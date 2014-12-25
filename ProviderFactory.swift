@@ -1,0 +1,15 @@
+//
+//  ProviderFactory.swift
+//  shoppin
+//
+//  Created by ischuetz on 13.12.14.
+//  Copyright (c) 2014 ivanschuetz. All rights reserved.
+//
+
+import UIKit
+
+class ProviderFactory: NSObject {
+   
+    lazy var listItemProvider:ListItemProvider = ListItemProviderImpl()
+
+}
