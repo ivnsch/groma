@@ -129,8 +129,8 @@
 				EB2F5D0F1A4ACC2500DBC4AF /* extensions */,
 				EB2F5D071A4A28DE00DBC4AF /* autosuggestions */,
 				EBEEDD631A49A7B500FC3B29 /* view */,
-				EBF162E31A3C853E0048E37C /* ListItemsTableView */,
-				EBF162CC1A3C82380048E37C /* TableView */,
+				EBF162E31A3C853E0048E37C /* listItemsTableView */,
+				EBF162CC1A3C82380048E37C /* tableView */,
 				EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */,
 				EB1DDEAF1A3334EC00D778DE /* ViewController.swift */,
 				EB1DDEB11A3334EC00D778DE /* Main.storyboard */,
@@ -213,35 +213,38 @@
 			name = coreData;
 			sourceTree = "<group>";
 		};
-		EBF162CC1A3C82380048E37C /* TableView */ = {
+		EBF162CC1A3C82380048E37C /* tableView */ = {
 			isa = PBXGroup;
 			children = (
 				EBF162CD1A3C82380048E37C /* CellSpecification.swift */,
-				EBF162CE1A3C82380048E37C /* Default */,
+				EBF162CE1A3C82380048E37C /* default */,
 				EBF162D71A3C82380048E37C /* TableViewSectionDelegate.swift */,
 			);
+			name = tableView;
 			path = TableView;
 			sourceTree = "<group>";
 		};
-		EBF162CE1A3C82380048E37C /* Default */ = {
+		EBF162CE1A3C82380048E37C /* default */ = {
 			isa = PBXGroup;
 			children = (
-				EBF162CF1A3C82380048E37C /* Constants */,
+				EBF162CF1A3C82380048E37C /* constants */,
 				EBF162D41A3C82380048E37C /* DefaultTableViewController.swift */,
 				EBF162D51A3C82380048E37C /* DefaultTableViewSection.swift */,
 			);
+			name = default;
 			path = Default;
 			sourceTree = "<group>";
 		};
-		EBF162CF1A3C82380048E37C /* Constants */ = {
+		EBF162CF1A3C82380048E37C /* constants */ = {
 			isa = PBXGroup;
 			children = (
 				EBF162D01A3C82380048E37C /* DefaultCellIdentifierConstants.swift */,
 			);
+			name = constants;
 			path = Constants;
 			sourceTree = "<group>";
 		};
-		EBF162E31A3C853E0048E37C /* ListItemsTableView */ = {
+		EBF162E31A3C853E0048E37C /* listItemsTableView */ = {
 			isa = PBXGroup;
 			children = (
 				EBF163001A3DE6880048E37C /* ItemsListTableViewConstants.swift */,
@@ -249,7 +252,7 @@
 				EBF162E41A3C85A30048E37C /* ListItemCell.swift */,
 				EB2F5D1C1A4B4CE300DBC4AF /* ListItemsTableViewController.swift */,
 			);
-			name = ListItemsTableView;
+			name = listItemsTableView;
 			sourceTree = "<group>";
 		};
 		EBF162E61A3CA1AC0048E37C /* model */ = {
