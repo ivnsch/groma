@@ -11,6 +11,7 @@ class ListItemMapper {
     class func listItemWithCD(cdListItem:CDListItem) -> ListItem {
         let product = ProductMapper.productWithCD(cdListItem.product)
         let section = SectionMapper.sectionWithCD(cdListItem.section)
-        return ListItem(done: cdListItem.done, product: product, section:section)
+        let id = cdListItem.objectID.URIRepresentation().absoluteString
+        return ListItem(id:id!, done: cdListItem.done, product: product, section:section)
     }
 }

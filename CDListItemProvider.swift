@@ -138,4 +138,32 @@ class CDListItemProvider: CDProvider {
         
         return cdListItem
     }
+    
+    func loadListItem(id:String) -> CDListItem {
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        
+        let objectId:NSManagedObjectID? = appDelegate.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(NSURL(string: id)!)
+        
+        let cdListItem = appDelegate.managedObjectContext!.objectWithID(objectId!) as CDListItem
+        
+        return cdListItem
+    }
+    
+    func updateListItem(listItem:ListItem) -> CDListItem? {
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        
+        let cdListItem = self.loadListItem(listItem.id)
+        
+        cdListItem.done = listItem.done
+        cdListItem.product.name = listItem.product.name
+        cdListItem.product.quantity = listItem.product.quantity
+        cdListItem.product.price = listItem.product.price
+        
+        let saved = self.save()
+        
+        println("updated list item: \(listItem.product.name), success: \(saved), done: \(cdListItem.done)")
+        
+        
+        return cdListItem
+    }
 }

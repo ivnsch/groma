@@ -8,6 +8,10 @@
 
 import UIKit
 
+enum ListItemsViewSectionStyle {
+    case Normal, Gray
+}
+
 class ListItemsViewSection: NSObject {
     
     var listItems:[ListItem]
@@ -22,6 +26,40 @@ class ListItemsViewSection: NSObject {
     let section:Section
     
     private let hasHeader:Bool
+    
+    var style:ListItemsTableViewControllerStyle = .Normal
+
+    
+    // this could be solved maybe with inheritance or sth like "style injection", for now this is ok
+    private var finalLabelColor:UIColor {
+        var color:UIColor
+        if self.style == .Gray {
+            color = UIColor.lightGrayColor()
+        } else {
+            color = self.labelColor
+        }
+        return color
+    }
+    
+    private var finalHeaderBGColor: UIColor {
+        var color:UIColor
+        if self.style == .Gray {
+            color = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
+        } else {
+            color = self.headerBGColor
+        }
+        return color
+    }
+    
+    private var finalHeaderFontColor: UIColor {
+        var color:UIColor
+        if self.style == .Gray {
+            color = UIColor.grayColor()
+        } else {
+            color = self.headerFontColor
+        }
+        return color
+    }
     
     
     init(section:Section, listItems:[ListItem], hasHeader:Bool = true) {
@@ -48,8 +86,8 @@ class ListItemsViewSection: NSObject {
         if self.hasHeader {
             let label = UILabel()
             label.text = "  " + self.section.name //FIXME - container doesn't work properly!
-            label.backgroundColor = self.headerBGColor
-            label.textColor = self.headerFontColor
+            label.backgroundColor = self.finalHeaderBGColor
+            label.textColor = self.finalHeaderFontColor
             label.font = UIFont(name: "Trebuchet MS", size: 15)
             v = label
         } else {
@@ -96,7 +134,7 @@ class ListItemsViewSection: NSObject {
         let listItem = listItems[row]
         
         cell.listItem = listItem
-        cell.labelColor = self.labelColor
+        cell.labelColor = self.finalHeaderFontColor
         
         return cell
     }

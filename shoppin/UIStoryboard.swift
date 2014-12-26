@@ -12,17 +12,15 @@ import UIKit
 extension UIStoryboard {
     class func mainStoryboard() -> UIStoryboard { return UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()) }
     
-    //    class func rightViewController() -> SidePanelViewController? {
-    //        return mainStoryboard().instantiateViewControllerWithIdentifier("RightViewController") as? SidePanelViewController
-    //    }
-    
-    //TODO rename...
-    class func centerViewController() -> ViewController? {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("ViewController") as? ViewController
+    class func todoItemsViewController() -> ViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("ViewController") as ViewController
     }
     
+    class func doneItemsViewController() -> DoneViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("DoneViewController") as DoneViewController
+    }
     
-    class func doneItemsViewController() -> ListItemsTableViewController {
+    class func listItemsTableViewController() -> ListItemsTableViewController {
         return mainStoryboard().instantiateViewControllerWithIdentifier("ListItemsTableViewController") as ListItemsTableViewController
     }
 }

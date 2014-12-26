@@ -17,6 +17,8 @@ protocol ListItemProvider {
 
     func remove(listItem:ListItem) -> Bool
     
-    func add(listItem:ListItem) -> Bool
+    func add(listItem:ListItem) -> ListItem?
+
+    func update(listItem:ListItem) -> Bool
 
 }

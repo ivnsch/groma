@@ -9,11 +9,15 @@
 import UIKit
 
 protocol ListItemsTableViewDelegate {
-    func onListItemDoubleTap(listItem:ListItem)
+    func onListItemDoubleTap(listItem:ListItem, indexPath:NSIndexPath)
+}
+
+enum ListItemsTableViewControllerStyle {
+    case Normal, Gray
 }
 
 class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate {
-
+    
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section
     private var tableViewSections:[ListItemsViewSection] = []
     
@@ -24,6 +28,8 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate 
     
     private(set) var sections:[Section] = [] // quick access. Sorting not necessarily same as in tableViewSections
     private(set) var items:[ListItem] = [] // quick access. Sorting not necessarily same as in tableViewSections
+    
+    var style:ListItemsTableViewControllerStyle = .Normal
     
     var tableViewTopInset:CGFloat {
         set {
@@ -46,7 +52,7 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate 
             return self.tableView.contentOffset.y
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -57,11 +63,18 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate 
         self.tableView.addGestureRecognizer(tapGesture)
     }
     
+    
+    override func viewWillLayoutSubviews() {
+//        println(self.view.constraints().count)
+    }
+    
     private func initTableView() {
         self.tableView.registerClass(ListItemCell.self, forCellReuseIdentifier: ItemsListTableViewConstants.listItemCellIdentifier)
-        
+
         self.tableView.dataSource = self
         self.tableView.delegate = self
+        
+        self.tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
     }
     
     func setListItems(items:[ListItem]) { // as function instead of variable+didSet because didSet is called each time we modify the array
@@ -114,6 +127,9 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate 
                     sections.append(item.section)
                     
                     currentSection = ListItemsViewSection(section: item.section, listItems: [])
+                    if self.style == .Gray {
+                        currentSection.style = .Gray
+                    }
                     tableViewSections.append(currentSection)
                 }
                 currentSection.addItem(item)
@@ -121,6 +137,42 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate 
         }
         
         return (tableViewSections, sections)
+    }
+    
+    func removeListItem(listItem:ListItem, indexPath:NSIndexPath) {
+        // TODO review this, we store items reduntantely, so find index in one list, remove, use indexPath for the other list....
+        // also is it thread safe to pass indexpath like this
+        // paramater indexPath and listitem?
+        var indexMaybe:Int?
+        for i in 0...self.items.count {
+            if self.items[i] == listItem {
+                indexMaybe = i
+                break
+            }
+        }
+        
+        if let index = indexMaybe {
+            self.items.removeAtIndex(index)
+            let tableViewSection = self.tableViewSections[indexPath.section]
+            tableViewSection.listItems.removeAtIndex(indexPath.row)
+            
+            if tableViewSection.listItems.isEmpty {
+                // remove table view section
+                self.tableViewSections.removeAtIndex(indexPath.section)
+                // remove model section TODO better way
+                var sectionIndexMaybe:Int?
+                for (index, section) in enumerate(self.sections) {
+                    if section == tableViewSection.section {
+                        sectionIndexMaybe = index
+                    }
+                }
+                if let sectionIndex = sectionIndexMaybe {
+                    self.sections.removeAtIndex(sectionIndex)
+                }
+            }
+        }
+        
+        self.tableView.reloadData()
     }
     
     override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
@@ -133,7 +185,7 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate 
         
         if let indexPath = indexPathMaybe {
             let listItem:ListItem = self.tableViewSections[indexPath.section].listItems[indexPath.row]
-            listItemsTableViewDelegate?.onListItemDoubleTap(listItem)
+            listItemsTableViewDelegate?.onListItemDoubleTap(listItem, indexPath: indexPath)
         }
     }
 

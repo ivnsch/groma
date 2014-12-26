@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ItemsObserver
 //    , UIBarPositioningDelegate
 {
 //    @IBOutlet weak var tableView: UITableView!
@@ -24,7 +24,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     @IBOutlet weak var inputBar: UIView!
     @IBOutlet weak var inputField: UITextField!
     @IBOutlet weak var addSectionContainer: UIView!
-
     
     @IBOutlet weak var plusButton: UIButton!
     
@@ -58,6 +57,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
   
     private var listItemsTableViewController:ListItemsTableViewController!
     
+    var itemsNotificator:ItemsNotificator?
+    var sideMenuManager:SideMenuManager?
+
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -66,18 +68,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let items = listItemsProvider.listItems()
-        
         self.initTableViewController()
-        self.listItemsTableViewController.setListItems(items)
+        self.initItems()
         
         self.resetProductInputs()
         self.updatePrices()
         
         let menuExpanded = true
         self.setAddModus(menuExpanded)
-        //TODO in view controller or table view controller?
-//        self.tableView.contentOffset = CGPointMake(0, -getTableViewInset(menuExpanded))
+        
         self.listItemsTableViewController.tableViewTopOffset = -getTableViewInset(menuExpanded)
    
         self.priceInput.keyboardType = UIKeyboardType.DecimalPad
@@ -94,12 +93,34 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.sectionInput.delegate = self
         self.sectionInput.addTarget(self, action: "sectionInputFieldChanged:", forControlEvents: UIControlEvents.EditingChanged)
         sectionInput.delegate = self
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: "onDonePriceTap:")
+        self.donePriceLabel.userInteractionEnabled = true
+        self.donePriceLabel.addGestureRecognizer(tapGesture)
+    }
+    
+    func onDonePriceTap(sender:UITapGestureRecognizer) {
+        sideMenuManager?.setDoneItemsOpen(true)
+    }
+    
+    func itemsChanged() {
+        self.initItems()
+    }
+    
+    private func initItems() {
+        let items = listItemsProvider.listItems().filter{!$0.done}
+        self.listItemsTableViewController.setListItems(items)
+    }
+    
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
     }
     
     private func initTableViewController() {
-        self.listItemsTableViewController = UIStoryboard.doneItemsViewController()
+        self.listItemsTableViewController = UIStoryboard.listItemsTableViewController()
         
         self.addChildViewControllerAndView(self.listItemsTableViewController, viewIndex: 0)
+        
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: "hideKeyboard")
         self.listItemsTableViewController.view.addGestureRecognizer(gestureRecognizer)
         self.listItemsTableViewController.scrollViewDelegate = self
@@ -124,15 +145,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.sectionAutosuggestionsViewController.view.hidden = true
     }
     
-    func handleTapGesture(sender:UITapGestureRecognizer) {
-//        let tapLocation = sender.locationInView(self.tableView)
-//        let indexPathMaybe:NSIndexPath? = self.tableView.indexPathForRowAtPoint(tapLocation)
-//        
-//        if let indexPath = indexPathMaybe {
-//            self.toggleItemDone(self.tableViewSections[indexPath.section].listItems[indexPath.row])
-//        }
-    }
-
     func sectionInputFieldChanged(textField:UITextField) {
         println(textField.text)
 
@@ -156,8 +168,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         return inset
     }
     
-    func onListItemDoubleTap(listItem: ListItem) {
-        self.toggleItemDone(listItem)
+    func onListItemDoubleTap(listItem: ListItem, indexPath: NSIndexPath) {
+        self.setItemDone(listItem, indexPath: indexPath)
     }
 
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
@@ -359,45 +371,36 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func updatePrices() {
 
-        let listItems = self.listItemsTableViewController.items
+        let listItems = self.listItemsProvider.listItems()
+
+        func calculatePrice(listItems:[ListItem]) -> Float {
+            return listItems.reduce(0, combine: {(price:Float, listItem:ListItem) -> Float in
+                return price + (listItem.product.price * Float(listItem.product.quantity))
+            })
+        }
         
 //        let allListItems = self.tableViewSections.map {
 //            $0.listItems
 //        }.reduce([], combine: +)
         
-        let totalPrice:Float = listItems.reduce(0, combine: {(price:Float, listItem:ListItem) -> Float in
-            return price + (listItem.product.price * Float(listItem.product.quantity))
-        })
+        let totalPrice:Float = calculatePrice(listItems)
         
-//        let totalPrice:Float = (doneSection.listItems + todoSection.listItems).reduce(0, combine: {(price:Float, listItem:ListItem) -> Float in
-//            return price + (listItem.product.price * Float(listItem.product.quantity))
-//        })
-//        let donePrice:Float = doneSection.listItems.reduce(0, combine: {(price:Float, listItem:ListItem) -> Float in
-//            return price + (listItem.product.price * Float(listItem.product.quantity))
-//        })
+        let doneListItems = listItems.filter{$0.done}
+        let donePrice:Float = calculatePrice(doneListItems)
 
         self.totalPriceLabel.text = NSNumber(float: totalPrice).stringValue + " €"
-//        self.donePriceLabel.text = NSNumber(float: donePrice).stringValue + " €"
+        self.donePriceLabel.text = NSNumber(float: donePrice).stringValue + " €"
     }
     
-    func toggleItemDone(listItem:ListItem) {
-        //TODO... again
-//        let (srcSection, dstSection) = listItem.done ? (self.doneSection, self.todoSection) : (self.todoSection, self.doneSection)
-//        
-//        listItem.done = !listItem.done
-//        
-//        var index = -1
-//        for i in 0...srcSection.listItems.count {
-//            if srcSection.listItems[i] == listItem {
-//                index = i
-//                break
-//            }
-//        }
-//        srcSection.listItems.removeAtIndex(index)
-//        dstSection.addItem(listItem)
-//        self.tableView.reloadData()
-//        
-//        self.updatePrices()
+    private func setItemDone(listItem:ListItem, indexPath: NSIndexPath) {
+        listItem.done = true
+
+        self.listItemsProvider.update(listItem)
+        self.listItemsTableViewController.removeListItem(listItem, indexPath: indexPath)
+        
+        self.updatePrices()
+        
+        itemsNotificator?.notifyItemUpdated(listItem, sender: self)
     }
     
     func addItem(itemName:String, price:Float, quantity:Int, sectionName:String) {
@@ -412,10 +415,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         // for now just create a new product and a listitem with it
         let product = Product(name: itemName, price:price, quantity:quantity)
         let section = Section(name: sectionName)
-        let listItem = ListItem(done: false, product: product, section: section)
         
-        if self.listItemsProvider.add(listItem) {
-            self.listItemsTableViewController.addListItem(listItem)
+        // we use for now core data object id as list item id. So before we insert the item there's no id and it's not used -> "dummy"
+        let listItem = ListItem(id:"dummy", done: false, product: product, section: section)
+        
+        if let savedListItem = self.listItemsProvider.add(listItem) {
+            self.listItemsTableViewController.addListItem(savedListItem)
         }
         
         self.sectionInput.resignFirstResponder()
