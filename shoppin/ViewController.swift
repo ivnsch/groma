@@ -116,6 +116,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
+    func startSideMenuDrag() {
+        self.listItemsTableViewController.clearPendingSwipeItemIfAny()
+    }
+    
     private func initItems() {
         let items = listItemsProvider.listItems().filter{!$0.done}
         self.listItemsTableViewController.setListItems(items)

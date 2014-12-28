@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObserver {
+class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObserver, SideMenuObserver {
 
     private var listItemsTableViewController:ListItemsTableViewController!
 
@@ -38,6 +38,13 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
     
     func onListItemClear(tableViewListItem:TableViewListItem) {
         self.setItemUndone(tableViewListItem.listItem)
+    }
+    
+    func changedSlideOutState(slideOutState: SlideOutState) {
+    }
+
+    func startSideMenuDrag() {
+        self.listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     
     private func setItemUndone(listItem:ListItem) {

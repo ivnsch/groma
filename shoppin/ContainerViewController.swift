@@ -28,6 +28,7 @@ protocol SideMenuManager {
 }
 
 protocol SideMenuObserver {
+    func startSideMenuDrag()
     func changedSlideOutState(slideOutState: SlideOutState)
 }
 
@@ -49,7 +50,9 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
             let shouldShowShadow = currentState != .Collapsed
             self.showShadowForCenterViewController(shouldShowShadow)
             
-            self.sideMenuObservers.forEach {$0.changedSlideOutState(self.currentState)}
+            if oldValue != currentState {
+                self.sideMenuObservers.forEach {$0.changedSlideOutState(self.currentState)}
+            }
         }
     }
     
@@ -105,6 +108,7 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
         if (rightViewController == nil) {
             rightViewController = UIStoryboard.doneItemsViewController()
             self.itemObservers.append(rightViewController)
+            self.sideMenuObservers.append(rightViewController)
             rightViewController.itemsNotificator = self
             rightViewController.view.backgroundColor = UIColor.whiteColor()
 
@@ -155,7 +159,7 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
         switch(recognizer.state) {
         case .Began:
             
-            println("\nTouch began!")
+            self.sideMenuObservers.forEach {$0.startSideMenuDrag()}
 
             if (currentState == .Collapsed) {
                 // If the user starts panning, and neither panel is visible
