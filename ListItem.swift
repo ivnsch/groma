@@ -22,5 +22,5 @@ class ListItem: Equatable {
 }
 
 func ==(lhs: ListItem, rhs: ListItem) -> Bool {
-    return lhs.product == rhs.product
+    return lhs.id == rhs.id
 }

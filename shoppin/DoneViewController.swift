@@ -30,23 +30,31 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
         self.addChildViewControllerAndView(self.listItemsTableViewController, viewIndex: 0)
         
         self.listItemsTableViewController.listItemsTableViewDelegate = self
+        
+        //TODO the tap recognizer to clearPendingSwipeItemIfAny should be in listItemsTableViewController instead of here and in ViewController- but it didn't work (quickly) there
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "clearThings")
+        self.listItemsTableViewController.view.addGestureRecognizer(gestureRecognizer)
     }
     
-    func onListItemDoubleTap(listItem: ListItem, indexPath: NSIndexPath) {
-        self.setItemUndone(listItem, indexPath: indexPath)
+    func onListItemClear(tableViewListItem:TableViewListItem) {
+        self.setItemUndone(tableViewListItem.listItem)
     }
     
-    private func setItemUndone(listItem:ListItem, indexPath: NSIndexPath) {
+    private func setItemUndone(listItem:ListItem) {
         listItem.done = false
         
         self.listItemsProvider.update(listItem)
-        self.listItemsTableViewController.removeListItem(listItem, indexPath: indexPath)
+        self.listItemsTableViewController.removeListItem(listItem, animation: UITableViewRowAnimation.Bottom)
         
         itemsNotificator?.notifyItemUpdated(listItem, sender: self)
     }
     
     func itemsChanged() {
         self.initItems()
+    }
+    
+    func clearThings() {
+        self.listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     
     private func initItems() {

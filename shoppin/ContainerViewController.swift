@@ -9,8 +9,8 @@
 import UIKit
 
 enum SlideOutState {
-    case BothCollapsed
-    case LeftPanelExpanded
+    case Collapsed
+//    case LeftPanelExpanded
     case RightPanelExpanded
 }
 
@@ -27,6 +27,11 @@ protocol SideMenuManager {
     func setDoneItemsOpen(open:Bool)
 }
 
+protocol SideMenuObserver {
+    func changedSlideOutState(slideOutState: SlideOutState)
+}
+
+
 class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManager {
 
     private var centerViewController: ViewController!
@@ -35,11 +40,16 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
     private let centerPanelExpandedOffset: CGFloat = 60
     
     var itemObservers:[ItemsObserver] = []
+
+    var sideMenuObservers:[SideMenuObserver] = []
     
-    var currentState: SlideOutState = .BothCollapsed {
+    
+    var currentState: SlideOutState = .Collapsed {
         didSet {
-            let shouldShowShadow = currentState != .BothCollapsed
+            let shouldShowShadow = currentState != .Collapsed
             self.showShadowForCenterViewController(shouldShowShadow)
+            
+            self.sideMenuObservers.forEach {$0.changedSlideOutState(self.currentState)}
         }
     }
     
@@ -61,6 +71,8 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
 
         self.centerViewController = UIStoryboard.todoItemsViewController()
         self.itemObservers.append(self.centerViewController)
+        self.sideMenuObservers.append(self.centerViewController)
+
         self.centerViewController.itemsNotificator = self
         self.centerViewController.sideMenuManager = self
         self.addChildViewControllerAndView(centerViewController)
@@ -116,7 +128,7 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
             animateCenterPanelXPosition(targetPosition: -CGRectGetWidth(centerViewController.view.frame) + centerPanelExpandedOffset)
         } else {
             animateCenterPanelXPosition(targetPosition: 0) { _ in
-                self.currentState = .BothCollapsed
+                self.currentState = .Collapsed
                 
 //                self.rightViewController!.view.removeFromSuperview()
 //                self.rightViewController = nil
@@ -137,26 +149,53 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
         // panel by looking at the velocity of the gesture
         let gestureIsDraggingFromLeftToRight = (recognizer.velocityInView(view).x > 0)
         
+//        println("velocity:\(recognizer.velocityInView(view).x) left to right:\(gestureIsDraggingFromLeftToRight)")
+        
+        
         switch(recognizer.state) {
         case .Began:
-            if (currentState == .BothCollapsed) {
+            
+            println("\nTouch began!")
+
+            if (currentState == .Collapsed) {
                 // If the user starts panning, and neither panel is visible
                 // then show the correct panel based on the pan direction
                 
                 if (gestureIsDraggingFromLeftToRight) {
 //                    addLeftPanelViewController()
+                    showShadowForCenterViewController(true)
+
                 } else {
                     addRightPanelViewController()
                 }
                 
-                showShadowForCenterViewController(true)
             }
         case .Changed:
             // If the user is already panning, translate the center view controller's
             // view by the amount that the user has panned
-            recognizer.view!.center.x = recognizer.view!.center.x + recognizer.translationInView(view).x
-            recognizer.setTranslation(CGPointZero, inView: view)
+            if (currentState == .RightPanelExpanded //while right expanded, allos swipe in both directions
+                ||
+                (!gestureIsDraggingFromLeftToRight //otherwise only gesture to open right menu -> swipe from right to left
+                    && recognizer.translationInView(view).x < 0) //and only when the translation is negative, otherwise if user swipes to right and back to left in one gesture, we process the positive translation (to right) here
+//                recognizer.view!.center.x < 180
+//                    || currentState == .RightPanelExpanded
+                ) {
+            
+//            println("---------------")
+//            println(recognizer.view!.center.x)
+//            println(recognizer.translationInView(view).x)
+            
+                
+                    
+                    
+                recognizer.view!.center.x = recognizer.view!.center.x + recognizer.translationInView(view).x
+                recognizer.setTranslation(CGPointZero, inView: view)
+            }
+            
         case .Ended:
+            
+            println("\nTouch ended!")
+            
             // When the pan ends, check whether the left or right view controller is visible
 //            if (leftViewController != nil) {
             if (false) {

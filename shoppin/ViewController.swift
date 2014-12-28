@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ItemsObserver
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ItemsObserver, SideMenuObserver
 //    , UIBarPositioningDelegate
 {
 //    @IBOutlet weak var tableView: UITableView!
@@ -107,6 +107,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.initItems()
     }
     
+    func changedSlideOutState(slideOutState: SlideOutState) {
+        switch slideOutState {
+        case .Collapsed:
+            listItemsTableViewController.touchEnabled(true)
+        case .RightPanelExpanded:
+            listItemsTableViewController.touchEnabled(false)
+        }
+    }
+    
     private func initItems() {
         let items = listItemsProvider.listItems().filter{!$0.done}
         self.listItemsTableViewController.setListItems(items)
@@ -121,7 +130,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         self.addChildViewControllerAndView(self.listItemsTableViewController, viewIndex: 0)
         
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "hideKeyboard")
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "clearThings")
         self.listItemsTableViewController.view.addGestureRecognizer(gestureRecognizer)
         self.listItemsTableViewController.scrollViewDelegate = self
         self.listItemsTableViewController.listItemsTableViewDelegate = self
@@ -133,16 +142,22 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        hideKeyboard()
+        clearThings()
     }
     
-    func hideKeyboard() {
+    private func hideKeyboard() {
         inputField.resignFirstResponder()
         priceInput.resignFirstResponder()
         quantityInput.resignFirstResponder()
         sectionInput.resignFirstResponder()
+    }
+    
+    func clearThings() {
+        self.hideKeyboard()
         
         self.sectionAutosuggestionsViewController.view.hidden = true
+        
+        self.listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     
     func sectionInputFieldChanged(textField:UITextField) {
@@ -168,8 +183,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         return inset
     }
     
-    func onListItemDoubleTap(listItem: ListItem, indexPath: NSIndexPath) {
-        self.setItemDone(listItem, indexPath: indexPath)
+    func onListItemClear(tableViewListItem:TableViewListItem) {
+        self.setItemDone(tableViewListItem.listItem)
     }
 
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
@@ -392,11 +407,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.donePriceLabel.text = NSNumber(float: donePrice).stringValue + " €"
     }
     
-    private func setItemDone(listItem:ListItem, indexPath: NSIndexPath) {
+    private func setItemDone(listItem:ListItem) {
         listItem.done = true
 
         self.listItemsProvider.update(listItem)
-        self.listItemsTableViewController.removeListItem(listItem, indexPath: indexPath)
+        self.listItemsTableViewController.removeListItem(listItem, animation: UITableViewRowAnimation.Bottom)
         
         self.updatePrices()
         

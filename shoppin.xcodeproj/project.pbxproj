@@ -23,6 +23,9 @@
 		EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D211A4C20E200DBC4AF /* UIViewController.swift */; };
 		EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D231A4C2B0600DBC4AF /* UIStoryboard.swift */; };
 		EB2F5D261A4DE56B00DBC4AF /* DoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D251A4DE56B00DBC4AF /* DoneViewController.swift */; };
+		EB2F5D5A1A4F5C8100DBC4AF /* SwipeableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D591A4F5C8100DBC4AF /* SwipeableCell.swift */; };
+		EB2F5D5C1A5058E900DBC4AF /* TableViewListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D5B1A5058E900DBC4AF /* TableViewListItem.swift */; };
+		EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D5D1A506F5100DBC4AF /* Array.swift */; };
 		EBEEDD691A49C75400FC3B29 /* CDSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD681A49C75400FC3B29 /* CDSection.swift */; };
 		EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6A1A49C94F00FC3B29 /* Section.swift */; };
 		EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */; };
@@ -69,6 +72,9 @@
 		EB2F5D211A4C20E200DBC4AF /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		EB2F5D231A4C2B0600DBC4AF /* UIStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIStoryboard.swift; sourceTree = "<group>"; };
 		EB2F5D251A4DE56B00DBC4AF /* DoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoneViewController.swift; sourceTree = "<group>"; };
+		EB2F5D591A4F5C8100DBC4AF /* SwipeableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeableCell.swift; sourceTree = "<group>"; };
+		EB2F5D5B1A5058E900DBC4AF /* TableViewListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewListItem.swift; sourceTree = "<group>"; };
+		EB2F5D5D1A506F5100DBC4AF /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		EBEEDD681A49C75400FC3B29 /* CDSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDSection.swift; sourceTree = "<group>"; };
 		EBEEDD6A1A49C94F00FC3B29 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionMapper.swift; sourceTree = "<group>"; };
@@ -187,6 +193,7 @@
 				EB2F5D101A4ACC4400DBC4AF /* String.swift */,
 				EB2F5D211A4C20E200DBC4AF /* UIViewController.swift */,
 				EB2F5D231A4C2B0600DBC4AF /* UIStoryboard.swift */,
+				EB2F5D5D1A506F5100DBC4AF /* Array.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -202,6 +209,7 @@
 		EBEEDD631A49A7B500FC3B29 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				EB2F5D591A4F5C8100DBC4AF /* SwipeableCell.swift */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -254,6 +262,7 @@
 				EBF162E11A3C83D50048E37C /* ListItemsViewSection.swift */,
 				EBF162E41A3C85A30048E37C /* ListItemCell.swift */,
 				EB2F5D1C1A4B4CE300DBC4AF /* ListItemsTableViewController.swift */,
+				EB2F5D5B1A5058E900DBC4AF /* TableViewListItem.swift */,
 			);
 			name = listItemsTableView;
 			sourceTree = "<group>";
@@ -390,6 +399,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB2F5D5A1A4F5C8100DBC4AF /* SwipeableCell.swift in Sources */,
 				EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */,
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
@@ -397,6 +407,7 @@
 				EBF162CB1A34B1860048E37C /* CDListItem.swift in Sources */,
 				EB1DDECE1A3338E200D778DE /* ShoppingListItemCell.swift in Sources */,
 				EBF162EB1A3CA2470048E37C /* Product.swift in Sources */,
+				EB2F5D5C1A5058E900DBC4AF /* TableViewListItem.swift in Sources */,
 				EB2743DB1A3E3ACE00593AB0 /* CDProduct.swift in Sources */,
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
 				EBEEDD691A49C75400FC3B29 /* CDSection.swift in Sources */,
@@ -407,6 +418,7 @@
 				EBF162ED1A3CA24E0048E37C /* ListItem.swift in Sources */,
 				EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */,
 				EB2F5D261A4DE56B00DBC4AF /* DoneViewController.swift in Sources */,
+				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,
 				EBF162DD1A3C82380048E37C /* DefaultTableViewController.swift in Sources */,
 				EBF162E51A3C85A30048E37C /* ListItemCell.swift in Sources */,

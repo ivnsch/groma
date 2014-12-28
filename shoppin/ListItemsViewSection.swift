@@ -12,9 +12,15 @@ enum ListItemsViewSectionStyle {
     case Normal, Gray
 }
 
-class ListItemsViewSection: NSObject {
+protocol ItemActionsDelegate {
+    func startItemSwipe(tableViewListItem:TableViewListItem)
+    func endItemSwipe(tableViewListItem:TableViewListItem)
+    func undoSwipe(tableViewListItem:TableViewListItem)
+}
+
+class ListItemsViewSection {
     
-    var listItems:[ListItem]
+    var tableViewListItems:[TableViewListItem]
     
     private let cellIdentifier = ItemsListTableViewConstants.listItemCellIdentifier
     
@@ -29,6 +35,7 @@ class ListItemsViewSection: NSObject {
     
     var style:ListItemsTableViewControllerStyle = .Normal
 
+    var delegate:ItemActionsDelegate!
     
     // this could be solved maybe with inheritance or sth like "style injection", for now this is ok
     private var finalLabelColor:UIColor {
@@ -62,9 +69,9 @@ class ListItemsViewSection: NSObject {
     }
     
     
-    init(section:Section, listItems:[ListItem], hasHeader:Bool = true) {
+    init(section:Section, tableViewListItems:[TableViewListItem], hasHeader:Bool = true) {
         self.section = section
-        self.listItems = listItems
+        self.tableViewListItems = tableViewListItems
         self.hasHeader = hasHeader
     }
     
@@ -77,7 +84,7 @@ class ListItemsViewSection: NSObject {
     }
     
     func cellReuseIdentifierForRow(row:Int) -> String {
-        return ItemsListTableViewConstants.listItemCellIdentifier
+        return cellIdentifier
     }
     
     func viewForHeader() -> UIView? {
@@ -93,7 +100,6 @@ class ListItemsViewSection: NSObject {
         } else {
             v = nil
         }
-        
         
 //        let container = UIView()
 //        container.addSubview(v)
@@ -127,24 +133,54 @@ class ListItemsViewSection: NSObject {
     //        return NSSet()
     //    }
     
+    
+    
     func tableView(tableView: UITableView, row: NSInteger) -> UITableViewCell {
 
         let cell:ListItemCell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as ListItemCell
-
-        let listItem = listItems[row]
+        cell.showsReorderControl = true
         
-        cell.listItem = listItem
+        let tableViewListItem = tableViewListItems[row]
+        
+        cell.nameLabel.text = tableViewListItem.listItem.product.name
+        cell.quantityLabel.text = String(tableViewListItem.listItem.product.quantity)
+        
         cell.labelColor = self.finalHeaderFontColor
+//        cell.delegate = self
+        cell.itemSwiped = { // use a closure to capture listitem
+            self.delegate.endItemSwipe(tableViewListItem)
+        }
+        cell.startItemSwipe = {
+            self.delegate.startItemSwipe(tableViewListItem)
+        }
+        cell.buttonTwoTap = {
+            self.delegate.undoSwipe(tableViewListItem)
+        }
+        
+        cell.setOpen(tableViewListItem.swiped)
+
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell
     }
     
     func numberOfRows() -> Int {
-        return listItems.count
+        return tableViewListItems.count
     }
     
-    func addItem(listItem:ListItem) {
-        self.listItems.append(listItem)
+    func addItem(tableViewListItem:TableViewListItem) {
+        self.tableViewListItems.append(tableViewListItem)
     }
     
+    func buttonOneActionForItemText() {
+        
+    }
+    
+    func buttonTwoActionForItemText() {
+        
+    }
+    
+    func buttonThreeActionForItemText() {
+        
+    }
 }
