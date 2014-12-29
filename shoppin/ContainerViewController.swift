@@ -35,7 +35,7 @@ protocol SideMenuObserver {
 
 class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManager {
 
-    private var centerViewController: ViewController!
+    private var centerViewController: UINavigationController!
     private var rightViewController: DoneViewController!
 
     private let centerPanelExpandedOffset: CGFloat = 60
@@ -72,12 +72,15 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.centerViewController = UIStoryboard.todoItemsViewController()
-        self.itemObservers.append(self.centerViewController)
-        self.sideMenuObservers.append(self.centerViewController)
+        let navigationViewController = UIStoryboard.navigationController()
+        let viewControler = navigationViewController.viewControllers[0] as ViewController
+        
+        self.centerViewController = navigationViewController
+        self.itemObservers.append(viewControler)
+        self.sideMenuObservers.append(viewControler)
 
-        self.centerViewController.itemsNotificator = self
-        self.centerViewController.sideMenuManager = self
+        viewControler.itemsNotificator = self
+        viewControler.sideMenuManager = self
         self.addChildViewControllerAndView(centerViewController)
         
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePanGesture:")

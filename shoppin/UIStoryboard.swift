@@ -23,4 +23,8 @@ extension UIStoryboard {
     class func listItemsTableViewController() -> ListItemsTableViewController {
         return mainStoryboard().instantiateViewControllerWithIdentifier("ListItemsTableViewController") as ListItemsTableViewController
     }
+    
+    class func navigationController() -> UINavigationController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("NavigationController") as UINavigationController
+    }
 }

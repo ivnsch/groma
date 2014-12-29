@@ -23,19 +23,13 @@ class AddItemView: UIView, UITextFieldDelegate {
     @IBOutlet weak var inputField: UITextField!
     @IBOutlet weak var addSectionContainer: UIView!
     
-    @IBOutlet weak var plusButton: UIButton!
-    
     @IBOutlet weak var priceInput: UITextField!
     @IBOutlet weak var quantityInput: UITextField!
     
-    @IBOutlet weak var totalPriceLabel: UILabel!
-    @IBOutlet weak var donePriceLabel: UILabel!
-    @IBOutlet weak var shopStatusContainer: UIView!
     @IBOutlet weak var sectionInput: UITextField!
-
-    private var shopStatusContainerTopConstraint:NSLayoutConstraint?
     
     @IBOutlet weak var heightConstraint:NSLayoutConstraint!
+    
     
     private var inputs:[UITextField] {
         return [self.inputField, self.priceInput, self.quantityInput, self.sectionInput]
@@ -48,18 +42,6 @@ class AddItemView: UIView, UITextFieldDelegate {
         }
         get {
             return self.sectionInput.text
-        }
-    }
-    
-    var totalPrice:Float? {
-        didSet {
-            self.totalPriceLabel.text = self.formattedPrice(totalPrice!)
-        }
-    }
-    
-    var donePrice:Float? {
-        didSet {
-            self.donePriceLabel.text = self.formattedPrice(donePrice!)
         }
     }
     
@@ -87,14 +69,9 @@ class AddItemView: UIView, UITextFieldDelegate {
         sectionInput.delegate = self
         
         let tapGesture = UITapGestureRecognizer(target: self, action: "onDonePriceTap:")
-        self.donePriceLabel.userInteractionEnabled = true
-        self.donePriceLabel.addGestureRecognizer(tapGesture)
     }
     
-    
     func sectionInputFieldChanged(textField:UITextField) {
-        println(textField.text)
-        
         delegate.onSectionInputChanged(textField.text)
     }
 
@@ -137,26 +114,17 @@ class AddItemView: UIView, UITextFieldDelegate {
         super.touchesBegan(touches, withEvent: event)
     }
 
-    @IBAction func onPlusTap(sender: AnyObject) {
-        self.expanded = !self.expanded
-    }
-
-    private func calculateFrameHeight(expanded:Bool) -> CGFloat {
+    private func calculateFrameHeight() -> CGFloat {
         let first:CGFloat = 0
-        let viewsHeight = [self.inputBar!, self.productDetailsContainer!, self.addSectionContainer!, self.shopStatusContainer!].reduce(first, combine: { (u:CGFloat, v:UIView) -> CGFloat in
+        let viewsHeight = [self.inputBar!, self.productDetailsContainer!, self.addSectionContainer!].reduce(first, combine: { (u:CGFloat, v:UIView) -> CGFloat in
             return u + (v.hidden ? 0 : v.frame.height)
         })
         
-        if (expanded) {
-            return viewsHeight
-        } else { // FIXME why is necessary to add status bar height only on contracted state...? when solved also remove parameter expanded in this function
-            let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-            return viewsHeight + statusBarHeight
-        }
+        return viewsHeight
     }
 
-    private func updateFrame(expanded:Bool) {
-        let height = self.calculateFrameHeight(expanded)
+    private func updateFrame() {
+        let height = self.calculateFrameHeight()
         self.heightConstraint.constant = height
         
         self.setNeedsLayout()
@@ -169,74 +137,7 @@ class AddItemView: UIView, UITextFieldDelegate {
             self.productDetailsContainer.hidden = !expanded
             self.addSectionContainer.hidden = !expanded
             
-            self.plusButton.setTitle(self.expanded ? "-" : "+", forState: UIControlState.Normal)
-            
-            if let topConstraint = shopStatusContainerTopConstraint {
-//                self.view.removeConstraint(topConstraint)
-                self.removeConstraint(topConstraint)
-            }
-            
-            if (self.expanded) {
-                
-                // FIXME hack... why not at bottom
-                let constant =
-                CGRectGetHeight(self.inputBar.frame)
-                    + CGRectGetHeight(self.productDetailsContainer.frame)
-                    + CGRectGetHeight(self.addSectionContainer.frame)
-                
-                //            self.shopStatusContainerTopConstraint = NSLayoutConstraint(
-                //                item: self.shopStatusContainer,
-                //                attribute: NSLayoutAttribute.Top,
-                //                relatedBy: NSLayoutRelation.Equal,
-                //                toItem: self.productDetailsContainer,
-                //                attribute: NSLayoutAttribute.Bottom,
-                //                multiplier: 0,
-                //                constant: 0)
-                self.shopStatusContainerTopConstraint = NSLayoutConstraint(
-                    item: self.shopStatusContainer,
-                    attribute: NSLayoutAttribute.Top,
-                    relatedBy: NSLayoutRelation.Equal,
-                    //                toItem: self.view,
-                    toItem: self,
-                    attribute: NSLayoutAttribute.Top,
-                    multiplier: 0,
-                    constant: constant)
-                
-                
-            } else {
-                
-                //            let frame = self.shopStatusContainer.frame
-                //            let newH = frame.size.height * 1.4
-                //            self.shopStatusContainer.frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, newH)
-                //
-                //            self.shopStatusContainer.addConstraint(NSLayoutConstraint(
-                //                item: self.shopStatusContainer,
-                //                attribute: NSLayoutAttribute.Height,
-                //                relatedBy: NSLayoutRelation.Equal,
-                //                toItem: nil,
-                //                attribute: NSLayoutAttribute.NotAnAttribute,
-                //                multiplier: 0,
-                //                constant: newH))
-                
-                
-                let constant:CGFloat =
-                CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-                
-                self.shopStatusContainerTopConstraint = NSLayoutConstraint(
-                    item: self.shopStatusContainer,
-                    attribute: NSLayoutAttribute.Top,
-                    relatedBy: NSLayoutRelation.Equal,
-                    //                toItem: self.view,
-                    toItem: self,
-                    attribute: NSLayoutAttribute.Top,
-                    multiplier: 0,
-                    constant: constant)
-                
-            }
-            //        self.view.addConstraint(self.shopStatusContainerTopConstraint!)
-            self.addConstraint(self.shopStatusContainerTopConstraint!)
-            
-            self.updateFrame(self.expanded)
+            self.updateFrame()
             
             self.delegate.onAddItemViewExpanded(self.expanded)
         }

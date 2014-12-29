@@ -37,6 +37,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     var itemsNotificator:ItemsNotificator?
     var sideMenuManager:SideMenuManager?
 
+    @IBOutlet weak var pricesView:PriceNavigationView!
+    
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -157,7 +159,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //    }
 
     private func getTableViewInset() -> CGFloat {
-        return CGRectGetHeight(self.addItemView.frame)
+        let addItemViewHeight = CGRectGetHeight(self.addItemView.frame)
+        let navbarHeight = self.navigationController!.navigationBar.frame.height
+        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+
+        return addItemViewHeight + navbarHeight + statusBarHeight
     }
     
     func onAddItemViewExpanded(expanded: Bool) {
@@ -221,8 +227,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let doneListItems = listItems.filter{$0.done}
         let donePrice:Float = calculatePrice(doneListItems)
 
-        self.addItemView.totalPrice = totalPrice
-        self.addItemView.donePrice = donePrice
+        self.pricesView.totalPrice = totalPrice
+        self.pricesView.donePrice = donePrice
     }
     
     private func setItemDone(listItem:ListItem) {

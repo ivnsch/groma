@@ -28,6 +28,8 @@
 		EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D5D1A506F5100DBC4AF /* Array.swift */; };
 		EB2F5D621A50B91200DBC4AF /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D611A50B91200DBC4AF /* AddItemView.swift */; };
 		EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D681A50C38B00DBC4AF /* FrozenEffect.swift */; };
+		EB2F5D6B1A51C02100DBC4AF /* PriceNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D6A1A51C02100DBC4AF /* PriceNavigationView.swift */; };
+		EB2F5D6D1A51C17200DBC4AF /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D6C1A51C17200DBC4AF /* UIView.swift */; };
 		EBEEDD691A49C75400FC3B29 /* CDSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD681A49C75400FC3B29 /* CDSection.swift */; };
 		EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6A1A49C94F00FC3B29 /* Section.swift */; };
 		EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */; };
@@ -79,6 +81,8 @@
 		EB2F5D5D1A506F5100DBC4AF /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		EB2F5D611A50B91200DBC4AF /* AddItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		EB2F5D681A50C38B00DBC4AF /* FrozenEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrozenEffect.swift; sourceTree = "<group>"; };
+		EB2F5D6A1A51C02100DBC4AF /* PriceNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceNavigationView.swift; sourceTree = "<group>"; };
+		EB2F5D6C1A51C17200DBC4AF /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		EBEEDD681A49C75400FC3B29 /* CDSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDSection.swift; sourceTree = "<group>"; };
 		EBEEDD6A1A49C94F00FC3B29 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionMapper.swift; sourceTree = "<group>"; };
@@ -198,6 +202,7 @@
 				EB2F5D211A4C20E200DBC4AF /* UIViewController.swift */,
 				EB2F5D231A4C2B0600DBC4AF /* UIStoryboard.swift */,
 				EB2F5D5D1A506F5100DBC4AF /* Array.swift */,
+				EB2F5D6C1A51C17200DBC4AF /* UIView.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -224,6 +229,7 @@
 				EB2F5D671A50C36E00DBC4AF /* helper */,
 				EB2F5D591A4F5C8100DBC4AF /* SwipeableCell.swift */,
 				EB2F5D611A50B91200DBC4AF /* AddItemView.swift */,
+				EB2F5D6A1A51C02100DBC4AF /* PriceNavigationView.swift */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -423,6 +429,8 @@
 				EBF162EB1A3CA2470048E37C /* Product.swift in Sources */,
 				EB2F5D5C1A5058E900DBC4AF /* TableViewListItem.swift in Sources */,
 				EB2F5D621A50B91200DBC4AF /* AddItemView.swift in Sources */,
+				EB2F5D6B1A51C02100DBC4AF /* PriceNavigationView.swift in Sources */,
+				EB2F5D6D1A51C17200DBC4AF /* UIView.swift in Sources */,
 				EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */,
 				EB2743DB1A3E3ACE00593AB0 /* CDProduct.swift in Sources */,
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
