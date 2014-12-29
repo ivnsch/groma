@@ -375,9 +375,15 @@
                                 <outlet property="totalPriceLabel" destination="HHn-gV-K9h" id="ug7-FB-ktW"/>
                             </connections>
                         </view>
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="4xW-aG-kPS">
+                            <connections>
+                                <action selector="onEditTap:" destination="BYZ-38-t0r" id="Tpr-Bd-PYJ"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="addItemView" destination="XO9-gD-NZj" id="dPV-HS-WyR"/>
+                        <outlet property="editButton" destination="4xW-aG-kPS" id="JWp-Ab-CNE"/>
                         <outlet property="pricesView" destination="ETJ-rQ-jD6" id="p02-Uu-TOr"/>
                     </connections>
                 </viewController>

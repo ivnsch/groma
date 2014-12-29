@@ -153,11 +153,13 @@ class CDListItemProvider: CDProvider {
         let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         
         let cdListItem = self.loadListItem(listItem.id)
+        let cdSection = self.loadSection(listItem.section.name)! // since we are updating an item, we assume section exists
         
         cdListItem.done = listItem.done
         cdListItem.product.name = listItem.product.name
         cdListItem.product.quantity = listItem.product.quantity
         cdListItem.product.price = listItem.product.price
+        cdListItem.section = cdSection
         
         let saved = self.save()
         
@@ -165,5 +167,14 @@ class CDListItemProvider: CDProvider {
         
         
         return cdListItem
+    }
+    
+    func remove(listItem:ListItem) -> Bool {
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+
+        let cdListItem = self.loadListItem(listItem.id)
+        appDelegate.managedObjectContext!.deleteObject(cdListItem)
+
+        return self.save()
     }
 }

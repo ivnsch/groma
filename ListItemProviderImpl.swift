@@ -20,35 +20,7 @@ class ListItemProviderImpl:ListItemProvider {
     }
     
     func remove(listItem:ListItem) -> Bool {
-        
-        //TODO - remove list item by id
-        
-//        var success = false
-//
-//        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-//        let entity = NSEntityDescription.entityForName("Product", inManagedObjectContext: appDelegate.managedObjectContext!)
-//        let fetch = NSFetchRequest()
-//        fetch.entity = entity
-//
-//        let predicate = NSPredicate(format: "name == %@", item)
-//        fetch.predicate = predicate
-//
-//        var error:NSError?
-//        let products = appDelegate.managedObjectContext!.executeFetchRequest(fetch, error: &error) as [Product]
-//
-//        for product in products {
-//            appDelegate.managedObjectContext!.deleteObject(product)
-//        }
-//
-//        if appDelegate.managedObjectContext!.save(&error) {
-//            success = true
-//        } else {
-//            println(error?.userInfo)
-//        }
-//        
-//        return success
-        
-        return true
+        return self.cdProvider.remove(listItem)
     }
     
     func add(listItem:ListItem) -> ListItem? {

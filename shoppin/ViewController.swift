@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ItemsObserver, SideMenuObserver, AddItemViewDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ItemsObserver, SideMenuObserver, AddItemViewDelegate, ListItemsEditTableViewDelegate
 //    , UIBarPositioningDelegate
 {
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
@@ -34,10 +34,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
   
     private var listItemsTableViewController:ListItemsTableViewController!
     
-    var itemsNotificator:ItemsNotificator?
-    var sideMenuManager:SideMenuManager?
+    var itemsNotificator:ItemsNotificator!
+    var sideMenuManager:SideMenuManager!
 
     @IBOutlet weak var pricesView:PriceNavigationView!
+    @IBOutlet weak var editButton: UIBarButtonItem!
+    
+    private var gestureRecognizer:UIGestureRecognizer!
     
     
     required init(coder aDecoder: NSCoder) {
@@ -82,11 +85,23 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onDonePriceTap() {
-        sideMenuManager?.setDoneItemsOpen(true)
+        sideMenuManager!.setDoneItemsOpen(true)
     }
     
+    @IBAction func onEditTap(sender: AnyObject) {
+        let editButton = sender as UIBarButtonItem
+        let editing = !self.listItemsTableViewController.editing
+        
+        self.listItemsTableViewController.setEditing(editing, animated: true)
+        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
+        self.sideMenuManager!.setGestureRecognizersEnabled(!editing) //don't block reordering rows
+        if editing {
+            editButton.title = "Done"
+        } else {
+            editButton.title = "Edit"
+        }
+    }
     
-  
     func itemsChanged() {
         self.initItems()
     }
@@ -118,10 +133,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         self.addChildViewControllerAndView(self.listItemsTableViewController, viewIndex: 0)
         
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "clearThings")
+        self.gestureRecognizer = UITapGestureRecognizer(target: self, action: "clearThings")
         self.listItemsTableViewController.view.addGestureRecognizer(gestureRecognizer)
         self.listItemsTableViewController.scrollViewDelegate = self
         self.listItemsTableViewController.listItemsTableViewDelegate = self
+        self.listItemsTableViewController.listItemsEditTableViewDelegate = self
     }
     
     private func onSectionSuggestionSelected(sectionSuggestion:String) {
@@ -207,6 +223,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
+    func onListItemChangedSection(tableViewListItem: TableViewListItem) {
+        self.listItemsProvider.update(tableViewListItem.listItem)
+    }
     
     func updatePrices() {
 
@@ -265,20 +284,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.addItemView.resignFirstResponder()
         self.updatePrices()
     }
-
     
-//    func removeItem(indexPath:NSIndexPath) {
-//        let listItem:ListItem = self.items[indexPath.row]
-//        let product:Product = listItem.product
-//        
-//        let removedPersisted = self.listItemsProvider.remove(listItem)
-//        if (removedPersisted) {
-//            self.items.removeAtIndex(indexPath.row)
-//            
-//            self.productsTableView.beginUpdates()
-//            self.productsTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
-//            self.productsTableView.endUpdates()
-//        }
-//    }
+    func onListItemDeleted(tableViewListItem: TableViewListItem) {
+        self.listItemsProvider.remove(tableViewListItem.listItem)
+    }
 }
 

@@ -24,6 +24,7 @@ protocol ItemsNotificator {
 }
 
 protocol SideMenuManager {
+    func setGestureRecognizersEnabled(enabled:Bool) //avoid conflicts with contained recognizers (tableview, etc)
     func setDoneItemsOpen(open:Bool)
 }
 
@@ -39,6 +40,8 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
     private var rightViewController: DoneViewController!
 
     private let centerPanelExpandedOffset: CGFloat = 60
+    
+    private var panGestureRecognizer:UIGestureRecognizer!
     
     var itemObservers:[ItemsObserver] = []
 
@@ -83,8 +86,12 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
         viewControler.sideMenuManager = self
         self.addChildViewControllerAndView(centerViewController)
         
-        let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePanGesture:")
+        self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: "handlePanGesture:")
         self.centerViewController.view.addGestureRecognizer(panGestureRecognizer)
+    }
+    
+    func setGestureRecognizersEnabled(enabled:Bool) {
+        panGestureRecognizer.enabled = enabled
     }
     
     func showShadowForCenterViewController(shouldShowShadow: Bool) {

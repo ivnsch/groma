@@ -12,6 +12,11 @@ protocol ListItemsTableViewDelegate {
     func onListItemClear(tableViewListItem:TableViewListItem)
 }
 
+protocol ListItemsEditTableViewDelegate {
+    func onListItemChangedSection(tableViewListItem:TableViewListItem) //TODO save also sorting position in a section!
+    func onListItemDeleted(tableViewListItem:TableViewListItem)
+}
+
 enum ListItemsTableViewControllerStyle {
     case Normal, Gray
 }
@@ -25,7 +30,8 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
     
     var scrollViewDelegate:UIScrollViewDelegate?
     var listItemsTableViewDelegate:ListItemsTableViewDelegate?
-    
+    var listItemsEditTableViewDelegate:ListItemsEditTableViewDelegate?
+
     private(set) var sections:[Section] = [] // quick access. Sorting not necessarily same as in tableViewSections
     private(set) var items:[ListItem] = [] // quick access. Sorting not necessarily same as in tableViewSections
     
@@ -64,11 +70,8 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
 
         self.initTableView()
         
-//        let tapGesture = UITapGestureRecognizer(target: self, action: "handleTapGesture:")
-//        tapGesture.numberOfTapsRequired = 2
-//        self.tableView.addGestureRecognizer(tapGesture)
-        
-//        self.tableView.allowsMultipleSelectionDuringEditing = false
+        //TODO maybe delete with this?
+//        self.tableView.allowsMultipleSelectionDuringEditing = true
     }
     
     
@@ -163,46 +166,50 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
     func removeListItem(listItem:ListItem, animation:UITableViewRowAnimation) {
         
         if let indexPath = self.getIndexPath(listItem) {
+            self.removeListItem(listItem, indexPath: indexPath, animation: animation)
+        }
+    }
+    
+    // TODO return bool
+    private func removeListItem(listItem:ListItem, indexPath:NSIndexPath, animation:UITableViewRowAnimation) {
+        // TODO review this, we store items reduntantely, so find index in one list, remove, use indexPath for the other list....
+        // also is it thread safe to pass indexpath like this
+        // paramater indexPath and listitem?
+        var indexMaybe:Int?
+        for i in 0...self.items.count {
+            if self.items[i] == listItem {
+                indexMaybe = i
+                break
+            }
+        }
+        
+        if let index = indexMaybe {
+            // remove from model
+            self.items.removeAtIndex(index)
+            let tableViewSection = self.tableViewSections[indexPath.section]
+            tableViewSection.tableViewListItems.removeAtIndex(indexPath.row)
             
-            // TODO review this, we store items reduntantely, so find index in one list, remove, use indexPath for the other list....
-            // also is it thread safe to pass indexpath like this
-            // paramater indexPath and listitem?
-            var indexMaybe:Int?
-            for i in 0...self.items.count {
-                if self.items[i] == listItem {
-                    indexMaybe = i
-                    break
+            // remove from table view
+            self.tableView.beginUpdates()
+            self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: animation)
+            
+            // remove section if no items
+            if tableViewSection.tableViewListItems.isEmpty {
+                // remove table view section
+                self.tableViewSections.removeAtIndex(indexPath.section)
+                // remove model section TODO better way
+                var sectionIndexMaybe:Int?
+                for (index, section) in enumerate(self.sections) {
+                    if section == tableViewSection.section {
+                        sectionIndexMaybe = index
+                    }
+                }
+                if let sectionIndex = sectionIndexMaybe {
+                    self.sections.removeAtIndex(sectionIndex)
+                    self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: animation)
                 }
             }
-            
-            if let index = indexMaybe {
-                // remove from model
-                self.items.removeAtIndex(index)
-                let tableViewSection = self.tableViewSections[indexPath.section]
-                tableViewSection.tableViewListItems.removeAtIndex(indexPath.row)
-                
-                // remove from table view
-                self.tableView.beginUpdates()
-                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: animation)
-                
-                // remove section if no items
-                if tableViewSection.tableViewListItems.isEmpty {
-                    // remove table view section
-                    self.tableViewSections.removeAtIndex(indexPath.section)
-                    // remove model section TODO better way
-                    var sectionIndexMaybe:Int?
-                    for (index, section) in enumerate(self.sections) {
-                        if section == tableViewSection.section {
-                            sectionIndexMaybe = index
-                        }
-                    }
-                    if let sectionIndex = sectionIndexMaybe {
-                        self.sections.removeAtIndex(sectionIndex)
-                        self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: animation)
-                    }
-                }
-                self.tableView.endUpdates()
-            }
+            self.tableView.endUpdates()
         }
     }
     
@@ -237,13 +244,6 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
         }
     }
     
-//    // TODO return bool
-//    func removeListItem(listItem:ListItem, animation:UITableViewRowAnimation) {
-//        if let indexPath = self.getIndexPath(listItem) {
-//            self.removeListItem(listItem, animation: animation)
-//        }
-//    }
-    
     func startItemSwipe(tableViewListItem: TableViewListItem) {
         clearPendingSwipeItemIfAny()
     }
@@ -259,21 +259,11 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
     func undoSwipe(tableViewListItem: TableViewListItem) {
         self.swipedTableViewListItem = nil
     }
-    
-    func handleTapGesture(sender:UITapGestureRecognizer) {
-        let tapLocation = sender.locationInView(self.tableView)
-        let indexPathMaybe:NSIndexPath? = self.tableView.indexPathForRowAtPoint(tapLocation)
-        
-        if let indexPath = indexPathMaybe {
-            let tableViewListItem:TableViewListItem = self.tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
-            listItemsTableViewDelegate?.onListItemClear(tableViewListItem)
-        }
-    }
 
     // MARK: - Table view data source
 
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return false
+        return self.editing
     }
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -312,31 +302,36 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
         
     }
     
-//    override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-//        return UITableViewCellEditingStyle.Delete
-//    }
-    
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            //            self.toggleItemDone(self.sections[indexPath.section].listItems[indexPath.row])
+            
+            self.tableView.beginUpdates()
+
+            // remove from tableview and model
+            let listItem = self.tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
+            self.removeListItem(listItem.listItem, indexPath: indexPath, animation: UITableViewRowAnimation.Bottom)
+            
+            // remove from content provider
+            self.listItemsEditTableViewDelegate?.onListItemDeleted(listItem)
+            
+            self.tableView.endUpdates()
         }
     }
     
-//    override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-//        return UITableViewCellEditingStyle.None
-//    }
-    
     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
+        return self.editing
     }
     
     override func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+        let srcSection = self.tableViewSections[sourceIndexPath.section]
+        let tableViewListItem = srcSection.tableViewListItems[sourceIndexPath.row]
+        srcSection.tableViewListItems.removeAtIndex(sourceIndexPath.row)
         
-        
-    }
-    
-//    override func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
-//        return NSIndexPath()
-//    }
+        let dstSection = self.tableViewSections[destinationIndexPath.section]
+        tableViewListItem.listItem.section = dstSection.section //not superclean to update model data in this controller, but for simplicity...
 
+        dstSection.tableViewListItems.insert(tableViewListItem, atIndex: destinationIndexPath.row)
+        
+        self.listItemsEditTableViewDelegate?.onListItemChangedSection(tableViewListItem)
+    }
 }
