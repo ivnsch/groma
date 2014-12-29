@@ -9,40 +9,17 @@
 import UIKit
 import CoreData
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ItemsObserver, SideMenuObserver
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ItemsObserver, SideMenuObserver, AddItemViewDelegate
 //    , UIBarPositioningDelegate
 {
-//    @IBOutlet weak var tableView: UITableView!
-    
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
 
-    private var addModus:Bool = true
-
+    @IBOutlet weak var addItemView: AddItemView!
     
-    //TODO put in new view
-    @IBOutlet weak var productDetailsContainer: UIView!
-    @IBOutlet weak var inputBar: UIView!
-    @IBOutlet weak var inputField: UITextField!
-    @IBOutlet weak var addSectionContainer: UIView!
-    
-    @IBOutlet weak var plusButton: UIButton!
-    
-    @IBOutlet weak var priceInput: UITextField!
-    @IBOutlet weak var quantityInput: UITextField!
-    
-    @IBOutlet weak var totalPriceLabel: UILabel!
-    @IBOutlet weak var donePriceLabel: UILabel!
-    @IBOutlet weak var shopStatusContainer: UIView!
-
-    private var shopStatusContainerTopConstraint:NSLayoutConstraint?
-    
-    @IBOutlet weak var sectionInput: UITextField!
     lazy var sectionAutosuggestionsViewController:AutosuggestionsTableViewController = {
         
-        let sectionFrame = self.sectionInput.frame
-        let originAbsolute = self.sectionInput.superview!.convertPoint(sectionFrame.origin, toView: self.view)
-        let frame = CGRectMake(originAbsolute.x, originAbsolute.y + sectionFrame.size.height, sectionFrame.size.width, 0)
-        
+        let frame = self.addItemView.sectionAutosuggestionsFrame(self.view)
+
         let viewController = AutosuggestionsTableViewController(frame: frame, onSuggestionSelected: { (suggestion:String) -> () in
             self.onSectionSuggestionSelected(suggestion)
         })
@@ -71,38 +48,43 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.initTableViewController()
         self.initItems()
         
-        self.resetProductInputs()
+        let inset = self.getTableViewInset()
+        self.listItemsTableViewController.tableViewTopInset = inset
+        self.listItemsTableViewController.tableViewTopOffset = -inset
+        
         self.updatePrices()
         
-        let menuExpanded = true
-        self.setAddModus(menuExpanded)
-        
-        self.listItemsTableViewController.tableViewTopOffset = -getTableViewInset(menuExpanded)
-   
-        self.priceInput.keyboardType = UIKeyboardType.DecimalPad
-        self.quantityInput.keyboardType = UIKeyboardType.DecimalPad
-        
-        inputField.placeholder = "Item name"
-        sectionInput.placeholder = "Section (optional)"
-        
-        self.addBlurToView(inputBar)
-        self.addBlurToView(productDetailsContainer)
-        self.addBlurToView(addSectionContainer)
-        self.addBlurToView(shopStatusContainer)
-        
-        self.sectionInput.delegate = self
-        self.sectionInput.addTarget(self, action: "sectionInputFieldChanged:", forControlEvents: UIControlEvents.EditingChanged)
-        sectionInput.delegate = self
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: "onDonePriceTap:")
-        self.donePriceLabel.userInteractionEnabled = true
-        self.donePriceLabel.addGestureRecognizer(tapGesture)
+        self.addItemView.delegate = self
     }
     
-    func onDonePriceTap(sender:UITapGestureRecognizer) {
+    // MARK: - AddItemViewDelegate
+
+    func onAddTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
+        if !name.isEmpty {
+            var price:Float = priceText.floatValue // TODO what happens if not a number? maybe use optional like toInt()?
+            
+            let quantity = quantityText.toInt() ?? 1
+            let sectionName = sectionName ?? defaultSectionIdentifier
+        
+            self.addItem(name, price: price, quantity: quantity, sectionName:sectionName)
+            self.view.endEditing(true)
+            self.addItemView.clearInputs()
+        }
+    }
+
+    func onSectionInputChanged(text: String) {
+        sectionAutosuggestionsViewController.options = self.listItemsProvider.sections().map{$0.name ?? ""} //TODO make this async or add a memory cache
+        sectionAutosuggestionsViewController.searchText(text)
+        
+        sectionAutosuggestionsViewController.view.hidden = text.isEmpty
+    }
+    
+    func onDonePriceTap() {
         sideMenuManager?.setDoneItemsOpen(true)
     }
     
+    
+  
     func itemsChanged() {
         self.initItems()
     }
@@ -141,19 +123,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func onSectionSuggestionSelected(sectionSuggestion:String) {
-        self.sectionInput.text = sectionSuggestion
+        self.addItemView.sectionText = sectionSuggestion
         self.sectionAutosuggestionsViewController.view.hidden = true
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         clearThings()
     }
+
     
     private func hideKeyboard() {
-        inputField.resignFirstResponder()
-        priceInput.resignFirstResponder()
-        quantityInput.resignFirstResponder()
-        sectionInput.resignFirstResponder()
+        self.addItemView.resignFirstResponder()
     }
     
     func clearThings() {
@@ -164,47 +144,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     
-    func sectionInputFieldChanged(textField:UITextField) {
-        println(textField.text)
-
-        sectionAutosuggestionsViewController.options = self.listItemsProvider.sections().map{$0.name ?? ""} //TODO make this async or add a memory cache
-        sectionAutosuggestionsViewController.searchText(textField.text)
-
-        sectionAutosuggestionsViewController.view.hidden = textField.text.isEmpty
-    }
-    
-    //TODO this depends if its for the todo or done tableview change signature/parameters/functionality
-    func getTableViewInset(topPanelExpanded:Bool) -> CGFloat {
-        var inset:CGFloat = CGRectGetHeight(shopStatusContainer.frame)
-        if topPanelExpanded {
-            inset += (CGRectGetHeight(inputBar.frame)
-                + CGRectGetHeight(productDetailsContainer.frame)
-                + CGRectGetHeight(addSectionContainer.frame)
-            )
-        } else {
-            inset += CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-        }
-        return inset
-    }
-    
     func onListItemClear(tableViewListItem:TableViewListItem) {
         self.setItemDone(tableViewListItem.listItem)
     }
 
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        let touch: AnyObject? = event.allTouches()?.anyObject()
-        if inputField.isFirstResponder() && touch?.view != inputField {
-            inputField.resignFirstResponder()
-        }
-        if priceInput.isFirstResponder() && touch?.view != priceInput {
-            priceInput.resignFirstResponder()
-        }
-        if quantityInput.isFirstResponder() && touch?.view != quantityInput {
-            quantityInput.resignFirstResponder()
-        }
-        super.touchesBegan(touches, withEvent: event)
-    }
-    
 //    func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
 //        return UIBarPosition.TopAttached
 //    }
@@ -213,117 +156,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //        return UIStatusBarStyle.LightContent
 //    }
 
-    func createBlurView() -> UIView {
-        var blurView:UIView
-        
-        if NSClassFromString("UIBlurEffect") != nil {
-            let blurEffect:UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.ExtraLight)
-            blurView = UIVisualEffectView(effect: blurEffect)
-            blurView.frame = view.frame
-        } else {
-            blurView = UIToolbar(frame: self.inputBar.bounds)
-        }
-        
-        return blurView
+    private func getTableViewInset() -> CGFloat {
+        return CGRectGetHeight(self.addItemView.frame)
     }
     
-    func addBlurToView(view:UIView) {
-        let blurView = createBlurView()
-        
-        blurView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
-        let views:Dictionary = ["blurView": blurView]
-        
-        view.insertSubview(blurView, atIndex: 0)
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[blurView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[blurView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+    func onAddItemViewExpanded(expanded: Bool) {
+        self.listItemsTableViewController.tableViewTopInset = self.getTableViewInset()
     }
-
-    
-    @IBAction func quantityEditBegin(sender: AnyObject) {
-        self.quantityInput.text = ""
-    }
-    
-
-    
-    @IBAction func onPlusTap(sender: AnyObject) {
-        setAddModus(!self.addModus)
-    }
-
-    
-    func setAddModus(addModus:Bool) {
-        self.addModus = addModus
-        
-        self.inputBar.hidden = !addModus
-        self.productDetailsContainer.hidden = !addModus
-        self.addSectionContainer.hidden = !addModus
-        
-        self.plusButton.setTitle(self.addModus ? "-" : "+", forState: UIControlState.Normal)
-        
-        if let topConstraint = shopStatusContainerTopConstraint {
-            self.view.removeConstraint(topConstraint)
-        }
-        
-        if (self.addModus) {
-            
-            // FIXME hack... why not at bottom
-            let constant =
-                CGRectGetHeight(self.inputBar.frame)
-                + CGRectGetHeight(self.productDetailsContainer.frame)
-                + CGRectGetHeight(self.addSectionContainer.frame)
-            
-//            self.shopStatusContainerTopConstraint = NSLayoutConstraint(
-//                item: self.shopStatusContainer,
-//                attribute: NSLayoutAttribute.Top,
-//                relatedBy: NSLayoutRelation.Equal,
-//                toItem: self.productDetailsContainer,
-//                attribute: NSLayoutAttribute.Bottom,
-//                multiplier: 0,
-//                constant: 0)
-            self.shopStatusContainerTopConstraint = NSLayoutConstraint(
-                item: self.shopStatusContainer,
-                attribute: NSLayoutAttribute.Top,
-                relatedBy: NSLayoutRelation.Equal,
-                toItem: self.view,
-                attribute: NSLayoutAttribute.Top,
-                multiplier: 0,
-                constant: constant)
-            
-            
-        } else {
-            
-//            let frame = self.shopStatusContainer.frame
-//            let newH = frame.size.height * 1.4
-//            self.shopStatusContainer.frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, newH)
-//            
-//            self.shopStatusContainer.addConstraint(NSLayoutConstraint(
-//                item: self.shopStatusContainer,
-//                attribute: NSLayoutAttribute.Height,
-//                relatedBy: NSLayoutRelation.Equal,
-//                toItem: nil,
-//                attribute: NSLayoutAttribute.NotAnAttribute,
-//                multiplier: 0,
-//                constant: newH))
-  
-            
-            let constant:CGFloat =
-                CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-            
-            self.shopStatusContainerTopConstraint = NSLayoutConstraint(
-                item: self.shopStatusContainer,
-                attribute: NSLayoutAttribute.Top,
-                relatedBy: NSLayoutRelation.Equal,
-                toItem: self.view,
-                attribute: NSLayoutAttribute.Top,
-                multiplier: 0,
-                constant: constant)
-            
-        }
-        self.view.addConstraint(self.shopStatusContainerTopConstraint!)
-        
-        self.listItemsTableViewController.tableViewTopInset = getTableViewInset(self.addModus)
-    }
-    
     
 //    func scrollViewDidScroll(scrollView: UIScrollView) {
 //        println(scrollView.contentOffset.y)
@@ -348,32 +187,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //        self.lastContentOffset = scrollView.contentOffset.y
 //
 //    }
-    
-    
-    @IBAction func onAddTap(sender: AnyObject) {
-        let text = inputField.text
-        let priceText = priceInput.text
-        let quantityText = quantityInput.text
-        let sectionText = sectionInput.text
-        
-        var price:Float = priceText.floatValue // TODO what happens if not a number? maybe use optional like toInt()?
-        
-        let quantity = quantityText.toInt() ?? 1
-        let sectionName = sectionText ?? defaultSectionIdentifier
-        
-        if !text.isEmpty {
-            self.addItem(text, price: price, quantity: quantity, sectionName:sectionName)
-            self.view.endEditing(true)
-            self.inputField.text = ""
-            self.resetProductInputs()
-        }
-    }
-    
-    func resetProductInputs() {
-        self.inputField.text = ""
-        self.quantityInput.text = "1"
-        self.priceInput.text = ""
-    }
+
 
     func loadItems() -> [String] {
         return self.listItemsProvider.products().map {
@@ -407,8 +221,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let doneListItems = listItems.filter{$0.done}
         let donePrice:Float = calculatePrice(doneListItems)
 
-        self.totalPriceLabel.text = NSNumber(float: totalPrice).stringValue + " €"
-        self.donePriceLabel.text = NSNumber(float: donePrice).stringValue + " €"
+        self.addItemView.totalPrice = totalPrice
+        self.addItemView.donePrice = donePrice
     }
     
     private func setItemDone(listItem:ListItem) {
@@ -442,7 +256,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             self.listItemsTableViewController.addListItem(savedListItem)
         }
         
-        self.sectionInput.resignFirstResponder()
+        self.addItemView.resignFirstResponder()
         self.updatePrices()
     }
 

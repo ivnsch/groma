@@ -8,10 +8,10 @@
 
 import UIKit
 
-extension Array {
-    func forEach(function: (element: T) -> Void) {
-        for e in self {
-            function(element: e)
+    extension Array {
+        func forEach<U>(function: (element: T) -> U) {
+            for e in self {
+                function(element: e)
+            }
         }
     }
-}
