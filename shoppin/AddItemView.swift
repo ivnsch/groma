@@ -12,8 +12,6 @@ import UIKit
 protocol AddItemViewDelegate {
     func onAddTap(name:String, price:String, quantity:String, sectionName:String)
     func onSectionInputChanged(text:String)
-    func onDonePriceTap()
-    func onAddItemViewExpanded(expanded:Bool)
 }
 
 class AddItemView: UIView, UITextFieldDelegate {
@@ -29,12 +27,16 @@ class AddItemView: UIView, UITextFieldDelegate {
     @IBOutlet weak var sectionInput: UITextField!
     
     @IBOutlet weak var heightConstraint:NSLayoutConstraint!
-    
+    @IBOutlet weak var topConstraint:NSLayoutConstraint!
+
+    var expanded:Bool = true
     
     private var inputs:[UITextField] {
         return [self.inputField, self.priceInput, self.quantityInput, self.sectionInput]
     }
 
+    private var originalHeight:CGFloat!
+    
     
     var sectionText:String {
         set {
@@ -68,17 +70,13 @@ class AddItemView: UIView, UITextFieldDelegate {
         self.sectionInput.addTarget(self, action: "sectionInputFieldChanged:", forControlEvents: UIControlEvents.EditingChanged)
         sectionInput.delegate = self
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: "onDonePriceTap:")
+        self.originalHeight = self.heightConstraint.constant
     }
     
     func sectionInputFieldChanged(textField:UITextField) {
         delegate.onSectionInputChanged(textField.text)
     }
 
-    func onDonePriceTap(sender:UITapGestureRecognizer) {
-        delegate.onDonePriceTap()
-    }
-    
     @IBAction func onAddTap(sender: AnyObject) {
         let text = inputField.text
         let priceText = priceInput.text
@@ -114,35 +112,6 @@ class AddItemView: UIView, UITextFieldDelegate {
         super.touchesBegan(touches, withEvent: event)
     }
 
-    private func calculateFrameHeight() -> CGFloat {
-        let first:CGFloat = 0
-        let viewsHeight = [self.inputBar!, self.productDetailsContainer!, self.addSectionContainer!].reduce(first, combine: { (u:CGFloat, v:UIView) -> CGFloat in
-            return u + (v.hidden ? 0 : v.frame.height)
-        })
-        
-        return viewsHeight
-    }
-
-    private func updateFrame() {
-        let height = self.calculateFrameHeight()
-        self.heightConstraint.constant = height
-        
-        self.setNeedsLayout()
-        self.layoutIfNeeded()
-    }
-    
-    var expanded:Bool = true {
-        didSet {
-            self.inputBar.hidden = !expanded
-            self.productDetailsContainer.hidden = !expanded
-            self.addSectionContainer.hidden = !expanded
-            
-            self.updateFrame()
-            
-            self.delegate.onAddItemViewExpanded(self.expanded)
-        }
-    }
-    
     override func resignFirstResponder() -> Bool {
         self.inputs.forEach{$0.resignFirstResponder()}
         return true

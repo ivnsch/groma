@@ -29,7 +29,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         return viewController
     }()
     
-    
     private let listItemsProvider = ProviderFactory().listItemProvider
   
     private var listItemsTableViewController:ListItemsTableViewController!
@@ -53,13 +52,46 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.initTableViewController()
         self.initItems()
         
-        let inset = self.getTableViewInset()
-        self.listItemsTableViewController.tableViewTopInset = inset
-        self.listItemsTableViewController.tableViewTopOffset = -inset
+        self.addItemView.delegate = self
+        
+        self.setEditing(false, animated: false)
         
         self.updatePrices()
+    }
+
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
         
-        self.addItemView.delegate = self
+        self.setAddItemViewAnchorPointTopCenter()
+    }
+    
+    //prepare add item view for scale animation, which should be top to bottom
+    private func setAddItemViewAnchorPointTopCenter() {
+        let frame = self.addItemView.frame
+        let topCenter = CGPointMake(CGRectGetMidX(frame), CGRectGetMinY(frame))
+        
+        self.addItemView.layer.anchorPoint = CGPointMake(0.5, 0)
+        
+        //        println("constraint height: \(self.addItemView.topConstraint.constant)")
+        
+        let navbarHeight = self.navigationController!.navigationBar.frame.height
+        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+        
+        //////////////////////////////////////////////////////////////////////
+        //FIXME
+        //        self.addItemView.layer.position = topCenter
+        
+        //for some reason we get -64 or alternate between -66.5 and -64 (depending where we call this) if we use this. It should be always -66.5
+//                self.addItemView.topConstraint.constant = -topCenter.y
+        
+        //and if we use this, we get always -64. why is extra offset? our view should start exactly after status and navigation bar
+//                let navbarHeight = self.navigationController!.navigationBar.frame.height
+//                let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+//                let offset = navbarHeight + statusBarHeight
+//                self.addItemView.topConstraint.constant = -offset
+        
+        self.addItemView.topConstraint.constant = -66.5
+        //////////////////////////////////////////////////////////////////////
     }
     
     // MARK: - AddItemViewDelegate
@@ -84,17 +116,39 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         sectionAutosuggestionsViewController.view.hidden = text.isEmpty
     }
     
-    func onDonePriceTap() {
-        sideMenuManager!.setDoneItemsOpen(true)
-    }
-    
     @IBAction func onEditTap(sender: AnyObject) {
         let editButton = sender as UIBarButtonItem
         let editing = !self.listItemsTableViewController.editing
         
-        self.listItemsTableViewController.setEditing(editing, animated: true)
+        self.setEditing(editing, animated: true)
+    }
+    
+    override func setEditing(editing: Bool, animated: Bool) {
+        self.listItemsTableViewController.setEditing(editing, animated: animated)
         self.gestureRecognizer.enabled = !editing //don't block tap on delete button
         self.sideMenuManager!.setGestureRecognizersEnabled(!editing) //don't block reordering rows
+
+        self.addItemView.expanded = editing
+        let animationTime:NSTimeInterval = animated ? 0.2 : 0
+
+//        self.addItemView.hidden = false
+        
+        UIView.animateWithDuration(animationTime, animations: { () -> Void in
+            let transform:CGAffineTransform = CGAffineTransformScale(CGAffineTransformIdentity, 1, editing ? 1 : 0.001) //0.001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
+            self.addItemView.transform = transform
+            
+
+            let navbarHeight = self.navigationController!.navigationBar.frame.height
+            let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+
+            self.listItemsTableViewController.tableViewTopInset = navbarHeight + statusBarHeight + CGRectGetHeight(self.addItemView.frame)
+            self.listItemsTableViewController.tableViewTopOffset = -self.listItemsTableViewController.tableViewTopInset
+            
+        }) { p in
+//            if !editing {self.addItemView.hidden = true} // without this uitableview doesn't receive touch in read modus. Also seems to be solved using 0.001 for scale down instead of 0...
+        }
+
+        
         if editing {
             editButton.title = "Done"
         } else {
@@ -122,10 +176,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private func initItems() {
         let items = listItemsProvider.listItems().filter{!$0.done}
         self.listItemsTableViewController.setListItems(items)
-    }
-    
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
     }
     
     private func initTableViewController() {
@@ -180,10 +230,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
 
         return addItemViewHeight + navbarHeight + statusBarHeight
-    }
-    
-    func onAddItemViewExpanded(expanded: Bool) {
-        self.listItemsTableViewController.tableViewTopInset = self.getTableViewInset()
     }
     
 //    func scrollViewDidScroll(scrollView: UIScrollView) {

@@ -275,24 +275,6 @@
                                             </mask>
                                         </variation>
                                     </view>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yNu-hC-zwB">
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k3e-Wr-PHU">
-                                                <rect key="frame" x="501" y="-23" width="71" height="47"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="71" id="OlK-jl-Yuj"/>
-                                                    <constraint firstAttribute="height" constant="47" id="jkz-Wt-RTf"/>
-                                                </constraints>
-                                                <state key="normal" title="-">
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                            </button>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="k3e-Wr-PHU" secondAttribute="trailing" constant="28" id="XYb-gu-eVw"/>
-                                            <constraint firstAttribute="centerY" secondItem="k3e-Wr-PHU" secondAttribute="centerY" id="Xic-vd-Ls0"/>
-                                        </constraints>
-                                    </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="ect-T8-cxW" firstAttribute="left" secondItem="XO9-gD-NZj" secondAttribute="left" id="D4c-mz-Hpe"/>
@@ -304,8 +286,6 @@
                                     <constraint firstAttribute="trailing" secondItem="9YK-xc-P2u" secondAttribute="trailing" id="dE7-bg-mM2"/>
                                     <constraint firstAttribute="trailing" secondItem="J4O-HN-4R0" secondAttribute="trailing" id="diX-Z9-9eX"/>
                                     <constraint firstAttribute="height" constant="133" id="hTr-6I-kHA"/>
-                                    <constraint firstAttribute="trailing" secondItem="yNu-hC-zwB" secondAttribute="trailing" id="kng-Ar-72u"/>
-                                    <constraint firstItem="yNu-hC-zwB" firstAttribute="leading" secondItem="XO9-gD-NZj" secondAttribute="leading" id="nNB-Ak-7br"/>
                                     <constraint firstItem="9YK-xc-P2u" firstAttribute="leading" secondItem="XO9-gD-NZj" secondAttribute="leading" id="rJV-qL-8jT"/>
                                 </constraints>
                                 <connections>
@@ -317,6 +297,7 @@
                                     <outlet property="productDetailsContainer" destination="9YK-xc-P2u" id="t9L-qq-2IH"/>
                                     <outlet property="quantityInput" destination="k4s-g2-9aR" id="w8i-XN-r0C"/>
                                     <outlet property="sectionInput" destination="C9f-Bc-EUk" id="PUf-3x-Mgx"/>
+                                    <outlet property="topConstraint" destination="DF8-ff-x0M" id="dqB-YE-C96"/>
                                 </connections>
                             </view>
                         </subviews>
