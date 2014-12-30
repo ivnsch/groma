@@ -87,7 +87,11 @@ class AddItemView: UIView, UITextFieldDelegate {
     }
 
     func clearInputs() {
-        self.inputs.forEach{$0.text = ""}
+        for input in self.inputs {
+            if input != self.sectionInput { // section name stays
+                input.text = ""
+            }
+        }
         self.setInputsDefaultValues()
     }
     
