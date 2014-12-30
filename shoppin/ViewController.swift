@@ -41,7 +41,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private var gestureRecognizer:UIGestureRecognizer!
     
-    
+    private var updatingListItem:ListItem?
+
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -98,15 +99,40 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     func onAddTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
         if !name.isEmpty {
-            var price:Float = priceText.floatValue // TODO what happens if not a number? maybe use optional like toInt()?
             
-            let quantity = quantityText.toInt() ?? 1
-            let sectionName = sectionName ?? defaultSectionIdentifier
+            let (name_, price, quantity, sectionName_) = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName)
         
-            self.addItem(name, price: price, quantity: quantity, sectionName:sectionName)
+            self.addItem(name_, price: price, quantity: quantity, sectionName:sectionName_)
             self.view.endEditing(true)
             self.addItemView.clearInputs()
         }
+    }
+    
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
+        let (name_, price, quantity, sectionName_) = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName)
+        
+        self.updateItem(self.updatingListItem!, itemName: name_, price: price, quantity: quantity, sectionName:sectionName_)
+        self.view.endEditing(true)
+        self.addItemView.clearInputs()
+        
+        self.updatingListItem = nil
+    }
+    
+    private func processListItemInputs(name: String, priceText: String, quantityText: String, sectionName: String) -> (name:String, price:Float, quantity:Int, sectionName:String) {
+        //TODO?
+        //        if !price {
+        //            price = 0
+        //        }
+        //        if !quantity {
+        //            quantity = 0
+        //        }
+        
+        var price:Float = priceText.floatValue // TODO what happens if not a number? maybe use optional like toInt()?
+        
+        let quantity = quantityText.toInt() ?? 1
+        let sectionName = sectionName ?? defaultSectionIdentifier
+        
+        return (name, price, quantity, sectionName)
     }
 
     func onSectionInputChanged(text: String) {
@@ -124,6 +150,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     override func setEditing(editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        
         self.listItemsTableViewController.setEditing(editing, animated: animated)
         self.gestureRecognizer.enabled = !editing //don't block tap on delete button
         self.sideMenuManager!.setGestureRecognizersEnabled(!editing) //don't block reordering rows
@@ -308,14 +336,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func addItem(itemName:String, price:Float, quantity:Int, sectionName:String) {
-//TODO?
-//        if !price {
-//            price = 0
-//        }
-//        if !quantity {
-//            quantity = 0
-//        }
-        
         // for now just create a new product and a listitem with it
         let product = Product(name: itemName, price:price, quantity:quantity)
         let section = Section(name: sectionName)
@@ -329,6 +349,27 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         self.addItemView.resignFirstResponder()
         self.updatePrices()
+    }
+    
+    func updateItem(listItem: ListItem, itemName:String, price:Float, quantity:Int, sectionName:String) {
+        let product = Product(name: itemName, price: price, quantity: quantity)
+        let section = Section(name: sectionName)
+        
+        let listItem = ListItem(id: self.updatingListItem!.id, done: self.updatingListItem!.done, product: product, section: section)
+        
+        if self.listItemsProvider.update(listItem) {
+            self.listItemsTableViewController.updateListItem(listItem)
+        }
+        
+        self.addItemView.resignFirstResponder()
+        self.updatePrices()
+    }
+    
+    func onListItemSelected(tableViewListItem: TableViewListItem) {
+        if self.editing {
+            self.updatingListItem = tableViewListItem.listItem
+            self.addItemView.setUpdateItem(tableViewListItem.listItem)
+        }
     }
     
     func onListItemDeleted(tableViewListItem: TableViewListItem) {

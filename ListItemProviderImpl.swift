@@ -33,6 +33,7 @@ class ListItemProviderImpl:ListItemProvider {
     }
     
     func update(listItem:ListItem) -> Bool {
+        self.cdProvider.saveSection(listItem.section) // creates a new section if there isn't one already
         return self.cdProvider.updateListItem(listItem) != nil
     }
     

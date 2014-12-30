@@ -68,4 +68,8 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
         let items = listItemsProvider.listItems().filter{$0.done}
         self.listItemsTableViewController.setListItems(items)
     }
+    
+    func onListItemSelected(tableViewListItem: TableViewListItem) {
+        //do nothing
+    }
 }

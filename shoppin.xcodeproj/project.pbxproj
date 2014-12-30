@@ -30,6 +30,7 @@
 		EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D681A50C38B00DBC4AF /* FrozenEffect.swift */; };
 		EB2F5D6B1A51C02100DBC4AF /* PriceNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D6A1A51C02100DBC4AF /* PriceNavigationView.swift */; };
 		EB2F5D6D1A51C17200DBC4AF /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D6C1A51C17200DBC4AF /* UIView.swift */; };
+		EB2F5D6F1A530FBC00DBC4AF /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D6E1A530FBC00DBC4AF /* Float.swift */; };
 		EBEEDD691A49C75400FC3B29 /* CDSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD681A49C75400FC3B29 /* CDSection.swift */; };
 		EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6A1A49C94F00FC3B29 /* Section.swift */; };
 		EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */; };
@@ -83,6 +84,7 @@
 		EB2F5D681A50C38B00DBC4AF /* FrozenEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrozenEffect.swift; sourceTree = "<group>"; };
 		EB2F5D6A1A51C02100DBC4AF /* PriceNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PriceNavigationView.swift; sourceTree = "<group>"; };
 		EB2F5D6C1A51C17200DBC4AF /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
+		EB2F5D6E1A530FBC00DBC4AF /* Float.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Float.swift; sourceTree = "<group>"; };
 		EBEEDD681A49C75400FC3B29 /* CDSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDSection.swift; sourceTree = "<group>"; };
 		EBEEDD6A1A49C94F00FC3B29 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionMapper.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 				EB2F5D231A4C2B0600DBC4AF /* UIStoryboard.swift */,
 				EB2F5D5D1A506F5100DBC4AF /* Array.swift */,
 				EB2F5D6C1A51C17200DBC4AF /* UIView.swift */,
+				EB2F5D6E1A530FBC00DBC4AF /* Float.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -457,6 +460,7 @@
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,
 				EBF162E21A3C83D50048E37C /* ListItemsViewSection.swift in Sources */,
 				EBF162F71A3CA5030048E37C /* ListItemProviderMock.swift in Sources */,
+				EB2F5D6F1A530FBC00DBC4AF /* Float.swift in Sources */,
 				EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */,
 				EB2F5D0C1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift in Sources */,
 				EB1DDEAE1A3334EC00D778DE /* shoppin.xcdatamodeld in Sources */,

@@ -11,9 +11,15 @@ import UIKit
 
 protocol AddItemViewDelegate {
     func onAddTap(name:String, price:String, quantity:String, sectionName:String)
+    func onUpdateTap(name:String, price:String, quantity:String, sectionName:String)
     func onSectionInputChanged(text:String)
 }
 
+enum AddModus {
+    case Add, Update
+}
+
+// TODO wrap this in controller, which also handles validating, creating listitem, maybe also storing in provider
 class AddItemView: UIView, UITextFieldDelegate {
     
     @IBOutlet weak var productDetailsContainer: UIView!
@@ -29,14 +35,28 @@ class AddItemView: UIView, UITextFieldDelegate {
     @IBOutlet weak var heightConstraint:NSLayoutConstraint!
     @IBOutlet weak var topConstraint:NSLayoutConstraint!
 
+    @IBOutlet weak var addButton: UIButton!
+
     var expanded:Bool = true
+
+    
+    private var addModus:AddModus = .Add {
+        didSet {
+            switch addModus {
+            case .Add:
+                self.addButton.setTitle("Add", forState: UIControlState.Normal)
+            case .Update:
+                self.addButton.setTitle("Update", forState: UIControlState.Normal)
+            }
+        }
+    }
     
     private var inputs:[UITextField] {
         return [self.inputField, self.priceInput, self.quantityInput, self.sectionInput]
     }
 
     private var originalHeight:CGFloat!
-    
+
     
     var sectionText:String {
         set {
@@ -83,7 +103,14 @@ class AddItemView: UIView, UITextFieldDelegate {
         let quantityText = quantityInput.text
         let sectionText = sectionInput.text
         
-        delegate.onAddTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+        switch self.addModus {
+        case .Add:
+            delegate.onAddTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+        case .Update:
+            delegate.onUpdateTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+        }
+        
+        self.addModus = .Add // after adding item, either if we come from add or update, we go back to add modus
     }
 
     func clearInputs() {
@@ -119,5 +146,18 @@ class AddItemView: UIView, UITextFieldDelegate {
     override func resignFirstResponder() -> Bool {
         self.inputs.forEach{$0.resignFirstResponder()}
         return true
+    }
+    
+    func setUpdateItem(listItem:ListItem) {
+        self.addModus = .Update
+        
+        self.prefill(listItem)
+    }
+    
+    private func prefill(listItem:ListItem) {
+        self.inputField.text = listItem.product.name
+        self.sectionInput.text = listItem.section.name
+        self.quantityInput.text = String(listItem.product.quantity)
+        self.priceInput.text = listItem.product.price.toString(2)
     }
 }

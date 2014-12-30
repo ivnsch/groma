@@ -289,6 +289,7 @@
                                     <constraint firstItem="9YK-xc-P2u" firstAttribute="leading" secondItem="XO9-gD-NZj" secondAttribute="leading" id="rJV-qL-8jT"/>
                                 </constraints>
                                 <connections>
+                                    <outlet property="addButton" destination="mT8-FV-1WC" id="xxu-Pm-CGC"/>
                                     <outlet property="addSectionContainer" destination="J4O-HN-4R0" id="qC7-hu-Mu3"/>
                                     <outlet property="heightConstraint" destination="hTr-6I-kHA" id="Jag-p5-Q8f"/>
                                     <outlet property="inputBar" destination="ect-T8-cxW" id="TW7-LI-vJu"/>

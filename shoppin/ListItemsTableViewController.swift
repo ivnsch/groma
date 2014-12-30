@@ -10,6 +10,7 @@ import UIKit
 
 protocol ListItemsTableViewDelegate {
     func onListItemClear(tableViewListItem:TableViewListItem)
+    func onListItemSelected(tableViewListItem:TableViewListItem)
 }
 
 protocol ListItemsEditTableViewDelegate {
@@ -87,11 +88,16 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
         
         self.tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         
+        self.tableView.allowsSelectionDuringEditing = true
 //        self.tableView.setEditing(true, animated: true)
     }
     
     func setListItems(items:[ListItem]) { // as function instead of variable+didSet because didSet is called each time we modify the array
         self.items = items
+        self.initTableViewContent()
+    }
+    
+    private func initTableViewContent() {
         let(tableViewSections, sections) = self.buildTableViewSections(self.items)
         self.tableViewSections = tableViewSections
         self.sections = sections
@@ -125,25 +131,51 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
         }
     }
     
+    // TODO simpler way to update, maybe just always reinit the table... also refactor rest (build sections etc) it is way more complex than it should
+    // right now prefer not to always reinit the table because this can change sorting
+    // so first we should implement persistent sorting, then refactor this class
+    func updateListItem(listItem:ListItem) {
+        if let indexPath = self.getIndexPath(listItem) {
+            let oldItem:TableViewListItem = self.tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
+            if (oldItem.listItem.section == listItem.section) {
+                self.tableViewSections[indexPath.section].tableViewListItems[indexPath.row] = TableViewListItem(listItem: listItem)
+                self.tableView.reloadData()
+            } else { // the item has a different (but present in tableview) section
+                //update the list item before we reinit the table, to update the section...
+                var itemIndexMaybe:Int?
+                for (index, item) in enumerate(self.items) {
+                    if item.id == listItem.id {
+                        itemIndexMaybe = index
+                    }
+                }
+                if let itemIndex = itemIndexMaybe {
+                    self.items[itemIndex] = listItem
+                    
+                    self.initTableViewContent()
+                }
+            }
+        } else { // indexpath for updated item not in the tableview, this can happen if e.g. updated item has a new section (not in tableview)
+            self.items.append(listItem) // FIXME hacky...
+            self.initTableViewContent()
+        }
+    }
+    
     // loops through list items to generate tableview sections, returns also found sections so we don't have to loop 2x
-    // assumes the items are grouped by section (items with section A, then items with section B, etc.)
     private func buildTableViewSections(listItems:[ListItem]) -> (tableViewSections:[ListItemsViewSection], sections:[Section]) {
         var tableViewSections:[ListItemsViewSection] = []
         var sections:[Section] = []
         
         if !listItems.isEmpty {
-            var set = [Section: Int]() // a "set" for quick lookup which sections we added already
+            var set = [Section: Int]() // "set" for quick lookup which sections we added already
             
-            //we don't need to initialise this variable here but compiler complains otherwise...
-            var currentTableViewSection:ListItemsViewSection = ListItemsViewSection(section: listItems.first!.section, tableViewListItems: [])
+
+            var currentTableViewSection:ListItemsViewSection!
             
-            //go through all the items, create new section when we find one, add following items to the current section until we find new one
-            //o(n)
             for listItem in listItems {
                 
                 let tableViewListItem = TableViewListItem(listItem: listItem)
                 
-                if set[listItem.section] == nil {
+                if set[listItem.section] == nil { // section not created yet - create one
                     set[listItem.section] = 1 // dummy value... swift doesn't have Set
                     sections.append(listItem.section)
                     
@@ -154,6 +186,13 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
                         currentTableViewSection.style = .Gray
                     }
                     tableViewSections.append(currentTableViewSection)
+                    
+                } else { //the section is in the set, this means it's in the tableViewSections. find it
+                    for tableViewSection in tableViewSections {
+                        if tableViewSection.section == listItem.section {
+                            currentTableViewSection = tableViewSection
+                        }
+                    }
                 }
                 currentTableViewSection.addItem(tableViewListItem)
             }
@@ -300,6 +339,11 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
         let section = self.tableViewSections[indexPath.section]
         return section.tableView(tableView, row:indexPath.row)
         
+    }
+
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let tableViewListItem = self.tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
+        self.listItemsTableViewDelegate?.onListItemSelected(tableViewListItem)
     }
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
