@@ -40,16 +40,16 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
     
     private var swipedTableViewListItem:TableViewListItem?
     
-    var tableViewTopInset:CGFloat {
+    var tableViewInset:UIEdgeInsets {
         set {
-            self.tableView.contentInset = UIEdgeInsetsMake(newValue, 0, 0, 0)
+            self.tableView.contentInset = newValue
             
             //TODO do we need this
             self.tableView.setNeedsLayout()
             self.tableView.layoutIfNeeded()
         }
         get {
-            return self.tableView.contentInset.top
+            return self.tableView.contentInset
         }
     }
     

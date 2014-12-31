@@ -21,25 +21,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gw6-cG-vVb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1012" y="-708"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="HBo-Vy-tSl">
-            <objects>
-                <viewController id="5yE-z6-6B9" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="XWc-QH-ntG"/>
-                        <viewControllerLayoutGuide type="bottom" id="y6W-Pi-Qa0"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="PKN-7d-UEy">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="iwH-r1-rsb" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-384" y="-708"/>
+            <point key="canvasLocation" x="934" y="-549"/>
         </scene>
         <!--List Items Table View Controller-->
         <scene sceneID="oM8-rF-sOo">
@@ -119,7 +101,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E2N-eA-Dwl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="476" y="-780"/>
+            <point key="canvasLocation" x="174" y="-922"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">

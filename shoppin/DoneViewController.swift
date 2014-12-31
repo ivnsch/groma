@@ -47,6 +47,11 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
         self.listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     
+    override func didMoveToParentViewController(parent: UIViewController?) {
+        let bottomInset = self.tabBarController?.tabBar.frame.height
+        self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(0, 0, bottomInset!, 0)
+    }
+    
     private func setItemUndone(listItem:ListItem) {
         listItem.done = false
         

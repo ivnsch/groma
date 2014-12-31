@@ -133,8 +133,7 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
             self.sideMenuObservers.append(rightViewController)
             rightViewController.itemsNotificator = self
             rightViewController.view.backgroundColor = UIColor.whiteColor()
-
-            self.view.insertSubview(rightViewController.view, atIndex: 0)
+            self.addChildViewControllerAndView(rightViewController, viewIndex: 0)
             rightViewController.view.setTranslatesAutoresizingMaskIntoConstraints(false)
             
             let views = ["view": rightViewController.view]

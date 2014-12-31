@@ -169,8 +169,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             let navbarHeight = self.navigationController!.navigationBar.frame.height
             let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
 
-            self.listItemsTableViewController.tableViewTopInset = navbarHeight + statusBarHeight + CGRectGetHeight(self.addItemView.frame)
-            self.listItemsTableViewController.tableViewTopOffset = -self.listItemsTableViewController.tableViewTopInset
+            let topInset = navbarHeight + statusBarHeight + CGRectGetHeight(self.addItemView.frame)
+            let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
+            self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0)
+            self.listItemsTableViewController.tableViewTopOffset = -self.listItemsTableViewController.tableViewInset.top
             
         }) { p in
 //            if !editing {self.addItemView.hidden = true} // without this uitableview doesn't receive touch in read modus. Also seems to be solved using 0.001 for scale down instead of 0...
