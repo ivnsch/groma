@@ -207,9 +207,7 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
             }
             
         case .Ended:
-            
-            println("\nTouch ended!")
-            
+                        
             // When the pan ends, check whether the left or right view controller is visible
 //            if (leftViewController != nil) {
             if (false) {

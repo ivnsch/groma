@@ -17,11 +17,6 @@ class Product:Equatable {
         self.name = name
         self.price = price
     }
-    
-//    func description() -> String {
-//        return ("\")
-//    }
-
 }
 
 func ==(lhs: Product, rhs: Product) -> Bool {

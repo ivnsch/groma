@@ -57,18 +57,6 @@ class CDListItemProvider: CDProvider {
         
         return sections
     }
-
-//    func saveProduct(productName:String) -> CDProduct {
-//        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-//        
-//        var product = NSEntityDescription.insertNewObjectForEntityForName("CDProduct", inManagedObjectContext: appDelegate.managedObjectContext!) as CDProduct
-//        product.name = productName
-//        
-//        self.save()
-//        
-//        return product;
-//    }
-//    
     
     private func loadManagedObject<T>(id:String) -> T {
         let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
@@ -126,18 +114,6 @@ class CDListItemProvider: CDProvider {
         }()
     }
     
-//    func saveListItem(itemName:String) -> CDListItem {
-//        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-//        
-//        let product:CDProduct = self.saveProduct(itemName)
-//        var listItem = NSEntityDescription.insertNewObjectForEntityForName("ListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as CDListItem
-//        listItem.product = product
-//        listItem.done = false
-//        
-//        return listItem;
-//    }
-    
-    
     func saveListItem(listItem:ListItem) -> CDListItem? {
         let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         
@@ -172,9 +148,6 @@ class CDListItemProvider: CDProvider {
         cdListItem.section = cdSection
         
         let saved = self.save()
-        
-        println("updated list item: \(listItem.product.name), success: \(saved), done: \(cdListItem.done)")
-        
         
         return cdListItem
     }
