@@ -192,7 +192,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         switch slideOutState {
         case .Collapsed:
             listItemsTableViewController.touchEnabled(true)
-        case .RightPanelExpanded:
+        case .RightPanelExpanded, .LeftPanelExpanded:
             listItemsTableViewController.touchEnabled(false)
         }
     }

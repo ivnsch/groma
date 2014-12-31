@@ -10,7 +10,7 @@ import UIKit
 
 enum SlideOutState {
     case Collapsed
-//    case LeftPanelExpanded
+    case LeftPanelExpanded
     case RightPanelExpanded
 }
 
@@ -26,6 +26,7 @@ protocol ItemsNotificator {
 protocol SideMenuManager {
     func setGestureRecognizersEnabled(enabled:Bool) //avoid conflicts with contained recognizers (tableview, etc)
     func setDoneItemsOpen(open:Bool)
+    func setAppMenuOpen(open:Bool)
 }
 
 protocol SideMenuObserver {
@@ -37,6 +38,8 @@ protocol SideMenuObserver {
 class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManager {
 
     private var centerViewController: UINavigationController!
+    
+    private var leftViewController: DoneViewController! // TODO
     private var rightViewController: DoneViewController!
 
     private let centerPanelExpandedOffset: CGFloat = 60
@@ -65,6 +68,11 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
                 itemObserver.itemsChanged()
             }
         }
+    }
+
+    func setAppMenuOpen(open: Bool) {
+        self.addLeftPanelViewController()
+        self.animateLeftPanel(shouldExpand: open)
     }
     
     func setDoneItemsOpen(open: Bool) {
@@ -114,6 +122,10 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
     }
     
     
+    
+    func addLeftPanelViewController() {
+    }
+    
     func addRightPanelViewController() {
         if (rightViewController == nil) {
             rightViewController = UIStoryboard.doneItemsViewController()
@@ -135,6 +147,23 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
         }
     }
     
+    
+    func animateLeftPanel(#shouldExpand: Bool) {
+        if (shouldExpand) {
+            currentState = .LeftPanelExpanded
+            
+            animateCenterPanelXPosition(targetPosition: CGRectGetWidth(centerViewController.view.frame) - centerPanelExpandedOffset)
+        } else {
+            animateCenterPanelXPosition(targetPosition: 0) { finished in
+                self.currentState = .Collapsed
+                
+                self.leftViewController!.view.removeFromSuperview()
+                self.leftViewController = nil
+            }
+        }
+    }
+
+    
     func animateRightPanel(#shouldExpand: Bool) {
         if (shouldExpand) {
             currentState = .RightPanelExpanded
@@ -144,8 +173,8 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
             animateCenterPanelXPosition(targetPosition: 0) { _ in
                 self.currentState = .Collapsed
                 
-//                self.rightViewController!.view.removeFromSuperview()
-//                self.rightViewController = nil
+                self.rightViewController!.view.removeFromSuperview()
+                self.rightViewController = nil
             }
         }
     }
@@ -163,12 +192,9 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
         // panel by looking at the velocity of the gesture
         let gestureIsDraggingFromLeftToRight = (recognizer.velocityInView(view).x > 0)
         
-//        println("velocity:\(recognizer.velocityInView(view).x) left to right:\(gestureIsDraggingFromLeftToRight)")
-        
-        
         switch(recognizer.state) {
         case .Began:
-            
+
             self.sideMenuObservers.forEach {$0.startSideMenuDrag()}
 
             if (currentState == .Collapsed) {
@@ -176,17 +202,17 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
                 // then show the correct panel based on the pan direction
                 
                 if (gestureIsDraggingFromLeftToRight) {
-//                    addLeftPanelViewController()
-                    showShadowForCenterViewController(true)
-
+                    addLeftPanelViewController()
                 } else {
                     addRightPanelViewController()
                 }
                 
+                showShadowForCenterViewController(true)
             }
         case .Changed:
             // If the user is already panning, translate the center view controller's
             // view by the amount that the user has panned
+            
             if (currentState == .RightPanelExpanded //while right expanded, allos swipe in both directions
                 ||
                 (!gestureIsDraggingFromLeftToRight //otherwise only gesture to open right menu -> swipe from right to left
@@ -199,13 +225,11 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
             }
             
         case .Ended:
-                        
             // When the pan ends, check whether the left or right view controller is visible
-//            if (leftViewController != nil) {
-            if (false) {
+            if (leftViewController != nil) {
                 // animate the side panel open or closed based on whether the view has moved more or less than halfway
                 let hasMovedGreaterThanHalfway = recognizer.view!.center.x > view.bounds.size.width
-//                animateLeftPanel(shouldExpand: hasMovedGreaterThanHalfway)
+                animateLeftPanel(shouldExpand: hasMovedGreaterThanHalfway)
             } else if (rightViewController != nil) {
                 let hasMovedGreaterThanHalfway = recognizer.view!.center.x < 0
                 animateRightPanel(shouldExpand: hasMovedGreaterThanHalfway)
@@ -214,5 +238,4 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
             break
         }
     }
-
 }
