@@ -15,12 +15,12 @@ class ListItemProviderMock: ListItemProvider {
     
     init() {
         self.productsVar = (0...20).map {
-            Product(name: "product " + String($0), price:1.2, quantity: 1)
+            Product(name: "product " + String($0), price:1.2)
         }
         
         let i:Int = self.productsVar.count / 2
-        let notDone = self.productsVar[0...i].map {ListItem(id: String(i), done: false, product: $0, section: Section(name: "test"))}
-        let done = self.productsVar[i...self.productsVar.count - 1].map {ListItem(id: String(i), done: true, product: $0, section: Section(name: "test"))}
+        let notDone = self.productsVar[0...i].map {ListItem(id: String(i), done: false, quantity: 1, product: $0, section: Section(name: "test"))}
+        let done = self.productsVar[i...self.productsVar.count - 1].map {ListItem(id: String(i), done: true, quantity: 1, product: $0, section: Section(name: "test"))}
         self.listItemsVar = Array(notDone) + Array(done)
     }
     

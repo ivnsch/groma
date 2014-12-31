@@ -13,6 +13,5 @@ class CDProduct: NSManagedObject {
 
     @NSManaged var name: String
     @NSManaged var price: NSNumber
-    @NSManaged var quantity: NSNumber
 
 }

@@ -12,6 +12,6 @@ class ListItemMapper {
         let product = ProductMapper.productWithCD(cdListItem.product)
         let section = SectionMapper.sectionWithCD(cdListItem.section)
         let id = cdListItem.objectID.URIRepresentation().absoluteString
-        return ListItem(id:id!, done: cdListItem.done, product: product, section:section)
+        return ListItem(id:id!, done: cdListItem.done, quantity: cdListItem.quantity.integerValue, product: product, section:section)
     }
 }

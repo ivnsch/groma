@@ -157,7 +157,7 @@ class AddItemView: UIView, UITextFieldDelegate {
     private func prefill(listItem:ListItem) {
         self.inputField.text = listItem.product.name
         self.sectionInput.text = listItem.section.name
-        self.quantityInput.text = String(listItem.product.quantity)
+        self.quantityInput.text = String(listItem.quantity)
         self.priceInput.text = listItem.product.price.toString(2)
     }
 }

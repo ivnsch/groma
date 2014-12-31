@@ -11,12 +11,10 @@ class Product:Equatable {
 
     let name:String
     let price:Float
-    let quantity:Int
     
-    init(name:String, price:Float, quantity:Int) {
+    init(name:String, price:Float) {
         self.name = name
         self.price = price
-        self.quantity = quantity
     }
     
 //    func description() -> String {

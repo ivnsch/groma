@@ -2,13 +2,13 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6738" systemVersion="13F34" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="CDListItem" representedClassName="shoppin.CDListItem" syncable="YES">
         <attribute name="done" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="quantity" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="product" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDProduct" inverseName="listItem" inverseEntity="CDProduct" syncable="YES"/>
         <relationship name="section" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDSection" inverseName="listItem" inverseEntity="CDSection" syncable="YES"/>
     </entity>
     <entity name="CDProduct" representedClassName="shoppin.CDProduct" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="price" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="quantity" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="listItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDListItem" inverseName="product" inverseEntity="CDListItem" syncable="YES"/>
     </entity>
     <entity name="CDSection" representedClassName="shoppin.CDSection" syncable="YES">
@@ -16,8 +16,8 @@
         <relationship name="listItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDListItem" inverseName="section" inverseEntity="CDListItem" syncable="YES"/>
     </entity>
     <elements>
-        <element name="CDListItem" positionX="-63" positionY="-9" width="128" height="88"/>
-        <element name="CDProduct" positionX="-63" positionY="-18" width="128" height="103"/>
+        <element name="CDListItem" positionX="-63" positionY="-9" width="128" height="105"/>
+        <element name="CDProduct" positionX="-63" positionY="-18" width="128" height="90"/>
         <element name="CDSection" positionX="-54" positionY="9" width="128" height="73"/>
     </elements>
 </model>

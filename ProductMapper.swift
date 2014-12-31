@@ -13,7 +13,6 @@ class ProductMapper: NSObject {
     class func productWithCD(cdProduct:CDProduct) -> Product {
         return Product(
             name: cdProduct.name,
-            price: cdProduct.price.floatValue,
-            quantity: cdProduct.quantity.integerValue)
+            price: cdProduct.price.floatValue)
     }
 }

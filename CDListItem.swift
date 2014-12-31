@@ -12,6 +12,7 @@ import CoreData
 class CDListItem: NSManagedObject {
 
     @NSManaged var done: Bool
+    @NSManaged var quantity: NSNumber
     @NSManaged var section: shoppin.CDSection
     @NSManaged var product: shoppin.CDProduct
 

@@ -10,12 +10,14 @@
 class ListItem: Equatable {
     let id:String // unique, for now we use core data objectId to initialise this
     var done:Bool
+    let quantity:Int
     let product:Product
     var section:Section
     
-    init(id:String, done:Bool, product:Product, section:Section) {
+    init(id:String, done:Bool, quantity:Int, product:Product, section:Section) {
         self.id = id
         self.done = done
+        self.quantity = quantity
         self.product = product
         self.section = section
     }

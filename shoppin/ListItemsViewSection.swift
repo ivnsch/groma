@@ -143,7 +143,7 @@ class ListItemsViewSection {
         let tableViewListItem = tableViewListItems[row]
         
         cell.nameLabel.text = tableViewListItem.listItem.product.name
-        cell.quantityLabel.text = String(tableViewListItem.listItem.product.quantity)
+        cell.quantityLabel.text = String(tableViewListItem.listItem.quantity)
         
         cell.labelColor = self.finalHeaderFontColor
 //        cell.delegate = self

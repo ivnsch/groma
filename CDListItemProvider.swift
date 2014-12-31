@@ -76,7 +76,6 @@ class CDListItemProvider: CDProvider {
         let cdProduct = NSEntityDescription.insertNewObjectForEntityForName("CDProduct", inManagedObjectContext: appDelegate.managedObjectContext!) as CDProduct
         cdProduct.name = product.name
         cdProduct.price = product.price
-        cdProduct.quantity = product.quantity
         
         self.save()
         
@@ -131,9 +130,10 @@ class CDListItemProvider: CDProvider {
 
         let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as CDListItem
         cdListItem.product = cdProduct
+        cdListItem.quantity = listItem.quantity
         cdListItem.done = listItem.done
         cdListItem.section = cdSection
-        
+
         self.save()
         
         return cdListItem
@@ -156,8 +156,8 @@ class CDListItemProvider: CDProvider {
         let cdSection = self.loadSection(listItem.section.name)! // since we are updating an item, we assume section exists
         
         cdListItem.done = listItem.done
+        cdListItem.quantity = listItem.quantity
         cdListItem.product.name = listItem.product.name
-        cdListItem.product.quantity = listItem.product.quantity
         cdListItem.product.price = listItem.product.price
         cdListItem.section = cdSection
         

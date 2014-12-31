@@ -307,7 +307,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
         func calculatePrice(listItems:[ListItem]) -> Float {
             return listItems.reduce(0, combine: {(price:Float, listItem:ListItem) -> Float in
-                return price + (listItem.product.price * Float(listItem.product.quantity))
+                return price + (listItem.product.price * Float(listItem.quantity))
             })
         }
         
@@ -337,11 +337,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func addItem(itemName:String, price:Float, quantity:Int, sectionName:String) {
         // for now just create a new product and a listitem with it
-        let product = Product(name: itemName, price:price, quantity:quantity)
+        let product = Product(name: itemName, price:price)
         let section = Section(name: sectionName)
         
         // we use for now core data object id as list item id. So before we insert the item there's no id and it's not used -> "dummy"
-        let listItem = ListItem(id:"dummy", done: false, product: product, section: section)
+        let listItem = ListItem(id:"dummy", done: false, quantity: quantity, product: product, section: section)
         
         if let savedListItem = self.listItemsProvider.add(listItem) {
             self.listItemsTableViewController.addListItem(savedListItem)
@@ -352,10 +352,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func updateItem(listItem: ListItem, itemName:String, price:Float, quantity:Int, sectionName:String) {
-        let product = Product(name: itemName, price: price, quantity: quantity)
+        let product = Product(name: itemName, price: price)
         let section = Section(name: sectionName)
         
-        let listItem = ListItem(id: self.updatingListItem!.id, done: self.updatingListItem!.done, product: product, section: section)
+        let listItem = ListItem(id: self.updatingListItem!.id, done: self.updatingListItem!.done, quantity: quantity, product: product, section: section)
         
         if self.listItemsProvider.update(listItem) {
             self.listItemsTableViewController.updateListItem(listItem)
