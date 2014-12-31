@@ -337,7 +337,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func addItem(itemName:String, price:Float, quantity:Int, sectionName:String) {
         // for now just create a new product and a listitem with it
-        let product = Product(name: itemName, price:price)
+        let product = Product(id: "dummy", name: itemName, price:price)
         let section = Section(name: sectionName)
         
         // we use for now core data object id as list item id. So before we insert the item there's no id and it's not used -> "dummy"
@@ -352,7 +352,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func updateItem(listItem: ListItem, itemName:String, price:Float, quantity:Int, sectionName:String) {
-        let product = Product(name: itemName, price: price)
+        let product = Product(id: self.updatingListItem!.product.id, name: itemName, price: price)
         let section = Section(name: sectionName)
         
         let listItem = ListItem(id: self.updatingListItem!.id, done: self.updatingListItem!.done, quantity: quantity, product: product, section: section)

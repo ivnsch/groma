@@ -15,7 +15,7 @@ class ListItemProviderMock: ListItemProvider {
     
     init() {
         self.productsVar = (0...20).map {
-            Product(name: "product " + String($0), price:1.2)
+            Product(id: String($0), name: "product " + String($0), price:1.2)
         }
         
         let i:Int = self.productsVar.count / 2

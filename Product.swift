@@ -8,11 +8,12 @@
 
 
 class Product:Equatable {
-
+    let id:String // unique, for now we use core data objectId to initialise this
     let name:String
     let price:Float
     
-    init(name:String, price:Float) {
+    init(id:String, name:String, price:Float) {
+        self.id = id
         self.name = name
         self.price = price
     }
@@ -24,5 +25,5 @@ class Product:Equatable {
 }
 
 func ==(lhs: Product, rhs: Product) -> Bool {
-    return lhs.name == rhs.name
+    return lhs.id == rhs.id
 }

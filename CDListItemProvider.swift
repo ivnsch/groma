@@ -70,10 +70,26 @@ class CDListItemProvider: CDProvider {
 //    }
 //    
     
+    private func loadManagedObject<T>(id:String) -> T {
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        
+        let objectId:NSManagedObjectID? = appDelegate.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(NSURL(string: id)!)
+        
+        let obj = appDelegate.managedObjectContext!.objectWithID(objectId!) as T
+        
+        return obj
+    }
+    
+    
+    func loadProduct(id:String) -> CDProduct {
+        return self.loadManagedObject(id)
+    }
+    
     func saveProduct(product:Product) -> CDProduct {
         let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         
         let cdProduct = NSEntityDescription.insertNewObjectForEntityForName("CDProduct", inManagedObjectContext: appDelegate.managedObjectContext!) as CDProduct
+        
         cdProduct.name = product.name
         cdProduct.price = product.price
         
@@ -140,13 +156,7 @@ class CDListItemProvider: CDProvider {
     }
     
     func loadListItem(id:String) -> CDListItem {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-        
-        let objectId:NSManagedObjectID? = appDelegate.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(NSURL(string: id)!)
-        
-        let cdListItem = appDelegate.managedObjectContext!.objectWithID(objectId!) as CDListItem
-        
-        return cdListItem
+        return self.loadManagedObject(id)
     }
     
     func updateListItem(listItem:ListItem) -> CDListItem? {
