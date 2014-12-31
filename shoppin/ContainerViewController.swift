@@ -194,14 +194,6 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
 //                recognizer.view!.center.x < 180
 //                    || currentState == .RightPanelExpanded
                 ) {
-            
-//            println("---------------")
-//            println(recognizer.view!.center.x)
-//            println(recognizer.translationInView(view).x)
-            
-                
-                    
-                    
                 recognizer.view!.center.x = recognizer.view!.center.x + recognizer.translationInView(view).x
                 recognizer.setTranslation(CGPointZero, inView: view)
             }
