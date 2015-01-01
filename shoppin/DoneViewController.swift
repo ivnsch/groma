@@ -20,7 +20,31 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
         super.viewDidLoad()
 
         self.initTableViewController()
-        self.initItems()
+        self.initList()
+    }
+    
+    
+    private func initList() {
+        
+        var list:List
+        if let listId:String = PreferencesManager.loadPreference(PreferencesManagerKey.listId) {
+            list = self.listItemsProvider.list(listId)!
+            
+        } else {
+            list = self.createList(Constants.defaultListIdentifier)
+            PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: Constants.defaultListIdentifier))
+        }
+        
+        let listItems:[ListItem] = self.listItemsProvider.listItems(list)
+        
+        let donelistItems = listItems.filter{$0.done}
+        self.listItemsTableViewController.setListItems(donelistItems)
+    }
+    
+    private func createList(name:String) -> List {
+        let list = List(id: "dummy", name: name)
+        let savedList = self.listItemsProvider.add(list)
+        return savedList!
     }
 
     private func initTableViewController() {
@@ -62,16 +86,11 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
     }
     
     func itemsChanged() {
-        self.initItems()
+        self.initList()
     }
     
     func clearThings() {
         self.listItemsTableViewController.clearPendingSwipeItemIfAny()
-    }
-    
-    private func initItems() {
-        let items = listItemsProvider.listItems().filter{$0.done}
-        self.listItemsTableViewController.setListItems(items)
     }
     
     func onListItemSelected(tableViewListItem: TableViewListItem) {

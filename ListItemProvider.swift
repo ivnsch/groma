@@ -11,8 +11,6 @@ protocol ListItemProvider {
     
     func products() -> [Product]
     
-    func listItems() -> [ListItem]
-    
     func sections() -> [Section]
 
     func remove(listItem:ListItem) -> Bool
@@ -21,4 +19,9 @@ protocol ListItemProvider {
 
     func update(listItem:ListItem) -> Bool
 
+    func add(list:List) -> List?
+    
+    func list(listId:String) -> List?
+    
+    func listItems(list:List) -> [ListItem]
 }

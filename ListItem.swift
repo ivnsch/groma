@@ -13,13 +13,15 @@ class ListItem: Equatable {
     let quantity:Int
     let product:Product
     var section:Section
+    var list:List
     
-    init(id:String, done:Bool, quantity:Int, product:Product, section:Section) {
+    init(id:String, done:Bool, quantity:Int, product:Product, section:Section, list:List) {
         self.id = id
         self.done = done
         self.quantity = quantity
         self.product = product
         self.section = section
+        self.list = list
     }
 }
 

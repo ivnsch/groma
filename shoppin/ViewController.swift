@@ -13,7 +13,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //    , UIBarPositioningDelegate
 {
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
-
+    
     @IBOutlet weak var addItemView: AddItemView!
     
     lazy var sectionAutosuggestionsViewController:AutosuggestionsTableViewController = {
@@ -44,15 +44,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     @IBOutlet weak var pricesView: PricesView!
     
+    @IBOutlet weak var listNameView: UILabel!
+
+    private var currentList:List!
+    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.initTableViewController()
-        self.initItems()
+        self.initList()
         
         self.addItemView.delegate = self
         
@@ -63,6 +67,33 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         FrozenEffect.apply(self.pricesView)
     }
 
+    
+    private func initList() {
+        var list:List
+        if let listId:String = PreferencesManager.loadPreference(PreferencesManagerKey.listId) {
+            list = self.listItemsProvider.list(listId)!
+            
+        } else {
+            list = self.createList(Constants.defaultListIdentifier)
+            PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: list.id))
+        }
+
+        self.currentList = list
+        
+        self.title = list.name
+        
+        let listItems:[ListItem] = self.listItemsProvider.listItems(list)
+        
+        let donelistItems = listItems.filter{!$0.done}
+        self.listItemsTableViewController.setListItems(donelistItems)
+    }
+    
+    private func createList(name:String) -> List {
+        let list = List(id: "dummy", name: name)
+        let savedList = self.listItemsProvider.add(list)
+        return savedList!
+    }
+    
     override func updateViewConstraints() {
         super.updateViewConstraints()
         
@@ -190,7 +221,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func itemsChanged() {
-        self.initItems()
+        self.initList()
     }
     
     func changedSlideOutState(slideOutState: SlideOutState) {
@@ -204,11 +235,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func startSideMenuDrag() {
         self.listItemsTableViewController.clearPendingSwipeItemIfAny()
-    }
-    
-    private func initItems() {
-        let items = listItemsProvider.listItems().filter{!$0.done}
-        self.listItemsTableViewController.setListItems(items)
     }
     
     private func initTableViewController() {
@@ -308,7 +334,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func updatePrices() {
 
-        let listItems = self.listItemsProvider.listItems()
+        let listItems = self.listItemsProvider.listItems(currentList)
 
         func calculatePrice(listItems:[ListItem]) -> Float {
             return listItems.reduce(0, combine: {(price:Float, listItem:ListItem) -> Float in
@@ -346,7 +372,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let section = Section(name: sectionName)
         
         // we use for now core data object id as list item id. So before we insert the item there's no id and it's not used -> "dummy"
-        let listItem = ListItem(id:"dummy", done: false, quantity: quantity, product: product, section: section)
+        let listItem = ListItem(id:"dummy", done: false, quantity: quantity, product: product, section: section, list: currentList)
         
         if let savedListItem = self.listItemsProvider.add(listItem) {
             self.listItemsTableViewController.addListItem(savedListItem)
@@ -360,7 +386,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let product = Product(id: self.updatingListItem!.product.id, name: itemName, price: price)
         let section = Section(name: sectionName)
         
-        let listItem = ListItem(id: self.updatingListItem!.id, done: self.updatingListItem!.done, quantity: quantity, product: product, section: section)
+        let listItem = ListItem(id: self.updatingListItem!.id, done: self.updatingListItem!.done, quantity: quantity, product: product, section: section, list: currentList)
         
         if self.listItemsProvider.update(listItem) {
             self.listItemsTableViewController.updateListItem(listItem)

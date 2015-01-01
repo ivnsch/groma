@@ -18,14 +18,17 @@ class ListItemProviderMock: ListItemProvider {
             Product(id: String($0), name: "product " + String($0), price:1.2)
         }
         
+        let list:List = List(id: "test", name: "test")
+        
         let i:Int = self.productsVar.count / 2
-        let notDone = self.productsVar[0...i].map {ListItem(id: String(i), done: false, quantity: 1, product: $0, section: Section(name: "test"))}
-        let done = self.productsVar[i...self.productsVar.count - 1].map {ListItem(id: String(i), done: true, quantity: 1, product: $0, section: Section(name: "test"))}
+        let notDone = self.productsVar[0...i].map {ListItem(id: String(i), done: false, quantity: 1, product: $0, section: Section(name: "test"), list: list)}
+        let done = self.productsVar[i...self.productsVar.count - 1].map {ListItem(id: String(i), done: true, quantity: 1, product: $0, section: Section(name: "test"), list: list)}
         self.listItemsVar = Array(notDone) + Array(done)
     }
     
     
-    func listItems() -> [ListItem] {
+    func listItems(list:List) -> [ListItem] {
+        //TODO use list
         return self.listItemsVar
     }
     
@@ -52,5 +55,15 @@ class ListItemProviderMock: ListItemProvider {
     func update(listItem:ListItem) -> Bool {
         //TODO?
         return true
+    }
+    
+    func list(listId: String) -> List? {
+        //TODO
+        return List(id: listId, name: "test")
+    }
+    
+    func add(list:List) -> List? {
+        //TODO
+        return nil
     }
 }

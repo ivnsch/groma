@@ -15,5 +15,5 @@ class CDListItem: NSManagedObject {
     @NSManaged var quantity: NSNumber
     @NSManaged var section: shoppin.CDSection
     @NSManaged var product: shoppin.CDProduct
-
+    @NSManaged var list: shoppin.CDList
 }

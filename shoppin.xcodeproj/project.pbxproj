@@ -31,6 +31,11 @@
 		EB2F5D6D1A51C17200DBC4AF /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D6C1A51C17200DBC4AF /* UIView.swift */; };
 		EB2F5D6F1A530FBC00DBC4AF /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D6E1A530FBC00DBC4AF /* Float.swift */; };
 		EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D721A55754400DBC4AF /* PricesView.swift */; };
+		EB2F5D751A5579B200DBC4AF /* CDList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D741A5579B200DBC4AF /* CDList.swift */; };
+		EB2F5D771A557AB000DBC4AF /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D761A557AB000DBC4AF /* List.swift */; };
+		EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */; };
+		EB2F5D7B1A55816B00DBC4AF /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7A1A55816B00DBC4AF /* PreferencesManager.swift */; };
+		EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7E1A559C8800DBC4AF /* Constants.swift */; };
 		EBEEDD691A49C75400FC3B29 /* CDSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD681A49C75400FC3B29 /* CDSection.swift */; };
 		EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6A1A49C94F00FC3B29 /* Section.swift */; };
 		EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */; };
@@ -85,6 +90,12 @@
 		EB2F5D6C1A51C17200DBC4AF /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		EB2F5D6E1A530FBC00DBC4AF /* Float.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Float.swift; sourceTree = "<group>"; };
 		EB2F5D721A55754400DBC4AF /* PricesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PricesView.swift; sourceTree = "<group>"; };
+		EB2F5D741A5579B200DBC4AF /* CDList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDList.swift; sourceTree = "<group>"; };
+		EB2F5D761A557AB000DBC4AF /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListMapper.swift; sourceTree = "<group>"; };
+		EB2F5D7A1A55816B00DBC4AF /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
+		EB2F5D7D1A558F5400DBC4AF /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
+		EB2F5D7E1A559C8800DBC4AF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		EBEEDD681A49C75400FC3B29 /* CDSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDSection.swift; sourceTree = "<group>"; };
 		EBEEDD6A1A49C94F00FC3B29 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionMapper.swift; sourceTree = "<group>"; };
@@ -124,6 +135,7 @@
 		EB1DDE9C1A3334EC00D778DE = {
 			isa = PBXGroup;
 			children = (
+				EB2F5D7D1A558F5400DBC4AF /* MyPlayground.playground */,
 				EBF162E71A3CA1CD0048E37C /* provider */,
 				EBF162E61A3CA1AC0048E37C /* model */,
 				EB1DDEA71A3334EC00D778DE /* shoppin */,
@@ -143,6 +155,7 @@
 		EB1DDEA71A3334EC00D778DE /* shoppin */ = {
 			isa = PBXGroup;
 			children = (
+				EB2F5D7C1A55817100DBC4AF /* common */,
 				EB2F5D0F1A4ACC2500DBC4AF /* extensions */,
 				EB2F5D071A4A28DE00DBC4AF /* autosuggestions */,
 				EBEEDD631A49A7B500FC3B29 /* view */,
@@ -226,6 +239,15 @@
 			name = helper;
 			sourceTree = "<group>";
 		};
+		EB2F5D7C1A55817100DBC4AF /* common */ = {
+			isa = PBXGroup;
+			children = (
+				EB2F5D7A1A55816B00DBC4AF /* PreferencesManager.swift */,
+				EB2F5D7E1A559C8800DBC4AF /* Constants.swift */,
+			);
+			name = common;
+			sourceTree = "<group>";
+		};
 		EBEEDD631A49A7B500FC3B29 /* view */ = {
 			isa = PBXGroup;
 			children = (
@@ -243,6 +265,7 @@
 				EB2743DA1A3E3ACE00593AB0 /* CDProduct.swift */,
 				EBF162CA1A34B1860048E37C /* CDListItem.swift */,
 				EBEEDD681A49C75400FC3B29 /* CDSection.swift */,
+				EB2F5D741A5579B200DBC4AF /* CDList.swift */,
 			);
 			name = coreData;
 			sourceTree = "<group>";
@@ -298,6 +321,7 @@
 				EBF162EA1A3CA2470048E37C /* Product.swift */,
 				EBF162EC1A3CA24E0048E37C /* ListItem.swift */,
 				EBEEDD6A1A49C94F00FC3B29 /* Section.swift */,
+				EB2F5D761A557AB000DBC4AF /* List.swift */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -345,6 +369,7 @@
 				EBF162FE1A3DDE730048E37C /* ListItemMapper.swift */,
 				EBF162FC1A3DDE5D0048E37C /* ProductMapper.swift */,
 				EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */,
+				EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */,
 			);
 			name = mapper;
 			sourceTree = "<group>";
@@ -427,6 +452,7 @@
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
 				EBF162FD1A3DDE5D0048E37C /* ProductMapper.swift in Sources */,
+				EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */,
 				EBF162CB1A34B1860048E37C /* CDListItem.swift in Sources */,
 				EB1DDECE1A3338E200D778DE /* ShoppingListItemCell.swift in Sources */,
 				EBF162EB1A3CA2470048E37C /* Product.swift in Sources */,
@@ -437,12 +463,15 @@
 				EB2743DB1A3E3ACE00593AB0 /* CDProduct.swift in Sources */,
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
 				EBEEDD691A49C75400FC3B29 /* CDSection.swift in Sources */,
+				EB2F5D7B1A55816B00DBC4AF /* PreferencesManager.swift in Sources */,
 				EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */,
 				EBF162F01A3CA3530048E37C /* CDListItemProvider.swift in Sources */,
+				EB2F5D771A557AB000DBC4AF /* List.swift in Sources */,
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
 				EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */,
 				EBF162ED1A3CA24E0048E37C /* ListItem.swift in Sources */,
+				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
 				EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */,
 				EB2F5D261A4DE56B00DBC4AF /* DoneViewController.swift in Sources */,
 				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
@@ -451,6 +480,7 @@
 				EBF162E51A3C85A30048E37C /* ListItemCell.swift in Sources */,
 				EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */,
 				EBF162FA1A3CA54F0048E37C /* ListItemProvider.swift in Sources */,
+				EB2F5D751A5579B200DBC4AF /* CDList.swift in Sources */,
 				EBF162F21A3CA3BB0048E37C /* CDProvider.swift in Sources */,
 				EBF162F51A3CA4BA0048E37C /* ProviderFactory.swift in Sources */,
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,

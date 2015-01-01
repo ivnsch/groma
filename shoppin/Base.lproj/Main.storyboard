@@ -357,7 +357,6 @@
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" id="R2t-vt-9FB">
-                        <nil key="title"/>
                         <barButtonItem key="rightBarButtonItem" title="Edit" id="4xW-aG-kPS">
                             <connections>
                                 <action selector="onEditTap:" destination="BYZ-38-t0r" id="Tpr-Bd-PYJ"/>

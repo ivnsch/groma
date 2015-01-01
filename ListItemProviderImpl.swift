@@ -15,8 +15,8 @@ class ListItemProviderImpl:ListItemProvider {
         return self.cdProvider.loadProducts().map {ProductMapper.productWithCD($0)}
     }
     
-    func listItems() -> [ListItem] {
-        return self.cdProvider.loadListItems().map {ListItemMapper.listItemWithCD($0)}
+    func listItems(list:List) -> [ListItem] {
+        return self.cdProvider.loadListItems(list.id).map {ListItemMapper.listItemWithCD($0)}
     }
     
     func remove(listItem:ListItem) -> Bool {
@@ -25,11 +25,8 @@ class ListItemProviderImpl:ListItemProvider {
     
     func add(listItem:ListItem) -> ListItem? {
         // return the saved object, to get object with generated id
-        if let cdListItem = self.cdProvider.saveListItem(listItem) {
-            return ListItemMapper.listItemWithCD(cdListItem)
-        } else {
-            return nil
-        }
+        let cdListItem = self.cdProvider.saveListItem(listItem)
+        return ListItemMapper.listItemWithCD(cdListItem)
     }
     
     func update(listItem:ListItem) -> Bool {
@@ -41,5 +38,17 @@ class ListItemProviderImpl:ListItemProvider {
         return self.cdProvider.loadSections().map {
             return Section(name: $0.name)
         }
+    }
+    
+    func list(listId: String) -> List? {
+        // return the saved object, to get object with generated id
+        let cdList = self.cdProvider.loadList(listId)
+        return ListMapper.listWithCD(cdList)
+    }
+    
+    func add(list:List) -> List? {
+        // return the saved object, to get object with generated id
+        let list = self.cdProvider.saveList(list)
+        return ListMapper.listWithCD(list)
     }
 }
