@@ -15,11 +15,27 @@ extension UIView {
         self.centerYInParent(constant: constantY)
     }
     
-    func centerYInParent(constant:Float = 0) {
-        self.superview!.addConstraint(NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: self.superview, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: CGFloat(constant)))
+    func centerYInParent(constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: self.superview, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: CGFloat(constant))
+        self.superview!.addConstraint(c)
+        return c
     }
     
-    func centerXInParent(constant:Float = 0) {
-        self.superview!.addConstraint(NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.superview, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: CGFloat(constant)))
+    func centerXInParent(constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.superview, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: CGFloat(constant))
+        self.superview!.addConstraint(c)
+        return c
+    }
+    
+    func positionBelowView(view:UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: CGFloat(constant))
+        self.superview!.addConstraint(c)
+        return c
+    }
+    
+    func alignTop(view:UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Top, multiplier: 1, constant: CGFloat(constant))
+        self.superview!.addConstraint(c)
+        return c
     }
 }
