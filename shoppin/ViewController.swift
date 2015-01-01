@@ -36,13 +36,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     var itemsNotificator:ItemsNotificator!
     var sideMenuManager:SideMenuManager!
 
-    @IBOutlet weak var pricesView:PriceNavigationView!
     @IBOutlet weak var editButton: UIBarButtonItem!
     
     private var gestureRecognizer:UIGestureRecognizer!
     
     private var updatingListItem:ListItem?
-
+    
+    @IBOutlet weak var pricesView: PricesView!
+    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -58,6 +59,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.setEditing(false, animated: false)
         
         self.updatePrices()
+        
+        FrozenEffect.apply(self.pricesView)
     }
 
     override func updateViewConstraints() {
@@ -169,7 +172,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             let navbarHeight = self.navigationController!.navigationBar.frame.height
             let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
 
-            let topInset = navbarHeight + statusBarHeight + CGRectGetHeight(self.addItemView.frame)
+            let topInset = navbarHeight + statusBarHeight + CGRectGetHeight(self.addItemView.frame) + CGRectGetHeight(self.pricesView.frame)
             let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
             self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0)
             self.listItemsTableViewController.tableViewTopOffset = -self.listItemsTableViewController.tableViewInset.top
