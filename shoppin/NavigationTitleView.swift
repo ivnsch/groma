@@ -44,6 +44,8 @@ class NavigationTitleView: UIView {
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: "onTap")
         self.addGestureRecognizer(tapRecognizer)
+        
+        self.textField.placeholder = "New list name"
     }
     
     var editMode:Bool = false {
