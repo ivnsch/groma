@@ -21,6 +21,8 @@ protocol ListItemProvider {
 
     func add(list:List) -> List?
     
+    func lists() -> [List]
+
     func list(listId:String) -> List?
     
     func listItems(list:List) -> [ListItem]

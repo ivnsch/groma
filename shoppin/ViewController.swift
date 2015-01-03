@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ItemsObserver, SideMenuObserver, AddItemViewDelegate, ListItemsEditTableViewDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ItemsObserver, SideMenuObserver, AddItemViewDelegate, ListItemsEditTableViewDelegate, NavigationTitleViewDelegate, WYPopoverControllerDelegate
 //    , UIBarPositioningDelegate
 {
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
@@ -52,6 +52,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     @IBOutlet weak var navigationTitleView: NavigationTitleView!
     
+    private var listsPopover:WYPopoverController?
+    
+    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -62,6 +65,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.initTableViewController()
         self.initList()
         
+        self.navigationTitleView.delegate = self
         self.addItemView.delegate = self
         
         self.setEditing(false, animated: false)
@@ -198,6 +202,34 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.addListButton.title = editing ? "Cancel" : "+"
 
         self.editButton.title = editing ? "Add" : "Edit"
+    }
+    
+    func onNavigationLabelTap() {
+        let lists = self.listItemsProvider.lists()
+
+        let listsTableViewController = PlainTableViewController(options: lists.map{$0.name}) {(index, option) -> () in
+            let list = lists[index]
+            self.showList(list)
+        }
+        
+        self.listsPopover = WYPopoverController(contentViewController: listsTableViewController)
+        self.listsPopover!.delegate = self
+        
+        // would have used title view, but then the popover is not centered correctly... so use nav bar frame, and adjust height to show popover a bit more to the top
+        let navBarFrame = self.navigationController!.navigationBar.frame
+        let frame = CGRectMake(navBarFrame.origin.x, navBarFrame.origin.y, navBarFrame.width, navBarFrame.height - 10)
+        self.listsPopover!.presentPopoverFromRect(frame, inView: self.view, permittedArrowDirections: WYPopoverArrowDirection.Any, animated: true)
+        
+        self.listsPopover!.popoverContentSize = CGSizeMake(300, listsTableViewController.tableView.contentSize.height)
+    }
+    
+    func popoverControllerShouldDismissPopover(popoverController: WYPopoverController!) -> Bool {
+        return true
+    }
+    
+    func popoverControllerDidDismissPopover(popoverController: WYPopoverController!) {
+        self.listsPopover?.delegate = nil
+        self.listsPopover = nil
     }
     
     private func addList(name:String) {

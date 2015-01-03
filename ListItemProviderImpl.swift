@@ -40,6 +40,10 @@ class ListItemProviderImpl:ListItemProvider {
         }
     }
     
+    func lists() -> [List] {
+        return self.cdProvider.loadLists().map {ListMapper.listWithCD($0)}
+    }
+    
     func list(listId: String) -> List? {
         // return the saved object, to get object with generated id
         let cdList = self.cdProvider.loadList(listId)

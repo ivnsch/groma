@@ -52,6 +52,11 @@ class ListItemProviderMock: ListItemProvider {
         return [Section(name: "test")]
     }
     
+    func lists() -> [List] {
+        //TODO
+        return [List(id: "test", name: "test")]
+    }
+
     func update(listItem:ListItem) -> Bool {
         //TODO?
         return true

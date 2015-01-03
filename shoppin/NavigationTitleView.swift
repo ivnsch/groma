@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol NavigationTitleViewDelegate {
+    func onNavigationLabelTap()
+}
+
 class NavigationTitleView: UIView {
 
     @IBOutlet weak var label: UILabel!
@@ -31,8 +35,15 @@ class NavigationTitleView: UIView {
         }
     }
     
+    var delegate:NavigationTitleViewDelegate?
+    
     override func awakeFromNib() {
         self.editMode = false
+        
+        self.userInteractionEnabled = true
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: "onTap")
+        self.addGestureRecognizer(tapRecognizer)
     }
     
     var editMode:Bool = false {
@@ -41,6 +52,12 @@ class NavigationTitleView: UIView {
             self.textField.hidden = !editMode
             
             self.textField.text = ""
+        }
+    }
+    
+    func onTap() {
+        if !self.editMode {
+            self.delegate?.onNavigationLabelTap()
         }
     }
 }

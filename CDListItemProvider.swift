@@ -168,6 +168,18 @@ class CDListItemProvider: CDProvider {
         return self.save()
     }
     
+    func loadLists() -> [CDList] {
+        let fetchRequest = NSFetchRequest()
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let entity = NSEntityDescription.entityForName("CDList", inManagedObjectContext: appDelegate.managedObjectContext!)
+        fetchRequest.entity = entity
+        
+        var error:NSError?
+        let lists = appDelegate.managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as [CDList]
+        
+        return lists
+    }
+    
     func loadList(id:String) -> CDList {
         return self.loadManagedObject(id)
     }
