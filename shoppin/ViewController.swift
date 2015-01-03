@@ -235,13 +235,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func addList(name:String) {
-        let list = self.createList(name)
-
-        self.showList(list)
-        
-        self.setListEditing(false)
-        
-        self.setEditing(true, animated: true)
+        if !name.isEmpty {
+            let list = self.createList(name)
+            
+            self.showList(list)
+            
+            self.setListEditing(false)
+            
+            self.setEditing(true, animated: true)
+        }
     }
     
     @IBAction func onEditTap(sender: AnyObject) {
