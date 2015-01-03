@@ -52,6 +52,10 @@ class NavigationTitleView: UIView {
             self.textField.hidden = !editMode
             
             self.textField.text = ""
+            
+            if editMode {
+                self.textField.becomeFirstResponder()
+            }
         }
     }
     

@@ -198,6 +198,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func setListEditing(editing:Bool) {
+        self.setEditing(false, animated: true)
+
         self.navigationTitleView.editMode = editing
         self.addListButton.title = editing ? "Cancel" : "+"
 
@@ -238,6 +240,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.showList(list)
         
         self.setListEditing(false)
+        
+        self.setEditing(true, animated: true)
     }
     
     @IBAction func onEditTap(sender: AnyObject) {
