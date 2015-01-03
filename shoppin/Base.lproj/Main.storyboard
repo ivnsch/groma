@@ -443,11 +443,31 @@
                     </tabBar>
                     <connections>
                         <segue destination="O41-N5-09C" kind="relationship" relationship="viewControllers" id="1Z7-OK-iUf"/>
+                        <segue destination="Evg-I2-MFV" kind="relationship" relationship="viewControllers" id="eCM-eF-qqW"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qM2-Cy-U9i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1478" y="842"/>
+        </scene>
+        <!--Inventory-->
+        <scene sceneID="xf4-IF-Ftq">
+            <objects>
+                <viewController id="Evg-I2-MFV" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="lLI-jB-obh"/>
+                        <viewControllerLayoutGuide type="bottom" id="ag9-N5-szY"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="94H-0V-hbs">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Inventory" id="2Hd-48-45g"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hYB-7h-rO7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-648" y="1140"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="aBY-Kl-kXd">
