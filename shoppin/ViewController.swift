@@ -237,7 +237,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
         self.showList(list)
         
-        self.navigationTitleView.editMode = false
+        self.setListEditing(false)
     }
     
     @IBAction func onEditTap(sender: AnyObject) {
