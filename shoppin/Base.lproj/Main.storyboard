@@ -357,6 +357,38 @@
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" id="R2t-vt-9FB">
+                        <nil key="title"/>
+                        <view key="titleView" contentMode="scaleToFill" id="jqW-kh-kcY" customClass="NavigationTitleView" customModule="shoppin" customModuleProvider="target">
+                            <rect key="frame" x="180" y="6" width="240" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dbT-wk-9Tz">
+                                    <rect key="frame" x="0.0" y="0.0" width="240" height="33"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ivR-Wt-34H">
+                                    <rect key="frame" x="0.0" y="2" width="240" height="30"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </textField>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="ivR-Wt-34H" secondAttribute="bottom" id="3Rd-TJ-xVD"/>
+                                <constraint firstAttribute="trailing" secondItem="ivR-Wt-34H" secondAttribute="trailing" id="Ev6-XE-M4X"/>
+                                <constraint firstAttribute="bottom" secondItem="dbT-wk-9Tz" secondAttribute="bottom" id="Frk-Rk-LgN"/>
+                                <constraint firstItem="ivR-Wt-34H" firstAttribute="top" secondItem="jqW-kh-kcY" secondAttribute="top" id="NwO-O8-uZU"/>
+                                <constraint firstItem="dbT-wk-9Tz" firstAttribute="top" secondItem="jqW-kh-kcY" secondAttribute="top" id="XVz-EN-CFa"/>
+                                <constraint firstAttribute="trailing" secondItem="dbT-wk-9Tz" secondAttribute="trailing" id="hWF-kT-zul"/>
+                                <constraint firstItem="ivR-Wt-34H" firstAttribute="leading" secondItem="jqW-kh-kcY" secondAttribute="leading" id="iK3-go-bP0"/>
+                                <constraint firstItem="dbT-wk-9Tz" firstAttribute="leading" secondItem="jqW-kh-kcY" secondAttribute="leading" id="sfn-4T-sFU"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="label" destination="dbT-wk-9Tz" id="isa-iO-L4k"/>
+                                <outlet property="textField" destination="ivR-Wt-34H" id="NvL-fQ-rmS"/>
+                            </connections>
+                        </view>
                         <barButtonItem key="rightBarButtonItem" title="Edit" id="4xW-aG-kPS">
                             <connections>
                                 <action selector="onEditTap:" destination="BYZ-38-t0r" id="Tpr-Bd-PYJ"/>
@@ -366,6 +398,7 @@
                     <connections>
                         <outlet property="addItemView" destination="XO9-gD-NZj" id="dPV-HS-WyR"/>
                         <outlet property="editButton" destination="4xW-aG-kPS" id="JWp-Ab-CNE"/>
+                        <outlet property="navigationTitleView" destination="jqW-kh-kcY" id="5Qw-o9-PFU"/>
                         <outlet property="pricesView" destination="wdp-hj-bbA" id="64l-Vh-k1d"/>
                     </connections>
                 </viewController>

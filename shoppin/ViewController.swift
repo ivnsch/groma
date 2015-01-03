@@ -47,6 +47,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     @IBOutlet weak var listNameView: UILabel!
 
     private var currentList:List!
+
+    @IBOutlet weak var navigationTitleView: NavigationTitleView!
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -80,7 +82,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
         self.currentList = list
         
-        self.title = list.name
+        self.navigationTitleView.labelText = list.name
         
         let listItems:[ListItem] = self.listItemsProvider.listItems(list)
         
