@@ -32,11 +32,15 @@ class NavigationTitleView: UIView {
     }
     
     override func awakeFromNib() {
-        self.setEditMode(false)
+        self.editMode = false
     }
     
-    func setEditMode(editMode:Bool) {
-        self.label.hidden = editMode
-        self.textField.hidden = !editMode
+    var editMode:Bool = false {
+        didSet {
+            self.label.hidden = editMode
+            self.textField.hidden = !editMode
+            
+            self.textField.text = ""
+        }
     }
 }

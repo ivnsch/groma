@@ -48,6 +48,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     private var currentList:List!
 
+    @IBOutlet weak var addListButton: UIBarButtonItem!
+    
     @IBOutlet weak var navigationTitleView: NavigationTitleView!
     
     required init(coder aDecoder: NSCoder) {
@@ -77,9 +79,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             
         } else {
             list = self.createList(Constants.defaultListIdentifier)
-            PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: list.id))
         }
-
+        
+        self.showList(list)
+    }
+    
+    private func showList(list:List) {
         self.currentList = list
         
         self.navigationTitleView.labelText = list.name
@@ -88,6 +93,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         let donelistItems = listItems.filter{!$0.done}
         self.listItemsTableViewController.setListItems(donelistItems)
+        
+        updatePrices()
+        
+        PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: list.id))
     }
     
     private func createList(name:String) -> List {
@@ -178,11 +187,37 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         sectionAutosuggestionsViewController.view.hidden = text.isEmpty
     }
     
+    @IBAction func onAddListTap(sender: UIBarButtonItem) {
+        let editing = !self.navigationTitleView.editMode
+
+        self.setListEditing(editing)
+    }
+    
+    private func setListEditing(editing:Bool) {
+        self.navigationTitleView.editMode = editing
+        self.addListButton.title = editing ? "Cancel" : "+"
+
+        self.editButton.title = editing ? "Add" : "Edit"
+    }
+    
+    private func addList(name:String) {
+        let list = self.createList(name)
+
+        self.showList(list)
+        
+        self.navigationTitleView.editMode = false
+    }
+    
     @IBAction func onEditTap(sender: AnyObject) {
         let editButton = sender as UIBarButtonItem
         let editing = !self.listItemsTableViewController.editing
         
-        self.setEditing(editing, animated: true)
+        if (self.navigationTitleView.editMode) { //during edit list mode, nav right button becomes "add list". TODO rename editButton in navRightButton or similar, onNavRightButtonTap etc
+            self.addList(self.navigationTitleView.textFieldText)
+
+        } else {
+            self.setEditing(editing, animated: true)
+        }
     }
     
     override func setEditing(editing: Bool, animated: Bool) {
