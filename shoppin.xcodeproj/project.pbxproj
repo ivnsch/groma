@@ -21,6 +21,8 @@
 		EB20FBFC1A5972A30058103B /* InventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFB1A5972A30058103B /* InventoryProvider.swift */; };
 		EB20FBFE1A5972C70058103B /* InventoryProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFD1A5972C70058103B /* InventoryProviderImpl.swift */; };
 		EB20FC001A5973330058103B /* CDInventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFF1A5973330058103B /* CDInventoryProvider.swift */; };
+		EB20FC051A599A500058103B /* InventoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FC041A599A500058103B /* InventoryViewController.swift */; };
+		EB20FC071A599AE20058103B /* InventoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FC061A599AE20058103B /* InventoryTableViewCell.swift */; };
 		EB2743DB1A3E3ACE00593AB0 /* CDProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2743DA1A3E3ACE00593AB0 /* CDProduct.swift */; };
 		EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */; };
 		EB28C1181A58623E00E1C8BC /* PlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */; };
@@ -91,6 +93,8 @@
 		EB20FBFB1A5972A30058103B /* InventoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryProvider.swift; sourceTree = "<group>"; };
 		EB20FBFD1A5972C70058103B /* InventoryProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryProviderImpl.swift; sourceTree = "<group>"; };
 		EB20FBFF1A5973330058103B /* CDInventoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDInventoryProvider.swift; sourceTree = "<group>"; };
+		EB20FC041A599A500058103B /* InventoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryViewController.swift; sourceTree = "<group>"; };
+		EB20FC061A599AE20058103B /* InventoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryTableViewCell.swift; sourceTree = "<group>"; };
 		EB2743DA1A3E3ACE00593AB0 /* CDProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDProduct.swift; sourceTree = "<group>"; };
 		EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationTitleView.swift; sourceTree = "<group>"; };
 		EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlainTableViewController.swift; sourceTree = "<group>"; };
@@ -192,6 +196,7 @@
 				EBF162E31A3C853E0048E37C /* listItemsTableView */,
 				EB20FC021A59986C0058103B /* list */,
 				EB20FC011A5998490058103B /* cart */,
+				EB20FC031A599A2B0058103B /* inventory */,
 				EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */,
 				EB1DDEB11A3334EC00D778DE /* Main.storyboard */,
 				EB1DDEB41A3334EC00D778DE /* Images.xcassets */,
@@ -246,6 +251,15 @@
 				EB2F5D611A50B91200DBC4AF /* AddItemView.swift */,
 			);
 			name = list;
+			sourceTree = "<group>";
+		};
+		EB20FC031A599A2B0058103B /* inventory */ = {
+			isa = PBXGroup;
+			children = (
+				EB20FC041A599A500058103B /* InventoryViewController.swift */,
+				EB20FC061A599AE20058103B /* InventoryTableViewCell.swift */,
+			);
+			name = inventory;
 			sourceTree = "<group>";
 		};
 		EB2F5D071A4A28DE00DBC4AF /* autosuggestions */ = {
@@ -559,6 +573,7 @@
 				EB2F5D7B1A55816B00DBC4AF /* PreferencesManager.swift in Sources */,
 				EB28C1181A58623E00E1C8BC /* PlainTableViewController.swift in Sources */,
 				EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */,
+				EB20FC051A599A500058103B /* InventoryViewController.swift in Sources */,
 				EBF162F01A3CA3530048E37C /* CDListItemProvider.swift in Sources */,
 				EB2F5D771A557AB000DBC4AF /* List.swift in Sources */,
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
@@ -568,6 +583,7 @@
 				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
 				EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */,
 				EB2F5D261A4DE56B00DBC4AF /* DoneViewController.swift in Sources */,
+				EB20FC071A599AE20058103B /* InventoryTableViewCell.swift in Sources */,
 				EB20FBF61A59701C0058103B /* CDInventoryItem.swift in Sources */,
 				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,

@@ -474,6 +474,57 @@
             </objects>
             <point key="canvasLocation" x="-648" y="411"/>
         </scene>
+        <!--Inventory-->
+        <scene sceneID="5br-Um-r4q">
+            <objects>
+                <tableViewController id="WaN-WQ-9iC" customClass="InventoryViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="rQJ-9h-DiT">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.95686274510000002" green="0.74592375799999999" blue="0.8901358667" alpha="1" colorSpace="calibratedRGB"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="inventoryCell" id="vCq-K7-Ar7" customClass="InventoryTableViewCell" customModule="shoppin" customModuleProvider="target">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vCq-K7-Ar7" id="6tq-xY-HMg">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kNJ-Rb-iDN">
+                                            <rect key="frame" x="8" y="11" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cUe-dc-Y1J">
+                                            <rect key="frame" x="550" y="11" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="cUe-dc-Y1J" secondAttribute="trailing" constant="5" id="QTF-ij-zRP"/>
+                                        <constraint firstAttribute="centerY" secondItem="cUe-dc-Y1J" secondAttribute="centerY" id="XzQ-Tq-r1I"/>
+                                        <constraint firstAttribute="centerY" secondItem="kNJ-Rb-iDN" secondAttribute="centerY" id="cWp-6C-OPw"/>
+                                        <constraint firstItem="kNJ-Rb-iDN" firstAttribute="leading" secondItem="6tq-xY-HMg" secondAttribute="leading" constant="5" id="xfn-Al-TWH"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="nameLabel" destination="kNJ-Rb-iDN" id="ith-TS-LNp"/>
+                                    <outlet property="quantityLabel" destination="cUe-dc-Y1J" id="oRT-ZV-gW0"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="WaN-WQ-9iC" id="3RK-GM-WDy"/>
+                            <outlet property="delegate" destination="WaN-WQ-9iC" id="pGP-00-ewc"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="Inventory" id="yUm-WR-GoU"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="I1W-NC-SaH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-648" y="1168"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="iFh-OB-bje">
             <objects>
@@ -486,31 +537,12 @@
                     </tabBar>
                     <connections>
                         <segue destination="O41-N5-09C" kind="relationship" relationship="viewControllers" id="1Z7-OK-iUf"/>
-                        <segue destination="Evg-I2-MFV" kind="relationship" relationship="viewControllers" id="eCM-eF-qqW"/>
+                        <segue destination="WaN-WQ-9iC" kind="relationship" relationship="viewControllers" id="PdG-0w-Uy9"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qM2-Cy-U9i" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1478" y="842"/>
-        </scene>
-        <!--Inventory-->
-        <scene sceneID="xf4-IF-Ftq">
-            <objects>
-                <viewController id="Evg-I2-MFV" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="lLI-jB-obh"/>
-                        <viewControllerLayoutGuide type="bottom" id="ag9-N5-szY"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="94H-0V-hbs">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Inventory" id="2Hd-48-45g"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hYB-7h-rO7" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-648" y="1140"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="aBY-Kl-kXd">

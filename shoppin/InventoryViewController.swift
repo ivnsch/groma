@@ -1,0 +1,53 @@
+//
+//  InventoryViewController.swift
+//  shoppin
+//
+//  Created by ischuetz on 04.01.15.
+//  Copyright (c) 2015 ivanschuetz. All rights reserved.
+//
+
+import UIKit
+
+class InventoryViewController: UITableViewController {
+
+    var inventoryItems:[InventoryItem]!
+
+    private let inventoryProvider = ProviderFactory().inventoryProvider
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.inventoryItems = self.inventoryProvider.inventory()
+        
+        self.tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
+    }
+    
+    override func viewWillAppear(animated:Bool) {
+        self.inventoryItems = self.inventoryProvider.inventory()
+        self.tableView.reloadData()
+    }
+    
+    // MARK: - Table view data source
+
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.inventoryItems.count
+    }
+
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("inventoryCell", forIndexPath: indexPath) as InventoryTableViewCell
+
+        let inventoryItem = self.inventoryItems[indexPath.row]
+        
+        cell.nameLabel.text = inventoryItem.product.name
+        cell.quantityLabel.text = String(inventoryItem.quantity)
+
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        
+        return cell
+    }
+}
