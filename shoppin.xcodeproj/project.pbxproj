@@ -19,6 +19,9 @@
 		EB20FBF61A59701C0058103B /* CDInventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF51A59701C0058103B /* CDInventoryItem.swift */; };
 		EB20FBF81A5971170058103B /* InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF71A5971170058103B /* InventoryItem.swift */; };
 		EB20FBFA1A5971C20058103B /* InventoryItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF91A5971C20058103B /* InventoryItemMapper.swift */; };
+		EB20FBFC1A5972A30058103B /* InventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFB1A5972A30058103B /* InventoryProvider.swift */; };
+		EB20FBFE1A5972C70058103B /* InventoryProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFD1A5972C70058103B /* InventoryProviderImpl.swift */; };
+		EB20FC001A5973330058103B /* CDInventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFF1A5973330058103B /* CDInventoryProvider.swift */; };
 		EB2743DB1A3E3ACE00593AB0 /* CDProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2743DA1A3E3ACE00593AB0 /* CDProduct.swift */; };
 		EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */; };
 		EB28C1181A58623E00E1C8BC /* PlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */; };
@@ -87,6 +90,9 @@
 		EB20FBF51A59701C0058103B /* CDInventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDInventoryItem.swift; path = shoppin/CDInventoryItem.swift; sourceTree = "<group>"; };
 		EB20FBF71A5971170058103B /* InventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItem.swift; sourceTree = "<group>"; };
 		EB20FBF91A5971C20058103B /* InventoryItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemMapper.swift; sourceTree = "<group>"; };
+		EB20FBFB1A5972A30058103B /* InventoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryProvider.swift; sourceTree = "<group>"; };
+		EB20FBFD1A5972C70058103B /* InventoryProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryProviderImpl.swift; sourceTree = "<group>"; };
+		EB20FBFF1A5973330058103B /* CDInventoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDInventoryProvider.swift; sourceTree = "<group>"; };
 		EB2743DA1A3E3ACE00593AB0 /* CDProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDProduct.swift; sourceTree = "<group>"; };
 		EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationTitleView.swift; sourceTree = "<group>"; };
 		EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlainTableViewController.swift; sourceTree = "<group>"; };
@@ -367,6 +373,7 @@
 				EBF162EE1A3CA3180048E37C /* coreData */,
 				EBF162F41A3CA4BA0048E37C /* ProviderFactory.swift */,
 				EBF162F91A3CA54F0048E37C /* ListItemProvider.swift */,
+				EB20FBFB1A5972A30058103B /* InventoryProvider.swift */,
 			);
 			name = provider;
 			sourceTree = "<group>";
@@ -374,8 +381,9 @@
 		EBF162EE1A3CA3180048E37C /* coreData */ = {
 			isa = PBXGroup;
 			children = (
-				EBF162EF1A3CA3530048E37C /* CDListItemProvider.swift */,
 				EBF162F11A3CA3BB0048E37C /* CDProvider.swift */,
+				EBF162EF1A3CA3530048E37C /* CDListItemProvider.swift */,
+				EB20FBFF1A5973330058103B /* CDInventoryProvider.swift */,
 			);
 			name = coreData;
 			sourceTree = "<group>";
@@ -392,6 +400,7 @@
 			isa = PBXGroup;
 			children = (
 				EBF162E81A3CA1F00048E37C /* ListItemProviderImpl.swift */,
+				EB20FBFD1A5972C70058103B /* InventoryProviderImpl.swift */,
 			);
 			name = impl;
 			sourceTree = "<group>";
@@ -523,6 +532,7 @@
 				EBF162FD1A3DDE5D0048E37C /* ProductMapper.swift in Sources */,
 				EB20FBFA1A5971C20058103B /* InventoryItemMapper.swift in Sources */,
 				EB20FBF21A5961360058103B /* CartMenuView.swift in Sources */,
+				EB20FBFC1A5972A30058103B /* InventoryProvider.swift in Sources */,
 				EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */,
 				EBF162CB1A34B1860048E37C /* CDListItem.swift in Sources */,
 				EB1DDECE1A3338E200D778DE /* ShoppingListItemCell.swift in Sources */,
@@ -563,9 +573,11 @@
 				EB2F5D161A4B380900DBC4AF /* ContainerViewController.swift in Sources */,
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,
+				EB20FBFE1A5972C70058103B /* InventoryProviderImpl.swift in Sources */,
 				EBF162E21A3C83D50048E37C /* ListItemsViewSection.swift in Sources */,
 				EBF162F71A3CA5030048E37C /* ListItemProviderMock.swift in Sources */,
 				EB2F5D6F1A530FBC00DBC4AF /* Float.swift in Sources */,
+				EB20FC001A5973330058103B /* CDInventoryProvider.swift in Sources */,
 				EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */,
 				EB2F5D0C1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift in Sources */,
 				EB1DDEAE1A3334EC00D778DE /* shoppin.xcdatamodeld in Sources */,

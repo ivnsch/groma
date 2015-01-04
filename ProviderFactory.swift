@@ -12,4 +12,5 @@ class ProviderFactory: NSObject {
    
     lazy var listItemProvider:ListItemProvider = ListItemProviderImpl()
 
+    lazy var inventoryProvider:InventoryProvider = InventoryProviderImpl()
 }
