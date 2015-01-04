@@ -14,7 +14,6 @@
 		EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB11A3334EC00D778DE /* Main.storyboard */; };
 		EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB41A3334EC00D778DE /* Images.xcassets */; };
 		EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB61A3334EC00D778DE /* LaunchScreen.xib */; };
-		EB1DDECE1A3338E200D778DE /* ShoppingListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDECD1A3338E200D778DE /* ShoppingListItemCell.swift */; };
 		EB20FBF21A5961360058103B /* CartMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF11A5961360058103B /* CartMenuView.swift */; };
 		EB20FBF61A59701C0058103B /* CDInventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF51A59701C0058103B /* CDInventoryItem.swift */; };
 		EB20FBF81A5971170058103B /* InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF71A5971170058103B /* InventoryItem.swift */; };
@@ -84,7 +83,6 @@
 		EB1DDEB71A3334EC00D778DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		EB1DDEC21A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEC31A3334EC00D778DE /* shoppinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shoppinTests.swift; sourceTree = "<group>"; };
-		EB1DDECD1A3338E200D778DE /* ShoppingListItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShoppingListItemCell.swift; sourceTree = SOURCE_ROOT; };
 		EB20FBEC1A58776E0058103B /* shoppin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-Bridging-Header.h"; sourceTree = "<group>"; };
 		EB20FBF11A5961360058103B /* CartMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartMenuView.swift; sourceTree = "<group>"; };
 		EB20FBF51A59701C0058103B /* CDInventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDInventoryItem.swift; path = shoppin/CDInventoryItem.swift; sourceTree = "<group>"; };
@@ -242,7 +240,6 @@
 		EB20FC021A59986C0058103B /* list */ = {
 			isa = PBXGroup;
 			children = (
-				EB1DDECD1A3338E200D778DE /* ShoppingListItemCell.swift */,
 				EB2F5D721A55754400DBC4AF /* PricesView.swift */,
 				EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */,
 				EB1DDEAF1A3334EC00D778DE /* ViewController.swift */,
@@ -551,7 +548,6 @@
 				EB20FBFC1A5972A30058103B /* InventoryProvider.swift in Sources */,
 				EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */,
 				EBF162CB1A34B1860048E37C /* CDListItem.swift in Sources */,
-				EB1DDECE1A3338E200D778DE /* ShoppingListItemCell.swift in Sources */,
 				EBF162EB1A3CA2470048E37C /* Product.swift in Sources */,
 				EB2F5D5C1A5058E900DBC4AF /* TableViewListItem.swift in Sources */,
 				EB2F5D621A50B91200DBC4AF /* AddItemView.swift in Sources */,
