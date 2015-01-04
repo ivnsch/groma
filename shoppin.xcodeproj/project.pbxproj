@@ -190,20 +190,16 @@
 			isa = PBXGroup;
 			children = (
 				EB2F5D7C1A55817100DBC4AF /* common */,
-				EB2F5D0F1A4ACC2500DBC4AF /* extensions */,
 				EB2F5D071A4A28DE00DBC4AF /* autosuggestions */,
-				EBEEDD631A49A7B500FC3B29 /* view */,
 				EBF162E31A3C853E0048E37C /* listItemsTableView */,
-				EBF162CC1A3C82380048E37C /* tableView */,
+				EB20FC021A59986C0058103B /* list */,
+				EB20FC011A5998490058103B /* cart */,
 				EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */,
-				EB1DDEAF1A3334EC00D778DE /* ViewController.swift */,
-				EB2F5D251A4DE56B00DBC4AF /* DoneViewController.swift */,
 				EB1DDEB11A3334EC00D778DE /* Main.storyboard */,
 				EB1DDEB41A3334EC00D778DE /* Images.xcassets */,
 				EB1DDEB61A3334EC00D778DE /* LaunchScreen.xib */,
 				EB1DDEAC1A3334EC00D778DE /* shoppin.xcdatamodeld */,
 				EB1DDEA81A3334EC00D778DE /* Supporting Files */,
-				EB1DDECD1A3338E200D778DE /* ShoppingListItemCell.swift */,
 				EB2F5D141A4B37D700DBC4AF /* sidemenu */,
 			);
 			path = shoppin;
@@ -232,6 +228,27 @@
 				EB1DDEC21A3334EC00D778DE /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EB20FC011A5998490058103B /* cart */ = {
+			isa = PBXGroup;
+			children = (
+				EB2F5D251A4DE56B00DBC4AF /* DoneViewController.swift */,
+				EB20FBF11A5961360058103B /* CartMenuView.swift */,
+			);
+			name = cart;
+			sourceTree = "<group>";
+		};
+		EB20FC021A59986C0058103B /* list */ = {
+			isa = PBXGroup;
+			children = (
+				EB1DDECD1A3338E200D778DE /* ShoppingListItemCell.swift */,
+				EB2F5D721A55754400DBC4AF /* PricesView.swift */,
+				EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */,
+				EB1DDEAF1A3334EC00D778DE /* ViewController.swift */,
+				EB2F5D611A50B91200DBC4AF /* AddItemView.swift */,
+			);
+			name = list;
 			sourceTree = "<group>";
 		};
 		EB2F5D071A4A28DE00DBC4AF /* autosuggestions */ = {
@@ -276,6 +293,9 @@
 		EB2F5D7C1A55817100DBC4AF /* common */ = {
 			isa = PBXGroup;
 			children = (
+				EBF162CC1A3C82380048E37C /* tableView */,
+				EB2F5D0F1A4ACC2500DBC4AF /* extensions */,
+				EBEEDD631A49A7B500FC3B29 /* view */,
 				EB2F5D7A1A55816B00DBC4AF /* PreferencesManager.swift */,
 				EB2F5D7E1A559C8800DBC4AF /* Constants.swift */,
 			);
@@ -287,11 +307,7 @@
 			children = (
 				EB2F5D671A50C36E00DBC4AF /* helper */,
 				EB2F5D591A4F5C8100DBC4AF /* SwipeableCell.swift */,
-				EB2F5D611A50B91200DBC4AF /* AddItemView.swift */,
-				EB2F5D721A55754400DBC4AF /* PricesView.swift */,
-				EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */,
 				EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */,
-				EB20FBF11A5961360058103B /* CartMenuView.swift */,
 			);
 			name = view;
 			sourceTree = "<group>";
