@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObserver, SideMenuObserver {
+class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObserver, SideMenuObserver, CartMenuDelegate {
 
     private var listItemsTableViewController:ListItemsTableViewController!
 
@@ -16,13 +16,18 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
 
     var itemsNotificator:ItemsNotificator?
 
+    @IBOutlet weak var cartMenu: CartMenuView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.initTableViewController()
         self.initList()
+        
+        FrozenEffect.apply(self.cartMenu)
+        
+        self.cartMenu.delegate = self
     }
-    
     
     private func initList() {
         
@@ -52,7 +57,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
         self.listItemsTableViewController.style = .Gray
 
         self.addChildViewControllerAndView(self.listItemsTableViewController, viewIndex: 0)
-        
+
         self.listItemsTableViewController.listItemsTableViewDelegate = self
         
         //TODO the tap recognizer to clearPendingSwipeItemIfAny should be in listItemsTableViewController instead of here and in ViewController- but it didn't work (quickly) there
@@ -72,8 +77,9 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
     }
     
     override func didMoveToParentViewController(parent: UIViewController?) {
+        let topInset = self.cartMenu.frame.height
         let bottomInset = self.tabBarController?.tabBar.frame.height
-        self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(0, 0, bottomInset!, 0)
+        self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0)
     }
     
     private func setItemUndone(listItem:ListItem) {
@@ -96,4 +102,8 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
     func onListItemSelected(tableViewListItem: TableViewListItem) {
         //do nothing
     }
+    
+    func onAddToInventoryTap() {
+    }
+
 }

@@ -16,8 +16,51 @@
                     <view key="view" contentMode="scaleToFill" id="cbd-Kq-bBv">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QON-Vw-STm" customClass="CartMenuView" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="55"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cart" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7wm-yh-3aT">
+                                        <rect key="frame" x="283" y="17" width="33" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="Glt-RD-qia"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="49c-vp-xmU">
+                                        <rect key="frame" x="542" y="13" width="50" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="wVY-l1-Gai"/>
+                                        </constraints>
+                                        <state key="normal" title="Bought">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onAddToInventoryTap:" destination="QON-Vw-STm" eventType="touchUpInside" id="GLY-P8-7X1"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="centerY" secondItem="49c-vp-xmU" secondAttribute="centerY" id="37K-9v-Tju"/>
+                                    <constraint firstAttribute="centerY" secondItem="7wm-yh-3aT" secondAttribute="centerY" id="LQh-bn-wqg"/>
+                                    <constraint firstAttribute="height" constant="55" id="k7u-iR-joH"/>
+                                    <constraint firstAttribute="centerX" secondItem="7wm-yh-3aT" secondAttribute="centerX" id="mQ6-mg-Lyz"/>
+                                    <constraint firstAttribute="trailing" secondItem="49c-vp-xmU" secondAttribute="trailing" constant="8" id="o6F-qb-c44"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="QON-Vw-STm" firstAttribute="top" secondItem="cbd-Kq-bBv" secondAttribute="top" id="GMt-5O-f0h"/>
+                            <constraint firstItem="QON-Vw-STm" firstAttribute="leading" secondItem="cbd-Kq-bBv" secondAttribute="leading" id="Way-pG-AcO"/>
+                            <constraint firstAttribute="trailing" secondItem="QON-Vw-STm" secondAttribute="trailing" id="xHD-1d-l8C"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="cartMenu" destination="QON-Vw-STm" id="vQs-z8-d6G"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gw6-cG-vVb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
