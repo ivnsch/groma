@@ -17,12 +17,16 @@ class InventoryViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.inventoryItems = self.inventoryProvider.inventory()
+        self.loadInventoryItems()
         
         self.tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
     }
     
     override func viewWillAppear(animated:Bool) {
+        self.loadInventoryItems()
+    }
+    
+    func loadInventoryItems() {
         self.inventoryItems = self.inventoryProvider.inventory()
         self.tableView.reloadData()
     }
@@ -46,6 +50,24 @@ class InventoryViewController: UITableViewController {
         cell.nameLabel.text = inventoryItem.product.name
         cell.quantityLabel.text = String(inventoryItem.quantity)
 
+        // this was initially a local function but it seems we have to use a closure, see http://stackoverflow.com/a/26237753/930450
+        let incrementItem = {(quantity:Int) -> () in
+            let newQuantity = inventoryItem.quantity + quantity
+            if (newQuantity >= 0) {
+                inventoryItem.quantity += quantity
+                self.inventoryProvider.updateInventoryItem(inventoryItem)
+                cell.quantityLabel.text = String(inventoryItem.quantity)
+            }
+        }
+        
+        cell.onPlusTap = {
+            incrementItem(1)
+        }
+        
+        cell.onMinusTap = {
+            incrementItem(-1)
+        }
+        
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell

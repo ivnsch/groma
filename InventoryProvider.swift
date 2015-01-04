@@ -13,5 +13,7 @@ protocol InventoryProvider {
     func inventory() -> [InventoryItem]
     
     func addToInventory(items:[InventoryItem])
+    
+    func updateInventoryItem(item:InventoryItem)
 
 }

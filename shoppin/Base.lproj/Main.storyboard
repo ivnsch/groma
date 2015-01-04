@@ -500,8 +500,30 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6wu-Z0-NWB">
+                                            <rect key="frame" x="496" y="7" width="30" height="30"/>
+                                            <state key="normal" title="+">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="onPlusTap:" destination="vCq-K7-Ar7" eventType="touchUpInside" id="ogb-lY-E91"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xmY-jl-tlT">
+                                            <rect key="frame" x="458" y="7" width="30" height="30"/>
+                                            <state key="normal" title="-">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="onMinusTap:" destination="vCq-K7-Ar7" eventType="touchUpInside" id="QE8-yX-OU4"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="cUe-dc-Y1J" firstAttribute="leading" secondItem="6wu-Z0-NWB" secondAttribute="trailing" constant="15" id="18C-HS-qYD"/>
+                                        <constraint firstItem="6wu-Z0-NWB" firstAttribute="leading" secondItem="xmY-jl-tlT" secondAttribute="trailing" constant="10" id="99S-Dr-ZQN"/>
+                                        <constraint firstAttribute="centerY" secondItem="6wu-Z0-NWB" secondAttribute="centerY" id="BRR-FG-4Vu"/>
+                                        <constraint firstAttribute="centerY" secondItem="xmY-jl-tlT" secondAttribute="centerY" id="MGn-O7-zcy"/>
                                         <constraint firstAttribute="trailing" secondItem="cUe-dc-Y1J" secondAttribute="trailing" constant="5" id="QTF-ij-zRP"/>
                                         <constraint firstAttribute="centerY" secondItem="cUe-dc-Y1J" secondAttribute="centerY" id="XzQ-Tq-r1I"/>
                                         <constraint firstAttribute="centerY" secondItem="kNJ-Rb-iDN" secondAttribute="centerY" id="cWp-6C-OPw"/>

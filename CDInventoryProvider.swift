@@ -57,4 +57,16 @@ class CDInventoryProvider: CDProvider {
         }
         return savedItem
     }
+    
+    func updateInventoryItem(item:InventoryItem) -> CDInventoryItem {
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        
+        let cdInventoryItem = self.loadInventoryItem(item.product)
+        
+        cdInventoryItem!.quantity = item.quantity
+        
+        let saved = self.save()
+        
+        return cdInventoryItem!
+    }
 }

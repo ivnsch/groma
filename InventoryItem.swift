@@ -10,7 +10,7 @@ import UIKit
 
 class InventoryItem: Equatable {
     let product:Product
-    let quantity:Int
+    var quantity:Int
     
     init(product:Product, quantity:Int) {
         self.product = product

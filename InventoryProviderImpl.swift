@@ -19,5 +19,8 @@ class InventoryProviderImpl: InventoryProvider {
     func addToInventory(items:[InventoryItem]) {
         self.cdProvider.addToInventory(items)
     }
-    
+ 
+    func updateInventoryItem(item:InventoryItem) {
+        self.cdProvider.updateInventoryItem(item)
+    }
 }
