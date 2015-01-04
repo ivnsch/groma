@@ -11,41 +11,16 @@ import CoreData
 
 class CDListItemProvider: CDProvider {
     
-    func loadProducts() -> [CDProduct] {        
-        let fetchRequest = NSFetchRequest()
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-        let entity = NSEntityDescription.entityForName("CDProduct", inManagedObjectContext: appDelegate.managedObjectContext!)
-        fetchRequest.entity = entity
-        
-        var error:NSError?
-        let products = appDelegate.managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as [CDProduct]
-        
-        return products
+    func loadProducts() -> [CDProduct] {
+        return self.load(entityName: "CDProduct", type: CDProduct.self)
     }
     
     func loadListItems(listId:String) -> [CDListItem] {
-        let fetchRequest = NSFetchRequest()
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-        let entity = NSEntityDescription.entityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!)
-        fetchRequest.entity = entity
-        fetchRequest.predicate = NSPredicate(format: "list.id=%@", listId)
-        
-        var error:NSError?
-        let listItems = appDelegate.managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as [CDListItem]
-        
-        return listItems
+        return self.load(entityName: "CDListItem", type: CDListItem.self, predicate: NSPredicate(format: "list.id=%@", listId))
     }
     
     func loadSections() -> [CDSection] {
-        let fetchRequest = NSFetchRequest()
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-        let entity = NSEntityDescription.entityForName("CDSection", inManagedObjectContext: appDelegate.managedObjectContext!)
-        fetchRequest.entity = entity
-        
-        var error:NSError?
-        let sections = appDelegate.managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as [CDSection]
-        
-        return sections
+        return self.load(entityName: "CDSection", type: CDSection.self)
     }
     
     func loadProduct(id:String) -> CDProduct {
@@ -66,15 +41,7 @@ class CDListItemProvider: CDProvider {
     }
     
     func loadSection(name:String?) -> CDSection? {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-
-        let fetchRequest = NSFetchRequest()
-        fetchRequest.entity = NSEntityDescription.entityForName("CDSection", inManagedObjectContext: appDelegate.managedObjectContext!)
-        fetchRequest.predicate = NSPredicate(format: "name=%@", name!)
-        
-        var error:NSError?
-        let sections = appDelegate.managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as [CDSection]
-        
+        let sections = self.load(entityName: "CDSection", type: CDSection.self, predicate: NSPredicate(format: "name=%@", name!))
         return sections.first
     }
     
@@ -147,15 +114,7 @@ class CDListItemProvider: CDProvider {
     }
     
     func loadLists() -> [CDList] {
-        let fetchRequest = NSFetchRequest()
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-        let entity = NSEntityDescription.entityForName("CDList", inManagedObjectContext: appDelegate.managedObjectContext!)
-        fetchRequest.entity = entity
-        
-        var error:NSError?
-        let lists = appDelegate.managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as [CDList]
-        
-        return lists
+        return self.load(entityName: "CDList", type: CDList.self)
     }
     
     func loadList(id:String) -> CDList {

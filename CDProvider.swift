@@ -45,4 +45,20 @@ class CDProvider: NSObject {
         }
         return success
     }
+    
+    func load<T:AnyObject>(#entityName:String, type:T.Type, predicate predicateMaybe:NSPredicate? = nil) -> [T] {
+        let fetchRequest = NSFetchRequest()
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: appDelegate.managedObjectContext!)
+        fetchRequest.entity = entity
+        
+        if let predicate = predicateMaybe {
+            fetchRequest.predicate = predicate
+        }
+        
+        var error:NSError?
+        let obj = appDelegate.managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as [T]
+        
+        return obj
+    }
 }
