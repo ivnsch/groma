@@ -26,4 +26,6 @@ protocol ListItemProvider {
     func list(listId:String) -> List?
     
     func listItems(list:List) -> [ListItem]
+    
+    func updateDone(listItems:[ListItem]) -> Bool
 }

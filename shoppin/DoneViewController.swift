@@ -104,8 +104,21 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
         //do nothing
     }
     
+    private func setAllItemsUndone() {
+        let listItems = self.listItemsTableViewController.items
+        for item in listItems {
+            item.done = false
+        }
+        self.listItemsProvider.updateDone(listItems)
+        self.listItemsTableViewController.setListItems([])
+        
+        itemsNotificator?.notifyItemsUpdated(self)
+    }
+    
     func onAddToInventoryTap() {
         let inventoryItems = self.listItemsTableViewController.items.map{InventoryItem(product: $0.product, quantity: $0.quantity)}
         self.inventoryProvider.addToInventory(inventoryItems)
+        
+        self.setAllItemsUndone()
     }
 }

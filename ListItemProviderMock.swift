@@ -71,4 +71,9 @@ class ListItemProviderMock: ListItemProvider {
         //TODO
         return nil
     }
+    
+    func updateDone(listItems:[ListItem]) -> Bool {
+        //TODO
+        return true
+    }
 }

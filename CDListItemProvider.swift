@@ -84,6 +84,17 @@ class CDListItemProvider: CDProvider {
     func loadListItem(id:String) -> CDListItem {
         return self.loadManagedObject(id)
     }
+
+    // update only done status of listitems, this way avoid loading section, list etc.
+    func updateListItemsDone(listItems:[ListItem]) -> Bool {
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        
+        for listItem in listItems {
+            let cdListItem = self.loadListItem(listItem.id)
+            cdListItem.done = listItem.done
+        }
+        return self.save()
+    }
     
     func updateListItem(listItem:ListItem) -> CDListItem? {
         let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate

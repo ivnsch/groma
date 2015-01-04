@@ -29,6 +29,10 @@ class ListItemProviderImpl:ListItemProvider {
         return ListItemMapper.listItemWithCD(cdListItem)
     }
     
+    func updateDone(listItems:[ListItem]) -> Bool {
+        return self.cdProvider.updateListItemsDone(listItems)
+    }
+    
     func update(listItem:ListItem) -> Bool {
         self.cdProvider.saveSection(listItem.section) // creates a new section if there isn't one already
         return self.cdProvider.updateListItem(listItem) != nil

@@ -21,6 +21,7 @@ protocol ItemsObserver {
 
 protocol ItemsNotificator {
     func notifyItemUpdated(listItem:ListItem, sender:AnyObject)
+    func notifyItemsUpdated(sender:AnyObject)
 }
 
 protocol SideMenuManager {
@@ -63,13 +64,17 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
     }
     
     func notifyItemUpdated(listItem:ListItem, sender:AnyObject) {
+        self.notifyItemsUpdated(sender)
+    }
+
+    func notifyItemsUpdated(sender:AnyObject) {
         for itemObserver in self.itemObservers {
             if (sender !== (itemObserver as AnyObject)) { //don't notify the sender
                 itemObserver.itemsChanged()
             }
         }
     }
-
+    
     func setAppMenuOpen(open: Bool) {
         self.addLeftPanelViewController()
         self.animateLeftPanel(shouldExpand: open)
