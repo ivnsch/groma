@@ -10,17 +10,6 @@ import UIKit
 import CoreData
 
 class CDListItemProvider: CDProvider {
-
-    func save() -> Bool {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-        var error:NSError?
-        let success = appDelegate.managedObjectContext!.save(&error)
-        if !success {
-            println(error?.userInfo)
-        }
-        return success
-    }
-    
     
     func loadProducts() -> [CDProduct] {        
         let fetchRequest = NSFetchRequest()
@@ -58,17 +47,6 @@ class CDListItemProvider: CDProvider {
         
         return sections
     }
-    
-    private func loadManagedObject<T>(id:String) -> T {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-        
-        let objectId:NSManagedObjectID? = appDelegate.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(NSURL(string: id)!)
-        
-        let obj = appDelegate.managedObjectContext!.objectWithID(objectId!) as T
-        
-        return obj
-    }
-    
     
     func loadProduct(id:String) -> CDProduct {
         return self.loadManagedObject(id)
