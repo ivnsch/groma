@@ -13,7 +13,8 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
     private var listItemsTableViewController:ListItemsTableViewController!
 
     private let listItemsProvider = ProviderFactory().listItemProvider
-
+    private let inventoryProvider = ProviderFactory().inventoryProvider
+    
     var itemsNotificator:ItemsNotificator?
 
     @IBOutlet weak var cartMenu: CartMenuView!
@@ -104,6 +105,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
     }
     
     func onAddToInventoryTap() {
+        let inventoryItems = self.listItemsTableViewController.items.map{InventoryItem(product: $0.product, quantity: $0.quantity)}
+        self.inventoryProvider.addToInventory(inventoryItems)
     }
-
 }

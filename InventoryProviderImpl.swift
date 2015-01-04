@@ -16,4 +16,8 @@ class InventoryProviderImpl: InventoryProvider {
         return self.cdProvider.loadInventory().map{InventoryItemMapper.inventoryItemWithCD($0)}
     }
     
+    func addToInventory(items:[InventoryItem]) {
+        self.cdProvider.addToInventory(items)
+    }
+    
 }

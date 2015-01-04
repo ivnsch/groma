@@ -11,4 +11,7 @@ import UIKit
 protocol InventoryProvider {
    
     func inventory() -> [InventoryItem]
+    
+    func addToInventory(items:[InventoryItem])
+
 }
