@@ -57,6 +57,8 @@ class NavigationTitleView: UIView {
             
             if editMode {
                 self.textField.becomeFirstResponder()
+            } else {
+                self.textField.resignFirstResponder()
             }
         }
     }

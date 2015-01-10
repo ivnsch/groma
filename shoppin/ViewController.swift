@@ -212,7 +212,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let listsTableViewController = PlainTableViewController(options: lists.map{$0.name}) {(index, option) -> () in
             let list = lists[index]
             self.showList(list)
-            self.listsPopover!.dismissPopoverAnimated(true)
+            self.listsPopover?.dismissPopoverAnimated(true)
         }
         
         self.listsPopover = WYPopoverController(contentViewController: listsTableViewController)
