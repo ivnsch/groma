@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 
+@objc(CDList)
 class CDList: NSManagedObject {
 
     @NSManaged var id: String

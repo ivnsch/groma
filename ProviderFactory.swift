@@ -6,9 +6,7 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
-import UIKit
-
-class ProviderFactory: NSObject {
+class ProviderFactory {
    
     lazy var listItemProvider:ListItemProvider = ListItemProviderImpl()
 

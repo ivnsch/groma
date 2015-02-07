@@ -6,9 +6,7 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
-import UIKit
-
-class ProductMapper: NSObject {
+class ProductMapper {
     
     class func productWithCD(cdProduct:CDProduct) -> Product {
         let id = cdProduct.objectID.URIRepresentation().absoluteString

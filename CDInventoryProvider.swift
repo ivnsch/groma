@@ -42,7 +42,7 @@ class CDInventoryProvider: CDProvider {
             savedItem = existingItem
             
         } else {
-            let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+            let appDelegate = SharedAppDelegate.getAppDelegate()
             let cdInventoryItem = NSEntityDescription.insertNewObjectForEntityForName("CDInventoryItem", inManagedObjectContext: appDelegate.managedObjectContext!) as CDInventoryItem
             
             let cdProduct = cdListItemProvider.loadProduct(item.product.id)
@@ -59,7 +59,7 @@ class CDInventoryProvider: CDProvider {
     }
     
     func updateInventoryItem(item:InventoryItem) -> CDInventoryItem {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = SharedAppDelegate.getAppDelegate()
         
         let cdInventoryItem = self.loadInventoryItem(item.product)
         

@@ -6,13 +6,12 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
-import UIKit
 import CoreData
 
 class CDProvider: NSObject {
     
     func save() -> Bool {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = SharedAppDelegate.getAppDelegate()
         var error:NSError?
         let success = appDelegate.managedObjectContext!.save(&error)
         if !success {
@@ -22,7 +21,7 @@ class CDProvider: NSObject {
     }
     
     func loadManagedObject<T>(id:String) -> T {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = SharedAppDelegate.getAppDelegate()
         
         let objectId:NSManagedObjectID? = appDelegate.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(NSURL(string: id)!)
         
@@ -33,7 +32,7 @@ class CDProvider: NSObject {
     
     func removeObject(object:NSManagedObject) -> Bool {
         var success = false
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = SharedAppDelegate.getAppDelegate()
         
         appDelegate.managedObjectContext!.deleteObject(object)
         
@@ -48,7 +47,7 @@ class CDProvider: NSObject {
     
     func load<T:AnyObject>(#entityName:String, type:T.Type, predicate predicateMaybe:NSPredicate? = nil) -> [T] {
         let fetchRequest = NSFetchRequest()
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = SharedAppDelegate.getAppDelegate()
         let entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: appDelegate.managedObjectContext!)
         fetchRequest.entity = entity
         

@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
-import UIKit
-
 class ListItemProviderMock: ListItemProvider {
     
     private var productsVar:[Product]

@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
-import UIKit
-
 protocol InventoryProvider {
    
     func inventory() -> [InventoryItem]

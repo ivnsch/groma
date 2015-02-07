@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 
+@objc(CDSection)
 class CDSection: NSManagedObject {
 
     @NSManaged var name: String

@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
-import UIKit
-
 class InventoryItem: Equatable {
     let product:Product
     var quantity:Int

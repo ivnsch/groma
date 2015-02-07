@@ -9,11 +9,12 @@
 import Foundation
 import CoreData
 
+@objc(CDListItem)
 class CDListItem: NSManagedObject {
 
     @NSManaged var done: Bool
     @NSManaged var quantity: NSNumber
-    @NSManaged var section: shoppin.CDSection
-    @NSManaged var product: shoppin.CDProduct
-    @NSManaged var list: shoppin.CDList
+    @NSManaged var section: CDSection
+    @NSManaged var product: CDProduct
+    @NSManaged var list: CDList
 }

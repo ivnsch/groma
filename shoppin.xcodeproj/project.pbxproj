@@ -47,6 +47,33 @@
 		EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */; };
 		EB2F5D7B1A55816B00DBC4AF /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7A1A55816B00DBC4AF /* PreferencesManager.swift */; };
 		EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7E1A559C8800DBC4AF /* Constants.swift */; };
+		EB55675D1A86433700CD3EC6 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162EA1A3CA2470048E37C /* Product.swift */; };
+		EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F91A3CA54F0048E37C /* ListItemProvider.swift */; };
+		EB55675F1A86437400CD3EC6 /* ListItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FE1A3DDE730048E37C /* ListItemMapper.swift */; };
+		EB5567601A86437800CD3EC6 /* ProductMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FC1A3DDE5D0048E37C /* ProductMapper.swift */; };
+		EB5567611A86437B00CD3EC6 /* SectionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */; };
+		EB5567621A86437E00CD3EC6 /* ListMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */; };
+		EB5567631A86438100CD3EC6 /* InventoryItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF91A5971C20058103B /* InventoryItemMapper.swift */; };
+		EB5567641A86438600CD3EC6 /* CDProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2743DA1A3E3ACE00593AB0 /* CDProduct.swift */; };
+		EB5567651A86438A00CD3EC6 /* CDListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162CA1A34B1860048E37C /* CDListItem.swift */; };
+		EB5567661A8643AB00CD3EC6 /* CDSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD681A49C75400FC3B29 /* CDSection.swift */; };
+		EB5567671A8643AF00CD3EC6 /* CDList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D741A5579B200DBC4AF /* CDList.swift */; };
+		EB5567681A8643B200CD3EC6 /* CDInventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF51A59701C0058103B /* CDInventoryItem.swift */; };
+		EB5567691A8643B800CD3EC6 /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162EC1A3CA24E0048E37C /* ListItem.swift */; };
+		EB55676A1A8643BC00CD3EC6 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6A1A49C94F00FC3B29 /* Section.swift */; };
+		EB55676B1A8643BF00CD3EC6 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D761A557AB000DBC4AF /* List.swift */; };
+		EB55676C1A8643C300CD3EC6 /* InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF71A5971170058103B /* InventoryItem.swift */; };
+		EB55676D1A8644D400CD3EC6 /* shoppin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAC1A3334EC00D778DE /* shoppin.xcdatamodeld */; };
+		EB5567711A864B6E00CD3EC6 /* ListItemProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F61A3CA5030048E37C /* ListItemProviderMock.swift */; };
+		EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFB1A5972A30058103B /* InventoryProvider.swift */; };
+		EB55677B1A86545300CD3EC6 /* SharedAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */; };
+		EB55677D1A86578400CD3EC6 /* SharedAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */; };
+		EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162E81A3CA1F00048E37C /* ListItemProviderImpl.swift */; };
+		EB55677F1A8658AA00CD3EC6 /* InventoryProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFD1A5972C70058103B /* InventoryProviderImpl.swift */; };
+		EB5567801A8658B000CD3EC6 /* CDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F11A3CA3BB0048E37C /* CDProvider.swift */; };
+		EB5567811A8658B400CD3EC6 /* CDListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162EF1A3CA3530048E37C /* CDListItemProvider.swift */; };
+		EB5567821A8658B700CD3EC6 /* CDInventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFF1A5973330058103B /* CDInventoryProvider.swift */; };
+		EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F41A3CA4BA0048E37C /* ProviderFactory.swift */; };
 		EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE61A8610550038355B /* AppDelegate.swift */; };
 		EB9F6CE91A8610550038355B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE81A8610550038355B /* ViewController.swift */; };
 		EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEA1A8610550038355B /* Images.xcassets */; };
@@ -135,6 +162,9 @@
 		EB2F5D7A1A55816B00DBC4AF /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		EB2F5D7D1A558F5400DBC4AF /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		EB2F5D7E1A559C8800DBC4AF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		EB5567791A86545300CD3EC6 /* SharedAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedAppDelegate.h; sourceTree = "<group>"; };
+		EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedAppDelegate.m; sourceTree = "<group>"; };
+		EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-osx-Bridging-Header.h"; sourceTree = "<group>"; };
 		EB9F6CE21A8610550038355B /* shoppin_osx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin_osx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB9F6CE51A8610550038355B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB9F6CE61A8610550038355B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -250,6 +280,8 @@
 			isa = PBXGroup;
 			children = (
 				EB1DDEA91A3334EC00D778DE /* Info.plist */,
+				EB5567791A86545300CD3EC6 /* SharedAppDelegate.h */,
+				EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -393,6 +425,7 @@
 				EB9F6CEA1A8610550038355B /* Images.xcassets */,
 				EB9F6CEC1A8610550038355B /* Main.storyboard */,
 				EB9F6CE41A8610550038355B /* Supporting Files */,
+				EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */,
 			);
 			path = shoppin_osx;
 			sourceTree = "<group>";
@@ -736,6 +769,7 @@
 			files = (
 				EB2F5D5A1A4F5C8100DBC4AF /* SwipeableCell.swift in Sources */,
 				EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */,
+				EB55677B1A86545300CD3EC6 /* SharedAppDelegate.m in Sources */,
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
 				EBF162FD1A3DDE5D0048E37C /* ProductMapper.swift in Sources */,
@@ -798,8 +832,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB5567691A8643B800CD3EC6 /* ListItem.swift in Sources */,
+				EB55677F1A8658AA00CD3EC6 /* InventoryProviderImpl.swift in Sources */,
+				EB5567631A86438100CD3EC6 /* InventoryItemMapper.swift in Sources */,
+				EB5567821A8658B700CD3EC6 /* CDInventoryProvider.swift in Sources */,
+				EB55675F1A86437400CD3EC6 /* ListItemMapper.swift in Sources */,
+				EB55676C1A8643C300CD3EC6 /* InventoryItem.swift in Sources */,
+				EB5567661A8643AB00CD3EC6 /* CDSection.swift in Sources */,
+				EB55676B1A8643BF00CD3EC6 /* List.swift in Sources */,
 				EB9F6CE91A8610550038355B /* ViewController.swift in Sources */,
+				EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */,
+				EB5567611A86437B00CD3EC6 /* SectionMapper.swift in Sources */,
+				EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */,
+				EB5567811A8658B400CD3EC6 /* CDListItemProvider.swift in Sources */,
+				EB55676D1A8644D400CD3EC6 /* shoppin.xcdatamodeld in Sources */,
+				EB5567601A86437800CD3EC6 /* ProductMapper.swift in Sources */,
+				EB5567711A864B6E00CD3EC6 /* ListItemProviderMock.swift in Sources */,
+				EB5567621A86437E00CD3EC6 /* ListMapper.swift in Sources */,
 				EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */,
+				EB5567671A8643AF00CD3EC6 /* CDList.swift in Sources */,
+				EB55675D1A86433700CD3EC6 /* Product.swift in Sources */,
+				EB5567681A8643B200CD3EC6 /* CDInventoryItem.swift in Sources */,
+				EB55677D1A86578400CD3EC6 /* SharedAppDelegate.m in Sources */,
+				EB5567651A86438A00CD3EC6 /* CDListItem.swift in Sources */,
+				EB55676A1A8643BC00CD3EC6 /* Section.swift in Sources */,
+				EB5567801A8658B000CD3EC6 /* CDProvider.swift in Sources */,
+				EB5567641A86438600CD3EC6 /* CDProduct.swift in Sources */,
+				EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */,
+				EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -935,10 +995,12 @@
 			baseConfigurationReference = ED602ABB2DEEE49607500199 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = shoppin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -948,6 +1010,7 @@
 			baseConfigurationReference = 0B9659E0D762FAD127662146 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = shoppin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -971,7 +1034,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "shoppin_osx/shoppin-osx-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -987,7 +1050,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "shoppin_osx/shoppin-osx-Bridging-Header.h";
 			};
 			name = Release;
 		};

@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
-import UIKit
 
 class InventoryItemMapper {
     

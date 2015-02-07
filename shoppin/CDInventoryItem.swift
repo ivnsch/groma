@@ -9,9 +9,10 @@
 import Foundation
 import CoreData
 
+@objc(CDInventoryItem)
 class CDInventoryItem: NSManagedObject {
 
     @NSManaged var quantity: NSNumber
-    @NSManaged var product: shoppin.CDProduct
+    @NSManaged var product: CDProduct
 
 }

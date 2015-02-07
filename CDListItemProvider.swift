@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
-import UIKit
 import CoreData
 
 class CDListItemProvider: CDProvider {
@@ -28,7 +27,7 @@ class CDListItemProvider: CDProvider {
     }
     
     func saveProduct(product:Product) -> CDProduct {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = SharedAppDelegate.getAppDelegate()
         
         let cdProduct = NSEntityDescription.insertNewObjectForEntityForName("CDProduct", inManagedObjectContext: appDelegate.managedObjectContext!) as CDProduct
         
@@ -49,7 +48,7 @@ class CDListItemProvider: CDProvider {
         
         return loadSection(section.name) ?? { // unique - save only if there's no section with this name already
             
-            let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+            let appDelegate = SharedAppDelegate.getAppDelegate()
             
             let cdSection = NSEntityDescription.insertNewObjectForEntityForName("CDSection", inManagedObjectContext: appDelegate.managedObjectContext!) as CDSection
             cdSection.name = section.name
@@ -61,7 +60,7 @@ class CDListItemProvider: CDProvider {
     }
     
     func saveListItem(listItem:ListItem) -> CDListItem {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = SharedAppDelegate.getAppDelegate()
         
         let cdProduct = self.saveProduct(listItem.product)
         let cdSection = self.saveSection(listItem.section)
@@ -87,7 +86,7 @@ class CDListItemProvider: CDProvider {
 
     // update only done status of listitems, this way avoid loading section, list etc.
     func updateListItemsDone(listItems:[ListItem]) -> Bool {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = SharedAppDelegate.getAppDelegate()
         
         for listItem in listItems {
             let cdListItem = self.loadListItem(listItem.id)
@@ -97,7 +96,7 @@ class CDListItemProvider: CDProvider {
     }
     
     func updateListItem(listItem:ListItem) -> CDListItem? {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = SharedAppDelegate.getAppDelegate()
         
         let cdListItem = self.loadListItem(listItem.id)
         let cdSection = self.loadSection(listItem.section.name)! // since we are updating an item, we assume section exists
@@ -116,7 +115,7 @@ class CDListItemProvider: CDProvider {
     }
     
     func remove(listItem:ListItem) -> Bool {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = SharedAppDelegate.getAppDelegate()
 
         let cdListItem = self.loadListItem(listItem.id)
         appDelegate.managedObjectContext!.deleteObject(cdListItem)
@@ -133,7 +132,7 @@ class CDListItemProvider: CDProvider {
     }
     
     func saveList(list:List) -> CDList {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = SharedAppDelegate.getAppDelegate()
         
         let cdList = NSEntityDescription.insertNewObjectForEntityForName("CDList", inManagedObjectContext: appDelegate.managedObjectContext!) as CDList
         cdList.name = list.name
