@@ -47,6 +47,11 @@
 		EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */; };
 		EB2F5D7B1A55816B00DBC4AF /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7A1A55816B00DBC4AF /* PreferencesManager.swift */; };
 		EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7E1A559C8800DBC4AF /* Constants.swift */; };
+		EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE61A8610550038355B /* AppDelegate.swift */; };
+		EB9F6CE91A8610550038355B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE81A8610550038355B /* ViewController.swift */; };
+		EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEA1A8610550038355B /* Images.xcassets */; };
+		EB9F6CEE1A8610550038355B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEC1A8610550038355B /* Main.storyboard */; };
+		EB9F6CFA1A8610550038355B /* shoppin_osxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CF91A8610550038355B /* shoppin_osxTests.swift */; };
 		EBEEDD691A49C75400FC3B29 /* CDSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD681A49C75400FC3B29 /* CDSection.swift */; };
 		EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6A1A49C94F00FC3B29 /* Section.swift */; };
 		EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */; };
@@ -72,8 +77,18 @@
 		EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF163001A3DE6880048E37C /* ItemsListTableViewConstants.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		EB9F6CF41A8610550038355B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB1DDE9D1A3334EC00D778DE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EB9F6CE11A8610550038355B;
+			remoteInfo = shoppin_osx;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		0E37DF4B010F4B588A09CE56 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		0B9659E0D762FAD127662146 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		CFD3968762A24D00B2ED9ADE /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -120,6 +135,15 @@
 		EB2F5D7A1A55816B00DBC4AF /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		EB2F5D7D1A558F5400DBC4AF /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		EB2F5D7E1A559C8800DBC4AF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		EB9F6CE21A8610550038355B /* shoppin_osx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin_osx.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB9F6CE51A8610550038355B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EB9F6CE61A8610550038355B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		EB9F6CE81A8610550038355B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		EB9F6CEA1A8610550038355B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		EB9F6CED1A8610550038355B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		EB9F6CF31A8610550038355B /* shoppin_osxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shoppin_osxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB9F6CF81A8610550038355B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EB9F6CF91A8610550038355B /* shoppin_osxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shoppin_osxTests.swift; sourceTree = "<group>"; };
 		EBEEDD681A49C75400FC3B29 /* CDSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDSection.swift; sourceTree = "<group>"; };
 		EBEEDD6A1A49C94F00FC3B29 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionMapper.swift; sourceTree = "<group>"; };
@@ -143,6 +167,7 @@
 		EBF162FC1A3DDE5D0048E37C /* ProductMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductMapper.swift; sourceTree = "<group>"; };
 		EBF162FE1A3DDE730048E37C /* ListItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemMapper.swift; sourceTree = "<group>"; };
 		EBF163001A3DE6880048E37C /* ItemsListTableViewConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsListTableViewConstants.swift; sourceTree = "<group>"; };
+		ED602ABB2DEEE49607500199 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +176,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FC87A4A718943E18BF37A57 /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB9F6CDF1A8610550038355B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB9F6CF01A8610550038355B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,9 +213,11 @@
 				EBF162E61A3CA1AC0048E37C /* model */,
 				EB1DDEA71A3334EC00D778DE /* shoppin */,
 				EB1DDEC01A3334EC00D778DE /* shoppinTests */,
+				EB9F6CE31A8610550038355B /* shoppin_osx */,
+				EB9F6CF61A8610550038355B /* shoppin_osxTests */,
 				EB1DDEA61A3334EC00D778DE /* Products */,
-				0E37DF4B010F4B588A09CE56 /* Pods.xcconfig */,
 				E4CDB4AFEC6C43F59CFE7A39 /* Frameworks */,
+				F5A12A83562C0B29B96FD548 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -184,6 +225,8 @@
 			isa = PBXGroup;
 			children = (
 				EB1DDEA51A3334EC00D778DE /* shoppin.app */,
+				EB9F6CE21A8610550038355B /* shoppin_osx.app */,
+				EB9F6CF31A8610550038355B /* shoppin_osxTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -311,6 +354,43 @@
 				EB2F5D7E1A559C8800DBC4AF /* Constants.swift */,
 			);
 			name = common;
+			sourceTree = "<group>";
+		};
+		EB9F6CE31A8610550038355B /* shoppin_osx */ = {
+			isa = PBXGroup;
+			children = (
+				EB9F6CE61A8610550038355B /* AppDelegate.swift */,
+				EB9F6CE81A8610550038355B /* ViewController.swift */,
+				EB9F6CEA1A8610550038355B /* Images.xcassets */,
+				EB9F6CEC1A8610550038355B /* Main.storyboard */,
+				EB9F6CE41A8610550038355B /* Supporting Files */,
+			);
+			path = shoppin_osx;
+			sourceTree = "<group>";
+		};
+		EB9F6CE41A8610550038355B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				EB9F6CE51A8610550038355B /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EB9F6CF61A8610550038355B /* shoppin_osxTests */ = {
+			isa = PBXGroup;
+			children = (
+				EB9F6CF91A8610550038355B /* shoppin_osxTests.swift */,
+				EB9F6CF71A8610550038355B /* Supporting Files */,
+			);
+			path = shoppin_osxTests;
+			sourceTree = "<group>";
+		};
+		EB9F6CF71A8610550038355B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				EB9F6CF81A8610550038355B /* Info.plist */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		EBEEDD631A49A7B500FC3B29 /* view */ = {
@@ -444,6 +524,15 @@
 			name = mapper;
 			sourceTree = "<group>";
 		};
+		F5A12A83562C0B29B96FD548 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				ED602ABB2DEEE49607500199 /* Pods.debug.xcconfig */,
+				0B9659E0D762FAD127662146 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -466,6 +555,41 @@
 			productReference = EB1DDEA51A3334EC00D778DE /* shoppin.app */;
 			productType = "com.apple.product-type.application";
 		};
+		EB9F6CE11A8610550038355B /* shoppin_osx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB9F6CFB1A8610550038355B /* Build configuration list for PBXNativeTarget "shoppin_osx" */;
+			buildPhases = (
+				EB9F6CDE1A8610550038355B /* Sources */,
+				EB9F6CDF1A8610550038355B /* Frameworks */,
+				EB9F6CE01A8610550038355B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = shoppin_osx;
+			productName = shoppin_osx;
+			productReference = EB9F6CE21A8610550038355B /* shoppin_osx.app */;
+			productType = "com.apple.product-type.application";
+		};
+		EB9F6CF21A8610550038355B /* shoppin_osxTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB9F6CFE1A8610550038355B /* Build configuration list for PBXNativeTarget "shoppin_osxTests" */;
+			buildPhases = (
+				EB9F6CEF1A8610550038355B /* Sources */,
+				EB9F6CF01A8610550038355B /* Frameworks */,
+				EB9F6CF11A8610550038355B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EB9F6CF51A8610550038355B /* PBXTargetDependency */,
+			);
+			name = shoppin_osxTests;
+			productName = shoppin_osxTests;
+			productReference = EB9F6CF31A8610550038355B /* shoppin_osxTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -478,6 +602,13 @@
 					EB1DDEA41A3334EC00D778DE = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 37QAPDY2PR;
+					};
+					EB9F6CE11A8610550038355B = {
+						CreatedOnToolsVersion = 6.2;
+					};
+					EB9F6CF21A8610550038355B = {
+						CreatedOnToolsVersion = 6.2;
+						TestTargetID = EB9F6CE11A8610550038355B;
 					};
 				};
 			};
@@ -495,6 +626,8 @@
 			projectRoot = "";
 			targets = (
 				EB1DDEA41A3334EC00D778DE /* shoppin */,
+				EB9F6CE11A8610550038355B /* shoppin_osx */,
+				EB9F6CF21A8610550038355B /* shoppin_osxTests */,
 			);
 		};
 /* End PBXProject section */
@@ -509,6 +642,22 @@
 				EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */,
 				EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */,
 				EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB9F6CE01A8610550038355B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */,
+				EB9F6CEE1A8610550038355B /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB9F6CF11A8610550038355B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,7 +676,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D96152C8C99740089D2A1CC1 /* Check Pods Manifest.lock */ = {
@@ -612,7 +761,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EB9F6CDE1A8610550038355B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB9F6CE91A8610550038355B /* ViewController.swift in Sources */,
+				EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB9F6CEF1A8610550038355B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB9F6CFA1A8610550038355B /* shoppin_osxTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EB9F6CF51A8610550038355B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EB9F6CE11A8610550038355B /* shoppin_osx */;
+			targetProxy = EB9F6CF41A8610550038355B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		EB1DDEB11A3334EC00D778DE /* Main.storyboard */ = {
@@ -629,6 +803,14 @@
 				EB1DDEB71A3334EC00D778DE /* Base */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		EB9F6CEC1A8610550038355B /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EB9F6CED1A8610550038355B /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -717,7 +899,7 @@
 		};
 		EB1DDEC81A3334EC00D778DE /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0E37DF4B010F4B588A09CE56 /* Pods.xcconfig */;
+			baseConfigurationReference = ED602ABB2DEEE49607500199 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = shoppin/Info.plist;
@@ -730,7 +912,7 @@
 		};
 		EB1DDEC91A3334EC00D778DE /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0E37DF4B010F4B588A09CE56 /* Pods.xcconfig */;
+			baseConfigurationReference = 0B9659E0D762FAD127662146 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = shoppin/Info.plist;
@@ -738,6 +920,82 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		EB9F6CFC1A8610550038355B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = shoppin_osx/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+			};
+			name = Debug;
+		};
+		EB9F6CFD1A8610550038355B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				INFOPLIST_FILE = shoppin_osx/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+			};
+			name = Release;
+		};
+		EB9F6CFF1A8610550038355B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = shoppin_osxTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/shoppin_osx.app/Contents/MacOS/shoppin_osx";
+			};
+			name = Debug;
+		};
+		EB9F6D001A8610550038355B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = shoppin_osxTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/shoppin_osx.app/Contents/MacOS/shoppin_osx";
 			};
 			name = Release;
 		};
@@ -758,6 +1016,24 @@
 			buildConfigurations = (
 				EB1DDEC81A3334EC00D778DE /* Debug */,
 				EB1DDEC91A3334EC00D778DE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EB9F6CFB1A8610550038355B /* Build configuration list for PBXNativeTarget "shoppin_osx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB9F6CFC1A8610550038355B /* Debug */,
+				EB9F6CFD1A8610550038355B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EB9F6CFE1A8610550038355B /* Build configuration list for PBXNativeTarget "shoppin_osxTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB9F6CFF1A8610550038355B /* Debug */,
+				EB9F6D001A8610550038355B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
