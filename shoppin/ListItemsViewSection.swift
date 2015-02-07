@@ -24,10 +24,10 @@ class ListItemsViewSection {
     
     private let cellIdentifier = ItemsListTableViewConstants.listItemCellIdentifier
     
-    var headerBGColor:UIColor = UIColor(red: 0.7, green: 0.7, blue: 1, alpha: 1)
+    var headerBGColor:UIColor = UIColor(red: 0, green: 0, blue: 1, alpha: 1)
     
-    var headerFontColor:UIColor = UIColor.blackColor()
-    var labelColor:UIColor = UIColor.blackColor()
+    var headerFontColor:UIColor = UIColor.whiteColor()
+    var labelFontColor:UIColor = UIColor.blackColor()
     
     let section:Section
     
@@ -38,12 +38,12 @@ class ListItemsViewSection {
     var delegate:ItemActionsDelegate!
     
     // this could be solved maybe with inheritance or sth like "style injection", for now this is ok
-    private var finalLabelColor:UIColor {
+    private var finalLabelFontColor:UIColor {
         var color:UIColor
         if self.style == .Gray {
             color = UIColor.lightGrayColor()
         } else {
-            color = self.labelColor
+            color = self.labelFontColor
         }
         return color
     }
@@ -145,7 +145,7 @@ class ListItemsViewSection {
         cell.nameLabel.text = tableViewListItem.listItem.product.name
         cell.quantityLabel.text = String(tableViewListItem.listItem.quantity)
         
-        cell.labelColor = self.finalHeaderFontColor
+        cell.labelColor = self.finalLabelFontColor
 //        cell.delegate = self
         cell.itemSwiped = { // use a closure to capture listitem
             self.delegate.endItemSwipe(tableViewListItem)
