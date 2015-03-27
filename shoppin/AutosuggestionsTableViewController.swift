@@ -18,20 +18,18 @@ class AutosuggestionsTableViewController: UITableViewController {
     private let onSuggestionSelected:((String) -> ())!
     
     init(frame:CGRect, onSuggestionSelected:(String) -> ()) {
-        super.init()
-        self.view.frame = frame
         self.onSuggestionSelected = onSuggestionSelected
+        
+        super.init(style: UITableViewStyle.Plain)
+        
+        self.view.frame = frame
 
         self.tableView.bounces = false
     }
-
-    override init(style: UITableViewStyle) {
-        super.init(style: style)
-    }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
+//    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+//        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+//    }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -77,7 +75,7 @@ class AutosuggestionsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cellMaybe = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as UITableViewCell?
+        var cellMaybe = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as! UITableViewCell?
         if cellMaybe == nil {
             cellMaybe = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: cellReuseIdentifier)
         }

@@ -248,7 +248,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     @IBAction func onEditTap(sender: AnyObject) {
-        let editButton = sender as UIBarButtonItem
+        let editButton = sender as! UIBarButtonItem
         let editing = !self.listItemsTableViewController.editing
         
         if (self.navigationTitleView.editMode) { //during edit list mode, nav right button becomes "add list". TODO rename editButton in navRightButton or similar, onNavRightButtonTap etc

@@ -25,7 +25,7 @@ class CDProvider: NSObject {
         
         let objectId:NSManagedObjectID? = appDelegate.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(NSURL(string: id)!)
         
-        let obj = appDelegate.managedObjectContext!.objectWithID(objectId!) as T
+        let obj = appDelegate.managedObjectContext!.objectWithID(objectId!) as! T
         
         return obj
     }
@@ -56,7 +56,7 @@ class CDProvider: NSObject {
         }
         
         var error:NSError?
-        let obj = appDelegate.managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as [T]
+        let obj = appDelegate.managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as! [T]
         
         return obj
     }

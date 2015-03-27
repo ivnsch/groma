@@ -22,6 +22,6 @@ class CellSpecification<T> {
     }
     
     func generateCellForTableView(tableView:UITableView) -> UITableViewCell {
-        return tableView.dequeueReusableCellWithIdentifier(self.cellIdentifier) as UITableViewCell
+        return tableView.dequeueReusableCellWithIdentifier(self.cellIdentifier) as! UITableViewCell
     }
 }

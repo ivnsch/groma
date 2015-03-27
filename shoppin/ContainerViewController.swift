@@ -89,7 +89,7 @@ class ContainerViewController: UIViewController, ItemsNotificator, SideMenuManag
         super.viewDidLoad()
 
         let navigationViewController = UIStoryboard.navigationController()
-        let viewControler = navigationViewController.viewControllers[0] as ViewController
+        let viewControler = navigationViewController.viewControllers[0] as! ViewController
         
         self.centerViewController = navigationViewController
         self.itemObservers.append(viewControler)

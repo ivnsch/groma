@@ -133,8 +133,8 @@ class AddItemView: UIView, UITextFieldDelegate {
         return frame
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        let touch: AnyObject? = event.allTouches()?.anyObject()
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        let touch: AnyObject? = event.allTouches()?.first
         self.inputs.forEach { (element) -> Void in
             if element.isFirstResponder() && touch?.view != element {
                 element.resignFirstResponder()

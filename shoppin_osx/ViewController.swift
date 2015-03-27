@@ -28,7 +28,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         }
     }
 
-    func numberOfRowsInTableView(aTableView: NSTableView!) -> Int {
+    func numberOfRowsInTableView(aTableView: NSTableView) -> Int {
         return self.products?.count ?? 0
     }
     
@@ -37,21 +37,21 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
 //        println("column: \(tableColumn)")
 //        return "foo"
 //    }
+   
     
     
-    func tableView(tableView: NSTableView!, viewForTableColumn tableColumn: NSTableColumn!, row: Int) -> AnyObject! {
-        
-        let identifier = tableColumn.identifier
-        let cellView = tableView.makeViewWithIdentifier(identifier, owner:self) as NSTableCellView
+    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+
+        let identifier = tableColumn!.identifier
+        let cellView = tableView.makeViewWithIdentifier(identifier, owner:self) as! NSTableCellView
 
         let product = self.products![row]
-        
-        
+
+
         cellView.textField?.stringValue = product.name
 
         return cellView
     }
-    
     
     
 //    

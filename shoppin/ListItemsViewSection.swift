@@ -137,7 +137,7 @@ class ListItemsViewSection {
     
     func tableView(tableView: UITableView, row: NSInteger) -> UITableViewCell {
 
-        let cell:ListItemCell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as ListItemCell
+        let cell:ListItemCell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! ListItemCell
         cell.showsReorderControl = true
         
         let tableViewListItem = tableViewListItems[row]

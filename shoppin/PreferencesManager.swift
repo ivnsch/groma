@@ -37,9 +37,7 @@ class PreferencesManager {
             
             if casted == nil {
                 println("Casting error! the preference is stored but wrong type...")
-                println( "TypeName = \(_stdlib_getTypeName(casted))")
             }
-            
             
             return casted
             

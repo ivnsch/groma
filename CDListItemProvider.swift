@@ -29,7 +29,7 @@ class CDListItemProvider: CDProvider {
     func saveProduct(product:Product) -> CDProduct {
         let appDelegate = SharedAppDelegate.getAppDelegate()
         
-        let cdProduct = NSEntityDescription.insertNewObjectForEntityForName("CDProduct", inManagedObjectContext: appDelegate.managedObjectContext!) as CDProduct
+        let cdProduct = NSEntityDescription.insertNewObjectForEntityForName("CDProduct", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDProduct
         
         cdProduct.name = product.name
         cdProduct.price = product.price
@@ -50,7 +50,7 @@ class CDListItemProvider: CDProvider {
             
             let appDelegate = SharedAppDelegate.getAppDelegate()
             
-            let cdSection = NSEntityDescription.insertNewObjectForEntityForName("CDSection", inManagedObjectContext: appDelegate.managedObjectContext!) as CDSection
+            let cdSection = NSEntityDescription.insertNewObjectForEntityForName("CDSection", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDSection
             cdSection.name = section.name
             
             self.save()
@@ -67,7 +67,7 @@ class CDListItemProvider: CDProvider {
 //        let cdList = self.saveList(listItem.list)
         let cdList = self.loadList(listItem.list.id) // before list item there must be always a list. Also, if we save each list for each listitem we don't have unique id
         
-        let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as CDListItem
+        let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDListItem
 
         cdListItem.product = cdProduct
         cdListItem.quantity = listItem.quantity
@@ -125,7 +125,7 @@ class CDListItemProvider: CDProvider {
     
     func loadLists() -> [CDList] {
         return self.load(entityName: "CDList", type: CDList.self)
-    }
+    } 
     
     func loadList(id:String) -> CDList {
         return self.loadManagedObject(id)
@@ -134,7 +134,7 @@ class CDListItemProvider: CDProvider {
     func saveList(list:List) -> CDList {
         let appDelegate = SharedAppDelegate.getAppDelegate()
         
-        let cdList = NSEntityDescription.insertNewObjectForEntityForName("CDList", inManagedObjectContext: appDelegate.managedObjectContext!) as CDList
+        let cdList = NSEntityDescription.insertNewObjectForEntityForName("CDList", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDList
         cdList.name = list.name
         self.save() //save before we store the id because it changes on save, and for consistency we want to store the final one
         

@@ -10,26 +10,24 @@ import UIKit
 
 class PlainTableViewController: UITableViewController {
 
-    let options:[String]!
+    let options:[String]
 
-    let onSelectOption:((Int, String) -> ())!
+    let onSelectOption:((Int, String) -> ())
     
     let reuseIdentifier = "reuseIdentifier"
     
     init(options:[String], onSelectOption:(Int, String) -> ()) {
-        super.init(style: UITableViewStyle.Plain)
-
         self.options = options
         self.onSelectOption = onSelectOption
         
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
-        
+        super.init(style: UITableViewStyle.Plain)
 
+        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    }
+//    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+//        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+//    }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -47,7 +45,7 @@ class PlainTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(reuseIdentifier, forIndexPath: indexPath) as! UITableViewCell
 
         cell.textLabel?.text = self.options[indexPath.row]
 
