@@ -2,11 +2,9 @@
 //  PreferencesManager.swift
 //  shoppin
 //
-//  Created by ischuetz on 01.01.15.
+//  Created by ischuetz on 28/03/15.
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
-
-import UIKit
 
 // TODO is it possible to declare this in class as only "Key"
 enum PreferencesManagerKey: String {
