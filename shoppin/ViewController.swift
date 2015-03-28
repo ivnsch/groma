@@ -149,25 +149,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     func onAddTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
         if !name.isEmpty {
             
-            let (name_, price, quantity, sectionName_) = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName)
+            let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName)
         
-            self.addItem(name_, price: price, quantity: quantity, sectionName:sectionName_)
+            self.addItem(listItemInput)
             self.view.endEditing(true)
             self.addItemView.clearInputs()
         }
     }
     
     func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
-        let (name_, price, quantity, sectionName_) = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName)
+        let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName)
         
-        self.updateItem(self.updatingListItem!, itemName: name_, price: price, quantity: quantity, sectionName:sectionName_)
+        self.updateItem(self.updatingListItem!, listItemInput: listItemInput)
         self.view.endEditing(true)
         self.addItemView.clearInputs()
         
         self.updatingListItem = nil
     }
     
-    private func processListItemInputs(name: String, priceText: String, quantityText: String, sectionName: String) -> (name:String, price:Float, quantity:Int, sectionName:String) {
+    private func processListItemInputs(name: String, priceText: String, quantityText: String, sectionName: String) -> ListItemInput {
         //TODO?
         //        if !price {
         //            price = 0
@@ -181,7 +181,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let quantity = quantityText.toInt() ?? 1
         let sectionName = sectionName ?? defaultSectionIdentifier
         
-        return (name, price, quantity, sectionName)
+        return ListItemInput(name: name, quantity: quantity, price: price, section: sectionName)
     }
 
     func onSectionInputChanged(text: String) {
@@ -442,15 +442,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         itemsNotificator?.notifyItemUpdated(listItem, sender: self)
     }
     
-    func addItem(itemName:String, price:Float, quantity:Int, sectionName:String) {
-        // for now just create a new product and a listitem with it
-        let product = Product(id: "dummy", name: itemName, price:price)
-        let section = Section(name: sectionName)
+    private func addItem(listItemInput: ListItemInput) {
         
-        // we use for now core data object id as list item id. So before we insert the item there's no id and it's not used -> "dummy"
-        let listItem = ListItem(id:"dummy", done: false, quantity: quantity, product: product, section: section, list: currentList)
-        
-        if let savedListItem = self.listItemsProvider.add(listItem) {
+        if let savedListItem = self.listItemsProvider.add(listItemInput, list: self.currentList) {
             self.listItemsTableViewController.addListItem(savedListItem)
         }
         
@@ -458,11 +452,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.updatePrices()
     }
     
-    func updateItem(listItem: ListItem, itemName:String, price:Float, quantity:Int, sectionName:String) {
-        let product = Product(id: self.updatingListItem!.product.id, name: itemName, price: price)
-        let section = Section(name: sectionName)
+    func updateItem(listItem: ListItem, listItemInput:ListItemInput) {
+        let product = Product(id: self.updatingListItem!.product.id, name: listItemInput.name, price: listItemInput.price)
+        let section = Section(name: listItemInput.section)
         
-        let listItem = ListItem(id: self.updatingListItem!.id, done: self.updatingListItem!.done, quantity: quantity, product: product, section: section, list: currentList)
+        let listItem = ListItem(id: self.updatingListItem!.id, done: self.updatingListItem!.done, quantity: listItemInput.quantity, product: product, section: section, list: self.currentList)
         
         if self.listItemsProvider.update(listItem) {
             self.listItemsTableViewController.updateListItem(listItem)

@@ -46,6 +46,10 @@ class ListItemProviderMock: ListItemProvider {
         return listItem
     }
     
+    func add(listItemInput:ListItemInput, list:List) -> ListItem? {
+        return nil
+    }
+    
     func sections() -> [Section] {
         return [Section(name: "test")]
     }

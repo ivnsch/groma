@@ -17,6 +17,8 @@ protocol ListItemProvider {
     
     func add(listItem:ListItem) -> ListItem?
 
+    func add(listItemInput:ListItemInput, list:List) -> ListItem?
+    
     func update(listItem:ListItem) -> Bool
 
     func add(list:List) -> List?

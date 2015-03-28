@@ -29,6 +29,17 @@ class ListItemProviderImpl:ListItemProvider {
         return ListItemMapper.listItemWithCD(cdListItem)
     }
     
+    func add(listItemInput:ListItemInput, list:List) -> ListItem? {
+        // for now just create a new product and a listitem with it
+        let product = Product(id: "dummy", name: listItemInput.name, price:listItemInput.price)
+        let section = Section(name: listItemInput.section)
+        
+        // we use for now core data object id as list item id. So before we insert the item there's no id and it's not used -> "dummy"
+        let listItem = ListItem(id:"dummy", done: false, quantity: listItemInput.quantity, product: product, section: section, list: list)
+       
+        return self.add(listItem)
+    }
+ 
     func updateDone(listItems:[ListItem]) -> Bool {
         return self.cdProvider.updateListItemsDone(listItems)
     }

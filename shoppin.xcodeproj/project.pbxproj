@@ -54,6 +54,8 @@
 		EB4FD4511AC6BE960000F952 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD44F1AC6BE960000F952 /* Globals.swift */; };
 		EB4FD4561AC6D6690000F952 /* EditListItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD4551AC6D6690000F952 /* EditListItemController.swift */; };
 		EB4FD4581AC6D8C90000F952 /* EditListItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB4FD4571AC6D8C90000F952 /* EditListItem.xib */; };
+		EB4FD45B1AC701410000F952 /* ListItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD45A1AC701410000F952 /* ListItemInput.swift */; };
+		EB4FD45C1AC701410000F952 /* ListItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD45A1AC701410000F952 /* ListItemInput.swift */; };
 		EB55675D1A86433700CD3EC6 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162EA1A3CA2470048E37C /* Product.swift */; };
 		EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F91A3CA54F0048E37C /* ListItemProvider.swift */; };
 		EB55675F1A86437400CD3EC6 /* ListItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FE1A3DDE730048E37C /* ListItemMapper.swift */; };
@@ -175,6 +177,7 @@
 		EB4FD44F1AC6BE960000F952 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		EB4FD4551AC6D6690000F952 /* EditListItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListItemController.swift; sourceTree = "<group>"; };
 		EB4FD4571AC6D8C90000F952 /* EditListItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditListItem.xib; sourceTree = "<group>"; };
+		EB4FD45A1AC701410000F952 /* ListItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemInput.swift; sourceTree = "<group>"; };
 		EB5567791A86545300CD3EC6 /* SharedAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedAppDelegate.h; sourceTree = "<group>"; };
 		EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedAppDelegate.m; sourceTree = "<group>"; };
 		EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-osx-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -408,6 +411,14 @@
 			name = extension;
 			sourceTree = "<group>";
 		};
+		EB4FD4591AC701290000F952 /* input */ = {
+			isa = PBXGroup;
+			children = (
+				EB4FD45A1AC701410000F952 /* ListItemInput.swift */,
+			);
+			name = input;
+			sourceTree = "<group>";
+		};
 		EB55675A1A8622E600CD3EC6 /* shoppin_ios */ = {
 			isa = PBXGroup;
 			children = (
@@ -553,6 +564,7 @@
 		EBF162E61A3CA1AC0048E37C /* model */ = {
 			isa = PBXGroup;
 			children = (
+				EB4FD4591AC701290000F952 /* input */,
 				EBF162FB1A3DDE4C0048E37C /* mapper */,
 				EBF162C51A34A5C70048E37C /* coreData */,
 				EBF162EA1A3CA2470048E37C /* Product.swift */,
@@ -854,6 +866,7 @@
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,
 				EB20FBFE1A5972C70058103B /* InventoryProviderImpl.swift in Sources */,
 				EBF162E21A3C83D50048E37C /* ListItemsViewSection.swift in Sources */,
+				EB4FD45B1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EBF162F71A3CA5030048E37C /* ListItemProviderMock.swift in Sources */,
 				EB2F5D6F1A530FBC00DBC4AF /* Float.swift in Sources */,
 				EB20FC001A5973330058103B /* CDInventoryProvider.swift in Sources */,
@@ -875,6 +888,7 @@
 				EB55676C1A8643C300CD3EC6 /* InventoryItem.swift in Sources */,
 				EB5567661A8643AB00CD3EC6 /* CDSection.swift in Sources */,
 				EB55676B1A8643BF00CD3EC6 /* List.swift in Sources */,
+				EB4FD45C1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EB9F6CE91A8610550038355B /* ViewController.swift in Sources */,
 				EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */,
 				EB5567611A86437B00CD3EC6 /* SectionMapper.swift in Sources */,
