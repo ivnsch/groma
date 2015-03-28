@@ -52,6 +52,8 @@
 		EB4FD44E1AC6BE390000F952 /* NSTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD44D1AC6BE390000F952 /* NSTableView.swift */; };
 		EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD44F1AC6BE960000F952 /* Globals.swift */; };
 		EB4FD4511AC6BE960000F952 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD44F1AC6BE960000F952 /* Globals.swift */; };
+		EB4FD4561AC6D6690000F952 /* EditListItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD4551AC6D6690000F952 /* EditListItemController.swift */; };
+		EB4FD4581AC6D8C90000F952 /* EditListItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB4FD4571AC6D8C90000F952 /* EditListItem.xib */; };
 		EB55675D1A86433700CD3EC6 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162EA1A3CA2470048E37C /* Product.swift */; };
 		EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F91A3CA54F0048E37C /* ListItemProvider.swift */; };
 		EB55675F1A86437400CD3EC6 /* ListItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FE1A3DDE730048E37C /* ListItemMapper.swift */; };
@@ -171,6 +173,8 @@
 		EB49F5EA1AC6CC0D00BBEDA2 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		EB4FD44D1AC6BE390000F952 /* NSTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTableView.swift; sourceTree = "<group>"; };
 		EB4FD44F1AC6BE960000F952 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		EB4FD4551AC6D6690000F952 /* EditListItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListItemController.swift; sourceTree = "<group>"; };
+		EB4FD4571AC6D8C90000F952 /* EditListItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditListItem.xib; sourceTree = "<group>"; };
 		EB5567791A86545300CD3EC6 /* SharedAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedAppDelegate.h; sourceTree = "<group>"; };
 		EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedAppDelegate.m; sourceTree = "<group>"; };
 		EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-osx-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -444,6 +448,8 @@
 				EB4FD44C1AC6BE2A0000F952 /* extension */,
 				EB9F6CE61A8610550038355B /* AppDelegate.swift */,
 				EB9F6CE81A8610550038355B /* ViewController.swift */,
+				EB4FD4551AC6D6690000F952 /* EditListItemController.swift */,
+				EB4FD4571AC6D8C90000F952 /* EditListItem.xib */,
 				EB9F6CEA1A8610550038355B /* Images.xcassets */,
 				EB9F6CEC1A8610550038355B /* Main.storyboard */,
 				EB9F6CE41A8610550038355B /* Supporting Files */,
@@ -744,6 +750,7 @@
 			files = (
 				EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */,
 				EB9F6CEE1A8610550038355B /* Main.storyboard in Resources */,
+				EB4FD4581AC6D8C90000F952 /* EditListItem.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -872,6 +879,7 @@
 				EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */,
 				EB5567611A86437B00CD3EC6 /* SectionMapper.swift in Sources */,
 				EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */,
+				EB4FD4561AC6D6690000F952 /* EditListItemController.swift in Sources */,
 				EB5567811A8658B400CD3EC6 /* CDListItemProvider.swift in Sources */,
 				EB55676D1A8644D400CD3EC6 /* shoppin.xcdatamodeld in Sources */,
 				EB5567601A86437800CD3EC6 /* ProductMapper.swift in Sources */,

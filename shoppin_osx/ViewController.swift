@@ -78,7 +78,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
 
         let listItemRow = self.listItemRows![row]
         
-        let columnIdentifier = ListItemColumnIdentifier(rawValue: tableColumn!.identifier)
+        let columnIdentifier = ListItemColumnIdentifier(rawValue: identifier)
         
         if let columnString = listItemRow.getColumnString(columnIdentifier!) {
             cellView.textField?.stringValue = columnString
@@ -98,6 +98,11 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     @IBAction func onRowDeleteTap(sender: NSButton) {
         let row = self.tableView.rowForView(sender)
         self.removeRow(row)
+    }
+    
+    @IBAction func rowAddTapped(sender: NSButton) {
+        let editListItemController = EditListItemController()
+        editListItemController.show()
     }
     
     func removeRow(row:Int) {
