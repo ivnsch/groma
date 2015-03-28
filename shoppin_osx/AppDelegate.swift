@@ -45,7 +45,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("shoppin.sqlite")
         var error: NSError? = nil
         var failureReason = "There was an error creating or loading the application's saved data."
-        if coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil, error: &error) == nil {
+        let storeOptions = [NSPersistentStoreUbiquitousContentNameKey: "MyAppCloudStore"]
+        if coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: storeOptions, error: &error) == nil {
             coordinator = nil
             // Report any error we got.
             let dict = NSMutableDictionary()

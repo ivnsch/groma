@@ -47,6 +47,7 @@
 		EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */; };
 		EB2F5D7B1A55816B00DBC4AF /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7A1A55816B00DBC4AF /* PreferencesManager.swift */; };
 		EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7E1A559C8800DBC4AF /* Constants.swift */; };
+		EB49F5EB1AC6CC0D00BBEDA2 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB49F5EA1AC6CC0D00BBEDA2 /* CloudKit.framework */; };
 		EB4FD44B1AC6B77C0000F952 /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D6E1A530FBC00DBC4AF /* Float.swift */; };
 		EB4FD44E1AC6BE390000F952 /* NSTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD44D1AC6BE390000F952 /* NSTableView.swift */; };
 		EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD44F1AC6BE960000F952 /* Globals.swift */; };
@@ -166,6 +167,8 @@
 		EB2F5D7A1A55816B00DBC4AF /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		EB2F5D7D1A558F5400DBC4AF /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		EB2F5D7E1A559C8800DBC4AF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		EB49F5E91AC6CBEE00BBEDA2 /* shoppin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = shoppin.entitlements; sourceTree = "<group>"; };
+		EB49F5EA1AC6CC0D00BBEDA2 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		EB4FD44D1AC6BE390000F952 /* NSTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTableView.swift; sourceTree = "<group>"; };
 		EB4FD44F1AC6BE960000F952 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		EB5567791A86545300CD3EC6 /* SharedAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedAppDelegate.h; sourceTree = "<group>"; };
@@ -212,6 +215,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FC87A4A718943E18BF37A57 /* libPods.a in Frameworks */,
+				EB49F5EB1AC6CC0D00BBEDA2 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,6 +239,7 @@
 		E4CDB4AFEC6C43F59CFE7A39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EB49F5EA1AC6CC0D00BBEDA2 /* CloudKit.framework */,
 				CFD3968762A24D00B2ED9ADE /* libPods.a */,
 			);
 			name = Frameworks;
@@ -277,6 +282,7 @@
 				EB1DDEB41A3334EC00D778DE /* Images.xcassets */,
 				EB1DDEB61A3334EC00D778DE /* LaunchScreen.xib */,
 				EB1DDEAC1A3334EC00D778DE /* shoppin.xcdatamodeld */,
+				EB49F5E91AC6CBEE00BBEDA2 /* shoppin.entitlements */,
 				EB1DDEA81A3334EC00D778DE /* Supporting Files */,
 			);
 			path = shoppin;
@@ -684,6 +690,11 @@
 					EB1DDEA41A3334EC00D778DE = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 37QAPDY2PR;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					EB9F6CE11A8610550038355B = {
 						CreatedOnToolsVersion = 6.2;
@@ -1016,10 +1027,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = shoppin/shoppin.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = shoppin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1031,10 +1046,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = shoppin/shoppin.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = shoppin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
