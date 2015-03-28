@@ -13,6 +13,11 @@ class EditListItemController: NSWindowController {
     @IBOutlet weak var nameTextField: NSTextField!
     @IBOutlet weak var quantityTextField: NSTextField!
     @IBOutlet weak var priceTextField: NSTextField!
+    @IBOutlet weak var sectionTextField: NSTextField!
+    
+    private let listItemsProvider = ProviderFactory().listItemProvider
+   
+    private var currentList:List!
     
     override func windowDidLoad() {
         super.windowDidLoad()
@@ -24,14 +29,31 @@ class EditListItemController: NSWindowController {
         return "EditListItem"
     }
     
-    func show() {
+    func show(list:List) {
+        
+        self.currentList = list
+        
         if let window = self.window {
-            NSApp.beginSheetModalForWindow(window, completionHandler: nil)
-           
             NSApp.runModalForWindow(window)
             
-            window.endSheet(window)
-            window.orderOut(self)
+//            window.endSheet(window)
+//            window.orderOut(self)
         }
+    }
+   
+    @IBAction func addTapped(sender: NSButton) {
+        let listItemMaybe = self.addItem()
+        println("added!: \(listItemMaybe)")
+    }
+    
+    func addItem() -> ListItem? {
+        let name = self.nameTextField.stringValue
+        let quantity = self.quantityTextField.integerValue
+        let price = self.priceTextField.floatValue
+        let sectionName = self.sectionTextField.stringValue
+ 
+        let listItemInput = ListItemInput(name: name, quantity: quantity, price: price, section: sectionName)
+        
+        return self.listItemsProvider.add(listItemInput, list: self.currentList)
     }
 }

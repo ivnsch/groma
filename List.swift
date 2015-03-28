@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
-class List: Equatable, Identifiable {
+class List: Equatable {
     let id:String // unique, for now we use core data objectId to initialise this
     let name:String
     let listItems:[ListItem]

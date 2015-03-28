@@ -60,16 +60,16 @@ class ListItemProviderMock: ListItemProvider {
         return section
     }
     
-    private func maxId(identifiables:[Identifiable]) -> Float {
-        var m:Float = FLT_MIN
-        for item in identifiables {
-            m = max(m, item.id.floatValue)
+    private func maxId(ids:[String]) -> Int {
+        var m = -1
+        for id in ids {
+            m = max(m, id.intValue)
         }
         return m
     }
     
-    private func nextId(identifiables:[Identifiable]) -> Float {
-        return self.maxId(identifiables) + 1
+    private func nextId(ids:[String]) -> Int {
+        return self.maxId(ids) + 1
     }
     
     private func findProduct(name:String) -> Product? {
@@ -98,9 +98,10 @@ class ListItemProviderMock: ListItemProvider {
     
     func add(listItemInput:ListItemInput, list:List) -> ListItem? {
         let product = addFindProduct(name: listItemInput.name, price: listItemInput.price)
-        let section = Section(name: listItemInput.name)
-       
-        let id = "\(self.nextId(self.listItemsVar)))"
+        let section = Section(name: listItemInput.section)
+        
+        let idInt = self.nextId(self.listItemsVar.map{$0.id})
+        let id = "\(idInt)"
         
         let listItem = ListItem(id: id, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list)
         return listItem

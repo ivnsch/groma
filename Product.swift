@@ -7,7 +7,7 @@
 //
 
 
-class Product:Equatable, Identifiable {
+class Product:Equatable {
     let id:String // unique, for now we use core data objectId to initialise this
     let name:String
     let price:Float

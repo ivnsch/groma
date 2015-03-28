@@ -57,8 +57,6 @@
 		EB4FD45C1AC701410000F952 /* ListItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD45A1AC701410000F952 /* ListItemInput.swift */; };
 		EB4FD45D1AC7148C0000F952 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D101A4ACC4400DBC4AF /* String.swift */; };
 		EB4FD45E1AC715FF0000F952 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D5D1A506F5100DBC4AF /* Array.swift */; };
-		EB4FD4601AC718F80000F952 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD45F1AC718F80000F952 /* Identifiable.swift */; };
-		EB4FD4611AC718F80000F952 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD45F1AC718F80000F952 /* Identifiable.swift */; };
 		EB4FD46C1AC73B590000F952 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */; };
 		EB4FD46D1AC73B590000F952 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */; };
 		EB4FD46E1AC73C930000F952 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7E1A559C8800DBC4AF /* Constants.swift */; };
@@ -183,7 +181,6 @@
 		EB4FD4551AC6D6690000F952 /* EditListItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListItemController.swift; sourceTree = "<group>"; };
 		EB4FD4571AC6D8C90000F952 /* EditListItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditListItem.xib; sourceTree = "<group>"; };
 		EB4FD45A1AC701410000F952 /* ListItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemInput.swift; sourceTree = "<group>"; };
-		EB4FD45F1AC718F80000F952 /* Identifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		EB5567791A86545300CD3EC6 /* SharedAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedAppDelegate.h; sourceTree = "<group>"; };
 		EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedAppDelegate.m; sourceTree = "<group>"; };
@@ -405,7 +402,6 @@
 				EB2F5D0F1A4ACC2500DBC4AF /* extensions */,
 				EB2F5D7E1A559C8800DBC4AF /* Constants.swift */,
 				EB4FD44F1AC6BE960000F952 /* Globals.swift */,
-				EB4FD45F1AC718F80000F952 /* Identifiable.swift */,
 				EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */,
 			);
 			name = common;
@@ -849,7 +845,6 @@
 				EB2F5D771A557AB000DBC4AF /* List.swift in Sources */,
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
-				EB4FD4601AC718F80000F952 /* Identifiable.swift in Sources */,
 				EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */,
 				EBF162ED1A3CA24E0048E37C /* ListItem.swift in Sources */,
 				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
@@ -903,7 +898,6 @@
 				EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */,
 				EB5567611A86437B00CD3EC6 /* SectionMapper.swift in Sources */,
 				EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */,
-				EB4FD4611AC718F80000F952 /* Identifiable.swift in Sources */,
 				EB4FD4561AC6D6690000F952 /* EditListItemController.swift in Sources */,
 				EB4FD45D1AC7148C0000F952 /* String.swift in Sources */,
 				EB4FD46D1AC73B590000F952 /* PreferencesManager.swift in Sources */,

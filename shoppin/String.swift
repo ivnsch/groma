@@ -17,7 +17,10 @@ extension String {
     var floatValue: Float {
         return (self as NSString).floatValue
     }
-
+    
+    var intValue: Int {
+        return (self as NSString).integerValue
+    }
 //    func startsWith(str:String) -> Bool {
 //        var startsWith = false
 //        if let range = self.rangeOfString(str) {

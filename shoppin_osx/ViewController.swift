@@ -40,6 +40,8 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
     
 
+    private var currentList:List?
+    
     @IBOutlet weak var tableView: NSTableView!
 
     private var listItemRows:[ListItemRow]?
@@ -49,8 +51,9 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let list = self.listItemsProvider.lists()[0]
-        let listItems = self.listItemsProvider.listItems(list)
+        let currentList = self.listItemsProvider.firstList
+        self.currentList = currentList
+        let listItems = self.listItemsProvider.listItems(currentList)
         
         self.listItemRows = listItems.map{ListItemRow($0)}
     }
@@ -101,8 +104,10 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
     
     @IBAction func rowAddTapped(sender: NSButton) {
-        let editListItemController = EditListItemController()
-        editListItemController.show()
+        if let list = self.currentList {
+            let editListItemController = EditListItemController()
+            editListItemController.show(list)
+        }
     }
     
     func removeRow(row:Int) {
