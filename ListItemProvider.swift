@@ -9,6 +9,7 @@
 
 protocol ListItemProvider {
     
+    // TODO vars instead of func
     func products() -> [Product]
     
     func sections() -> [Section]
@@ -30,4 +31,6 @@ protocol ListItemProvider {
     func listItems(list:List) -> [ListItem]
     
     func updateDone(listItems:[ListItem]) -> Bool
+    
+    var firstList:List {get}
 }

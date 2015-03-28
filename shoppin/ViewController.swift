@@ -77,15 +77,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     
     private func initList() {
-        var list:List
-        if let listId:String = PreferencesManager.loadPreference(PreferencesManagerKey.listId) {
-            list = self.listItemsProvider.list(listId)!
-            
-        } else {
-            list = self.createList(Constants.defaultListIdentifier)
-        }
-        
-        self.showList(list)
+        self.showList(self.listItemsProvider.firstList)
     }
     
     private func showList(list:List) {

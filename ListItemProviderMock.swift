@@ -132,4 +132,8 @@ class ListItemProviderMock: ListItemProvider {
         //TODO
         return true
     }
+    
+    var firstList:List {
+        return self.listsVar.first!
+    }
 }

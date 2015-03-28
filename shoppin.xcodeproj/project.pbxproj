@@ -61,6 +61,7 @@
 		EB4FD4611AC718F80000F952 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD45F1AC718F80000F952 /* Identifiable.swift */; };
 		EB4FD46C1AC73B590000F952 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */; };
 		EB4FD46D1AC73B590000F952 /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */; };
+		EB4FD46E1AC73C930000F952 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7E1A559C8800DBC4AF /* Constants.swift */; };
 		EB55675D1A86433700CD3EC6 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162EA1A3CA2470048E37C /* Product.swift */; };
 		EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F91A3CA54F0048E37C /* ListItemProvider.swift */; };
 		EB55675F1A86437400CD3EC6 /* ListItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FE1A3DDE730048E37C /* ListItemMapper.swift */; };
@@ -889,6 +890,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB5567691A8643B800CD3EC6 /* ListItem.swift in Sources */,
+				EB4FD46E1AC73C930000F952 /* Constants.swift in Sources */,
 				EB55677F1A8658AA00CD3EC6 /* InventoryProviderImpl.swift in Sources */,
 				EB5567631A86438100CD3EC6 /* InventoryItemMapper.swift in Sources */,
 				EB5567821A8658B700CD3EC6 /* CDInventoryProvider.swift in Sources */,

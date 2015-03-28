@@ -70,4 +70,21 @@ class ListItemProviderImpl:ListItemProvider {
         let list = self.cdProvider.saveList(list)
         return ListMapper.listWithCD(list)
     }
+    
+    var firstList:List {
+        
+        func createList(name:String) -> List {
+            let list = List(id: "dummy", name: name)
+            let savedList = self.add(list)
+            return savedList!
+        }
+
+        var list:List
+        if let listId:String = PreferencesManager.loadPreference(PreferencesManagerKey.listId) {
+            list = self.list(listId)!
+        } else {
+            list = createList(Constants.defaultListIdentifier)
+        }
+        return list
+    }
 }
