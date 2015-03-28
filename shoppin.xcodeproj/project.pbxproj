@@ -47,6 +47,7 @@
 		EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */; };
 		EB2F5D7B1A55816B00DBC4AF /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7A1A55816B00DBC4AF /* PreferencesManager.swift */; };
 		EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7E1A559C8800DBC4AF /* Constants.swift */; };
+		EB4FD44B1AC6B77C0000F952 /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D6E1A530FBC00DBC4AF /* Float.swift */; };
 		EB55675D1A86433700CD3EC6 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162EA1A3CA2470048E37C /* Product.swift */; };
 		EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F91A3CA54F0048E37C /* ListItemProvider.swift */; };
 		EB55675F1A86437400CD3EC6 /* ListItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FE1A3DDE730048E37C /* ListItemMapper.swift */; };
@@ -855,6 +856,7 @@
 				EB5567681A8643B200CD3EC6 /* CDInventoryItem.swift in Sources */,
 				EB55677D1A86578400CD3EC6 /* SharedAppDelegate.m in Sources */,
 				EB5567651A86438A00CD3EC6 /* CDListItem.swift in Sources */,
+				EB4FD44B1AC6B77C0000F952 /* Float.swift in Sources */,
 				EB55676A1A8643BC00CD3EC6 /* Section.swift in Sources */,
 				EB5567801A8658B000CD3EC6 /* CDProvider.swift in Sources */,
 				EB5567641A86438600CD3EC6 /* CDProduct.swift in Sources */,
