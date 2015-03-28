@@ -8,25 +8,29 @@
 
 class ListItemProviderMock: ListItemProvider {
     
-    private var productsVar:[Product]
-    private var listItemsVar:[ListItem]
+    private var productsVar:[Product] = []
+    private var sectionsVar:[Section] = []
+    private var listsVar:[List] = []
+    private var listItemsVar:[ListItem] = []
     
     init() {
         self.productsVar = (0...20).map {
             Product(id: String($0), name: "product " + String($0), price:1.2)
         }
         
+        let section = Section(name: "test")
+        self.sectionsVar.append(section)
+        
         let list:List = List(id: "test", name: "test")
+        self.listsVar.append(list)
         
         let i:Int = self.productsVar.count / 2
-        let notDone = self.productsVar[0...i].map {ListItem(id: String(i), done: false, quantity: 1, product: $0, section: Section(name: "test"), list: list)}
-        let done = self.productsVar[i...self.productsVar.count - 1].map {ListItem(id: String(i), done: true, quantity: 1, product: $0, section: Section(name: "test"), list: list)}
+        let notDone = self.productsVar[0...i].map {ListItem(id: String(i), done: false, quantity: 1, product: $0, section: section, list: list)}
+        let done = self.productsVar[i...self.productsVar.count - 1].map {ListItem(id: String(i), done: true, quantity: 1, product: $0, section: section, list: list)}
         self.listItemsVar = Array(notDone) + Array(done)
     }
     
-    
     func listItems(list:List) -> [ListItem] {
-        //TODO use list
         return self.listItemsVar
     }
     
@@ -42,31 +46,81 @@ class ListItemProviderMock: ListItemProvider {
     }
     
     func add(listItem:ListItem) -> ListItem? {
-        listItemsVar.append(listItem)
+        self.listItemsVar.append(listItem)
         return listItem
     }
     
+    func add(product:Product) -> Product? {
+        self.productsVar.append(product)
+        return product
+    }
+    
+    func add(section:Section) -> Section? {
+        self.sectionsVar.append(section)
+        return section
+    }
+    
+    private func maxId(identifiables:[Identifiable]) -> Float {
+        var m:Float = FLT_MIN
+        for item in identifiables {
+            m = max(m, item.id.floatValue)
+        }
+        return m
+    }
+    
+    private func nextId(identifiables:[Identifiable]) -> Float {
+        return self.maxId(identifiables) + 1
+    }
+    
+    private func findProduct(name:String) -> Product? {
+        return self.productsVar.findFirst{$0.name == name}
+    }
+    
+    private func addFindProduct(#name:String, price:Float) -> Product {
+        return self.findProduct(name) ?? {
+            let product = Product(id: "", name: name, price: price)
+            self.add(product)
+            return product
+        }()
+    }
+    
+    private func findSection(name:String) -> Section? {
+        return self.sectionsVar.findFirst{$0.name == name}
+    }
+    
+    private func addFindSection(name:String) -> Section {
+        return self.findSection(name) ?? {
+            let section = Section(name: name)
+            self.add(section)
+            return section
+        }()
+    }
+    
     func add(listItemInput:ListItemInput, list:List) -> ListItem? {
-        return nil
+        let product = addFindProduct(name: listItemInput.name, price: listItemInput.price)
+        let section = Section(name: listItemInput.name)
+       
+        let id = "\(self.nextId(self.listItemsVar)))"
+        
+        let listItem = ListItem(id: id, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list)
+        return listItem
     }
     
-    func sections() -> [Section] {
-        return [Section(name: "test")]
-    }
-    
-    func lists() -> [List] {
-        //TODO
-        return [List(id: "test", name: "test")]
-    }
-
     func update(listItem:ListItem) -> Bool {
         //TODO?
         return true
     }
     
+    func sections() -> [Section] {
+        return self.sectionsVar
+    }
+   
+    func lists() -> [List] {
+        return self.listsVar
+    }
+    
     func list(listId: String) -> List? {
-        //TODO
-        return List(id: listId, name: "test")
+        return self.listsVar.findFirst{$0.id == listId}
     }
     
     func add(list:List) -> List? {

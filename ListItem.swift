@@ -7,7 +7,7 @@
 //
 
 
-class ListItem: Equatable {
+class ListItem: Equatable, Identifiable {
     let id:String // unique, for now we use core data objectId to initialise this
     var done:Bool
     let quantity:Int
