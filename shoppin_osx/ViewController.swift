@@ -9,17 +9,50 @@
 import Cocoa
 
 class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
+   
+    // wrapper to retrieve data for tableview
+    private struct ListItemRow {
+        let listItem:ListItem
+        
+        init(_ listItem:ListItem) {
+            self.listItem = listItem
+        }
+        
+        func getColumnString(columnIdentifier: ListItemColumnIdentifier) -> String? {
+            switch columnIdentifier {
+                case .ProductName:
+                    return listItem.product.name
+                case .Quantity:
+                    return String(listItem.quantity)
+                case .Price:
+                    return listItem.product.price.toString(2)!
+                default:
+                    return nil
+            }
+        }
+    }
+    
+    private enum ListItemColumnIdentifier:String {
+        case ProductName = "name"
+        case Quantity = "quantity"
+        case Price = "price"
+        case Edit = "edit"
+    }
+    
 
     @IBOutlet weak var tableView: NSTableView!
 
-    private var products:[Product]?
+    private var listItemRows:[ListItemRow]?
     
     private let listItemsProvider = ProviderFactory().listItemProvider
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.products = self.listItemsProvider.products()
+        let list = self.listItemsProvider.lists()[0]
+        let listItems = self.listItemsProvider.listItems(list)
+        
+        self.listItemRows = listItems.map{ListItemRow($0)}
     }
 
     override var representedObject: AnyObject? {
@@ -29,59 +62,51 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
 
     func numberOfRowsInTableView(aTableView: NSTableView) -> Int {
-        return self.products?.count ?? 0
+        return self.listItemRows?.count ?? 0
+
     }
     
 //    func tableView(tableView: NSTableView!, objectValueForTableColumn tableColumn: NSTableColumn!, row: Int) -> AnyObject! {
-//        
 //        println("column: \(tableColumn)")
 //        return "foo"
 //    }
-   
-    
     
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
 
         let identifier = tableColumn!.identifier
         let cellView = tableView.makeViewWithIdentifier(identifier, owner:self) as! NSTableCellView
 
-        let product = self.products![row]
-
-
-        cellView.textField?.stringValue = product.name
-
+        let listItemRow = self.listItemRows![row]
+        
+        let columnIdentifier = ListItemColumnIdentifier(rawValue: tableColumn!.identifier)
+        
+        if let columnString = listItemRow.getColumnString(columnIdentifier!) {
+            cellView.textField?.stringValue = columnString
+            
+            
+        } else {
+//            switch columnIdentifier {
+//                case .Edit:
+//                default:
+//                    break;
+//            }
+        }
+        
         return cellView
     }
     
+    @IBAction func onRowDeleteTap(sender: NSButton) {
+        let row = self.tableView.rowForView(sender)
+        self.removeRow(row)
+    }
     
-//    
-//    // This method is optional if you use bindings to provide the data
-//    - (NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row {
-//    // Group our "model" object, which is a dictionary
-//    NSDictionary *dictionary = [_tableContents objectAtIndex:row];
-//    
-//    // In IB the tableColumn has the identifier set to the same string as the keys in our dictionary
-//    NSString *identifier = [tableColumn identifier];
-//    
-//    if ([identifier isEqualToString:@"MainCell"]) {
-//    // We pass us as the owner so we can setup target/actions into this main controller object
-//    NSTableCellView *cellView = [tableView makeViewWithIdentifier:identifier owner:self];
-//    // Then setup properties on the cellView based on the column
-//    cellView.textField.stringValue = [dictionary objectForKey:@"Name"];
-//    cellView.imageView.objectValue = [dictionary objectForKey:@"Image"];
-//    return cellView;
-//    } else if ([identifier isEqualToString:@"SizeCell"]) {
-//    NSTextField *textField = [tableView makeViewWithIdentifier:identifier owner:self];
-//    NSImage *image = [dictionary objectForKey:@"Image"];
-//    NSSize size = image ? [image size] : NSZeroSize;
-//    NSString *sizeString = [NSString stringWithFormat:@"%.0fx%.0f", size.width, size.height];
-//    textField.objectValue = sizeString;
-//    return textField;
-//    } else {
-//    NSAssert1(NO, @"Unhandled table column identifier %@", identifier);
-//    }
-//    return nil;
-//    }
-
+    func removeRow(row:Int) {
+        let listItemRow = self.listItemRows![row]
+        self.listItemRows?.removeAtIndex(row)
+        
+        self.tableView.wrapUpdates {
+            self.tableView.removeRowsAtIndexes(NSIndexSet(index: row), withAnimation: NSTableViewAnimationOptions.EffectFade | NSTableViewAnimationOptions.SlideLeft)
+        }()
+    }
 }
 

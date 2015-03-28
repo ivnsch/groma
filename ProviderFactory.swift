@@ -8,7 +8,7 @@
 
 class ProviderFactory {
    
-    lazy var listItemProvider:ListItemProvider = ListItemProviderImpl()
+    lazy var listItemProvider:ListItemProvider = ListItemProviderMock()
 
     lazy var inventoryProvider:InventoryProvider = InventoryProviderImpl()
 }
