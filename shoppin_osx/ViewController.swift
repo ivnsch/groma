@@ -113,6 +113,10 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     
     @IBAction func onRowDeleteTap(sender: NSButton) {
         let row = self.tableView.rowForView(sender)
+
+        let listItem = self.listItemRows[row].listItem
+        self.listItemsProvider.remove(listItem)
+
         self.removeRow(row)
     }
     
