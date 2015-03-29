@@ -104,7 +104,7 @@ class ListItemProviderMock: ListItemProvider {
         let id = "\(idInt)"
         
         let listItem = ListItem(id: id, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list)
-        return listItem
+        return self.add(listItem)
     }
     
     func update(listItem:ListItem) -> Bool {
