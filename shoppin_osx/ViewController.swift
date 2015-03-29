@@ -53,11 +53,14 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
 
         let currentList = self.listItemsProvider.firstList
         self.currentList = currentList
-        let listItems = self.listItemsProvider.listItems(currentList)
-        
-        self.listItemRows = listItems.map{ListItemRow($0)}
+        self.initList(currentList)
     }
 
+    private func initList(list:List) {
+        let listItems = self.listItemsProvider.listItems(list)
+        self.listItemRows = listItems.map{ListItemRow($0)}
+    }
+    
     override var representedObject: AnyObject? {
         didSet {
         // Update the view, if already loaded.
@@ -106,6 +109,20 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     @IBAction func rowAddTapped(sender: NSButton) {
         if let list = self.currentList {
             let editListItemController = EditListItemController()
+            editListItemController.addTappedFunc = {listItemInput in
+                
+                let listItem = self.listItemsProvider.add(listItemInput, list: list)
+              
+                if let currentList = self.currentList {
+                    self.initList(currentList)
+                    self.tableView.reloadData()
+                    
+                } else {
+                    println("Warning: trying to add item without current list")
+                }
+
+                editListItemController.close()
+            }
             editListItemController.show(list)
         }
     }

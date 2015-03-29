@@ -17,7 +17,7 @@ class EditListItemController: NSWindowController {
     
     private let listItemsProvider = ProviderFactory().listItemProvider
    
-    private var currentList:List!
+    var addTappedFunc:((ListItemInput) -> ())?
     
     override func windowDidLoad() {
         super.windowDidLoad()
@@ -30,30 +30,25 @@ class EditListItemController: NSWindowController {
     }
     
     func show(list:List) {
-        
-        self.currentList = list
-        
         if let window = self.window {
             NSApp.runModalForWindow(window)
-            
-//            window.endSheet(window)
-//            window.orderOut(self)
         }
     }
    
     @IBAction func addTapped(sender: NSButton) {
-        let listItemMaybe = self.addItem()
-        println("added!: \(listItemMaybe)")
-    }
-    
-    func addItem() -> ListItem? {
+
         let name = self.nameTextField.stringValue
         let quantity = self.quantityTextField.integerValue
         let price = self.priceTextField.floatValue
         let sectionName = self.sectionTextField.stringValue
- 
+        
         let listItemInput = ListItemInput(name: name, quantity: quantity, price: price, section: sectionName)
         
-        return self.listItemsProvider.add(listItemInput, list: self.currentList)
+        self.addTappedFunc?(listItemInput)
+    }
+    
+    override func close() {
+        NSApp.stopModal()
+        super.close()
     }
 }
