@@ -77,28 +77,38 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
 //        return "foo"
 //    }
     
-    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
-
-        let identifier = tableColumn!.identifier
-        let cellView = tableView.makeViewWithIdentifier(identifier, owner:self) as! NSTableCellView
+    
+    private func makeButtonsCell(columnIdentifier: ListItemColumnIdentifier, tableView: NSTableView, row:Int) -> EditListItemButtonsCell {
+      
+        var cell = tableView.makeViewWithIdentifier(columnIdentifier.rawValue, owner:self) as! EditListItemButtonsCell
+        
+        
+        return cell
+    }
+    
+    private func makeDefaultCell(columnIdentifier: ListItemColumnIdentifier, tableView: NSTableView, row:Int) -> NSTableCellView {
+        
+        var cell = tableView.makeViewWithIdentifier(columnIdentifier.rawValue, owner:self) as! NSTableCellView
 
         let listItemRow = self.listItemRows![row]
-        
-        let columnIdentifier = ListItemColumnIdentifier(rawValue: identifier)
-        
-        if let columnString = listItemRow.getColumnString(columnIdentifier!) {
-            cellView.textField?.stringValue = columnString
-            
-            
-        } else {
-//            switch columnIdentifier {
-//                case .Edit:
-//                default:
-//                    break;
-//            }
+
+        if let columnString = listItemRow.getColumnString(columnIdentifier) {
+            cell.textField?.stringValue = columnString
         }
         
-        return cellView
+        return cell
+    }
+    
+    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+
+        let columnIdentifier = ListItemColumnIdentifier(rawValue: tableColumn!.identifier)!
+
+        switch columnIdentifier {
+            case .Edit:
+                return self.makeButtonsCell(columnIdentifier, tableView: tableView, row: row)
+            default:
+                return self.makeDefaultCell(columnIdentifier, tableView: tableView, row: row)
+        }
     }
     
     @IBAction func onRowDeleteTap(sender: NSButton) {

@@ -87,6 +87,7 @@
 		EB5567811A8658B400CD3EC6 /* CDListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162EF1A3CA3530048E37C /* CDListItemProvider.swift */; };
 		EB5567821A8658B700CD3EC6 /* CDInventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFF1A5973330058103B /* CDInventoryProvider.swift */; };
 		EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F41A3CA4BA0048E37C /* ProviderFactory.swift */; };
+		EB6A207B1AC7FFFF00B9BCB2 /* EditListItemButtonsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6A207A1AC7FFFE00B9BCB2 /* EditListItemButtonsCell.swift */; };
 		EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE61A8610550038355B /* AppDelegate.swift */; };
 		EB9F6CE91A8610550038355B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE81A8610550038355B /* ViewController.swift */; };
 		EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEA1A8610550038355B /* Images.xcassets */; };
@@ -185,6 +186,7 @@
 		EB5567791A86545300CD3EC6 /* SharedAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedAppDelegate.h; sourceTree = "<group>"; };
 		EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedAppDelegate.m; sourceTree = "<group>"; };
 		EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-osx-Bridging-Header.h"; sourceTree = "<group>"; };
+		EB6A207A1AC7FFFE00B9BCB2 /* EditListItemButtonsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListItemButtonsCell.swift; sourceTree = "<group>"; };
 		EB9F6CE21A8610550038355B /* shoppin_osx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin_osx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB9F6CE51A8610550038355B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB9F6CE61A8610550038355B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -469,6 +471,7 @@
 				EB9F6CEC1A8610550038355B /* Main.storyboard */,
 				EB9F6CE41A8610550038355B /* Supporting Files */,
 				EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */,
+				EB6A207A1AC7FFFE00B9BCB2 /* EditListItemButtonsCell.swift */,
 			);
 			path = shoppin_osx;
 			sourceTree = "<group>";
@@ -918,6 +921,7 @@
 				EB4FD4511AC6BE960000F952 /* Globals.swift in Sources */,
 				EB55676A1A8643BC00CD3EC6 /* Section.swift in Sources */,
 				EB5567801A8658B000CD3EC6 /* CDProvider.swift in Sources */,
+				EB6A207B1AC7FFFF00B9BCB2 /* EditListItemButtonsCell.swift in Sources */,
 				EB5567641A86438600CD3EC6 /* CDProduct.swift in Sources */,
 				EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */,
 				EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */,
