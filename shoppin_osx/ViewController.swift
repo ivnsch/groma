@@ -44,7 +44,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     
     @IBOutlet weak var tableView: NSTableView!
 
-    private var listItemRows:[ListItemRow]?
+    private var listItemRows:[ListItemRow] = []
     
     private let listItemsProvider = ProviderFactory().listItemProvider
 
@@ -68,7 +68,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
 
     func numberOfRowsInTableView(aTableView: NSTableView) -> Int {
-        return self.listItemRows?.count ?? 0
+        return self.listItemRows.count
 
     }
     
@@ -90,7 +90,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         
         var cell = tableView.makeViewWithIdentifier(columnIdentifier.rawValue, owner:self) as! NSTableCellView
 
-        let listItemRow = self.listItemRows![row]
+        let listItemRow = self.listItemRows[row]
 
         if let columnString = listItemRow.getColumnString(columnIdentifier) {
             cell.textField?.stringValue = columnString
@@ -127,7 +127,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
               
                 if let currentList = self.currentList, listItem = listItemMaybe {
                     let newRow = row + 1
-                    self.listItemRows?.insert(ListItemRow(listItem), atIndex: newRow)
+                    self.listItemRows.insert(ListItemRow(listItem), atIndex: newRow)
                     self.tableView.wrapUpdates {
                         self.tableView.insertRowsAtIndexes(NSIndexSet(index: newRow), withAnimation: NSTableViewAnimationOptions.SlideDown)
                     }()
@@ -143,8 +143,8 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
     
     func removeRow(row:Int) {
-        let listItemRow = self.listItemRows![row]
-        self.listItemRows?.removeAtIndex(row)
+        let listItemRow = self.listItemRows[row]
+        self.listItemRows.removeAtIndex(row)
         
         self.tableView.wrapUpdates {
             self.tableView.removeRowsAtIndexes(NSIndexSet(index: row), withAnimation: NSTableViewAnimationOptions.EffectFade | NSTableViewAnimationOptions.SlideLeft)
