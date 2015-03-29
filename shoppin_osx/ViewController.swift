@@ -117,15 +117,20 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
     
     @IBAction func rowAddTapped(sender: NSButton) {
+        let row = self.tableView.rowForView(sender)
+        
         if let list = self.currentList {
             let editListItemController = EditListItemController()
             editListItemController.addTappedFunc = {listItemInput in
                 
-                let listItem = self.listItemsProvider.add(listItemInput, list: list)
+                let listItemMaybe = self.listItemsProvider.add(listItemInput, list: list)
               
-                if let currentList = self.currentList {
-                    self.initList(currentList)
-                    self.tableView.reloadData()
+                if let currentList = self.currentList, listItem = listItemMaybe {
+                    let newRow = row + 1
+                    self.listItemRows?.insert(ListItemRow(listItem), atIndex: newRow)
+                    self.tableView.wrapUpdates {
+                        self.tableView.insertRowsAtIndexes(NSIndexSet(index: newRow), withAnimation: NSTableViewAnimationOptions.SlideDown)
+                    }()
                     
                 } else {
                     println("Warning: trying to add item without current list")
