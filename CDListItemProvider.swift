@@ -15,7 +15,11 @@ class CDListItemProvider: CDProvider {
     }
     
     func loadListItems(listId:String) -> [CDListItem] {
-        return self.load(entityName: "CDListItem", type: CDListItem.self, predicate: NSPredicate(format: "list.id=%@", listId))
+        return self.load(
+            entityName: "CDListItem",
+            type: CDListItem.self,
+            predicate: NSPredicate(format: "list.id=%@", listId),
+            sortDescriptors: [NSSortDescriptor(key: "order", ascending: true)])
     }
     
     func loadSections() -> [CDSection] {
@@ -72,6 +76,7 @@ class CDListItemProvider: CDProvider {
         cdListItem.product = cdProduct
         cdListItem.quantity = listItem.quantity
         cdListItem.done = listItem.done
+        cdListItem.order = listItem.order
         cdListItem.section = cdSection
         cdListItem.list = cdList
         
@@ -94,8 +99,27 @@ class CDListItemProvider: CDProvider {
         }
         return self.save()
     }
+  
+    // bulk update
+    func updateListItems(listItems:[ListItem]) -> [CDListItem]? {
+        var updatedCDListItems:[CDListItem] = []
+        
+        for listItem in listItems {
+            if let cdListItem = self.updateListItem(listItem, saveContext: false) { // we save after of bulk update
+                updatedCDListItems.append(cdListItem)
+                
+            } else {
+                println ("Error: couldn't update list item")
+                return nil
+            }
+        }
+        
+        self.save()
+        
+        return updatedCDListItems
+    }
     
-    func updateListItem(listItem:ListItem) -> CDListItem? {
+    func updateListItem(listItem:ListItem, saveContext:Bool = true) -> CDListItem? {
         let appDelegate = SharedAppDelegate.getAppDelegate()
         
         let cdListItem = self.loadListItem(listItem.id)
@@ -106,10 +130,15 @@ class CDListItemProvider: CDProvider {
         cdListItem.quantity = listItem.quantity
         cdListItem.product.name = listItem.product.name
         cdListItem.product.price = listItem.product.price
+        cdListItem.order = listItem.order
         cdListItem.section = cdSection
         cdListItem.list = cdList
         
-        let saved = self.save()
+        if saveContext {
+            if !self.save() {
+                println ("Warning: couldn't save context after listitem update")
+            }
+        }
         
         return cdListItem
     }

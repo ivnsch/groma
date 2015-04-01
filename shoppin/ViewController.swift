@@ -396,8 +396,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
-    func onListItemChangedSection(tableViewListItem: TableViewListItem) {
-        self.listItemsProvider.update(tableViewListItem.listItem)
+    func onListItemsChangedSection(tableViewListItems: [TableViewListItem]) {
+        self.listItemsProvider.update(tableViewListItems.map{$0.listItem})
     }
     
     func updatePrices() {
@@ -448,7 +448,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let product = Product(id: self.updatingListItem!.product.id, name: listItemInput.name, price: listItemInput.price)
         let section = Section(name: listItemInput.section)
         
-        let listItem = ListItem(id: self.updatingListItem!.id, done: self.updatingListItem!.done, quantity: listItemInput.quantity, product: product, section: section, list: self.currentList)
+        let listItem = ListItem(id: self.updatingListItem!.id, done: self.updatingListItem!.done, quantity: listItemInput.quantity, product: product, section: section, list: self.currentList, order: self.updatingListItem!.order)
         
         if self.listItemsProvider.update(listItem) {
             self.listItemsTableViewController.updateListItem(listItem)

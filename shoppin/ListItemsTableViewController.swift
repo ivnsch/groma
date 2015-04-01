@@ -14,7 +14,7 @@ protocol ListItemsTableViewDelegate {
 }
 
 protocol ListItemsEditTableViewDelegate {
-    func onListItemChangedSection(tableViewListItem:TableViewListItem) //TODO save also sorting position in a section!
+    func onListItemsChangedSection(tableViewListItems:[TableViewListItem])
     func onListItemDeleted(tableViewListItem:TableViewListItem)
 }
 
@@ -365,6 +365,18 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return self.editing
     }
+   
+    // updates list item models with current ordering in table view
+    private func updateListItemsModelsOrder() {
+        var sectionRows = 0
+        for section in self.tableViewSections {
+            for (listItemIndex, tableViewListItem) in enumerate(section.tableViewListItems) {
+                let absoluteRowIndex = listItemIndex + sectionRows
+                tableViewListItem.listItem.order = absoluteRowIndex
+            }
+            sectionRows += section.numberOfRows()
+        }
+    }
     
     override func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
         let srcSection = self.tableViewSections[sourceIndexPath.section]
@@ -373,9 +385,12 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
         
         let dstSection = self.tableViewSections[destinationIndexPath.section]
         tableViewListItem.listItem.section = dstSection.section //not superclean to update model data in this controller, but for simplicity...
-
-        dstSection.tableViewListItems.insert(tableViewListItem, atIndex: destinationIndexPath.row)
         
-        self.listItemsEditTableViewDelegate?.onListItemChangedSection(tableViewListItem)
+        let absoluteRow = tableView.absoluteRow(destinationIndexPath)
+        dstSection.tableViewListItems.insert(tableViewListItem, atIndex: destinationIndexPath.row)
+
+        self.updateListItemsModelsOrder()
+        
+        self.listItemsEditTableViewDelegate?.onListItemsChangedSection(self.tableViewSections.flatMap{$0.tableViewListItems})
     }
 }

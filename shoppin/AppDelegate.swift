@@ -19,9 +19,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+        if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) {
+            PreferencesManager.savePreference(PreferencesManagerKey.hasLaunchedBefore, value: true)
+
+            self.addDummyPersistentObjects()
+        }
         return true
     }
-
+    
+    func addDummyPersistentObjects() {
+        let listItemProviderImpl = ListItemProviderImpl()
+        let mock = ListItemProviderMock()
+        let firstList = listItemProviderImpl.firstList
+        for listItem in mock.listItems(firstList) {
+            listItem.list = firstList // change mock list to valid core data list
+            listItemProviderImpl.add(listItem)
+        }
+    }
+    
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.

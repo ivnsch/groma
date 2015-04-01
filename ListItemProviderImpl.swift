@@ -33,15 +33,22 @@ class ListItemProviderImpl:ListItemProvider {
         // for now just create a new product and a listitem with it
         let product = Product(id: "dummy", name: listItemInput.name, price:listItemInput.price)
         let section = Section(name: listItemInput.section)
+       
+        let listItems = self.listItems(list)
+        let order = listItems.count + 1
         
         // we use for now core data object id as list item id. So before we insert the item there's no id and it's not used -> "dummy"
-        let listItem = ListItem(id:"dummy", done: false, quantity: listItemInput.quantity, product: product, section: section, list: list)
+        let listItem = ListItem(id:"dummy", done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
        
         return self.add(listItem)
     }
  
     func updateDone(listItems:[ListItem]) -> Bool {
         return self.cdProvider.updateListItemsDone(listItems)
+    }
+    
+    func update(listItems:[ListItem]) -> Bool {
+        return self.cdProvider.updateListItems(listItems) != nil
     }
     
     func update(listItem:ListItem) -> Bool {
@@ -76,6 +83,7 @@ class ListItemProviderImpl:ListItemProvider {
         func createList(name:String) -> List {
             let list = List(id: "dummy", name: name)
             let savedList = self.add(list)
+            PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: savedList!.id))
             return savedList!
         }
 

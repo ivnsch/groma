@@ -45,7 +45,7 @@ class CDProvider: NSObject {
         return success
     }
     
-    func load<T:AnyObject>(#entityName:String, type:T.Type, predicate predicateMaybe:NSPredicate? = nil) -> [T] {
+    func load<T:AnyObject>(#entityName:String, type:T.Type, predicate predicateMaybe:NSPredicate? = nil, sortDescriptors sortDescriptorsMaybe:[NSSortDescriptor]? = nil) -> [T] {
         let fetchRequest = NSFetchRequest()
         let appDelegate = SharedAppDelegate.getAppDelegate()
         let entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: appDelegate.managedObjectContext!)
@@ -53,6 +53,10 @@ class CDProvider: NSObject {
         
         if let predicate = predicateMaybe {
             fetchRequest.predicate = predicate
+        }
+        
+        if let sortDescriptors = sortDescriptorsMaybe {
+            fetchRequest.sortDescriptors = sortDescriptors
         }
         
         var error:NSError?

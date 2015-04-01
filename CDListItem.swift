@@ -17,4 +17,5 @@ class CDListItem: NSManagedObject {
     @NSManaged var section: CDSection
     @NSManaged var product: CDProduct
     @NSManaged var list: CDList
+    @NSManaged var order: NSNumber
 }

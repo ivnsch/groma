@@ -13,6 +13,6 @@ class ListItemMapper {
         let section = SectionMapper.sectionWithCD(cdListItem.section)
         let id = cdListItem.objectID.URIRepresentation().absoluteString
         let list = ListMapper.listWithCD(cdListItem.list)
-        return ListItem(id:id!, done: cdListItem.done, quantity: cdListItem.quantity.integerValue, product: product, section:section, list: list)
+        return ListItem(id:id!, done: cdListItem.done, quantity: cdListItem.quantity.integerValue, product: product, section:section, list: list, order: cdListItem.order.integerValue)
     }
 }

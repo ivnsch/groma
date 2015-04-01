@@ -8,10 +8,10 @@
 
 class ListItemProviderMock: ListItemProvider {
     
-    private var productsVar:[Product] = []
-    private var sectionsVar:[Section] = []
-    private var listsVar:[List] = []
-    private var listItemsVar:[ListItem] = []
+    private(set) var productsVar:[Product] = []
+    private(set) var sectionsVar:[Section] = []
+    private(set) var listsVar:[List] = []
+    private(set) var listItemsVar:[ListItem] = []
     
     init() {
         self.productsVar = (0...20).map {
@@ -21,7 +21,7 @@ class ListItemProviderMock: ListItemProvider {
         let section = Section(name: "test")
         self.sectionsVar.append(section)
         
-        let list:List = List(id: "test", name: "test")
+        let list:List = List(id: "dummy", name: Constants.defaultListIdentifier)
         self.listsVar.append(list)
         
         let i:Int = self.productsVar.count / 2
@@ -35,10 +35,10 @@ class ListItemProviderMock: ListItemProvider {
         }
         
         let notDone = Array(zipTuple(ranged(self.productsVar, 0...i))).map {product, index in
-            ListItem(id: String(index), done: false, quantity: 1, product: product, section: section, list: list)
+            ListItem(id: String(index), done: false, quantity: 1, product: product, section: section, list: list, order: index)
         }
         let done = Array(zipTuple(ranged(self.productsVar, i + 1...self.productsVar.count - 1))).map {product, index in
-            ListItem(id: String(index), done: true, quantity: 1, product: product, section: section, list: list)
+            ListItem(id: String(index), done: true, quantity: 1, product: product, section: section, list: list, order: index)
         }
         
         self.listItemsVar = Array(notDone) + Array(done)
@@ -117,12 +117,17 @@ class ListItemProviderMock: ListItemProvider {
         let idInt = self.nextId(self.listItemsVar.map{$0.id})
         let id = "\(idInt)"
         
-        let listItem = ListItem(id: id, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list)
+        let listItem = ListItem(id: id, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: idInt)
         return self.add(listItem)
     }
     
     func update(listItem:ListItem) -> Bool {
-        //TODO?
+        //TODO
+        return true
+    }
+    
+    func update(listItems:[ListItem]) -> Bool {
+        //TODO
         return true
     }
     

@@ -9,6 +9,7 @@
 // TODO is it possible to declare this in class as only "Key"
 enum PreferencesManagerKey: String {
     case listId = "listId"
+    case hasLaunchedBefore = "hasLaunchedBefore"
 }
 
 class PreferencesManager {
