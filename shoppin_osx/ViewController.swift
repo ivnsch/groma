@@ -127,7 +127,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             let editListItemController = EditListItemController()
             editListItemController.addTappedFunc = {listItemInput in
                 
-                let listItemMaybe = self.listItemsProvider.add(listItemInput, list: list)
+                let listItemMaybe = self.listItemsProvider.add(listItemInput, list: list, order: nil)
               
                 if let currentList = self.currentList, listItem = listItemMaybe {
                     let newRow = row + 1

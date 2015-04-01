@@ -60,7 +60,7 @@ class ListItemProviderMock: ListItemProvider {
     }
     
     func add(listItem:ListItem) -> ListItem? {
-        self.listItemsVar.append(listItem)
+        self.listItemsVar.insert(listItem, atIndex: listItem.order)
         return listItem
     }
     
@@ -110,14 +110,16 @@ class ListItemProviderMock: ListItemProvider {
         }()
     }
     
-    func add(listItemInput:ListItemInput, list:List) -> ListItem? {
+    func add(listItemInput:ListItemInput, list:List, order orderMaybe:Int?) -> ListItem? {
         let product = addFindProduct(name: listItemInput.name, price: listItemInput.price)
         let section = Section(name: listItemInput.section)
         
         let idInt = self.nextId(self.listItemsVar.map{$0.id})
         let id = "\(idInt)"
         
-        let listItem = ListItem(id: id, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: idInt)
+        let order = orderMaybe ?? idInt
+        
+        let listItem = ListItem(id: id, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
         return self.add(listItem)
     }
     

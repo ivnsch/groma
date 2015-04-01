@@ -436,7 +436,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private func addItem(listItemInput: ListItemInput) {
         
-        if let savedListItem = self.listItemsProvider.add(listItemInput, list: self.currentList) {
+        if let savedListItem = self.listItemsProvider.add(listItemInput, list: self.currentList, order: nil) {
             self.listItemsTableViewController.addListItem(savedListItem)
         }
         

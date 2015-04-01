@@ -18,7 +18,8 @@ protocol ListItemProvider {
     
     func add(listItem:ListItem) -> ListItem?
 
-    func add(listItemInput:ListItemInput, list:List) -> ListItem?
+    // optional order - if nil will be appended at the end
+    func add(listItemInput:ListItemInput, list:List, order:Int?) -> ListItem?
     
     func update(listItem:ListItem) -> Bool
 
