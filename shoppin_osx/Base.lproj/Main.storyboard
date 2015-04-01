@@ -674,8 +674,26 @@
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="QlP-gk-xmn">
                                 <rect key="frame" x="0.0" y="220" width="480" height="50"/>
+                                <subviews>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="U7l-qA-mFk">
+                                        <rect key="frame" x="417" y="8" width="49" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="37" id="O3p-Sb-fMR"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="push" title="+" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vdp-R3-ye0">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="menuAddTapped:" target="XfG-lQ-9wD" id="ExF-Kl-zMo"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="B8W-8P-Ln2"/>
+                                    <constraint firstAttribute="trailing" secondItem="U7l-qA-mFk" secondAttribute="trailing" constant="20" id="F4i-GY-Hoc"/>
+                                    <constraint firstItem="U7l-qA-mFk" firstAttribute="top" secondItem="QlP-gk-xmn" secondAttribute="top" constant="14" id="g6c-CT-jY4"/>
+                                    <constraint firstAttribute="bottom" secondItem="U7l-qA-mFk" secondAttribute="bottom" constant="15" id="wet-wU-0aX"/>
                                 </constraints>
                             </customView>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cto-Xg-dV0">

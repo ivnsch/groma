@@ -120,21 +120,31 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         self.removeRow(row)
     }
     
+    @IBAction func menuAddTapped(sender: NSButton) {
+        let rowIndex = self.listItemRows.count
+        self.addListItem(rowIndex)
+    }
+    
     @IBAction func rowAddTapped(sender: NSButton) {
-        let row = self.tableView.rowForView(sender)
+        let rowIndex = self.tableView.rowForView(sender) + 1
+        self.addListItem(rowIndex)
         
+        self.updateListItemsModelsOrder()
+        self.listItemsProvider.update(self.listItemRows.map{$0.listItem})
+    }
+    
+    private func addListItem(rowIndex: Int) {
         if let list = self.currentList {
             let editListItemController = EditListItemController()
             editListItemController.addTappedFunc = {listItemInput in
                 
-                let listItemMaybe = self.listItemsProvider.add(listItemInput, list: list, order: nil)
-              
+                let listItemMaybe = self.listItemsProvider.add(listItemInput, list: list, order: rowIndex)
+                
                 if let currentList = self.currentList, listItem = listItemMaybe {
-                    let newRow = row + 1
-                    self.listItemRows.insert(ListItemRow(listItem), atIndex: newRow)
+                    self.listItemRows.insert(ListItemRow(listItem), atIndex: rowIndex)
                     self.tableView.wrapUpdates {
-                        self.tableView.insertRowsAtIndexes(NSIndexSet(index: newRow), withAnimation: NSTableViewAnimationOptions.SlideDown)
-                    }()
+                        self.tableView.insertRowsAtIndexes(NSIndexSet(index: rowIndex), withAnimation: NSTableViewAnimationOptions.SlideDown)
+                        }()
                     
                 } else {
                     println("Warning: trying to add item without current list")
@@ -143,6 +153,14 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
                 editListItemController.close()
             }
             editListItemController.show(list)
+        }
+    }
+    
+    // updates list item models with current ordering in table view
+    private func updateListItemsModelsOrder() {
+        var sectionRows = 0
+        for (listItemIndex, listItemRow) in enumerate(self.listItemRows) {
+            listItemRow.listItem.order = listItemIndex
         }
     }
     
