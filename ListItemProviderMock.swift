@@ -25,8 +25,22 @@ class ListItemProviderMock: ListItemProvider {
         self.listsVar.append(list)
         
         let i:Int = self.productsVar.count / 2
-        let notDone = self.productsVar[0...i].map {ListItem(id: String(i), done: false, quantity: 1, product: $0, section: section, list: list)}
-        let done = self.productsVar[i...self.productsVar.count - 1].map {ListItem(id: String(i), done: true, quantity: 1, product: $0, section: section, list: list)}
+        
+        func ranged<T>(arr:[T], interval:Range<Int>) -> ([T], Range<Int>) {
+            return (Array(arr[interval]), interval)
+        }
+        
+        func zipTuple<T>(tuple: ([T], Range<Int>)) -> Zip2<[T], Range<Int>> {
+            return Zip2(tuple.0, tuple.1)
+        }
+        
+        let notDone = Array(zipTuple(ranged(self.productsVar, 0...i))).map {product, index in
+            ListItem(id: String(index), done: false, quantity: 1, product: product, section: section, list: list)
+        }
+        let done = Array(zipTuple(ranged(self.productsVar, i + 1...self.productsVar.count - 1))).map {product, index in
+            ListItem(id: String(index), done: true, quantity: 1, product: product, section: section, list: list)
+        }
+        
         self.listItemsVar = Array(notDone) + Array(done)
     }
     
