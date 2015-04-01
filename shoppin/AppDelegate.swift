@@ -17,17 +17,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
         
         if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) {
             PreferencesManager.savePreference(PreferencesManagerKey.hasLaunchedBefore, value: true)
-
-            self.addDummyPersistentObjects()
+            self.firstLaunchSetup()
         }
         return true
     }
     
-    func addDummyPersistentObjects() {
+    private func firstLaunchSetup() {
+        #if DEBUG
+            self.debugFirstLaunchSetup()
+            #else
+        #endif
+    }
+    
+    private func debugFirstLaunchSetup() {
+        self.addDummyPersistentObjects()
+    }
+    
+    
+    private func addDummyPersistentObjects() {
         let listItemProviderImpl = ListItemProviderImpl()
         let mock = ListItemProviderMock()
         let firstList = listItemProviderImpl.firstList
