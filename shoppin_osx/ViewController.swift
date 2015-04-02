@@ -12,7 +12,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
    
     // wrapper to retrieve data for tableview
     private struct ListItemRow {
-        let listItem:ListItem
+        var listItem:ListItem
         
         init(_ listItem:ListItem) {
             self.listItem = listItem
@@ -132,6 +132,37 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         self.updateListItemsModelsOrder()
         self.listItemsProvider.update(self.listItemRows.map{$0.listItem})
     }
+
+    private func toListItemInput(listItem: ListItem) -> ListItemInput {
+        return ListItemInput(
+            name: listItem.product.name,
+            quantity: listItem.quantity,
+            price: listItem.product.price,
+            section: listItem.section.name)
+    }
+    
+    private func toUpdatedListItem(listItem:ListItem, listItemInput: ListItemInput) -> ListItem {
+        
+        let section = Section(name: listItemInput.section)
+        
+        // for now we overwrite existing product on update (provider just sets the fields on existing product)
+        // later we may want to think about this, depending how we use products
+        // for example if we used products e.g. to make statistics about bought products, and a user changes "strawberries" name into "fish", we will make them incorrect
+        // or if for some reason we have different list items pointing to same product, we will change product name for all of them - also incorrect
+        // this behaviour may be desired though to correct spelling errors
+        // so yes we have to think about it
+        let product = Product(id: "dummy", name: listItemInput.name, price: listItemInput.price)
+        
+        return ListItem(
+            id: listItem.id,
+            done: listItem.done,
+            quantity: listItemInput.quantity,
+            product: product,
+            section: section,
+            list: listItem.list,
+            order: listItem.order
+        )
+    }
     
     private func addListItem(rowIndex: Int) {
         if let list = self.currentList {
@@ -144,14 +175,53 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
                     self.listItemRows.insert(ListItemRow(listItem), atIndex: rowIndex)
                     self.tableView.wrapUpdates {
                         self.tableView.insertRowsAtIndexes(NSIndexSet(index: rowIndex), withAnimation: NSTableViewAnimationOptions.SlideDown)
-                        }()
+                    }()
                     
                 } else {
                     println("Warning: trying to add item without current list")
                 }
-
+                
                 editListItemController.close()
             }
+            
+            editListItemController.windowDidLoadFunc = {
+                editListItemController.modus = .Add
+            }
+            
+            editListItemController.modus = .Add
+            editListItemController.show(list)
+        }
+    }
+    
+    private func updateListItem(rowIndex: Int) {
+        if let list = self.currentList {
+            let editListItemController = EditListItemController()
+            editListItemController.addTappedFunc = {listItemInput in
+              
+                let listItem = self.listItemRows[rowIndex].listItem
+                let updatedListItem = self.toUpdatedListItem(listItem, listItemInput: listItemInput)
+                if (!self.listItemsProvider.update(updatedListItem)) {
+                    println("Error: couldn't update item")
+                }
+                
+                self.listItemRows[rowIndex].listItem = updatedListItem
+                
+                let editableColumnIndices: NSIndexSet =  NSIndexSet(indexesInRange: NSMakeRange(0, 3))
+                self.tableView.wrapUpdates {
+                    self.tableView.reloadDataForRowIndexes(NSIndexSet(index: rowIndex), columnIndexes: editableColumnIndices)
+                    
+                }()
+ 
+                editListItemController.close()
+            }
+
+            let updatingListItem = self.listItemRows[rowIndex].listItem
+            
+            editListItemController.windowDidLoadFunc = {
+                editListItemController.modus = .Edit
+                editListItemController.prefill(self.toListItemInput(updatingListItem))
+            }
+            
             editListItemController.show(list)
         }
     }
@@ -204,6 +274,10 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         
         updateListItemsModelsOrder() // this can be optimised in changing only order of items at rowIndex and targetIndex
     }
-
+    
+    @IBAction func editTapped(sender: NSButton) {
+        let rowIndex = self.tableView.rowForView(sender)
+        self.updateListItem(rowIndex)
+    }
 }
 

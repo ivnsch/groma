@@ -7,6 +7,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="EditListItemController" customModule="shoppin_osx" customModuleProvider="target">
             <connections>
                 <outlet property="nameTextField" destination="X7c-sR-jiY" id="Nea-de-tRe"/>
+                <outlet property="okButton" destination="kyU-hm-L2V" id="zuG-yb-awA"/>
                 <outlet property="priceTextField" destination="Bsz-ge-lIL" id="JEV-CE-pup"/>
                 <outlet property="quantityTextField" destination="krD-Od-Dkh" id="rh8-dx-Cal"/>
                 <outlet property="sectionTextField" destination="oKx-iE-evz" id="7hg-2d-p4T"/>

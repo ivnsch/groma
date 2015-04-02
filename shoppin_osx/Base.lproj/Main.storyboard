@@ -874,6 +874,16 @@
                                                                         <action selector="downTapped:" target="XfG-lQ-9wD" id="M0Y-dn-vJJ"/>
                                                                     </connections>
                                                                 </button>
+                                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wXn-1Z-NsY">
+                                                                    <rect key="frame" x="199" y="-8" width="64" height="32"/>
+                                                                    <buttonCell key="cell" type="push" title="edit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sFh-pT-qB5">
+                                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                    <connections>
+                                                                        <action selector="editTapped:" target="XfG-lQ-9wD" id="unU-d2-mCO"/>
+                                                                    </connections>
+                                                                </button>
                                                             </subviews>
                                                             <constraints>
                                                                 <constraint firstAttribute="centerY" secondItem="RTn-w5-BOv" secondAttribute="centerY" id="OVk-dg-xIb"/>
