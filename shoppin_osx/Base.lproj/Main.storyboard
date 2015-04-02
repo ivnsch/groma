@@ -703,7 +703,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowSizeStyle="automatic" headerView="l4E-Xu-o8P" viewBased="YES" id="uH3-ov-6Kl">
-                                            <rect key="frame" x="0.0" y="0.0" width="478" height="0.0"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="633" height="0.0"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -852,6 +852,26 @@
                                                                     </buttonCell>
                                                                     <connections>
                                                                         <action selector="rowAddTapped:" target="XfG-lQ-9wD" id="t7y-f3-M1C"/>
+                                                                    </connections>
+                                                                </button>
+                                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LO8-r3-NHO">
+                                                                    <rect key="frame" x="83" y="-9" width="56" height="32"/>
+                                                                    <buttonCell key="cell" type="push" title="up" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2z1-te-z68">
+                                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                    <connections>
+                                                                        <action selector="upTapped:" target="XfG-lQ-9wD" id="iI7-VC-Jto"/>
+                                                                    </connections>
+                                                                </button>
+                                                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vx8-w1-eO6">
+                                                                    <rect key="frame" x="132" y="-9" width="74" height="32"/>
+                                                                    <buttonCell key="cell" type="push" title="down" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jTR-BR-8V1">
+                                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                        <font key="font" metaFont="system"/>
+                                                                    </buttonCell>
+                                                                    <connections>
+                                                                        <action selector="downTapped:" target="XfG-lQ-9wD" id="M0Y-dn-vJJ"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>

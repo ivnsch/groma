@@ -162,6 +162,8 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         for (listItemIndex, listItemRow) in enumerate(self.listItemRows) {
             listItemRow.listItem.order = listItemIndex
         }
+        
+        self.listItemsProvider.update(self.listItemRows.map{$0.listItem})
     }
     
     func removeRow(row:Int) {
@@ -172,5 +174,36 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             self.tableView.removeRowsAtIndexes(NSIndexSet(index: row), withAnimation: NSTableViewAnimationOptions.EffectFade | NSTableViewAnimationOptions.SlideLeft)
         }()
     }
+
+    @IBAction func upTapped(sender: NSButton) {
+        let rowIndex = self.tableView.rowForView(sender)
+        self.moveRowWithLimitsCheck(rowIndex, targetIndex: rowIndex - 1, anim: NSTableViewAnimationOptions.SlideUp)
+    }
+    
+    @IBAction func downTapped(sender: NSButton) {
+        let rowIndex = self.tableView.rowForView(sender)
+        self.moveRowWithLimitsCheck(rowIndex, targetIndex: rowIndex + 1, anim: NSTableViewAnimationOptions.SlideDown)
+    }
+    
+    private func moveRowWithLimitsCheck(rowIndex: Int, targetIndex: Int, anim: NSTableViewAnimationOptions) {
+        if targetIndex >= 0 && targetIndex < self.listItemRows.count {
+            self.moveRow(rowIndex, targetIndex: targetIndex, anim: anim)
+        }
+    }
+    
+    private func moveRow(rowIndex: Int, targetIndex: Int, anim: NSTableViewAnimationOptions) {
+        let listItemRow = self.listItemRows[rowIndex]
+        
+        self.listItemRows.removeAtIndex(rowIndex)
+        self.listItemRows.insert(listItemRow, atIndex: targetIndex)
+        
+        self.tableView.wrapUpdates {
+            self.tableView.removeRowsAtIndexes(NSIndexSet(index: rowIndex), withAnimation: NSTableViewAnimationOptions.EffectFade | anim)
+            self.tableView.insertRowsAtIndexes(NSIndexSet(index: targetIndex), withAnimation: NSTableViewAnimationOptions.EffectFade | anim)
+        }()
+        
+        updateListItemsModelsOrder() // this can be optimised in changing only order of items at rowIndex and targetIndex
+    }
+
 }
 
