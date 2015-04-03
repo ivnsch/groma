@@ -219,6 +219,37 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         }()
         
         updateListItemsModelsOrder() // this can be optimised in changing only order of items at rowIndex and targetIndex
+        
+        self.assignListItemsToSections()
+    }
+    
+    func assignListItemsToSections() {
+        
+        var currentSection:Section?
+ 
+        for cellManager in self.cellManagers {
+            
+            if let headerCellManager = cellManager as? HeaderCellManager {
+                currentSection = headerCellManager.section
+            
+            } else if let listItemCellManager = cellManager as? ListItemCellManager {
+                let listItem = listItemCellManager.listItemRow.listItem
+                
+                if let cs = currentSection {
+                    listItem.section = cs
+                    
+                } else {
+                    println("Warning: Invalid state - list item before any section")
+                }
+            }
+        }
+        
+        // without section headers
+        let listItemRows:[ListItemCellManager] = self.cellManagers.filter {
+            $0 as? ListItemCellManager != nil
+        } as! [ListItemCellManager]
+        
+        self.listItemsProvider.update(listItemRows.map{$0.listItemRow.listItem})
     }
     
     
