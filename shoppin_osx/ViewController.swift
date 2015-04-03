@@ -184,7 +184,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             listItemRow.listItemRow.listItem.order = listItemIndex
         }
         
-        self.listItemsProvider.update(self.listItemRows.map{$0.listItemRow.listItem})
+        self.updateAllListItemsInProvider()
     }
     
     func removeRow(row:Int, listItemRow: ListItemRow) {
@@ -242,9 +242,12 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             }
         }
         
-        self.listItemsProvider.update(self.listItemRows.map{$0.listItemRow.listItem})
+        self.updateAllListItemsInProvider()
     }
     
+    private func updateAllListItemsInProvider() {
+        self.listItemsProvider.update(self.listItemRows.map{$0.listItemRow.listItem})
+    }
     
     func rowAddTapped(cell: NSTableCellView, listItemRow: ListItemRow) {
         let index = self.tableView.rowForView(cell)
