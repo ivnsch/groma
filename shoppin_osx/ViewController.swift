@@ -19,6 +19,10 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     
     private let listItemsProvider = ProviderFactory().listItemProvider
 
+    private var listItemRows:[ListItemCellManager] {
+        return self.cellManagers.filter {$0 as? ListItemCellManager != nil} as! [ListItemCellManager]
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -176,17 +180,11 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     private func updateListItemsModelsOrder() {
         var sectionRows = 0
         
-        // without section headers
-        let listItemRows:[ListItemCellManager] = self.cellManagers.filter {
-            $0 as? ListItemCellManager != nil
-        } as! [ListItemCellManager]
-        
-        
         for (listItemIndex, listItemRow) in enumerate(listItemRows) {
             listItemRow.listItemRow.listItem.order = listItemIndex
         }
         
-        self.listItemsProvider.update(listItemRows.map{$0.listItemRow.listItem})
+        self.listItemsProvider.update(self.listItemRows.map{$0.listItemRow.listItem})
     }
     
     func removeRow(row:Int, listItemRow: ListItemRow) {
@@ -244,12 +242,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             }
         }
         
-        // without section headers
-        let listItemRows:[ListItemCellManager] = self.cellManagers.filter {
-            $0 as? ListItemCellManager != nil
-        } as! [ListItemCellManager]
-        
-        self.listItemsProvider.update(listItemRows.map{$0.listItemRow.listItem})
+        self.listItemsProvider.update(self.listItemRows.map{$0.listItemRow.listItem})
     }
     
     
