@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="7528.3" systemVersion="14B25" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7528.3"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="HeaderCell" customModule="shoppin_osx" customModuleProvider="target">
+            <connections>
+                <outlet property="titleField" destination="2Lh-q6-KLq" id="15o-9S-grv"/>
+                <outlet property="view" destination="c22-O7-iKe" id="u1m-Rf-nfA"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="674" height="61"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2Lh-q6-KLq">
+                    <rect key="frame" x="18" y="22" width="38" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="04H-va-uq3">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="centerY" secondItem="2Lh-q6-KLq" secondAttribute="centerY" id="eYI-Xo-kh3"/>
+                <constraint firstItem="2Lh-q6-KLq" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" id="jZd-ie-cTM"/>
+            </constraints>
+            <point key="canvasLocation" x="434" y="358.5"/>
+        </customView>
+    </objects>
+</document>

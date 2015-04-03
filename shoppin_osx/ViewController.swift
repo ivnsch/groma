@@ -35,13 +35,18 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     
     private func createCellManagers(listItems: [ListItem]) -> [CellManager] {
         var cellManagers:[CellManager] = []
+        var foundSections = Set<String>() // quick lookup
         
         for listItem in listItems {
+            if !foundSections.contains(listItem.section.name) {
+                foundSections.insert(listItem.section.name)
+                cellManagers.append(HeaderCellManager(section: listItem.section))
+            }
+            
             cellManagers.append(ListItemCellManager(listItem: listItem, delegate: self))
         }
         return cellManagers
     }
-    
     
     override var representedObject: AnyObject? {
         didSet {
