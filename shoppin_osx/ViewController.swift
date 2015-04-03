@@ -143,7 +143,9 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     
     private func addListItemInRow(rowIndex: Int) {
         self.addListItem(rowIndex)
+        
         self.updateListItemsModelsOrder()
+        self.updateAllListItemsInProvider()
     }
     
     private func updateListItem(rowIndex: Int, listItemRow: ListItemRow) {
@@ -183,8 +185,6 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         for (listItemIndex, listItemRow) in enumerate(listItemRows) {
             listItemRow.listItemRow.listItem.order = listItemIndex
         }
-        
-        self.updateAllListItemsInProvider()
     }
     
     func removeRow(row:Int, listItemRow: ListItemRow) {
@@ -197,6 +197,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         self.listItemsProvider.remove(listItemRow.listItem)
         
         updateListItemsModelsOrder()
+        self.updateAllListItemsInProvider()
     }
 
     private func moveRowWithLimitsCheck(rowIndex: Int, targetIndex: Int, anim: NSTableViewAnimationOptions) {
@@ -217,8 +218,8 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         }()
         
         updateListItemsModelsOrder() // this can be optimised in changing only order of items at rowIndex and targetIndex
-        
         self.assignListItemsToSections()
+        self.updateAllListItemsInProvider()
     }
     
     func assignListItemsToSections() {
@@ -241,8 +242,6 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
                 }
             }
         }
-        
-        self.updateAllListItemsInProvider()
     }
     
     private func updateAllListItemsInProvider() {
