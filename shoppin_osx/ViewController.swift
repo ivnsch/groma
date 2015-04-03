@@ -196,7 +196,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         
         self.listItemsProvider.remove(listItemRow.listItem)
         
-        updateListItemsModelsOrder()
+        self.updateListItemsModelsOrder()
         self.updateAllListItemsInProvider()
     }
 
@@ -217,7 +217,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             self.tableView.insertRowsAtIndexes(NSIndexSet(index: targetIndex), withAnimation: NSTableViewAnimationOptions.EffectFade | anim)
         }()
         
-        updateListItemsModelsOrder() // this can be optimised in changing only order of items at rowIndex and targetIndex
+        self.updateListItemsModelsOrder() // this can be optimised in changing only order of items at rowIndex and targetIndex
         self.assignListItemsToSections()
         self.updateAllListItemsInProvider()
     }
