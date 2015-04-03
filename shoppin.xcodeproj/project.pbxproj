@@ -94,6 +94,9 @@
 		EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEA1A8610550038355B /* Images.xcassets */; };
 		EB9F6CEE1A8610550038355B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEC1A8610550038355B /* Main.storyboard */; };
 		EB9F6CFA1A8610550038355B /* shoppin_osxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CF91A8610550038355B /* shoppin_osxTests.swift */; };
+		EBDFE3A71ACE829400E48F95 /* CellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3A61ACE829400E48F95 /* CellManager.swift */; };
+		EBDFE3A91ACE82F000E48F95 /* ListItemCellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */; };
+		EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3AA1ACE935600E48F95 /* ListItemRow.swift */; };
 		EBEEDD691A49C75400FC3B29 /* CDSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD681A49C75400FC3B29 /* CDSection.swift */; };
 		EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6A1A49C94F00FC3B29 /* Section.swift */; };
 		EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */; };
@@ -198,6 +201,9 @@
 		EB9F6CF31A8610550038355B /* shoppin_osxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shoppin_osxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB9F6CF81A8610550038355B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB9F6CF91A8610550038355B /* shoppin_osxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shoppin_osxTests.swift; sourceTree = "<group>"; };
+		EBDFE3A61ACE829400E48F95 /* CellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellManager.swift; sourceTree = "<group>"; };
+		EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCellManager.swift; sourceTree = "<group>"; };
+		EBDFE3AA1ACE935600E48F95 /* ListItemRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemRow.swift; sourceTree = "<group>"; };
 		EBEEDD681A49C75400FC3B29 /* CDSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDSection.swift; sourceTree = "<group>"; };
 		EBEEDD6A1A49C94F00FC3B29 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionMapper.swift; sourceTree = "<group>"; };
@@ -465,6 +471,7 @@
 		EB9F6CE31A8610550038355B /* shoppin_osx */ = {
 			isa = PBXGroup;
 			children = (
+				EBDFE3A51ACE827C00E48F95 /* tableview */,
 				EB4FD44C1AC6BE2A0000F952 /* extension */,
 				EB9F6CE61A8610550038355B /* AppDelegate.swift */,
 				EB9F6CE81A8610550038355B /* ViewController.swift */,
@@ -474,7 +481,6 @@
 				EB9F6CEC1A8610550038355B /* Main.storyboard */,
 				EB9F6CE41A8610550038355B /* Supporting Files */,
 				EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */,
-				EB6A207A1AC7FFFE00B9BCB2 /* EditListItemButtonsCell.swift */,
 			);
 			path = shoppin_osx;
 			sourceTree = "<group>";
@@ -502,6 +508,17 @@
 				EB9F6CF81A8610550038355B /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EBDFE3A51ACE827C00E48F95 /* tableview */ = {
+			isa = PBXGroup;
+			children = (
+				EBDFE3A61ACE829400E48F95 /* CellManager.swift */,
+				EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */,
+				EBDFE3AA1ACE935600E48F95 /* ListItemRow.swift */,
+				EB6A207A1AC7FFFE00B9BCB2 /* EditListItemButtonsCell.swift */,
+			);
+			name = tableview;
 			sourceTree = "<group>";
 		};
 		EBEEDD631A49A7B500FC3B29 /* view */ = {
@@ -904,6 +921,7 @@
 				EB9F6CE91A8610550038355B /* ViewController.swift in Sources */,
 				EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */,
 				EB5567611A86437B00CD3EC6 /* SectionMapper.swift in Sources */,
+				EBDFE3A71ACE829400E48F95 /* CellManager.swift in Sources */,
 				EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */,
 				EB4FD4561AC6D6690000F952 /* EditListItemController.swift in Sources */,
 				EB4FD45D1AC7148C0000F952 /* String.swift in Sources */,
@@ -916,6 +934,7 @@
 				EB5567621A86437E00CD3EC6 /* ListMapper.swift in Sources */,
 				EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */,
 				EB5567671A8643AF00CD3EC6 /* CDList.swift in Sources */,
+				EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */,
 				EB55675D1A86433700CD3EC6 /* Product.swift in Sources */,
 				EB5567681A8643B200CD3EC6 /* CDInventoryItem.swift in Sources */,
 				EB55677D1A86578400CD3EC6 /* SharedAppDelegate.m in Sources */,
@@ -924,6 +943,7 @@
 				EB4FD44E1AC6BE390000F952 /* NSTableView.swift in Sources */,
 				EB4FD4511AC6BE960000F952 /* Globals.swift in Sources */,
 				EB55676A1A8643BC00CD3EC6 /* Section.swift in Sources */,
+				EBDFE3A91ACE82F000E48F95 /* ListItemCellManager.swift in Sources */,
 				EB5567801A8658B000CD3EC6 /* CDProvider.swift in Sources */,
 				EB6A207B1AC7FFFF00B9BCB2 /* EditListItemButtonsCell.swift in Sources */,
 				EB5567641A86438600CD3EC6 /* CDProduct.swift in Sources */,

@@ -841,7 +841,7 @@
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
                                                                     <connections>
-                                                                        <action selector="onRowDeleteTap:" target="XfG-lQ-9wD" id="AKA-Q7-0fR"/>
+                                                                        <action selector="rowDeleteTapped:" target="OOb-ZE-dne" id="BwZ-J5-Qr5"/>
                                                                     </connections>
                                                                 </button>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JbT-0Y-zrG">
@@ -851,7 +851,7 @@
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
                                                                     <connections>
-                                                                        <action selector="rowAddTapped:" target="XfG-lQ-9wD" id="t7y-f3-M1C"/>
+                                                                        <action selector="rowAddTapped:" target="OOb-ZE-dne" id="dBk-bD-laT"/>
                                                                     </connections>
                                                                 </button>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LO8-r3-NHO">
@@ -861,7 +861,7 @@
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
                                                                     <connections>
-                                                                        <action selector="upTapped:" target="XfG-lQ-9wD" id="iI7-VC-Jto"/>
+                                                                        <action selector="upTapped:" target="OOb-ZE-dne" id="A24-Cg-lBw"/>
                                                                     </connections>
                                                                 </button>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vx8-w1-eO6">
@@ -871,7 +871,7 @@
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
                                                                     <connections>
-                                                                        <action selector="downTapped:" target="XfG-lQ-9wD" id="M0Y-dn-vJJ"/>
+                                                                        <action selector="downTapped:" target="OOb-ZE-dne" id="B5a-yP-pjP"/>
                                                                     </connections>
                                                                 </button>
                                                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wXn-1Z-NsY">
@@ -881,7 +881,7 @@
                                                                         <font key="font" metaFont="system"/>
                                                                     </buttonCell>
                                                                     <connections>
-                                                                        <action selector="editTapped:" target="XfG-lQ-9wD" id="unU-d2-mCO"/>
+                                                                        <action selector="editTapped:" target="OOb-ZE-dne" id="aRr-Nw-M4r"/>
                                                                     </connections>
                                                                 </button>
                                                             </subviews>

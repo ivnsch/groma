@@ -8,43 +8,14 @@
 
 import Cocoa
 
-class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource {
-   
-    // wrapper to retrieve data for tableview
-    private struct ListItemRow {
-        var listItem:ListItem
-        
-        init(_ listItem:ListItem) {
-            self.listItem = listItem
-        }
-        
-        func getColumnString(columnIdentifier: ListItemColumnIdentifier) -> String? {
-            switch columnIdentifier {
-                case .ProductName:
-                    return listItem.product.name
-                case .Quantity:
-                    return String(listItem.quantity)
-                case .Price:
-                    return listItem.product.price.toString(2)!
-                default:
-                    return nil
-            }
-        }
-    }
-    
-    private enum ListItemColumnIdentifier:String {
-        case ProductName = "name"
-        case Quantity = "quantity"
-        case Price = "price"
-        case Edit = "edit"
-    }
-    
 
+class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, ListItemCellManagerDelegate {
+   
     private var currentList:List?
     
     @IBOutlet weak var tableView: NSTableView!
 
-    private var listItemRows:[ListItemRow] = []
+    private var cellManagers:[CellManager] = []
     
     private let listItemsProvider = ProviderFactory().listItemProvider
 
@@ -58,8 +29,19 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
 
     private func initList(list:List) {
         let listItems = self.listItemsProvider.listItems(list)
-        self.listItemRows = listItems.map{ListItemRow($0)}
+        
+        self.cellManagers = self.createCellManagers(listItems)
     }
+    
+    private func createCellManagers(listItems: [ListItem]) -> [CellManager] {
+        var cellManagers:[CellManager] = []
+        
+        for listItem in listItems {
+            cellManagers.append(ListItemCellManager(listItem: listItem, delegate: self))
+        }
+        return cellManagers
+    }
+    
     
     override var representedObject: AnyObject? {
         didSet {
@@ -68,7 +50,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
 
     func numberOfRowsInTableView(aTableView: NSTableView) -> Int {
-        return self.listItemRows.count
+        return self.cellManagers.count
 
     }
     
@@ -77,61 +59,17 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
 //        return "foo"
 //    }
     
-    
-    private func makeButtonsCell(columnIdentifier: ListItemColumnIdentifier, tableView: NSTableView, row:Int) -> EditListItemButtonsCell {
-      
-        var cell = tableView.makeViewWithIdentifier(columnIdentifier.rawValue, owner:self) as! EditListItemButtonsCell
-        
-        
-        return cell
-    }
-    
-    private func makeDefaultCell(columnIdentifier: ListItemColumnIdentifier, tableView: NSTableView, row:Int) -> NSTableCellView {
-        
-        var cell = tableView.makeViewWithIdentifier(columnIdentifier.rawValue, owner:self) as! NSTableCellView
 
-        let listItemRow = self.listItemRows[row]
-
-        if let columnString = listItemRow.getColumnString(columnIdentifier) {
-            cell.textField?.stringValue = columnString
-        }
-        
-        return cell
-    }
-    
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
-
-        let columnIdentifier = ListItemColumnIdentifier(rawValue: tableColumn!.identifier)!
-
-        switch columnIdentifier {
-            case .Edit:
-                return self.makeButtonsCell(columnIdentifier, tableView: tableView, row: row)
-            default:
-                return self.makeDefaultCell(columnIdentifier, tableView: tableView, row: row)
-        }
+        return self.cellManagers[row].makeCell(tableView, tableColumn: tableColumn, row: row)
     }
     
-    @IBAction func onRowDeleteTap(sender: NSButton) {
-        let row = self.tableView.rowForView(sender)
 
-        let listItem = self.listItemRows[row].listItem
-        self.listItemsProvider.remove(listItem)
-
-        self.removeRow(row)
-    }
-    
     @IBAction func menuAddTapped(sender: NSButton) {
-        let rowIndex = self.listItemRows.count
+        let rowIndex = self.cellManagers.count
         self.addListItem(rowIndex)
     }
-    
-    @IBAction func rowAddTapped(sender: NSButton) {
-        let rowIndex = self.tableView.rowForView(sender) + 1
-        self.addListItem(rowIndex)
-        
-        self.updateListItemsModelsOrder()
-        self.listItemsProvider.update(self.listItemRows.map{$0.listItem})
-    }
+
 
     private func toListItemInput(listItem: ListItem) -> ListItemInput {
         return ListItemInput(
@@ -172,7 +110,9 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
                 let listItemMaybe = self.listItemsProvider.add(listItemInput, list: list, order: rowIndex)
                 
                 if let currentList = self.currentList, listItem = listItemMaybe {
-                    self.listItemRows.insert(ListItemRow(listItem), atIndex: rowIndex)
+                    
+                    let cellManager = ListItemCellManager(listItem: listItem, delegate: self)
+                    self.cellManagers.insert(cellManager, atIndex: rowIndex)
                     self.tableView.wrapUpdates {
                         self.tableView.insertRowsAtIndexes(NSIndexSet(index: rowIndex), withAnimation: NSTableViewAnimationOptions.SlideDown)
                     }()
@@ -188,23 +128,26 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
                 editListItemController.modus = .Add
             }
             
-            editListItemController.modus = .Add
             editListItemController.show(list)
         }
     }
     
-    private func updateListItem(rowIndex: Int) {
+    private func addListItemInRow(rowIndex: Int) {
+        self.addListItem(rowIndex)
+        self.updateListItemsModelsOrder()
+    }
+    
+    private func updateListItem(rowIndex: Int, listItemRow: ListItemRow) {
         if let list = self.currentList {
             let editListItemController = EditListItemController()
             editListItemController.addTappedFunc = {listItemInput in
               
-                let listItem = self.listItemRows[rowIndex].listItem
-                let updatedListItem = self.toUpdatedListItem(listItem, listItemInput: listItemInput)
+                let updatedListItem = self.toUpdatedListItem(listItemRow.listItem, listItemInput: listItemInput)
                 if (!self.listItemsProvider.update(updatedListItem)) {
                     println("Error: couldn't update item")
                 }
                 
-                self.listItemRows[rowIndex].listItem = updatedListItem
+                self.cellManagers[rowIndex] = ListItemCellManager(listItem: updatedListItem, delegate: self)
                 
                 let editableColumnIndices: NSIndexSet =  NSIndexSet(indexesInRange: NSMakeRange(0, 3))
                 self.tableView.wrapUpdates {
@@ -215,11 +158,9 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
                 editListItemController.close()
             }
 
-            let updatingListItem = self.listItemRows[rowIndex].listItem
-            
             editListItemController.windowDidLoadFunc = {
                 editListItemController.modus = .Edit
-                editListItemController.prefill(self.toListItemInput(updatingListItem))
+                editListItemController.prefill(self.toListItemInput(listItemRow.listItem))
             }
             
             editListItemController.show(list)
@@ -229,43 +170,43 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     // updates list item models with current ordering in table view
     private func updateListItemsModelsOrder() {
         var sectionRows = 0
-        for (listItemIndex, listItemRow) in enumerate(self.listItemRows) {
-            listItemRow.listItem.order = listItemIndex
+        
+        // without section headers
+        let listItemRows:[ListItemCellManager] = self.cellManagers.filter {
+            $0 as? ListItemCellManager != nil
+        } as! [ListItemCellManager]
+        
+        
+        for (listItemIndex, listItemRow) in enumerate(listItemRows) {
+            listItemRow.listItemRow.listItem.order = listItemIndex
         }
         
-        self.listItemsProvider.update(self.listItemRows.map{$0.listItem})
+        self.listItemsProvider.update(listItemRows.map{$0.listItemRow.listItem})
     }
     
-    func removeRow(row:Int) {
-        let listItemRow = self.listItemRows[row]
-        self.listItemRows.removeAtIndex(row)
+    func removeRow(row:Int, listItemRow: ListItemRow) {
+        self.cellManagers.removeAtIndex(row)
         
         self.tableView.wrapUpdates {
             self.tableView.removeRowsAtIndexes(NSIndexSet(index: row), withAnimation: NSTableViewAnimationOptions.EffectFade | NSTableViewAnimationOptions.SlideLeft)
         }()
+        
+        self.listItemsProvider.remove(listItemRow.listItem)
+        
+        updateListItemsModelsOrder()
     }
 
-    @IBAction func upTapped(sender: NSButton) {
-        let rowIndex = self.tableView.rowForView(sender)
-        self.moveRowWithLimitsCheck(rowIndex, targetIndex: rowIndex - 1, anim: NSTableViewAnimationOptions.SlideUp)
-    }
-    
-    @IBAction func downTapped(sender: NSButton) {
-        let rowIndex = self.tableView.rowForView(sender)
-        self.moveRowWithLimitsCheck(rowIndex, targetIndex: rowIndex + 1, anim: NSTableViewAnimationOptions.SlideDown)
-    }
-    
     private func moveRowWithLimitsCheck(rowIndex: Int, targetIndex: Int, anim: NSTableViewAnimationOptions) {
-        if targetIndex >= 0 && targetIndex < self.listItemRows.count {
+        if targetIndex >= 0 && targetIndex < self.cellManagers.count {
             self.moveRow(rowIndex, targetIndex: targetIndex, anim: anim)
         }
     }
     
     private func moveRow(rowIndex: Int, targetIndex: Int, anim: NSTableViewAnimationOptions) {
-        let listItemRow = self.listItemRows[rowIndex]
+        let listItemRow = self.cellManagers[rowIndex]
         
-        self.listItemRows.removeAtIndex(rowIndex)
-        self.listItemRows.insert(listItemRow, atIndex: targetIndex)
+        self.cellManagers.removeAtIndex(rowIndex)
+        self.cellManagers.insert(listItemRow, atIndex: targetIndex)
         
         self.tableView.wrapUpdates {
             self.tableView.removeRowsAtIndexes(NSIndexSet(index: rowIndex), withAnimation: NSTableViewAnimationOptions.EffectFade | anim)
@@ -275,9 +216,30 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         updateListItemsModelsOrder() // this can be optimised in changing only order of items at rowIndex and targetIndex
     }
     
-    @IBAction func editTapped(sender: NSButton) {
-        let rowIndex = self.tableView.rowForView(sender)
-        self.updateListItem(rowIndex)
+    
+    func rowAddTapped(cell: NSTableCellView, listItemRow: ListItemRow) {
+        let index = self.tableView.rowForView(cell)
+        self.addListItemInRow(index + 1)
+    }
+    
+    func rowDeleteTapped(cell: NSTableCellView, listItemRow: ListItemRow) {
+        let index = self.tableView.rowForView(cell)
+        self.removeRow(index, listItemRow: listItemRow)
+    }
+    
+    func rowUpTapped(cell: NSTableCellView, listItemRow: ListItemRow) {
+        let index = self.tableView.rowForView(cell)
+        self.moveRowWithLimitsCheck(index, targetIndex: index - 1, anim: NSTableViewAnimationOptions.SlideUp)
+    }
+    
+    func rowDownTapped(cell: NSTableCellView, listItemRow: ListItemRow) {
+        let index = self.tableView.rowForView(cell)
+        self.moveRowWithLimitsCheck(index, targetIndex: index + 1, anim: NSTableViewAnimationOptions.SlideDown)
+    }
+    
+    func rowEditTapped(cell: NSTableCellView, listItemRow: ListItemRow) {
+        let index = self.tableView.rowForView(cell)
+        self.updateListItem(index, listItemRow: listItemRow)
     }
 }
 
