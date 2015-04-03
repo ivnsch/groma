@@ -58,22 +58,6 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         }
     }
 
-    func numberOfRowsInTableView(aTableView: NSTableView) -> Int {
-        return self.cellManagers.count
-
-    }
-    
-//    func tableView(tableView: NSTableView!, objectValueForTableColumn tableColumn: NSTableColumn!, row: Int) -> AnyObject! {
-//        println("column: \(tableColumn)")
-//        return "foo"
-//    }
-    
-
-    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        return self.cellManagers[row].makeCell(tableView, tableColumn: tableColumn, row: row)
-    }
-    
-
     @IBAction func menuAddTapped(sender: NSButton) {
         let rowIndex = self.cellManagers.count
         self.addListItem(rowIndex)
@@ -109,8 +93,10 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             list: listItem.list,
             order: listItem.order
         )
+        
     }
-    
+    // MARK: - table view / model update
+ 
     private func addListItem(rowIndex: Int) {
         if let list = self.currentList {
             let editListItemController = EditListItemController()
@@ -177,16 +163,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             editListItemController.show(list)
         }
     }
-    
-    // updates list item models with current ordering in table view
-    private func updateListItemsModelsOrder() {
-        var sectionRows = 0
-        
-        for (listItemIndex, listItemRow) in enumerate(listItemRows) {
-            listItemRow.listItemRow.listItem.order = listItemIndex
-        }
-    }
-    
+
     func removeRow(row:Int, listItemRow: ListItemRow) {
         self.cellManagers.removeAtIndex(row)
         
@@ -221,16 +198,28 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         self.assignListItemsToSections()
         self.updateAllListItemsInProvider()
     }
+
+    // MARK: - update all models
+    // these methods mostly require to save the changes in data provider after they are executed
+    
+    // updates list item models with current ordering in table view
+    private func updateListItemsModelsOrder() {
+        var sectionRows = 0
+        
+        for (listItemIndex, listItemRow) in enumerate(listItemRows) {
+            listItemRow.listItemRow.listItem.order = listItemIndex
+        }
+    }
     
     func assignListItemsToSections() {
         
         var currentSection:Section?
- 
+        
         for cellManager in self.cellManagers {
             
             if let headerCellManager = cellManager as? HeaderCellManager {
                 currentSection = headerCellManager.section
-            
+                
             } else if let listItemCellManager = cellManager as? ListItemCellManager {
                 let listItem = listItemCellManager.listItemRow.listItem
                 
@@ -244,9 +233,31 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         }
     }
     
+    // MARK: - provider only
+
     private func updateAllListItemsInProvider() {
         self.listItemsProvider.update(self.listItemRows.map{$0.listItemRow.listItem})
     }
+    
+    
+    // MARK: - NSTableViewDataSource
+ 
+    func numberOfRowsInTableView(aTableView: NSTableView) -> Int {
+        return self.cellManagers.count
+        
+    }
+    
+    //    func tableView(tableView: NSTableView!, objectValueForTableColumn tableColumn: NSTableColumn!, row: Int) -> AnyObject! {
+    //        println("column: \(tableColumn)")
+    //        return "foo"
+    //    }
+    
+    
+    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        return self.cellManagers[row].makeCell(tableView, tableColumn: tableColumn, row: row)
+    }
+    
+    // MARK: - ListItemCellManagerDelegate
     
     func rowAddTapped(cell: NSTableCellView, listItemRow: ListItemRow) {
         let index = self.tableView.rowForView(cell)
