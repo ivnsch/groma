@@ -1,14 +1,14 @@
 //
-//  EditListItemButtonsCell.swift
+//  ListItemCell.swift
 //  shoppin
 //
-//  Created by ischuetz on 29/03/15.
+//  Created by ischuetz on 03/04/15.
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
 import Cocoa
 
-protocol EditListItemButtonsCellDelegate: class {
+protocol ListItemCellDelegate: class {
     func rowAddTapped(cell: NSTableCellView, listItemRow: ListItemRow)
     func rowDeleteTapped(cell: NSTableCellView, listItemRow: ListItemRow)
     func rowUpTapped(cell: NSTableCellView, listItemRow: ListItemRow)
@@ -16,17 +16,34 @@ protocol EditListItemButtonsCellDelegate: class {
     func rowEditTapped(cell: NSTableCellView, listItemRow: ListItemRow)
 }
 
-class EditListItemButtonsCell: NSTableCellView {
+class ListItemCell: NSTableCellView {
+   
+    var listItemRow: ListItemRow? {
+        didSet {
+            if let listItemRow = self.listItemRow {
+                self.fill(listItemRow.listItem)
+            }
+        }
+    }
+    
+    weak var delegate: ListItemCellDelegate? // not sure if it makes sense here to declare as weak. The manager does not retain a reference to the cells
+    
+    @IBOutlet weak var nameLabel: NSTextField!
+    @IBOutlet weak var quantityLabel: NSTextField!
+    @IBOutlet weak var priceLabel: NSTextField!
 
-    var listItemRow: ListItemRow?
-    
-    weak var delegate: EditListItemButtonsCellDelegate? // not sure if it makes sense here to declare as weak. The manager does not retain a reference to the cells
-    
     override func drawRect(dirtyRect: NSRect) {
         super.drawRect(dirtyRect)
 
         // Drawing code here.
     }
+   
+    private func fill(listItem: ListItem) {
+        self.nameLabel.stringValue = listItem.product.name
+        self.quantityLabel.integerValue = listItem.quantity
+        self.priceLabel.floatValue = listItem.product.price
+    }
+    
     @IBAction func rowAddTapped(sender: NSButton) {
         self.unwrapHelper({self.delegate?.rowAddTapped($0, listItemRow: $1)})
     }

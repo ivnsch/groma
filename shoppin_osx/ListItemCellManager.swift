@@ -16,7 +16,7 @@ protocol ListItemCellManagerDelegate: class {
     func rowEditTapped(cell: NSTableCellView, listItemRow: ListItemRow)
 }
 
-class ListItemCellManager: CellManager, EditListItemButtonsCellDelegate {
+class ListItemCellManager: CellManager, ListItemCellDelegate {
     
     let listItemRow: ListItemRow
    
@@ -28,37 +28,13 @@ class ListItemCellManager: CellManager, EditListItemButtonsCellDelegate {
         self.delegate = delegate
     }
 
-    private func makeButtonsCell(columnIdentifier: ListItemColumnIdentifier, tableView: NSTableView, row: Int) -> EditListItemButtonsCell {
-        
-        let cell = tableView.makeViewWithIdentifier(columnIdentifier.rawValue, owner:self) as! EditListItemButtonsCell
-        
-        cell.listItemRow = self.listItemRow
-        cell.delegate = self
-        
-        return cell
-    }
-    
-    private func makeDefaultCell(columnIdentifier: ListItemColumnIdentifier, tableView: NSTableView, row: Int) -> NSTableCellView {
-        
-        let cell = tableView.makeViewWithIdentifier(columnIdentifier.rawValue, owner:self) as! NSTableCellView
-        
-        if let columnString = self.listItemRow.getColumnString(columnIdentifier) {
-            cell.textField?.stringValue = columnString
-        }
-        
-        return cell
-    }
-    
     override func makeCell(tableView: NSTableView, tableColumn: NSTableColumn?, row: Int) -> NSTableCellView {
+        let cell = tableView.makeViewWithIdentifier("listItem", owner:self) as! ListItemCell
         
-        let columnIdentifier = ListItemColumnIdentifier(rawValue: tableColumn!.identifier)!
+        cell.delegate = self
+        cell.listItemRow = self.listItemRow
         
-        switch columnIdentifier {
-        case .Edit:
-            return self.makeButtonsCell(columnIdentifier, tableView: tableView, row: row)
-        default:
-            return self.makeDefaultCell(columnIdentifier, tableView: tableView, row: row)
-        }
+        return cell
     }
     
     func rowAddTapped(rowIndex: NSTableCellView, listItemRow: ListItemRow) {

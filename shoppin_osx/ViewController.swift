@@ -149,7 +149,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
                 
                 self.cellManagers[rowIndex] = ListItemCellManager(listItem: updatedListItem, delegate: self)
                 
-                let editableColumnIndices: NSIndexSet =  NSIndexSet(indexesInRange: NSMakeRange(0, 3))
+                let editableColumnIndices: NSIndexSet =  NSIndexSet(indexesInRange: NSMakeRange(0, 1))
                 self.tableView.wrapUpdates {
                     self.tableView.reloadDataForRowIndexes(NSIndexSet(index: rowIndex), columnIndexes: editableColumnIndices)
                     
