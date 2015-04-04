@@ -9,7 +9,7 @@
 import Cocoa
 
 
-class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, ListItemCellManagerDelegate {
+class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, ListItemCellManagerDelegate, HeaderCellManagerDelegate {
    
     private var currentList:List?
     
@@ -44,7 +44,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         for listItem in listItems {
             if !foundSections.contains(listItem.section.name) {
                 foundSections.insert(listItem.section.name)
-                cellManagers.append(HeaderCellManager(section: listItem.section))
+                cellManagers.append(HeaderCellManager(section: listItem.section, delegate: self))
             }
             
             cellManagers.append(ListItemCellManager(listItem: listItem, delegate: self))
@@ -95,7 +95,8 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         )
         
     }
-    // MARK: - table view / model update
+    
+    // MARK: - table view / model / provider update
  
     private func addListItem(rowIndex: Int) {
         if let list = self.currentList {
@@ -199,6 +200,34 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         self.updateAllListItemsInProvider()
     }
 
+    private func removeSection(cell: HeaderCell, section: Section) {
+        let sectionRowIndex = self.tableView.rowForView(cell)
+        
+        func getListItemRowsInSection(sectionIndex: Int) -> NSIndexSet {
+            // collect indices until start of next section
+            var indexSet = NSMutableIndexSet()
+            for i in (sectionIndex + 1)..<self.cellManagers.count {
+                let cellManager = self.cellManagers[i]
+                if cellManager is ListItemCellManager {
+                    indexSet.addIndex(i)
+                } else if cellManager is HeaderCellManager {
+                    break
+                }
+            }
+            return indexSet
+        }
+        
+        self.listItemsProvider.remove(section)
+        
+        let indexSetToRemove = NSMutableIndexSet()
+        indexSetToRemove.addIndex(sectionRowIndex)
+        let sectionListItemRows = getListItemRowsInSection(sectionRowIndex)
+        indexSetToRemove.addIndexes(sectionListItemRows)
+        self.tableView.wrapUpdates {
+            self.tableView.removeRowsAtIndexes(indexSetToRemove, withAnimation: NSTableViewAnimationOptions.SlideDown)
+        }()
+    }
+    
     // MARK: - update all models
     // these methods mostly require to save the changes in data provider after they are executed
     
@@ -257,6 +286,14 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         return self.cellManagers[row].makeCell(tableView, tableColumn: tableColumn, row: row)
     }
     
+    // MARK: - HeaderCellManagerDelegate
+ 
+    func headerDeleteTapped(cell: HeaderCell, section: Section) {
+        DialogUtils.confirmAlert(okTitle: "Yes", title: "Are you sure?", msg: "This will delete all the items in the section", okAction: {
+            self.removeSection(cell, section: section)
+        })
+    }
+
     // MARK: - ListItemCellManagerDelegate
     
     func rowAddTapped(cell: NSTableCellView, listItemRow: ListItemRow) {

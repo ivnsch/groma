@@ -23,6 +23,10 @@ class ListItemProviderImpl:ListItemProvider {
         return self.cdProvider.remove(listItem)
     }
     
+    func remove(section:Section) -> Bool {
+        return self.cdProvider.remove(section)
+    }
+    
     func add(listItem:ListItem) -> ListItem? {
         // return the saved object, to get object with generated id
         let cdListItem = self.cdProvider.saveListItem(listItem)

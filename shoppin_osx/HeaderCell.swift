@@ -8,6 +8,10 @@
 
 import Cocoa
 
+protocol HeaderCellDelegate: class {
+    func headerDeleteTapped(cell: HeaderCell)
+}
+
 class HeaderCell: NSTableCellView {
     
     @IBOutlet weak var view: NSView!
@@ -21,6 +25,8 @@ class HeaderCell: NSTableCellView {
             }
         }
     }
+   
+    weak var delegate: HeaderCellDelegate?
     
     init() {
         super.init(frame: CGRectZero)
@@ -52,5 +58,9 @@ class HeaderCell: NSTableCellView {
         NSRectFill(dirtyRect)
         
         super.drawRect(dirtyRect)
+    }
+    
+    @IBAction func headerDeleteTapped(sender: NSButton) {
+        delegate?.headerDeleteTapped(self)
     }
 }

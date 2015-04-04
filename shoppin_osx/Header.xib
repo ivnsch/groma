@@ -24,9 +24,21 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Pmk-Aw-gsI">
+                    <rect key="frame" x="611" y="13" width="49" height="32"/>
+                    <buttonCell key="cell" type="push" title="X" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bM4-so-pEb">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="headerDeleteTapped:" target="-2" id="7PS-W4-eci"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
+                <constraint firstAttribute="centerY" secondItem="Pmk-Aw-gsI" secondAttribute="centerY" id="ZUH-qV-u6J"/>
                 <constraint firstAttribute="centerY" secondItem="2Lh-q6-KLq" secondAttribute="centerY" id="eYI-Xo-kh3"/>
+                <constraint firstAttribute="trailing" secondItem="Pmk-Aw-gsI" secondAttribute="trailing" constant="20" id="iaC-P8-gAz"/>
                 <constraint firstItem="2Lh-q6-KLq" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" id="jZd-ie-cTM"/>
             </constraints>
             <point key="canvasLocation" x="434" y="358.5"/>

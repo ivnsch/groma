@@ -143,12 +143,47 @@ class CDListItemProvider: CDProvider {
         return cdListItem
     }
     
-    func remove(listItem:ListItem) -> Bool {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
-
+    func remove(listItem: ListItem, save: Bool = true) -> Bool {
         let cdListItem = self.loadListItem(listItem.id)
+        return self.remove(cdListItem, save: save)
+    }
+    
+    private func remove(cdListItem: CDListItem, save: Bool = true) -> Bool {
+        let appDelegate = SharedAppDelegate.getAppDelegate()
         appDelegate.managedObjectContext!.deleteObject(cdListItem)
-
+        
+        if save {
+            return self.save()
+        } else {
+            return true
+        }
+    }
+    
+    private func loadListItems(section: Section) -> [CDListItem] {
+        return self.load(
+            entityName: "CDListItem",
+            type: CDListItem.self,
+            predicate: NSPredicate(format: "section.name=%@", section.name))
+    }
+    
+    // remove section and all the listitems assigned to it
+    func remove(section:Section) -> Bool {
+        let appDelegate = SharedAppDelegate.getAppDelegate()
+ 
+        // remove listitems
+        let sectionCDListItems = self.loadListItems(section)
+        for cdListItem in sectionCDListItems {
+            self.remove(cdListItem, save: false) // we save after everything is updated
+        }
+       
+        // remove section
+        if let cdSection = self.loadSection(section.name) {
+            self.removeObject(cdSection)
+            
+        } else {
+            println("Error: Illegal state - trying to remove a section that is not stored")
+        }
+        
         return self.save()
     }
     
