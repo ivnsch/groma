@@ -688,11 +688,31 @@
                                             <action selector="menuAddTapped:" target="XfG-lQ-9wD" id="ExF-Kl-zMo"/>
                                         </connections>
                                     </button>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ZeW-xp-g4Q">
+                                        <rect key="frame" x="18" y="17" width="76" height="17"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Total price: " id="5bU-o9-vDl">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J1N-8k-GSD">
+                                        <rect key="frame" x="102" y="17" width="12" height="17"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0" id="YEm-FO-DaE">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="ZeW-xp-g4Q" firstAttribute="leading" secondItem="QlP-gk-xmn" secondAttribute="leading" constant="20" id="7SE-0b-tXD"/>
                                     <constraint firstAttribute="height" constant="50" id="B8W-8P-Ln2"/>
                                     <constraint firstAttribute="trailing" secondItem="U7l-qA-mFk" secondAttribute="trailing" constant="20" id="F4i-GY-Hoc"/>
+                                    <constraint firstItem="J1N-8k-GSD" firstAttribute="leading" secondItem="ZeW-xp-g4Q" secondAttribute="trailing" constant="12" id="etO-FA-u97"/>
                                     <constraint firstItem="U7l-qA-mFk" firstAttribute="top" secondItem="QlP-gk-xmn" secondAttribute="top" constant="14" id="g6c-CT-jY4"/>
+                                    <constraint firstAttribute="centerY" secondItem="J1N-8k-GSD" secondAttribute="centerY" id="nMG-Tb-DIk"/>
+                                    <constraint firstAttribute="centerY" secondItem="ZeW-xp-g4Q" secondAttribute="centerY" id="tb7-Zc-iob"/>
                                     <constraint firstAttribute="bottom" secondItem="U7l-qA-mFk" secondAttribute="bottom" constant="15" id="wet-wU-0aX"/>
                                 </constraints>
                             </customView>
@@ -703,7 +723,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="48" rowSizeStyle="automatic" headerView="l4E-Xu-o8P" viewBased="YES" id="uH3-ov-6Kl">
-                                            <rect key="frame" x="0.0" y="0.0" width="633" height="0.0"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="798" height="0.0"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -748,8 +768,8 @@
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                 </textField>
-                                                                <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GOP-Ez-ne4">
-                                                                    <rect key="frame" x="555" y="0.0" width="367" height="48"/>
+                                                                <customView translatesAutoresizingMaskIntoConstraints="NO" id="GOP-Ez-ne4">
+                                                                    <rect key="frame" x="428" y="0.0" width="367" height="48"/>
                                                                     <subviews>
                                                                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pHU-fO-8ib">
                                                                             <rect key="frame" x="14" y="7" width="56" height="32"/>
@@ -886,11 +906,12 @@
                     </view>
                     <connections>
                         <outlet property="tableView" destination="uH3-ov-6Kl" id="pnP-es-MAN"/>
+                        <outlet property="totalPriceTextField" destination="J1N-8k-GSD" id="P1b-kb-LUg"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="150.5" y="791.5"/>
+            <point key="canvasLocation" x="150" y="791"/>
         </scene>
     </scenes>
 </document>

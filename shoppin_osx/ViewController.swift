@@ -13,6 +13,8 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
    
     private var currentList:List?
     
+    @IBOutlet weak var totalPriceTextField: NSTextField!
+    
     @IBOutlet weak var tableView: NSTableView!
 
     private var cellManagers:[CellManager] = []
@@ -35,6 +37,8 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         let listItems = self.listItemsProvider.listItems(list)
         
         self.cellManagers = self.createCellManagers(listItems)
+        
+        self.updateTotalPriceLabel()
     }
     
     private func createCellManagers(listItems: [ListItem]) -> [CellManager] {
@@ -61,8 +65,20 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     @IBAction func menuAddTapped(sender: NSButton) {
         let rowIndex = self.cellManagers.count
         self.addListItem(rowIndex)
+        
+        self.updateTotalPriceLabel()
     }
 
+    private var totalPrice: Float {
+        return self.listItemRows.reduce(Float(0)) {(sum, listItemCellManager) in
+            let listItem = listItemCellManager.listItemRow.listItem
+            return sum + (listItem.product.price * Float(listItem.quantity))
+        }
+    }
+
+    private func updateTotalPriceLabel() {
+        self.totalPriceTextField.stringValue = self.totalPrice.toString(2)!
+    }
 
     private func toListItemInput(listItem: ListItem) -> ListItemInput {
         return ListItemInput(
@@ -229,6 +245,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         
         self.updateListItemsModelsOrder()
         self.updateAllListItemsInProvider()
+        self.updateTotalPriceLabel()
     }
     
     private func updateListItem(rowIndex: Int, listItemRow: ListItemRow) {
@@ -250,6 +267,8 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
                 }()
  
                 editListItemController.close()
+                
+                self.updateTotalPriceLabel()
             }
 
             editListItemController.windowDidLoadFunc = {
@@ -272,6 +291,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         
         self.updateListItemsModelsOrder()
         self.updateAllListItemsInProvider()
+        self.updateTotalPriceLabel()
     }
 
     private func moveRowWithLimitsCheck(rowIndex: Int, targetIndex: Int, anim: NSTableViewAnimationOptions) {
@@ -309,6 +329,8 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         self.tableView.wrapUpdates {
             self.tableView.removeRowsAtIndexes(indexSetToRemove, withAnimation: NSTableViewAnimationOptions.SlideDown)
         }()
+        
+        self.updateTotalPriceLabel()
     }
     
     // MARK: - update all models
