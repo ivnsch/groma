@@ -93,24 +93,120 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             list: listItem.list,
             order: listItem.order
         )
-        
+    }
+    
+    // MARK: - table view query
+ 
+    private func getSectionHeaderRowIndex(section: Section) -> Int? {
+       return Array(enumerate(self.cellManagers)).filter {
+            if let headerCellManager = $0.element as? HeaderCellManager {
+                return headerCellManager.section.name == section.name
+            } else {
+                return false
+            }
+        }.first?.index
+    }
+    
+    private func getListItemRowsInSection(sectionIndex: Int) -> NSIndexSet {
+        // collect indices until start of next section
+        var indexSet = NSMutableIndexSet()
+        for i in (sectionIndex + 1)..<self.cellManagers.count {
+            let cellManager = self.cellManagers[i]
+            if cellManager is ListItemCellManager {
+                indexSet.addIndex(i)
+            } else if cellManager is HeaderCellManager {
+                break
+            }
+        }
+        return indexSet
+    }
+    
+    // returns last index in section, nil if the section isn't in the table view (shouldn't happen normally)
+    private func getLastIndexInSection(section: Section) -> Int? {
+        if let sectionIndex = self.getSectionHeaderRowIndex(section) {
+            let sectionListItemsCount = self.getListItemRowsInSection(sectionIndex).count
+            return sectionIndex + sectionListItemsCount
+        } else {
+            println("Warning: didn't find a header for section")
+            return nil
+        }
+    }
+    
+    private func getHeader(rowIndex: Int) -> HeaderCellManager {
+        for i in reverse(0...rowIndex) {
+            if let headerCellManager = self.cellManagers[i] as? HeaderCellManager {
+                return headerCellManager
+            }
+        }
+        fatalError("Couldn't find header for a row. Header-less rows are not suppoted")
+    }
+
+    // returns index of last row in section where rowIndex is
+    // returns -1 if the tableview is empty
+    private func getEndOfCurrentSection(rowIndex: Int) -> Int {
+        for i in (rowIndex + 1)..<self.cellManagers.count {
+            if let headerCellManager = cellManagers[i] as? HeaderCellManager {
+                return i - 1
+            }
+        }
+        // there were no new headers after rowIndex - we are in the last section
+        return self.cellManagers.count - 1
     }
     
     // MARK: - table view / model / provider update
  
+    // param: rowIndex: the index of the row that will be added
     private func addListItem(rowIndex: Int) {
+        
+        let previousRow = rowIndex - 1 // the row user pressed to add or elements.count-1 when add from menu. Note it's -1 when table view is empty
+        
         if let list = self.currentList {
             let editListItemController = EditListItemController()
             editListItemController.addTappedFunc = {listItemInput in
                 
-                let listItemMaybe = self.listItemsProvider.add(listItemInput, list: list, order: rowIndex)
+                let listItemMaybe = self.listItemsProvider.add(listItemInput, list: list, order: rowIndex) // note that this also adds the section if it doesn't exist yet
                 
                 if let currentList = self.currentList, listItem = listItemMaybe {
                     
                     let cellManager = ListItemCellManager(listItem: listItem, delegate: self)
-                    self.cellManagers.insert(cellManager, atIndex: rowIndex)
+                    
+                    var indexPathsToInsert = NSMutableIndexSet()
+                    
+                    if let lastIndexInSection = self.getLastIndexInSection(listItem.section) { // section exists
+                       
+                        let header = self.getHeader(previousRow)
+                        if header.section == listItem.section { // rowIndex is in the section - insert at rowIndex
+                            self.cellManagers.insert(cellManager, atIndex: rowIndex)
+                            indexPathsToInsert.addIndex(rowIndex)
+                            
+                        } else { // rowIndex is not in the section (user selected changed the section in the popup) - insert at the end of entered section
+                            if let lastIndexInSection = self.getLastIndexInSection(listItem.section) {
+                                let newListItemIndex = lastIndexInSection + 1
+                                self.cellManagers.insert(cellManager, atIndex: newListItemIndex)
+                                indexPathsToInsert.addIndex(newListItemIndex)
+                                
+                            } else {
+                                println("Error: couldn't get last index in section, can't add item row to tableview")
+                            }
+                        }
+ 
+                    } else { // new section
+                        // insert section header at the end of current section
+                        let newSectionHeader = HeaderCellManager(section: listItem.section, delegate: self)
+                        
+                        let endOfCurrentSection = self.getEndOfCurrentSection(previousRow) // -1 to get current row - rowIndex is index of new item
+                        let newHeaderIndex = endOfCurrentSection + 1
+
+                        self.cellManagers.insert(newSectionHeader, atIndex: newHeaderIndex)
+                        // insert new item below the new header
+                        let newListItemIndex = newHeaderIndex + 1
+                        self.cellManagers.insert(cellManager, atIndex: newListItemIndex)
+                        indexPathsToInsert.addIndex(newHeaderIndex)
+                        indexPathsToInsert.addIndex(newListItemIndex)
+                    }
+                    
                     self.tableView.wrapUpdates {
-                        self.tableView.insertRowsAtIndexes(NSIndexSet(index: rowIndex), withAnimation: NSTableViewAnimationOptions.SlideDown)
+                        self.tableView.insertRowsAtIndexes(indexPathsToInsert, withAnimation: NSTableViewAnimationOptions.SlideDown)
                     }()
                     
                 } else {
@@ -203,25 +299,12 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     private func removeSection(cell: HeaderCell, section: Section) {
         let sectionRowIndex = self.tableView.rowForView(cell)
         
-        func getListItemRowsInSection(sectionIndex: Int) -> NSIndexSet {
-            // collect indices until start of next section
-            var indexSet = NSMutableIndexSet()
-            for i in (sectionIndex + 1)..<self.cellManagers.count {
-                let cellManager = self.cellManagers[i]
-                if cellManager is ListItemCellManager {
-                    indexSet.addIndex(i)
-                } else if cellManager is HeaderCellManager {
-                    break
-                }
-            }
-            return indexSet
-        }
-        
+
         self.listItemsProvider.remove(section)
         
         let indexSetToRemove = NSMutableIndexSet()
         indexSetToRemove.addIndex(sectionRowIndex)
-        let sectionListItemRows = getListItemRowsInSection(sectionRowIndex)
+        let sectionListItemRows = self.getListItemRowsInSection(sectionRowIndex)
         indexSetToRemove.addIndexes(sectionListItemRows)
         self.tableView.wrapUpdates {
             self.tableView.removeRowsAtIndexes(indexSetToRemove, withAnimation: NSTableViewAnimationOptions.SlideDown)
