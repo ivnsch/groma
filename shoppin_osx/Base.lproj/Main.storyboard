@@ -716,8 +716,46 @@
                                     <constraint firstAttribute="bottom" secondItem="U7l-qA-mFk" secondAttribute="bottom" constant="15" id="wet-wU-0aX"/>
                                 </constraints>
                             </customView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="1NE-Ax-fe1">
+                                <rect key="frame" x="0.0" y="430" width="800" height="20"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GmW-e8-vyq">
+                                        <rect key="frame" x="18" y="2" width="41" height="17"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Name" id="kVY-N9-Eix">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="syQ-W2-XhF">
+                                        <rect key="frame" x="248" y="2" width="36" height="17"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Price" id="cL5-5B-GIR">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ejw-R7-Wk0">
+                                        <rect key="frame" x="348" y="2" width="56" height="17"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Quantity" id="QaS-a3-qUq">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="GmW-e8-vyq" firstAttribute="leading" secondItem="1NE-Ax-fe1" secondAttribute="leading" constant="20" id="3wZ-xp-P1a"/>
+                                    <constraint firstAttribute="centerY" secondItem="ejw-R7-Wk0" secondAttribute="centerY" id="E27-PP-zaD"/>
+                                    <constraint firstItem="ejw-R7-Wk0" firstAttribute="leading" secondItem="1NE-Ax-fe1" secondAttribute="leading" constant="350" id="Lpg-uc-ZXx"/>
+                                    <constraint firstAttribute="height" constant="20" id="QBK-D4-D1o"/>
+                                    <constraint firstItem="syQ-W2-XhF" firstAttribute="leading" secondItem="1NE-Ax-fe1" secondAttribute="leading" constant="250" id="Xdc-BO-lpH"/>
+                                    <constraint firstAttribute="centerY" secondItem="GmW-e8-vyq" secondAttribute="centerY" id="m7C-Rm-xgI"/>
+                                    <constraint firstAttribute="centerY" secondItem="syQ-W2-XhF" secondAttribute="centerY" id="pKN-A9-xQg"/>
+                                </constraints>
+                            </customView>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="50" horizontalPageScroll="10" verticalLineScroll="50" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cto-Xg-dV0">
-                                <rect key="frame" x="0.0" y="0.0" width="800" height="450"/>
+                                <rect key="frame" x="0.0" y="0.0" width="800" height="430"/>
                                 <clipView key="contentView" misplaced="YES" id="PqH-hK-Lgc">
                                     <rect key="frame" x="1" y="0.0" width="238" height="134"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -899,10 +937,13 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="cto-Xg-dV0" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="2Al-vm-yGf"/>
-                            <constraint firstItem="cto-Xg-dV0" firstAttribute="top" secondItem="QlP-gk-xmn" secondAttribute="bottom" id="5TJ-EL-cZF"/>
+                            <constraint firstItem="cto-Xg-dV0" firstAttribute="top" secondItem="1NE-Ax-fe1" secondAttribute="bottom" id="8uJ-3D-R11"/>
                             <constraint firstAttribute="trailing" secondItem="cto-Xg-dV0" secondAttribute="trailing" id="CZM-2v-AbO"/>
+                            <constraint firstAttribute="trailing" secondItem="1NE-Ax-fe1" secondAttribute="trailing" id="Igl-Gm-D2v"/>
                             <constraint firstAttribute="bottom" secondItem="cto-Xg-dV0" secondAttribute="bottom" id="Iso-di-rES"/>
+                            <constraint firstItem="1NE-Ax-fe1" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="JT5-QG-goa"/>
                             <constraint firstItem="QlP-gk-xmn" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="SIL-AM-A9q"/>
+                            <constraint firstItem="1NE-Ax-fe1" firstAttribute="top" secondItem="QlP-gk-xmn" secondAttribute="bottom" id="da9-OF-TIU"/>
                             <constraint firstAttribute="trailing" secondItem="QlP-gk-xmn" secondAttribute="trailing" id="uGY-rP-QvW"/>
                             <constraint firstItem="QlP-gk-xmn" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="xrT-Wf-i3T"/>
                         </constraints>
