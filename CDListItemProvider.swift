@@ -114,7 +114,9 @@ class CDListItemProvider: CDProvider {
             }
         }
         
-        self.save()
+        if !self.save() {
+            println("Warning: could't save after list items bulk update")
+        }
         
         return updatedCDListItems
     }
