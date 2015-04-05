@@ -750,7 +750,7 @@
                                                                     <rect key="frame" x="0.0" y="0.0" width="428" height="48"/>
                                                                     <subviews>
                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gel-EO-Vp6">
-                                                                            <rect key="frame" x="-2" y="15" width="38" height="17"/>
+                                                                            <rect key="frame" x="18" y="15" width="38" height="17"/>
                                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="BdR-ng-doD">
                                                                                 <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -758,7 +758,7 @@
                                                                             </textFieldCell>
                                                                         </textField>
                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="M78-Ub-a8C">
-                                                                            <rect key="frame" x="-2" y="15" width="38" height="17"/>
+                                                                            <rect key="frame" x="248" y="15" width="38" height="17"/>
                                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="E4a-Nm-34w">
                                                                                 <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -766,7 +766,7 @@
                                                                             </textFieldCell>
                                                                         </textField>
                                                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3XP-oD-yJt">
-                                                                            <rect key="frame" x="-2" y="15" width="38" height="17"/>
+                                                                            <rect key="frame" x="348" y="15" width="38" height="17"/>
                                                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="LUu-UC-hSn">
                                                                                 <font key="font" metaFont="system"/>
                                                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -777,10 +777,10 @@
                                                                     <constraints>
                                                                         <constraint firstAttribute="centerY" secondItem="3XP-oD-yJt" secondAttribute="centerY" id="CC8-Bn-vQk"/>
                                                                         <constraint firstAttribute="centerY" secondItem="gel-EO-Vp6" secondAttribute="centerY" id="M7O-j0-lNH"/>
-                                                                        <constraint firstItem="M78-Ub-a8C" firstAttribute="leading" secondItem="AVo-qT-CAh" secondAttribute="leading" id="TB8-D5-jvE"/>
+                                                                        <constraint firstItem="M78-Ub-a8C" firstAttribute="leading" secondItem="AVo-qT-CAh" secondAttribute="leading" constant="250" id="TB8-D5-jvE"/>
                                                                         <constraint firstAttribute="centerY" secondItem="M78-Ub-a8C" secondAttribute="centerY" id="g2e-I0-8JK"/>
-                                                                        <constraint firstItem="gel-EO-Vp6" firstAttribute="leading" secondItem="AVo-qT-CAh" secondAttribute="leading" id="ggt-um-k0q"/>
-                                                                        <constraint firstItem="3XP-oD-yJt" firstAttribute="leading" secondItem="AVo-qT-CAh" secondAttribute="leading" id="v6t-Sd-2m4"/>
+                                                                        <constraint firstItem="gel-EO-Vp6" firstAttribute="leading" secondItem="AVo-qT-CAh" secondAttribute="leading" constant="20" id="ggt-um-k0q"/>
+                                                                        <constraint firstItem="3XP-oD-yJt" firstAttribute="leading" secondItem="AVo-qT-CAh" secondAttribute="leading" constant="350" id="v6t-Sd-2m4"/>
                                                                     </constraints>
                                                                 </customView>
                                                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="GOP-Ez-ne4">

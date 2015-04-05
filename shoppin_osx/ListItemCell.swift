@@ -38,23 +38,6 @@ class ListItemCell: NSTableCellView {
 
         // Drawing code here.
     }
-  
-    override func viewWillMoveToSuperview(newSuperview: NSView?) {
-        self.addColumnConstraints()
-    }
-    
-    // to space views evenly in container we need programmatic constraints, so we add all the constraints for these views here
-    private func addColumnConstraints() {
-        
-        self.columnsContainerView.removeAllConstraints()
-        
-        let columnViews: [NSView] = [nameLabel, quantityLabel, priceLabel]
-        let constraints = NSLayoutConstraint.distributeEvenlyHorizontallyConstraint(columnViews, leading: 20, trailing: 20)!
-        self.columnsContainerView.addConstraints(constraints)
-        for view in columnViews {
-            view.centerVerticallyInParent()
-        }
-    }
     
     private func fill(listItem: ListItem) {
         self.nameLabel.stringValue = listItem.product.name
