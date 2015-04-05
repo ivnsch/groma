@@ -14,11 +14,12 @@ protocol HeaderCellManagerDelegate: class {
 
 class HeaderCellManager: CellManager, HeaderCellDelegate {
     
-    let section: Section
+    var section: Section!
     
     weak var delegate: HeaderCellManagerDelegate?
-    
-    init(section: Section, delegate: HeaderCellManagerDelegate) {
+   
+    required convenience init(section: Section, delegate: HeaderCellManagerDelegate) {
+        self.init()
         self.section = section
         self.delegate = delegate
     }
@@ -34,5 +35,26 @@ class HeaderCellManager: CellManager, HeaderCellDelegate {
     
     func headerDeleteTapped(cell: HeaderCell) {
         self.delegate?.headerDeleteTapped(cell, section: self.section)
+    }
+    
+    override func overridableEquals(other: CellManager) -> Bool {
+        if let otherHeaderCellManager = other as? HeaderCellManager {
+            return self.section == otherHeaderCellManager.section
+        }
+        return super.overridableEquals(other)
+    }
+    
+    // MARK: - NSCoding
+    // required for drag & drop
+    
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    required init() {
+        super.init()
+    }
+    
+    override func encodeWithCoder(aCoder: NSCoder) {
     }
 }

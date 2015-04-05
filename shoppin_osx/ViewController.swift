@@ -33,7 +33,10 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         let currentList = self.listItemsProvider.firstList
         self.currentList = currentList
         self.initList(currentList)
+        
+        self.tableView.registerForDraggedTypes([NSGeneralPboard])
     }
+    
 
     private func initList(list:List) {
         let listItems = self.listItemsProvider.listItems(list)
@@ -56,10 +59,12 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         for listItem in listItems {
             if !foundSections.contains(listItem.section.name) {
                 foundSections.insert(listItem.section.name)
-                cellManagers.append(HeaderCellManager(section: listItem.section, delegate: self))
+                let cellManager = HeaderCellManager(section: listItem.section, delegate: self)
+                cellManagers.append(cellManager)
             }
-            
-            cellManagers.append(ListItemCellManager(listItem: listItem, delegate: self))
+           
+            let cellManager = ListItemCellManager(listItem: listItem, delegate: self)
+            cellManagers.append(cellManager)
         }
         return cellManagers
     }
@@ -175,6 +180,66 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         }
         // there were no new headers after rowIndex - we are in the last section
         return self.cellManagers.count - 1
+    }
+    
+    // MARK: - drag & drop
+    
+    func tableView(tableView: NSTableView, writeRowsWithIndexes rowIndexes: NSIndexSet, toPasteboard pboard: NSPasteboard) -> Bool {
+       
+        var cellManagers:[CellManager] = []
+        for index in rowIndexes {
+            cellManagers.append(self.cellManagers[index])
+        }
+       
+        // for now single row drap and drop
+        if let cellManager = cellManagers.first {
+            
+            if cellManager is HeaderCellManager {
+                return false // drag & drop for sections will be implemented later
+                
+            } else {
+                let data = NSKeyedArchiver.archivedDataWithRootObject(cellManager)
+                pboard.declareTypes([NSGeneralPboard], owner: nil)
+                pboard.setData(data, forType: NSGeneralPboard)
+                return true
+            }
+        }
+        
+        return false
+    }
+    
+    func tableView(tableView: NSTableView, validateDrop info: NSDraggingInfo, proposedRow row: Int, proposedDropOperation dropOperation: NSTableViewDropOperation) -> NSDragOperation {
+        tableView.setDropRow(row, dropOperation: NSTableViewDropOperation.Above)
+        return NSDragOperation.Move
+    }
+    
+    func tableView(tableView: NSTableView, acceptDrop info: NSDraggingInfo, row: Int, dropOperation: NSTableViewDropOperation) -> Bool {
+        //        let pboard = info.draggingPasteboard()
+        //
+        //        let data = pboard.dataForType(NSGeneralPboard)
+        //
+        //        let cellManager = NSKeyedUnarchiver.unarchiveObjectWithData(data!) as! CellManager
+        //
+        //        if let index = find(self.cellManagers, cellManager) {
+        //
+        //            self.cellManagers.removeAtIndex(index)
+        //            self.cellManagers.insert(cellManager, atIndex: row)
+        //
+        //            self.modelUpdatesOnRowMoved()
+        //
+        //            self.tableView.reloadData()
+        //
+        //            return true
+        //
+        //        } else {
+        //            println("Error: trying to drop item that is not in the cell managers (!?)")
+        //            return false
+        //        }
+        
+        // commented and return false because executing this method freezes XCode, since added find/removeAtIndex (6.3 beta (6D554n))
+        // maybe related with equals implementations, which are used by find?
+        // dropping works so far except part for find/remove index, which couldn't be tested
+        return false
     }
     
     // MARK: - table view / model / provider update
@@ -319,11 +384,15 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             self.tableView.insertRowsAtIndexes(NSIndexSet(index: targetIndex), withAnimation: NSTableViewAnimationOptions.EffectFade | anim)
         }()
         
-        self.updateListItemsModelsOrder() // this can be optimised in changing only order of items at rowIndex and targetIndex
-        self.assignListItemsToSections()
-        self.updateAllListItemsInProvider()
+        self.modelUpdatesOnRowMoved()
     }
-
+    
+    private func modelUpdatesOnRowMoved() {
+        self.updateListItemsModelsOrder() // update order field
+        self.assignListItemsToSections() // maybe section of item was changed - update sections
+        self.updateAllListItemsInProvider() // write updated items to db
+    }
+    
     private func removeSection(cell: HeaderCell, section: Section) {
         let sectionRowIndex = self.tableView.rowForView(cell)
         
@@ -353,7 +422,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         }
     }
     
-    func assignListItemsToSections() {
+    private func assignListItemsToSections() {
         
         var currentSection:Section?
         
