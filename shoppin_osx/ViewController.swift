@@ -43,6 +43,12 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         self.updateTotalPriceLabel()
     }
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+
+        self.tableView.reloadData()
+    }
+    
     private func createCellManagers(listItems: [ListItem]) -> [CellManager] {
         var cellManagers:[CellManager] = []
         var foundSections = Set<String>() // quick lookup
