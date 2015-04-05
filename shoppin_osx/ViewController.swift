@@ -28,6 +28,8 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.tableView.headerView = nil // we will use a normal view as header
+
         let currentList = self.listItemsProvider.firstList
         self.currentList = currentList
         self.initList(currentList)
