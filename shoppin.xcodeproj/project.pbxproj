@@ -102,6 +102,8 @@
 		EBDFE3BB1ACEEFDC00E48F95 /* Header.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBDFE3BA1ACEEFDC00E48F95 /* Header.xib */; };
 		EBDFE3BF1ACEF60100E48F95 /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3BE1ACEF60100E48F95 /* HeaderCell.swift */; };
 		EBDFE3C21AD00E8200E48F95 /* DialogUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C11AD00E8200E48F95 /* DialogUtils.swift */; };
+		EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C31AD11EA100E48F95 /* NSView.swift */; };
+		EBDFE3C61AD11F6700E48F95 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */; };
 		EBEEDD691A49C75400FC3B29 /* CDSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD681A49C75400FC3B29 /* CDSection.swift */; };
 		EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6A1A49C94F00FC3B29 /* Section.swift */; };
 		EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */; };
@@ -214,6 +216,8 @@
 		EBDFE3BA1ACEEFDC00E48F95 /* Header.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Header.xib; sourceTree = "<group>"; };
 		EBDFE3BE1ACEF60100E48F95 /* HeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderCell.swift; sourceTree = "<group>"; };
 		EBDFE3C11AD00E8200E48F95 /* DialogUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogUtils.swift; sourceTree = "<group>"; };
+		EBDFE3C31AD11EA100E48F95 /* NSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSView.swift; sourceTree = "<group>"; };
+		EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
 		EBEEDD681A49C75400FC3B29 /* CDSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CDSection.swift; sourceTree = "<group>"; };
 		EBEEDD6A1A49C94F00FC3B29 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionMapper.swift; sourceTree = "<group>"; };
@@ -431,6 +435,8 @@
 			isa = PBXGroup;
 			children = (
 				EB4FD44D1AC6BE390000F952 /* NSTableView.swift */,
+				EBDFE3C31AD11EA100E48F95 /* NSView.swift */,
+				EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */,
 			);
 			name = extension;
 			sourceTree = "<group>";
@@ -970,12 +976,14 @@
 				EB4FD44E1AC6BE390000F952 /* NSTableView.swift in Sources */,
 				EB4FD4511AC6BE960000F952 /* Globals.swift in Sources */,
 				EB55676A1A8643BC00CD3EC6 /* Section.swift in Sources */,
+				EBDFE3C61AD11F6700E48F95 /* NSLayoutConstraint.swift in Sources */,
 				EBDFE3B51ACEEB5400E48F95 /* HeaderCellManager.swift in Sources */,
 				EBDFE3A91ACE82F000E48F95 /* ListItemCellManager.swift in Sources */,
 				EB5567801A8658B000CD3EC6 /* CDProvider.swift in Sources */,
 				EB5567641A86438600CD3EC6 /* CDProduct.swift in Sources */,
 				EBDFE3C21AD00E8200E48F95 /* DialogUtils.swift in Sources */,
 				EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */,
+				EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */,
 				EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
