@@ -88,6 +88,12 @@
 		EB5567821A8658B700CD3EC6 /* CDInventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFF1A5973330058103B /* CDInventoryProvider.swift */; };
 		EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F41A3CA4BA0048E37C /* ProviderFactory.swift */; };
 		EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6A207C1ACC079000B9BCB2 /* UITableView.swift */; };
+		EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */; };
+		EB89D3071AD41E2D00B6E0D0 /* ListsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */; };
+		EB89D33C1AD44BD400B6E0D0 /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */; };
+		EB89D33D1AD44BD400B6E0D0 /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */; };
+		EB89D3471AD4536300B6E0D0 /* AddListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D3441AD4536300B6E0D0 /* AddListController.swift */; };
+		EB89D3491AD4536300B6E0D0 /* AddListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB89D3451AD4536300B6E0D0 /* AddListController.xib */; };
 		EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE61A8610550038355B /* AppDelegate.swift */; };
 		EB9F6CE91A8610550038355B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE81A8610550038355B /* ViewController.swift */; };
 		EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEA1A8610550038355B /* Images.xcassets */; };
@@ -197,6 +203,11 @@
 		EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedAppDelegate.m; sourceTree = "<group>"; };
 		EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-osx-Bridging-Header.h"; sourceTree = "<group>"; };
 		EB6A207C1ACC079000B9BCB2 /* UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITableView.swift; path = shoppin/UITableView.swift; sourceTree = "<group>"; };
+		EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
+		EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListsViewController.xib; sourceTree = "<group>"; };
+		EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
+		EB89D3441AD4536300B6E0D0 /* AddListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddListController.swift; sourceTree = "<group>"; };
+		EB89D3451AD4536300B6E0D0 /* AddListController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddListController.xib; sourceTree = "<group>"; };
 		EB9F6CE21A8610550038355B /* shoppin_osx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin_osx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB9F6CE51A8610550038355B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB9F6CE61A8610550038355B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -425,6 +436,7 @@
 				EB2F5D7E1A559C8800DBC4AF /* Constants.swift */,
 				EB4FD44F1AC6BE960000F952 /* Globals.swift */,
 				EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */,
+				EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -496,6 +508,10 @@
 				EB9F6CEC1A8610550038355B /* Main.storyboard */,
 				EB9F6CE41A8610550038355B /* Supporting Files */,
 				EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */,
+				EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */,
+				EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */,
+				EB89D3441AD4536300B6E0D0 /* AddListController.swift */,
+				EB89D3451AD4536300B6E0D0 /* AddListController.xib */,
 			);
 			path = shoppin_osx;
 			sourceTree = "<group>";
@@ -813,6 +829,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB89D3071AD41E2D00B6E0D0 /* ListsViewController.xib in Resources */,
+				EB89D3491AD4536300B6E0D0 /* AddListController.xib in Resources */,
 				EBDFE3BB1ACEEFDC00E48F95 /* Header.xib in Resources */,
 				EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */,
 				EB9F6CEE1A8610550038355B /* Main.storyboard in Resources */,
@@ -900,6 +918,7 @@
 				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
 				EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */,
 				EB2F5D261A4DE56B00DBC4AF /* DoneViewController.swift in Sources */,
+				EB89D33C1AD44BD400B6E0D0 /* Selectable.swift in Sources */,
 				EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */,
 				EB20FC071A599AE20058103B /* InventoryTableViewCell.swift in Sources */,
 				EB20FBF61A59701C0058103B /* CDInventoryItem.swift in Sources */,
@@ -950,11 +969,13 @@
 				EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */,
 				EB5567611A86437B00CD3EC6 /* SectionMapper.swift in Sources */,
 				EBDFE3A71ACE829400E48F95 /* CellManager.swift in Sources */,
+				EB89D33D1AD44BD400B6E0D0 /* Selectable.swift in Sources */,
 				EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */,
 				EB4FD4561AC6D6690000F952 /* EditListItemController.swift in Sources */,
 				EB4FD45D1AC7148C0000F952 /* String.swift in Sources */,
 				EB4FD46D1AC73B590000F952 /* PreferencesManager.swift in Sources */,
 				EB5567811A8658B400CD3EC6 /* CDListItemProvider.swift in Sources */,
+				EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */,
 				EB4FD45E1AC715FF0000F952 /* Array.swift in Sources */,
 				EB55676D1A8644D400CD3EC6 /* shoppin.xcdatamodeld in Sources */,
 				EB5567601A86437800CD3EC6 /* ProductMapper.swift in Sources */,
@@ -973,6 +994,7 @@
 				EB4FD4511AC6BE960000F952 /* Globals.swift in Sources */,
 				EB55676A1A8643BC00CD3EC6 /* Section.swift in Sources */,
 				EBDFE3C61AD11F6700E48F95 /* NSLayoutConstraint.swift in Sources */,
+				EB89D3471AD4536300B6E0D0 /* AddListController.swift in Sources */,
 				EBDFE3B51ACEEB5400E48F95 /* HeaderCellManager.swift in Sources */,
 				EBDFE3A91ACE82F000E48F95 /* ListItemCellManager.swift in Sources */,
 				EB5567801A8658B000CD3EC6 /* CDProvider.swift in Sources */,

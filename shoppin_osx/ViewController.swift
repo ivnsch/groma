@@ -9,10 +9,8 @@
 import Cocoa
 
 
-class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, ListItemCellManagerDelegate, HeaderCellManagerDelegate {
+class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, ListItemCellManagerDelegate, HeaderCellManagerDelegate, ListsViewControllerDelegate {
    
-    private var currentList:List?
-    
     @IBOutlet weak var totalPriceTextField: NSTextField!
     
     @IBOutlet weak var tableView: NSTableView!
@@ -21,22 +19,19 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     
     private let listItemsProvider = ProviderFactory().listItemProvider
 
+    @IBOutlet weak var listsContainerView: NSView!
+    private var listsViewController: ListsViewController?
+    private var currentList:List? {
+        return listsViewController?.selectedList
+    }
+ 
     private var listItemRows:[ListItemCellManager] {
         return self.cellManagers.filter {$0 as? ListItemCellManager != nil} as! [ListItemCellManager]
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.tableView.headerView = nil // we will use a normal view as header
-
-        let currentList = self.listItemsProvider.firstList
-        self.currentList = currentList
-        self.initList(currentList)
-        
-        self.tableView.registerForDraggedTypes([NSGeneralPboard])
     }
-    
 
     private func initList(list:List) {
         let listItems = self.listItemsProvider.listItems(list)
@@ -49,9 +44,29 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        self.tableView.headerView = nil // we will use a normal view as header
+        self.tableView.registerForDraggedTypes([NSGeneralPboard])
+        
+        self.initListsViewController()
+        
         self.tableView.reloadData()
     }
+  
+    private func initListsViewController() {
+        let listsViewController = ListsViewController(nibName: "ListsViewController", bundle: nil)!
+        listsViewController.view.frame = self.listsContainerView.frame
+        listsViewController.delegate = self
+        listsContainerView.addSubview(listsViewController.view) // this has to be called from viewDidAppear (or later), otherwise crash because unrecognizer tableview delegate selector
+        self.listsViewController = listsViewController
+    }
     
+    private func selectList(list:List) {
+        let listItems = self.listItemsProvider.listItems(list)
+        self.cellManagers = self.createCellManagers(listItems)
+        self.updateTotalPriceLabel()
+        self.tableView.reloadData()
+    }
+
     private func createCellManagers(listItems: [ListItem]) -> [CellManager] {
         var cellManagers:[CellManager] = []
         var foundSections = Set<String>() // quick lookup
@@ -501,6 +516,12 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     func rowEditTapped(cell: NSTableCellView, listItemRow: ListItemRow) {
         let index = self.tableView.rowForView(cell)
         self.updateListItem(index, listItemRow: listItemRow)
+    }
+    
+    // MARK: - ListsViewControllerDelegate
+    
+    func listSelected(list: List) {
+        self.selectList(list)
     }
 }
 

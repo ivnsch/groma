@@ -1,0 +1,108 @@
+//
+//  ListsViewController.swift
+//  shoppin
+//
+//  Created by ischuetz on 07/04/15.
+//  Copyright (c) 2015 ivanschuetz. All rights reserved.
+//
+
+import Cocoa
+
+protocol ListsViewControllerDelegate: class {
+    func listSelected(list: List)
+}
+
+class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
+    
+    @IBOutlet weak var tableView: NSTableView!
+ 
+    private let listItemsProvider = ProviderFactory().listItemProvider
+    
+    private var selectables: [Selectable<List>] = []
+    
+    weak var delegate: ListsViewControllerDelegate?
+    
+    private(set) var selectedList: List?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+   
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.tableView.headerView = nil
+    }
+    
+    @IBAction func addListTapped(sender: NSButton) {
+        let addListController = AddListController()
+        addListController.addTappedFunc = {listInput in
+            self.addList(listInput)
+            addListController.close()
+        }
+        addListController.show()
+    }
+    
+    override func viewDidAppear() {
+        self.loadLists() // note we have to do this in viewDidAppear (or later) otherwise crash because tableview delegate seems not to be fully initialised yet. Related with being created in other view controller.
+        if let firstList = self.selectables.first?.model {
+            self.selectList(firstList)
+            self.selectTableViewRow(firstList)
+        }
+    }
+  
+    private func addList(listInput: ListInput) {
+        let list = List(id: "dummy", name: listInput.name)
+        
+        if let addedList = self.listItemsProvider.add(list) {
+            self.loadLists() // we modified list - reload everything
+            self.selectTableViewRow(addedList)
+            
+        } else {
+            println("Error: couldn't add list to provider: \(list)")
+        }
+    }
+    
+    private func selectTableViewRow(list: List) {
+        if let rowIndex = find(selectables.map{$0.model}, list) {
+            self.tableView.selectRowIndexes(NSIndexSet(index: rowIndex), byExtendingSelection: false)
+            
+        } else {
+            println("Warning: trying to select a list that is not in the tableview")
+        }
+    }
+    
+    private func loadLists() {
+        self.selectables = self.listItemsProvider.lists().map{Selectable(model: $0)}
+        self.tableView.reloadData()
+    }
+
+    
+    private func selectList(list: List) {
+        self.selectedList = list
+        self.selectTableViewRow(list) // this makes sense when selecting programmatically and is redundant when we come from selecting in table view (ok).
+        
+        self.delegate?.listSelected(list)
+    }
+    
+    // MARK: - NSTableViewDataSource
+    
+    func numberOfRowsInTableView(aTableView: NSTableView) -> Int {
+        return self.selectables.count
+    }
+    
+    func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
+        let cell = tableView.makeViewWithIdentifier("defaultCell", owner:self) as! NSTableCellView
+        let selectable = self.selectables[row]
+        cell.textField?.stringValue = selectable.model.name
+
+        return cell
+    }
+   
+    func tableViewSelectionDidChange(notification: NSNotification) {
+        let row = self.tableView.selectedRow
+        if row >= 0 {
+            let selectedList = self.selectables[row].model
+            self.selectList(selectedList)
+        }
+    }
+}
