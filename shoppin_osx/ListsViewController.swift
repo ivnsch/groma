@@ -12,7 +12,7 @@ protocol ListsViewControllerDelegate: class {
     func listSelected(list: List)
 }
 
-class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate {
+class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewDelegate, ListCellDelegate {
     
     @IBOutlet weak var tableView: NSTableView!
  
@@ -70,18 +70,39 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             println("Warning: trying to select a list that is not in the tableview")
         }
     }
+   
+    private func restoreSelectionAfterReloadData() {
+        if let selectedList = self.selectedList {
+            self.selectTableViewRow(selectedList)
+        }
+    }
     
     private func loadLists() {
         self.selectables = self.listItemsProvider.lists().map{Selectable(model: $0)}
         self.tableView.reloadData()
     }
 
-    
     private func selectList(list: List) {
         self.selectedList = list
         self.selectTableViewRow(list) // this makes sense when selecting programmatically and is redundant when we come from selecting in table view (ok).
         
         self.delegate?.listSelected(list)
+    }
+    
+    private func removeList(list: List) {
+        if self.listItemsProvider.remove(list) {
+            self.loadLists()
+            self.restoreSelectionAfterReloadData()
+            
+        } else {
+            println("Error: list couldn't be removed: \(list)")
+        }
+    }
+    
+    private func removeListWithConfirm(list: List) {
+        DialogUtils.confirmAlert(okTitle: "Yes", title: "Remove list: \(list.name)\nAre you sure?", msg: "This will also delete all the items in the list", okAction: {
+            self.removeList(list)
+        })
     }
     
     // MARK: - NSTableViewDataSource
@@ -91,10 +112,10 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        let cell = tableView.makeViewWithIdentifier("defaultCell", owner:self) as! NSTableCellView
+        let cell = tableView.makeViewWithIdentifier("listCell", owner:self) as! ListCell
         let selectable = self.selectables[row]
-        cell.textField?.stringValue = selectable.model.name
-
+        cell.list = selectable.model
+        cell.delegate = self
         return cell
     }
    
@@ -105,4 +126,16 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             self.selectList(selectedList)
         }
     }
+    
+    // MARK: - ListCellDelegate
+    
+    func removeListTapped(cell: ListCell) {
+        if let list = cell.list {
+            self.removeListWithConfirm(list)
+            
+        } else {
+            println("Error - cell without list tapped")
+        }
+    }
+
 }

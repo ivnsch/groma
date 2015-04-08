@@ -63,6 +63,10 @@ class ListItemProviderMock: ListItemProvider {
         // TODO
         return false
     }
+    func remove(list:List) -> Bool {
+        // TODO
+        return false
+    }
     
     func add(listItem:ListItem) -> ListItem? {
         self.listItemsVar.insert(listItem, atIndex: listItem.order)

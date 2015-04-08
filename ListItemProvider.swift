@@ -18,6 +18,8 @@ protocol ListItemProvider {
     
     func remove(section:Section) -> Bool
     
+    func remove(list:List) -> Bool
+
     func add(listItem:ListItem) -> ListItem?
 
     // optional order - if nil will be appended at the end

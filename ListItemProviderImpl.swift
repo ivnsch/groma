@@ -7,7 +7,7 @@
 //
 
 
-class ListItemProviderImpl:ListItemProvider {
+class ListItemProviderImpl: ListItemProvider {
 
     let cdProvider = CDListItemProvider()
 
@@ -25,6 +25,10 @@ class ListItemProviderImpl:ListItemProvider {
     
     func remove(section:Section) -> Bool {
         return self.cdProvider.remove(section)
+    }
+    
+    func remove(list:List) -> Bool {
+        return self.cdProvider.remove(list)
     }
     
     func add(listItem:ListItem) -> ListItem? {

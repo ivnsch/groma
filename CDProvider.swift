@@ -15,6 +15,7 @@ class CDProvider: NSObject {
         var error:NSError?
         let success = appDelegate.managedObjectContext!.save(&error)
         if !success {
+            println("Error: CDProvider couldn't save")
             println(error?.userInfo)
         }
         return success

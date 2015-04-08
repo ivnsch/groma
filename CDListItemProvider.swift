@@ -168,6 +168,13 @@ class CDListItemProvider: CDProvider {
             predicate: NSPredicate(format: "section.name=%@", section.name))
     }
     
+    private func loadListItems(list: List) -> [CDListItem] {
+        return self.load(
+            entityName: "CDListItem",
+            type: CDListItem.self,
+            predicate: NSPredicate(format: "list.name=%@", list.name))
+    }
+    
     // remove section and all the listitems assigned to it
     func remove(section:Section) -> Bool {
         let appDelegate = SharedAppDelegate.getAppDelegate()
@@ -187,6 +194,30 @@ class CDListItemProvider: CDProvider {
         }
         
         return self.save()
+    }
+   
+    
+    func remove(list:List) -> Bool {
+        let appDelegate = SharedAppDelegate.getAppDelegate()
+        
+        // remove listitems
+        let sectionCDListItems = self.loadListItems(list)
+        for cdListItem in sectionCDListItems {
+            self.remove(cdListItem, save: false) // we save after everything is updated
+        }
+        
+        // remove list
+        let cdList = self.loadList(list.id)
+        let removed = self.removeObject(cdList)
+        let saved = self.save()
+        
+        if !removed {
+            println("Error: list couldn't be removed in core data")
+        }
+       
+        // TODO there isn't really a reason to have different logic to remove section and lists, refactor
+        
+        return removed && saved
     }
     
     func loadLists() -> [CDList] {
