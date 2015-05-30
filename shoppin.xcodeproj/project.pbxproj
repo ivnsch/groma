@@ -46,7 +46,6 @@
 		EB2F5D771A557AB000DBC4AF /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D761A557AB000DBC4AF /* List.swift */; };
 		EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */; };
 		EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7E1A559C8800DBC4AF /* Constants.swift */; };
-		EB49F5EB1AC6CC0D00BBEDA2 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB49F5EA1AC6CC0D00BBEDA2 /* CloudKit.framework */; };
 		EB4FD44B1AC6B77C0000F952 /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D6E1A530FBC00DBC4AF /* Float.swift */; };
 		EB4FD44E1AC6BE390000F952 /* NSTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD44D1AC6BE390000F952 /* NSTableView.swift */; };
 		EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD44F1AC6BE960000F952 /* Globals.swift */; };
@@ -193,7 +192,6 @@
 		EB2F5D7D1A558F5400DBC4AF /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 		EB2F5D7E1A559C8800DBC4AF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		EB49F5E91AC6CBEE00BBEDA2 /* shoppin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = shoppin.entitlements; sourceTree = "<group>"; };
-		EB49F5EA1AC6CC0D00BBEDA2 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		EB4FD44D1AC6BE390000F952 /* NSTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTableView.swift; sourceTree = "<group>"; };
 		EB4FD44F1AC6BE960000F952 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		EB4FD4551AC6D6690000F952 /* EditListItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListItemController.swift; sourceTree = "<group>"; };
@@ -204,6 +202,7 @@
 		EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedAppDelegate.m; sourceTree = "<group>"; };
 		EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-osx-Bridging-Header.h"; sourceTree = "<group>"; };
 		EB6A207C1ACC079000B9BCB2 /* UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITableView.swift; path = shoppin/UITableView.swift; sourceTree = "<group>"; };
+		EB6D70321B19E435009572BA /* shoppin_osx.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = shoppin_osx.entitlements; sourceTree = "<group>"; };
 		EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
 		EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListsViewController.xib; sourceTree = "<group>"; };
 		EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
@@ -261,7 +260,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FC87A4A718943E18BF37A57 /* libPods.a in Frameworks */,
-				EB49F5EB1AC6CC0D00BBEDA2 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,7 +283,6 @@
 		E4CDB4AFEC6C43F59CFE7A39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EB49F5EA1AC6CC0D00BBEDA2 /* CloudKit.framework */,
 				CFD3968762A24D00B2ED9ADE /* libPods.a */,
 			);
 			name = Frameworks;
@@ -499,6 +496,7 @@
 		EB9F6CE31A8610550038355B /* shoppin_osx */ = {
 			isa = PBXGroup;
 			children = (
+				EB6D70321B19E435009572BA /* shoppin_osx.entitlements */,
 				EBDFE3C01AD00E6C00E48F95 /* utils */,
 				EBDFE3A51ACE827C00E48F95 /* tableview */,
 				EB4FD44C1AC6BE2A0000F952 /* extension */,
@@ -788,6 +786,12 @@
 					};
 					EB9F6CE11A8610550038355B = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 37QAPDY2PR;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					EB9F6CF21A8610550038355B = {
 						CreatedOnToolsVersion = 6.2;
@@ -1180,7 +1184,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_ENTITLEMENTS = shoppin_osx/shoppin_osx.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1191,6 +1197,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_SWIFT_FLAGS = "-DDEBUG";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "shoppin_osx/shoppin-osx-Bridging-Header.h";
 			};
@@ -1200,7 +1207,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_ENTITLEMENTS = shoppin_osx/shoppin_osx.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				INFOPLIST_FILE = shoppin_osx/Info.plist;
@@ -1208,6 +1217,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_SWIFT_FLAGS = "-DRELEASE";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "shoppin_osx/shoppin-osx-Bridging-Header.h";
 			};
