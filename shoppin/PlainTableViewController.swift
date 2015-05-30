@@ -10,9 +10,9 @@ import UIKit
 
 class PlainTableViewController: UITableViewController {
 
-    let options:[String]
+    var options:[String]!
 
-    let onSelectOption:((Int, String) -> ())
+    var onSelectOption:((Int, String) -> ())!
     
     let reuseIdentifier = "reuseIdentifier"
     
@@ -25,9 +25,9 @@ class PlainTableViewController: UITableViewController {
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
     }
     
-//    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
-//        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-//    }
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
 
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
