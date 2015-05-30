@@ -96,7 +96,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func createList(name:String) -> List {
-        let list = List(id: "dummy", name: name)
+        let list = List(id: NSUUID().UUIDString, name: name)
         let savedList = self.listItemsProvider.add(list)
         return savedList!
     }

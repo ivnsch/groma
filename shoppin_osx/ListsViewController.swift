@@ -51,7 +51,7 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
   
     private func addList(listInput: ListInput) {
-        let list = List(id: "dummy", name: listInput.name)
+        let list = List(id: NSUUID().UUIDString, name: listInput.name)
         
         if let addedList = self.listItemsProvider.add(list) {
             self.loadLists() // we modified list - reload everything

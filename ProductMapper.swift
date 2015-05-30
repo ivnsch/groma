@@ -9,9 +9,8 @@
 class ProductMapper {
     
     class func productWithCD(cdProduct:CDProduct) -> Product {
-        let id = cdProduct.objectID.URIRepresentation().absoluteString
         return Product(
-            id: id!,
+            id: cdProduct.id,
             name: cdProduct.name,
             price: cdProduct.price.floatValue)
     }

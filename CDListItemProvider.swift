@@ -27,7 +27,7 @@ class CDListItemProvider: CDProvider {
     }
     
     func loadProduct(id:String) -> CDProduct {
-        return self.loadManagedObject(id)
+        return self.load(entityName: "CDProduct", type: CDProduct.self, predicate: NSPredicate(format: "id=%@", id)).first!
     }
     
     func saveProduct(product:Product) -> CDProduct {
@@ -35,6 +35,7 @@ class CDListItemProvider: CDProvider {
         
         let cdProduct = NSEntityDescription.insertNewObjectForEntityForName("CDProduct", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDProduct
         
+        cdProduct.id = product.id
         cdProduct.name = product.name
         cdProduct.price = product.price
         
@@ -73,6 +74,7 @@ class CDListItemProvider: CDProvider {
         
         let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDListItem
 
+        cdListItem.id = listItem.id
         cdListItem.product = cdProduct
         cdListItem.quantity = listItem.quantity
         cdListItem.done = listItem.done
@@ -86,7 +88,7 @@ class CDListItemProvider: CDProvider {
     }
     
     func loadListItem(id:String) -> CDListItem {
-        return self.loadManagedObject(id)
+        return self.load(entityName: "CDListItem", type: CDListItem.self, predicate: NSPredicate(format: "id=%@", id)).first!
     }
 
     // update only done status of listitems, this way avoid loading section, list etc.
@@ -128,6 +130,7 @@ class CDListItemProvider: CDProvider {
         let cdSection = self.loadSection(listItem.section.name)! // since we are updating an item, we assume section exists
         let cdList = self.loadList(listItem.list.id)
         
+        cdListItem.id = listItem.id
         cdListItem.done = listItem.done
         cdListItem.quantity = listItem.quantity
         cdListItem.product.name = listItem.product.name
@@ -225,7 +228,7 @@ class CDListItemProvider: CDProvider {
     } 
     
     func loadList(id:String) -> CDList {
-        return self.loadManagedObject(id)
+        return self.load(entityName: "CDList", type: CDList.self, predicate: NSPredicate(format: "id=%@", id)).first!
     }
     
     func saveList(list:List) -> CDList {
@@ -235,7 +238,7 @@ class CDListItemProvider: CDProvider {
         cdList.name = list.name
         self.save() //save before we store the id because it changes on save, and for consistency we want to store the final one
         
-        cdList.id = cdList.objectID.URIRepresentation().absoluteString! // store the core data id as an extra field "id" - to be able to make fetch request using id predicate (we want to fetch list items by list id)
+        cdList.id = NSUUID().UUIDString
         
         self.save() //now that we stored the id, save again...
         

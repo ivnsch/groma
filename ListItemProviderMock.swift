@@ -21,7 +21,7 @@ class ListItemProviderMock: ListItemProvider {
         let section = Section(name: "test")
         self.sectionsVar.append(section)
         
-        let list:List = List(id: "dummy", name: Constants.defaultListIdentifier)
+        let list:List = List(id: NSUUID().UUIDString, name: Constants.defaultListIdentifier)
         self.listsVar.append(list)
         
         let i:Int = self.productsVar.count / 2

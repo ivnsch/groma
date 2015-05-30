@@ -126,7 +126,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         // or if for some reason we have different list items pointing to same product, we will change product name for all of them - also incorrect
         // this behaviour may be desired though to correct spelling errors
         // so yes we have to think about it
-        let product = Product(id: "dummy", name: listItemInput.name, price: listItemInput.price)
+        let product = Product(id: NSUUID().UUIDString, name: listItemInput.name, price: listItemInput.price)
         
         return ListItem(
             id: listItem.id,

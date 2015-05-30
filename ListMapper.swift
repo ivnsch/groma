@@ -9,7 +9,6 @@
 class ListMapper {
     
     class func listWithCD(cdList:CDList) -> List {
-        let id = cdList.objectID.URIRepresentation().absoluteString
-        return List(id:id!, name: cdList.name)
+        return List(id: cdList.id, name: cdList.name)
     }
 }

@@ -21,16 +21,6 @@ class CDProvider: NSObject {
         return success
     }
     
-    func loadManagedObject<T>(id:String) -> T {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
-        
-        let objectId:NSManagedObjectID? = appDelegate.persistentStoreCoordinator!.managedObjectIDForURIRepresentation(NSURL(string: id)!)
-        
-        let obj = appDelegate.managedObjectContext!.objectWithID(objectId!) as! T
-        
-        return obj
-    }
-    
     func removeObject(object:NSManagedObject) -> Bool {
         var success = false
         let appDelegate = SharedAppDelegate.getAppDelegate()

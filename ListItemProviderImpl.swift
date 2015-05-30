@@ -39,13 +39,12 @@ class ListItemProviderImpl: ListItemProvider {
     
     func add(listItemInput:ListItemInput, list:List, order orderMaybe:Int? = nil) -> ListItem? {
         // for now just create a new product and a listitem with it
-        let product = Product(id: "dummy", name: listItemInput.name, price:listItemInput.price)
+        let product = Product(id: NSUUID().UUIDString, name: listItemInput.name, price:listItemInput.price)
         let section = Section(name: listItemInput.section)
        
         let order = orderMaybe ?? self.listItems(list).count
         
-        // we use for now core data object id as list item id. So before we insert the item there's no id and it's not used -> "dummy"
-        let listItem = ListItem(id:"dummy", done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
+        let listItem = ListItem(id: NSUUID().UUIDString, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
        
         return self.add(listItem)
     }
@@ -88,7 +87,7 @@ class ListItemProviderImpl: ListItemProvider {
     var firstList:List {
         
         func createList(name:String) -> List {
-            let list = List(id: "dummy", name: name)
+            let list = List(id: NSUUID().UUIDString, name: name)
             let savedList = self.add(list)
             PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: savedList!.id))
             return savedList!

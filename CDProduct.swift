@@ -11,7 +11,7 @@ import CoreData
 
 @objc(CDProduct)
 class CDProduct: NSManagedObject {
-
+    @NSManaged var id: String
     @NSManaged var name: String
     @NSManaged var price: NSNumber
 

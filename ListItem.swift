@@ -8,7 +8,7 @@
 
 
 class ListItem: Equatable {
-    let id:String // unique, for now we use core data objectId to initialise this
+    let id:String
     var done:Bool
     let quantity:Int
     let product:Product
