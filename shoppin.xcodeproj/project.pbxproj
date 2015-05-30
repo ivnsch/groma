@@ -788,6 +788,9 @@
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = 37QAPDY2PR;
 						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
 							com.apple.iCloud = {
 								enabled = 1;
 							};
