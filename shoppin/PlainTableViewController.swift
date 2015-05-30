@@ -17,11 +17,11 @@ class PlainTableViewController: UITableViewController {
     let reuseIdentifier = "reuseIdentifier"
     
     init(options:[String], onSelectOption:(Int, String) -> ()) {
+        super.init(style: UITableViewStyle.Plain)
+
         self.options = options
         self.onSelectOption = onSelectOption
         
-        super.init(style: UITableViewStyle.Plain)
-
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
     }
     
