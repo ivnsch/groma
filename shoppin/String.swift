@@ -10,8 +10,14 @@ import Foundation
 
 extension String {
     
-    func contains(str:String) -> Bool {
-        return self.rangeOfString(str) != nil
+    func contains(str: String, caseInsensitive: Bool = false) -> Bool {
+        
+        var options = NSStringCompareOptions.allZeros
+        if caseInsensitive {
+            options |= NSStringCompareOptions.CaseInsensitiveSearch
+        }
+
+        return self.rangeOfString(str, options: options) != nil
     }
     
     var floatValue: Float {

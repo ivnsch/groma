@@ -48,6 +48,14 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             self.selectList(firstList)
             self.selectTableViewRow(firstList)
         }
+        
+        // temporary workaround for recreation of icloud folder
+        let seconds = 3.0
+        let delay = seconds * Double(NSEC_PER_SEC)
+        var dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        dispatch_after(dispatchTime, dispatch_get_main_queue(), {
+            self.loadLists()
+        })
     }
   
     private func addList(listInput: ListInput) {
