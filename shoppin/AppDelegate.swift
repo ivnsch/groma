@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func debugFirstLaunchSetup() {
-        self.addDummyPersistentObjects()
+//        self.addDummyPersistentObjects()
     }
     
     
