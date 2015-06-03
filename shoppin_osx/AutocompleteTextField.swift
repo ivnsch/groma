@@ -72,8 +72,6 @@ class AutocompleteTextField: NSTextField {
             fallthrough
         case 36: // return
             self.sectionAutosuggestionsViewController.view.hidden = true
-        case 51: // backspace - don't autocomplete
-            break
         default:
             self.sectionAutosuggestionsViewController.suggestions = self.suggestions //TODO make this async or add a memory cache
             
@@ -92,16 +90,19 @@ class AutocompleteTextField: NSTextField {
             let filteredSuggestions = search.isEmpty ? suggestions : suggestions.filter{$0.contains(search, caseInsensitive: true)}
             self.sectionAutosuggestionsViewController.filteredSuggestions = filteredSuggestions
             
-            if let first = filteredSuggestions.first {
-                let firstNSString: NSString = first
-                let range: NSRange = firstNSString.rangeOfString(search, options: .CaseInsensitiveSearch)
-                if range.location == 0 {
-                    
-                    let highlightRange = NSMakeRange(range.length, count(first) - range.length)
-                    
-                    self.stringValue = first
-                    let editor = NSApplication.sharedApplication().mainWindow?.fieldEditor(true, forObject: self)
-                    editor!.selectedRange = highlightRange
+            if keyCode != 51 { // backspace - don't autocomplete
+                
+                if let first = filteredSuggestions.first {
+                    let firstNSString: NSString = first
+                    let range: NSRange = firstNSString.rangeOfString(search, options: .CaseInsensitiveSearch)
+                    if range.location == 0 {
+                        
+                        let highlightRange = NSMakeRange(range.length, count(first) - range.length)
+                        
+                        self.stringValue = first
+                        let editor = NSApplication.sharedApplication().mainWindow?.fieldEditor(true, forObject: self)
+                        editor!.selectedRange = highlightRange
+                    }
                 }
             }
         }
