@@ -12,10 +12,16 @@ class AutosuggestionsTableViewController: NSViewController, NSTableViewDelegate,
 
     @IBOutlet weak var tableView: HandlingTableView!
 
-    var suggestions:[String] = []
-    var filteredSuggestions:[String] = []
+    var suggestions: [String] = []
+    var filteredSuggestions: [String] = [] {
+        didSet {
+            self.view.hidden = self.filteredSuggestions.isEmpty
+            self.tableView.reloadData()
+            self.tableView.sizeToFit()
+        }
+    }
 
-    private var suggestionConfirmed:((String) -> ())!
+    private var suggestionConfirmed: ((String) -> ())!
     
     var suggestionSelected: ((String) -> ())?
     var upAtTopPressed: (() -> ())?
@@ -110,12 +116,6 @@ class AutosuggestionsTableViewController: NSViewController, NSTableViewDelegate,
         if let selectedSuggestion = self.selectedSuggestion {
             self.suggestionConfirmed(selectedSuggestion)
         }
-    }
-    
-    func searchText(text: String) {
-        self.filteredSuggestions = text.isEmpty ? self.suggestions : self.suggestions.filter{$0.contains(text, caseInsensitive: true)}
-        self.tableView.reloadData()
-        self.tableView.sizeToFit()
     }
     
     func numberOfRowsInTableView(aTableView: NSTableView) -> Int {

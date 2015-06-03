@@ -14,6 +14,7 @@
 		EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB11A3334EC00D778DE /* Main.storyboard */; };
 		EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB41A3334EC00D778DE /* Images.xcassets */; };
 		EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB61A3334EC00D778DE /* LaunchScreen.xib */; };
+		EB1EFAC51B1EFBBC0079A35D /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1EFAC41B1EFBBC0079A35D /* AutocompleteTextField.swift */; };
 		EB20FBF21A5961360058103B /* CartMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF11A5961360058103B /* CartMenuView.swift */; };
 		EB20FBF61A59701C0058103B /* CDInventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF51A59701C0058103B /* CDInventoryItem.swift */; };
 		EB20FBF81A5971170058103B /* InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF71A5971170058103B /* InventoryItem.swift */; };
@@ -161,6 +162,7 @@
 		EB1DDEB71A3334EC00D778DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		EB1DDEC21A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEC31A3334EC00D778DE /* shoppinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shoppinTests.swift; sourceTree = "<group>"; };
+		EB1EFAC41B1EFBBC0079A35D /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
 		EB20FBEC1A58776E0058103B /* shoppin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-Bridging-Header.h"; sourceTree = "<group>"; };
 		EB20FBF11A5961360058103B /* CartMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartMenuView.swift; sourceTree = "<group>"; };
 		EB20FBF51A59701C0058103B /* CDInventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDInventoryItem.swift; path = shoppin/CDInventoryItem.swift; sourceTree = "<group>"; };
@@ -513,6 +515,7 @@
 				EB4FD4551AC6D6690000F952 /* EditListItemController.swift */,
 				EB4FD4571AC6D8C90000F952 /* EditListItem.xib */,
 				EB6D93A51B1BAFB400ED8999 /* HandlingTextField.swift */,
+				EB1EFAC41B1EFBBC0079A35D /* AutocompleteTextField.swift */,
 				EB6D93A71B1C8CE500ED8999 /* HandlingTableView.swift */,
 				EB9F6CEA1A8610550038355B /* Images.xcassets */,
 				EB9F6CEC1A8610550038355B /* Main.storyboard */,
@@ -1004,6 +1007,7 @@
 				EB5567601A86437800CD3EC6 /* ProductMapper.swift in Sources */,
 				EB5567711A864B6E00CD3EC6 /* ListItemProviderMock.swift in Sources */,
 				EB5567621A86437E00CD3EC6 /* ListMapper.swift in Sources */,
+				EB1EFAC51B1EFBBC0079A35D /* AutocompleteTextField.swift in Sources */,
 				EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */,
 				EB5567671A8643AF00CD3EC6 /* CDList.swift in Sources */,
 				EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */,
