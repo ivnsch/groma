@@ -23,7 +23,7 @@ enum EditListItemControllerModus {
 
 class EditListItemController: NSWindowController, NSTextFieldDelegate {
 
-    @IBOutlet weak var nameTextField: NSTextField!
+    @IBOutlet weak var nameTextField: AutocompleteTextField!
     @IBOutlet weak var quantityTextField: NSTextField!
     @IBOutlet weak var priceTextField: NSTextField!
     
@@ -36,6 +36,8 @@ class EditListItemController: NSWindowController, NSTextFieldDelegate {
     var addTappedFunc: ((ListItemInput) -> ())?
  
     var windowDidLoadFunc: VoidFunction?
+    
+    private var list: List?
     
     var modus: EditListItemControllerModus = .Add {
         didSet {
@@ -52,11 +54,20 @@ class EditListItemController: NSWindowController, NSTextFieldDelegate {
     
         // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
         self.windowDidLoadFunc?()
+
+        self.nameTextField.suggestionsLoader = {[weak self] in
+            if let list = self!.list {
+                return self!.listItemsProvider.products().map{$0.name}
+            } else {
+                return []
+            }
+        }
         
         self.sectionTextField.suggestionsLoader = {[weak self] in
             self!.listItemsProvider.sections().map{$0.name ?? ""}
         }
-        
+
+        self.nameTextField.delegate = self
         self.sectionTextField.delegate = self
     }
     
@@ -69,6 +80,8 @@ class EditListItemController: NSWindowController, NSTextFieldDelegate {
     }
     
     func show(list: List) {
+        self.list = list
+        
         if let window = self.window {
             NSApp.runModalForWindow(window)
         }
