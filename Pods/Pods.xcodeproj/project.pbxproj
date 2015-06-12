@@ -1,1082 +1,1029 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>archiveVersion</key>
-	<string>1</string>
-	<key>classes</key>
-	<dict/>
-	<key>objectVersion</key>
-	<string>46</string>
-	<key>objects</key>
-	<dict>
-		<key>01321C756B332793FF157826</key>
-		<dict>
-			<key>buildConfigurations</key>
-			<array>
-				<string>FFDAE478840DC03605801946</string>
-				<string>BBFB516C0E8BA3604F091538</string>
-			</array>
-			<key>defaultConfigurationIsVisible</key>
-			<string>0</string>
-			<key>defaultConfigurationName</key>
-			<string>Release</string>
-			<key>isa</key>
-			<string>XCConfigurationList</string>
-		</dict>
-		<key>0DD202ABEAE3222ADCC40CB7</key>
-		<dict>
-			<key>baseConfigurationReference</key>
-			<string>F99611ADB440442B858C14D5</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>ALWAYS_SEARCH_USER_PATHS</key>
-				<string>NO</string>
-				<key>COPY_PHASE_STRIP</key>
-				<string>YES</string>
-				<key>DSTROOT</key>
-				<string>/tmp/xcodeproj.dst</string>
-				<key>GCC_PRECOMPILE_PREFIX_HEADER</key>
-				<string>YES</string>
-				<key>GCC_PREFIX_HEADER</key>
-				<string>Target Support Files/Pods-WYPopoverController/Pods-WYPopoverController-prefix.pch</string>
-				<key>INSTALL_PATH</key>
-				<string>$(BUILT_PRODUCTS_DIR)</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>7.1</string>
-				<key>OTHER_CFLAGS</key>
-				<array>
-					<string>-DNS_BLOCK_ASSERTIONS=1</string>
-					<string>$(inherited)</string>
-				</array>
-				<key>OTHER_CPLUSPLUSFLAGS</key>
-				<array>
-					<string>-DNS_BLOCK_ASSERTIONS=1</string>
-					<string>$(inherited)</string>
-				</array>
-				<key>OTHER_LDFLAGS</key>
-				<string></string>
-				<key>OTHER_LIBTOOLFLAGS</key>
-				<string></string>
-				<key>PRODUCT_NAME</key>
-				<string>$(TARGET_NAME)</string>
-				<key>PUBLIC_HEADERS_FOLDER_PATH</key>
-				<string>$(TARGET_NAME)</string>
-				<key>SDKROOT</key>
-				<string>iphoneos</string>
-				<key>SKIP_INSTALL</key>
-				<string>YES</string>
-				<key>VALIDATE_PRODUCT</key>
-				<string>YES</string>
-			</dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>name</key>
-			<string>Release</string>
-		</dict>
-		<key>0F1E141501B22B9229A43F45</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>path</key>
-			<string>Pods.release.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>137D90DE3A653795A60A054D</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>wrapper.framework</string>
-			<key>name</key>
-			<string>Foundation.framework</string>
-			<key>path</key>
-			<string>Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/Foundation.framework</string>
-			<key>sourceTree</key>
-			<string>DEVELOPER_DIR</string>
-		</dict>
-		<key>18BFB3695620FA6607B894B8</key>
-		<dict>
-			<key>explicitFileType</key>
-			<string>archive.ar</string>
-			<key>includeInIndex</key>
-			<string>0</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>path</key>
-			<string>libPods-WYPopoverController.a</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-		</dict>
-		<key>1B2E8A6DB3CBB2221DE0F0FE</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>Pods-WYPopoverController-prefix.pch</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>1BCA53D893CA87E9E9289350</key>
-		<dict>
-			<key>fileRef</key>
-			<string>78E7D7F90B9397719B788430</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>1EF90FFC10E64627FAEE11FD</key>
-		<dict>
-			<key>attributes</key>
-			<dict>
-				<key>LastUpgradeCheck</key>
-				<string>0510</string>
-			</dict>
-			<key>buildConfigurationList</key>
-			<string>01321C756B332793FF157826</string>
-			<key>compatibilityVersion</key>
-			<string>Xcode 3.2</string>
-			<key>developmentRegion</key>
-			<string>English</string>
-			<key>hasScannedForEncodings</key>
-			<string>0</string>
-			<key>isa</key>
-			<string>PBXProject</string>
-			<key>knownRegions</key>
-			<array>
-				<string>en</string>
-			</array>
-			<key>mainGroup</key>
-			<string>F297890B931D5CFC261616D1</string>
-			<key>productRefGroup</key>
-			<string>A330AAE18DFAB8183555BCA6</string>
-			<key>projectDirPath</key>
-			<string></string>
-			<key>projectReferences</key>
-			<array/>
-			<key>projectRoot</key>
-			<string></string>
-			<key>targets</key>
-			<array>
-				<string>9B5941BF9C73C8FEF26A56F9</string>
-				<string>DAD381EC21E0CA5820BB9DFA</string>
-			</array>
-		</dict>
-		<key>3467D3BD273CE3CA87AB5474</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text</string>
-			<key>name</key>
-			<string>Podfile</string>
-			<key>path</key>
-			<string>../Podfile</string>
-			<key>sourceTree</key>
-			<string>SOURCE_ROOT</string>
-			<key>xcLanguageSpecificationIdentifier</key>
-			<string>xcode.lang.ruby</string>
-		</dict>
-		<key>347AB350E07077E107258B24</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>CF82D7B6BA06A2ACCFE4DEA8</string>
-			</array>
-			<key>isa</key>
-			<string>PBXFrameworksBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>3541CC04BF36CDDBEC2E53B3</key>
-		<dict>
-			<key>fileRef</key>
-			<string>EA40AEF2DD81B8C65FB61601</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>37C12E9C288A0D6E2942E7FA</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>6F278B9C67C766B88726BE7F</string>
-				<string>DBD37108E7584E672FB60FAA</string>
-			</array>
-			<key>isa</key>
-			<string>PBXHeadersBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>438452AB79E82F991BB29DA9</key>
-		<dict>
-			<key>fileRef</key>
-			<string>137D90DE3A653795A60A054D</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>440EABC3CFE2C027344AA1CB</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>WYPopoverController.h</string>
-			<key>path</key>
-			<string>WYPopoverController/WYPopoverController.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>4A15F6621D0D2160D0CF188B</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>path</key>
-			<string>Pods.debug.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>4D67D3F0FB4C29B2E8505EED</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXTargetDependency</string>
-			<key>name</key>
-			<string>Pods-WYPopoverController</string>
-			<key>target</key>
-			<string>DAD381EC21E0CA5820BB9DFA</string>
-			<key>targetProxy</key>
-			<string>FB2C9ED47291D3B3AF90C8C5</string>
-		</dict>
-		<key>59939216B88682BB60C50B3B</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>WYStoryboardPopoverSegue.m</string>
-			<key>path</key>
-			<string>WYPopoverController/WYStoryboardPopoverSegue.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>5AB5BE2B71D556710E5C7FBA</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>1BCA53D893CA87E9E9289350</string>
-			</array>
-			<key>isa</key>
-			<string>PBXSourcesBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>663CE975CC76670DAC8BB8BA</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>path</key>
-			<string>Pods-environment.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>6A0F611B4694EBB2FC19F3A4</key>
-		<dict>
-			<key>explicitFileType</key>
-			<string>archive.ar</string>
-			<key>includeInIndex</key>
-			<string>0</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>path</key>
-			<string>libPods.a</string>
-			<key>sourceTree</key>
-			<string>BUILT_PRODUCTS_DIR</string>
-		</dict>
-		<key>6F278B9C67C766B88726BE7F</key>
-		<dict>
-			<key>fileRef</key>
-			<string>440EABC3CFE2C027344AA1CB</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>6F77B3292D8FA1C68A1A2ACC</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text</string>
-			<key>path</key>
-			<string>Pods-acknowledgements.markdown</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>70E86D0FACE8A4BBC75AE723</key>
-		<dict>
-			<key>baseConfigurationReference</key>
-			<string>4A15F6621D0D2160D0CF188B</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>ALWAYS_SEARCH_USER_PATHS</key>
-				<string>NO</string>
-				<key>COPY_PHASE_STRIP</key>
-				<string>NO</string>
-				<key>DSTROOT</key>
-				<string>/tmp/xcodeproj.dst</string>
-				<key>GCC_DYNAMIC_NO_PIC</key>
-				<string>NO</string>
-				<key>GCC_OPTIMIZATION_LEVEL</key>
-				<string>0</string>
-				<key>GCC_PRECOMPILE_PREFIX_HEADER</key>
-				<string>YES</string>
-				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
-				<array>
-					<string>DEBUG=1</string>
-					<string>$(inherited)</string>
-				</array>
-				<key>GCC_SYMBOLS_PRIVATE_EXTERN</key>
-				<string>NO</string>
-				<key>INSTALL_PATH</key>
-				<string>$(BUILT_PRODUCTS_DIR)</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>7.1</string>
-				<key>OTHER_LDFLAGS</key>
-				<string></string>
-				<key>OTHER_LIBTOOLFLAGS</key>
-				<string></string>
-				<key>PRODUCT_NAME</key>
-				<string>$(TARGET_NAME)</string>
-				<key>PUBLIC_HEADERS_FOLDER_PATH</key>
-				<string>$(TARGET_NAME)</string>
-				<key>SDKROOT</key>
-				<string>iphoneos</string>
-				<key>SKIP_INSTALL</key>
-				<string>YES</string>
-			</dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>name</key>
-			<string>Debug</string>
-		</dict>
-		<key>74B9C1B844991AE2D38EA097</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.script.sh</string>
-			<key>path</key>
-			<string>Pods-resources.sh</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>78E7D7F90B9397719B788430</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>Pods-dummy.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>852D0F103F7FFACADFE2E531</key>
-		<dict>
-			<key>fileRef</key>
-			<string>A7B838A20710494FE1E8239E</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>8B96DE0CAF8BA6360AD0C514</key>
-		<dict>
-			<key>fileRef</key>
-			<string>59939216B88682BB60C50B3B</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>9221991CF4EDC0F759A162A4</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>440EABC3CFE2C027344AA1CB</string>
-				<string>98EB2F0E36A6292858A0C83C</string>
-				<string>C52E09E94878F4F270076C70</string>
-				<string>59939216B88682BB60C50B3B</string>
-				<string>C02DF4062F18714316285391</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>WYPopoverController</string>
-			<key>path</key>
-			<string>WYPopoverController</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>93FFFA4AA070FE4EAAB9BDA7</key>
-		<dict>
-			<key>fileRef</key>
-			<string>B5E5880FE4CEB64623E4C49A</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>977C0F0507D511719BD76571</key>
-		<dict>
-			<key>baseConfigurationReference</key>
-			<string>0F1E141501B22B9229A43F45</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>ALWAYS_SEARCH_USER_PATHS</key>
-				<string>NO</string>
-				<key>COPY_PHASE_STRIP</key>
-				<string>YES</string>
-				<key>DSTROOT</key>
-				<string>/tmp/xcodeproj.dst</string>
-				<key>GCC_PRECOMPILE_PREFIX_HEADER</key>
-				<string>YES</string>
-				<key>INSTALL_PATH</key>
-				<string>$(BUILT_PRODUCTS_DIR)</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>7.1</string>
-				<key>OTHER_CFLAGS</key>
-				<array>
-					<string>-DNS_BLOCK_ASSERTIONS=1</string>
-					<string>$(inherited)</string>
-				</array>
-				<key>OTHER_CPLUSPLUSFLAGS</key>
-				<array>
-					<string>-DNS_BLOCK_ASSERTIONS=1</string>
-					<string>$(inherited)</string>
-				</array>
-				<key>OTHER_LDFLAGS</key>
-				<string></string>
-				<key>OTHER_LIBTOOLFLAGS</key>
-				<string></string>
-				<key>PRODUCT_NAME</key>
-				<string>$(TARGET_NAME)</string>
-				<key>PUBLIC_HEADERS_FOLDER_PATH</key>
-				<string>$(TARGET_NAME)</string>
-				<key>SDKROOT</key>
-				<string>iphoneos</string>
-				<key>SKIP_INSTALL</key>
-				<string>YES</string>
-				<key>VALIDATE_PRODUCT</key>
-				<string>YES</string>
-			</dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>name</key>
-			<string>Release</string>
-		</dict>
-		<key>97AFE4E23E8D184A80CA8076</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>wrapper.framework</string>
-			<key>name</key>
-			<string>CoreGraphics.framework</string>
-			<key>path</key>
-			<string>Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/CoreGraphics.framework</string>
-			<key>sourceTree</key>
-			<string>DEVELOPER_DIR</string>
-		</dict>
-		<key>98EB2F0E36A6292858A0C83C</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>name</key>
-			<string>WYPopoverController.m</string>
-			<key>path</key>
-			<string>WYPopoverController/WYPopoverController.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>99357E0B49B935DDBDD0A818</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>E1580C70FB24A849A5C5E050</string>
-				<string>438452AB79E82F991BB29DA9</string>
-				<string>93FFFA4AA070FE4EAAB9BDA7</string>
-				<string>852D0F103F7FFACADFE2E531</string>
-			</array>
-			<key>isa</key>
-			<string>PBXFrameworksBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>9B5941BF9C73C8FEF26A56F9</key>
-		<dict>
-			<key>buildConfigurationList</key>
-			<string>C1CBC3652D17D71D91B01664</string>
-			<key>buildPhases</key>
-			<array>
-				<string>5AB5BE2B71D556710E5C7FBA</string>
-				<string>347AB350E07077E107258B24</string>
-			</array>
-			<key>buildRules</key>
-			<array/>
-			<key>dependencies</key>
-			<array>
-				<string>4D67D3F0FB4C29B2E8505EED</string>
-			</array>
-			<key>isa</key>
-			<string>PBXNativeTarget</string>
-			<key>name</key>
-			<string>Pods</string>
-			<key>productName</key>
-			<string>Pods</string>
-			<key>productReference</key>
-			<string>6A0F611B4694EBB2FC19F3A4</string>
-			<key>productType</key>
-			<string>com.apple.product-type.library.static</string>
-		</dict>
-		<key>9D20598597EBE3F60437D072</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>6F77B3292D8FA1C68A1A2ACC</string>
-				<string>F46398DEEB2F6C3B3476BA08</string>
-				<string>78E7D7F90B9397719B788430</string>
-				<string>663CE975CC76670DAC8BB8BA</string>
-				<string>74B9C1B844991AE2D38EA097</string>
-				<string>4A15F6621D0D2160D0CF188B</string>
-				<string>0F1E141501B22B9229A43F45</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Pods</string>
-			<key>path</key>
-			<string>Target Support Files/Pods</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>A0C672A1E7B353D91B332A89</key>
-		<dict>
-			<key>buildActionMask</key>
-			<string>2147483647</string>
-			<key>files</key>
-			<array>
-				<string>3541CC04BF36CDDBEC2E53B3</string>
-				<string>A446C7AAF28CE961B082B34C</string>
-				<string>8B96DE0CAF8BA6360AD0C514</string>
-			</array>
-			<key>isa</key>
-			<string>PBXSourcesBuildPhase</string>
-			<key>runOnlyForDeploymentPostprocessing</key>
-			<string>0</string>
-		</dict>
-		<key>A330AAE18DFAB8183555BCA6</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>6A0F611B4694EBB2FC19F3A4</string>
-				<string>18BFB3695620FA6607B894B8</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Products</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>A446C7AAF28CE961B082B34C</key>
-		<dict>
-			<key>fileRef</key>
-			<string>98EB2F0E36A6292858A0C83C</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>A7B838A20710494FE1E8239E</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>wrapper.framework</string>
-			<key>name</key>
-			<string>UIKit.framework</string>
-			<key>path</key>
-			<string>Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/UIKit.framework</string>
-			<key>sourceTree</key>
-			<string>DEVELOPER_DIR</string>
-		</dict>
-		<key>AF6B6545A936AA5CE6B240E2</key>
-		<dict>
-			<key>buildConfigurations</key>
-			<array>
-				<string>D4312B74878B7BC3EA52D6C3</string>
-				<string>0DD202ABEAE3222ADCC40CB7</string>
-			</array>
-			<key>defaultConfigurationIsVisible</key>
-			<string>0</string>
-			<key>defaultConfigurationName</key>
-			<string>Release</string>
-			<key>isa</key>
-			<string>XCConfigurationList</string>
-		</dict>
-		<key>B5E5880FE4CEB64623E4C49A</key>
-		<dict>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>wrapper.framework</string>
-			<key>name</key>
-			<string>QuartzCore.framework</string>
-			<key>path</key>
-			<string>Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/QuartzCore.framework</string>
-			<key>sourceTree</key>
-			<string>DEVELOPER_DIR</string>
-		</dict>
-		<key>BBFB516C0E8BA3604F091538</key>
-		<dict>
-			<key>buildSettings</key>
-			<dict>
-				<key>ALWAYS_SEARCH_USER_PATHS</key>
-				<string>NO</string>
-				<key>CLANG_CXX_LANGUAGE_STANDARD</key>
-				<string>gnu++0x</string>
-				<key>CLANG_CXX_LIBRARY</key>
-				<string>libc++</string>
-				<key>CLANG_ENABLE_MODULES</key>
-				<string>YES</string>
-				<key>CLANG_ENABLE_OBJC_ARC</key>
-				<string>YES</string>
-				<key>CLANG_WARN_BOOL_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_CONSTANT_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_DIRECT_OBJC_ISA_USAGE</key>
-				<string>YES</string>
-				<key>CLANG_WARN_EMPTY_BODY</key>
-				<string>YES</string>
-				<key>CLANG_WARN_ENUM_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_INT_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_OBJC_ROOT_CLASS</key>
-				<string>YES</string>
-				<key>COPY_PHASE_STRIP</key>
-				<string>NO</string>
-				<key>ENABLE_NS_ASSERTIONS</key>
-				<string>NO</string>
-				<key>GCC_C_LANGUAGE_STANDARD</key>
-				<string>gnu99</string>
-				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
-				<array>
-					<string>RELEASE=1</string>
-				</array>
-				<key>GCC_WARN_64_TO_32_BIT_CONVERSION</key>
-				<string>YES</string>
-				<key>GCC_WARN_ABOUT_RETURN_TYPE</key>
-				<string>YES</string>
-				<key>GCC_WARN_UNDECLARED_SELECTOR</key>
-				<string>YES</string>
-				<key>GCC_WARN_UNINITIALIZED_AUTOS</key>
-				<string>YES</string>
-				<key>GCC_WARN_UNUSED_FUNCTION</key>
-				<string>YES</string>
-				<key>GCC_WARN_UNUSED_VARIABLE</key>
-				<string>YES</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>7.1</string>
-				<key>STRIP_INSTALLED_PRODUCT</key>
-				<string>NO</string>
-				<key>VALIDATE_PRODUCT</key>
-				<string>YES</string>
-			</dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>name</key>
-			<string>Release</string>
-		</dict>
-		<key>C02DF4062F18714316285391</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>FE271F764DB6FFB139F66047</string>
-				<string>F99611ADB440442B858C14D5</string>
-				<string>EA40AEF2DD81B8C65FB61601</string>
-				<string>1B2E8A6DB3CBB2221DE0F0FE</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Support Files</string>
-			<key>path</key>
-			<string>../Target Support Files/Pods-WYPopoverController</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>C1CBC3652D17D71D91B01664</key>
-		<dict>
-			<key>buildConfigurations</key>
-			<array>
-				<string>70E86D0FACE8A4BBC75AE723</string>
-				<string>977C0F0507D511719BD76571</string>
-			</array>
-			<key>defaultConfigurationIsVisible</key>
-			<string>0</string>
-			<key>defaultConfigurationName</key>
-			<string>Release</string>
-			<key>isa</key>
-			<string>XCConfigurationList</string>
-		</dict>
-		<key>C52E09E94878F4F270076C70</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.h</string>
-			<key>name</key>
-			<string>WYStoryboardPopoverSegue.h</string>
-			<key>path</key>
-			<string>WYPopoverController/WYStoryboardPopoverSegue.h</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>C6F334AD844F2340FE34A1EE</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>9221991CF4EDC0F759A162A4</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Pods</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>CF82D7B6BA06A2ACCFE4DEA8</key>
-		<dict>
-			<key>fileRef</key>
-			<string>137D90DE3A653795A60A054D</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>D4312B74878B7BC3EA52D6C3</key>
-		<dict>
-			<key>baseConfigurationReference</key>
-			<string>F99611ADB440442B858C14D5</string>
-			<key>buildSettings</key>
-			<dict>
-				<key>ALWAYS_SEARCH_USER_PATHS</key>
-				<string>NO</string>
-				<key>COPY_PHASE_STRIP</key>
-				<string>NO</string>
-				<key>DSTROOT</key>
-				<string>/tmp/xcodeproj.dst</string>
-				<key>GCC_DYNAMIC_NO_PIC</key>
-				<string>NO</string>
-				<key>GCC_OPTIMIZATION_LEVEL</key>
-				<string>0</string>
-				<key>GCC_PRECOMPILE_PREFIX_HEADER</key>
-				<string>YES</string>
-				<key>GCC_PREFIX_HEADER</key>
-				<string>Target Support Files/Pods-WYPopoverController/Pods-WYPopoverController-prefix.pch</string>
-				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
-				<array>
-					<string>DEBUG=1</string>
-					<string>$(inherited)</string>
-				</array>
-				<key>GCC_SYMBOLS_PRIVATE_EXTERN</key>
-				<string>NO</string>
-				<key>INSTALL_PATH</key>
-				<string>$(BUILT_PRODUCTS_DIR)</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>7.1</string>
-				<key>OTHER_LDFLAGS</key>
-				<string></string>
-				<key>OTHER_LIBTOOLFLAGS</key>
-				<string></string>
-				<key>PRODUCT_NAME</key>
-				<string>$(TARGET_NAME)</string>
-				<key>PUBLIC_HEADERS_FOLDER_PATH</key>
-				<string>$(TARGET_NAME)</string>
-				<key>SDKROOT</key>
-				<string>iphoneos</string>
-				<key>SKIP_INSTALL</key>
-				<string>YES</string>
-			</dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>name</key>
-			<string>Debug</string>
-		</dict>
-		<key>DAD381EC21E0CA5820BB9DFA</key>
-		<dict>
-			<key>buildConfigurationList</key>
-			<string>AF6B6545A936AA5CE6B240E2</string>
-			<key>buildPhases</key>
-			<array>
-				<string>A0C672A1E7B353D91B332A89</string>
-				<string>99357E0B49B935DDBDD0A818</string>
-				<string>37C12E9C288A0D6E2942E7FA</string>
-			</array>
-			<key>buildRules</key>
-			<array/>
-			<key>dependencies</key>
-			<array/>
-			<key>isa</key>
-			<string>PBXNativeTarget</string>
-			<key>name</key>
-			<string>Pods-WYPopoverController</string>
-			<key>productName</key>
-			<string>Pods-WYPopoverController</string>
-			<key>productReference</key>
-			<string>18BFB3695620FA6607B894B8</string>
-			<key>productType</key>
-			<string>com.apple.product-type.library.static</string>
-		</dict>
-		<key>DBD37108E7584E672FB60FAA</key>
-		<dict>
-			<key>fileRef</key>
-			<string>C52E09E94878F4F270076C70</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>DDCCF1641EB6F4CC2D5CF323</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>9D20598597EBE3F60437D072</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Targets Support Files</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>DE584C5370E249E1827D1256</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>97AFE4E23E8D184A80CA8076</string>
-				<string>137D90DE3A653795A60A054D</string>
-				<string>B5E5880FE4CEB64623E4C49A</string>
-				<string>A7B838A20710494FE1E8239E</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>iOS</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>E1580C70FB24A849A5C5E050</key>
-		<dict>
-			<key>fileRef</key>
-			<string>97AFE4E23E8D184A80CA8076</string>
-			<key>isa</key>
-			<string>PBXBuildFile</string>
-		</dict>
-		<key>EA40AEF2DD81B8C65FB61601</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>sourcecode.c.objc</string>
-			<key>path</key>
-			<string>Pods-WYPopoverController-dummy.m</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F297890B931D5CFC261616D1</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>3467D3BD273CE3CA87AB5474</string>
-				<string>F636426EDFBE624564CEEB22</string>
-				<string>C6F334AD844F2340FE34A1EE</string>
-				<string>A330AAE18DFAB8183555BCA6</string>
-				<string>DDCCF1641EB6F4CC2D5CF323</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F46398DEEB2F6C3B3476BA08</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.plist.xml</string>
-			<key>path</key>
-			<string>Pods-acknowledgements.plist</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F636426EDFBE624564CEEB22</key>
-		<dict>
-			<key>children</key>
-			<array>
-				<string>DE584C5370E249E1827D1256</string>
-			</array>
-			<key>isa</key>
-			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Frameworks</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>F99611ADB440442B858C14D5</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>path</key>
-			<string>Pods-WYPopoverController-Private.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>FB2C9ED47291D3B3AF90C8C5</key>
-		<dict>
-			<key>containerPortal</key>
-			<string>1EF90FFC10E64627FAEE11FD</string>
-			<key>isa</key>
-			<string>PBXContainerItemProxy</string>
-			<key>proxyType</key>
-			<string>1</string>
-			<key>remoteGlobalIDString</key>
-			<string>DAD381EC21E0CA5820BB9DFA</string>
-			<key>remoteInfo</key>
-			<string>Pods-WYPopoverController</string>
-		</dict>
-		<key>FE271F764DB6FFB139F66047</key>
-		<dict>
-			<key>includeInIndex</key>
-			<string>1</string>
-			<key>isa</key>
-			<string>PBXFileReference</string>
-			<key>lastKnownFileType</key>
-			<string>text.xcconfig</string>
-			<key>path</key>
-			<string>Pods-WYPopoverController.xcconfig</string>
-			<key>sourceTree</key>
-			<string>&lt;group&gt;</string>
-		</dict>
-		<key>FFDAE478840DC03605801946</key>
-		<dict>
-			<key>buildSettings</key>
-			<dict>
-				<key>ALWAYS_SEARCH_USER_PATHS</key>
-				<string>NO</string>
-				<key>CLANG_CXX_LANGUAGE_STANDARD</key>
-				<string>gnu++0x</string>
-				<key>CLANG_CXX_LIBRARY</key>
-				<string>libc++</string>
-				<key>CLANG_ENABLE_MODULES</key>
-				<string>YES</string>
-				<key>CLANG_ENABLE_OBJC_ARC</key>
-				<string>YES</string>
-				<key>CLANG_WARN_BOOL_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_CONSTANT_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_DIRECT_OBJC_ISA_USAGE</key>
-				<string>YES</string>
-				<key>CLANG_WARN_EMPTY_BODY</key>
-				<string>YES</string>
-				<key>CLANG_WARN_ENUM_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_INT_CONVERSION</key>
-				<string>YES</string>
-				<key>CLANG_WARN_OBJC_ROOT_CLASS</key>
-				<string>YES</string>
-				<key>COPY_PHASE_STRIP</key>
-				<string>YES</string>
-				<key>GCC_C_LANGUAGE_STANDARD</key>
-				<string>gnu99</string>
-				<key>GCC_DYNAMIC_NO_PIC</key>
-				<string>NO</string>
-				<key>GCC_OPTIMIZATION_LEVEL</key>
-				<string>0</string>
-				<key>GCC_PREPROCESSOR_DEFINITIONS</key>
-				<array>
-					<string>DEBUG=1</string>
-					<string>$(inherited)</string>
-				</array>
-				<key>GCC_SYMBOLS_PRIVATE_EXTERN</key>
-				<string>NO</string>
-				<key>GCC_WARN_64_TO_32_BIT_CONVERSION</key>
-				<string>YES</string>
-				<key>GCC_WARN_ABOUT_RETURN_TYPE</key>
-				<string>YES</string>
-				<key>GCC_WARN_UNDECLARED_SELECTOR</key>
-				<string>YES</string>
-				<key>GCC_WARN_UNINITIALIZED_AUTOS</key>
-				<string>YES</string>
-				<key>GCC_WARN_UNUSED_FUNCTION</key>
-				<string>YES</string>
-				<key>GCC_WARN_UNUSED_VARIABLE</key>
-				<string>YES</string>
-				<key>IPHONEOS_DEPLOYMENT_TARGET</key>
-				<string>7.1</string>
-				<key>ONLY_ACTIVE_ARCH</key>
-				<string>YES</string>
-				<key>STRIP_INSTALLED_PRODUCT</key>
-				<string>NO</string>
-			</dict>
-			<key>isa</key>
-			<string>XCBuildConfiguration</string>
-			<key>name</key>
-			<string>Debug</string>
-		</dict>
-	</dict>
-	<key>rootObject</key>
-	<string>1EF90FFC10E64627FAEE11FD</string>
-</dict>
-</plist>
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		01FC3CE9930F9A0855D12C3C /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B519A09488DC1CBF018091 /* Upload.swift */; };
+		168AD31FF21291EF5C6ABEA1 /* WYPopoverController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A981A0E105B41059D7E3EB8 /* WYPopoverController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1BA8DD301703D16B2774A23E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC5701A705017B6F065D1E6C /* CoreGraphics.framework */; };
+		1C45E9EEE28C6C258C698CC7 /* Pods-shoppin-Alamofire-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F27FB6B4DB776D3697463C6 /* Pods-shoppin-Alamofire-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		21F2D8CD1AFC5E1C4553BBE8 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8E8D8DB29FCC4AF65287F6 /* Validation.swift */; };
+		24B931F24070449EBE9AD550 /* Pods-shoppin_osx-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7716D7DD8360B78313ECE9D6 /* Pods-shoppin_osx-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		25E324314962B850699D9472 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F704F7F312D7AE912A887A32 /* Manager.swift */; };
+		26EF56636B87CDA27658822D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EA6EBD1CABB52DD41AE3568 /* QuartzCore.framework */; };
+		2833A615CC36EF0A0737190E /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6CFA6D0300374EA18CC625 /* Request.swift */; };
+		283A1489628F9D2C824E0771 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE372BDA169940C93212A3B /* Cocoa.framework */; };
+		2E3220A9BC6C9C57D6E36378 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B519A09488DC1CBF018091 /* Upload.swift */; };
+		350D3140A2E81DDC0E7ED204 /* WYStoryboardPopoverSegue.h in Headers */ = {isa = PBXBuildFile; fileRef = 43AA3A5DB0709760ACD997DA /* WYStoryboardPopoverSegue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		38593A5B2DAD360911281020 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77C14714E5E695481184EA0 /* Alamofire.swift */; };
+		3BD0348EA7132DBE3526B82F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D10FC358560833C00C7FDA /* Foundation.framework */; };
+		3F7C2FA2DC1E2855C58C38C3 /* Pods-shoppin_osx-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8ADFA9BBD6D8411AAC9352 /* Pods-shoppin_osx-dummy.m */; };
+		3F95A9A1F0747A44989AC839 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8E8D8DB29FCC4AF65287F6 /* Validation.swift */; };
+		6D7F75550B7972C21F9F957A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE372BDA169940C93212A3B /* Cocoa.framework */; };
+		714C3FB97CD3B7631CFCDD02 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D10FC358560833C00C7FDA /* Foundation.framework */; };
+		76EBBFB237BCECD9A4D464FB /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F704F7F312D7AE912A887A32 /* Manager.swift */; };
+		7B1E05CB0E4746B7633F886B /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6CFA6D0300374EA18CC625 /* Request.swift */; };
+		7DB065C4A57541A739541CD2 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87298D50C4958D801306BB3 /* ParameterEncoding.swift */; };
+		8708D3BE2D8330A4ED4DC11F /* WYStoryboardPopoverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = AC8B13D0E22ABF2751EE86FE /* WYStoryboardPopoverSegue.m */; };
+		8925ABBFDF3D4B1A902E915E /* Pods-shoppin_osx-Alamofire-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 231FDD4FC637721227026C21 /* Pods-shoppin_osx-Alamofire-dummy.m */; };
+		930E69DB73913E4006F3F966 /* Pods-shoppin-WYPopoverController-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3234E5D9BE23505088FBC162 /* Pods-shoppin-WYPopoverController-dummy.m */; };
+		94021C440342EA38E97AFD5A /* Pods-shoppin-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 291900B904244FB97CD1C635 /* Pods-shoppin-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96C910EEB24DDBA7C6C6C81F /* WYPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = F21E5F51DF5FC580C05FE79B /* WYPopoverController.m */; };
+		98B803341E44197DA7A58370 /* Pods-shoppin-Alamofire-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DB97F2618F92F802962D10D /* Pods-shoppin-Alamofire-dummy.m */; };
+		9A2B6D03558390611A5E5A2B /* Pods-shoppin-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 50AF05C8F9DED1F4A21FADC0 /* Pods-shoppin-dummy.m */; };
+		AF3F98A7C681760A56BCC54E /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD382BBFE8F1447C4FD4627 /* Download.swift */; };
+		B7103867DB3F8E9E41479281 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87298D50C4958D801306BB3 /* ParameterEncoding.swift */; };
+		B75D806D4F315E2D7B81B575 /* Pods-shoppin_osx-Alamofire-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCB4E6A85CE51FF165EE01A /* Pods-shoppin_osx-Alamofire-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B9CB312D160B2712D8FB566F /* Pods-shoppin-WYPopoverController-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 749086AB36822C80B9906D64 /* Pods-shoppin-WYPopoverController-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BE80D3B1DB058E314CD54423 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77C14714E5E695481184EA0 /* Alamofire.swift */; };
+		C8351DA48959F80DA75F0EBA /* ResponseSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403D33DAF96785A3BFE70686 /* ResponseSerialization.swift */; };
+		D503B5E8CDF2EBCF978A3902 /* ResponseSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403D33DAF96785A3BFE70686 /* ResponseSerialization.swift */; };
+		D747288C31B6307F74BA6272 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8BBE708A66F387E36B96673 /* UIKit.framework */; };
+		FB0DB1E408371633CC96D16F /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD382BBFE8F1447C4FD4627 /* Download.swift */; };
+		FD348239E30E6793CED9F5A2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D10FC358560833C00C7FDA /* Foundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B21A8B2F46AD81C93E56AB3D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F47B6A57BA88C3D9190AA085 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6774193A693C73D70FFB118F;
+			remoteInfo = "Pods-shoppin_osx-Alamofire";
+		};
+		CFA0817074286ED2C4CD829E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F47B6A57BA88C3D9190AA085 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4201D7708ACFA81FBD1F5D8B;
+			remoteInfo = "Pods-shoppin-Alamofire";
+		};
+		FB68E0A0123E4AA14F712CE0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F47B6A57BA88C3D9190AA085 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F41CD19835FF8A64619B2EE2;
+			remoteInfo = "Pods-shoppin-WYPopoverController";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		017E652750E6D3F64D31B3B4 /* Pods-shoppin_osx-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppin_osx-frameworks.sh"; sourceTree = "<group>"; };
+		026B748761D0760E008C8B3A /* Pods-shoppin-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-environment.h"; sourceTree = "<group>"; };
+		0A981A0E105B41059D7E3EB8 /* WYPopoverController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WYPopoverController.h; path = WYPopoverController/WYPopoverController.h; sourceTree = "<group>"; };
+		0D773907B0EFBD7ABE2EC05E /* Pods-shoppin_osx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin_osx.release.xcconfig"; sourceTree = "<group>"; };
+		0DB97F2618F92F802962D10D /* Pods-shoppin-Alamofire-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppin-Alamofire-dummy.m"; sourceTree = "<group>"; };
+		10469D7021596A02E67A2B6D /* Pods-shoppin-WYPopoverController-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-WYPopoverController-prefix.pch"; sourceTree = "<group>"; };
+		1A8BD04A3C50FE69AB134777 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1F567A5653DD000155CF1923 /* Pods_shoppin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		201683C5591C5F94927D191E /* Pods-shoppin.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-shoppin.modulemap"; sourceTree = "<group>"; };
+		20BC2A09D5C9F969F8E62BEB /* Pods-shoppin-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-shoppin-acknowledgements.plist"; sourceTree = "<group>"; };
+		231FDD4FC637721227026C21 /* Pods-shoppin_osx-Alamofire-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "Pods-shoppin_osx-Alamofire-dummy.m"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-dummy.m"; sourceTree = "<group>"; };
+		291900B904244FB97CD1C635 /* Pods-shoppin-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-umbrella.h"; sourceTree = "<group>"; };
+		29D10FC358560833C00C7FDA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		2BE87B0F478C152633460889 /* Pods-shoppin_osx-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin_osx-environment.h"; sourceTree = "<group>"; };
+		2DCB4E6A85CE51FF165EE01A /* Pods-shoppin_osx-Alamofire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-shoppin_osx-Alamofire-umbrella.h"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-umbrella.h"; sourceTree = "<group>"; };
+		2F4E55D532C3FCAE08BA871F /* Pods-shoppin_osx.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-shoppin_osx.modulemap"; sourceTree = "<group>"; };
+		3234E5D9BE23505088FBC162 /* Pods-shoppin-WYPopoverController-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppin-WYPopoverController-dummy.m"; sourceTree = "<group>"; };
+		340B7FD7ECE5DECE6A9E955A /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		38B519A09488DC1CBF018091 /* Upload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Upload.swift; path = Source/Upload.swift; sourceTree = "<group>"; };
+		3ED4D82588B422A8A40D7FCC /* Pods-shoppin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin.debug.xcconfig"; sourceTree = "<group>"; };
+		403D33DAF96785A3BFE70686 /* ResponseSerialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResponseSerialization.swift; path = Source/ResponseSerialization.swift; sourceTree = "<group>"; };
+		43AA3A5DB0709760ACD997DA /* WYStoryboardPopoverSegue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WYStoryboardPopoverSegue.h; path = WYPopoverController/WYStoryboardPopoverSegue.h; sourceTree = "<group>"; };
+		4F2816D2F08A555B00065910 /* WYPopoverController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WYPopoverController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		503ADEA73BFA36D1588A8700 /* Pods-shoppin-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppin-frameworks.sh"; sourceTree = "<group>"; };
+		50AF05C8F9DED1F4A21FADC0 /* Pods-shoppin-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppin-dummy.m"; sourceTree = "<group>"; };
+		552D8AB77329ED8A9FF771CE /* Pods-shoppin_osx-Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; name = "Pods-shoppin_osx-Alamofire.modulemap"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire.modulemap"; sourceTree = "<group>"; };
+		5DB694104C9D8B69FAA89056 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6164DE62F26FBB9ABB8C62EA /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		61CE3B58209A1653A7548DA9 /* Pods-shoppin_osx-Alamofire-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin_osx-Alamofire-Private.xcconfig"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-Private.xcconfig"; sourceTree = "<group>"; };
+		6C307D729C8BA98A2CC281A4 /* Pods-shoppin-Alamofire.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin-Alamofire.xcconfig"; sourceTree = "<group>"; };
+		6C981CE066468A2E18338539 /* Pods-shoppin_osx-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppin_osx-resources.sh"; sourceTree = "<group>"; };
+		74465C01CB9A046A8892C5CF /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../Pods-shoppin_osx-Alamofire/Info.plist"; sourceTree = "<group>"; };
+		749086AB36822C80B9906D64 /* Pods-shoppin-WYPopoverController-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-WYPopoverController-umbrella.h"; sourceTree = "<group>"; };
+		7716D7DD8360B78313ECE9D6 /* Pods-shoppin_osx-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin_osx-umbrella.h"; sourceTree = "<group>"; };
+		77F3B7E28CE48FF3A25EDA40 /* Pods-shoppin_osx-Alamofire-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-shoppin_osx-Alamofire-prefix.pch"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-prefix.pch"; sourceTree = "<group>"; };
+		810406FA90B61D86E8326388 /* Pods-shoppin-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-shoppin-acknowledgements.markdown"; sourceTree = "<group>"; };
+		8C8ADFA9BBD6D8411AAC9352 /* Pods-shoppin_osx-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppin_osx-dummy.m"; sourceTree = "<group>"; };
+		8D6CFA6D0300374EA18CC625 /* Request.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Request.swift; path = Source/Request.swift; sourceTree = "<group>"; };
+		8ECF0DC77C71508725E71AD7 /* Pods-shoppin_osx-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-shoppin_osx-acknowledgements.markdown"; sourceTree = "<group>"; };
+		90A195D7F4DF5636E6BCCC91 /* Pods-shoppin_osx-Alamofire.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin_osx-Alamofire.xcconfig"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire.xcconfig"; sourceTree = "<group>"; };
+		9651B5C6984476559E158A6F /* Pods-shoppin-WYPopoverController.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-shoppin-WYPopoverController.modulemap"; sourceTree = "<group>"; };
+		9970F8C251A86094525B42A2 /* Pods-shoppin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin.release.xcconfig"; sourceTree = "<group>"; };
+		99F04EFB4DBB3FEB889AD24E /* Pods-shoppin-Alamofire-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin-Alamofire-Private.xcconfig"; sourceTree = "<group>"; };
+		9AD382BBFE8F1447C4FD4627 /* Download.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Download.swift; path = Source/Download.swift; sourceTree = "<group>"; };
+		9BEDBD6AE6E2199E53830B0D /* Pods_shoppin_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9EA6EBD1CABB52DD41AE3568 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		9F27FB6B4DB776D3697463C6 /* Pods-shoppin-Alamofire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-Alamofire-umbrella.h"; sourceTree = "<group>"; };
+		AA8E8D8DB29FCC4AF65287F6 /* Validation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Validation.swift; path = Source/Validation.swift; sourceTree = "<group>"; };
+		AC8B13D0E22ABF2751EE86FE /* WYStoryboardPopoverSegue.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = WYStoryboardPopoverSegue.m; path = WYPopoverController/WYStoryboardPopoverSegue.m; sourceTree = "<group>"; };
+		B221D603A3A1D082A5C5B91E /* Pods-shoppin_osx-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-shoppin_osx-acknowledgements.plist"; sourceTree = "<group>"; };
+		B4C64BB5273AAFB0F1A50B17 /* Pods-shoppin-WYPopoverController-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin-WYPopoverController-Private.xcconfig"; sourceTree = "<group>"; };
+		B87298D50C4958D801306BB3 /* ParameterEncoding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ParameterEncoding.swift; path = Source/ParameterEncoding.swift; sourceTree = "<group>"; };
+		BC809EDEDD5519BE078CB30A /* Pods-shoppin-WYPopoverController.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin-WYPopoverController.xcconfig"; sourceTree = "<group>"; };
+		BE2A09CFD27AA31F995AFF17 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C86092FF4C687909AAEA6DA3 /* Pods-shoppin-Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-shoppin-Alamofire.modulemap"; sourceTree = "<group>"; };
+		D06E30282E72E1EF49600A7D /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D32105065010466EC518AA9A /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D77C14714E5E695481184EA0 /* Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Alamofire.swift; path = Source/Alamofire.swift; sourceTree = "<group>"; };
+		DEE372BDA169940C93212A3B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		E0985385615D7C380C724779 /* Pods-shoppin_osx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin_osx.debug.xcconfig"; sourceTree = "<group>"; };
+		E8BBE708A66F387E36B96673 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		E92EB41A7D59B0ADE70F6485 /* Pods-shoppin-Alamofire-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-Alamofire-prefix.pch"; sourceTree = "<group>"; };
+		EC5701A705017B6F065D1E6C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		F21E5F51DF5FC580C05FE79B /* WYPopoverController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = WYPopoverController.m; path = WYPopoverController/WYPopoverController.m; sourceTree = "<group>"; };
+		F704F7F312D7AE912A887A32 /* Manager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Manager.swift; path = Source/Manager.swift; sourceTree = "<group>"; };
+		FE19035B092ED70A05955DA7 /* Pods-shoppin-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppin-resources.sh"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		12FE5B8ED79D83482D1AAD27 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BD0348EA7132DBE3526B82F /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6464CF976653049BB5F5BA8B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				714C3FB97CD3B7631CFCDD02 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B9E5F4AE6DDCF45FF3164D34 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6D7F75550B7972C21F9F957A /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB8328D2230228560579B064 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				283A1489628F9D2C824E0771 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F53FF12EE8B9731019905B63 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1BA8DD301703D16B2774A23E /* CoreGraphics.framework in Frameworks */,
+				FD348239E30E6793CED9F5A2 /* Foundation.framework in Frameworks */,
+				26EF56636B87CDA27658822D /* QuartzCore.framework in Frameworks */,
+				D747288C31B6307F74BA6272 /* UIKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		240ADBFE6B36EDCE6539886D /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				B371AB81A4F3F7896C954EDB /* Pods-shoppin */,
+				3C92D7BD1C415C818576C986 /* Pods-shoppin_osx */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		24599EEE5CB9BB8F8EF687B9 = {
+			isa = PBXGroup;
+			children = (
+				6164DE62F26FBB9ABB8C62EA /* Podfile */,
+				BBC4B402100344220FC91533 /* Frameworks */,
+				E416CC45FB111DA8E217D3A7 /* Pods */,
+				DA6A5C2E11F0F6A7FA3321B4 /* Products */,
+				240ADBFE6B36EDCE6539886D /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		3C92D7BD1C415C818576C986 /* Pods-shoppin_osx */ = {
+			isa = PBXGroup;
+			children = (
+				340B7FD7ECE5DECE6A9E955A /* Info.plist */,
+				2F4E55D532C3FCAE08BA871F /* Pods-shoppin_osx.modulemap */,
+				8ECF0DC77C71508725E71AD7 /* Pods-shoppin_osx-acknowledgements.markdown */,
+				B221D603A3A1D082A5C5B91E /* Pods-shoppin_osx-acknowledgements.plist */,
+				8C8ADFA9BBD6D8411AAC9352 /* Pods-shoppin_osx-dummy.m */,
+				2BE87B0F478C152633460889 /* Pods-shoppin_osx-environment.h */,
+				017E652750E6D3F64D31B3B4 /* Pods-shoppin_osx-frameworks.sh */,
+				6C981CE066468A2E18338539 /* Pods-shoppin_osx-resources.sh */,
+				7716D7DD8360B78313ECE9D6 /* Pods-shoppin_osx-umbrella.h */,
+				E0985385615D7C380C724779 /* Pods-shoppin_osx.debug.xcconfig */,
+				0D773907B0EFBD7ABE2EC05E /* Pods-shoppin_osx.release.xcconfig */,
+			);
+			name = "Pods-shoppin_osx";
+			path = "Target Support Files/Pods-shoppin_osx";
+			sourceTree = "<group>";
+		};
+		42D165CE4B11BC1318DC96BB /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				1A8BD04A3C50FE69AB134777 /* Info.plist */,
+				74465C01CB9A046A8892C5CF /* Info.plist */,
+				C86092FF4C687909AAEA6DA3 /* Pods-shoppin-Alamofire.modulemap */,
+				6C307D729C8BA98A2CC281A4 /* Pods-shoppin-Alamofire.xcconfig */,
+				99F04EFB4DBB3FEB889AD24E /* Pods-shoppin-Alamofire-Private.xcconfig */,
+				0DB97F2618F92F802962D10D /* Pods-shoppin-Alamofire-dummy.m */,
+				E92EB41A7D59B0ADE70F6485 /* Pods-shoppin-Alamofire-prefix.pch */,
+				9F27FB6B4DB776D3697463C6 /* Pods-shoppin-Alamofire-umbrella.h */,
+				552D8AB77329ED8A9FF771CE /* Pods-shoppin_osx-Alamofire.modulemap */,
+				90A195D7F4DF5636E6BCCC91 /* Pods-shoppin_osx-Alamofire.xcconfig */,
+				61CE3B58209A1653A7548DA9 /* Pods-shoppin_osx-Alamofire-Private.xcconfig */,
+				231FDD4FC637721227026C21 /* Pods-shoppin_osx-Alamofire-dummy.m */,
+				77F3B7E28CE48FF3A25EDA40 /* Pods-shoppin_osx-Alamofire-prefix.pch */,
+				2DCB4E6A85CE51FF165EE01A /* Pods-shoppin_osx-Alamofire-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-shoppin-Alamofire";
+			sourceTree = "<group>";
+		};
+		6B0FB67AF132BB1FB3A526EE /* WYPopoverController */ = {
+			isa = PBXGroup;
+			children = (
+				0A981A0E105B41059D7E3EB8 /* WYPopoverController.h */,
+				F21E5F51DF5FC580C05FE79B /* WYPopoverController.m */,
+				43AA3A5DB0709760ACD997DA /* WYStoryboardPopoverSegue.h */,
+				AC8B13D0E22ABF2751EE86FE /* WYStoryboardPopoverSegue.m */,
+				7B571C9DFA26C951A3861686 /* Support Files */,
+			);
+			path = WYPopoverController;
+			sourceTree = "<group>";
+		};
+		7B571C9DFA26C951A3861686 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				D06E30282E72E1EF49600A7D /* Info.plist */,
+				9651B5C6984476559E158A6F /* Pods-shoppin-WYPopoverController.modulemap */,
+				BC809EDEDD5519BE078CB30A /* Pods-shoppin-WYPopoverController.xcconfig */,
+				B4C64BB5273AAFB0F1A50B17 /* Pods-shoppin-WYPopoverController-Private.xcconfig */,
+				3234E5D9BE23505088FBC162 /* Pods-shoppin-WYPopoverController-dummy.m */,
+				10469D7021596A02E67A2B6D /* Pods-shoppin-WYPopoverController-prefix.pch */,
+				749086AB36822C80B9906D64 /* Pods-shoppin-WYPopoverController-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/Pods-shoppin-WYPopoverController";
+			sourceTree = "<group>";
+		};
+		88155A20725E77911D1795FF /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				DEE372BDA169940C93212A3B /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
+		B371AB81A4F3F7896C954EDB /* Pods-shoppin */ = {
+			isa = PBXGroup;
+			children = (
+				D32105065010466EC518AA9A /* Info.plist */,
+				201683C5591C5F94927D191E /* Pods-shoppin.modulemap */,
+				810406FA90B61D86E8326388 /* Pods-shoppin-acknowledgements.markdown */,
+				20BC2A09D5C9F969F8E62BEB /* Pods-shoppin-acknowledgements.plist */,
+				50AF05C8F9DED1F4A21FADC0 /* Pods-shoppin-dummy.m */,
+				026B748761D0760E008C8B3A /* Pods-shoppin-environment.h */,
+				503ADEA73BFA36D1588A8700 /* Pods-shoppin-frameworks.sh */,
+				FE19035B092ED70A05955DA7 /* Pods-shoppin-resources.sh */,
+				291900B904244FB97CD1C635 /* Pods-shoppin-umbrella.h */,
+				3ED4D82588B422A8A40D7FCC /* Pods-shoppin.debug.xcconfig */,
+				9970F8C251A86094525B42A2 /* Pods-shoppin.release.xcconfig */,
+			);
+			name = "Pods-shoppin";
+			path = "Target Support Files/Pods-shoppin";
+			sourceTree = "<group>";
+		};
+		BBC4B402100344220FC91533 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				88155A20725E77911D1795FF /* OS X */,
+				D04B22B9DB783BFCC8FDC40D /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D04B22B9DB783BFCC8FDC40D /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				EC5701A705017B6F065D1E6C /* CoreGraphics.framework */,
+				29D10FC358560833C00C7FDA /* Foundation.framework */,
+				9EA6EBD1CABB52DD41AE3568 /* QuartzCore.framework */,
+				E8BBE708A66F387E36B96673 /* UIKit.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		DA6A5C2E11F0F6A7FA3321B4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5DB694104C9D8B69FAA89056 /* Alamofire.framework */,
+				BE2A09CFD27AA31F995AFF17 /* Alamofire.framework */,
+				1F567A5653DD000155CF1923 /* Pods_shoppin.framework */,
+				9BEDBD6AE6E2199E53830B0D /* Pods_shoppin_osx.framework */,
+				4F2816D2F08A555B00065910 /* WYPopoverController.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E416CC45FB111DA8E217D3A7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EB977324BF198A56CB04224F /* Alamofire */,
+				6B0FB67AF132BB1FB3A526EE /* WYPopoverController */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		EB977324BF198A56CB04224F /* Alamofire */ = {
+			isa = PBXGroup;
+			children = (
+				D77C14714E5E695481184EA0 /* Alamofire.swift */,
+				9AD382BBFE8F1447C4FD4627 /* Download.swift */,
+				F704F7F312D7AE912A887A32 /* Manager.swift */,
+				B87298D50C4958D801306BB3 /* ParameterEncoding.swift */,
+				8D6CFA6D0300374EA18CC625 /* Request.swift */,
+				403D33DAF96785A3BFE70686 /* ResponseSerialization.swift */,
+				38B519A09488DC1CBF018091 /* Upload.swift */,
+				AA8E8D8DB29FCC4AF65287F6 /* Validation.swift */,
+				42D165CE4B11BC1318DC96BB /* Support Files */,
+			);
+			path = Alamofire;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		411AAEE29CC42641A0DF4F41 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C45E9EEE28C6C258C698CC7 /* Pods-shoppin-Alamofire-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		48521854330FA345662AC11F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24B931F24070449EBE9AD550 /* Pods-shoppin_osx-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		681DE8C0D25DB795BA016408 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				94021C440342EA38E97AFD5A /* Pods-shoppin-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		69605675C6FB0C49BB9D0F70 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B9CB312D160B2712D8FB566F /* Pods-shoppin-WYPopoverController-umbrella.h in Headers */,
+				168AD31FF21291EF5C6ABEA1 /* WYPopoverController.h in Headers */,
+				350D3140A2E81DDC0E7ED204 /* WYStoryboardPopoverSegue.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF88CEFA47C0F2BBF7324B23 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B75D806D4F315E2D7B81B575 /* Pods-shoppin_osx-Alamofire-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		1FF2E4A828E40BE961D6E2BF /* Pods-shoppin_osx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 15E098C11F443A03604F5369 /* Build configuration list for PBXNativeTarget "Pods-shoppin_osx" */;
+			buildPhases = (
+				CB624F5BF6420F6CF40B4F99 /* Sources */,
+				B9E5F4AE6DDCF45FF3164D34 /* Frameworks */,
+				48521854330FA345662AC11F /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				586A340553DCABF16F614680 /* PBXTargetDependency */,
+			);
+			name = "Pods-shoppin_osx";
+			productName = "Pods-shoppin_osx";
+			productReference = 9BEDBD6AE6E2199E53830B0D /* Pods_shoppin_osx.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		4201D7708ACFA81FBD1F5D8B /* Pods-shoppin-Alamofire */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6B5927D7406C6957F566468D /* Build configuration list for PBXNativeTarget "Pods-shoppin-Alamofire" */;
+			buildPhases = (
+				EAA114A2DBE9795B3C040F63 /* Sources */,
+				12FE5B8ED79D83482D1AAD27 /* Frameworks */,
+				411AAEE29CC42641A0DF4F41 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-shoppin-Alamofire";
+			productName = "Pods-shoppin-Alamofire";
+			productReference = 5DB694104C9D8B69FAA89056 /* Alamofire.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		6774193A693C73D70FFB118F /* Pods-shoppin_osx-Alamofire */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EAA67A30B7177D9EDE28EC7D /* Build configuration list for PBXNativeTarget "Pods-shoppin_osx-Alamofire" */;
+			buildPhases = (
+				AE4A2A5778B31D03C2447E96 /* Sources */,
+				EB8328D2230228560579B064 /* Frameworks */,
+				FF88CEFA47C0F2BBF7324B23 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-shoppin_osx-Alamofire";
+			productName = "Pods-shoppin_osx-Alamofire";
+			productReference = BE2A09CFD27AA31F995AFF17 /* Alamofire.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		67C03EA22D5A3EA5251E32D3 /* Pods-shoppin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E8538E57F8C0881F58D0CCA9 /* Build configuration list for PBXNativeTarget "Pods-shoppin" */;
+			buildPhases = (
+				FB937086E2A958FAA6AB998B /* Sources */,
+				6464CF976653049BB5F5BA8B /* Frameworks */,
+				681DE8C0D25DB795BA016408 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				60EF935B48617429BC0D418F /* PBXTargetDependency */,
+				32C2B30632E5CE363D8C9510 /* PBXTargetDependency */,
+			);
+			name = "Pods-shoppin";
+			productName = "Pods-shoppin";
+			productReference = 1F567A5653DD000155CF1923 /* Pods_shoppin.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		F41CD19835FF8A64619B2EE2 /* Pods-shoppin-WYPopoverController */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 419BCD3275FB950A61F927FE /* Build configuration list for PBXNativeTarget "Pods-shoppin-WYPopoverController" */;
+			buildPhases = (
+				81F6441260F023311C8D7DF3 /* Sources */,
+				F53FF12EE8B9731019905B63 /* Frameworks */,
+				69605675C6FB0C49BB9D0F70 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-shoppin-WYPopoverController";
+			productName = "Pods-shoppin-WYPopoverController";
+			productReference = 4F2816D2F08A555B00065910 /* WYPopoverController.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F47B6A57BA88C3D9190AA085 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+			};
+			buildConfigurationList = 5B9717210018BADD4B8C67A2 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 24599EEE5CB9BB8F8EF687B9;
+			productRefGroup = DA6A5C2E11F0F6A7FA3321B4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				67C03EA22D5A3EA5251E32D3 /* Pods-shoppin */,
+				4201D7708ACFA81FBD1F5D8B /* Pods-shoppin-Alamofire */,
+				F41CD19835FF8A64619B2EE2 /* Pods-shoppin-WYPopoverController */,
+				1FF2E4A828E40BE961D6E2BF /* Pods-shoppin_osx */,
+				6774193A693C73D70FFB118F /* Pods-shoppin_osx-Alamofire */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		81F6441260F023311C8D7DF3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				930E69DB73913E4006F3F966 /* Pods-shoppin-WYPopoverController-dummy.m in Sources */,
+				96C910EEB24DDBA7C6C6C81F /* WYPopoverController.m in Sources */,
+				8708D3BE2D8330A4ED4DC11F /* WYStoryboardPopoverSegue.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE4A2A5778B31D03C2447E96 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE80D3B1DB058E314CD54423 /* Alamofire.swift in Sources */,
+				AF3F98A7C681760A56BCC54E /* Download.swift in Sources */,
+				76EBBFB237BCECD9A4D464FB /* Manager.swift in Sources */,
+				7DB065C4A57541A739541CD2 /* ParameterEncoding.swift in Sources */,
+				8925ABBFDF3D4B1A902E915E /* Pods-shoppin_osx-Alamofire-dummy.m in Sources */,
+				2833A615CC36EF0A0737190E /* Request.swift in Sources */,
+				D503B5E8CDF2EBCF978A3902 /* ResponseSerialization.swift in Sources */,
+				01FC3CE9930F9A0855D12C3C /* Upload.swift in Sources */,
+				21F2D8CD1AFC5E1C4553BBE8 /* Validation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CB624F5BF6420F6CF40B4F99 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F7C2FA2DC1E2855C58C38C3 /* Pods-shoppin_osx-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EAA114A2DBE9795B3C040F63 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				38593A5B2DAD360911281020 /* Alamofire.swift in Sources */,
+				FB0DB1E408371633CC96D16F /* Download.swift in Sources */,
+				25E324314962B850699D9472 /* Manager.swift in Sources */,
+				B7103867DB3F8E9E41479281 /* ParameterEncoding.swift in Sources */,
+				98B803341E44197DA7A58370 /* Pods-shoppin-Alamofire-dummy.m in Sources */,
+				7B1E05CB0E4746B7633F886B /* Request.swift in Sources */,
+				C8351DA48959F80DA75F0EBA /* ResponseSerialization.swift in Sources */,
+				2E3220A9BC6C9C57D6E36378 /* Upload.swift in Sources */,
+				3F95A9A1F0747A44989AC839 /* Validation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB937086E2A958FAA6AB998B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A2B6D03558390611A5E5A2B /* Pods-shoppin-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		32C2B30632E5CE363D8C9510 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-shoppin-WYPopoverController";
+			target = F41CD19835FF8A64619B2EE2 /* Pods-shoppin-WYPopoverController */;
+			targetProxy = FB68E0A0123E4AA14F712CE0 /* PBXContainerItemProxy */;
+		};
+		586A340553DCABF16F614680 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-shoppin_osx-Alamofire";
+			target = 6774193A693C73D70FFB118F /* Pods-shoppin_osx-Alamofire */;
+			targetProxy = B21A8B2F46AD81C93E56AB3D /* PBXContainerItemProxy */;
+		};
+		60EF935B48617429BC0D418F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-shoppin-Alamofire";
+			target = 4201D7708ACFA81FBD1F5D8B /* Pods-shoppin-Alamofire */;
+			targetProxy = CFA0817074286ED2C4CD829E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0A0FAA334446632DD0D3C23D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9970F8C251A86094525B42A2 /* Pods-shoppin.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin/Pods-shoppin.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_shoppin;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		24AB7013B94AF61B3F630968 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 61CE3B58209A1653A7548DA9 /* Pods-shoppin_osx-Alamofire-Private.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin_osx-Alamofire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = Alamofire;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		32A5D7ABEA32DC52036F8B94 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0D773907B0EFBD7ABE2EC05E /* Pods-shoppin_osx.release.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin_osx/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin_osx/Pods-shoppin_osx.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_shoppin_osx;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		6EE387541B62AC63A00896B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6F5D025033A451DAD6328891 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 99F04EFB4DBB3FEB889AD24E /* Pods-shoppin-Alamofire-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin-Alamofire/Pods-shoppin-Alamofire-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin-Alamofire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-Alamofire/Pods-shoppin-Alamofire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = Alamofire;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7317D4EB0D50E29073F50895 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B4C64BB5273AAFB0F1A50B17 /* Pods-shoppin-WYPopoverController-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin-WYPopoverController/Pods-shoppin-WYPopoverController-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin-WYPopoverController/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-WYPopoverController/Pods-shoppin-WYPopoverController.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = WYPopoverController;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		735A9292BDFAEB7FF1CA2B87 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		7457638B01E84565C6F33210 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B4C64BB5273AAFB0F1A50B17 /* Pods-shoppin-WYPopoverController-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin-WYPopoverController/Pods-shoppin-WYPopoverController-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin-WYPopoverController/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-WYPopoverController/Pods-shoppin-WYPopoverController.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = WYPopoverController;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		905D128CE37AB4B5AE308ED9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 99F04EFB4DBB3FEB889AD24E /* Pods-shoppin-Alamofire-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin-Alamofire/Pods-shoppin-Alamofire-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin-Alamofire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-Alamofire/Pods-shoppin-Alamofire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = Alamofire;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		94A34A3B2583699EE9E1CA8B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3ED4D82588B422A8A40D7FCC /* Pods-shoppin.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin/Pods-shoppin.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_shoppin;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		C7BB7279B61E4387EEDA0D61 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 61CE3B58209A1653A7548DA9 /* Pods-shoppin_osx-Alamofire-Private.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin_osx-Alamofire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = Alamofire;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		DB152E8CAA07B6716626CB4D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E0985385615D7C380C724779 /* Pods-shoppin_osx.debug.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin_osx/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin_osx/Pods-shoppin_osx.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_shoppin_osx;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		15E098C11F443A03604F5369 /* Build configuration list for PBXNativeTarget "Pods-shoppin_osx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DB152E8CAA07B6716626CB4D /* Debug */,
+				32A5D7ABEA32DC52036F8B94 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		419BCD3275FB950A61F927FE /* Build configuration list for PBXNativeTarget "Pods-shoppin-WYPopoverController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7457638B01E84565C6F33210 /* Debug */,
+				7317D4EB0D50E29073F50895 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5B9717210018BADD4B8C67A2 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				735A9292BDFAEB7FF1CA2B87 /* Debug */,
+				6EE387541B62AC63A00896B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6B5927D7406C6957F566468D /* Build configuration list for PBXNativeTarget "Pods-shoppin-Alamofire" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				905D128CE37AB4B5AE308ED9 /* Debug */,
+				6F5D025033A451DAD6328891 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E8538E57F8C0881F58D0CCA9 /* Build configuration list for PBXNativeTarget "Pods-shoppin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				94A34A3B2583699EE9E1CA8B /* Debug */,
+				0A0FAA334446632DD0D3C23D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EAA67A30B7177D9EDE28EC7D /* Build configuration list for PBXNativeTarget "Pods-shoppin_osx-Alamofire" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7BB7279B61E4387EEDA0D61 /* Debug */,
+				24AB7013B94AF61B3F630968 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F47B6A57BA88C3D9190AA085 /* Project object */;
+}

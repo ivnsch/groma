@@ -4,12 +4,27 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Pods-WYPopoverController.xcscheme</key>
+		<key>Pods-shoppin-Alamofire.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods.xcscheme</key>
+		<key>Pods-shoppin-WYPopoverController.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-shoppin.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-shoppin_osx-Alamofire.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-shoppin_osx.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -17,12 +32,27 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>9B5941BF9C73C8FEF26A56F9</key>
+		<key>1FF2E4A828E40BE961D6E2BF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DAD381EC21E0CA5820BB9DFA</key>
+		<key>4201D7708ACFA81FBD1F5D8B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>6774193A693C73D70FFB118F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>67C03EA22D5A3EA5251E32D3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F41CD19835FF8A64619B2EE2</key>
 		<dict>
 			<key>primary</key>
 			<true/>

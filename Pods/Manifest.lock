@@ -1,10 +1,13 @@
 PODS:
+  - Alamofire (1.2.2)
   - WYPopoverController (0.2.2)
 
 DEPENDENCIES:
-  - WYPopoverController (~> 0.2.0)
+  - Alamofire (~> 1.2)
+  - WYPopoverController (~> 0.2.2)
 
 SPEC CHECKSUMS:
-  WYPopoverController: c233d69fdfd5c7e316b481df1060624d7a9e629d
+  Alamofire: 11a6022f5089887d92ffb5a3014c97a0a915ab98
+  WYPopoverController: 00d879c25bddd1fd873dcc21aa98c8308d7f1555
 
-COCOAPODS: 0.35.0
+COCOAPODS: 0.37.2
