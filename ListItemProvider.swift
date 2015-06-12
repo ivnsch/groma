@@ -9,8 +9,7 @@
 
 protocol ListItemProvider {
     
-    // TODO vars instead of func
-    func products() -> [Product]
+    func products(handler: Try<Product>)
     
     func sections() -> [Section]
 

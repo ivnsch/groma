@@ -93,6 +93,8 @@
 		EB6D93A41B1B788200ED8999 /* AutosuggestionsTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB6D93A21B1B788200ED8999 /* AutosuggestionsTableViewController.xib */; };
 		EB6D93A61B1BAFB400ED8999 /* HandlingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6D93A51B1BAFB400ED8999 /* HandlingTextField.swift */; };
 		EB6D93A81B1C8CE500ED8999 /* HandlingTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6D93A71B1C8CE500ED8999 /* HandlingTableView.swift */; };
+		EB7E8B611B2ADF620090409A /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
+		EB7E8B621B2ADF9A0090409A /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
 		EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */; };
 		EB89D3071AD41E2D00B6E0D0 /* ListsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */; };
 		EB89D33C1AD44BD400B6E0D0 /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */; };
@@ -218,6 +220,7 @@
 		EB6D93A21B1B788200ED8999 /* AutosuggestionsTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AutosuggestionsTableViewController.xib; sourceTree = "<group>"; };
 		EB6D93A51B1BAFB400ED8999 /* HandlingTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlingTextField.swift; sourceTree = "<group>"; };
 		EB6D93A71B1C8CE500ED8999 /* HandlingTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlingTableView.swift; sourceTree = "<group>"; };
+		EB7E8B601B2ADF620090409A /* Try.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Try.swift; sourceTree = "<group>"; };
 		EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
 		EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListsViewController.xib; sourceTree = "<group>"; };
 		EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
@@ -454,6 +457,7 @@
 				EB4FD44F1AC6BE960000F952 /* Globals.swift */,
 				EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */,
 				EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */,
+				EB7E8B601B2ADF620090409A /* Try.swift */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -1029,6 +1033,7 @@
 				EBF162DD1A3C82380048E37C /* DefaultTableViewController.swift in Sources */,
 				EBF162E51A3C85A30048E37C /* ListItemCell.swift in Sources */,
 				EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */,
+				EB7E8B611B2ADF620090409A /* Try.swift in Sources */,
 				EB20FBF81A5971170058103B /* InventoryItem.swift in Sources */,
 				EBF162FA1A3CA54F0048E37C /* ListItemProvider.swift in Sources */,
 				EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */,
@@ -1088,6 +1093,7 @@
 				EB5567671A8643AF00CD3EC6 /* CDList.swift in Sources */,
 				EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */,
 				EB6D93A81B1C8CE500ED8999 /* HandlingTableView.swift in Sources */,
+				EB7E8B621B2ADF9A0090409A /* Try.swift in Sources */,
 				EB55675D1A86433700CD3EC6 /* Product.swift in Sources */,
 				EBDFE3BF1ACEF60100E48F95 /* HeaderCell.swift in Sources */,
 				EB5567681A8643B200CD3EC6 /* CDInventoryItem.swift in Sources */,

@@ -11,7 +11,9 @@ class ListItemProviderImpl: ListItemProvider {
 
     let cdProvider = CDListItemProvider()
 
-    func products() -> [Product] {
+    func products(handler: Try<Product>) {
+        
+        
         return self.cdProvider.loadProducts().map {ProductMapper.productWithCD($0)}
     }
     

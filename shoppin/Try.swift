@@ -6,8 +6,7 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
-import UIKit
-
-class Try: Any {
-   
+enum Try<T, U> {
+    case Success(T)
+    case Error(U)
 }

@@ -10,8 +10,9 @@ import CoreData
 
 class CDListItemProvider: CDProvider {
     
-    func loadProducts() -> [CDProduct] {
-        return self.load(entityName: "CDProduct", type: CDProduct.self)
+    func loadProducts(handler: Try<Array<CDProduct>>) {
+        let cdProducts = self.load(entityName: "CDProduct", type: CDProduct.self)
+        handler(Try.Success(cdProducts))
     }
     
     func loadListItems(listId:String) -> [CDListItem] {
