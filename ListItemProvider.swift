@@ -9,34 +9,34 @@
 
 protocol ListItemProvider {
     
-    func products(handler: Try<Product>)
+    func products(handler: Try<[Product]> -> ())
     
-    func sections() -> [Section]
+    func sections(handler: Try<[Section]> -> ())
 
-    func remove(listItem:ListItem) -> Bool
+    func remove(listItem: ListItem, handler: Try<Bool> -> ())
     
-    func remove(section:Section) -> Bool
+    func remove(section: Section, handler: Try<Bool> -> ())
     
-    func remove(list:List) -> Bool
+    func remove(list: List, handler: Try<Bool> -> ())
 
-    func add(listItem:ListItem) -> ListItem?
+    func add(listItem: ListItem, handler: Try<ListItem> -> ())
 
     // optional order - if nil will be appended at the end
-    func add(listItemInput:ListItemInput, list:List, order:Int?) -> ListItem?
+    func add(listItemInput: ListItemInput, list: List, order: Int?, handler: Try<ListItem> -> ())
     
-    func update(listItem:ListItem) -> Bool
+    func update(listItem: ListItem, handler: Try<Bool> -> ())
 
-    func update(listItems:[ListItem]) -> Bool
+    func update(listItems: [ListItem], handler: Try<Bool> -> ())
     
-    func add(list:List) -> List?
+    func add(list: List, handler: Try<List> -> ())
     
-    func lists() -> [List]
+    func lists(handler: Try<[List]> -> ())
 
-    func list(listId:String) -> List?
+    func list(listId: String, handler: Try<List> -> ())
     
-    func listItems(list:List) -> [ListItem]
+    func listItems(list: List, handler: Try<[ListItem]> -> ())
     
-    func updateDone(listItems:[ListItem]) -> Bool
-    
-    var firstList:List {get}
+    func updateDone(listItems:[ListItem], handler: Try<Bool> -> ())
+
+    func firstList(handler: Try<List> -> ())
 }

@@ -33,12 +33,13 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         super.viewDidLoad()
     }
 
-    private func initList(list:List) {
-        let listItems = self.listItemsProvider.listItems(list)
-        
-        self.cellManagers = self.createCellManagers(listItems)
-        
-        self.updateTotalPriceLabel()
+    private func initList(list: List) {
+        self.listItemsProvider.listItems(list, handler: {try in
+            if let listItems = try.success {
+                self.cellManagers = self.createCellManagers(listItems)
+                self.updateTotalPriceLabel()
+            }
+        })
     }
     
     override func awakeFromNib() {
@@ -60,11 +61,14 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         self.listsViewController = listsViewController
     }
     
-    private func selectList(list:List) {
-        let listItems = self.listItemsProvider.listItems(list)
-        self.cellManagers = self.createCellManagers(listItems)
-        self.updateTotalPriceLabel()
-        self.tableView.reloadData()
+    private func selectList(list: List) {
+        self.listItemsProvider.listItems(list, handler: {try in
+            if let listItems = try.success {
+                self.cellManagers = self.createCellManagers(listItems)
+                self.updateTotalPriceLabel()
+                self.tableView.reloadData()
+            }
+        })
     }
 
     private func createCellManagers(listItems: [ListItem]) -> [CellManager] {
@@ -268,54 +272,58 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             let editListItemController = EditListItemController()
             editListItemController.addTappedFunc = {listItemInput in
                 
-                let listItemMaybe = self.listItemsProvider.add(listItemInput, list: list, order: rowIndex) // note that this also adds the section if it doesn't exist yet
-                
-                if let currentList = self.currentList, listItem = listItemMaybe {
+                // note that this also adds the section if it doesn't exist yet
+                self.listItemsProvider.add(listItemInput, list: list, order: rowIndex, handler: {try in
                     
-                    let cellManager = ListItemCellManager(listItem: listItem, delegate: self)
-                    
-                    var indexPathsToInsert = NSMutableIndexSet()
-                    
-                    if let lastIndexInSection = self.getLastIndexInSection(listItem.section) { // section exists
-                       
-                        let header = self.getHeader(previousRow)
-                        if header.section == listItem.section { // rowIndex is in the section - insert at rowIndex
-                            self.cellManagers.insert(cellManager, atIndex: rowIndex)
-                            indexPathsToInsert.addIndex(rowIndex)
-                            
-                        } else { // rowIndex is not in the section (user selected changed the section in the popup) - insert at the end of entered section
-                            if let lastIndexInSection = self.getLastIndexInSection(listItem.section) {
-                                let newListItemIndex = lastIndexInSection + 1
-                                self.cellManagers.insert(cellManager, atIndex: newListItemIndex)
-                                indexPathsToInsert.addIndex(newListItemIndex)
-                                
-                            } else {
-                                println("Error: couldn't get last index in section, can't add item row to tableview")
-                            }
-                        }
- 
-                    } else { // new section
-                        // insert section header at the end of current section
-                        let newSectionHeader = HeaderCellManager(section: listItem.section, delegate: self)
+                    if let currentList = self.currentList, listItem = try.success {
                         
-                        let endOfCurrentSection = self.getEndOfCurrentSection(previousRow) // -1 to get current row - rowIndex is index of new item
-                        let newHeaderIndex = endOfCurrentSection + 1
-
-                        self.cellManagers.insert(newSectionHeader, atIndex: newHeaderIndex)
-                        // insert new item below the new header
-                        let newListItemIndex = newHeaderIndex + 1
-                        self.cellManagers.insert(cellManager, atIndex: newListItemIndex)
-                        indexPathsToInsert.addIndex(newHeaderIndex)
-                        indexPathsToInsert.addIndex(newListItemIndex)
+                        let cellManager = ListItemCellManager(listItem: listItem, delegate: self)
+                        
+                        var indexPathsToInsert = NSMutableIndexSet()
+                        
+                        if let lastIndexInSection = self.getLastIndexInSection(listItem.section) { // section exists
+                            
+                            let header = self.getHeader(previousRow)
+                            if header.section == listItem.section { // rowIndex is in the section - insert at rowIndex
+                                self.cellManagers.insert(cellManager, atIndex: rowIndex)
+                                indexPathsToInsert.addIndex(rowIndex)
+                                
+                            } else { // rowIndex is not in the section (user selected changed the section in the popup) - insert at the end of entered section
+                                if let lastIndexInSection = self.getLastIndexInSection(listItem.section) {
+                                    let newListItemIndex = lastIndexInSection + 1
+                                    self.cellManagers.insert(cellManager, atIndex: newListItemIndex)
+                                    indexPathsToInsert.addIndex(newListItemIndex)
+                                    
+                                } else {
+                                    println("Error: couldn't get last index in section, can't add item row to tableview")
+                                }
+                            }
+                            
+                        } else { // new section
+                            // insert section header at the end of current section
+                            let newSectionHeader = HeaderCellManager(section: listItem.section, delegate: self)
+                            
+                            let endOfCurrentSection = self.getEndOfCurrentSection(previousRow) // -1 to get current row - rowIndex is index of new item
+                            let newHeaderIndex = endOfCurrentSection + 1
+                            
+                            self.cellManagers.insert(newSectionHeader, atIndex: newHeaderIndex)
+                            // insert new item below the new header
+                            let newListItemIndex = newHeaderIndex + 1
+                            self.cellManagers.insert(cellManager, atIndex: newListItemIndex)
+                            indexPathsToInsert.addIndex(newHeaderIndex)
+                            indexPathsToInsert.addIndex(newListItemIndex)
+                        }
+                        
+                        self.tableView.wrapUpdates {
+                            self.tableView.insertRowsAtIndexes(indexPathsToInsert, withAnimation: NSTableViewAnimationOptions.SlideDown)
+                            }()
+                        
+                    } else {
+                        println("Warning: trying to add item without current list")
                     }
                     
-                    self.tableView.wrapUpdates {
-                        self.tableView.insertRowsAtIndexes(indexPathsToInsert, withAnimation: NSTableViewAnimationOptions.SlideDown)
-                    }()
-                    
-                } else {
-                    println("Warning: trying to add item without current list")
-                }
+                })
+
                 
                 editListItemController.close()
             }
@@ -342,21 +350,25 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             editListItemController.addTappedFunc = {listItemInput in
               
                 let updatedListItem = self.toUpdatedListItem(listItemRow.listItem, listItemInput: listItemInput)
-                if (!self.listItemsProvider.update(updatedListItem)) {
-                    println("Error: couldn't update item")
-                }
-                
-                self.cellManagers[rowIndex] = ListItemCellManager(listItem: updatedListItem, delegate: self)
-                
-                let editableColumnIndices: NSIndexSet =  NSIndexSet(indexesInRange: NSMakeRange(0, 1))
-                self.tableView.wrapUpdates {
-                    self.tableView.reloadDataForRowIndexes(NSIndexSet(index: rowIndex), columnIndexes: editableColumnIndices)
-                    
-                }()
- 
-                editListItemController.close()
-                
-                self.updateTotalPriceLabel()
+                self.listItemsProvider.update(updatedListItem, handler: {try in
+                    if try.success ?? false {
+                        
+                        self.cellManagers[rowIndex] = ListItemCellManager(listItem: updatedListItem, delegate: self)
+                        
+                        let editableColumnIndices: NSIndexSet =  NSIndexSet(indexesInRange: NSMakeRange(0, 1))
+                        self.tableView.wrapUpdates {
+                            self.tableView.reloadDataForRowIndexes(NSIndexSet(index: rowIndex), columnIndexes: editableColumnIndices)
+                            
+                            }()
+                        
+                        editListItemController.close()
+                        
+                        self.updateTotalPriceLabel()
+                        
+                    } else {
+                        println("Error: couldn't update item")
+                    }
+                })
             }
 
             editListItemController.windowDidLoadFunc = {
@@ -375,11 +387,11 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             self.tableView.removeRowsAtIndexes(NSIndexSet(index: row), withAnimation: NSTableViewAnimationOptions.EffectFade | NSTableViewAnimationOptions.SlideLeft)
         }()
         
-        self.listItemsProvider.remove(listItemRow.listItem)
-        
-        self.updateListItemsModelsOrder()
-        self.updateAllListItemsInProvider()
-        self.updateTotalPriceLabel()
+        self.listItemsProvider.remove(listItemRow.listItem, handler: {removed in
+            self.updateListItemsModelsOrder()
+            self.updateAllListItemsInProvider()
+            self.updateTotalPriceLabel()
+        })
     }
 
     private func moveRowWithLimitsCheck(rowIndex: Int, targetIndex: Int, anim: NSTableViewAnimationOptions) {
@@ -410,19 +422,19 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     
     private func removeSection(cell: HeaderCell, section: Section) {
         let sectionRowIndex = self.tableView.rowForView(cell)
-        
 
-        self.listItemsProvider.remove(section)
-        
-        let indexSetToRemove = NSMutableIndexSet()
-        indexSetToRemove.addIndex(sectionRowIndex)
-        let sectionListItemRows = self.getListItemRowsInSection(sectionRowIndex)
-        indexSetToRemove.addIndexes(sectionListItemRows)
-        self.tableView.wrapUpdates {
-            self.tableView.removeRowsAtIndexes(indexSetToRemove, withAnimation: NSTableViewAnimationOptions.SlideDown)
-        }()
-        
-        self.updateTotalPriceLabel()
+        self.listItemsProvider.remove(section, handler: {[weak self] removed in
+            
+            let indexSetToRemove = NSMutableIndexSet()
+            indexSetToRemove.addIndex(sectionRowIndex)
+            let sectionListItemRows = self!.getListItemRowsInSection(sectionRowIndex)
+            indexSetToRemove.addIndexes(sectionListItemRows)
+            self!.tableView.wrapUpdates {
+                self!.tableView.removeRowsAtIndexes(indexSetToRemove, withAnimation: NSTableViewAnimationOptions.SlideDown)
+                }()
+            
+            self!.updateTotalPriceLabel()
+        })
     }
     
     // MARK: - update all models
@@ -462,7 +474,9 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     // MARK: - provider only
 
     private func updateAllListItemsInProvider() {
-        self.listItemsProvider.update(self.listItemRows.map{$0.listItemRow.listItem})
+        self.listItemsProvider.update(self.listItemRows.map{$0.listItemRow.listItem}, handler: {try in
+            return
+        })
     }
     
     

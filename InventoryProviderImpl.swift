@@ -10,15 +10,23 @@ class InventoryProviderImpl: InventoryProvider {
    
     let cdProvider = CDInventoryProvider()
 
-    func inventory() -> [InventoryItem] {
-        return self.cdProvider.loadInventory().map{InventoryItemMapper.inventoryItemWithCD($0)}
+    func inventory(handler: Try<[InventoryItem]> -> ()) {
+        
+        self.cdProvider.loadInventory{try in
+            if let cdItems = try.success {
+                let items = cdItems.map{InventoryItemMapper.inventoryItemWithCD($0)}
+                handler(Try(items))
+            }
+        }
     }
     
-    func addToInventory(items:[InventoryItem]) {
-        self.cdProvider.addToInventory(items)
+    func addToInventory(items: [InventoryItem]) {
+        self.cdProvider.addToInventory(items, handler: {try in
+        })
     }
  
     func updateInventoryItem(item:InventoryItem) {
-        self.cdProvider.updateInventoryItem(item)
+        self.cdProvider.updateInventoryItem(item, handler: {try in
+        })
     }
 }

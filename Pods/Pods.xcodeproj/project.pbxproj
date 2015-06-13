@@ -7,354 +7,354 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		01FC3CE9930F9A0855D12C3C /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B519A09488DC1CBF018091 /* Upload.swift */; };
-		168AD31FF21291EF5C6ABEA1 /* WYPopoverController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0A981A0E105B41059D7E3EB8 /* WYPopoverController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1BA8DD301703D16B2774A23E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC5701A705017B6F065D1E6C /* CoreGraphics.framework */; };
-		1C45E9EEE28C6C258C698CC7 /* Pods-shoppin-Alamofire-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F27FB6B4DB776D3697463C6 /* Pods-shoppin-Alamofire-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		21F2D8CD1AFC5E1C4553BBE8 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8E8D8DB29FCC4AF65287F6 /* Validation.swift */; };
-		24B931F24070449EBE9AD550 /* Pods-shoppin_osx-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 7716D7DD8360B78313ECE9D6 /* Pods-shoppin_osx-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		25E324314962B850699D9472 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F704F7F312D7AE912A887A32 /* Manager.swift */; };
-		26EF56636B87CDA27658822D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EA6EBD1CABB52DD41AE3568 /* QuartzCore.framework */; };
-		2833A615CC36EF0A0737190E /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6CFA6D0300374EA18CC625 /* Request.swift */; };
-		283A1489628F9D2C824E0771 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE372BDA169940C93212A3B /* Cocoa.framework */; };
-		2E3220A9BC6C9C57D6E36378 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B519A09488DC1CBF018091 /* Upload.swift */; };
-		350D3140A2E81DDC0E7ED204 /* WYStoryboardPopoverSegue.h in Headers */ = {isa = PBXBuildFile; fileRef = 43AA3A5DB0709760ACD997DA /* WYStoryboardPopoverSegue.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		38593A5B2DAD360911281020 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77C14714E5E695481184EA0 /* Alamofire.swift */; };
-		3BD0348EA7132DBE3526B82F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D10FC358560833C00C7FDA /* Foundation.framework */; };
-		3F7C2FA2DC1E2855C58C38C3 /* Pods-shoppin_osx-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C8ADFA9BBD6D8411AAC9352 /* Pods-shoppin_osx-dummy.m */; };
-		3F95A9A1F0747A44989AC839 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8E8D8DB29FCC4AF65287F6 /* Validation.swift */; };
-		6D7F75550B7972C21F9F957A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEE372BDA169940C93212A3B /* Cocoa.framework */; };
-		714C3FB97CD3B7631CFCDD02 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D10FC358560833C00C7FDA /* Foundation.framework */; };
-		76EBBFB237BCECD9A4D464FB /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F704F7F312D7AE912A887A32 /* Manager.swift */; };
-		7B1E05CB0E4746B7633F886B /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6CFA6D0300374EA18CC625 /* Request.swift */; };
-		7DB065C4A57541A739541CD2 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87298D50C4958D801306BB3 /* ParameterEncoding.swift */; };
-		8708D3BE2D8330A4ED4DC11F /* WYStoryboardPopoverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = AC8B13D0E22ABF2751EE86FE /* WYStoryboardPopoverSegue.m */; };
-		8925ABBFDF3D4B1A902E915E /* Pods-shoppin_osx-Alamofire-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 231FDD4FC637721227026C21 /* Pods-shoppin_osx-Alamofire-dummy.m */; };
-		930E69DB73913E4006F3F966 /* Pods-shoppin-WYPopoverController-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3234E5D9BE23505088FBC162 /* Pods-shoppin-WYPopoverController-dummy.m */; };
-		94021C440342EA38E97AFD5A /* Pods-shoppin-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 291900B904244FB97CD1C635 /* Pods-shoppin-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		96C910EEB24DDBA7C6C6C81F /* WYPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = F21E5F51DF5FC580C05FE79B /* WYPopoverController.m */; };
-		98B803341E44197DA7A58370 /* Pods-shoppin-Alamofire-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DB97F2618F92F802962D10D /* Pods-shoppin-Alamofire-dummy.m */; };
-		9A2B6D03558390611A5E5A2B /* Pods-shoppin-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 50AF05C8F9DED1F4A21FADC0 /* Pods-shoppin-dummy.m */; };
-		AF3F98A7C681760A56BCC54E /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD382BBFE8F1447C4FD4627 /* Download.swift */; };
-		B7103867DB3F8E9E41479281 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87298D50C4958D801306BB3 /* ParameterEncoding.swift */; };
-		B75D806D4F315E2D7B81B575 /* Pods-shoppin_osx-Alamofire-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DCB4E6A85CE51FF165EE01A /* Pods-shoppin_osx-Alamofire-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B9CB312D160B2712D8FB566F /* Pods-shoppin-WYPopoverController-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 749086AB36822C80B9906D64 /* Pods-shoppin-WYPopoverController-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BE80D3B1DB058E314CD54423 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77C14714E5E695481184EA0 /* Alamofire.swift */; };
-		C8351DA48959F80DA75F0EBA /* ResponseSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403D33DAF96785A3BFE70686 /* ResponseSerialization.swift */; };
-		D503B5E8CDF2EBCF978A3902 /* ResponseSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 403D33DAF96785A3BFE70686 /* ResponseSerialization.swift */; };
-		D747288C31B6307F74BA6272 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8BBE708A66F387E36B96673 /* UIKit.framework */; };
-		FB0DB1E408371633CC96D16F /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AD382BBFE8F1447C4FD4627 /* Download.swift */; };
-		FD348239E30E6793CED9F5A2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29D10FC358560833C00C7FDA /* Foundation.framework */; };
+		0656C51778B3D0FD1154E6F1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F8F9EF524066D2CCCE6D675F /* CoreGraphics.framework */; };
+		0BFAA1A0C821E64FAF03B11E /* Pods-shoppin-WYPopoverController-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 72A6DFD83C7A8D3594AB5A04 /* Pods-shoppin-WYPopoverController-dummy.m */; };
+		1580A7365574D0F88FBAD52F /* Pods-shoppin_osx-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 244CB5D3205F01B55F209DE3 /* Pods-shoppin_osx-dummy.m */; };
+		1C166FD3487F546B991984C6 /* Pods-shoppin-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 095DB51C8D6CAF27DF77869A /* Pods-shoppin-dummy.m */; };
+		1C53507AF47417B1479C6A72 /* Pods-shoppin-Alamofire-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D40AB3C33AD18C08E3B6449 /* Pods-shoppin-Alamofire-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1D3CA170B44FD70724B9F509 /* WYPopoverController.h in Headers */ = {isa = PBXBuildFile; fileRef = C9D74AC181C900EA46898869 /* WYPopoverController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1DED319CBC58F974624BE2CA /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B499A00E3B763A5B3930D5 /* Alamofire.swift */; };
+		20A6ECA9313D218218FBC188 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F2522BD356BB8AB1337904 /* Foundation.framework */; };
+		238B6F9EEECBC0BC29AFC62A /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B499A00E3B763A5B3930D5 /* Alamofire.swift */; };
+		243343A4EB2A6F5BB8849284 /* Pods-shoppin-WYPopoverController-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 874556CDBF1831031E2D9131 /* Pods-shoppin-WYPopoverController-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		346B44661E787570BC020711 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F2522BD356BB8AB1337904 /* Foundation.framework */; };
+		3C2144D69D9215A85FC4CFF9 /* Pods-shoppin_osx-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 22E097D2F9FA2895AA939963 /* Pods-shoppin_osx-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		40937B8322DF1C67249B096F /* WYPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 985A0D389544C8110A58DDEC /* WYPopoverController.m */; };
+		43821FD857A16F7C786F5F4D /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F2686DECBC0A801A77C618 /* Request.swift */; };
+		45847CF3133DA2AEA823FC46 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D8DA71EE21AD19768361D4 /* Upload.swift */; };
+		4DEEEC357001E053DABA7BE6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F5986D7A0DC4B453C6F7450 /* Cocoa.framework */; };
+		55B5095A5D336849AD27C07E /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36182EFE69B5C3D155F84E8B /* Validation.swift */; };
+		56F7A5ED9068536A68632D39 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19F2686DECBC0A801A77C618 /* Request.swift */; };
+		57CA91B714063BBE4EB08F34 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3868BAC439D0686B8565D3F1 /* ParameterEncoding.swift */; };
+		6C8EC4AF6CAF5013533CCE11 /* WYStoryboardPopoverSegue.h in Headers */ = {isa = PBXBuildFile; fileRef = B02D5F355BA648AFD56B9E68 /* WYStoryboardPopoverSegue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6DDABAF707C3BF21C71AEED7 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E461EEB0D7E16C9FA93816A9 /* QuartzCore.framework */; };
+		7FA0C734C20F9E6920DFF94C /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36182EFE69B5C3D155F84E8B /* Validation.swift */; };
+		852FE096EE820E4A7A52F4B5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 76291474AD8C01159E47CBED /* UIKit.framework */; };
+		877712F0AEC321B1BEAC4CA9 /* Pods-shoppin_osx-Alamofire-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 041FF3CBE3C74B3D4410BE2B /* Pods-shoppin_osx-Alamofire-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		881425E9E1179AE9A649D093 /* WYStoryboardPopoverSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = 610E3233EAFAFE3D4B5F8087 /* WYStoryboardPopoverSegue.m */; };
+		9D36B9CA040003F06A64470F /* ResponseSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF55E8B0716369B20C0CC84 /* ResponseSerialization.swift */; };
+		9DD8DE9A490C9598ED95367E /* Pods-shoppin-Alamofire-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FCE198F4C38B8A9FB1EE906D /* Pods-shoppin-Alamofire-dummy.m */; };
+		AA95CCF02B06169D8093A255 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D8DA71EE21AD19768361D4 /* Upload.swift */; };
+		AC54A72EB09FF0EEDD4A6863 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C278B46502D8049B712D74A /* Manager.swift */; };
+		AF2C058D1CAD17632026B6B2 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C278B46502D8049B712D74A /* Manager.swift */; };
+		C03372704F6461078C5AB19B /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CF1B9CE1310E73C356114E /* Download.swift */; };
+		D92FC0F727B8F04D5D11F7BF /* Pods-shoppin_osx-Alamofire-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FA136727E60F45C63CB5233 /* Pods-shoppin_osx-Alamofire-dummy.m */; };
+		E1430D25A7E2EB0B2EA2BA77 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9CF1B9CE1310E73C356114E /* Download.swift */; };
+		E4FCB99BA47287A44BDC5F09 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0F2522BD356BB8AB1337904 /* Foundation.framework */; };
+		E866F8432902ED7481443747 /* Pods-shoppin-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = FF46910D8EADB5A5B32A1FA3 /* Pods-shoppin-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F00CA91850AF8AC3C5762B98 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F5986D7A0DC4B453C6F7450 /* Cocoa.framework */; };
+		FD245CF5ADD80DA690A8F4C5 /* ResponseSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EF55E8B0716369B20C0CC84 /* ResponseSerialization.swift */; };
+		FEF5D0A70825AF997B822A49 /* ParameterEncoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3868BAC439D0686B8565D3F1 /* ParameterEncoding.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		B21A8B2F46AD81C93E56AB3D /* PBXContainerItemProxy */ = {
+		651B7EA67ACB065B35231E30 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F47B6A57BA88C3D9190AA085 /* Project object */;
+			containerPortal = BF2F77F4D0910C0DD85ADA64 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 6774193A693C73D70FFB118F;
-			remoteInfo = "Pods-shoppin_osx-Alamofire";
-		};
-		CFA0817074286ED2C4CD829E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F47B6A57BA88C3D9190AA085 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4201D7708ACFA81FBD1F5D8B;
+			remoteGlobalIDString = 085474726820CB97A009F7B3;
 			remoteInfo = "Pods-shoppin-Alamofire";
 		};
-		FB68E0A0123E4AA14F712CE0 /* PBXContainerItemProxy */ = {
+		A3A6CF52BF6056A952A167A0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = F47B6A57BA88C3D9190AA085 /* Project object */;
+			containerPortal = BF2F77F4D0910C0DD85ADA64 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = F41CD19835FF8A64619B2EE2;
+			remoteGlobalIDString = C8097AC3B9017EEC7BDC89DB;
+			remoteInfo = "Pods-shoppin_osx-Alamofire";
+		};
+		D9C19C9D1A925880A6B366C8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BF2F77F4D0910C0DD85ADA64 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2047A1390C96F8CD9DB9A32B;
 			remoteInfo = "Pods-shoppin-WYPopoverController";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		017E652750E6D3F64D31B3B4 /* Pods-shoppin_osx-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppin_osx-frameworks.sh"; sourceTree = "<group>"; };
-		026B748761D0760E008C8B3A /* Pods-shoppin-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-environment.h"; sourceTree = "<group>"; };
-		0A981A0E105B41059D7E3EB8 /* WYPopoverController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WYPopoverController.h; path = WYPopoverController/WYPopoverController.h; sourceTree = "<group>"; };
-		0D773907B0EFBD7ABE2EC05E /* Pods-shoppin_osx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin_osx.release.xcconfig"; sourceTree = "<group>"; };
-		0DB97F2618F92F802962D10D /* Pods-shoppin-Alamofire-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppin-Alamofire-dummy.m"; sourceTree = "<group>"; };
-		10469D7021596A02E67A2B6D /* Pods-shoppin-WYPopoverController-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-WYPopoverController-prefix.pch"; sourceTree = "<group>"; };
-		1A8BD04A3C50FE69AB134777 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1F567A5653DD000155CF1923 /* Pods_shoppin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		201683C5591C5F94927D191E /* Pods-shoppin.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-shoppin.modulemap"; sourceTree = "<group>"; };
-		20BC2A09D5C9F969F8E62BEB /* Pods-shoppin-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-shoppin-acknowledgements.plist"; sourceTree = "<group>"; };
-		231FDD4FC637721227026C21 /* Pods-shoppin_osx-Alamofire-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "Pods-shoppin_osx-Alamofire-dummy.m"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-dummy.m"; sourceTree = "<group>"; };
-		291900B904244FB97CD1C635 /* Pods-shoppin-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-umbrella.h"; sourceTree = "<group>"; };
-		29D10FC358560833C00C7FDA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		2BE87B0F478C152633460889 /* Pods-shoppin_osx-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin_osx-environment.h"; sourceTree = "<group>"; };
-		2DCB4E6A85CE51FF165EE01A /* Pods-shoppin_osx-Alamofire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-shoppin_osx-Alamofire-umbrella.h"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-umbrella.h"; sourceTree = "<group>"; };
-		2F4E55D532C3FCAE08BA871F /* Pods-shoppin_osx.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-shoppin_osx.modulemap"; sourceTree = "<group>"; };
-		3234E5D9BE23505088FBC162 /* Pods-shoppin-WYPopoverController-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppin-WYPopoverController-dummy.m"; sourceTree = "<group>"; };
-		340B7FD7ECE5DECE6A9E955A /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		38B519A09488DC1CBF018091 /* Upload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Upload.swift; path = Source/Upload.swift; sourceTree = "<group>"; };
-		3ED4D82588B422A8A40D7FCC /* Pods-shoppin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin.debug.xcconfig"; sourceTree = "<group>"; };
-		403D33DAF96785A3BFE70686 /* ResponseSerialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResponseSerialization.swift; path = Source/ResponseSerialization.swift; sourceTree = "<group>"; };
-		43AA3A5DB0709760ACD997DA /* WYStoryboardPopoverSegue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WYStoryboardPopoverSegue.h; path = WYPopoverController/WYStoryboardPopoverSegue.h; sourceTree = "<group>"; };
-		4F2816D2F08A555B00065910 /* WYPopoverController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WYPopoverController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		503ADEA73BFA36D1588A8700 /* Pods-shoppin-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppin-frameworks.sh"; sourceTree = "<group>"; };
-		50AF05C8F9DED1F4A21FADC0 /* Pods-shoppin-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppin-dummy.m"; sourceTree = "<group>"; };
-		552D8AB77329ED8A9FF771CE /* Pods-shoppin_osx-Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; name = "Pods-shoppin_osx-Alamofire.modulemap"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire.modulemap"; sourceTree = "<group>"; };
-		5DB694104C9D8B69FAA89056 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6164DE62F26FBB9ABB8C62EA /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		61CE3B58209A1653A7548DA9 /* Pods-shoppin_osx-Alamofire-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin_osx-Alamofire-Private.xcconfig"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-Private.xcconfig"; sourceTree = "<group>"; };
-		6C307D729C8BA98A2CC281A4 /* Pods-shoppin-Alamofire.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin-Alamofire.xcconfig"; sourceTree = "<group>"; };
-		6C981CE066468A2E18338539 /* Pods-shoppin_osx-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppin_osx-resources.sh"; sourceTree = "<group>"; };
-		74465C01CB9A046A8892C5CF /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../Pods-shoppin_osx-Alamofire/Info.plist"; sourceTree = "<group>"; };
-		749086AB36822C80B9906D64 /* Pods-shoppin-WYPopoverController-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-WYPopoverController-umbrella.h"; sourceTree = "<group>"; };
-		7716D7DD8360B78313ECE9D6 /* Pods-shoppin_osx-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin_osx-umbrella.h"; sourceTree = "<group>"; };
-		77F3B7E28CE48FF3A25EDA40 /* Pods-shoppin_osx-Alamofire-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-shoppin_osx-Alamofire-prefix.pch"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-prefix.pch"; sourceTree = "<group>"; };
-		810406FA90B61D86E8326388 /* Pods-shoppin-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-shoppin-acknowledgements.markdown"; sourceTree = "<group>"; };
-		8C8ADFA9BBD6D8411AAC9352 /* Pods-shoppin_osx-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppin_osx-dummy.m"; sourceTree = "<group>"; };
-		8D6CFA6D0300374EA18CC625 /* Request.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Request.swift; path = Source/Request.swift; sourceTree = "<group>"; };
-		8ECF0DC77C71508725E71AD7 /* Pods-shoppin_osx-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-shoppin_osx-acknowledgements.markdown"; sourceTree = "<group>"; };
-		90A195D7F4DF5636E6BCCC91 /* Pods-shoppin_osx-Alamofire.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin_osx-Alamofire.xcconfig"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire.xcconfig"; sourceTree = "<group>"; };
-		9651B5C6984476559E158A6F /* Pods-shoppin-WYPopoverController.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-shoppin-WYPopoverController.modulemap"; sourceTree = "<group>"; };
-		9970F8C251A86094525B42A2 /* Pods-shoppin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin.release.xcconfig"; sourceTree = "<group>"; };
-		99F04EFB4DBB3FEB889AD24E /* Pods-shoppin-Alamofire-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin-Alamofire-Private.xcconfig"; sourceTree = "<group>"; };
-		9AD382BBFE8F1447C4FD4627 /* Download.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Download.swift; path = Source/Download.swift; sourceTree = "<group>"; };
-		9BEDBD6AE6E2199E53830B0D /* Pods_shoppin_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9EA6EBD1CABB52DD41AE3568 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
-		9F27FB6B4DB776D3697463C6 /* Pods-shoppin-Alamofire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-Alamofire-umbrella.h"; sourceTree = "<group>"; };
-		AA8E8D8DB29FCC4AF65287F6 /* Validation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Validation.swift; path = Source/Validation.swift; sourceTree = "<group>"; };
-		AC8B13D0E22ABF2751EE86FE /* WYStoryboardPopoverSegue.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = WYStoryboardPopoverSegue.m; path = WYPopoverController/WYStoryboardPopoverSegue.m; sourceTree = "<group>"; };
-		B221D603A3A1D082A5C5B91E /* Pods-shoppin_osx-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-shoppin_osx-acknowledgements.plist"; sourceTree = "<group>"; };
-		B4C64BB5273AAFB0F1A50B17 /* Pods-shoppin-WYPopoverController-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin-WYPopoverController-Private.xcconfig"; sourceTree = "<group>"; };
-		B87298D50C4958D801306BB3 /* ParameterEncoding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ParameterEncoding.swift; path = Source/ParameterEncoding.swift; sourceTree = "<group>"; };
-		BC809EDEDD5519BE078CB30A /* Pods-shoppin-WYPopoverController.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin-WYPopoverController.xcconfig"; sourceTree = "<group>"; };
-		BE2A09CFD27AA31F995AFF17 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C86092FF4C687909AAEA6DA3 /* Pods-shoppin-Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-shoppin-Alamofire.modulemap"; sourceTree = "<group>"; };
-		D06E30282E72E1EF49600A7D /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D32105065010466EC518AA9A /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D77C14714E5E695481184EA0 /* Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Alamofire.swift; path = Source/Alamofire.swift; sourceTree = "<group>"; };
-		DEE372BDA169940C93212A3B /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
-		E0985385615D7C380C724779 /* Pods-shoppin_osx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin_osx.debug.xcconfig"; sourceTree = "<group>"; };
-		E8BBE708A66F387E36B96673 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		E92EB41A7D59B0ADE70F6485 /* Pods-shoppin-Alamofire-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-Alamofire-prefix.pch"; sourceTree = "<group>"; };
-		EC5701A705017B6F065D1E6C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
-		F21E5F51DF5FC580C05FE79B /* WYPopoverController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = WYPopoverController.m; path = WYPopoverController/WYPopoverController.m; sourceTree = "<group>"; };
-		F704F7F312D7AE912A887A32 /* Manager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Manager.swift; path = Source/Manager.swift; sourceTree = "<group>"; };
-		FE19035B092ED70A05955DA7 /* Pods-shoppin-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppin-resources.sh"; sourceTree = "<group>"; };
+		041FF3CBE3C74B3D4410BE2B /* Pods-shoppin_osx-Alamofire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-shoppin_osx-Alamofire-umbrella.h"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-umbrella.h"; sourceTree = "<group>"; };
+		046A0C2DF102173007E08DA7 /* Pods-shoppin-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-shoppin-acknowledgements.markdown"; sourceTree = "<group>"; };
+		095DB51C8D6CAF27DF77869A /* Pods-shoppin-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppin-dummy.m"; sourceTree = "<group>"; };
+		098A013744C44093E082895A /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0A8E54A4FA7B0699B0F72115 /* Pods-shoppin-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-shoppin-acknowledgements.plist"; sourceTree = "<group>"; };
+		0D2786C56428D0E8C8971A36 /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		0E5D217C912CBA39F8B1BEA1 /* Pods-shoppin_osx-Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; name = "Pods-shoppin_osx-Alamofire.modulemap"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire.modulemap"; sourceTree = "<group>"; };
+		0F5986D7A0DC4B453C6F7450 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		104648DE6C1C16FB8382CCDD /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		125FC13FE125D550D8F56B2C /* Pods-shoppin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin.release.xcconfig"; sourceTree = "<group>"; };
+		13978CB7835DAD312E800D73 /* Pods-shoppin-Alamofire.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin-Alamofire.xcconfig"; sourceTree = "<group>"; };
+		15CBE69B5A662028590E2698 /* Pods-shoppin_osx-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-shoppin_osx-acknowledgements.markdown"; sourceTree = "<group>"; };
+		1947C69F9B9EEE9125853AB6 /* Pods_shoppin_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		19F2686DECBC0A801A77C618 /* Request.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Request.swift; path = Source/Request.swift; sourceTree = "<group>"; };
+		1DBAC10EF614DD50F383E2D2 /* Pods-shoppin.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-shoppin.modulemap"; sourceTree = "<group>"; };
+		1E849B2795AA5851ACA725AB /* WYPopoverController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WYPopoverController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1F270DF1DE2E16445022DC3D /* Pods-shoppin_osx-Alamofire.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin_osx-Alamofire.xcconfig"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire.xcconfig"; sourceTree = "<group>"; };
+		2227A44F91CFBAC6AF736067 /* Pods-shoppin-Alamofire-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin-Alamofire-Private.xcconfig"; sourceTree = "<group>"; };
+		22E097D2F9FA2895AA939963 /* Pods-shoppin_osx-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin_osx-umbrella.h"; sourceTree = "<group>"; };
+		244CB5D3205F01B55F209DE3 /* Pods-shoppin_osx-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppin_osx-dummy.m"; sourceTree = "<group>"; };
+		2BA978592ADA39494C2F1123 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		36182EFE69B5C3D155F84E8B /* Validation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Validation.swift; path = Source/Validation.swift; sourceTree = "<group>"; };
+		3868BAC439D0686B8565D3F1 /* ParameterEncoding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ParameterEncoding.swift; path = Source/ParameterEncoding.swift; sourceTree = "<group>"; };
+		3A351CFADC16AC134F9F1114 /* Pods-shoppin-Alamofire-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-Alamofire-prefix.pch"; sourceTree = "<group>"; };
+		3F4D61C2671F85A1DD851C55 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C278B46502D8049B712D74A /* Manager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Manager.swift; path = Source/Manager.swift; sourceTree = "<group>"; };
+		521EFD4F6F01380CC1495401 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5798E2902071CBBE897DFBB6 /* Pods-shoppin-Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-shoppin-Alamofire.modulemap"; sourceTree = "<group>"; };
+		57BB7D1CE3186EBF7FF233AB /* Pods-shoppin-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppin-resources.sh"; sourceTree = "<group>"; };
+		57DAAC7A948D5E309D1931A6 /* Pods-shoppin_osx-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppin_osx-frameworks.sh"; sourceTree = "<group>"; };
+		5A080BA65A55557018672B5F /* Pods-shoppin_osx-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-shoppin_osx-acknowledgements.plist"; sourceTree = "<group>"; };
+		5D40AB3C33AD18C08E3B6449 /* Pods-shoppin-Alamofire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-Alamofire-umbrella.h"; sourceTree = "<group>"; };
+		5D8606E9898456E51A8B7C39 /* Pods-shoppin_osx.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-shoppin_osx.modulemap"; sourceTree = "<group>"; };
+		610E3233EAFAFE3D4B5F8087 /* WYStoryboardPopoverSegue.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = WYStoryboardPopoverSegue.m; path = WYPopoverController/WYStoryboardPopoverSegue.m; sourceTree = "<group>"; };
+		61557DC7E67B7E0C0727D527 /* Pods-shoppin_osx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin_osx.debug.xcconfig"; sourceTree = "<group>"; };
+		68C935D52628AA92025319E6 /* Pods-shoppin-WYPopoverController.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-shoppin-WYPopoverController.modulemap"; sourceTree = "<group>"; };
+		6A28E693F259689027249E52 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		70B499A00E3B763A5B3930D5 /* Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Alamofire.swift; path = Source/Alamofire.swift; sourceTree = "<group>"; };
+		72A6DFD83C7A8D3594AB5A04 /* Pods-shoppin-WYPopoverController-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppin-WYPopoverController-dummy.m"; sourceTree = "<group>"; };
+		740C4F618ABF1FEC8F5A66E6 /* Pods_shoppin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		76291474AD8C01159E47CBED /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		7EF55E8B0716369B20C0CC84 /* ResponseSerialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResponseSerialization.swift; path = Source/ResponseSerialization.swift; sourceTree = "<group>"; };
+		874556CDBF1831031E2D9131 /* Pods-shoppin-WYPopoverController-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-WYPopoverController-umbrella.h"; sourceTree = "<group>"; };
+		985A0D389544C8110A58DDEC /* WYPopoverController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = WYPopoverController.m; path = WYPopoverController/WYPopoverController.m; sourceTree = "<group>"; };
+		9FA136727E60F45C63CB5233 /* Pods-shoppin_osx-Alamofire-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "Pods-shoppin_osx-Alamofire-dummy.m"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-dummy.m"; sourceTree = "<group>"; };
+		A996F580C47080F5DE1782F9 /* Pods-shoppin-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-environment.h"; sourceTree = "<group>"; };
+		B02D5F355BA648AFD56B9E68 /* WYStoryboardPopoverSegue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WYStoryboardPopoverSegue.h; path = WYPopoverController/WYStoryboardPopoverSegue.h; sourceTree = "<group>"; };
+		C0332462DAA18DA3585A1302 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../Pods-shoppin_osx-Alamofire/Info.plist"; sourceTree = "<group>"; };
+		C0F2C70866BCB78E7856F785 /* Pods-shoppin_osx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin_osx.release.xcconfig"; sourceTree = "<group>"; };
+		C17823D80F85EEDA92978828 /* Pods-shoppin-WYPopoverController.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin-WYPopoverController.xcconfig"; sourceTree = "<group>"; };
+		C9D74AC181C900EA46898869 /* WYPopoverController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WYPopoverController.h; path = WYPopoverController/WYPopoverController.h; sourceTree = "<group>"; };
+		D0F2522BD356BB8AB1337904 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		D185F2CA443664C5E155ADFF /* Pods-shoppin_osx-Alamofire-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin_osx-Alamofire-Private.xcconfig"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-Private.xcconfig"; sourceTree = "<group>"; };
+		D6DB29D07DC91C48253DDAFE /* Pods-shoppin_osx-Alamofire-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "Pods-shoppin_osx-Alamofire-prefix.pch"; path = "../Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-prefix.pch"; sourceTree = "<group>"; };
+		D72FCBB4FD67B8219A310A48 /* Pods-shoppin_osx-environment.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin_osx-environment.h"; sourceTree = "<group>"; };
+		D8411C0531B9598F0F6B8831 /* Pods-shoppin-WYPopoverController-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin-WYPopoverController-Private.xcconfig"; sourceTree = "<group>"; };
+		E1101E8CCECCF57BF2CD0511 /* Pods-shoppin-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppin-frameworks.sh"; sourceTree = "<group>"; };
+		E2D8DA71EE21AD19768361D4 /* Upload.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Upload.swift; path = Source/Upload.swift; sourceTree = "<group>"; };
+		E40E811CDD3DF6AAF0F93879 /* Pods-shoppin_osx-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-shoppin_osx-resources.sh"; sourceTree = "<group>"; };
+		E461EEB0D7E16C9FA93816A9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		E9CF1B9CE1310E73C356114E /* Download.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Download.swift; path = Source/Download.swift; sourceTree = "<group>"; };
+		EE45AB1777F0ACC2B9D8770C /* Pods-shoppin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-shoppin.debug.xcconfig"; sourceTree = "<group>"; };
+		F8F9EF524066D2CCCE6D675F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		FCE198F4C38B8A9FB1EE906D /* Pods-shoppin-Alamofire-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-shoppin-Alamofire-dummy.m"; sourceTree = "<group>"; };
+		FD03B17ABCC1F784DB46144C /* Pods-shoppin-WYPopoverController-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-WYPopoverController-prefix.pch"; sourceTree = "<group>"; };
+		FF46910D8EADB5A5B32A1FA3 /* Pods-shoppin-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-shoppin-umbrella.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		12FE5B8ED79D83482D1AAD27 /* Frameworks */ = {
+		2778E19472715B17125771A0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BD0348EA7132DBE3526B82F /* Foundation.framework in Frameworks */,
+				0656C51778B3D0FD1154E6F1 /* CoreGraphics.framework in Frameworks */,
+				346B44661E787570BC020711 /* Foundation.framework in Frameworks */,
+				6DDABAF707C3BF21C71AEED7 /* QuartzCore.framework in Frameworks */,
+				852FE096EE820E4A7A52F4B5 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6464CF976653049BB5F5BA8B /* Frameworks */ = {
+		2E075ED47FF7E1C67981FD5D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				714C3FB97CD3B7631CFCDD02 /* Foundation.framework in Frameworks */,
+				E4FCB99BA47287A44BDC5F09 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B9E5F4AE6DDCF45FF3164D34 /* Frameworks */ = {
+		9031CF134B48E37D445EC622 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D7F75550B7972C21F9F957A /* Cocoa.framework in Frameworks */,
+				4DEEEC357001E053DABA7BE6 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EB8328D2230228560579B064 /* Frameworks */ = {
+		9582D0D8F3C16F94F1C4F717 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				283A1489628F9D2C824E0771 /* Cocoa.framework in Frameworks */,
+				F00CA91850AF8AC3C5762B98 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F53FF12EE8B9731019905B63 /* Frameworks */ = {
+		B388BEAF1ED1EFD5E27CC2A6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BA8DD301703D16B2774A23E /* CoreGraphics.framework in Frameworks */,
-				FD348239E30E6793CED9F5A2 /* Foundation.framework in Frameworks */,
-				26EF56636B87CDA27658822D /* QuartzCore.framework in Frameworks */,
-				D747288C31B6307F74BA6272 /* UIKit.framework in Frameworks */,
+				20A6ECA9313D218218FBC188 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		240ADBFE6B36EDCE6539886D /* Targets Support Files */ = {
+		2A633C1EF43895E7396ADFF2 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				B371AB81A4F3F7896C954EDB /* Pods-shoppin */,
-				3C92D7BD1C415C818576C986 /* Pods-shoppin_osx */,
+				F8F9EF524066D2CCCE6D675F /* CoreGraphics.framework */,
+				D0F2522BD356BB8AB1337904 /* Foundation.framework */,
+				E461EEB0D7E16C9FA93816A9 /* QuartzCore.framework */,
+				76291474AD8C01159E47CBED /* UIKit.framework */,
 			);
-			name = "Targets Support Files";
+			name = iOS;
 			sourceTree = "<group>";
 		};
-		24599EEE5CB9BB8F8EF687B9 = {
+		2A9ECF32F5807EDB2395EF2E /* Pods-shoppin_osx */ = {
 			isa = PBXGroup;
 			children = (
-				6164DE62F26FBB9ABB8C62EA /* Podfile */,
-				BBC4B402100344220FC91533 /* Frameworks */,
-				E416CC45FB111DA8E217D3A7 /* Pods */,
-				DA6A5C2E11F0F6A7FA3321B4 /* Products */,
-				240ADBFE6B36EDCE6539886D /* Targets Support Files */,
-			);
-			sourceTree = "<group>";
-		};
-		3C92D7BD1C415C818576C986 /* Pods-shoppin_osx */ = {
-			isa = PBXGroup;
-			children = (
-				340B7FD7ECE5DECE6A9E955A /* Info.plist */,
-				2F4E55D532C3FCAE08BA871F /* Pods-shoppin_osx.modulemap */,
-				8ECF0DC77C71508725E71AD7 /* Pods-shoppin_osx-acknowledgements.markdown */,
-				B221D603A3A1D082A5C5B91E /* Pods-shoppin_osx-acknowledgements.plist */,
-				8C8ADFA9BBD6D8411AAC9352 /* Pods-shoppin_osx-dummy.m */,
-				2BE87B0F478C152633460889 /* Pods-shoppin_osx-environment.h */,
-				017E652750E6D3F64D31B3B4 /* Pods-shoppin_osx-frameworks.sh */,
-				6C981CE066468A2E18338539 /* Pods-shoppin_osx-resources.sh */,
-				7716D7DD8360B78313ECE9D6 /* Pods-shoppin_osx-umbrella.h */,
-				E0985385615D7C380C724779 /* Pods-shoppin_osx.debug.xcconfig */,
-				0D773907B0EFBD7ABE2EC05E /* Pods-shoppin_osx.release.xcconfig */,
+				6A28E693F259689027249E52 /* Info.plist */,
+				5D8606E9898456E51A8B7C39 /* Pods-shoppin_osx.modulemap */,
+				15CBE69B5A662028590E2698 /* Pods-shoppin_osx-acknowledgements.markdown */,
+				5A080BA65A55557018672B5F /* Pods-shoppin_osx-acknowledgements.plist */,
+				244CB5D3205F01B55F209DE3 /* Pods-shoppin_osx-dummy.m */,
+				D72FCBB4FD67B8219A310A48 /* Pods-shoppin_osx-environment.h */,
+				57DAAC7A948D5E309D1931A6 /* Pods-shoppin_osx-frameworks.sh */,
+				E40E811CDD3DF6AAF0F93879 /* Pods-shoppin_osx-resources.sh */,
+				22E097D2F9FA2895AA939963 /* Pods-shoppin_osx-umbrella.h */,
+				61557DC7E67B7E0C0727D527 /* Pods-shoppin_osx.debug.xcconfig */,
+				C0F2C70866BCB78E7856F785 /* Pods-shoppin_osx.release.xcconfig */,
 			);
 			name = "Pods-shoppin_osx";
 			path = "Target Support Files/Pods-shoppin_osx";
 			sourceTree = "<group>";
 		};
-		42D165CE4B11BC1318DC96BB /* Support Files */ = {
+		2F55F167D4675B175C6CF080 /* Targets Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				1A8BD04A3C50FE69AB134777 /* Info.plist */,
-				74465C01CB9A046A8892C5CF /* Info.plist */,
-				C86092FF4C687909AAEA6DA3 /* Pods-shoppin-Alamofire.modulemap */,
-				6C307D729C8BA98A2CC281A4 /* Pods-shoppin-Alamofire.xcconfig */,
-				99F04EFB4DBB3FEB889AD24E /* Pods-shoppin-Alamofire-Private.xcconfig */,
-				0DB97F2618F92F802962D10D /* Pods-shoppin-Alamofire-dummy.m */,
-				E92EB41A7D59B0ADE70F6485 /* Pods-shoppin-Alamofire-prefix.pch */,
-				9F27FB6B4DB776D3697463C6 /* Pods-shoppin-Alamofire-umbrella.h */,
-				552D8AB77329ED8A9FF771CE /* Pods-shoppin_osx-Alamofire.modulemap */,
-				90A195D7F4DF5636E6BCCC91 /* Pods-shoppin_osx-Alamofire.xcconfig */,
-				61CE3B58209A1653A7548DA9 /* Pods-shoppin_osx-Alamofire-Private.xcconfig */,
-				231FDD4FC637721227026C21 /* Pods-shoppin_osx-Alamofire-dummy.m */,
-				77F3B7E28CE48FF3A25EDA40 /* Pods-shoppin_osx-Alamofire-prefix.pch */,
-				2DCB4E6A85CE51FF165EE01A /* Pods-shoppin_osx-Alamofire-umbrella.h */,
+				8C1CB0AD2863CC037400A2D8 /* Pods-shoppin */,
+				2A9ECF32F5807EDB2395EF2E /* Pods-shoppin_osx */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		4068251C53488CD32045D9FD /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				104648DE6C1C16FB8382CCDD /* Info.plist */,
+				C0332462DAA18DA3585A1302 /* Info.plist */,
+				5798E2902071CBBE897DFBB6 /* Pods-shoppin-Alamofire.modulemap */,
+				13978CB7835DAD312E800D73 /* Pods-shoppin-Alamofire.xcconfig */,
+				2227A44F91CFBAC6AF736067 /* Pods-shoppin-Alamofire-Private.xcconfig */,
+				FCE198F4C38B8A9FB1EE906D /* Pods-shoppin-Alamofire-dummy.m */,
+				3A351CFADC16AC134F9F1114 /* Pods-shoppin-Alamofire-prefix.pch */,
+				5D40AB3C33AD18C08E3B6449 /* Pods-shoppin-Alamofire-umbrella.h */,
+				0E5D217C912CBA39F8B1BEA1 /* Pods-shoppin_osx-Alamofire.modulemap */,
+				1F270DF1DE2E16445022DC3D /* Pods-shoppin_osx-Alamofire.xcconfig */,
+				D185F2CA443664C5E155ADFF /* Pods-shoppin_osx-Alamofire-Private.xcconfig */,
+				9FA136727E60F45C63CB5233 /* Pods-shoppin_osx-Alamofire-dummy.m */,
+				D6DB29D07DC91C48253DDAFE /* Pods-shoppin_osx-Alamofire-prefix.pch */,
+				041FF3CBE3C74B3D4410BE2B /* Pods-shoppin_osx-Alamofire-umbrella.h */,
 			);
 			name = "Support Files";
 			path = "../Target Support Files/Pods-shoppin-Alamofire";
 			sourceTree = "<group>";
 		};
-		6B0FB67AF132BB1FB3A526EE /* WYPopoverController */ = {
+		41B491D2E7FEB09318748880 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				0A981A0E105B41059D7E3EB8 /* WYPopoverController.h */,
-				F21E5F51DF5FC580C05FE79B /* WYPopoverController.m */,
-				43AA3A5DB0709760ACD997DA /* WYStoryboardPopoverSegue.h */,
-				AC8B13D0E22ABF2751EE86FE /* WYStoryboardPopoverSegue.m */,
-				7B571C9DFA26C951A3861686 /* Support Files */,
-			);
-			path = WYPopoverController;
-			sourceTree = "<group>";
-		};
-		7B571C9DFA26C951A3861686 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				D06E30282E72E1EF49600A7D /* Info.plist */,
-				9651B5C6984476559E158A6F /* Pods-shoppin-WYPopoverController.modulemap */,
-				BC809EDEDD5519BE078CB30A /* Pods-shoppin-WYPopoverController.xcconfig */,
-				B4C64BB5273AAFB0F1A50B17 /* Pods-shoppin-WYPopoverController-Private.xcconfig */,
-				3234E5D9BE23505088FBC162 /* Pods-shoppin-WYPopoverController-dummy.m */,
-				10469D7021596A02E67A2B6D /* Pods-shoppin-WYPopoverController-prefix.pch */,
-				749086AB36822C80B9906D64 /* Pods-shoppin-WYPopoverController-umbrella.h */,
+				521EFD4F6F01380CC1495401 /* Info.plist */,
+				68C935D52628AA92025319E6 /* Pods-shoppin-WYPopoverController.modulemap */,
+				C17823D80F85EEDA92978828 /* Pods-shoppin-WYPopoverController.xcconfig */,
+				D8411C0531B9598F0F6B8831 /* Pods-shoppin-WYPopoverController-Private.xcconfig */,
+				72A6DFD83C7A8D3594AB5A04 /* Pods-shoppin-WYPopoverController-dummy.m */,
+				FD03B17ABCC1F784DB46144C /* Pods-shoppin-WYPopoverController-prefix.pch */,
+				874556CDBF1831031E2D9131 /* Pods-shoppin-WYPopoverController-umbrella.h */,
 			);
 			name = "Support Files";
 			path = "../Target Support Files/Pods-shoppin-WYPopoverController";
 			sourceTree = "<group>";
 		};
-		88155A20725E77911D1795FF /* OS X */ = {
+		588F312A482A381638E4F1FE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DEE372BDA169940C93212A3B /* Cocoa.framework */,
+				2BA978592ADA39494C2F1123 /* Alamofire.framework */,
+				3F4D61C2671F85A1DD851C55 /* Alamofire.framework */,
+				740C4F618ABF1FEC8F5A66E6 /* Pods_shoppin.framework */,
+				1947C69F9B9EEE9125853AB6 /* Pods_shoppin_osx.framework */,
+				1E849B2795AA5851ACA725AB /* WYPopoverController.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6E2F927076D39871A9BB84A0 /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				0F5986D7A0DC4B453C6F7450 /* Cocoa.framework */,
 			);
 			name = "OS X";
 			sourceTree = "<group>";
 		};
-		B371AB81A4F3F7896C954EDB /* Pods-shoppin */ = {
+		8C1CB0AD2863CC037400A2D8 /* Pods-shoppin */ = {
 			isa = PBXGroup;
 			children = (
-				D32105065010466EC518AA9A /* Info.plist */,
-				201683C5591C5F94927D191E /* Pods-shoppin.modulemap */,
-				810406FA90B61D86E8326388 /* Pods-shoppin-acknowledgements.markdown */,
-				20BC2A09D5C9F969F8E62BEB /* Pods-shoppin-acknowledgements.plist */,
-				50AF05C8F9DED1F4A21FADC0 /* Pods-shoppin-dummy.m */,
-				026B748761D0760E008C8B3A /* Pods-shoppin-environment.h */,
-				503ADEA73BFA36D1588A8700 /* Pods-shoppin-frameworks.sh */,
-				FE19035B092ED70A05955DA7 /* Pods-shoppin-resources.sh */,
-				291900B904244FB97CD1C635 /* Pods-shoppin-umbrella.h */,
-				3ED4D82588B422A8A40D7FCC /* Pods-shoppin.debug.xcconfig */,
-				9970F8C251A86094525B42A2 /* Pods-shoppin.release.xcconfig */,
+				098A013744C44093E082895A /* Info.plist */,
+				1DBAC10EF614DD50F383E2D2 /* Pods-shoppin.modulemap */,
+				046A0C2DF102173007E08DA7 /* Pods-shoppin-acknowledgements.markdown */,
+				0A8E54A4FA7B0699B0F72115 /* Pods-shoppin-acknowledgements.plist */,
+				095DB51C8D6CAF27DF77869A /* Pods-shoppin-dummy.m */,
+				A996F580C47080F5DE1782F9 /* Pods-shoppin-environment.h */,
+				E1101E8CCECCF57BF2CD0511 /* Pods-shoppin-frameworks.sh */,
+				57BB7D1CE3186EBF7FF233AB /* Pods-shoppin-resources.sh */,
+				FF46910D8EADB5A5B32A1FA3 /* Pods-shoppin-umbrella.h */,
+				EE45AB1777F0ACC2B9D8770C /* Pods-shoppin.debug.xcconfig */,
+				125FC13FE125D550D8F56B2C /* Pods-shoppin.release.xcconfig */,
 			);
 			name = "Pods-shoppin";
 			path = "Target Support Files/Pods-shoppin";
 			sourceTree = "<group>";
 		};
-		BBC4B402100344220FC91533 /* Frameworks */ = {
+		8CF20C01DE87F45EF76DB570 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				88155A20725E77911D1795FF /* OS X */,
-				D04B22B9DB783BFCC8FDC40D /* iOS */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		D04B22B9DB783BFCC8FDC40D /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				EC5701A705017B6F065D1E6C /* CoreGraphics.framework */,
-				29D10FC358560833C00C7FDA /* Foundation.framework */,
-				9EA6EBD1CABB52DD41AE3568 /* QuartzCore.framework */,
-				E8BBE708A66F387E36B96673 /* UIKit.framework */,
-			);
-			name = iOS;
-			sourceTree = "<group>";
-		};
-		DA6A5C2E11F0F6A7FA3321B4 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5DB694104C9D8B69FAA89056 /* Alamofire.framework */,
-				BE2A09CFD27AA31F995AFF17 /* Alamofire.framework */,
-				1F567A5653DD000155CF1923 /* Pods_shoppin.framework */,
-				9BEDBD6AE6E2199E53830B0D /* Pods_shoppin_osx.framework */,
-				4F2816D2F08A555B00065910 /* WYPopoverController.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		E416CC45FB111DA8E217D3A7 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				EB977324BF198A56CB04224F /* Alamofire */,
-				6B0FB67AF132BB1FB3A526EE /* WYPopoverController */,
+				DD0B08F44F2937E73909A786 /* Alamofire */,
+				B6B0A3AF880C529FD816F81B /* WYPopoverController */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		EB977324BF198A56CB04224F /* Alamofire */ = {
+		9397FBF18CFB90AA844E8679 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D77C14714E5E695481184EA0 /* Alamofire.swift */,
-				9AD382BBFE8F1447C4FD4627 /* Download.swift */,
-				F704F7F312D7AE912A887A32 /* Manager.swift */,
-				B87298D50C4958D801306BB3 /* ParameterEncoding.swift */,
-				8D6CFA6D0300374EA18CC625 /* Request.swift */,
-				403D33DAF96785A3BFE70686 /* ResponseSerialization.swift */,
-				38B519A09488DC1CBF018091 /* Upload.swift */,
-				AA8E8D8DB29FCC4AF65287F6 /* Validation.swift */,
-				42D165CE4B11BC1318DC96BB /* Support Files */,
+				6E2F927076D39871A9BB84A0 /* OS X */,
+				2A633C1EF43895E7396ADFF2 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B6B0A3AF880C529FD816F81B /* WYPopoverController */ = {
+			isa = PBXGroup;
+			children = (
+				C9D74AC181C900EA46898869 /* WYPopoverController.h */,
+				985A0D389544C8110A58DDEC /* WYPopoverController.m */,
+				B02D5F355BA648AFD56B9E68 /* WYStoryboardPopoverSegue.h */,
+				610E3233EAFAFE3D4B5F8087 /* WYStoryboardPopoverSegue.m */,
+				41B491D2E7FEB09318748880 /* Support Files */,
+			);
+			path = WYPopoverController;
+			sourceTree = "<group>";
+		};
+		BDA1A13FB293E56C180C1195 = {
+			isa = PBXGroup;
+			children = (
+				0D2786C56428D0E8C8971A36 /* Podfile */,
+				9397FBF18CFB90AA844E8679 /* Frameworks */,
+				8CF20C01DE87F45EF76DB570 /* Pods */,
+				588F312A482A381638E4F1FE /* Products */,
+				2F55F167D4675B175C6CF080 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		DD0B08F44F2937E73909A786 /* Alamofire */ = {
+			isa = PBXGroup;
+			children = (
+				70B499A00E3B763A5B3930D5 /* Alamofire.swift */,
+				E9CF1B9CE1310E73C356114E /* Download.swift */,
+				4C278B46502D8049B712D74A /* Manager.swift */,
+				3868BAC439D0686B8565D3F1 /* ParameterEncoding.swift */,
+				19F2686DECBC0A801A77C618 /* Request.swift */,
+				7EF55E8B0716369B20C0CC84 /* ResponseSerialization.swift */,
+				E2D8DA71EE21AD19768361D4 /* Upload.swift */,
+				36182EFE69B5C3D155F84E8B /* Validation.swift */,
+				4068251C53488CD32045D9FD /* Support Files */,
 			);
 			path = Alamofire;
 			sourceTree = "<group>";
@@ -362,76 +362,76 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		411AAEE29CC42641A0DF4F41 /* Headers */ = {
+		02799A3520B3C852C5E7D100 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1C45E9EEE28C6C258C698CC7 /* Pods-shoppin-Alamofire-umbrella.h in Headers */,
+				243343A4EB2A6F5BB8849284 /* Pods-shoppin-WYPopoverController-umbrella.h in Headers */,
+				1D3CA170B44FD70724B9F509 /* WYPopoverController.h in Headers */,
+				6C8EC4AF6CAF5013533CCE11 /* WYStoryboardPopoverSegue.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		48521854330FA345662AC11F /* Headers */ = {
+		269B76EC742A82685A3BF516 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24B931F24070449EBE9AD550 /* Pods-shoppin_osx-umbrella.h in Headers */,
+				3C2144D69D9215A85FC4CFF9 /* Pods-shoppin_osx-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		681DE8C0D25DB795BA016408 /* Headers */ = {
+		960428E3783CB7D985C702C8 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94021C440342EA38E97AFD5A /* Pods-shoppin-umbrella.h in Headers */,
+				E866F8432902ED7481443747 /* Pods-shoppin-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		69605675C6FB0C49BB9D0F70 /* Headers */ = {
+		9F46B52E173419F29ADEDD2C /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B9CB312D160B2712D8FB566F /* Pods-shoppin-WYPopoverController-umbrella.h in Headers */,
-				168AD31FF21291EF5C6ABEA1 /* WYPopoverController.h in Headers */,
-				350D3140A2E81DDC0E7ED204 /* WYStoryboardPopoverSegue.h in Headers */,
+				1C53507AF47417B1479C6A72 /* Pods-shoppin-Alamofire-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FF88CEFA47C0F2BBF7324B23 /* Headers */ = {
+		A7F08F6FDA40E6F882581532 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B75D806D4F315E2D7B81B575 /* Pods-shoppin_osx-Alamofire-umbrella.h in Headers */,
+				877712F0AEC321B1BEAC4CA9 /* Pods-shoppin_osx-Alamofire-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		1FF2E4A828E40BE961D6E2BF /* Pods-shoppin_osx */ = {
+		04EF83E0D29D79B2ACD4ABBD /* Pods-shoppin_osx */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 15E098C11F443A03604F5369 /* Build configuration list for PBXNativeTarget "Pods-shoppin_osx" */;
+			buildConfigurationList = 33C4C456FE8F8B65315DF9B4 /* Build configuration list for PBXNativeTarget "Pods-shoppin_osx" */;
 			buildPhases = (
-				CB624F5BF6420F6CF40B4F99 /* Sources */,
-				B9E5F4AE6DDCF45FF3164D34 /* Frameworks */,
-				48521854330FA345662AC11F /* Headers */,
+				068394CD1584FCD5E83BACDA /* Sources */,
+				9582D0D8F3C16F94F1C4F717 /* Frameworks */,
+				269B76EC742A82685A3BF516 /* Headers */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				586A340553DCABF16F614680 /* PBXTargetDependency */,
+				87B5DC0C839FDFA7E36B6DE1 /* PBXTargetDependency */,
 			);
 			name = "Pods-shoppin_osx";
 			productName = "Pods-shoppin_osx";
-			productReference = 9BEDBD6AE6E2199E53830B0D /* Pods_shoppin_osx.framework */;
+			productReference = 1947C69F9B9EEE9125853AB6 /* Pods_shoppin_osx.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		4201D7708ACFA81FBD1F5D8B /* Pods-shoppin-Alamofire */ = {
+		085474726820CB97A009F7B3 /* Pods-shoppin-Alamofire */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6B5927D7406C6957F566468D /* Build configuration list for PBXNativeTarget "Pods-shoppin-Alamofire" */;
+			buildConfigurationList = 6E135E1F807581D48F8F58E5 /* Build configuration list for PBXNativeTarget "Pods-shoppin-Alamofire" */;
 			buildPhases = (
-				EAA114A2DBE9795B3C040F63 /* Sources */,
-				12FE5B8ED79D83482D1AAD27 /* Frameworks */,
-				411AAEE29CC42641A0DF4F41 /* Headers */,
+				00F190479DDCC39F5D62B8EE /* Sources */,
+				B388BEAF1ED1EFD5E27CC2A6 /* Frameworks */,
+				9F46B52E173419F29ADEDD2C /* Headers */,
 			);
 			buildRules = (
 			);
@@ -439,52 +439,16 @@
 			);
 			name = "Pods-shoppin-Alamofire";
 			productName = "Pods-shoppin-Alamofire";
-			productReference = 5DB694104C9D8B69FAA89056 /* Alamofire.framework */;
+			productReference = 2BA978592ADA39494C2F1123 /* Alamofire.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		6774193A693C73D70FFB118F /* Pods-shoppin_osx-Alamofire */ = {
+		2047A1390C96F8CD9DB9A32B /* Pods-shoppin-WYPopoverController */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EAA67A30B7177D9EDE28EC7D /* Build configuration list for PBXNativeTarget "Pods-shoppin_osx-Alamofire" */;
+			buildConfigurationList = 7824198D0878E2283BFA4F87 /* Build configuration list for PBXNativeTarget "Pods-shoppin-WYPopoverController" */;
 			buildPhases = (
-				AE4A2A5778B31D03C2447E96 /* Sources */,
-				EB8328D2230228560579B064 /* Frameworks */,
-				FF88CEFA47C0F2BBF7324B23 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Pods-shoppin_osx-Alamofire";
-			productName = "Pods-shoppin_osx-Alamofire";
-			productReference = BE2A09CFD27AA31F995AFF17 /* Alamofire.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		67C03EA22D5A3EA5251E32D3 /* Pods-shoppin */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = E8538E57F8C0881F58D0CCA9 /* Build configuration list for PBXNativeTarget "Pods-shoppin" */;
-			buildPhases = (
-				FB937086E2A958FAA6AB998B /* Sources */,
-				6464CF976653049BB5F5BA8B /* Frameworks */,
-				681DE8C0D25DB795BA016408 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				60EF935B48617429BC0D418F /* PBXTargetDependency */,
-				32C2B30632E5CE363D8C9510 /* PBXTargetDependency */,
-			);
-			name = "Pods-shoppin";
-			productName = "Pods-shoppin";
-			productReference = 1F567A5653DD000155CF1923 /* Pods_shoppin.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		F41CD19835FF8A64619B2EE2 /* Pods-shoppin-WYPopoverController */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 419BCD3275FB950A61F927FE /* Build configuration list for PBXNativeTarget "Pods-shoppin-WYPopoverController" */;
-			buildPhases = (
-				81F6441260F023311C8D7DF3 /* Sources */,
-				F53FF12EE8B9731019905B63 /* Frameworks */,
-				69605675C6FB0C49BB9D0F70 /* Headers */,
+				3BD8EAE2A16FDBDA59B885F6 /* Sources */,
+				2778E19472715B17125771A0 /* Frameworks */,
+				02799A3520B3C852C5E7D100 /* Headers */,
 			);
 			buildRules = (
 			);
@@ -492,124 +456,160 @@
 			);
 			name = "Pods-shoppin-WYPopoverController";
 			productName = "Pods-shoppin-WYPopoverController";
-			productReference = 4F2816D2F08A555B00065910 /* WYPopoverController.framework */;
+			productReference = 1E849B2795AA5851ACA725AB /* WYPopoverController.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		C8097AC3B9017EEC7BDC89DB /* Pods-shoppin_osx-Alamofire */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BB5C9377256E1ED25B880381 /* Build configuration list for PBXNativeTarget "Pods-shoppin_osx-Alamofire" */;
+			buildPhases = (
+				275499DA8BA23F3C8D15A3CD /* Sources */,
+				9031CF134B48E37D445EC622 /* Frameworks */,
+				A7F08F6FDA40E6F882581532 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Pods-shoppin_osx-Alamofire";
+			productName = "Pods-shoppin_osx-Alamofire";
+			productReference = 3F4D61C2671F85A1DD851C55 /* Alamofire.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		DC03B2E957746E7CEEBD9850 /* Pods-shoppin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 673B3ECBD01B6A83838EFF46 /* Build configuration list for PBXNativeTarget "Pods-shoppin" */;
+			buildPhases = (
+				EC906D3FEDB0040DEB8BFAF6 /* Sources */,
+				2E075ED47FF7E1C67981FD5D /* Frameworks */,
+				960428E3783CB7D985C702C8 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				864CCB590F9113CA3302C896 /* PBXTargetDependency */,
+				BC638517C29E45A301700723 /* PBXTargetDependency */,
+			);
+			name = "Pods-shoppin";
+			productName = "Pods-shoppin";
+			productReference = 740C4F618ABF1FEC8F5A66E6 /* Pods_shoppin.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		F47B6A57BA88C3D9190AA085 /* Project object */ = {
+		BF2F77F4D0910C0DD85ADA64 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0640;
 			};
-			buildConfigurationList = 5B9717210018BADD4B8C67A2 /* Build configuration list for PBXProject "Pods" */;
+			buildConfigurationList = 12208C4FA178D9C8E3527259 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = 24599EEE5CB9BB8F8EF687B9;
-			productRefGroup = DA6A5C2E11F0F6A7FA3321B4 /* Products */;
+			mainGroup = BDA1A13FB293E56C180C1195;
+			productRefGroup = 588F312A482A381638E4F1FE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				67C03EA22D5A3EA5251E32D3 /* Pods-shoppin */,
-				4201D7708ACFA81FBD1F5D8B /* Pods-shoppin-Alamofire */,
-				F41CD19835FF8A64619B2EE2 /* Pods-shoppin-WYPopoverController */,
-				1FF2E4A828E40BE961D6E2BF /* Pods-shoppin_osx */,
-				6774193A693C73D70FFB118F /* Pods-shoppin_osx-Alamofire */,
+				DC03B2E957746E7CEEBD9850 /* Pods-shoppin */,
+				085474726820CB97A009F7B3 /* Pods-shoppin-Alamofire */,
+				2047A1390C96F8CD9DB9A32B /* Pods-shoppin-WYPopoverController */,
+				04EF83E0D29D79B2ACD4ABBD /* Pods-shoppin_osx */,
+				C8097AC3B9017EEC7BDC89DB /* Pods-shoppin_osx-Alamofire */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		81F6441260F023311C8D7DF3 /* Sources */ = {
+		00F190479DDCC39F5D62B8EE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				930E69DB73913E4006F3F966 /* Pods-shoppin-WYPopoverController-dummy.m in Sources */,
-				96C910EEB24DDBA7C6C6C81F /* WYPopoverController.m in Sources */,
-				8708D3BE2D8330A4ED4DC11F /* WYStoryboardPopoverSegue.m in Sources */,
+				238B6F9EEECBC0BC29AFC62A /* Alamofire.swift in Sources */,
+				C03372704F6461078C5AB19B /* Download.swift in Sources */,
+				AC54A72EB09FF0EEDD4A6863 /* Manager.swift in Sources */,
+				57CA91B714063BBE4EB08F34 /* ParameterEncoding.swift in Sources */,
+				9DD8DE9A490C9598ED95367E /* Pods-shoppin-Alamofire-dummy.m in Sources */,
+				56F7A5ED9068536A68632D39 /* Request.swift in Sources */,
+				FD245CF5ADD80DA690A8F4C5 /* ResponseSerialization.swift in Sources */,
+				AA95CCF02B06169D8093A255 /* Upload.swift in Sources */,
+				7FA0C734C20F9E6920DFF94C /* Validation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		AE4A2A5778B31D03C2447E96 /* Sources */ = {
+		068394CD1584FCD5E83BACDA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BE80D3B1DB058E314CD54423 /* Alamofire.swift in Sources */,
-				AF3F98A7C681760A56BCC54E /* Download.swift in Sources */,
-				76EBBFB237BCECD9A4D464FB /* Manager.swift in Sources */,
-				7DB065C4A57541A739541CD2 /* ParameterEncoding.swift in Sources */,
-				8925ABBFDF3D4B1A902E915E /* Pods-shoppin_osx-Alamofire-dummy.m in Sources */,
-				2833A615CC36EF0A0737190E /* Request.swift in Sources */,
-				D503B5E8CDF2EBCF978A3902 /* ResponseSerialization.swift in Sources */,
-				01FC3CE9930F9A0855D12C3C /* Upload.swift in Sources */,
-				21F2D8CD1AFC5E1C4553BBE8 /* Validation.swift in Sources */,
+				1580A7365574D0F88FBAD52F /* Pods-shoppin_osx-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		CB624F5BF6420F6CF40B4F99 /* Sources */ = {
+		275499DA8BA23F3C8D15A3CD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F7C2FA2DC1E2855C58C38C3 /* Pods-shoppin_osx-dummy.m in Sources */,
+				1DED319CBC58F974624BE2CA /* Alamofire.swift in Sources */,
+				E1430D25A7E2EB0B2EA2BA77 /* Download.swift in Sources */,
+				AF2C058D1CAD17632026B6B2 /* Manager.swift in Sources */,
+				FEF5D0A70825AF997B822A49 /* ParameterEncoding.swift in Sources */,
+				D92FC0F727B8F04D5D11F7BF /* Pods-shoppin_osx-Alamofire-dummy.m in Sources */,
+				43821FD857A16F7C786F5F4D /* Request.swift in Sources */,
+				9D36B9CA040003F06A64470F /* ResponseSerialization.swift in Sources */,
+				45847CF3133DA2AEA823FC46 /* Upload.swift in Sources */,
+				55B5095A5D336849AD27C07E /* Validation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EAA114A2DBE9795B3C040F63 /* Sources */ = {
+		3BD8EAE2A16FDBDA59B885F6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				38593A5B2DAD360911281020 /* Alamofire.swift in Sources */,
-				FB0DB1E408371633CC96D16F /* Download.swift in Sources */,
-				25E324314962B850699D9472 /* Manager.swift in Sources */,
-				B7103867DB3F8E9E41479281 /* ParameterEncoding.swift in Sources */,
-				98B803341E44197DA7A58370 /* Pods-shoppin-Alamofire-dummy.m in Sources */,
-				7B1E05CB0E4746B7633F886B /* Request.swift in Sources */,
-				C8351DA48959F80DA75F0EBA /* ResponseSerialization.swift in Sources */,
-				2E3220A9BC6C9C57D6E36378 /* Upload.swift in Sources */,
-				3F95A9A1F0747A44989AC839 /* Validation.swift in Sources */,
+				0BFAA1A0C821E64FAF03B11E /* Pods-shoppin-WYPopoverController-dummy.m in Sources */,
+				40937B8322DF1C67249B096F /* WYPopoverController.m in Sources */,
+				881425E9E1179AE9A649D093 /* WYStoryboardPopoverSegue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FB937086E2A958FAA6AB998B /* Sources */ = {
+		EC906D3FEDB0040DEB8BFAF6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A2B6D03558390611A5E5A2B /* Pods-shoppin-dummy.m in Sources */,
+				1C166FD3487F546B991984C6 /* Pods-shoppin-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		32C2B30632E5CE363D8C9510 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Pods-shoppin-WYPopoverController";
-			target = F41CD19835FF8A64619B2EE2 /* Pods-shoppin-WYPopoverController */;
-			targetProxy = FB68E0A0123E4AA14F712CE0 /* PBXContainerItemProxy */;
-		};
-		586A340553DCABF16F614680 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "Pods-shoppin_osx-Alamofire";
-			target = 6774193A693C73D70FFB118F /* Pods-shoppin_osx-Alamofire */;
-			targetProxy = B21A8B2F46AD81C93E56AB3D /* PBXContainerItemProxy */;
-		};
-		60EF935B48617429BC0D418F /* PBXTargetDependency */ = {
+		864CCB590F9113CA3302C896 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Pods-shoppin-Alamofire";
-			target = 4201D7708ACFA81FBD1F5D8B /* Pods-shoppin-Alamofire */;
-			targetProxy = CFA0817074286ED2C4CD829E /* PBXContainerItemProxy */;
+			target = 085474726820CB97A009F7B3 /* Pods-shoppin-Alamofire */;
+			targetProxy = 651B7EA67ACB065B35231E30 /* PBXContainerItemProxy */;
+		};
+		87B5DC0C839FDFA7E36B6DE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-shoppin_osx-Alamofire";
+			target = C8097AC3B9017EEC7BDC89DB /* Pods-shoppin_osx-Alamofire */;
+			targetProxy = A3A6CF52BF6056A952A167A0 /* PBXContainerItemProxy */;
+		};
+		BC638517C29E45A301700723 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Pods-shoppin-WYPopoverController";
+			target = 2047A1390C96F8CD9DB9A32B /* Pods-shoppin-WYPopoverController */;
+			targetProxy = D9C19C9D1A925880A6B366C8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		0A0FAA334446632DD0D3C23D /* Release */ = {
+		0891A72AA7FDF4C844DBD0EA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9970F8C251A86094525B42A2 /* Pods-shoppin.release.xcconfig */;
+			baseConfigurationReference = 2227A44F91CFBAC6AF736067 /* Pods-shoppin-Alamofire-Private.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
@@ -618,16 +618,14 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = "Target Support Files/Pods-shoppin/Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin-Alamofire/Pods-shoppin-Alamofire-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin-Alamofire/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Pods-shoppin/Pods-shoppin.modulemap";
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-Alamofire/Pods-shoppin-Alamofire.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_NAME = Pods_shoppin;
+				PRODUCT_NAME = Alamofire;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -636,37 +634,36 @@
 			};
 			name = Release;
 		};
-		24AB7013B94AF61B3F630968 /* Release */ = {
+		14B00926E192AD38C4DE802D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 61CE3B58209A1653A7548DA9 /* Pods-shoppin_osx-Alamofire-Private.xcconfig */;
+			baseConfigurationReference = D8411C0531B9598F0F6B8831 /* Pods-shoppin-WYPopoverController-Private.xcconfig */;
 			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_VERSION = A;
-				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Pods-shoppin_osx-Alamofire/Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin-WYPopoverController/Pods-shoppin-WYPopoverController-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin-WYPopoverController/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				MODULEMAP_FILE = "Target Support Files/Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire.modulemap";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = Alamofire;
-				SDKROOT = macosx;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-WYPopoverController/Pods-shoppin-WYPopoverController.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = WYPopoverController;
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = Debug;
 		};
-		32A5D7ABEA32DC52036F8B94 /* Release */ = {
+		294A246870AAB5501AE6B1D5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0D773907B0EFBD7ABE2EC05E /* Pods-shoppin_osx.release.xcconfig */;
+			baseConfigurationReference = C0F2C70866BCB78E7856F785 /* Pods-shoppin_osx.release.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -694,44 +691,37 @@
 			};
 			name = Release;
 		};
-		6EE387541B62AC63A00896B6 /* Release */ = {
+		49E1E0B8677F6F0A5974F45F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D185F2CA443664C5E155ADFF /* Pods-shoppin_osx-Alamofire-Private.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = YES;
-				ENABLE_NS_ASSERTIONS = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin_osx-Alamofire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				STRIP_INSTALLED_PRODUCT = NO;
-				SYMROOT = "${SRCROOT}/../build";
-				VALIDATE_PRODUCT = YES;
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = Alamofire;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
-		6F5D025033A451DAD6328891 /* Release */ = {
+		59584E63024D99E1A84DC57F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 99F04EFB4DBB3FEB889AD24E /* Pods-shoppin-Alamofire-Private.xcconfig */;
+			baseConfigurationReference = 2227A44F91CFBAC6AF736067 /* Pods-shoppin-Alamofire-Private.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
@@ -746,44 +736,18 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-Alamofire/Pods-shoppin-Alamofire.modulemap";
-				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = Alamofire;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = Debug;
 		};
-		7317D4EB0D50E29073F50895 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B4C64BB5273AAFB0F1A50B17 /* Pods-shoppin-WYPopoverController-Private.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin-WYPopoverController/Pods-shoppin-WYPopoverController-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Pods-shoppin-WYPopoverController/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-WYPopoverController/Pods-shoppin-WYPopoverController.modulemap";
-				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_NAME = WYPopoverController;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		735A9292BDFAEB7FF1CA2B87 /* Debug */ = {
+		5EE05FC102742230E7774A4E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -823,9 +787,9 @@
 			};
 			name = Debug;
 		};
-		7457638B01E84565C6F33210 /* Debug */ = {
+		785ABA4E1DA10D3FB446E23D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B4C64BB5273AAFB0F1A50B17 /* Pods-shoppin-WYPopoverController-Private.xcconfig */;
+			baseConfigurationReference = D8411C0531B9598F0F6B8831 /* Pods-shoppin-WYPopoverController-Private.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
@@ -840,7 +804,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-WYPopoverController/Pods-shoppin-WYPopoverController.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = WYPopoverController;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -848,97 +812,11 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Debug;
+			name = Release;
 		};
-		905D128CE37AB4B5AE308ED9 /* Debug */ = {
+		B1C51174ADDE62699AD14B37 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 99F04EFB4DBB3FEB889AD24E /* Pods-shoppin-Alamofire-Private.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin-Alamofire/Pods-shoppin-Alamofire-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Pods-shoppin-Alamofire/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Pods-shoppin-Alamofire/Pods-shoppin-Alamofire.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = Alamofire;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		94A34A3B2583699EE9E1CA8B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3ED4D82588B422A8A40D7FCC /* Pods-shoppin.debug.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = "Target Support Files/Pods-shoppin/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/Pods-shoppin/Pods-shoppin.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_NAME = Pods_shoppin;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		C7BB7279B61E4387EEDA0D61 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 61CE3B58209A1653A7548DA9 /* Pods-shoppin_osx-Alamofire-Private.xcconfig */;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_VERSION = A;
-				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/Pods-shoppin_osx-Alamofire/Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				MODULEMAP_FILE = "Target Support Files/Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_NAME = Alamofire;
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		DB152E8CAA07B6716626CB4D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E0985385615D7C380C724779 /* Pods-shoppin_osx.debug.xcconfig */;
+			baseConfigurationReference = 61557DC7E67B7E0C0727D527 /* Pods-shoppin_osx.debug.xcconfig */;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -966,64 +844,186 @@
 			};
 			name = Debug;
 		};
+		B60E4B38A8EF256960578483 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EE45AB1777F0ACC2B9D8770C /* Pods-shoppin.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin/Pods-shoppin.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_shoppin;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		C218D3B8F2F7EB41AB8C9B13 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CF438B4AE68FC3492EB51C53 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 125FC13FE125D550D8F56B2C /* Pods-shoppin.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin/Pods-shoppin.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_shoppin;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		D6808FB1A1AFE887217E6F6C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D185F2CA443664C5E155ADFF /* Pods-shoppin_osx-Alamofire-Private.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_VERSION = A;
+				GCC_PREFIX_HEADER = "Target Support Files/Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/Pods-shoppin_osx-Alamofire/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MODULEMAP_FILE = "Target Support Files/Pods-shoppin_osx-Alamofire/Pods-shoppin_osx-Alamofire.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = Alamofire;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		15E098C11F443A03604F5369 /* Build configuration list for PBXNativeTarget "Pods-shoppin_osx" */ = {
+		12208C4FA178D9C8E3527259 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DB152E8CAA07B6716626CB4D /* Debug */,
-				32A5D7ABEA32DC52036F8B94 /* Release */,
+				5EE05FC102742230E7774A4E /* Debug */,
+				C218D3B8F2F7EB41AB8C9B13 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		419BCD3275FB950A61F927FE /* Build configuration list for PBXNativeTarget "Pods-shoppin-WYPopoverController" */ = {
+		33C4C456FE8F8B65315DF9B4 /* Build configuration list for PBXNativeTarget "Pods-shoppin_osx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7457638B01E84565C6F33210 /* Debug */,
-				7317D4EB0D50E29073F50895 /* Release */,
+				B1C51174ADDE62699AD14B37 /* Debug */,
+				294A246870AAB5501AE6B1D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5B9717210018BADD4B8C67A2 /* Build configuration list for PBXProject "Pods" */ = {
+		673B3ECBD01B6A83838EFF46 /* Build configuration list for PBXNativeTarget "Pods-shoppin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				735A9292BDFAEB7FF1CA2B87 /* Debug */,
-				6EE387541B62AC63A00896B6 /* Release */,
+				B60E4B38A8EF256960578483 /* Debug */,
+				CF438B4AE68FC3492EB51C53 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6B5927D7406C6957F566468D /* Build configuration list for PBXNativeTarget "Pods-shoppin-Alamofire" */ = {
+		6E135E1F807581D48F8F58E5 /* Build configuration list for PBXNativeTarget "Pods-shoppin-Alamofire" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				905D128CE37AB4B5AE308ED9 /* Debug */,
-				6F5D025033A451DAD6328891 /* Release */,
+				59584E63024D99E1A84DC57F /* Debug */,
+				0891A72AA7FDF4C844DBD0EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E8538E57F8C0881F58D0CCA9 /* Build configuration list for PBXNativeTarget "Pods-shoppin" */ = {
+		7824198D0878E2283BFA4F87 /* Build configuration list for PBXNativeTarget "Pods-shoppin-WYPopoverController" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				94A34A3B2583699EE9E1CA8B /* Debug */,
-				0A0FAA334446632DD0D3C23D /* Release */,
+				14B00926E192AD38C4DE802D /* Debug */,
+				785ABA4E1DA10D3FB446E23D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EAA67A30B7177D9EDE28EC7D /* Build configuration list for PBXNativeTarget "Pods-shoppin_osx-Alamofire" */ = {
+		BB5C9377256E1ED25B880381 /* Build configuration list for PBXNativeTarget "Pods-shoppin_osx-Alamofire" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C7BB7279B61E4387EEDA0D61 /* Debug */,
-				24AB7013B94AF61B3F630968 /* Release */,
+				D6808FB1A1AFE887217E6F6C /* Debug */,
+				49E1E0B8677F6F0A5974F45F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = F47B6A57BA88C3D9190AA085 /* Project object */;
+	rootObject = BF2F77F4D0910C0DD85ADA64 /* Project object */;
 }

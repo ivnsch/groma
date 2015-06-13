@@ -55,7 +55,7 @@ class AutosuggestionsTableViewController: UITableViewController {
         return filteredOptions.count
     }
     
-    func searchText(text:String) {
+    func searchText(text: String) {
         self.filteredOptions = options.filter{$0.contains(text)}
         self.tableView.reloadData()
         
@@ -90,7 +90,7 @@ class AutosuggestionsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.onSuggestionSelected(self.filteredOptions[indexPath.row])
+        self.onSuggestionSelected(self.filteredOptions[indexPath.row]) // TODO crash sometimes
     }
     
     /*

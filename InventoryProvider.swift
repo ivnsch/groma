@@ -8,7 +8,7 @@
 
 protocol InventoryProvider {
    
-    func inventory() -> [InventoryItem]
+    func inventory(handler: Try<[InventoryItem]> -> ())
     
     func addToInventory(items:[InventoryItem])
     

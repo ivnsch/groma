@@ -27,8 +27,13 @@ class InventoryViewController: UITableViewController {
     }
     
     func loadInventoryItems() {
-        self.inventoryItems = self.inventoryProvider.inventory()
-        self.tableView.reloadData()
+        self.inventoryProvider.inventory {[weak self] try in
+            
+            if let inventoryItems = try.success {
+                self?.inventoryItems = inventoryItems
+                self?.tableView.reloadData()
+            }
+        }
     }
     
     // MARK: - Table view data source

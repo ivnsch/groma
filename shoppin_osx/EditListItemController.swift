@@ -45,6 +45,47 @@ class EditListItemController: NSWindowController, NSTextFieldDelegate {
         }
     }
     
+    
+    class ProductsSuggestionsLoader: SuggestionsLoader {
+        
+        private let listItemsProvider: ListItemProvider
+        
+        init(listItemsProvider: ListItemProvider) {
+            self.listItemsProvider = listItemsProvider
+        }
+        
+        func loadSuggestions(callback: ([String]) -> ()) {
+            
+            self.listItemsProvider.products {result in
+                if let products = result.success {
+                    let suggestions = products.map{$0.name}
+                    callback(suggestions)
+                }
+            }
+        }
+    }
+    
+    
+    class SectionSuggestionsLoader: SuggestionsLoader {
+        
+        private let listItemsProvider: ListItemProvider
+        
+        init(listItemsProvider: ListItemProvider) {
+            self.listItemsProvider = listItemsProvider
+        }
+        
+        func loadSuggestions(callback: ([String]) -> ()) {
+            
+            self.listItemsProvider.sections {result in
+                if let sections = result.success {
+                    let suggestions = sections.map{$0.name}
+                    callback(suggestions)
+                }
+            }
+        }
+    }
+    
+    
     override func windowDidLoad() {
         let sectionFrame = self.sectionTextField.frame
 
@@ -55,17 +96,8 @@ class EditListItemController: NSWindowController, NSTextFieldDelegate {
         // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
         self.windowDidLoadFunc?()
 
-        self.nameTextField.suggestionsLoader = {[weak self] in
-            if let list = self!.list {
-                return self!.listItemsProvider.products().map{$0.name}
-            } else {
-                return []
-            }
-        }
-        
-        self.sectionTextField.suggestionsLoader = {[weak self] in
-            self!.listItemsProvider.sections().map{$0.name ?? ""}
-        }
+        self.nameTextField.suggestionsLoader = ProductsSuggestionsLoader(listItemsProvider: self.listItemsProvider)
+        self.sectionTextField.suggestionsLoader = SectionSuggestionsLoader(listItemsProvider: self.listItemsProvider)
 
         self.nameTextField.delegate = self
         self.sectionTextField.delegate = self

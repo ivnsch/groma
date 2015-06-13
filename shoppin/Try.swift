@@ -6,7 +6,26 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
-enum Try<T, U> {
-    case Success(T)
-    case Error(U)
+// TODO use this in swift 2
+//enum Try<T> {
+//    case Success(T)
+//    case Error(NSError)
+//}
+
+final public class Try<T> {
+    public let success: T?
+    public let error: NSError?
+
+    public convenience init(_ success: T) {
+        self.init(success: success, error: nil)
+    }
+
+    public convenience init(_ error: NSError) {
+        self.init(success: nil, error: error)
+    }
+    
+    private init(success: T?, error: NSError?) {
+        self.success = success
+        self.error = error
+    }
 }

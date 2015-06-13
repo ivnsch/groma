@@ -11,96 +11,164 @@ class ListItemProviderImpl: ListItemProvider {
 
     let cdProvider = CDListItemProvider()
 
-    func products(handler: Try<Product>) {
+    func products(handler: Try<[Product]> -> ()) {
+        self.cdProvider.loadProducts {result in
+            if let products = result.success {
+                handler(Try(products.map{ProductMapper.productWithCD($0)}))
+            }
+        }
+    }
+    
+    func listItems(list: List, handler: Try<[ListItem]> -> ()) {
         
+        self.cdProvider.loadListItems(list.id, handler: {try in
+            
+            if let cdListItems = try.success {
+                let listItems = cdListItems.map{ListItemMapper.listItemWithCD($0)}
+                handler(Try(listItems))
+            }
+        })
+    }
+    
+    func remove(listItem: ListItem, handler: Try<Bool> -> ()) {
+
+        self.cdProvider.remove(listItem, handler: {removed in
+            handler(removed)
+            
+        })
         
-        return self.cdProvider.loadProducts().map {ProductMapper.productWithCD($0)}
+//        return self.cdProvider.remove(listItem)
     }
     
-    func listItems(list:List) -> [ListItem] {
-        return self.cdProvider.loadListItems(list.id).map {ListItemMapper.listItemWithCD($0)}
+    func remove(section:Section, handler: Try<Bool> -> ()) {
+        return self.cdProvider.remove(section, handler: {removed in
+            handler(removed)
+        })
     }
     
-    func remove(listItem:ListItem) -> Bool {
-        return self.cdProvider.remove(listItem)
+    func remove(list: List, handler: Try<Bool> -> ()) {
+        return self.cdProvider.remove(list, handler: {removed in
+            handler(removed)
+        })
     }
     
-    func remove(section:Section) -> Bool {
-        return self.cdProvider.remove(section)
-    }
-    
-    func remove(list:List) -> Bool {
-        return self.cdProvider.remove(list)
-    }
-    
-    func add(listItem:ListItem) -> ListItem? {
+    func add(listItem: ListItem, handler: Try<ListItem> -> ()) {
         // return the saved object, to get object with generated id
-        let cdListItem = self.cdProvider.saveListItem(listItem)
-        return ListItemMapper.listItemWithCD(cdListItem)
+        self.cdProvider.saveListItem(listItem, handler: {try in
+            if let cdListItem = try.success {
+                let listItem = ListItemMapper.listItemWithCD(cdListItem)
+                handler(Try(listItem))
+            }
+        })
     }
     
-    func add(listItemInput:ListItemInput, list:List, order orderMaybe:Int? = nil) -> ListItem? {
+    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, handler: Try<ListItem> -> ()) {
         // for now just create a new product and a listitem with it
         let product = Product(id: NSUUID().UUIDString, name: listItemInput.name, price:listItemInput.price)
         let section = Section(name: listItemInput.section)
        
-        let order = orderMaybe ?? self.listItems(list).count
-        
-        let listItem = ListItem(id: NSUUID().UUIDString, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
-       
-        return self.add(listItem)
+        self.listItems(list, handler: {try in // TODO fetch items only when order not passed, because they are used only to get order
+            
+            if let listItems = try.success {
+                
+                let order = orderMaybe ?? listItems.count
+                
+                let listItem = ListItem(id: NSUUID().UUIDString, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
+                
+                self.add(listItem, handler: {try in
+                    handler(try)
+                })
+            }
+        })
     }
  
-    func updateDone(listItems:[ListItem]) -> Bool {
-        return self.cdProvider.updateListItemsDone(listItems)
+    func updateDone(listItems: [ListItem], handler: Try<Bool> -> ()) {
+        return self.cdProvider.updateListItemsDone(listItems, handler: {try in
+            handler(try)
+        })
     }
     
-    func update(listItems:[ListItem]) -> Bool {
-        return self.cdProvider.updateListItems(listItems) != nil
+    func update(listItems: [ListItem], handler: Try<Bool> -> ()) {
+        self.cdProvider.updateListItems(listItems, handler: {try in
+            handler(Try(try.success != nil))
+        })
+//        return self.cdProvider.updateListItems(listItems) != nil
     }
     
-    func update(listItem:ListItem) -> Bool {
-        self.cdProvider.saveSection(listItem.section) // creates a new section if there isn't one already
-        return self.cdProvider.updateListItem(listItem) != nil
+    func update(listItem: ListItem, handler: Try<Bool> -> ()) {
+        self.cdProvider.saveSection(listItem.section, handler: {try in
+
+            if try.success != nil {
+                self.cdProvider.updateListItem(listItem, handler: {try in
+                    handler(Try(try.success != nil))
+                })
+            }
+        }) // creates a new section if there isn't one already
     }
     
-    func sections() -> [Section] {
-        return self.cdProvider.loadSections().map {
-            return Section(name: $0.name)
+    func sections(handler: Try<[Section]> -> ()) {
+        self.cdProvider.loadSections {result in
+            if let sections = result.success {
+                handler(Try(sections.map{Section(name: $0.name)}))
+            }
         }
     }
     
-    func lists() -> [List] {
-        return self.cdProvider.loadLists().map {ListMapper.listWithCD($0)}
+    func lists(handler: Try<[List]> -> ()) {
+        self.cdProvider.loadLists{try in
+            if let cdLists = try.success {
+                let lists = cdLists.map {ListMapper.listWithCD($0)}
+                handler(Try(lists))
+            }
+        }
     }
     
-    func list(listId: String) -> List? {
+    func list(listId: String, handler: Try<List> -> ()) {
         // return the saved object, to get object with generated id
-        let cdList = self.cdProvider.loadList(listId)
-        return ListMapper.listWithCD(cdList)
+        self.cdProvider.loadList(listId, handler: {try in
+            if let cdList = try.success {
+                let list = ListMapper.listWithCD(cdList)
+                handler(Try(list))
+            }
+        })
     }
     
-    func add(list:List) -> List? {
+    func add(list: List, handler: Try<List> -> ()) {
         // return the saved object, to get object with generated id
-        let list = self.cdProvider.saveList(list)
-        return ListMapper.listWithCD(list)
+        self.cdProvider.saveList(list, handler: {try in
+            if let cdList = try.success {
+                let list = ListMapper.listWithCD(cdList)
+                handler(Try(list))
+            }
+        })
     }
     
-    var firstList:List {
+    func firstList(handler: Try<List> -> ()) {
         
-        func createList(name:String) -> List {
+        func createList(name: String, #handler: Try<List> -> ()) {
             let list = List(id: NSUUID().UUIDString, name: name)
-            let savedList = self.add(list)
-            PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: savedList!.id))
-            return savedList!
+            self.add(list, handler: {try in
+                if let savedList = try.success {
+                    PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: savedList.id))
+                    handler(Try(savedList))
+                }
+            })
         }
 
-        var list:List
         if let listId:String = PreferencesManager.loadPreference(PreferencesManagerKey.listId) {
-            list = self.list(listId)!
+            self.list(listId, handler: {try in
+                if let list = try.success {
+                    handler(Try(list))
+                }
+
+            })
+            
         } else {
-            list = createList(Constants.defaultListIdentifier)
+            createList(Constants.defaultListIdentifier, handler: {try in
+                if let list = try.success {
+                    handler(Try(list))
+                }
+            })
         }
-        return list
     }
 }

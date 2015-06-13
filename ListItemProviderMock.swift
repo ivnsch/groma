@@ -44,33 +44,33 @@ class ListItemProviderMock: ListItemProvider {
         self.listItemsVar = Array(notDone) + Array(done)
     }
     
-    func listItems(list:List) -> [ListItem] {
-        return self.listItemsVar
+    func listItems(list: List, handler: Try<[ListItem]> -> ()) {
+        handler(Try(self.listItemsVar))
     }
     
-    func products() -> [Product] {
-        return self.productsVar
+    func products(handler: Try<[Product]> -> ()) {
+        handler(Try(self.productsVar))
     }
     
-    func remove(listItem:ListItem) -> Bool {
+    func remove(listItem: ListItem, handler: Try<Bool> -> ()) {
         if let index = find(self.listItemsVar, listItem) {
             listItemsVar.removeAtIndex(index)
         }
-        return true
+        handler(Try(true))
     }
     
-    func remove(section:Section) -> Bool {
+    func remove(section: Section, handler: Try<Bool> -> ()) {
         // TODO
-        return false
+        handler(Try(false))
     }
-    func remove(list:List) -> Bool {
+    func remove(list: List, handler: Try<Bool> -> ()) {
         // TODO
-        return false
+        handler(Try(false))
     }
     
-    func add(listItem:ListItem) -> ListItem? {
+    func add(listItem: ListItem, handler: Try<ListItem> -> ()) {
         self.listItemsVar.insert(listItem, atIndex: listItem.order)
-        return listItem
+        handler(Try(listItem))
     }
     
     func add(product:Product) -> Product? {
@@ -119,7 +119,7 @@ class ListItemProviderMock: ListItemProvider {
         }()
     }
     
-    func add(listItemInput:ListItemInput, list:List, order orderMaybe:Int?) -> ListItem? {
+    func add(listItemInput:ListItemInput, list:List, order orderMaybe:Int?, handler: Try<ListItem> -> ()) {
         let product = addFindProduct(name: listItemInput.name, price: listItemInput.price)
         let section = Section(name: listItemInput.section)
         
@@ -129,42 +129,47 @@ class ListItemProviderMock: ListItemProvider {
         let order = orderMaybe ?? idInt
         
         let listItem = ListItem(id: id, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
-        return self.add(listItem)
+        self.add(listItem, handler: handler)
     }
     
-    func update(listItem:ListItem) -> Bool {
+    func update(listItem: ListItem, handler: Try<Bool> -> ()) {
         //TODO
-        return true
+        handler(Try(true))
     }
     
-    func update(listItems:[ListItem]) -> Bool {
+    func update(listItems: [ListItem], handler: Try<Bool> -> ()) {
         //TODO
-        return true
+        handler(Try(true))
     }
     
-    func sections() -> [Section] {
-        return self.sectionsVar
+    func sections(handler: Try<[Section]> -> ()) {
+        handler(Try(self.sectionsVar))
     }
    
-    func lists() -> [List] {
-        return self.listsVar
+    func lists(handler: Try<[List]> -> ()) {
+        handler(Try(self.listsVar))
     }
     
-    func list(listId: String) -> List? {
-        return self.listsVar.findFirst{$0.id == listId}
+    func list(listId: String, handler: Try<List> -> ()) {
+        if let list = (self.listsVar.findFirst{$0.id == listId}) {
+            handler(Try(list))
+        } else {
+            handler(Try(NSError()))
+        }
     }
     
-    func add(list:List) -> List? {
+    func add(list: List, handler: Try<List> -> ()) {
         //TODO
-        return nil
+        handler(Try(list))
     }
     
-    func updateDone(listItems:[ListItem]) -> Bool {
+    func updateDone(listItems:[ListItem], handler: Try<Bool> -> ()) {
         //TODO
-        return true
+        handler(Try(true))
     }
     
-    var firstList:List {
-        return self.listsVar.first!
+    func firstList(handler: Try<List> -> ()) {
+        let list = self.listsVar.first!
+        handler(Try(list))
     }
 }

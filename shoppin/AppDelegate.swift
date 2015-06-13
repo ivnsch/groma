@@ -40,10 +40,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func addDummyPersistentObjects() {
         let listItemProviderImpl = ListItemProviderImpl()
         let mock = ListItemProviderMock()
-        let firstList = listItemProviderImpl.firstList
-        for listItem in mock.listItems(firstList) {
-            listItem.list = firstList // change mock list to valid core data list
-            listItemProviderImpl.add(listItem)
+        listItemProviderImpl.firstList{try in
+            
+            if let firstList = try.success {
+                mock.listItems(firstList, handler: {try in
+                    
+                    if let listItems = try.success {
+                        for listItem in listItems {
+                            listItem.list = firstList // change mock list to valid core data list
+                            listItemProviderImpl.add(listItem, handler: {try in
+                            })
+                        }
+                    }
+                })
+            }
         }
     }
     

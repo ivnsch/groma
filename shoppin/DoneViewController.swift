@@ -32,25 +32,31 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
     
     private func initList() {
         
-        var list:List
-        if let listId:String = PreferencesManager.loadPreference(PreferencesManagerKey.listId) {
-            list = self.listItemsProvider.list(listId)!
-            
-        } else {
-            list = self.createList(Constants.defaultListIdentifier)
-            PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: Constants.defaultListIdentifier))
+        let handler: Try<List> -> () = {[weak self] try in
+            if let list = try.success {
+                
+                self!.listItemsProvider.listItems(list, handler: {try in
+                    
+                    if let listItems = try.success {
+                        let donelistItems = listItems.filter{$0.done}
+                        self!.listItemsTableViewController.setListItems(donelistItems)
+                    }
+                })
+            }
         }
         
-        let listItems:[ListItem] = self.listItemsProvider.listItems(list)
-        
-        let donelistItems = listItems.filter{$0.done}
-        self.listItemsTableViewController.setListItems(donelistItems)
+        if let listId:String = PreferencesManager.loadPreference(PreferencesManagerKey.listId) {
+            self.listItemsProvider.list(listId, handler: handler)
+            
+        } else {
+            PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: Constants.defaultListIdentifier)) // TODO probably it's safer to save this in the handler, so we know thelist was also loaded
+            self.createList(Constants.defaultListIdentifier, handler: handler)
+        }
     }
     
-    private func createList(name:String) -> List {
+    private func createList(name: String, handler: Try<List> -> ()) {
         let list = List(id: NSUUID().UUIDString, name: name)
-        let savedList = self.listItemsProvider.add(list)
-        return savedList!
+        self.listItemsProvider.add(list, handler: handler)
     }
 
     private func initTableViewController() {
@@ -83,13 +89,18 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
         self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0)
     }
     
-    private func setItemUndone(listItem:ListItem) {
+    private func setItemUndone(listItem: ListItem) {
         listItem.done = false
         
-        self.listItemsProvider.update(listItem)
-        self.listItemsTableViewController.removeListItem(listItem, animation: UITableViewRowAnimation.Bottom)
-        
-        itemsNotificator?.notifyItemUpdated(listItem, sender: self)
+        self.listItemsProvider.update(listItem, handler: {[weak self] try in
+            
+            if try.success ?? false {
+                
+                self!.listItemsTableViewController.removeListItem(listItem, animation: UITableViewRowAnimation.Bottom)
+                
+                self!.itemsNotificator?.notifyItemUpdated(listItem, sender: self!)
+            }
+        })
     }
     
     func itemsChanged() {
@@ -109,10 +120,12 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
         for item in listItems {
             item.done = false
         }
-        self.listItemsProvider.updateDone(listItems)
-        self.listItemsTableViewController.setListItems([])
-        
-        itemsNotificator?.notifyItemsUpdated(self)
+        self.listItemsProvider.updateDone(listItems, handler: {[weak self] try in
+            
+            self!.listItemsTableViewController.setListItems([])
+            
+            self!.itemsNotificator?.notifyItemsUpdated(self!)
+        })
     }
     
     func onAddToInventoryTap() {

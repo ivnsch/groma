@@ -61,13 +61,16 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     private func addList(listInput: ListInput) {
         let list = List(id: NSUUID().UUIDString, name: listInput.name)
         
-        if let addedList = self.listItemsProvider.add(list) {
-            self.loadLists() // we modified list - reload everything
-            self.selectTableViewRow(addedList)
+        self.listItemsProvider.add(list, handler: {try in
+           
+            if let addedList = try.success {
+                self.loadLists() // we modified list - reload everything
+                self.selectTableViewRow(addedList)
             
-        } else {
-            println("Error: couldn't add list to provider: \(list)")
-        }
+            } else {
+                println("Error: couldn't add list to provider: \(list)")
+            }
+        })
     }
     
     private func selectTableViewRow(list: List) {
@@ -86,8 +89,12 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     private func loadLists() {
-        self.selectables = self.listItemsProvider.lists().map{Selectable(model: $0)}
-        self.tableView.reloadData()
+        self.listItemsProvider.lists{[weak self] try in
+            if let lists = try.success {
+                self?.selectables = lists.map{Selectable(model: $0)}
+                self?.tableView.reloadData()
+            }
+        }
     }
 
     private func selectList(list: List) {
@@ -98,13 +105,15 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     private func removeList(list: List) {
-        if self.listItemsProvider.remove(list) {
-            self.loadLists()
-            self.restoreSelectionAfterReloadData()
-            
-        } else {
-            println("Error: list couldn't be removed: \(list)")
-        }
+        self.listItemsProvider.remove(list, handler: {[weak self] removed in
+            if removed.success ?? false {
+                self?.loadLists()
+                self?.restoreSelectionAfterReloadData()
+                
+            } else {
+                println("Error: list couldn't be removed: \(list)")
+            }
+        })
     }
     
     private func removeListWithConfirm(list: List) {
