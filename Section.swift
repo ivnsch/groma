@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
-class Section: Hashable {
+final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSerializable {
     let name:String
     
     init(name:String) {
@@ -15,6 +15,22 @@ class Section: Hashable {
     
     var hashValue: Int {
         return name.hashValue
+    }
+    
+    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+//        self.id = representation.valueForKeyPath("id") as! String // TODO
+        self.name = representation.valueForKeyPath("name") as! String
+    }
+    
+    @objc static func collection(#response: NSHTTPURLResponse, representation: AnyObject) -> [Section] {
+        var sections = [Section]()
+        for obj in representation as! [AnyObject] {
+            if let section = Section(response: response, representation: obj) {
+                sections.append(section)
+            }
+            
+        }
+        return sections
     }
 }
 

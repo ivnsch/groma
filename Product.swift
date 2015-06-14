@@ -7,12 +7,12 @@
 //
 
 
-class Product:Equatable {
-    let id:String
-    let name:String
-    let price:Float
+final class Product: Equatable {
+    let id: String
+    let name: String
+    let price: Float
     
-    init(id:String, name:String, price:Float) {
+    init(id: String, name: String, price: Float) {
         self.id = id
         self.name = name
         self.price = price

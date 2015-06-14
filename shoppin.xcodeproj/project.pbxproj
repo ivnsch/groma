@@ -102,6 +102,19 @@
 		EB89D3471AD4536300B6E0D0 /* AddListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D3441AD4536300B6E0D0 /* AddListController.swift */; };
 		EB89D3491AD4536300B6E0D0 /* AddListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB89D3451AD4536300B6E0D0 /* AddListController.xib */; };
 		EB89D34D1AD5235600B6E0D0 /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D34C1AD5235600B6E0D0 /* ListCell.swift */; };
+		EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
+		EB9BE4171B2C6556005B401A /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
+		EB9BE4191B2CB355005B401A /* RemoteListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4181B2CB355005B401A /* RemoteListItems.swift */; };
+		EB9BE41A1B2CB355005B401A /* RemoteListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4181B2CB355005B401A /* RemoteListItems.swift */; };
+		EB9BE41C1B2CB42B005B401A /* RemoteListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE41B1B2CB42B005B401A /* RemoteListItem.swift */; };
+		EB9BE41D1B2CB42B005B401A /* RemoteListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE41B1B2CB42B005B401A /* RemoteListItem.swift */; };
+		EB9BE41F1B2CB513005B401A /* RemoteProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE41E1B2CB513005B401A /* RemoteProduct.swift */; };
+		EB9BE4201B2CB513005B401A /* RemoteProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE41E1B2CB513005B401A /* RemoteProduct.swift */; };
+		EB9BE4221B2CB51F005B401A /* RemoteSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4211B2CB51F005B401A /* RemoteSection.swift */; };
+		EB9BE4231B2CB51F005B401A /* RemoteSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4211B2CB51F005B401A /* RemoteSection.swift */; };
+		EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4241B2CB542005B401A /* RemoteList.swift */; };
+		EB9BE4261B2CB542005B401A /* RemoteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4241B2CB542005B401A /* RemoteList.swift */; };
+		EB9BE42B1B2DFC87005B401A /* RemoteListItemWithData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4271B2DFA58005B401A /* RemoteListItemWithData.swift */; };
 		EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE61A8610550038355B /* AppDelegate.swift */; };
 		EB9F6CE91A8610550038355B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE81A8610550038355B /* ViewController.swift */; };
 		EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEA1A8610550038355B /* Images.xcassets */; };
@@ -227,6 +240,13 @@
 		EB89D3441AD4536300B6E0D0 /* AddListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddListController.swift; sourceTree = "<group>"; };
 		EB89D3451AD4536300B6E0D0 /* AddListController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddListController.xib; sourceTree = "<group>"; };
 		EB89D34C1AD5235600B6E0D0 /* ListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
+		EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemProvider.swift; sourceTree = "<group>"; };
+		EB9BE4181B2CB355005B401A /* RemoteListItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItems.swift; sourceTree = "<group>"; };
+		EB9BE41B1B2CB42B005B401A /* RemoteListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItem.swift; sourceTree = "<group>"; };
+		EB9BE41E1B2CB513005B401A /* RemoteProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProduct.swift; sourceTree = "<group>"; };
+		EB9BE4211B2CB51F005B401A /* RemoteSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSection.swift; sourceTree = "<group>"; };
+		EB9BE4241B2CB542005B401A /* RemoteList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteList.swift; sourceTree = "<group>"; };
+		EB9BE4271B2DFA58005B401A /* RemoteListItemWithData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemWithData.swift; sourceTree = "<group>"; };
 		EB9F6CE21A8610550038355B /* shoppin_osx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin_osx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB9F6CE51A8610550038355B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB9F6CE61A8610550038355B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -515,6 +535,20 @@
 			name = extensions;
 			sourceTree = "<group>";
 		};
+		EB9BE4141B2C6525005B401A /* remote */ = {
+			isa = PBXGroup;
+			children = (
+				EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */,
+				EB9BE4181B2CB355005B401A /* RemoteListItems.swift */,
+				EB9BE41B1B2CB42B005B401A /* RemoteListItem.swift */,
+				EB9BE4271B2DFA58005B401A /* RemoteListItemWithData.swift */,
+				EB9BE41E1B2CB513005B401A /* RemoteProduct.swift */,
+				EB9BE4241B2CB542005B401A /* RemoteList.swift */,
+				EB9BE4211B2CB51F005B401A /* RemoteSection.swift */,
+			);
+			name = remote;
+			sourceTree = "<group>";
+		};
 		EB9F6CE31A8610550038355B /* shoppin_osx */ = {
 			isa = PBXGroup;
 			children = (
@@ -680,6 +714,7 @@
 				EBF162F81A3CA52F0048E37C /* impl */,
 				EBF162F31A3CA4620048E37C /* mock */,
 				EBF162EE1A3CA3180048E37C /* coreData */,
+				EB9BE4141B2C6525005B401A /* remote */,
 				EBF162F41A3CA4BA0048E37C /* ProviderFactory.swift */,
 				EBF162F91A3CA54F0048E37C /* ListItemProvider.swift */,
 				EB20FBFB1A5972A30058103B /* InventoryProvider.swift */,
@@ -807,6 +842,7 @@
 		EB1DDE9D1A3334EC00D778DE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = ivanschuetz;
 				TargetAttributes = {
@@ -996,6 +1032,7 @@
 				EB55677B1A86545300CD3EC6 /* SharedAppDelegate.m in Sources */,
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
+				EB9BE4191B2CB355005B401A /* RemoteListItems.swift in Sources */,
 				EBF162FD1A3DDE5D0048E37C /* ProductMapper.swift in Sources */,
 				EB20FBFA1A5971C20058103B /* InventoryItemMapper.swift in Sources */,
 				EB20FBF21A5961360058103B /* CartMenuView.swift in Sources */,
@@ -1016,12 +1053,15 @@
 				EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */,
 				EB20FC051A599A500058103B /* InventoryViewController.swift in Sources */,
 				EBF162F01A3CA3530048E37C /* CDListItemProvider.swift in Sources */,
+				EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */,
 				EB2F5D771A557AB000DBC4AF /* List.swift in Sources */,
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
 				EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */,
+				EB9BE4221B2CB51F005B401A /* RemoteSection.swift in Sources */,
 				EBF162ED1A3CA24E0048E37C /* ListItem.swift in Sources */,
 				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
+				EB9BE41F1B2CB513005B401A /* RemoteProduct.swift in Sources */,
 				EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */,
 				EB2F5D261A4DE56B00DBC4AF /* DoneViewController.swift in Sources */,
 				EB89D33C1AD44BD400B6E0D0 /* Selectable.swift in Sources */,
@@ -1043,8 +1083,10 @@
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
 				EB2F5D161A4B380900DBC4AF /* ContainerViewController.swift in Sources */,
+				EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */,
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,
+				EB9BE41C1B2CB42B005B401A /* RemoteListItem.swift in Sources */,
 				EB20FBFE1A5972C70058103B /* InventoryProviderImpl.swift in Sources */,
 				EBF162E21A3C83D50048E37C /* ListItemsViewSection.swift in Sources */,
 				EB4FD45B1AC701410000F952 /* ListItemInput.swift in Sources */,
@@ -1062,6 +1104,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB5567691A8643B800CD3EC6 /* ListItem.swift in Sources */,
+				EB9BE4171B2C6556005B401A /* RemoteListItemProvider.swift in Sources */,
 				EB4FD46E1AC73C930000F952 /* Constants.swift in Sources */,
 				EB55677F1A8658AA00CD3EC6 /* InventoryProviderImpl.swift in Sources */,
 				EB5567631A86438100CD3EC6 /* InventoryItemMapper.swift in Sources */,
@@ -1069,15 +1112,19 @@
 				EB55675F1A86437400CD3EC6 /* ListItemMapper.swift in Sources */,
 				EB55676C1A8643C300CD3EC6 /* InventoryItem.swift in Sources */,
 				EB5567661A8643AB00CD3EC6 /* CDSection.swift in Sources */,
+				EB9BE4201B2CB513005B401A /* RemoteProduct.swift in Sources */,
 				EBDFE3B11ACED1F600E48F95 /* ListItemCell.swift in Sources */,
 				EB55676B1A8643BF00CD3EC6 /* List.swift in Sources */,
 				EB4FD45C1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EB9F6CE91A8610550038355B /* ViewController.swift in Sources */,
+				EB9BE42B1B2DFC87005B401A /* RemoteListItemWithData.swift in Sources */,
 				EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */,
 				EB5567611A86437B00CD3EC6 /* SectionMapper.swift in Sources */,
 				EBDFE3A71ACE829400E48F95 /* CellManager.swift in Sources */,
 				EB89D33D1AD44BD400B6E0D0 /* Selectable.swift in Sources */,
 				EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */,
+				EB9BE4261B2CB542005B401A /* RemoteList.swift in Sources */,
+				EB9BE41D1B2CB42B005B401A /* RemoteListItem.swift in Sources */,
 				EB4FD4561AC6D6690000F952 /* EditListItemController.swift in Sources */,
 				EB4FD45D1AC7148C0000F952 /* String.swift in Sources */,
 				EB4FD46D1AC73B590000F952 /* PreferencesManager.swift in Sources */,
@@ -1085,6 +1132,7 @@
 				EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */,
 				EB4FD45E1AC715FF0000F952 /* Array.swift in Sources */,
 				EB55676D1A8644D400CD3EC6 /* shoppin.xcdatamodeld in Sources */,
+				EB9BE4231B2CB51F005B401A /* RemoteSection.swift in Sources */,
 				EB5567601A86437800CD3EC6 /* ProductMapper.swift in Sources */,
 				EB5567711A864B6E00CD3EC6 /* ListItemProviderMock.swift in Sources */,
 				EB5567621A86437E00CD3EC6 /* ListMapper.swift in Sources */,
@@ -1109,6 +1157,7 @@
 				EB89D3471AD4536300B6E0D0 /* AddListController.swift in Sources */,
 				EBDFE3B51ACEEB5400E48F95 /* HeaderCellManager.swift in Sources */,
 				EBDFE3A91ACE82F000E48F95 /* ListItemCellManager.swift in Sources */,
+				EB9BE41A1B2CB355005B401A /* RemoteListItems.swift in Sources */,
 				EB89D34D1AD5235600B6E0D0 /* ListCell.swift in Sources */,
 				EB5567801A8658B000CD3EC6 /* CDProvider.swift in Sources */,
 				EB5567641A86438600CD3EC6 /* CDProduct.swift in Sources */,

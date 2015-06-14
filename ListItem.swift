@@ -7,17 +7,17 @@
 //
 
 
-class ListItem: Equatable {
-    let id:String
-    var done:Bool
-    let quantity:Int
-    let product:Product
-    var section:Section
-    var list:List
+final class ListItem: Equatable {
+    let id: String
+    var done: Bool
+    let quantity: Int
+    let product: Product
+    var section: Section
+    var list: List
    
-    var order:Int
+    var order: Int
     
-    init(id:String, done:Bool, quantity:Int, product:Product, section:Section, list:List, order:Int) {
+    init(id: String, done: Bool, quantity: Int, product: Product, section: Section, list: List, order: Int) {
         self.id = id
         self.done = done
         self.quantity = quantity
