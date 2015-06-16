@@ -12,6 +12,7 @@ import CoreData
 @objc(CDSection)
 class CDSection: NSManagedObject {
 
+    @NSManaged var id: String
     @NSManaged var name: String
     @NSManaged var listItem: NSSet
 

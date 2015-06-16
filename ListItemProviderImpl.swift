@@ -65,7 +65,8 @@ class ListItemProviderImpl: ListItemProvider {
     func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, handler: Try<ListItem> -> ()) {
         // for now just create a new product and a listitem with it
         let product = Product(id: NSUUID().UUIDString, name: listItemInput.name, price:listItemInput.price)
-        let section = Section(name: listItemInput.section)
+        // for now create a new section (TODO review this), server assigns new id if not existent yet or ignores
+        let section = Section(id: NSUUID().UUIDString, name: listItemInput.section)
        
         self.listItems(list, handler: {try in // TODO fetch items only when order not passed, because they are used only to get order
             
@@ -109,7 +110,7 @@ class ListItemProviderImpl: ListItemProvider {
     func sections(handler: Try<[Section]> -> ()) {
         self.cdProvider.loadSections {result in
             if let sections = result.success {
-                handler(Try(sections.map{Section(name: $0.name)}))
+                handler(Try(sections.map{Section(id: $0.id, name: $0.name)}))
             }
         }
     }

@@ -26,6 +26,7 @@
         <relationship name="listItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDListItem" inverseName="product" inverseEntity="CDListItem" syncable="YES"/>
     </entity>
     <entity name="CDSection" representedClassName="CDSection" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
         <relationship name="listItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDListItem" inverseName="section" inverseEntity="CDListItem" syncable="YES"/>
     </entity>
@@ -34,6 +35,6 @@
         <element name="CDList" positionX="-54" positionY="27" width="128" height="88"/>
         <element name="CDListItem" positionX="-63" positionY="-9" width="128" height="150"/>
         <element name="CDProduct" positionX="-63" positionY="-18" width="128" height="120"/>
-        <element name="CDSection" positionX="-54" positionY="9" width="128" height="75"/>
+        <element name="CDSection" positionX="-54" positionY="9" width="128" height="90"/>
     </elements>
 </model>

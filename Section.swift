@@ -7,9 +7,11 @@
 //
 
 final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSerializable {
-    let name:String
+    let id: String
+    let name: String
     
-    init(name:String) {
+    init(id:  String, name: String) {
+        self.id = id
         self.name = name
     }
     
@@ -18,7 +20,7 @@ final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSer
     }
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
-//        self.id = representation.valueForKeyPath("id") as! String // TODO
+        self.id = representation.valueForKeyPath("id") as! String
         self.name = representation.valueForKeyPath("name") as! String
     }
     

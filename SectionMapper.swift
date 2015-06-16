@@ -8,7 +8,7 @@
 
 
 class SectionMapper {
-    class func sectionWithCD(cdSection:CDSection) -> Section {
-        return Section(name: cdSection.name)
+    class func sectionWithCD(cdSection: CDSection) -> Section {
+        return Section(id: cdSection.id, name: cdSection.name)
     }
 }

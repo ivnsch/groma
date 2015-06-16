@@ -27,6 +27,18 @@ extension String {
     var intValue: Int {
         return (self as NSString).integerValue
     }
+    
+    var boolValue: Bool? {
+        switch self {
+        case "true":
+            return true
+        case "false":
+            return false
+        default:
+            return nil
+        }
+    }
+    
 //    func startsWith(str:String) -> Bool {
 //        var startsWith = false
 //        if let range = self.rangeOfString(str) {

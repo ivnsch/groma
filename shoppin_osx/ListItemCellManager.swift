@@ -75,6 +75,7 @@ class ListItemCellManager: CellManager, ListItemCellDelegate {
     private let productPriceKey = "productPrice"
     private let listIdKey = "listId"
     private let listNameKey = "listName"
+    private let sectionIdKey = "sectionId"
     private let sectionNameKey = "sectionName"
     private let listItemQuantityKey = "listItemQuantity"
     private let listItemOrderKey = "listItemOrder"
@@ -94,8 +95,9 @@ class ListItemCellManager: CellManager, ListItemCellDelegate {
             let productPrice = aDecoder.decodeFloatForKey(productPriceKey)
             let product = Product(id: productId, name: productName, price: productPrice)
             
+            let sectionId = aDecoder.decodeObjectForKey(listIdKey) as! String
             let sectionName = aDecoder.decodeObjectForKey(sectionNameKey) as! String
-            let section = Section(name: sectionName)
+            let section = Section(id: sectionId, name: sectionName)
             
             let listItemId = aDecoder.decodeObjectForKey(listItemIdKey) as! String
             let listItemQuantity = aDecoder.decodeIntegerForKey(listItemQuantityKey)
@@ -122,6 +124,7 @@ class ListItemCellManager: CellManager, ListItemCellDelegate {
         aCoder.encodeObject(listItem.product.name, forKey: productNameKey)
         aCoder.encodeFloat(listItem.product.price, forKey: productPriceKey)
 
+        aCoder.encodeObject(listItem.section.id, forKey: sectionIdKey)
         aCoder.encodeObject(listItem.section.name, forKey: sectionNameKey)
         
         aCoder.encodeInteger(listItem.quantity, forKey: listItemQuantityKey)

@@ -22,18 +22,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: "NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints")
             #else
         #endif
-
-
-        let section = Section(name: "foo_section")
-        let list = List(id: "", name: "foo_list", listItems: Array<ListItem>())
-        let product = Product(id: "", name: "foo_product", price: 100)
-        let listItem = ListItem(id: "", done: false, quantity: 100, product: product, section: section, list: list, order: 5)
-        RemoteListItemProvider().add(listItem, handler: {try in
-            
-            
-            println("added listitem:, \(try.success)")
-            
-        })
     }
     
 

@@ -18,7 +18,7 @@ class ListItemProviderMock: ListItemProvider {
             Product(id: String($0), name: "product " + String($0), price:1.2)
         }
         
-        let section = Section(name: "test")
+        let section = Section(id: NSUUID().UUIDString, name: "test")
         self.sectionsVar.append(section)
         
         let list:List = List(id: NSUUID().UUIDString, name: Constants.defaultListIdentifier)
@@ -111,9 +111,9 @@ class ListItemProviderMock: ListItemProvider {
         return self.sectionsVar.findFirst{$0.name == name}
     }
     
-    private func addFindSection(name:String) -> Section {
+    private func addFindSection(name: String) -> Section {
         return self.findSection(name) ?? {
-            let section = Section(name: name)
+            let section = Section(id: NSUUID().UUIDString, name: name)
             self.add(section)
             return section
         }()
@@ -121,7 +121,7 @@ class ListItemProviderMock: ListItemProvider {
     
     func add(listItemInput:ListItemInput, list:List, order orderMaybe:Int?, handler: Try<ListItem> -> ()) {
         let product = addFindProduct(name: listItemInput.name, price: listItemInput.price)
-        let section = Section(name: listItemInput.section)
+        let section = Section(id: NSUUID().UUIDString, name: listItemInput.section)
         
         let idInt = self.nextId(self.listItemsVar.map{$0.id})
         let id = "\(idInt)"

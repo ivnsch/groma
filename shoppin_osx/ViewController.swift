@@ -120,9 +120,9 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             section: listItem.section.name)
     }
     
-    private func toUpdatedListItem(listItem:ListItem, listItemInput: ListItemInput) -> ListItem {
+    private func toUpdatedListItem(listItem: ListItem, listItemInput: ListItemInput) -> ListItem {
         
-        let section = Section(name: listItemInput.section)
+        let section = Section(id: NSUUID().UUIDString, name: listItemInput.section) // TODO not used ids or something, given in server anyway
         
         // for now we overwrite existing product on update (provider just sets the fields on existing product)
         // later we may want to think about this, depending how we use products
