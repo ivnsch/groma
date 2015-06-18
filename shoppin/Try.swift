@@ -16,6 +16,10 @@ final public class Try<T> {
     public let success: T?
     public let error: NSError?
 
+    var isSuccess: Bool {
+        return self.success != nil && self.error == nil
+    }
+    
     public convenience init(_ success: T) {
         self.init(success: success, error: nil)
     }

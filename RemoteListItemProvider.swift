@@ -60,6 +60,17 @@ class RemoteListItemProvider {
         }
     }
 
+    func listItems(#list: List, handler: Try<RemoteListItems> -> ()) {
+        Alamofire.request(.GET, Urls.listItems, parameters: ["list": list.id]).responseObject { (request, _, listItems: RemoteListItems?, error) in
+            if let listItems = listItems {
+                println("received listItems: \(listItems)")
+                handler(Try(listItems))
+            } else {
+                println("Response error: \(error), request: \(request)")
+            }
+        }
+    }
+    
     func listItems(handler: Try<RemoteListItems> -> ()) {
         Alamofire.request(.GET, Urls.listItems).responseObject { (request, _, listItems: RemoteListItems?, error) in
             if let listItems = listItems {

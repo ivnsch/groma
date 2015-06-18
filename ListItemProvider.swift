@@ -37,6 +37,4 @@ protocol ListItemProvider {
     func listItems(list: List, handler: Try<[ListItem]> -> ())
     
     func updateDone(listItems:[ListItem], handler: Try<Bool> -> ())
-
-    func firstList(handler: Try<List> -> ())
 }

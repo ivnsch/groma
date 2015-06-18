@@ -55,6 +55,49 @@ class CDProvider: NSObject {
         })
     }
     
+    func removeAll(entityName: String, predicate predicateMaybe: NSPredicate? = nil, save: Bool, handler: Try<Bool> -> ()) {
+        
+        let appDelegate = SharedAppDelegate.getAppDelegate()
+        let context = appDelegate.managedObjectContext!
+        
+        let fetchRequest = NSFetchRequest()
+        fetchRequest.entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: context)
+        fetchRequest.includesPropertyValues = false
+        
+        if let predicate = predicateMaybe {
+            fetchRequest.predicate = predicate
+        }
+        
+        var error:NSError?
+        if let results = context.executeFetchRequest(fetchRequest, error: &error) as? [NSManagedObject] {
+            for result in results {
+                context.deleteObject(result)
+            }
+            
+            if save {
+                var error:NSError?
+                if context.save(&error) {
+                    handler(Try(true))
+                    
+                } else if let error = error {
+                    println(error.userInfo)
+                    handler(Try(error))
+                }
+                
+            } else {
+                handler(Try(true))
+            }
+
+        } else if let error = error {
+            println(error.userInfo)
+            handler(Try(error))
+            
+        } else {
+            println("Error: removeAll - results is nil")
+            // TODO is this really an error, if yes handle appropiately otherwise return success
+        }
+    }
+    
     func load<T:AnyObject>(#entityName: String, type: T.Type, predicate predicateMaybe: NSPredicate? = nil, sortDescriptors sortDescriptorsMaybe: [NSSortDescriptor]? = nil, handler: Try<[T]> -> ()) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {

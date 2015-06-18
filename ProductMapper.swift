@@ -14,4 +14,9 @@ class ProductMapper {
             name: cdProduct.name,
             price: cdProduct.price.floatValue)
     }
+    
+    
+    class func ProductWithRemote(remoteProduct: RemoteProduct) -> Product {
+        return Product(id: remoteProduct.id, name: remoteProduct.name, price: remoteProduct.price)
+    }
 }

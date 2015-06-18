@@ -31,3 +31,7 @@ final class ListItem: Equatable {
 func ==(lhs: ListItem, rhs: ListItem) -> Bool {
     return lhs.id == rhs.id
 }
+
+// convenience (redundant) holder to avoid having to iterate through listitems to find unique products, sections, lists
+// so products, sections and lists arrays are the result of extracting the unique products, sections and list from listItems array
+typealias ListItemsWithRelations = (listItems: [ListItem], products: [Product], sections: [Section], lists: [List])

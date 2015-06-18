@@ -49,16 +49,7 @@ class CDListItemProvider: CDProvider {
     }
     
     func saveProduct(product: Product, handler: Try<CDProduct> -> ()) {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
-        
-        let cdProduct = NSEntityDescription.insertNewObjectForEntityForName("CDProduct", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDProduct
-        
-        cdProduct.id = product.id
-        cdProduct.name = product.name
-        cdProduct.price = product.price
-        
-        self.save{try in
-        }
+        let cdProduct = self.saveProductInt(product, save: true)
         
         handler(Try(cdProduct))
     }
@@ -96,6 +87,395 @@ class CDListItemProvider: CDProvider {
                 handler(Try(cdSection))
             }
             
+        })
+    }
+    
+    func saveListsOverwrite(lists: [List], handler: Try<Bool> -> ()) {
+        
+        self.removeAll("CDList", save: false, handler: {[weak self] removeListsTry in
+            
+            if removeListsTry.success ?? false == true {
+                self!.saveListsInt(lists, save: true)
+                handler(Try(true)) // TODO error handling?
+            }
+        })
+    }
+    
+    ///////////////////////////////////////////////
+    // TODO refactor
+    
+    private func saveProductsInt(products: [Product], save: Bool) -> (arr: [CDProduct], idDict: [String: CDProduct]) {
+        var arr: [CDProduct] = []
+        var idDict: [String: CDProduct] = [:]
+        for product in products {
+            let cdProduct = self.saveProductInt(product, save: save)
+            arr.append(cdProduct)
+            idDict[product.id] = cdProduct
+        }
+        
+        return (
+            arr: arr,
+            idDict: idDict
+        )
+    }
+    
+    private func saveSectionsInt(sections: [Section], save: Bool) -> (arr: [CDSection], idDict: [String: CDSection]) {
+        var arr: [CDSection] = []
+        var idDict: [String: CDSection] = [:]
+        for section in sections {
+            let cdSection = self.saveSectionInt(section, save: save)
+            arr.append(cdSection)
+            idDict[section.id] = cdSection
+        }
+        
+        return (
+            arr: arr,
+            idDict: idDict
+        )
+    }
+    
+    // TODO async, also in other methods, check that save can be done in bg (crash in other place)
+    private func saveListsInt(lists: [List], save: Bool) -> (arr: [CDList], idDict: [String: CDList]) {
+        var arr: [CDList] = []
+        var idDict: [String: CDList] = [:]
+        for list in lists {
+            let cdList = self.saveListInt(list, save: false)
+            arr.append(cdList)
+            idDict[list.id] = cdList
+        }
+        
+        if save {
+            self.save{try in
+            }
+        }
+        
+        return (
+            arr: arr,
+            idDict: idDict
+        )
+    }
+    
+    private func saveProductInt(product: Product, save: Bool) -> CDProduct {
+        let appDelegate = SharedAppDelegate.getAppDelegate()
+        
+        let cdProduct = NSEntityDescription.insertNewObjectForEntityForName("CDProduct", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDProduct
+        
+        cdProduct.id = product.id
+        cdProduct.name = product.name
+        cdProduct.price = product.price
+        
+        if save {
+            self.save{try in
+            }
+        }
+        
+        return cdProduct
+    }
+    
+    private func saveListInt(list: List, save: Bool) -> CDList {
+        let appDelegate = SharedAppDelegate.getAppDelegate()
+        
+        let cdList = NSEntityDescription.insertNewObjectForEntityForName("CDList", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDList
+        
+        cdList.id = list.id
+        cdList.name = list.name
+
+        if save {
+            self.save{try in
+            }
+        }
+        
+        return cdList
+    }
+    
+    private func saveSectionInt(section: Section, save: Bool) -> CDSection {
+        let appDelegate = SharedAppDelegate.getAppDelegate()
+        
+        let cdSection = NSEntityDescription.insertNewObjectForEntityForName("CDSection", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDSection
+        
+        cdSection.id = section.id
+        cdSection.name = section.name
+        
+        if save {
+            self.save{try in
+            }
+        }
+
+        return cdSection
+    }
+    
+    
+    
+    private func upsertProductsInt(models: [Product], save: Bool, handler: Try<(arr: [CDProduct], idDict: [String: CDProduct])> -> ()) {
+        self.load(entityName: "CDProduct", type: CDProduct.self, predicate: NSPredicate(format: "id IN %@", models.map{$0.id}), handler: {try in
+            
+            if let cdObjs = try.success { // TODO check that when there are no saved products we also join this block
+
+                var existingCDObjsIdsDict: [String: CDProduct] = [:] // quick lookup
+                for cdObj in cdObjs {
+                    existingCDObjsIdsDict[cdObj.id] = cdObj
+                }
+                
+                var idDict: [String: CDProduct] = [:]
+                var cdObjs: [CDProduct] = []
+                
+                for model in models {
+                    
+                    let cdObj: CDProduct = {
+                        if let existing = existingCDObjsIdsDict[model.id] { // object is in the db - update
+                            existing.name = model.name
+                            existing.price = model.price
+                            return existing
+                            
+                        } else { // insert
+                            return self.saveProductInt(model, save: false) // we save at the end
+                        }
+                    }()
+
+                    idDict[model.id] = cdObj
+                    cdObjs.append(cdObj)
+                }
+                
+                let result: (arr: [CDProduct], idDict: [String: CDProduct]) = (cdObjs, idDict)
+                
+                if save {
+                    self.save{try in
+                        handler(Try(result))
+                    }
+                } else {
+                    handler(Try(result))
+                }
+
+            }
+        })
+    }
+
+    private func upsertSectionsInt(models: [Section], save: Bool, handler: Try<(arr: [CDSection], idDict: [String: CDSection])> -> ()) {
+        self.load(entityName: "CDSection", type: CDSection.self, predicate: NSPredicate(format: "id IN %@", models.map{$0.id}), handler: {try in
+            
+            if let cdObjs = try.success { // TODO check that when there are no saved products we also join this block
+                
+                var existingCDObjsIdsDict: [String: CDSection] = [:] // quick lookup
+                for cdObj in cdObjs {
+                    existingCDObjsIdsDict[cdObj.id] = cdObj
+                }
+                
+                var idDict: [String: CDSection] = [:]
+                var cdObjs: [CDSection] = []
+                
+                for model in models {
+                    
+                    let cdObj: CDSection = {
+                        if let existing = existingCDObjsIdsDict[model.id] { // object is in the db - update
+                            existing.name = model.name
+                            return existing
+                            
+                        } else { // insert
+                            return self.saveSectionInt(model, save: false) // we save at the end
+                        }
+                    }()
+                    
+                    idDict[model.id] = cdObj
+                    cdObjs.append(cdObj)
+                }
+                
+                let result: (arr: [CDSection], idDict: [String: CDSection]) = (cdObjs, idDict)
+                
+                if save {
+                    self.save{try in
+                        handler(Try(result))
+                    }
+                } else {
+                    handler(Try(result))
+                }
+            }
+        })
+    }
+    
+    private func upsertListsInt(models: [List], save: Bool, handler: Try<(arr: [CDList], idDict: [String: CDList])> -> ()) {
+        self.load(entityName: "CDList", type: CDList.self, predicate: NSPredicate(format: "id IN %@", models.map{$0.id}), handler: {try in
+            
+            if let cdObjs = try.success { // TODO check that when there are no saved products we also join this block
+                
+                var existingCDObjsIdsDict: [String: CDList] = [:] // quick lookup
+                for cdObj in cdObjs {
+                    existingCDObjsIdsDict[cdObj.id] = cdObj
+                }
+                
+                var idDict: [String: CDList] = [:]
+                var cdObjs: [CDList] = []
+                
+                for model in models {
+                    
+                    let cdObj: CDList = {
+                        if let existing = existingCDObjsIdsDict[model.id] { // object is in the db - update
+                            existing.name = model.name
+                            return existing
+                            
+                        } else { // insert
+                            return self.saveListInt(model, save: false) // we save at the end
+                        }
+                        }()
+                    
+                    idDict[model.id] = cdObj
+                    cdObjs.append(cdObj)
+                }
+                
+                let result: (arr: [CDList], idDict: [String: CDList]) = (cdObjs, idDict)
+                
+                if save {
+                    self.save{try in
+                        handler(Try(result))
+                    }
+                } else {
+                    handler(Try(result))
+                }
+                
+            }
+        })
+    }
+    
+//    private func saveListItemInt(listItem: ListItem, save: Bool) -> CDListItem {
+//        let appDelegate = SharedAppDelegate.getAppDelegate()
+//        
+//        let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDListItem
+//        
+//        cdListItem.id = listItem.id
+//        cdListItem.product = cdProductsDict[listItem.id]!
+//        cdListItem.quantity = listItem.quantity
+//        cdListItem.done = listItem.done
+//        cdListItem.order = listItem.order
+//        cdListItem.section = cdSectionsDict[listItem.id]!
+//        cdListItem.list = cdListsDict[listItem.id]!
+//        
+//        if save {
+//            self.save{try in
+//            }
+//        }
+//        
+//        return cdSection
+//    }
+    
+    
+    ///////////////////////////////////////////////
+    
+    func saveListItemsForListUpdate(listItemsWithRelations: ListItemsWithRelations, list: List, handler: Try<Bool> -> ()) {
+        self.saveListItemsUpdate(listItemsWithRelations, deleteListItemsPredicate: NSPredicate(format: "list.id=%@", list.id), handler: handler)
+    }
+    
+    private func saveListItemsUpdate(listItemsWithRelations: ListItemsWithRelations, deleteListItemsPredicate: NSPredicate? = nil, handler: Try<Bool> -> ()) {
+    
+        let didUpdateEverything: (cdProductsDict: [String: CDProduct], cdSectionsDict: [String: CDSection], cdListsDict: [String: CDList]) -> () = {[weak self] cdProductsDict, cdSectionsDict, cdListsDict in
+            
+            let appDelegate = SharedAppDelegate.getAppDelegate()
+
+            // save list items
+            for listItem in listItemsWithRelations.listItems {
+                let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDListItem
+                
+                cdListItem.id = listItem.id
+                cdListItem.product = cdProductsDict[listItem.product.id]!
+                cdListItem.quantity = listItem.quantity
+                cdListItem.done = listItem.done
+                cdListItem.order = listItem.order
+                cdListItem.section = cdSectionsDict[listItem.section.id]!
+                cdListItem.list = cdListsDict[listItem.list.id]!
+            }
+            
+            // now that everything is saved, write to disk
+            self!.save(handler)
+        }
+        
+        // delete the all list items for this list
+        self.removeAll("CDListItem", predicate: deleteListItemsPredicate, save: false, handler: {removeListItemsTry in
+            if removeListItemsTry.success ?? false == true {
+                
+                // update relations - products, sections, list
+                // products, sections and list table contain data from other lists or things so we don't do delete table and insert here
+                // TODO these could be executed in paralel, check after port to futures
+                self.upsertProductsInt(listItemsWithRelations.products, save: false, handler: {upsertProductsTry in
+                    
+                    if let (_, cdProductsDict) = upsertProductsTry.success {
+                        
+                        self.upsertSectionsInt(listItemsWithRelations.sections, save: false, handler: {upsertSectionsTry in
+                            
+                            if let (_, cdSectionsDict) = upsertSectionsTry.success {
+                                
+                                self.upsertListsInt(listItemsWithRelations.lists, save: false, handler: {upsertListsTry in
+                                    
+                                    if let (_, cdListsDict) = upsertListsTry.success {
+                                        didUpdateEverything(cdProductsDict: cdProductsDict, cdSectionsDict: cdSectionsDict, cdListsDict: cdListsDict)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        })
+            
+            
+
+    }
+    
+    
+    
+    // overwrites list items, products, lists, sections
+    func saveListItemsOverwrite(listItemsWithRelations: ListItemsWithRelations, handler: Try<Bool> -> ()) {
+        
+        let didRemoveEverything: () -> () = {[weak self] in
+            
+            let appDelegate = SharedAppDelegate.getAppDelegate()
+
+            // save the products, sections, lists
+            // TODO error checking this assumes it works
+            let (cdProducts, cdProductsDict) = self!.saveProductsInt(listItemsWithRelations.products, save: false)
+            let (cdSections, cdSectionsDict) = self!.saveSectionsInt(listItemsWithRelations.sections, save: false)
+            let (cdLists, cdListsDict) = self!.saveListsInt(listItemsWithRelations.lists, save: false)
+
+            // save list items
+            for listItem in listItemsWithRelations.listItems {
+                let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDListItem
+                
+                cdListItem.id = listItem.id
+                cdListItem.product = cdProductsDict[listItem.product.id]!
+                cdListItem.quantity = listItem.quantity
+                cdListItem.done = listItem.done
+                cdListItem.order = listItem.order
+                cdListItem.section = cdSectionsDict[listItem.section.id]!
+                cdListItem.list = cdListsDict[listItem.list.id]!
+            }
+            
+            // now that everything is saved, write to disk
+            self!.save{try in
+                
+                if let error = try.error {
+                    println("Error saving after saveListItems: \(error)")
+                }
+            }
+        }
+        
+        // clear everything
+        // TODO error handling, maybe after porting to futures
+        self.removeAll("CDListItem", save: false, handler: {removeListItemsTry in
+            if removeListItemsTry.success ?? false == true {
+                
+                self.removeAll("CDList", save: false, handler: {removeListsTry in
+                    if removeListsTry.success ?? false == true {
+                        
+                        self.removeAll("CDSection", save: false, handler: {removeSectionsTry in
+                            if removeSectionsTry.success ?? false == true {
+
+                                self.removeAll("CDProduct", save: false, handler: {removeProductsTry in
+                                    if removeProductsTry.success ?? false == true {
+                                        didRemoveEverything()
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            }
         })
     }
     

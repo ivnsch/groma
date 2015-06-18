@@ -10,7 +10,8 @@
 class ListItemProviderImpl: ListItemProvider {
 
     let cdProvider = CDListItemProvider()
-
+    let remoteProvider = RemoteListItemProvider()
+    
     func products(handler: Try<[Product]> -> ()) {
         self.cdProvider.loadProducts {result in
             if let products = result.success {
@@ -20,12 +21,40 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func listItems(list: List, handler: Try<[ListItem]> -> ()) {
-        
-        self.cdProvider.loadListItems(list.id, handler: {try in
+        self.cdProvider.loadListItems(list.id, handler: {dbTry in
             
-            if let cdListItems = try.success {
+            var dbListItemsMaybe: [ListItem]? = nil
+            
+            if let cdListItems = dbTry.success {
                 let listItems = cdListItems.map{ListItemMapper.listItemWithCD($0)}
                 handler(Try(listItems))
+                dbListItemsMaybe = listItems
+            }
+            
+            self.remoteProvider.listItems(list: list) {remoteTry in
+                if let remoteListItems = remoteTry.success {
+                    
+                    let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems)
+                    
+                    // if there's no cached list or there's a difference, overwrite the cached list
+                    if dbListItemsMaybe == nil || (dbListItemsMaybe! != listItemsWithRelations.listItems) {
+                        
+                        self.cdProvider.saveListItemsForListUpdate(listItemsWithRelations, list: list) {try in
+                            
+                            if try.success ?? false {
+                                handler(Try(listItemsWithRelations.listItems))
+                                
+                            } else {
+                                if let error = try.error {
+                                    println("Error updating listitems: \(error)")
+                                    
+                                } else {
+                                    println("saveListItemsUpdate no success, no error - shouldn't happen")
+                                }
+                            }
+                        }
+                    }
+                }
             }
         })
     }
@@ -116,10 +145,41 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func lists(handler: Try<[List]> -> ()) {
-        self.cdProvider.loadLists{try in
-            if let cdLists = try.success {
+
+        self.cdProvider.loadLists{dbTry in
+            
+            var dbListsMaybe: [List]? = nil
+            
+            if let cdLists = dbTry.success {
                 let lists = cdLists.map {ListMapper.listWithCD($0)}
                 handler(Try(lists))
+                dbListsMaybe = lists
+            }
+            
+            self.remoteProvider.lists{remoteTry in
+                if let remoteLists = remoteTry.success {
+                    
+                    let lists: [List] = remoteLists.map{ListMapper.ListWithRemote($0)}
+                    
+                    // if there's no cached list or there's a difference, overwrite the cached list
+                    if dbListsMaybe == nil || (dbListsMaybe! != lists) {
+                        
+                        self.cdProvider.saveListsOverwrite(lists) {try in
+                            
+                            if try.success ?? false {
+                                handler(Try(lists))
+                                
+                            } else {
+                                if let error = try.error {
+                                    println("Error updating listitems: \(error)")
+                                    
+                                } else {
+                                    println("saveListItemsUpdate no success, no error - shouldn't happen")
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -135,41 +195,56 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func add(list: List, handler: Try<List> -> ()) {
-        // return the saved object, to get object with generated id
-        self.cdProvider.saveList(list, handler: {try in
-            if let cdList = try.success {
-                let list = ListMapper.listWithCD(cdList)
-                handler(Try(list))
+
+        // TODO ensure that in add list case the list is persisted / is never deleted
+        // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
+        // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
+        self.remoteProvider.add(list, handler: {remoteTry in
+     
+            if let remoteList = remoteTry.success {
+                
+                let list = ListMapper.ListWithRemote(remoteList)
+                
+                // now what we have list with real id, save it in the cache
+                self.cdProvider.saveList(list, handler: {dbTry in
+                    if let cdList = dbTry.success {
+                        let list = ListMapper.listWithCD(cdList)
+                        handler(Try(list))
+                    }
+                })
+                
+            } else {
+                println("error adding the remote list: \(remoteTry.error)")
             }
         })
     }
     
-    func firstList(handler: Try<List> -> ()) {
-        
-        func createList(name: String, #handler: Try<List> -> ()) {
-            let list = List(id: NSUUID().UUIDString, name: name)
-            self.add(list, handler: {try in
-                if let savedList = try.success {
-                    PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: savedList.id))
-                    handler(Try(savedList))
-                }
-            })
-        }
-
-        if let listId:String = PreferencesManager.loadPreference(PreferencesManagerKey.listId) {
-            self.list(listId, handler: {try in
-                if let list = try.success {
-                    handler(Try(list))
-                }
-
-            })
-            
-        } else {
-            createList(Constants.defaultListIdentifier, handler: {try in
-                if let list = try.success {
-                    handler(Try(list))
-                }
-            })
-        }
-    }
+//    func firstList(handler: Try<List> -> ()) {
+//        
+//        func createList(name: String, #handler: Try<List> -> ()) {
+//            let list = List(id: NSUUID().UUIDString, name: name)
+//            self.add(list, handler: {try in
+//                if let savedList = try.success {
+//                    PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: savedList.id))
+//                    handler(Try(savedList))
+//                }
+//            })
+//        }
+//
+//        if let listId:String = PreferencesManager.loadPreference(PreferencesManagerKey.listId) {
+//            self.list(listId, handler: {try in
+//                if let list = try.success {
+//                    handler(Try(list))
+//                }
+//
+//            })
+//            
+//        } else {
+//            createList(Constants.defaultListIdentifier, handler: {try in
+//                if let list = try.success {
+//                    handler(Try(list))
+//                }
+//            })
+//        }
+//    }
 }
