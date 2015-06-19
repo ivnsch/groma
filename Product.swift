@@ -8,17 +8,17 @@
 
 
 final class Product: Equatable {
-    let id: String
+    let uuid: String
     let name: String
     let price: Float
     
-    init(id: String, name: String, price: Float) {
-        self.id = id
+    init(uuid: String, name: String, price: Float) {
+        self.uuid = uuid
         self.name = name
         self.price = price
     }
 }
 
 func ==(lhs: Product, rhs: Product) -> Bool {
-    return lhs.id == rhs.id
+    return lhs.uuid == rhs.uuid
 }

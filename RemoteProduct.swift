@@ -7,12 +7,12 @@
 //
 
 final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
-    let id: String
+    let uuid: String
     let name: String
     let price: Float
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
-        self.id = representation.valueForKeyPath("id") as! String
+        self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
         self.price = representation.valueForKeyPath("price") as! Float
     }
@@ -29,6 +29,6 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) id: \(self.id), name: \(self.name), price: \(self.price)}"
+        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), price: \(self.price)}"
     }
 }

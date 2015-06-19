@@ -8,13 +8,13 @@
 
 class ListMapper {
     
-    class func listWithCD(cdList:CDList) -> List {
-        return List(id: cdList.id, name: cdList.name)
+    class func listWithCD(cdList: CDList) -> List {
+        return List(uuid: cdList.uuid, name: cdList.name)
     }
     
     
     class func ListWithRemote(remoteList: RemoteList) -> List {
-        return List(id: remoteList.id, name: remoteList.name)
+        return List(uuid: remoteList.uuid, name: remoteList.name)
     }
     
 }

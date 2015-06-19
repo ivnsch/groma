@@ -15,13 +15,13 @@ class ListItemProviderMock: ListItemProvider {
     
     init() {
         self.productsVar = (0...20).map {
-            Product(id: String($0), name: "product " + String($0), price:1.2)
+            Product(uuid: String($0), name: "product " + String($0), price:1.2)
         }
         
-        let section = Section(id: NSUUID().UUIDString, name: "test")
+        let section = Section(uuid: NSUUID().UUIDString, name: "test")
         self.sectionsVar.append(section)
         
-        let list:List = List(id: NSUUID().UUIDString, name: Constants.defaultListIdentifier)
+        let list:List = List(uuid: NSUUID().UUIDString, name: Constants.defaultListIdentifier)
         self.listsVar.append(list)
         
         let i:Int = self.productsVar.count / 2
@@ -35,10 +35,10 @@ class ListItemProviderMock: ListItemProvider {
         }
         
         let notDone = Array(zipTuple(ranged(self.productsVar, 0...i))).map {product, index in
-            ListItem(id: String(index), done: false, quantity: 1, product: product, section: section, list: list, order: index)
+            ListItem(uuid: String(index), done: false, quantity: 1, product: product, section: section, list: list, order: index)
         }
         let done = Array(zipTuple(ranged(self.productsVar, i + 1...self.productsVar.count - 1))).map {product, index in
-            ListItem(id: String(index), done: true, quantity: 1, product: product, section: section, list: list, order: index)
+            ListItem(uuid: String(index), done: true, quantity: 1, product: product, section: section, list: list, order: index)
         }
         
         self.listItemsVar = Array(notDone) + Array(done)
@@ -101,7 +101,7 @@ class ListItemProviderMock: ListItemProvider {
     
     private func addFindProduct(#name:String, price:Float) -> Product {
         return self.findProduct(name) ?? {
-            let product = Product(id: "", name: name, price: price)
+            let product = Product(uuid: "", name: name, price: price)
             self.add(product)
             return product
         }()
@@ -113,7 +113,7 @@ class ListItemProviderMock: ListItemProvider {
     
     private func addFindSection(name: String) -> Section {
         return self.findSection(name) ?? {
-            let section = Section(id: NSUUID().UUIDString, name: name)
+            let section = Section(uuid: NSUUID().UUIDString, name: name)
             self.add(section)
             return section
         }()
@@ -121,14 +121,14 @@ class ListItemProviderMock: ListItemProvider {
     
     func add(listItemInput:ListItemInput, list:List, order orderMaybe:Int?, handler: Try<ListItem> -> ()) {
         let product = addFindProduct(name: listItemInput.name, price: listItemInput.price)
-        let section = Section(id: NSUUID().UUIDString, name: listItemInput.section)
+        let section = Section(uuid: NSUUID().UUIDString, name: listItemInput.section)
         
-        let idInt = self.nextId(self.listItemsVar.map{$0.id})
-        let id = "\(idInt)"
+        let idInt = self.nextId(self.listItemsVar.map{$0.uuid})
+        let uuid = "\(idInt)"
         
         let order = orderMaybe ?? idInt
         
-        let listItem = ListItem(id: id, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
+        let listItem = ListItem(uuid: uuid, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
         self.add(listItem, handler: handler)
     }
     
@@ -150,8 +150,8 @@ class ListItemProviderMock: ListItemProvider {
         handler(Try(self.listsVar))
     }
     
-    func list(listId: String, handler: Try<List> -> ()) {
-        if let list = (self.listsVar.findFirst{$0.id == listId}) {
+    func list(listUuid: String, handler: Try<List> -> ()) {
+        if let list = (self.listsVar.findFirst{$0.uuid == listUuid}) {
             handler(Try(list))
         } else {
             handler(Try(NSError()))

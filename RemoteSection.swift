@@ -7,11 +7,11 @@
 //
 
 final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
-    let id: String
+    let uuid: String
     let name: String
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
-        self.id = representation.valueForKeyPath("id") as! String
+        self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
     }
     
@@ -27,6 +27,6 @@ final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSeriali
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) id: \(self.id), name: \(self.name)}"
+        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name)}"
     }
 }

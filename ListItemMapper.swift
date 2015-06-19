@@ -12,7 +12,7 @@ class ListItemMapper {
         let product = ProductMapper.productWithCD(cdListItem.product)
         let section = SectionMapper.sectionWithCD(cdListItem.section)
         let list = ListMapper.listWithCD(cdListItem.list)
-        return ListItem(id: cdListItem.id, done: cdListItem.done, quantity: cdListItem.quantity.integerValue, product: product, section:section, list: list, order: cdListItem.order.integerValue)
+        return ListItem(uuid: cdListItem.uuid, done: cdListItem.done, quantity: cdListItem.quantity.integerValue, product: product, section:section, list: list, order: cdListItem.order.integerValue)
     }
     
     
@@ -23,7 +23,7 @@ class ListItemMapper {
             var arr: [Product] = []
             for remoteProduct in remoteProducts {
                 let product = ProductMapper.ProductWithRemote(remoteProduct)
-                dict[remoteProduct.id] = product
+                dict[remoteProduct.uuid] = product
                 arr.append(product)
                 
             }
@@ -35,7 +35,7 @@ class ListItemMapper {
             var arr: [List] = []
             for remoteList in remoteLists {
                 let list = ListMapper.ListWithRemote(remoteList)
-                dict[remoteList.id] = list
+                dict[remoteList.uuid] = list
                 arr.append(list)
             }
             return (dict, arr)
@@ -46,7 +46,7 @@ class ListItemMapper {
             var arr: [Section] = []
             for remoteSection in remoteSections {
                 let section = SectionMapper.SectionWithRemote(remoteSection)
-                dict[remoteSection.id] = section
+                dict[remoteSection.uuid] = section
                 arr.append(section)
             }
             return (dict, arr)
@@ -60,12 +60,12 @@ class ListItemMapper {
         
         let listItems = remoteListItems.map {remoteListItem in
             ListItem(
-                id: remoteListItem.id,
+                uuid: remoteListItem.uuid,
                 done: remoteListItem.done,
                 quantity: remoteListItem.quantity,
-                product: productsDict[remoteListItem.productId]!,
-                section: sectionsDict[remoteListItem.sectionId]!,
-                list: listsDict[remoteListItem.listId]!,
+                product: productsDict[remoteListItem.productUuid]!,
+                section: sectionsDict[remoteListItem.sectionUuid]!,
+                list: listsDict[remoteListItem.listUuid]!,
                 order: remoteListItem.order
             )
         }

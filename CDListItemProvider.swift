@@ -19,7 +19,7 @@ class CDListItemProvider: CDProvider {
         self.load(
             entityName: "CDListItem",
             type: CDListItem.self,
-            predicate: NSPredicate(format: "list.id=%@", listId),
+            predicate: NSPredicate(format: "list.uuid=%@", listId),
             sortDescriptors: [NSSortDescriptor(key: "order", ascending: true)],
             handler: {try in
                 if let cdListItems = try.success {
@@ -110,7 +110,7 @@ class CDListItemProvider: CDProvider {
         for product in products {
             let cdProduct = self.saveProductInt(product, save: save)
             arr.append(cdProduct)
-            idDict[product.id] = cdProduct
+            idDict[product.uuid] = cdProduct
         }
         
         return (
@@ -125,7 +125,7 @@ class CDListItemProvider: CDProvider {
         for section in sections {
             let cdSection = self.saveSectionInt(section, save: save)
             arr.append(cdSection)
-            idDict[section.id] = cdSection
+            idDict[section.uuid] = cdSection
         }
         
         return (
@@ -141,7 +141,7 @@ class CDListItemProvider: CDProvider {
         for list in lists {
             let cdList = self.saveListInt(list, save: false)
             arr.append(cdList)
-            idDict[list.id] = cdList
+            idDict[list.uuid] = cdList
         }
         
         if save {
@@ -160,7 +160,7 @@ class CDListItemProvider: CDProvider {
         
         let cdProduct = NSEntityDescription.insertNewObjectForEntityForName("CDProduct", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDProduct
         
-        cdProduct.id = product.id
+        cdProduct.uuid = product.uuid
         cdProduct.name = product.name
         cdProduct.price = product.price
         
@@ -177,7 +177,7 @@ class CDListItemProvider: CDProvider {
         
         let cdList = NSEntityDescription.insertNewObjectForEntityForName("CDList", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDList
         
-        cdList.id = list.id
+        cdList.uuid = list.uuid
         cdList.name = list.name
 
         if save {
@@ -193,7 +193,7 @@ class CDListItemProvider: CDProvider {
         
         let cdSection = NSEntityDescription.insertNewObjectForEntityForName("CDSection", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDSection
         
-        cdSection.id = section.id
+        cdSection.uuid = section.uuid
         cdSection.name = section.name
         
         if save {
@@ -207,13 +207,13 @@ class CDListItemProvider: CDProvider {
     
     
     private func upsertProductsInt(models: [Product], save: Bool, handler: Try<(arr: [CDProduct], idDict: [String: CDProduct])> -> ()) {
-        self.load(entityName: "CDProduct", type: CDProduct.self, predicate: NSPredicate(format: "id IN %@", models.map{$0.id}), handler: {try in
+        self.load(entityName: "CDProduct", type: CDProduct.self, predicate: NSPredicate(format: "uuid IN %@", models.map{$0.uuid}), handler: {try in
             
             if let cdObjs = try.success { // TODO check that when there are no saved products we also join this block
 
                 var existingCDObjsIdsDict: [String: CDProduct] = [:] // quick lookup
                 for cdObj in cdObjs {
-                    existingCDObjsIdsDict[cdObj.id] = cdObj
+                    existingCDObjsIdsDict[cdObj.uuid] = cdObj
                 }
                 
                 var idDict: [String: CDProduct] = [:]
@@ -222,7 +222,7 @@ class CDListItemProvider: CDProvider {
                 for model in models {
                     
                     let cdObj: CDProduct = {
-                        if let existing = existingCDObjsIdsDict[model.id] { // object is in the db - update
+                        if let existing = existingCDObjsIdsDict[model.uuid] { // object is in the db - update
                             existing.name = model.name
                             existing.price = model.price
                             return existing
@@ -232,7 +232,7 @@ class CDListItemProvider: CDProvider {
                         }
                     }()
 
-                    idDict[model.id] = cdObj
+                    idDict[model.uuid] = cdObj
                     cdObjs.append(cdObj)
                 }
                 
@@ -251,13 +251,13 @@ class CDListItemProvider: CDProvider {
     }
 
     private func upsertSectionsInt(models: [Section], save: Bool, handler: Try<(arr: [CDSection], idDict: [String: CDSection])> -> ()) {
-        self.load(entityName: "CDSection", type: CDSection.self, predicate: NSPredicate(format: "id IN %@", models.map{$0.id}), handler: {try in
+        self.load(entityName: "CDSection", type: CDSection.self, predicate: NSPredicate(format: "uuid IN %@", models.map{$0.uuid}), handler: {try in
             
             if let cdObjs = try.success { // TODO check that when there are no saved products we also join this block
                 
                 var existingCDObjsIdsDict: [String: CDSection] = [:] // quick lookup
                 for cdObj in cdObjs {
-                    existingCDObjsIdsDict[cdObj.id] = cdObj
+                    existingCDObjsIdsDict[cdObj.uuid] = cdObj
                 }
                 
                 var idDict: [String: CDSection] = [:]
@@ -266,7 +266,7 @@ class CDListItemProvider: CDProvider {
                 for model in models {
                     
                     let cdObj: CDSection = {
-                        if let existing = existingCDObjsIdsDict[model.id] { // object is in the db - update
+                        if let existing = existingCDObjsIdsDict[model.uuid] { // object is in the db - update
                             existing.name = model.name
                             return existing
                             
@@ -275,7 +275,7 @@ class CDListItemProvider: CDProvider {
                         }
                     }()
                     
-                    idDict[model.id] = cdObj
+                    idDict[model.uuid] = cdObj
                     cdObjs.append(cdObj)
                 }
                 
@@ -293,13 +293,13 @@ class CDListItemProvider: CDProvider {
     }
     
     private func upsertListsInt(models: [List], save: Bool, handler: Try<(arr: [CDList], idDict: [String: CDList])> -> ()) {
-        self.load(entityName: "CDList", type: CDList.self, predicate: NSPredicate(format: "id IN %@", models.map{$0.id}), handler: {try in
+        self.load(entityName: "CDList", type: CDList.self, predicate: NSPredicate(format: "uuid IN %@", models.map{$0.uuid}), handler: {try in
             
             if let cdObjs = try.success { // TODO check that when there are no saved products we also join this block
                 
                 var existingCDObjsIdsDict: [String: CDList] = [:] // quick lookup
                 for cdObj in cdObjs {
-                    existingCDObjsIdsDict[cdObj.id] = cdObj
+                    existingCDObjsIdsDict[cdObj.uuid] = cdObj
                 }
                 
                 var idDict: [String: CDList] = [:]
@@ -308,7 +308,7 @@ class CDListItemProvider: CDProvider {
                 for model in models {
                     
                     let cdObj: CDList = {
-                        if let existing = existingCDObjsIdsDict[model.id] { // object is in the db - update
+                        if let existing = existingCDObjsIdsDict[model.uuid] { // object is in the db - update
                             existing.name = model.name
                             return existing
                             
@@ -317,7 +317,7 @@ class CDListItemProvider: CDProvider {
                         }
                         }()
                     
-                    idDict[model.id] = cdObj
+                    idDict[model.uuid] = cdObj
                     cdObjs.append(cdObj)
                 }
                 
@@ -340,13 +340,13 @@ class CDListItemProvider: CDProvider {
 //        
 //        let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDListItem
 //        
-//        cdListItem.id = listItem.id
-//        cdListItem.product = cdProductsDict[listItem.id]!
+//        cdListItem.uuid = listItem.uuid
+//        cdListItem.product = cdProductsDict[listItem.uuid]!
 //        cdListItem.quantity = listItem.quantity
 //        cdListItem.done = listItem.done
 //        cdListItem.order = listItem.order
-//        cdListItem.section = cdSectionsDict[listItem.id]!
-//        cdListItem.list = cdListsDict[listItem.id]!
+//        cdListItem.section = cdSectionsDict[listItem.uuid]!
+//        cdListItem.list = cdListsDict[listItem.uuid]!
 //        
 //        if save {
 //            self.save{try in
@@ -360,7 +360,7 @@ class CDListItemProvider: CDProvider {
     ///////////////////////////////////////////////
     
     func saveListItemsForListUpdate(listItemsWithRelations: ListItemsWithRelations, list: List, handler: Try<Bool> -> ()) {
-        self.saveListItemsUpdate(listItemsWithRelations, deleteListItemsPredicate: NSPredicate(format: "list.id=%@", list.id), handler: handler)
+        self.saveListItemsUpdate(listItemsWithRelations, deleteListItemsPredicate: NSPredicate(format: "list.uuid=%@", list.uuid), handler: handler)
     }
     
     private func saveListItemsUpdate(listItemsWithRelations: ListItemsWithRelations, deleteListItemsPredicate: NSPredicate? = nil, handler: Try<Bool> -> ()) {
@@ -373,13 +373,13 @@ class CDListItemProvider: CDProvider {
             for listItem in listItemsWithRelations.listItems {
                 let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDListItem
                 
-                cdListItem.id = listItem.id
-                cdListItem.product = cdProductsDict[listItem.product.id]!
+                cdListItem.uuid = listItem.uuid
+                cdListItem.product = cdProductsDict[listItem.product.uuid]!
                 cdListItem.quantity = listItem.quantity
                 cdListItem.done = listItem.done
                 cdListItem.order = listItem.order
-                cdListItem.section = cdSectionsDict[listItem.section.id]!
-                cdListItem.list = cdListsDict[listItem.list.id]!
+                cdListItem.section = cdSectionsDict[listItem.section.uuid]!
+                cdListItem.list = cdListsDict[listItem.list.uuid]!
             }
             
             // now that everything is saved, write to disk
@@ -437,13 +437,13 @@ class CDListItemProvider: CDProvider {
             for listItem in listItemsWithRelations.listItems {
                 let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDListItem
                 
-                cdListItem.id = listItem.id
-                cdListItem.product = cdProductsDict[listItem.product.id]!
+                cdListItem.uuid = listItem.uuid
+                cdListItem.product = cdProductsDict[listItem.product.uuid]!
                 cdListItem.quantity = listItem.quantity
                 cdListItem.done = listItem.done
                 cdListItem.order = listItem.order
-                cdListItem.section = cdSectionsDict[listItem.section.id]!
-                cdListItem.list = cdListsDict[listItem.list.id]!
+                cdListItem.section = cdSectionsDict[listItem.section.uuid]!
+                cdListItem.list = cdListsDict[listItem.list.uuid]!
             }
             
             // now that everything is saved, write to disk
@@ -488,12 +488,12 @@ class CDListItemProvider: CDProvider {
         let ifProductAndSectionSaved: () -> () = {
             if let cdProduct = cdProductMaybe, cdSection = cdSectionMaybe {
                 
-                self.loadList(listItem.list.id, handler: {try in
+                self.loadList(listItem.list.uuid, handler: {try in
                     
                     if let cdList = try.success {
                         let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDListItem
                         
-                        cdListItem.id = listItem.id
+                        cdListItem.uuid = listItem.uuid
                         cdListItem.product = cdProduct
                         cdListItem.quantity = listItem.quantity
                         cdListItem.done = listItem.done
@@ -542,7 +542,7 @@ class CDListItemProvider: CDProvider {
         var count = 0
         
         for listItem in listItems {
-            self.loadListItem(listItem.id, handler: {try in
+            self.loadListItem(listItem.uuid, handler: {try in
                 
                 if let cdListItem = try.success {
                     cdListItem.done = listItem.done
@@ -583,17 +583,17 @@ class CDListItemProvider: CDProvider {
     func updateListItem(listItem: ListItem, saveContext: Bool = true, handler: Try<CDListItem> -> ()) {
         let appDelegate = SharedAppDelegate.getAppDelegate()
         
-        self.loadListItem(listItem.id, handler: {try in
+        self.loadListItem(listItem.uuid, handler: {try in
             
             if let cdListItem = try.success {
                 
                 self.loadSection(listItem.section.name, handler: {try in
                     
                     if let cdSection = try.success {
-                        self.loadList(listItem.list.id, handler: {try in
+                        self.loadList(listItem.list.uuid, handler: {try in
                             
                             if let cdList = try.success {
-                                cdListItem.id = listItem.id
+                                cdListItem.uuid = listItem.uuid
                                 cdListItem.done = listItem.done
                                 cdListItem.quantity = listItem.quantity
                                 cdListItem.product.name = listItem.product.name
@@ -622,7 +622,7 @@ class CDListItemProvider: CDProvider {
     }
     
     func remove(listItem: ListItem, save: Bool = true, handler: Try<Bool> -> ()) {
-        self.loadListItem(listItem.id, handler: {try in
+        self.loadListItem(listItem.uuid, handler: {try in
             if let cdListItem = try.success {
                 self.remove(cdListItem, save: save, handler: handler)
                 //        return self.remove(cdListItem, save: save)
@@ -734,7 +734,7 @@ class CDListItemProvider: CDProvider {
         
         
         // remove list
-        self.loadList(list.id, handler: {try in
+        self.loadList(list.uuid, handler: {try in
             
             if let cdList = try.success {
                 self.removeObject(cdList, handler: {try in
@@ -772,7 +772,7 @@ class CDListItemProvider: CDProvider {
         
         let cdList = NSEntityDescription.insertNewObjectForEntityForName("CDList", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDList
         cdList.name = list.name
-        cdList.id = NSUUID().UUIDString
+        cdList.uuid = NSUUID().UUIDString
         
         self.save{try in
             handler(Try(cdList))

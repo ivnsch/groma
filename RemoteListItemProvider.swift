@@ -61,7 +61,7 @@ class RemoteListItemProvider {
     }
 
     func listItems(#list: List, handler: Try<RemoteListItems> -> ()) {
-        Alamofire.request(.GET, Urls.listItems, parameters: ["list": list.id]).responseObject { (request, _, listItems: RemoteListItems?, error) in
+        Alamofire.request(.GET, Urls.listItems, parameters: ["list": list.uuid]).responseObject { (request, _, listItems: RemoteListItems?, error) in
             if let listItems = listItems {
                 println("received listItems: \(listItems)")
                 handler(Try(listItems))
@@ -83,7 +83,7 @@ class RemoteListItemProvider {
     }
     
     func remove(listItem: ListItem, handler: Try<Bool> -> ()) {
-        Alamofire.request(.DELETE, Urls.listItem + "/\(listItem.id)").responseString { (request, _, string, error) in
+        Alamofire.request(.DELETE, Urls.listItem + "/\(listItem.uuid)").responseString { (request, _, string, error) in
             if let success = string?.boolValue {
                 handler(Try(success))
             }
@@ -91,7 +91,7 @@ class RemoteListItemProvider {
     }
     
     func remove(section: Section, handler: Try<Bool> -> ()) {
-        Alamofire.request(.DELETE, Urls.section + "/\(section.id)").responseString { (request, _, string, error) in
+        Alamofire.request(.DELETE, Urls.section + "/\(section.uuid)").responseString { (request, _, string, error) in
             if let success = string?.boolValue {
                 handler(Try(success))
             }
@@ -99,7 +99,7 @@ class RemoteListItemProvider {
     }
     
     func remove(list: List, handler: Try<Bool> -> ()) {
-        Alamofire.request(.DELETE, Urls.section + "/\(list.id)").responseString { (request, _, string, error) in
+        Alamofire.request(.DELETE, Urls.section + "/\(list.uuid)").responseString { (request, _, string, error) in
             if let success = string?.boolValue {
                 handler(Try(success))
             }
@@ -124,7 +124,7 @@ class RemoteListItemProvider {
         
         let parameters = self.toRequestParams(listItem)
         
-        Alamofire.request(.PUT, Urls.listItem + "/\(listItem.id)", parameters: parameters, encoding: .JSON).responseString { (request, _, string, error) in
+        Alamofire.request(.PUT, Urls.listItem + "/\(listItem.uuid)", parameters: parameters, encoding: .JSON).responseString { (request, _, string, error) in
             if let success = string?.boolValue {
                 handler(Try(success))
             }

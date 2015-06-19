@@ -51,7 +51,7 @@ class CDInventoryProvider: CDProvider {
                 let appDelegate = SharedAppDelegate.getAppDelegate()
                 let cdInventoryItem = NSEntityDescription.insertNewObjectForEntityForName("CDInventoryItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDInventoryItem
                 
-                self?.cdListItemProvider.loadProduct(item.product.id, handler: {try in
+                self?.cdListItemProvider.loadProduct(item.product.uuid, handler: {try in
                     
                     if let cdProduct = try.success {
                         

@@ -7,11 +7,11 @@
 //
 
 final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSerializable {
-    let id: String
+    let uuid: String
     let name: String
     
-    init(id:  String, name: String) {
-        self.id = id
+    init(uuid:  String, name: String) {
+        self.uuid = uuid
         self.name = name
     }
     
@@ -20,7 +20,7 @@ final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSer
     }
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
-        self.id = representation.valueForKeyPath("id") as! String
+        self.uuid = representation.valueForKeyPath("id") as! String
         self.name = representation.valueForKeyPath("name") as! String
     }
     
@@ -37,5 +37,5 @@ final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSer
 }
 
 func ==(lhs: Section, rhs: Section) -> Bool {
-    return lhs.name == rhs.name
+    return lhs.uuid == rhs.uuid
 }

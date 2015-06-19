@@ -70,40 +70,40 @@ class ListItemCellManager: CellManager, ListItemCellDelegate {
     // a rather simple solution would be to serialise just the list item id and let the decoder fetch the object from core data - less code and less error prone
     // but maybe not good for performance? async while dropping possible?
     
-    private let productIdKey = "productId"
+    private let productUuidKey = "productUuidKey"
     private let productNameKey = "productName"
     private let productPriceKey = "productPrice"
-    private let listIdKey = "listId"
+    private let listUuidKey = "listUuid"
     private let listNameKey = "listName"
-    private let sectionIdKey = "sectionId"
+    private let sectionUuidKey = "sectionUuid"
     private let sectionNameKey = "sectionName"
     private let listItemQuantityKey = "listItemQuantity"
     private let listItemOrderKey = "listItemOrder"
-    private let listItemIdKey = "listItemId"
+    private let listItemUuidKey = "listItemUuid"
     private let listItemDoneKey = "listItemDone"
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
        
-        if aDecoder.containsValueForKey(listIdKey) {
-            let listId = aDecoder.decodeObjectForKey(listIdKey) as! String
+        if aDecoder.containsValueForKey(listUuidKey) {
+            let listUuid = aDecoder.decodeObjectForKey(listUuidKey) as! String
             let listName = aDecoder.decodeObjectForKey(listNameKey) as! String
-            let list = List(id: listId, name: listName, listItems: [])
+            let list = List(uuid: listUuid, name: listName, listItems: [])
             
-            let productId = aDecoder.decodeObjectForKey(productIdKey) as! String
+            let productUuid = aDecoder.decodeObjectForKey(productUuidKey) as! String
             let productName = aDecoder.decodeObjectForKey(productNameKey) as! String
             let productPrice = aDecoder.decodeFloatForKey(productPriceKey)
-            let product = Product(id: productId, name: productName, price: productPrice)
+            let product = Product(uuid: productUuid, name: productName, price: productPrice)
             
-            let sectionId = aDecoder.decodeObjectForKey(listIdKey) as! String
+            let sectionUuid = aDecoder.decodeObjectForKey(sectionUuidKey) as! String
             let sectionName = aDecoder.decodeObjectForKey(sectionNameKey) as! String
-            let section = Section(id: sectionId, name: sectionName)
+            let section = Section(uuid: sectionUuid, name: sectionName)
             
-            let listItemId = aDecoder.decodeObjectForKey(listItemIdKey) as! String
+            let listItemUuid = aDecoder.decodeObjectForKey(listItemUuidKey) as! String
             let listItemQuantity = aDecoder.decodeIntegerForKey(listItemQuantityKey)
             let listItemOrder = aDecoder.decodeIntegerForKey(listItemOrderKey)
             let listItemDone = aDecoder.decodeBoolForKey(listItemDoneKey)
-            let listItem = ListItem(id: listItemId, done: listItemDone, quantity: listItemQuantity, product: product, section: section, list: list, order: listItemOrder)
+            let listItem = ListItem(uuid: listItemUuid, done: listItemDone, quantity: listItemQuantity, product: product, section: section, list: list, order: listItemOrder)
             
             self.listItemRow = ListItemRow(listItem)
         }
@@ -117,19 +117,19 @@ class ListItemCellManager: CellManager, ListItemCellDelegate {
         
         let listItem = self.listItemRow.listItem
         
-        aCoder.encodeObject(listItem.list.id, forKey: listIdKey)
+        aCoder.encodeObject(listItem.list.uuid, forKey: listUuidKey)
         aCoder.encodeObject(listItem.list.name, forKey: listNameKey)
         
-        aCoder.encodeObject(listItem.product.id, forKey: productIdKey)
+        aCoder.encodeObject(listItem.product.uuid, forKey: productUuidKey)
         aCoder.encodeObject(listItem.product.name, forKey: productNameKey)
         aCoder.encodeFloat(listItem.product.price, forKey: productPriceKey)
 
-        aCoder.encodeObject(listItem.section.id, forKey: sectionIdKey)
+        aCoder.encodeObject(listItem.section.uuid, forKey: sectionUuidKey)
         aCoder.encodeObject(listItem.section.name, forKey: sectionNameKey)
         
         aCoder.encodeInteger(listItem.quantity, forKey: listItemQuantityKey)
         aCoder.encodeInteger(listItem.order, forKey: listItemOrderKey)
-        aCoder.encodeObject(listItem.id, forKey: listItemIdKey)
+        aCoder.encodeObject(listItem.uuid, forKey: listItemUuidKey)
         aCoder.encodeBool(listItem.done, forKey: listItemDoneKey)
     }
 }

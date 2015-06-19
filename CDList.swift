@@ -12,7 +12,7 @@ import CoreData
 @objc(CDList)
 class CDList: NSManagedObject {
 
-    @NSManaged var id: String
+    @NSManaged var uuid: String
     @NSManaged var name: String
     @NSManaged var listItems: NSSet
 

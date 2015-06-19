@@ -59,7 +59,7 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
   
     private func addList(listInput: ListInput) {
-        let list = List(id: NSUUID().UUIDString, name: listInput.name)
+        let list = List(uuid: NSUUID().UUIDString, name: listInput.name)
         
         self.listItemsProvider.add(list, handler: {try in
            

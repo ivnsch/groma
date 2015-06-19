@@ -8,21 +8,21 @@
 
 final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
     
-    let id: String
+    let uuid: String
     var done: Bool
     let quantity: Int
-    let productId: String
-    var sectionId: String
-    var listId: String
+    let productUuid: String
+    var sectionUuid: String
+    var listUuid: String
     var order: Int
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
-        self.id = representation.valueForKeyPath("id") as! String
+        self.uuid = representation.valueForKeyPath("uuid") as! String
         self.done = representation.valueForKeyPath("done") as! Bool
         self.quantity = representation.valueForKeyPath("quantity") as! Int
-        self.productId = representation.valueForKeyPath("productId") as! String
-        self.sectionId = representation.valueForKeyPath("sectionId") as! String
-        self.listId = representation.valueForKeyPath("listId") as! String
+        self.productUuid = representation.valueForKeyPath("productUuid") as! String
+        self.sectionUuid = representation.valueForKeyPath("sectionUuid") as! String
+        self.listUuid = representation.valueForKeyPath("listUuid") as! String
         self.order = representation.valueForKeyPath("order") as! Int
     }
     
@@ -38,6 +38,6 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) id: \(self.id), done: \(self.done), quantity: \(self.quantity), order: \(self.order), productId: \(self.productId), sectionId: \(self.sectionId), listId: \(self.listId)}"
+        return "{\(self.dynamicType) uuid: \(self.uuid), done: \(self.done), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.productUuid), sectionUuid: \(self.sectionUuid), listUuid: \(self.listUuid)}"
     }
 }

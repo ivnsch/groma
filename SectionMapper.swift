@@ -9,10 +9,10 @@
 
 class SectionMapper {
     class func sectionWithCD(cdSection: CDSection) -> Section {
-        return Section(id: cdSection.id, name: cdSection.name)
+        return Section(uuid: cdSection.uuid, name: cdSection.name)
     }
     
     class func SectionWithRemote(remoteSection: RemoteSection) -> Section {
-        return Section(id: remoteSection.id, name: remoteSection.name)
+        return Section(uuid: remoteSection.uuid, name: remoteSection.name)
     }
 }

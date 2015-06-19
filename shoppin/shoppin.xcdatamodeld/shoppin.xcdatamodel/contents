@@ -5,34 +5,34 @@
         <relationship name="product" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDProduct" inverseName="inventory" inverseEntity="CDProduct" syncable="YES"/>
     </entity>
     <entity name="CDList" representedClassName="CDList" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="listItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDListItem" inverseName="list" inverseEntity="CDListItem" syncable="YES"/>
     </entity>
     <entity name="CDListItem" representedClassName="CDListItem" syncable="YES">
         <attribute name="done" optional="YES" attributeType="Boolean" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="order" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="quantity" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="list" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDList" inverseName="listItems" inverseEntity="CDList" syncable="YES"/>
         <relationship name="product" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDProduct" inverseName="listItem" inverseEntity="CDProduct" syncable="YES"/>
         <relationship name="section" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDSection" inverseName="listItem" inverseEntity="CDSection" syncable="YES"/>
     </entity>
     <entity name="CDProduct" representedClassName="CDProduct" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="price" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="inventory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDInventoryItem" inverseName="product" inverseEntity="CDInventoryItem" syncable="YES"/>
         <relationship name="listItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDListItem" inverseName="product" inverseEntity="CDListItem" syncable="YES"/>
     </entity>
     <entity name="CDSection" representedClassName="CDSection" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="listItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDListItem" inverseName="section" inverseEntity="CDListItem" syncable="YES"/>
     </entity>
     <elements>
         <element name="CDInventoryItem" positionX="-54" positionY="36" width="128" height="75"/>
-        <element name="CDList" positionX="-54" positionY="27" width="128" height="88"/>
+        <element name="CDList" positionX="-54" positionY="27" width="128" height="90"/>
         <element name="CDListItem" positionX="-63" positionY="-9" width="128" height="150"/>
         <element name="CDProduct" positionX="-63" positionY="-18" width="128" height="120"/>
         <element name="CDSection" positionX="-54" positionY="9" width="128" height="90"/>

@@ -21,7 +21,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func listItems(list: List, handler: Try<[ListItem]> -> ()) {
-        self.cdProvider.loadListItems(list.id, handler: {dbTry in
+        self.cdProvider.loadListItems(list.uuid, handler: {dbTry in
             
             var dbListItemsMaybe: [ListItem]? = nil
             
@@ -93,9 +93,9 @@ class ListItemProviderImpl: ListItemProvider {
     
     func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, handler: Try<ListItem> -> ()) {
         // for now just create a new product and a listitem with it
-        let product = Product(id: NSUUID().UUIDString, name: listItemInput.name, price:listItemInput.price)
+        let product = Product(uuid: NSUUID().UUIDString, name: listItemInput.name, price:listItemInput.price)
         // for now create a new section (TODO review this), server assigns new id if not existent yet or ignores
-        let section = Section(id: NSUUID().UUIDString, name: listItemInput.section)
+        let section = Section(uuid: NSUUID().UUIDString, name: listItemInput.section)
        
         self.listItems(list, handler: {try in // TODO fetch items only when order not passed, because they are used only to get order
             
@@ -103,7 +103,7 @@ class ListItemProviderImpl: ListItemProvider {
                 
                 let order = orderMaybe ?? listItems.count
                 
-                let listItem = ListItem(id: NSUUID().UUIDString, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
+                let listItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
                 
                 self.add(listItem, handler: {try in
                     handler(try)
@@ -139,7 +139,7 @@ class ListItemProviderImpl: ListItemProvider {
     func sections(handler: Try<[Section]> -> ()) {
         self.cdProvider.loadSections {result in
             if let sections = result.success {
-                handler(Try(sections.map{Section(id: $0.id, name: $0.name)}))
+                handler(Try(sections.map{Section(uuid: $0.uuid, name: $0.name)}))
             }
         }
     }

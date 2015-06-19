@@ -8,7 +8,7 @@
 
 
 final class ListItem: Equatable {
-    let id: String
+    let uuid: String
     var done: Bool
     let quantity: Int
     let product: Product
@@ -17,8 +17,8 @@ final class ListItem: Equatable {
    
     var order: Int
     
-    init(id: String, done: Bool, quantity: Int, product: Product, section: Section, list: List, order: Int) {
-        self.id = id
+    init(uuid: String, done: Bool, quantity: Int, product: Product, section: Section, list: List, order: Int) {
+        self.uuid = uuid
         self.done = done
         self.quantity = quantity
         self.product = product
@@ -29,7 +29,7 @@ final class ListItem: Equatable {
 }
 
 func ==(lhs: ListItem, rhs: ListItem) -> Bool {
-    return lhs.id == rhs.id
+    return lhs.uuid == rhs.uuid
 }
 
 // convenience (redundant) holder to avoid having to iterate through listitems to find unique products, sections, lists

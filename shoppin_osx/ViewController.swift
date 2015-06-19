@@ -122,7 +122,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     
     private func toUpdatedListItem(listItem: ListItem, listItemInput: ListItemInput) -> ListItem {
         
-        let section = Section(id: NSUUID().UUIDString, name: listItemInput.section) // TODO not used ids or something, given in server anyway
+        let section = Section(uuid: NSUUID().UUIDString, name: listItemInput.section) // TODO not used ids or something, given in server anyway
         
         // for now we overwrite existing product on update (provider just sets the fields on existing product)
         // later we may want to think about this, depending how we use products
@@ -130,10 +130,10 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         // or if for some reason we have different list items pointing to same product, we will change product name for all of them - also incorrect
         // this behaviour may be desired though to correct spelling errors
         // so yes we have to think about it
-        let product = Product(id: NSUUID().UUIDString, name: listItemInput.name, price: listItemInput.price)
+        let product = Product(uuid: NSUUID().UUIDString, name: listItemInput.name, price: listItemInput.price)
         
         return ListItem(
-            id: listItem.id,
+            uuid: listItem.uuid,
             done: listItem.done,
             quantity: listItemInput.quantity,
             product: product,

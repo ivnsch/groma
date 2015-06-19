@@ -7,17 +7,17 @@
 //
 
 class List: Equatable {
-    let id:String
-    let name:String
-    let listItems:[ListItem]
+    let uuid: String
+    let name: String
+    let listItems: [ListItem]
     
-    init(id:String, name:String, listItems:[ListItem] = []) {
-        self.id = id
+    init(uuid: String, name:String, listItems:[ListItem] = []) {
+        self.uuid = uuid
         self.name = name
         self.listItems = listItems
     }
 }
 
 func ==(lhs: List, rhs: List) -> Bool {
-    return lhs.id == rhs.id
+    return lhs.uuid == rhs.uuid
 }
