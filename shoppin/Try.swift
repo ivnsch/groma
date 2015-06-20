@@ -21,11 +21,11 @@ final public class Try<T> {
         return self.success != nil && self.error == nil
     }
     
-    public convenience init(_ success: T) {
+    public convenience init(_ success: T?) {
         self.init(success: success, error: nil)
     }
 
-    public convenience init(_ error: NSError?) {
+    public convenience init(_ error: NSError) {
         self.init(success: nil, error: error)
     }
     

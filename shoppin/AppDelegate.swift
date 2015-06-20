@@ -36,26 +36,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        self.addDummyPersistentObjects()
     }
     
-    
-    private func addDummyPersistentObjects() {
-        let listItemProviderImpl = ListItemProviderImpl()
-        let mock = ListItemProviderMock()
-        listItemProviderImpl.firstList{try in
-            
-            if let firstList = try.success {
-                mock.listItems(firstList, handler: {try in
-                    
-                    if let listItems = try.success {
-                        for listItem in listItems {
-                            listItem.list = firstList // change mock list to valid core data list
-                            listItemProviderImpl.add(listItem, handler: {try in
-                            })
-                        }
-                    }
-                })
-            }
-        }
-    }
+
+    // TODO does this still make sense, maybe remove
+//    private func addDummyPersistentObjects() {
+//        let listItemProviderImpl = ListItemProviderImpl()
+//        let mock = ListItemProviderMock()
+//        listItemProviderImpl.lists {try in
+//            if let firstList = try.success?.first {
+//                mock.listItems(firstList, handler: {try in
+//                    
+//                    if let listItems = try.success {
+//                        for listItem in listItems {
+//                            listItem.list = firstList // change mock list to valid core data list
+//                            listItemProviderImpl.add(listItem, handler: {try in
+//                            })
+//                        }
+//                    }
+//                })
+//            }
+//        }
+//    }
     
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

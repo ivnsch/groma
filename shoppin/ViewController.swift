@@ -78,9 +78,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     
     private func initList(afterListInitialized: (() -> ())? = nil) {
-        self.listItemsProvider.firstList{[weak self] try in
-            
-            if let firstList = try.success {
+        self.listItemsProvider.lists {[weak self] try in
+            if let firstList = try.success?.first {
                 self!.showList(firstList)
                 afterListInitialized?()
             }
@@ -100,13 +99,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 
                 self?.updatePrices()
                 
-                PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: list.id))
+                PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: list.uuid))
             }
         })
     }
     
     private func createList(name: String, handler: Try<List> -> ()) {
-        let list = List(id: NSUUID().UUIDString, name: name)
+        let list = List(uuid: NSUUID().UUIDString, name: name)
         self.listItemsProvider.add(list, handler: handler)
     }
     
@@ -148,6 +147,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     // MARK: - AddItemViewDelegate
 
     func onAddTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
+        
         if !name.isEmpty {
             
             let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName)
@@ -482,10 +482,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func updateItem(listItem: ListItem, listItemInput:ListItemInput) {
-        let product = Product(id: self.updatingListItem!.product.id, name: listItemInput.name, price: listItemInput.price)
-        let section = Section(name: listItemInput.section)
+        let product = Product(uuid: self.updatingListItem!.product.uuid, name: listItemInput.name, price: listItemInput.price)
+        let section = Section(uuid: NSUUID().UUIDString, name: listItemInput.section)
         
-        let listItem = ListItem(id: self.updatingListItem!.id, done: self.updatingListItem!.done, quantity: listItemInput.quantity, product: product, section: section, list: self.currentList, order: self.updatingListItem!.order)
+        let listItem = ListItem(uuid: self.updatingListItem!.uuid, done: self.updatingListItem!.done, quantity: listItemInput.quantity, product: product, section: section, list: self.currentList, order: self.updatingListItem!.order)
         
         self.listItemsProvider.update(listItem, handler: {try in
             

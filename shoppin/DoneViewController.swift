@@ -55,7 +55,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
     }
     
     private func createList(name: String, handler: Try<List> -> ()) {
-        let list = List(id: NSUUID().UUIDString, name: name)
+        let list = List(uuid: NSUUID().UUIDString, name: name)
         self.listItemsProvider.add(list, handler: handler)
     }
 

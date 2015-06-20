@@ -83,6 +83,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func add(listItem: ListItem, handler: Try<ListItem> -> ()) {
+
         // return the saved object, to get object with generated id
         
         // for now do remote first. Imagine we do coredata first, user adds the list and then a lot of items to it and server fails. The list with all items will be lost in next sync.
@@ -101,21 +102,49 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, handler: Try<ListItem> -> ()) {
-        // for now just create a new product and a listitem with it (TODO review - as written in tests, product should be updated if already existing)
-        let product = Product(uuid: NSUUID().UUIDString, name: listItemInput.name, price:listItemInput.price)
-        // for now create a new section (FIXME this will not work on the second item we add to a section since section name is unique in the server!)
-        let section = Section(uuid: NSUUID().UUIDString, name: listItemInput.section)
-       
+
         self.listItems(list, handler: {try in // TODO fetch items only when order not passed, because they are used only to get order
             
             if let listItems = try.success {
                 
                 let order = orderMaybe ?? listItems.count
                 
-                let listItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
-                
-                self.add(listItem, handler: {try in
-                    handler(try)
+                // get product and section uui if they're already in the local db (remember that we assign uuid in the client so this logic has to be in the client)
+                self.cdProvider.loadProduct(listItemInput.name, handler: {try in
+                    
+                    // load product and update or create one
+                    // if we find a product with the name we update it - this is for the case the user changes the price for an existing product while adding an item
+                    let productUuid: String = {
+                        if let existingProduct = try.success {
+                            return existingProduct.uuid
+                        } else {
+                            return NSUUID().UUIDString
+                        }
+                    }()
+                    let product = Product(uuid: productUuid, name: listItemInput.name, price: listItemInput.price)
+
+                    // load section or create one (there's no more section data in the input besides of the name, so there's nothing to update.
+                    // There is no name update since here we have only name so either the name is in db or it's not, if it's not insert a new section
+                    self.cdProvider.loadSection(listItemInput.section, handler: {try in
+                        
+                        let section: Section = {
+                            if let existingCDSection = try.success {
+                                return SectionMapper.sectionWithCD(existingCDSection)
+                            } else {
+                                return Section(uuid: NSUUID().UUIDString, name: listItemInput.section)
+                            }
+                        }()
+                        
+                        // WARN / TODO: we didn't do any local db udpates! currently this is done after we receive the response off addItem of the server, with the server object
+                        // in order to support offline use this has to be changed either
+                        // 1. do the update before calling the service. If service returns an error then remove?
+                        // 2. do the update before calling the service, and add flag not synched (etc)
+                        // 3. more ideas?
+                        let listItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
+                        self.add(listItem, handler: {try in
+                            handler(try)
+                        })
+                    })
                 })
             }
         })

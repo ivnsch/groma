@@ -8,4 +8,3 @@
 
 
 #import "WYPopoverController.h"
-#import "SharedAppDelegate.h"

@@ -144,7 +144,7 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
                 //update the list item before we reinit the table, to update the section...
                 var itemIndexMaybe:Int?
                 for (index, item) in enumerate(self.items) {
-                    if item.id == listItem.id {
+                    if item.uuid == listItem.uuid {
                         itemIndexMaybe = index
                     }
                 }

@@ -38,13 +38,28 @@ class CDListItemProvider: CDProvider {
         })
     }
     
-    func loadProduct(id: String, handler: (Try<CDProduct>) -> ()) {
-        self.load(entityName: "CDProduct", type: CDProduct.self, predicate: NSPredicate(format: "uuid=%@", id), handler: {try in
+    func loadProductWithUuid(uuid: String, handler: (Try<CDProduct>) -> ()) {
+        self.load(entityName: "CDProduct", type: CDProduct.self, predicate: NSPredicate(format: "uuid=%@", uuid), handler: {try in
             
             if let cdProducts = try.success {
                 if let first = cdProducts.first {
                     handler(Try(first))
                 }
+            }
+        })
+    }
+
+    func loadProduct(name: String, handler: (Try<CDProduct>) -> ()) {
+        self.load(entityName: "CDProduct", type: CDProduct.self, predicate: NSPredicate(format: "name=%@", name), handler: {try in
+            
+            if let cdProducts = try.success {
+                if let first = cdProducts.first {
+                    handler(Try(first))
+                } else {
+                    handler(Try(nil))
+                }
+            } else {
+                handler(Try(NSError()))
             }
         })
     }
@@ -63,8 +78,10 @@ class CDListItemProvider: CDProvider {
                     handler(Try(section))
                     
                 } else {
-                    handler(Try(NSError()))
+                    handler(Try(nil))
                 }
+            } else {
+                handler(Try(NSError()))
             }
         })
     }

@@ -35,7 +35,7 @@ class RemoteListItemProvider {
                 handler(Try(products))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
@@ -47,7 +47,7 @@ class RemoteListItemProvider {
                 handler(Try(sections))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
@@ -60,7 +60,7 @@ class RemoteListItemProvider {
                 handler(Try(lists))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
@@ -72,7 +72,7 @@ class RemoteListItemProvider {
                 handler(Try(listItems))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
@@ -84,7 +84,7 @@ class RemoteListItemProvider {
                 handler(Try(listItems))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
@@ -95,7 +95,7 @@ class RemoteListItemProvider {
                 handler(Try(success))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
@@ -106,7 +106,7 @@ class RemoteListItemProvider {
                 handler(Try(success))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
@@ -117,7 +117,7 @@ class RemoteListItemProvider {
                 handler(Try(success))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
@@ -129,7 +129,7 @@ class RemoteListItemProvider {
                 handler(Try(success))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
@@ -144,7 +144,7 @@ class RemoteListItemProvider {
                 handler(Try(listItem))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
@@ -158,7 +158,7 @@ class RemoteListItemProvider {
                 handler(Try(success))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
@@ -178,7 +178,7 @@ class RemoteListItemProvider {
                 handler(Try(success))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
@@ -211,7 +211,7 @@ class RemoteListItemProvider {
                 handler(Try(section))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
@@ -223,7 +223,7 @@ class RemoteListItemProvider {
                 handler(Try(list))
             } else {
                 println("Response error: \(error), request: \(request)")
-                handler(Try(error))
+                handler(Try(error ?? NSError()))
             }
         }
     }
