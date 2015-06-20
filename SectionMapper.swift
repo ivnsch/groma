@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
+import Foundation
 
 class SectionMapper {
     class func sectionWithCD(cdSection: CDSection) -> Section {

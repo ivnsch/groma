@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
+import Foundation
+
 class ListItemProviderMock: ListItemProvider {
     
     private(set) var productsVar:[Product] = []

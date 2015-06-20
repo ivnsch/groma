@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
+import Foundation
+
 final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSerializable {
     let uuid: String
     let name: String
@@ -33,6 +35,10 @@ final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSer
             
         }
         return sections
+    }
+    
+    var debugDescription: String {
+        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name)}"
     }
 }
 

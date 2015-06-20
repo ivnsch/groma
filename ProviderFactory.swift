@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
+import Foundation
+
 class ProviderFactory {
    
     lazy var listItemProvider:ListItemProvider = ListItemProviderImpl()

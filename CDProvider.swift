@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
+import Foundation
 import CoreData
 
 class CDProvider: NSObject {
@@ -18,9 +19,8 @@ class CDProvider: NSObject {
             
             dispatch_async(dispatch_get_main_queue(), {
                 
-                let appDelegate = SharedAppDelegate.getAppDelegate()
                 var error:NSError?
-                let success = appDelegate.managedObjectContext!.save(&error) // TODO do this in the background, currently crashes if in background http://stackoverflow.com/a/9347736/930450
+                let success = PersistentStoreHelper.sharedInstance.managedObjectContext!.save(&error) // TODO do this in the background, currently crashes if in background http://stackoverflow.com/a/9347736/930450
                 if !success {
                     println("Error: CDProvider couldn't save")
                     println(error?.userInfo)
@@ -38,12 +38,11 @@ class CDProvider: NSObject {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
           
             var success = false
-            let appDelegate = SharedAppDelegate.getAppDelegate()
             
-            appDelegate.managedObjectContext!.deleteObject(object)
+            PersistentStoreHelper.sharedInstance.managedObjectContext!.deleteObject(object)
             
             var error:NSError?
-            if appDelegate.managedObjectContext!.save(&error) {
+            if PersistentStoreHelper.sharedInstance.managedObjectContext!.save(&error) {
                 success = true
             } else {
                 println(error?.userInfo)
@@ -57,8 +56,7 @@ class CDProvider: NSObject {
     
     func removeAll(entityName: String, predicate predicateMaybe: NSPredicate? = nil, save: Bool, handler: Try<Bool> -> ()) {
         
-        let appDelegate = SharedAppDelegate.getAppDelegate()
-        let context = appDelegate.managedObjectContext!
+        let context = PersistentStoreHelper.sharedInstance.managedObjectContext!
         
         let fetchRequest = NSFetchRequest()
         fetchRequest.entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: context)
@@ -103,8 +101,7 @@ class CDProvider: NSObject {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
         
             let fetchRequest = NSFetchRequest()
-            let appDelegate = SharedAppDelegate.getAppDelegate()
-            let entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: appDelegate.managedObjectContext!)
+            let entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: PersistentStoreHelper.sharedInstance.managedObjectContext!)
             fetchRequest.entity = entity
             
             if let predicate = predicateMaybe {
@@ -116,7 +113,7 @@ class CDProvider: NSObject {
             }
             
             var error:NSError?
-            let obj = appDelegate.managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as! [T]
+            let obj = PersistentStoreHelper.sharedInstance.managedObjectContext?.executeFetchRequest(fetchRequest, error: &error) as! [T]
             
             dispatch_async(dispatch_get_main_queue(), {
                 handler(Try(obj))

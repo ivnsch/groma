@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
+import Foundation
+
 extension Array {
     func forEach<U>(function: (element: T) -> U) {
         for e in self {

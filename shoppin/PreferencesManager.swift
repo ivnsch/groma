@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
+import Foundation
+
 // TODO is it possible to declare this in class as only "Key"
 enum PreferencesManagerKey: String {
     case listId = "listId"

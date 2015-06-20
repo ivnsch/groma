@@ -11,6 +11,7 @@
 //    case Success(T)
 //    case Error(NSError)
 //}
+import Foundation
 
 final public class Try<T> {
     public let success: T?
@@ -24,7 +25,7 @@ final public class Try<T> {
         self.init(success: success, error: nil)
     }
 
-    public convenience init(_ error: NSError) {
+    public convenience init(_ error: NSError?) {
         self.init(success: nil, error: error)
     }
     

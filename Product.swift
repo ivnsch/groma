@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
+import Foundation
 
 final class Product: Equatable {
     let uuid: String
@@ -16,6 +17,10 @@ final class Product: Equatable {
         self.uuid = uuid
         self.name = name
         self.price = price
+    }
+    
+    var debugDescription: String {
+        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), price: \(self.price)}"
     }
 }
 

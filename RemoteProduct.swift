@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
+import Foundation
+
 final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
     let uuid: String
     let name: String

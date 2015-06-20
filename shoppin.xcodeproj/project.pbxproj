@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		32F343E224A9A610E9AC4FC0 /* Pods_shoppin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA884C051390422A612DB890 /* Pods_shoppin.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		3D320F1F161F7AF32A6A8B13 /* Pods_shoppin_osxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F6916CBE86100FE4744418F /* Pods_shoppin_osxTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		746817AD4172A5D3EF184CB4 /* Pods_shoppin_osx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0BE6D43CA3EAD8C16C1355 /* Pods_shoppin_osx.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEAE1A3334EC00D778DE /* shoppin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAC1A3334EC00D778DE /* shoppin.xcdatamodeld */; };
@@ -80,8 +81,6 @@
 		EB55676D1A8644D400CD3EC6 /* shoppin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAC1A3334EC00D778DE /* shoppin.xcdatamodeld */; };
 		EB5567711A864B6E00CD3EC6 /* ListItemProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F61A3CA5030048E37C /* ListItemProviderMock.swift */; };
 		EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFB1A5972A30058103B /* InventoryProvider.swift */; };
-		EB55677B1A86545300CD3EC6 /* SharedAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */; };
-		EB55677D1A86578400CD3EC6 /* SharedAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */; };
 		EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162E81A3CA1F00048E37C /* ListItemProviderImpl.swift */; };
 		EB55677F1A8658AA00CD3EC6 /* InventoryProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFD1A5972C70058103B /* InventoryProviderImpl.swift */; };
 		EB5567801A8658B000CD3EC6 /* CDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F11A3CA3BB0048E37C /* CDProvider.swift */; };
@@ -119,7 +118,6 @@
 		EB9F6CE91A8610550038355B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE81A8610550038355B /* ViewController.swift */; };
 		EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEA1A8610550038355B /* Images.xcassets */; };
 		EB9F6CEE1A8610550038355B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEC1A8610550038355B /* Main.storyboard */; };
-		EB9F6CFA1A8610550038355B /* shoppin_osxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CF91A8610550038355B /* shoppin_osxTests.swift */; };
 		EBDFE3A71ACE829400E48F95 /* CellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3A61ACE829400E48F95 /* CellManager.swift */; };
 		EBDFE3A91ACE82F000E48F95 /* ListItemCellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */; };
 		EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3AA1ACE935600E48F95 /* ListItemRow.swift */; };
@@ -153,6 +151,55 @@
 		EBF162FD1A3DDE5D0048E37C /* ProductMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FC1A3DDE5D0048E37C /* ProductMapper.swift */; };
 		EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FE1A3DDE730048E37C /* ListItemMapper.swift */; };
 		EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF163001A3DE6880048E37C /* ItemsListTableViewConstants.swift */; };
+		EBF377291B341B6900EEB6DB /* RemoteListItemProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF377281B341B6900EEB6DB /* RemoteListItemProviderSpec.swift */; };
+		EBF377301B341FBD00EEB6DB /* RemoteListItemWithData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4271B2DFA58005B401A /* RemoteListItemWithData.swift */; };
+		EBF377591B34208400EEB6DB /* shoppin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAC1A3334EC00D778DE /* shoppin.xcdatamodeld */; };
+		EBF3775B1B3423C200EEB6DB /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
+		EBF3775D1B342A3700EEB6DB /* ListItemProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162E81A3CA1F00048E37C /* ListItemProviderImpl.swift */; };
+		EBF3775E1B342A4900EEB6DB /* InventoryProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFD1A5972C70058103B /* InventoryProviderImpl.swift */; };
+		EBF3775F1B342A4E00EEB6DB /* ListItemProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F61A3CA5030048E37C /* ListItemProviderMock.swift */; };
+		EBF377601B342A5E00EEB6DB /* CDProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F11A3CA3BB0048E37C /* CDProvider.swift */; };
+		EBF377611B342A6800EEB6DB /* CDListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162EF1A3CA3530048E37C /* CDListItemProvider.swift */; };
+		EBF377621B342A6F00EEB6DB /* CDInventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFF1A5973330058103B /* CDInventoryProvider.swift */; };
+		EBF377631B342A7A00EEB6DB /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
+		EBF377641B342A8300EEB6DB /* RemoteListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4181B2CB355005B401A /* RemoteListItems.swift */; };
+		EBF377651B342A8E00EEB6DB /* RemoteListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE41B1B2CB42B005B401A /* RemoteListItem.swift */; };
+		EBF377661B342A9400EEB6DB /* RemoteListItemWithData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4271B2DFA58005B401A /* RemoteListItemWithData.swift */; };
+		EBF377671B342A9A00EEB6DB /* RemoteProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE41E1B2CB513005B401A /* RemoteProduct.swift */; };
+		EBF377681B342AA100EEB6DB /* RemoteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4241B2CB542005B401A /* RemoteList.swift */; };
+		EBF377691B342AA800EEB6DB /* RemoteSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4211B2CB51F005B401A /* RemoteSection.swift */; };
+		EBF3776A1B342AAF00EEB6DB /* ProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F41A3CA4BA0048E37C /* ProviderFactory.swift */; };
+		EBF3776B1B342AB500EEB6DB /* ListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F91A3CA54F0048E37C /* ListItemProvider.swift */; };
+		EBF3776C1B342ABB00EEB6DB /* InventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFB1A5972A30058103B /* InventoryProvider.swift */; };
+		EBF3776E1B342ACB00EEB6DB /* ListItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD45A1AC701410000F952 /* ListItemInput.swift */; };
+		EBF3776F1B342AD300EEB6DB /* ListItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FE1A3DDE730048E37C /* ListItemMapper.swift */; };
+		EBF377701B342ADA00EEB6DB /* ProductMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FC1A3DDE5D0048E37C /* ProductMapper.swift */; };
+		EBF377711B342AE000EEB6DB /* SectionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */; };
+		EBF377721B342AE700EEB6DB /* ListMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */; };
+		EBF377731B342AF000EEB6DB /* InventoryItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF91A5971C20058103B /* InventoryItemMapper.swift */; };
+		EBF377741B342AF500EEB6DB /* CDProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2743DA1A3E3ACE00593AB0 /* CDProduct.swift */; };
+		EBF377751B342AF900EEB6DB /* CDListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162CA1A34B1860048E37C /* CDListItem.swift */; };
+		EBF377761B342AFD00EEB6DB /* CDSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD681A49C75400FC3B29 /* CDSection.swift */; };
+		EBF377771B342B0200EEB6DB /* CDList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D741A5579B200DBC4AF /* CDList.swift */; };
+		EBF377781B342B0500EEB6DB /* CDInventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF51A59701C0058103B /* CDInventoryItem.swift */; };
+		EBF377791B342B1100EEB6DB /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162EA1A3CA2470048E37C /* Product.swift */; };
+		EBF3777A1B342B1700EEB6DB /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162EC1A3CA24E0048E37C /* ListItem.swift */; };
+		EBF3777B1B342B1E00EEB6DB /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6A1A49C94F00FC3B29 /* Section.swift */; };
+		EBF3777C1B342B2500EEB6DB /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D761A557AB000DBC4AF /* List.swift */; };
+		EBF3777D1B342B2E00EEB6DB /* InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF71A5971170058103B /* InventoryItem.swift */; };
+		EBF3777E1B342B3500EEB6DB /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D101A4ACC4400DBC4AF /* String.swift */; };
+		EBF3777F1B342B3A00EEB6DB /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D5D1A506F5100DBC4AF /* Array.swift */; };
+		EBF377801B342B4000EEB6DB /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D6E1A530FBC00DBC4AF /* Float.swift */; };
+		EBF377811B342B4500EEB6DB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7E1A559C8800DBC4AF /* Constants.swift */; };
+		EBF377821B342B4800EEB6DB /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD44F1AC6BE960000F952 /* Globals.swift */; };
+		EBF377831B342B4F00EEB6DB /* PreferencesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */; };
+		EBF377841B342B5500EEB6DB /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */; };
+		EBF377871B344E7D00EEB6DB /* PersistentStoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF377861B344E7D00EEB6DB /* PersistentStoreHelper.swift */; };
+		EBF377881B3450E800EEB6DB /* PersistentStoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF377861B344E7D00EEB6DB /* PersistentStoreHelper.swift */; };
+		EBF377891B3450E800EEB6DB /* PersistentStoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF377861B344E7D00EEB6DB /* PersistentStoreHelper.swift */; };
+		EBF3778B1B357F1800EEB6DB /* TestLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3778A1B357F1800EEB6DB /* TestLists.swift */; };
+		EBF3778D1B357FA100EEB6DB /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3778C1B357FA100EEB6DB /* TestUtils.swift */; };
+		EBF3778F1B35808900EEB6DB /* TestListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3778E1B35808900EEB6DB /* TestListItems.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -167,6 +214,8 @@
 
 /* Begin PBXFileReference section */
 		0B9659E0D762FAD127662146 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		0F6916CBE86100FE4744418F /* Pods_shoppin_osxTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osxTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F90ABEE48670685CDFFFF36 /* Pods-shoppin_osxTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin_osxTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin_osxTests/Pods-shoppin_osxTests.debug.xcconfig"; sourceTree = "<group>"; };
 		20AF746A4347B9510B7B01E5 /* Pods-shoppin_osx.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin_osx.release.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin_osx/Pods-shoppin_osx.release.xcconfig"; sourceTree = "<group>"; };
 		4D4D858B6419525A4D5181F4 /* Pods-shoppin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin.release.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin/Pods-shoppin.release.xcconfig"; sourceTree = "<group>"; };
 		AA884C051390422A612DB890 /* Pods_shoppin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -224,8 +273,6 @@
 		EB4FD4571AC6D8C90000F952 /* EditListItem.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditListItem.xib; sourceTree = "<group>"; };
 		EB4FD45A1AC701410000F952 /* ListItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemInput.swift; sourceTree = "<group>"; };
 		EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
-		EB5567791A86545300CD3EC6 /* SharedAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedAppDelegate.h; sourceTree = "<group>"; };
-		EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SharedAppDelegate.m; sourceTree = "<group>"; };
 		EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-osx-Bridging-Header.h"; sourceTree = "<group>"; };
 		EB6A207C1ACC079000B9BCB2 /* UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITableView.swift; path = shoppin/UITableView.swift; sourceTree = "<group>"; };
 		EB6D70321B19E435009572BA /* shoppin_osx.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = shoppin_osx.entitlements; sourceTree = "<group>"; };
@@ -255,7 +302,6 @@
 		EB9F6CED1A8610550038355B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EB9F6CF31A8610550038355B /* shoppin_osxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shoppin_osxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB9F6CF81A8610550038355B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EB9F6CF91A8610550038355B /* shoppin_osxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shoppin_osxTests.swift; sourceTree = "<group>"; };
 		EBDFE3A61ACE829400E48F95 /* CellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellManager.swift; sourceTree = "<group>"; };
 		EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCellManager.swift; sourceTree = "<group>"; };
 		EBDFE3AA1ACE935600E48F95 /* ListItemRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemRow.swift; sourceTree = "<group>"; };
@@ -289,8 +335,16 @@
 		EBF162FC1A3DDE5D0048E37C /* ProductMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductMapper.swift; sourceTree = "<group>"; };
 		EBF162FE1A3DDE730048E37C /* ListItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemMapper.swift; sourceTree = "<group>"; };
 		EBF163001A3DE6880048E37C /* ItemsListTableViewConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsListTableViewConstants.swift; sourceTree = "<group>"; };
+		EBF377281B341B6900EEB6DB /* RemoteListItemProviderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemProviderSpec.swift; sourceTree = "<group>"; };
+		EBF3772A1B341DC400EEB6DB /* shoppin-Bridging-Header-tests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "shoppin-Bridging-Header-tests.h"; sourceTree = "<group>"; };
+		EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "shoppin-prefix.pch"; sourceTree = "<group>"; };
+		EBF377861B344E7D00EEB6DB /* PersistentStoreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentStoreHelper.swift; sourceTree = "<group>"; };
+		EBF3778A1B357F1800EEB6DB /* TestLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLists.swift; sourceTree = "<group>"; };
+		EBF3778C1B357FA100EEB6DB /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
+		EBF3778E1B35808900EEB6DB /* TestListItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestListItems.swift; sourceTree = "<group>"; };
 		ED602ABB2DEEE49607500199 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		EF20317B4274E286EAD0FF2C /* Pods-shoppin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin/Pods-shoppin.debug.xcconfig"; sourceTree = "<group>"; };
+		F0450DFB9EA44C2CE78F6DE2 /* Pods-shoppin_osxTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin_osxTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin_osxTests/Pods-shoppin_osxTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -314,6 +368,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D320F1F161F7AF32A6A8B13 /* Pods_shoppin_osxTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,6 +381,7 @@
 				CFD3968762A24D00B2ED9ADE /* libPods.a */,
 				CD0BE6D43CA3EAD8C16C1355 /* Pods_shoppin_osx.framework */,
 				AA884C051390422A612DB890 /* Pods_shoppin.framework */,
+				0F6916CBE86100FE4744418F /* Pods_shoppin_osxTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -333,6 +389,8 @@
 		EB1DDE9C1A3334EC00D778DE = {
 			isa = PBXGroup;
 			children = (
+				EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */,
+				EBF3772A1B341DC400EEB6DB /* shoppin-Bridging-Header-tests.h */,
 				EB20FBEC1A58776E0058103B /* shoppin-Bridging-Header.h */,
 				EB1DDEA71A3334EC00D778DE /* shoppin */,
 				EB55675A1A8622E600CD3EC6 /* shoppin_ios */,
@@ -376,8 +434,6 @@
 			isa = PBXGroup;
 			children = (
 				EB1DDEA91A3334EC00D778DE /* Info.plist */,
-				EB5567791A86545300CD3EC6 /* SharedAppDelegate.h */,
-				EB55677A1A86545300CD3EC6 /* SharedAppDelegate.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -557,6 +613,7 @@
 				EBDFE3A51ACE827C00E48F95 /* tableview */,
 				EB4FD44C1AC6BE2A0000F952 /* extension */,
 				EB9F6CE61A8610550038355B /* AppDelegate.swift */,
+				EBF377861B344E7D00EEB6DB /* PersistentStoreHelper.swift */,
 				EB9F6CE81A8610550038355B /* ViewController.swift */,
 				EB4FD4551AC6D6690000F952 /* EditListItemController.swift */,
 				EB4FD4571AC6D8C90000F952 /* EditListItem.xib */,
@@ -589,8 +646,11 @@
 		EB9F6CF61A8610550038355B /* shoppin_osxTests */ = {
 			isa = PBXGroup;
 			children = (
-				EB9F6CF91A8610550038355B /* shoppin_osxTests.swift */,
 				EB9F6CF71A8610550038355B /* Supporting Files */,
+				EBF377281B341B6900EEB6DB /* RemoteListItemProviderSpec.swift */,
+				EBF3778A1B357F1800EEB6DB /* TestLists.swift */,
+				EBF3778E1B35808900EEB6DB /* TestListItems.swift */,
+				EBF3778C1B357FA100EEB6DB /* TestUtils.swift */,
 			);
 			path = shoppin_osxTests;
 			sourceTree = "<group>";
@@ -771,6 +831,8 @@
 				20AF746A4347B9510B7B01E5 /* Pods-shoppin_osx.release.xcconfig */,
 				EF20317B4274E286EAD0FF2C /* Pods-shoppin.debug.xcconfig */,
 				4D4D858B6419525A4D5181F4 /* Pods-shoppin.release.xcconfig */,
+				0F90ABEE48670685CDFFFF36 /* Pods-shoppin_osxTests.debug.xcconfig */,
+				F0450DFB9EA44C2CE78F6DE2 /* Pods-shoppin_osxTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -822,9 +884,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EB9F6CFE1A8610550038355B /* Build configuration list for PBXNativeTarget "shoppin_osxTests" */;
 			buildPhases = (
+				75FDFE5426A2982C4EAB81ED /* Check Pods Manifest.lock */,
 				EB9F6CEF1A8610550038355B /* Sources */,
 				EB9F6CF01A8610550038355B /* Frameworks */,
 				EB9F6CF11A8610550038355B /* Resources */,
+				57525054752AF9AFF633CBC1 /* Embed Pods Frameworks */,
+				06686425BC1BB7E8A381FC1B /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -930,6 +995,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		06686425BC1BB7E8A381FC1B /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-shoppin_osxTests/Pods-shoppin_osxTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		272492BC443343C8B2A40466 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -960,6 +1040,21 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
+		57525054752AF9AFF633CBC1 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-shoppin_osxTests/Pods-shoppin_osxTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		5AB8A0B5103E644D2D3F1FB3 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -973,6 +1068,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-shoppin/Pods-shoppin-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		75FDFE5426A2982C4EAB81ED /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		81DA6607342D7C518ADA4AD2 /* Embed Pods Frameworks */ = {
@@ -1029,7 +1139,6 @@
 			files = (
 				EB2F5D5A1A4F5C8100DBC4AF /* SwipeableCell.swift in Sources */,
 				EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */,
-				EB55677B1A86545300CD3EC6 /* SharedAppDelegate.m in Sources */,
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
 				EB9BE4191B2CB355005B401A /* RemoteListItems.swift in Sources */,
@@ -1079,6 +1188,7 @@
 				EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */,
 				EB2F5D751A5579B200DBC4AF /* CDList.swift in Sources */,
 				EBF162F21A3CA3BB0048E37C /* CDProvider.swift in Sources */,
+				EBF377891B3450E800EEB6DB /* PersistentStoreHelper.swift in Sources */,
 				EBF162F51A3CA4BA0048E37C /* ProviderFactory.swift in Sources */,
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
@@ -1095,6 +1205,7 @@
 				EB20FC001A5973330058103B /* CDInventoryProvider.swift in Sources */,
 				EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */,
 				EB2F5D0C1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift in Sources */,
+				EBF377301B341FBD00EEB6DB /* RemoteListItemWithData.swift in Sources */,
 				EB1DDEAE1A3334EC00D778DE /* shoppin.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1111,6 +1222,7 @@
 				EB5567821A8658B700CD3EC6 /* CDInventoryProvider.swift in Sources */,
 				EB55675F1A86437400CD3EC6 /* ListItemMapper.swift in Sources */,
 				EB55676C1A8643C300CD3EC6 /* InventoryItem.swift in Sources */,
+				EBF377871B344E7D00EEB6DB /* PersistentStoreHelper.swift in Sources */,
 				EB5567661A8643AB00CD3EC6 /* CDSection.swift in Sources */,
 				EB9BE4201B2CB513005B401A /* RemoteProduct.swift in Sources */,
 				EBDFE3B11ACED1F600E48F95 /* ListItemCell.swift in Sources */,
@@ -1145,7 +1257,6 @@
 				EB55675D1A86433700CD3EC6 /* Product.swift in Sources */,
 				EBDFE3BF1ACEF60100E48F95 /* HeaderCell.swift in Sources */,
 				EB5567681A8643B200CD3EC6 /* CDInventoryItem.swift in Sources */,
-				EB55677D1A86578400CD3EC6 /* SharedAppDelegate.m in Sources */,
 				EB5567651A86438A00CD3EC6 /* CDListItem.swift in Sources */,
 				EB6D93A31B1B788200ED8999 /* AutosuggestionsTableViewController.swift in Sources */,
 				EB4FD44B1AC6B77C0000F952 /* Float.swift in Sources */,
@@ -1172,7 +1283,52 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB9F6CFA1A8610550038355B /* shoppin_osxTests.swift in Sources */,
+				EBF377611B342A6800EEB6DB /* CDListItemProvider.swift in Sources */,
+				EBF377781B342B0500EEB6DB /* CDInventoryItem.swift in Sources */,
+				EBF3776A1B342AAF00EEB6DB /* ProviderFactory.swift in Sources */,
+				EBF3778D1B357FA100EEB6DB /* TestUtils.swift in Sources */,
+				EBF3777D1B342B2E00EEB6DB /* InventoryItem.swift in Sources */,
+				EBF377741B342AF500EEB6DB /* CDProduct.swift in Sources */,
+				EBF3775D1B342A3700EEB6DB /* ListItemProviderImpl.swift in Sources */,
+				EBF3776B1B342AB500EEB6DB /* ListItemProvider.swift in Sources */,
+				EBF3775F1B342A4E00EEB6DB /* ListItemProviderMock.swift in Sources */,
+				EBF377721B342AE700EEB6DB /* ListMapper.swift in Sources */,
+				EBF3777F1B342B3A00EEB6DB /* Array.swift in Sources */,
+				EBF377681B342AA100EEB6DB /* RemoteList.swift in Sources */,
+				EBF377791B342B1100EEB6DB /* Product.swift in Sources */,
+				EBF3775E1B342A4900EEB6DB /* InventoryProviderImpl.swift in Sources */,
+				EBF377751B342AF900EEB6DB /* CDListItem.swift in Sources */,
+				EBF377771B342B0200EEB6DB /* CDList.swift in Sources */,
+				EBF377811B342B4500EEB6DB /* Constants.swift in Sources */,
+				EBF3776C1B342ABB00EEB6DB /* InventoryProvider.swift in Sources */,
+				EBF377881B3450E800EEB6DB /* PersistentStoreHelper.swift in Sources */,
+				EBF377591B34208400EEB6DB /* shoppin.xcdatamodeld in Sources */,
+				EBF3777A1B342B1700EEB6DB /* ListItem.swift in Sources */,
+				EBF377291B341B6900EEB6DB /* RemoteListItemProviderSpec.swift in Sources */,
+				EBF3777B1B342B1E00EEB6DB /* Section.swift in Sources */,
+				EBF377651B342A8E00EEB6DB /* RemoteListItem.swift in Sources */,
+				EBF377841B342B5500EEB6DB /* Selectable.swift in Sources */,
+				EBF377731B342AF000EEB6DB /* InventoryItemMapper.swift in Sources */,
+				EBF3778F1B35808900EEB6DB /* TestListItems.swift in Sources */,
+				EBF377621B342A6F00EEB6DB /* CDInventoryProvider.swift in Sources */,
+				EBF377831B342B4F00EEB6DB /* PreferencesManager.swift in Sources */,
+				EBF377631B342A7A00EEB6DB /* RemoteListItemProvider.swift in Sources */,
+				EBF377601B342A5E00EEB6DB /* CDProvider.swift in Sources */,
+				EBF3777C1B342B2500EEB6DB /* List.swift in Sources */,
+				EBF3778B1B357F1800EEB6DB /* TestLists.swift in Sources */,
+				EBF3776E1B342ACB00EEB6DB /* ListItemInput.swift in Sources */,
+				EBF3776F1B342AD300EEB6DB /* ListItemMapper.swift in Sources */,
+				EBF3777E1B342B3500EEB6DB /* String.swift in Sources */,
+				EBF377711B342AE000EEB6DB /* SectionMapper.swift in Sources */,
+				EBF377641B342A8300EEB6DB /* RemoteListItems.swift in Sources */,
+				EBF377661B342A9400EEB6DB /* RemoteListItemWithData.swift in Sources */,
+				EBF377701B342ADA00EEB6DB /* ProductMapper.swift in Sources */,
+				EBF377691B342AA800EEB6DB /* RemoteSection.swift in Sources */,
+				EBF377801B342B4000EEB6DB /* Float.swift in Sources */,
+				EBF377761B342AFD00EEB6DB /* CDSection.swift in Sources */,
+				EBF3775B1B3423C200EEB6DB /* Try.swift in Sources */,
+				EBF377671B342A9A00EEB6DB /* RemoteProduct.swift in Sources */,
+				EBF377821B342B4800EEB6DB /* Globals.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1237,6 +1393,7 @@
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREFIX_HEADER = "shoppin-prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1249,6 +1406,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
@@ -1282,6 +1440,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREFIX_HEADER = "shoppin-prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -1289,6 +1448,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				SDKROOT = iphoneos;
@@ -1351,7 +1511,7 @@
 				);
 				INFOPLIST_FILE = shoppin_osx/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_SWIFT_FLAGS = "-DDEBUG $(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1372,7 +1532,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				INFOPLIST_FILE = shoppin_osx/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_SWIFT_FLAGS = "-DRELEASE $(inherited)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1383,6 +1543,7 @@
 		};
 		EB9F6CFF1A8610550038355B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0F90ABEE48670685CDFFFF36 /* Pods-shoppin_osxTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1399,12 +1560,14 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "shoppin-Bridging-Header-tests.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/shoppin_osx.app/Contents/MacOS/shoppin_osx";
 			};
 			name = Debug;
 		};
 		EB9F6D001A8610550038355B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F0450DFB9EA44C2CE78F6DE2 /* Pods-shoppin_osxTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1418,6 +1581,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "shoppin-Bridging-Header-tests.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/shoppin_osx.app/Contents/MacOS/shoppin_osx";
 			};
 			name = Release;

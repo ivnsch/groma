@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
+import Foundation
 
 final class ListItem: Equatable {
     let uuid: String
@@ -25,6 +26,10 @@ final class ListItem: Equatable {
         self.section = section
         self.list = list
         self.order = order
+    }
+    
+    var debugDescription: String {
+        return "{\(self.dynamicType) uuid: \(self.uuid), done: \(self.done), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.product), sectionUuid: \(self.section), listUuid: \(self.list)}"
     }
 }
 

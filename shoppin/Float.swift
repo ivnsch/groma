@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
+import Foundation
+
 extension Float {
    
     func toString(maxFractionDigits:Int) -> String? {

@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
+import Foundation
 import Alamofire
-
 
 class RemoteListItemProvider {
     
@@ -24,6 +24,8 @@ class RemoteListItemProvider {
         static let listItem = host + "listItem"
         static let section = host + "section"
         static let list = host + "list"
+        
+        static let removeAll = host + "debug_clearAll"
     }
     
     func products(handler: Try<[RemoteProduct]> -> ()) {
@@ -33,6 +35,7 @@ class RemoteListItemProvider {
                 handler(Try(products))
             } else {
                 println("Response error: \(error), request: \(request)")
+                handler(Try(error))
             }
         }
     }
@@ -44,6 +47,7 @@ class RemoteListItemProvider {
                 handler(Try(sections))
             } else {
                 println("Response error: \(error), request: \(request)")
+                handler(Try(error))
             }
         }
     }
@@ -56,6 +60,7 @@ class RemoteListItemProvider {
                 handler(Try(lists))
             } else {
                 println("Response error: \(error), request: \(request)")
+                handler(Try(error))
             }
         }
     }
@@ -67,6 +72,7 @@ class RemoteListItemProvider {
                 handler(Try(listItems))
             } else {
                 println("Response error: \(error), request: \(request)")
+                handler(Try(error))
             }
         }
     }
@@ -78,6 +84,7 @@ class RemoteListItemProvider {
                 handler(Try(listItems))
             } else {
                 println("Response error: \(error), request: \(request)")
+                handler(Try(error))
             }
         }
     }
@@ -86,6 +93,9 @@ class RemoteListItemProvider {
         Alamofire.request(.DELETE, Urls.listItem + "/\(listItem.uuid)").responseString { (request, _, string, error) in
             if let success = string?.boolValue {
                 handler(Try(success))
+            } else {
+                println("Response error: \(error), request: \(request)")
+                handler(Try(error))
             }
         }
     }
@@ -94,14 +104,32 @@ class RemoteListItemProvider {
         Alamofire.request(.DELETE, Urls.section + "/\(section.uuid)").responseString { (request, _, string, error) in
             if let success = string?.boolValue {
                 handler(Try(success))
+            } else {
+                println("Response error: \(error), request: \(request)")
+                handler(Try(error))
             }
         }
     }
     
     func remove(list: List, handler: Try<Bool> -> ()) {
-        Alamofire.request(.DELETE, Urls.section + "/\(list.uuid)").responseString { (request, _, string, error) in
+        Alamofire.request(.DELETE, Urls.list + "/\(list.uuid)").responseString { (request, _, string, error) in
             if let success = string?.boolValue {
                 handler(Try(success))
+            } else {
+                println("Response error: \(error), request: \(request)")
+                handler(Try(error))
+            }
+        }
+    }
+    
+    func update(list: List, handler: Try<Bool> -> ()) {
+        let parameters = self.toRequestParams(list)
+        Alamofire.request(.PUT, Urls.list + "/\(list.uuid)", parameters: parameters, encoding: .JSON).responseString { (request, _, string, error) in
+            if let success = string?.boolValue {
+                handler(Try(success))
+            } else {
+                println("Response error: \(error), request: \(request)")
+                handler(Try(error))
             }
         }
     }
@@ -116,6 +144,7 @@ class RemoteListItemProvider {
                 handler(Try(listItem))
             } else {
                 println("Response error: \(error), request: \(request)")
+                handler(Try(error))
             }
         }
     }
@@ -127,6 +156,9 @@ class RemoteListItemProvider {
         Alamofire.request(.PUT, Urls.listItem + "/\(listItem.uuid)", parameters: parameters, encoding: .JSON).responseString { (request, _, string, error) in
             if let success = string?.boolValue {
                 handler(Try(success))
+            } else {
+                println("Response error: \(error), request: \(request)")
+                handler(Try(error))
             }
         }
     }
@@ -144,12 +176,16 @@ class RemoteListItemProvider {
         Alamofire.request(request).responseString {request, _, string, error in
             if let success = string?.boolValue {
                 handler(Try(success))
+            } else {
+                println("Response error: \(error), request: \(request)")
+                handler(Try(error))
             }
         }
     }
     
     func add(list: List, handler: Try<RemoteList> -> ()) {
         let parameters = [
+            "uuid": list.uuid,
             "name": list.name
         ]
         
@@ -165,6 +201,7 @@ class RemoteListItemProvider {
 
     func add(section: Section, handler: Try<RemoteSection> -> ()) {
         let parameters = [
+            "uuid": section.uuid,
             "name": section.name
         ]
         
@@ -174,6 +211,7 @@ class RemoteListItemProvider {
                 handler(Try(section))
             } else {
                 println("Response error: \(error), request: \(request)")
+                handler(Try(error))
             }
         }
     }
@@ -185,6 +223,16 @@ class RemoteListItemProvider {
                 handler(Try(list))
             } else {
                 println("Response error: \(error), request: \(request)")
+                handler(Try(error))
+            }
+        }
+    }
+    
+    // for unit tests
+    func removeAll(handler: Try<Bool> -> ()) {
+        Alamofire.request(.GET, Urls.removeAll).responseString { (request, _, string: String?, error) in
+            if let success = string?.boolValue {
+                handler(Try(success))
             }
         }
     }
@@ -193,20 +241,31 @@ class RemoteListItemProvider {
     
     func toRequestParams(listItem: ListItem) -> [String: AnyObject] {
         return [
-            //            "id": listItem.id,
+            "uuid": listItem.uuid,
             "done": listItem.done,
             "quantity": listItem.quantity,
             "product": [
+                "uuid": listItem.product.uuid,
                 "name": listItem.product.name,
                 "price": listItem.product.price,
             ],
             "list": [
+                "uuid": listItem.list.uuid,
                 "name": listItem.list.name
             ],
             "section": [
+                "uuid": listItem.section.uuid,
                 "name": listItem.section.name
             ],
             "order": listItem.order
+        ]
+    }
+    
+    
+    func toRequestParams(list: List) -> [String: AnyObject] {
+        return [
+            "uuid": list.uuid,
+            "name": list.name
         ]
     }
 }

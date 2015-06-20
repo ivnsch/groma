@@ -1,0 +1,17 @@
+//
+//  shoppin-prefix.pch
+//  shoppin
+//
+//  Created by ischuetz on 19/06/15.
+//  Copyright (c) 2015 ivanschuetz. All rights reserved.
+//
+
+#ifdef __OBJC__
+
+#if TARGET_OS_IPHONE
+#import <UIKit/UIKit.h>
+#endif
+
+#import <Foundation/Foundation.h>
+
+#endif

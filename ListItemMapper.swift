@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
+import Foundation
+
 class ListItemMapper {
 
     class func listItemWithCD(cdListItem: CDListItem) -> ListItem {

@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
+import Foundation
+
 class ListMapper {
     
     class func listWithCD(cdList: CDList) -> List {

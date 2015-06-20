@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
+import Foundation
 import CoreData
 
 class CDInventoryProvider: CDProvider {
@@ -48,8 +49,7 @@ class CDInventoryProvider: CDProvider {
                 handler(Try(existingItem))
                 
             } else {
-                let appDelegate = SharedAppDelegate.getAppDelegate()
-                let cdInventoryItem = NSEntityDescription.insertNewObjectForEntityForName("CDInventoryItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDInventoryItem
+                let cdInventoryItem = NSEntityDescription.insertNewObjectForEntityForName("CDInventoryItem", inManagedObjectContext: PersistentStoreHelper.sharedInstance.managedObjectContext!) as! CDInventoryItem
                 
                 self?.cdListItemProvider.loadProduct(item.product.uuid, handler: {try in
                     
@@ -73,7 +73,6 @@ class CDInventoryProvider: CDProvider {
     }
     
     func updateInventoryItem(item: InventoryItem, handler: Try<CDInventoryItem> -> ()) {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
         
         self.loadInventoryItem(item.product, handler: {try in
          

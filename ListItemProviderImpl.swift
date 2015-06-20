@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
+import Foundation
 
 class ListItemProviderImpl: ListItemProvider {
 
@@ -83,18 +84,26 @@ class ListItemProviderImpl: ListItemProvider {
     
     func add(listItem: ListItem, handler: Try<ListItem> -> ()) {
         // return the saved object, to get object with generated id
-        self.cdProvider.saveListItem(listItem, handler: {try in
-            if let cdListItem = try.success {
-                let listItem = ListItemMapper.listItemWithCD(cdListItem)
-                handler(Try(listItem))
+        
+        // for now do remote first. Imagine we do coredata first, user adds the list and then a lot of items to it and server fails. The list with all items will be lost in next sync.
+        // we can do special handling though, like show an error message when server fails and remove the list which was just added, and/or retry server. Or use a flag "synched = false" which tells us that these items should not be removed on sync, similar to items which were added offline. Etc.
+        self.remoteProvider.add(listItem, handler: {try in
+            
+            if let remoteListItem = try.success {
+                self.cdProvider.saveListItem(listItem, handler: {try in // currently the item returned by server is identically to the one we sent, so we just save our local item
+                    if let cdListItem = try.success {
+                        let listItem = ListItemMapper.listItemWithCD(cdListItem)
+                        handler(Try(listItem))
+                    }
+                })
             }
         })
     }
     
     func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, handler: Try<ListItem> -> ()) {
-        // for now just create a new product and a listitem with it
+        // for now just create a new product and a listitem with it (TODO review - as written in tests, product should be updated if already existing)
         let product = Product(uuid: NSUUID().UUIDString, name: listItemInput.name, price:listItemInput.price)
-        // for now create a new section (TODO review this), server assigns new id if not existent yet or ignores
+        // for now create a new section (FIXME this will not work on the second item we add to a section since section name is unique in the server!)
         let section = Section(uuid: NSUUID().UUIDString, name: listItemInput.section)
        
         self.listItems(list, handler: {try in // TODO fetch items only when order not passed, because they are used only to get order
@@ -205,7 +214,6 @@ class ListItemProviderImpl: ListItemProvider {
                 
                 let list = ListMapper.ListWithRemote(remoteList)
                 
-                // now what we have list with real id, save it in the cache
                 self.cdProvider.saveList(list, handler: {dbTry in
                     if let cdList = dbTry.success {
                         let list = ListMapper.listWithCD(cdList)

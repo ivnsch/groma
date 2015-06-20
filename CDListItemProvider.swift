@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 ivanschuetz. All rights reserved.
 //
 
+import Foundation
 import CoreData
 
 class CDListItemProvider: CDProvider {
@@ -38,7 +39,7 @@ class CDListItemProvider: CDProvider {
     }
     
     func loadProduct(id: String, handler: (Try<CDProduct>) -> ()) {
-        self.load(entityName: "CDProduct", type: CDProduct.self, predicate: NSPredicate(format: "id=%@", id), handler: {try in
+        self.load(entityName: "CDProduct", type: CDProduct.self, predicate: NSPredicate(format: "uuid=%@", id), handler: {try in
             
             if let cdProducts = try.success {
                 if let first = cdProducts.first {
@@ -76,9 +77,9 @@ class CDListItemProvider: CDProvider {
                 handler(Try(cdSection))
             
             } else {
-                let appDelegate = SharedAppDelegate.getAppDelegate()
                 
-                let cdSection = NSEntityDescription.insertNewObjectForEntityForName("CDSection", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDSection
+                let cdSection = NSEntityDescription.insertNewObjectForEntityForName("CDSection", inManagedObjectContext: PersistentStoreHelper.sharedInstance.managedObjectContext!) as! CDSection
+                cdSection.uuid = section.uuid
                 cdSection.name = section.name
                 
                 self.save{try in
@@ -156,9 +157,8 @@ class CDListItemProvider: CDProvider {
     }
     
     private func saveProductInt(product: Product, save: Bool) -> CDProduct {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
         
-        let cdProduct = NSEntityDescription.insertNewObjectForEntityForName("CDProduct", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDProduct
+        let cdProduct = NSEntityDescription.insertNewObjectForEntityForName("CDProduct", inManagedObjectContext: PersistentStoreHelper.sharedInstance.managedObjectContext!) as! CDProduct
         
         cdProduct.uuid = product.uuid
         cdProduct.name = product.name
@@ -173,9 +173,8 @@ class CDListItemProvider: CDProvider {
     }
     
     private func saveListInt(list: List, save: Bool) -> CDList {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
         
-        let cdList = NSEntityDescription.insertNewObjectForEntityForName("CDList", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDList
+        let cdList = NSEntityDescription.insertNewObjectForEntityForName("CDList", inManagedObjectContext: PersistentStoreHelper.sharedInstance.managedObjectContext!) as! CDList
         
         cdList.uuid = list.uuid
         cdList.name = list.name
@@ -189,9 +188,8 @@ class CDListItemProvider: CDProvider {
     }
     
     private func saveSectionInt(section: Section, save: Bool) -> CDSection {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
         
-        let cdSection = NSEntityDescription.insertNewObjectForEntityForName("CDSection", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDSection
+        let cdSection = NSEntityDescription.insertNewObjectForEntityForName("CDSection", inManagedObjectContext: PersistentStoreHelper.sharedInstance.managedObjectContext!) as! CDSection
         
         cdSection.uuid = section.uuid
         cdSection.name = section.name
@@ -366,12 +364,10 @@ class CDListItemProvider: CDProvider {
     private func saveListItemsUpdate(listItemsWithRelations: ListItemsWithRelations, deleteListItemsPredicate: NSPredicate? = nil, handler: Try<Bool> -> ()) {
     
         let didUpdateEverything: (cdProductsDict: [String: CDProduct], cdSectionsDict: [String: CDSection], cdListsDict: [String: CDList]) -> () = {[weak self] cdProductsDict, cdSectionsDict, cdListsDict in
-            
-            let appDelegate = SharedAppDelegate.getAppDelegate()
 
             // save list items
             for listItem in listItemsWithRelations.listItems {
-                let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDListItem
+                let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: PersistentStoreHelper.sharedInstance.managedObjectContext!) as! CDListItem
                 
                 cdListItem.uuid = listItem.uuid
                 cdListItem.product = cdProductsDict[listItem.product.uuid]!
@@ -413,9 +409,6 @@ class CDListItemProvider: CDProvider {
                 })
             }
         })
-            
-            
-
     }
     
     
@@ -424,8 +417,6 @@ class CDListItemProvider: CDProvider {
     func saveListItemsOverwrite(listItemsWithRelations: ListItemsWithRelations, handler: Try<Bool> -> ()) {
         
         let didRemoveEverything: () -> () = {[weak self] in
-            
-            let appDelegate = SharedAppDelegate.getAppDelegate()
 
             // save the products, sections, lists
             // TODO error checking this assumes it works
@@ -435,7 +426,7 @@ class CDListItemProvider: CDProvider {
 
             // save list items
             for listItem in listItemsWithRelations.listItems {
-                let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDListItem
+                let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: PersistentStoreHelper.sharedInstance.managedObjectContext!) as! CDListItem
                 
                 cdListItem.uuid = listItem.uuid
                 cdListItem.product = cdProductsDict[listItem.product.uuid]!
@@ -480,7 +471,6 @@ class CDListItemProvider: CDProvider {
     }
     
     func saveListItem(listItem: ListItem, handler: Try<CDListItem> -> ()) {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
 
         var cdProductMaybe: CDProduct?
         var cdSectionMaybe: CDSection?
@@ -491,7 +481,7 @@ class CDListItemProvider: CDProvider {
                 self.loadList(listItem.list.uuid, handler: {try in
                     
                     if let cdList = try.success {
-                        let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDListItem
+                        let cdListItem = NSEntityDescription.insertNewObjectForEntityForName("CDListItem", inManagedObjectContext: PersistentStoreHelper.sharedInstance.managedObjectContext!) as! CDListItem
                         
                         cdListItem.uuid = listItem.uuid
                         cdListItem.product = cdProduct
@@ -500,7 +490,7 @@ class CDListItemProvider: CDProvider {
                         cdListItem.order = listItem.order
                         cdListItem.section = cdSection
                         cdListItem.list = cdList
-                        
+
                         self.save{try in
                         }
                         
@@ -525,7 +515,7 @@ class CDListItemProvider: CDProvider {
     
     func loadListItem(id: String, handler: Try<CDListItem> -> ()) {
         
-        self.load(entityName: "CDListItem", type: CDListItem.self, predicate: NSPredicate(format: "id=%@", id), handler: {try in
+        self.load(entityName: "CDListItem", type: CDListItem.self, predicate: NSPredicate(format: "uuid=%@", id), handler: {try in
             
             if let cdListItems = try.success {
                 if let cdListItem = cdListItems.first {
@@ -537,7 +527,6 @@ class CDListItemProvider: CDProvider {
 
     // update only done status of listitems, this way avoid loading section, list etc.
     func updateListItemsDone(listItems: [ListItem], handler: Try<Bool> -> ()) {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
         
         var count = 0
         
@@ -581,7 +570,6 @@ class CDListItemProvider: CDProvider {
     }
     
     func updateListItem(listItem: ListItem, saveContext: Bool = true, handler: Try<CDListItem> -> ()) {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
         
         self.loadListItem(listItem.uuid, handler: {try in
             
@@ -631,8 +619,7 @@ class CDListItemProvider: CDProvider {
     }
     
     private func remove(cdListItem: CDListItem, save: Bool = true, handler: Try<Bool> -> ()) {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
-        appDelegate.managedObjectContext!.deleteObject(cdListItem)
+        PersistentStoreHelper.sharedInstance.managedObjectContext!.deleteObject(cdListItem)
         
         self.save(handler)
     }
@@ -656,7 +643,6 @@ class CDListItemProvider: CDProvider {
     
     // remove section and all the listitems assigned to it
     func remove(section:Section, handler: Try<Bool> -> ()) {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
  
         var listItemsRemoved: Bool = false
         var sectionRemoved: Bool = false
@@ -706,7 +692,6 @@ class CDListItemProvider: CDProvider {
    
     
     func remove(list: List, handler: Try<Bool> -> ()) {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
         
         var listItemsRemoved: Bool = false
         var listRemoved: Bool = false
@@ -758,7 +743,7 @@ class CDListItemProvider: CDProvider {
     } 
     
     func loadList(id: String, handler: Try<CDList> -> ()) {
-        self.load(entityName: "CDList", type: CDList.self, predicate: NSPredicate(format: "id=%@", id), handler: {try in
+        self.load(entityName: "CDList", type: CDList.self, predicate: NSPredicate(format: "uuid=%@", id), handler: {try in
             if let cdLists = try.success {
                 if let cdList = cdLists.first {
                     handler(Try(cdList))
@@ -768,9 +753,8 @@ class CDListItemProvider: CDProvider {
     }
     
     func saveList(list: List, handler: Try<CDList> -> ()) {
-        let appDelegate = SharedAppDelegate.getAppDelegate()
         
-        let cdList = NSEntityDescription.insertNewObjectForEntityForName("CDList", inManagedObjectContext: appDelegate.managedObjectContext!) as! CDList
+        let cdList = NSEntityDescription.insertNewObjectForEntityForName("CDList", inManagedObjectContext: PersistentStoreHelper.sharedInstance.managedObjectContext!) as! CDList
         cdList.name = list.name
         cdList.uuid = NSUUID().UUIDString
         
