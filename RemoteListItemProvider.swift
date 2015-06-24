@@ -10,23 +10,7 @@ import Foundation
 import Alamofire
 
 class RemoteListItemProvider {
-    
-    private struct Urls {
-        private static let host: String = "http://localhost:8091/"
-        
-        static let products = host + "products"
-        static let listItems = host + "listItems"
-        static let sections = host + "sections"
-        static let lists = host + "lists"
-        
-        static let addListItem = host + "addListItem"
-        
-        static let listItem = host + "listItem"
-        static let section = host + "section"
-        static let list = host + "list"
-        
-        static let removeAll = host + "debug_clearAll"
-    }
+
     
     func products(handler: Try<[RemoteProduct]> -> ()) {
         Alamofire.request(.GET, Urls.products).responseCollection { (request, _, products: [RemoteProduct]?, error) in
@@ -78,7 +62,7 @@ class RemoteListItemProvider {
     }
     
     func listItems(handler: Try<RemoteListItems> -> ()) {
-        Alamofire.request(.GET, Urls.listItems).responseObject { (request, _, listItems: RemoteListItems?, error) in
+        Alamofire.request(.GET, Urls.allListItems).responseObject { (request, _, listItems: RemoteListItems?, error) in
             if let listItems = listItems {
                 println("received listItems: \(listItems)")
                 handler(Try(listItems))
@@ -124,7 +108,7 @@ class RemoteListItemProvider {
     
     func update(list: List, handler: Try<Bool> -> ()) {
         let parameters = self.toRequestParams(list)
-        Alamofire.request(.PUT, Urls.list + "/\(list.uuid)", parameters: parameters, encoding: .JSON).responseString { (request, _, string, error) in
+        Alamofire.request(.PUT, Urls.list, parameters: parameters, encoding: .JSON).responseString { (request, _, string, error) in
             if let success = string?.boolValue {
                 handler(Try(success))
             } else {
@@ -153,7 +137,7 @@ class RemoteListItemProvider {
         
         let parameters = self.toRequestParams(listItem)
         
-        Alamofire.request(.PUT, Urls.listItem + "/\(listItem.uuid)", parameters: parameters, encoding: .JSON).responseString { (request, _, string, error) in
+        Alamofire.request(.PUT, Urls.listItem, parameters: parameters, encoding: .JSON).responseString { (request, _, string, error) in
             if let success = string?.boolValue {
                 handler(Try(success))
             } else {
@@ -228,14 +212,14 @@ class RemoteListItemProvider {
         }
     }
     
-    // for unit tests
-    func removeAll(handler: Try<Bool> -> ()) {
-        Alamofire.request(.GET, Urls.removeAll).responseString { (request, _, string: String?, error) in
-            if let success = string?.boolValue {
-                handler(Try(success))
-            }
-        }
-    }
+//    // for unit tests
+//    func removeAll(handler: Try<Bool> -> ()) {
+//        Alamofire.request(.GET, Urls.removeAll).responseString { (request, _, string: String?, error) in
+//            if let success = string?.boolValue {
+//                handler(Try(success))
+//            }
+//        }
+//    }
     
     //////////////////
     
@@ -271,68 +255,5 @@ class RemoteListItemProvider {
 }
 
 
-//////////////////
-
-extension Request {
-    public func debugLog() -> Self {
-        #if DEBUG
-            debugPrint(self)
-        #endif
-        return self
-    }
-}
 
 
-//////////////////
-//JSON
-
-@objc public protocol ResponseObjectSerializable {
-    init?(response: NSHTTPURLResponse, representation: AnyObject)
-}
-
-extension Alamofire.Request {
-    public func responseObject<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest, NSHTTPURLResponse?, T?, NSError?) -> Void) -> Self {
-        let serializer: Serializer = { (request, response, data) in
-            
-            println("response: \(response)")
-            
-            let JSONSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
-            let (JSON: AnyObject?, serializationError) = JSONSerializer(request, response, data)
-            
-            println("JSON: \(JSON)")
-            
-            if response != nil && JSON != nil {
-                return (T(response: response!, representation: JSON!), nil)
-            } else {
-                return (nil, serializationError)
-            }
-        }
-        
-        return response(serializer: serializer, completionHandler: { (request, response, object, error) in
-            completionHandler(request, response, object as? T, error)
-        })
-    }
-}
-
-
-@objc public protocol ResponseCollectionSerializable {
-    static func collection(#response: NSHTTPURLResponse, representation: AnyObject) -> [Self]
-}
-
-extension Alamofire.Request {
-    public func responseCollection<T: ResponseCollectionSerializable>(completionHandler: (NSURLRequest, NSHTTPURLResponse?, [T]?, NSError?) -> Void) -> Self {
-        let serializer: Serializer = { (request, response, data) in
-            let JSONSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
-            let (JSON: AnyObject?, serializationError) = JSONSerializer(request, response, data)
-            if response != nil && JSON != nil {
-                return (T.collection(response: response!, representation: JSON!), nil)
-            } else {
-                return (nil, serializationError)
-            }
-        }
-        
-        return response(serializer: serializer, completionHandler: { (request, response, object, error) in
-            completionHandler(request, response, object as? [T], error)
-        })
-    }
-}

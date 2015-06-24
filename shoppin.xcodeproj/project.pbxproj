@@ -200,6 +200,19 @@
 		EBF3778B1B357F1800EEB6DB /* TestLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3778A1B357F1800EEB6DB /* TestLists.swift */; };
 		EBF3778D1B357FA100EEB6DB /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3778C1B357FA100EEB6DB /* TestUtils.swift */; };
 		EBF3778F1B35808900EEB6DB /* TestListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3778E1B35808900EEB6DB /* TestListItems.swift */; };
+		EBF377911B38A80100EEB6DB /* TestUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF377901B38A80100EEB6DB /* TestUsers.swift */; };
+		EBF377931B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF377921B38A99800EEB6DB /* RemoteUserProvider.swift */; };
+		EBF377941B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF377921B38A99800EEB6DB /* RemoteUserProvider.swift */; };
+		EBF377951B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF377921B38A99800EEB6DB /* RemoteUserProvider.swift */; };
+		EBF377971B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF377961B38A9C900EEB6DB /* AlamofireExtensions.swift */; };
+		EBF377981B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF377961B38A9C900EEB6DB /* AlamofireExtensions.swift */; };
+		EBF377991B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF377961B38A9C900EEB6DB /* AlamofireExtensions.swift */; };
+		EBF3779B1B38AA5900EEB6DB /* Urls.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3779A1B38AA5900EEB6DB /* Urls.swift */; };
+		EBF3779C1B38AA5900EEB6DB /* Urls.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3779A1B38AA5900EEB6DB /* Urls.swift */; };
+		EBF3779D1B38AA5900EEB6DB /* Urls.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3779A1B38AA5900EEB6DB /* Urls.swift */; };
+		EBF3779F1B38AB1000EEB6DB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3779E1B38AB1000EEB6DB /* User.swift */; };
+		EBF377A01B38AB1000EEB6DB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3779E1B38AB1000EEB6DB /* User.swift */; };
+		EBF377A11B38AB1000EEB6DB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3779E1B38AB1000EEB6DB /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -342,6 +355,11 @@
 		EBF3778A1B357F1800EEB6DB /* TestLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLists.swift; sourceTree = "<group>"; };
 		EBF3778C1B357FA100EEB6DB /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
 		EBF3778E1B35808900EEB6DB /* TestListItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestListItems.swift; sourceTree = "<group>"; };
+		EBF377901B38A80100EEB6DB /* TestUsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUsers.swift; sourceTree = "<group>"; };
+		EBF377921B38A99800EEB6DB /* RemoteUserProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteUserProvider.swift; sourceTree = "<group>"; };
+		EBF377961B38A9C900EEB6DB /* AlamofireExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireExtensions.swift; sourceTree = "<group>"; };
+		EBF3779A1B38AA5900EEB6DB /* Urls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Urls.swift; sourceTree = "<group>"; };
+		EBF3779E1B38AB1000EEB6DB /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		ED602ABB2DEEE49607500199 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		EF20317B4274E286EAD0FF2C /* Pods-shoppin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin/Pods-shoppin.debug.xcconfig"; sourceTree = "<group>"; };
 		F0450DFB9EA44C2CE78F6DE2 /* Pods-shoppin_osxTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin_osxTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin_osxTests/Pods-shoppin_osxTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -595,6 +613,9 @@
 			isa = PBXGroup;
 			children = (
 				EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */,
+				EBF377921B38A99800EEB6DB /* RemoteUserProvider.swift */,
+				EBF377961B38A9C900EEB6DB /* AlamofireExtensions.swift */,
+				EBF3779A1B38AA5900EEB6DB /* Urls.swift */,
 				EB9BE4181B2CB355005B401A /* RemoteListItems.swift */,
 				EB9BE41B1B2CB42B005B401A /* RemoteListItem.swift */,
 				EB9BE4271B2DFA58005B401A /* RemoteListItemWithData.swift */,
@@ -650,6 +671,7 @@
 				EBF377281B341B6900EEB6DB /* RemoteListItemProviderSpec.swift */,
 				EBF3778A1B357F1800EEB6DB /* TestLists.swift */,
 				EBF3778E1B35808900EEB6DB /* TestListItems.swift */,
+				EBF377901B38A80100EEB6DB /* TestUsers.swift */,
 				EBF3778C1B357FA100EEB6DB /* TestUtils.swift */,
 			);
 			path = shoppin_osxTests;
@@ -762,6 +784,7 @@
 				EBF162EC1A3CA24E0048E37C /* ListItem.swift */,
 				EBEEDD6A1A49C94F00FC3B29 /* Section.swift */,
 				EB2F5D761A557AB000DBC4AF /* List.swift */,
+				EBF3779E1B38AB1000EEB6DB /* User.swift */,
 				EB20FBF71A5971170058103B /* InventoryItem.swift */,
 			);
 			name = model;
@@ -1164,6 +1187,7 @@
 				EBF162F01A3CA3530048E37C /* CDListItemProvider.swift in Sources */,
 				EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */,
 				EB2F5D771A557AB000DBC4AF /* List.swift in Sources */,
+				EBF377931B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
 				EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */,
@@ -1196,14 +1220,17 @@
 				EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */,
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,
+				EBF3779F1B38AB1000EEB6DB /* User.swift in Sources */,
 				EB9BE41C1B2CB42B005B401A /* RemoteListItem.swift in Sources */,
 				EB20FBFE1A5972C70058103B /* InventoryProviderImpl.swift in Sources */,
 				EBF162E21A3C83D50048E37C /* ListItemsViewSection.swift in Sources */,
+				EBF3779B1B38AA5900EEB6DB /* Urls.swift in Sources */,
 				EB4FD45B1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EBF162F71A3CA5030048E37C /* ListItemProviderMock.swift in Sources */,
 				EB2F5D6F1A530FBC00DBC4AF /* Float.swift in Sources */,
 				EB20FC001A5973330058103B /* CDInventoryProvider.swift in Sources */,
 				EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */,
+				EBF377971B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
 				EB2F5D0C1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift in Sources */,
 				EBF377301B341FBD00EEB6DB /* RemoteListItemWithData.swift in Sources */,
 				EB1DDEAE1A3334EC00D778DE /* shoppin.xcdatamodeld in Sources */,
@@ -1244,7 +1271,9 @@
 				EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */,
 				EB4FD45E1AC715FF0000F952 /* Array.swift in Sources */,
 				EB55676D1A8644D400CD3EC6 /* shoppin.xcdatamodeld in Sources */,
+				EBF377941B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
 				EB9BE4231B2CB51F005B401A /* RemoteSection.swift in Sources */,
+				EBF377A01B38AB1000EEB6DB /* User.swift in Sources */,
 				EB5567601A86437800CD3EC6 /* ProductMapper.swift in Sources */,
 				EB5567711A864B6E00CD3EC6 /* ListItemProviderMock.swift in Sources */,
 				EB5567621A86437E00CD3EC6 /* ListMapper.swift in Sources */,
@@ -1262,9 +1291,11 @@
 				EB4FD44B1AC6B77C0000F952 /* Float.swift in Sources */,
 				EB4FD44E1AC6BE390000F952 /* NSTableView.swift in Sources */,
 				EB4FD4511AC6BE960000F952 /* Globals.swift in Sources */,
+				EBF3779C1B38AA5900EEB6DB /* Urls.swift in Sources */,
 				EB55676A1A8643BC00CD3EC6 /* Section.swift in Sources */,
 				EB6D93A61B1BAFB400ED8999 /* HandlingTextField.swift in Sources */,
 				EBDFE3C61AD11F6700E48F95 /* NSLayoutConstraint.swift in Sources */,
+				EBF377981B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
 				EB89D3471AD4536300B6E0D0 /* AddListController.swift in Sources */,
 				EBDFE3B51ACEEB5400E48F95 /* HeaderCellManager.swift in Sources */,
 				EBDFE3A91ACE82F000E48F95 /* ListItemCellManager.swift in Sources */,
@@ -1290,7 +1321,10 @@
 				EBF3777D1B342B2E00EEB6DB /* InventoryItem.swift in Sources */,
 				EBF377741B342AF500EEB6DB /* CDProduct.swift in Sources */,
 				EBF3775D1B342A3700EEB6DB /* ListItemProviderImpl.swift in Sources */,
+				EBF377911B38A80100EEB6DB /* TestUsers.swift in Sources */,
 				EBF3776B1B342AB500EEB6DB /* ListItemProvider.swift in Sources */,
+				EBF3779D1B38AA5900EEB6DB /* Urls.swift in Sources */,
+				EBF377951B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
 				EBF3775F1B342A4E00EEB6DB /* ListItemProviderMock.swift in Sources */,
 				EBF377721B342AE700EEB6DB /* ListMapper.swift in Sources */,
 				EBF3777F1B342B3A00EEB6DB /* Array.swift in Sources */,
@@ -1321,8 +1355,10 @@
 				EBF3777E1B342B3500EEB6DB /* String.swift in Sources */,
 				EBF377711B342AE000EEB6DB /* SectionMapper.swift in Sources */,
 				EBF377641B342A8300EEB6DB /* RemoteListItems.swift in Sources */,
+				EBF377A11B38AB1000EEB6DB /* User.swift in Sources */,
 				EBF377661B342A9400EEB6DB /* RemoteListItemWithData.swift in Sources */,
 				EBF377701B342ADA00EEB6DB /* ProductMapper.swift in Sources */,
+				EBF377991B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
 				EBF377691B342AA800EEB6DB /* RemoteSection.swift in Sources */,
 				EBF377801B342B4000EEB6DB /* Float.swift in Sources */,
 				EBF377761B342AFD00EEB6DB /* CDSection.swift in Sources */,

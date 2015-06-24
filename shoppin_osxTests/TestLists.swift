@@ -18,7 +18,7 @@ class TestLists: XCTestCase {
         
         var expectation = self.expectationWithDescription("add lists")
         
-        TestUtils.withClearedDatabase(self.remoteProvider) {
+        TestUtils.withClearedDatabase {
             
             println("add first list")
             let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])
@@ -68,13 +68,13 @@ class TestLists: XCTestCase {
                 }
             })
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectationsWithTimeout(15.0, handler: nil)
     }
     
     func testRemoveList() {
         var expectation = self.expectationWithDescription("add lists")
         
-        TestUtils.withClearedDatabase(self.remoteProvider) {
+        TestUtils.withClearedDatabase {
             
             println("add first list")
             let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])
@@ -124,7 +124,7 @@ class TestLists: XCTestCase {
     func testUpdateList() {
         var expectation = self.expectationWithDescription("update lists")
         
-        TestUtils.withClearedDatabase(self.remoteProvider) {
+        TestUtils.withClearedDatabase {
             
             println("add first list")
             let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])

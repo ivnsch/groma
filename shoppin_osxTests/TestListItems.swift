@@ -17,7 +17,7 @@ class TestListItems: XCTestCase {
         
         var expectation = self.expectationWithDescription("add list items")
         
-        TestUtils.withClearedDatabase(self.remoteProvider) {
+        TestUtils.withClearedDatabase {
             
             println("add first list item")
             
@@ -47,7 +47,7 @@ class TestListItems: XCTestCase {
         
         var expectation = self.expectationWithDescription("add list items")
         
-        TestUtils.withClearedDatabase(self.remoteProvider) {
+        TestUtils.withClearedDatabase {
             
             println("add first list item")
             
@@ -134,7 +134,7 @@ class TestListItems: XCTestCase {
         
         var expectation = self.expectationWithDescription("add list items")
         
-        TestUtils.withClearedDatabase(self.remoteProvider) {
+        TestUtils.withClearedDatabase {
             
             println("add first list item")
             
@@ -224,7 +224,7 @@ class TestListItems: XCTestCase {
         
         var expectation = self.expectationWithDescription("add list items")
         
-        TestUtils.withClearedDatabase(self.remoteProvider) {
+        TestUtils.withClearedDatabase {
             
             println("add first list item")
             

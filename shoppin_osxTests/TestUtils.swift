@@ -7,12 +7,13 @@
 //
 
 import Nimble
+import Alamofire
 
 class TestUtils {
 
-    class func withClearedDatabase(remoteProvider: RemoteListItemProvider, f: () -> ()) {
-        remoteProvider.removeAll {try in
-            expect(try.success).notTo(beNil())
+    class func withClearedDatabase(f: () -> ()) {
+        Alamofire.request(.GET, Urls.removeAll).responseString { (request, _, string: String?, error) in
+            expect(string).notTo(beNil())
             f()
         }
     }
