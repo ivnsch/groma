@@ -22,6 +22,8 @@
 		EB0C1B941B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B921B3DA9D100F24C85 /* UserProviderImpl.swift */; };
 		EB0C1B951B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B921B3DA9D100F24C85 /* UserProviderImpl.swift */; };
 		EB0C1B971B3DBD1300F24C85 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB0C1B961B3DBD1300F24C85 /* Login.storyboard */; };
+		EB0C1B9A1B3DBF7F00F24C85 /* Register.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB0C1B991B3DBF7F00F24C85 /* Register.storyboard */; };
+		EB0C1B9C1B3DBF9600F24C85 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B9B1B3DBF9600F24C85 /* RegisterViewController.swift */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEAE1A3334EC00D778DE /* shoppin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAC1A3334EC00D778DE /* shoppin.xcdatamodeld */; };
 		EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAF1A3334EC00D778DE /* ViewController.swift */; };
@@ -254,6 +256,8 @@
 		EB0C1B8E1B3DA97000F24C85 /* UserProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProvider.swift; sourceTree = "<group>"; };
 		EB0C1B921B3DA9D100F24C85 /* UserProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProviderImpl.swift; sourceTree = "<group>"; };
 		EB0C1B961B3DBD1300F24C85 /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
+		EB0C1B991B3DBF7F00F24C85 /* Register.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Register.storyboard; sourceTree = "<group>"; };
+		EB0C1B9B1B3DBF9600F24C85 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -428,6 +432,7 @@
 			isa = PBXGroup;
 			children = (
 				EB0C1B851B3DA2E500F24C85 /* login */,
+				EB0C1B981B3DBF6E00F24C85 /* register */,
 			);
 			name = user;
 			sourceTree = "<group>";
@@ -439,6 +444,15 @@
 				EB0C1B961B3DBD1300F24C85 /* Login.storyboard */,
 			);
 			name = login;
+			sourceTree = "<group>";
+		};
+		EB0C1B981B3DBF6E00F24C85 /* register */ = {
+			isa = PBXGroup;
+			children = (
+				EB0C1B9B1B3DBF9600F24C85 /* RegisterViewController.swift */,
+				EB0C1B991B3DBF7F00F24C85 /* Register.storyboard */,
+			);
+			name = register;
 			sourceTree = "<group>";
 		};
 		EB1DDE9C1A3334EC00D778DE = {
@@ -1044,6 +1058,7 @@
 				EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */,
 				EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */,
 				EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */,
+				EB0C1B9A1B3DBF7F00F24C85 /* Register.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1224,6 +1239,7 @@
 				EB20FBF21A5961360058103B /* CartMenuView.swift in Sources */,
 				EB4FD46C1AC73B590000F952 /* PreferencesManager.swift in Sources */,
 				EB20FBFC1A5972A30058103B /* InventoryProvider.swift in Sources */,
+				EB0C1B9C1B3DBF9600F24C85 /* RegisterViewController.swift in Sources */,
 				EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */,
 				EBF162CB1A34B1860048E37C /* CDListItem.swift in Sources */,
 				EBF162EB1A3CA2470048E37C /* Product.swift in Sources */,

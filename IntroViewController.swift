@@ -8,12 +8,8 @@
 
 import UIKit
 
-class IntroViewController: UIViewController {
+class IntroViewController: UIViewController, RegisterDelegate {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-    }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
@@ -27,10 +23,25 @@ class IntroViewController: UIViewController {
 
     
     @IBAction func registerTapped(sender: UIButton) {
+        let registerController = UIStoryboard.registerViewController()
+        registerController.delegate = self
+        self.navigationController?.pushViewController(registerController, animated: true)
     }
 
     
     @IBAction func skipTapped(sender: UIButton) {
+        self.startMainStoryboard()
+    }
+    
+    func onRegisterError() {
+        println("register error!") // TODO handle
+    }
+    
+    func onRegisterSuccess() {
+        self.startMainStoryboard()
+    }
+    
+    private func startMainStoryboard() {
         let tabController = UIStoryboard.mainTabController()
         self.navigationController?.setViewControllers([tabController], animated: true)
     }
