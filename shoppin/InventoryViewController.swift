@@ -10,7 +10,7 @@ import UIKit
 
 class InventoryViewController: UITableViewController {
 
-    var inventoryItems:[InventoryItem]!
+    private var inventoryItems: [InventoryItem] = []
 
     private let inventoryProvider = ProviderFactory().inventoryProvider
     
