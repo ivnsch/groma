@@ -10,6 +10,7 @@
 		32F343E224A9A610E9AC4FC0 /* Pods_shoppin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA884C051390422A612DB890 /* Pods_shoppin.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		3D320F1F161F7AF32A6A8B13 /* Pods_shoppin_osxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F6916CBE86100FE4744418F /* Pods_shoppin_osxTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		746817AD4172A5D3EF184CB4 /* Pods_shoppin_osx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0BE6D43CA3EAD8C16C1355 /* Pods_shoppin_osx.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		EB0C1B831B3D626500F24C85 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B821B3D626500F24C85 /* IntroViewController.swift */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEAE1A3334EC00D778DE /* shoppin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAC1A3334EC00D778DE /* shoppin.xcdatamodeld */; };
 		EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAF1A3334EC00D778DE /* ViewController.swift */; };
@@ -92,6 +93,7 @@
 		EB6D93A41B1B788200ED8999 /* AutosuggestionsTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB6D93A21B1B788200ED8999 /* AutosuggestionsTableViewController.xib */; };
 		EB6D93A61B1BAFB400ED8999 /* HandlingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6D93A51B1BAFB400ED8999 /* HandlingTextField.swift */; };
 		EB6D93A81B1C8CE500ED8999 /* HandlingTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6D93A71B1C8CE500ED8999 /* HandlingTableView.swift */; };
+		EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB703FE11B3B5F3A001586C5 /* Intro.storyboard */; };
 		EB7E8B611B2ADF620090409A /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
 		EB7E8B621B2ADF9A0090409A /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
 		EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */; };
@@ -235,6 +237,7 @@
 		B86B36921B26D43622B0EC93 /* Pods-shoppin_osx.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin_osx.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin_osx/Pods-shoppin_osx.debug.xcconfig"; sourceTree = "<group>"; };
 		CD0BE6D43CA3EAD8C16C1355 /* Pods_shoppin_osx.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_shoppin_osx.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFD3968762A24D00B2ED9ADE /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB0C1B821B3D626500F24C85 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -293,6 +296,7 @@
 		EB6D93A21B1B788200ED8999 /* AutosuggestionsTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AutosuggestionsTableViewController.xib; sourceTree = "<group>"; };
 		EB6D93A51B1BAFB400ED8999 /* HandlingTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlingTextField.swift; sourceTree = "<group>"; };
 		EB6D93A71B1C8CE500ED8999 /* HandlingTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlingTableView.swift; sourceTree = "<group>"; };
+		EB703FE11B3B5F3A001586C5 /* Intro.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Intro.storyboard; sourceTree = "<group>"; };
 		EB7E8B601B2ADF620090409A /* Try.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Try.swift; sourceTree = "<group>"; };
 		EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
 		EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListsViewController.xib; sourceTree = "<group>"; };
@@ -577,6 +581,7 @@
 		EB55675A1A8622E600CD3EC6 /* shoppin_ios */ = {
 			isa = PBXGroup;
 			children = (
+				EB703FE01B3B5F1C001586C5 /* intro */,
 				EB20FC021A59986C0058103B /* list */,
 				EB20FC011A5998490058103B /* cart */,
 				EB20FC031A599A2B0058103B /* inventory */,
@@ -607,6 +612,15 @@
 				EB6A207C1ACC079000B9BCB2 /* UITableView.swift */,
 			);
 			name = extensions;
+			sourceTree = "<group>";
+		};
+		EB703FE01B3B5F1C001586C5 /* intro */ = {
+			isa = PBXGroup;
+			children = (
+				EB703FE11B3B5F3A001586C5 /* Intro.storyboard */,
+				EB0C1B821B3D626500F24C85 /* IntroViewController.swift */,
+			);
+			name = intro;
 			sourceTree = "<group>";
 		};
 		EB9BE4141B2C6525005B401A /* remote */ = {
@@ -989,6 +1003,7 @@
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
 				EB2F5D0D1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.xib in Resources */,
 				EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */,
+				EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */,
 				EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */,
 				EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */,
 			);
@@ -1205,6 +1220,7 @@
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,
 				EBF162DD1A3C82380048E37C /* DefaultTableViewController.swift in Sources */,
 				EBF162E51A3C85A30048E37C /* ListItemCell.swift in Sources */,
+				EB0C1B831B3D626500F24C85 /* IntroViewController.swift in Sources */,
 				EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */,
 				EB7E8B611B2ADF620090409A /* Try.swift in Sources */,
 				EB20FBF81A5971170058103B /* InventoryItem.swift in Sources */,

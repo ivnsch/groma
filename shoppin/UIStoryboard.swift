@@ -11,6 +11,10 @@ import UIKit
 
 extension UIStoryboard {
     class func mainStoryboard() -> UIStoryboard { return UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()) }
+    class func introboard() -> UIStoryboard { return UIStoryboard(name: "Intro", bundle: NSBundle.mainBundle()) }
+ 
+    
+    // MARK: - Main
     
     class func todoItemsViewController() -> ViewController {
         return mainStoryboard().instantiateViewControllerWithIdentifier("ViewController") as! ViewController
@@ -26,5 +30,16 @@ extension UIStoryboard {
     
     class func navigationController() -> UINavigationController {
         return mainStoryboard().instantiateViewControllerWithIdentifier("NavigationController") as! UINavigationController
+    }
+
+    class func mainTabController() -> UIViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("MainTabController") as! UIViewController
+    }
+    
+    
+    // MARK: - Intro
+    
+    class func introViewController() -> IntroViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("IntroController") as! IntroViewController
     }
 }
