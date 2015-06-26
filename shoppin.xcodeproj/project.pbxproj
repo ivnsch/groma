@@ -24,6 +24,7 @@
 		EB0C1B971B3DBD1300F24C85 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB0C1B961B3DBD1300F24C85 /* Login.storyboard */; };
 		EB0C1B9A1B3DBF7F00F24C85 /* Register.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB0C1B991B3DBF7F00F24C85 /* Register.storyboard */; };
 		EB0C1B9C1B3DBF9600F24C85 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B9B1B3DBF9600F24C85 /* RegisterViewController.swift */; };
+		EB0C1B9E1B3DE96400F24C85 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B9D1B3DE96400F24C85 /* MainTabBarController.swift */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEAE1A3334EC00D778DE /* shoppin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAC1A3334EC00D778DE /* shoppin.xcdatamodeld */; };
 		EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAF1A3334EC00D778DE /* ViewController.swift */; };
@@ -258,6 +259,7 @@
 		EB0C1B961B3DBD1300F24C85 /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		EB0C1B991B3DBF7F00F24C85 /* Register.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Register.storyboard; sourceTree = "<group>"; };
 		EB0C1B9B1B3DBF9600F24C85 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		EB0C1B9D1B3DE96400F24C85 /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -637,6 +639,7 @@
 				EB2F5D071A4A28DE00DBC4AF /* autosuggestions */,
 				EB55675B1A86231D00CD3EC6 /* common */,
 				EB2F5D141A4B37D700DBC4AF /* sidemenu */,
+				EB0C1B9D1B3DE96400F24C85 /* MainTabBarController.swift */,
 			);
 			name = shoppin_ios;
 			sourceTree = "<group>";
@@ -1248,6 +1251,7 @@
 				EB2F5D6D1A51C17200DBC4AF /* UIView.swift in Sources */,
 				EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */,
 				EB0C1B931B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
+				EB0C1B9E1B3DE96400F24C85 /* MainTabBarController.swift in Sources */,
 				EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */,
 				EB0C1B8F1B3DA97000F24C85 /* UserProvider.swift in Sources */,
 				EB2743DB1A3E3ACE00593AB0 /* CDProduct.swift in Sources */,
