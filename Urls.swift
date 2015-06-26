@@ -27,4 +27,5 @@ struct Urls {
     static let removeAll = host + "debug_clearAll"
     
     static let register = host + "register"
+    static let login = host + "login"
 }

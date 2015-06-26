@@ -10,7 +10,9 @@ import Foundation
 
 class ProviderFactory {
    
-    lazy var listItemProvider:ListItemProvider = ListItemProviderImpl()
+    lazy var listItemProvider: ListItemProvider = ListItemProviderImpl()
 
-    lazy var inventoryProvider:InventoryProvider = InventoryProviderImpl()
+    lazy var inventoryProvider: InventoryProvider = InventoryProviderImpl()
+    
+    lazy var userProvider: UserProvider = UserProviderImpl()
 }
