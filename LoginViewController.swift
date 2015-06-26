@@ -8,6 +8,12 @@
 
 import UIKit
 
+
+protocol LoginDelegate {
+    func onLoginSuccess()
+    func onLoginError()
+}
+
 class LoginViewController: UIViewController {
 
     let userProvider = ProviderFactory().userProvider
@@ -15,7 +21,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var userNameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
-    var onLoginSuccess: (() -> ())?
+    var delegate: LoginDelegate?
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -36,10 +42,10 @@ class LoginViewController: UIViewController {
         
         self.userProvider.login(loginData, handler: {try in
             if try.success ?? false {
-                self.onLoginSuccess?() ?? println("Warn: no login success block")
+                self.delegate?.onLoginSuccess() ?? println("Warn: no login delegate")
                 
             } else {
-                // show login error
+                self.delegate?.onLoginError() ?? println("Warn: no login delegate")
             }
         })
     }

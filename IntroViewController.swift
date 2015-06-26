@@ -8,7 +8,7 @@
 
 import UIKit
 
-class IntroViewController: UIViewController, RegisterDelegate {
+class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate {
 
     
     override func viewWillAppear(animated: Bool) {
@@ -18,6 +18,7 @@ class IntroViewController: UIViewController, RegisterDelegate {
     
     @IBAction func loginTapped(sender: UIButton) {
         let loginController = UIStoryboard.loginViewController()
+        loginController.delegate = self
         self.navigationController?.pushViewController(loginController, animated: true)
     }
 
@@ -44,6 +45,14 @@ class IntroViewController: UIViewController, RegisterDelegate {
     private func startMainStoryboard() {
         let tabController = UIStoryboard.mainTabController()
         self.navigationController?.setViewControllers([tabController], animated: true)
+    }
+    
+    func onLoginError() {
+        println("login error!") // TODO handle
+    }
+    
+    func onLoginSuccess() {
+        self.startMainStoryboard()
     }
 }
 
