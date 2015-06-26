@@ -12,9 +12,13 @@ import UIKit
 protocol LoginDelegate {
     func onLoginSuccess()
     func onLoginError()
+    
+    // LoginDelegate has register link, so the register event is forwarded to the container
+    func onRegisterFromLoginSuccess()
+    func onRegisterFromLoginError()
 }
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, RegisterDelegate {
 
     let userProvider = ProviderFactory().userProvider
     
@@ -48,5 +52,19 @@ class LoginViewController: UIViewController {
                 self.delegate?.onLoginError() ?? println("Warn: no login delegate")
             }
         })
+    }
+    
+    @IBAction func onRegisterTap(sender: UIButton) {
+        let registerController = UIStoryboard.registerViewController()
+        registerController.delegate = self
+        self.navigationController?.pushViewController(registerController, animated: true)
+    }
+    
+    func onRegisterSuccess() {
+        self.delegate?.onRegisterFromLoginSuccess() ?? println("Warn: no login delegate")
+    }
+    
+    func onRegisterError() {
+        self.delegate?.onRegisterFromLoginError() ?? println("Warn: no login delegate")
     }
 }

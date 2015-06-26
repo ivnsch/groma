@@ -14,7 +14,8 @@ extension UIStoryboard {
     class func introboard() -> UIStoryboard { return UIStoryboard(name: "Intro", bundle: NSBundle.mainBundle()) }
     class func loginStoryboard() -> UIStoryboard { return UIStoryboard(name: "Login", bundle: NSBundle.mainBundle()) }
     class func registerStoryboard() -> UIStoryboard { return UIStoryboard(name: "Register", bundle: NSBundle.mainBundle()) }
-    
+    class func userDetailsStoryboard() -> UIStoryboard { return UIStoryboard(name: "UserDetails", bundle: NSBundle.mainBundle()) }
+
     // MARK: - Main
     
     class func todoItemsViewController() -> ViewController {
@@ -55,5 +56,11 @@ extension UIStoryboard {
     
     class func registerViewController() -> RegisterViewController {
         return registerStoryboard().instantiateViewControllerWithIdentifier("RegisterController") as! RegisterViewController
+    }
+    
+    // MARK: - UserDetails
+    
+    class func userDetailsViewController() -> UserDetailsViewController {
+        return userDetailsStoryboard().instantiateViewControllerWithIdentifier("UserDetailsController") as! UserDetailsViewController
     }
 }

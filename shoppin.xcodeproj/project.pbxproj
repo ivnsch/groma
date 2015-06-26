@@ -24,7 +24,10 @@
 		EB0C1B971B3DBD1300F24C85 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB0C1B961B3DBD1300F24C85 /* Login.storyboard */; };
 		EB0C1B9A1B3DBF7F00F24C85 /* Register.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB0C1B991B3DBF7F00F24C85 /* Register.storyboard */; };
 		EB0C1B9C1B3DBF9600F24C85 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B9B1B3DBF9600F24C85 /* RegisterViewController.swift */; };
-		EB0C1B9E1B3DE96400F24C85 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B9D1B3DE96400F24C85 /* MainTabBarController.swift */; };
+		EB0C1BA01B3DF2B500F24C85 /* UserTabItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B9F1B3DF2B500F24C85 /* UserTabItemViewController.swift */; };
+		EB0C1BA31B3DF5EA00F24C85 /* UserDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB0C1BA21B3DF5EA00F24C85 /* UserDetails.storyboard */; };
+		EB0C1BA51B3DF5FB00F24C85 /* UserDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1BA41B3DF5FB00F24C85 /* UserDetailsViewController.swift */; };
+		EB0C1BA71B3DFD0800F24C85 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1BA61B3DFD0800F24C85 /* NSLayoutConstraint.swift */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEAE1A3334EC00D778DE /* shoppin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAC1A3334EC00D778DE /* shoppin.xcdatamodeld */; };
 		EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAF1A3334EC00D778DE /* ViewController.swift */; };
@@ -259,7 +262,10 @@
 		EB0C1B961B3DBD1300F24C85 /* Login.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
 		EB0C1B991B3DBF7F00F24C85 /* Register.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Register.storyboard; sourceTree = "<group>"; };
 		EB0C1B9B1B3DBF9600F24C85 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
-		EB0C1B9D1B3DE96400F24C85 /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		EB0C1B9F1B3DF2B500F24C85 /* UserTabItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTabItemViewController.swift; sourceTree = "<group>"; };
+		EB0C1BA21B3DF5EA00F24C85 /* UserDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = UserDetails.storyboard; sourceTree = "<group>"; };
+		EB0C1BA41B3DF5FB00F24C85 /* UserDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDetailsViewController.swift; sourceTree = "<group>"; };
+		EB0C1BA61B3DFD0800F24C85 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -433,8 +439,10 @@
 		EB0C1B841B3DA2DD00F24C85 /* user */ = {
 			isa = PBXGroup;
 			children = (
+				EB0C1BA11B3DF5CD00F24C85 /* userDetails */,
 				EB0C1B851B3DA2E500F24C85 /* login */,
 				EB0C1B981B3DBF6E00F24C85 /* register */,
+				EB0C1B9F1B3DF2B500F24C85 /* UserTabItemViewController.swift */,
 			);
 			name = user;
 			sourceTree = "<group>";
@@ -455,6 +463,15 @@
 				EB0C1B991B3DBF7F00F24C85 /* Register.storyboard */,
 			);
 			name = register;
+			sourceTree = "<group>";
+		};
+		EB0C1BA11B3DF5CD00F24C85 /* userDetails */ = {
+			isa = PBXGroup;
+			children = (
+				EB0C1BA41B3DF5FB00F24C85 /* UserDetailsViewController.swift */,
+				EB0C1BA21B3DF5EA00F24C85 /* UserDetails.storyboard */,
+			);
+			name = userDetails;
 			sourceTree = "<group>";
 		};
 		EB1DDE9C1A3334EC00D778DE = {
@@ -639,7 +656,6 @@
 				EB2F5D071A4A28DE00DBC4AF /* autosuggestions */,
 				EB55675B1A86231D00CD3EC6 /* common */,
 				EB2F5D141A4B37D700DBC4AF /* sidemenu */,
-				EB0C1B9D1B3DE96400F24C85 /* MainTabBarController.swift */,
 			);
 			name = shoppin_ios;
 			sourceTree = "<group>";
@@ -660,6 +676,7 @@
 				EB2F5D211A4C20E200DBC4AF /* UIViewController.swift */,
 				EB2F5D231A4C2B0600DBC4AF /* UIStoryboard.swift */,
 				EB2F5D6C1A51C17200DBC4AF /* UIView.swift */,
+				EB0C1BA61B3DFD0800F24C85 /* NSLayoutConstraint.swift */,
 				EB6A207C1ACC079000B9BCB2 /* UITableView.swift */,
 			);
 			name = extensions;
@@ -1060,6 +1077,7 @@
 				EB0C1B971B3DBD1300F24C85 /* Login.storyboard in Resources */,
 				EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */,
 				EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */,
+				EB0C1BA31B3DF5EA00F24C85 /* UserDetails.storyboard in Resources */,
 				EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */,
 				EB0C1B9A1B3DBF7F00F24C85 /* Register.storyboard in Resources */,
 			);
@@ -1251,7 +1269,6 @@
 				EB2F5D6D1A51C17200DBC4AF /* UIView.swift in Sources */,
 				EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */,
 				EB0C1B931B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
-				EB0C1B9E1B3DE96400F24C85 /* MainTabBarController.swift in Sources */,
 				EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */,
 				EB0C1B8F1B3DA97000F24C85 /* UserProvider.swift in Sources */,
 				EB2743DB1A3E3ACE00593AB0 /* CDProduct.swift in Sources */,
@@ -1262,6 +1279,7 @@
 				EB20FC051A599A500058103B /* InventoryViewController.swift in Sources */,
 				EBF162F01A3CA3530048E37C /* CDListItemProvider.swift in Sources */,
 				EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */,
+				EB0C1BA71B3DFD0800F24C85 /* NSLayoutConstraint.swift in Sources */,
 				EB2F5D771A557AB000DBC4AF /* List.swift in Sources */,
 				EBF377931B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
@@ -1272,6 +1290,7 @@
 				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
 				EB9BE41F1B2CB513005B401A /* RemoteProduct.swift in Sources */,
 				EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */,
+				EB0C1BA51B3DF5FB00F24C85 /* UserDetailsViewController.swift in Sources */,
 				EB2F5D261A4DE56B00DBC4AF /* DoneViewController.swift in Sources */,
 				EB89D33C1AD44BD400B6E0D0 /* Selectable.swift in Sources */,
 				EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */,
@@ -1279,6 +1298,7 @@
 				EB20FBF61A59701C0058103B /* CDInventoryItem.swift in Sources */,
 				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,
+				EB0C1BA01B3DF2B500F24C85 /* UserTabItemViewController.swift in Sources */,
 				EBF162DD1A3C82380048E37C /* DefaultTableViewController.swift in Sources */,
 				EBF162E51A3C85A30048E37C /* ListItemCell.swift in Sources */,
 				EB0C1B831B3D626500F24C85 /* IntroViewController.swift in Sources */,

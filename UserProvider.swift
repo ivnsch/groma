@@ -13,4 +13,6 @@ protocol UserProvider {
     func login(loginData: LoginData, handler: Try<Bool> -> ())
     
     func register(user: User, handler: Try<Bool> -> ())
+    
+    func logout(handler: Try<Bool> -> ())
 }

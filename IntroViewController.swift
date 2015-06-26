@@ -54,5 +54,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate {
     func onLoginSuccess() {
         self.startMainStoryboard()
     }
+    
+    func onRegisterFromLoginError() {
+        println("register error!") // TODO handle
+    }
+    
+    func onRegisterFromLoginSuccess() {
+        self.startMainStoryboard()
+    }
 }
 

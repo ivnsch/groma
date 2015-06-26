@@ -48,6 +48,18 @@ class RemoteUserProvider {
         }
     }
     
+    func logout(handler: Try<Bool> -> ()) {
+        Alamofire.request(.POST, Urls.register, encoding: .JSON).responseMyObject { (request, _, remoteResult: RemoteResult<NoOpSerializable>, error) in
+            if remoteResult.success {
+                handler(Try(true))
+                
+            } else {
+                println("Response error, status: \(remoteResult.status), message: \(remoteResult.errorMsg)")
+                handler(Try(remoteResult.error!))
+            }
+        }
+    }
+    
     
     func toRequestParams(user: User) -> [String: AnyObject] {
         return [

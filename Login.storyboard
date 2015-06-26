@@ -35,12 +35,23 @@
                                     <action selector="loginTapped:" destination="rg4-qz-Lat" eventType="touchUpInside" id="dgI-v3-ngY"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v0i-2j-jaS">
+                                <rect key="frame" x="272" y="190" width="57" height="30"/>
+                                <state key="normal" title="Register">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onRegisterTap:" destination="rg4-qz-Lat" eventType="touchUpInside" id="b1V-IP-ISq"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="EgA-OH-X0u" firstAttribute="top" secondItem="TsF-zg-FLy" secondAttribute="bottom" constant="18" id="1k1-lB-RYq"/>
                             <constraint firstAttribute="trailing" secondItem="Yt4-Ha-XoG" secondAttribute="trailing" constant="16" id="A7N-aN-EYy"/>
+                            <constraint firstItem="v0i-2j-jaS" firstAttribute="top" secondItem="EgA-OH-X0u" secondAttribute="bottom" constant="38" id="BHP-YC-cak"/>
                             <constraint firstItem="Yt4-Ha-XoG" firstAttribute="top" secondItem="Pdv-bE-LUR" secondAttribute="bottom" constant="10" id="Cmv-oP-f5o"/>
+                            <constraint firstAttribute="centerX" secondItem="v0i-2j-jaS" secondAttribute="centerX" id="EV7-Ej-izx"/>
                             <constraint firstItem="TsF-zg-FLy" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="16" id="Lko-r6-N2Y"/>
                             <constraint firstItem="TsF-zg-FLy" firstAttribute="top" secondItem="Yt4-Ha-XoG" secondAttribute="bottom" constant="14" id="bbt-tb-zJh"/>
                             <constraint firstAttribute="trailing" secondItem="TsF-zg-FLy" secondAttribute="trailing" constant="16" id="bnR-83-IbH"/>

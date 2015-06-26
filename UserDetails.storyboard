@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+    </dependencies>
+    <scenes>
+        <!--User Details View Controller-->
+        <scene sceneID="qCn-nu-Ry4">
+            <objects>
+                <viewController storyboardIdentifier="UserDetailsController" id="h7G-yZ-k7i" customClass="UserDetailsViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pJa-rp-3ws"/>
+                        <viewControllerLayoutGuide type="bottom" id="e08-Sl-Rs6"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="FsR-KS-FXf">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7vg-i2-1c4">
+                                <rect key="frame" x="276" y="35" width="49" height="30"/>
+                                <state key="normal" title="Logout">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onLogoutTap:" destination="h7G-yZ-k7i" eventType="touchUpInside" id="2IZ-Di-JNv"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="7vg-i2-1c4" firstAttribute="top" secondItem="pJa-rp-3ws" secondAttribute="bottom" constant="15" id="JMg-Om-NOK"/>
+                            <constraint firstAttribute="centerX" secondItem="7vg-i2-1c4" secondAttribute="centerX" id="v37-Nk-YTL"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uDG-wC-KnL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="221" y="455"/>
+        </scene>
+    </scenes>
+</document>
