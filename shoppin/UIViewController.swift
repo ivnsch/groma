@@ -21,4 +21,25 @@ extension UIViewController {
         
         viewController.didMoveToParentViewController(self)
     }
+    
+    func successHandler<T>(onSuccess: (T?) -> ()) -> ((providerResult: ProviderResult<T>) -> ()) {
+        return self.resultHandler(onSuccess: onSuccess, onError: nil)
+    }
+    
+    func resultHandler<T>(#onSuccess: (T?) -> (), onError: (() -> ())? = nil)(providerResult: ProviderResult<T>) {
+        
+        if providerResult.success {
+            onSuccess(providerResult.sucessResult)
+            
+        } else {
+            onError?() ?? {
+                let title = "todo"
+                let message = "todo"
+                
+                let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+                alert.addAction(UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: nil))
+                self.presentViewController(alert, animated: true, completion: nil)
+            }()
+        }
+    }
 }

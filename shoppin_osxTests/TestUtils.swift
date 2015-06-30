@@ -12,12 +12,31 @@ import Alamofire
 class TestUtils {
 
     class func withClearedDatabase(f: () -> ()) {
-        Alamofire.request(.GET, Urls.removeAll).responseString { (request, _, string: String?, error) in
-            expect(string).notTo(beNil())
+        
+        Alamofire.request(.GET, Urls.removeAll).responseMyObject { (request, _, remoteResult: RemoteResult<NoOpSerializable>, error) in
+            expect(remoteResult.status) == RemoteStatusCode.Success
             f()
         }
     }
 
+    class func testIfSuccessWithResult<T>(result: RemoteResult<T>) {
+        TestUtils.ifSuccessMustBeResultNotNil(result)
+        TestUtils.ifResultNotNilMustBeSuccess(result)
+    }
+    
+    class func ifSuccessMustBeResultNotNil<T>(result: RemoteResult<T>) {
+        if result.success {
+            expect(result.successResult).notTo(beNil())
+        }
+    }
+
+    // This should be always the case - all tests should make this check
+    class func ifResultNotNilMustBeSuccess<T>(result: RemoteResult<T>) {
+        if result.successResult != nil {
+            expect(result.success).to(beTrue())
+        }
+    }
+    
     class func testRemoteListValid(remoteList: RemoteList) {
         expect(remoteList.uuid).notTo(beEmpty())
         expect(remoteList.name).notTo(beEmpty())

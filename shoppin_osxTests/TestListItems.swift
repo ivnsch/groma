@@ -26,10 +26,11 @@ class TestListItems: XCTestCase {
             let firstList = List(uuid: NSUUID().UUIDString, name: "my-first-list")
             let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: firstList, order: 1)
             
-            self.remoteProvider.add(firstListItem, handler: {try in
-                expect(try.success).toNot(beNil())
+            self.remoteProvider.add(firstListItem, handler: {result in
+                expect(result.success).to(beTrue())
+                expect(result.successResult).toNot(beNil())
                 
-                if let remoteListItem = try.success {
+                if let remoteListItem = result.successResult {
                     println("test first list item is returned correctly")
                     TestUtils.testRemoteListItemWithDataValid(remoteListItem)
                     TestUtils.testRemoteListItemWithDataMatches(remoteListItem, firstListItem)
@@ -56,10 +57,10 @@ class TestListItems: XCTestCase {
             let firstList = List(uuid: NSUUID().UUIDString, name: "my-first-list")
             let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: firstList, order: 1)
             
-            self.remoteProvider.add(firstListItem, handler: {try in
-                expect(try.success).toNot(beNil())
+            self.remoteProvider.add(firstListItem, handler: {result in
+                expect(result.success).to(beTrue())
                 
-                if let remoteListItem = try.success {
+                if let remoteListItem = result.successResult {
                     println("test first list item is returned correctly")
                     TestUtils.testRemoteListItemWithDataMatches(remoteListItem, firstListItem)
                     
@@ -68,19 +69,19 @@ class TestListItems: XCTestCase {
                     let secondSection = Section(uuid: NSUUID().UUIDString, name: "my-second-section")
                     let secondList = List(uuid: NSUUID().UUIDString, name: "my-second-list")
                     let secondListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: secondProduct, section: secondSection, list: secondList, order: 2)
-                    self.remoteProvider.add(secondListItem, handler: {try in
-                        expect(try.success).toNot(beNil())
+                    self.remoteProvider.add(secondListItem, handler: {result in
+                        expect(result.success).to(beTrue())
                         
-                        if let remoteListItem = try.success {
+                        if let remoteListItem = result.successResult {
                             println("test second list item is returned correctly")
                             TestUtils.testRemoteListItemWithDataValid(remoteListItem)
                             TestUtils.testRemoteListItemWithDataMatches(remoteListItem, secondListItem)
                             
                             println("test lists are returned in GET, in correct order")
                             self.remoteProvider.listItems {try in
-                                expect(try.success).toNot(beNil())
+                                expect(try.success).to(beTrue())
                                 
-                                if let remoteListItems = try.success {
+                                if let remoteListItems = try.successResult {
                                     
                                     TestUtils.testRemoteListItemsValid(remoteListItems)
 
@@ -143,10 +144,10 @@ class TestListItems: XCTestCase {
             let firstList = List(uuid: NSUUID().UUIDString, name: "my-first-list")
             let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: firstList, order: 1)
             
-            self.remoteProvider.add(firstListItem, handler: {try in
-                expect(try.success).toNot(beNil())
+            self.remoteProvider.add(firstListItem, handler: {result in
+                expect(result.success).to(beTrue())
                 
-                if let remoteListItem = try.success {
+                if let remoteListItem = result.successResult {
                     println("test first list item is returned correctly")
                     TestUtils.testRemoteListItemWithDataValid(remoteListItem)
                     TestUtils.testRemoteListItemWithDataMatches(remoteListItem, firstListItem)
@@ -156,24 +157,23 @@ class TestListItems: XCTestCase {
                     let secondSection = Section(uuid: NSUUID().UUIDString, name: "my-second-section")
                     let secondList = List(uuid: NSUUID().UUIDString, name: "my-second-list")
                     let secondListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: secondProduct, section: secondSection, list: secondList, order: 2)
-                    self.remoteProvider.add(secondListItem, handler: {try in
-                        expect(try.success).toNot(beNil())
+                    self.remoteProvider.add(secondListItem, handler: {result in
+                        expect(result.success).to(beTrue())
                         
-                        if let remoteListItem = try.success {
+                        if let remoteListItem = result.successResult {
                             println("test second list item is returned correctly")
                             TestUtils.testRemoteListItemWithDataValid(remoteListItem)
                             TestUtils.testRemoteListItemWithDataMatches(remoteListItem, secondListItem)
 
                             println("remove first list item")
                             self.remoteProvider.remove(firstListItem, handler: {try in
-                                expect(try.success).toNot(beNil())
-                                expect(try.success ?? false).to(beTrue())
+                                expect(try.success).to(beTrue())
                                 
                                 println("test GET - only second list item should be there")
                                 self.remoteProvider.listItems {try in
-                                    expect(try.success).toNot(beNil())
+                                    expect(try.success).to(beTrue())
                                     
-                                    if let remoteListItems = try.success {
+                                    if let remoteListItems = try.successResult {
                                         
                                         TestUtils.testRemoteListItemsValid(remoteListItems)
 
@@ -233,10 +233,10 @@ class TestListItems: XCTestCase {
             let firstList = List(uuid: NSUUID().UUIDString, name: "my-first-list")
             let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: firstList, order: 1)
             
-            self.remoteProvider.add(firstListItem, handler: {try in
-                expect(try.success).toNot(beNil())
+            self.remoteProvider.add(firstListItem, handler: {result in
+                expect(result.success).to(beTrue())
                 
-                if let remoteListItem = try.success {
+                if let remoteListItem = result.successResult {
                     println("test first list item is returned correctly")
                     TestUtils.testRemoteListItemWithDataValid(remoteListItem)
                     TestUtils.testRemoteListItemWithDataMatches(remoteListItem, firstListItem)
@@ -246,14 +246,17 @@ class TestListItems: XCTestCase {
                     let secondSection = Section(uuid: NSUUID().UUIDString, name: "my-second-section")
                     let secondList = List(uuid: NSUUID().UUIDString, name: "my-second-list")
                     let secondListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: secondProduct, section: secondSection, list: secondList, order: 2)
-                    self.remoteProvider.add(secondListItem, handler: {try in
-                        expect(try.success).toNot(beNil())
+                    self.remoteProvider.add(secondListItem, handler: {result in
+                        expect(result.success).to(beTrue())
                         
-                        if let remoteListItem = try.success {
+                        if let remoteListItem = result.successResult {
                             println("test second list item is returned correctly")
+                            
+
+
                             TestUtils.testRemoteListItemWithDataValid(remoteListItem)
                             TestUtils.testRemoteListItemWithDataMatches(remoteListItem, secondListItem)
-                            
+
                             println("update first list item")
                             // TODO update relations here how handle??
                             let updatedFirstProduct = Product(uuid: firstProduct.uuid, name: "my-first-product-updated", price: 10.01)
@@ -263,18 +266,17 @@ class TestListItems: XCTestCase {
 //                            let updatedFirstList = List(uuid: firstList.uuid, name: "my-first-list-updated")
                             let updatedFirstSection = Section(uuid: NSUUID().UUIDString, name: "my-first-section-new")
                             let updatedFirstList = List(uuid: NSUUID().UUIDString, name: "my-first-list-new")
-                            
+//
                             let updatedFirstListItem = ListItem(uuid: firstListItem.uuid, done: true, quantity: 5, product: updatedFirstProduct, section: updatedFirstSection, list: updatedFirstList, order: 5)
                             
-                            self.remoteProvider.update(updatedFirstListItem, handler: {try in
-                                expect(try.success).toNot(beNil())
-                                expect(try.success ?? false).to(beTrue())
+                            self.remoteProvider.update(updatedFirstListItem, handler: {result in
+                                expect(result.success).to(beTrue())
                                 
                                 println("test GET - only second list item should be there")
                                 self.remoteProvider.listItems {try in
                                     expect(try.success).toNot(beNil())
                                     
-                                    if let remoteListItems = try.success {
+                                    if let remoteListItems = try.successResult {
                                         
                                         TestUtils.testRemoteListItemsValid(remoteListItems)
                                         

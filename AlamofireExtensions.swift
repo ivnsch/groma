@@ -12,8 +12,18 @@ import Alamofire
 enum RemoteStatusCode: Int {
     case Success = 1
     case AlreadyExists = 4
+    case NotFound = 5
     case Unknown = 100
-    case ParsingError = 101
+ 
+    case ParsingError = 10001
+}
+
+extension RemoteStatusCode : Printable {
+    var description: String { get {
+        switch self {
+        default: return "\(self.rawValue)"
+        }
+    }}
 }
 
 
@@ -42,19 +52,14 @@ public class NoOpSerializable: ResponseObjectSerializable {
 public class RemoteResult<T>: DebugPrintable {
     
     let status: RemoteStatusCode
-    let sucessResult: T?
+    
+    // Callers can assume that if successResult != nil, status == .Success. If the reponse's status is != .Success no data will be parsed and subsequently successResult not set.
+    let successResult: T?
+    
     let errorMsg: String?
     
     var success: Bool {
         return self.status == .Success
-    }
-    
-    var error: NSError? {
-        if !self.success {
-            return NSError(domain: "remote", code: self.status.rawValue, userInfo: ["msg": self.errorMsg ?? ""])
-        } else {
-            return nil
-        }
     }
     
     convenience init(status: RemoteStatusCode, sucessResult: T) {
@@ -71,19 +76,51 @@ public class RemoteResult<T>: DebugPrintable {
     
     private init(status: RemoteStatusCode, sucessResult: T?, errorMsg: String?) {
         self.status = status
-        self.sucessResult = sucessResult
+        self.successResult = sucessResult
         self.errorMsg = errorMsg
     }
     
     public var debugDescription: String {
-        return "{\(self.dynamicType) status: \(self.status), model: \(self.sucessResult), errorMsg: \(self.errorMsg)}"
+        return "{\(self.dynamicType) status: \(self.status), model: \(self.successResult), errorMsg: \(self.errorMsg)}"
     }
 }
 
 
 extension Alamofire.Request {
 
+    public func responseMyArray<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest, NSHTTPURLResponse?, RemoteResult<[T]>, NSError?) -> Void) -> Self {
+
+        let dataParser: (AnyObject, NSHTTPURLResponse) -> ([T]?) = {data, response in
+            var objs = [T]()
+            for obj in data as! [AnyObject] {
+                if let obj = T(response: response, representation: obj) {
+                    objs.append(obj)
+                    
+                } else {
+                    println("Error parsing obj: \(obj)")
+                    return nil
+                }
+            }
+            return objs
+        }
+        
+        return self.responseHandler(dataParser, completionHandler: completionHandler)
+    }
+    
+    
     public func responseMyObject<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest, NSHTTPURLResponse?, RemoteResult<T>, NSError?) -> Void) -> Self {
+        
+        let dataParser: (AnyObject, NSHTTPURLResponse) -> (T?) = {data, response in
+            return T(response: response, representation: data)
+        }
+        
+        return self.responseHandler(dataParser, completionHandler: completionHandler)
+    }
+    
+    
+    // Common method to parse json object and array
+    private func responseHandler<T>(dataParser: (AnyObject, NSHTTPURLResponse) -> (T?), completionHandler: (NSURLRequest, NSHTTPURLResponse?, RemoteResult<T>, NSError?) -> Void) -> Self {
+        
         let serializer: Serializer = { (request, response, data) in
             
             println("response: \(response)")
@@ -101,7 +138,7 @@ extension Alamofire.Request {
                         
                         if let data: AnyObject = JSON!.valueForKeyPath("data") {
                             
-                            if let sucessResult = T(response: response!, representation: data) {
+                            if let sucessResult = dataParser(data, response!) {
                                 let remoteResult = RemoteResult(status: status, sucessResult: sucessResult)
                                 return (remoteResult, nil)
                                 
@@ -117,7 +154,7 @@ extension Alamofire.Request {
                             let remoteResult = RemoteResult<T>(status: status)
                             return (remoteResult, nil)
                         }
-
+                        
                         
                     } else {
                         let remoteResult = RemoteResult<T>(status: status)
@@ -140,29 +177,8 @@ extension Alamofire.Request {
         return response(serializer: serializer, completionHandler: { (request, response, object, error) in
             completionHandler(request, response, object as! RemoteResult<T>, error)
         })
-    }
-
-    
-    public func responseObject<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest, NSHTTPURLResponse?, T?, NSError?) -> Void) -> Self {
-        let serializer: Serializer = { (request, response, data) in
-            
-            println("response: \(response)")
-            
-            let JSONSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
-            let (JSON: AnyObject?, serializationError) = JSONSerializer(request, response, data)
-            
-            println("JSON: \(JSON)")
-            
-            if response != nil && JSON != nil {
-                return (T(response: response!, representation: JSON!), nil)
-            } else {
-                return (nil, serializationError)
-            }
-        }
         
-        return response(serializer: serializer, completionHandler: { (request, response, object, error) in
-            completionHandler(request, response, object as? T, error)
-        })
+        
     }
 }
 

@@ -43,15 +43,13 @@ class LoginViewController: UIViewController, RegisterDelegate {
         let password = passwordField.text
         
         let loginData = LoginData(email: email, password: password)
-        
-        self.userProvider.login(loginData, handler: {try in
-            if try.success ?? false {
+
+        self.userProvider.login(loginData, resultHandler(onSuccess: {result in
                 self.delegate?.onLoginSuccess() ?? println("Warn: no login delegate")
-                
-            } else {
-                self.delegate?.onLoginError() ?? println("Warn: no login delegate")
-            }
-        })
+            
+        }, onError: {
+            self.delegate?.onLoginError() ?? println("Warn: no login delegate")
+        }))
     }
     
     @IBAction func onRegisterTap(sender: UIButton) {

@@ -28,6 +28,12 @@
 		EB0C1BA31B3DF5EA00F24C85 /* UserDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB0C1BA21B3DF5EA00F24C85 /* UserDetails.storyboard */; };
 		EB0C1BA51B3DF5FB00F24C85 /* UserDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1BA41B3DF5FB00F24C85 /* UserDetailsViewController.swift */; };
 		EB0C1BA71B3DFD0800F24C85 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1BA61B3DFD0800F24C85 /* NSLayoutConstraint.swift */; };
+		EB0C1BA91B3EC00700F24C85 /* ProviderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1BA81B3EC00700F24C85 /* ProviderResult.swift */; };
+		EB0C1BAA1B3ED8D500F24C85 /* ProviderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1BA81B3EC00700F24C85 /* ProviderResult.swift */; };
+		EB0C1BAB1B3ED8D600F24C85 /* ProviderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1BA81B3EC00700F24C85 /* ProviderResult.swift */; };
+		EB0C1BAD1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1BAC1B3F33CE00F24C85 /* remoteResultHandler.swift */; };
+		EB0C1BAE1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1BAC1B3F33CE00F24C85 /* remoteResultHandler.swift */; };
+		EB0C1BAF1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1BAC1B3F33CE00F24C85 /* remoteResultHandler.swift */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEAE1A3334EC00D778DE /* shoppin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAC1A3334EC00D778DE /* shoppin.xcdatamodeld */; };
 		EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAF1A3334EC00D778DE /* ViewController.swift */; };
@@ -266,6 +272,8 @@
 		EB0C1BA21B3DF5EA00F24C85 /* UserDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = UserDetails.storyboard; sourceTree = "<group>"; };
 		EB0C1BA41B3DF5FB00F24C85 /* UserDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDetailsViewController.swift; sourceTree = "<group>"; };
 		EB0C1BA61B3DFD0800F24C85 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
+		EB0C1BA81B3EC00700F24C85 /* ProviderResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderResult.swift; sourceTree = "<group>"; };
+		EB0C1BAC1B3F33CE00F24C85 /* remoteResultHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = remoteResultHandler.swift; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -885,6 +893,7 @@
 				EBF162F91A3CA54F0048E37C /* ListItemProvider.swift */,
 				EB20FBFB1A5972A30058103B /* InventoryProvider.swift */,
 				EB0C1B8E1B3DA97000F24C85 /* UserProvider.swift */,
+				EB0C1BA81B3EC00700F24C85 /* ProviderResult.swift */,
 			);
 			name = provider;
 			path = ..;
@@ -914,6 +923,7 @@
 				EBF162E81A3CA1F00048E37C /* ListItemProviderImpl.swift */,
 				EB20FBFD1A5972C70058103B /* InventoryProviderImpl.swift */,
 				EB0C1B921B3DA9D100F24C85 /* UserProviderImpl.swift */,
+				EB0C1BAC1B3F33CE00F24C85 /* remoteResultHandler.swift */,
 			);
 			name = impl;
 			sourceTree = "<group>";
@@ -1254,6 +1264,7 @@
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
 				EB0C1B881B3DA37100F24C85 /* LoginViewController.swift in Sources */,
+				EB0C1BAD1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
 				EB9BE4191B2CB355005B401A /* RemoteListItems.swift in Sources */,
 				EBF162FD1A3DDE5D0048E37C /* ProductMapper.swift in Sources */,
 				EB20FBFA1A5971C20058103B /* InventoryItemMapper.swift in Sources */,
@@ -1326,6 +1337,7 @@
 				EB4FD45B1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EBF162F71A3CA5030048E37C /* ListItemProviderMock.swift in Sources */,
 				EB2F5D6F1A530FBC00DBC4AF /* Float.swift in Sources */,
+				EB0C1BA91B3EC00700F24C85 /* ProviderResult.swift in Sources */,
 				EB20FC001A5973330058103B /* CDInventoryProvider.swift in Sources */,
 				EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */,
 				EBF377971B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
@@ -1356,6 +1368,7 @@
 				EB4FD45C1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EB9F6CE91A8610550038355B /* ViewController.swift in Sources */,
 				EB9BE42B1B2DFC87005B401A /* RemoteListItemWithData.swift in Sources */,
+				EB0C1BAA1B3ED8D500F24C85 /* ProviderResult.swift in Sources */,
 				EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */,
 				EB5567611A86437B00CD3EC6 /* SectionMapper.swift in Sources */,
 				EBDFE3A71ACE829400E48F95 /* CellManager.swift in Sources */,
@@ -1405,6 +1418,7 @@
 				EB5567801A8658B000CD3EC6 /* CDProvider.swift in Sources */,
 				EB5567641A86438600CD3EC6 /* CDProduct.swift in Sources */,
 				EBDFE3C21AD00E8200E48F95 /* DialogUtils.swift in Sources */,
+				EB0C1BAE1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
 				EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */,
 				EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */,
 				EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */,
@@ -1432,6 +1446,7 @@
 				EBF3777F1B342B3A00EEB6DB /* Array.swift in Sources */,
 				EBF377681B342AA100EEB6DB /* RemoteList.swift in Sources */,
 				EBF377791B342B1100EEB6DB /* Product.swift in Sources */,
+				EB0C1BAB1B3ED8D600F24C85 /* ProviderResult.swift in Sources */,
 				EBF3775E1B342A4900EEB6DB /* InventoryProviderImpl.swift in Sources */,
 				EBF377751B342AF900EEB6DB /* CDListItem.swift in Sources */,
 				EBF377771B342B0200EEB6DB /* CDList.swift in Sources */,
@@ -1467,6 +1482,7 @@
 				EBF377761B342AFD00EEB6DB /* CDSection.swift in Sources */,
 				EBF3775B1B3423C200EEB6DB /* Try.swift in Sources */,
 				EBF377671B342A9A00EEB6DB /* RemoteProduct.swift in Sources */,
+				EB0C1BAF1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
 				EBF377821B342B4800EEB6DB /* Globals.swift in Sources */,
 				EB0C1B951B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
 			);
@@ -1685,7 +1701,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0F90ABEE48670685CDFFFF36 /* Pods-shoppin_osxTests.debug.xcconfig */;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -1701,7 +1716,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "shoppin-Bridging-Header-tests.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/shoppin_osx.app/Contents/MacOS/shoppin_osx";
 			};
 			name = Debug;
 		};
@@ -1709,7 +1723,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F0450DFB9EA44C2CE78F6DE2 /* Pods-shoppin_osxTests.release.xcconfig */;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1722,7 +1735,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "shoppin-Bridging-Header-tests.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/shoppin_osx.app/Contents/MacOS/shoppin_osx";
 			};
 			name = Release;
 		};

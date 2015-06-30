@@ -32,8 +32,9 @@ class ListItemProviderImpl: ListItemProvider {
                 dbListItemsMaybe = listItems
             }
             
-            self.remoteProvider.listItems(list: list) {remoteTry in
-                if let remoteListItems = remoteTry.success {
+            self.remoteProvider.listItems(list: list) {remoteResult in
+                
+                if let remoteListItems = remoteResult.successResult {
                     
                     let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems)
                     
@@ -88,9 +89,9 @@ class ListItemProviderImpl: ListItemProvider {
         
         // for now do remote first. Imagine we do coredata first, user adds the list and then a lot of items to it and server fails. The list with all items will be lost in next sync.
         // we can do special handling though, like show an error message when server fails and remove the list which was just added, and/or retry server. Or use a flag "synched = false" which tells us that these items should not be removed on sync, similar to items which were added offline. Etc.
-        self.remoteProvider.add(listItem, handler: {try in
+        self.remoteProvider.add(listItem, handler: {remoteResult in
             
-            if let remoteListItem = try.success {
+            if let remoteListItem = remoteResult.successResult {
                 self.cdProvider.saveListItem(listItem, handler: {try in // currently the item returned by server is identically to the one we sent, so we just save our local item
                     if let cdListItem = try.success {
                         let listItem = ListItemMapper.listItemWithCD(cdListItem)
@@ -194,9 +195,10 @@ class ListItemProviderImpl: ListItemProvider {
                 dbListsMaybe = lists
             }
             
-            self.remoteProvider.lists{remoteTry in
-                if let remoteLists = remoteTry.success {
+            
+            self.remoteProvider.lists {remoteResult in
                     
+                if let remoteLists = remoteResult.successResult {
                     let lists: [List] = remoteLists.map{ListMapper.ListWithRemote($0)}
                     
                     // if there's no cached list or there's a difference, overwrite the cached list
@@ -217,6 +219,10 @@ class ListItemProviderImpl: ListItemProvider {
                             }
                         }
                     }
+                    
+                } else {
+                    println("Error: invalid state: success response but remote lists is nil")
+                    // TODO return error to client
                 }
             }
         }
@@ -237,9 +243,9 @@ class ListItemProviderImpl: ListItemProvider {
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
         // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
-        self.remoteProvider.add(list, handler: {remoteTry in
+        self.remoteProvider.add(list, handler: {remoteResult in
      
-            if let remoteList = remoteTry.success {
+            if let remoteList = remoteResult.successResult {
                 
                 let list = ListMapper.ListWithRemote(remoteList)
                 
@@ -251,7 +257,7 @@ class ListItemProviderImpl: ListItemProvider {
                 })
                 
             } else {
-                println("error adding the remote list: \(remoteTry.error)")
+                println("error adding the remote list: \(remoteResult)")
             }
         })
     }

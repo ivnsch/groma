@@ -10,9 +10,9 @@ import Foundation
 
 protocol UserProvider {
    
-    func login(loginData: LoginData, handler: Try<Bool> -> ())
+    func login(loginData: LoginData, _ handler: ProviderResult<Any> -> ())
     
-    func register(user: User, handler: Try<Bool> -> ())
+    func register(user: User, _ handler: ProviderResult<Any> -> ())
     
-    func logout(handler: Try<Bool> -> ())
+    func logout(handler: ProviderResult<Any> -> ())
 }

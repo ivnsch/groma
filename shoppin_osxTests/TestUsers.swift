@@ -28,14 +28,10 @@ class TestUsers: XCTestCase {
                 expect(try.success).toNot(beNil())
                 expect(try.success ?? false).to(beTrue())
 
-                self.remoteProvider.register(user, handler: {try in
+                self.remoteProvider.register(user, handler: {remoteResult in
                     
-                    expect(try.success).to(beNil())
-                    expect(try.error).toNot(beNil())
-                    
-                    let status = RemoteStatusCode(rawValue: try.error!.code)
-                    expect(status).toNot(beNil())
-                    expect(status) == RemoteStatusCode.AlreadyExists
+                    expect(remoteResult.status) == RemoteStatusCode.AlreadyExists
+                    expect(remoteResult.success).to(beFalse())
                     
                     expectation.fulfill()
                 })

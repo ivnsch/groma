@@ -10,144 +10,78 @@ import Foundation
 import Alamofire
 
 class RemoteListItemProvider {
-
     
-    func products(handler: Try<[RemoteProduct]> -> ()) {
-        Alamofire.request(.GET, Urls.products).responseCollection { (request, _, products: [RemoteProduct]?, error) in
-            if let products = products {
-                println("received products: \(products)")
-                handler(Try(products))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+    func products(handler: RemoteResult<[RemoteProduct]> -> ()) {
+        Alamofire.request(.GET, Urls.products).responseMyArray { (request, _, result: RemoteResult<[RemoteProduct]>, error) in
+            handler(result)
         }
     }
     
-    func sections(handler: Try<[RemoteSection]> -> ()) {
-        Alamofire.request(.GET, Urls.sections).responseCollection { (request, _, sections: [RemoteSection]?, error) in
-            if let sections = sections {
-                println("received sections: \(sections)")
-                handler(Try(sections))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+    func sections(handler: RemoteResult<[RemoteSection]> -> ()) {
+        Alamofire.request(.GET, Urls.sections).responseMyArray { (request, _, result: RemoteResult<[RemoteSection]>, error) in
+            handler(result)
         }
     }
 
     
-    func lists(handler: Try<[RemoteList]> -> ()) {
-        Alamofire.request(.GET, Urls.lists).responseCollection { (request, _, lists: [RemoteList]?, error) in
-            if let lists = lists {
-                println("received lists: \(lists)")
-                handler(Try(lists))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+    func lists(handler: RemoteResult<[RemoteList]> -> ()) {
+        Alamofire.request(.GET, Urls.lists).responseMyArray { (request, _, result: RemoteResult<[RemoteList]>, error) in
+            handler(result)
         }
     }
 
-    func listItems(#list: List, handler: Try<RemoteListItems> -> ()) {
-        Alamofire.request(.GET, Urls.listItems, parameters: ["list": list.uuid]).responseObject { (request, _, listItems: RemoteListItems?, error) in
-            if let listItems = listItems {
-                println("received listItems: \(listItems)")
-                handler(Try(listItems))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+    func listItems(#list: List, handler: RemoteResult<RemoteListItems> -> ()) {
+        Alamofire.request(.GET, Urls.listItems, parameters: ["list": list.uuid]).responseMyObject { (request, _, result: RemoteResult<RemoteListItems>, error) in
+            handler(result)
         }
     }
     
-    func listItems(handler: Try<RemoteListItems> -> ()) {
-        Alamofire.request(.GET, Urls.allListItems).responseObject { (request, _, listItems: RemoteListItems?, error) in
-            if let listItems = listItems {
-                println("received listItems: \(listItems)")
-                handler(Try(listItems))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+    func listItems(handler: RemoteResult<RemoteListItems> -> ()) {
+        Alamofire.request(.GET, Urls.allListItems).responseMyObject { (request, _, result: RemoteResult<RemoteListItems>, error) in
+            handler(result)
         }
     }
     
-    func remove(listItem: ListItem, handler: Try<Bool> -> ()) {
-        Alamofire.request(.DELETE, Urls.listItem + "/\(listItem.uuid)").responseString { (request, _, string, error) in
-            if let success = string?.boolValue {
-                handler(Try(success))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+    func remove(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
+        Alamofire.request(.DELETE, Urls.listItem + "/\(listItem.uuid)").responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
+            handler(result)
         }
     }
     
-    func remove(section: Section, handler: Try<Bool> -> ()) {
-        Alamofire.request(.DELETE, Urls.section + "/\(section.uuid)").responseString { (request, _, string, error) in
-            if let success = string?.boolValue {
-                handler(Try(success))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+    func remove(section: Section, handler: RemoteResult<NoOpSerializable> -> ()) {
+        Alamofire.request(.DELETE, Urls.section + "/\(section.uuid)").responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
+            handler(result)
         }
     }
     
-    func remove(list: List, handler: Try<Bool> -> ()) {
-        Alamofire.request(.DELETE, Urls.list + "/\(list.uuid)").responseString { (request, _, string, error) in
-            if let success = string?.boolValue {
-                handler(Try(success))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+    func remove(list: List, handler: RemoteResult<NoOpSerializable> -> ()) {
+        Alamofire.request(.DELETE, Urls.list + "/\(list.uuid)").responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
+            handler(result)
         }
     }
     
-    func update(list: List, handler: Try<Bool> -> ()) {
+    func update(list: List, handler: RemoteResult<NoOpSerializable> -> ()) {
         let parameters = self.toRequestParams(list)
-        Alamofire.request(.PUT, Urls.list, parameters: parameters, encoding: .JSON).responseString { (request, _, string, error) in
-            if let success = string?.boolValue {
-                handler(Try(success))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+        Alamofire.request(.PUT, Urls.list, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
+            handler(result)
         }
     }
     
-    func add(listItem: ListItem, handler: Try<RemoteListItemWithData> -> ()) {
-        
+    func add(listItem: ListItem, handler: RemoteResult<RemoteListItemWithData> -> ()) {
         let parameters = self.toRequestParams(listItem)
-        
-        Alamofire.request(.POST, Urls.addListItem, parameters: parameters, encoding: .JSON).responseObject { (request, _, listItem: RemoteListItemWithData?, error) in
-            if let listItem = listItem {
-                println("received listItems: \(listItem)")
-                handler(Try(listItem))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+        Alamofire.request(.POST, Urls.addListItem, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, result: RemoteResult<RemoteListItemWithData>, error) in
+            handler(result)
         }
     }
     
-    func update(listItem: ListItem, handler: Try<Bool> -> ()) {
-        
+    func update(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
         let parameters = self.toRequestParams(listItem)
-        
-        Alamofire.request(.PUT, Urls.listItem, parameters: parameters, encoding: .JSON).responseString { (request, _, string, error) in
-            if let success = string?.boolValue {
-                handler(Try(success))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+        Alamofire.request(.PUT, Urls.listItem, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
+            handler(result)
         }
     }
     
-    func update(listItems: [ListItem], handler: Try<Bool> -> ()) {
+    func update(listItems: [ListItem], handler: RemoteResult<NoOpSerializable> -> ()) {
         let request = NSMutableURLRequest(URL: NSURL(string: Urls.listItems)!)
         request.HTTPMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -157,58 +91,37 @@ class RemoteListItemProvider {
         var error: NSError?
         request.HTTPBody = NSJSONSerialization.dataWithJSONObject(values, options: nil, error: &error)
         
-        Alamofire.request(request).responseString {request, _, string, error in
-            if let success = string?.boolValue {
-                handler(Try(success))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+        Alamofire.request(request).responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>, error) in
+            handler(result)
         }
     }
     
-    func add(list: List, handler: Try<RemoteList> -> ()) {
+    func add(list: List, handler: RemoteResult<RemoteList> -> ()) {
         let parameters = [
             "uuid": list.uuid,
             "name": list.name
         ]
         
-        Alamofire.request(.POST, Urls.list, parameters: parameters, encoding: .JSON).responseObject { (request, _, list: RemoteList?, error) in
-            if let list = list {
-                println("received listItems: \(list)")
-                handler(Try(list))
-            } else {
-                println("Response error: \(error), request: \(request)")
-            }
+        Alamofire.request(.POST, Urls.list, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, result: RemoteResult<RemoteList>, error) in
+            handler(result)
         }
     }
 
-    func add(section: Section, handler: Try<RemoteSection> -> ()) {
+    func add(section: Section, handler: RemoteResult<RemoteSection> -> ()) {
         let parameters = [
             "uuid": section.uuid,
             "name": section.name
         ]
         
-        Alamofire.request(.POST, Urls.section, parameters: parameters, encoding: .JSON).responseObject { (request, _, section: RemoteSection?, error) in
-            if let section = section {
-                println("received listItems: \(section)")
-                handler(Try(section))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+        Alamofire.request(.POST, Urls.section, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, result: RemoteResult<RemoteSection>, error) in
+            handler(result)
         }
     }
     
     
-    func list(listId: String, handler: Try<RemoteList> -> ()) {
-        Alamofire.request(.GET, Urls.list).responseObject { (request, _, list: RemoteList?, error) in
-            if let list = list {
-                handler(Try(list))
-            } else {
-                println("Response error: \(error), request: \(request)")
-                handler(Try(error ?? NSError()))
-            }
+    func list(listId: String, handler: RemoteResult<RemoteList> -> ()) {
+        Alamofire.request(.GET, Urls.list).responseMyObject { (request, _, result: RemoteResult<RemoteList>, error) in
+            handler(result)
         }
     }
     
@@ -228,16 +141,16 @@ class RemoteListItemProvider {
             "uuid": listItem.uuid,
             "done": listItem.done,
             "quantity": listItem.quantity,
-            "product": [
+            "productInput": [
                 "uuid": listItem.product.uuid,
                 "name": listItem.product.name,
                 "price": listItem.product.price,
             ],
-            "list": [
+            "listInput": [
                 "uuid": listItem.list.uuid,
                 "name": listItem.list.name
             ],
-            "section": [
+            "sectionInput": [
                 "uuid": listItem.section.uuid,
                 "name": listItem.section.name
             ],

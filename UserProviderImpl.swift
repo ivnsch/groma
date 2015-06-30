@@ -12,15 +12,16 @@ class UserProviderImpl: UserProvider {
    
     let remoteProvider = RemoteUserProvider()
     
-    func login(loginData: LoginData, handler: Try<Bool> -> ()) {
-        self.remoteProvider.login(loginData, handler: handler)
+    
+    func login(loginData: LoginData, _ handler: ProviderResult<Any> -> ()) {
+        self.remoteProvider.login(loginData, handler: remoteResultHandler(handler))
     }
     
-    func register(user: User, handler: Try<Bool> -> ()) {
-        self.remoteProvider.register(user, handler: handler)
+    func register(user: User, _ handler: ProviderResult<Any> -> ()) {
+        self.remoteProvider.register(user, handler: remoteResultHandler(handler))
     }
     
-    func logout(handler: Try<Bool> -> ()) {
-        self.remoteProvider.logout(handler)
+    func logout(handler: ProviderResult<Any> -> ()) {
+        self.remoteProvider.logout(remoteResultHandler(handler))
     }
 }

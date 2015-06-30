@@ -36,14 +36,11 @@ class RegisterViewController: UIViewController {
         
         let user = User(email: emailField.text, password: passwordField.text, firstName: firstNameField.text, lastName: lastNameField.text)
         
-        self.userProvider.register(user, handler: {try in
+        self.userProvider.register(user, resultHandler(onSuccess: {result in
+            self.delegate?.onRegisterSuccess() ?? println("Warn: no register delegate")
             
-            if try.success ?? false {
-                self.delegate?.onRegisterSuccess() ?? println("Warn: no register delegate")
-                
-            } else {
+            }, onError: {
                 self.delegate?.onRegisterError() ?? println("Warn: no register delegate")
-            }
-        })
+        }))
     }
 }

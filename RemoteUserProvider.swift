@@ -12,9 +12,8 @@ import Alamofire
 class RemoteUserProvider {
     
     // TODO refactor providers to return remoteresult. mapping to try and NSError seems nonsensical
-
     
-    func login(loginData: LoginData, handler: Try<Bool> -> ()) {
+    func login(loginData: LoginData, handler: RemoteResult<NoOpSerializable> -> ()) {
         
         let parameters = [
             "email": loginData.email,
@@ -22,41 +21,23 @@ class RemoteUserProvider {
         ]
         
         Alamofire.request(.POST, Urls.register, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, remoteResult: RemoteResult<NoOpSerializable>, error) in
-            if remoteResult.success {
-                handler(Try(true))
-                
-            } else {
-                println("Response error, status: \(remoteResult.status), message: \(remoteResult.errorMsg)")
-                handler(Try(remoteResult.error!))
-            }
+            handler(remoteResult)
         }
     }
     
     
-    func register(user: User, handler: Try<Bool> -> ()) {
+    func register(user: User, handler: RemoteResult<NoOpSerializable> -> ()) {
         
         let parameters = self.toRequestParams(user)
         
         Alamofire.request(.POST, Urls.register, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, remoteResult: RemoteResult<NoOpSerializable>, error) in
-            if remoteResult.success {
-                handler(Try(true))
-                
-            } else {
-                println("Response error, status: \(remoteResult.status), message: \(remoteResult.errorMsg)")
-                handler(Try(remoteResult.error!))
-            }
+            handler(remoteResult)
         }
     }
     
-    func logout(handler: Try<Bool> -> ()) {
+    func logout(handler: RemoteResult<NoOpSerializable> -> ()) {
         Alamofire.request(.POST, Urls.register, encoding: .JSON).responseMyObject { (request, _, remoteResult: RemoteResult<NoOpSerializable>, error) in
-            if remoteResult.success {
-                handler(Try(true))
-                
-            } else {
-                println("Response error, status: \(remoteResult.status), message: \(remoteResult.errorMsg)")
-                handler(Try(remoteResult.error!))
-            }
+            handler(remoteResult)
         }
     }
     
