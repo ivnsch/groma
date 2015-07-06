@@ -100,6 +100,31 @@ public class RemoteResult<T>: DebugPrintable {
     }
 }
 
+// This would have been an extension if "Alamofire" wasn't only a namespace...
+// The idea was to be called like Alamofire.request
+struct AlamofireHelper {
+    
+    static func authenticatedRequest(method: Alamofire.Method, _ url: String, _ parameters: [String: AnyObject]? = nil) -> Request {
+     
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+        
+        let maybeToken = valet?.stringForKey(KeychainKeys.token)
+        
+        var mutableURLRequest = NSMutableURLRequest(URL: NSURL(string: url)!)
+        mutableURLRequest.HTTPMethod = method.rawValue
+        
+        if let token = maybeToken {
+            mutableURLRequest.setValue(token, forHTTPHeaderField: "X-Auth-Token")
+        } // TODO if there's no token return status code to direct to login controller or something
+        
+        // TODO: server: when encoding is not supported the response is nil! It should send a valid response. Happened testing listItems (GET) with JSON encoding
+        let encoding = method == .GET ? Alamofire.ParameterEncoding.URL : Alamofire.ParameterEncoding.JSON
+            
+        let request: NSURLRequest = encoding.encode(mutableURLRequest, parameters: parameters).0
+        
+        return Alamofire.request(request)
+    }
+}
 
 extension Alamofire.Request {
 

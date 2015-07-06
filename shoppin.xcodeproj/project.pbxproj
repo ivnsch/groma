@@ -122,6 +122,7 @@
 		EB6F81321B4717C2008680E0 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81311B4717C2008680E0 /* KeychainKeys.swift */; };
 		EB6F81331B4717C2008680E0 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81311B4717C2008680E0 /* KeychainKeys.swift */; };
 		EB6F81341B4717C2008680E0 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81311B4717C2008680E0 /* KeychainKeys.swift */; };
+		EB6F81661B4B1CDC008680E0 /* TestRequiresAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81631B4B1CDC008680E0 /* TestRequiresAuthentication.swift */; };
 		EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB703FE11B3B5F3A001586C5 /* Intro.storyboard */; };
 		EB7E8B611B2ADF620090409A /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
 		EB7E8B621B2ADF9A0090409A /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
@@ -340,6 +341,7 @@
 		EB6D93A71B1C8CE500ED8999 /* HandlingTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlingTableView.swift; sourceTree = "<group>"; };
 		EB6F812C1B46E2C4008680E0 /* RemoteLoginResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteLoginResult.swift; sourceTree = "<group>"; };
 		EB6F81311B4717C2008680E0 /* KeychainKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainKeys.swift; sourceTree = "<group>"; };
+		EB6F81631B4B1CDC008680E0 /* TestRequiresAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestRequiresAuthentication.swift; sourceTree = "<group>"; };
 		EB703FE11B3B5F3A001586C5 /* Intro.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Intro.storyboard; sourceTree = "<group>"; };
 		EB7E8B601B2ADF620090409A /* Try.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Try.swift; sourceTree = "<group>"; };
 		EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
@@ -779,6 +781,7 @@
 				EBF377281B341B6900EEB6DB /* RemoteListItemProviderSpec.swift */,
 				EBF3778A1B357F1800EEB6DB /* TestLists.swift */,
 				EBF3778E1B35808900EEB6DB /* TestListItems.swift */,
+				EB6F81631B4B1CDC008680E0 /* TestRequiresAuthentication.swift */,
 				EBF377901B38A80100EEB6DB /* TestUsers.swift */,
 				EBF3778C1B357FA100EEB6DB /* TestUtils.swift */,
 			);
@@ -1469,6 +1472,7 @@
 				EBF3777F1B342B3A00EEB6DB /* Array.swift in Sources */,
 				EBF377681B342AA100EEB6DB /* RemoteList.swift in Sources */,
 				EBF377791B342B1100EEB6DB /* Product.swift in Sources */,
+				EB6F81661B4B1CDC008680E0 /* TestRequiresAuthentication.swift in Sources */,
 				EB0C1BAB1B3ED8D600F24C85 /* ProviderResult.swift in Sources */,
 				EBF3775E1B342A4900EEB6DB /* InventoryProviderImpl.swift in Sources */,
 				EBF377751B342AF900EEB6DB /* CDListItem.swift in Sources */,

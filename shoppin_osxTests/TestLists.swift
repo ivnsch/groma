@@ -18,7 +18,7 @@ class TestLists: XCTestCase {
         
         var expectation = self.expectationWithDescription("add lists")
         
-        TestUtils.withClearedDatabase {
+        TestUtils.withClearDatabaseAndNewLoggedInAccount {[weak expectation] loginData in
             
             println("add first list")
             let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])
@@ -59,16 +59,16 @@ class TestLists: XCTestCase {
                                     
                                 }
                                 
-                                expectation.fulfill()
+                                expectation?.fulfill()
                             }
                             
                         } else {
-                            expectation.fulfill()
+                            expectation?.fulfill()
                         }
                     })
                     
                 } else {
-                    expectation.fulfill()
+                    expectation?.fulfill()
                 }
             })
         }
@@ -78,7 +78,7 @@ class TestLists: XCTestCase {
     func testRemoveList() {
         var expectation = self.expectationWithDescription("add lists")
         
-        TestUtils.withClearedDatabase {
+        TestUtils.withClearDatabaseAndNewLoggedInAccount {[weak expectation] loginData in
             
             println("add first list")
             let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])
@@ -116,11 +116,11 @@ class TestLists: XCTestCase {
                                     TestUtils.testRemoteListMatches(lists[0], secondList)
                                 }
                                 
-                                expectation.fulfill()
+                                expectation?.fulfill()
                             }
                         })
                     } else {
-                        expectation.fulfill()
+                        expectation?.fulfill()
                     }
                 })
             })
@@ -132,7 +132,7 @@ class TestLists: XCTestCase {
     func testUpdateList() {
         var expectation = self.expectationWithDescription("update lists")
         
-        TestUtils.withClearedDatabase {
+        TestUtils.withClearDatabaseAndNewLoggedInAccount {[weak expectation] loginData in
             
             println("add first list")
             let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])
@@ -156,8 +156,10 @@ class TestLists: XCTestCase {
                         println("update first list")
                         
                         let updatedList = List(uuid: firstList.uuid, name: "test-first-list-new-name", listItems: [])
-                        self.remoteProvider.update(updatedList, handler: {result in
+                        self.remoteProvider.update(updatedList, handler: {result in 
                             expect(result.success).to(beTrue())
+                            
+                            println("result of POST list: \(result.success), uuid: \(firstList.uuid)")
                             
                             println("get lists - check update worked")
                             self.remoteProvider.lists {result in
@@ -171,16 +173,16 @@ class TestLists: XCTestCase {
                                     TestUtils.testRemoteListMatches(lists[1], secondList)
                                 }
                                 
-                                expectation.fulfill()
+                                expectation?.fulfill()
                             }
                         })
                         
                     } else {
-                        expectation.fulfill()
+                        expectation?.fulfill()
                     }
                 })
             })
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectationsWithTimeout(15.0, handler: nil)
     }
 }

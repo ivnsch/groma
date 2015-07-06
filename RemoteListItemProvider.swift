@@ -31,73 +31,70 @@ class RemoteListItemProvider {
     }
 
     func listItems(#list: List, handler: RemoteResult<RemoteListItems> -> ()) {
-        Alamofire.request(.GET, Urls.listItems, parameters: ["list": list.uuid]).responseMyObject { (request, _, result: RemoteResult<RemoteListItems>, error) in
+        AlamofireHelper.authenticatedRequest(.GET, Urls.listItems, ["list": list.uuid]).responseMyObject {(request, _, result: RemoteResult<RemoteListItems>, error) in
             handler(result)
         }
     }
     
     func listItems(handler: RemoteResult<RemoteListItems> -> ()) {
-        
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-
-        let maybeToken = valet?.stringForKey(KeychainKeys.token)
-
-        var request = NSMutableURLRequest(URL: NSURL(string: Urls.allListItems)!)
-        request.HTTPMethod = "GET"
-
-        if let token = maybeToken {
-            request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
-        } // TODO if there's no token return status code to direct to login controller or something
-
-
-        Alamofire.request(request).responseMyObject  {(request, _, result: RemoteResult<RemoteListItems>, error) in
+        AlamofireHelper.authenticatedRequest(.GET, Urls.allListItems).responseMyObject {(request, _, result: RemoteResult<RemoteListItems>, error) in
             handler(result)
         }
     }
     
     func remove(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
-        Alamofire.request(.DELETE, Urls.listItem + "/\(listItem.uuid)").responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
+        AlamofireHelper.authenticatedRequest(.DELETE, Urls.listItem + "/\(listItem.uuid)").responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>, error) in
             handler(result)
         }
     }
     
     func remove(section: Section, handler: RemoteResult<NoOpSerializable> -> ()) {
-        Alamofire.request(.DELETE, Urls.section + "/\(section.uuid)").responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
+        AlamofireHelper.authenticatedRequest(.DELETE, Urls.section + "/\(section.uuid)").responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
             handler(result)
         }
     }
     
     func remove(list: List, handler: RemoteResult<NoOpSerializable> -> ()) {
-        Alamofire.request(.DELETE, Urls.list + "/\(list.uuid)").responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
+        AlamofireHelper.authenticatedRequest(.DELETE, Urls.list + "/\(list.uuid)").responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
             handler(result)
         }
     }
     
     func update(list: List, handler: RemoteResult<NoOpSerializable> -> ()) {
         let parameters = self.toRequestParams(list)
-        Alamofire.request(.PUT, Urls.list, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
+        AlamofireHelper.authenticatedRequest(.PUT, Urls.list, parameters).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
             handler(result)
         }
     }
     
     func add(listItem: ListItem, handler: RemoteResult<RemoteListItemWithData> -> ()) {
         let parameters = self.toRequestParams(listItem)
-        Alamofire.request(.POST, Urls.addListItem, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, result: RemoteResult<RemoteListItemWithData>, error) in
+        AlamofireHelper.authenticatedRequest(.POST, Urls.addListItem, parameters).responseMyObject { (request, _, result: RemoteResult<RemoteListItemWithData>, error) in
             handler(result)
         }
     }
     
     func update(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
         let parameters = self.toRequestParams(listItem)
-        Alamofire.request(.PUT, Urls.listItem, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
+        AlamofireHelper.authenticatedRequest(.PUT, Urls.listItem, parameters).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
             handler(result)
         }
     }
     
     func update(listItems: [ListItem], handler: RemoteResult<NoOpSerializable> -> ()) {
+        // this is handled differently because the parameters are a dictionary and default request in alamofire doesn't support this (the difference is the request.HTTPBody line)
+        
         let request = NSMutableURLRequest(URL: NSURL(string: Urls.listItems)!)
         request.HTTPMethod = "PUT"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+
+        let maybeToken = valet?.stringForKey(KeychainKeys.token)
+        
+        if let token = maybeToken {
+            request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
+        } // TODO if there's no token return status code to direct to login controller or something
         
         let values = listItems.map{self.toRequestParams($0)}
         
@@ -114,8 +111,7 @@ class RemoteListItemProvider {
             "uuid": list.uuid,
             "name": list.name
         ]
-        
-        Alamofire.request(.POST, Urls.list, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, result: RemoteResult<RemoteList>, error) in
+        AlamofireHelper.authenticatedRequest(.POST, Urls.list, parameters).responseMyObject { (request, _, result: RemoteResult<RemoteList>, error) in
             handler(result)
         }
     }
@@ -125,8 +121,7 @@ class RemoteListItemProvider {
             "uuid": section.uuid,
             "name": section.name
         ]
-        
-        Alamofire.request(.POST, Urls.section, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, result: RemoteResult<RemoteSection>, error) in
+        AlamofireHelper.authenticatedRequest(.POST, Urls.section, parameters).responseMyObject { (request, _, result: RemoteResult<RemoteSection>, error) in
             handler(result)
         }
     }

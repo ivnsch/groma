@@ -11,54 +11,26 @@ import Nimble
 
 class TestListItems: XCTestCase {
     
+    let timeout: NSTimeInterval = 5.0
+    
     let remoteProvider = RemoteListItemProvider()
     let remoteUserProvider = RemoteUserProvider()
-    
     
     func testGetListItemsEmpty() {
         
         var expectation = self.expectationWithDescription("get list items empty list")
         
-        TestUtils.withClearedDatabase {
+        TestUtils.withClearDatabaseAndNewLoggedInAccount {[weak expectation] loginData in
             
-            println("get list items, expect success result with empty list.")
+            println("get list items authorized, expect success result with empty list.")
             self.remoteProvider.listItems {result in
-                expect(result.status) == RemoteStatusCode.NotAuthenticated
-                expectation.fulfill()
+                expect(result.success).to(beTrue())
+                expect(result.successResult).toNot(beNil())
+                expectation?.fulfill()
             }
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
-    }
-
-    func testGetListItemsEmptyAuthorized() {
         
-        var expectation = self.expectationWithDescription("get list items empty list")
-        
-        TestUtils.withClearedDatabase {
-            let user = User(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
-            
-            self.remoteUserProvider.register(user, handler: {result in
-                
-                expect(result.success).to(beTrue())
-                expect(result.successResult).to(beNil())
-                
-                let loginData = LoginData(email: user.email, password: user.password)
-                
-                self.remoteUserProvider.login(loginData, handler: {result in
-                    
-                    expect(result.success).to(beTrue())
-                    expect(result.successResult).toNot(beNil())
-                    
-                    println("get list items authorized, expect success result with empty list.")
-                    self.remoteProvider.listItems {result in
-                        expect(result.success).to(beTrue())
-                        expect(result.successResult).toNot(beNil())
-                        expectation.fulfill()
-                    }
-                })
-            })
-        }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectationsWithTimeout(timeout, handler: nil)
     }
 
     
@@ -66,7 +38,7 @@ class TestListItems: XCTestCase {
         
         var expectation = self.expectationWithDescription("add list items")
         
-        TestUtils.withClearedDatabase {
+        TestUtils.withClearDatabaseAndNewLoggedInAccount {[weak expectation] loginData in
             
             println("add first list item")
             
@@ -79,6 +51,7 @@ class TestListItems: XCTestCase {
                 expect(result.success).to(beTrue())
                 expect(result.successResult).toNot(beNil())
                 
+                
                 if let remoteListItem = result.successResult {
                     println("test first list item is returned correctly")
                     TestUtils.testRemoteListItemWithDataValid(remoteListItem)
@@ -86,10 +59,10 @@ class TestListItems: XCTestCase {
                     
                 }
                 
-                expectation.fulfill()
+                expectation?.fulfill()
             })
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectationsWithTimeout(timeout, handler: nil)
     }
     
     
@@ -97,7 +70,7 @@ class TestListItems: XCTestCase {
         
         var expectation = self.expectationWithDescription("add list items")
         
-        TestUtils.withClearedDatabase {
+        TestUtils.withClearDatabaseAndNewLoggedInAccount {loginData in
             
             println("add first list item")
             
@@ -106,7 +79,7 @@ class TestListItems: XCTestCase {
             let firstList = List(uuid: NSUUID().UUIDString, name: "my-first-list")
             let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: firstList, order: 1)
             
-            self.remoteProvider.add(firstListItem, handler: {result in
+            self.remoteProvider.add(firstListItem, handler: {[weak expectation] result in
                 expect(result.success).to(beTrue())
                 
                 if let remoteListItem = result.successResult {
@@ -164,27 +137,27 @@ class TestListItems: XCTestCase {
                                     TestUtils.testRemoteListItemMatches(listItem2, secondListItem)
                                 }
                                 
-                                expectation.fulfill()
+                                expectation?.fulfill()
                             }
                             
                         } else {
-                            expectation.fulfill()
+                            expectation?.fulfill()
                         }
                     })
                     
                 } else {
-                    expectation.fulfill()
+                    expectation?.fulfill()
                 }
             })
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectationsWithTimeout(timeout, handler: nil)
     }
     
     func testDeleteListItem() {
         
         var expectation = self.expectationWithDescription("add list items")
         
-        TestUtils.withClearedDatabase {
+        TestUtils.withClearDatabaseAndNewLoggedInAccount {[weak expectation] loginData in
             
             println("add first list item")
             
@@ -249,7 +222,7 @@ class TestListItems: XCTestCase {
                                         TestUtils.testRemoteListItemMatches(listItem, secondListItem)
                                     }
                                     
-                                    expectation.fulfill()
+                                    expectation?.fulfill()
                                 }
 
                             })
@@ -257,23 +230,23 @@ class TestListItems: XCTestCase {
 
                             
                         } else {
-                            expectation.fulfill()
+                            expectation?.fulfill()
                         }
                     })
                     
                 } else {
-                    expectation.fulfill()
+                    expectation?.fulfill()
                 }
             })
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectationsWithTimeout(timeout, handler: nil)
     }
     
     func testUpdateListItem() {
         
         var expectation = self.expectationWithDescription("add list items")
         
-        TestUtils.withClearedDatabase {
+        TestUtils.withClearDatabaseAndNewLoggedInAccount {loginData in
             
             println("add first list item")
             
@@ -282,7 +255,7 @@ class TestListItems: XCTestCase {
             let firstList = List(uuid: NSUUID().UUIDString, name: "my-first-list")
             let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: firstList, order: 1)
             
-            self.remoteProvider.add(firstListItem, handler: {result in
+            self.remoteProvider.add(firstListItem, handler: {[weak expectation] result in
                 expect(result.success).to(beTrue())
                 
                 if let remoteListItem = result.successResult {
@@ -359,22 +332,25 @@ class TestListItems: XCTestCase {
                                         TestUtils.testRemoteListItemMatches(listItem2, secondListItem)
                                     }
                                     
-                                    expectation.fulfill()
+                                    expectation?.fulfill()
                                 }
                             })
                             
                             
                             
                         } else {
-                            expectation.fulfill()
+                            expectation?.fulfill()
                         }
                     })
                     
                 } else {
-                    expectation.fulfill()
+                    expectation?.fulfill()
                 }
             })
         }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+        self.waitForExpectationsWithTimeout(timeout, handler: nil)
     }
+    
+    
+    
 }

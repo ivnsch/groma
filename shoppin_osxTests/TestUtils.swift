@@ -11,6 +11,8 @@ import Alamofire
 
 class TestUtils {
 
+    static let remoteUserProvider = RemoteUserProvider()
+
     class func withClearedDatabase(f: () -> ()) {
         
         Alamofire.request(.GET, Urls.removeAll).responseMyObject { (request, _, remoteResult: RemoteResult<NoOpSerializable>, error) in
@@ -18,6 +20,57 @@ class TestUtils {
             f()
         }
     }
+    
+    
+    class func withClearDatabaseAndNewLoggedInAccount(onLoggedIn: (LoginData) -> ()) {
+        // ensure empty keychain
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+        valet?.removeAllObjects()
+        
+        TestUtils.withClearedDatabase {
+            self.withNewLoggedInAccount(onLoggedIn)
+        }
+    }
+
+    class func testNotAuthenticated<T>(result: RemoteResult<T>) {
+        expect(result.status) == RemoteStatusCode.NotAuthenticated
+    }
+    //a failed attempt to merge withClearedDatabase and testNotAuthenticated to write less code. The idea is to have 1-2 liners to check if services are protected
+//    class func testUnauthenticatedAccess<T>(remoteCall: (handler: RemoteResult<[RemoteList]> -> ()) -> ()) {
+//
+//        TestUtils.withClearedDatabase {
+//            remoteCall {result in
+//                expect(result.status) == RemoteStatusCode.NotAuthenticated
+//            }
+//        }
+//    }
+    
+    
+    class func withNewLoggedInAccount(onLoggedIn: (LoginData) -> ()) {
+        
+        // ensure empty keychain
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+        valet?.removeAllObjects()
+        
+        let user = User(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
+        
+        self.remoteUserProvider.register(user, handler: {result in
+            
+            expect(result.success).to(beTrue())
+            expect(result.successResult).to(beNil())
+            
+            let loginData = LoginData(email: user.email, password: user.password)
+            
+            self.remoteUserProvider.login(loginData, handler: {result in
+                
+                expect(result.success).to(beTrue())
+                expect(result.successResult).toNot(beNil())
+                
+                onLoggedIn(loginData)
+            })
+        })
+    }
+    
 
     class func testIfSuccessWithResult<T>(result: RemoteResult<T>) {
         TestUtils.ifSuccessMustBeResultNotNil(result)
