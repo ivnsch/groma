@@ -9,12 +9,27 @@
 import Foundation
 import Alamofire
 
+// Representation of status code related with remote responses
+// Can represent a HTTP status code sent by the server, a status flag in the JSON response, or a client-side error related with the processing of the remote response
+// 
+// Not handled JSON as well as HTTP status (different than 200) should be mapped to .Unknown
+//
+// Note that this doesn't contain any success HTTP status codes as this is currently not necessary, either it's an error, or if not, we have a JSON object where we can query the JSON status flag which is sent in all JSON responses. Improvement: TODO: use HTTP status codes instead of JSON flag wherever possible - e.g. use 204 to indicate a success response with no content. So we don't have to parse the JSON. Currently this is being sent using JSON status flag "NotFound" (which represents -maybe unexpectedly- empty result, no 404).
 enum RemoteStatusCode: Int {
+    
+    // JSON FLAG
     case Success = 1
+    case InvalidParameters = 2
+
     case AlreadyExists = 4
     case NotFound = 5
-    case Unknown = 100
+    case InvalidCredentials = 6
+    case Unknown = 100 // Note that, like above cases this also is sent as status by the server - don't change raw value
  
+    // HTTP
+    case NotAuthenticated = 401
+    
+    // Client
     case ParsingError = 10001
 }
 
@@ -120,55 +135,79 @@ extension Alamofire.Request {
     
     // Common method to parse json object and array
     private func responseHandler<T>(dataParser: (AnyObject, NSHTTPURLResponse) -> (T?), completionHandler: (NSURLRequest, NSHTTPURLResponse?, RemoteResult<T>, NSError?) -> Void) -> Self {
-        
-        let serializer: Serializer = { (request, response, data) in
+
+        let serializer: Serializer = { (request, responseMaybe, data) in
             
-            println("response: \(response)")
+            println("response: \(responseMaybe)")
             
-            let JSONSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
-            let (JSON: AnyObject?, serializationError) = JSONSerializer(request, response, data)
-            
-            println("JSON: \(JSON)")
-            
-            if response != nil && JSON != nil {
+            if let response = responseMaybe {
                 
-                let statusInt = JSON!.valueForKeyPath("status") as! Int
-                if let status = RemoteStatusCode(rawValue: statusInt) {
-                    if status == .Success {
+                let statusCode = response.statusCode
+                
+                if statusCode >= 200 && statusCode < 300 {
+                    let JSONSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
+                    let (JSON: AnyObject?, serializationError) = JSONSerializer(request, response, data)
+                    
+                    println("JSON: \(JSON)")
+                    
+                    if JSON != nil {
                         
-                        if let data: AnyObject = JSON!.valueForKeyPath("data") {
-                            
-                            if let sucessResult = dataParser(data, response!) {
-                                let remoteResult = RemoteResult(status: status, sucessResult: sucessResult)
-                                return (remoteResult, nil)
+                        let statusInt = JSON!.valueForKeyPath("status") as! Int
+                        if let status = RemoteStatusCode(rawValue: statusInt) {
+                            if status == .Success {
+                                
+                                if let data: AnyObject = JSON!.valueForKeyPath("data") {
+                                    
+                                    if let sucessResult = dataParser(data, response) {
+                                        let remoteResult = RemoteResult(status: status, sucessResult: sucessResult)
+                                        return (remoteResult, nil)
+                                        
+                                    } else {
+                                        println("Error parsing success object: \(response)")
+                                        
+                                        
+                                        let remoteResult = RemoteResult<T>(status: .ParsingError)
+                                        return (remoteResult, nil)
+                                    }
+                                    
+                                } else { // the result has no data
+                                    let remoteResult = RemoteResult<T>(status: status)
+                                    return (remoteResult, nil)
+                                }
+                                
                                 
                             } else {
-                                println("Error parsing success object: \(response)")
-                                
-                                
-                                let remoteResult = RemoteResult<T>(status: .ParsingError)
+                                let remoteResult = RemoteResult<T>(status: status)
                                 return (remoteResult, nil)
                             }
                             
-                        } else { // the result has no data
-                            let remoteResult = RemoteResult<T>(status: status)
+                        } else {
+                            println("Error parsing response: status flag not recognized: \(statusInt)")
+                            let remoteResult = RemoteResult<T>(status: .Unknown)
                             return (remoteResult, nil)
                         }
                         
-                        
                     } else {
-                        let remoteResult = RemoteResult<T>(status: status)
+                        println("Error: wrong reponse format: \(response)")
+                        let remoteResult = RemoteResult<T>(status: .Unknown)
                         return (remoteResult, nil)
                     }
                     
+                    
+                    
+                } else if statusCode == 401 {
+                    println("Unauthorized")
+                    let remoteResult = RemoteResult<T>(status: .NotAuthenticated)
+                    return (remoteResult, nil)
+                    
                 } else {
-                    println("Error parsing response: status flag not recognized: \(statusInt)")
+                    println("Error: Not handled status code: \(statusCode)")
                     let remoteResult = RemoteResult<T>(status: .Unknown)
                     return (remoteResult, nil)
                 }
                 
             } else {
-                println("Error: wrong reponse format: \(response)")
+                println("Error: response == nil")
                 let remoteResult = RemoteResult<T>(status: .Unknown)
                 return (remoteResult, nil)
             }

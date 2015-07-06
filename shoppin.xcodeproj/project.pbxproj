@@ -116,6 +116,12 @@
 		EB6D93A41B1B788200ED8999 /* AutosuggestionsTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB6D93A21B1B788200ED8999 /* AutosuggestionsTableViewController.xib */; };
 		EB6D93A61B1BAFB400ED8999 /* HandlingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6D93A51B1BAFB400ED8999 /* HandlingTextField.swift */; };
 		EB6D93A81B1C8CE500ED8999 /* HandlingTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6D93A71B1C8CE500ED8999 /* HandlingTableView.swift */; };
+		EB6F812D1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F812C1B46E2C4008680E0 /* RemoteLoginResult.swift */; };
+		EB6F812E1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F812C1B46E2C4008680E0 /* RemoteLoginResult.swift */; };
+		EB6F812F1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F812C1B46E2C4008680E0 /* RemoteLoginResult.swift */; };
+		EB6F81321B4717C2008680E0 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81311B4717C2008680E0 /* KeychainKeys.swift */; };
+		EB6F81331B4717C2008680E0 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81311B4717C2008680E0 /* KeychainKeys.swift */; };
+		EB6F81341B4717C2008680E0 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81311B4717C2008680E0 /* KeychainKeys.swift */; };
 		EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB703FE11B3B5F3A001586C5 /* Intro.storyboard */; };
 		EB7E8B611B2ADF620090409A /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
 		EB7E8B621B2ADF9A0090409A /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
@@ -332,6 +338,8 @@
 		EB6D93A21B1B788200ED8999 /* AutosuggestionsTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AutosuggestionsTableViewController.xib; sourceTree = "<group>"; };
 		EB6D93A51B1BAFB400ED8999 /* HandlingTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlingTextField.swift; sourceTree = "<group>"; };
 		EB6D93A71B1C8CE500ED8999 /* HandlingTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlingTableView.swift; sourceTree = "<group>"; };
+		EB6F812C1B46E2C4008680E0 /* RemoteLoginResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteLoginResult.swift; sourceTree = "<group>"; };
+		EB6F81311B4717C2008680E0 /* KeychainKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainKeys.swift; sourceTree = "<group>"; };
 		EB703FE11B3B5F3A001586C5 /* Intro.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Intro.storyboard; sourceTree = "<group>"; };
 		EB7E8B601B2ADF620090409A /* Try.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Try.swift; sourceTree = "<group>"; };
 		EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
@@ -515,6 +523,7 @@
 				EBF162E71A3CA1CD0048E37C /* provider */,
 				EBF162E61A3CA1AC0048E37C /* model */,
 				EB2F5D7C1A55817100DBC4AF /* common */,
+				EB6F81301B471793008680E0 /* utils */,
 				EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */,
 				EB1DDEB11A3334EC00D778DE /* Main.storyboard */,
 				EB1DDEB41A3334EC00D778DE /* Images.xcassets */,
@@ -690,6 +699,14 @@
 			name = extensions;
 			sourceTree = "<group>";
 		};
+		EB6F81301B471793008680E0 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				EB6F81311B4717C2008680E0 /* KeychainKeys.swift */,
+			);
+			name = utils;
+			sourceTree = "<group>";
+		};
 		EB703FE01B3B5F1C001586C5 /* intro */ = {
 			isa = PBXGroup;
 			children = (
@@ -708,6 +725,7 @@
 				EBF3779A1B38AA5900EEB6DB /* Urls.swift */,
 				EB9BE4181B2CB355005B401A /* RemoteListItems.swift */,
 				EB9BE41B1B2CB42B005B401A /* RemoteListItem.swift */,
+				EB6F812C1B46E2C4008680E0 /* RemoteLoginResult.swift */,
 				EB9BE4271B2DFA58005B401A /* RemoteListItemWithData.swift */,
 				EB9BE41E1B2CB513005B401A /* RemoteProduct.swift */,
 				EB9BE4241B2CB542005B401A /* RemoteList.swift */,
@@ -1262,6 +1280,7 @@
 				EB2F5D5A1A4F5C8100DBC4AF /* SwipeableCell.swift in Sources */,
 				EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */,
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
+				EB6F81321B4717C2008680E0 /* KeychainKeys.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
 				EB0C1B881B3DA37100F24C85 /* LoginViewController.swift in Sources */,
 				EB0C1BAD1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
@@ -1279,6 +1298,7 @@
 				EB2F5D621A50B91200DBC4AF /* AddItemView.swift in Sources */,
 				EB2F5D6D1A51C17200DBC4AF /* UIView.swift in Sources */,
 				EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */,
+				EB6F812D1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EB0C1B931B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
 				EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */,
 				EB0C1B8F1B3DA97000F24C85 /* UserProvider.swift in Sources */,
@@ -1389,6 +1409,7 @@
 				EBF377A01B38AB1000EEB6DB /* User.swift in Sources */,
 				EB5567601A86437800CD3EC6 /* ProductMapper.swift in Sources */,
 				EB5567711A864B6E00CD3EC6 /* ListItemProviderMock.swift in Sources */,
+				EB6F812E1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EB5567621A86437E00CD3EC6 /* ListMapper.swift in Sources */,
 				EB1EFAC51B1EFBBC0079A35D /* AutocompleteTextField.swift in Sources */,
 				EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */,
@@ -1416,6 +1437,7 @@
 				EB9BE41A1B2CB355005B401A /* RemoteListItems.swift in Sources */,
 				EB89D34D1AD5235600B6E0D0 /* ListCell.swift in Sources */,
 				EB5567801A8658B000CD3EC6 /* CDProvider.swift in Sources */,
+				EB6F81331B4717C2008680E0 /* KeychainKeys.swift in Sources */,
 				EB5567641A86438600CD3EC6 /* CDProduct.swift in Sources */,
 				EBDFE3C21AD00E8200E48F95 /* DialogUtils.swift in Sources */,
 				EB0C1BAE1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
@@ -1432,6 +1454,7 @@
 				EBF377611B342A6800EEB6DB /* CDListItemProvider.swift in Sources */,
 				EBF377781B342B0500EEB6DB /* CDInventoryItem.swift in Sources */,
 				EBF3776A1B342AAF00EEB6DB /* ProviderFactory.swift in Sources */,
+				EB6F81341B4717C2008680E0 /* KeychainKeys.swift in Sources */,
 				EBF3778D1B357FA100EEB6DB /* TestUtils.swift in Sources */,
 				EBF3777D1B342B2E00EEB6DB /* InventoryItem.swift in Sources */,
 				EB0C1B911B3DA97000F24C85 /* UserProvider.swift in Sources */,
@@ -1479,6 +1502,7 @@
 				EBF377991B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
 				EBF377691B342AA800EEB6DB /* RemoteSection.swift in Sources */,
 				EBF377801B342B4000EEB6DB /* Float.swift in Sources */,
+				EB6F812F1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EBF377761B342AFD00EEB6DB /* CDSection.swift in Sources */,
 				EBF3775B1B3423C200EEB6DB /* Try.swift in Sources */,
 				EBF377671B342A9A00EEB6DB /* RemoteProduct.swift in Sources */,

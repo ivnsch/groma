@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-shoppin-Valet.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-shoppin-WYPopoverController.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -20,6 +25,11 @@
 			<false/>
 		</dict>
 		<key>Pods-shoppin_osx-Alamofire.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-shoppin_osx-Valet.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -44,6 +54,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-shoppin_osxTests-Valet.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-shoppin_osxTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -52,47 +67,62 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>12FB8D44DD5507701A50D799</key>
+		<key>0146ED2EB9D50730CBD4DBD6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>16841111EDD208367E5F7667</key>
+		<key>18FF060B28EC202FE737B76F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3DEC9C40BE4ED69DA58DC0AD</key>
+		<key>35620ACCAD7F3D47C6FC2928</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5E90183381C18795903CD1B4</key>
+		<key>60AE7F929440F6326FF173DF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6C744223DB340C4939A538A2</key>
+		<key>624602291EA620294443AE76</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6D942DB41E76DC88D22116F4</key>
+		<key>8587842042771F7F1E8809D9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9DDFF999F60B497A5AB1327A</key>
+		<key>A08FA460E5BEFB08CC27AF38</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C0367F58609B081AF1F695CC</key>
+		<key>A4C4A4CF4249D3264317F2D5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>ED31AB7CB1C25A9653AEA912</key>
+		<key>C5C99E77881860CF28D5D8BA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D1C5D1C6C5E9BE5A73370D6D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E19B8EAFAEF31AC57E4BE802</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FAB40FC40D471C70C43464B5</key>
 		<dict>
 			<key>primary</key>
 			<true/>

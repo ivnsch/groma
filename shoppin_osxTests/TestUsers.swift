@@ -21,17 +21,49 @@ class TestUsers: XCTestCase {
             println("register a user")
             let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])
             
-            let user = User(email: "foo@bar.com", password: "password123", firstName: "azucar", lastName: "schuetz")
+            let user = User(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
             
-            self.remoteProvider.register(user, handler: {try in
+            self.remoteProvider.register(user, handler: {result in
                 
-                expect(try.success).toNot(beNil())
-                expect(try.success ?? false).to(beTrue())
+                expect(result.success).to(beTrue())
+                expect(result.successResult).to(beNil())
 
-                self.remoteProvider.register(user, handler: {remoteResult in
+                self.remoteProvider.register(user, handler: {result in
                     
-                    expect(remoteResult.status) == RemoteStatusCode.AlreadyExists
-                    expect(remoteResult.success).to(beFalse())
+                    expect(result.status) == RemoteStatusCode.AlreadyExists
+                    expect(result.success).to(beFalse())
+                    expect(result.successResult).to(beNil())
+                    
+                    expectation.fulfill()
+                })
+            })
+        }
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+    
+    func testLoginAfterRegister() {
+        var expectation = self.expectationWithDescription("register user")
+        
+        TestUtils.withClearedDatabase {
+            
+            println("register a user")
+            let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])
+            
+            let user = User(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
+            
+            self.remoteProvider.register(user, handler: {result in
+                
+                expect(result.success).to(beTrue())
+                expect(result.successResult).to(beNil())
+                
+                let loginData = LoginData(email: user.email, password: user.password)
+                
+                self.remoteProvider.login(loginData, handler: {result in
+                    
+                    expect(result.success).to(beTrue())
+                    expect(result.successResult).toNot(beNil())
+                    
+                    expect(result.successResult?.token).toNot(beNil())
                     
                     expectation.fulfill()
                 })

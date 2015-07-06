@@ -1,6 +1,7 @@
 def shared
     use_frameworks!
     pod 'Alamofire', '~> 1.2'
+    pod 'Valet', '~> 1.3'
 end
 
 

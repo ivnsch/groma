@@ -12,7 +12,56 @@ import Nimble
 class TestListItems: XCTestCase {
     
     let remoteProvider = RemoteListItemProvider()
+    let remoteUserProvider = RemoteUserProvider()
+    
+    
+    func testGetListItemsEmpty() {
+        
+        var expectation = self.expectationWithDescription("get list items empty list")
+        
+        TestUtils.withClearedDatabase {
+            
+            println("get list items, expect success result with empty list.")
+            self.remoteProvider.listItems {result in
+                expect(result.status) == RemoteStatusCode.NotAuthenticated
+                expectation.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
 
+    func testGetListItemsEmptyAuthorized() {
+        
+        var expectation = self.expectationWithDescription("get list items empty list")
+        
+        TestUtils.withClearedDatabase {
+            let user = User(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
+            
+            self.remoteUserProvider.register(user, handler: {result in
+                
+                expect(result.success).to(beTrue())
+                expect(result.successResult).to(beNil())
+                
+                let loginData = LoginData(email: user.email, password: user.password)
+                
+                self.remoteUserProvider.login(loginData, handler: {result in
+                    
+                    expect(result.success).to(beTrue())
+                    expect(result.successResult).toNot(beNil())
+                    
+                    println("get list items authorized, expect success result with empty list.")
+                    self.remoteProvider.listItems {result in
+                        expect(result.success).to(beTrue())
+                        expect(result.successResult).toNot(beNil())
+                        expectation.fulfill()
+                    }
+                })
+            })
+        }
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+
+    
     func testAddListItem() {
         
         var expectation = self.expectationWithDescription("add list items")

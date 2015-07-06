@@ -11,10 +11,12 @@ import Foundation
 enum ProviderStatusCode: Int {
     case Success = 1
     // Remote related
+    case NotAuthenticated = 3
     case AlreadyExists = 4
     case NotFound = 5
+    case InvalidCredentials = 6
     case Unknown = 100
-    case ParsingError = 101
+    case ServerError = 101 //invalid json, etc.
     
     // DB related
     
@@ -67,8 +69,11 @@ struct DefaultRemoteResultMapper {
     static func toProviderStatus(remoteStatus: RemoteStatusCode) -> ProviderStatusCode {
         switch remoteStatus {
         case .AlreadyExists: return .AlreadyExists
+        case .InvalidParameters: return .ServerError
+        case .NotAuthenticated: return .NotAuthenticated
         case .NotFound: return .NotFound
-        case .ParsingError: return .ParsingError
+        case .ParsingError: return .ServerError
+        case .InvalidCredentials: return .InvalidCredentials
         case .Success: return .Success
         case .Unknown: return .Unknown
         }

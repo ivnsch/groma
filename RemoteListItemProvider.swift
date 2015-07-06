@@ -37,7 +37,20 @@ class RemoteListItemProvider {
     }
     
     func listItems(handler: RemoteResult<RemoteListItems> -> ()) {
-        Alamofire.request(.GET, Urls.allListItems).responseMyObject { (request, _, result: RemoteResult<RemoteListItems>, error) in
+        
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+
+        let maybeToken = valet?.stringForKey(KeychainKeys.token)
+
+        var request = NSMutableURLRequest(URL: NSURL(string: Urls.allListItems)!)
+        request.HTTPMethod = "GET"
+
+        if let token = maybeToken {
+            request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
+        } // TODO if there's no token return status code to direct to login controller or something
+
+
+        Alamofire.request(request).responseMyObject  {(request, _, result: RemoteResult<RemoteListItems>, error) in
             handler(result)
         }
     }
