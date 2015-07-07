@@ -73,6 +73,7 @@
 		EB2F5D771A557AB000DBC4AF /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D761A557AB000DBC4AF /* List.swift */; };
 		EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */; };
 		EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7E1A559C8800DBC4AF /* Constants.swift */; };
+		EB4C36551B4BD5A700C387C5 /* TestSharedLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */; };
 		EB4FD44B1AC6B77C0000F952 /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D6E1A530FBC00DBC4AF /* Float.swift */; };
 		EB4FD44E1AC6BE390000F952 /* NSTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD44D1AC6BE390000F952 /* NSTableView.swift */; };
 		EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD44F1AC6BE960000F952 /* Globals.swift */; };
@@ -326,6 +327,7 @@
 		EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListMapper.swift; sourceTree = "<group>"; };
 		EB2F5D7E1A559C8800DBC4AF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		EB49F5E91AC6CBEE00BBEDA2 /* shoppin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = shoppin.entitlements; sourceTree = "<group>"; };
+		EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSharedLists.swift; sourceTree = "<group>"; };
 		EB4FD44D1AC6BE390000F952 /* NSTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTableView.swift; sourceTree = "<group>"; };
 		EB4FD44F1AC6BE960000F952 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		EB4FD4551AC6D6690000F952 /* EditListItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListItemController.swift; sourceTree = "<group>"; };
@@ -780,6 +782,7 @@
 				EB9F6CF71A8610550038355B /* Supporting Files */,
 				EBF377281B341B6900EEB6DB /* RemoteListItemProviderSpec.swift */,
 				EBF3778A1B357F1800EEB6DB /* TestLists.swift */,
+				EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */,
 				EBF3778E1B35808900EEB6DB /* TestListItems.swift */,
 				EB6F81631B4B1CDC008680E0 /* TestRequiresAuthentication.swift */,
 				EBF377901B38A80100EEB6DB /* TestUsers.swift */,
@@ -1468,6 +1471,7 @@
 				EBF3779D1B38AA5900EEB6DB /* Urls.swift in Sources */,
 				EBF377951B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
 				EBF3775F1B342A4E00EEB6DB /* ListItemProviderMock.swift in Sources */,
+				EB4C36551B4BD5A700C387C5 /* TestSharedLists.swift in Sources */,
 				EBF377721B342AE700EEB6DB /* ListMapper.swift in Sources */,
 				EBF3777F1B342B3A00EEB6DB /* Array.swift in Sources */,
 				EBF377681B342AA100EEB6DB /* RemoteList.swift in Sources */,

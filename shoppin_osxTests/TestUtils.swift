@@ -11,6 +11,9 @@ import Alamofire
 
 class TestUtils {
 
+    static let user1 = User(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
+    static let user2 = User(email: "test@test.test", password: "test123", firstName: "test", lastName: "tester")
+    
     static let remoteUserProvider = RemoteUserProvider()
 
     class func withClearedDatabase(f: () -> ()) {
@@ -21,14 +24,34 @@ class TestUtils {
         }
     }
     
+    // TODO needs better helpers for muti-user (store different tokens)
+    // helper for multiuser tests
+    class func withClearDatabaseAndNewLoggedInAccountUser1(onLoggedIn: (LoginData) -> ()) {
+        self.withClearDatabaseAndNewLoggedInAccount(user: self.user1, onLoggedIn: onLoggedIn)
+    }
+
+    // helper for multiuser tests
+    class func withClearDatabaseAndNewLoggedInAccountUser2(onLoggedIn: (LoginData) -> ()) {
+        self.withClearDatabaseAndNewLoggedInAccount(user: self.user2, onLoggedIn: onLoggedIn)
+    }
     
-    class func withClearDatabaseAndNewLoggedInAccount(onLoggedIn: (LoginData) -> ()) {
+    // helper for multiuser tests
+    class func withNewLoggedInAccountUser1(onLoggedIn: (LoginData) -> ()) {
+        self.withNewLoggedInAccount(user: TestUtils.user1, onLoggedIn: onLoggedIn)
+    }
+    
+    // helper for multiuser tests
+    class func withNewLoggedInAccountUser2(onLoggedIn: (LoginData) -> ()) {
+        self.withNewLoggedInAccount(user: TestUtils.user2, onLoggedIn: onLoggedIn)
+    }
+    
+    class func withClearDatabaseAndNewLoggedInAccount(user: User = TestUtils.user1, onLoggedIn: (LoginData) -> ()) {
         // ensure empty keychain
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
         valet?.removeAllObjects()
         
         TestUtils.withClearedDatabase {
-            self.withNewLoggedInAccount(onLoggedIn)
+            self.withNewLoggedInAccount(user: user, onLoggedIn: onLoggedIn)
         }
     }
 
@@ -44,6 +67,32 @@ class TestUtils {
 //            }
 //        }
 //    }
+    
+
+    class func withNewLoggedInAccount(user: User = TestUtils.user1, onLoggedIn: (LoginData) -> ()) {
+        
+        // ensure empty keychain
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+        valet?.removeAllObjects()
+        
+        let user = User(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
+        
+        self.remoteUserProvider.register(user, handler: {result in
+            
+            expect(result.success).to(beTrue())
+            expect(result.successResult).to(beNil())
+            
+            let loginData = LoginData(email: user.email, password: user.password)
+            
+            self.remoteUserProvider.login(loginData, handler: {result in
+                
+                expect(result.success).to(beTrue())
+                expect(result.successResult).toNot(beNil())
+                
+                onLoggedIn(loginData)
+            })
+        })
+    }
     
     
     class func withNewLoggedInAccount(onLoggedIn: (LoginData) -> ()) {
