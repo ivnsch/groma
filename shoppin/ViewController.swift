@@ -156,7 +156,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //                let offset = navbarHeight + statusBarHeight
 //                self.addItemView.topConstraint.constant = -offset
         
-        self.addItemView.topConstraint.constant = -66.5
+        self.addItemView.topConstraint.constant = -86.5
         //////////////////////////////////////////////////////////////////////
     }
     
