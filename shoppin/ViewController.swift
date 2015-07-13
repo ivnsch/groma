@@ -64,7 +64,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         super.viewDidLoad()
         
         self.initTableViewController()
-        self.initList{
+        self.initList {
             
             self.navigationTitleView.delegate = self
             self.addItemView.delegate = self
@@ -460,10 +460,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 }
             })
             
-        } else {
-            println("Error: Invalid state: trying to update prices without current list")
         }
-
     }
     
     private func setItemDone(listItem: ListItem) {
