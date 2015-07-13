@@ -171,7 +171,7 @@ extension Alamofire.Request {
 
         let serializer: Serializer = { (request, responseMaybe, data) in
             
-            println("response: \(responseMaybe)")
+//            println("response: \(responseMaybe)")
             
             if let response = responseMaybe {
                 
@@ -181,7 +181,7 @@ extension Alamofire.Request {
                     let JSONSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
                     let (JSON: AnyObject?, serializationError) = JSONSerializer(request, response, data)
                     
-                    println("JSON: \(JSON)")
+//                    println("JSON: \(JSON)")
                     
                     if JSON != nil {
                         
