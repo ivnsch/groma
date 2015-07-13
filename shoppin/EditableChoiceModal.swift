@@ -26,7 +26,7 @@ class EditableChoiceModal: UIViewController {
     
     var listItems: [EditablePlainTableViewControllerModel<SharedUser>]? {
         set {
-            if let listItems = self.listItems, tableViewController = self.tableViewController {
+            if let listItems = newValue, tableViewController = self.tableViewController {
                 tableViewController.listItems = listItems
             }
         }

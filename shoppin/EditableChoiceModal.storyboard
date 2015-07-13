@@ -19,7 +19,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vvc-Md-QLz">
                                 <rect key="frame" x="0.0" y="80" width="600" height="460"/>
                                 <connections>
-                                    <segue destination="YKF-0g-Y0v" kind="embed" id="ABV-WG-hYH"/>
+                                    <segue destination="YKF-0g-Y0v" kind="embed" identifier="tableViewControllerSegue" id="ABV-WG-hYH"/>
                                 </connections>
                             </containerView>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eaR-bs-9eK">
@@ -93,7 +93,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Fv8-R9-dLY">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="reuseIdentifier" id="Fv8-R9-dLY">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Fv8-R9-dLY" id="boT-gw-AKA">
                                     <autoresizingMask key="autoresizingMask"/>

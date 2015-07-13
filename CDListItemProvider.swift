@@ -220,6 +220,25 @@ class CDListItemProvider: CDProvider {
     }
     
     
+    private func saveSharedUserInt(sharedUser: SharedUser, save: Bool) -> CDSharedUser {
+        
+        let cdSharedUser = NSEntityDescription.insertNewObjectForEntityForName("CDSharedUser", inManagedObjectContext: PersistentStoreHelper.sharedInstance.managedObjectContext!) as! CDSharedUser
+        
+        cdSharedUser.uuid = sharedUser.uuid
+        cdSharedUser.email = sharedUser.email
+        cdSharedUser.firstName = sharedUser.firstName
+        cdSharedUser.lastName = sharedUser.lastName
+        
+        if save {
+            self.save{try in
+            }
+        }
+        
+        return cdSharedUser
+    }
+    
+    
+    
     
     private func upsertProductsInt(models: [Product], save: Bool, handler: Try<(arr: [CDProduct], idDict: [String: CDProduct])> -> ()) {
         self.load(entityName: "CDProduct", type: CDProduct.self, predicate: NSPredicate(format: "uuid IN %@", models.map{$0.uuid}), handler: {try in
@@ -349,6 +368,52 @@ class CDListItemProvider: CDProvider {
             }
         })
     }
+    
+    private func upsertSharedUsersInt(models: [SharedUser], save: Bool, handler: Try<(arr: [CDSharedUser], idDict: [String: CDSharedUser])> -> ()) {
+        self.load(entityName: "CDSharedUser", type: CDSharedUser.self, predicate: NSPredicate(format: "uuid IN %@", models.map{$0.uuid}), handler: {try in
+            
+            if let cdObjs = try.success { // TODO check that when there are no saved products we also join this block
+                
+                var existingCDObjsIdsDict: [String: CDSharedUser] = [:] // quick lookup
+                for cdObj in cdObjs {
+                    existingCDObjsIdsDict[cdObj.uuid] = cdObj
+                }
+                
+                var idDict: [String: CDSharedUser] = [:]
+                var cdObjs: [CDSharedUser] = []
+                
+                for model in models {
+                    
+                    let cdObj: CDSharedUser = {
+                        if let existing = existingCDObjsIdsDict[model.uuid] { // object is in the db - update
+                            existing.email = model.email
+                            existing.firstName = model.firstName
+                            existing.lastName = model.lastName
+                            return existing
+                            
+                        } else { // insert
+                            return self.saveSharedUserInt(model, save: false) // we save at the end
+                        }
+                        }()
+                    
+                    idDict[model.uuid] = cdObj
+                    cdObjs.append(cdObj)
+                }
+                
+                let result: (arr: [CDSharedUser], idDict: [String: CDSharedUser]) = (cdObjs, idDict)
+                
+                if save {
+                    self.save{try in
+                        handler(Try(result))
+                    }
+                } else {
+                    handler(Try(result))
+                }
+                
+            }
+        })
+    }
+    
     
 //    private func saveListItemInt(listItem: ListItem, save: Bool) -> CDListItem {
 //        let appDelegate = SharedAppDelegate.getAppDelegate()
@@ -775,8 +840,18 @@ class CDListItemProvider: CDProvider {
         cdList.name = list.name
         cdList.uuid = NSUUID().UUIDString
         
-        self.save{try in
-            handler(Try(cdList))
-        }
+        self.upsertSharedUsersInt(list.users, save: false, handler: {upsertSharedUsersTry in
+            
+            if let cdSharedUsers = upsertSharedUsersTry.success?.arr {
+                cdList.users = NSSet(array: cdSharedUsers)
+                
+                self.save{try in
+                    handler(Try(cdList))
+                }
+                
+            } else {
+                println("huh? saved shared users but didn't get cd shared users back")
+            }
+        })
     }
 }
