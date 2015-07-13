@@ -607,10 +607,10 @@
             </objects>
             <point key="canvasLocation" x="-1124" y="1837"/>
         </scene>
-        <!--Main Tab Bar Controller-->
+        <!--Tab Bar Controller-->
         <scene sceneID="iFh-OB-bje">
             <objects>
-                <tabBarController storyboardIdentifier="MainTabController" id="c3h-ZV-UrG" customClass="MainTabBarController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="MainTabController" id="c3h-ZV-UrG" sceneMemberID="viewController">
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="heg-cs-duS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
