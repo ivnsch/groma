@@ -113,9 +113,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         // when user opens account with lists like that, somehow we replace the dummy value with the email (client and server)
         // or maybe we can just use *always* a dummy identifier for myself. A general purpose string like "myself"
         // For the user is not important to see their own email address, only to know this is myself. This is probably a bad idea for the databse in the server though.
-        let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: "foo@foo.foo")])
-        
-        self.listItemsProvider.add(listWithSharedUsers, handler: handler)
+        if let myEmail: String = PreferencesManager.loadPreference(PreferencesManagerKey.email) {
+            let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: myEmail)])
+            self.listItemsProvider.add(listWithSharedUsers, handler: handler)
+            
+        } else {
+            println("Warning: not tested use case: add list without user account - using dummy address")
+            let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: "dummy@e.mail")])
+            self.listItemsProvider.add(listWithSharedUsers, handler: handler)
+        }
+
     }
     
     override func updateViewConstraints() {
