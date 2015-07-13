@@ -18,13 +18,11 @@ class RemoteUserProvider {
             "email": loginData.email,
             "password": loginData.password
         ]
-        Alamofire.request(.POST, Urls.login, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, remoteResult: RemoteResult<RemoteLoginResult>, error) in
+        Alamofire.request(.POST, Urls.login, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteLoginResult>, error) in
             
             if let successResult = remoteResult.successResult {
-                let token = successResult.token
-                
-                let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-                valet?.setString(token, forKey: KeychainKeys.token)
+                self?.storeToken(successResult.token)
+                self?.storeEmail(loginData.email)
             }
 
             handler(remoteResult)
@@ -32,13 +30,29 @@ class RemoteUserProvider {
     }
     
     
-    func register(user: UserInput, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func register(user: UserInput, handler: RemoteResult<RemoteRegisterResult> -> ()) {
         
         let parameters = self.toRequestParams(user)
         
-        Alamofire.request(.POST, Urls.register, parameters: parameters, encoding: .JSON).responseMyObject { (request, _, remoteResult: RemoteResult<NoOpSerializable>, error) in
+        Alamofire.request(.POST, Urls.register, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteRegisterResult>, error) in
+
+            if let successResult = remoteResult.successResult {
+                self?.storeToken(successResult.token)
+                self?.storeEmail(user.email)
+            }
+
             handler(remoteResult)
         }
+    }
+    
+    private func storeToken(token: String) {
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+        valet?.setString(token, forKey: KeychainKeys.token)
+    }
+    
+    // For now store the user's email as simple preference, we need it to be added automatically to list shared users. This may change in the future
+    private func storeEmail(email: String) {
+        PreferencesManager.savePreference(PreferencesManagerKey.email, value: NSString(string: email))
     }
     
     func logout(handler: RemoteResult<NoOpSerializable> -> ()) {

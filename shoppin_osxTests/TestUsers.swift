@@ -24,7 +24,12 @@ class TestUsers: XCTestCase {
             self.remoteProvider.register(user, handler: {result in
                 
                 expect(result.success).to(beTrue())
-                expect(result.successResult).to(beNil())
+                expect(result.successResult).toNot(beNil())
+                
+                expect(result.successResult?.token).toNot(beNil())
+                expect(result.successResult?.token).toNot(beEmpty())
+
+                expect(PreferencesManager.loadPreference(PreferencesManagerKey.email)) == user.email
 
                 self.remoteProvider.register(user, handler: {result in
                     
@@ -50,7 +55,14 @@ class TestUsers: XCTestCase {
             self.remoteProvider.register(user, handler: {result in
                 
                 expect(result.success).to(beTrue())
-                expect(result.successResult).to(beNil())
+                expect(result.successResult).toNot(beNil())
+
+                expect(result.successResult?.token).toNot(beNil())
+                expect(result.successResult?.token).toNot(beEmpty())
+                
+                expect(PreferencesManager.loadPreference(PreferencesManagerKey.email)) == user.email
+
+                let registerToken = result.successResult?.token
                 
                 let loginData = LoginData(email: user.email, password: user.password)
                 
@@ -58,8 +70,11 @@ class TestUsers: XCTestCase {
                     
                     expect(result.success).to(beTrue())
                     expect(result.successResult).toNot(beNil())
+                    expect(result.successResult?.token).toNot(beEmpty())
                     
-                    expect(result.successResult?.token).toNot(beNil())
+                    expect(PreferencesManager.loadPreference(PreferencesManagerKey.email)) == user.email
+
+//                    expect(result.successResult?.token) == registerToken // TODO why does this fail, should the token not be always the same?
                     
                     expectation.fulfill()
                 })

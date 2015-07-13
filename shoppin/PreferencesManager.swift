@@ -12,6 +12,7 @@ import Foundation
 enum PreferencesManagerKey: String {
     case listId = "listId"
     case hasLaunchedBefore = "hasLaunchedBefore"
+    case email = "email"
 }
 
 class PreferencesManager {
