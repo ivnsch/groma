@@ -44,7 +44,7 @@ class RegisterViewController: UIViewController {
 
     @IBAction func onRegisterTap(sender: UIButton) {
         
-        let user = User(email: emailField.text, password: passwordField.text, firstName: firstNameField.text, lastName: lastNameField.text)
+        let user = UserInput(email: emailField.text, password: passwordField.text, firstName: firstNameField.text, lastName: lastNameField.text)
         
         self.userProvider.register(user, resultHandler(onSuccess: {result in
             self.delegate?.onRegisterSuccess() ?? println("Warn: no register delegate")
