@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EditableChoiceModal: UIViewController {
+class EditableChoiceModal: UIViewController, UIScrollViewDelegate {
     
     private var tableViewController: EditablePlainTableViewController?
     
@@ -43,6 +43,7 @@ class EditableChoiceModal: UIViewController {
         let segueName = segue.identifier
         if segueName == "tableViewControllerSegue" {
             self.tableViewController = segue.destinationViewController as? EditablePlainTableViewController
+            self.tableViewController?.scrollViewDelegate = self
         }
     }
     
@@ -72,4 +73,13 @@ class EditableChoiceModal: UIViewController {
             }
         }
     }
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        self.hideKeyboard()
+    }
+    
+    private func hideKeyboard() {
+        self.participantInputField.resignFirstResponder()
+    }
+    
 }

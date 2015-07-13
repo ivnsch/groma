@@ -19,13 +19,15 @@ class EditablePlainTableViewControllerModel<T> {
     }
 }
 
-class EditablePlainTableViewController: UITableViewController {
+class EditablePlainTableViewController: UITableViewController, UIScrollViewDelegate {
 
     var listItems: [EditablePlainTableViewControllerModel<SharedUser>] = [] {// for now enforce User as type parameter since obj-c class (UIViewController in this case) doesn't support generics
         didSet {
             self.tableView.reloadData()
         }
     }
+
+    var scrollViewDelegate: UIScrollViewDelegate?
     
     func addItem(model: EditablePlainTableViewControllerModel<SharedUser>) {
         self.listItems.append(model)
@@ -104,5 +106,10 @@ class EditablePlainTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+
+    override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        self.scrollViewDelegate?.scrollViewWillBeginDragging?(scrollView)
+    }
+    
 
 }
