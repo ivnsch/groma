@@ -30,7 +30,17 @@ class RegisterViewController: UIViewController {
         super.viewDidLoad()
 
         self.navigationController?.navigationBarHidden = false
+        
+        fillTestInput()
     }
+    
+    private func fillTestInput() {
+        emailField.text = "ivanschuetz@gmail.com"
+        firstNameField.text = "Ivan"
+        lastNameField.text = "Schuetz"
+        passwordField.text = "test123"
+    }
+
 
     @IBAction func onRegisterTap(sender: UIButton) {
         

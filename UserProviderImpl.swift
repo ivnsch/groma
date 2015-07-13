@@ -22,7 +22,7 @@ class UserProviderImpl: UserProvider {
         })
     }
     
-    func register(user: User, _ handler: ProviderResult<Any> -> ()) {
+    func register(user: UserInput, _ handler: ProviderResult<Any> -> ()) {
         self.remoteProvider.register(user, handler: remoteResultHandler(handler))
     }
     

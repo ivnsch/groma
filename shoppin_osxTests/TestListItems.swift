@@ -38,14 +38,13 @@ class TestListItems: XCTestCase {
         
         var expectation = self.expectationWithDescription("add list items")
         
-        TestUtils.withClearDatabaseAndNewLoggedInAccount {[weak expectation] loginData in
+        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1AndAddedList1 {[weak expectation] (loginData, list) in
             
             println("add first list item")
             
             let firstProduct = Product(uuid: NSUUID().UUIDString, name: "my-first-product", price: 3.5)
             let firstSection = Section(uuid: NSUUID().UUIDString, name: "my-first-section")
-            let firstList = List(uuid: NSUUID().UUIDString, name: "my-first-list")
-            let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: firstList, order: 1)
+            let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: TestUtils.listInput1.list, order: 1)
             
             self.remoteProvider.add(firstListItem, handler: {result in
                 expect(result.success).to(beTrue())
@@ -70,14 +69,13 @@ class TestListItems: XCTestCase {
         
         var expectation = self.expectationWithDescription("add list items")
         
-        TestUtils.withClearDatabaseAndNewLoggedInAccount {loginData in
+        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1AndAddedList1 {[weak expectation] (loginData, list) in
             
             println("add first list item")
             
             let firstProduct = Product(uuid: NSUUID().UUIDString, name: "my-first-product", price: 3.5)
             let firstSection = Section(uuid: NSUUID().UUIDString, name: "my-first-section")
-            let firstList = List(uuid: NSUUID().UUIDString, name: "my-first-list")
-            let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: firstList, order: 1)
+            let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: TestUtils.listInput1.list, order: 1)
             
             self.remoteProvider.add(firstListItem, handler: {[weak expectation] result in
                 expect(result.success).to(beTrue())
@@ -89,8 +87,7 @@ class TestListItems: XCTestCase {
                     println("add second list item")
                     let secondProduct = Product(uuid: NSUUID().UUIDString, name: "my-second-product", price: 3.5)
                     let secondSection = Section(uuid: NSUUID().UUIDString, name: "my-second-section")
-                    let secondList = List(uuid: NSUUID().UUIDString, name: "my-second-list")
-                    let secondListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: secondProduct, section: secondSection, list: secondList, order: 2)
+                    let secondListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: secondProduct, section: secondSection, list: TestUtils.listInput1.list, order: 2)
                     self.remoteProvider.add(secondListItem, handler: {result in
                         expect(result.success).to(beTrue())
                         
@@ -108,7 +105,8 @@ class TestListItems: XCTestCase {
                                     TestUtils.testRemoteListItemsValid(remoteListItems)
 
                                     expect(remoteListItems.products.count) == 2
-                                    expect(remoteListItems.lists.count) == 2
+//                                    expect(remoteListItems.lists.count) == 2
+                                    expect(remoteListItems.lists.count) == 1
                                     expect(remoteListItems.sections.count) == 2
                                     expect(remoteListItems.listItems.count) == 2
                                     
@@ -119,7 +117,7 @@ class TestListItems: XCTestCase {
                                     let section2 = remoteListItems.sections[1]
                                     
                                     let list1 = remoteListItems.lists[0]
-                                    let list2 = remoteListItems.lists[1]
+//                                    let list2 = remoteListItems.lists[1]
                                     
                                     let listItem1 = remoteListItems.listItems[0]
                                     let listItem2 = remoteListItems.listItems[1]
@@ -130,8 +128,8 @@ class TestListItems: XCTestCase {
                                     TestUtils.testRemoteSectionMatches(section1, firstSection)
                                     TestUtils.testRemoteSectionMatches(section2, secondSection)
                                     
-                                    TestUtils.testRemoteListMatches(list1, firstList)
-                                    TestUtils.testRemoteListMatches(list2, secondList)
+                                    TestUtils.testRemoteListMatches(list1, TestUtils.listInput1.list)
+//                                    TestUtils.testRemoteListMatches(list2, secondList)
                                     
                                     TestUtils.testRemoteListItemMatches(listItem1, firstListItem)
                                     TestUtils.testRemoteListItemMatches(listItem2, secondListItem)
@@ -157,14 +155,13 @@ class TestListItems: XCTestCase {
         
         var expectation = self.expectationWithDescription("add list items")
         
-        TestUtils.withClearDatabaseAndNewLoggedInAccount {[weak expectation] loginData in
+        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1AndAddedList1 {[weak expectation] (loginData, list) in
             
             println("add first list item")
             
             let firstProduct = Product(uuid: NSUUID().UUIDString, name: "my-first-product", price: 3.5)
             let firstSection = Section(uuid: NSUUID().UUIDString, name: "my-first-section")
-            let firstList = List(uuid: NSUUID().UUIDString, name: "my-first-list")
-            let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: firstList, order: 1)
+            let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: TestUtils.listInput1.list, order: 1)
             
             self.remoteProvider.add(firstListItem, handler: {result in
                 expect(result.success).to(beTrue())
@@ -177,8 +174,7 @@ class TestListItems: XCTestCase {
                     println("add second list item")
                     let secondProduct = Product(uuid: NSUUID().UUIDString, name: "my-second-product", price: 3.5)
                     let secondSection = Section(uuid: NSUUID().UUIDString, name: "my-second-section")
-                    let secondList = List(uuid: NSUUID().UUIDString, name: "my-second-list")
-                    let secondListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: secondProduct, section: secondSection, list: secondList, order: 2)
+                    let secondListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: secondProduct, section: secondSection, list: TestUtils.listInput1.list, order: 2)
                     self.remoteProvider.add(secondListItem, handler: {result in
                         expect(result.success).to(beTrue())
                         
@@ -216,8 +212,9 @@ class TestListItems: XCTestCase {
                                         TestUtils.testRemoteProductMatches(product, secondProduct)
                                         
                                         TestUtils.testRemoteSectionMatches(section, secondSection)
-                                        
-                                        TestUtils.testRemoteListMatches(list, secondList)
+
+                                        TestUtils.testRemoteListMatches(list, TestUtils.listInput1.list)
+//                                        TestUtils.testRemoteListMatches(list, secondList)
                                         
                                         TestUtils.testRemoteListItemMatches(listItem, secondListItem)
                                     }
@@ -246,14 +243,13 @@ class TestListItems: XCTestCase {
         
         var expectation = self.expectationWithDescription("add list items")
         
-        TestUtils.withClearDatabaseAndNewLoggedInAccount {loginData in
+        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1AndAddedList1 {[weak expectation] (loginData, list) in
             
             println("add first list item")
             
             let firstProduct = Product(uuid: NSUUID().UUIDString, name: "my-first-product", price: 3.5)
             let firstSection = Section(uuid: NSUUID().UUIDString, name: "my-first-section")
-            let firstList = List(uuid: NSUUID().UUIDString, name: "my-first-list")
-            let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: firstList, order: 1)
+            let firstListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: firstProduct, section: firstSection, list: TestUtils.listInput1.list, order: 1)
             
             self.remoteProvider.add(firstListItem, handler: {[weak expectation] result in
                 expect(result.success).to(beTrue())
@@ -266,8 +262,7 @@ class TestListItems: XCTestCase {
                     println("add second list item")
                     let secondProduct = Product(uuid: NSUUID().UUIDString, name: "my-second-product", price: 3.5)
                     let secondSection = Section(uuid: NSUUID().UUIDString, name: "my-second-section")
-                    let secondList = List(uuid: NSUUID().UUIDString, name: "my-second-list")
-                    let secondListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: secondProduct, section: secondSection, list: secondList, order: 2)
+                    let secondListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: secondProduct, section: secondSection, list: TestUtils.listInput1.list, order: 2)
                     self.remoteProvider.add(secondListItem, handler: {result in
                         expect(result.success).to(beTrue())
                         
@@ -287,9 +282,9 @@ class TestListItems: XCTestCase {
 //                            let updatedFirstSection = Section(uuid: firstSection.uuid, name: "my-first-section-updated")
 //                            let updatedFirstList = List(uuid: firstList.uuid, name: "my-first-list-updated")
                             let updatedFirstSection = Section(uuid: NSUUID().UUIDString, name: "my-first-section-new")
-                            let updatedFirstList = List(uuid: NSUUID().UUIDString, name: "my-first-list-new")
+//                            let updatedFirstList = List(uuid: NSUUID().UUIDString, name: "my-first-list-new")
 //
-                            let updatedFirstListItem = ListItem(uuid: firstListItem.uuid, done: true, quantity: 5, product: updatedFirstProduct, section: updatedFirstSection, list: updatedFirstList, order: 5)
+                            let updatedFirstListItem = ListItem(uuid: firstListItem.uuid, done: true, quantity: 5, product: updatedFirstProduct, section: updatedFirstSection, list: TestUtils.listInput1.list, order: 5)
                             
                             self.remoteProvider.update(updatedFirstListItem, handler: {result in
                                 expect(result.success).to(beTrue())
@@ -303,7 +298,8 @@ class TestListItems: XCTestCase {
                                         TestUtils.testRemoteListItemsValid(remoteListItems)
                                         
                                         expect(remoteListItems.products.count) == 2
-                                        expect(remoteListItems.lists.count) == 2
+//                                        expect(remoteListItems.lists.count) == 2
+                                        expect(remoteListItems.lists.count) == 1
                                         expect(remoteListItems.sections.count) == 2
                                         expect(remoteListItems.listItems.count) == 2
                                         
@@ -314,7 +310,7 @@ class TestListItems: XCTestCase {
                                         let section2 = remoteListItems.sections[1]
                                         
                                         let list1 = remoteListItems.lists[0]
-                                        let list2 = remoteListItems.lists[1]
+//                                        let list2 = remoteListItems.lists[1]
                                         
                                         let listItem1 = remoteListItems.listItems[0]
                                         let listItem2 = remoteListItems.listItems[1]
@@ -325,8 +321,8 @@ class TestListItems: XCTestCase {
                                         // since we send new section and list, the previous second will be first and new one second. (the previous first doesn't appear in the result as it's not used by returned listitems)
                                         TestUtils.testRemoteSectionMatches(section1, secondSection)
                                         TestUtils.testRemoteSectionMatches(section2, updatedFirstSection)
-                                        TestUtils.testRemoteListMatches(list1, secondList)
-                                        TestUtils.testRemoteListMatches(list2, updatedFirstList)
+                                        TestUtils.testRemoteListMatches(list1, TestUtils.listInput1.list)
+//                                        TestUtils.testRemoteListMatches(list2, updatedFirstList)
                                         
                                         TestUtils.testRemoteListItemMatches(listItem1, updatedFirstListItem)
                                         TestUtils.testRemoteListItemMatches(listItem2, secondListItem)

@@ -160,9 +160,9 @@ class ListItemProviderMock: ListItemProvider {
         }
     }
     
-    func add(list: List, handler: Try<List> -> ()) {
+    func add(list: ListWithSharedUsersInput, handler: Try<List> -> ()) {
         //TODO
-        handler(Try(list))
+        handler(Try(list.list))
     }
     
     func updateDone(listItems:[ListItem], handler: Try<Bool> -> ()) {

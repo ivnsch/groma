@@ -30,7 +30,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }()
     
     private let listItemsProvider = ProviderFactory().listItemProvider
-  
+    private let listProvider = ProviderFactory().listProvider
+    
     private var listItemsTableViewController:ListItemsTableViewController!
     
     var itemsNotificator:ItemsNotificator!
@@ -46,7 +47,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     @IBOutlet weak var listNameView: UILabel!
 
-    private var currentList: List!
+    private var currentList: List?
 
     @IBOutlet weak var addListButton: UIBarButtonItem!
     
@@ -432,24 +433,29 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             })
         }
         
-        
-        self.listItemsProvider.listItems(currentList, handler: {try in
+        if let currentList = self.currentList {
+            self.listItemsProvider.listItems(currentList, handler: {try in
+                
+                if let listItems = try.success {
+                    
+                    //        let allListItems = self.tableViewSections.map {
+                    //            $0.listItems
+                    //        }.reduce([], combine: +)
+                    
+                    let totalPrice:Float = calculatePrice(listItems)
+                    
+                    let doneListItems = listItems.filter{$0.done}
+                    let donePrice:Float = calculatePrice(doneListItems)
+                    
+                    self.pricesView.totalPrice = totalPrice
+                    self.pricesView.donePrice = donePrice
+                }
+            })
             
-            if let listItems = try.success {
-                
-                //        let allListItems = self.tableViewSections.map {
-                //            $0.listItems
-                //        }.reduce([], combine: +)
-                
-                let totalPrice:Float = calculatePrice(listItems)
-                
-                let doneListItems = listItems.filter{$0.done}
-                let donePrice:Float = calculatePrice(doneListItems)
-                
-                self.pricesView.totalPrice = totalPrice
-                self.pricesView.donePrice = donePrice
-            }
-        })
+        } else {
+            println("Error: Invalid state: trying to update prices without current list")
+        }
+
     }
     
     private func setItemDone(listItem: ListItem) {
@@ -468,35 +474,48 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func addItem(listItemInput: ListItemInput) {
-        
-        self.listItemsProvider.add(listItemInput, list: self.currentList, order: nil, handler: {try in
-            
-            if let savedListItem = try.success {
-            
-                self.listItemsTableViewController.addListItem(savedListItem)
+
+        if let currentList = self.currentList {
+            self.listItemsProvider.add(listItemInput, list: currentList, order: nil, handler: {try in
                 
-                self.addItemView.resignFirstResponder()
-                self.updatePrices()
-            }
-        })
+                if let savedListItem = try.success {
+                    
+                    self.listItemsTableViewController.addListItem(savedListItem)
+                    
+                    self.addItemView.resignFirstResponder()
+                    self.updatePrices()
+                }
+            })
+            
+        } else {
+            println("Error: Invalid state: trying to add item without current list")
+        }
+
     }
     
     func updateItem(listItem: ListItem, listItemInput:ListItemInput) {
-        let product = Product(uuid: self.updatingListItem!.product.uuid, name: listItemInput.name, price: listItemInput.price)
-        let section = Section(uuid: NSUUID().UUIDString, name: listItemInput.section)
-        
-        let listItem = ListItem(uuid: self.updatingListItem!.uuid, done: self.updatingListItem!.done, quantity: listItemInput.quantity, product: product, section: section, list: self.currentList, order: self.updatingListItem!.order)
-        
-        self.listItemsProvider.update(listItem, handler: {try in
+        if let currentList = self.currentList {
             
-            if try.success ?? false {
+            let product = Product(uuid: self.updatingListItem!.product.uuid, name: listItemInput.name, price: listItemInput.price)
+            let section = Section(uuid: NSUUID().UUIDString, name: listItemInput.section)
+        
+            let listItem = ListItem(uuid: self.updatingListItem!.uuid, done: self.updatingListItem!.done, quantity: listItemInput.quantity, product: product, section: section, list: currentList, order: self.updatingListItem!.order)
+            
+            self.listItemsProvider.update(listItem, handler: {try in
                 
-                self.listItemsTableViewController.updateListItem(listItem)
-                
-                self.addItemView.resignFirstResponder()
-                self.updatePrices()
-            }
-        })
+                if try.success ?? false {
+                    
+                    self.listItemsTableViewController.updateListItem(listItem)
+                    
+                    self.addItemView.resignFirstResponder()
+                    self.updatePrices()
+                }
+            })
+            
+        } else {
+            println("Error: Invalid state: trying to update list item without current list")
+        }
+
     }
     
     func onListItemSelected(tableViewListItem: TableViewListItem) {
@@ -509,6 +528,35 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     func onListItemDeleted(tableViewListItem: TableViewListItem) {
         self.listItemsProvider.remove(tableViewListItem.listItem, handler: {try in
         })
+    }
+    
+    @IBAction func onSharePress(sender: UIButton) {
+        if let currentList = self.currentList {
+        
+            let modalViewController = UIStoryboard.choiceViewController()
+            modalViewController.modalPresentationStyle = .Popover
+            self.presentViewController(modalViewController, animated: true, completion: nil)
+            
+            modalViewController.listItems = currentList.users.map {
+                EditablePlainTableViewControllerModel<SharedUser>(model: $0, text: $0.email)
+            }
+            
+            modalViewController.onDonePress = {
+                modalViewController.dismissViewControllerAnimated(true, completion: nil)
+            }
+            
+            modalViewController.onAddItemFunc = {userEmail in
+                self.listProvider.addUserToList(currentList, email: userEmail) {result in
+                    if let user = result.sucessResult {
+                        modalViewController.addItem(EditablePlainTableViewControllerModel<SharedUser>(model: user, text: user.email))
+                    }
+                }
+                return
+            }
+        
+        } else {
+            println("Error: Invalid state: trying to share list item without current list")
+        }
     }
 }
 

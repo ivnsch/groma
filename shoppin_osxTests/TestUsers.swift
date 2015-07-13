@@ -19,9 +19,7 @@ class TestUsers: XCTestCase {
         TestUtils.withClearedDatabase {
             
             println("register a user")
-            let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])
-            
-            let user = User(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
+            let user = UserInput(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
             
             self.remoteProvider.register(user, handler: {result in
                 
@@ -47,9 +45,7 @@ class TestUsers: XCTestCase {
         TestUtils.withClearedDatabase {
             
             println("register a user")
-            let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])
-            
-            let user = User(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
+            let user = UserInput(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
             
             self.remoteProvider.register(user, handler: {result in
                 

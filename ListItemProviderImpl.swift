@@ -197,32 +197,38 @@ class ListItemProviderImpl: ListItemProvider {
             
             
             self.remoteProvider.lists {remoteResult in
-                    
-                if let remoteLists = remoteResult.successResult {
-                    let lists: [List] = remoteLists.map{ListMapper.ListWithRemote($0)}
-                    
-                    // if there's no cached list or there's a difference, overwrite the cached list
-                    if dbListsMaybe == nil || (dbListsMaybe! != lists) {
+                
+                if remoteResult.success {
+                    if let remoteLists = remoteResult.successResult {
+                        let lists: [List] = remoteLists.map{ListMapper.ListWithRemote($0)}
                         
-                        self.cdProvider.saveListsOverwrite(lists) {try in
+                        // if there's no cached list or there's a difference, overwrite the cached list
+                        if dbListsMaybe == nil || (dbListsMaybe! != lists) {
                             
-                            if try.success ?? false {
-                                handler(Try(lists))
+                            self.cdProvider.saveListsOverwrite(lists) {try in
                                 
-                            } else {
-                                if let error = try.error {
-                                    println("Error updating listitems: \(error)")
+                                if try.success ?? false {
+                                    handler(Try(lists))
                                     
                                 } else {
-                                    println("saveListItemsUpdate no success, no error - shouldn't happen")
+                                    if let error = try.error {
+                                        println("Error updating listitems: \(error)")
+                                        
+                                    } else {
+                                        println("saveListItemsUpdate no success, no error - shouldn't happen")
+                                    }
                                 }
                             }
                         }
+                        
+                    } else {
+                        println("Error: invalid state: success response but remote lists is nil")
+                        // TODO return error to client
                     }
                     
+                    
                 } else {
-                    println("Error: invalid state: success response but remote lists is nil")
-                    // TODO return error to client
+                    println("get remote lists no success, status: \(remoteResult.status)")
                 }
             }
         }
@@ -238,7 +244,7 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
     
-    func add(list: List, handler: Try<List> -> ()) {
+    func add(list: ListWithSharedUsersInput, handler: Try<List> -> ()) {
 
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive

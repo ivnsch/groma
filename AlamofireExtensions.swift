@@ -28,9 +28,17 @@ enum RemoteStatusCode: Int {
  
     // HTTP
     case NotAuthenticated = 401
+    case InternalServerError = 500
     
-    // Client
+    // Client generated
     case ParsingError = 10001
+    case NotRecognizedStatusFlag = 10002
+    case NoJson = 10003
+    case NotHandledHTTPStatusCode = 10004
+    case ResponseIsNil = 10005
+    case ServerNotReachable = 10006 // This is currently both server is down and no internet connection
+    case UnknownServerCommunicationError = 10007 // Communication errors other than .ServerNotReachable
+    
 }
 
 extension RemoteStatusCode : Printable {
@@ -208,13 +216,13 @@ extension Alamofire.Request {
                             
                         } else {
                             println("Error parsing response: status flag not recognized: \(statusInt)")
-                            let remoteResult = RemoteResult<T>(status: .Unknown)
+                            let remoteResult = RemoteResult<T>(status: .NotRecognizedStatusFlag)
                             return (remoteResult, nil)
                         }
                         
                     } else {
                         println("Error: wrong reponse format: \(response)")
-                        let remoteResult = RemoteResult<T>(status: .Unknown)
+                        let remoteResult = RemoteResult<T>(status: .NoJson)
                         return (remoteResult, nil)
                     }
                     
@@ -225,21 +233,42 @@ extension Alamofire.Request {
                     let remoteResult = RemoteResult<T>(status: .NotAuthenticated)
                     return (remoteResult, nil)
                     
+                } else if statusCode == 500 {
+                    println("Internal server error: \(response)")
+                    let remoteResult = RemoteResult<T>(status: .InternalServerError)
+                    return (remoteResult, nil)
+                    
                 } else {
                     println("Error: Not handled status code: \(statusCode)")
-                    let remoteResult = RemoteResult<T>(status: .Unknown)
+                    let remoteResult = RemoteResult<T>(status: .NotHandledHTTPStatusCode)
                     return (remoteResult, nil)
                 }
                 
-            } else {
+            } else { // So far this happened only when the server was not reachable but now we are catching the error before using the serializable, so it's unexpected that this will be used
                 println("Error: response == nil")
-                let remoteResult = RemoteResult<T>(status: .Unknown)
+                let remoteResult = RemoteResult<T>(status: .ResponseIsNil)
                 return (remoteResult, nil)
             }
         }
         
         return response(serializer: serializer, completionHandler: { (request, response, object, error) in
-            completionHandler(request, response, object as! RemoteResult<T>, error)
+            
+            let result: RemoteResult<T> = {
+                
+                if let e = error {
+                    println("Error calling remote service: \(e)")
+                    if e.code == -1004 {  // iOS returns -1004 when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
+                        return RemoteResult<T>(status: .ServerNotReachable)
+                    } else {
+                        return RemoteResult<T>(status: .UnknownServerCommunicationError)
+                    }
+                    
+                } else {
+                    return object as! RemoteResult<T>
+                }
+            }()
+            
+            completionHandler(request, response, result, error)
         })
         
         

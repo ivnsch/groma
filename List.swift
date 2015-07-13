@@ -13,10 +13,13 @@ class List: Equatable {
     let name: String
     let listItems: [ListItem]
     
-    init(uuid: String, name:String, listItems:[ListItem] = []) {
+    let users: [SharedUser] // note that this will be empty if using the app offline (TODO think about showing myself in this list - right now also this will not appear offline)
+    
+    init(uuid: String, name: String, listItems:[ListItem] = [], users: [SharedUser] = []) {
         self.uuid = uuid
         self.name = name
         self.listItems = listItems
+        self.users = users
     }
     
     var debugDescription: String {

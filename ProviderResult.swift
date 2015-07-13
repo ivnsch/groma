@@ -8,6 +8,7 @@
 
 import Foundation
 
+// Status codes relevant to the user
 enum ProviderStatusCode: Int {
     case Success = 1
     // Remote related
@@ -15,13 +16,15 @@ enum ProviderStatusCode: Int {
     case AlreadyExists = 4
     case NotFound = 5
     case InvalidCredentials = 6
-    case Unknown = 100
-    case ServerError = 101 //invalid json, etc.
+    case ServerError = 101 // Generic server error - invalid json, etc.
+    case ServerNotReachable = 102 // This is currently both server is down and no internet connection
+    case UnknownServerCommunicationError = 103
     
     // DB related
     
     
     // Other
+    case Unknown = 100 // Note: This represents unknown client error. Unknown server error is mapped to .ServerError
 }
 
 public class ProviderResult<T>: DebugPrintable {
@@ -75,8 +78,14 @@ struct DefaultRemoteResultMapper {
         case .ParsingError: return .ServerError
         case .InvalidCredentials: return .InvalidCredentials
         case .Success: return .Success
-        case .Unknown: return .Unknown
+        case .Unknown: return .ServerError
+        case .NotHandledHTTPStatusCode: return .ServerError
+        case .NotRecognizedStatusFlag: return .ServerError
+        case .ResponseIsNil: return .ServerError
+        case .NoJson: return .ServerError
+        case .ServerNotReachable: return .ServerNotReachable
+        case .UnknownServerCommunicationError: return .UnknownServerCommunicationError
+        case .InternalServerError: return .ServerError
         }
     }
-    
 }

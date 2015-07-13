@@ -1,0 +1,108 @@
+//
+//  EditablePlainTableViewController.swift
+//  shoppin
+//
+//  Created by ischuetz on 07/07/15.
+//  Copyright (c) 2015 ivanschuetz. All rights reserved.
+//
+
+import UIKit
+
+class EditablePlainTableViewControllerModel<T> {
+    
+    let text: String
+    let model: T
+    
+    init(model: T, text: String) {
+        self.model = model
+        self.text = text
+    }
+}
+
+class EditablePlainTableViewController: UITableViewController {
+
+    var listItems: [EditablePlainTableViewControllerModel<SharedUser>] = [] {// for now enforce User as type parameter since obj-c class (UIViewController in this case) doesn't support generics
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
+    
+    func addItem(model: EditablePlainTableViewControllerModel<SharedUser>) {
+        self.listItems.append(model)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
+
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    }
+
+    // MARK: - Table view data source
+
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 0
+    }
+
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.listItems.count
+    }
+
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as! UITableViewCell
+
+        cell.textLabel?.text = self.listItems[indexPath.row].text
+        
+        return cell
+    }
+    
+
+    
+    // Override to support conditional editing of the table view.
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        // Return NO if you do not want the specified item to be editable.
+        return true
+    }
+
+
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            // Delete the row from the data source
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            listItems.removeAtIndex(indexPath.row)
+            
+        } else if editingStyle == .Insert {
+            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+        }    
+    }
+
+    /*
+    // Override to support rearranging the table view.
+    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
+
+    }
+    */
+
+    /*
+    // Override to support conditional rearranging of the table view.
+    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        // Return NO if you do not want the item to be re-orderable.
+        return true
+    }
+    */
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // Get the new view controller using [segue destinationViewController].
+        // Pass the selected object to the new view controller.
+    }
+    */
+
+}

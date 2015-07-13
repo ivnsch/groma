@@ -11,11 +11,17 @@ import Alamofire
 
 class TestUtils {
 
-    static let user1 = User(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
-    static let user2 = User(email: "test@test.test", password: "test123", firstName: "test", lastName: "tester")
+    static let userInput1 = UserInput(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
+    static let userInput2 = UserInput(email: "test@test.test", password: "test123", firstName: "test", lastName: "tester")
+    
+    static let listInput1 = ListWithSharedUsersInput(list: List(uuid: NSUUID().UUIDString, name: "my-first-list"), users: [SharedUserInput(email: "foo@bar.com")])
+    static let listInput2 = ListWithSharedUsersInput(list: List(uuid: NSUUID().UUIDString, name: "my-second-list"), users: [SharedUserInput(email: "test@test.test")])
+    
     
     static let remoteUserProvider = RemoteUserProvider()
+    static let remoteListItemProvider = RemoteListItemProvider()
 
+    
     class func withClearedDatabase(f: () -> ()) {
         
         Alamofire.request(.GET, Urls.removeAll).responseMyObject { (request, _, remoteResult: RemoteResult<NoOpSerializable>, error) in
@@ -24,28 +30,42 @@ class TestUtils {
         }
     }
     
+    class func withClearDatabaseAndNewLoggedInAccountUser1AndAddedList1(onComplete: (LoginData, RemoteList) -> ()) {
+        self.withClearDatabaseAndNewLoggedInAccount(user: self.userInput1, onLoggedIn: {loginData in
+            
+            self.remoteListItemProvider.add(self.listInput1, handler: {addListResult in
+                
+                expect(addListResult.success).to(beTrue())
+                expect(addListResult.successResult).toNot(beNil())
+                
+                onComplete(loginData, addListResult.successResult!)
+            })
+        })
+    }
+    
+    
     // TODO needs better helpers for muti-user (store different tokens)
     // helper for multiuser tests
     class func withClearDatabaseAndNewLoggedInAccountUser1(onLoggedIn: (LoginData) -> ()) {
-        self.withClearDatabaseAndNewLoggedInAccount(user: self.user1, onLoggedIn: onLoggedIn)
+        self.withClearDatabaseAndNewLoggedInAccount(user: self.userInput1, onLoggedIn: onLoggedIn)
     }
 
     // helper for multiuser tests
     class func withClearDatabaseAndNewLoggedInAccountUser2(onLoggedIn: (LoginData) -> ()) {
-        self.withClearDatabaseAndNewLoggedInAccount(user: self.user2, onLoggedIn: onLoggedIn)
+        self.withClearDatabaseAndNewLoggedInAccount(user: self.userInput2, onLoggedIn: onLoggedIn)
     }
     
     // helper for multiuser tests
     class func withNewLoggedInAccountUser1(onLoggedIn: (LoginData) -> ()) {
-        self.withNewLoggedInAccount(user: TestUtils.user1, onLoggedIn: onLoggedIn)
+        self.withNewLoggedInAccount(user: TestUtils.userInput1, onLoggedIn: onLoggedIn)
     }
     
     // helper for multiuser tests
     class func withNewLoggedInAccountUser2(onLoggedIn: (LoginData) -> ()) {
-        self.withNewLoggedInAccount(user: TestUtils.user2, onLoggedIn: onLoggedIn)
+        self.withNewLoggedInAccount(user: TestUtils.userInput2, onLoggedIn: onLoggedIn)
     }
     
-    class func withClearDatabaseAndNewLoggedInAccount(user: User = TestUtils.user1, onLoggedIn: (LoginData) -> ()) {
+    class func withClearDatabaseAndNewLoggedInAccount(user: UserInput = TestUtils.userInput1, onLoggedIn: (LoginData) -> ()) {
         // ensure empty keychain
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
         valet?.removeAllObjects()
@@ -69,13 +89,13 @@ class TestUtils {
 //    }
     
 
-    class func withNewLoggedInAccount(user: User = TestUtils.user1, onLoggedIn: (LoginData) -> ()) {
+    class func withNewLoggedInAccount(user: UserInput = TestUtils.userInput1, onLoggedIn: (LoginData) -> ()) {
         
         // ensure empty keychain
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
         valet?.removeAllObjects()
         
-        let user = User(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
+        let user = UserInput(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
         
         self.remoteUserProvider.register(user, handler: {result in
             
@@ -101,7 +121,7 @@ class TestUtils {
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
         valet?.removeAllObjects()
         
-        let user = User(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
+        let user = UserInput(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
         
         self.remoteUserProvider.register(user, handler: {result in
             
@@ -142,11 +162,28 @@ class TestUtils {
     class func testRemoteListValid(remoteList: RemoteList) {
         expect(remoteList.uuid).notTo(beEmpty())
         expect(remoteList.name).notTo(beEmpty())
+        expect(remoteList.users).notTo(beEmpty())
     }
     
+    // TODO remove this, we should need only testRemoteListWithSharedUsersMatches
     class func testRemoteListMatches(remoteList: RemoteList, _ list: List) {
         expect(remoteList.uuid) == list.uuid
         expect(remoteList.name) == list.name
+//        expect(remoteList.users.count) == list.users.count
+    }
+
+    class func testRemoteListWithSharedUsersMatches(remoteList: RemoteList, _ list: ListWithSharedUsersInput) {
+        expect(remoteList.uuid) == list.list.uuid
+        expect(remoteList.name) == list.list.name
+        expect(remoteList.users.count) == list.users.count
+        
+        for i in 0..<remoteList.users.count {
+            self.testRemoteSharedUserMatchesWithInput(remoteList.users[i], list.users[i])
+        }
+    }
+    
+    class func testRemoteSharedUserMatchesWithInput(remoteSharedUser: RemoteSharedUser, _ sharedUserInput: SharedUserInput) {
+        expect(remoteSharedUser.email) == sharedUserInput.email
     }
 
     class func testRemoteSectionValid(remoteSection: RemoteSection) {

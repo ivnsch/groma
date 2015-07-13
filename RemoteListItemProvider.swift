@@ -25,7 +25,7 @@ class RemoteListItemProvider {
 
     
     func lists(handler: RemoteResult<[RemoteList]> -> ()) {
-        Alamofire.request(.GET, Urls.lists).responseMyArray { (request, _, result: RemoteResult<[RemoteList]>, error) in
+        AlamofireHelper.authenticatedRequest(.GET, Urls.lists).responseMyArray { (request, _, result: RemoteResult<[RemoteList]>, error) in
             handler(result)
         }
     }
@@ -60,9 +60,9 @@ class RemoteListItemProvider {
         }
     }
     
-    func update(list: List, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func update(list: ListWithSharedUsersInput, handler: RemoteResult<RemoteList> -> ()) {
         let parameters = self.toRequestParams(list)
-        AlamofireHelper.authenticatedRequest(.PUT, Urls.list, parameters).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
+        AlamofireHelper.authenticatedRequest(.PUT, Urls.list, parameters).responseMyObject { (request, _, result: RemoteResult<RemoteList>, error) in
             handler(result)
         }
     }
@@ -106,10 +106,11 @@ class RemoteListItemProvider {
         }
     }
     
-    func add(list: List, handler: RemoteResult<RemoteList> -> ()) {
-        let parameters = [
-            "uuid": list.uuid,
-            "name": list.name
+    func add(list: ListWithSharedUsersInput, handler: RemoteResult<RemoteList> -> ()) {
+        let parameters: [String: AnyObject] = [
+            "uuid": list.list.uuid,
+            "name": list.list.name,
+            "users": list.users.map{self.toRequestParams($0)}
         ]
         AlamofireHelper.authenticatedRequest(.POST, Urls.list, parameters).responseMyObject { (request, _, result: RemoteResult<RemoteList>, error) in
             handler(result)
@@ -144,6 +145,15 @@ class RemoteListItemProvider {
     
     //////////////////
     
+    func toRequestParams(sharedUser: SharedUser) -> [String: AnyObject] {
+        return [
+            "uuid": sharedUser.uuid,
+            "email": sharedUser.email,
+            "firstName": sharedUser.firstName,
+            "lastName": sharedUser.lastName
+        ]
+    }
+    
     func toRequestParams(listItem: ListItem) -> [String: AnyObject] {
         return [
             "uuid": listItem.uuid,
@@ -154,10 +164,8 @@ class RemoteListItemProvider {
                 "name": listItem.product.name,
                 "price": listItem.product.price,
             ],
-            "listInput": [
-                "uuid": listItem.list.uuid,
-                "name": listItem.list.name
-            ],
+            "listUuid": listItem.list.uuid,
+            "listName": listItem.list.name,
             "sectionInput": [
                 "uuid": listItem.section.uuid,
                 "name": listItem.section.name
@@ -166,6 +174,23 @@ class RemoteListItemProvider {
         ]
     }
     
+    func toRequestParams(sharedUserInput: SharedUserInput) -> [String: AnyObject] {
+        return [
+            "email": sharedUserInput.email,
+            "foo": "" // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
+        ]
+    }
+    
+    
+    func toRequestParams(listWithSharedUsersInput: ListWithSharedUsersInput) -> [String: AnyObject] {
+        let sharedUsers: [[String: AnyObject]] = listWithSharedUsersInput.users.map{self.toRequestParams($0)}
+        
+        var listDict = self.toRequestParams(listWithSharedUsersInput.list)
+        
+        listDict["users"] = sharedUsers
+        
+        return listDict
+    }
     
     func toRequestParams(list: List) -> [String: AnyObject] {
         return [

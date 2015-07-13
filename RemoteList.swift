@@ -11,10 +11,15 @@ import Foundation
 final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
     let uuid: String
     let name: String
+    let users: [RemoteSharedUser]
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
-        self.uuid = representation.valueForKeyPath("uuid") as! String
-        self.name = representation.valueForKeyPath("name") as! String
+        
+        let list: AnyObject = representation.valueForKeyPath("list")!
+        self.uuid = list.valueForKeyPath("uuid") as! String
+        self.name = list.valueForKeyPath("name") as! String
+        let unserializedUsers: AnyObject = representation.valueForKeyPath("users")!
+        self.users = RemoteSharedUser.collection(response: response, representation: unserializedUsers)
     }
     
     @objc static func collection(#response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteList] {
@@ -29,6 +34,6 @@ final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializab
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name)}"
+        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), users: \(self.users)}"
     }
 }

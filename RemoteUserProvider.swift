@@ -32,7 +32,7 @@ class RemoteUserProvider {
     }
     
     
-    func register(user: User, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func register(user: UserInput, handler: RemoteResult<NoOpSerializable> -> ()) {
         
         let parameters = self.toRequestParams(user)
         
@@ -48,7 +48,7 @@ class RemoteUserProvider {
     }
     
     
-    func toRequestParams(user: User) -> [String: AnyObject] {
+    func toRequestParams(user: UserInput) -> [String: AnyObject] {
         return [
             "email": user.email,
             "firstName": user.firstName,

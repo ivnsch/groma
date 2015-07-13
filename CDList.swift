@@ -15,5 +15,6 @@ class CDList: NSManagedObject {
     @NSManaged var uuid: String
     @NSManaged var name: String
     @NSManaged var listItems: NSSet
+    @NSManaged var users: NSSet
 
 }

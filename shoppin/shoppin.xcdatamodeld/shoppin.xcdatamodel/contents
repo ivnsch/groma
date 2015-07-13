@@ -8,6 +8,7 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="listItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDListItem" inverseName="list" inverseEntity="CDListItem" syncable="YES"/>
+        <relationship name="users" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDSharedUser" inverseName="list" inverseEntity="CDSharedUser" syncable="YES"/>
     </entity>
     <entity name="CDListItem" representedClassName="CDListItem" syncable="YES">
         <attribute name="done" optional="YES" attributeType="Boolean" syncable="YES"/>
@@ -30,11 +31,19 @@
         <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="listItem" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDListItem" inverseName="section" inverseEntity="CDListItem" syncable="YES"/>
     </entity>
+    <entity name="CDSharedUser" representedClassName="PRODUCT_MODULE_NAME.CDSharedUser" syncable="YES">
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="firstName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="list" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDList" inverseName="users" inverseEntity="CDList" syncable="YES"/>
+    </entity>
     <elements>
         <element name="CDInventoryItem" positionX="-54" positionY="36" width="128" height="75"/>
-        <element name="CDList" positionX="-54" positionY="27" width="128" height="90"/>
+        <element name="CDList" positionX="-54" positionY="27" width="128" height="105"/>
         <element name="CDListItem" positionX="-63" positionY="-9" width="128" height="150"/>
         <element name="CDProduct" positionX="-63" positionY="-18" width="128" height="120"/>
         <element name="CDSection" positionX="-54" positionY="9" width="128" height="90"/>
+        <element name="CDSharedUser" positionX="-54" positionY="45" width="128" height="120"/>
     </elements>
 </model>

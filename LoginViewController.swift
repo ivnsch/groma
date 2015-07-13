@@ -35,8 +35,16 @@ class LoginViewController: UIViewController, RegisterDelegate {
         super.viewDidLoad()
 
         self.navigationController?.navigationBarHidden = false
+        
+        self.fillTestInput()
     }
 
+    
+    private func fillTestInput() {
+        userNameField.text = "ivanschuetz@gmail.com"
+        passwordField.text = "test123"
+    }
+    
     @IBAction func loginTapped(sender: AnyObject) {
         
         let email = userNameField.text

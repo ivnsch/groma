@@ -41,6 +41,9 @@
 		EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB41A3334EC00D778DE /* Images.xcassets */; };
 		EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB61A3334EC00D778DE /* LaunchScreen.xib */; };
 		EB1EFAC51B1EFBBC0079A35D /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1EFAC41B1EFBBC0079A35D /* AutocompleteTextField.swift */; };
+		EB202B871B51C462001699E7 /* ListWithSharedUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB202B861B51C462001699E7 /* ListWithSharedUsers.swift */; };
+		EB202B881B51C462001699E7 /* ListWithSharedUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB202B861B51C462001699E7 /* ListWithSharedUsers.swift */; };
+		EB202B891B51C462001699E7 /* ListWithSharedUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB202B861B51C462001699E7 /* ListWithSharedUsers.swift */; };
 		EB20FBF21A5961360058103B /* CartMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF11A5961360058103B /* CartMenuView.swift */; };
 		EB20FBF61A59701C0058103B /* CDInventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF51A59701C0058103B /* CDInventoryItem.swift */; };
 		EB20FBF81A5971170058103B /* InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF71A5971170058103B /* InventoryItem.swift */; };
@@ -74,6 +77,9 @@
 		EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */; };
 		EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7E1A559C8800DBC4AF /* Constants.swift */; };
 		EB4C36551B4BD5A700C387C5 /* TestSharedLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */; };
+		EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */; };
+		EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */; };
+		EB4C365F1B4C142600C387C5 /* EditableChoiceModal.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB4C365E1B4C142600C387C5 /* EditableChoiceModal.storyboard */; };
 		EB4FD44B1AC6B77C0000F952 /* Float.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D6E1A530FBC00DBC4AF /* Float.swift */; };
 		EB4FD44E1AC6BE390000F952 /* NSTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD44D1AC6BE390000F952 /* NSTableView.swift */; };
 		EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4FD44F1AC6BE960000F952 /* Globals.swift */; };
@@ -125,6 +131,30 @@
 		EB6F81341B4717C2008680E0 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81311B4717C2008680E0 /* KeychainKeys.swift */; };
 		EB6F81661B4B1CDC008680E0 /* TestRequiresAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81631B4B1CDC008680E0 /* TestRequiresAuthentication.swift */; };
 		EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB703FE11B3B5F3A001586C5 /* Intro.storyboard */; };
+		EB70C2171B4D2C690060E529 /* ListProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2161B4D2C690060E529 /* ListProviderImpl.swift */; };
+		EB70C2191B4D2C940060E529 /* ListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2181B4D2C940060E529 /* ListProvider.swift */; };
+		EB70C21B1B4D2ECE0060E529 /* RemoteSharedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C21A1B4D2ECE0060E529 /* RemoteSharedUser.swift */; };
+		EB70C21C1B4D2ECE0060E529 /* RemoteSharedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C21A1B4D2ECE0060E529 /* RemoteSharedUser.swift */; };
+		EB70C21D1B4D2ECE0060E529 /* RemoteSharedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C21A1B4D2ECE0060E529 /* RemoteSharedUser.swift */; };
+		EB70C21F1B4D302D0060E529 /* SharedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C21E1B4D302D0060E529 /* SharedUser.swift */; };
+		EB70C2201B4D302D0060E529 /* SharedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C21E1B4D302D0060E529 /* SharedUser.swift */; };
+		EB70C2211B4D302D0060E529 /* SharedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C21E1B4D302D0060E529 /* SharedUser.swift */; };
+		EB70C2231B4D33E90060E529 /* SharedUserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2221B4D33E90060E529 /* SharedUserMapper.swift */; };
+		EB70C2241B4D33E90060E529 /* SharedUserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2221B4D33E90060E529 /* SharedUserMapper.swift */; };
+		EB70C2251B4D33E90060E529 /* SharedUserMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2221B4D33E90060E529 /* SharedUserMapper.swift */; };
+		EB70C2271B4D34780060E529 /* CDSharedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2261B4D34780060E529 /* CDSharedUser.swift */; };
+		EB70C2281B4D34780060E529 /* CDSharedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2261B4D34780060E529 /* CDSharedUser.swift */; };
+		EB70C2291B4D34780060E529 /* CDSharedUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2261B4D34780060E529 /* CDSharedUser.swift */; };
+		EB70C22A1B4D3DD40060E529 /* ListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2181B4D2C940060E529 /* ListProvider.swift */; };
+		EB70C22B1B4D3DD50060E529 /* ListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2181B4D2C940060E529 /* ListProvider.swift */; };
+		EB70C22C1B4D3DF50060E529 /* ListProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2161B4D2C690060E529 /* ListProviderImpl.swift */; };
+		EB70C22D1B4D3DF50060E529 /* ListProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2161B4D2C690060E529 /* ListProviderImpl.swift */; };
+		EB70C22F1B5021D50060E529 /* UserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C22E1B5021D40060E529 /* UserInput.swift */; };
+		EB70C2301B5021D50060E529 /* UserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C22E1B5021D40060E529 /* UserInput.swift */; };
+		EB70C2311B5021D50060E529 /* UserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C22E1B5021D40060E529 /* UserInput.swift */; };
+		EB70C2381B50497C0060E529 /* SharedUserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2371B50497C0060E529 /* SharedUserInput.swift */; };
+		EB70C2391B50497C0060E529 /* SharedUserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2371B50497C0060E529 /* SharedUserInput.swift */; };
+		EB70C23A1B50497C0060E529 /* SharedUserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2371B50497C0060E529 /* SharedUserInput.swift */; };
 		EB7E8B611B2ADF620090409A /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
 		EB7E8B621B2ADF9A0090409A /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
 		EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */; };
@@ -293,6 +323,7 @@
 		EB1DDEC21A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEC31A3334EC00D778DE /* shoppinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shoppinTests.swift; sourceTree = "<group>"; };
 		EB1EFAC41B1EFBBC0079A35D /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
+		EB202B861B51C462001699E7 /* ListWithSharedUsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListWithSharedUsers.swift; sourceTree = "<group>"; };
 		EB20FBEC1A58776E0058103B /* shoppin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-Bridging-Header.h"; sourceTree = "<group>"; };
 		EB20FBF11A5961360058103B /* CartMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartMenuView.swift; sourceTree = "<group>"; };
 		EB20FBF51A59701C0058103B /* CDInventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDInventoryItem.swift; path = shoppin/CDInventoryItem.swift; sourceTree = "<group>"; };
@@ -328,6 +359,9 @@
 		EB2F5D7E1A559C8800DBC4AF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		EB49F5E91AC6CBEE00BBEDA2 /* shoppin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = shoppin.entitlements; sourceTree = "<group>"; };
 		EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSharedLists.swift; sourceTree = "<group>"; };
+		EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableChoiceModal.swift; sourceTree = "<group>"; };
+		EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditablePlainTableViewController.swift; sourceTree = "<group>"; };
+		EB4C365E1B4C142600C387C5 /* EditableChoiceModal.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditableChoiceModal.storyboard; sourceTree = "<group>"; };
 		EB4FD44D1AC6BE390000F952 /* NSTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTableView.swift; sourceTree = "<group>"; };
 		EB4FD44F1AC6BE960000F952 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		EB4FD4551AC6D6690000F952 /* EditListItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListItemController.swift; sourceTree = "<group>"; };
@@ -345,6 +379,14 @@
 		EB6F81311B4717C2008680E0 /* KeychainKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainKeys.swift; sourceTree = "<group>"; };
 		EB6F81631B4B1CDC008680E0 /* TestRequiresAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestRequiresAuthentication.swift; sourceTree = "<group>"; };
 		EB703FE11B3B5F3A001586C5 /* Intro.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Intro.storyboard; sourceTree = "<group>"; };
+		EB70C2161B4D2C690060E529 /* ListProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListProviderImpl.swift; sourceTree = "<group>"; };
+		EB70C2181B4D2C940060E529 /* ListProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListProvider.swift; sourceTree = "<group>"; };
+		EB70C21A1B4D2ECE0060E529 /* RemoteSharedUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSharedUser.swift; sourceTree = "<group>"; };
+		EB70C21E1B4D302D0060E529 /* SharedUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUser.swift; sourceTree = "<group>"; };
+		EB70C2221B4D33E90060E529 /* SharedUserMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUserMapper.swift; sourceTree = "<group>"; };
+		EB70C2261B4D34780060E529 /* CDSharedUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CDSharedUser.swift; path = shoppin/CDSharedUser.swift; sourceTree = "<group>"; };
+		EB70C22E1B5021D40060E529 /* UserInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInput.swift; sourceTree = "<group>"; };
+		EB70C2371B50497C0060E529 /* SharedUserInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUserInput.swift; sourceTree = "<group>"; };
 		EB7E8B601B2ADF620090409A /* Try.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Try.swift; sourceTree = "<group>"; };
 		EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
 		EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListsViewController.xib; sourceTree = "<group>"; };
@@ -647,6 +689,25 @@
 			name = common;
 			sourceTree = "<group>";
 		};
+		EB4C36561B4C115E00C387C5 /* libraryCandidates */ = {
+			isa = PBXGroup;
+			children = (
+				EB4C36571B4C117C00C387C5 /* selectionModal */,
+			);
+			name = libraryCandidates;
+			path = shoppin;
+			sourceTree = "<group>";
+		};
+		EB4C36571B4C117C00C387C5 /* selectionModal */ = {
+			isa = PBXGroup;
+			children = (
+				EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */,
+				EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */,
+				EB4C365E1B4C142600C387C5 /* EditableChoiceModal.storyboard */,
+			);
+			name = selectionModal;
+			sourceTree = "<group>";
+		};
 		EB4FD44C1AC6BE2A0000F952 /* extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -660,7 +721,9 @@
 		EB4FD4591AC701290000F952 /* input */ = {
 			isa = PBXGroup;
 			children = (
+				EB70C2321B5038D90060E529 /* update */,
 				EB4FD45A1AC701410000F952 /* ListItemInput.swift */,
+				EB70C22E1B5021D40060E529 /* UserInput.swift */,
 			);
 			name = input;
 			sourceTree = "<group>";
@@ -677,6 +740,7 @@
 				EB2F5D071A4A28DE00DBC4AF /* autosuggestions */,
 				EB55675B1A86231D00CD3EC6 /* common */,
 				EB2F5D141A4B37D700DBC4AF /* sidemenu */,
+				EB4C36561B4C115E00C387C5 /* libraryCandidates */,
 			);
 			name = shoppin_ios;
 			sourceTree = "<group>";
@@ -720,6 +784,15 @@
 			name = intro;
 			sourceTree = "<group>";
 		};
+		EB70C2321B5038D90060E529 /* update */ = {
+			isa = PBXGroup;
+			children = (
+				EB202B861B51C462001699E7 /* ListWithSharedUsers.swift */,
+				EB70C2371B50497C0060E529 /* SharedUserInput.swift */,
+			);
+			name = update;
+			sourceTree = "<group>";
+		};
 		EB9BE4141B2C6525005B401A /* remote */ = {
 			isa = PBXGroup;
 			children = (
@@ -734,6 +807,7 @@
 				EB9BE41E1B2CB513005B401A /* RemoteProduct.swift */,
 				EB9BE4241B2CB542005B401A /* RemoteList.swift */,
 				EB9BE4211B2CB51F005B401A /* RemoteSection.swift */,
+				EB70C21A1B4D2ECE0060E529 /* RemoteSharedUser.swift */,
 			);
 			name = remote;
 			sourceTree = "<group>";
@@ -840,6 +914,7 @@
 				EBEEDD681A49C75400FC3B29 /* CDSection.swift */,
 				EB2F5D741A5579B200DBC4AF /* CDList.swift */,
 				EB20FBF51A59701C0058103B /* CDInventoryItem.swift */,
+				EB70C2261B4D34780060E529 /* CDSharedUser.swift */,
 			);
 			name = coreData;
 			sourceTree = "<group>";
@@ -899,6 +974,7 @@
 				EBEEDD6A1A49C94F00FC3B29 /* Section.swift */,
 				EB2F5D761A557AB000DBC4AF /* List.swift */,
 				EBF3779E1B38AB1000EEB6DB /* User.swift */,
+				EB70C21E1B4D302D0060E529 /* SharedUser.swift */,
 				EB0C1B8A1B3DA89900F24C85 /* LoginData.swift */,
 				EB20FBF71A5971170058103B /* InventoryItem.swift */,
 			);
@@ -918,6 +994,7 @@
 				EB20FBFB1A5972A30058103B /* InventoryProvider.swift */,
 				EB0C1B8E1B3DA97000F24C85 /* UserProvider.swift */,
 				EB0C1BA81B3EC00700F24C85 /* ProviderResult.swift */,
+				EB70C2181B4D2C940060E529 /* ListProvider.swift */,
 			);
 			name = provider;
 			path = ..;
@@ -948,6 +1025,7 @@
 				EB20FBFD1A5972C70058103B /* InventoryProviderImpl.swift */,
 				EB0C1B921B3DA9D100F24C85 /* UserProviderImpl.swift */,
 				EB0C1BAC1B3F33CE00F24C85 /* remoteResultHandler.swift */,
+				EB70C2161B4D2C690060E529 /* ListProviderImpl.swift */,
 			);
 			name = impl;
 			sourceTree = "<group>";
@@ -960,6 +1038,7 @@
 				EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */,
 				EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */,
 				EB20FBF91A5971C20058103B /* InventoryItemMapper.swift */,
+				EB70C2221B4D33E90060E529 /* SharedUserMapper.swift */,
 			);
 			name = mapper;
 			sourceTree = "<group>";
@@ -1105,6 +1184,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB4C365F1B4C142600C387C5 /* EditableChoiceModal.storyboard in Resources */,
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
 				EB2F5D0D1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.xib in Resources */,
 				EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */,
@@ -1285,6 +1365,7 @@
 			files = (
 				EB2F5D5A1A4F5C8100DBC4AF /* SwipeableCell.swift in Sources */,
 				EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */,
+				EB70C2191B4D2C940060E529 /* ListProvider.swift in Sources */,
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				EB6F81321B4717C2008680E0 /* KeychainKeys.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
@@ -1307,12 +1388,14 @@
 				EB6F812D1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EB0C1B931B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
 				EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */,
+				EB70C22F1B5021D50060E529 /* UserInput.swift in Sources */,
 				EB0C1B8F1B3DA97000F24C85 /* UserProvider.swift in Sources */,
 				EB2743DB1A3E3ACE00593AB0 /* CDProduct.swift in Sources */,
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
 				EBEEDD691A49C75400FC3B29 /* CDSection.swift in Sources */,
 				EB28C1181A58623E00E1C8BC /* PlainTableViewController.swift in Sources */,
 				EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */,
+				EB70C21B1B4D2ECE0060E529 /* RemoteSharedUser.swift in Sources */,
 				EB20FC051A599A500058103B /* InventoryViewController.swift in Sources */,
 				EBF162F01A3CA3530048E37C /* CDListItemProvider.swift in Sources */,
 				EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */,
@@ -1322,11 +1405,14 @@
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
 				EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */,
+				EB70C2271B4D34780060E529 /* CDSharedUser.swift in Sources */,
 				EB9BE4221B2CB51F005B401A /* RemoteSection.swift in Sources */,
+				EB70C2381B50497C0060E529 /* SharedUserInput.swift in Sources */,
 				EBF162ED1A3CA24E0048E37C /* ListItem.swift in Sources */,
 				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
 				EB9BE41F1B2CB513005B401A /* RemoteProduct.swift in Sources */,
 				EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */,
+				EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */,
 				EB0C1BA51B3DF5FB00F24C85 /* UserDetailsViewController.swift in Sources */,
 				EB2F5D261A4DE56B00DBC4AF /* DoneViewController.swift in Sources */,
 				EB89D33C1AD44BD400B6E0D0 /* Selectable.swift in Sources */,
@@ -1334,10 +1420,12 @@
 				EB20FC071A599AE20058103B /* InventoryTableViewCell.swift in Sources */,
 				EB20FBF61A59701C0058103B /* CDInventoryItem.swift in Sources */,
 				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
+				EB70C21F1B4D302D0060E529 /* SharedUser.swift in Sources */,
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,
 				EB0C1BA01B3DF2B500F24C85 /* UserTabItemViewController.swift in Sources */,
 				EBF162DD1A3C82380048E37C /* DefaultTableViewController.swift in Sources */,
 				EBF162E51A3C85A30048E37C /* ListItemCell.swift in Sources */,
+				EB202B871B51C462001699E7 /* ListWithSharedUsers.swift in Sources */,
 				EB0C1B831B3D626500F24C85 /* IntroViewController.swift in Sources */,
 				EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */,
 				EB7E8B611B2ADF620090409A /* Try.swift in Sources */,
@@ -1347,6 +1435,7 @@
 				EB2F5D751A5579B200DBC4AF /* CDList.swift in Sources */,
 				EBF162F21A3CA3BB0048E37C /* CDProvider.swift in Sources */,
 				EBF377891B3450E800EEB6DB /* PersistentStoreHelper.swift in Sources */,
+				EB70C2231B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBF162F51A3CA4BA0048E37C /* ProviderFactory.swift in Sources */,
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
@@ -1354,6 +1443,7 @@
 				EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */,
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,
+				EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */,
 				EBF3779F1B38AB1000EEB6DB /* User.swift in Sources */,
 				EB9BE41C1B2CB42B005B401A /* RemoteListItem.swift in Sources */,
 				EB20FBFE1A5972C70058103B /* InventoryProviderImpl.swift in Sources */,
@@ -1363,6 +1453,7 @@
 				EB4FD45B1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EBF162F71A3CA5030048E37C /* ListItemProviderMock.swift in Sources */,
 				EB2F5D6F1A530FBC00DBC4AF /* Float.swift in Sources */,
+				EB70C2171B4D2C690060E529 /* ListProviderImpl.swift in Sources */,
 				EB0C1BA91B3EC00700F24C85 /* ProviderResult.swift in Sources */,
 				EB20FC001A5973330058103B /* CDInventoryProvider.swift in Sources */,
 				EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */,
@@ -1379,8 +1470,10 @@
 			files = (
 				EB5567691A8643B800CD3EC6 /* ListItem.swift in Sources */,
 				EB9BE4171B2C6556005B401A /* RemoteListItemProvider.swift in Sources */,
+				EB70C22A1B4D3DD40060E529 /* ListProvider.swift in Sources */,
 				EB4FD46E1AC73C930000F952 /* Constants.swift in Sources */,
 				EB0C1B8C1B3DA89900F24C85 /* LoginData.swift in Sources */,
+				EB70C2281B4D34780060E529 /* CDSharedUser.swift in Sources */,
 				EB55677F1A8658AA00CD3EC6 /* InventoryProviderImpl.swift in Sources */,
 				EB5567631A86438100CD3EC6 /* InventoryItemMapper.swift in Sources */,
 				EB5567821A8658B700CD3EC6 /* CDInventoryProvider.swift in Sources */,
@@ -1408,6 +1501,7 @@
 				EB4FD46D1AC73B590000F952 /* PreferencesManager.swift in Sources */,
 				EB5567811A8658B400CD3EC6 /* CDListItemProvider.swift in Sources */,
 				EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */,
+				EB70C21C1B4D2ECE0060E529 /* RemoteSharedUser.swift in Sources */,
 				EB4FD45E1AC715FF0000F952 /* Array.swift in Sources */,
 				EB55676D1A8644D400CD3EC6 /* shoppin.xcdatamodeld in Sources */,
 				EBF377941B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
@@ -1415,6 +1509,7 @@
 				EBF377A01B38AB1000EEB6DB /* User.swift in Sources */,
 				EB5567601A86437800CD3EC6 /* ProductMapper.swift in Sources */,
 				EB5567711A864B6E00CD3EC6 /* ListItemProviderMock.swift in Sources */,
+				EB70C2301B5021D50060E529 /* UserInput.swift in Sources */,
 				EB6F812E1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EB5567621A86437E00CD3EC6 /* ListMapper.swift in Sources */,
 				EB1EFAC51B1EFBBC0079A35D /* AutocompleteTextField.swift in Sources */,
@@ -1432,10 +1527,12 @@
 				EB4FD44E1AC6BE390000F952 /* NSTableView.swift in Sources */,
 				EB4FD4511AC6BE960000F952 /* Globals.swift in Sources */,
 				EBF3779C1B38AA5900EEB6DB /* Urls.swift in Sources */,
+				EB70C2391B50497C0060E529 /* SharedUserInput.swift in Sources */,
 				EB55676A1A8643BC00CD3EC6 /* Section.swift in Sources */,
 				EB6D93A61B1BAFB400ED8999 /* HandlingTextField.swift in Sources */,
 				EBDFE3C61AD11F6700E48F95 /* NSLayoutConstraint.swift in Sources */,
 				EB0C1B901B3DA97000F24C85 /* UserProvider.swift in Sources */,
+				EB70C2241B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBF377981B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
 				EB89D3471AD4536300B6E0D0 /* AddListController.swift in Sources */,
 				EBDFE3B51ACEEB5400E48F95 /* HeaderCellManager.swift in Sources */,
@@ -1445,8 +1542,11 @@
 				EB5567801A8658B000CD3EC6 /* CDProvider.swift in Sources */,
 				EB6F81331B4717C2008680E0 /* KeychainKeys.swift in Sources */,
 				EB5567641A86438600CD3EC6 /* CDProduct.swift in Sources */,
+				EB202B881B51C462001699E7 /* ListWithSharedUsers.swift in Sources */,
+				EB70C2201B4D302D0060E529 /* SharedUser.swift in Sources */,
 				EBDFE3C21AD00E8200E48F95 /* DialogUtils.swift in Sources */,
 				EB0C1BAE1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
+				EB70C22C1B4D3DF50060E529 /* ListProviderImpl.swift in Sources */,
 				EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */,
 				EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */,
 				EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */,
@@ -1457,6 +1557,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB70C23A1B50497C0060E529 /* SharedUserInput.swift in Sources */,
 				EBF377611B342A6800EEB6DB /* CDListItemProvider.swift in Sources */,
 				EBF377781B342B0500EEB6DB /* CDInventoryItem.swift in Sources */,
 				EBF3776A1B342AAF00EEB6DB /* ProviderFactory.swift in Sources */,
@@ -1472,14 +1573,17 @@
 				EBF377951B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
 				EBF3775F1B342A4E00EEB6DB /* ListItemProviderMock.swift in Sources */,
 				EB4C36551B4BD5A700C387C5 /* TestSharedLists.swift in Sources */,
+				EB70C22B1B4D3DD50060E529 /* ListProvider.swift in Sources */,
 				EBF377721B342AE700EEB6DB /* ListMapper.swift in Sources */,
 				EBF3777F1B342B3A00EEB6DB /* Array.swift in Sources */,
 				EBF377681B342AA100EEB6DB /* RemoteList.swift in Sources */,
 				EBF377791B342B1100EEB6DB /* Product.swift in Sources */,
 				EB6F81661B4B1CDC008680E0 /* TestRequiresAuthentication.swift in Sources */,
 				EB0C1BAB1B3ED8D600F24C85 /* ProviderResult.swift in Sources */,
+				EB70C22D1B4D3DF50060E529 /* ListProviderImpl.swift in Sources */,
 				EBF3775E1B342A4900EEB6DB /* InventoryProviderImpl.swift in Sources */,
 				EBF377751B342AF900EEB6DB /* CDListItem.swift in Sources */,
+				EB70C2211B4D302D0060E529 /* SharedUser.swift in Sources */,
 				EBF377771B342B0200EEB6DB /* CDList.swift in Sources */,
 				EBF377811B342B4500EEB6DB /* Constants.swift in Sources */,
 				EBF3776C1B342ABB00EEB6DB /* InventoryProvider.swift in Sources */,
@@ -1487,9 +1591,11 @@
 				EBF377881B3450E800EEB6DB /* PersistentStoreHelper.swift in Sources */,
 				EBF377591B34208400EEB6DB /* shoppin.xcdatamodeld in Sources */,
 				EBF3777A1B342B1700EEB6DB /* ListItem.swift in Sources */,
+				EB202B891B51C462001699E7 /* ListWithSharedUsers.swift in Sources */,
 				EBF377291B341B6900EEB6DB /* RemoteListItemProviderSpec.swift in Sources */,
 				EBF3777B1B342B1E00EEB6DB /* Section.swift in Sources */,
 				EBF377651B342A8E00EEB6DB /* RemoteListItem.swift in Sources */,
+				EB70C2311B5021D50060E529 /* UserInput.swift in Sources */,
 				EBF377841B342B5500EEB6DB /* Selectable.swift in Sources */,
 				EBF377731B342AF000EEB6DB /* InventoryItemMapper.swift in Sources */,
 				EBF3778F1B35808900EEB6DB /* TestListItems.swift in Sources */,
@@ -1498,7 +1604,9 @@
 				EBF377631B342A7A00EEB6DB /* RemoteListItemProvider.swift in Sources */,
 				EBF377601B342A5E00EEB6DB /* CDProvider.swift in Sources */,
 				EBF3777C1B342B2500EEB6DB /* List.swift in Sources */,
+				EB70C2291B4D34780060E529 /* CDSharedUser.swift in Sources */,
 				EBF3778B1B357F1800EEB6DB /* TestLists.swift in Sources */,
+				EB70C2251B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBF3776E1B342ACB00EEB6DB /* ListItemInput.swift in Sources */,
 				EBF3776F1B342AD300EEB6DB /* ListItemMapper.swift in Sources */,
 				EBF3777E1B342B3500EEB6DB /* String.swift in Sources */,
@@ -1510,6 +1618,7 @@
 				EBF377991B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
 				EBF377691B342AA800EEB6DB /* RemoteSection.swift in Sources */,
 				EBF377801B342B4000EEB6DB /* Float.swift in Sources */,
+				EB70C21D1B4D2ECE0060E529 /* RemoteSharedUser.swift in Sources */,
 				EB6F812F1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EBF377761B342AFD00EEB6DB /* CDSection.swift in Sources */,
 				EBF3775B1B3423C200EEB6DB /* Try.swift in Sources */,

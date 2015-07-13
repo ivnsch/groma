@@ -29,7 +29,7 @@ protocol ListItemProvider {
 
     func update(listItems: [ListItem], handler: Try<Bool> -> ())
     
-    func add(list: List, handler: Try<List> -> ())
+    func add(list: ListWithSharedUsersInput, handler: Try<List> -> ())
     
     func lists(handler: Try<[List]> -> ())
 

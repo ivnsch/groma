@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class ListInput {
+class EditListInput {
     let name: String
     
     init(name: String) {
@@ -20,7 +20,7 @@ class AddListController: NSWindowController {
     
     @IBOutlet weak var listNameTextField: NSTextField!
     
-    var addTappedFunc: ((ListInput) -> ())?
+    var addTappedFunc: ((EditListInput) -> ())?
     
     var windowDidLoadFunc: VoidFunction?
     
@@ -44,7 +44,7 @@ class AddListController: NSWindowController {
     
     @IBAction func addTapped(sender: NSButton) {
         let listName = listNameTextField.stringValue
-        let listInput = ListInput(name: listName)
+        let listInput = EditListInput(name: listName)
         self.addTappedFunc?(listInput)
     }
     

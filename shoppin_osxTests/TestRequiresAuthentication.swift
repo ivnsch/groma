@@ -15,7 +15,6 @@ class TestRequiresAuthentication: XCTestCase {
     let remoteUserProvider = RemoteUserProvider()
 
     
-    // test secured services don't let us pass without authentication /////////////////////////////////////////////
     // TODO refactor - can we reduce each of these checks to 1-2 lines?
     func testNotAuthenticatedListItems() {
         var expectation = self.expectationWithDescription("not authenticated list items")
@@ -40,6 +39,7 @@ class TestRequiresAuthentication: XCTestCase {
         }
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
+    
     // TODO do the rest
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 }

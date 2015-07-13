@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO rename logininput
 class LoginData: Equatable {
     let email: String
     let password: String
