@@ -8,6 +8,7 @@
 
 import Nimble
 import Alamofire
+import Valet
 
 class TestUtils {
 

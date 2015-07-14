@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import Valet
 
 // Representation of status code related with remote responses
 // Can represent a HTTP status code sent by the server, a status flag in the JSON response, or a client-side error related with the processing of the remote response
