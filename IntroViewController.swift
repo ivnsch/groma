@@ -43,6 +43,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate {
     }
     
     private func startMainStoryboard() {
+        self.navigationController?.navigationBarHidden = true // otherwise it overlays the navigation of the nested view controllers (not sure if this structure is ok, maybe all should use the same navigation controller?)
+
         let tabController = UIStoryboard.mainTabController()
         self.navigationController?.setViewControllers([tabController], animated: true)
     }
