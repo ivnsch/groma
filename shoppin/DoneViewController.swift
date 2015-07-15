@@ -32,30 +32,26 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
     
     private func initList() {
         
-        let handler: Try<List> -> () = {[weak self] try in
-            if let list = try.success {
+        let listHandler: List -> () = {[weak self] list in
                 
-                self!.listItemsProvider.listItems(list, handler: {try in
-                    
-                    if let listItems = try.success {
-                        let donelistItems = listItems.filter{$0.done}
-                        self!.listItemsTableViewController.setListItems(donelistItems)
-                    }
-                })
-            }
+            self!.listItemsProvider.listItems(list, self!.successHandler{listItems in
+                
+                let donelistItems = listItems.filter{$0.done}
+                self!.listItemsTableViewController.setListItems(donelistItems)
+            })
         }
         
         if let listId:String = PreferencesManager.loadPreference(PreferencesManagerKey.listId) {
-            self.listItemsProvider.list(listId, handler: handler)
+            self.listItemsProvider.list(listId, successHandler(listHandler))
             
         } else {
             PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: Constants.defaultListIdentifier)) // TODO probably it's safer to save this in the handler, so we know thelist was also loaded
-            self.createList(Constants.defaultListIdentifier, handler: handler)
+            self.createList(Constants.defaultListIdentifier, listHandler: listHandler)
         }
     }
     
     // TODO why is there create list in done view controller?
-    private func createList(name: String, handler: Try<List> -> ()) {
+    private func createList(name: String, listHandler: List -> ()) {
         let list = List(uuid: NSUUID().UUIDString, name: name)
         
         // TODO handle when user doesn't have account! if I add list without internet, then there's no account data and no possibility to share users
@@ -65,10 +61,8 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
         // For the user is not important to see their own email address, only to know this is myself. This is probably a bad idea for the databse in the server though.
         let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: "foo@foo.foo")])
         
-        self.listItemsProvider.add(listWithSharedUsers, handler: {addedListTry in
-            if let savedList = addedListTry.success {
-                handler(Try(savedList))
-            }
+        self.listItemsProvider.add(listWithSharedUsers, successHandler{savedList in
+            listHandler(savedList)
         })
     }
 
@@ -105,7 +99,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
     private func setItemUndone(listItem: ListItem) {
         listItem.done = false
         
-        self.listItemsProvider.update(listItem, handler: {[weak self] try in
+        self.listItemsProvider.update(listItem, {[weak self] try in
             
             if try.success ?? false {
                 
@@ -133,7 +127,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
         for item in listItems {
             item.done = false
         }
-        self.listItemsProvider.updateDone(listItems, handler: {[weak self] try in
+        self.listItemsProvider.updateDone(listItems, {[weak self] try in
             
             self!.listItemsTableViewController.setListItems([])
             

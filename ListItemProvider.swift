@@ -10,32 +10,32 @@ import Foundation
 
 protocol ListItemProvider {
     
-    func products(handler: Try<[Product]> -> ())
+    func products(handler: ProviderResult<[Product]> -> ())
     
-    func sections(handler: Try<[Section]> -> ())
+    func sections(handler: ProviderResult<[Section]> -> ())
 
-    func remove(listItem: ListItem, handler: Try<Bool> -> ())
+    func remove(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
     
-    func remove(section: Section, handler: Try<Bool> -> ())
+    func remove(section: Section, _ handler: ProviderResult<Any> -> ())
     
-    func remove(list: List, handler: Try<Bool> -> ())
+    func remove(list: List, _ handler: ProviderResult<Any> -> ())
 
-    func add(listItem: ListItem, handler: Try<Bool> -> ())
+    func add(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
 
     // optional order - if nil will be appended at the end
-    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int?, handler: Try<ListItem> -> ())
+    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int?, _ handler: ProviderResult<ListItem> -> ())
     
-    func update(listItem: ListItem, handler: Try<Bool> -> ())
+    func update(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
 
-    func update(listItems: [ListItem], handler: Try<Bool> -> ())
+    func update(listItems: [ListItem], _ handler: ProviderResult<Any> -> ())
     
-    func add(list: ListWithSharedUsersInput, handler: Try<List> -> ())
+    func add(list: ListWithSharedUsersInput, _ handler: ProviderResult<List> -> ())
     
-    func lists(handler: Try<[List]> -> ())
+    func lists(handler: ProviderResult<[List]> -> ())
 
-    func list(listId: String, handler: Try<List> -> ())
+    func list(listId: String, _ handler: ProviderResult<List> -> ())
     
-    func listItems(list: List, handler: Try<[ListItem]> -> ())
+    func listItems(list: List, _ handler: ProviderResult<[ListItem]> -> ())
     
-    func updateDone(listItems:[ListItem], handler: Try<Bool> -> ())
+    func updateDone(listItems:[ListItem], _ handler: ProviderResult<Any> -> ())
 }

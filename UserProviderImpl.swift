@@ -14,11 +14,8 @@ class UserProviderImpl: UserProvider {
     
     func login(loginData: LoginData, _ handler: ProviderResult<Any> -> ()) {
         self.remoteProvider.login(loginData, handler: {result in
-            
-            if let successResult = result.successResult {
-                let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
-                handler(ProviderResult(status: providerStatus))
-            }
+            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
+            handler(ProviderResult(status: providerStatus))
         })
     }
     

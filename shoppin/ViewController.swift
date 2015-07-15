@@ -80,12 +80,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     
     private func initList(afterListInitialized: (() -> ())? = nil) {
-        self.listItemsProvider.lists {[weak self] try in
-            if let firstList = try.success?.first {
+        self.listItemsProvider.lists(successHandler{[weak self] lists in
+            if let firstList = lists.first {
                 self!.showList(firstList)
             }
             afterListInitialized?()
-        }
+        })
     }
     
     private func showList(list: List) {
@@ -93,16 +93,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         self.navigationTitleView.labelText = list.name
         
-        self.listItemsProvider.listItems(list, handler: {[weak self] try in
+        self.listItemsProvider.listItems(list, successHandler{[weak self] listItems in
             
-            if let listItems = try.success {
-                let donelistItems = listItems.filter{!$0.done}
-                self?.listItemsTableViewController.setListItems(donelistItems)
-                
-                self?.updatePrices()
-                
-                PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: list.uuid))
-            }
+            let donelistItems = listItems.filter{!$0.done}
+            self?.listItemsTableViewController.setListItems(donelistItems)
+            
+            self?.updatePrices()
+            
+            PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: list.uuid))
         })
     }
     
@@ -116,19 +114,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         // For the user is not important to see their own email address, only to know this is myself. This is probably a bad idea for the databse in the server though.
         if let myEmail: String = PreferencesManager.loadPreference(PreferencesManagerKey.email) {
             let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: myEmail)])
-            self.listItemsProvider.add(listWithSharedUsers, handler: {addedListTry in
-                if let savedList = addedListTry.success {
-                    handler(Try(savedList))
-                }
+            self.listItemsProvider.add(listWithSharedUsers, successHandler{savedList in
+                handler(Try(savedList))
+                return
             })
             
         } else {
             println("Warning: not tested use case: add list without user account - using dummy address")
             let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: "dummy@e.mail")])
-            self.listItemsProvider.add(listWithSharedUsers, handler: {addedListTry in
-                if let savedList = addedListTry.success {
-                    handler(Try(savedList))
-                }
+            self.listItemsProvider.add(listWithSharedUsers, successHandler{savedList in
+                handler(Try(savedList))
             })
         }
 
@@ -212,15 +207,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     func onSectionInputChanged(text: String) {
         
-        self.listItemsProvider.sections{[weak self] try in
+        self.listItemsProvider.sections(successHandler{[weak self] sections in
             
-            if let sections = try.success {
-                self?.sectionAutosuggestionsViewController.options = sections.map{$0.name ?? ""} //TODO make this async or add a memory cache
-                self?.sectionAutosuggestionsViewController.searchText(text)
-                
-                self?.sectionAutosuggestionsViewController.view.hidden = text.isEmpty
-            }
-        }
+            self?.sectionAutosuggestionsViewController.options = sections.map{$0.name ?? ""} //TODO make this async or add a memory cache
+            self?.sectionAutosuggestionsViewController.searchText(text)
+            
+            self?.sectionAutosuggestionsViewController.view.hidden = text.isEmpty
+        })
     }
     
     @IBAction func onAddListTap(sender: UIBarButtonItem) {
@@ -239,29 +232,24 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onNavigationLabelTap() {
-        self.listItemsProvider.lists{try in
-            
-            if let lists = try.success {
+        self.listItemsProvider.lists(successHandler{lists in
                 
-                let listsTableViewController = PlainTableViewController(options: lists.map{$0.name}) {(index, option) -> () in
-                    let list = lists[index]
-                    self.showList(list)
-                    self.listsPopover?.dismissPopoverAnimated(true)
-                }
-                
-                self.listsPopover = WYPopoverController(contentViewController: listsTableViewController)
-                self.listsPopover!.delegate = self
-                
-                // would have used title view, but then the popover is not centered correctly... so use nav bar frame, and adjust height to show popover a bit more to the top
-                let navBarFrame = self.navigationController!.navigationBar.frame
-                let frame = CGRectMake(navBarFrame.origin.x, navBarFrame.origin.y, navBarFrame.width, navBarFrame.height - 10)
-                self.listsPopover!.presentPopoverFromRect(frame, inView: self.view, permittedArrowDirections: WYPopoverArrowDirection.Any, animated: true)
-                
-                self.listsPopover!.popoverContentSize = CGSizeMake(300, listsTableViewController.tableView.contentSize.height)
+            let listsTableViewController = PlainTableViewController(options: lists.map{$0.name}) {(index, option) -> () in
+                let list = lists[index]
+                self.showList(list)
+                self.listsPopover?.dismissPopoverAnimated(true)
             }
             
-        }
-
+            self.listsPopover = WYPopoverController(contentViewController: listsTableViewController)
+            self.listsPopover!.delegate = self
+            
+            // would have used title view, but then the popover is not centered correctly... so use nav bar frame, and adjust height to show popover a bit more to the top
+            let navBarFrame = self.navigationController!.navigationBar.frame
+            let frame = CGRectMake(navBarFrame.origin.x, navBarFrame.origin.y, navBarFrame.width, navBarFrame.height - 10)
+            self.listsPopover!.presentPopoverFromRect(frame, inView: self.view, permittedArrowDirections: WYPopoverArrowDirection.Any, animated: true)
+            
+            self.listsPopover!.popoverContentSize = CGSizeMake(300, listsTableViewController.tableView.contentSize.height)
+        })
     }
     
     func popoverControllerShouldDismissPopover(popoverController: WYPopoverController!) -> Bool {
@@ -435,17 +423,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     func loadItems(handler: Try<[String]> -> ()) {
         
-        self.listItemsProvider.products{try in
-            
-            if let products = try.success {
-                let names = products.map{$0.name}
-                handler(Try(names))
-            }
-        }
+        self.listItemsProvider.products(successHandler{products in
+            let names = products.map{$0.name}
+            handler(Try(names))
+        })
     }
     
     func onListItemsChangedSection(tableViewListItems: [TableViewListItem]) {
-        self.listItemsProvider.update(tableViewListItems.map{$0.listItem}, handler: {try in
+        self.listItemsProvider.update(tableViewListItems.map{$0.listItem}, {try in
         })
     }
     
@@ -458,31 +443,27 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
         
         if let currentList = self.currentList {
-            self.listItemsProvider.listItems(currentList, handler: {try in
+            self.listItemsProvider.listItems(currentList, successHandler{listItems in
+                    
+                //        let allListItems = self.tableViewSections.map {
+                //            $0.listItems
+                //        }.reduce([], combine: +)
                 
-                if let listItems = try.success {
-                    
-                    //        let allListItems = self.tableViewSections.map {
-                    //            $0.listItems
-                    //        }.reduce([], combine: +)
-                    
-                    let totalPrice:Float = calculatePrice(listItems)
-                    
-                    let doneListItems = listItems.filter{$0.done}
-                    let donePrice:Float = calculatePrice(doneListItems)
-                    
-                    self.pricesView.totalPrice = totalPrice
-                    self.pricesView.donePrice = donePrice
-                }
+                let totalPrice:Float = calculatePrice(listItems)
+                
+                let doneListItems = listItems.filter{$0.done}
+                let donePrice:Float = calculatePrice(doneListItems)
+                
+                self.pricesView.totalPrice = totalPrice
+                self.pricesView.donePrice = donePrice
             })
-            
         }
     }
     
     private func setItemDone(listItem: ListItem) {
         listItem.done = true
 
-        self.listItemsProvider.update(listItem, handler: {[weak self] try in
+        self.listItemsProvider.update(listItem, {[weak self] try in
             
             if try.success ?? false {
                 self!.listItemsTableViewController.removeListItem(listItem, animation: UITableViewRowAnimation.Bottom)
@@ -497,15 +478,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private func addItem(listItemInput: ListItemInput) {
 
         if let currentList = self.currentList {
-            self.listItemsProvider.add(listItemInput, list: currentList, order: nil, handler: {try in
+            self.listItemsProvider.add(listItemInput, list: currentList, order: nil, successHandler {savedListItem in
+                    
+                self.listItemsTableViewController.addListItem(savedListItem)
                 
-                if let savedListItem = try.success {
-                    
-                    self.listItemsTableViewController.addListItem(savedListItem)
-                    
-                    self.addItemView.resignFirstResponder()
-                    self.updatePrices()
-                }
+                self.addItemView.resignFirstResponder()
+                self.updatePrices()
             })
             
         } else {
@@ -522,7 +500,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
             let listItem = ListItem(uuid: self.updatingListItem!.uuid, done: self.updatingListItem!.done, quantity: listItemInput.quantity, product: product, section: section, list: currentList, order: self.updatingListItem!.order)
             
-            self.listItemsProvider.update(listItem, handler: {try in
+            self.listItemsProvider.update(listItem, {try in
                 
                 if try.success ?? false {
                     
@@ -547,7 +525,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onListItemDeleted(tableViewListItem: TableViewListItem) {
-        self.listItemsProvider.remove(tableViewListItem.listItem, handler: {try in
+        self.listItemsProvider.remove(tableViewListItem.listItem, {try in
         })
     }
     

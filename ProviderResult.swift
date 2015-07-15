@@ -21,10 +21,10 @@ enum ProviderStatusCode: Int {
     case UnknownServerCommunicationError = 103
     
     // DB related
-    
+    case DatabaseUnknown = 1000
     
     // Other
-    case Unknown = 100 // Note: This represents unknown client error. Unknown server error is mapped to .ServerError
+    case Unknown = 2000 // Note: This represents unknown client error. Unknown server error is mapped to .ServerError
 }
 
 public class ProviderResult<T>: DebugPrintable {

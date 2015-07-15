@@ -13,17 +13,18 @@ class ListItemProviderImpl: ListItemProvider {
     let dbProvider = RealmProvider()
     let remoteProvider = RemoteListItemProvider()
     
-    func products(handler: Try<[Product]> -> ()) {
+    func products(handler: ProviderResult<[Product]> -> ()) {
         self.dbProvider.loadProducts {dbProducts in
-            handler(Try(dbProducts.map{ProductMapper.productWithDB($0)}))
+            let products = dbProducts.map{ProductMapper.productWithDB($0)}
+            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: products))
         }
     }
     
-    func listItems(list: List, handler: Try<[ListItem]> -> ()) {
+    func listItems(list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
         self.dbProvider.loadListItems(list, handler: {dbListItems in
 
             let mappedDBlistItems = dbListItems.map{ListItemMapper.listItemWithDB($0)}
-            handler(Try(mappedDBlistItems))
+            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: mappedDBlistItems))
             
             self.remoteProvider.listItems(list: list) {remoteResult in
                 
@@ -33,33 +34,37 @@ class ListItemProviderImpl: ListItemProvider {
                     // if there's no cached list or there's a difference, overwrite the cached list
                     if (mappedDBlistItems != listItemsWithRelations.listItems) {
                         self.dbProvider.saveListItems(listItemsWithRelations) {saved in
-                            handler(Try(listItemsWithRelations.listItems))
+                            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItemsWithRelations.listItems))
                         }
                     }
+                    
+                } else {
+                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+                    handler(ProviderResult(status: providerStatus))
                 }
             }
         })
     }
     
-    func remove(listItem: ListItem, handler: Try<Bool> -> ()) {
+    func remove(listItem: ListItem, _ handler: ProviderResult<Any> -> ()) {
         self.dbProvider.remove(listItem, handler: {removed in
-            handler(Try(removed))
+            handler(ProviderResult(status: removed ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
         })
     }
     
-    func remove(section: Section, handler: Try<Bool> -> ()) {
+    func remove(section: Section, _ handler: ProviderResult<Any> -> ()) {
         self.dbProvider.remove(section) {removed in
-            handler(Try(removed))
+            handler(ProviderResult(status: removed ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
         }
     }
     
-    func remove(list: List, handler: Try<Bool> -> ()) {
+    func remove(list: List, _ handler: ProviderResult<Any> -> ()) {
         self.dbProvider.remove(list) {removed in
-            handler(Try(removed))
+            handler(ProviderResult(status: removed ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
         }
     }
     
-    func add(listItem: ListItem, handler: Try<Bool> -> ()) {
+    func add(listItem: ListItem, _ handler: ProviderResult<Any> -> ()) {
 
         // return the saved object, to get object with generated id
         
@@ -69,19 +74,22 @@ class ListItemProviderImpl: ListItemProvider {
             
             if let remoteListItem = remoteResult.successResult {
                 self.dbProvider.saveListItem(listItem) {saved in // currently the item returned by server is identically to the one we sent, so we just save our local item
-                    if saved {
-                        handler(Try(saved))
-                    }
+                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
+                    handler(ProviderResult(status: providerStatus))
                 }
+                
+            } else {
+                let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+                handler(ProviderResult(status: providerStatus))
             }
         })
     }
     
-    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, handler: Try<ListItem> -> ()) {
+    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> ()) {
 
-        self.listItems(list, handler: {try in // TODO fetch items only when order not passed, because they are used only to get order
+        self.listItems(list, {result in // TODO fetch items only when order not passed, because they are used only to get order
             
-            if let listItems = try.success {
+            if let listItems = result.sucessResult {
                 
                 let order = orderMaybe ?? listItems.count
                 
@@ -101,10 +109,10 @@ class ListItemProviderImpl: ListItemProvider {
 
                     // load section or create one (there's no more section data in the input besides of the name, so there's nothing to update).
                     // There is no name update since here we have only name so either the name is in db or it's not, if it's not insert a new section
-                    self.loadSection(listItemInput.section, list: list) {sectionTry in
+                    self.loadSection(listItemInput.section, list: list) {result in
                         
                         let section: Section = {
-                            if let existingSection = sectionTry.success {
+                            if let existingSection = result.sucessResult {
                                 return existingSection
                             } else {
                                 return Section(uuid: NSUUID().UUIDString, name: listItemInput.section)
@@ -117,8 +125,8 @@ class ListItemProviderImpl: ListItemProvider {
                         // 2. do the update before calling the service, and add flag not synched (etc)
                         // 3. more ideas?
                         let listItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
-                        self.add(listItem, handler: {saved in
-                            handler(Try(listItem))
+                        self.add(listItem, {saved in
+                            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItem))
                         })
                     }
                 }
@@ -126,21 +134,23 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
     
-    private func loadSection(name: String, list: List, handler: Try<Section> -> ()) {
+    private func loadSection(name: String, list: List, handler: ProviderResult<Section> -> ()) {
         self.dbProvider.loadSectionWithName(name) {dbSectionMaybe in
             if let dbSection = dbSectionMaybe {
                 let section = SectionMapper.sectionWithDB(dbSection)
-                handler(Try(section))
+                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: section))
                 
             } else {
                 self.remoteProvider.section(name, list: list) {remoteResult in
                     
                     if let remoteSection = remoteResult.successResult {
                         let section = SectionMapper.SectionWithRemote(remoteSection)
-                        handler(Try(section))
+                        handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: section))
+                        
                     } else {
                         println("Error getting remote product, status: \(remoteResult.status)")
-                        handler(Try(NSError()))
+                        let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+                        handler(ProviderResult(status: providerStatus))
                     }
                 }
             }
@@ -168,21 +178,23 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
  
-    func updateDone(listItems: [ListItem], handler: Try<Bool> -> ()) {
-        self.update(listItems, handler: handler)
+    func updateDone(listItems: [ListItem], _ handler: ProviderResult<Any> -> ()) {
+        self.update(listItems, handler)
     }
     
-    func update(listItems: [ListItem], handler: Try<Bool> -> ()) {
-        return self.dbProvider.updateListItems(listItems, handler: {dbListItemsMaybe in
-            handler(Try(dbListItemsMaybe != nil))
+    func update(listItems: [ListItem], _ handler: ProviderResult<Any> -> ()) {
+        return self.dbProvider.updateListItems(listItems, handler: {saved in
+            handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
         })
+        // TODO is this used? if yes, server!
     }
     
-    func update(listItem: ListItem, handler: Try<Bool> -> ()) {
+    func update(listItem: ListItem, _ handler: ProviderResult<Any> -> ()) {
         
-        self.dbProvider.saveListItem(listItem) {dbListItem in
-            handler(Try(true))
+        self.dbProvider.saveListItem(listItem) {saved in
+            handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
         }
+        // TODO is this used? if yes, server!
         
 //        self.dbProvider.saveSection(listItem.section, handler: {dbSectionMaybe in
 //            self.dbProvider.updateListItem(listItem, handler: {try in
@@ -192,9 +204,10 @@ class ListItemProviderImpl: ListItemProvider {
 //        }) // creates a new section if there isn't one already
     }
     
-    func sections(handler: Try<[Section]> -> ()) {
+    func sections(handler: ProviderResult<[Section]> -> ()) {
         self.dbProvider.loadSections {dbSections in
-            handler(Try(dbSections.map{SectionMapper.sectionWithDB($0)}))
+            let sections = dbSections.map{SectionMapper.sectionWithDB($0)}
+            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: sections))
         }
     }
     
@@ -208,58 +221,55 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func lists(handler: Try<[List]> -> ()) {
+    func lists(handler: ProviderResult<[List]> -> ()) {
         self.dbProvider.loadLists{dbLists in
             
-            handler(Try(dbLists))
+            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbLists))
             
             self.remoteProvider.lists {remoteResult in
-                if remoteResult.success {
-                    if let remoteLists = remoteResult.successResult {
-                        let lists: [List] = remoteLists.map{ListMapper.ListWithRemote($0)}
+
+                if let remoteLists = remoteResult.successResult {
+                    let lists: [List] = remoteLists.map{ListMapper.ListWithRemote($0)}
+                    
+                    // if there's no cached list or there's a difference, overwrite the cached list
+                    if dbLists != lists {
                         
-                        // if there's no cached list or there's a difference, overwrite the cached list
-                        if dbLists != lists {
-                            
-                            self.dbProvider.saveLists(lists, update: true) {saved in
-                                if saved {
-                                    handler(Try(lists))
-                                    
-                                } else {
-                                    println("Error updating lists - dbListsMaybe is nil")
-                                }
+                        self.dbProvider.saveLists(lists, update: true) {saved in
+                            if saved {
+                                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: lists))
+                                
+                            } else {
+                                println("Error updating lists - dbListsMaybe is nil")
                             }
                         }
-                        
-                    } else {
-                        println("Error: invalid state: success response but remote lists is nil")
-                        // TODO return error to client
                     }
                     
                 } else {
                     println("get remote lists no success, status: \(remoteResult.status)")
+                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+                    handler(ProviderResult(status: providerStatus))
                 }
             }
         }
     }
     
     // TODO is this used? Also what id, is it uuid?
-    func list(listId: String, handler: Try<List> -> ()) {
+    func list(listId: String, _ handler: ProviderResult<List> -> ()) {
         // return the saved object, to get object with generated id
         self.dbProvider.loadList(listId) {dbListMaybe in
             if let dbList = dbListMaybe {
                 let list = ListMapper.listWithDB(dbList)
-                handler(Try(list))
+                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: list))
                 
             } else {
                 println("Error: couldn't loadList: \(listId)")
-                handler(Try(NSError()))
+                handler(ProviderResult(status: ProviderStatusCode.NotFound))
             }
 
         }
     }
     
-    func add(list: ListWithSharedUsersInput, handler: Try<List> -> ()) {
+    func add(list: ListWithSharedUsersInput, _ handler: ProviderResult<List> -> ()) {
 
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
@@ -271,11 +281,13 @@ class ListItemProviderImpl: ListItemProvider {
                 let list = ListMapper.ListWithRemote(remoteList)
                 
                 self.dbProvider.saveList(list, handler: {saved in
-                    handler(Try(list))
+                    handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: list))
                 })
                 
             } else {
                 println("error adding the remote list: \(remoteResult)")
+                let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+                handler(ProviderResult(status: providerStatus))
             }
         })
     }
