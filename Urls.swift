@@ -10,9 +10,11 @@ import Foundation
 
 struct Urls {
 
-    private static let host: String = "http://localhost:9000/"
+    private static let host: String = "http://192.168.0.20:9000/"
 
     static let products = host + "products"
+    static let productWithUnique = host + "productWithUnique"
+    static let sectionWithUnique = host + "sectionWithUnique"
     static let listItems = host + "listItems"
     static let allListItems = host + "allListItems"
     static let sections = host + "sections"

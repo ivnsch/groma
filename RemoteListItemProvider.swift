@@ -17,6 +17,30 @@ class RemoteListItemProvider {
             handler(result)
         }
     }
+
+    // get product for name + list (unique)
+    // this is necessary to find the uuid of a possibly already existing product, which may not be stored in the local database
+    // (e.g. user uses 2 devices, device 2 doesn't have the recently added products in device 1 in it's local database, so it has to request the server)
+    // Note that this overall needs more development, since device 2 can add products offline and we can get conflicts (same name, diff uuids) with the server
+    func product(name: String, list: List, handler: RemoteResult<RemoteProduct> -> ()) {
+        let params = [
+            "name": name,
+            "listUuid": list.uuid,
+        ]
+        AlamofireHelper.authenticatedRequest(.GET, Urls.productWithUnique, params).responseMyObject {(request, _, result: RemoteResult<RemoteProduct>, error) in
+            handler(result)
+        }
+    }
+
+    func section(name: String, list: List, handler: RemoteResult<RemoteSection> -> ()) {
+        let params = [
+            "name": name,
+            "listUuid": list.uuid,
+        ]
+        AlamofireHelper.authenticatedRequest(.GET, Urls.sectionWithUnique, params).responseMyObject {(request, _, result: RemoteResult<RemoteSection>, error) in
+            handler(result)
+        }
+    }
     
     func sections(handler: RemoteResult<[RemoteSection]> -> ()) {
         Alamofire.request(.GET, Urls.sections).responseMyArray { (request, _, result: RemoteResult<[RemoteSection]>, error) in

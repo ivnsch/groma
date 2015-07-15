@@ -1,5 +1,5 @@
 //
-//  ListWithSharedUsers.swift
+//  ListWithSharedUsersInput.swift
 //  shoppin
 //
 //  Created by ischuetz on 11/07/15.

@@ -14,6 +14,11 @@ class ListMapper {
         let users = (cdList.users.allObjects as! [CDSharedUser]).map{SharedUserMapper.sharedUserWithCD($0)}
         return List(uuid: cdList.uuid, name: cdList.name, users: users)
     }
+
+    class func listWithDB(dbList: DBList) -> List {
+        let users = dbList.users.toArray().map{SharedUserMapper.sharedUserWithDB($0)}
+        return List(uuid: dbList.uuid, name: dbList.name, users: users)
+    }
     
     class func ListWithRemote(remoteList: RemoteList) -> List {
         return List(uuid: remoteList.uuid, name: remoteList.name, users: remoteList.users.map{SharedUserMapper.sharedUserWithRemote($0)})

@@ -20,10 +20,10 @@ protocol ListItemProvider {
     
     func remove(list: List, handler: Try<Bool> -> ())
 
-    func add(listItem: ListItem, handler: Try<ListItem> -> ())
+    func add(listItem: ListItem, handler: Try<Bool> -> ())
 
     // optional order - if nil will be appended at the end
-    func add(listItemInput: ListItemInput, list: List, order: Int?, handler: Try<ListItem> -> ())
+    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int?, handler: Try<ListItem> -> ())
     
     func update(listItem: ListItem, handler: Try<Bool> -> ())
 

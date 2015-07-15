@@ -65,7 +65,11 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
         // For the user is not important to see their own email address, only to know this is myself. This is probably a bad idea for the databse in the server though.
         let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: "foo@foo.foo")])
         
-        self.listItemsProvider.add(listWithSharedUsers, handler: handler)
+        self.listItemsProvider.add(listWithSharedUsers, handler: {addedListTry in
+            if let savedList = addedListTry.success {
+                handler(Try(savedList))
+            }
+        })
     }
 
     private func initTableViewController() {

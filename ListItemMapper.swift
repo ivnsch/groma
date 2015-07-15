@@ -17,6 +17,13 @@ class ListItemMapper {
         return ListItem(uuid: cdListItem.uuid, done: cdListItem.done, quantity: cdListItem.quantity.integerValue, product: product, section:section, list: list, order: cdListItem.order.integerValue)
     }
     
+    class func listItemWithDB(dbListItem: DBListItem) -> ListItem {
+        let product = ProductMapper.productWithDB(dbListItem.product)
+        let section = SectionMapper.sectionWithDB(dbListItem.section)
+        let list = ListMapper.listWithDB(dbListItem.list)
+        return ListItem(uuid: dbListItem.uuid, done: dbListItem.done, quantity: dbListItem.quantity, product: product, section: section, list: list, order: dbListItem.order)
+    }
+    
     
     class func listItemsWithRemote(remoteListItems: RemoteListItems) -> ListItemsWithRelations {
         

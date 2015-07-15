@@ -70,9 +70,9 @@ class ListItemProviderMock: ListItemProvider {
         handler(Try(false))
     }
     
-    func add(listItem: ListItem, handler: Try<ListItem> -> ()) {
+    func add(listItem: ListItem, handler: Try<Bool> -> ()) {
         self.listItemsVar.insert(listItem, atIndex: listItem.order)
-        handler(Try(listItem))
+        handler(Try(true))
     }
     
     func add(product:Product) -> Product? {
@@ -131,7 +131,9 @@ class ListItemProviderMock: ListItemProvider {
         let order = orderMaybe ?? idInt
         
         let listItem = ListItem(uuid: uuid, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
-        self.add(listItem, handler: handler)
+        self.add(listItem, handler: {saved in
+            handler(Try(listItem))
+        })
     }
     
     func update(listItem: ListItem, handler: Try<Bool> -> ()) {
