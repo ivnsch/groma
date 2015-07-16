@@ -34,6 +34,9 @@
 		EB0C1BAD1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1BAC1B3F33CE00F24C85 /* remoteResultHandler.swift */; };
 		EB0C1BAE1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1BAC1B3F33CE00F24C85 /* remoteResultHandler.swift */; };
 		EB0C1BAF1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1BAC1B3F33CE00F24C85 /* remoteResultHandler.swift */; };
+		EB0C2A281B570BA700AF6226 /* ViewTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A271B570BA700AF6226 /* ViewTags.swift */; };
+		EB0C2A291B570BA700AF6226 /* ViewTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A271B570BA700AF6226 /* ViewTags.swift */; };
+		EB0C2A2A1B570BA700AF6226 /* ViewTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A271B570BA700AF6226 /* ViewTags.swift */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEAE1A3334EC00D778DE /* shoppin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAC1A3334EC00D778DE /* shoppin.xcdatamodeld */; };
 		EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAF1A3334EC00D778DE /* ViewController.swift */; };
@@ -339,6 +342,7 @@
 		EB0C1BA61B3DFD0800F24C85 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
 		EB0C1BA81B3EC00700F24C85 /* ProviderResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderResult.swift; sourceTree = "<group>"; };
 		EB0C1BAC1B3F33CE00F24C85 /* remoteResultHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = remoteResultHandler.swift; sourceTree = "<group>"; };
+		EB0C2A271B570BA700AF6226 /* ViewTags.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewTags.swift; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -717,6 +721,7 @@
 				EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */,
 				EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */,
 				EB7E8B601B2ADF620090409A /* Try.swift */,
+				EB0C2A271B570BA700AF6226 /* ViewTags.swift */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -1471,6 +1476,7 @@
 				EB0C1BA51B3DF5FB00F24C85 /* UserDetailsViewController.swift in Sources */,
 				EB2F5D261A4DE56B00DBC4AF /* DoneViewController.swift in Sources */,
 				EB89D33C1AD44BD400B6E0D0 /* Selectable.swift in Sources */,
+				EB0C2A281B570BA700AF6226 /* ViewTags.swift in Sources */,
 				EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */,
 				EB20FC071A599AE20058103B /* InventoryTableViewCell.swift in Sources */,
 				EB20FBF61A59701C0058103B /* CDInventoryItem.swift in Sources */,
@@ -1529,6 +1535,7 @@
 				EB5567691A8643B800CD3EC6 /* ListItem.swift in Sources */,
 				EB40A46A1B5506FB000E9CAD /* DBSection.swift in Sources */,
 				EB9BE4171B2C6556005B401A /* RemoteListItemProvider.swift in Sources */,
+				EB0C2A291B570BA700AF6226 /* ViewTags.swift in Sources */,
 				EB70C22A1B4D3DD40060E529 /* ListProvider.swift in Sources */,
 				EB4FD46E1AC73C930000F952 /* Constants.swift in Sources */,
 				EB0C1B8C1B3DA89900F24C85 /* LoginData.swift in Sources */,
@@ -1690,6 +1697,7 @@
 				EBF377661B342A9400EEB6DB /* RemoteListItemWithData.swift in Sources */,
 				EBF377701B342ADA00EEB6DB /* ProductMapper.swift in Sources */,
 				EBF377991B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
+				EB0C2A2A1B570BA700AF6226 /* ViewTags.swift in Sources */,
 				EB40A46B1B5506FB000E9CAD /* DBSection.swift in Sources */,
 				EBF377691B342AA800EEB6DB /* RemoteSection.swift in Sources */,
 				EBF377801B342B4000EEB6DB /* Float.swift in Sources */,

@@ -80,6 +80,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     
     private func initList(afterListInitialized: (() -> ())? = nil) {
+        self.progressVisible()
         self.listItemsProvider.lists(successHandler{[weak self] lists in
             if let firstList = lists.first {
                 self!.showList(firstList)
@@ -114,14 +115,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         // For the user is not important to see their own email address, only to know this is myself. This is probably a bad idea for the databse in the server though.
         if let myEmail: String = PreferencesManager.loadPreference(PreferencesManagerKey.email) {
             let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: myEmail)])
+            self.progressVisible()
             self.listItemsProvider.add(listWithSharedUsers, successHandler{savedList in
                 handler(Try(savedList))
-                return
             })
             
         } else {
             println("Warning: not tested use case: add list without user account - using dummy address")
             let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: "dummy@e.mail")])
+            self.progressVisible()
             self.listItemsProvider.add(listWithSharedUsers, successHandler{savedList in
                 handler(Try(savedList))
             })
@@ -545,6 +547,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             }
             
             modalViewController.onAddItemFunc = {userEmail in
+                self.progressVisible()
                 self.listProvider.addUserToList(currentList, email: userEmail) {result in
                     if let user = result.sucessResult {
                         modalViewController.addItem(EditablePlainTableViewControllerModel<SharedUser>(model: user, text: user.email))

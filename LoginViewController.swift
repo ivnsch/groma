@@ -52,6 +52,7 @@ class LoginViewController: UIViewController, RegisterDelegate {
         
         let loginData = LoginData(email: email, password: password)
 
+        self.progressVisible()
         self.userProvider.login(loginData, successHandler{result in
             self.delegate?.onLoginSuccess() ?? println("Warn: no login delegate")
         })

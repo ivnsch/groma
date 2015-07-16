@@ -46,6 +46,7 @@ class RegisterViewController: UIViewController {
         
         let user = UserInput(email: emailField.text, password: passwordField.text, firstName: firstNameField.text, lastName: lastNameField.text)
         
+        self.progressVisible()
         self.userProvider.register(user, resultHandler(onSuccess: {result in
             self.delegate?.onRegisterSuccess() ?? println("Warn: no register delegate")
             
