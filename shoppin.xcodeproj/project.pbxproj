@@ -37,6 +37,11 @@
 		EB0C2A281B570BA700AF6226 /* ViewTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A271B570BA700AF6226 /* ViewTags.swift */; };
 		EB0C2A291B570BA700AF6226 /* ViewTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A271B570BA700AF6226 /* ViewTags.swift */; };
 		EB0C2A2A1B570BA700AF6226 /* ViewTags.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A271B570BA700AF6226 /* ViewTags.swift */; };
+		EB0C2A2D1B57BA3C00AF6226 /* NSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A2B1B57BA3C00AF6226 /* NSViewController.swift */; };
+		EB0C2A301B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A2F1B57BA9300AF6226 /* RequestErrorToMsgMapper.swift */; };
+		EB0C2A311B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A2F1B57BA9300AF6226 /* RequestErrorToMsgMapper.swift */; };
+		EB0C2A321B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A2F1B57BA9300AF6226 /* RequestErrorToMsgMapper.swift */; };
+		EB0C2A341B57BE6100AF6226 /* NSWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A331B57BE6100AF6226 /* NSWindowController.swift */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEAE1A3334EC00D778DE /* shoppin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAC1A3334EC00D778DE /* shoppin.xcdatamodeld */; };
 		EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAF1A3334EC00D778DE /* ViewController.swift */; };
@@ -343,6 +348,9 @@
 		EB0C1BA81B3EC00700F24C85 /* ProviderResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderResult.swift; sourceTree = "<group>"; };
 		EB0C1BAC1B3F33CE00F24C85 /* remoteResultHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = remoteResultHandler.swift; sourceTree = "<group>"; };
 		EB0C2A271B570BA700AF6226 /* ViewTags.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewTags.swift; sourceTree = "<group>"; };
+		EB0C2A2B1B57BA3C00AF6226 /* NSViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSViewController.swift; sourceTree = "<group>"; };
+		EB0C2A2F1B57BA9300AF6226 /* RequestErrorToMsgMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestErrorToMsgMapper.swift; sourceTree = "<group>"; };
+		EB0C2A331B57BE6100AF6226 /* NSWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSWindowController.swift; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -722,6 +730,7 @@
 				EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */,
 				EB7E8B601B2ADF620090409A /* Try.swift */,
 				EB0C2A271B570BA700AF6226 /* ViewTags.swift */,
+				EB0C2A2F1B57BA9300AF6226 /* RequestErrorToMsgMapper.swift */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -773,6 +782,8 @@
 				EB4FD44D1AC6BE390000F952 /* NSTableView.swift */,
 				EBDFE3C31AD11EA100E48F95 /* NSView.swift */,
 				EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */,
+				EB0C2A2B1B57BA3C00AF6226 /* NSViewController.swift */,
+				EB0C2A331B57BE6100AF6226 /* NSWindowController.swift */,
 			);
 			name = extension;
 			sourceTree = "<group>";
@@ -1521,6 +1532,7 @@
 				EB40A48A1B553A19000E9CAD /* DBListItem.swift in Sources */,
 				EB20FC001A5973330058103B /* CDInventoryProvider.swift in Sources */,
 				EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */,
+				EB0C2A301B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */,
 				EBF377971B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
 				EB2F5D0C1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift in Sources */,
 				EBF377301B341FBD00EEB6DB /* RemoteListItemWithData.swift in Sources */,
@@ -1551,6 +1563,7 @@
 				EBF377871B344E7D00EEB6DB /* PersistentStoreHelper.swift in Sources */,
 				EB5567661A8643AB00CD3EC6 /* CDSection.swift in Sources */,
 				EB9BE4201B2CB513005B401A /* RemoteProduct.swift in Sources */,
+				EB0C2A2D1B57BA3C00AF6226 /* NSViewController.swift in Sources */,
 				EBDFE3B11ACED1F600E48F95 /* ListItemCell.swift in Sources */,
 				EB55676B1A8643BF00CD3EC6 /* List.swift in Sources */,
 				EB4FD45C1AC701410000F952 /* ListItemInput.swift in Sources */,
@@ -1565,6 +1578,7 @@
 				EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */,
 				EB9BE4261B2CB542005B401A /* RemoteList.swift in Sources */,
 				EB40A4771B550C0C000E9CAD /* Results.swift in Sources */,
+				EB0C2A311B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */,
 				EB9BE41D1B2CB42B005B401A /* RemoteListItem.swift in Sources */,
 				EB4FD4561AC6D6690000F952 /* EditListItemController.swift in Sources */,
 				EB4FD45D1AC7148C0000F952 /* String.swift in Sources */,
@@ -1611,6 +1625,7 @@
 				EBDFE3A91ACE82F000E48F95 /* ListItemCellManager.swift in Sources */,
 				EB9BE41A1B2CB355005B401A /* RemoteListItems.swift in Sources */,
 				EB89D34D1AD5235600B6E0D0 /* ListCell.swift in Sources */,
+				EB0C2A341B57BE6100AF6226 /* NSWindowController.swift in Sources */,
 				EB5567801A8658B000CD3EC6 /* CDProvider.swift in Sources */,
 				EB6F81331B4717C2008680E0 /* KeychainKeys.swift in Sources */,
 				EB5567641A86438600CD3EC6 /* CDProduct.swift in Sources */,
@@ -1705,6 +1720,7 @@
 				EB6F812F1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EBF377761B342AFD00EEB6DB /* CDSection.swift in Sources */,
 				EBF3775B1B3423C200EEB6DB /* Try.swift in Sources */,
+				EB0C2A321B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */,
 				EBF377671B342A9A00EEB6DB /* RemoteProduct.swift in Sources */,
 				EB0C1BAF1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
 				EBF377821B342B4800EEB6DB /* Globals.swift in Sources */,

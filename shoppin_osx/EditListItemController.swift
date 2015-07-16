@@ -56,8 +56,9 @@ class EditListItemController: NSWindowController, NSTextFieldDelegate {
         
         func loadSuggestions(callback: ([String]) -> ()) {
             
+            // TODO pass control to EditListItemController so we can handle result with successHandler
             self.listItemsProvider.products {result in
-                if let products = result.success {
+                if let products = result.sucessResult {
                     let suggestions = products.map{$0.name}
                     callback(suggestions)
                 }
@@ -76,8 +77,9 @@ class EditListItemController: NSWindowController, NSTextFieldDelegate {
         
         func loadSuggestions(callback: ([String]) -> ()) {
             
+            // TODO pass control to EditListItemController so we can handle result with successHandler
             self.listItemsProvider.sections {result in
-                if let sections = result.success {
+                if let sections = result.sucessResult {
                     let suggestions = sections.map{$0.name}
                     callback(suggestions)
                 }

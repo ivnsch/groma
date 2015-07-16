@@ -68,15 +68,10 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         // For the user is not important to see their own email address, only to know this is myself. This is probably a bad idea for the databse in the server though.
         let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: "foo@foo.foo")])
         
-        self.listItemsProvider.add(listWithSharedUsers, handler: {try in
-           
-            if let addedList = try.success {
-                self.loadLists() // we modified list - reload everything
-                self.selectTableViewRow(addedList)
-            
-            } else {
-                println("Error: couldn't add list to provider: \(list)")
-            }
+        self.listItemsProvider.add(listWithSharedUsers, successHandler{[weak self] addedList in
+            self?.loadLists() // we modified list - reload everything
+            self?.selectTableViewRow(addedList)
+            return
         })
     }
     
@@ -96,12 +91,10 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     private func loadLists() {
-        self.listItemsProvider.lists{[weak self] try in
-            if let lists = try.success {
-                self?.selectables = lists.map{Selectable(model: $0)}
-                self?.tableView.reloadData()
-            }
-        }
+        self.listItemsProvider.lists(successHandler{[weak self] lists in
+            self?.selectables = lists.map{Selectable(model: $0)}
+            self?.tableView.reloadData()
+        })
     }
 
     private func selectList(list: List) {
@@ -112,14 +105,9 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     private func removeList(list: List) {
-        self.listItemsProvider.remove(list, handler: {[weak self] removed in
-            if removed.success ?? false {
-                self?.loadLists()
-                self?.restoreSelectionAfterReloadData()
-                
-            } else {
-                println("Error: list couldn't be removed: \(list)")
-            }
+        self.listItemsProvider.remove(list, successHandler{[weak self] in
+            self?.loadLists()
+            self?.restoreSelectionAfterReloadData()
         })
     }
     

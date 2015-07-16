@@ -60,20 +60,7 @@ extension UIViewController {
     private func showProviderErrorAlert<T>(providerResult: ProviderResult<T>) {
         let title = "Error"
         
-        let message: String = {
-            switch providerResult.status {
-                case .NotAuthenticated: return "error_not_authenticated"
-                case .AlreadyExists: return "error_already_exists"
-                case .NotFound: return "error_not_found"
-                case .InvalidCredentials: return "error_invalid_credentials"
-                case .ServerError: return "error_server"
-                case .ServerNotReachable: return "error_server_not_reachable"
-                case .UnknownServerCommunicationError: return "error_server_communication_unknown"
-                case .DatabaseUnknown: return "error_unknown_database"
-                case .Unknown: return "error_unknown"
-                case .Success: return "success" // this is not used but we want exhaustive switch (without default case)
-            }
-        }()
+        let message: String = RequestErrorToMsgMapper.message(providerResult.status)
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: nil))
