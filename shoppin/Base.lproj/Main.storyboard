@@ -281,7 +281,7 @@
                                             </mask>
                                         </variation>
                                     </view>
-                                    <view tag="123" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J4O-HN-4R0">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J4O-HN-4R0">
                                         <rect key="frame" x="0.0" y="90" width="600" height="40"/>
                                         <subviews>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C9f-Bc-EUk">
@@ -306,7 +306,7 @@
                                             </mask>
                                         </variation>
                                     </view>
-                                    <view tag="124" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9YK-xc-P2u">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9YK-xc-P2u">
                                         <rect key="frame" x="0.0" y="130" width="600" height="40"/>
                                         <subviews>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kVb-bS-3S1">
