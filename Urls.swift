@@ -31,4 +31,7 @@ struct Urls {
     static let register = host + "register"
     static let login = host + "login"
     static let logout = host + "logout"
+    
+    // Inventory
+    static let inventory = host + "inventory"
 }

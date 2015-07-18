@@ -13,6 +13,7 @@ class TestRequiresAuthentication: XCTestCase {
     
     let remoteProvider = RemoteListItemProvider()
     let remoteUserProvider = RemoteUserProvider()
+    let remoteInventoryProvider = RemoteInventoryProvider()
 
     
     // TODO refactor - can we reduce each of these checks to 1-2 lines?
@@ -33,6 +34,17 @@ class TestRequiresAuthentication: XCTestCase {
         var expectation = self.expectationWithDescription("not authenticated list items")
         TestUtils.withClearedDatabase {[weak expectation] in
             self.remoteProvider.lists {result in
+                TestUtils.testNotAuthenticated(result)
+                expectation?.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+
+    func testNotAuthenticatedInventory() {
+        var expectation = self.expectationWithDescription("not authenticated list items")
+        TestUtils.withClearedDatabase {[weak expectation] in
+            self.remoteInventoryProvider.inventoryItems{result in
                 TestUtils.testNotAuthenticated(result)
                 expectation?.fulfill()
             }

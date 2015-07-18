@@ -136,9 +136,9 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
     }
     
     func onAddToInventoryTap() {
-        let inventoryItems = self.listItemsTableViewController.items.map{InventoryItem(product: $0.product, quantity: $0.quantity)}
-        self.inventoryProvider.addToInventory(inventoryItems)
-        
-        self.setAllItemsUndone()
+        let inventoryItems = self.listItemsTableViewController.items.map{InventoryItem(uuid: NSUUID().UUIDString, quantity: $0.quantity, product: $0.product)}
+        self.inventoryProvider.addToInventory(inventoryItems) {result in
+            self.setAllItemsUndone()
+        }
     }
 }

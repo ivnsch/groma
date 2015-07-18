@@ -10,6 +10,7 @@ import Foundation
 
 class ListItemMapper {
 
+    // TODO remove
     class func listItemWithCD(cdListItem: CDListItem) -> ListItem {
         let product = ProductMapper.productWithCD(cdListItem.product)
         let section = SectionMapper.sectionWithCD(cdListItem.section)
@@ -22,6 +23,20 @@ class ListItemMapper {
         let section = SectionMapper.sectionWithDB(dbListItem.section)
         let list = ListMapper.listWithDB(dbListItem.list)
         return ListItem(uuid: dbListItem.uuid, done: dbListItem.done, quantity: dbListItem.quantity, product: product, section: section, list: list, order: dbListItem.order)
+    }
+    
+    class func dbWithListItem(listItem: ListItem) -> DBListItem {
+        let dbListItem = DBListItem()
+        dbListItem.uuid = listItem.uuid
+        dbListItem.quantity = listItem.quantity // TODO float
+        dbListItem.done = listItem.done
+        dbListItem.order = listItem.order
+        
+        dbListItem.product = ProductMapper.dbWithProduct(listItem.product)
+        dbListItem.section = SectionMapper.dbWithSection(listItem.section)
+        dbListItem.list = ListMapper.dbWithList(listItem.list)
+        
+        return dbListItem
     }
     
     

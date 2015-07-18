@@ -20,4 +20,11 @@ class SectionMapper {
     class func SectionWithRemote(remoteSection: RemoteSection) -> Section {
         return Section(uuid: remoteSection.uuid, name: remoteSection.name)
     }
+    
+    class func dbWithSection(section: Section) -> DBSection {
+        let dbSection = DBSection()
+        dbSection.uuid = section.uuid
+        dbSection.name = section.name
+        return dbSection
+    }
 }

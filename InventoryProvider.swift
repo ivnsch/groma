@@ -10,10 +10,10 @@ import Foundation
 
 protocol InventoryProvider {
    
-    func inventory(handler: Try<[InventoryItem]> -> ())
+    func inventory(handler: ProviderResult<[InventoryItem]> -> ())
     
-    func addToInventory(items:[InventoryItem])
+    func addToInventory(items: [InventoryItem], handler: ProviderResult<Any> -> ())
     
-    func updateInventoryItem(item:InventoryItem)
+    func updateInventoryItem(item: InventoryItem)
 
 }

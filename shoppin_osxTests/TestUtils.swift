@@ -101,17 +101,20 @@ class TestUtils {
         self.remoteUserProvider.register(user, handler: {result in
             
             expect(result.success).to(beTrue())
-            expect(result.successResult).to(beNil())
+            expect(result.successResult).toNot(beNil())
             
             let loginData = LoginData(email: user.email, password: user.password)
-            
-            self.remoteUserProvider.login(loginData, handler: {result in
-                
-                expect(result.success).to(beTrue())
-                expect(result.successResult).toNot(beNil())
-                
-                onLoggedIn(loginData)
-            })
+            onLoggedIn(loginData)
+
+//            let loginData = LoginData(email: user.email, password: user.password)
+//            
+//            self.remoteUserProvider.login(loginData, handler: {result in
+//                
+//                expect(result.success).to(beTrue())
+//                expect(result.successResult).toNot(beNil())
+//                
+//                onLoggedIn(loginData)
+//            })
         })
     }
     
@@ -207,6 +210,12 @@ class TestUtils {
         expect(remoteProduct.uuid) == product.uuid
         expect(remoteProduct.name) == product.name
         expect(remoteProduct.price) == product.price
+    }
+
+    class func testRemoteInventoryItemMatches(remoteInventoryItem: RemoteInventoryItemWithProduct, _ inventoryItem: InventoryItem) {
+        expect(remoteInventoryItem.inventoryItem.uuid) == inventoryItem.uuid
+        expect(remoteInventoryItem.inventoryItem.quantity) == inventoryItem.quantity
+        self.testRemoteProductMatches(remoteInventoryItem.product, inventoryItem.product)
     }
     
     class func testRemoteListItemWithDataValid(remoteListItemWithData: RemoteListItemWithData) {

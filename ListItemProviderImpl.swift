@@ -10,7 +10,7 @@ import Foundation
 
 class ListItemProviderImpl: ListItemProvider {
 
-    let dbProvider = RealmProvider()
+    let dbProvider = RealmListItemProvider()
     let remoteProvider = RemoteListItemProvider()
     
     func products(handler: ProviderResult<[Product]> -> ()) {

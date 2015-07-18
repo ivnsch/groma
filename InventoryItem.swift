@@ -9,15 +9,21 @@
 import Foundation
 
 class InventoryItem: Equatable {
-    let product:Product
-    var quantity:Int
+    let uuid: String
+    var quantity: Int // TODO?
+    let product: Product
     
-    init(product:Product, quantity:Int) {
-        self.product = product
+    init(uuid: String, quantity: Int, product: Product) {
+        self.uuid = uuid
         self.quantity = quantity
+        self.product = product
+    }
+    
+    var debugDescription: String {
+        return "{\(self.dynamicType) uuid: \(self.uuid), quantity: \(self.quantity), product: \(self.product)}"
     }
 }
 
 func ==(lhs: InventoryItem, rhs: InventoryItem) -> Bool {
-    return lhs.product == rhs.product
+    return lhs.uuid == rhs.uuid
 }

@@ -107,7 +107,7 @@ class RemoteListItemProvider {
     }
     
     func update(listItems: [ListItem], handler: RemoteResult<NoOpSerializable> -> ()) {
-        // this is handled differently because the parameters are a dictionary and default request in alamofire doesn't support this (the difference is the request.HTTPBody line)
+        // this is handled differently because the parameters are an array and default request in alamofire doesn't support this (the difference is the request.HTTPBody line)
         
         let request = NSMutableURLRequest(URL: NSURL(string: Urls.listItems)!)
         request.HTTPMethod = "PUT"

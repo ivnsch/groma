@@ -10,8 +10,21 @@ import Foundation
 
 class InventoryItemMapper {
     
-    class func inventoryItemWithCD(cdInventoryItem:CDInventoryItem) -> InventoryItem {
-        let product = ProductMapper.productWithCD(cdInventoryItem.product)
-        return InventoryItem(product: product, quantity: cdInventoryItem.quantity.integerValue)
+    class func inventoryItemWithDB(dbInventoryItem: DBInventoryItem) -> InventoryItem {
+        let product = ProductMapper.productWithDB(dbInventoryItem.product)
+        return InventoryItem(uuid: dbInventoryItem.uuid, quantity: dbInventoryItem.quantity, product: product)
+    }
+    
+    class func inventoryItemWithRemote(remoteItem: RemoteInventoryItemWithProduct) -> InventoryItem {
+        let product = ProductMapper.ProductWithRemote(remoteItem.product)
+        return InventoryItem(uuid: remoteItem.inventoryItem.uuid, quantity: remoteItem.inventoryItem.quantity, product: product)
+    }
+    
+    class func dbWithInventoryItem(item: InventoryItem) -> DBInventoryItem {
+        let db = DBInventoryItem()
+        db.uuid = item.uuid
+        db.quantity = item.quantity
+        db.product = ProductMapper.dbWithProduct(item.product)
+        return db
     }
 }

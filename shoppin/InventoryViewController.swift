@@ -27,13 +27,10 @@ class InventoryViewController: UITableViewController {
     }
     
     func loadInventoryItems() {
-        self.inventoryProvider.inventory {[weak self] try in
-            
-            if let inventoryItems = try.success {
-                self?.inventoryItems = inventoryItems
-                self?.tableView.reloadData()
-            }
-        }
+        self.inventoryProvider.inventory(successHandler{[weak self] inventoryItems in
+            self?.inventoryItems = inventoryItems
+            self?.tableView.reloadData()
+        })
     }
     
     // MARK: - Table view data source
@@ -56,7 +53,7 @@ class InventoryViewController: UITableViewController {
         cell.quantityLabel.text = String(inventoryItem.quantity)
 
         // this was initially a local function but it seems we have to use a closure, see http://stackoverflow.com/a/26237753/930450
-        let incrementItem = {(quantity:Int) -> () in
+        let incrementItem = {(quantity: Int) -> () in
             let newQuantity = inventoryItem.quantity + quantity
             if (newQuantity >= 0) {
                 inventoryItem.quantity += quantity
