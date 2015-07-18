@@ -44,10 +44,17 @@ class InventoryProviderImpl: InventoryProvider {
         self.remoteInventoryProvider.addToInventory(items) {remoteResult in
             
             if let remoteListItem = remoteResult.successResult {
-                self.dbInventoryProvider.saveInventory(items) {saved in
-                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
-                    handler(ProviderResult(status: providerStatus))
-                }
+                
+                // For now no saving in local database, since there's no logic to increment in the client
+                // TODO in the future we should do the increment in the client, as the app can be used offline-only
+                // then call a sync with the server when we're online, where we either send the pending increments or somehow overwrite with updated items, taking into account timestamps
+                // remember that the inventory has to support merge since it can be shared with other users
+//                self.dbInventoryProvider.saveInventory(items) {saved in
+//                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
+//                    handler(ProviderResult(status: providerStatus))
+//                }
+                
+                handler(ProviderResult(status: ProviderStatusCode.Success))
                 
             } else {
                 let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
