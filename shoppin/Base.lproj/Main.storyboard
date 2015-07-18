@@ -218,6 +218,38 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XO9-gD-NZj" customClass="AddItemView" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="98" width="600" height="173"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cHM-r6-1eY">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="40"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mgd-iB-OTV">
+                                                <rect key="frame" x="539" y="5" width="53" height="30"/>
+                                                <state key="normal" title="Share...">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="onSharePress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SJU-eW-i6X"/>
+                                                </connections>
+                                            </button>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="R61-uJ-fcC">
+                                                <rect key="frame" x="8" y="6" width="200" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="200" id="YBQ-zl-6sZ"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="R61-uJ-fcC" firstAttribute="top" secondItem="cHM-r6-1eY" secondAttribute="top" constant="6" id="5H9-8U-UdR"/>
+                                            <constraint firstAttribute="height" constant="40" id="IRa-uI-Qg7"/>
+                                            <constraint firstAttribute="bottom" secondItem="R61-uJ-fcC" secondAttribute="bottom" constant="4" id="YXM-5N-UNc"/>
+                                            <constraint firstAttribute="trailing" secondItem="mgd-iB-OTV" secondAttribute="trailing" constant="8" id="dnO-fR-fMa"/>
+                                            <constraint firstAttribute="bottom" secondItem="mgd-iB-OTV" secondAttribute="bottom" constant="5" id="g6e-Qr-YUb"/>
+                                            <constraint firstItem="R61-uJ-fcC" firstAttribute="leading" secondItem="cHM-r6-1eY" secondAttribute="leading" constant="8" id="ibd-v1-tgn"/>
+                                            <constraint firstItem="mgd-iB-OTV" firstAttribute="top" secondItem="cHM-r6-1eY" secondAttribute="top" constant="5" id="qLb-2b-jxt"/>
+                                        </constraints>
+                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ect-T8-cxW">
                                         <rect key="frame" x="0.0" y="40" width="600" height="50"/>
                                         <subviews>
@@ -268,6 +300,11 @@
                                             <constraint firstItem="C9f-Bc-EUk" firstAttribute="leading" secondItem="J4O-HN-4R0" secondAttribute="leading" constant="8" id="UM9-2d-dgi"/>
                                             <constraint firstAttribute="height" constant="40" id="Ua0-W4-CBB"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="QTD-VL-B12"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                     <view tag="124" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9YK-xc-P2u">
                                         <rect key="frame" x="0.0" y="130" width="600" height="40"/>
@@ -357,38 +394,6 @@
                                                 <exclude reference="n2T-2Y-aUr"/>
                                             </mask>
                                         </variation>
-                                    </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cHM-r6-1eY">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="40"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mgd-iB-OTV">
-                                                <rect key="frame" x="539" y="5" width="53" height="30"/>
-                                                <state key="normal" title="Share...">
-                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="onSharePress:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SJU-eW-i6X"/>
-                                                </connections>
-                                            </button>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="R61-uJ-fcC">
-                                                <rect key="frame" x="8" y="6" width="200" height="30"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="200" id="YBQ-zl-6sZ"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                            </textField>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="R61-uJ-fcC" firstAttribute="top" secondItem="cHM-r6-1eY" secondAttribute="top" constant="6" id="5H9-8U-UdR"/>
-                                            <constraint firstAttribute="height" constant="40" id="IRa-uI-Qg7"/>
-                                            <constraint firstAttribute="bottom" secondItem="R61-uJ-fcC" secondAttribute="bottom" constant="4" id="YXM-5N-UNc"/>
-                                            <constraint firstAttribute="trailing" secondItem="mgd-iB-OTV" secondAttribute="trailing" constant="8" id="dnO-fR-fMa"/>
-                                            <constraint firstAttribute="bottom" secondItem="mgd-iB-OTV" secondAttribute="bottom" constant="5" id="g6e-Qr-YUb"/>
-                                            <constraint firstItem="R61-uJ-fcC" firstAttribute="leading" secondItem="cHM-r6-1eY" secondAttribute="leading" constant="8" id="ibd-v1-tgn"/>
-                                            <constraint firstItem="mgd-iB-OTV" firstAttribute="top" secondItem="cHM-r6-1eY" secondAttribute="top" constant="5" id="qLb-2b-jxt"/>
-                                        </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
