@@ -9,9 +9,6 @@
 import Foundation
 
 class SectionMapper {
-    class func sectionWithCD(cdSection: CDSection) -> Section {
-        return Section(uuid: cdSection.uuid, name: cdSection.name)
-    }
     
     class func sectionWithDB(dbSection: DBSection) -> Section {
         return Section(uuid: dbSection.uuid, name: dbSection.name)

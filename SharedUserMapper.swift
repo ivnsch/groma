@@ -9,10 +9,6 @@
 import Foundation
 
 class SharedUserMapper {
-   
-    class func sharedUserWithCD(cdSharedUser: CDSharedUser) -> SharedUser {
-        return SharedUser(email: cdSharedUser.email, uuid: cdSharedUser.uuid, firstName: cdSharedUser.firstName, lastName: cdSharedUser.lastName)
-    }
     
     class func sharedUserWithDB(dbSharedUser: DBSharedUser) -> SharedUser {
         return SharedUser(email: dbSharedUser.email, uuid: dbSharedUser.uuid, firstName: dbSharedUser.firstName, lastName: dbSharedUser.lastName)

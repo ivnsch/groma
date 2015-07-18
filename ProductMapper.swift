@@ -9,14 +9,6 @@
 import Foundation
 
 class ProductMapper {
-    
-    class func productWithCD(cdProduct:CDProduct) -> Product {
-        return Product(
-            uuid: cdProduct.uuid,
-            name: cdProduct.name,
-            price: cdProduct.price.floatValue)
-    }
-    
 
     class func productWithDB(dbProduct: DBProduct) -> Product {
         return Product(

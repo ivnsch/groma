@@ -9,14 +9,6 @@
 import Foundation
 
 class ListItemMapper {
-
-    // TODO remove
-    class func listItemWithCD(cdListItem: CDListItem) -> ListItem {
-        let product = ProductMapper.productWithCD(cdListItem.product)
-        let section = SectionMapper.sectionWithCD(cdListItem.section)
-        let list = ListMapper.listWithCD(cdListItem.list)
-        return ListItem(uuid: cdListItem.uuid, done: cdListItem.done, quantity: cdListItem.quantity.integerValue, product: product, section:section, list: list, order: cdListItem.order.integerValue)
-    }
     
     class func listItemWithDB(dbListItem: DBListItem) -> ListItem {
         let product = ProductMapper.productWithDB(dbListItem.product)

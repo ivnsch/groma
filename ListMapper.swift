@@ -10,11 +10,6 @@ import Foundation
 
 class ListMapper {
     
-    class func listWithCD(cdList: CDList) -> List {
-        let users = (cdList.users.allObjects as! [CDSharedUser]).map{SharedUserMapper.sharedUserWithCD($0)}
-        return List(uuid: cdList.uuid, name: cdList.name, users: users)
-    }
-
     class func dbWithList(list: List) -> DBList {
         let dbList = DBList()
         dbList.uuid = list.uuid
