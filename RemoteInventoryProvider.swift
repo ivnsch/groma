@@ -28,7 +28,6 @@ class RemoteInventoryProvider {
                     "price": inventoryItem.product.price
                 ],
                 "inventoryItem": [
-                    "uuid": inventoryItem.uuid,
                     "quantity": inventoryItem.quantity,
                     "inventoryUuid": "???", // this is for now not used - only 1 inventory per user
                     "productUuid": inventoryItem.product.uuid

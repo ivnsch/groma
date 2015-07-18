@@ -213,7 +213,6 @@ class TestUtils {
     }
 
     class func testRemoteInventoryItemMatches(remoteInventoryItem: RemoteInventoryItemWithProduct, _ inventoryItem: InventoryItem) {
-        expect(remoteInventoryItem.inventoryItem.uuid) == inventoryItem.uuid
         expect(remoteInventoryItem.inventoryItem.quantity) == inventoryItem.quantity
         self.testRemoteProductMatches(remoteInventoryItem.product, inventoryItem.product)
     }

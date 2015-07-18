@@ -9,12 +9,10 @@
 import Foundation
 
 final class RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
-    let uuid: String
     let quantity: Int
     let productUuid: String
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
-        self.uuid = representation.valueForKeyPath("uuid") as! String
         self.quantity = representation.valueForKeyPath("quantity") as! Int
         self.productUuid = representation.valueForKeyPath("productUuid") as! String
     }
@@ -30,6 +28,6 @@ final class RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionS
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), quantity: \(self.quantity), productUuid: \(self.productUuid)}"
+        return "{\(self.dynamicType) quantity: \(self.quantity), productUuid: \(self.productUuid)}"
     }
 }
