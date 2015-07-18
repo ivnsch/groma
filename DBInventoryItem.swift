@@ -11,11 +11,12 @@ import RealmSwift
 
 class DBInventoryItem: Object {
     
+    dynamic var id: Int = 0
     dynamic var quantity: Int = 0
     dynamic var product: DBProduct = DBProduct()
     
     override static func primaryKey() -> String? {
-        return "product.uuid"
+        return "id"
     }
 }
 
