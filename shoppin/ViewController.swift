@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import WYPopoverController
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ItemsObserver, SideMenuObserver, AddItemViewDelegate, ListItemsEditTableViewDelegate, NavigationTitleViewDelegate, WYPopoverControllerDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, AddItemViewDelegate, ListItemsEditTableViewDelegate, NavigationTitleViewDelegate, WYPopoverControllerDelegate
 //    , UIBarPositioningDelegate
 {
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
@@ -35,9 +35,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private var listItemsTableViewController:ListItemsTableViewController!
     
-    var itemsNotificator:ItemsNotificator!
-    var sideMenuManager:SideMenuManager!
-
     @IBOutlet weak var editButton: UIBarButtonItem!
     
     private var gestureRecognizer:UIGestureRecognizer!
@@ -295,7 +292,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         self.listItemsTableViewController.setEditing(editing, animated: animated)
         self.gestureRecognizer.enabled = !editing //don't block tap on delete button
-        self.sideMenuManager!.setGestureRecognizersEnabled(!editing) //don't block reordering rows
 
         self.addItemView.expanded = editing
         let animationTime:NSTimeInterval = animated ? 0.2 : 0
@@ -329,19 +325,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func itemsChanged() {
         self.initList()
-    }
-    
-    func changedSlideOutState(slideOutState: SlideOutState) {
-        switch slideOutState {
-        case .Collapsed:
-            listItemsTableViewController.touchEnabled(true)
-        case .RightPanelExpanded, .LeftPanelExpanded:
-            listItemsTableViewController.touchEnabled(false)
-        }
-    }
-    
-    func startSideMenuDrag() {
-        self.listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     
     private func initTableViewController() {
@@ -471,8 +454,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 self!.listItemsTableViewController.removeListItem(listItem, animation: UITableViewRowAnimation.Bottom)
                 
                 self!.updatePrices()
-                
-                self!.itemsNotificator?.notifyItemUpdated(listItem, sender: self!)
             }
         })
     }

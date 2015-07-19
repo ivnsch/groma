@@ -8,15 +8,13 @@
 
 import UIKit
 
-class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObserver, SideMenuObserver, CartMenuDelegate {
+class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenuDelegate {
 
     private var listItemsTableViewController:ListItemsTableViewController!
 
     private let listItemsProvider = ProviderFactory().listItemProvider
     private let inventoryProvider = ProviderFactory().inventoryProvider
     
-    var itemsNotificator:ItemsNotificator?
-
     @IBOutlet weak var cartMenu: CartMenuView!
     
     override func viewDidLoad() {
@@ -66,6 +64,10 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
         })
     }
 
+    @IBAction func onCloseTap(sender: UIButton) {
+        self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     private func initTableViewController() {
         self.listItemsTableViewController = UIStoryboard.listItemsTableViewController()
         self.listItemsTableViewController.style = .Gray
@@ -81,9 +83,6 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
     
     func onListItemClear(tableViewListItem:TableViewListItem) {
         self.setItemUndone(tableViewListItem.listItem)
-    }
-    
-    func changedSlideOutState(slideOutState: SlideOutState) {
     }
 
     func startSideMenuDrag() {
@@ -104,8 +103,6 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
             if try.success ?? false {
                 
                 self!.listItemsTableViewController.removeListItem(listItem, animation: UITableViewRowAnimation.Bottom)
-                
-                self!.itemsNotificator?.notifyItemUpdated(listItem, sender: self!)
             }
         })
     }
@@ -130,8 +127,6 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, ItemsObs
         self.listItemsProvider.updateDone(listItems, {[weak self] try in
             
             self!.listItemsTableViewController.setListItems([])
-            
-            self!.itemsNotificator?.notifyItemsUpdated(self!)
         })
     }
     

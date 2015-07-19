@@ -85,7 +85,6 @@
 		EB2F5D0C1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D0A1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift */; };
 		EB2F5D0D1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB2F5D0B1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.xib */; };
 		EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D101A4ACC4400DBC4AF /* String.swift */; };
-		EB2F5D161A4B380900DBC4AF /* ContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D151A4B380900DBC4AF /* ContainerViewController.swift */; };
 		EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D1C1A4B4CE300DBC4AF /* ListItemsTableViewController.swift */; };
 		EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D211A4C20E200DBC4AF /* UIViewController.swift */; };
 		EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D231A4C2B0600DBC4AF /* UIStoryboard.swift */; };
@@ -368,7 +367,6 @@
 		EB2F5D0A1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutosuggestionsTableViewController.swift; sourceTree = "<group>"; };
 		EB2F5D0B1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AutosuggestionsTableViewController.xib; sourceTree = "<group>"; };
 		EB2F5D101A4ACC4400DBC4AF /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
-		EB2F5D151A4B380900DBC4AF /* ContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerViewController.swift; sourceTree = "<group>"; };
 		EB2F5D1C1A4B4CE300DBC4AF /* ListItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsTableViewController.swift; sourceTree = "<group>"; };
 		EB2F5D211A4C20E200DBC4AF /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIViewController.swift; path = shoppin/UIViewController.swift; sourceTree = "<group>"; };
 		EB2F5D231A4C2B0600DBC4AF /* UIStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIStoryboard.swift; path = shoppin/UIStoryboard.swift; sourceTree = "<group>"; };
@@ -684,15 +682,6 @@
 			name = extensions;
 			sourceTree = "<group>";
 		};
-		EB2F5D141A4B37D700DBC4AF /* sidemenu */ = {
-			isa = PBXGroup;
-			children = (
-				EB2F5D151A4B380900DBC4AF /* ContainerViewController.swift */,
-			);
-			name = sidemenu;
-			path = shoppin;
-			sourceTree = "<group>";
-		};
 		EB2F5D671A50C36E00DBC4AF /* helper */ = {
 			isa = PBXGroup;
 			children = (
@@ -794,7 +783,6 @@
 				EBF162E31A3C853E0048E37C /* listItemsTableView */,
 				EB2F5D071A4A28DE00DBC4AF /* autosuggestions */,
 				EB55675B1A86231D00CD3EC6 /* common */,
-				EB2F5D141A4B37D700DBC4AF /* sidemenu */,
 				EB4C36561B4C115E00C387C5 /* libraryCandidates */,
 			);
 			name = shoppin_ios;
@@ -1470,7 +1458,6 @@
 				EBF162F51A3CA4BA0048E37C /* ProviderFactory.swift in Sources */,
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
-				EB2F5D161A4B380900DBC4AF /* ContainerViewController.swift in Sources */,
 				EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */,
 				EB40A46E1B550804000E9CAD /* RealmProvider.swift in Sources */,
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
