@@ -62,14 +62,6 @@ class InventoryViewController: UITableViewController {
             }
         }
         
-        cell.onPlusTap = {
-            incrementItem(1)
-        }
-        
-        cell.onMinusTap = {
-            incrementItem(-1)
-        }
-        
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell
