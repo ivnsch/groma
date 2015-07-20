@@ -8,9 +8,8 @@
 
 import UIKit
 import CoreData
-import WYPopoverController
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, AddItemViewDelegate, ListItemsEditTableViewDelegate, NavigationTitleViewDelegate, WYPopoverControllerDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, AddItemViewDelegate, ListItemsEditTableViewDelegate
 //    , UIBarPositioningDelegate
 {
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
@@ -45,13 +44,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     @IBOutlet weak var listNameView: UILabel!
 
-    private var currentList: List?
-
-    @IBOutlet weak var addListButton: UIBarButtonItem!
-    
-    @IBOutlet weak var navigationTitleView: NavigationTitleView!
-    
-    private var listsPopover:WYPopoverController?
+    var currentList: List?
     
     
     required init(coder aDecoder: NSCoder) {
@@ -62,70 +55,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         super.viewDidLoad()
         
         self.initTableViewController()
-        self.initList {
-            
-            self.navigationTitleView.delegate = self
-            self.addItemView.delegate = self
-            
-            self.setEditing(false, animated: false)
-            
-            self.updatePrices()
-            
-            FrozenEffect.apply(self.pricesView)
+
+        self.addItemView.delegate = self
+        self.setEditing(false, animated: false)
+        self.updatePrices()
+        FrozenEffect.apply(self.pricesView)
+        
+        if let list = self.currentList {
+            self.navigationItem.title = list.name
         }
     }
-
-    
-    private func initList(afterListInitialized: (() -> ())? = nil) {
-        self.progressVisible()
-        self.listItemsProvider.lists(successHandler{[weak self] lists in
-            if let firstList = lists.first {
-                self!.showList(firstList)
-            }
-            afterListInitialized?()
-        })
-    }
-    
-    private func showList(list: List) {
-        self.currentList = list
+   
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
-        self.navigationTitleView.labelText = list.name
-        
-        self.listItemsProvider.listItems(list, successHandler{[weak self] listItems in
-            
-            let donelistItems = listItems.filter{!$0.done}
-            self?.listItemsTableViewController.setListItems(donelistItems)
-            
-            self?.updatePrices()
-            
-            PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: list.uuid))
-        })
-    }
-    
-    private func createList(name: String, handler: Try<List> -> ()) {
-        let list = List(uuid: NSUUID().UUIDString, name: name)
-        
-        // TODO handle when user doesn't have account! if I add list without internet, then there's no account data and no possibility to share users
-        // so in this case we add to local database with dummy user (?) that represents myself and hide share users from the user (or "you need an account to use this")
-        // when user opens account with lists like that, somehow we replace the dummy value with the email (client and server)
-        // or maybe we can just use *always* a dummy identifier for myself. A general purpose string like "myself"
-        // For the user is not important to see their own email address, only to know this is myself. This is probably a bad idea for the databse in the server though.
-        if let myEmail: String = PreferencesManager.loadPreference(PreferencesManagerKey.email) {
-            let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: myEmail)])
-            self.progressVisible()
-            self.listItemsProvider.add(listWithSharedUsers, successHandler{savedList in
-                handler(Try(savedList))
-            })
-            
-        } else {
-            println("Warning: not tested use case: add list without user account - using dummy address")
-            let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: "dummy@e.mail")])
-            self.progressVisible()
-            self.listItemsProvider.add(listWithSharedUsers, successHandler{savedList in
-                handler(Try(savedList))
+        if let list = self.currentList {
+            self.listItemsProvider.listItems(list, successHandler{listItems in
+                self.listItemsTableViewController.setListItems(listItems.filter{!$0.done})
             })
         }
-
     }
     
     override func updateViewConstraints() {
@@ -136,31 +84,34 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     //prepare add item view for scale animation, which should be top to bottom
     private func setAddItemViewAnchorPointTopCenter() {
-        let frame = self.addItemView.frame
-        let topCenter = CGPointMake(CGRectGetMidX(frame), CGRectGetMinY(frame))
         
-        self.addItemView.layer.anchorPoint = CGPointMake(0.5, 0)
-        
-        //        println("constraint height: \(self.addItemView.topConstraint.constant)")
-        
-        let navbarHeight = self.navigationController!.navigationBar.frame.height
-        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-        
-        //////////////////////////////////////////////////////////////////////
-        //FIXME
-        //        self.addItemView.layer.position = topCenter
-        
-        //for some reason we get -64 or alternate between -66.5 and -64 (depending where we call this) if we use this. It should be always -66.5
-//                self.addItemView.topConstraint.constant = -topCenter.y
-        
-        //and if we use this, we get always -64. why is extra offset? our view should start exactly after status and navigation bar
-//                let navbarHeight = self.navigationController!.navigationBar.frame.height
-//                let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-//                let offset = navbarHeight + statusBarHeight
-//                self.addItemView.topConstraint.constant = -offset
-        
-        self.addItemView.topConstraint.constant = -86.5
-        //////////////////////////////////////////////////////////////////////
+        if let navigationController = self.navigationController {
+            let frame = self.addItemView.frame
+            let topCenter = CGPointMake(CGRectGetMidX(frame), CGRectGetMinY(frame))
+            
+            self.addItemView.layer.anchorPoint = CGPointMake(0.5, 0)
+            
+            //        println("constraint height: \(self.addItemView.topConstraint.constant)")
+            
+            let navbarHeight = navigationController.navigationBar.frame.height
+            let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+            
+            //////////////////////////////////////////////////////////////////////
+            //FIXME
+            //        self.addItemView.layer.position = topCenter
+            
+            //for some reason we get -64 or alternate between -66.5 and -64 (depending where we call this) if we use this. It should be always -66.5
+            //                self.addItemView.topConstraint.constant = -topCenter.y
+            
+            //and if we use this, we get always -64. why is extra offset? our view should start exactly after status and navigation bar
+            //                let navbarHeight = self.navigationController!.navigationBar.frame.height
+            //                let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+            //                let offset = navbarHeight + statusBarHeight
+            //                self.addItemView.topConstraint.constant = -offset
+            
+            self.addItemView.topConstraint.constant = -66.5
+            //////////////////////////////////////////////////////////////////////
+        }
     }
     
     // MARK: - AddItemViewDelegate
@@ -215,76 +166,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         })
     }
     
-    @IBAction func onAddListTap(sender: UIBarButtonItem) {
-        let editing = !self.navigationTitleView.editMode
-
-        self.setListEditing(editing)
-    }
-    
-    private func setListEditing(editing:Bool) {
-        self.setEditing(false, animated: true)
-
-        self.navigationTitleView.editMode = editing
-        self.addListButton.title = editing ? "Cancel" : "+"
-
-        self.editButton.title = editing ? "Add" : "Edit"
-    }
-    
-    func onNavigationLabelTap() {
-        self.listItemsProvider.lists(successHandler{lists in
-                
-            let listsTableViewController = PlainTableViewController(options: lists.map{$0.name}) {(index, option) -> () in
-                let list = lists[index]
-                self.showList(list)
-                self.listsPopover?.dismissPopoverAnimated(true)
-            }
-            
-            self.listsPopover = WYPopoverController(contentViewController: listsTableViewController)
-            self.listsPopover!.delegate = self
-            
-            // would have used title view, but then the popover is not centered correctly... so use nav bar frame, and adjust height to show popover a bit more to the top
-            let navBarFrame = self.navigationController!.navigationBar.frame
-            let frame = CGRectMake(navBarFrame.origin.x, navBarFrame.origin.y, navBarFrame.width, navBarFrame.height - 10)
-            self.listsPopover!.presentPopoverFromRect(frame, inView: self.view, permittedArrowDirections: WYPopoverArrowDirection.Any, animated: true)
-            
-            self.listsPopover!.popoverContentSize = CGSizeMake(300, listsTableViewController.tableView.contentSize.height)
-        })
-    }
-    
-    func popoverControllerShouldDismissPopover(popoverController: WYPopoverController!) -> Bool {
-        return true
-    }
-    
-    func popoverControllerDidDismissPopover(popoverController: WYPopoverController!) {
-        self.listsPopover?.delegate = nil
-        self.listsPopover = nil
-    }
-    
-    private func addList(name: String) {
-        if !name.isEmpty {
-            self.createList(name, handler: {try in
-                
-                if let list = try.success {
-                    self.showList(list)
-                    
-                    self.setListEditing(false)
-                    
-                    self.setEditing(true, animated: true)
-                }
-            })
-        }
-    }
-    
     @IBAction func onEditTap(sender: AnyObject) {
         let editButton = sender as! UIBarButtonItem
         let editing = !self.listItemsTableViewController.editing
         
-        if (self.navigationTitleView.editMode) { //during edit list mode, nav right button becomes "add list". TODO rename editButton in navRightButton or similar, onNavRightButtonTap etc
-            self.addList(self.navigationTitleView.textFieldText)
-
-        } else {
-            self.setEditing(editing, animated: true)
-        }
+        self.setEditing(editing, animated: true)
     }
     
     override func setEditing(editing: Bool, animated: Bool) {
@@ -308,7 +194,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
             let topInset = navbarHeight + statusBarHeight + CGRectGetHeight(self.addItemView.frame) + CGRectGetHeight(self.pricesView.frame)
             let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
-            self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0)
+            self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
             self.listItemsTableViewController.tableViewTopOffset = -self.listItemsTableViewController.tableViewInset.top
             
         }) { p in
@@ -323,9 +209,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
-    func itemsChanged() {
-        self.initList()
-    }
+    // TODO do we still need this? This was prob used by done view controller to update our list
+//    func itemsChanged() {
+//        self.initList()
+//    }
     
     private func initTableViewController() {
         self.listItemsTableViewController = UIStoryboard.listItemsTableViewController()
@@ -512,33 +399,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         })
     }
     
-    @IBAction func onSharePress(sender: UIButton) {
-        if let currentList = self.currentList {
-        
-            let modalViewController = UIStoryboard.choiceViewController()
-            modalViewController.modalPresentationStyle = .Popover
-            self.presentViewController(modalViewController, animated: true, completion: nil)
-            
-            modalViewController.listItems = currentList.users.map {
-                EditablePlainTableViewControllerModel<SharedUser>(model: $0, text: $0.email)
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "doneViewControllerSegue" {
+            if let doneViewController = segue.destinationViewController as? DoneViewController {
+                doneViewController.list = self.currentList
             }
-            
-            modalViewController.onDonePress = {
-                modalViewController.dismissViewControllerAnimated(true, completion: nil)
-            }
-            
-            modalViewController.onAddItemFunc = {userEmail in
-                self.progressVisible()
-                self.listProvider.addUserToList(currentList, email: userEmail) {result in
-                    if let user = result.sucessResult {
-                        modalViewController.addItem(EditablePlainTableViewControllerModel<SharedUser>(model: user, text: user.email))
-                    }
-                }
-                return
-            }
-        
-        } else {
-            println("Error: Invalid state: trying to share list item without current list")
         }
     }
 }

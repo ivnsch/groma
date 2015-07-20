@@ -11,8 +11,12 @@ import Foundation
 protocol ListProvider {
     
     // TODO move list-only methods from listitemsprovider here
-   
-    func users(list: List, handler: ProviderResult<[SharedUser]> -> ())
+
+    func add(list: ListWithSharedUsersInput, _ handler: ProviderResult<List> -> ())
+
+    func update(listInput: ListInput, _ handler: ProviderResult<List> -> ())
     
-    func addUserToList(list: List, email: String, handler: ProviderResult<SharedUser> -> ())
+    func users(list: List, _ handler: ProviderResult<[SharedUser]> -> ())
+    
+    func addUserToList(list: List, email: String, _ handler: ProviderResult<SharedUser> -> ())
 }

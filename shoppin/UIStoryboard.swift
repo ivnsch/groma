@@ -16,15 +16,11 @@ extension UIStoryboard {
     private class func registerStoryboard() -> UIStoryboard { return UIStoryboard(name: "Register", bundle: NSBundle.mainBundle()) }
     private class func userDetailsStoryboard() -> UIStoryboard { return UIStoryboard(name: "UserDetails", bundle: NSBundle.mainBundle()) }
     private class func choiceStoryboard() -> UIStoryboard { return UIStoryboard(name: "EditableChoiceModal", bundle: NSBundle.mainBundle()) }
-
+    
     // MARK: - Main
     
     class func todoItemsViewController() -> ViewController {
         return mainStoryboard().instantiateViewControllerWithIdentifier("ViewController") as! ViewController
-    }
-    
-    class func doneItemsViewController() -> DoneViewController {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("DoneViewController") as! DoneViewController
     }
     
     class func listItemsTableViewController() -> ListItemsTableViewController {
@@ -69,4 +65,11 @@ extension UIStoryboard {
     class func choiceViewController() -> EditableChoiceModal {
         return choiceStoryboard().instantiateViewControllerWithIdentifier("editableChoiceModal") as! EditableChoiceModal
     }
+    
+    // MARK: - Lists
+    class func editListsViewController() -> EditListViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("editListsViewController") as! EditListViewController
+    }
+    
+    
 }

@@ -16,7 +16,7 @@ struct RequestErrorToMsgMapper {
             case .AlreadyExists: return "error_already_exists"
             case .NotFound: return "error_not_found"
             case .InvalidCredentials: return "error_invalid_credentials"
-            case .ServerError: return "error_server"
+            case .ServerError: return "error_server_generic"
             case .ServerNotReachable: return "error_server_not_reachable"
             case .UnknownServerCommunicationError: return "error_server_communication_unknown"
             case .DatabaseUnknown: return "error_unknown_database"

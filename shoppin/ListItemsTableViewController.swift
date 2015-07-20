@@ -75,6 +75,10 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
 //        self.tableView.allowsMultipleSelectionDuringEditing = true
     }
     
+    func tableViewShiftDown(offset: CGFloat) { // offset/inset to start at given offset but scroll behind it
+        self.tableViewInset = UIEdgeInsetsMake(offset, 0, 0, 0)
+        self.tableViewTopOffset = -self.tableViewInset.top
+    }
     
     override func viewWillLayoutSubviews() {
 //        println(self.view.constraints().count)

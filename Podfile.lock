@@ -8,7 +8,6 @@ PODS:
   - RealmSwift (0.93.2):
     - Realm (= 0.93.2)
   - Valet (1.3)
-  - WYPopoverController (0.2.2)
 
 DEPENDENCIES:
   - Alamofire (~> 1.2)
@@ -16,7 +15,6 @@ DEPENDENCIES:
   - Quick (~> 0.3.0)
   - RealmSwift
   - Valet (~> 1.3)
-  - WYPopoverController (~> 0.2.2)
 
 SPEC CHECKSUMS:
   Alamofire: 5550bf0b575ed1a4bf9be572f9463e1015cc169e
@@ -25,6 +23,5 @@ SPEC CHECKSUMS:
   Realm: 2fdd0ae74f730e190384e0338d8a0d3654df8220
   RealmSwift: 231b064da9f98b1c4f325fe1f1cb8756aae2b8d6
   Valet: f5d70827d3155876c1027011843603fadbacdc39
-  WYPopoverController: 00d879c25bddd1fd873dcc21aa98c8308d7f1555
 
 COCOAPODS: 0.37.2

@@ -28,9 +28,7 @@ protocol ListItemProvider {
     func update(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
 
     func update(listItems: [ListItem], _ handler: ProviderResult<Any> -> ())
-    
-    func add(list: ListWithSharedUsersInput, _ handler: ProviderResult<List> -> ())
-    
+        
     func lists(handler: ProviderResult<[List]> -> ())
 
     func list(listId: String, _ handler: ProviderResult<List> -> ())

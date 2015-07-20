@@ -13,7 +13,6 @@ end
 
 target 'shoppin' do
     platform :ios, '8.0'
-    pod 'WYPopoverController', '~> 0.2.2'
     shared
 end
 

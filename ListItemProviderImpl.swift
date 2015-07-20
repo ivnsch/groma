@@ -269,29 +269,6 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func add(list: ListWithSharedUsersInput, _ handler: ProviderResult<List> -> ()) {
-
-        // TODO ensure that in add list case the list is persisted / is never deleted
-        // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
-        // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
-        self.remoteProvider.add(list, handler: {remoteResult in
-     
-            if let remoteList = remoteResult.successResult {
-                
-                let list = ListMapper.ListWithRemote(remoteList)
-                
-                self.dbProvider.saveList(list, handler: {saved in
-                    handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: list))
-                })
-                
-            } else {
-                println("error adding the remote list: \(remoteResult)")
-                let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                handler(ProviderResult(status: providerStatus))
-            }
-        })
-    }
-    
 //    func firstList(handler: Try<List> -> ()) {
 //        
 //        func createList(name: String, #handler: Try<List> -> ()) {

@@ -11,7 +11,7 @@ import Foundation
 class List: Equatable {
     let uuid: String
     let name: String
-    let listItems: [ListItem]
+    let listItems: [ListItem] // TODO is this used? we get the items everywhere from the provider not the list object
     
     let users: [SharedUser] // note that this will be empty if using the app offline (TODO think about showing myself in this list - right now also this will not appear offline)
     

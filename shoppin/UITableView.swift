@@ -17,4 +17,10 @@ extension UITableView {
         }
         return absRow
     }
+    
+    func wrapUpdates(function: () -> ()) {
+        self.beginUpdates()
+        function()
+        self.endUpdates()
+    }
 }
