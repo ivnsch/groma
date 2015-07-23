@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO shared user for client should be only email (and later email+provider), so remove other attributes and remove SharedUserInput
 class SharedUser: Equatable {
     let email: String
     let uuid: String

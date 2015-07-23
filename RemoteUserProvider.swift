@@ -51,15 +51,20 @@ class RemoteUserProvider {
         valet?.setString(token, forKey: KeychainKeys.token)
     }
     
+    private func removeToken() {
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+        valet?.removeObjectForKey(KeychainKeys.token)
+    }
+    
     // For now store the user's email as simple preference, we need it to be added automatically to list shared users. This may change in the future
     private func storeEmail(email: String) {
         PreferencesManager.savePreference(PreferencesManagerKey.email, value: NSString(string: email))
     }
     
     func logout(handler: RemoteResult<NoOpSerializable> -> ()) {
-        Alamofire.request(.POST, Urls.register, encoding: .JSON).responseMyObject { (request, _, remoteResult: RemoteResult<NoOpSerializable>, error) in
-            handler(remoteResult)
-        }
+        // with JWT we just have to remove token from client no need to call the server TODO verify this
+        self.removeToken()
+        handler(RemoteResult<NoOpSerializable>(status: .Success))
     }
     
     

@@ -14,6 +14,7 @@ class DBInventoryItem: Object {
     dynamic var id: Int = 0
     dynamic var quantity: Int = 0
     dynamic var product: DBProduct = DBProduct()
+    dynamic var inventory: DBInventory = DBInventory()
     
     override static func primaryKey() -> String? {
         return "id"

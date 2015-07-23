@@ -10,7 +10,7 @@ import Foundation
 
 final class RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
     let quantity: Int
-    let productUuid: String
+    let productUuid: String // TODO remove this? or store product and inventory here not in RemoteInventoryItemWithProduct
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.quantity = representation.valueForKeyPath("quantity") as! Int

@@ -2,59 +2,21 @@
 //  InventoryProviderImpl.swift
 //  shoppin
 //
-//  Created by ischuetz on 04.01.15.
+//  Created by ischuetz on 21/07/15.
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class InventoryProviderImpl: InventoryProvider {
    
-    let remoteInventoryProvider = RemoteInventoryProvider()
-    let dbInventoryProvider = RealmInventoryProvider()
-
-    func inventory(handler: ProviderResult<[InventoryItem]> -> ()) {
-        
-        self.dbInventoryProvider.loadInventory{dbInventoryItems in
-            let mappedDBItems = dbInventoryItems.map{InventoryItemMapper.inventoryItemWithDB($0)}
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: mappedDBItems))
-            
-            self.remoteInventoryProvider.inventoryItems {remoteResult in
-                
-                if let remoteInventoryItems = remoteResult.successResult {
-                    let inventoryItems: [InventoryItem] = remoteInventoryItems.map{InventoryItemMapper.inventoryItemWithRemote($0)}
-                    
-                    // if there's no cached list or there's a difference, overwrite the cached list
-                    if (mappedDBItems != inventoryItems) {
-                        self.dbInventoryProvider.saveInventory(inventoryItems) {saved in
-                            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: inventoryItems))
-                        }
-                    }
-                    
-                } else {
-                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                    handler(ProviderResult(status: providerStatus))
-                }
-            }
-        }
-    }
+    private let remoteProvider = RemoteInventoryProvider()
     
-    func addToInventory(items: [InventoryItem], handler: ProviderResult<Any> -> ()) {
-        
-        self.remoteInventoryProvider.addToInventory(items) {remoteResult in
-            
-            if let remoteListItem = remoteResult.successResult {
-                
-                // For now no saving in local database, since there's no logic to increment in the client
-                // TODO in the future we should do the increment in the client, as the app can be used offline-only
-                // then call a sync with the server when we're online, where we either send the pending increments or somehow overwrite with updated items, taking into account timestamps
-                // remember that the inventory has to support merge since it can be shared with other users
-//                self.dbInventoryProvider.saveInventory(items) {saved in
-//                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
-//                    handler(ProviderResult(status: providerStatus))
-//                }
-                
-                handler(ProviderResult(status: ProviderStatusCode.Success))
+    func inventories(handler: ProviderResult<[Inventory]> -> ()) {
+        self.remoteProvider.inventories {remoteResult in
+            if let remoteInventories = remoteResult.successResult {
+                let inventories = remoteInventories.map{InventoryMapper.inventoryWithRemote($0)}
+                handler(ProviderResult(status: .Success, sucessResult: inventories))
                 
             } else {
                 let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
@@ -62,10 +24,18 @@ class InventoryProviderImpl: InventoryProvider {
             }
         }
     }
- 
-    func updateInventoryItem(item: InventoryItem) {
-        // TODO
-//        self.cdProvider.updateInventoryItem(item, handler: {try in
-//        })
+    
+    func addInventory(inventory: InventoryInput, _ handler: ProviderResult<Any> -> ()) {
+        self.remoteProvider.addInventory(inventory) {remoteResult in
+            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+            handler(ProviderResult(status: providerStatus))
+        }
+    }
+    
+    func updateInventory(inventory: InventoryInput, _ handler: ProviderResult<Any> -> ()) {
+        self.remoteProvider.updateInventory(inventory) {remoteResult in
+            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+            handler(ProviderResult(status: providerStatus))
+        }
     }
 }

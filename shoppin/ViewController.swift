@@ -348,6 +348,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private func addItem(listItemInput: ListItemInput) {
 
         if let currentList = self.currentList {
+            
+            self.progressVisible(true)
             self.listItemsProvider.add(listItemInput, list: currentList, order: nil, successHandler {savedListItem in
                     
                 self.listItemsTableViewController.addListItem(savedListItem)

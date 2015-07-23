@@ -86,6 +86,7 @@ struct DefaultRemoteResultMapper {
         case .ServerNotReachable: return .ServerNotReachable
         case .UnknownServerCommunicationError: return .UnknownServerCommunicationError
         case .InternalServerError: return .ServerError
+        case .BadRequest: return .ServerError
         }
     }
 }

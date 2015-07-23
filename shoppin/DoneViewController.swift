@@ -14,6 +14,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
 
     private let listItemsProvider = ProviderFactory().listItemProvider
     private let inventoryProvider = ProviderFactory().inventoryProvider
+    private let inventoryItemsProvider = ProviderFactory().inventoryItemsProvider
     
     @IBOutlet weak var cartMenu: CartMenuView!
     
@@ -111,9 +112,36 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
     }
     
     func onAddToInventoryTap() {
-        let inventoryItems = self.listItemsTableViewController.items.map{InventoryItem(quantity: $0.quantity, product: $0.product)}
-        self.inventoryProvider.addToInventory(inventoryItems) {result in
-            self.setAllItemsUndone()
+        
+        let onHasInventory: (Inventory) -> () = {[weak self] inventory in
+            
+            let inventoryItems = self!.listItemsTableViewController.items.map{InventoryItem(quantity: $0.quantity, product: $0.product, inventory: inventory)}
+
+            self!.inventoryItemsProvider.addToInventory(inventory, items: inventoryItems, self!.successHandler{result in
+                self!.setAllItemsUndone()
+            })
         }
+        
+        // WARN for now we assume user has always only one inventory. Note that general setup (database, server etc) supports multiple inventories though.
+        self.progressVisible(true)
+        self.inventoryProvider.inventories(successHandler{[weak self] inventories in
+            if let inventory = inventories.first {
+                onHasInventory(inventory)
+                
+            } else { // user has no inventories - create first one. Note if offline there can be inventories in server - there has to be a sync when user comes online/signs up
+                let myEmail = PreferencesManager.loadPreference(PreferencesManagerKey.email) ?? "unknown@e.mail" // TODO how do we handle shared users internally (database etc) when user is offline
+                
+                let inventoryInput = InventoryInput(uuid: NSUUID().UUIDString, name: "Home", users: [SharedUserInput(email: myEmail)])
+                self!.inventoryProvider.addInventory(inventoryInput, self!.successHandler{notused in
+                    
+                    // just a hack because we need "full" shared user to create inventory based on inventory input
+                    // but full shared user is deprecated and will be removed soon, because client doesn't need anything besides email (and provider, in the future)
+                    // so for now we create full shared user where these attributes are empty
+                    let sharedUsers = inventoryInput.users.map{SharedUser(email: $0.email, uuid: "", firstName: "", lastName: "")}
+                    
+                    onHasInventory(Inventory(uuid: inventoryInput.uuid, name: inventoryInput.name, users: sharedUsers))
+                })
+            }
+        })
     }
 }

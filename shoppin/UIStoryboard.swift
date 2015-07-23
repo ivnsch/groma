@@ -71,5 +71,8 @@ extension UIStoryboard {
         return mainStoryboard().instantiateViewControllerWithIdentifier("editListsViewController") as! EditListViewController
     }
     
-    
+    // MARK: - Inventory
+    class func editInventoriesViewController() -> EditInventoryViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("editInventoriesViewController") as! EditInventoryViewController
+    }
 }

@@ -29,6 +29,7 @@ enum RemoteStatusCode: Int {
  
     // HTTP
     case NotAuthenticated = 401
+    case BadRequest = 415 // e.g. post request without payload
     case InternalServerError = 500
     
     // Client generated
@@ -172,7 +173,7 @@ extension Alamofire.Request {
 
         let serializer: Serializer = { (request, responseMaybe, data) in
             
-//            println("response: \(responseMaybe)")
+            println("method: \(request.HTTPMethod), response: \(responseMaybe)")
             
             if let response = responseMaybe {
                 
@@ -182,7 +183,7 @@ extension Alamofire.Request {
                     let JSONSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
                     let (JSON: AnyObject?, serializationError) = JSONSerializer(request, response, data)
                     
-//                    println("JSON: \(JSON)")
+                    println("request: \(request), JSON: \(JSON)")
                     
                     if JSON != nil {
                         
@@ -231,6 +232,11 @@ extension Alamofire.Request {
                     
                 } else if statusCode == 401 {
                     println("Unauthorized")
+                    let remoteResult = RemoteResult<T>(status: .NotAuthenticated)
+                    return (remoteResult, nil)
+                    
+                } else if statusCode == 415 {
+                    println("Bad request")
                     let remoteResult = RemoteResult<T>(status: .NotAuthenticated)
                     return (remoteResult, nil)
                     

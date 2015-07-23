@@ -12,18 +12,20 @@ class InventoryItemMapper {
     
     class func inventoryItemWithDB(dbInventoryItem: DBInventoryItem) -> InventoryItem {
         let product = ProductMapper.productWithDB(dbInventoryItem.product)
-        return InventoryItem(quantity: dbInventoryItem.quantity, product: product)
+        let inventory = InventoryMapper.inventoryWithDB(dbInventoryItem.inventory)
+        return InventoryItem(quantity: dbInventoryItem.quantity, product: product, inventory: inventory)
     }
     
-    class func inventoryItemWithRemote(remoteItem: RemoteInventoryItemWithProduct) -> InventoryItem {
+    class func inventoryItemWithRemote(remoteItem: RemoteInventoryItemWithProduct, inventory: Inventory) -> InventoryItem {
         let product = ProductMapper.ProductWithRemote(remoteItem.product)
-        return InventoryItem(quantity: remoteItem.inventoryItem.quantity, product: product)
+        return InventoryItem(quantity: remoteItem.inventoryItem.quantity, product: product, inventory: inventory)
     }
     
     class func dbWithInventoryItem(item: InventoryItem) -> DBInventoryItem {
         let db = DBInventoryItem()
         db.quantity = item.quantity
         db.product = ProductMapper.dbWithProduct(item.product)
+        db.inventory = InventoryMapper.dbWithInventory(item.inventory)
         return db
     }
 }
