@@ -29,7 +29,8 @@ enum RemoteStatusCode: Int {
  
     // HTTP
     case NotAuthenticated = 401
-    case BadRequest = 415 // e.g. post request without payload
+    case BadRequest = 400 // e.g. post request with wrong json
+    case UnsupportedMediaType = 415
     case InternalServerError = 500
     
     // Client generated
@@ -235,9 +236,14 @@ extension Alamofire.Request {
                     let remoteResult = RemoteResult<T>(status: .NotAuthenticated)
                     return (remoteResult, nil)
                     
-                } else if statusCode == 415 {
+                } else if statusCode == 400 {
                     println("Bad request")
-                    let remoteResult = RemoteResult<T>(status: .NotAuthenticated)
+                    let remoteResult = RemoteResult<T>(status: .BadRequest)
+                    return (remoteResult, nil)
+                    
+                } else if statusCode == 415 {
+                    println("Unsupported media type")
+                    let remoteResult = RemoteResult<T>(status: .UnsupportedMediaType)
                     return (remoteResult, nil)
                     
                 } else if statusCode == 500 {

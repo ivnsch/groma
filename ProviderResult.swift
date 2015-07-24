@@ -87,6 +87,7 @@ struct DefaultRemoteResultMapper {
         case .UnknownServerCommunicationError: return .UnknownServerCommunicationError
         case .InternalServerError: return .ServerError
         case .BadRequest: return .ServerError
+        case .UnsupportedMediaType: return .ServerError
         }
     }
 }
