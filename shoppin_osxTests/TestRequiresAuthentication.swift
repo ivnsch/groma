@@ -18,7 +18,7 @@ class TestRequiresAuthentication: XCTestCase {
     
     // TODO refactor - can we reduce each of these checks to 1-2 lines?
     func testNotAuthenticatedListItems() {
-        var expectation = self.expectationWithDescription("not authenticated list items")
+        let expectation = self.expectationWithDescription("not authenticated list items")
         
         let list = List(uuid: NSUUID().UUIDString, name: "some list")
         TestUtils.withClearedDatabase {[weak expectation] in
@@ -31,7 +31,7 @@ class TestRequiresAuthentication: XCTestCase {
     }
     
     func testNotAuthenticatedLists() {
-        var expectation = self.expectationWithDescription("not authenticated list items")
+        let expectation = self.expectationWithDescription("not authenticated list items")
         TestUtils.withClearedDatabase {[weak expectation] in
             self.remoteProvider.lists {result in
                 TestUtils.testNotAuthenticated(result)
@@ -41,16 +41,16 @@ class TestRequiresAuthentication: XCTestCase {
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
 
-    func testNotAuthenticatedInventory() {
-        var expectation = self.expectationWithDescription("not authenticated list items")
-        TestUtils.withClearedDatabase {[weak expectation] in
-            self.remoteInventoryProvider.inventoryItems{result in
-                TestUtils.testNotAuthenticated(result)
-                expectation?.fulfill()
-            }
-        }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
-    }
+//    func testNotAuthenticatedInventory() {
+//        let expectation = self.expectationWithDescription("not authenticated list items")
+//        TestUtils.withClearedDatabase {[weak expectation] in
+//            self.remoteInventoryProvider.inventoryItems{result in
+//                TestUtils.testNotAuthenticated(result)
+//                expectation?.fulfill()
+//            }
+//        }
+//        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+//    }
     
     // TODO do the rest
 

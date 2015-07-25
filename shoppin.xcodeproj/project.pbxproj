@@ -245,8 +245,6 @@
 		EBB9A7511B5EBBF900E5487D /* InventoryInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A74F1B5EBBF900E5487D /* InventoryInput.swift */; };
 		EBB9A7521B5EBBF900E5487D /* InventoryInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A74F1B5EBBF900E5487D /* InventoryInput.swift */; };
 		EBB9A7541B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7531B5FED4200E5487D /* InventoryTableViewCell.swift */; };
-		EBB9A7551B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7531B5FED4200E5487D /* InventoryTableViewCell.swift */; };
-		EBB9A7561B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7531B5FED4200E5487D /* InventoryTableViewCell.swift */; };
 		EBCE418B1B5D10BA00583551 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */; };
 		EBCE418D1B5D466B00583551 /* EditListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418C1B5D466B00583551 /* EditListViewController.swift */; };
 		EBCE418F1B5D884000583551 /* ListInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418E1B5D884000583551 /* ListInput.swift */; };
@@ -1208,8 +1206,9 @@
 		EB1DDE9D1A3334EC00D778DE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = ivanschuetz;
 				TargetAttributes = {
 					EB1DDEA41A3334EC00D778DE = {
@@ -1580,7 +1579,6 @@
 				EBB9A7451B5EB28500E5487D /* RemoteInventoryItemsProvider.swift in Sources */,
 				EB0C1B8C1B3DA89900F24C85 /* LoginData.swift in Sources */,
 				EB0C2A471B58405D00AF6226 /* RealmListItemProvider.swift in Sources */,
-				EBB9A7551B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */,
 				EB0C2A3B1B58330300AF6226 /* RemoteInventoryItem.swift in Sources */,
 				EB55677F1A8658AA00CD3EC6 /* InventoryItemsProviderImpl.swift in Sources */,
 				EB5567631A86438100CD3EC6 /* InventoryItemMapper.swift in Sources */,
@@ -1741,7 +1739,6 @@
 				EBF3777E1B342B3500EEB6DB /* String.swift in Sources */,
 				EBF377711B342AE000EEB6DB /* SectionMapper.swift in Sources */,
 				EBF377641B342A8300EEB6DB /* RemoteListItems.swift in Sources */,
-				EBB9A7561B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */,
 				EBF377A11B38AB1000EEB6DB /* User.swift in Sources */,
 				EBF377661B342A9400EEB6DB /* RemoteListItemWithData.swift in Sources */,
 				EBF377701B342ADA00EEB6DB /* ProductMapper.swift in Sources */,
@@ -1822,6 +1819,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1903,6 +1901,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DDEBUG $(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.schuetz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -1924,6 +1923,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "-DRELEASE $(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.schuetz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -1949,6 +1949,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_SWIFT_FLAGS = "-DDEBUG $(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.schuetz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
@@ -1971,6 +1972,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_SWIFT_FLAGS = "-DRELEASE $(inherited)";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.schuetz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
@@ -1995,6 +1997,7 @@
 				INFOPLIST_FILE = shoppin_osxTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.schuetz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
@@ -2015,6 +2018,7 @@
 				INFOPLIST_FILE = shoppin_osxTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.schuetz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "";

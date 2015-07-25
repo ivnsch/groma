@@ -15,58 +15,113 @@ import RealmSwift
 class RealmProvider {
 
     func saveObj<T: Object>(obj: T, update: Bool = false, handler: Bool -> ()) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            let realm = Realm()
-            realm.write {
-                realm.add(obj, update: update)
-            }
+
+        let finished: (Bool) -> () = {success in
             dispatch_async(dispatch_get_main_queue(), {
-                handler(true)
+                handler(success)
             })
+        }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            
+            do {
+                let realm = try Realm()
+                realm.write {
+                    realm.add(obj, update: update)
+                }
+            } catch _ { // TODO doesn't compile when writing here (and in the other methods) ErrorType or let error as NSError, why?
+                print("Error: creating Realm() in saveObj")
+                finished(false)
+            }
+            
+            finished(true)
         })
     }
     
     func saveObjs<T: Object>(objs: [T], update: Bool = false, handler: Bool -> ()) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            let realm = Realm()
-            realm.write {
-                for obj in objs {
-                    realm.add(obj, update: update)
-                }
-            }
+        
+        let finished: (Bool) -> () = {success in
             dispatch_async(dispatch_get_main_queue(), {
-                handler(true)
+                handler(success)
             })
+        }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+
+            do {
+                let realm = try Realm()
+                realm.write {
+                    for obj in objs {
+                        realm.add(obj, update: update)
+                    }
+                }
+            } catch _ {
+                print("Error: creating Realm() in saveObjs")
+                finished(false)
+            }
+
+            finished(true)
+        })
+    }
+    
+    func loadFirst<T: Object, U>(mapper: T -> U, filter filterMaybe: String? = nil, handler: U? -> ()) {
+        self.load(mapper, filter: filterMaybe, handler: {results in
+            handler(results.first)
         })
     }
     
     func load<T: Object, U>(mapper: T -> U, filter filterMaybe: String? = nil, handler: [U] -> ()) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            var results = Realm().objects(T)
-            if let filter = filterMaybe {
-                results = results.filter(filter)
-            }
-            
-            let objs: [T] = Realm().objects(T).toArray()
-            let models = objs.map{mapper($0)}
-            
+
+        let finished: ([U]) -> () = {result in
             dispatch_async(dispatch_get_main_queue(), {
-                handler(models)
+                handler(result)
             })
+        }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            
+            do {
+                let realm = try Realm()
+                
+                var results = realm.objects(T)
+                if let filter = filterMaybe {
+                    results = results.filter(filter)
+                }
+                
+                let objs: [T] = realm.objects(T).toArray() 
+                let models = objs.map{mapper($0)}
+                
+                finished(models)
+                
+            } catch _ {
+                print("Error: creating Realm() in load, returning empty results")
+                finished([]) // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
+            }
         })
     }
     
     func remove<T: Object>(pred: String, handler: Bool -> (), objType: T.Type) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            let realm = Realm()
-            let results: Results<T> = realm.objects(T).filter(pred)
-            realm.write {
-                realm.delete(results)
-            }
-            
+        
+        let finished: (Bool) -> () = {success in
             dispatch_async(dispatch_get_main_queue(), {
-                handler(true)
+                handler(success)
             })
+        }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            do {
+                let realm = try Realm()
+                let results: Results<T> = realm.objects(T).filter(pred)
+                realm.write {
+                    realm.delete(results)
+                }
+
+                finished(true)
+
+            } catch _ {
+                print("Error: creating Realm() in remove")
+                finished(false)
+            }
         })
     }
 }

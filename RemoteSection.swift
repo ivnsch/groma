@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
+final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     
@@ -17,7 +17,7 @@ final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSeriali
         self.name = representation.valueForKeyPath("name") as! String
     }
     
-    @objc static func collection(#response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteSection] {
+    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteSection] {
         var sections = [RemoteSection]()
         for obj in representation as! [AnyObject] {
             if let section = RemoteSection(response: response, representation: obj) {

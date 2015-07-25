@@ -27,7 +27,7 @@ enum ProviderStatusCode: Int {
     case Unknown = 2000 // Note: This represents unknown client error. Unknown server error is mapped to .ServerError
 }
 
-public class ProviderResult<T>: DebugPrintable {
+public class ProviderResult<T>: CustomDebugStringConvertible {
     let status: ProviderStatusCode
     let sucessResult: T?
     let errorMsg: String?
@@ -88,6 +88,7 @@ struct DefaultRemoteResultMapper {
         case .InternalServerError: return .ServerError
         case .BadRequest: return .ServerError
         case .UnsupportedMediaType: return .ServerError
+        case .ClientParamsParsingError: return .Unknown
         }
     }
 }

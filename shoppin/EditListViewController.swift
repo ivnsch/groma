@@ -82,23 +82,27 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
         // But now we have an additional service where we do this beforehand
         // TODO clean solution?
    
-        let listName = self.listNameInputField.text
-        
-        // FIXME code smell - not using listFormInput for the listName, are we using listFormInput correctly? Do we actually need listFormInput? Structure differently?
-        let listInput = ListInput(uuid: NSUUID().UUIDString, name: listName, users: self.listFormInput.users)
-        
-        self.progressVisible(true)
-        
-        if self.isEdit {
-            self.listProvider.update(listInput, successHandler{list in
-                self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-            })
+        if let listName = self.listNameInputField.text {
+            
+            // FIXME code smell - not using listFormInput for the listName, are we using listFormInput correctly? Do we actually need listFormInput? Structure differently?
+            let listInput = ListInput(uuid: NSUUID().UUIDString, name: listName, users: self.listFormInput.users)
+            
+            self.progressVisible(true)
+            
+            if self.isEdit {
+                self.listProvider.update(listInput, successHandler{list in
+                    self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+                    })
+            } else {
+                // FIXME redundancy users empty array and shared users
+                let listWithSharedUsers = ListWithSharedUsersInput(list: List(uuid: NSUUID().UUIDString, name: listInput.name, listItems: [], users: []), users: listInput.users)
+                self.listProvider.add(listWithSharedUsers, successHandler{list in
+                    self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+                    })
+            }
+            
         } else {
-            // FIXME redundancy users empty array and shared users
-            let listWithSharedUsers = ListWithSharedUsersInput(list: List(uuid: NSUUID().UUIDString, name: listInput.name, listItems: [], users: []), users: listInput.users)
-            self.listProvider.add(listWithSharedUsers, successHandler{list in
-                self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-            })
+            print("TODO validation onDoneTap")
         }
     }
     
@@ -107,13 +111,17 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func onAddUserTap(sender: UIButton) {
-        let input: String = self.addUserInputField.text
-        // TODO validate
-        
-        // TODO do later a verification here if email exists in the server
-        self.listFormInput = self.listFormInput.copy(users: self.listFormInput.users + [SharedUserInput(email: input)])
-        self.usersTableView?.reloadData()
-        self.addUserInputField.text = ""
+        if let input = self.addUserInputField.text {
+            // TODO validate
+            
+            // TODO do later a verification here if email exists in the server
+            self.listFormInput = self.listFormInput.copy(users: self.listFormInput.users + [SharedUserInput(email: input)])
+            self.usersTableView?.reloadData()
+            self.addUserInputField.text = ""
+            
+        } else {
+            print("TODO validation onAddUserTap")
+        }
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -126,7 +134,7 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("listCell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("listCell", forIndexPath: indexPath) 
         
         let userInput = self.listFormInput.users[indexPath.row]
         cell.textLabel?.text = userInput.email

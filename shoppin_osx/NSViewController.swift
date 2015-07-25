@@ -18,7 +18,7 @@ extension NSViewController {
         return self.resultHandler(onSuccess: onSuccess, onError: nil)
     }
     
-    func resultHandler(#onSuccess: () -> (), onError: (() -> ())? = nil)(providerResult: ProviderResult<Any>) {
+    func resultHandler(onSuccess onSuccess: () -> (), onError: (() -> ())? = nil)(providerResult: ProviderResult<Any>) {
         if providerResult.success {
             onSuccess()
             
@@ -28,12 +28,12 @@ extension NSViewController {
     }
     
     // Result handlar for result with payload
-    func resultHandler<T>(#onSuccess: (T) -> (), onError: (() -> ())? = nil)(providerResult: ProviderResult<T>) {
+    func resultHandler<T>(onSuccess onSuccess: (T) -> (), onError: (() -> ())? = nil)(providerResult: ProviderResult<T>) {
         if providerResult.success {
             if let successResult = providerResult.sucessResult {
                 onSuccess(successResult)
             } else {
-                println("Error: Invalid state: handler expects result with payload, result is success but has no payload")
+                print("Error: Invalid state: handler expects result with payload, result is success but has no payload")
                 self.showProviderErrorAlert(ProviderResult<Any>(status: ProviderStatusCode.Unknown))
             }
             
@@ -43,7 +43,7 @@ extension NSViewController {
     }
     
     private func showProviderErrorAlert<T>(providerResult: ProviderResult<T>) {
-        let title = "Error"
+//        let title = "Error"
         
         let message: String = RequestErrorToMsgMapper.message(providerResult.status)
         

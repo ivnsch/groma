@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
+final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let uuid: String
     var done: Bool
@@ -28,7 +28,7 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
         self.order = representation.valueForKeyPath("order") as! Int
     }
     
-    @objc static func collection(#response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteListItem] {
+    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteListItem] {
         var listItems = [RemoteListItem]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteListItem(response: response, representation: obj) {

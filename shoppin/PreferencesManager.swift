@@ -38,7 +38,7 @@ class PreferencesManager {
             let casted = object as? T
             
             if casted == nil {
-                println("Casting error! the preference is stored but wrong type...")
+                print("Casting error! the preference is stored but wrong type...")
             }
             
             return casted
@@ -49,13 +49,13 @@ class PreferencesManager {
         }
     }
     
-    class private func savePreference<T: AnyObject>(#key: String, value: T) {
+    class private func savePreference<T: AnyObject>(key key: String, value: T) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setObject(value, forKey: key)
         userDefaults.synchronize()
     }
     
-    class private func loadPreference(#key:String) -> AnyObject? {
+    class private func loadPreference(key key:String) -> AnyObject? {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         return userDefaults.objectForKey(key)
     }

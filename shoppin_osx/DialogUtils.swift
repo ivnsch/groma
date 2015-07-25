@@ -10,13 +10,15 @@ import Cocoa
 
 class DialogUtils {
     
-    class func confirmAlert(okTitle: String = "Ok", cancelTitle: String = "Cancel", title: String = "Confirm", msg: String? = nil, okAction: VoidFunction) {
+    class func confirmAlert(okTitle okTitle: String = "Ok", cancelTitle: String = "Cancel", title: String = "Confirm", msg: String? = nil, okAction: VoidFunction) {
         let alert = NSAlert()
         alert.addButtonWithTitle(okTitle)
         alert.addButtonWithTitle(cancelTitle)
         
         alert.messageText = title
-        alert.informativeText = msg
+        if let msg = msg {
+            alert.informativeText = msg
+        }
         
         alert.alertStyle = .WarningAlertStyle
         

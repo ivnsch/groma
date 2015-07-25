@@ -13,7 +13,7 @@ import Valet
 class RemoteListItemProvider {
     
     func products(handler: RemoteResult<[RemoteProduct]> -> ()) {
-        Alamofire.request(.GET, Urls.products).responseMyArray { (request, _, result: RemoteResult<[RemoteProduct]>, error) in
+        Alamofire.request(.GET, URLString: Urls.products).responseMyArray { (request, _, result: RemoteResult<[RemoteProduct]>, error) in
             handler(result)
         }
     }
@@ -43,7 +43,7 @@ class RemoteListItemProvider {
     }
     
     func sections(handler: RemoteResult<[RemoteSection]> -> ()) {
-        Alamofire.request(.GET, Urls.sections).responseMyArray { (request, _, result: RemoteResult<[RemoteSection]>, error) in
+        Alamofire.request(.GET, URLString: Urls.sections).responseMyArray { (request, _, result: RemoteResult<[RemoteSection]>, error) in
             handler(result)
         }
     }
@@ -55,7 +55,7 @@ class RemoteListItemProvider {
         }
     }
 
-    func listItems(#list: List, handler: RemoteResult<RemoteListItems> -> ()) {
+    func listItems(list list: List, handler: RemoteResult<RemoteListItems> -> ()) {
         AlamofireHelper.authenticatedRequest(.GET, Urls.listItems, ["list": list.uuid]).responseMyObject {(request, _, result: RemoteResult<RemoteListItems>, error) in
             handler(result)
         }
@@ -123,11 +123,15 @@ class RemoteListItemProvider {
         
         let values = listItems.map{self.toRequestParams($0)}
         
-        var error: NSError?
-        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(values, options: nil, error: &error)
-        
-        Alamofire.request(request).responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>, error) in
-            handler(result)
+        do {
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(values, options: [])
+            
+            Alamofire.request(request).responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>, error) in
+                handler(result)
+            }
+            
+        } catch _ as NSError {
+            handler(RemoteResult(status: .ClientParamsParsingError))
         }
     }
     
@@ -154,7 +158,7 @@ class RemoteListItemProvider {
     
     
     func list(listId: String, handler: RemoteResult<RemoteList> -> ()) {
-        Alamofire.request(.GET, Urls.list).responseMyObject { (request, _, result: RemoteResult<RemoteList>, error) in
+        Alamofire.request(.GET, URLString: Urls.list).responseMyObject { (request, _, result: RemoteResult<RemoteList>, error) in
             handler(result)
         }
     }

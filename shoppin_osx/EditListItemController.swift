@@ -104,8 +104,8 @@ class EditListItemController: NSWindowController, NSTextFieldDelegate {
         self.nameTextField.delegate = self
         self.sectionTextField.delegate = self
     }
-    
-    func control(control: NSControl, textView: NSTextView, completions words: [AnyObject], forPartialWordRange charRange: NSRange, indexOfSelectedItem index: UnsafeMutablePointer<Int>) -> [AnyObject] {
+
+    func control(control: NSControl, textView: NSTextView, completions words: [String], forPartialWordRange charRange: NSRange, indexOfSelectedItem index: UnsafeMutablePointer<Int>) -> [String] {
         return [] // disable system's autocomplete
     }
     

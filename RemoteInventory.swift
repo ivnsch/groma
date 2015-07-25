@@ -6,9 +6,9 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
+final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let users: [RemoteSharedUser]
@@ -21,7 +21,7 @@ final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSeria
         self.users = RemoteSharedUser.collection(response: response, representation: unserializedUsers)
     }
     
-    @objc static func collection(#response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventory] {
+    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventory] {
         var sections = [RemoteInventory]()
         for obj in representation as! [AnyObject] {
             if let section = RemoteInventory(response: response, representation: obj) {

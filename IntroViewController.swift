@@ -35,7 +35,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate {
     }
     
     func onRegisterError() {
-        println("register error!") // TODO handle
+        print("register error!") // TODO handle
     }
     
     func onRegisterSuccess() {
@@ -50,7 +50,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate {
     }
     
     func onLoginError() {
-        println("login error!") // TODO handle
+        print("login error!") // TODO handle
     }
     
     func onLoginSuccess() {
@@ -58,7 +58,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate {
     }
     
     func onRegisterFromLoginError() {
-        println("register error!") // TODO handle
+        print("register error!") // TODO handle
     }
     
     func onRegisterFromLoginSuccess() {

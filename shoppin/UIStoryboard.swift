@@ -32,7 +32,7 @@ extension UIStoryboard {
     }
 
     class func mainTabController() -> UIViewController {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("MainTabController") as! UIViewController
+        return mainStoryboard().instantiateViewControllerWithIdentifier("MainTabController") 
     }
     
     

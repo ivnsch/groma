@@ -44,14 +44,20 @@ class RegisterViewController: UIViewController {
 
     @IBAction func onRegisterTap(sender: UIButton) {
         
-        let user = UserInput(email: emailField.text, password: passwordField.text, firstName: firstNameField.text, lastName: lastNameField.text)
-        
-        self.progressVisible()
-        self.userProvider.register(user, resultHandler(onSuccess: {result in
-            self.delegate?.onRegisterSuccess() ?? println("Warn: no register delegate")
+        if let email = emailField.text, password = passwordField.text, firstName = firstNameField.text, lastName = lastNameField.text {
             
-            }, onError: {
-                self.delegate?.onRegisterError() ?? println("Warn: no register delegate")
-        }))
+            let user = UserInput(email: email, password: password, firstName: firstName, lastName: lastName)
+            
+            self.progressVisible()
+            self.userProvider.register(user, resultHandler(onSuccess: {result in
+                self.delegate?.onRegisterSuccess() ?? print("Warn: no register delegate")
+                
+                }, onError: {
+                    self.delegate?.onRegisterError() ?? print("Warn: no register delegate")
+            }))
+            
+        } else {
+            print("TODO onRegisterTap, validation")
+        }
     }
 }

@@ -16,8 +16,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     func inventoryItems(inventory: Inventory, _ handler: ProviderResult<[InventoryItem]> -> ()) {
     
         self.dbInventoryProvider.loadInventory{dbInventoryItems in
-            let mappedDBItems = dbInventoryItems.map{InventoryItemMapper.inventoryItemWithDB($0)}
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: mappedDBItems))
+            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbInventoryItems))
             
             self.remoteInventoryItemsProvider.inventoryItems(inventory) {remoteResult in
                 
@@ -25,7 +24,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     let inventoryItems: [InventoryItem] = remoteInventoryItems.map{InventoryItemMapper.inventoryItemWithRemote($0, inventory: inventory)}
                     
                     // if there's no cached list or there's a difference, overwrite the cached list
-                    if (mappedDBItems != inventoryItems) {
+                    if (dbInventoryItems != inventoryItems) {
                         self.dbInventoryProvider.saveInventory(inventoryItems) {saved in
                             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: inventoryItems))
                         }
@@ -43,7 +42,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         
         self.remoteInventoryItemsProvider.addToInventory(inventory, inventoryItems: items) {remoteResult in
             
-            if let remoteListItem = remoteResult.successResult {
+            if let _ = remoteResult.successResult {
                 
                 // For now no saving in local database, since there's no logic to increment in the client
                 // TODO in the future we should do the increment in the client, as the app can be used offline-only

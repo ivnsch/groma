@@ -13,9 +13,9 @@ class RealmInventoryProvider: RealmProvider {
    
     let dbListItemProvider: RealmListItemProvider = RealmListItemProvider()
     
-    func loadInventory(handler: [DBInventoryItem] -> ()) {
-        var dbObjs: Results<DBInventoryItem> = Realm().objects(DBInventoryItem)
-        handler(dbObjs.toArray())
+    func loadInventory(handler: [InventoryItem] -> ()) {
+        let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}
+        self.load(mapper, handler: handler)
     }
     
     func saveInventory(items: [InventoryItem], handler: Bool -> ()) {

@@ -47,7 +47,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     var currentList: List?
     
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
@@ -85,16 +85,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     //prepare add item view for scale animation, which should be top to bottom
     private func setAddItemViewAnchorPointTopCenter() {
         
-        if let navigationController = self.navigationController {
-            let frame = self.addItemView.frame
-            let topCenter = CGPointMake(CGRectGetMidX(frame), CGRectGetMinY(frame))
+        if let _ = self.navigationController {
+//            let frame = self.addItemView.frame
+//            let topCenter = CGPointMake(CGRectGetMidX(frame), CGRectGetMinY(frame))
             
             self.addItemView.layer.anchorPoint = CGPointMake(0.5, 0)
             
             //        println("constraint height: \(self.addItemView.topConstraint.constant)")
             
-            let navbarHeight = navigationController.navigationBar.frame.height
-            let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+//            let navbarHeight = navigationController.navigationBar.frame.height
+//            let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
             
             //////////////////////////////////////////////////////////////////////
             //FIXME
@@ -147,9 +147,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         //            quantity = 0
         //        }
         
-        var price:Float = priceText.floatValue // TODO what happens if not a number? maybe use optional like toInt()?
+        let price:Float = priceText.floatValue // TODO what happens if not a number? maybe use optional like toInt()?
         
-        let quantity = quantityText.toInt() ?? 1
+        let quantity = Int(quantityText) ?? 1
         let sectionName = sectionName ?? defaultSectionIdentifier
         
         return ListItemInput(name: name, quantity: quantity, price: price, section: sectionName)
@@ -167,7 +167,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     @IBAction func onEditTap(sender: AnyObject) {
-        let editButton = sender as! UIBarButtonItem
         let editing = !self.listItemsTableViewController.editing
         
         self.setEditing(editing, animated: true)
@@ -302,7 +301,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onListItemsChangedSection(tableViewListItems: [TableViewListItem]) {
-        self.listItemsProvider.update(tableViewListItems.map{$0.listItem}, {try in
+        self.listItemsProvider.update(tableViewListItems.map{$0.listItem}, successHandler{result in
         })
     }
     
@@ -335,9 +334,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private func setItemDone(listItem: ListItem) {
         listItem.done = true
 
-        self.listItemsProvider.update(listItem, {[weak self] try in
+        self.listItemsProvider.update(listItem, {[weak self] `try` in
             
-            if try.success ?? false {
+            if `try`.success ?? false {
                 self!.listItemsTableViewController.removeListItem(listItem, animation: UITableViewRowAnimation.Bottom)
                 
                 self!.updatePrices()
@@ -359,7 +358,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             })
             
         } else {
-            println("Error: Invalid state: trying to add item without current list")
+            print("Error: Invalid state: trying to add item without current list")
         }
 
     }
@@ -372,19 +371,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
             let listItem = ListItem(uuid: self.updatingListItem!.uuid, done: self.updatingListItem!.done, quantity: listItemInput.quantity, product: product, section: section, list: currentList, order: self.updatingListItem!.order)
             
-            self.listItemsProvider.update(listItem, {try in
+            self.listItemsProvider.update(listItem, successHandler{
+                    
+                self.listItemsTableViewController.updateListItem(listItem)
                 
-                if try.success ?? false {
-                    
-                    self.listItemsTableViewController.updateListItem(listItem)
-                    
-                    self.addItemView.resignFirstResponder()
-                    self.updatePrices()
-                }
+                self.addItemView.resignFirstResponder()
+                self.updatePrices()
             })
             
         } else {
-            println("Error: Invalid state: trying to update list item without current list")
+            print("Error: Invalid state: trying to update list item without current list")
         }
 
     }
@@ -397,7 +393,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onListItemDeleted(tableViewListItem: TableViewListItem) {
-        self.listItemsProvider.remove(tableViewListItem.listItem, {try in
+        self.listItemsProvider.remove(tableViewListItem.listItem, successHandler{
         })
     }
     

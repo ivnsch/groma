@@ -21,12 +21,12 @@ class UserDetailsViewController: UIViewController {
     
     @IBAction func onLogoutTap(sender: UIButton) {
         
-        self.userProvider.logout {try in
-            if try.success ?? false {
-                self.delegate?.onLogoutSuccess() ?? println("Warn: no login delegate")
+        self.userProvider.logout {remoteResult in
+            if remoteResult.success ?? false {
+                self.delegate?.onLogoutSuccess() ?? print("Warn: no login delegate")
                 
             } else {
-                self.delegate?.onLogoutError() ?? println("Warn: no login delegate")
+                self.delegate?.onLogoutError() ?? print("Warn: no login delegate")
             }
         }
     }

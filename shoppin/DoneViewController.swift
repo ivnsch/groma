@@ -32,7 +32,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         if let list = self.list {
             initWithList(list)
         } else {
-            println("Error: Invalid state: no list for done view controller!")
+            print("Error: Invalid state: no list for done view controller!")
         }
     }
 
@@ -83,9 +83,9 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
     private func setItemUndone(listItem: ListItem) {
         listItem.done = false
         
-        self.listItemsProvider.update(listItem, {[weak self] try in
+        self.listItemsProvider.update(listItem, {[weak self] `try` in
             
-            if try.success ?? false {
+            if `try`.success ?? false {
                 
                 self!.listItemsTableViewController.removeListItem(listItem, animation: UITableViewRowAnimation.Bottom)
             }
@@ -105,7 +105,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         for item in listItems {
             item.done = false
         }
-        self.listItemsProvider.updateDone(listItems, {[weak self] try in
+        self.listItemsProvider.updateDone(listItems, {[weak self] `try` in
             
             self!.listItemsTableViewController.setListItems([])
         })

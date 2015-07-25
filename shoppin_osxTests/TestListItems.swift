@@ -18,11 +18,11 @@ class TestListItems: XCTestCase {
     
     func testGetListItemsEmpty() {
         
-        var expectation = self.expectationWithDescription("get list items empty list")
+        let expectation = self.expectationWithDescription("get list items empty list")
         
         TestUtils.withClearDatabaseAndNewLoggedInAccount {[weak expectation] loginData in
             
-            println("get list items authorized, expect success result with empty list.")
+            print("get list items authorized, expect success result with empty list.")
             self.remoteProvider.listItems {result in
                 expect(result.success).to(beTrue())
                 expect(result.successResult).toNot(beNil())
@@ -36,11 +36,11 @@ class TestListItems: XCTestCase {
     
     func testAddListItem() {
         
-        var expectation = self.expectationWithDescription("add list items")
+        let expectation = self.expectationWithDescription("add list items")
         
         TestUtils.withClearDatabaseAndNewLoggedInAccountUser1AndAddedList1 {[weak expectation] (loginData, list) in
             
-            println("add first list item")
+            print("add first list item")
             
             let firstProduct = Product(uuid: NSUUID().UUIDString, name: "my-first-product", price: 3.5)
             let firstSection = Section(uuid: NSUUID().UUIDString, name: "my-first-section")
@@ -52,7 +52,7 @@ class TestListItems: XCTestCase {
                 
                 
                 if let remoteListItem = result.successResult {
-                    println("test first list item is returned correctly")
+                    print("test first list item is returned correctly")
                     TestUtils.testRemoteListItemWithDataValid(remoteListItem)
                     TestUtils.testRemoteListItemWithDataMatches(remoteListItem, firstListItem)
                     
@@ -67,11 +67,11 @@ class TestListItems: XCTestCase {
     
     func testAddListItems() {
         
-        var expectation = self.expectationWithDescription("add list items")
+        let expectation = self.expectationWithDescription("add list items")
         
         TestUtils.withClearDatabaseAndNewLoggedInAccountUser1AndAddedList1 {[weak expectation] (loginData, list) in
             
-            println("add first list item")
+            print("add first list item")
             
             let firstProduct = Product(uuid: NSUUID().UUIDString, name: "my-first-product", price: 3.5)
             let firstSection = Section(uuid: NSUUID().UUIDString, name: "my-first-section")
@@ -81,10 +81,10 @@ class TestListItems: XCTestCase {
                 expect(result.success).to(beTrue())
                 
                 if let remoteListItem = result.successResult {
-                    println("test first list item is returned correctly")
+                    print("test first list item is returned correctly")
                     TestUtils.testRemoteListItemWithDataMatches(remoteListItem, firstListItem)
                     
-                    println("add second list item")
+                    print("add second list item")
                     let secondProduct = Product(uuid: NSUUID().UUIDString, name: "my-second-product", price: 3.5)
                     let secondSection = Section(uuid: NSUUID().UUIDString, name: "my-second-section")
                     let secondListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: secondProduct, section: secondSection, list: TestUtils.listInput1.list, order: 2)
@@ -92,15 +92,15 @@ class TestListItems: XCTestCase {
                         expect(result.success).to(beTrue())
                         
                         if let remoteListItem = result.successResult {
-                            println("test second list item is returned correctly")
+                            print("test second list item is returned correctly")
                             TestUtils.testRemoteListItemWithDataValid(remoteListItem)
                             TestUtils.testRemoteListItemWithDataMatches(remoteListItem, secondListItem)
                             
-                            println("test lists are returned in GET, in correct order")
-                            self.remoteProvider.listItems {try in
-                                expect(try.success).to(beTrue())
+                            print("test lists are returned in GET, in correct order")
+                            self.remoteProvider.listItems {result in
+                                expect(result.success).to(beTrue())
                                 
-                                if let remoteListItems = try.successResult {
+                                if let remoteListItems = result.successResult {
                                     
                                     TestUtils.testRemoteListItemsValid(remoteListItems)
 
@@ -153,11 +153,11 @@ class TestListItems: XCTestCase {
     
     func testDeleteListItem() {
         
-        var expectation = self.expectationWithDescription("add list items")
+        let expectation = self.expectationWithDescription("add list items")
         
         TestUtils.withClearDatabaseAndNewLoggedInAccountUser1AndAddedList1 {[weak expectation] (loginData, list) in
             
-            println("add first list item")
+            print("add first list item")
             
             let firstProduct = Product(uuid: NSUUID().UUIDString, name: "my-first-product", price: 3.5)
             let firstSection = Section(uuid: NSUUID().UUIDString, name: "my-first-section")
@@ -167,11 +167,11 @@ class TestListItems: XCTestCase {
                 expect(result.success).to(beTrue())
                 
                 if let remoteListItem = result.successResult {
-                    println("test first list item is returned correctly")
+                    print("test first list item is returned correctly")
                     TestUtils.testRemoteListItemWithDataValid(remoteListItem)
                     TestUtils.testRemoteListItemWithDataMatches(remoteListItem, firstListItem)
                     
-                    println("add second list item")
+                    print("add second list item")
                     let secondProduct = Product(uuid: NSUUID().UUIDString, name: "my-second-product", price: 3.5)
                     let secondSection = Section(uuid: NSUUID().UUIDString, name: "my-second-section")
                     let secondListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: secondProduct, section: secondSection, list: TestUtils.listInput1.list, order: 2)
@@ -179,19 +179,19 @@ class TestListItems: XCTestCase {
                         expect(result.success).to(beTrue())
                         
                         if let remoteListItem = result.successResult {
-                            println("test second list item is returned correctly")
+                            print("test second list item is returned correctly")
                             TestUtils.testRemoteListItemWithDataValid(remoteListItem)
                             TestUtils.testRemoteListItemWithDataMatches(remoteListItem, secondListItem)
 
-                            println("remove first list item")
-                            self.remoteProvider.remove(firstListItem, handler: {try in
-                                expect(try.success).to(beTrue())
+                            print("remove first list item")
+                            self.remoteProvider.remove(firstListItem, handler: {result in
+                                expect(result.success).to(beTrue())
                                 
-                                println("test GET - only second list item should be there")
-                                self.remoteProvider.listItems {try in
-                                    expect(try.success).to(beTrue())
+                                print("test GET - only second list item should be there")
+                                self.remoteProvider.listItems {result in
+                                    expect(result.success).to(beTrue())
                                     
-                                    if let remoteListItems = try.successResult {
+                                    if let remoteListItems = result.successResult {
                                         
                                         TestUtils.testRemoteListItemsValid(remoteListItems)
 
@@ -241,11 +241,11 @@ class TestListItems: XCTestCase {
     
     func testUpdateListItem() {
         
-        var expectation = self.expectationWithDescription("add list items")
+        let expectation = self.expectationWithDescription("add list items")
         
         TestUtils.withClearDatabaseAndNewLoggedInAccountUser1AndAddedList1 {[weak expectation] (loginData, list) in
             
-            println("add first list item")
+            print("add first list item")
             
             let firstProduct = Product(uuid: NSUUID().UUIDString, name: "my-first-product", price: 3.5)
             let firstSection = Section(uuid: NSUUID().UUIDString, name: "my-first-section")
@@ -255,11 +255,11 @@ class TestListItems: XCTestCase {
                 expect(result.success).to(beTrue())
                 
                 if let remoteListItem = result.successResult {
-                    println("test first list item is returned correctly")
+                    print("test first list item is returned correctly")
                     TestUtils.testRemoteListItemWithDataValid(remoteListItem)
                     TestUtils.testRemoteListItemWithDataMatches(remoteListItem, firstListItem)
                     
-                    println("add second list item")
+                    print("add second list item")
                     let secondProduct = Product(uuid: NSUUID().UUIDString, name: "my-second-product", price: 3.5)
                     let secondSection = Section(uuid: NSUUID().UUIDString, name: "my-second-section")
                     let secondListItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: 2, product: secondProduct, section: secondSection, list: TestUtils.listInput1.list, order: 2)
@@ -267,14 +267,14 @@ class TestListItems: XCTestCase {
                         expect(result.success).to(beTrue())
                         
                         if let remoteListItem = result.successResult {
-                            println("test second list item is returned correctly")
+                            print("test second list item is returned correctly")
                             
 
 
                             TestUtils.testRemoteListItemWithDataValid(remoteListItem)
                             TestUtils.testRemoteListItemWithDataMatches(remoteListItem, secondListItem)
 
-                            println("update first list item")
+                            print("update first list item")
                             // TODO update relations here how handle??
                             let updatedFirstProduct = Product(uuid: firstProduct.uuid, name: "my-first-product-updated", price: 10.01)
                             
@@ -289,11 +289,12 @@ class TestListItems: XCTestCase {
                             self.remoteProvider.update(updatedFirstListItem, handler: {result in
                                 expect(result.success).to(beTrue())
                                 
-                                println("test GET - only second list item should be there")
-                                self.remoteProvider.listItems {try in
-                                    expect(try.success).toNot(beNil())
+                                print("test GET - only second list item should be there")
+                                self.remoteProvider.listItems {result in
+                                    expect(result.success).to(beTrue())
+                                    expect(result.successResult).toNot(beNil())
                                     
-                                    if let remoteListItems = try.successResult {
+                                    if let remoteListItems = result.successResult {
                                         
                                         TestUtils.testRemoteListItemsValid(remoteListItems)
                                         

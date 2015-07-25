@@ -12,9 +12,9 @@ extension String {
     
     func contains(str: String, caseInsensitive: Bool = false) -> Bool {
         
-        var options = NSStringCompareOptions.allZeros
+        var options = NSStringCompareOptions()
         if caseInsensitive {
-            options |= NSStringCompareOptions.CaseInsensitiveSearch
+            options = options.union(NSStringCompareOptions.CaseInsensitiveSearch)
         }
 
         return self.rangeOfString(str, options: options) != nil

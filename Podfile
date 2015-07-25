@@ -1,8 +1,9 @@
 def shared
     use_frameworks!
-    pod 'Alamofire', '~> 1.2'
+    pod 'Alamofire', :git => 'https://github.com/Alamofire/Alamofire.git', :branch => 'swift-2.0'
     pod 'Valet', '~> 1.3'
-    pod 'RealmSwift'
+    pod 'Realm', :git => 'https://github.com/realm/realm-cocoa.git', :branch => 'swift-2.0'
+    pod 'RealmSwift', :git => 'https://github.com/realm/realm-cocoa.git', :branch => 'swift-2.0'
 end
 
 
@@ -19,7 +20,5 @@ end
 target 'shoppin_osxTests' do
     platform :osx, '10.10'
     shared
-    pod 'Quick', '~> 0.3.0'
-    pod 'Nimble', '~> 0.4.0'
-
+    pod 'Nimble', :git => 'https://github.com/Quick/Nimble.git', :branch => 'swift-2.0'
 end

@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
+final class RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let uuid: String
     var email: String
@@ -22,7 +22,7 @@ final class RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSeri
         self.lastName = representation.valueForKeyPath("lastName") as! String
     }
     
-    @objc static func collection(#response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteSharedUser] {
+    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteSharedUser] {
         var listItems = [RemoteSharedUser]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteSharedUser(response: response, representation: obj) {

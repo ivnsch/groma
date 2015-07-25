@@ -41,10 +41,10 @@ enum RemoteStatusCode: Int {
     case ResponseIsNil = 10005
     case ServerNotReachable = 10006 // This is currently both server is down and no internet connection
     case UnknownServerCommunicationError = 10007 // Communication errors other than .ServerNotReachable
-    
+    case ClientParamsParsingError = 10008 // This should really not happen, but the serialization for some requests needs do catch so for overall consistency in catch we return this error
 }
 
-extension RemoteStatusCode : Printable {
+extension RemoteStatusCode : CustomStringConvertible {
     var description: String { get {
         switch self {
         default: return "\(self.rawValue)"
@@ -75,7 +75,7 @@ public class NoOpSerializable: ResponseObjectSerializable {
 }
 
 
-public class RemoteResult<T>: DebugPrintable {
+public class RemoteResult<T>: CustomDebugStringConvertible {
     
     let status: RemoteStatusCode
     
@@ -121,7 +121,7 @@ struct AlamofireHelper {
         
         let maybeToken = valet?.stringForKey(KeychainKeys.token)
         
-        var mutableURLRequest = NSMutableURLRequest(URL: NSURL(string: url)!)
+        let mutableURLRequest = NSMutableURLRequest(URL: NSURL(string: url)!)
         mutableURLRequest.HTTPMethod = method.rawValue
         
         if let token = maybeToken {
@@ -139,7 +139,7 @@ struct AlamofireHelper {
 
 extension Alamofire.Request {
 
-    public func responseMyArray<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest, NSHTTPURLResponse?, RemoteResult<[T]>, NSError?) -> Void) -> Self {
+    public func responseMyArray<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest?, NSHTTPURLResponse?, RemoteResult<[T]>, NSError?) -> Void) -> Self {
 
         let dataParser: (AnyObject, NSHTTPURLResponse) -> ([T]?) = {data, response in
             var objs = [T]()
@@ -148,7 +148,7 @@ extension Alamofire.Request {
                     objs.append(obj)
                     
                 } else {
-                    println("Error parsing obj: \(obj)")
+                    print("Error parsing obj: \(obj)")
                     return nil
                 }
             }
@@ -159,7 +159,7 @@ extension Alamofire.Request {
     }
     
     
-    public func responseMyObject<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest, NSHTTPURLResponse?, RemoteResult<T>, NSError?) -> Void) -> Self {
+    public func responseMyObject<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest?, NSHTTPURLResponse?, RemoteResult<T>, NSError?) -> Void) -> Self {
         
         let dataParser: (AnyObject, NSHTTPURLResponse) -> (T?) = {data, response in
             return T(response: response, representation: data)
@@ -170,11 +170,11 @@ extension Alamofire.Request {
     
     
     // Common method to parse json object and array
-    private func responseHandler<T>(dataParser: (AnyObject, NSHTTPURLResponse) -> (T?), completionHandler: (NSURLRequest, NSHTTPURLResponse?, RemoteResult<T>, NSError?) -> Void) -> Self {
+    private func responseHandler<T>(dataParser: (AnyObject, NSHTTPURLResponse) -> (T?), completionHandler: (NSURLRequest?, NSHTTPURLResponse?, RemoteResult<T>, NSError?) -> Void) -> Self {
 
         let serializer: Serializer = { (request, responseMaybe, data) in
             
-            println("method: \(request.HTTPMethod), response: \(responseMaybe)")
+            print("method: \(request?.HTTPMethod), response: \(responseMaybe)")
             
             if let response = responseMaybe {
                 
@@ -182,9 +182,9 @@ extension Alamofire.Request {
                 
                 if statusCode >= 200 && statusCode < 300 {
                     let JSONSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
-                    let (JSON: AnyObject?, serializationError) = JSONSerializer(request, response, data)
+                    let (JSON, serializationError) = JSONSerializer(request, response, data)
                     
-                    println("request: \(request), JSON: \(JSON)")
+                    print("request: \(request), JSON: \(JSON)")
                     
                     if JSON != nil {
                         
@@ -199,7 +199,7 @@ extension Alamofire.Request {
                                         return (remoteResult, nil)
                                         
                                     } else {
-                                        println("Error parsing success object: \(response)")
+                                        print("Error parsing success object: \(response)")
                                         
                                         
                                         let remoteResult = RemoteResult<T>(status: .ParsingError)
@@ -218,13 +218,13 @@ extension Alamofire.Request {
                             }
                             
                         } else {
-                            println("Error parsing response: status flag not recognized: \(statusInt)")
+                            print("Error parsing response: status flag not recognized: \(statusInt)")
                             let remoteResult = RemoteResult<T>(status: .NotRecognizedStatusFlag)
                             return (remoteResult, nil)
                         }
                         
                     } else {
-                        println("Error: wrong reponse format: \(response)")
+                        print("Error: wrong reponse format: \(response), serializationError: \(serializationError)")
                         let remoteResult = RemoteResult<T>(status: .NoJson)
                         return (remoteResult, nil)
                     }
@@ -232,33 +232,33 @@ extension Alamofire.Request {
                     
                     
                 } else if statusCode == 401 {
-                    println("Unauthorized")
+                    print("Unauthorized")
                     let remoteResult = RemoteResult<T>(status: .NotAuthenticated)
                     return (remoteResult, nil)
                     
                 } else if statusCode == 400 {
-                    println("Bad request")
+                    print("Bad request")
                     let remoteResult = RemoteResult<T>(status: .BadRequest)
                     return (remoteResult, nil)
                     
                 } else if statusCode == 415 {
-                    println("Unsupported media type")
+                    print("Unsupported media type")
                     let remoteResult = RemoteResult<T>(status: .UnsupportedMediaType)
                     return (remoteResult, nil)
                     
                 } else if statusCode == 500 {
-                    println("Internal server error: \(response)")
+                    print("Internal server error: \(response)")
                     let remoteResult = RemoteResult<T>(status: .InternalServerError)
                     return (remoteResult, nil)
                     
                 } else {
-                    println("Error: Not handled status code: \(statusCode)")
+                    print("Error: Not handled status code: \(statusCode)")
                     let remoteResult = RemoteResult<T>(status: .NotHandledHTTPStatusCode)
                     return (remoteResult, nil)
                 }
                 
             } else { // So far this happened only when the server was not reachable but now we are catching the error before using the serializable, so it's unexpected that this will be used
-                println("Error: response == nil")
+                print("Error: response == nil")
                 let remoteResult = RemoteResult<T>(status: .ResponseIsNil)
                 return (remoteResult, nil)
             }
@@ -269,7 +269,7 @@ extension Alamofire.Request {
             let result: RemoteResult<T> = {
                 
                 if let e = error {
-                    println("Error calling remote service: \(e)")
+                    print("Error calling remote service: \(e)")
                     if e.code == -1004 {  // iOS returns -1004 when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
                         return RemoteResult<T>(status: .ServerNotReachable)
                     } else {
@@ -290,16 +290,16 @@ extension Alamofire.Request {
 
 
 @objc public protocol ResponseCollectionSerializable {
-    static func collection(#response: NSHTTPURLResponse, representation: AnyObject) -> [Self]
+    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [Self]
 }
 
 extension Alamofire.Request {
-    public func responseCollection<T: ResponseCollectionSerializable>(completionHandler: (NSURLRequest, NSHTTPURLResponse?, [T]?, NSError?) -> Void) -> Self {
+    public func responseCollection<T: ResponseCollectionSerializable>(completionHandler: (NSURLRequest?, NSHTTPURLResponse?, [T]?, NSError?) -> Void) -> Self {
         let serializer: Serializer = { (request, response, data) in
             let JSONSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
-            let (JSON: AnyObject?, serializationError) = JSONSerializer(request, response, data)
-            if response != nil && JSON != nil {
-                return (T.collection(response: response!, representation: JSON!), nil)
+            let (JSON, serializationError) = JSONSerializer(request, response, data)
+            if let response = response, JSON = JSON {
+                return (T.collection(response: response, representation: JSON), nil)
             } else {
                 return (nil, serializationError)
             }

@@ -82,20 +82,24 @@ class EditInventoryViewController: UIViewController, UITableViewDelegate, UITabl
         // But now we have an additional service where we do this beforehand
         // TODO clean solution?
         
-        let inventoryName = self.inventoryNameInputField.text
-        
-        let inventoryInput = InventoryInput(uuid: NSUUID().UUIDString, name: inventoryName, users: self.inventoryFormInput.users)
-        
-        self.progressVisible(true)
-        
-        if self.isEdit {
-            self.inventoryProvider.updateInventory(inventoryInput, successHandler{list in
-                self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-            })
+        if let inventoryName = self.inventoryNameInputField.text {
+            
+            let inventoryInput = InventoryInput(uuid: NSUUID().UUIDString, name: inventoryName, users: self.inventoryFormInput.users)
+            
+            self.progressVisible(true)
+            
+            if self.isEdit {
+                self.inventoryProvider.updateInventory(inventoryInput, successHandler{list in
+                    self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+                    })
+            } else {
+                self.inventoryProvider.addInventory(inventoryInput, successHandler{list in
+                    self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+                    })
+            }
+            
         } else {
-            self.inventoryProvider.addInventory(inventoryInput, successHandler{list in
-                self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-            })
+            print("TODO validation onDoneTap")
         }
     }
     
@@ -104,13 +108,17 @@ class EditInventoryViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     @IBAction func onAddUserTap(sender: UIButton) {
-        let input: String = self.addUserInputField.text
-        // TODO validate
-        
-        // TODO do later a verification here if email exists in the server
-        self.inventoryFormInput = self.inventoryFormInput.copy(users: self.inventoryFormInput.users + [SharedUserInput(email: input)])
-        self.usersTableView?.reloadData()
-        self.addUserInputField.text = ""
+        if let input: String = self.addUserInputField.text {
+            // TODO validate
+            
+            // TODO do later a verification here if email exists in the server
+            self.inventoryFormInput = self.inventoryFormInput.copy(users: self.inventoryFormInput.users + [SharedUserInput(email: input)])
+            self.usersTableView?.reloadData()
+            self.addUserInputField.text = ""
+            
+        } else {
+            print("TODO validation onAddUserTap")
+        }
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -123,7 +131,7 @@ class EditInventoryViewController: UIViewController, UITableViewDelegate, UITabl
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("listCell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("listCell", forIndexPath: indexPath) 
         
         let userInput = self.inventoryFormInput.users[indexPath.row]
         cell.textLabel?.text = userInput.email

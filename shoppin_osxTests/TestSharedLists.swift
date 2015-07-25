@@ -20,7 +20,7 @@ class TestSharedLists: XCTestCase {
     
         TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak expectation] loginData in
         
-            println("Add a list")
+            print("Add a list")
             let firstList = List(uuid: NSUUID().UUIDString, name: "test-shared-list", listItems: [])
             let firstListWithSharedUsers = ListWithSharedUsersInput(list: firstList, users: [SharedUserInput(email: "foo@foo.foo")])
             self.remoteListItemProvider.add(firstListWithSharedUsers) {result in
@@ -28,13 +28,13 @@ class TestSharedLists: XCTestCase {
                 expect(result.success).to(beTrue())
                 TestUtils.testIfSuccessWithResult(result)
 
-                println("Register a new user")
+                print("Register a new user")
                 self.remoteUserProvider.register(TestUtils.userInput2) {result in
                     expect(result.success).to(beTrue())
                     expect(result.successResult).to(beNil())
                     
                     
-                    println("Share list with new user")
+                    print("Share list with new user")
                     let updatedListWithUsers = ListWithSharedUsersInput(list: firstList, users: [
                         SharedUserInput(email: TestUtils.userInput1.email),
                         SharedUserInput(email: TestUtils.userInput2.email)
@@ -89,7 +89,7 @@ class TestSharedLists: XCTestCase {
 //        
 //        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak expectation] loginData in
 //            
-//            println("add first list")
+//            print("add first list")
 //            let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])
 //            self.remoteProvider.add(firstList, handler: {result in
 //                
@@ -97,11 +97,11 @@ class TestSharedLists: XCTestCase {
 //                TestUtils.testIfSuccessWithResult(result)
 //                
 //                if let remoteList = result.successResult {
-//                    println("test first list is returned correctly")
+//                    print("test first list is returned correctly")
 //                    TestUtils.testRemoteListValid(remoteList)
 //                    TestUtils.testRemoteListMatches(remoteList, firstList)
 //                    
-//                    println("add second list")
+//                    print("add second list")
 //                    let secondList = List(uuid: NSUUID().UUIDString, name: "test-second-list", listItems: [])
 //                    self.remoteProvider.add(secondList, handler: {result in
 //                        
@@ -109,7 +109,7 @@ class TestSharedLists: XCTestCase {
 //                        TestUtils.testIfSuccessWithResult(result)
 //                        
 //                        if let remoteList = result.successResult {
-//                            println("test second list is returned correctly (post response)")
+//                            print("test second list is returned correctly (post response)")
 //                            TestUtils.testRemoteListValid(remoteList)
 //                            TestUtils.testRemoteListMatches(remoteList, secondList)
 //                            
@@ -126,14 +126,14 @@ class TestSharedLists: XCTestCase {
 //                                    TestUtils.testIfSuccessWithResult(result)
 //                                    
 //                                    if let remoteList = result.successResult {
-//                                        println("test list added by second user is returned correctly (post response)")
+//                                        print("test list added by second user is returned correctly (post response)")
 //                                        TestUtils.testRemoteListValid(remoteList)
 //                                        TestUtils.testRemoteListMatches(remoteList, firstList)
 //                                        
 //
 //                                        // TODO the login token from first user is overwritten now - test have to be modified to support this kind of multi-user test
 //                                        // one possibility could be to store the tokens in memory, but has to be careful not introducing new issues
-////                                        println("test lists added by first user are returned correctly")
+////                                        print("test lists added by first user are returned correctly")
 ////                                        self.remoteProvider.lists {result in
 ////                                            expect(result.success).toNot(beNil())
 ////                                            if let lists = result.successResult {
@@ -152,7 +152,7 @@ class TestSharedLists: XCTestCase {
 //                                })
 //                            }
 //                            
-////                            println("test lists are returned in GET, in correct order")
+////                            print("test lists are returned in GET, in correct order")
 ////                            self.remoteProvider.lists {result in
 ////                                expect(result.success).toNot(beNil())
 ////                                

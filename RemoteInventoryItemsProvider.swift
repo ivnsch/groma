@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import Valet
 import Alamofire
 
@@ -35,11 +35,15 @@ class RemoteInventoryItemsProvider: Any {
         
         let values = inventoryItems.map{[weak self] in self!.toDictionary($0)}
         
-        var error: NSError?
-        request.HTTPBody = NSJSONSerialization.dataWithJSONObject(values, options: nil, error: &error)
-        
-        Alamofire.request(request).responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>, error) in
-            handler(result)
+        do {
+            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(values, options: [])
+            
+            Alamofire.request(request).responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>, error) in
+                handler(result)
+            }
+            
+        } catch _ as NSError {
+            handler(RemoteResult(status: .ClientParamsParsingError))
         }
     }
     

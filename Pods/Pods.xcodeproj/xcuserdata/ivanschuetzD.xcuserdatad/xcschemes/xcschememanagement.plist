@@ -64,11 +64,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-shoppin_osxTests-Quick.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Pods-shoppin_osxTests-Realm.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -92,87 +87,82 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0727ACE11D6DD747642152E6</key>
+		<key>1D247095143F5F232A2EEEE9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0A116A3517CF3F7238862E20</key>
+		<key>3514CEEB73F45CA81F230494</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1E3E7FFD50ACBEB0C0DCA7B9</key>
+		<key>36A701AB93E9A4AA0121DC33</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2AE8F9EB379877231BE4DCF1</key>
+		<key>49EA5DB50DD053D0BB18E364</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2B8946B4AE3C526D7496136C</key>
+		<key>4CC52AF50FDB110D9921260A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2E1768AD6D9132E09EAB574E</key>
+		<key>580BC595C537B9264D1B941A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>32B1591D2BB489A041C13005</key>
+		<key>66006D1A60BC1338C5746B49</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>38BDC8484D237D6B27038598</key>
+		<key>7986E545540DDAF19C986D23</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3A310727C0BC6B67BE3B706C</key>
+		<key>7BB93A61716EA688EE106A45</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4F03E753F1181B653C0D5531</key>
+		<key>80E0DA30CC584B511C179CB3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7AF7F4302AA86C42130096A7</key>
+		<key>8376BD2836F23CC844097816</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7D010997684FB30D75803D27</key>
+		<key>CAE901A3D957A184FF811EFA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A2E65E7120A11753C15FF654</key>
+		<key>D577012BEBCB6A24BCDA5D73</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A3B7EE1CB15ACFFC76ECF6E6</key>
+		<key>DC355C18AF9B2E2DCE79D6B1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D0E6AF59315EBFE84A63E74E</key>
+		<key>E1003E6712A4D3283CD9F75C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E5C42D6380E417C335DD36B2</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>EC8348F4B15E9A40D6C4288B</key>
+		<key>E1E591BFC2B2B122DCD90CAD</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -13,13 +13,13 @@ class FrozenEffect {
     class func apply(view:UIView) {
         let blurView = createBlurView(forView: view)
         
-        blurView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        blurView.translatesAutoresizingMaskIntoConstraints = false
         
         let views:Dictionary = ["blurView": blurView]
         
         view.insertSubview(blurView, atIndex: 0)
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[blurView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[blurView]|", options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[blurView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[blurView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
     }
     
     private class func createBlurView(forView view:UIView) -> UIView {

@@ -17,7 +17,7 @@ enum DBStatusCode: Int {
     case Unknown = 100
 }
 
-public class DBResult<T>: DebugPrintable {
+public class DBResult<T>: CustomDebugStringConvertible {
     let status: DBStatusCode
     let sucessResult: T?
     let errorMsg: String?

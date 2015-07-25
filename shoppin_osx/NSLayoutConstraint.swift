@@ -25,7 +25,7 @@ extension NSLayoutConstraint {
             var elementsStr = ""
             var dictionary = Dictionary<String, NSView>()
             var firstViewStr: String?
-            for (index, view) in enumerate(views) {
+            for (index, view) in views.enumerate() {
                 let viewStr = "v\(index)"
                 if index == 0 {
                     firstViewStr = viewStr
@@ -38,16 +38,16 @@ extension NSLayoutConstraint {
             
             return NSLayoutConstraint.constraintsWithVisualFormat(
                 "H:|-(\(leading))-\(elementsStr)-(\(trailing))-|",
-                options: NSLayoutFormatOptions.allZeros,
+                options: NSLayoutFormatOptions(),
                 metrics: nil,
-                views: dictionary) as? [NSLayoutConstraint] // ? instead of ! to silence warning (compiler doesn't seem to see we use optional for return value when views is empty).
+                views: dictionary) as [NSLayoutConstraint]
                 
         } else {
             return nil
         }
     }
     
-    private class func sameAttributeConstraint(#view: NSView, otherView: NSView, multiplier: Float = 1, constant: Float = 0, attribute: NSLayoutAttribute) -> NSLayoutConstraint {
+    private class func sameAttributeConstraint(view view: NSView, otherView: NSView, multiplier: Float = 1, constant: Float = 0, attribute: NSLayoutAttribute) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: view, attribute: attribute, relatedBy: NSLayoutRelation.Equal, toItem: otherView, attribute: attribute, multiplier: CGFloat(multiplier), constant: CGFloat(constant))
     }
 }

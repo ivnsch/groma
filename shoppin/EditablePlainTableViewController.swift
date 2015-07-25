@@ -19,7 +19,7 @@ class EditablePlainTableViewControllerModel<T> {
     }
 }
 
-class EditablePlainTableViewController: UITableViewController, UIScrollViewDelegate {
+class EditablePlainTableViewController: UITableViewController {
 
     var listItems: [EditablePlainTableViewControllerModel<SharedUser>] = [] {// for now enforce User as type parameter since obj-c class (UIViewController in this case) doesn't support generics
         didSet {
@@ -55,7 +55,7 @@ class EditablePlainTableViewController: UITableViewController, UIScrollViewDeleg
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) 
 
         cell.textLabel?.text = self.listItems[indexPath.row].text
         

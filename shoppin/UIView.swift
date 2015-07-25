@@ -11,8 +11,8 @@ import UIKit
 extension UIView {
    
     func centerInParent(constantX:Float = 0, constantY:Float = 0) {
-        self.centerXInParent(constant: constantX)
-        self.centerYInParent(constant: constantY)
+        self.centerXInParent(constantX)
+        self.centerYInParent(constantY)
     }
     
     func centerYInParent(constant:Float = 0) -> NSLayoutConstraint {

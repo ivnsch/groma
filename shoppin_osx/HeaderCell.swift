@@ -43,7 +43,7 @@ class HeaderCell: NSTableCellView {
             "H:|[v]|",
             "V:|[v]|"
             ] {
-            self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(c, options: NSLayoutFormatOptions.allZeros, metrics: nil, views: ["v": self.view]))
+            self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(c, options: NSLayoutFormatOptions(), metrics: nil, views: ["v": self.view]))
         }
     }
     

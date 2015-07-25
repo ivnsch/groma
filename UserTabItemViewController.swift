@@ -19,7 +19,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     // MARK: - LoginDelegate
     
     func onLoginError() {
-        println("login error!") // TODO handle
+        print("login error!") // TODO handle
     }
     
     func onLoginSuccess() {
@@ -27,7 +27,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     }
     
     func onRegisterFromLoginError() {
-        println("register error!") // TODO handle
+        print("register error!") // TODO handle
     }
     
     func onRegisterFromLoginSuccess() {
@@ -47,7 +47,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     }
 
     func onLogoutError() {
-        println("login error!") // TODO handle
+        print("login error!") // TODO handle
     }
     
     // MARK:
@@ -62,20 +62,16 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     }
     
     private func replaceController(newController: UIViewController) {
-        if let tabBarController = self.tabBarController, var controllers = tabBarController.viewControllers {
-            
-            // these loops could be replaced with first? but loop just feels better
-            for view in self.view.subviews {
-                view.removeFromSuperview()
-            }
-            for controller in self.childViewControllers {
-                controller.removeFromParentViewController()
-            }
-            self.addChildViewControllerAndView(newController)
-            newController.view.matchSize(self.view)
-            
-        } else {
-            println("Error: trying to replace tab but there's no tab bar controller or view controllers")
+        
+        // these loops could be replaced with first? but loop just feels better
+        for view in self.view.subviews {
+            view.removeFromSuperview()
         }
+        for controller in self.childViewControllers {
+            controller.removeFromParentViewController()
+        }
+        self.addChildViewControllerAndView(newController)
+        newController.view.matchSize(self.view)
+
     }
 }

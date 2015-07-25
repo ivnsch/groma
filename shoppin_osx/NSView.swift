@@ -37,7 +37,7 @@ extension NSView {
         if let superview = self.superview {
             function(superview: superview)
         } else {
-            println("Warning: trying to add superview constraint without a superview")
+            print("Warning: trying to add superview constraint without a superview")
         }
     }
    

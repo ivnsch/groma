@@ -23,7 +23,7 @@ import UIKit
 //    func buttonThreeActionForItemText()
 //}
 
-class SwipeableCell: UITableViewCell, UIGestureRecognizerDelegate {
+class SwipeableCell: UITableViewCell {
     
     private let bounceValue:CGFloat = 20
     
@@ -121,7 +121,7 @@ class SwipeableCell: UITableViewCell, UIGestureRecognizerDelegate {
         if animated {
             duration = 0.2
         }
-        var delay:NSTimeInterval = 0
+        let delay:NSTimeInterval = 0
         
         UIView.animateWithDuration(duration, delay: delay, options: UIViewAnimationOptions.CurveEaseOut, animations: {() -> Void in
             self.layoutIfNeeded()
@@ -148,7 +148,7 @@ class SwipeableCell: UITableViewCell, UIGestureRecognizerDelegate {
             if movingHorizontally {
                 let currentPoint = recognizer.translationInView(self.myContentView)
                 let deltaX = currentPoint.x - self.panStartPoint.x
-                var panningRight = currentPoint.x > self.panStartPoint.x
+                let panningRight = currentPoint.x > self.panStartPoint.x
                 
                 if self.startingLeftLayoutConstraint == 0 { //closed
                     if !panningRight {

@@ -18,7 +18,7 @@ class DefaultTableViewController: UIViewController, UITableViewDataSource, UITab
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -28,14 +28,14 @@ class DefaultTableViewController: UIViewController, UITableViewDataSource, UITab
         
         let views = ["tableView": self.tableView]
         for view in views.values {
-            view.setTranslatesAutoresizingMaskIntoConstraints(false)
+            view.translatesAutoresizingMaskIntoConstraints = false
         }
         
         for constraint in [
             "H:|[tableView]|",
             "V:|[tableView]|"
             ] {
-                self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(constraint, options: NSLayoutFormatOptions(0), metrics: nil, views: views))
+                self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(constraint, options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: views))
         }
     }
     
@@ -53,7 +53,7 @@ class DefaultTableViewController: UIViewController, UITableViewDataSource, UITab
         tableView.sectionFooterHeight = 0.0
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         
-        for (cellClass:UITableViewCell.Type, cellIdentifier) in self.cellsToRegister() {
+        for (cellClass, cellIdentifier): (UITableViewCell.Type, String) in self.cellsToRegister() {
             tableView.registerClass(cellClass, forCellReuseIdentifier:cellIdentifier)
         }
         

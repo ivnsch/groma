@@ -125,7 +125,6 @@ class AutosuggestionsTableViewController: NSViewController, NSTableViewDelegate,
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
         let cell = tableView.makeViewWithIdentifier("cell", owner: self) as! NSTableCellView
         let option = self.filteredSuggestions[row]
-        let a = cell.textField
         cell.textField?.stringValue = option
         return cell
     }

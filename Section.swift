@@ -26,7 +26,7 @@ final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSer
         self.name = representation.valueForKeyPath("name") as! String
     }
     
-    @objc static func collection(#response: NSHTTPURLResponse, representation: AnyObject) -> [Section] {
+    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [Section] {
         var sections = [Section]()
         for obj in representation as! [AnyObject] {
             if let section = Section(response: response, representation: obj) {

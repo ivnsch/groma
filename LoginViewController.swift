@@ -27,7 +27,7 @@ class LoginViewController: UIViewController, RegisterDelegate {
     
     var delegate: LoginDelegate?
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -47,15 +47,17 @@ class LoginViewController: UIViewController, RegisterDelegate {
     
     @IBAction func loginTapped(sender: AnyObject) {
         
-        let email = userNameField.text
-        let password = passwordField.text
-        
-        let loginData = LoginData(email: email, password: password)
-
-        self.progressVisible()
-        self.userProvider.login(loginData, successHandler{result in
-            self.delegate?.onLoginSuccess() ?? println("Warn: no login delegate")
-        })
+        if let email = userNameField.text, password = passwordField.text {
+            let loginData = LoginData(email: email, password: password)
+            
+            self.progressVisible()
+            self.userProvider.login(loginData, successHandler{result in
+                self.delegate?.onLoginSuccess() ?? print("Warn: no login delegate")
+            })
+            
+        } else {
+            print("TODO loginTapped, validation")
+        }
     }
     
     @IBAction func onRegisterTap(sender: UIButton) {
@@ -65,10 +67,10 @@ class LoginViewController: UIViewController, RegisterDelegate {
     }
     
     func onRegisterSuccess() {
-        self.delegate?.onRegisterFromLoginSuccess() ?? println("Warn: no login delegate")
+        self.delegate?.onRegisterFromLoginSuccess() ?? print("Warn: no login delegate")
     }
     
     func onRegisterError() {
-        self.delegate?.onRegisterFromLoginError() ?? println("Warn: no login delegate")
+        self.delegate?.onRegisterFromLoginError() ?? print("Warn: no login delegate")
     }
 }

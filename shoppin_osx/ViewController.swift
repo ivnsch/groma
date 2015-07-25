@@ -142,7 +142,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     // MARK: - table view query
  
     private func getSectionHeaderRowIndex(section: Section) -> Int? {
-       return Array(enumerate(self.cellManagers)).filter {
+       return self.cellManagers.enumerate().filter {
             if let headerCellManager = $0.element as? HeaderCellManager {
                 return headerCellManager.section.name == section.name
             } else {
@@ -153,7 +153,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     
     private func getListItemRowsInSection(sectionIndex: Int) -> NSIndexSet {
         // collect indices until start of next section
-        var indexSet = NSMutableIndexSet()
+        let indexSet = NSMutableIndexSet()
         for i in (sectionIndex + 1)..<self.cellManagers.count {
             let cellManager = self.cellManagers[i]
             if cellManager is ListItemCellManager {
@@ -171,13 +171,13 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             let sectionListItemsCount = self.getListItemRowsInSection(sectionIndex).count
             return sectionIndex + sectionListItemsCount
         } else {
-            println("Warning: didn't find a header for section")
+            print("Warning: didn't find a header for section")
             return nil
         }
     }
     
     private func getHeader(rowIndex: Int) -> HeaderCellManager {
-        for i in reverse(0...rowIndex) {
+        for i in (0...rowIndex).reverse() {
             if let headerCellManager = self.cellManagers[i] as? HeaderCellManager {
                 return headerCellManager
             }
@@ -189,7 +189,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     // returns -1 if the tableview is empty
     private func getEndOfCurrentSection(rowIndex: Int) -> Int {
         for i in (rowIndex + 1)..<self.cellManagers.count {
-            if let headerCellManager = cellManagers[i] as? HeaderCellManager {
+            if let _ = cellManagers[i] as? HeaderCellManager {
                 return i - 1
             }
         }
@@ -271,13 +271,13 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
                 // note that this also adds the section if it doesn't exist yet
                 self!.listItemsProvider.add(listItemInput, list: list, order: rowIndex, self!.successHandler{addedListItem in
                     
-                    if let currentList = self!.currentList {
+                    if let _ = self!.currentList {
                         
                         let cellManager = ListItemCellManager(listItem: addedListItem, delegate: self!)
                         
-                        var indexPathsToInsert = NSMutableIndexSet()
+                        let indexPathsToInsert = NSMutableIndexSet()
                         
-                        if let lastIndexInSection = self!.getLastIndexInSection(addedListItem.section) { // section exists
+                        if let _ = self!.getLastIndexInSection(addedListItem.section) { // section exists
                             
                             let header = self!.getHeader(previousRow)
                             if header.section == addedListItem.section { // rowIndex is in the section - insert at rowIndex
@@ -291,7 +291,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
                                     indexPathsToInsert.addIndex(newListItemIndex)
                                     
                                 } else {
-                                    println("Error: couldn't get last index in section, can't add item row to tableview")
+                                    print("Error: couldn't get last index in section, can't add item row to tableview")
                                 }
                             }
                             
@@ -315,7 +315,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
                         }()
                         
                     } else {
-                        println("Warning: trying to add item without current list")
+                        print("Warning: trying to add item without current list")
                     }
                     
                 })
@@ -374,7 +374,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         self.cellManagers.removeAtIndex(row)
         
         self.tableView.wrapUpdates {
-            self.tableView.removeRowsAtIndexes(NSIndexSet(index: row), withAnimation: NSTableViewAnimationOptions.EffectFade | NSTableViewAnimationOptions.SlideLeft)
+            self.tableView.removeRowsAtIndexes(NSIndexSet(index: row), withAnimation: [NSTableViewAnimationOptions.EffectFade, NSTableViewAnimationOptions.SlideLeft])
         }()
         
         self.listItemsProvider.remove(listItemRow.listItem, successHandler{
@@ -397,8 +397,8 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         self.cellManagers.insert(listItemRow, atIndex: targetIndex)
         
         self.tableView.wrapUpdates {
-            self.tableView.removeRowsAtIndexes(NSIndexSet(index: rowIndex), withAnimation: NSTableViewAnimationOptions.EffectFade | anim)
-            self.tableView.insertRowsAtIndexes(NSIndexSet(index: targetIndex), withAnimation: NSTableViewAnimationOptions.EffectFade | anim)
+            self.tableView.removeRowsAtIndexes(NSIndexSet(index: rowIndex), withAnimation: [NSTableViewAnimationOptions.EffectFade, anim])
+            self.tableView.insertRowsAtIndexes(NSIndexSet(index: targetIndex), withAnimation: [NSTableViewAnimationOptions.EffectFade, anim])
         }()
         
         self.modelUpdatesOnRowMoved()
@@ -432,9 +432,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     
     // updates list item models with current ordering in table view
     private func updateListItemsModelsOrder() {
-        var sectionRows = 0
-        
-        for (listItemIndex, listItemRow) in enumerate(listItemRows) {
+        for (listItemIndex, listItemRow) in listItemRows.enumerate() {
             listItemRow.listItemRow.listItem.order = listItemIndex
         }
     }
@@ -455,7 +453,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
                     listItem.section = cs
                     
                 } else {
-                    println("Warning: Invalid state - list item before any section")
+                    print("Warning: Invalid state - list item before any section")
                 }
             }
         }

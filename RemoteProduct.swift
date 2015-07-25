@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
+final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let price: Float
@@ -19,7 +19,7 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
         self.price = representation.valueForKeyPath("price") as! Float
     }
     
-    @objc static func collection(#response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteProduct] {
+    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteProduct] {
         var products = [RemoteProduct]()
         for obj in representation as! [AnyObject] {
             if let product = RemoteProduct(response: response, representation: obj) {

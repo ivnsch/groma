@@ -79,17 +79,15 @@ class InventoriesTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let segueName = segue.identifier
         if segueName == "showInventoryItemsController" {
-            if let indexPath = self.tableView.indexPathForSelectedRow(), inventories = self.inventories, inventoryItemsController = segue.destinationViewController as? InventoryItemsViewController {
+            if let indexPath = self.tableView.indexPathForSelectedRow, inventories = self.inventories, inventoryItemsController = segue.destinationViewController as? InventoryItemsViewController {
                 inventoryItemsController.inventory = inventories[indexPath.row]
             }
         }
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if self.editing {
-            let editInventoriesViewController = UIStoryboard.editInventoriesViewController()
-            
-            if let indexPath = self.tableView.indexPathForSelectedRow(), inventories = self.inventories {
+        if self.editing {            
+            if let indexPath = self.tableView.indexPathForSelectedRow, inventories = self.inventories {
                 self.showAddOrEditListViewController(true, inventoryToEdit: inventories[indexPath.row])
             }
             

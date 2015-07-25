@@ -50,7 +50,7 @@ class EditableChoiceModal: UIViewController, UIScrollViewDelegate {
     
     // TODO rename add item this is a library candidate
     @IBAction func onAddParticipantPress(sender: UIButton) {
-        if let list = self.list {
+        if let _ = self.list {
             
             if let input = participantInputField.text {
                 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RemoteRegisterResult: ResponseObjectSerializable, DebugPrintable {
+class RemoteRegisterResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     
     let token: String
     

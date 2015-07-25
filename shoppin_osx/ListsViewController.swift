@@ -17,6 +17,7 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     @IBOutlet weak var tableView: NSTableView!
  
     private let listItemsProvider = ProviderFactory().listItemProvider
+    private let listsProvider = ProviderFactory().listProvider
     
     private var selectables: [Selectable<List>] = []
     
@@ -52,7 +53,7 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         // temporary workaround for recreation of icloud folder
         let seconds = 3.0
         let delay = seconds * Double(NSEC_PER_SEC)
-        var dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
+        let dispatchTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
         dispatch_after(dispatchTime, dispatch_get_main_queue(), {
             self.loadLists()
         })
@@ -68,7 +69,7 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         // For the user is not important to see their own email address, only to know this is myself. This is probably a bad idea for the databse in the server though.
         let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: "foo@foo.foo")])
         
-        self.listItemsProvider.add(listWithSharedUsers, successHandler{[weak self] addedList in
+        self.listsProvider.add(listWithSharedUsers, successHandler{[weak self] addedList in
             self?.loadLists() // we modified list - reload everything
             self?.selectTableViewRow(addedList)
             return
@@ -76,11 +77,10 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
     
     private func selectTableViewRow(list: List) {
-        if let rowIndex = find(selectables.map{$0.model}, list) {
+        if let rowIndex = (selectables.map{$0.model}).indexOf(list) {
             self.tableView.selectRowIndexes(NSIndexSet(index: rowIndex), byExtendingSelection: false)
-            
         } else {
-            println("Warning: trying to select a list that is not in the tableview")
+            print("Warning: trying to select a list that is not in the tableview")
         }
     }
    
@@ -146,7 +146,7 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
             self.removeListWithConfirm(list)
             
         } else {
-            println("Error - cell without list tapped")
+            print("Error - cell without list tapped")
         }
     }
 

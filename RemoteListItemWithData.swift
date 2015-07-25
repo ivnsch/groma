@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class RemoteListItemWithData: ResponseObjectSerializable, DebugPrintable {
+final class RemoteListItemWithData: ResponseObjectSerializable, CustomDebugStringConvertible {
     
     let product: RemoteProduct
     let section: RemoteSection

@@ -75,7 +75,7 @@ class AutosuggestionsTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cellMaybe = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as! UITableViewCell?
+        var cellMaybe = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) 
         if cellMaybe == nil {
             cellMaybe = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: cellReuseIdentifier)
         }

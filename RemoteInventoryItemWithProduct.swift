@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
+final class RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let inventoryItem: RemoteInventoryItem
     let product: RemoteProduct
     
@@ -27,7 +27,7 @@ final class RemoteInventoryItemWithProduct: ResponseObjectSerializable, Response
         self.product = RemoteProduct(response: response, representation: product)!
     }
     
-    @objc static func collection(#response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventoryItemWithProduct] {
+    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventoryItemWithProduct] {
         var items = [RemoteInventoryItemWithProduct]()
         for obj in representation as! [AnyObject] {
             if let item = RemoteInventoryItemWithProduct(response: response, representation: obj) {

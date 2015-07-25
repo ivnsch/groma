@@ -12,7 +12,7 @@ import UIKit
 protocol AddItemViewDelegate {
     func onAddTap(name:String, price:String, quantity:String, sectionName:String)
     func onUpdateTap(name:String, price:String, quantity:String, sectionName:String)
-    func onSectionInputChanged(text:String)
+    func onSectionInputChanged(text: String)
 }
 
 enum AddModus {
@@ -58,16 +58,16 @@ class AddItemView: UIView, UITextFieldDelegate {
     private var originalHeight:CGFloat!
 
     
-    var sectionText:String {
+    var sectionText: String {
         set {
             self.sectionInput.text = newValue
         }
         get {
-            return self.sectionInput.text
+            return self.sectionInput.text ?? ""
         }
     }
     
-    var delegate:AddItemViewDelegate!
+    var delegate: AddItemViewDelegate!
     
     private func formattedPrice(price:Float) -> String {
         return NSNumber(float: price).stringValue + " €"
@@ -93,24 +93,22 @@ class AddItemView: UIView, UITextFieldDelegate {
         self.originalHeight = self.heightConstraint.constant
     }
     
-    func sectionInputFieldChanged(textField:UITextField) {
-        delegate.onSectionInputChanged(textField.text)
+    func sectionInputFieldChanged(textField: UITextField) {
+        self.delegate.onSectionInputChanged(textField.text ?? "")
     }
 
     @IBAction func onAddTap(sender: AnyObject) {
-        let text = inputField.text
-        let priceText = priceInput.text
-        let quantityText = quantityInput.text
-        let sectionText = sectionInput.text
         
-        switch self.addModus {
-        case .Add:
-            delegate.onAddTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
-        case .Update:
-            delegate.onUpdateTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+        if let text = self.inputField.text, priceText = self.priceInput.text, quantityText = self.quantityInput.text, sectionText = self.sectionInput.text {
+            switch self.addModus {
+            case .Add:
+                delegate.onAddTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+            case .Update:
+                delegate.onUpdateTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+            }
+            
+            self.addModus = .Add // after adding item, either if we come from add or update, we go back to add modus
         }
-        
-        self.addModus = .Add // after adding item, either if we come from add or update, we go back to add modus
     }
 
     func clearInputs() {
@@ -133,10 +131,9 @@ class AddItemView: UIView, UITextFieldDelegate {
         return frame
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        let touch: AnyObject? = event.allTouches()?.first
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.inputs.forEach { (element) -> Void in
-            if element.isFirstResponder() && touch?.view != element {
+            if element.isFirstResponder() && touches.first?.view != element {
                 element.resignFirstResponder()
             }
         }

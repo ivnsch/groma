@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, DebugPrintable {
+final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let users: [RemoteSharedUser]
@@ -22,7 +22,7 @@ final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializab
         self.users = RemoteSharedUser.collection(response: response, representation: unserializedUsers)
     }
     
-    @objc static func collection(#response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteList] {
+    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteList] {
         var lists = [RemoteList]()
         for obj in representation as! [AnyObject] {
             if let list = RemoteList(response: response, representation: obj) {

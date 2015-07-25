@@ -9,7 +9,7 @@
 import Cocoa
 
 @objc // required for NSCoding
-class CellManager: NSObject, NSCoding, Equatable {
+class CellManager: NSObject, NSCoding {
     
     required override init() {
         super.init()

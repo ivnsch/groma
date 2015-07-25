@@ -14,11 +14,11 @@ class TestUsers: XCTestCase {
     let remoteProvider = RemoteUserProvider()
 
     func testRegister() {
-        var expectation = self.expectationWithDescription("register user")
+        let expectation = self.expectationWithDescription("register user")
         
         TestUtils.withClearedDatabase {
             
-            println("register a user")
+            print("register a user")
             let user = UserInput(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
             
             self.remoteProvider.register(user, handler: {result in
@@ -45,11 +45,11 @@ class TestUsers: XCTestCase {
     }
     
     func testLoginAfterRegister() {
-        var expectation = self.expectationWithDescription("register user")
+        let expectation = self.expectationWithDescription("register user")
         
         TestUtils.withClearedDatabase {
             
-            println("register a user")
+            print("register a user")
             let user = UserInput(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
             
             self.remoteProvider.register(user, handler: {result in
@@ -62,7 +62,7 @@ class TestUsers: XCTestCase {
                 
                 expect(PreferencesManager.loadPreference(PreferencesManagerKey.email)) == user.email
 
-                let registerToken = result.successResult?.token
+//                let registerToken = result.successResult?.token
                 
                 let loginData = LoginData(email: user.email, password: user.password)
                 

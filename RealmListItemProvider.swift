@@ -13,19 +13,19 @@ class RealmListItemProvider: RealmProvider {
     
     // MARK: - Section
     
-    func loadSectionWithUuid(uuid: String, handler: DBSection? -> ()) {
-        var dbSections: Results<DBSection> = Realm().objects(DBSection).filter("uuid = '\(uuid)'")
-        handler(dbSections.first)
+    func loadSectionWithUuid(uuid: String, handler: Section? -> ()) {
+        let mapper = {SectionMapper.sectionWithDB($0)}
+        self.loadFirst(mapper, filter: "uuid = '\(uuid)'", handler: handler)
     }
     
-    func loadSectionWithName(name: String, handler: DBSection? -> ()) {
-        var dbSections: Results<DBSection> = Realm().objects(DBSection).filter("name = '\(name)'")
-        handler(dbSections.first)
+    func loadSectionWithName(name: String, handler: Section? -> ()) {
+        let mapper = {SectionMapper.sectionWithDB($0)}
+        self.loadFirst(mapper, filter: "name = '\(name)'", handler: handler)
     }
     
-    func loadSections(handler: [DBSection] -> ()) {
-        var dbSections: Results<DBSection> = Realm().objects(DBSection)
-        handler(dbSections.toArray())
+    func loadSections(handler: [Section] -> ()) {
+        let mapper = {SectionMapper.sectionWithDB($0)}
+        self.load(mapper, handler: handler)
     }
     
     func saveSection(section: Section, handler: Bool -> ()) {
@@ -43,19 +43,19 @@ class RealmListItemProvider: RealmProvider {
     
     // MARK: - Product
     
-    func loadProductWithUuid(uuid: String, handler: DBProduct? -> ()) {
-        var dbProducts: Results<DBProduct> = Realm().objects(DBProduct).filter("uuid = '\(uuid)'")
-        handler(dbProducts.first)
+    func loadProductWithUuid(uuid: String, handler: Product? -> ()) {
+        let mapper = {ProductMapper.productWithDB($0)}
+        self.loadFirst(mapper, filter: "uuid = '\(uuid)'", handler: handler)
     }
     
-    func loadProductWithName(name: String, handler: DBProduct? -> ()) {
-        var dbProducts: Results<DBProduct> = Realm().objects(DBProduct).filter("name = '\(name)'")
-        handler(dbProducts.first)
+    func loadProductWithName(name: String, handler: Product? -> ()) {
+        let mapper = {ProductMapper.productWithDB($0)}
+        self.loadFirst(mapper, filter: "name = '\(name)'", handler: handler)
     }
     
-    func loadProducts(handler: [DBProduct] -> ()) {
-        var dbProducts: Results<DBProduct> = Realm().objects(DBProduct)
-        handler(dbProducts.toArray())
+    func loadProducts(handler: [Product] -> ()) {
+        let mapper = {ProductMapper.productWithDB($0)}
+        self.load(mapper, handler: handler)
     }
     
     // MARK: - List
@@ -70,18 +70,14 @@ class RealmListItemProvider: RealmProvider {
         self.saveObjs(dbLists, update: update, handler: handler)
     }
     
-    func loadList(uuid: String, handler: DBList? -> ()) {
-        var dbProducts: Results<DBList> = Realm().objects(DBList).filter("uuid = '\(uuid)'")
-        handler(dbProducts.first)
+    func loadList(uuid: String, handler: List? -> ()) {
+        let mapper = {ListMapper.listWithDB($0)}
+        self.loadFirst(mapper, filter: "uuid = '\(uuid)'", handler: handler)
     }
     
     func loadLists(handler: [List] -> ()) {
-        let mapper = {dbList in
-            return ListMapper.listWithDB(dbList)
-        }
-        self.load(mapper) {lists in
-            handler(lists)
-        }
+        let mapper = {ListMapper.listWithDB($0)}
+        self.load(mapper, handler: handler)
     }
     
     func remove(list: List, handler: Bool -> ()) {
@@ -100,9 +96,9 @@ class RealmListItemProvider: RealmProvider {
         self.saveObjs(dbListItems, update: true, handler: handler)
     }
     
-    func loadListItems(list: List, handler: [DBListItem] -> ()) {
-        let dbLists: Results<DBListItem> = Realm().objects(DBListItem).filter("list.uuid = '\(list.uuid)'")
-        handler(dbLists.toArray())
+    func loadListItems(list: List, handler: [ListItem] -> ()) {
+        let mapper = {ListItemMapper.listItemWithDB($0)}
+        self.load(mapper, filter: "list.uuid = '\(list.uuid)'", handler: handler)
     }
     
     
@@ -113,7 +109,6 @@ class RealmListItemProvider: RealmProvider {
     
     // TODO do we really need ListItemsWithRelations here, maybe convenience holder made sense only for coredata?
     func saveListItems(listItemsWithRelations: ListItemsWithRelations, handler: Bool -> ()) {
-        let realm = Realm()
         
         //        let dbProducts = listItemsWithRelations.products.map{self.toDBProduct($0)}
         //        let dbSections = listItemsWithRelations.sections.map{self.toDBSection($0)}
@@ -139,8 +134,6 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func updateListItems(listItems: [ListItem], handler: Bool -> ()) {
-        self.saveListItems(listItems) {saved in
-            handler(saved)
-        }
+        self.saveListItems(listItems, handler: handler)
     }
 }

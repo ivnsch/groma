@@ -29,7 +29,7 @@ class ListProviderImpl: ListProvider {
                 })
                 
             } else {
-                println("error adding the remote list: \(remoteResult)")
+                print("error adding the remote list: \(remoteResult)")
                 let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
                 handler(ProviderResult(status: providerStatus))
             }

@@ -100,7 +100,7 @@ class AutocompleteTextField: NSTextField {
                             let range: NSRange = firstNSString.rangeOfString(search, options: .CaseInsensitiveSearch)
                             if range.location == 0 {
                                 
-                                let highlightRange = NSMakeRange(range.length, count(first) - range.length)
+                                let highlightRange = NSMakeRange(range.length, first.characters.count - range.length)
                                 
                                 self!.stringValue = first
                                 let editor = NSApplication.sharedApplication().mainWindow?.fieldEditor(true, forObject: self)

@@ -25,7 +25,7 @@ class TestUtils {
     
     class func withClearedDatabase(f: () -> ()) {
         
-        Alamofire.request(.GET, Urls.removeAll).responseMyObject { (request, _, remoteResult: RemoteResult<NoOpSerializable>, error) in
+        Alamofire.request(.GET, URLString: Urls.removeAll).responseMyObject { (request, _, remoteResult: RemoteResult<NoOpSerializable>, error) in
             expect(remoteResult.status) == RemoteStatusCode.Success
             f()
         }
@@ -66,7 +66,7 @@ class TestUtils {
         self.withNewLoggedInAccount(user: TestUtils.userInput2, onLoggedIn: onLoggedIn)
     }
     
-    class func withClearDatabaseAndNewLoggedInAccount(user: UserInput = TestUtils.userInput1, onLoggedIn: (LoginData) -> ()) {
+    class func withClearDatabaseAndNewLoggedInAccount(user user: UserInput = TestUtils.userInput1, onLoggedIn: (LoginData) -> ()) {
         // ensure empty keychain
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
         valet?.removeAllObjects()
@@ -90,7 +90,7 @@ class TestUtils {
 //    }
     
 
-    class func withNewLoggedInAccount(user: UserInput = TestUtils.userInput1, onLoggedIn: (LoginData) -> ()) {
+    class func withNewLoggedInAccount(user user: UserInput = TestUtils.userInput1, onLoggedIn: (LoginData) -> ()) {
         
         // ensure empty keychain
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)

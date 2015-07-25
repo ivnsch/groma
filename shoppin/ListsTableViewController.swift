@@ -79,17 +79,15 @@ class ListsTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let segueName = segue.identifier
         if segueName == "showListItemsController" {
-            if let indexPath = self.tableView.indexPathForSelectedRow(), lists = self.lists, listItemsController = segue.destinationViewController as? ViewController {
+            if let indexPath = self.tableView.indexPathForSelectedRow, lists = self.lists, listItemsController = segue.destinationViewController as? ViewController {
                 listItemsController.currentList = lists[indexPath.row]
             }
         }
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if self.editing {
-            let editListViewController = UIStoryboard.editListsViewController()
-            
-            if let indexPath = self.tableView.indexPathForSelectedRow(), lists = self.lists {
+        if self.editing {            
+            if let indexPath = self.tableView.indexPathForSelectedRow, lists = self.lists {
                 self.showAddOrEditListViewController(true, listToEdit: lists[indexPath.row])
             }
             

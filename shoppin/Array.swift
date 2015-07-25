@@ -9,13 +9,13 @@
 import Foundation
 
 extension Array {
-    func forEach<U>(function: (element: T) -> U) {
+    func forEach<U>(function: (element: Element) -> U) {
         for e in self {
             function(element: e)
         }
     }
     
-    func findFirst(function: (element: T) -> Bool) -> T? {
+    func findFirst(function: (element: Element) -> Bool) -> Element? {
         for e in self {
             if function(element: e) {
                 return e

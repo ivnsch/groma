@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 ivanschuetz. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 class InventoryProviderImpl: InventoryProvider {
    

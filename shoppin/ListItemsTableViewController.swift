@@ -22,7 +22,7 @@ enum ListItemsTableViewControllerStyle {
     case Normal, Gray
 }
 
-class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate, ItemActionsDelegate {
+class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section
     private var tableViewSections:[ListItemsViewSection] = []
@@ -147,7 +147,7 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
             } else { // the item has a different (but present in tableview) section
                 //update the list item before we reinit the table, to update the section...
                 var itemIndexMaybe:Int?
-                for (index, item) in enumerate(self.items) {
+                for (index, item) in self.items.enumerate() {
                     if item.uuid == listItem.uuid {
                         itemIndexMaybe = index
                     }
@@ -242,7 +242,7 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
                 self.tableViewSections.removeAtIndex(indexPath.section)
                 // remove model section TODO better way
                 var sectionIndexMaybe:Int?
-                for (index, section) in enumerate(self.sections) {
+                for (index, section) in self.sections.enumerate() {
                     if section == tableViewSection.section {
                         sectionIndexMaybe = index
                     }
@@ -259,15 +259,15 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
     override func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         self.scrollViewDelegate?.scrollViewWillBeginDragging?(scrollView)
         
-        let velocity = scrollView.panGestureRecognizer.velocityInView(scrollView.superview)
-        let scrollingUp = (velocity.y < 0)
+//        let velocity = scrollView.panGestureRecognizer.velocityInView(scrollView.superview)
+//        let scrollingUp = (velocity.y < 0)
         
         clearPendingSwipeItemIfAny()
     }
     
     func getIndexPath(listItem:ListItem) -> NSIndexPath? {
-        for (sectionIndex, s) in enumerate(self.tableViewSections) {
-            for (listItemIndex, l) in enumerate(s.tableViewListItems) {
+        for (sectionIndex, s) in self.tableViewSections.enumerate() {
+            for (listItemIndex, l) in s.tableViewListItems.enumerate() {
                 if (listItem == l.listItem) {
                     let indexPath = NSIndexPath(forRow: listItemIndex, inSection: sectionIndex)
                     return indexPath
@@ -374,7 +374,7 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
     private func updateListItemsModelsOrder() {
         var sectionRows = 0
         for section in self.tableViewSections {
-            for (listItemIndex, tableViewListItem) in enumerate(section.tableViewListItems) {
+            for (listItemIndex, tableViewListItem) in section.tableViewListItems.enumerate() {
                 let absoluteRowIndex = listItemIndex + sectionRows
                 tableViewListItem.listItem.order = absoluteRowIndex
             }
@@ -390,7 +390,7 @@ class ListItemsTableViewController: UITableViewController, UIScrollViewDelegate,
         let dstSection = self.tableViewSections[destinationIndexPath.section]
         tableViewListItem.listItem.section = dstSection.section //not superclean to update model data in this controller, but for simplicity...
         
-        let absoluteRow = tableView.absoluteRow(destinationIndexPath)
+//        let absoluteRow = tableView.absoluteRow(destinationIndexPath)
         dstSection.tableViewListItems.insert(tableViewListItem, atIndex: destinationIndexPath.row)
 
         self.updateListItemsModelsOrder()
