@@ -19,6 +19,7 @@ struct RequestErrorToMsgMapper {
             case .ServerError: return "error_server_generic"
             case .ServerNotReachable: return "error_server_not_reachable"
             case .UnknownServerCommunicationError: return "error_server_communication_unknown"
+            case .ServerInvalidParamsError: return "error_server_invalid_params"
             case .DatabaseUnknown: return "error_unknown_database"
             case .Unknown: return "error_unknown"
             case .Success: return "success" // this is not used but we want exhaustive switch (without default case)

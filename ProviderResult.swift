@@ -19,7 +19,8 @@ enum ProviderStatusCode: Int {
     case ServerError = 101 // Generic server error - invalid json, etc.
     case ServerNotReachable = 102 // This is currently both server is down and no internet connection
     case UnknownServerCommunicationError = 103
-    
+    case ServerInvalidParamsError = 104 // Generic server error - invalid json, etc.
+
     // DB related
     case DatabaseUnknown = 1000
     
@@ -86,7 +87,7 @@ struct DefaultRemoteResultMapper {
         case .ServerNotReachable: return .ServerNotReachable
         case .UnknownServerCommunicationError: return .UnknownServerCommunicationError
         case .InternalServerError: return .ServerError
-        case .BadRequest: return .ServerError
+        case .BadRequest: return .ServerInvalidParamsError
         case .UnsupportedMediaType: return .ServerError
         case .ClientParamsParsingError: return .Unknown
         }
