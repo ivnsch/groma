@@ -279,7 +279,6 @@
 		EBF162FD1A3DDE5D0048E37C /* ProductMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FC1A3DDE5D0048E37C /* ProductMapper.swift */; };
 		EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FE1A3DDE730048E37C /* ListItemMapper.swift */; };
 		EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF163001A3DE6880048E37C /* ItemsListTableViewConstants.swift */; };
-		EBF377291B341B6900EEB6DB /* RemoteListItemProviderSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF377281B341B6900EEB6DB /* RemoteListItemProviderSpec.swift */; };
 		EBF377301B341FBD00EEB6DB /* RemoteListItemWithData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4271B2DFA58005B401A /* RemoteListItemWithData.swift */; };
 		EBF3775B1B3423C200EEB6DB /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
 		EBF3775D1B342A3700EEB6DB /* ListItemProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162E81A3CA1F00048E37C /* ListItemProviderImpl.swift */; };
@@ -518,7 +517,6 @@
 		EBF162FC1A3DDE5D0048E37C /* ProductMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductMapper.swift; sourceTree = "<group>"; };
 		EBF162FE1A3DDE730048E37C /* ListItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemMapper.swift; sourceTree = "<group>"; };
 		EBF163001A3DE6880048E37C /* ItemsListTableViewConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsListTableViewConstants.swift; sourceTree = "<group>"; };
-		EBF377281B341B6900EEB6DB /* RemoteListItemProviderSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemProviderSpec.swift; sourceTree = "<group>"; };
 		EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "shoppin-prefix.pch"; sourceTree = "<group>"; };
 		EBF3778A1B357F1800EEB6DB /* TestLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestLists.swift; sourceTree = "<group>"; };
 		EBF3778C1B357FA100EEB6DB /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
@@ -950,7 +948,6 @@
 			isa = PBXGroup;
 			children = (
 				EB9F6CF71A8610550038355B /* Supporting Files */,
-				EBF377281B341B6900EEB6DB /* RemoteListItemProviderSpec.swift */,
 				EBF3778A1B357F1800EEB6DB /* TestLists.swift */,
 				EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */,
 				EBF3778E1B35808900EEB6DB /* TestListItems.swift */,
@@ -1716,7 +1713,6 @@
 				EB0C1B8D1B3DA89900F24C85 /* LoginData.swift in Sources */,
 				EBF3777A1B342B1700EEB6DB /* ListItem.swift in Sources */,
 				EB202B891B51C462001699E7 /* ListWithSharedUsersInput.swift in Sources */,
-				EBF377291B341B6900EEB6DB /* RemoteListItemProviderSpec.swift in Sources */,
 				EBF3777B1B342B1E00EEB6DB /* Section.swift in Sources */,
 				EB0C2A501B5841C600AF6226 /* DBInventoryItem.swift in Sources */,
 				EBF377651B342A8E00EEB6DB /* RemoteListItem.swift in Sources */,
