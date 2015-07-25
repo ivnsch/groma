@@ -120,25 +120,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         if !name.isEmpty {
             
-            let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName)
-        
-            self.addItem(listItemInput)
-            self.view.endEditing(true)
-            self.addItemView.clearInputs()
+            if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName) {
+                self.addItem(listItemInput)
+                self.view.endEditing(true)
+                self.addItemView.clearInputs()
+            }
         }
     }
     
     func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
-        let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName)
-        
-        self.updateItem(self.updatingListItem!, listItemInput: listItemInput)
-        self.view.endEditing(true)
-        self.addItemView.clearInputs()
-        
-        self.updatingListItem = nil
+        if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName) {
+            self.updateItem(self.updatingListItem!, listItemInput: listItemInput)
+            self.view.endEditing(true)
+            self.addItemView.clearInputs()
+            
+            self.updatingListItem = nil
+        }
     }
     
-    private func processListItemInputs(name: String, priceText: String, quantityText: String, sectionName: String) -> ListItemInput {
+    private func processListItemInputs(name: String, priceText: String, quantityText: String, sectionName: String) -> ListItemInput? {
         //TODO?
         //        if !price {
         //            price = 0
@@ -147,12 +147,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         //            quantity = 0
         //        }
         
-        let price:Float = priceText.floatValue // TODO what happens if not a number? maybe use optional like toInt()?
-        
-        let quantity = Int(quantityText) ?? 1
-        let sectionName = sectionName ?? defaultSectionIdentifier
-        
-        return ListItemInput(name: name, quantity: quantity, price: price, section: sectionName)
+        if let price = priceText.floatValue {
+            let quantity = Int(quantityText) ?? 1
+            let sectionName = sectionName ?? defaultSectionIdentifier
+            
+            return ListItemInput(name: name, quantity: quantity, price: price, section: sectionName)
+            
+        } else {
+            print("TODO validation in processListItemInputs")
+            return nil
+        }
     }
 
     func onSectionInputChanged(text: String) {

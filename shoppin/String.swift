@@ -20,12 +20,8 @@ extension String {
         return self.rangeOfString(str, options: options) != nil
     }
     
-    var floatValue: Float {
-        return (self as NSString).floatValue
-    }
-    
-    var intValue: Int {
-        return (self as NSString).integerValue
+    var floatValue: Float? {
+        return NSNumberFormatter().numberFromString(self)?.floatValue
     }
     
     var boolValue: Bool? {
