@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import SwiftValidator
 
 protocol LoginDelegate {
     func onLoginSuccess()
@@ -27,6 +27,8 @@ class LoginViewController: UIViewController, RegisterDelegate {
     
     var delegate: LoginDelegate?
     
+    private var validator: Validator?
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -37,26 +39,44 @@ class LoginViewController: UIViewController, RegisterDelegate {
         self.navigationController?.navigationBarHidden = false
         
         self.fillTestInput()
+        
+        self.initValidator()
     }
 
+    private func initValidator() {
+        let validator = Validator()
+        validator.registerField(self.userNameField, rules: [EmailRule(message: "validation_email_format")])
+        validator.registerField(self.passwordField, rules: [PasswordRule(message: "password: 8 letter, 1 uppercase, 1 number")]) // TODO repl with translation key, for now this so testers understand
+        self.validator = validator
+    }
     
     private func fillTestInput() {
         userNameField.text = "ivanschuetz@gmail.com"
-        passwordField.text = "test123"
+        passwordField.text = "test123Q"
     }
     
     @IBAction func loginTapped(sender: AnyObject) {
-        
-        if let email = userNameField.text, password = passwordField.text {
-            let loginData = LoginData(email: email, password: password)
-            
-            self.progressVisible()
-            self.userProvider.login(loginData, successHandler{result in
-                self.delegate?.onLoginSuccess() ?? print("Warn: no login delegate")
-            })
+
+        guard self.validator != nil else {return}
+
+        if let errors = self.validator?.validate() {
+            for (field, _) in errors {
+                field.showValidationError()
+            }
+            self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             
         } else {
-            print("TODO loginTapped, validation")
+            if let email = userNameField.text, password = passwordField.text {
+                let loginData = LoginData(email: email, password: password)
+                
+                self.progressVisible()
+                self.userProvider.login(loginData, successHandler{result in
+                    self.delegate?.onLoginSuccess() ?? print("Warn: no login delegate")
+                    })
+                
+            } else {
+                print("TODO loginTapped, validation")
+            }
         }
     }
     

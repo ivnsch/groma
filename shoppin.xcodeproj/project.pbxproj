@@ -101,6 +101,7 @@
 		EB2F5D771A557AB000DBC4AF /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D761A557AB000DBC4AF /* List.swift */; };
 		EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */; };
 		EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7E1A559C8800DBC4AF /* Constants.swift */; };
+		EB3144461B643559005814F0 /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3144451B643559005814F0 /* UITextField.swift */; };
 		EB40A4691B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
 		EB40A46A1B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
 		EB40A46B1B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
@@ -218,6 +219,10 @@
 		EB9F6CE91A8610550038355B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE81A8610550038355B /* ViewController.swift */; };
 		EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEA1A8610550038355B /* Images.xcassets */; };
 		EB9F6CEE1A8610550038355B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEC1A8610550038355B /* Main.storyboard */; };
+		EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */; };
+		EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */; };
+		EBB5A0481B65395F00FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */; };
+		EBB5A0491B65396000FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */; };
 		EBB9A72E1B5EB00E00E5487D /* InventoriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A72D1B5EB00E00E5487D /* InventoriesTableViewController.swift */; };
 		EBB9A7301B5EB08C00E5487D /* Inventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A72F1B5EB08C00E5487D /* Inventory.swift */; };
 		EBB9A7321B5EB0FC00E5487D /* DBInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7311B5EB0FC00E5487D /* DBInventory.swift */; };
@@ -415,6 +420,7 @@
 		EB2F5D761A557AB000DBC4AF /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListMapper.swift; sourceTree = "<group>"; };
 		EB2F5D7E1A559C8800DBC4AF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		EB3144451B643559005814F0 /* UITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		EB40A4681B5506FB000E9CAD /* DBSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSection.swift; sourceTree = "<group>"; };
 		EB40A46D1B550804000E9CAD /* RealmProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProvider.swift; sourceTree = "<group>"; };
 		EB40A4711B5508B6000E9CAD /* DBResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBResult.swift; sourceTree = "<group>"; };
@@ -474,6 +480,8 @@
 		EB9F6CED1A8610550038355B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EB9F6CF31A8610550038355B /* shoppin_osxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shoppin_osxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB9F6CF81A8610550038355B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationErrorMsgBuilder.swift; sourceTree = "<group>"; };
+		EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationAlert.swift; sourceTree = "<group>"; };
 		EBB9A72D1B5EB00E00E5487D /* InventoriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoriesTableViewController.swift; sourceTree = "<group>"; };
 		EBB9A72F1B5EB08C00E5487D /* Inventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inventory.swift; sourceTree = "<group>"; };
 		EBB9A7311B5EB0FC00E5487D /* DBInventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBInventory.swift; sourceTree = "<group>"; };
@@ -730,6 +738,7 @@
 				EB2F5D101A4ACC4400DBC4AF /* String.swift */,
 				EB2F5D5D1A506F5100DBC4AF /* Array.swift */,
 				EB2F5D6E1A530FBC00DBC4AF /* Float.swift */,
+				EB3144451B643559005814F0 /* UITextField.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -746,6 +755,7 @@
 			isa = PBXGroup;
 			children = (
 				EB2F5D0F1A4ACC2500DBC4AF /* extensions */,
+				EBB5A0441B65391200FB9C58 /* validatorHelpers */,
 				EB2F5D7E1A559C8800DBC4AF /* Constants.swift */,
 				EB4FD44F1AC6BE960000F952 /* Globals.swift */,
 				EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */,
@@ -849,6 +859,7 @@
 				EB55675C1A86233700CD3EC6 /* extensions */,
 				EBEEDD631A49A7B500FC3B29 /* view */,
 				EBF162CC1A3C82380048E37C /* tableView */,
+				EBB5A0451B65393D00FB9C58 /* validatorHelpers */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -965,6 +976,22 @@
 				EB9F6CF81A8610550038355B /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		EBB5A0441B65391200FB9C58 /* validatorHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */,
+			);
+			name = validatorHelpers;
+			sourceTree = "<group>";
+		};
+		EBB5A0451B65393D00FB9C58 /* validatorHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */,
+			);
+			name = validatorHelpers;
 			sourceTree = "<group>";
 		};
 		EBDFE3A51ACE827C00E48F95 /* tableview */ = {
@@ -1488,6 +1515,7 @@
 				EBF377931B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
+				EB3144461B643559005814F0 /* UITextField.swift in Sources */,
 				EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */,
 				EB9BE4221B2CB51F005B401A /* RemoteSection.swift in Sources */,
 				EB70C2381B50497C0060E529 /* SharedUserInput.swift in Sources */,
@@ -1530,7 +1558,9 @@
 				EB70C2231B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBF162F51A3CA4BA0048E37C /* ProviderFactory.swift in Sources */,
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
+				EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */,
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
+				EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */,
 				EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */,
 				EB40A46E1B550804000E9CAD /* RealmProvider.swift in Sources */,
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
@@ -1597,6 +1627,7 @@
 				EB5567611A86437B00CD3EC6 /* SectionMapper.swift in Sources */,
 				EBDFE3A71ACE829400E48F95 /* CellManager.swift in Sources */,
 				EB0C2A371B58329800AF6226 /* RemoteInventoryProvider.swift in Sources */,
+				EBB5A0481B65395F00FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */,
 				EB0C1B941B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
 				EB89D33D1AD44BD400B6E0D0 /* Selectable.swift in Sources */,
 				EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */,
@@ -1693,6 +1724,7 @@
 				EBB9A74A1B5EB46C00E5487D /* InventoryMapper.swift in Sources */,
 				EB0C2A401B583BFE00AF6226 /* RemoteInventoryItemWithProduct.swift in Sources */,
 				EB40A47C1B551176000E9CAD /* DBProduct.swift in Sources */,
+				EBB5A0491B65396000FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */,
 				EB4C36551B4BD5A700C387C5 /* TestSharedLists.swift in Sources */,
 				EB70C22B1B4D3DD50060E529 /* ListProvider.swift in Sources */,
 				EB202B991B54109A001699E7 /* RemoteRegisterResult.swift in Sources */,

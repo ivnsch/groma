@@ -14,6 +14,7 @@ end
 
 target 'shoppin' do
     platform :ios, '8.0'
+    pod 'SwiftValidator', :git => 'https://github.com/i-schuetz/SwiftValidator', :branch => 'swift2.0_remove_delegate_callback'
     shared
 end
 

@@ -7,9 +7,12 @@
 //
 
 import UIKit
-
+import SwiftValidator
 
 protocol AddItemViewDelegate {
+    
+    func onValidationErrors(errors: [UITextField: ValidationError])
+    
     func onAddTap(name:String, price:String, quantity:String, sectionName:String)
     func onUpdateTap(name:String, price:String, quantity:String, sectionName:String)
     func onSectionInputChanged(text: String)
@@ -39,6 +42,8 @@ class AddItemView: UIView, UITextFieldDelegate {
 
     var expanded:Bool = true
 
+    
+    private var validator: Validator?
     
     private var addModus:AddModus = .Add {
         didSet {
@@ -73,8 +78,19 @@ class AddItemView: UIView, UITextFieldDelegate {
         return NSNumber(float: price).stringValue + " €"
     }
     
+    private func initValidator() {
+        let validator = Validator()
+        validator.registerField(self.inputField, rules: [MinLengthRule(length: 1, message: "validation_item_name_not_empty")])
+        validator.registerField(self.sectionInput, rules: [MinLengthRule(length: 1, message: "validation_section_name_not_empty")])
+        validator.registerField(self.priceInput, rules: [MinLengthRule(length: 1, message: "validation_price_not_empty"), FloatRule(message: "validation_price_number")])
+        validator.registerField(self.quantityInput, rules: [MinLengthRule(length: 1, message: "validation_quantity_not_empty"), FloatRule(message: "validation_quantity_number")])
+        self.validator = validator
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        self.initValidator()
         
         self.setInputsDefaultValues()
         
@@ -91,7 +107,10 @@ class AddItemView: UIView, UITextFieldDelegate {
         sectionInput.delegate = self
         
         self.originalHeight = self.heightConstraint.constant
+        
+
     }
+
     
     func sectionInputFieldChanged(textField: UITextField) {
         self.delegate.onSectionInputChanged(textField.text ?? "")
@@ -99,15 +118,34 @@ class AddItemView: UIView, UITextFieldDelegate {
 
     @IBAction func onAddTap(sender: AnyObject) {
         
-        if let text = self.inputField.text, priceText = self.priceInput.text, quantityText = self.quantityInput.text, sectionText = self.sectionInput.text {
-            switch self.addModus {
-            case .Add:
-                delegate.onAddTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
-            case .Update:
-                delegate.onUpdateTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+        guard validator != nil else {return}
+   
+        if let errors = self.validator?.validate() {
+            for (field, _) in errors {
+                field.showValidationError()
+                self.delegate.onValidationErrors(errors)
             }
             
-            self.addModus = .Add // after adding item, either if we come from add or update, we go back to add modus
+        } else {
+            if let lastErrors = self.validator?.lastErrors {
+                for (field, _) in lastErrors {
+                    field.clearValidationError()
+                }
+            }
+            
+            if let text = self.inputField.text, priceText = self.priceInput.text, quantityText = self.quantityInput.text, sectionText = self.sectionInput.text {
+                switch self.addModus {
+                case .Add:
+                    delegate.onAddTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+                case .Update:
+                    delegate.onUpdateTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+                }
+    
+                self.addModus = .Add // after adding item, either if we come from add or update, we go back to add modus
+                
+            } else {
+                print("Error: validation was not implemented correctly")
+            }
         }
     }
 

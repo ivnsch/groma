@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftValidator
 
 struct EditInventoryFormInput {
     let name: String
@@ -36,6 +37,9 @@ class EditInventoryViewController: UIViewController, UITableViewDelegate, UITabl
     @IBOutlet weak var inventoryNameInputField: UITextField!
     @IBOutlet weak var usersTableView: UITableView!
     @IBOutlet weak var addUserInputField: UITextField!
+
+    private var inventoryInputsValidator: Validator?
+    private var userInputsValidator: Validator?
     
     var inventoryFormInput = EditInventoryFormInput(name: "", users: []) {
         didSet {
@@ -67,12 +71,25 @@ class EditInventoryViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
+    private func initValidator() {
+        let inventoryInputsValidator = Validator()
+        inventoryInputsValidator.registerField(self.inventoryNameInputField, rules: [MinLengthRule(length: 1, message: "validation_list_name_not_empty")])
+        
+        let userInputsValidator = Validator()
+        userInputsValidator.registerField(self.addUserInputField, rules: [MinLengthRule(length: 1, message: "validation_user_input_not_empty")])
+        
+        self.inventoryInputsValidator = inventoryInputsValidator
+        self.userInputsValidator = userInputsValidator
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.usersTableView.registerClass(ListTableViewCell.self, forCellReuseIdentifier: "listCell")
         
         self.initFieldsWithInput(self.inventoryFormInput)
+        
+        self.initValidator()
     }
     
     @IBAction func onDoneTap(sender: UIBarButtonItem) {
@@ -82,24 +99,48 @@ class EditInventoryViewController: UIViewController, UITableViewDelegate, UITabl
         // But now we have an additional service where we do this beforehand
         // TODO clean solution?
         
-        if let inventoryName = self.inventoryNameInputField.text {
+        self.validateInputs(self.inventoryInputsValidator) {[weak self] in
             
-            let inventoryInput = InventoryInput(uuid: NSUUID().UUIDString, name: inventoryName, users: self.inventoryFormInput.users)
-            
-            self.progressVisible(true)
-            
-            if self.isEdit {
-                self.inventoryProvider.updateInventory(inventoryInput, successHandler{list in
-                    self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+            if let inventoryName = self!.inventoryNameInputField.text {
+                
+                let inventoryInput = InventoryInput(uuid: NSUUID().UUIDString, name: inventoryName, users: self!.inventoryFormInput.users)
+                
+                self!.progressVisible(true)
+                
+                if self!.isEdit {
+                    self!.inventoryProvider.updateInventory(inventoryInput, self!.successHandler{list in
+                        self!.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
                     })
+                } else {
+                    self!.inventoryProvider.addInventory(inventoryInput, self!.successHandler{list in
+                        self!.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+                    })
+                }
+                
             } else {
-                self.inventoryProvider.addInventory(inventoryInput, successHandler{list in
-                    self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-                    })
+                print("TODO validation onDoneTap")
+            }
+        }
+    }
+    
+    private func validateInputs(validator: Validator?, onValid: () -> ()) {
+
+        guard validator != nil else {return}
+
+        if let errors = validator?.validate() {
+            for (field, _) in errors {
+                field.showValidationError()
+            }
+            self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+
+        } else {
+            if let lastErrors = validator?.lastErrors {
+                for (field, _) in lastErrors {
+                    field.clearValidationError()
+                }
             }
             
-        } else {
-            print("TODO validation onDoneTap")
+            onValid()
         }
     }
     
@@ -108,16 +149,19 @@ class EditInventoryViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     @IBAction func onAddUserTap(sender: UIButton) {
-        if let input: String = self.addUserInputField.text {
-            // TODO validate
-            
-            // TODO do later a verification here if email exists in the server
-            self.inventoryFormInput = self.inventoryFormInput.copy(users: self.inventoryFormInput.users + [SharedUserInput(email: input)])
-            self.usersTableView?.reloadData()
-            self.addUserInputField.text = ""
-            
-        } else {
-            print("TODO validation onAddUserTap")
+        
+        self.validateInputs(self.userInputsValidator) {[weak self] in
+            if let input: String = self!.addUserInputField.text {
+                // TODO validate
+                
+                // TODO do later a verification here if email exists in the server
+                self!.inventoryFormInput = self!.inventoryFormInput.copy(users: self!.inventoryFormInput.users + [SharedUserInput(email: input)])
+                self!.usersTableView?.reloadData()
+                self!.addUserInputField.text = ""
+                
+            } else {
+                print("TODO validation onAddUserTap")
+            }
         }
     }
     

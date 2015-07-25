@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftValidator
 
 struct EditListFormInput {
     let name: String
@@ -37,6 +38,9 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var usersTableView: UITableView!
     @IBOutlet weak var addUserInputField: UITextField!
 
+    private var listInputsValidator: Validator?
+    private var userInputsValidator: Validator?
+    
     var listFormInput = EditListFormInput(name: "", users: []) {
         didSet {
             self.initFieldsWithInput(self.listFormInput)
@@ -67,12 +71,25 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+    private func initValidator() {
+        let listInputsValidator = Validator()
+        listInputsValidator.registerField(self.listNameInputField, rules: [MinLengthRule(length: 1, message: "validation_list_name_not_empty")])
+
+        let userInputsValidator = Validator()
+        userInputsValidator.registerField(self.addUserInputField, rules: [MinLengthRule(length: 1, message: "validation_user_input_not_empty")])
+
+        self.listInputsValidator = listInputsValidator
+        self.userInputsValidator = userInputsValidator
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.usersTableView.registerClass(ListTableViewCell.self, forCellReuseIdentifier: "listCell")
         
         self.initFieldsWithInput(self.listFormInput)
+        
+        self.initValidator()
     }
 
     @IBAction func onDoneTap(sender: UIBarButtonItem) {
@@ -82,27 +99,51 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
         // But now we have an additional service where we do this beforehand
         // TODO clean solution?
    
-        if let listName = self.listNameInputField.text {
+        self.validateInputs(self.listInputsValidator) {[weak self] in
             
-            // FIXME code smell - not using listFormInput for the listName, are we using listFormInput correctly? Do we actually need listFormInput? Structure differently?
-            let listInput = ListInput(uuid: NSUUID().UUIDString, name: listName, users: self.listFormInput.users)
-            
-            self.progressVisible(true)
-            
-            if self.isEdit {
-                self.listProvider.update(listInput, successHandler{list in
-                    self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+            if let listName = self!.listNameInputField.text {
+                
+                // FIXME code smell - not using listFormInput for the listName, are we using listFormInput correctly? Do we actually need listFormInput? Structure differently?
+                let listInput = ListInput(uuid: NSUUID().UUIDString, name: listName, users: self!.listFormInput.users)
+                
+                self!.progressVisible(true)
+                
+                if self!.isEdit {
+                    self!.listProvider.update(listInput, self!.successHandler{list in
+                        self!.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+                        })
+                } else {
+                    // FIXME redundancy users empty array and shared users
+                    let listWithSharedUsers = ListWithSharedUsersInput(list: List(uuid: NSUUID().UUIDString, name: listInput.name, listItems: [], users: []), users: listInput.users)
+                    self!.listProvider.add(listWithSharedUsers, self!.successHandler{list in
+                        self!.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
                     })
+                }
+                
             } else {
-                // FIXME redundancy users empty array and shared users
-                let listWithSharedUsers = ListWithSharedUsersInput(list: List(uuid: NSUUID().UUIDString, name: listInput.name, listItems: [], users: []), users: listInput.users)
-                self.listProvider.add(listWithSharedUsers, successHandler{list in
-                    self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-                    })
+                print("TODO validation onDoneTap")
             }
+        }
+    }
+    
+    private func validateInputs(validator: Validator?, onValid: () -> ()) {
+        
+        guard validator != nil else {return}
+
+        if let errors = validator?.validate() {
+            for (field, _) in errors {
+                field.showValidationError()
+            }
+            self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             
         } else {
-            print("TODO validation onDoneTap")
+            if let lastErrors = validator?.lastErrors {
+                for (field, _) in lastErrors {
+                    field.clearValidationError()
+                }
+            }
+            
+            onValid()
         }
     }
     
@@ -111,16 +152,16 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func onAddUserTap(sender: UIButton) {
-        if let input = self.addUserInputField.text {
-            // TODO validate
-            
-            // TODO do later a verification here if email exists in the server
-            self.listFormInput = self.listFormInput.copy(users: self.listFormInput.users + [SharedUserInput(email: input)])
-            self.usersTableView?.reloadData()
-            self.addUserInputField.text = ""
-            
-        } else {
-            print("TODO validation onAddUserTap")
+        self.validateInputs(self.userInputsValidator) {[weak self] in
+            if let input = self!.addUserInputField.text {
+                // TODO do later a verification here if email exists in the server
+                self!.listFormInput = self!.listFormInput.copy(users: self!.listFormInput.users + [SharedUserInput(email: input)])
+                self!.usersTableView?.reloadData()
+                self!.addUserInputField.text = ""
+                
+            } else {
+                print("Error: validation was not implemented correctly")
+            }
         }
     }
     

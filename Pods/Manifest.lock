@@ -6,6 +6,7 @@ PODS:
   - Realm/Headers (0.93.2)
   - RealmSwift (0.93.2):
     - Realm (= 0.93.2)
+  - SwiftValidator (2.1.1)
   - Valet (1.3)
 
 DEPENDENCIES:
@@ -13,6 +14,7 @@ DEPENDENCIES:
   - Nimble (from `https://github.com/Quick/Nimble.git`, branch `swift-2.0`)
   - Realm (from `https://github.com/realm/realm-cocoa.git`, branch `swift-2.0`)
   - RealmSwift (from `https://github.com/realm/realm-cocoa.git`, branch `swift-2.0`)
+  - SwiftValidator (from `https://github.com/i-schuetz/SwiftValidator`, branch `swift2.0_remove_delegate_callback`)
   - Valet (~> 1.3)
 
 EXTERNAL SOURCES:
@@ -28,6 +30,9 @@ EXTERNAL SOURCES:
   RealmSwift:
     :branch: swift-2.0
     :git: https://github.com/realm/realm-cocoa.git
+  SwiftValidator:
+    :branch: swift2.0_remove_delegate_callback
+    :git: https://github.com/i-schuetz/SwiftValidator
 
 CHECKOUT OPTIONS:
   Alamofire:
@@ -37,17 +42,21 @@ CHECKOUT OPTIONS:
     :commit: a804949542eb2f299b823ffb36936aec54fe0db6
     :git: https://github.com/Quick/Nimble.git
   Realm:
-    :commit: beb7778ce12829c78242c6bc39cc0fd031e7423c
+    :commit: 2b1d6689fa956aee78b1d673b620dd55dc5e536d
     :git: https://github.com/realm/realm-cocoa.git
   RealmSwift:
-    :commit: beb7778ce12829c78242c6bc39cc0fd031e7423c
+    :commit: 2b1d6689fa956aee78b1d673b620dd55dc5e536d
     :git: https://github.com/realm/realm-cocoa.git
+  SwiftValidator:
+    :commit: 5e9e922d7bc3e4ecb1bfca1e5468b82de0627aa8
+    :git: https://github.com/i-schuetz/SwiftValidator
 
 SPEC CHECKSUMS:
   Alamofire: 5550bf0b575ed1a4bf9be572f9463e1015cc169e
   Nimble: 7ab11d79c4f70cb6b5a4a01685ae90243345c8ee
   Realm: 580569262baa2bb57e530d6a4aeb00e8e083f884
   RealmSwift: 92294610b57fefaf03d7c2b33d0e5d56dd1edf7f
+  SwiftValidator: 79936ea870f1dba8a0824763375375bb209fe30d
   Valet: f5d70827d3155876c1027011843603fadbacdc39
 
 COCOAPODS: 0.37.2

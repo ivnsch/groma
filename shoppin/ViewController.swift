@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SwiftValidator
 
 class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, AddItemViewDelegate, ListItemsEditTableViewDelegate
 //    , UIBarPositioningDelegate
@@ -45,7 +46,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     @IBOutlet weak var listNameView: UILabel!
 
     var currentList: List?
-    
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -116,6 +116,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     // MARK: - AddItemViewDelegate
 
+    func onValidationErrors(errors: [UITextField: ValidationError]) {
+        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+    }
+    
+    // TODO rename )After validation)
     func onAddTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
         
         if !name.isEmpty {
