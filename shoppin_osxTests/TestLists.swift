@@ -192,7 +192,7 @@ class TestLists: XCTestCase {
                         expect(user.lastName) == TestUtils.userInput1.lastName
                     }
                     
-                    if let remoteList = result.successResult {
+                    if let _ = result.successResult {
                      
                         print("update first list")
                         let updatedList = List(uuid: firstList.uuid, name: "test-first-list-new-name", listItems: [])

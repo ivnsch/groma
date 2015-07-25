@@ -13,7 +13,7 @@ import Alamofire
 class RemoteInventoryItemsProvider: Any {
     
     func inventoryItems(inventory: Inventory, handler: RemoteResult<[RemoteInventoryItemWithProduct]> -> ()) {
-        AlamofireHelper.authenticatedRequest(.GET, Urls.inventoryItems).responseMyArray { (request, _, result: RemoteResult<[RemoteInventoryItemWithProduct]>, error) in
+        AlamofireHelper.authenticatedRequest(.GET, Urls.inventoryItems, ["inventory": inventory.uuid]).responseMyArray { (request, _, result: RemoteResult<[RemoteInventoryItemWithProduct]>, error) in
             handler(result)
         }
     }
@@ -21,7 +21,7 @@ class RemoteInventoryItemsProvider: Any {
     func addToInventory(inventory: Inventory, inventoryItems: [InventoryItem], handler: RemoteResult<NoOpSerializable> -> ()) {
         
         // this is handled differently because the parameters are an array and default request in alamofire doesn't support this (the difference is the request.HTTPBody line)
-        let request = NSMutableURLRequest(URL: NSURL(string: Urls.inventoryItems)!)
+        let request = NSMutableURLRequest(URL: NSURL(string: Urls.inventoryItems + "/\(inventory.uuid)")!)
         request.HTTPMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
@@ -47,6 +47,7 @@ class RemoteInventoryItemsProvider: Any {
         }
     }
     
+    // TODO remote inventory from inventory items, at least for sending - we want to add all the items to one inventory....... for receiving this also wastes payload, they also have the same inventory also
     private func toDictionary(inventoryItem: InventoryItem) -> [String: AnyObject] {
         return [
             "product": [

@@ -16,68 +16,68 @@ class TestSharedLists: XCTestCase {
 
     func testSharedList() {
         
-        var expectation = self.expectationWithDescription("User shares can adds a list, share it with other user and get list which contains the 2 correct users")
-    
-        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak expectation] loginData in
-        
-            print("Add a list")
-            let firstList = List(uuid: NSUUID().UUIDString, name: "test-shared-list", listItems: [])
-            let firstListWithSharedUsers = ListWithSharedUsersInput(list: firstList, users: [SharedUserInput(email: "foo@foo.foo")])
-            self.remoteListItemProvider.add(firstListWithSharedUsers) {result in
-                
-                expect(result.success).to(beTrue())
-                TestUtils.testIfSuccessWithResult(result)
-
-                print("Register a new user")
-                self.remoteUserProvider.register(TestUtils.userInput2) {result in
-                    expect(result.success).to(beTrue())
-                    expect(result.successResult).to(beNil())
-                    
-                    
-                    print("Share list with new user")
-                    let updatedListWithUsers = ListWithSharedUsersInput(list: firstList, users: [
-                        SharedUserInput(email: TestUtils.userInput1.email),
-                        SharedUserInput(email: TestUtils.userInput2.email)
-                    ])
-                    
-                    self.remoteListItemProvider.update(updatedListWithUsers) {result in
-                        expect(result.success).to(beTrue())
-                        TestUtils.testIfSuccessWithResult(result)
-
-                        if let lists = result.successResult {
-                            
-                        }
-                        
-                        
-                    }
-                    
-                    
-                    
-                }
-
-                    
-                    
-                    
-            }
-            
-            
-            
-        }
-            
-            
-            // register a new user
-            
-            
-            // share list with new user
-            
-            
-            // get list, should have both users
-            
-            
-            
-        
-        
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+//        let expectation = self.expectationWithDescription("User shares can adds a list, share it with other user and get list which contains the 2 correct users")
+//    
+//        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak expectation] loginData in
+//        
+//            print("Add a list")
+//            let firstList = List(uuid: NSUUID().UUIDString, name: "test-shared-list", listItems: [])
+//            let firstListWithSharedUsers = ListWithSharedUsersInput(list: firstList, users: [SharedUserInput(email: "foo@foo.foo")])
+//            self.remoteListItemProvider.add(firstListWithSharedUsers) {result in
+//                
+//                expect(result.success).to(beTrue())
+//                TestUtils.testIfSuccessWithResult(result)
+//
+//                print("Register a new user")
+//                self.remoteUserProvider.register(TestUtils.userInput2) {result in
+//                    expect(result.success).to(beTrue())
+//                    expect(result.successResult).to(beNil())
+//                    
+//                    
+//                    print("Share list with new user")
+//                    let updatedListWithUsers = ListWithSharedUsersInput(list: firstList, users: [
+//                        SharedUserInput(email: TestUtils.userInput1.email),
+//                        SharedUserInput(email: TestUtils.userInput2.email)
+//                    ])
+//                    
+//                    self.remoteListItemProvider.update(updatedListWithUsers) {result in
+//                        expect(result.success).to(beTrue())
+//                        TestUtils.testIfSuccessWithResult(result)
+//
+//                        if let lists = result.successResult {
+//                            
+//                        }
+//                        
+//                        
+//                    }
+//                    
+//                    
+//                    
+//                }
+//
+//                    
+//                    
+//                    
+//            }
+//            
+//            
+//            
+//        }
+//            
+//            
+//            // register a new user
+//            
+//            
+//            // share list with new user
+//            
+//            
+//            // get list, should have both users
+//            
+//            
+//            
+//        
+//        
+//        self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
     
     
