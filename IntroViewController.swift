@@ -34,10 +34,6 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate {
         self.startMainStoryboard()
     }
     
-    func onRegisterError() {
-        print("register error!") // TODO handle
-    }
-    
     func onRegisterSuccess() {
         self.startMainStoryboard()
     }
@@ -49,16 +45,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate {
         self.navigationController?.setViewControllers([tabController], animated: true)
     }
     
-    func onLoginError() {
-        print("login error!") // TODO handle
-    }
-    
     func onLoginSuccess() {
         self.startMainStoryboard()
-    }
-    
-    func onRegisterFromLoginError() {
-        print("register error!") // TODO handle
     }
     
     func onRegisterFromLoginSuccess() {

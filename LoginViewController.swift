@@ -11,11 +11,9 @@ import SwiftValidator
 
 protocol LoginDelegate {
     func onLoginSuccess()
-    func onLoginError()
     
     // LoginDelegate has register link, so the register event is forwarded to the container
     func onRegisterFromLoginSuccess()
-    func onRegisterFromLoginError()
 }
 
 class LoginViewController: UIViewController, RegisterDelegate {
@@ -88,9 +86,5 @@ class LoginViewController: UIViewController, RegisterDelegate {
     
     func onRegisterSuccess() {
         self.delegate?.onRegisterFromLoginSuccess() ?? print("Warn: no login delegate")
-    }
-    
-    func onRegisterError() {
-        self.delegate?.onRegisterFromLoginError() ?? print("Warn: no login delegate")
     }
 }

@@ -11,7 +11,6 @@ import SwiftValidator
 
 protocol RegisterDelegate {
     func onRegisterSuccess()
-    func onRegisterError()
 }
 
 class RegisterViewController: UIViewController {
@@ -71,12 +70,9 @@ class RegisterViewController: UIViewController {
                 let user = UserInput(email: email, password: password, firstName: firstName, lastName: lastName)
                 
                 self.progressVisible()
-                self.userProvider.register(user, resultHandler(onSuccess: {result in
+                self.userProvider.register(user, successHandler{result in
                     self.delegate?.onRegisterSuccess() ?? print("Warn: no register delegate")
-                    
-                    }, onError: {
-                        self.delegate?.onRegisterError() ?? print("Warn: no register delegate")
-                }))
+                })
                 
             } else {
                 print("TODO onRegisterTap, validation")
