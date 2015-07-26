@@ -73,7 +73,7 @@ class LoginViewController: UIViewController, RegisterDelegate {
                     })
                 
             } else {
-                print("TODO loginTapped, validation")
+                print("Error: validation was not implemented correctly")
             }
         }
     }

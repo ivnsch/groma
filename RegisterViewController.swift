@@ -75,7 +75,7 @@ class RegisterViewController: UIViewController {
                 })
                 
             } else {
-                print("TODO onRegisterTap, validation")
+                print("Error: validation was not implemented correctly")
             }
         }
     }

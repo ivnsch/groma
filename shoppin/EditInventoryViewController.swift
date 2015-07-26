@@ -118,7 +118,7 @@ class EditInventoryViewController: UIViewController, UITableViewDelegate, UITabl
                 }
                 
             } else {
-                print("TODO validation onDoneTap")
+                print("Error: validation was not implemented correctly")
             }
         }
     }
