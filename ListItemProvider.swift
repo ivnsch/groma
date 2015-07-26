@@ -33,7 +33,7 @@ protocol ListItemProvider {
 
     func list(listId: String, _ handler: ProviderResult<List> -> ())
     
-    func listItems(list: List, _ handler: ProviderResult<[ListItem]> -> ())
+    func listItems(list: List, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[ListItem]> -> ())
     
     func updateDone(listItems:[ListItem], _ handler: ProviderResult<Any> -> ())
 }

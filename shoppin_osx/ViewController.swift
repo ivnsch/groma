@@ -34,7 +34,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
 
     private func initList(list: List) {
-        self.listItemsProvider.listItems(list, successHandler{listItems in
+        self.listItemsProvider.listItems(list, fetchMode: .Both, successHandler{listItems in
             self.cellManagers = self.createCellManagers(listItems)
             self.updateTotalPriceLabel()
         })
@@ -60,7 +60,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
     
     private func selectList(list: List) {
-        self.listItemsProvider.listItems(list, successHandler{listItems in
+        self.listItemsProvider.listItems(list, fetchMode: .Both, successHandler{listItems in
             self.cellManagers = self.createCellManagers(listItems)
             self.updateTotalPriceLabel()
             self.tableView.reloadData()

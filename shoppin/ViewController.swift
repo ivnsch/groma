@@ -70,7 +70,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         super.viewWillAppear(animated)
         
         if let list = self.currentList {
-            self.listItemsProvider.listItems(list, successHandler{listItems in
+            self.listItemsProvider.listItems(list, fetchMode: .Both, successHandler{listItems in
                 self.listItemsTableViewController.setListItems(listItems.filter{!$0.done})
             })
         }
@@ -323,7 +323,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
         
         if let currentList = self.currentList {
-            self.listItemsProvider.listItems(currentList, successHandler{listItems in
+            self.listItemsProvider.listItems(currentList, fetchMode: .Both, successHandler{listItems in
                     
                 //        let allListItems = self.tableViewSections.map {
                 //            $0.listItems

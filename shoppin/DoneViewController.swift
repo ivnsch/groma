@@ -38,7 +38,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
 
     private func initWithList(list: List) {
         
-        self.listItemsProvider.listItems(list, successHandler{listItems in
+        self.listItemsProvider.listItems(list, fetchMode: .Both, successHandler{listItems in
             let doneListItems = listItems.filter{$0.done}
             self.listItemsTableViewController.setListItems(doneListItems)
         })

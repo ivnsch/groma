@@ -19,7 +19,8 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func listItems(list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
+    func listItems(list: List, fetchMode: ProviderFetchModus = .Both, _ handler: ProviderResult<[ListItem]> -> ()) {
+
         self.dbProvider.loadListItems(list, handler: {dbListItems in
 
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbListItems))
@@ -32,7 +33,10 @@ class ListItemProviderImpl: ListItemProvider {
                     // if there's no cached list or there's a difference, overwrite the cached list
                     if (dbListItems != listItemsWithRelations.listItems) {
                         self.dbProvider.saveListItems(listItemsWithRelations) {saved in
-                            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItemsWithRelations.listItems))
+                            
+                            if fetchMode == .Both {
+                                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItemsWithRelations.listItems))
+                            }
                         }
                     }
                     
@@ -85,7 +89,7 @@ class ListItemProviderImpl: ListItemProvider {
     
     func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> ()) {
 
-        self.listItems(list, {result in // TODO fetch items only when order not passed, because they are used only to get order
+        self.listItems(list, fetchMode: .First) {result in // TODO fetch items only when order not passed, because they are used only to get order
             
             if let listItems = result.sucessResult {
                 
@@ -129,7 +133,7 @@ class ListItemProviderImpl: ListItemProvider {
                     }
                 }
             }
-        })
+        }
     }
     
     private func loadSection(name: String, list: List, handler: ProviderResult<Section> -> ()) {
