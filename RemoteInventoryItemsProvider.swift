@@ -59,10 +59,6 @@ class RemoteInventoryItemsProvider: Any {
                 "quantity": inventoryItem.quantity,
                 "inventoryUuid": inventoryItem.inventory.uuid,
                 "productUuid": inventoryItem.product.uuid
-            ],
-            "inventory": [
-                "uuid": inventoryItem.inventory.uuid,
-                "name": inventoryItem.inventory.name
             ]
         ]
     }
