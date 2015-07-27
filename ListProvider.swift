@@ -12,9 +12,9 @@ protocol ListProvider {
     
     // TODO move list-only methods from listitemsprovider here
 
-    func add(list: ListWithSharedUsersInput, _ handler: ProviderResult<List> -> ())
+    func add(list: List, _ handler: ProviderResult<List> -> ())
 
-    func update(listInput: ListInput, _ handler: ProviderResult<List> -> ())
+    func update(listInput: List, _ handler: ProviderResult<List> -> ())
     
     func users(list: List, _ handler: ProviderResult<[SharedUser]> -> ())
     

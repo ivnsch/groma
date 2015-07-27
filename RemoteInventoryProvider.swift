@@ -17,28 +17,28 @@ class RemoteInventoryProvider {
         }
     }
     
-    func addInventory(inventory: InventoryInput, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func addInventory(inventory: Inventory, handler: RemoteResult<NoOpSerializable> -> ()) {
         let params = self.toRequestParams(inventory)
         AlamofireHelper.authenticatedRequest(.POST, Urls.inventory, params).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
             handler(result)
         }
     }
     
-    func updateInventory(inventory: InventoryInput, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func updateInventory(inventory: Inventory, handler: RemoteResult<NoOpSerializable> -> ()) {
         let params = self.toRequestParams(inventory)
         AlamofireHelper.authenticatedRequest(.PUT, Urls.inventory, params).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
             handler(result)
         }
     }
 
-    func toRequestParams(sharedUserInput: SharedUserInput) -> [String: AnyObject] {
+    func toRequestParams(sharedUserInput: SharedUser) -> [String: AnyObject] {
         return [
             "email": sharedUserInput.email,
             "foo": "" // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
         ]
     }
 
-    func toRequestParams(inventoryInput: InventoryInput) -> [String: AnyObject] {
+    func toRequestParams(inventoryInput: Inventory) -> [String: AnyObject] {
         let sharedUsers: [[String: AnyObject]] = inventoryInput.users.map{self.toRequestParams($0)}
         
         var inventoryDict: [String: AnyObject] = [

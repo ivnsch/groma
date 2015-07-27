@@ -68,9 +68,6 @@
 		EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB41A3334EC00D778DE /* Images.xcassets */; };
 		EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB61A3334EC00D778DE /* LaunchScreen.xib */; };
 		EB1EFAC51B1EFBBC0079A35D /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1EFAC41B1EFBBC0079A35D /* AutocompleteTextField.swift */; };
-		EB202B871B51C462001699E7 /* ListWithSharedUsersInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB202B861B51C462001699E7 /* ListWithSharedUsersInput.swift */; };
-		EB202B881B51C462001699E7 /* ListWithSharedUsersInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB202B861B51C462001699E7 /* ListWithSharedUsersInput.swift */; };
-		EB202B891B51C462001699E7 /* ListWithSharedUsersInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB202B861B51C462001699E7 /* ListWithSharedUsersInput.swift */; };
 		EB202B971B54109A001699E7 /* RemoteRegisterResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB202B961B54109A001699E7 /* RemoteRegisterResult.swift */; };
 		EB202B981B54109A001699E7 /* RemoteRegisterResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB202B961B54109A001699E7 /* RemoteRegisterResult.swift */; };
 		EB202B991B54109A001699E7 /* RemoteRegisterResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB202B961B54109A001699E7 /* RemoteRegisterResult.swift */; };
@@ -190,9 +187,6 @@
 		EB70C22F1B5021D50060E529 /* UserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C22E1B5021D40060E529 /* UserInput.swift */; };
 		EB70C2301B5021D50060E529 /* UserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C22E1B5021D40060E529 /* UserInput.swift */; };
 		EB70C2311B5021D50060E529 /* UserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C22E1B5021D40060E529 /* UserInput.swift */; };
-		EB70C2381B50497C0060E529 /* SharedUserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2371B50497C0060E529 /* SharedUserInput.swift */; };
-		EB70C2391B50497C0060E529 /* SharedUserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2371B50497C0060E529 /* SharedUserInput.swift */; };
-		EB70C23A1B50497C0060E529 /* SharedUserInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2371B50497C0060E529 /* SharedUserInput.swift */; };
 		EB714AA31B6669AA00F91B94 /* ProviderFetchModus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */; };
 		EB714AA41B6669AA00F91B94 /* ProviderFetchModus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */; };
 		EB7E8B611B2ADF620090409A /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
@@ -247,15 +241,9 @@
 		EBB9A7491B5EB46C00E5487D /* InventoryMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7471B5EB46C00E5487D /* InventoryMapper.swift */; };
 		EBB9A74A1B5EB46C00E5487D /* InventoryMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7471B5EB46C00E5487D /* InventoryMapper.swift */; };
 		EBB9A74C1B5EB95A00E5487D /* EditInventoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A74B1B5EB95A00E5487D /* EditInventoryViewController.swift */; };
-		EBB9A7501B5EBBF900E5487D /* InventoryInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A74F1B5EBBF900E5487D /* InventoryInput.swift */; };
-		EBB9A7511B5EBBF900E5487D /* InventoryInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A74F1B5EBBF900E5487D /* InventoryInput.swift */; };
-		EBB9A7521B5EBBF900E5487D /* InventoryInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A74F1B5EBBF900E5487D /* InventoryInput.swift */; };
 		EBB9A7541B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7531B5FED4200E5487D /* InventoryTableViewCell.swift */; };
 		EBCE418B1B5D10BA00583551 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */; };
 		EBCE418D1B5D466B00583551 /* EditListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418C1B5D466B00583551 /* EditListViewController.swift */; };
-		EBCE418F1B5D884000583551 /* ListInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418E1B5D884000583551 /* ListInput.swift */; };
-		EBCE41901B5D884000583551 /* ListInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418E1B5D884000583551 /* ListInput.swift */; };
-		EBCE41911B5D884000583551 /* ListInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418E1B5D884000583551 /* ListInput.swift */; };
 		EBDFE3A71ACE829400E48F95 /* CellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3A61ACE829400E48F95 /* CellManager.swift */; };
 		EBDFE3A91ACE82F000E48F95 /* ListItemCellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */; };
 		EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3AA1ACE935600E48F95 /* ListItemRow.swift */; };
@@ -392,7 +380,6 @@
 		EB1DDEC21A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEC31A3334EC00D778DE /* shoppinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shoppinTests.swift; sourceTree = "<group>"; };
 		EB1EFAC41B1EFBBC0079A35D /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
-		EB202B861B51C462001699E7 /* ListWithSharedUsersInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListWithSharedUsersInput.swift; sourceTree = "<group>"; };
 		EB202B961B54109A001699E7 /* RemoteRegisterResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteRegisterResult.swift; sourceTree = "<group>"; };
 		EB20FBF11A5961360058103B /* CartMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartMenuView.swift; sourceTree = "<group>"; };
 		EB20FBF71A5971170058103B /* InventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItem.swift; sourceTree = "<group>"; };
@@ -458,7 +445,6 @@
 		EB70C21E1B4D302D0060E529 /* SharedUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUser.swift; sourceTree = "<group>"; };
 		EB70C2221B4D33E90060E529 /* SharedUserMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUserMapper.swift; sourceTree = "<group>"; };
 		EB70C22E1B5021D40060E529 /* UserInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInput.swift; sourceTree = "<group>"; };
-		EB70C2371B50497C0060E529 /* SharedUserInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUserInput.swift; sourceTree = "<group>"; };
 		EB7E8B601B2ADF620090409A /* Try.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Try.swift; sourceTree = "<group>"; };
 		EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
 		EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListsViewController.xib; sourceTree = "<group>"; };
@@ -493,11 +479,9 @@
 		EBB9A7431B5EB28500E5487D /* RemoteInventoryItemsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryItemsProvider.swift; sourceTree = "<group>"; };
 		EBB9A7471B5EB46C00E5487D /* InventoryMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryMapper.swift; sourceTree = "<group>"; };
 		EBB9A74B1B5EB95A00E5487D /* EditInventoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditInventoryViewController.swift; sourceTree = "<group>"; };
-		EBB9A74F1B5EBBF900E5487D /* InventoryInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryInput.swift; sourceTree = "<group>"; };
 		EBB9A7531B5FED4200E5487D /* InventoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryTableViewCell.swift; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		EBCE418C1B5D466B00583551 /* EditListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListViewController.swift; sourceTree = "<group>"; };
-		EBCE418E1B5D884000583551 /* ListInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListInput.swift; sourceTree = "<group>"; };
 		EBDFE3A61ACE829400E48F95 /* CellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellManager.swift; sourceTree = "<group>"; };
 		EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCellManager.swift; sourceTree = "<group>"; };
 		EBDFE3AA1ACE935600E48F95 /* ListItemRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemRow.swift; sourceTree = "<group>"; };
@@ -831,10 +815,6 @@
 			children = (
 				EB4FD45A1AC701410000F952 /* ListItemInput.swift */,
 				EB70C22E1B5021D40060E529 /* UserInput.swift */,
-				EB202B861B51C462001699E7 /* ListWithSharedUsersInput.swift */,
-				EB70C2371B50497C0060E529 /* SharedUserInput.swift */,
-				EBCE418E1B5D884000583551 /* ListInput.swift */,
-				EBB9A74F1B5EBBF900E5487D /* InventoryInput.swift */,
 			);
 			name = input;
 			sourceTree = "<group>";
@@ -1500,7 +1480,6 @@
 				EB0C1B931B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
 				EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */,
 				EB70C22F1B5021D50060E529 /* UserInput.swift in Sources */,
-				EBB9A7501B5EBBF900E5487D /* InventoryInput.swift in Sources */,
 				EB0C1B8F1B3DA97000F24C85 /* UserProvider.swift in Sources */,
 				EB40A4691B5506FB000E9CAD /* DBSection.swift in Sources */,
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
@@ -1521,7 +1500,6 @@
 				EB3144461B643559005814F0 /* UITextField.swift in Sources */,
 				EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */,
 				EB9BE4221B2CB51F005B401A /* RemoteSection.swift in Sources */,
-				EB70C2381B50497C0060E529 /* SharedUserInput.swift in Sources */,
 				EBB9A73C1B5EB1C700E5487D /* InventoryItemsProvider.swift in Sources */,
 				EBF162ED1A3CA24E0048E37C /* ListItem.swift in Sources */,
 				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
@@ -1548,7 +1526,6 @@
 				EB0C2A3E1B583BFE00AF6226 /* RemoteInventoryItemWithProduct.swift in Sources */,
 				EBF162DD1A3C82380048E37C /* DefaultTableViewController.swift in Sources */,
 				EBF162E51A3C85A30048E37C /* ListItemCell.swift in Sources */,
-				EB202B871B51C462001699E7 /* ListWithSharedUsersInput.swift in Sources */,
 				EB0C1B831B3D626500F24C85 /* IntroViewController.swift in Sources */,
 				EBCE418B1B5D10BA00583551 /* ListTableViewCell.swift in Sources */,
 				EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */,
@@ -1570,7 +1547,6 @@
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,
 				EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */,
 				EBF3779F1B38AB1000EEB6DB /* User.swift in Sources */,
-				EBCE418F1B5D884000583551 /* ListInput.swift in Sources */,
 				EB9BE41C1B2CB42B005B401A /* RemoteListItem.swift in Sources */,
 				EB20FBFE1A5972C70058103B /* InventoryItemsProviderImpl.swift in Sources */,
 				EBB5A04D1B6596D400FB9C58 /* ProviderFetchModus.swift in Sources */,
@@ -1640,7 +1616,6 @@
 				EB0C2A311B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */,
 				EB0C2A4F1B5841C600AF6226 /* DBInventoryItem.swift in Sources */,
 				EB9BE41D1B2CB42B005B401A /* RemoteListItem.swift in Sources */,
-				EBCE41901B5D884000583551 /* ListInput.swift in Sources */,
 				EB4FD4561AC6D6690000F952 /* EditListItemController.swift in Sources */,
 				EB4FD45D1AC7148C0000F952 /* String.swift in Sources */,
 				EB4FD46D1AC73B590000F952 /* PreferencesManager.swift in Sources */,
@@ -1673,7 +1648,6 @@
 				EB4FD44E1AC6BE390000F952 /* NSTableView.swift in Sources */,
 				EB4FD4511AC6BE960000F952 /* Globals.swift in Sources */,
 				EBF3779C1B38AA5900EEB6DB /* Urls.swift in Sources */,
-				EB70C2391B50497C0060E529 /* SharedUserInput.swift in Sources */,
 				EB55676A1A8643BC00CD3EC6 /* Section.swift in Sources */,
 				EB6D93A61B1BAFB400ED8999 /* HandlingTextField.swift in Sources */,
 				EBDFE3C61AD11F6700E48F95 /* NSLayoutConstraint.swift in Sources */,
@@ -1687,13 +1661,11 @@
 				EB89D34D1AD5235600B6E0D0 /* ListCell.swift in Sources */,
 				EB0C2A341B57BE6100AF6226 /* NSWindowController.swift in Sources */,
 				EB6F81331B4717C2008680E0 /* KeychainKeys.swift in Sources */,
-				EB202B881B51C462001699E7 /* ListWithSharedUsersInput.swift in Sources */,
 				EB70C2201B4D302D0060E529 /* SharedUser.swift in Sources */,
 				EBDFE3C21AD00E8200E48F95 /* DialogUtils.swift in Sources */,
 				EB0C1BAE1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
 				EB70C22C1B4D3DF50060E529 /* ListProviderImpl.swift in Sources */,
 				EB40A47F1B5512D6000E9CAD /* DBSharedUser.swift in Sources */,
-				EBB9A7511B5EBBF900E5487D /* InventoryInput.swift in Sources */,
 				EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */,
 				EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */,
 				EB40A48B1B553A19000E9CAD /* DBListItem.swift in Sources */,
@@ -1705,10 +1677,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB70C23A1B50497C0060E529 /* SharedUserInput.swift in Sources */,
 				EB0C2A481B58405D00AF6226 /* RealmListItemProvider.swift in Sources */,
-				EBB9A7521B5EBBF900E5487D /* InventoryInput.swift in Sources */,
-				EBCE41911B5D884000583551 /* ListInput.swift in Sources */,
 				EB0C2A3C1B58330300AF6226 /* RemoteInventoryItem.swift in Sources */,
 				EBF3776A1B342AAF00EEB6DB /* ProviderFactory.swift in Sources */,
 				EB6F81341B4717C2008680E0 /* KeychainKeys.swift in Sources */,
@@ -1748,7 +1717,6 @@
 				EBF3776C1B342ABB00EEB6DB /* InventoryProvider.swift in Sources */,
 				EB0C1B8D1B3DA89900F24C85 /* LoginData.swift in Sources */,
 				EBF3777A1B342B1700EEB6DB /* ListItem.swift in Sources */,
-				EB202B891B51C462001699E7 /* ListWithSharedUsersInput.swift in Sources */,
 				EBF3777B1B342B1E00EEB6DB /* Section.swift in Sources */,
 				EB0C2A501B5841C600AF6226 /* DBInventoryItem.swift in Sources */,
 				EBF377651B342A8E00EEB6DB /* RemoteListItem.swift in Sources */,

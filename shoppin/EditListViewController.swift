@@ -11,9 +11,9 @@ import SwiftValidator
 
 struct EditListFormInput {
     let name: String
-    let users: [SharedUserInput] // note that this will be empty if using the app offline (TODO think about showing myself in this list - right now also this will not appear offline)
+    let users: [SharedUser] // note that this will be empty if using the app offline (TODO think about showing myself in this list - right now also this will not appear offline)
     
-    init(name: String, users: [SharedUserInput] = []) {
+    init(name: String, users: [SharedUser] = []) {
         self.name = name
         self.users = users
     }
@@ -22,7 +22,7 @@ struct EditListFormInput {
         return "{\(self.dynamicType) name: \(self.name), users: \(self.users)}"
     }
     
-    func copy(name: String? = nil, users: [SharedUserInput]? = nil) -> EditListFormInput {
+    func copy(name: String? = nil, users: [SharedUser]? = nil) -> EditListFormInput {
         return EditListFormInput(
             name: name ?? self.name,
             users: users ?? self.users
@@ -51,14 +51,14 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
         didSet {
             if !self.isEdit {
                 if let myEmail: String = PreferencesManager.loadPreference(PreferencesManagerKey.email) {
-                    self.listFormInput = self.listFormInput.copy(users: [SharedUserInput(email: myEmail)])
+                    self.listFormInput = self.listFormInput.copy(users: [SharedUser(email: myEmail)])
                 }
             }
         }
     }
     
     func prefill(list: List) { // for edit list case
-        self.listFormInput = EditListFormInput(name: list.name, users: list.users.map{SharedUserInput(email: $0.email)})
+        self.listFormInput = EditListFormInput(name: list.name, users: list.users.map{SharedUser(email: $0.email)})
     }
     
     // Note, optionals because called from didSet which can be called before the outlets are initialized
@@ -104,7 +104,7 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
             if let listName = self!.listNameInputField.text {
                 
                 // FIXME code smell - not using listFormInput for the listName, are we using listFormInput correctly? Do we actually need listFormInput? Structure differently?
-                let listInput = ListInput(uuid: NSUUID().UUIDString, name: listName, users: self!.listFormInput.users)
+                let listInput = List(uuid: NSUUID().UUIDString, name: listName, users: self!.listFormInput.users)
                 
                 self!.progressVisible(true)
                 
@@ -113,8 +113,8 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
                         self!.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
                         })
                 } else {
-                    // FIXME redundancy users empty array and shared users
-                    let listWithSharedUsers = ListWithSharedUsersInput(list: List(uuid: NSUUID().UUIDString, name: listInput.name, listItems: [], users: []), users: listInput.users)
+
+                    let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listInput.name, listItems: [], users: listInput.users)
                     self!.listProvider.add(listWithSharedUsers, self!.successHandler{list in
                         self!.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
                     })
@@ -155,7 +155,7 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
         self.validateInputs(self.userInputsValidator) {[weak self] in
             if let input = self!.addUserInputField.text {
                 // TODO do later a verification here if email exists in the server
-                self!.listFormInput = self!.listFormInput.copy(users: self!.listFormInput.users + [SharedUserInput(email: input)])
+                self!.listFormInput = self!.listFormInput.copy(users: self!.listFormInput.users + [SharedUser(email: input)])
                 self!.usersTableView?.reloadData()
                 self!.addUserInputField.text = ""
                 

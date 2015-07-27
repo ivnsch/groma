@@ -11,9 +11,9 @@ import SwiftValidator
 
 struct EditInventoryFormInput {
     let name: String
-    let users: [SharedUserInput] // note that this will be empty if using the app offline (TODO think about showing myself in this list - right now also this will not appear offline)
+    let users: [SharedUser] // note that this will be empty if using the app offline (TODO think about showing myself in this list - right now also this will not appear offline)
     
-    init(name: String, users: [SharedUserInput] = []) {
+    init(name: String, users: [SharedUser] = []) {
         self.name = name
         self.users = users
     }
@@ -22,7 +22,7 @@ struct EditInventoryFormInput {
         return "{\(self.dynamicType) name: \(self.name), users: \(self.users)}"
     }
     
-    func copy(name: String? = nil, users: [SharedUserInput]? = nil) -> EditInventoryFormInput {
+    func copy(name: String? = nil, users: [SharedUser]? = nil) -> EditInventoryFormInput {
         return EditInventoryFormInput(
             name: name ?? self.name,
             users: users ?? self.users
@@ -51,14 +51,14 @@ class EditInventoryViewController: UIViewController, UITableViewDelegate, UITabl
         didSet {
             if !self.isEdit {
                 if let myEmail: String = PreferencesManager.loadPreference(PreferencesManagerKey.email) {
-                    self.inventoryFormInput = self.inventoryFormInput.copy(users: [SharedUserInput(email: myEmail)])
+                    self.inventoryFormInput = self.inventoryFormInput.copy(users: [SharedUser(email: myEmail)])
                 }
             }
         }
     }
     
     func prefill(inventory: Inventory) { // for edit list case
-        self.inventoryFormInput = EditInventoryFormInput(name: inventory.name, users: inventory.users.map{SharedUserInput(email: $0.email)})
+        self.inventoryFormInput = EditInventoryFormInput(name: inventory.name, users: inventory.users.map{SharedUser(email: $0.email)})
     }
     
     // Note, optionals because called from didSet which can be called before the outlets are initialized
@@ -103,7 +103,7 @@ class EditInventoryViewController: UIViewController, UITableViewDelegate, UITabl
             
             if let inventoryName = self!.inventoryNameInputField.text {
                 
-                let inventoryInput = InventoryInput(uuid: NSUUID().UUIDString, name: inventoryName, users: self!.inventoryFormInput.users)
+                let inventoryInput = Inventory(uuid: NSUUID().UUIDString, name: inventoryName, users: self!.inventoryFormInput.users)
                 
                 self!.progressVisible(true)
                 
@@ -155,7 +155,7 @@ class EditInventoryViewController: UIViewController, UITableViewDelegate, UITabl
                 // TODO validate
                 
                 // TODO do later a verification here if email exists in the server
-                self!.inventoryFormInput = self!.inventoryFormInput.copy(users: self!.inventoryFormInput.users + [SharedUserInput(email: input)])
+                self!.inventoryFormInput = self!.inventoryFormInput.copy(users: self!.inventoryFormInput.users + [SharedUser(email: input)])
                 self!.usersTableView?.reloadData()
                 self!.addUserInputField.text = ""
                 

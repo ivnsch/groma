@@ -13,7 +13,7 @@ class ListProviderImpl: ListProvider {
     let remoteListProvider = RemoteListItemProvider()
     let dbProvider = RealmListItemProvider()
 
-    func add(list: ListWithSharedUsersInput, _ handler: ProviderResult<List> -> ()) {
+    func add(list: List, _ handler: ProviderResult<List> -> ()) {
         
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
@@ -36,12 +36,7 @@ class ListProviderImpl: ListProvider {
         })
     }
     
-    func update(listInput: ListInput, _ handler: ProviderResult<List> -> ()) {
-        
-        // TODO refactor this, we should send the listInput directly to the server, specially messy is that we don't use users in List object
-        let listInput = ListWithSharedUsersInput(list:
-            List(uuid: listInput.uuid, name: listInput.name, listItems: [], users: []),
-            users: listInput.users)
+    func update(listInput: List, _ handler: ProviderResult<List> -> ()) {
         
         self.remoteListProvider.update(listInput) {remoteResult in
             if let remoteList = remoteResult.successResult {
@@ -58,8 +53,8 @@ class ListProviderImpl: ListProvider {
 
     func users(list: List, _ handler: ProviderResult<[SharedUser]> -> ()) {
         // TODO
-        let user1 = SharedUser(email: "foo@bar.com", uuid: "uuid1", firstName: "test", lastName: "tester")
-        let user2 = SharedUser(email: "bla@bla.de", uuid: "uuid2", firstName: "Ivan", lastName: "Schuetz")
+        let user1 = SharedUser(email: "foo@bar.com")
+        let user2 = SharedUser(email: "bla@bla.de")
         let result = ProviderResult(status: .Success, sucessResult: [user1, user2])
         
         handler(result)
@@ -68,7 +63,7 @@ class ListProviderImpl: ListProvider {
     // TODO probably it doesn't make sense to use this, we have 1. service to verify the email exists, 2. service to update the whole list
     func addUserToList(list: List, email: String, _ handler: ProviderResult<SharedUser> -> ()) {
         // TODO
-        let addedUser = SharedUser(email: email, uuid: "uuid123", firstName: "added", lastName: "user")
+        let addedUser = SharedUser(email: email)
         let result = ProviderResult(status: .Success, sucessResult: addedUser)
         
         handler(result)

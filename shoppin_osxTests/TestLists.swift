@@ -20,9 +20,8 @@ class TestLists: XCTestCase {
         TestUtils.withClearDatabaseAndNewLoggedInAccount {[weak expectation] loginData in
             
             print("add first list")
-            let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])
-            let firstListWithSharedUsers = ListWithSharedUsersInput(list: firstList, users: [SharedUserInput(email: TestUtils.userInput1.email)])
-            self.remoteProvider.add(firstListWithSharedUsers, handler: {result in
+            let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [], users: [SharedUser(email: TestUtils.userInput1.email)])
+            self.remoteProvider.add(firstList, handler: {result in
                 
                 expect(result.success).to(beTrue())
                 TestUtils.testIfSuccessWithResult(result)
@@ -33,9 +32,8 @@ class TestLists: XCTestCase {
                     TestUtils.testRemoteListMatches(remoteList, firstList)
                     
                     print("add second list")
-                    let secondList = List(uuid: NSUUID().UUIDString, name: "test-second-list", listItems: [])
-                    let secondListWithSharedUsers = ListWithSharedUsersInput(list: secondList, users: [SharedUserInput(email: TestUtils.userInput1.email)])
-                    self.remoteProvider.add(secondListWithSharedUsers, handler: {result in
+                    let secondList = List(uuid: NSUUID().UUIDString, name: "test-second-list", listItems: [], users: [SharedUser(email: TestUtils.userInput1.email)])
+                    self.remoteProvider.add(secondList, handler: {result in
                         
                         expect(result.success).to(beTrue())
                         TestUtils.testIfSuccessWithResult(result)
@@ -54,15 +52,14 @@ class TestLists: XCTestCase {
                                     expect(lists.count) == 2
                                     
                                     TestUtils.testRemoteListValid(lists[0])
-                                    TestUtils.testRemoteListWithSharedUsersMatches(lists[0], firstListWithSharedUsers)
+                                    TestUtils.testRemoteListWithSharedUsersMatches(lists[0], firstList)
                                     TestUtils.testRemoteListValid(lists[1])
-                                    TestUtils.testRemoteListWithSharedUsersMatches(lists[1], secondListWithSharedUsers)
+                                    TestUtils.testRemoteListWithSharedUsersMatches(lists[1], secondList)
                                     
                                     
                                     print("should get error response when adding a list with a shared user that is not registered")
-                                    let thirdList = List(uuid: NSUUID().UUIDString, name: "test-third-list", listItems: [])
-                                    let thirdListWithSharedUsers = ListWithSharedUsersInput(list: thirdList, users: [SharedUserInput(email: "does@not.exist")])
-                                    self.remoteProvider.add(thirdListWithSharedUsers, handler: {result in
+                                    let thirdList = List(uuid: NSUUID().UUIDString, name: "test-third-list", listItems: [], users: [SharedUser(email: "does@not.exist")])
+                                    self.remoteProvider.add(thirdList, handler: {result in
                                         expect(result.success).to(beFalse())
                                         expect(result.successResult).to(beNil())
                                         expect(result.status) == RemoteStatusCode.NotFound // TODO this error has to be improved (*user* not found, and return list of not found users). For now this is all that can be tested
@@ -98,17 +95,15 @@ class TestLists: XCTestCase {
         TestUtils.withClearDatabaseAndNewLoggedInAccount {[weak expectation] loginData in
             
             print("add first list")
-            let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])
-            let firstListWithSharedUsers = ListWithSharedUsersInput(list: firstList, users: [SharedUserInput(email: TestUtils.userInput1.email)])
-            self.remoteProvider.add(firstListWithSharedUsers, handler: {result in
+            let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [], users: [SharedUser(email: TestUtils.userInput1.email)])
+            self.remoteProvider.add(firstList, handler: {result in
 
                 expect(result.success).to(beTrue())
                 TestUtils.testIfSuccessWithResult(result)
                 
                 print("add second list")
-                let secondList = List(uuid: NSUUID().UUIDString, name: "test-second-list", listItems: [])
-                let secondListWithSharedUsers = ListWithSharedUsersInput(list: secondList, users: [SharedUserInput(email: TestUtils.userInput1.email)])
-                self.remoteProvider.add(secondListWithSharedUsers, handler: {result in
+                let secondList = List(uuid: NSUUID().UUIDString, name: "test-second-list", listItems: [], users: [SharedUser(email: TestUtils.userInput1.email)])
+                self.remoteProvider.add(secondList, handler: {result in
 
                     expect(result.success).to(beTrue())
                     TestUtils.testIfSuccessWithResult(result)
@@ -154,9 +149,8 @@ class TestLists: XCTestCase {
         TestUtils.withClearDatabaseAndNewLoggedInAccount {[weak expectation] loginData in
             
             print("add first list")
-            let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [])
-            let firstListWithSharedUsers = ListWithSharedUsersInput(list: firstList, users: [SharedUserInput(email: TestUtils.userInput1.email)])
-            self.remoteProvider.add(firstListWithSharedUsers, handler: {result in
+            let firstList = List(uuid: NSUUID().UUIDString, name: "test-first-list", listItems: [], users: [SharedUser(email: TestUtils.userInput1.email)])
+            self.remoteProvider.add(firstList, handler: {result in
 
                 expect(result.success).to(beTrue())
                 TestUtils.testIfSuccessWithResult(result)
@@ -173,16 +167,15 @@ class TestLists: XCTestCase {
                 }
                 
                 print("add second list")
-                let secondList = List(uuid: NSUUID().UUIDString, name: "test-second-list", listItems: [])
-                let secondListWithSharedUsers = ListWithSharedUsersInput(list: secondList, users: [SharedUserInput(email: TestUtils.userInput1.email)])
-                self.remoteProvider.add(secondListWithSharedUsers, handler: {result in
+                let secondList = List(uuid: NSUUID().UUIDString, name: "test-second-list", listItems: [], users: [SharedUser(email: TestUtils.userInput1.email)])
+                self.remoteProvider.add(secondList, handler: {result in
 
                     expect(result.success).to(beTrue())
                     TestUtils.testIfSuccessWithResult(result)
                     
                     print("test second list is returned correctly")
                     if let list = result.successResult {
-                        TestUtils.testRemoteListWithSharedUsersMatches(list, secondListWithSharedUsers)
+                        TestUtils.testRemoteListWithSharedUsersMatches(list, secondList)
                         
                         expect(list.users.count) == 1
                         let user = list.users.first!
@@ -195,10 +188,9 @@ class TestLists: XCTestCase {
                     if let _ = result.successResult {
                      
                         print("update first list")
-                        let updatedList = List(uuid: firstList.uuid, name: "test-first-list-new-name", listItems: [])
+                        let updatedList = List(uuid: firstList.uuid, name: "test-first-list-new-name", listItems: [], users: [SharedUser(email: TestUtils.userInput1.email)])
                         // TODO test validtion when we send empty shared users. The server should reject this (it's not implemented yet)
-                        let updatedListWithSharedUsers = ListWithSharedUsersInput(list: updatedList, users: [SharedUserInput(email: TestUtils.userInput1.email)])
-                        self.remoteProvider.update(updatedListWithSharedUsers, handler: {result in
+                        self.remoteProvider.update(updatedList, handler: {result in
                             expect(result.success).to(beTrue())
                             expectation?.fulfill()
 
@@ -211,9 +203,9 @@ class TestLists: XCTestCase {
                                 if let lists = result.successResult {
                                     expect(lists.count) == 2
                                     TestUtils.testRemoteListValid(lists[0])
-                                    TestUtils.testRemoteListWithSharedUsersMatches(lists[0], updatedListWithSharedUsers)
+                                    TestUtils.testRemoteListWithSharedUsersMatches(lists[0], updatedList)
                                     TestUtils.testRemoteListValid(lists[1])
-                                    TestUtils.testRemoteListWithSharedUsersMatches(lists[1], secondListWithSharedUsers)
+                                    TestUtils.testRemoteListWithSharedUsersMatches(lists[1], secondList)
                                 }
                                 
                                 expectation?.fulfill()

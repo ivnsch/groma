@@ -85,7 +85,7 @@ class RemoteListItemProvider {
         }
     }
     
-    func update(list: ListWithSharedUsersInput, handler: RemoteResult<RemoteList> -> ()) {
+    func update(list: List, handler: RemoteResult<RemoteList> -> ()) {
         let parameters = self.toRequestParams(list)
         AlamofireHelper.authenticatedRequest(.PUT, Urls.list, parameters).responseMyObject { (request, _, result: RemoteResult<RemoteList>, error) in
             handler(result)
@@ -135,10 +135,10 @@ class RemoteListItemProvider {
         }
     }
     
-    func add(list: ListWithSharedUsersInput, handler: RemoteResult<RemoteList> -> ()) {
+    func add(list: List, handler: RemoteResult<RemoteList> -> ()) {
         let parameters: [String: AnyObject] = [
-            "uuid": list.list.uuid,
-            "name": list.list.name,
+            "uuid": list.uuid,
+            "name": list.name,
             "users": list.users.map{self.toRequestParams($0)}
         ]
         AlamofireHelper.authenticatedRequest(.POST, Urls.list, parameters).responseMyObject { (request, _, result: RemoteResult<RemoteList>, error) in
@@ -176,10 +176,8 @@ class RemoteListItemProvider {
     
     func toRequestParams(sharedUser: SharedUser) -> [String: AnyObject] {
         return [
-            "uuid": sharedUser.uuid,
             "email": sharedUser.email,
-            "firstName": sharedUser.firstName,
-            "lastName": sharedUser.lastName
+            "foo": "" // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
         ]
     }
     
@@ -203,30 +201,19 @@ class RemoteListItemProvider {
         ]
     }
     
-    func toRequestParams(sharedUserInput: SharedUserInput) -> [String: AnyObject] {
-        return [
-            "email": sharedUserInput.email,
-            "foo": "" // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
-        ]
-    }
-    
-    
-    func toRequestParams(listWithSharedUsersInput: ListWithSharedUsersInput) -> [String: AnyObject] {
-        let sharedUsers: [[String: AnyObject]] = listWithSharedUsersInput.users.map{self.toRequestParams($0)}
+    func toRequestParams(list: List) -> [String: AnyObject] {
+        let sharedUsers: [[String: AnyObject]] = list.users.map{self.toRequestParams($0)}
         
-        var listDict = self.toRequestParams(listWithSharedUsersInput.list)
+        var listDict: [String: AnyObject] = [
+            "uuid": list.uuid,
+            "name": list.name
+        ]
         
         listDict["users"] = sharedUsers
         
         return listDict
     }
-    
-    func toRequestParams(list: List) -> [String: AnyObject] {
-        return [
-            "uuid": list.uuid,
-            "name": list.name
-        ]
-    }
+
 }
 
 

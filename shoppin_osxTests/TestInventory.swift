@@ -34,7 +34,7 @@ class TestInventory: XCTestCase {
     
     private func withAddedInventory(expectation: XCTestExpectation?, block: (addedInventory: Inventory) -> ()) {
         
-        let inventoryInput = InventoryInput(uuid: NSUUID().UUIDString, name: "foo")
+        let inventoryInput = Inventory(uuid: NSUUID().UUIDString, name: "foo")
         
         self.remoteInventoryProvider.addInventory(inventoryInput) {result in
             expect(result.success).to(beTrue())

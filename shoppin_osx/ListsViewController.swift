@@ -60,16 +60,14 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
     }
   
     private func addList(listInput: EditListInput) {
-        let list = List(uuid: NSUUID().UUIDString, name: listInput.name)
-        
         // TODO handle when user doesn't have account! if I add list without internet, then there's no account data and no possibility to share users
         // so in this case we add to local database with dummy user (?) that represents myself and hide share users from the user (or "you need an account to use this")
         // when user opens account with lists like that, somehow we replace the dummy value with the email (client and server)
         // or maybe we can just use *always* a dummy identifier for myself. A general purpose string like "myself"
         // For the user is not important to see their own email address, only to know this is myself. This is probably a bad idea for the databse in the server though.
-        let listWithSharedUsers = ListWithSharedUsersInput(list: list, users: [SharedUserInput(email: "foo@foo.foo")])
-        
-        self.listsProvider.add(listWithSharedUsers, successHandler{[weak self] addedList in
+        let list = List(uuid: NSUUID().UUIDString, name: listInput.name, users: [SharedUser(email: "foo@foo.foo")])
+
+        self.listsProvider.add(list, successHandler{[weak self] addedList in
             self?.loadLists() // we modified list - reload everything
             self?.selectTableViewRow(addedList)
             return

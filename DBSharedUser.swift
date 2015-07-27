@@ -12,10 +12,7 @@ import RealmSwift
 // TODO remove uuid, firstName and lastName
 class DBSharedUser: Object {
     
-    dynamic var uuid: String = ""
     dynamic var email: String = ""
-    dynamic var firstName: String = ""
-    dynamic var lastName: String = ""
     
     override static func primaryKey() -> String? {
         return "email"

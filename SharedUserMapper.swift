@@ -11,19 +11,16 @@ import Foundation
 class SharedUserMapper {
     
     class func sharedUserWithDB(dbSharedUser: DBSharedUser) -> SharedUser {
-        return SharedUser(email: dbSharedUser.email, uuid: dbSharedUser.uuid, firstName: dbSharedUser.firstName, lastName: dbSharedUser.lastName)
+        return SharedUser(email: dbSharedUser.email)
     }
     
     class func sharedUserWithRemote(remoteSharedUser: RemoteSharedUser) -> SharedUser {
-        return SharedUser(email: remoteSharedUser.email, uuid: remoteSharedUser.uuid, firstName: remoteSharedUser.firstName, lastName: remoteSharedUser.lastName)
+        return SharedUser(email: remoteSharedUser.email)
     }
     
     class func dbWithSharedUser(sharedUser: SharedUser) -> DBSharedUser {
         let dbSharedUser = DBSharedUser()
-        dbSharedUser.uuid = sharedUser.uuid
         dbSharedUser.email = sharedUser.email
-        dbSharedUser.firstName = sharedUser.firstName
-        dbSharedUser.lastName = sharedUser.lastName
         return dbSharedUser
     }
 }

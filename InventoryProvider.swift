@@ -12,7 +12,7 @@ protocol InventoryProvider {
     
     func inventories(handler: ProviderResult<[Inventory]> -> ())
     
-    func addInventory(inventory: InventoryInput, _ handler: ProviderResult<Any> -> ())
+    func addInventory(inventory: Inventory, _ handler: ProviderResult<Any> -> ())
     
-    func updateInventory(inventory: InventoryInput, _ handler: ProviderResult<Any> -> ())
+    func updateInventory(inventory: Inventory, _ handler: ProviderResult<Any> -> ())
 }

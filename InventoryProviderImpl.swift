@@ -25,14 +25,14 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    func addInventory(inventory: InventoryInput, _ handler: ProviderResult<Any> -> ()) {
+    func addInventory(inventory: Inventory, _ handler: ProviderResult<Any> -> ()) {
         self.remoteProvider.addInventory(inventory) {remoteResult in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
             handler(ProviderResult(status: providerStatus))
         }
     }
     
-    func updateInventory(inventory: InventoryInput, _ handler: ProviderResult<Any> -> ()) {
+    func updateInventory(inventory: Inventory, _ handler: ProviderResult<Any> -> ()) {
         self.remoteProvider.updateInventory(inventory) {remoteResult in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
             handler(ProviderResult(status: providerStatus))

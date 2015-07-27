@@ -15,9 +15,8 @@ class TestUtils {
     static let userInput1 = UserInput(email: "foo@bar.com", password: "password123", firstName: "ivan", lastName: "schuetz")
     static let userInput2 = UserInput(email: "test@test.test", password: "test123", firstName: "test", lastName: "tester")
     
-    static let listInput1 = ListWithSharedUsersInput(list: List(uuid: NSUUID().UUIDString, name: "my-first-list"), users: [SharedUserInput(email: "foo@bar.com")])
-    static let listInput2 = ListWithSharedUsersInput(list: List(uuid: NSUUID().UUIDString, name: "my-second-list"), users: [SharedUserInput(email: "test@test.test")])
-    
+    static let listInput1 = List(uuid: NSUUID().UUIDString, name: "my-first-list", users: [SharedUser(email: "foo@bar.com")])
+    static let listInput2 = List(uuid: NSUUID().UUIDString, name: "my-second-list", users: [SharedUser(email: "test@test.test")])
     
     static let remoteUserProvider = RemoteUserProvider()
     static let remoteListItemProvider = RemoteListItemProvider()
@@ -176,9 +175,9 @@ class TestUtils {
 //        expect(remoteList.users.count) == list.users.count
     }
 
-    class func testRemoteListWithSharedUsersMatches(remoteList: RemoteList, _ list: ListWithSharedUsersInput) {
-        expect(remoteList.uuid) == list.list.uuid
-        expect(remoteList.name) == list.list.name
+    class func testRemoteListWithSharedUsersMatches(remoteList: RemoteList, _ list: List) {
+        expect(remoteList.uuid) == list.uuid
+        expect(remoteList.name) == list.name
         expect(remoteList.users.count) == list.users.count
         
         for i in 0..<remoteList.users.count {
@@ -186,7 +185,7 @@ class TestUtils {
         }
     }
     
-    class func testRemoteSharedUserMatchesWithInput(remoteSharedUser: RemoteSharedUser, _ sharedUserInput: SharedUserInput) {
+    class func testRemoteSharedUserMatchesWithInput(remoteSharedUser: RemoteSharedUser, _ sharedUserInput: SharedUser) {
         expect(remoteSharedUser.email) == sharedUserInput.email
     }
 
