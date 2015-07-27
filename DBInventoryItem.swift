@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-class DBInventoryItem: Object {
+class DBInventoryItem: DBBase {
     
     dynamic var id: Int = 0
     dynamic var quantity: Int = 0

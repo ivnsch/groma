@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-class DBProduct: Object {
+class DBProduct: DBBase {
     
     dynamic var uuid: String = ""
     dynamic var name: String = ""

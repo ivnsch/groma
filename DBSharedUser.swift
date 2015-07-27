@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 
 // TODO remove uuid, firstName and lastName
-class DBSharedUser: Object {
+class DBSharedUser: DBBase {
     
     dynamic var email: String = ""
     

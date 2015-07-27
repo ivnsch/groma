@@ -14,7 +14,7 @@ import RealmSwift
 
 class RealmProvider {
 
-    func saveObj<T: Object>(obj: T, update: Bool = false, handler: Bool -> ()) {
+    func saveObj<T: DBBase>(obj: T, update: Bool = false, handler: Bool -> ()) {
 
         let finished: (Bool) -> () = {success in
             dispatch_async(dispatch_get_main_queue(), {
@@ -25,6 +25,7 @@ class RealmProvider {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             
             do {
+                obj.lastUpdated = NSDate()
                 let realm = try Realm()
                 realm.write {
                     realm.add(obj, update: update)
@@ -38,7 +39,7 @@ class RealmProvider {
         })
     }
     
-    func saveObjs<T: Object>(objs: [T], update: Bool = false, handler: Bool -> ()) {
+    func saveObjs<T: DBBase>(objs: [T], update: Bool = false, handler: Bool -> ()) {
         
         let finished: (Bool) -> () = {success in
             dispatch_async(dispatch_get_main_queue(), {
@@ -52,6 +53,7 @@ class RealmProvider {
                 let realm = try Realm()
                 realm.write {
                     for obj in objs {
+                        obj.lastUpdated = NSDate()
                         realm.add(obj, update: update)
                     }
                 }
