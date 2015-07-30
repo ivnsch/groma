@@ -25,7 +25,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     
                     // if there's no cached list or there's a difference, overwrite the cached list
                     if (dbInventoryItems != inventoryItems) {
-                        self.dbInventoryProvider.saveInventory(inventoryItems) {saved in
+                        self.dbInventoryProvider.saveInventoryItems(inventoryItems) {saved in
                             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: inventoryItems))
                         }
                     }

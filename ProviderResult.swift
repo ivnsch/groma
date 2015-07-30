@@ -23,6 +23,7 @@ enum ProviderStatusCode: Int {
 
     // DB related
     case DatabaseUnknown = 1000
+    case DatabaseSavingError = 1001
     
     // Other
     case Unknown = 2000 // Note: This represents unknown client error. Unknown server error is mapped to .ServerError

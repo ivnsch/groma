@@ -9,10 +9,25 @@
 import Foundation
 import Alamofire
 
-class RemoteInventoryProvider {
+class RemoteInventoryProvider: RemoteProvider {
     
     func inventories(handler: RemoteResult<[RemoteInventory]> -> ()) {
         AlamofireHelper.authenticatedRequest(.GET, Urls.inventory).responseMyArray { (request, _, result: RemoteResult<[RemoteInventory]>, error) in
+            handler(result)
+        }
+    }
+    
+    func syncInventories(inventories: [Inventory], toRemove: [Inventory], handler: RemoteResult<RemoteSyncResult<RemoteInventory>> -> ()) {
+        
+        let inventoriesParams = inventories.map{self.toRequestParams($0)}
+        let toRemoveParams = toRemove.map{self.toRequestParamsToRemove($0)}
+        
+        let dictionary: [String: AnyObject] = [
+            "inventories": inventoriesParams,
+            "toRemove": toRemoveParams
+        ]
+        
+        AlamofireHelper.authenticatedRequest(.POST, Urls.inventorySync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteSyncResult<RemoteInventory>>, error) in
             handler(result)
         }
     }
@@ -31,6 +46,14 @@ class RemoteInventoryProvider {
         }
     }
 
+    func toRequestParamsToRemove(inventory: Inventory) -> [String: AnyObject] {
+        var dict: [String: AnyObject] = ["uuid": inventory.uuid]
+        if let lastServerUpdate = inventory.lastServerUpdate {
+            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        }
+        return dict
+    }
+    
     func toRequestParams(sharedUserInput: SharedUser) -> [String: AnyObject] {
         return [
             "email": sharedUserInput.email,
@@ -38,6 +61,7 @@ class RemoteInventoryProvider {
         ]
     }
 
+    
     func toRequestParams(inventoryInput: Inventory) -> [String: AnyObject] {
         let sharedUsers: [[String: AnyObject]] = inventoryInput.users.map{self.toRequestParams($0)}
         
@@ -46,6 +70,10 @@ class RemoteInventoryProvider {
             "name": inventoryInput.name
         ]
 
+        if let lastServerUpdate = inventoryInput.lastServerUpdate {
+            inventoryDict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        }
+        
         inventoryDict["users"] = sharedUsers
         
         return inventoryDict

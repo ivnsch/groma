@@ -14,7 +14,7 @@ import RealmSwift
 
 class RealmProvider {
 
-    func saveObj<T: DBBase>(obj: T, update: Bool = false, handler: Bool -> ()) {
+    func saveObj<T: DBSyncable>(obj: T, update: Bool = false, handler: Bool -> ()) {
 
         let finished: (Bool) -> () = {success in
             dispatch_async(dispatch_get_main_queue(), {
@@ -25,7 +25,7 @@ class RealmProvider {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             
             do {
-                obj.lastUpdated = NSDate()
+                obj.lastUpdate = NSDate()
                 let realm = try Realm()
                 realm.write {
                     realm.add(obj, update: update)
@@ -39,7 +39,7 @@ class RealmProvider {
         })
     }
     
-    func saveObjs<T: DBBase>(objs: [T], update: Bool = false, handler: Bool -> ()) {
+    func saveObjs<T: DBSyncable>(objs: [T], update: Bool = false, onSaved: ((Realm) -> ())? = nil, handler: Bool -> ()) {
         
         let finished: (Bool) -> () = {success in
             dispatch_async(dispatch_get_main_queue(), {
@@ -53,7 +53,7 @@ class RealmProvider {
                 let realm = try Realm()
                 realm.write {
                     for obj in objs {
-                        obj.lastUpdated = NSDate()
+                        obj.lastUpdate = NSDate()
                         realm.add(obj, update: update)
                     }
                 }
@@ -71,6 +71,8 @@ class RealmProvider {
             handler(results.first)
         })
     }
+    
+
     
     func load<T: Object, U>(mapper: T -> U, filter filterMaybe: String? = nil, handler: [U] -> ()) {
 
@@ -126,4 +128,39 @@ class RealmProvider {
             }
         })
     }
+    
+    // resetLastUpdateToServer = true should be always used when this method is called for sync
+    func overwrite<T: DBSyncable>(newObjects: [T], resetLastUpdateToServer: Bool = true, handler: Bool -> ()) {
+        let finished: (Bool) -> () = {success in
+            dispatch_async(dispatch_get_main_queue(), {
+                handler(success)
+            })
+        }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            do {
+                let realm = try Realm()
+                let results: Results<T> = realm.objects(T)
+                realm.write {
+                    realm.delete(results)
+                    for obj in newObjects {
+                        if resetLastUpdateToServer {
+                            obj.lastUpdate = obj.lastServerUpdate // for sync - this basically removes "dirty" status of item (item is not dirty when lastUpdate == lastServerUpdate)
+                        } else {
+                            obj.lastUpdate = NSDate()
+                        }
+                        
+                        realm.add(obj, update: false)
+                    }
+                }
+
+                finished(true)
+
+            } catch _ {
+                print("Error: creating Realm() in remove")
+                finished(false)
+            }
+        })
+    }
+
 }

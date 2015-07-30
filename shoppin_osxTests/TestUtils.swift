@@ -175,6 +175,11 @@ class TestUtils {
 //        expect(remoteList.users.count) == list.users.count
     }
 
+    class func testRemoteInventoryMatches(remoteInventory: RemoteInventory, _ inventory: Inventory) {
+        expect(remoteInventory.uuid) == inventory.uuid
+        expect(remoteInventory.name) == inventory.name
+    }
+    
     class func testRemoteListWithSharedUsersMatches(remoteList: RemoteList, _ list: List) {
         expect(remoteList.uuid) == list.uuid
         expect(remoteList.name) == list.name

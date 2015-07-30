@@ -23,4 +23,10 @@ class SharedUserMapper {
         dbSharedUser.email = sharedUser.email
         return dbSharedUser
     }
+    
+    class func dbWithSharedUser(sharedUser: RemoteSharedUser) -> DBSharedUser {
+        let dbSharedUser = DBSharedUser()
+        dbSharedUser.email = sharedUser.email
+        return dbSharedUser
+    }
 }

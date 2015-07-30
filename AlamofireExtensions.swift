@@ -135,6 +135,26 @@ struct AlamofireHelper {
         
         return Alamofire.request(request)
     }
+    
+    static func authenticatedRequest(method: Alamofire.Method, _ url: String, _ parameters: [[String: AnyObject]]) -> Request {
+        
+        // this is handled differently because the parameters are an array and default request in alamofire doesn't support this (the difference is the request.HTTPBody line)
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
+        request.HTTPMethod = method.rawValue
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+        
+        let maybeToken = valet?.stringForKey(KeychainKeys.token)
+        
+        if let token = maybeToken {
+            request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
+        } // TODO if there's no token return status code to direct to login controller or something
+        
+        // TODO review, force try parameter serialization. For now like this because there's no known reason why this would fail, and simplifies code significantly
+        request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(parameters, options: [])
+        return Alamofire.request(request)
+    }
 }
 
 extension Alamofire.Request {

@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-class DBListItem: DBBase {
+class DBListItem: DBSyncable {
     
     dynamic var uuid: String = ""
     dynamic var done: Bool = false

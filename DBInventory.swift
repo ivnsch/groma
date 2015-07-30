@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-class DBInventory: DBBase {
+class DBInventory: DBSyncable {
     
     dynamic var uuid: String = ""
     dynamic var name: String = ""
