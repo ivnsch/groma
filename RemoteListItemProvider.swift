@@ -61,12 +61,6 @@ class RemoteListItemProvider {
         }
     }
     
-    func listItems(handler: RemoteResult<RemoteListItems> -> ()) {
-        AlamofireHelper.authenticatedRequest(.GET, Urls.allListItems).responseMyObject {(request, _, result: RemoteResult<RemoteListItems>, error) in
-            handler(result)
-        }
-    }
-    
     func remove(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
         AlamofireHelper.authenticatedRequest(.DELETE, Urls.listItem + "/\(listItem.uuid)").responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>, error) in
             handler(result)
@@ -92,9 +86,9 @@ class RemoteListItemProvider {
         }
     }
     
-    func add(listItem: ListItem, handler: RemoteResult<RemoteListItemWithData> -> ()) {
+    func add(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
         let parameters = self.toRequestParams(listItem)
-        AlamofireHelper.authenticatedRequest(.POST, Urls.addListItem, parameters).responseMyObject { (request, _, result: RemoteResult<RemoteListItemWithData>, error) in
+        AlamofireHelper.authenticatedRequest(.POST, Urls.addListItem, parameters).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
             handler(result)
         }
     }
@@ -163,6 +157,22 @@ class RemoteListItemProvider {
         }
     }
     
+    func syncListItems(list: List, listItems: [ListItem], toRemove: [ListItem], handler: RemoteResult<RemoteSyncResult<RemoteListItems>> -> ()) {
+        
+        let listItemsParams = listItems.map{self.toRequestParams($0)}
+        let toRemoveParams = toRemove.map{self.toRequestParamsToRemove($0)}
+        
+        let dictionary: [String: AnyObject] = [
+            "list": self.toRequestParamsShort(list),
+            "listItems": listItemsParams,
+            "toRemove": toRemoveParams
+        ]
+        
+        AlamofireHelper.authenticatedRequest(.POST, Urls.listItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteSyncResult<RemoteListItems>>, error) in
+            handler(result)
+        }
+    }
+    
 //    // for unit tests
 //    func removeAll(handler: Try<Bool> -> ()) {
 //        Alamofire.request(.GET, Urls.removeAll).responseString { (request, _, string: String?, error) in
@@ -182,7 +192,7 @@ class RemoteListItemProvider {
     }
     
     func toRequestParams(listItem: ListItem) -> [String: AnyObject] {
-        return [
+        var dict: [String: AnyObject] = [
             "uuid": listItem.uuid,
             "done": listItem.done,
             "quantity": listItem.quantity,
@@ -199,19 +209,37 @@ class RemoteListItemProvider {
             ],
             "order": listItem.order
         ]
+        
+        if let lastServerUpdate = listItem.lastServerUpdate {
+            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        }
+        
+        return dict
+    }
+    
+    func toRequestParamsShort(list: List) -> [String: AnyObject] {
+        return [
+            "uuid": list.uuid,
+            "name": list.name
+        ]
     }
     
     func toRequestParams(list: List) -> [String: AnyObject] {
         let sharedUsers: [[String: AnyObject]] = list.users.map{self.toRequestParams($0)}
         
-        var listDict: [String: AnyObject] = [
-            "uuid": list.uuid,
-            "name": list.name
-        ]
+        var listDict = self.toRequestParamsShort(list)
         
         listDict["users"] = sharedUsers
         
         return listDict
+    }
+    
+    func toRequestParamsToRemove(listItem: ListItem) -> [String: AnyObject] {
+        var dict: [String: AnyObject] = ["uuid": listItem.uuid]
+        if let lastServerUpdate = listItem.lastServerUpdate {
+            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        }
+        return dict
     }
 
 }

@@ -28,7 +28,7 @@ class ListItemProviderImpl: ListItemProvider {
             self.remoteProvider.listItems(list: list) {remoteResult in
                 
                 if let remoteListItems = remoteResult.successResult {
-                    let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems)
+                    let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems, list: list)
                     
                     // if there's no cached list or there's a difference, overwrite the cached list
                     if (dbListItems != listItemsWithRelations.listItems) {
@@ -264,6 +264,79 @@ class ListItemProviderImpl: ListItemProvider {
                 handler(ProviderResult(status: ProviderStatusCode.NotFound))
             }
 
+        }
+    }
+    
+    func syncListItems(list: List, handler: (ProviderResult<Any>) -> ()) {
+        
+        self.dbProvider.loadListItems(list) {dbListItems in
+            
+            // TODO send only items that are new or updated, currently sending everything
+            // new -> doesn't have lastServerUpdate, updated -> lastUpdate > lastServerUpdate
+            var listItems: [ListItem] = []
+            var toRemove: [ListItem] = []
+            for listItem in dbListItems {
+                if listItem.removed {
+                    toRemove.append(listItem)
+                } else {
+                    // Send only "dirty" items
+                    // Note assumption - lastUpdate can't be smaller than lastServerUpdate, so with != we mean >
+                    // when we receive sync result we reset lastUpdate of all items to lastServerUpdate, from there on lastUpdate can become only bigger
+                    // and when the items are not synced yet, lastServerUpdate is nil so != will also be true
+                    // Note also that the server can handle not-dirty items, we filter them just to reduce the payload
+                    if listItem.lastUpdate != listItem.lastServerUpdate {
+                        listItems.append(listItem)
+                    }
+                }
+            }
+            
+            self.remoteProvider.syncListItems(list, listItems: listItems, toRemove: toRemove) {remoteResult in
+                
+                // save first the products, then the sections, then the listitems
+                // note that sync will overwrite the listitems but it will not remove products or sections
+                // products particularly is a bit complex since they are referenced also by inventory items, so they should be removed only when they are not referenced from anywhere
+                // a possible approach to solve this could be regular cleanup operations, this can be serverside or in the client, or both
+                // serverside we would do the cleanups (cronjob?), and make client's sync such that *everything* is synced and overwritten, paying attention not to recreate products etc. which were removed in the server by the cronjob. TODO think about this. For now letting some garbage in the client's db is not critical, our app doesn't handle a lot of data generally
+                // in the server this is more important, since a little garbage from each client sums up. But for now also ignored.
+                
+                if let syncResult = remoteResult.successResult, items = syncResult.items.first {
+                    
+                    self.dbProvider.saveProducts(items.products.map{ProductMapper.ProductWithRemote($0)}) {productSaved in
+                        if productSaved {
+                            
+                            self.dbProvider.saveSections(items.sections.map{SectionMapper.SectionWithRemote($0)}) {sectionsSaved in
+                                if sectionsSaved {
+                                    
+                                    // for now overwrite all. In the future we should do a timestamp check here also for the case that user does an update while the sync service is being called
+                                    // since we support background sync, this should not be neglected
+                                    
+                                    let listItemsWithRelations = ListItemMapper.listItemsWithRemote(items, list: list)
+                                    let serverListItems = listItemsWithRelations.listItems.map{ListItemMapper.dbWithListItem($0)}
+                                    self.dbProvider.overwrite(serverListItems) {success in
+                                        if success {
+                                            handler(ProviderResult(status: .Success))
+                                        } else {
+                                            handler(ProviderResult(status: .DatabaseSavingError))
+                                        }
+                                        return
+                                    }
+                                    
+                                } else {
+                                    print("Error: database: couldn't save section")
+                                    handler(ProviderResult(status: .DatabaseSavingError))
+                                }
+                            }
+                        } else {
+                            print("Error: database: couldn't save section")
+                            handler(ProviderResult(status: .DatabaseSavingError))
+                        }
+                    }
+                    
+                } else {
+                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+                    handler(ProviderResult(status: providerStatus))
+                }
+            }
         }
     }
     

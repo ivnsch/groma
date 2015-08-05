@@ -220,20 +220,6 @@ class TestUtils {
         expect(remoteInventoryItem.inventoryItem.quantity) == inventoryItem.quantity
         self.testRemoteProductMatches(remoteInventoryItem.product, inventoryItem.product)
     }
-    
-    class func testRemoteListItemWithDataValid(remoteListItemWithData: RemoteListItemWithData) {
-        self.testRemoteListItemValid(remoteListItemWithData.listItem)
-        self.testRemoteProductValid(remoteListItemWithData.product)
-        self.testRemoteListValid(remoteListItemWithData.list)
-        self.testRemoteSectionValid(remoteListItemWithData.section)
-    }
-    
-    class func testRemoteListItemWithDataMatches(remoteListItemWithData: RemoteListItemWithData, _ listItem: ListItem) {
-        self.testRemoteListItemMatches(remoteListItemWithData.listItem, listItem)
-        self.testRemoteSectionMatches(remoteListItemWithData.section, listItem.section)
-        self.testRemoteListMatches(remoteListItemWithData.list, listItem.list)
-        self.testRemoteProductMatches(remoteListItemWithData.product, listItem.product)
-    }
 
     class func testRemoteListItemValid(remoteListItem: RemoteListItem) {
         expect(remoteListItem.uuid).notTo(beEmpty())
@@ -261,9 +247,6 @@ class TestUtils {
         }
         for s in remoteListItems.sections {
             self.testRemoteSectionValid(s)
-        }
-        for l in remoteListItems.lists {
-            self.testRemoteListValid(l)
         }
         for l in remoteListItems.listItems {
             self.testRemoteListItemValid(l)

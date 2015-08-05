@@ -18,7 +18,17 @@ final class ListItem: Equatable {
    
     var order: Int
     
-    init(uuid: String, done: Bool, quantity: Int, product: Product, section: Section, list: List, order: Int) {
+    //////////////////////////////////////////////
+    // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
+    // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
+    // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
+    let lastUpdate: NSDate
+    let lastServerUpdate: NSDate?
+    let removed: Bool
+    //////////////////////////////////////////////
+    
+    
+    init(uuid: String, done: Bool, quantity: Int, product: Product, section: Section, list: List, order: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.done = done
         self.quantity = quantity
@@ -26,10 +36,13 @@ final class ListItem: Equatable {
         self.section = section
         self.list = list
         self.order = order
+        self.lastUpdate = lastUpdate
+        self.lastServerUpdate = lastServerUpdate
+        self.removed = removed
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), done: \(self.done), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.product), sectionUuid: \(self.section), listUuid: \(self.list)}"
+        return "{\(self.dynamicType) uuid: \(self.uuid), done: \(self.done), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.product), sectionUuid: \(self.section), listUuid: \(self.list), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
     }
 }
 
@@ -37,6 +50,6 @@ func ==(lhs: ListItem, rhs: ListItem) -> Bool {
     return lhs.uuid == rhs.uuid
 }
 
-// convenience (redundant) holder to avoid having to iterate through listitems to find unique products, sections, lists
-// so products, sections and lists arrays are the result of extracting the unique products, sections and list from listItems array
-typealias ListItemsWithRelations = (listItems: [ListItem], products: [Product], sections: [Section], lists: [List])
+// convenience (redundant) holder to avoid having to iterate through listitems to find unique products, sections, list
+// so products, sections arrays and list are the result of extracting the unique products, sections and list from listItems array
+typealias ListItemsWithRelations = (listItems: [ListItem], products: [Product], sections: [Section])

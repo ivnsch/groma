@@ -31,8 +31,7 @@ class ListItemMapper {
         return dbListItem
     }
     
-    
-    class func listItemsWithRemote(remoteListItems: RemoteListItems) -> ListItemsWithRelations {
+    class func listItemsWithRemote(remoteListItems: RemoteListItems, list: List) -> ListItemsWithRelations {
         
         func toProductDict(remoteProducts: [RemoteProduct]) -> ([String: Product], [Product]) {
             var dict: [String: Product] = [:]
@@ -70,18 +69,17 @@ class ListItemMapper {
         
         let (productsDict, products) = toProductDict(remoteListItems.products)
         let (sectionsDict, sections) = toSectionDict(remoteListItems.sections)
-        let (listsDict, lists) = toListDict(remoteListItems.lists)
         
-        let remoteListItems = remoteListItems.listItems
+        let remoteListItemsArr = remoteListItems.listItems
         
-        let listItems = remoteListItems.map {remoteListItem in
+        let listItems = remoteListItemsArr.map {remoteListItem in
             ListItem(
                 uuid: remoteListItem.uuid,
                 done: remoteListItem.done,
                 quantity: remoteListItem.quantity,
                 product: productsDict[remoteListItem.productUuid]!,
                 section: sectionsDict[remoteListItem.sectionUuid]!,
-                list: listsDict[remoteListItem.listUuid]!,
+                list: list,
                 order: remoteListItem.order
             )
         }
@@ -89,8 +87,7 @@ class ListItemMapper {
         return (
             listItems,
             products,
-            sections,
-            lists
+            sections
         )
     }
 }

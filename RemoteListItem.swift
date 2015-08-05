@@ -17,6 +17,7 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
     var sectionUuid: String
     var listUuid: String
     var order: Int
+    let lastUpdate: NSDate
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
@@ -26,6 +27,7 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
         self.sectionUuid = representation.valueForKeyPath("sectionUuid") as! String
         self.listUuid = representation.valueForKeyPath("listUuid") as! String
         self.order = representation.valueForKeyPath("order") as! Int
+        self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
     }
     
     @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteListItem] {
@@ -40,6 +42,6 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), done: \(self.done), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.productUuid), sectionUuid: \(self.sectionUuid), listUuid: \(self.listUuid)}"
+        return "{\(self.dynamicType) uuid: \(self.uuid), done: \(self.done), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.productUuid), sectionUuid: \(self.sectionUuid), listUuid: \(self.listUuid), listUpdate: \(self.lastUpdate)}"
     }
 }

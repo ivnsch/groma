@@ -36,6 +36,11 @@ class RealmListItemProvider: RealmProvider {
         self.saveObj(dbSection, handler: handler)
     }
     
+    func saveSections(sections: [Section], handler: Bool -> ()) {
+        let dbSections = sections.map{SectionMapper.dbWithSection($0)}
+        self.saveObjs(dbSections, update: true, handler: handler)
+    }
+    
     func remove(section: Section, handler: Bool -> ()) {
         self.remove("uuid = '\(section.uuid)'", handler: handler, objType: DBSection.self)
     }
@@ -56,6 +61,11 @@ class RealmListItemProvider: RealmProvider {
     func loadProducts(handler: [Product] -> ()) {
         let mapper = {ProductMapper.productWithDB($0)}
         self.load(mapper, handler: handler)
+    }
+    
+    func saveProducts(products: [Product], handler: Bool -> ()) {
+        let dbProducts = products.map{ProductMapper.dbWithProduct($0)}
+        self.saveObjs(dbProducts, update: true, handler: handler)
     }
     
     // MARK: - List

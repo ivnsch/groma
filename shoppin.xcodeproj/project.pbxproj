@@ -219,7 +219,6 @@
 		EB9BE4231B2CB51F005B401A /* RemoteSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4211B2CB51F005B401A /* RemoteSection.swift */; };
 		EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4241B2CB542005B401A /* RemoteList.swift */; };
 		EB9BE4261B2CB542005B401A /* RemoteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4241B2CB542005B401A /* RemoteList.swift */; };
-		EB9BE42B1B2DFC87005B401A /* RemoteListItemWithData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4271B2DFA58005B401A /* RemoteListItemWithData.swift */; };
 		EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE61A8610550038355B /* AppDelegate.swift */; };
 		EB9F6CE91A8610550038355B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE81A8610550038355B /* ViewController.swift */; };
 		EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEA1A8610550038355B /* Images.xcassets */; };
@@ -282,7 +281,6 @@
 		EBF162FD1A3DDE5D0048E37C /* ProductMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FC1A3DDE5D0048E37C /* ProductMapper.swift */; };
 		EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162FE1A3DDE730048E37C /* ListItemMapper.swift */; };
 		EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF163001A3DE6880048E37C /* ItemsListTableViewConstants.swift */; };
-		EBF377301B341FBD00EEB6DB /* RemoteListItemWithData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4271B2DFA58005B401A /* RemoteListItemWithData.swift */; };
 		EBF3775B1B3423C200EEB6DB /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
 		EBF3775D1B342A3700EEB6DB /* ListItemProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162E81A3CA1F00048E37C /* ListItemProviderImpl.swift */; };
 		EBF3775E1B342A4900EEB6DB /* InventoryItemsProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFD1A5972C70058103B /* InventoryItemsProviderImpl.swift */; };
@@ -290,7 +288,6 @@
 		EBF377631B342A7A00EEB6DB /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
 		EBF377641B342A8300EEB6DB /* RemoteListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4181B2CB355005B401A /* RemoteListItems.swift */; };
 		EBF377651B342A8E00EEB6DB /* RemoteListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE41B1B2CB42B005B401A /* RemoteListItem.swift */; };
-		EBF377661B342A9400EEB6DB /* RemoteListItemWithData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4271B2DFA58005B401A /* RemoteListItemWithData.swift */; };
 		EBF377671B342A9A00EEB6DB /* RemoteProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE41E1B2CB513005B401A /* RemoteProduct.swift */; };
 		EBF377681B342AA100EEB6DB /* RemoteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4241B2CB542005B401A /* RemoteList.swift */; };
 		EBF377691B342AA800EEB6DB /* RemoteSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4211B2CB51F005B401A /* RemoteSection.swift */; };
@@ -470,7 +467,6 @@
 		EB9BE41E1B2CB513005B401A /* RemoteProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProduct.swift; sourceTree = "<group>"; };
 		EB9BE4211B2CB51F005B401A /* RemoteSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSection.swift; sourceTree = "<group>"; };
 		EB9BE4241B2CB542005B401A /* RemoteList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteList.swift; sourceTree = "<group>"; };
-		EB9BE4271B2DFA58005B401A /* RemoteListItemWithData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemWithData.swift; sourceTree = "<group>"; };
 		EB9F6CE21A8610550038355B /* shoppin_osx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin_osx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB9F6CE51A8610550038355B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB9F6CE61A8610550038355B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -902,7 +898,6 @@
 				EB9BE41B1B2CB42B005B401A /* RemoteListItem.swift */,
 				EB6F812C1B46E2C4008680E0 /* RemoteLoginResult.swift */,
 				EB202B961B54109A001699E7 /* RemoteRegisterResult.swift */,
-				EB9BE4271B2DFA58005B401A /* RemoteListItemWithData.swift */,
 				EB9BE41E1B2CB513005B401A /* RemoteProduct.swift */,
 				EB9BE4241B2CB542005B401A /* RemoteList.swift */,
 				EB0C2A391B58330300AF6226 /* RemoteInventoryItem.swift */,
@@ -1584,7 +1579,6 @@
 				EBF377971B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
 				EB2F5D0C1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift in Sources */,
 				EB714AAE1B67895500F91B94 /* RemoteProvider.swift in Sources */,
-				EBF377301B341FBD00EEB6DB /* RemoteListItemWithData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1619,7 +1613,6 @@
 				EB55676B1A8643BF00CD3EC6 /* List.swift in Sources */,
 				EB4FD45C1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EB9F6CE91A8610550038355B /* ViewController.swift in Sources */,
-				EB9BE42B1B2DFC87005B401A /* RemoteListItemWithData.swift in Sources */,
 				EBB9A7331B5EB0FC00E5487D /* DBInventory.swift in Sources */,
 				EB0C1BAA1B3ED8D500F24C85 /* ProviderResult.swift in Sources */,
 				EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */,
@@ -1764,7 +1757,6 @@
 				EBF377641B342A8300EEB6DB /* RemoteListItems.swift in Sources */,
 				EBF377A11B38AB1000EEB6DB /* User.swift in Sources */,
 				EB714AC11B681AF700F91B94 /* RemoteSyncResult.swift in Sources */,
-				EBF377661B342A9400EEB6DB /* RemoteListItemWithData.swift in Sources */,
 				EBF377701B342ADA00EEB6DB /* ProductMapper.swift in Sources */,
 				EBF377991B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
 				EB0C2A2A1B570BA700AF6226 /* ViewTags.swift in Sources */,

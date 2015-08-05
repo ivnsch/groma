@@ -15,22 +15,22 @@ struct Urls {
     static let products = host + "products"
     static let productWithUnique = host + "productWithUnique"
     static let sectionWithUnique = host + "sectionWithUnique"
-    static let listItems = host + "listItems"
-    static let allListItems = host + "allListItems"
     static let sections = host + "sections"
     static let lists = host + "lists"
-
-    static let addListItem = host + "addListItem"
-
-    static let listItem = host + "listItem"
-    static let section = host + "section"
-    static let list = host + "list"
 
     static let removeAll = host + "debug_clearAll"
     
     static let register = host + "register"
     static let login = host + "login"
     static let logout = host + "logout"
+
+    // List items
+    static let listItems = host + "listItems"
+    static let addListItem = host + "addListItem"
+    static let listItem = host + "listItem"
+    static let section = host + "section"
+    static let list = host + "list"
+    static let listItemsSync = host + "listItem/sync"
     
     // Inventory
     static let inventoryItems = host + "inventoryItems"
