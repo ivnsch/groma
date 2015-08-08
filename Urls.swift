@@ -16,7 +16,7 @@ struct Urls {
     static let productWithUnique = host + "productWithUnique"
     static let sectionWithUnique = host + "sectionWithUnique"
     static let sections = host + "sections"
-    static let lists = host + "lists"
+
 
     static let removeAll = host + "debug_clearAll"
     
@@ -24,6 +24,10 @@ struct Urls {
     static let login = host + "login"
     static let logout = host + "logout"
 
+    // Lists
+    static let lists = host + "lists"
+    static let listsWithItemsSync = host + "lists/sync"
+    
     // List items
     static let listItems = host + "listItems"
     static let addListItem = host + "addListItem"
@@ -31,7 +35,7 @@ struct Urls {
     static let section = host + "section"
     static let list = host + "list"
     static let listItemsSync = host + "listItem/sync"
-    
+
     // Inventory
     static let inventoryItems = host + "inventoryItems"
     static let inventory = host + "inventory"

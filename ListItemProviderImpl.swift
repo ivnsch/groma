@@ -266,31 +266,14 @@ class ListItemProviderImpl: ListItemProvider {
 
         }
     }
-    
+
     func syncListItems(list: List, handler: (ProviderResult<Any>) -> ()) {
         
         self.dbProvider.loadListItems(list) {dbListItems in
+        
+            let (toAddOrUpdate, toRemove) = SyncUtils.toSyncListItems(dbListItems)
             
-            // TODO send only items that are new or updated, currently sending everything
-            // new -> doesn't have lastServerUpdate, updated -> lastUpdate > lastServerUpdate
-            var listItems: [ListItem] = []
-            var toRemove: [ListItem] = []
-            for listItem in dbListItems {
-                if listItem.removed {
-                    toRemove.append(listItem)
-                } else {
-                    // Send only "dirty" items
-                    // Note assumption - lastUpdate can't be smaller than lastServerUpdate, so with != we mean >
-                    // when we receive sync result we reset lastUpdate of all items to lastServerUpdate, from there on lastUpdate can become only bigger
-                    // and when the items are not synced yet, lastServerUpdate is nil so != will also be true
-                    // Note also that the server can handle not-dirty items, we filter them just to reduce the payload
-                    if listItem.lastUpdate != listItem.lastServerUpdate {
-                        listItems.append(listItem)
-                    }
-                }
-            }
-            
-            self.remoteProvider.syncListItems(list, listItems: listItems, toRemove: toRemove) {remoteResult in
+            self.remoteProvider.syncListItems(list, listItems: toAddOrUpdate, toRemove: toRemove) {remoteResult in
                 
                 // save first the products, then the sections, then the listitems
                 // note that sync will overwrite the listitems but it will not remove products or sections

@@ -111,7 +111,11 @@ class RealmListItemProvider: RealmProvider {
         self.load(mapper, filter: "list.uuid = '\(list.uuid)'", handler: handler)
     }
     
-    
+    // hm...
+    func loadAllListItems(handler: [ListItem] -> ()) {
+        let mapper = {ListItemMapper.listItemWithDB($0)}
+        self.load(mapper, handler: handler)
+    }
     
     func remove(listItem: ListItem, handler: Bool -> ()) {
         self.remove("uuid = '\(listItem.uuid)'", handler: handler, objType: DBListItem.self)

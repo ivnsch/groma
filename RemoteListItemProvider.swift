@@ -172,6 +172,51 @@ class RemoteListItemProvider {
             handler(result)
         }
     }
+
+    func syncListsWithListItems(listsSync: ListsSync, handler: RemoteResult<RemoteListWithListItemsSyncResult> -> ()) {
+        
+        let lystsSyncDicts: [[String: AnyObject]] = listsSync.listsSyncs.map {listSync in
+            
+            let list = listSync.list
+            
+            let sharedUsers: [[String: AnyObject]] = list.users.map{self.toRequestParams($0)}
+            
+            var dict: [String: AnyObject] = [
+                "uuid": list.uuid,
+                "name": list.name,
+                "users": sharedUsers,
+            ]
+            
+            if let lastServerUpdate = list.lastServerUpdate {
+                dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+            }
+            
+            let listItemsDicts = listSync.listItemsSync.listItems.map {toRequestParams($0)}
+            let toRemoveDicts = listSync.listItemsSync.toRemove.map{self.toRequestParamsToRemove($0)}
+            let listItemsSyncDict: [String: AnyObject] = [
+                "listItems": listItemsDicts,
+                "toRemove": toRemoveDicts
+            ]
+
+            dict["listItems"] = listItemsSyncDict
+            
+            return dict
+        }
+        
+        let toRemoveDicts = listsSync.toRemove.map{self.toRequestParamsToRemove($0)}
+        
+        let dictionary: [String: AnyObject] = [
+            "lists": lystsSyncDicts,
+            "toRemove": toRemoveDicts
+        ]
+        
+        print("sending: \(dictionary)")
+        
+        AlamofireHelper.authenticatedRequest(.POST, Urls.listsWithItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteListWithListItemsSyncResult>, error) in
+            handler(result)
+        }
+    }
+    
     
 //    // for unit tests
 //    func removeAll(handler: Try<Bool> -> ()) {
@@ -242,6 +287,13 @@ class RemoteListItemProvider {
         return dict
     }
 
+    func toRequestParamsToRemove(list: List) -> [String: AnyObject] {
+        var dict: [String: AnyObject] = ["uuid": list.uuid]
+        if let lastServerUpdate = list.lastServerUpdate {
+            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        }
+        return dict
+    }
 }
 
 
