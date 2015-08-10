@@ -213,92 +213,6 @@ class TestInventory: XCTestCase {
     }
     
     
-    func testInventoriesSync() {
-        let expectation = self.expectationWithDescription("Sync inventories")
-        
-        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak self, weak expectation] loginData in
-            
-            // Simulate a local database: 4 inventories
-            let inventory1 = Inventory(uuid: NSUUID().UUIDString, name: "foo")
-            let inventory2 = Inventory(uuid: NSUUID().UUIDString, name: "bar")
-            let inventory3 = Inventory(uuid: NSUUID().UUIDString, name: "pan")
-            let inventory4 = Inventory(uuid: NSUUID().UUIDString, name: "lol")
-            
-            // Part 1. add 3 first items and try to remove the last one. We expect adding to succeed and the removal to be ignored
-            self!.remoteInventoryProvider.syncInventories ([inventory1, inventory2, inventory3], toRemove: [inventory4]) {result in
-                expect(result.success).to(beTrue())
-                expect(result.successResult).toNot(beNil())
-                
-                if let successResult = result.successResult {
-                    expect(successResult.items.count) == 3
-                    expect(successResult.couldNotUpdate.count) == 0
-                    expect(successResult.couldNotDelete.count) == 0 // item is couldNotDelete only when it was not possible to delete due to a conflict in the server (there's another version of the item). Trying to delete an item that doesn't exist in the server is ignored
-                    
-                    TestUtils.testRemoteInventoryMatches(successResult.items[0], inventory1)
-                    TestUtils.testRemoteInventoryMatches(successResult.items[1], inventory2)
-                    TestUtils.testRemoteInventoryMatches(successResult.items[2], inventory3)
-                    
-                    // Part 2. Update inventory1, delete inventory 3 and add inventory4
-                    // Note that for now we send always the complete database - TODO implement or test that we send only added/modified
-                    let updatedInventory1 = Inventory(uuid: inventory1.uuid, name: "foo-updated", lastServerUpdate: successResult.items[0].lastUpdate)
-                    let updatedInventory2 = Inventory(uuid: inventory2.uuid, name: inventory2.name, lastServerUpdate: successResult.items[1].lastUpdate)
-                    let updatedInventory3 = Inventory(uuid: inventory3.uuid, name: inventory3.name, lastServerUpdate: successResult.items[2].lastUpdate)
-
-                    self!.remoteInventoryProvider.syncInventories ([updatedInventory1, updatedInventory2, inventory4], toRemove: [updatedInventory3]) {result in
-                        expect(result.success).to(beTrue())
-                        expect(result.successResult).toNot(beNil())
-                        
-                        if let successResult = result.successResult {
-                            expect(successResult.items.count) == 3
-                            expect(successResult.couldNotUpdate.count) == 0
-                            expect(successResult.couldNotDelete.count) == 0 // item is couldNotDelete only when it was not possible to delete due to a conflict in the server (so another version of the item is still in the server). Trying to delete an item that doesn't exist in the server is considered a succesful delete.
-                            
-                            TestUtils.testRemoteInventoryMatches(successResult.items[0], updatedInventory1)
-                            TestUtils.testRemoteInventoryMatches(successResult.items[1], updatedInventory2)
-                            TestUtils.testRemoteInventoryMatches(successResult.items[2], inventory4)
-                            
-                            // Part 3. Try an update with an out of sync item (last server update date is older than in the server) and a synched item (last server update date is the same as in server)
-                            // and a delete with an item out of sync
-                            // we expect first one to return a failed sync item, the second one to succeed and the removal to also return a failed sync item
-                            let outOfSyncInventory1 = Inventory(uuid: inventory1.uuid, name: "will-not-be-used", lastServerUpdate: NSDate(timeIntervalSinceNow: -3600))
-                            let updatedAgainInventory2 = Inventory(uuid: inventory2.uuid, name: "my-second update", lastServerUpdate: successResult.items[1].lastUpdate)
-                            let outOfSyncInventory4 = Inventory(uuid: inventory4.uuid, name: "doesn't matter", lastServerUpdate: NSDate(timeIntervalSinceNow: -10))
-                            
-                            self!.remoteInventoryProvider.syncInventories ([outOfSyncInventory1, updatedAgainInventory2], toRemove: [outOfSyncInventory4]) {result in
-                                expect(result.success).to(beTrue())
-                                expect(result.successResult).toNot(beNil())
-                                
-                                if let successResult = result.successResult {
-                                    expect(successResult.items.count) == 3
-                                    expect(successResult.couldNotUpdate.count) == 1
-                                    expect(successResult.couldNotDelete.count) == 1
-                                    
-                                    TestUtils.testRemoteInventoryMatches(successResult.items[0], updatedInventory1)
-                                    TestUtils.testRemoteInventoryMatches(successResult.items[1], updatedAgainInventory2)
-                                    TestUtils.testRemoteInventoryMatches(successResult.items[2], inventory4)
-                                    
-                                    expect(successResult.couldNotUpdate[0] == outOfSyncInventory1.uuid)
-                                    expect(successResult.couldNotDelete[0] == outOfSyncInventory4.uuid)
-                                }
-
-                                expectation?.fulfill()
-                            }
-                            
-                        } else {
-                            expectation?.fulfill()
-                        }
-                    }
-
-                } else {
-                    expectation?.fulfill()
-                }
-            }
-        }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
-    }
-    
-    
-    
     
     // more test cases
     // retrieve an existing inventory where user is not in shared users - should return not authorized or similar. Same with update and try to add or update items it.
@@ -307,4 +221,277 @@ class TestInventory: XCTestCase {
     // add/remove shared users
     // users removes themselves from shared users, and when user is the last one (behaviour in this case is not defined yet)
     
+    
+    func testSyncInventoriesWithItems() {
+        
+        let expectation = self.expectationWithDescription("add inventory items")
+        
+        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak self, weak expectation] loginData in
+            
+            // Simulate a local database
+            let inventory1 = Inventory(uuid: NSUUID().UUIDString, name: "myinventory1")
+            let inventory2 = Inventory(uuid: NSUUID().UUIDString, name: "myinventory2")
+            let inventory3 = Inventory(uuid: NSUUID().UUIDString, name: "myinventory3", removed: true) // this is expected to have no effect because the list hasn't been added to the server yet
+            
+            let product1 = Product(uuid: NSUUID().UUIDString, name: "myproduct1", price: 1.1)
+            let product2 = Product(uuid: NSUUID().UUIDString, name: "myproduct2", price: 2.2)
+            let product3 = Product(uuid: NSUUID().UUIDString, name: "myproduct3", price: 3.3)
+            
+            let inventoryItem1 = InventoryItem(quantity: 0, quantityDelta: 1, product: product1, inventory: inventory1)
+            let inventoryItem2 = InventoryItem(quantity: 0, quantityDelta: 2, product: product2, inventory: inventory1)
+            let inventoryItem3 = InventoryItem(quantity: 0, quantityDelta: 3, product: product3, inventory: inventory2)
+            
+            let inventoriesSync = SyncUtils.toInventoriesSync([inventory1, inventory2, inventory3], dbInventoryItems: [inventoryItem1, inventoryItem2, inventoryItem3])
+            
+            // 1. Very basic sync - remote database is empty
+            self?.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
+                expect(result.success).to(beTrue())
+                expect(result.successResult).toNot(beNil())
+                
+                if let syncResult = result.successResult {
+                    
+                    expect(syncResult.inventories.count) == 2
+                    expect(syncResult.couldNotDelete.count) == 0 // trying to remove a not existing element doesn't count as couldNotDelete
+                    expect(syncResult.couldNotUpdate.count) == 0
+                    expect(syncResult.inventoryItemsSyncResults.count) == 2 // listitems for 2 lists
+                    
+                    let remoteInventory1 = syncResult.inventories[0]
+                    let remoteInventory2 = syncResult.inventories[1]
+                    
+                    TestUtils.testRemoteInventoryMatches(remoteInventory1, inventory1)
+                    TestUtils.testRemoteInventoryMatches(remoteInventory2, inventory2)
+                    
+                    let inventoryItemsSyncResult1 = syncResult.inventoryItemsSyncResults[0]
+                    let inventoryItemsSyncResult2 = syncResult.inventoryItemsSyncResults[1]
+                    
+                    expect(inventoryItemsSyncResult1.inventoryUuid == inventory1.uuid)
+                    expect(inventoryItemsSyncResult2.inventoryUuid == inventory2.uuid)
+                    
+                    expect(inventoryItemsSyncResult1.inventoryItems.count) == 2
+                    expect(inventoryItemsSyncResult2.inventoryItems.count) == 1
+                    
+                    let remoteInventoryItem1 = inventoryItemsSyncResult1.inventoryItems[0]
+                    let remoteInventoryItem2 = inventoryItemsSyncResult1.inventoryItems[1]
+                    let remoteInventoryItem3 = inventoryItemsSyncResult2.inventoryItems[0]
+                    
+                    TestUtils.testRemoteInventoryItemMatches(remoteInventoryItem1, inventoryItem1)
+                    TestUtils.testRemoteInventoryItemMatches(remoteInventoryItem2, inventoryItem2)
+                    TestUtils.testRemoteInventoryItemMatches(remoteInventoryItem3, inventoryItem3)
+                    
+                    expect(inventoryItemsSyncResult1.couldNotDelete).to(beEmpty())
+                    expect(inventoryItemsSyncResult2.couldNotDelete).to(beEmpty())
+//                    expect(inventoryItemsSyncResult1.couldNotUpdate).to(beEmpty())
+//                    expect(inventoryItemsSyncResult2.couldNotUpdate).to(beEmpty())
+                    
+
+                    // 2. More complicated sync, list update, list invalid update, listitem update, listitem invalid update, listitem marked as delete
+                    let updatedInventory1 = Inventory(uuid: inventory1.uuid, name: "myinventory1-updated", lastServerUpdate: syncResult.inventories[0].lastUpdate) // valid update (== timestamp in server)
+                    let updatedInventory2 = Inventory(uuid: inventory2.uuid, name: "myinventory2-updated", lastServerUpdate: NSDate(timeIntervalSinceNow: -3600)) // invalid update
+                    
+                    let updatedInventoryItem1 = InventoryItem(quantity: remoteInventoryItem1.inventoryItem.quantity, quantityDelta: 1, product: inventoryItem1.product, inventory: inventoryItem1.inventory, lastServerUpdate: remoteInventoryItem1.lastUpdate)
+                    
+//                    let updatedInventoryItem1 = InventoryItem(uuid: inventoryItem1.uuid, done: false, quantity: 111, product: listItem1.product, section: listItem1.section, list: listItem1.list, order: listItem1.order, lastServerUpdate: remoteListItem1.lastUpdate) // valid update (== timestamp in server)
+                    let updatedInventoryItem2 = InventoryItem(quantity: remoteInventoryItem2.inventoryItem.quantity, quantityDelta: 2, product: inventoryItem2.product, inventory: inventoryItem2.inventory, lastServerUpdate: NSDate(timeIntervalSinceNow: -3600)) // invalid update DIFFERENCE TO LISTITEMS: update date for inventory items is ignored, so there's always overwrite (because with quantity increment logic too complex for now). Note this only applies for inventory items not inventories.
+                    let updatedInventoryItem3 = InventoryItem(quantity: remoteInventoryItem3.inventoryItem.quantity, quantityDelta: 3, product: inventoryItem3.product, inventory: inventoryItem3.inventory, lastServerUpdate: remoteInventoryItem3.lastUpdate, removed: true) // to delete
+                    
+                    let inventoriesSync = SyncUtils.toInventoriesSync([updatedInventory1, updatedInventory2], dbInventoryItems: [updatedInventoryItem1, updatedInventoryItem2, updatedInventoryItem3])
+                    
+                    self?.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
+                        
+                        expect(result.success).to(beTrue())
+                        expect(result.successResult).toNot(beNil())
+                        
+                        if let syncResult = result.successResult {
+                            
+                            expect(syncResult.inventories.count) == 2 // there are still 2 lists in the remote database
+                            expect(syncResult.couldNotDelete.count) == 0
+                            expect(syncResult.couldNotUpdate.count) == 1
+                            expect(syncResult.inventoryItemsSyncResults.count) == 2 // listitems for 2 lists
+                            
+                            let remoteInventory1 = syncResult.inventories[0]
+                            let remoteInventory2 = syncResult.inventories[1]
+                            
+                            TestUtils.testRemoteInventoryMatches(remoteInventory1, updatedInventory1)
+                            TestUtils.testRemoteInventoryMatches(remoteInventory2, inventory2) // the update was invalid, so list should be unchanged
+                            
+                            let inventoryItemsSyncResult1 = syncResult.inventoryItemsSyncResults[0]
+                            let inventoryItemsSyncResult2 = syncResult.inventoryItemsSyncResults[1]
+                            
+                            expect(inventoryItemsSyncResult1.inventoryUuid == inventory1.uuid)
+                            expect(inventoryItemsSyncResult2.inventoryUuid == inventory2.uuid)
+                            
+                            expect(inventoryItemsSyncResult1.inventoryItems.count) == 2
+                            expect(inventoryItemsSyncResult2.inventoryItems.count) == 0 // we removed the only listitem in list2
+                            
+                            let remoteInventoryItem1 = inventoryItemsSyncResult1.inventoryItems[0]
+                            let remoteInventoryItem2 = inventoryItemsSyncResult1.inventoryItems[1]
+                            
+                            TestUtils.testRemoteInventoryItemMatches(remoteInventoryItem1, updatedInventoryItem1)
+                            TestUtils.testRemoteInventoryItemMatches(remoteInventoryItem2, updatedInventoryItem2) // the update was invalid, but for inventory items this is ignored, so update works
+                            
+                            expect(inventoryItemsSyncResult1.couldNotDelete).to(beEmpty())
+                            expect(inventoryItemsSyncResult2.couldNotDelete).to(beEmpty())
+//                            expect(listItemsSyncResult1.couldNotUpdate.count) == 1 // there was one item in list1 with an invalid update
+//                            expect(listItemsSyncResult2.couldNotUpdate).to(beEmpty())
+                            
+//                             3. Test invalid list delete and a non-changed other lists and list items
+                            let updatedAgainInventory1 = Inventory(uuid: inventory1.uuid, name: "myinventory1-updated", lastServerUpdate: NSDate(timeIntervalSinceNow: -3600), removed: true) // invalid update (== timestamp in server)
+                            
+                            let inventoriesSync = SyncUtils.toInventoriesSync([updatedAgainInventory1], dbInventoryItems: [])
+                            
+                            self?.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
+                                
+                                expect(result.success).to(beTrue())
+                                expect(result.successResult).toNot(beNil())
+                                
+                                if let syncResult = result.successResult {
+                                    
+                                    expect(syncResult.inventories.count) == 2 // there are still 2 lists in the remote database
+                                    expect(syncResult.couldNotDelete.count) == 1 // one invalid delete
+                                    expect(syncResult.couldNotUpdate.count) == 0
+                                    expect(syncResult.inventoryItemsSyncResults.count) == 2 // still 2 listitems, for 2 lists
+                                    
+                                    let remoteInventory1 = syncResult.inventories[0]
+                                    let remoteInventory2 = syncResult.inventories[1]
+                                    
+                                    TestUtils.testRemoteInventoryMatches(remoteInventory1, updatedInventory1)
+                                    TestUtils.testRemoteInventoryMatches(remoteInventory2, inventory2)
+                                    
+                                    let inventoryItemsSyncResult1 = syncResult.inventoryItemsSyncResults[0]
+                                    let inventoryItemsSyncResult2 = syncResult.inventoryItemsSyncResults[1]
+                                    
+                                    expect(inventoryItemsSyncResult1.inventoryUuid == inventory1.uuid)
+                                    expect(inventoryItemsSyncResult2.inventoryUuid == inventory2.uuid)
+                                    
+                                    expect(inventoryItemsSyncResult1.inventoryItems.count) == 2
+                                    expect(inventoryItemsSyncResult2.inventoryItems.count) == 0
+                                    
+                                    let remoteInventoryItem1 = inventoryItemsSyncResult1.inventoryItems[0]
+                                    let remoteInventoryItem2 = inventoryItemsSyncResult1.inventoryItems[1]
+                                    
+                                    TestUtils.testRemoteInventoryItemMatches(remoteInventoryItem1, updatedInventoryItem1)
+                                    TestUtils.testRemoteInventoryItemMatches(remoteInventoryItem2, updatedInventoryItem2)
+                                    
+                                    expect(inventoryItemsSyncResult1.couldNotDelete).to(beEmpty())
+                                    expect(inventoryItemsSyncResult2.couldNotDelete).to(beEmpty())
+//                                    expect(listItemsSyncResult1.couldNotUpdate).to(beEmpty())
+//                                    expect(listItemsSyncResult2.couldNotUpdate).to(beEmpty())
+
+
+                                    // 4. Update (only) a list item - the server will update the lastUpdate timestamp from the list, matching the one from listitem (TODO server)
+                                    let updatedAgainInventoryItem2 = InventoryItem(quantity: remoteInventoryItem2.inventoryItem.quantity, quantityDelta: 2222, product: inventoryItem2.product, inventory: inventoryItem2.inventory, lastServerUpdate: NSDate(timeIntervalSinceNow: -3600)) // invalid update DIFFERENCE TO LISTITEMS: update date for inventory items is ignored, so there's always overwrite (because with quantity increment logic too complex for now). Note this only applies for inventory items not inventories.
+                                    
+                                    let inventoriesSync = SyncUtils.toInventoriesSync([], dbInventoryItems: [updatedAgainInventoryItem2])
+                                    
+                                    self?.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
+                                        
+                                        expect(result.success).to(beTrue())
+                                        expect(result.successResult).toNot(beNil())
+                                        
+                                        if let syncResult = result.successResult {
+                                            
+                                            expect(syncResult.inventories.count) == 2 // there are still 2 lists in the remote database
+                                            expect(syncResult.couldNotDelete.count) == 0
+                                            expect(syncResult.couldNotUpdate.count) == 0
+                                            expect(syncResult.inventoryItemsSyncResults.count) == 2 // still 2 listitems, for 2 lists
+                                            
+                                            let remoteInventory1 = syncResult.inventories[0]
+                                            let remoteInventory2 = syncResult.inventories[1]
+                                            
+                                            TestUtils.testRemoteInventoryMatches(remoteInventory1, updatedInventory1)
+                                            TestUtils.testRemoteInventoryMatches(remoteInventory2, inventory2)
+                                            
+                                            let inventoryItemsSyncResult1 = syncResult.inventoryItemsSyncResults[0]
+                                            let inventoryItemsSyncResult2 = syncResult.inventoryItemsSyncResults[1]
+                                            
+                                            expect(inventoryItemsSyncResult1.inventoryUuid == inventory1.uuid)
+                                            expect(inventoryItemsSyncResult2.inventoryUuid == inventory2.uuid)
+                                            
+                                            expect(inventoryItemsSyncResult1.inventoryItems.count) == 2
+                                            expect(inventoryItemsSyncResult2.inventoryItems.count) == 0
+                                            
+                                            let remoteInventoryItem1 = inventoryItemsSyncResult1.inventoryItems[0]
+                                            let remoteInventoryItem2 = inventoryItemsSyncResult1.inventoryItems[1]
+                                            
+                                            TestUtils.testRemoteInventoryItemMatches(remoteInventoryItem1, updatedInventoryItem1)
+                                            TestUtils.testRemoteInventoryItemMatches(remoteInventoryItem2, updatedInventoryItem2)
+                                            
+                                            expect(inventoryItemsSyncResult1.couldNotDelete).to(beEmpty())
+                                            expect(inventoryItemsSyncResult2.couldNotDelete).to(beEmpty())
+//                                            expect(listItemsSyncResult1.couldNotUpdate).to(beEmpty())
+//                                            expect(listItemsSyncResult2.couldNotUpdate).to(beEmpty())
+                                            expectation?.fulfill()
+                                            // TODO after server change, test lastUpdate list1 == lastUpdate remoteListItem2
+                                            
+                                            
+//                                            // 5. Delete list1 - the list items also have to be deleted
+                                            let updatedOnceAgainInventory1 = Inventory(uuid: inventory1.uuid, name: "myinventory1-updated", lastServerUpdate: remoteInventory1.lastUpdate, removed: true)
+                                            // Try to update listitem from list1 - here nothing will happen, since list is deleted (not expected to be in cannotUpdate)
+                                            let updatedAgainInventoryItem1 = InventoryItem(quantity: remoteInventoryItem2.inventoryItem.quantity, quantityDelta: 1234, product: inventoryItem1.product, inventory: inventoryItem1.inventory, lastServerUpdate: remoteInventoryItem1.lastUpdate) // valid update (== timestamp in server)
+
+                                            let inventoriesSync = SyncUtils.toInventoriesSync([updatedOnceAgainInventory1], dbInventoryItems: [updatedAgainInventoryItem1])
+                                            
+                                            self?.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
+                                                
+                                                expect(result.success).to(beTrue())
+                                                expect(result.successResult).toNot(beNil())
+                                                
+                                                if let syncResult = result.successResult {
+                                                    
+                                                    expect(syncResult.inventories.count) == 1 // list was deleted
+                                                    expect(syncResult.couldNotDelete.count) == 0
+                                                    expect(syncResult.couldNotUpdate.count) == 0
+                                                    expect(syncResult.inventoryItemsSyncResults.count) == 1 // only one list left - only group of listitems
+                                                    
+                                                    let remoteInventory1 = syncResult.inventories[0]
+                                                    
+                                                    TestUtils.testRemoteInventoryMatches(remoteInventory1, inventory2)
+                                                    
+                                                    let inventoryItemsSyncResult1 = syncResult.inventoryItemsSyncResults[0]
+                                                    
+                                                    expect(inventoryItemsSyncResult1.inventoryUuid == inventory2.uuid)
+                                                    
+                                                    expect(inventoryItemsSyncResult1.inventoryItems.count) == 0
+                                                    
+                                                    expect(inventoryItemsSyncResult1.couldNotDelete).to(beEmpty())
+//                                                    expect(listItemsSyncResult1.couldNotUpdate).to(beEmpty())
+                                                    
+                                                    expectation?.fulfill()
+                                                    
+                                                } else {
+                                                    expectation?.fulfill()
+                                                }
+                                                
+                                            } // end test 5
+                                            
+                                            
+                                        } else {
+                                            expectation?.fulfill()
+                                        }
+                                        
+                                    } // end test 4
+                                    
+                                    
+                                } else {
+                                    expectation?.fulfill()
+                                }
+                                
+                            } // end test 3
+                            
+                            
+                        } else {
+                            expectation?.fulfill()
+                        }
+                    } // end test 2
+                    
+                    
+                } else {
+                    expectation?.fulfill()
+                }
+                
+            } // end test 1
+        }
+        
+        self.waitForExpectationsWithTimeout(50.0, handler: nil)
+    }
 }

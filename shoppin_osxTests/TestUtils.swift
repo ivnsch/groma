@@ -217,7 +217,7 @@ class TestUtils {
     }
 
     class func testRemoteInventoryItemMatches(remoteInventoryItem: RemoteInventoryItemWithProduct, _ inventoryItem: InventoryItem) {
-        expect(remoteInventoryItem.inventoryItem.quantity) == inventoryItem.quantity
+        expect(remoteInventoryItem.inventoryItem.quantity) == (inventoryItem.quantity + inventoryItem.quantityDelta)
         self.testRemoteProductMatches(remoteInventoryItem.product, inventoryItem.product)
     }
 

@@ -13,6 +13,7 @@ class DBInventoryItem: DBSyncable {
     
     dynamic var id: Int = 0
     dynamic var quantity: Int = 0
+    dynamic var quantityDelta: Int = 0
     dynamic var product: DBProduct = DBProduct()
     dynamic var inventory: DBInventory = DBInventory()
     

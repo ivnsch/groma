@@ -45,7 +45,79 @@ class RemoteInventoryProvider: RemoteProvider {
             handler(result)
         }
     }
+    
+    func syncInventoriesWithInventoryItems(inventoriesSync: InventoriesSync, handler: RemoteResult<RemoteInventoriesWithInventoryItemsSyncResult> -> ()) {
+        
+        let inventoriesSyncDicts: [[String: AnyObject]] = inventoriesSync.inventoriesSyncs.map {inventorySync in
+            
+            let inventory = inventorySync.inventory
+            
+            let sharedUsers: [[String: AnyObject]] = inventory.users.map{self.toRequestParams($0)}
+            
+            var dict: [String: AnyObject] = [
+                "uuid": inventory.uuid,
+                "name": inventory.name,
+                "users": sharedUsers,
+            ]
+            
+            if let lastServerUpdate = inventory.lastServerUpdate {
+                dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+            }
+            
+            let inventoryItemsDicts = inventorySync.inventoryItemsSync.inventoryItems.map {toRequestParamsForSync($0)}
+            let toRemoveDicts = inventorySync.inventoryItemsSync.toRemove.map{self.toRequestParamsToRemove($0)}
+            let inventoryItemsSyncDict: [String: AnyObject] = [
+                "inventoryItems": inventoryItemsDicts,
+                "toRemove": toRemoveDicts
+            ]
+            
+            dict["inventoryItems"] = inventoryItemsSyncDict
+            
+            return dict
+        }
+        
+        let toRemoveDicts = inventoriesSync.toRemove.map{self.toRequestParamsToRemove($0)}
+        
+        let dictionary: [String: AnyObject] = [
+            "inventories": inventoriesSyncDicts,
+            "toRemove": toRemoveDicts
+        ]
+        
+        print("sending: \(dictionary)")
+        
+        AlamofireHelper.authenticatedRequest(.POST, Urls.inventoriesWithItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteInventoriesWithInventoryItemsSyncResult>, error) in
+            handler(result)
+        }
+    }
+    
 
+    // TODO maybe generally use this for inventoryItem request params?
+    func toRequestParamsForSync(inventoryItem: InventoryItem) -> [String: AnyObject] {
+        var dict: [String: AnyObject] = [
+            "quantityDelta": inventoryItem.quantityDelta,
+            "product": [
+                "uuid": inventoryItem.product.uuid,
+                "name": inventoryItem.product.name,
+                "price": inventoryItem.product.price,
+            ],
+            "inventoryUuid": inventoryItem.inventory.uuid
+        ]
+        
+        if let lastServerUpdate = inventoryItem.lastServerUpdate {
+            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        }
+        
+        return dict
+    }
+    
+    func toRequestParamsToRemove(inventoryItem: InventoryItem) -> [String: AnyObject] {
+        var dict: [String: AnyObject] = ["inventoryUuid": inventoryItem.inventory.uuid, "productUuid": inventoryItem.product.uuid]
+        if let lastServerUpdate = inventoryItem.lastServerUpdate {
+            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        }
+        return dict
+    }
+    
     func toRequestParamsToRemove(inventory: Inventory) -> [String: AnyObject] {
         var dict: [String: AnyObject] = ["uuid": inventory.uuid]
         if let lastServerUpdate = inventory.lastServerUpdate {

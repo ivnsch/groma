@@ -57,12 +57,12 @@ class InventoryItemsViewController: UITableViewController {
         // this was initially a local function but it seems we have to use a closure, see http://stackoverflow.com/a/26237753/930450
         // TODO change quantity / edit inventory items
 //        let incrementItem = {(quantity: Int) -> () in
-//            let newQuantity = inventoryItem.quantity + quantity
-//            if (newQuantity >= 0) {
-//                inventoryItem.quantity += quantity
+//            //let newQuantity = inventoryItem.quantity + quantity
+//            //if (newQuantity >= 0) {
+//                inventoryItem.quantityDelta += quantity
 //                self.inventoryItemsProvider.updateInventoryItem(inventoryItem)
 //                cell.quantityLabel.text = String(inventoryItem.quantity)
-//            }
+//            //}
 //        }
         
         cell.selectionStyle = UITableViewCellSelectionStyle.None
