@@ -46,14 +46,28 @@ class RemoteUserProvider {
         }
     }
     
+    func hasToken() -> Bool {
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+        return valet?.containsObjectForKey(KeychainKeys.token) ?? {
+            print("Error: No valet instance available, can't check if token exists")
+            return false
+        }()
+    }
+    
     private func storeToken(token: String) {
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        valet?.setString(token, forKey: KeychainKeys.token)
+        valet?.setString(token, forKey: KeychainKeys.token) ?? {
+            print("Error: No valet instance available, can't store token")
+            return false
+        }()
     }
     
     private func removeToken() {
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        valet?.removeObjectForKey(KeychainKeys.token)
+        valet?.removeObjectForKey(KeychainKeys.token) ?? {
+            print("Error: No valet instance available, can't remove token")
+            return false
+        }()
     }
     
     // For now store the user's email as simple preference, we need it to be added automatically to list shared users. This may change in the future

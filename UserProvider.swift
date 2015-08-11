@@ -10,6 +10,10 @@ import Foundation
 
 protocol UserProvider {
    
+    var loggedIn: Bool {get}
+   
+    var myEmail: String? {get}
+
     func login(loginData: LoginData, _ handler: ProviderResult<Any> -> ())
     
     func register(user: UserInput, _ handler: ProviderResult<Any> -> ())

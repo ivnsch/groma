@@ -129,7 +129,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
                 onHasInventory(inventory)
                 
             } else { // user has no inventories - create first one. Note if offline there can be inventories in server - there has to be a sync when user comes online/signs up
-                let myEmail = PreferencesManager.loadPreference(PreferencesManagerKey.email) ?? "unknown@e.mail" // TODO how do we handle shared users internally (database etc) when user is offline
+                let myEmail = ProviderFactory().userProvider.myEmail ?? "unknown@e.mail" // TODO how do we handle shared users internally (database etc) when user is offline
                 
                 let inventoryInput = Inventory(uuid: NSUUID().UUIDString, name: "Home", users: [SharedUser(email: myEmail)])
                 self!.inventoryProvider.addInventory(inventoryInput, self!.successHandler{notused in

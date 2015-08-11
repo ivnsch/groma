@@ -50,7 +50,7 @@ class EditInventoryViewController: UIViewController, UITableViewDelegate, UITabl
     var isEdit: Bool = false {
         didSet {
             if !self.isEdit {
-                if let myEmail: String = PreferencesManager.loadPreference(PreferencesManagerKey.email) {
+                if let myEmail: String = ProviderFactory().userProvider.myEmail {
                     self.inventoryFormInput = self.inventoryFormInput.copy(users: [SharedUser(email: myEmail)])
                 }
             }

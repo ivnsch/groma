@@ -207,6 +207,11 @@
 		EB714ABF1B681AF700F91B94 /* RemoteSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB714ABE1B681AF700F91B94 /* RemoteSyncResult.swift */; };
 		EB714AC01B681AF700F91B94 /* RemoteSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB714ABE1B681AF700F91B94 /* RemoteSyncResult.swift */; };
 		EB714AC11B681AF700F91B94 /* RemoteSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB714ABE1B681AF700F91B94 /* RemoteSyncResult.swift */; };
+		EB7E82EF1B79F1FB009DEEF4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E82EE1B79F1FB009DEEF4 /* LoginViewController.swift */; };
+		EB7E82F31B79F97B009DEEF4 /* NSStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E82F21B79F97B009DEEF4 /* NSStoryboard.swift */; };
+		EB7E82F51B7A141E009DEEF4 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E82F41B7A141E009DEEF4 /* RegisterViewController.swift */; };
+		EB7E82F71B7A14AE009DEEF4 /* LoginRegister.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB7E82F61B7A14AE009DEEF4 /* LoginRegister.storyboard */; };
+		EB7E83141B7B3A5E009DEEF4 /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E83131B7B3A5E009DEEF4 /* MainWindowController.swift */; };
 		EB7E8B611B2ADF620090409A /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
 		EB7E8B621B2ADF9A0090409A /* Try.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E8B601B2ADF620090409A /* Try.swift */; };
 		EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */; };
@@ -472,6 +477,11 @@
 		EB714AA51B66BBA800F91B94 /* DBSyncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSyncable.swift; sourceTree = "<group>"; };
 		EB714AAD1B67895500F91B94 /* RemoteProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProvider.swift; sourceTree = "<group>"; };
 		EB714ABE1B681AF700F91B94 /* RemoteSyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSyncResult.swift; sourceTree = "<group>"; };
+		EB7E82EE1B79F1FB009DEEF4 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		EB7E82F21B79F97B009DEEF4 /* NSStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSStoryboard.swift; sourceTree = "<group>"; };
+		EB7E82F41B7A141E009DEEF4 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		EB7E82F61B7A14AE009DEEF4 /* LoginRegister.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LoginRegister.storyboard; sourceTree = "<group>"; };
+		EB7E83131B7B3A5E009DEEF4 /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
 		EB7E8B601B2ADF620090409A /* Try.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Try.swift; sourceTree = "<group>"; };
 		EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
 		EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListsViewController.xib; sourceTree = "<group>"; };
@@ -835,6 +845,7 @@
 				EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */,
 				EB0C2A2B1B57BA3C00AF6226 /* NSViewController.swift */,
 				EB0C2A331B57BE6100AF6226 /* NSWindowController.swift */,
+				EB7E82F21B79F97B009DEEF4 /* NSStoryboard.swift */,
 			);
 			name = extension;
 			sourceTree = "<group>";
@@ -905,6 +916,16 @@
 			name = intro;
 			sourceTree = "<group>";
 		};
+		EB7E82EB1B79F1B7009DEEF4 /* user */ = {
+			isa = PBXGroup;
+			children = (
+				EB7E82EE1B79F1FB009DEEF4 /* LoginViewController.swift */,
+				EB7E82F41B7A141E009DEEF4 /* RegisterViewController.swift */,
+				EB7E82F61B7A14AE009DEEF4 /* LoginRegister.storyboard */,
+			);
+			name = user;
+			sourceTree = "<group>";
+		};
 		EB9BE4141B2C6525005B401A /* remote */ = {
 			isa = PBXGroup;
 			children = (
@@ -940,6 +961,7 @@
 				EBDFE3C01AD00E6C00E48F95 /* utils */,
 				EBDFE3A51ACE827C00E48F95 /* tableview */,
 				EB4FD44C1AC6BE2A0000F952 /* extension */,
+				EB7E82EB1B79F1B7009DEEF4 /* user */,
 				EB9F6CE61A8610550038355B /* AppDelegate.swift */,
 				EB9F6CE81A8610550038355B /* ViewController.swift */,
 				EB4FD4551AC6D6690000F952 /* EditListItemController.swift */,
@@ -958,6 +980,7 @@
 				EB89D3441AD4536300B6E0D0 /* AddListController.swift */,
 				EB89D34C1AD5235600B6E0D0 /* ListCell.swift */,
 				EB89D3451AD4536300B6E0D0 /* AddListController.xib */,
+				EB7E83131B7B3A5E009DEEF4 /* MainWindowController.swift */,
 			);
 			path = shoppin_osx;
 			sourceTree = "<group>";
@@ -1327,6 +1350,7 @@
 				EB89D3491AD4536300B6E0D0 /* AddListController.xib in Resources */,
 				EBDFE3BB1ACEEFDC00E48F95 /* Header.xib in Resources */,
 				EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */,
+				EB7E82F71B7A14AE009DEEF4 /* LoginRegister.storyboard in Resources */,
 				EB9F6CEE1A8610550038355B /* Main.storyboard in Resources */,
 				EB4FD4581AC6D8C90000F952 /* EditListItem.xib in Resources */,
 			);
@@ -1678,6 +1702,7 @@
 				EB6F812E1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EBB9A7391B5EB14300E5487D /* RemoteInventory.swift in Sources */,
 				EB5567621A86437E00CD3EC6 /* ListMapper.swift in Sources */,
+				EB7E83141B7B3A5E009DEEF4 /* MainWindowController.swift in Sources */,
 				EB1EFAC51B1EFBBC0079A35D /* AutocompleteTextField.swift in Sources */,
 				EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */,
 				EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */,
@@ -1692,6 +1717,7 @@
 				EB4FD44B1AC6B77C0000F952 /* Float.swift in Sources */,
 				EB4FD44E1AC6BE390000F952 /* NSTableView.swift in Sources */,
 				EB4FD4511AC6BE960000F952 /* Globals.swift in Sources */,
+				EB7E82EF1B79F1FB009DEEF4 /* LoginViewController.swift in Sources */,
 				EBF3779C1B38AA5900EEB6DB /* Urls.swift in Sources */,
 				EB55676A1A8643BC00CD3EC6 /* Section.swift in Sources */,
 				EB6D93A61B1BAFB400ED8999 /* HandlingTextField.swift in Sources */,
@@ -1700,6 +1726,7 @@
 				EB70C2241B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBF377981B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
 				EB89D3471AD4536300B6E0D0 /* AddListController.swift in Sources */,
+				EB7E82F31B79F97B009DEEF4 /* NSStoryboard.swift in Sources */,
 				EBF299881B791023006BDA1F /* InventorySync.swift in Sources */,
 				EBDFE3B51ACEEB5400E48F95 /* HeaderCellManager.swift in Sources */,
 				EBDFE3A91ACE82F000E48F95 /* ListItemCellManager.swift in Sources */,
@@ -1717,6 +1744,7 @@
 				EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */,
 				EBF299841B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */,
 				EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */,
+				EB7E82F51B7A141E009DEEF4 /* RegisterViewController.swift in Sources */,
 				EB40A48B1B553A19000E9CAD /* DBListItem.swift in Sources */,
 				EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */,
 			);

@@ -66,4 +66,12 @@ class UserProviderImpl: UserProvider {
             }
         }
     }
+    
+    var loggedIn: Bool {
+        return remoteProvider.hasToken()
+    }
+    
+    var myEmail: String? {
+        return PreferencesManager.loadPreference(PreferencesManagerKey.email)
+    }
 }

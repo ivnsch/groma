@@ -40,9 +40,9 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         })
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-
+    override func viewDidAppear() {
+        super.viewDidAppear()
+        
         self.tableView.headerView = nil // we will use a normal view as header
         self.tableView.registerForDraggedTypes([NSGeneralPboard])
         
