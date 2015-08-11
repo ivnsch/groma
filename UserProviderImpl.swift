@@ -43,7 +43,27 @@ class UserProviderImpl: UserProvider {
     }
     
     private func sync(handler: () -> ()) {
-        // TODO create 1 privider service to sync everything, call it here
-        handler()
+        let listsProvider = ProviderFactory().listProvider
+        let inventoryProvider = ProviderFactory().inventoryProvider
+        
+        listsProvider.syncListsWithListItems {result in
+            if result.success {
+                inventoryProvider.syncInventoriesWithInventoryItems {result in
+                    if result.success {
+                        inventoryProvider.syncInventoriesWithInventoryItems {result in
+                            handler()
+                        }
+                        
+                    } else {
+                        print("Error: could not sync inventories (login/register): \(result.status)")
+                        handler()
+                    }
+                }
+                
+            } else {
+                print("Error: could not sync lists (login/register): \(result.status)")
+                handler()
+            }
+        }
     }
 }

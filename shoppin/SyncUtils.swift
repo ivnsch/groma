@@ -104,12 +104,12 @@ struct SyncUtils {
     
     :returns: tuple with listItems that are new or have been updated ("toAddOrUpdate") and items marked for removal ("toRemove")
     */
-    static func toSyncInventoryItems(dbListItems: [InventoryItem]) -> (toAddOrUpdate: [InventoryItem], toRemove: [InventoryItem]) {
+    static func toSyncInventoryItems(dbInventoryItems: [InventoryItem]) -> (toAddOrUpdate: [InventoryItem], toRemove: [InventoryItem]) {
         // TODO send only items that are new or updated, currently sending everything
         // new -> doesn't have lastServerUpdate, updated -> lastUpdate > lastServerUpdate
         var listItems: [InventoryItem] = []
         var toRemove: [InventoryItem] = []
-        for listItem in dbListItems {
+        for listItem in dbInventoryItems {
             if listItem.removed {
                 toRemove.append(listItem)
             } else {
@@ -133,12 +133,12 @@ struct SyncUtils {
     
     :returns: tuple with lists that are new or have been updated ("toAddOrUpdate") and lists marked for removal ("toRemove")
     */
-    static func toSyncLists(dbLists: [Inventory]) -> (toAddOrUpdate: [Inventory], toRemove: [Inventory]) {
+    static func toSyncInventories(dbInventories: [Inventory]) -> (toAddOrUpdate: [Inventory], toRemove: [Inventory]) {
         // TODO send only items that are new or updated, currently sending everything
         // new -> doesn't have lastServerUpdate, updated -> lastUpdate > lastServerUpdate
         var listItems: [Inventory] = []
         var toRemove: [Inventory] = []
-        for listItem in dbLists {
+        for listItem in dbInventories {
             if listItem.removed {
                 toRemove.append(listItem)
             } else {
@@ -157,9 +157,9 @@ struct SyncUtils {
     }
     
     /// Create full sync object with lists and listItems
-    static func toInventoriesSync(dbLists: [Inventory], dbInventoryItems: [InventoryItem]) -> InventoriesSync {
+    static func toInventoriesSync(dbInventories: [Inventory], dbInventoryItems: [InventoryItem]) -> InventoriesSync {
         
-        let (lists, toRemove) = self.toSyncLists(dbLists)
+        let (lists, toRemove) = self.toSyncInventories(dbInventories)
         
         // Group by list. Note we do this in tuples and using list in outer loop to preserve the order of the lists
         //                var listsItemsSyncs = [ListItemsSync]()

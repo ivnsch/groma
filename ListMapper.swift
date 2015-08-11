@@ -20,6 +20,17 @@ class ListMapper {
         }
         return dbList
     }
+
+    class func dbWithList(list: RemoteList) -> DBList {
+        let dbList = DBList()
+        dbList.uuid = list.uuid
+        dbList.name = list.name
+        let dbSharedUsers = list.users.map{SharedUserMapper.dbWithSharedUser($0)}
+        for dbObj in dbSharedUsers {
+            dbList.users.append(dbObj)
+        }
+        return dbList
+    }
     
     class func listWithDB(dbList: DBList) -> List {
         let users = dbList.users.toArray().map{SharedUserMapper.sharedUserWithDB($0)}

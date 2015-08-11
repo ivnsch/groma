@@ -19,4 +19,6 @@ protocol ListProvider {
     func users(list: List, _ handler: ProviderResult<[SharedUser]> -> ())
     
     func addUserToList(list: List, email: String, _ handler: ProviderResult<SharedUser> -> ())
+    
+    func syncListsWithListItems(handler: (ProviderResult<[Any]> -> ()))
 }

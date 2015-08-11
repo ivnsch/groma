@@ -280,12 +280,12 @@ class TestLists: XCTestCase {
                     expect(listItemsSyncResult1.listUuid == list1.uuid)
                     expect(listItemsSyncResult2.listUuid == list2.uuid)
                     
-                    expect(listItemsSyncResult1.listItems.count) == 2
-                    expect(listItemsSyncResult2.listItems.count) == 1
+                    expect(listItemsSyncResult1.listItems.listItems.count) == 2
+                    expect(listItemsSyncResult2.listItems.listItems.count) == 1
                     
-                    let remoteListItem1 = listItemsSyncResult1.listItems[0]
-                    let remoteListItem2 = listItemsSyncResult1.listItems[1]
-                    let remoteListItem3 = listItemsSyncResult2.listItems[0]
+                    let remoteListItem1 = listItemsSyncResult1.listItems.listItems[0]
+                    let remoteListItem2 = listItemsSyncResult1.listItems.listItems[1]
+                    let remoteListItem3 = listItemsSyncResult2.listItems.listItems[0]
                     
                     TestUtils.testRemoteListItemMatches(remoteListItem1, listItem1)
                     TestUtils.testRemoteListItemMatches(remoteListItem2, listItem2)
@@ -329,11 +329,11 @@ class TestLists: XCTestCase {
                             expect(listItemsSyncResult1.listUuid == list1.uuid)
                             expect(listItemsSyncResult2.listUuid == list2.uuid)
                             
-                            expect(listItemsSyncResult1.listItems.count) == 2
-                            expect(listItemsSyncResult2.listItems.count) == 0 // we removed the only listitem in list2
+                            expect(listItemsSyncResult1.listItems.listItems.count) == 2
+                            expect(listItemsSyncResult2.listItems.listItems.count) == 0 // we removed the only listitem in list2
                             
-                            let remoteListItem1 = listItemsSyncResult1.listItems[0]
-                            let remoteListItem2 = listItemsSyncResult1.listItems[1]
+                            let remoteListItem1 = listItemsSyncResult1.listItems.listItems[0]
+                            let remoteListItem2 = listItemsSyncResult1.listItems.listItems[1]
                             
                             TestUtils.testRemoteListItemMatches(remoteListItem1, updatedListItem1)
                             TestUtils.testRemoteListItemMatches(remoteListItem2, listItem2) // the update was invalid, so listitem should be unchanged
@@ -373,11 +373,11 @@ class TestLists: XCTestCase {
                                     expect(listItemsSyncResult1.listUuid == list1.uuid)
                                     expect(listItemsSyncResult2.listUuid == list2.uuid)
                                     
-                                    expect(listItemsSyncResult1.listItems.count) == 2
-                                    expect(listItemsSyncResult2.listItems.count) == 0
+                                    expect(listItemsSyncResult1.listItems.listItems.count) == 2
+                                    expect(listItemsSyncResult2.listItems.listItems.count) == 0
                                     
-                                    let remoteListItem1 = listItemsSyncResult1.listItems[0]
-                                    let remoteListItem2 = listItemsSyncResult1.listItems[1]
+                                    let remoteListItem1 = listItemsSyncResult1.listItems.listItems[0]
+                                    let remoteListItem2 = listItemsSyncResult1.listItems.listItems[1]
                                     
                                     TestUtils.testRemoteListItemMatches(remoteListItem1, updatedListItem1)
                                     TestUtils.testRemoteListItemMatches(remoteListItem2, listItem2)
@@ -417,11 +417,11 @@ class TestLists: XCTestCase {
                                             expect(listItemsSyncResult1.listUuid == list1.uuid)
                                             expect(listItemsSyncResult2.listUuid == list2.uuid)
                                             
-                                            expect(listItemsSyncResult1.listItems.count) == 2
-                                            expect(listItemsSyncResult2.listItems.count) == 0
+                                            expect(listItemsSyncResult1.listItems.listItems.count) == 2
+                                            expect(listItemsSyncResult2.listItems.listItems.count) == 0
                                             
-                                            let remoteListItem1 = listItemsSyncResult1.listItems[0]
-                                            let remoteListItem2 = listItemsSyncResult1.listItems[1]
+                                            let remoteListItem1 = listItemsSyncResult1.listItems.listItems[0]
+                                            let remoteListItem2 = listItemsSyncResult1.listItems.listItems[1]
                                             
                                             TestUtils.testRemoteListItemMatches(remoteListItem1, updatedListItem1)
                                             TestUtils.testRemoteListItemMatches(remoteListItem2, listItem2)
@@ -461,7 +461,7 @@ class TestLists: XCTestCase {
                                                     
                                                     expect(listItemsSyncResult1.listUuid == list2.uuid)
                                                     
-                                                    expect(listItemsSyncResult1.listItems.count) == 0
+                                                    expect(listItemsSyncResult1.listItems.listItems.count) == 0
                                                     
                                                     expect(listItemsSyncResult1.couldNotDelete).to(beEmpty())
                                                     expect(listItemsSyncResult1.couldNotUpdate).to(beEmpty())

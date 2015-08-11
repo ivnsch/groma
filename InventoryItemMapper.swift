@@ -29,4 +29,15 @@ class InventoryItemMapper {
         db.inventory = InventoryMapper.dbWithInventory(item.inventory)
         return db
     }
+    
+    class func dbInventoryItemWithRemote(item: RemoteInventoryItemWithProduct, inventory: DBInventory) -> DBInventoryItem {
+        let product = ProductMapper.dbProductWithRemote(item.product)
+        
+        let db = DBInventoryItem()
+        db.quantity = item.inventoryItem.quantity
+        db.product = product
+        db.inventory = inventory
+        
+        return db
+    }
 }

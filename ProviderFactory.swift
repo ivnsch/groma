@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO make variables static (static is lazy)
 class ProviderFactory {
    
     lazy var listItemProvider: ListItemProvider = ListItemProviderImpl()

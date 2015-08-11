@@ -129,38 +129,50 @@ class RealmProvider {
         })
     }
     
-    // resetLastUpdateToServer = true should be always used when this method is called for sync
-    func overwrite<T: DBSyncable>(newObjects: [T], resetLastUpdateToServer: Bool = true, handler: Bool -> ()) {
+    func doInWriteTransaction(f: Realm -> Bool, finishHandler: Bool -> ()) {
+        
         let finished: (Bool) -> () = {success in
             dispatch_async(dispatch_get_main_queue(), {
-                handler(success)
+                finishHandler(success)
             })
         }
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             do {
                 let realm = try Realm()
-                let results: Results<T> = realm.objects(T)
                 realm.write {
-                    realm.delete(results)
-                    for obj in newObjects {
-                        if resetLastUpdateToServer {
-                            obj.lastUpdate = obj.lastServerUpdate // for sync - this basically removes "dirty" status of item (item is not dirty when lastUpdate == lastServerUpdate)
-                        } else {
-                            obj.lastUpdate = NSDate()
-                        }
-                        
-                        realm.add(obj, update: false)
-                    }
+                    finished(f(realm))
                 }
-
-                finished(true)
-
+                
             } catch _ {
                 print("Error: creating Realm() in remove")
                 finished(false)
             }
         })
     }
+    
+    
+    // resetLastUpdateToServer = true should be always used when this method is called for sync
+    func overwrite<T: DBSyncable>(newObjects: [T], resetLastUpdateToServer: Bool = true, handler: Bool -> ()) {
+        
+        self.doInWriteTransaction({realm in
+            
+            let results: Results<T> = realm.objects(T)
 
+            realm.delete(results)
+            for obj in newObjects {
+                if resetLastUpdateToServer {
+                    obj.lastUpdate = obj.lastServerUpdate // for sync - this basically removes "dirty" status of item (item is not dirty when lastUpdate == lastServerUpdate)
+                } else {
+                    obj.lastUpdate = NSDate()
+                }
+                
+                realm.add(obj, update: false)
+            }
+            return true
+            
+        }, finishHandler: {saved in
+            handler(saved)
+        })
+    }
 }

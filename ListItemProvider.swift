@@ -36,4 +36,6 @@ protocol ListItemProvider {
     func listItems(list: List, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[ListItem]> -> ())
     
     func updateDone(listItems:[ListItem], _ handler: ProviderResult<Any> -> ())
+    
+    func syncListItems(list: List, handler: (ProviderResult<Any>) -> ())
 }

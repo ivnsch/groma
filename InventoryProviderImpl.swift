@@ -117,4 +117,33 @@ class InventoryProviderImpl: InventoryProvider {
             handler(ProviderResult(status: providerStatus))
         }
     }
+    
+    func syncInventoriesWithInventoryItems(handler: (ProviderResult<[Any]> -> ())) {
+        
+        self.dbInventoryProvider.loadInventories {dbInventories in
+            
+            self.dbInventoryProvider.loadAllInventoryItems {dbInventoryItems in
+
+                let inventoriesSync = SyncUtils.toInventoriesSync(dbInventories, dbInventoryItems: dbInventoryItems)
+
+                self.remoteProvider.syncInventoriesWithInventoryItems(inventoriesSync) {remoteResult in
+                    
+                    if let syncResult = remoteResult.successResult {
+                        
+                        self.dbInventoryProvider.saveInventoriesSyncResult(syncResult) {success in
+                            if success {
+                                handler(ProviderResult(status: .Success))
+                            } else {
+                                handler(ProviderResult(status: .DatabaseSavingError))
+                            }
+                        }
+                        
+                    } else {
+                        let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+                        handler(ProviderResult(status: providerStatus))
+                    }
+                }
+            }
+        }
+    }
 }

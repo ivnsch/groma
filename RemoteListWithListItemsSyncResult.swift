@@ -11,22 +11,16 @@ import Foundation
 
 final class RemoteListItemsSyncResult: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let listUuid: String
-    let listItems: [RemoteListItem]
+    let listItems: RemoteListItems
     let couldNotUpdate: [String]
     let couldNotDelete: [String]
     
-    init(listUuid: String, listItems: [RemoteListItem], couldNotUpdate: [String], couldNotDelete: [String]) {
-        self.listUuid = listUuid
-        self.listItems = listItems
-        self.couldNotUpdate = couldNotUpdate
-        self.couldNotDelete = couldNotDelete
-    }
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.listUuid = representation.valueForKeyPath("listUuid") as! String
         
-        let listItems = representation.valueForKeyPath("listItems") as! [AnyObject]
-        self.listItems = RemoteListItem.collection(response: response, representation: listItems)
+        let listItems = representation.valueForKeyPath("listItems")!
+        self.listItems = RemoteListItems(response: response, representation: listItems)!
         
         self.couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as! [String]
         self.couldNotDelete = representation.valueForKeyPath("couldNotDelete") as! [String]
