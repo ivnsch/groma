@@ -92,7 +92,7 @@ class RealmProvider {
                     results = results.filter(filter)
                 }
                 
-                let objs: [T] = realm.objects(T).toArray() 
+                let objs: [T] = results.toArray()
                 let models = objs.map{mapper($0)}
                 
                 finished(models)
