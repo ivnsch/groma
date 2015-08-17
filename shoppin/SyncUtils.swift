@@ -180,4 +180,43 @@ struct SyncUtils {
         
         return InventoriesSync(inventoriesSyncs: listsSyncs, toRemove: toRemove)
     }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    // Same code again for history items.... (copied from lists - letting local vars names unchanged)
+    
+    /**
+    Separates listItems that are marked for removal from the rest
+    And collects listItems from "rest" which are new or have been updated
+    
+    :returns: tuple with listItems that are new or have been updated ("toAddOrUpdate") and items marked for removal ("toRemove")
+    */
+    static func toSyncHistoryItems(dbHistoryItems: [HistoryItem]) -> (toAddOrUpdate: [HistoryItem], toRemove: [HistoryItem]) {
+        // TODO send only items that are new or updated, currently sending everything
+        // new -> doesn't have lastServerUpdate, updated -> lastUpdate > lastServerUpdate
+        var listItems: [HistoryItem] = []
+        var toRemove: [HistoryItem] = []
+        for listItem in dbHistoryItems {
+            if listItem.removed {
+                toRemove.append(listItem)
+            } else {
+                // Send only "dirty" items
+                // Note assumption - lastUpdate can't be smaller than lastServerUpdate, so with != we mean >
+                // when we receive sync result we reset lastUpdate of all items to lastServerUpdate, from there on lastUpdate can become only bigger
+                // and when the items are not synced yet, lastServerUpdate is nil so != will also be true
+                // Note also that the server can handle not-dirty items, we filter them just to reduce the payload
+                if listItem.lastUpdate != listItem.lastServerUpdate {
+                    listItems.append(listItem)
+                }
+            }
+        }
+        
+        return (toAddOrUpdate: listItems, toRemove: toRemove)
+    }
+    
+    /// Create full sync object with lists and listItems
+    static func toHistoryItemsSync(dbInventoryItems: [HistoryItem]) -> HistoryItemsSync {
+        
+        let (toAddOrUpdate, toRemove) = SyncUtils.toSyncHistoryItems(dbInventoryItems)
+        return HistoryItemsSync(historyItems: toAddOrUpdate, toRemove: toRemove)
+    }
 }

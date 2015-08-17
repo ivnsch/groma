@@ -19,5 +19,6 @@ class ProviderFactory {
     lazy var userProvider: UserProvider = UserProviderImpl()
     
     lazy var listProvider: ListProvider = ListProviderImpl()
-
+    
+    lazy var historyProvider: HistoryProvider = HistoryProviderImpl()
 }

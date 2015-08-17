@@ -12,7 +12,7 @@ protocol UserProvider {
    
     var loggedIn: Bool {get}
    
-    var myEmail: String? {get}
+    var mySharedUser: SharedUser? {get}
 
     func login(loginData: LoginData, _ handler: ProviderResult<Any> -> ())
     

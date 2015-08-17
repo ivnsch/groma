@@ -18,7 +18,7 @@ class RemoteInventoryItemsProvider: Any {
         }
     }
     
-    func addToInventory(inventory: Inventory, inventoryItems: [InventoryItem], handler: RemoteResult<NoOpSerializable> -> ()) {
+    func addToInventory(inventory: Inventory, inventoryItems: [InventoryItemWithHistoryEntry], handler: RemoteResult<NoOpSerializable> -> ()) {
         
         // this is handled differently because the parameters are an array and default request in alamofire doesn't support this (the difference is the request.HTTPBody line)
         let request = NSMutableURLRequest(URL: NSURL(string: Urls.inventoryItems + "/\(inventory.uuid)")!)
@@ -48,18 +48,28 @@ class RemoteInventoryItemsProvider: Any {
     }
     
     // TODO remote inventory from inventory items, at least for sending - we want to add all the items to one inventory....... for receiving this also wastes payload, they also have the same inventory also
-    private func toDictionary(inventoryItem: InventoryItem) -> [String: AnyObject] {
+    private func toDictionary(inventoryItem: InventoryItemWithHistoryEntry) -> [String: AnyObject] {
         return [
             "product": [
-                "uuid": inventoryItem.product.uuid,
-                "name": inventoryItem.product.name,
-                "price": inventoryItem.product.price
+                "uuid": inventoryItem.inventoryItem.product.uuid,
+                "name": inventoryItem.inventoryItem.product.name,
+                "price": inventoryItem.inventoryItem.product.price
             ],
             "inventoryItem": [
-                "quantity": inventoryItem.quantity,
-                "inventoryUuid": inventoryItem.inventory.uuid,
-                "productUuid": inventoryItem.product.uuid
-            ]
+                "quantity": inventoryItem.inventoryItem.quantityDelta,
+                "inventoryUuid": inventoryItem.inventoryItem.inventory.uuid,
+                "productUuid": inventoryItem.inventoryItem.product.uuid
+            ],
+            "historyItemUuid": inventoryItem.historyItemUuid,
+            "addedDate": NSNumber(double: inventoryItem.addedDate.timeIntervalSince1970).longValue,
+            "user": self.toRequestParams(inventoryItem.user)
+        ]
+    }
+    
+    private func toRequestParams(sharedUser: SharedUser) -> [String: AnyObject] {
+        return [
+            "email": sharedUser.email,
+            "foo": "" // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
         ]
     }
 }

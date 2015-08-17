@@ -122,4 +122,26 @@ class RealmInventoryProvider: RealmProvider {
             handler(success)
         })
     }
+
+    
+    /**
+    Adds inventory and corresponding history items, in a transaction
+    */
+    func add(inventoryItemsWithHistory: [InventoryItemWithHistoryEntry], handler: Bool -> ()) {
+        
+        self.doInWriteTransaction({realm in
+            for inventoryItemWithHistory in inventoryItemsWithHistory {
+                let dbInventory = InventoryItemMapper.dbWithInventoryItem(inventoryItemWithHistory.inventoryItem)
+                realm.add(dbInventory, update: false)
+                let dbHistoryItem = HistoryItemMapper.dbWith(inventoryItemWithHistory)
+                realm.add(dbInventory, update: true) // TODO implement increment delta for inventory items
+                realm.add(dbHistoryItem, update: false)
+            }
+            
+            return true
+            
+            }, finishHandler: {success in
+                handler(success)
+            })
+    }
 }

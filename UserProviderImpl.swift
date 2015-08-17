@@ -71,7 +71,11 @@ class UserProviderImpl: UserProvider {
         return remoteProvider.hasToken()
     }
     
-    var myEmail: String? {
-        return PreferencesManager.loadPreference(PreferencesManagerKey.email)
+    var mySharedUser: SharedUser? {
+        if let email: String = PreferencesManager.loadPreference(PreferencesManagerKey.email) {
+            return SharedUser(email: email)
+        } else {
+            return nil
+        }
     }
 }

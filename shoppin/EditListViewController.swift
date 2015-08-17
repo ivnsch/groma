@@ -50,8 +50,8 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
     var isEdit: Bool = false {
         didSet {
             if !self.isEdit {
-                if let myEmail: String = ProviderFactory().userProvider.myEmail {
-                    self.listFormInput = self.listFormInput.copy(users: [SharedUser(email: myEmail)])
+                if let mySharedUser = ProviderFactory().userProvider.mySharedUser {
+                    self.listFormInput = self.listFormInput.copy(users: [mySharedUser])
                 }
             }
         }

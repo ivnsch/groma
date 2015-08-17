@@ -11,32 +11,14 @@ import Nimble
 
 class TestInventory: XCTestCase {
  
-    let remoteInventoryItemsProvider = RemoteInventoryItemsProvider()
-    let remoteInventoryProvider = RemoteInventoryProvider()
+    static let remoteInventoryItemsProvider = RemoteInventoryItemsProvider()
+    static let remoteInventoryProvider = RemoteInventoryProvider()
     
-    func testNotFoundInventory() {
-        let expectation = self.expectationWithDescription("Get not existing inventory")
-        
-        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak expectation] loginData in
-            
-            let inventory = Inventory(uuid: NSUUID().UUIDString, name: "foo")
-            
-            self.remoteInventoryItemsProvider.inventoryItems(inventory) {result in
-                expect(result.success).to(beFalse())
-                expect(result.successResult).to(beNil())
-                expect(result.status) == RemoteStatusCode.NotFound
-                
-                expectation?.fulfill()
-            }
-        }
-        self.waitForExpectationsWithTimeout(5.0, handler: nil)
-    }
+    static let inventory1 = Inventory(uuid: NSUUID().UUIDString, name: "foo")
     
-    private func withAddedInventory(expectation: XCTestExpectation?, block: (addedInventory: Inventory) -> ()) {
+    static func withAddedInventory(expectation: XCTestExpectation?, block: (addedInventory: Inventory) -> ()) {
         
-        let inventoryInput = Inventory(uuid: NSUUID().UUIDString, name: "foo")
-        
-        self.remoteInventoryProvider.addInventory(inventoryInput) {result in
+        self.remoteInventoryProvider.addInventory(self.inventory1) {result in
             expect(result.success).to(beTrue())
             expect(result.successResult).to(beNil())
             
@@ -56,7 +38,7 @@ class TestInventory: XCTestCase {
                         let inventory = Inventory(uuid: remoteInventory.uuid, name: remoteInventory.name)
                         
                         block(addedInventory: inventory)
-
+                        
                     } else {
                         expectation?.fulfill()
                     }
@@ -65,17 +47,37 @@ class TestInventory: XCTestCase {
                 }
             }
         }
-        
     }
+    
+    func testNotFoundInventory() {
+        let expectation = self.expectationWithDescription("Get not existing inventory")
+        
+        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak expectation] loginData in
+            
+            let inventory = Inventory(uuid: NSUUID().UUIDString, name: "foo")
+            
+            TestInventory.remoteInventoryItemsProvider.inventoryItems(inventory) {result in
+                expect(result.success).to(beFalse())
+                expect(result.successResult).to(beNil())
+                expect(result.status) == RemoteStatusCode.NotFound
+                
+                expectation?.fulfill()
+            }
+        }
+        self.waitForExpectationsWithTimeout(5.0, handler: nil)
+    }
+    
+    
+
     
     func testAddInventory() {
         let expectation = self.expectationWithDescription("Get empty inventory")
         
-        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak self, weak expectation] loginData in
+        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak expectation] loginData in
             
-            self!.withAddedInventory(expectation) {addedInventory in
+            TestInventory.withAddedInventory(expectation) {addedInventory in
                 
-                self!.remoteInventoryProvider.inventories {result in
+                TestInventory.remoteInventoryProvider.inventories {result in
                     expect(result.success).to(beTrue())
                     expect(result.successResult).toNot(beNil())
                     
@@ -87,7 +89,7 @@ class TestInventory: XCTestCase {
                             TestUtils.testRemoteInventoryMatches(remoteInventory, addedInventory)
                             expect(remoteInventory.users.count) == 1 // user is added automatically by server, using the token
                             
-                            self!.remoteInventoryItemsProvider.inventoryItems(addedInventory) {result in
+                            TestInventory.remoteInventoryItemsProvider.inventoryItems(addedInventory) {result in
                                 expect(result.success).to(beTrue())
                                 expect(result.successResult).toNot(beNil())
                                 
@@ -117,10 +119,10 @@ class TestInventory: XCTestCase {
     func testAddInventoryItems() {
         let expectation = self.expectationWithDescription("Add inventory items")
         
-        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak self, weak expectation] loginData in
+        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak expectation] loginData in
             
-            self!.withAddedInventory(expectation) {addedInventory in
-                self!.remoteInventoryItemsProvider.inventoryItems(addedInventory) {result in
+            TestInventory.withAddedInventory(expectation) {addedInventory in
+                TestInventory.remoteInventoryItemsProvider.inventoryItems(addedInventory) {result in
                     expect(result.success).to(beTrue())
                     expect(result.successResult).toNot(beNil())
                     
@@ -133,12 +135,14 @@ class TestInventory: XCTestCase {
                     let inventoryItem1 = InventoryItem(quantity: 2, product: product1, inventory: addedInventory)
                     let product2 = Product(uuid: NSUUID().UUIDString, name: "bread", price: 0.7)
                     let inventoryItem2 = InventoryItem(quantity: 1, product: product2, inventory: addedInventory)
-                    self!.remoteInventoryItemsProvider.addToInventory(addedInventory, inventoryItems: [inventoryItem1, inventoryItem2]) {result in
+                    let inventoryItemWithHistory1 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem1, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
+                    let inventoryItemWithHistory2 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem2, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
+                    TestInventory.remoteInventoryItemsProvider.addToInventory(addedInventory, inventoryItems: [inventoryItemWithHistory1, inventoryItemWithHistory2]) {result in
                         expect(result.success).to(beTrue())
                         expect(result.successResult).to(beNil())
                         
                         print("Get items")
-                        self!.remoteInventoryItemsProvider.inventoryItems(addedInventory) {result in
+                        TestInventory.remoteInventoryItemsProvider.inventoryItems(addedInventory) {result in
                             expect(result.success).to(beTrue())
                             expect(result.successResult).toNot(beNil())
                             
@@ -146,24 +150,25 @@ class TestInventory: XCTestCase {
                                 expect(inventoryItems.count) == 2
                                 TestUtils.testRemoteInventoryItemMatches(inventoryItems[0], inventoryItem1)
                                 TestUtils.testRemoteInventoryItemMatches(inventoryItems[1], inventoryItem2)
+                                
+                                expectation?.fulfill()
                             }
-                            
-                            expectation?.fulfill()
                         }
                     }
                 }
             }
         }
+        
         self.waitForExpectationsWithTimeout(5.0, handler: nil)
     }
     
     func testIncrementInventoryItems() {
         let expectation = self.expectationWithDescription("Add inventory items")
         
-        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak self, weak expectation] loginData in
+        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak expectation] loginData in
             
-            self!.withAddedInventory(expectation) {addedInventory in
-                self!.remoteInventoryItemsProvider.inventoryItems(addedInventory) {result in
+            TestInventory.withAddedInventory(expectation) {addedInventory in
+                TestInventory.remoteInventoryItemsProvider.inventoryItems(addedInventory) {result in
                     expect(result.success).to(beTrue())
                     expect(result.successResult).toNot(beNil())
                     
@@ -176,19 +181,24 @@ class TestInventory: XCTestCase {
                     let inventoryItem1 = InventoryItem(quantity: 2, product: product1, inventory: addedInventory)
                     let product2 = Product(uuid: NSUUID().UUIDString, name: "bread", price: 0.7)
                     let inventoryItem2 = InventoryItem(quantity: 1, product: product2, inventory: addedInventory)
-                    self!.remoteInventoryItemsProvider.addToInventory(addedInventory, inventoryItems: [inventoryItem1, inventoryItem2]) {result in
+                    let inventoryItemWithHistory1 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem1, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
+                    let inventoryItemWithHistory2 = InventoryItemWithHistoryEntry(inventoryItem: inventoryItem2, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
+                    
+                    TestInventory.remoteInventoryItemsProvider.addToInventory(addedInventory, inventoryItems: [inventoryItemWithHistory1, inventoryItemWithHistory2]) {result in
                         expect(result.success).to(beTrue())
                         expect(result.successResult).to(beNil())
                         
                         print("Increment the 2 added items")
                         let moreInventoryItem1 = InventoryItem(quantity: 10, product: product1, inventory: addedInventory)
                         let moreInventoryItem2 = InventoryItem(quantity: 30, product: product2, inventory: addedInventory)
-                        self!.remoteInventoryItemsProvider.addToInventory(addedInventory, inventoryItems: [moreInventoryItem1, moreInventoryItem2]) {result in
+                        let moreInventoryItemWithHistory1 = InventoryItemWithHistoryEntry(inventoryItem: moreInventoryItem1, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
+                        let moreInventoryItemWithHistory2 = InventoryItemWithHistoryEntry(inventoryItem: moreInventoryItem2, historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: SharedUser(email: TestUtils.userInput1.email))
+                        TestInventory.remoteInventoryItemsProvider.addToInventory(addedInventory, inventoryItems: [moreInventoryItemWithHistory1, moreInventoryItemWithHistory2]) {result in
                             expect(result.success).to(beTrue())
                             expect(result.successResult).to(beNil())
                             
                             print("Get items")
-                            self!.remoteInventoryItemsProvider.inventoryItems(addedInventory) {result in
+                            TestInventory.remoteInventoryItemsProvider.inventoryItems(addedInventory) {result in
                                 expect(result.success).to(beTrue())
                                 expect(result.successResult).toNot(beNil())
                                 
@@ -226,7 +236,7 @@ class TestInventory: XCTestCase {
         
         let expectation = self.expectationWithDescription("add inventory items")
         
-        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak self, weak expectation] loginData in
+        TestUtils.withClearDatabaseAndNewLoggedInAccountUser1 {[weak expectation] loginData in
             
             // Simulate a local database
             let inventory1 = Inventory(uuid: NSUUID().UUIDString, name: "myinventory1")
@@ -244,7 +254,7 @@ class TestInventory: XCTestCase {
             let inventoriesSync = SyncUtils.toInventoriesSync([inventory1, inventory2, inventory3], dbInventoryItems: [inventoryItem1, inventoryItem2, inventoryItem3])
             
             // 1. Very basic sync - remote database is empty
-            self?.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
+            TestInventory.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
                 expect(result.success).to(beTrue())
                 expect(result.successResult).toNot(beNil())
                 
@@ -296,7 +306,7 @@ class TestInventory: XCTestCase {
                     
                     let inventoriesSync = SyncUtils.toInventoriesSync([updatedInventory1, updatedInventory2], dbInventoryItems: [updatedInventoryItem1, updatedInventoryItem2, updatedInventoryItem3])
                     
-                    self?.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
+                    TestInventory.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
                         
                         expect(result.success).to(beTrue())
                         expect(result.successResult).toNot(beNil())
@@ -339,7 +349,7 @@ class TestInventory: XCTestCase {
                             
                             let inventoriesSync = SyncUtils.toInventoriesSync([updatedAgainInventory1], dbInventoryItems: [])
                             
-                            self?.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
+                            TestInventory.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
                                 
                                 expect(result.success).to(beTrue())
                                 expect(result.successResult).toNot(beNil())
@@ -383,7 +393,7 @@ class TestInventory: XCTestCase {
                                     
                                     let inventoriesSync = SyncUtils.toInventoriesSync([], dbInventoryItems: [updatedAgainInventoryItem2])
                                     
-                                    self?.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
+                                    TestInventory.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
                                         
                                         expect(result.success).to(beTrue())
                                         expect(result.successResult).toNot(beNil())
@@ -431,7 +441,7 @@ class TestInventory: XCTestCase {
 
                                             let inventoriesSync = SyncUtils.toInventoriesSync([updatedOnceAgainInventory1], dbInventoryItems: [updatedAgainInventoryItem1])
                                             
-                                            self?.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
+                                            TestInventory.remoteInventoryProvider.syncInventoriesWithInventoryItems(inventoriesSync) {result in
                                                 
                                                 expect(result.success).to(beTrue())
                                                 expect(result.successResult).toNot(beNil())

@@ -143,7 +143,6 @@ class TestUtils {
         })
     }
     
-
     class func testIfSuccessWithResult<T>(result: RemoteResult<T>) {
         TestUtils.ifSuccessMustBeResultNotNil(result)
         TestUtils.ifResultNotNilMustBeSuccess(result)
@@ -228,6 +227,37 @@ class TestUtils {
         expect(remoteListItem.listUuid).notTo(beEmpty())
         expect(remoteListItem.order).notTo(beLessThan(0))
         expect(remoteListItem.quantity).notTo(beLessThan(0))
+    }
+    
+    class func testHistoryItemMatches(remoteHistoryItem: RemoteHistoryItem, inventoryItemWithHistory: InventoryItemWithHistoryEntry, remoteHistoryItems: RemoteHistoryItems) {
+        expect(remoteHistoryItem.uuid) == inventoryItemWithHistory.historyItemUuid
+        expect(remoteHistoryItem.inventoryUuid) == inventoryItemWithHistory.inventoryItem.inventory.uuid
+        expect(remoteHistoryItem.productUuid) == inventoryItemWithHistory.inventoryItem.product.uuid
+        expect(remoteHistoryItem.quantity) == inventoryItemWithHistory.inventoryItem.quantityDelta // Note that this is used for add service, not sync - when adding the service is called immediately and quantityDelta is only the quantity for the current item (when incrementing inventory items in the local database offline/without account delta is an accumulation since the last sync).
+
+        let remoteInventory = remoteHistoryItems.inventories.findFirst {$0.uuid == remoteHistoryItem.inventoryUuid}
+        expect(remoteInventory).notTo(beNil())
+        self.testRemoteInventoryMatches(remoteInventory!, inventoryItemWithHistory.inventoryItem.inventory)
+        
+        let remoteProduct = remoteHistoryItems.products.findFirst {$0.uuid == remoteHistoryItem.productUuid}
+        expect(remoteProduct).notTo(beNil())
+        self.testRemoteProductMatches(remoteProduct!, inventoryItemWithHistory.inventoryItem.product)
+        
+        let remoteUser = remoteHistoryItems.users.findFirst {$0.uuid == remoteHistoryItem.userUuid}
+        expect(remoteUser).notTo(beNil())
+        expect(remoteUser!.email) == inventoryItemWithHistory.user.email
+        
+        // TODO fix (all) dates, this doesn't work, server saves 1970, etc. Work with UTC.
+        // Here the server receives the same long we send. But sends back a slightly different one. Probably issue happens when save and load from db
+//        expect(remoteHistoryItem.addedDate) == inventoryItemWithHistory.addedDate
+    }
+    
+    class func testHistoryItemMatches(remoteHistoryItem: RemoteHistoryItem, historyItem: HistoryItem) {
+        expect(remoteHistoryItem.uuid) == historyItem.uuid
+        expect(remoteHistoryItem.productUuid) == historyItem.product.uuid
+        expect(remoteHistoryItem.quantity) == historyItem.quantity
+        expect(remoteHistoryItem.inventoryUuid) == historyItem.inventory.uuid
+//        expect(remoteHistoryItem.addedDate) == historyItem.addedDate
     }
     
     class func testRemoteListItemMatches(remoteListItem: RemoteListItem, _ listItem: ListItem) {

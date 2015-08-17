@@ -38,26 +38,40 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    func addToInventory(inventory: Inventory, items: [InventoryItem], _ handler: ProviderResult<Any> -> ()) {
+    func addToInventory(inventory: Inventory, items: [InventoryItemWithHistoryEntry], _ handler: ProviderResult<Any> -> ()) {
         
-        self.remoteInventoryItemsProvider.addToInventory(inventory, inventoryItems: items) {remoteResult in
+        self.dbInventoryProvider.add(items) {saved in
             
-            if let _ = remoteResult.successResult {
+            if saved {
+                handler(ProviderResult(status: .Success))
                 
-                // For now no saving in local database, since there's no logic to increment in the client
-                // TODO in the future we should do the increment in the client, as the app can be used offline-only
-                // then call a sync with the server when we're online, where we either send the pending increments or somehow overwrite with updated items, taking into account timestamps
-                // remember that the inventory has to support merge since it can be shared with other users
-//                self.dbInventoryProvider.saveInventory(items) {saved in
-//                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
-//                    handler(ProviderResult(status: providerStatus))
-//                }
-                
-                handler(ProviderResult(status: ProviderStatusCode.Success))
+                self.remoteInventoryItemsProvider.addToInventory(inventory, inventoryItems: items) {remoteResult in
+                    
+                    if let _ = remoteResult.successResult {
+                        
+                        print("DEBUG: add remote inventory items success")
+                        
+                        
+                        // TODO is this comment still relevant?
+                        // For now no saving in local database, since there's no logic to increment in the client
+                        // TODO in the future we should do the increment in the client, as the app can be used offline-only
+                        // then call a sync with the server when we're online, where we either send the pending increments or somehow overwrite with updated items, taking into account timestamps
+                        // remember that the inventory has to support merge since it can be shared with other users
+                        //                self.dbInventoryProvider.saveInventory(items) {saved in
+                        //                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
+                        //                    handler(ProviderResult(status: providerStatus))
+                        //                }
+                        
+                        
+                        
+                    } else {
+                        print("TODO handling of sync errors, differentiate between no connection/server not reachable and the likes (this is ok), and invalid data etc.")
+                        // (what do we do with server invalid data error? do we remove the record from the client's database? which kind of error do we show to the client!? in any case this has to be sent to error monitoring, very clearly and detailed
+                    }
+                }
                 
             } else {
-                let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                handler(ProviderResult(status: providerStatus))
+                handler(ProviderResult(status: .DatabaseSavingError))
             }
         }
     }

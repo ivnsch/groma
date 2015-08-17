@@ -29,7 +29,7 @@ class TestUsers: XCTestCase {
                 expect(result.successResult?.token).toNot(beNil())
                 expect(result.successResult?.token).toNot(beEmpty())
 
-                expect(ProviderFactory().userProvider.myEmail) == user.email
+                expect(ProviderFactory().userProvider.mySharedUser?.email) == user.email
 
                 self.remoteProvider.register(user, handler: {result in
                     
@@ -60,7 +60,7 @@ class TestUsers: XCTestCase {
                 expect(result.successResult?.token).toNot(beNil())
                 expect(result.successResult?.token).toNot(beEmpty())
                 
-                expect(ProviderFactory().userProvider.myEmail) == user.email
+                expect(ProviderFactory().userProvider.mySharedUser?.email) == user.email
 
 //                let registerToken = result.successResult?.token
                 
@@ -72,7 +72,7 @@ class TestUsers: XCTestCase {
                     expect(result.successResult).toNot(beNil())
                     expect(result.successResult?.token).toNot(beEmpty())
                     
-                    expect(ProviderFactory().userProvider.myEmail) == user.email
+                    expect(ProviderFactory().userProvider.mySharedUser?.email) == user.email
 
 //                    expect(result.successResult?.token) == registerToken // TODO why does this fail, should the token not be always the same?
                     

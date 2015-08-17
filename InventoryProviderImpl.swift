@@ -67,31 +67,31 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    func addInventoryWithItems(inventory: Inventory, items: [InventoryItem], _ handler: ProviderResult<Any> -> ()) {
-        
-        self.dbInventoryProvider.saveInventory(inventory) {saved in
-            if saved {
-                self.dbInventoryProvider.saveInventoryItems(items) {saved in
-                    if saved {
-                        handler(ProviderResult(status: .Success))
-                        
-                        // background
-                        self.remoteProvider.addInventory(inventory) {remoteResult in
-                            if remoteResult.success {
-                                self.remoteInventoryItemsProvider.addToInventory(inventory, inventoryItems: items) {remoteResult in
-                                    if !remoteResult.success {
-                                        print("Error: remoteInventoryItemsProvider.addToInventory failed: \(remoteResult.status)") // TODO handle, when should we remove the item from local DB, when should we send a msg to error monitoring etc.
-                                    }
-                                }
-                            } else {
-                                    print("Error: remoteProvider.addInventory failed: \(remoteResult.status)") // TODO handle, when should we remove the item from local DB, when should we send a msg to error monitoring etc.
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    func addInventoryWithItems(inventory: Inventory, items: [InventoryItem], _ handler: ProviderResult<Any> -> ()) {
+//        
+//        self.dbInventoryProvider.saveInventory(inventory) {saved in
+//            if saved {
+//                self.dbInventoryProvider.saveInventoryItems(items) {saved in
+//                    if saved {
+//                        handler(ProviderResult(status: .Success))
+//                        
+//                        // background
+//                        self.remoteProvider.addInventory(inventory) {remoteResult in
+//                            if remoteResult.success {
+//                                self.remoteInventoryItemsProvider.addToInventory(inventory, inventoryItems: items) {remoteResult in
+//                                    if !remoteResult.success {
+//                                        print("Error: remoteInventoryItemsProvider.addToInventory failed: \(remoteResult.status)") // TODO handle, when should we remove the item from local DB, when should we send a msg to error monitoring etc.
+//                                    }
+//                                }
+//                            } else {
+//                                    print("Error: remoteProvider.addInventory failed: \(remoteResult.status)") // TODO handle, when should we remove the item from local DB, when should we send a msg to error monitoring etc.
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     func addInventory(inventory: Inventory, _ handler: ProviderResult<Any> -> ()) {
         self.dbInventoryProvider.saveInventory(inventory) {saved in
@@ -146,4 +146,5 @@ class InventoryProviderImpl: InventoryProvider {
             }
         }
     }
+
 }

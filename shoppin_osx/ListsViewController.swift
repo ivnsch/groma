@@ -65,8 +65,7 @@ class ListsViewController: NSViewController, NSTableViewDataSource, NSTableViewD
         // when user opens account with lists like that, somehow we replace the dummy value with the email (client and server)
         // or maybe we can just use *always* a dummy identifier for myself. A general purpose string like "myself"
         // For the user is not important to see their own email address, only to know this is myself. This is probably a bad idea for the databse in the server though.
-        let myEmail = ProviderFactory().userProvider.myEmail
-        let list = List(uuid: NSUUID().UUIDString, name: listInput.name, users: [SharedUser(email: myEmail ?? "foo@foo.foo")])
+        let list = List(uuid: NSUUID().UUIDString, name: listInput.name, users: [ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")])
 
         self.listsProvider.add(list, successHandler{[weak self] addedList in
             self?.loadLists() // we modified list - reload everything

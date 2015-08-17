@@ -115,7 +115,9 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         
         let onHasInventory: (Inventory) -> () = {[weak self] inventory in
             
-            let inventoryItems = self!.listItemsTableViewController.items.map{InventoryItem(quantity: $0.quantity, product: $0.product, inventory: inventory)}
+            let inventoryItems = self!.listItemsTableViewController.items.map{
+                InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.quantity, product: $0.product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
+            }
 
             self!.inventoryItemsProvider.addToInventory(inventory, items: inventoryItems, self!.successHandler{result in
                 self!.setAllItemsUndone()
@@ -129,9 +131,9 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
                 onHasInventory(inventory)
                 
             } else { // user has no inventories - create first one. Note if offline there can be inventories in server - there has to be a sync when user comes online/signs up
-                let myEmail = ProviderFactory().userProvider.myEmail ?? "unknown@e.mail" // TODO how do we handle shared users internally (database etc) when user is offline
+                let mySharedUser = ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail") // TODO how do we handle shared users internally (database etc) when user is offline
                 
-                let inventoryInput = Inventory(uuid: NSUUID().UUIDString, name: "Home", users: [SharedUser(email: myEmail)])
+                let inventoryInput = Inventory(uuid: NSUUID().UUIDString, name: "Home", users: [mySharedUser])
                 self!.inventoryProvider.addInventory(inventoryInput, self!.successHandler{notused in
                     
                     // just a hack because we need "full" shared user to create inventory based on inventory input
