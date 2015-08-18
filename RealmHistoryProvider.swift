@@ -17,11 +17,11 @@ class RealmHistoryProvider: RealmProvider {
     }
     
     func loadHistoryItems(handler: [HistoryItem] -> ()) {
-        let mapper = {HistoryItemMapper.historyItemWith($0)}
+        let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
         self.load(mapper, handler: handler)
     }
     
-    func saveHistoryItemsSyncResult(historyItems: RemoteHistoryItems, handler: Bool -> ()) {
+    func saveHistoryItems(historyItems: RemoteHistoryItems, handler: Bool -> ()) {
         
         self.doInWriteTransaction({realm in
             
@@ -29,7 +29,7 @@ class RealmHistoryProvider: RealmProvider {
             
             // save inventory items
             let historyItemsWithRelations = HistoryItemMapper.historyItemsWithRemote(historyItems)
-        
+            
             for product in historyItemsWithRelations.products {
                 let dbProduct = ProductMapper.dbWithProduct(product)
                 realm.add(dbProduct, update: true) // since we don't delete products (see comment above) we do update
@@ -42,14 +42,18 @@ class RealmHistoryProvider: RealmProvider {
             
             for historyItem in historyItemsWithRelations.historyItems {
                 let dbInventoryItem = HistoryItemMapper.dbWithHistoryItem(historyItem)
-                realm.add(dbInventoryItem, update: false)
+                realm.add(dbInventoryItem, update: true)
             }
-
+            
             return true
             
             }, finishHandler: {success in
                 handler(success)
             }
         )
+    }
+    
+    func saveHistoryItemsSyncResult(historyItems: RemoteHistoryItems, handler: Bool -> ()) {
+        self.saveHistoryItems(historyItems, handler: handler)
     }
 }

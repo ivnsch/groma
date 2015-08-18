@@ -12,6 +12,25 @@ class HistoryProviderImpl: HistoryProvider {
 
     let dbProvider = RealmHistoryProvider()
     let remoteProvider = RemoteHistoryProvider()
+
+    // Note that when we have push notifications sync we will not need this
+    func historyItems(handler: ProviderResult<[HistoryItem]> -> ()) {
+        self.dbProvider.loadHistoryItems {historyItems in
+            handler(ProviderResult(status: .Success, sucessResult: historyItems))
+        }
+        
+        self.remoteProvider.historyItems {result in
+            if let historyItems = result.successResult {
+                self.dbProvider.saveHistoryItems(historyItems) {saved in
+                    if !saved {
+                        print("Error: local database couldn't save history items fetched in background request")
+                    }
+                }
+            } else {
+                print("Error: history items background request didn't work: \(result.status)")
+            }
+        }
+    }
     
     func syncHistoryItems(handler: (ProviderResult<[Any]> -> ())) {
         

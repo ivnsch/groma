@@ -170,7 +170,7 @@ class RealmListItemProvider: RealmProvider {
             for remoteInventory in remoteInventories {
                 let dbInventory = ListMapper.dbWithList(remoteInventory)
                 dbInventoriesDict[remoteInventory.uuid] = dbInventory
-                realm.add(dbInventory, update: false)
+                realm.add(dbInventory, update: true)
             }
             
             // save inventory items
@@ -191,7 +191,7 @@ class RealmListItemProvider: RealmProvider {
                     
                     for listItem in listItemsWithRelations.listItems {
                         let dbInventoryItem = ListItemMapper.dbWithListItem(listItem)
-                        realm.add(dbInventoryItem, update: false)
+                        realm.add(dbInventoryItem, update: true)
 
                     }
                 } else {

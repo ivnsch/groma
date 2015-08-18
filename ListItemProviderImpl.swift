@@ -193,9 +193,16 @@ class ListItemProviderImpl: ListItemProvider {
         
         self.dbProvider.saveListItem(listItem) {saved in
             handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
+         
+            self.remoteProvider.update(listItem) {result in
+                if !result.success {
+                    print("Error: Updating listItem: \(listItem)")
+                }
+            }
         }
         // TODO is this used? if yes, server!
-        
+  
+
 //        self.dbProvider.saveSection(listItem.section, handler: {dbSectionMaybe in
 //            self.dbProvider.updateListItem(listItem, handler: {try in
 //                handler(Try(try.success != nil))

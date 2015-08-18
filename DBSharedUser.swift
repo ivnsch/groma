@@ -10,7 +10,8 @@ import Foundation
 import RealmSwift
 
 // TODO remove uuid, firstName and lastName
-class DBSharedUser: DBSyncable {
+//class DBSharedUser: DBSyncable { // TODO is this syncable or not?
+class DBSharedUser: Object {
     
     dynamic var email: String = ""
     

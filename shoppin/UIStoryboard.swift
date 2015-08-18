@@ -75,4 +75,15 @@ extension UIStoryboard {
     class func editInventoriesViewController() -> EditInventoryViewController {
         return mainStoryboard().instantiateViewControllerWithIdentifier("editInventoriesViewController") as! EditInventoryViewController
     }
+    
+    // MARK: - Stats
+    
+    class func historyViewController() -> HistoryViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("HistoryViewController") as! HistoryViewController
+    }
+    
+    class func statsViewController() -> StatsViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("StatsViewController") as! StatsViewController
+    }
+    
 }

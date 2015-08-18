@@ -144,8 +144,10 @@ class RealmProvider {
                     finished(f(realm))
                 }
                 
-            } catch _ {
-                print("Error: creating Realm() in remove")
+            }
+            
+            catch _ {
+                print("Error: creating Realm() in doInWriteTransaction")
                 finished(false)
             }
         })

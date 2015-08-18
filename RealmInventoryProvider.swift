@@ -99,7 +99,7 @@ class RealmInventoryProvider: RealmProvider {
             for remoteInventory in remoteInventories {
                 let dbInventory = InventoryMapper.dbWithInventory(remoteInventory)
                 dbInventoriesDict[remoteInventory.uuid] = dbInventory
-                realm.add(dbInventory, update: false)
+                realm.add(dbInventory, update: true)
             }
             
             // save inventory items
@@ -107,7 +107,7 @@ class RealmInventoryProvider: RealmProvider {
                 for inventoryItem in inventoryItemsSyncResult.inventoryItems {
                     if let dbInventory = dbInventoriesDict[inventoryItemsSyncResult.inventoryUuid] {
                         let dbInventoryItem = InventoryItemMapper.dbInventoryItemWithRemote(inventoryItem, inventory: dbInventory)
-                        realm.add(dbInventoryItem, update: false)
+                        realm.add(dbInventoryItem, update: true)
                     } else {
                         print("Error: Invalid response: Inventory item sync response: No inventory found for inventory item uuid")
                         // TODO good unit test for this, also send to error monitoring
@@ -132,10 +132,10 @@ class RealmInventoryProvider: RealmProvider {
         self.doInWriteTransaction({realm in
             for inventoryItemWithHistory in inventoryItemsWithHistory {
                 let dbInventory = InventoryItemMapper.dbWithInventoryItem(inventoryItemWithHistory.inventoryItem)
-                realm.add(dbInventory, update: false)
+                realm.add(dbInventory, update: true)
                 let dbHistoryItem = HistoryItemMapper.dbWith(inventoryItemWithHistory)
                 realm.add(dbInventory, update: true) // TODO implement increment delta for inventory items
-                realm.add(dbHistoryItem, update: false)
+                realm.add(dbHistoryItem, update: true)
             }
             
             return true

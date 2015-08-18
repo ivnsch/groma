@@ -11,8 +11,11 @@ import Alamofire
 
 class RemoteHistoryProvider {
 
-    func historyItems(inventory: Inventory, handler: RemoteResult<RemoteHistoryItems> -> ()) {
-        AlamofireHelper.authenticatedRequest(.GET, Urls.historyItems, ["inventory": inventory.uuid]).responseMyObject {(request, _, result: RemoteResult<RemoteHistoryItems>, error) in
+    func historyItems(inventory: Inventory? = nil, handler: RemoteResult<RemoteHistoryItems> -> ()) {
+        
+        let params: [String: AnyObject] = inventory.map{["inventory": $0.uuid]} ?? [String: AnyObject]()
+        
+        AlamofireHelper.authenticatedRequest(.GET, Urls.historyItems, params).responseMyObject {(request, _, result: RemoteResult<RemoteHistoryItems>, error) in
             handler(result)
         }
     }

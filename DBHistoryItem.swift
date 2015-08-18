@@ -16,4 +16,8 @@ class DBHistoryItem: DBSyncable {
     dynamic var addedDate: NSDate = NSDate()
     dynamic var quantity: Int = 0
     dynamic var user: DBSharedUser = DBSharedUser()
+    
+    override static func primaryKey() -> String? {
+        return "uuid"
+    }
 }

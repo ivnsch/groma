@@ -9,5 +9,8 @@
 import Foundation
 
 protocol HistoryProvider {
+    
+    func historyItems(handler: ProviderResult<[HistoryItem]> -> ())
+
     func syncHistoryItems(handler: (ProviderResult<[Any]> -> ()))
 }
