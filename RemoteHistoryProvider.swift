@@ -15,7 +15,7 @@ class RemoteHistoryProvider {
         
         let params: [String: AnyObject] = inventory.map{["inventory": $0.uuid]} ?? [String: AnyObject]()
         
-        AlamofireHelper.authenticatedRequest(.GET, Urls.historyItems, params).responseMyObject {(request, _, result: RemoteResult<RemoteHistoryItems>, error) in
+        AlamofireHelper.authenticatedRequest(.GET, Urls.historyItems, params).responseMyObject {(request, _, result: RemoteResult<RemoteHistoryItems>) in
             handler(result)
         }
     }
@@ -58,7 +58,7 @@ class RemoteHistoryProvider {
         
         print("sending: \(dictionary)")
         
-        AlamofireHelper.authenticatedRequest(.POST, Urls.historyItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteSyncResult<RemoteHistoryItems>>, error) in
+        AlamofireHelper.authenticatedRequest(.POST, Urls.historyItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteSyncResult<RemoteHistoryItems>>) in
             handler(result)
         }
     }

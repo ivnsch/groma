@@ -4,209 +4,145 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Nimble.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-shoppin-Alamofire.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>3</integer>
 		</dict>
 		<key>Pods-shoppin-Realm.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>4</integer>
 		</dict>
 		<key>Pods-shoppin-RealmSwift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>5</integer>
-		</dict>
-		<key>Pods-shoppin-SwiftValidator.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>6</integer>
 		</dict>
 		<key>Pods-shoppin-Valet.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>7</integer>
 		</dict>
 		<key>Pods-shoppin.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>2</integer>
 		</dict>
 		<key>Pods-shoppin_osx-Alamofire.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>9</integer>
 		</dict>
 		<key>Pods-shoppin_osx-Realm.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>10</integer>
 		</dict>
 		<key>Pods-shoppin_osx-RealmSwift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>11</integer>
 		</dict>
 		<key>Pods-shoppin_osx-Valet.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>12</integer>
 		</dict>
 		<key>Pods-shoppin_osx.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>8</integer>
-		</dict>
-		<key>Pods-shoppin_osxTests-Alamofire.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>14</integer>
-		</dict>
-		<key>Pods-shoppin_osxTests-Nimble.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>15</integer>
-		</dict>
-		<key>Pods-shoppin_osxTests-Realm.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>16</integer>
 		</dict>
 		<key>Pods-shoppin_osxTests-RealmSwift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>17</integer>
-		</dict>
-		<key>Pods-shoppin_osxTests-Valet.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>18</integer>
 		</dict>
 		<key>Pods-shoppin_osxTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>13</integer>
+		</dict>
+		<key>SwiftValidator.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>1626460B947203B42F2556A8</key>
+		<key>332D88155B869F140B7FC679899ECEB6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>1720EAA624116D798D542721</key>
+		<key>3CA0261739F050A39915CB248E03BB1E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>28ACCA5CA54B1D29A0369D82</key>
+		<key>5A483D0D7668ED673CB59C4715F3F12F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2E966F95FF7B30ABE007282D</key>
+		<key>8FE3C0867E32491553768D57972C294C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3D549010A8A3A1904E90E65B</key>
+		<key>9E99C613F7471D293407191EDB254935</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>43D1D6CBBD81422AF8AA8EEC</key>
+		<key>A4B51543672909061EE6DF073C5DA433</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5B1A0D91B7BBA6953911E383</key>
+		<key>B273CFE2182965906BA42D91A8D61342</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5F16C3181B45059E98EEA0BD</key>
+		<key>B73B6A6C62ECB13A0A1E0DFAAA0DDCF7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6AFCB322A094312532BAD31D</key>
+		<key>B981256B1D91F4D9693C73B42264F2D5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7E310D1D4A7033D6C1686299</key>
+		<key>CB086547AA71DE66E76DDCEC9743D075</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9C0EDBBC28E59E41F7C8D5CC</key>
+		<key>CD75F05333CD140DF39146B1D9E4AB3F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AEE193BDF1902F2096533E98</key>
+		<key>DD4FBBA31D04B2125DA54E16F3D5764C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D14A5DCC5D7AC86589F69F5C</key>
+		<key>F68E649563F6ADD214742857C446CDB4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D37F53647FA18FF9C7D1F4AC</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>D92E34D6100B2453E8790049</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F429D6E9D403EDCEABE56701</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F73D68027AD99055663D4F13</key>
+		<key>FF396A6BC21A0331CBAC0E7382884850</key>
 		<dict>
 			<key>primary</key>
 			<true/>

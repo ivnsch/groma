@@ -19,7 +19,7 @@ class RemoteUserProvider {
             "email": loginData.email,
             "password": loginData.password
         ]
-        Alamofire.request(.POST, URLString: Urls.login, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteLoginResult>, error) in
+        Alamofire.request(.POST, Urls.login, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteLoginResult>) in
             
             if let successResult = remoteResult.successResult {
                 self?.storeToken(successResult.token)
@@ -35,7 +35,7 @@ class RemoteUserProvider {
         
         let parameters = self.toRequestParams(user)
         
-        Alamofire.request(.POST, URLString: Urls.register, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteRegisterResult>, error) in
+        Alamofire.request(.POST, Urls.register, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteRegisterResult>) in
 
             if let successResult = remoteResult.successResult {
                 self?.storeToken(successResult.token)

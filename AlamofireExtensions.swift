@@ -159,7 +159,7 @@ struct AlamofireHelper {
 
 extension Alamofire.Request {
 
-    public func responseMyArray<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest?, NSHTTPURLResponse?, RemoteResult<[T]>, NSError?) -> Void) -> Self {
+    public func responseMyArray<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest?, NSHTTPURLResponse?, RemoteResult<[T]>) -> Void) -> Self {
 
         let dataParser: (AnyObject, NSHTTPURLResponse) -> ([T]?) = {data, response in
             var objs = [T]()
@@ -179,7 +179,7 @@ extension Alamofire.Request {
     }
     
     
-    public func responseMyObject<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest?, NSHTTPURLResponse?, RemoteResult<T>, NSError?) -> Void) -> Self {
+    public func responseMyObject<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest?, NSHTTPURLResponse?, RemoteResult<T>) -> Void) -> Self {
         
         let dataParser: (AnyObject, NSHTTPURLResponse) -> (T?) = {data, response in
             return T(response: response, representation: data)
@@ -190,9 +190,9 @@ extension Alamofire.Request {
     
     
     // Common method to parse json object and array
-    private func responseHandler<T>(dataParser: (AnyObject, NSHTTPURLResponse) -> (T?), completionHandler: (NSURLRequest?, NSHTTPURLResponse?, RemoteResult<T>, NSError?) -> Void) -> Self {
+    private func responseHandler<T>(dataParser: (AnyObject, NSHTTPURLResponse) -> (T?), completionHandler: (NSURLRequest?, NSHTTPURLResponse?, RemoteResult<T>) -> Void) -> Self {
 
-        let serializer: Serializer = { (request, responseMaybe, data) in
+        let responseSerializer = GenericResponseSerializer<RemoteResult<T>> { request, responseMaybe, data in
             
             print("method: \(request?.HTTPMethod), response: \(responseMaybe)")
             
@@ -202,131 +202,95 @@ extension Alamofire.Request {
                 
                 if statusCode >= 200 && statusCode < 300 {
                     let JSONSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
-                    let (JSON, serializationError) = JSONSerializer(request, response, data)
+                    let JSON = JSONSerializer.serializeResponse(request, response, data)
                     
-                    print("request: \(request), JSON: \(JSON)")
-                    
-                    if JSON != nil {
+                    switch JSON {
+                    case .Success(let dataObj):
                         
-                        let statusInt = JSON!.valueForKeyPath("status") as! Int
+                        let statusInt = dataObj.valueForKeyPath("status") as! Int
                         if let status = RemoteStatusCode(rawValue: statusInt) {
                             if status == .Success {
                                 
-                                if let data: AnyObject = JSON!.valueForKeyPath("data") {
+                                if let data: AnyObject = dataObj.valueForKeyPath("data") {
                                     
                                     if let sucessResult = dataParser(data, response) {
                                         let remoteResult = RemoteResult(status: status, sucessResult: sucessResult)
-                                        return (remoteResult, nil)
+                                        return Result.Success(remoteResult)
                                         
                                     } else {
-                                        print("Error parsing success object: \(response)")
-                                        
-                                        
-                                        let remoteResult = RemoteResult<T>(status: .ParsingError)
-                                        return (remoteResult, nil)
+                                        print("Error parsing result object")
+                                        return Result.Success(RemoteResult<T>(status: .ParsingError))
                                     }
                                     
                                 } else { // the result has no data
-                                    let remoteResult = RemoteResult<T>(status: status)
-                                    return (remoteResult, nil)
+                                    return Result.Success(RemoteResult<T>(status: status))
                                 }
                                 
                                 
-                            } else {
-                                let remoteResult = RemoteResult<T>(status: status)
-                                return (remoteResult, nil)
+                            } else { // status != success
+                                return Result.Success(RemoteResult<T>(status: status))
                             }
                             
                         } else {
-                            print("Error parsing response: status flag not recognized: \(statusInt)")
-                            let remoteResult = RemoteResult<T>(status: .NotRecognizedStatusFlag)
-                            return (remoteResult, nil)
+                            print("Error: response: status flag not recognized: \(statusInt)")
+                            return Result.Success(RemoteResult<T>(status: .NotRecognizedStatusFlag))
                         }
                         
-                    } else {
-                        print("Error: wrong reponse format: \(response), serializationError: \(serializationError)")
-                        let remoteResult = RemoteResult<T>(status: .NoJson)
-                        return (remoteResult, nil)
+                    case .Failure(let data, let error):
+                        print("Error serializing response: \(response), request: \(request), data: \(data), serializationError: \(error)")
+                        return Result.Success(RemoteResult<T>(status: .ParsingError))
                     }
-                    
-                    
                     
                 } else if statusCode == 401 {
                     print("Unauthorized")
-                    let remoteResult = RemoteResult<T>(status: .NotAuthenticated)
-                    return (remoteResult, nil)
+                    return Result.Success(RemoteResult<T>(status: .NotAuthenticated))
                     
                 } else if statusCode == 400 {
                     print("Bad request")
-                    let remoteResult = RemoteResult<T>(status: .BadRequest)
-                    return (remoteResult, nil)
+                    return Result.Success(RemoteResult<T>(status: .BadRequest))
                     
                 } else if statusCode == 415 {
                     print("Unsupported media type")
-                    let remoteResult = RemoteResult<T>(status: .UnsupportedMediaType)
-                    return (remoteResult, nil)
+                    return Result.Success(RemoteResult<T>(status: .UnsupportedMediaType))
                     
                 } else if statusCode == 500 {
                     print("Internal server error: \(response)")
-                    let remoteResult = RemoteResult<T>(status: .InternalServerError)
-                    return (remoteResult, nil)
+                    return Result.Success(RemoteResult<T>(status: .InternalServerError))
                     
                 } else {
                     print("Error: Not handled status code: \(statusCode)")
-                    let remoteResult = RemoteResult<T>(status: .NotHandledHTTPStatusCode)
-                    return (remoteResult, nil)
+                    return Result.Success(RemoteResult<T>(status: .NotHandledHTTPStatusCode))
                 }
                 
-            } else { // So far this happened only when the server was not reachable but now we are catching the error before using the serializable, so it's unexpected that this will be used
+            } else { // So far this happened when the server was not reachable. This will be executed but the error is handled in the completionHandler block (Alamofire passes us a .Failure in this case). We return here .ResponseIsNil only as result of the serialization.
                 print("Error: response == nil")
-                let remoteResult = RemoteResult<T>(status: .ResponseIsNil)
-                return (remoteResult, nil)
+                return Result.Success(RemoteResult<T>(status: .ResponseIsNil))
             }
         }
         
-        return response(serializer: serializer, completionHandler: { (request, response, object, error) in
-            
-            let result: RemoteResult<T> = {
-                
-                if let e = error {
-                    print("Error calling remote service: \(e)")
-                    if e.code == -1004 {  // iOS returns -1004 when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
+        return response(responseSerializer: responseSerializer, completionHandler: { (request: NSURLRequest?, response: NSHTTPURLResponse?, object: Result<RemoteResult<T>>) in
+
+            let remoteResult: RemoteResult<T> = {
+                switch object {
+                    
+                case .Success(let remoteResult):
+                    return remoteResult
+                    
+                case .Failure(let data, let error):
+                    print("Error calling remote service, data: \(data), error: \(error)")
+                    if error.code == -1004 {  // iOS returns -1004 both when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
                         return RemoteResult<T>(status: .ServerNotReachable)
                     } else {
                         return RemoteResult<T>(status: .UnknownServerCommunicationError)
                     }
-                    
-                } else {
-                    return object as! RemoteResult<T>
                 }
             }()
             
-            completionHandler(request, response, result, error)
+            completionHandler(request, response, remoteResult)
         })
-        
-        
     }
 }
-
 
 @objc public protocol ResponseCollectionSerializable {
     static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [Self]
-}
-
-extension Alamofire.Request {
-    public func responseCollection<T: ResponseCollectionSerializable>(completionHandler: (NSURLRequest?, NSHTTPURLResponse?, [T]?, NSError?) -> Void) -> Self {
-        let serializer: Serializer = { (request, response, data) in
-            let JSONSerializer = Request.JSONResponseSerializer(options: .AllowFragments)
-            let (JSON, serializationError) = JSONSerializer(request, response, data)
-            if let response = response, JSON = JSON {
-                return (T.collection(response: response, representation: JSON), nil)
-            } else {
-                return (nil, serializationError)
-            }
-        }
-        
-        return response(serializer: serializer, completionHandler: { (request, response, object, error) in
-            completionHandler(request, response, object as? [T], error)
-        })
-    }
 }

@@ -12,7 +12,7 @@ import Alamofire
 class RemoteInventoryProvider: RemoteProvider {
     
     func inventories(handler: RemoteResult<[RemoteInventory]> -> ()) {
-        AlamofireHelper.authenticatedRequest(.GET, Urls.inventory).responseMyArray { (request, _, result: RemoteResult<[RemoteInventory]>, error) in
+        AlamofireHelper.authenticatedRequest(.GET, Urls.inventory).responseMyArray { (request, _, result: RemoteResult<[RemoteInventory]>) in
             handler(result)
         }
     }
@@ -27,21 +27,21 @@ class RemoteInventoryProvider: RemoteProvider {
             "toRemove": toRemoveParams
         ]
         
-        AlamofireHelper.authenticatedRequest(.POST, Urls.inventorySync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteSyncResult<RemoteInventory>>, error) in
+        AlamofireHelper.authenticatedRequest(.POST, Urls.inventorySync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteSyncResult<RemoteInventory>>) in
             handler(result)
         }
     }
     
     func addInventory(inventory: Inventory, handler: RemoteResult<NoOpSerializable> -> ()) {
         let params = self.toRequestParams(inventory)
-        AlamofireHelper.authenticatedRequest(.POST, Urls.inventory, params).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
+        AlamofireHelper.authenticatedRequest(.POST, Urls.inventory, params).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>) in
             handler(result)
         }
     }
     
     func updateInventory(inventory: Inventory, handler: RemoteResult<NoOpSerializable> -> ()) {
         let params = self.toRequestParams(inventory)
-        AlamofireHelper.authenticatedRequest(.PUT, Urls.inventory, params).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>, error) in
+        AlamofireHelper.authenticatedRequest(.PUT, Urls.inventory, params).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>) in
             handler(result)
         }
     }
@@ -85,7 +85,7 @@ class RemoteInventoryProvider: RemoteProvider {
         
         print("sending: \(dictionary)")
         
-        AlamofireHelper.authenticatedRequest(.POST, Urls.inventoriesWithItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteInventoriesWithInventoryItemsSyncResult>, error) in
+        AlamofireHelper.authenticatedRequest(.POST, Urls.inventoriesWithItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteInventoriesWithInventoryItemsSyncResult>) in
             handler(result)
         }
     }

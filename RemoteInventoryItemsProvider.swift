@@ -13,7 +13,7 @@ import Alamofire
 class RemoteInventoryItemsProvider: Any {
     
     func inventoryItems(inventory: Inventory, handler: RemoteResult<[RemoteInventoryItemWithProduct]> -> ()) {
-        AlamofireHelper.authenticatedRequest(.GET, Urls.inventoryItems, ["inventory": inventory.uuid]).responseMyArray { (request, _, result: RemoteResult<[RemoteInventoryItemWithProduct]>, error) in
+        AlamofireHelper.authenticatedRequest(.GET, Urls.inventoryItems, ["inventory": inventory.uuid]).responseMyArray { (request, _, result: RemoteResult<[RemoteInventoryItemWithProduct]>) in
             handler(result)
         }
     }
@@ -38,7 +38,7 @@ class RemoteInventoryItemsProvider: Any {
         do {
             request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(values, options: [])
             
-            Alamofire.request(request).responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>, error) in
+            Alamofire.request(request).responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>) in
                 handler(result)
             }
             

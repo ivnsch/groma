@@ -50,7 +50,7 @@ class AutocompleteTextField: NSTextField {
         let sectionFrame = self!.frame
         let h: CGFloat = 100
         viewController.view.frame = CGRectMake(sectionFrame.origin.x, sectionFrame.origin.y - h, sectionFrame.size.width + 50, h)
-        self!.window?.contentView.addSubview(viewController.view)
+        self!.window?.contentView?.addSubview(viewController.view)
         return viewController
     }()
     
