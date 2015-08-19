@@ -30,6 +30,11 @@ class RealmHistoryProvider: RealmProvider {
             // save inventory items
             let historyItemsWithRelations = HistoryItemMapper.historyItemsWithRemote(historyItems)
             
+            for inventory in historyItemsWithRelations.inventories {
+                let dbInventory = InventoryMapper.dbWithInventory(inventory)
+                realm.add(dbInventory, update: true) // since we don't delete products (see comment above) we do update
+            }
+            
             for product in historyItemsWithRelations.products {
                 let dbProduct = ProductMapper.dbWithProduct(product)
                 realm.add(dbProduct, update: true) // since we don't delete products (see comment above) we do update

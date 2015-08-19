@@ -131,10 +131,9 @@ class RealmInventoryProvider: RealmProvider {
         
         self.doInWriteTransaction({realm in
             for inventoryItemWithHistory in inventoryItemsWithHistory {
-                let dbInventory = InventoryItemMapper.dbWithInventoryItem(inventoryItemWithHistory.inventoryItem)
-                realm.add(dbInventory, update: true)
+                let dbInventoryItem = InventoryItemMapper.dbWithInventoryItem(inventoryItemWithHistory.inventoryItem)
                 let dbHistoryItem = HistoryItemMapper.dbWith(inventoryItemWithHistory)
-                realm.add(dbInventory, update: true) // TODO implement increment delta for inventory items
+                realm.add(dbInventoryItem, update: true) // TODO implement increment delta for inventory items
                 realm.add(dbHistoryItem, update: true)
             }
             

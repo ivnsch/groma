@@ -45,12 +45,13 @@ class UserProviderImpl: UserProvider {
     private func sync(handler: () -> ()) {
         let listsProvider = ProviderFactory().listProvider
         let inventoryProvider = ProviderFactory().inventoryProvider
+        let historyProvider = ProviderFactory().historyProvider
         
         listsProvider.syncListsWithListItems {result in
             if result.success {
                 inventoryProvider.syncInventoriesWithInventoryItems {result in
                     if result.success {
-                        inventoryProvider.syncInventoriesWithInventoryItems {result in
+                        historyProvider.syncHistoryItems {result in
                             handler()
                         }
                         

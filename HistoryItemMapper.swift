@@ -13,6 +13,7 @@ class HistoryItemMapper {
     class func dbWithHistoryItem(historyItem: HistoryItem) -> DBHistoryItem {
         let dbHistoryItem = DBHistoryItem()
         dbHistoryItem.uuid = historyItem.uuid
+        dbHistoryItem.inventory = InventoryMapper.dbWithInventory(historyItem.inventory)
         dbHistoryItem.product  = ProductMapper.dbWithProduct(historyItem.product)
         dbHistoryItem.addedDate = historyItem.addedDate
         dbHistoryItem.quantity = historyItem.quantity
@@ -23,6 +24,7 @@ class HistoryItemMapper {
     class func dbWith(inventoryItemWithHistory: InventoryItemWithHistoryEntry) -> DBHistoryItem {
         let dbHistoryItem = DBHistoryItem()
         dbHistoryItem.uuid = inventoryItemWithHistory.historyItemUuid
+        dbHistoryItem.inventory = InventoryMapper.dbWithInventory(inventoryItemWithHistory.inventoryItem.inventory)
         dbHistoryItem.product  = ProductMapper.dbWithProduct(inventoryItemWithHistory.inventoryItem.product)
         dbHistoryItem.addedDate = inventoryItemWithHistory.addedDate
         dbHistoryItem.quantity = inventoryItemWithHistory.inventoryItem.quantityDelta
