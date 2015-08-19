@@ -31,12 +31,15 @@ class StatsContainerViewController: UIViewController {
     
     @IBAction func onToggleHistoryStatsPress(sender: UIButton) {
     
-        self.currentViewController = {
+        let (currentViewController, buttonTitle): (UIViewController, String) = {
             if self.currentViewController is StatsViewController {
-                return self.historyViewController
+                return (self.historyViewController, "Stats")
             } else {
-                return self.statsViewController
+                return (self.statsViewController, "History")
             }
         }()
+        
+        self.currentViewController = currentViewController
+        sender.setTitle(buttonTitle, forState: UIControlState.Normal)
     }
 }
