@@ -12,8 +12,14 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if ProviderFactory().userProvider.loggedIn {
+            self.showUserDetailsController()
+        } else {
+            self.showLoginController()
+        }
 
-        self.showLoginController()
+        
     }
 
     // MARK: - LoginDelegate
@@ -35,9 +41,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     }
     
     private func onLoginOrRegisterSuccess() {
-        let userDetailsController = UIStoryboard.userDetailsViewController()
-        userDetailsController.delegate = self
-        self.replaceController(userDetailsController)
+        self.showUserDetailsController()
     }
 
     // MARK: - UserDetailsViewControllerDelegate
@@ -48,6 +52,13 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
 
     func onLogoutError() {
         print("login error!") // TODO handle
+    }
+    
+    
+    private func showUserDetailsController() {
+        let userDetailsController = UIStoryboard.userDetailsViewController()
+        userDetailsController.delegate = self
+        self.replaceController(userDetailsController)
     }
     
     // MARK:
