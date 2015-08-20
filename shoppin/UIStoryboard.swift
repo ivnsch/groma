@@ -11,7 +11,7 @@ import UIKit
 
 extension UIStoryboard {
     private class func mainStoryboard() -> UIStoryboard { return UIStoryboard(name: "Main", bundle: NSBundle.mainBundle()) }
-    private class func introboard() -> UIStoryboard { return UIStoryboard(name: "Intro", bundle: NSBundle.mainBundle()) }
+    private class func introStoryboard() -> UIStoryboard { return UIStoryboard(name: "Intro", bundle: NSBundle.mainBundle()) }
     private class func loginStoryboard() -> UIStoryboard { return UIStoryboard(name: "Login", bundle: NSBundle.mainBundle()) }
     private class func registerStoryboard() -> UIStoryboard { return UIStoryboard(name: "Register", bundle: NSBundle.mainBundle()) }
     private class func userDetailsStoryboard() -> UIStoryboard { return UIStoryboard(name: "UserDetails", bundle: NSBundle.mainBundle()) }
@@ -37,9 +37,13 @@ extension UIStoryboard {
     
     
     // MARK: - Intro
+
+    class func introNavController() -> UINavigationController {
+        return introStoryboard().instantiateViewControllerWithIdentifier("IntroNavController") as! UINavigationController
+    }
     
     class func introViewController() -> IntroViewController {
-        return introboard().instantiateViewControllerWithIdentifier("IntroController") as! IntroViewController
+        return introStoryboard().instantiateViewControllerWithIdentifier("IntroController") as! IntroViewController
     }
 
     // MARK: - Login

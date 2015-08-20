@@ -22,6 +22,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             PreferencesManager.savePreference(PreferencesManagerKey.hasLaunchedBefore, value: true)
             self.firstLaunchSetup()
         }
+        
+        let viewController: UIViewController = {
+            if ProviderFactory().userProvider.loggedIn {
+                return UIStoryboard.mainTabController()
+            } else {
+                return UIStoryboard.introNavController()
+            }
+        }()
+        
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        self.window?.rootViewController = viewController
+        self.window?.makeKeyAndVisible()
+        
         return true
     }
     
