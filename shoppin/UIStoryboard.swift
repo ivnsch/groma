@@ -79,15 +79,24 @@ extension UIStoryboard {
     class func editInventoriesViewController() -> EditInventoryViewController {
         return mainStoryboard().instantiateViewControllerWithIdentifier("editInventoriesViewController") as! EditInventoryViewController
     }
-    
-    // MARK: - Stats
+
+    // MARK: - History
     
     class func historyViewController() -> HistoryViewController {
         return mainStoryboard().instantiateViewControllerWithIdentifier("HistoryViewController") as! HistoryViewController
     }
     
+    // MARK: - Stats
+    
     class func statsViewController() -> StatsViewController {
         return mainStoryboard().instantiateViewControllerWithIdentifier("StatsViewController") as! StatsViewController
     }
     
+    class func aggrByTypeTableViewController() -> AggrByTypeTableViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("AggrByTypeTableViewController") as! AggrByTypeTableViewController
+    }
+
+    class func aggrByDateTableViewController() -> AggrByDateTableViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("AggrByDateTableViewController") as! AggrByDateTableViewController
+    }
 }

@@ -23,6 +23,7 @@ struct RequestErrorToMsgMapper {
             case .DatabaseUnknown: return "error_unknown_database"
             case .DatabaseSavingError: return "error_unknown_database"
             case .Unknown: return "error_unknown"
+            case .DateCalculationError: return "error_unknown"
             case .Success: return "success" // this is not used but we want exhaustive switch (without default case)
         }
     }

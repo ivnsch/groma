@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class Product: Equatable {
+final class Product: Equatable, Hashable {
     let uuid: String
     let name: String
     let price: Float
@@ -22,6 +22,11 @@ final class Product: Equatable {
     var debugDescription: String {
         return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), price: \(self.price)}"
     }
+
+    var hashValue: Int {
+        return self.uuid.hashValue
+    }
+    
 }
 
 func ==(lhs: Product, rhs: Product) -> Bool {

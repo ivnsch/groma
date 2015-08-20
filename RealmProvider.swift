@@ -73,9 +73,8 @@ class RealmProvider {
     }
     
 
-    
-    func load<T: Object, U>(mapper: T -> U, filter filterMaybe: String? = nil, handler: [U] -> ()) {
-
+    func load<T: Object, U>(mapper: T -> U, predicate predicateMaybe: NSPredicate?, handler: [U] -> ()) {
+        
         let finished: ([U]) -> () = {result in
             dispatch_async(dispatch_get_main_queue(), {
                 handler(result)
@@ -88,8 +87,8 @@ class RealmProvider {
                 let realm = try Realm()
                 
                 var results = realm.objects(T)
-                if let filter = filterMaybe {
-                    results = results.filter(filter)
+                if let predicate = predicateMaybe {
+                    results = results.filter(predicate)
                 }
                 
                 let objs: [T] = results.toArray()
@@ -102,6 +101,15 @@ class RealmProvider {
                 finished([]) // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
             }
         })
+    }
+    
+    func load<T: Object, U>(mapper: T -> U, filter filterMaybe: String? = nil, handler: [U] -> ()) {
+
+        let predicateMaybe = filterMaybe.map {
+            NSPredicate(format: $0, argumentArray: [])
+        }
+        
+        self.load(mapper, predicate: predicateMaybe, handler: handler)
     }
     
     func remove<T: Object>(pred: String, handler: Bool -> (), objType: T.Type) {
