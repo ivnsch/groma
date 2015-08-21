@@ -117,17 +117,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     
                     let user = SharedUser(email: "ivanschuetz@gmail.com") // Note this has to be the same as used in login
                     
+                    let today = NSDate()
+                    let calendar = NSCalendar.currentCalendar()
+                    let components = NSDateComponents()
+                    components.month = -2
+                    let months2Ago = calendar.dateByAddingComponents(components, toDate: today, options: .WrapComponents)!
+                    components.month = -4
+                    let months4Ago = calendar.dateByAddingComponents(components, toDate: today, options: .WrapComponents)!
+                    
                     let inventoryWithHistoryItems = [
                         InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[0], historyItemUuid: "600", addedDate: NSDate(), user: user),
-                        InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[1], historyItemUuid: "601", addedDate: NSDate(), user: user),
-                        InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[2], historyItemUuid: "602", addedDate: NSDate(), user: user),
+                        InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[1], historyItemUuid: "601", addedDate: months4Ago, user: user),
+                        InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[2], historyItemUuid: "602", addedDate: months2Ago, user: user),
                         InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[3], historyItemUuid: "603", addedDate: NSDate(), user: user),
-                        InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[4], historyItemUuid: "604", addedDate: NSDate(), user: user),
+                        InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[4], historyItemUuid: "604", addedDate: months2Ago, user: user),
                         InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[5], historyItemUuid: "605", addedDate: NSDate(), user: user),
                         InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[6], historyItemUuid: "606", addedDate: NSDate(), user: user),
-                        InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[7], historyItemUuid: "607", addedDate: NSDate(), user: user),
+                        InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[7], historyItemUuid: "607", addedDate: months4Ago, user: user),
                         InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[8], historyItemUuid: "608", addedDate: NSDate(), user: user),
-                        InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[9], historyItemUuid: "609", addedDate: NSDate(), user: user),
+                        InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[9], historyItemUuid: "609", addedDate: months2Ago, user: user),
                         InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[10], historyItemUuid: "610", addedDate: NSDate(), user: user),
                         InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[11], historyItemUuid: "611", addedDate: NSDate(), user: user)
                     ]
