@@ -78,6 +78,7 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         timePeriodPicker.hidden = true
         let timePeriod = timePeriods[row]
         currentTimePeriod = timePeriod.timePeriod
+        showStatsContent()
         timePeriodButton.setTitle(timePeriod.text, forState: .Normal)
     }
     
