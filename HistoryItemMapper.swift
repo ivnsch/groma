@@ -18,6 +18,8 @@ class HistoryItemMapper {
         dbHistoryItem.addedDate = historyItem.addedDate
         dbHistoryItem.quantity = historyItem.quantity
         dbHistoryItem.user = SharedUserMapper.dbWithSharedUser(historyItem.user)
+        dbHistoryItem.lastUpdate = historyItem.lastUpdate
+        dbHistoryItem.lastServerUpdate = historyItem.lastUpdate
         return dbHistoryItem
     }
     
@@ -29,6 +31,10 @@ class HistoryItemMapper {
         dbHistoryItem.addedDate = inventoryItemWithHistory.addedDate
         dbHistoryItem.quantity = inventoryItemWithHistory.inventoryItem.quantityDelta
         dbHistoryItem.user = SharedUserMapper.dbWithSharedUser(inventoryItemWithHistory.user)
+        dbHistoryItem.lastUpdate = inventoryItemWithHistory.inventoryItem.lastUpdate
+        if let lastServerUpdate = inventoryItemWithHistory.inventoryItem.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
+            dbHistoryItem.lastServerUpdate = lastServerUpdate
+        }
         return dbHistoryItem
     }
     
@@ -39,7 +45,9 @@ class HistoryItemMapper {
             product: ProductMapper.productWithDB(dbHistoryItem.product),
             addedDate: dbHistoryItem.addedDate,
             quantity: dbHistoryItem.quantity,
-            user: SharedUserMapper.sharedUserWithDB(dbHistoryItem.user)
+            user: SharedUserMapper.sharedUserWithDB(dbHistoryItem.user),
+            lastUpdate: dbHistoryItem.lastUpdate,
+            lastServerUpdate: dbHistoryItem.lastServerUpdate
         )
     }
     

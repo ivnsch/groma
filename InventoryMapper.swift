@@ -12,7 +12,7 @@ class InventoryMapper {
     
     class func inventoryWithDB(dbInventory: DBInventory) -> Inventory {
         let users = dbInventory.users.toArray().map{SharedUserMapper.sharedUserWithDB($0)}
-        return Inventory(uuid: dbInventory.uuid, name: dbInventory.name, users: users, lastUpdate: dbInventory.lastUpdate) // lastupdate ONLY DB -> MODEL
+        return Inventory(uuid: dbInventory.uuid, name: dbInventory.name, users: users, lastUpdate: dbInventory.lastUpdate, lastServerUpdate: dbInventory.lastServerUpdate) // lastupdate ONLY DB -> MODEL
     }
     
     class func inventoryWithRemote(remoteInventory: RemoteInventory) -> Inventory {
@@ -23,6 +23,10 @@ class InventoryMapper {
         let db = DBInventory()
         db.uuid = inventory.uuid
         db.name = inventory.name
+        db.lastUpdate = inventory.lastUpdate
+        if let lastServerUpdate = inventory.lastServerUpdate {
+            db.lastServerUpdate = lastServerUpdate
+        }
         let dbSharedUsers = inventory.users.map{SharedUserMapper.dbWithSharedUser($0)}
         for dbObj in dbSharedUsers {
             db.users.append(dbObj)

@@ -18,6 +18,9 @@ class ListMapper {
         for dbObj in dbSharedUsers {
             dbList.users.append(dbObj)
         }
+        if let lastServerUpdate = list.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
+            dbList.lastServerUpdate = lastServerUpdate
+        }
         return dbList
     }
 
@@ -29,6 +32,7 @@ class ListMapper {
         for dbObj in dbSharedUsers {
             dbList.users.append(dbObj)
         }
+        dbList.lastServerUpdate = list.lastUpdate
         return dbList
     }
     

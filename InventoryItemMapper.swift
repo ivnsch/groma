@@ -27,6 +27,10 @@ class InventoryItemMapper {
         db.quantityDelta = item.quantityDelta
         db.product = ProductMapper.dbWithProduct(item.product)
         db.inventory = InventoryMapper.dbWithInventory(item.inventory)
+        db.lastUpdate = item.lastUpdate
+        if let lastServerUpdate = item.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
+            db.lastServerUpdate = lastServerUpdate
+        }
         return db
     }
     
@@ -37,7 +41,7 @@ class InventoryItemMapper {
         db.quantity = item.inventoryItem.quantity
         db.product = product
         db.inventory = inventory
-        
+        db.lastServerUpdate = item.lastUpdate
         return db
     }
 }

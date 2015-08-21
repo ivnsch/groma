@@ -11,6 +11,6 @@ import RealmSwift
 
 class DBSyncable: Object {
     dynamic var lastUpdate: NSDate = NSDate()
-    dynamic var lastServerUpdate: NSDate = NSDate()
+    dynamic var lastServerUpdate: NSDate = NSDate(timeIntervalSince1970: 1) // Realm doesn't support nilable NSDate yet
     dynamic var removed: Bool = false
 }

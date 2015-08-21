@@ -194,7 +194,7 @@ extension Alamofire.Request {
 
         let responseSerializer = GenericResponseSerializer<RemoteResult<T>> { request, responseMaybe, data in
             
-            print("method: \(request?.HTTPMethod), response: \(responseMaybe)")
+//            print("method: \(request?.HTTPMethod), response: \(responseMaybe)")
             
             if let response = responseMaybe {
                 
@@ -207,6 +207,8 @@ extension Alamofire.Request {
                     switch JSON {
                     case .Success(let dataObj):
                         
+                        print("JSON (request \(request?.HTTPMethod), \(request?.URL): \(dataObj)")
+
                         let statusInt = dataObj.valueForKeyPath("status") as! Int
                         if let status = RemoteStatusCode(rawValue: statusInt) {
                             if status == .Success {
