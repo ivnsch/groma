@@ -101,18 +101,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 inventoryProvider.saveInventory(inventory1) {saved in
                     
                     let inventoryItems = [
-                        InventoryItem(quantity: 1, product: product8, inventory: inventory1),
-                        InventoryItem(quantity: 10, product: product9, inventory: inventory1),
-                        InventoryItem(quantity: 1, product: product10, inventory: inventory1),
-                        InventoryItem(quantity: 7, product: product11, inventory: inventory1),
-                        InventoryItem(quantity: 4, product: product12, inventory: inventory1),
-                        InventoryItem(quantity: 1, product: product13, inventory: inventory1),
-                        InventoryItem(quantity: 6, product: product14, inventory: inventory1),
-                        InventoryItem(quantity: 4, product: product15, inventory: inventory1),
-                        InventoryItem(quantity: 2, product: product16, inventory: inventory1),
-                        InventoryItem(quantity: 1, product: product17, inventory: inventory1),
-                        InventoryItem(quantity: 3, product: product18, inventory: inventory1),
-                        InventoryItem(quantity: 1, product: product19, inventory: inventory1)
+                        InventoryItem(quantityDelta: 1, product: product8, inventory: inventory1),
+                        InventoryItem(quantityDelta: 10, product: product9, inventory: inventory1),
+                        InventoryItem(quantityDelta: 1, product: product10, inventory: inventory1),
+                        InventoryItem(quantityDelta: 7, product: product11, inventory: inventory1),
+                        InventoryItem(quantityDelta: 4, product: product12, inventory: inventory1),
+                        InventoryItem(quantityDelta: 1, product: product13, inventory: inventory1),
+                        InventoryItem(quantityDelta: 6, product: product14, inventory: inventory1),
+                        InventoryItem(quantityDelta: 4, product: product15, inventory: inventory1),
+                        InventoryItem(quantityDelta: 2, product: product16, inventory: inventory1),
+                        InventoryItem(quantityDelta: 1, product: product17, inventory: inventory1),
+                        InventoryItem(quantityDelta: 3, product: product18, inventory: inventory1),
+                        InventoryItem(quantityDelta: 1, product: product19, inventory: inventory1)
                     ]
                     
                     let user = SharedUser(email: "ivanschuetz@gmail.com") // Note this has to be the same as used in login

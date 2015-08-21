@@ -24,7 +24,7 @@ class InventoryItem: Equatable {
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(quantity: Int, quantityDelta: Int = 0, product: Product, inventory: Inventory, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(quantity: Int = 0, quantityDelta: Int = 0, product: Product, inventory: Inventory, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.quantity = quantity
         self.product = product
         self.inventory = inventory
