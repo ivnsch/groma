@@ -44,14 +44,15 @@ struct MonthYearAggregate {
     }
 }
 
+
 class RealmStatsProvider: RealmProvider {
     
     // TODO move non db logic to provider impl
 
     func aggregate(timePeriod: TimePeriod, groupBy: GroupByAttribute, handler: ProviderResult<[ProductAggregate]> -> ()) {
         
-        let dateComponents = NSDateComponents()
-        dateComponents.month = -3
+        let dateComponents = timePeriod.dateOffsetComponent()
+        
         if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: NSDate(), options: .WrapComponents) {
             
             RealmHistoryProvider().loadHistoryItems(startDate) {historyItems in
@@ -101,8 +102,8 @@ class RealmStatsProvider: RealmProvider {
     
     func history(timePeriod: TimePeriod, group: AggregateGroup, handler: ProviderResult<GroupMonthYearAggregate> -> ()) {
     
-        let dateComponents = NSDateComponents()
-        dateComponents.month = -3
+        let dateComponents = timePeriod.dateOffsetComponent()
+        
         if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: NSDate(), options: .WrapComponents) {
             
             RealmHistoryProvider().loadHistoryItems(startDate) {historyItems in
@@ -135,6 +136,9 @@ class RealmStatsProvider: RealmProvider {
             print("Error: dateByAddingComponents in RealmStatsProvider, aggregate, returned nil. Can't calculate aggregate.")
             handler(ProviderResult(status: .DateCalculationError))
         }
-        
     }
+    
+
+    
+
 }

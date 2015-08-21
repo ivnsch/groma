@@ -9,7 +9,7 @@
 import UIKit
 
 enum TimeUnit {
-    case Day, Week, Month, Year
+    case Month, Year
 }
 
 struct TimePeriod {
@@ -19,6 +19,20 @@ struct TimePeriod {
     init(quantity: Int, timeUnit: TimeUnit) {
         self.quantity = quantity
         self.timeUnit = timeUnit
+    }
+    
+    func dateOffsetComponent() -> NSDateComponents {
+        
+        let dateComponents = NSDateComponents()
+        
+        let quantity = self.quantity
+        
+        switch timeUnit {
+        case .Month: dateComponents.month = quantity
+        case .Year: dateComponents.year = quantity
+        }
+        
+        return dateComponents
     }
 }
 

@@ -20,10 +20,10 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
 
     private let statsProvider = ProviderFactory().statsProvider
     
-    private static let defaultTimePeriod = TimePeriod(quantity: 3, timeUnit: .Month)
+    private static let defaultTimePeriod = TimePeriod(quantity: -3, timeUnit: .Month)
     private let timePeriods: [(timePeriod: TimePeriod, text: String)] = [
         (defaultTimePeriod, "3 months"),
-        (TimePeriod(quantity: 6, timeUnit: .Month), "6 months")
+        (TimePeriod(quantity: -6, timeUnit: .Month), "6 months")
     ]
     
     @IBOutlet weak var statsContentView: UIView!
