@@ -124,8 +124,10 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         showStatsContent(viewController)
     }
     
-    private func showAggrGraph(data: [ProductAggregate]) {
-        print("TODO showAggrGraph")
+    private func showAggrGraph(aggregates: [ProductAggregate]) {
+        let viewController = UIStoryboard.aggrByTypeChartViewController()
+        viewController.productAggregates = aggregates
+        showStatsContent(viewController)
     }
     
     private func showStatsContent(viewController: UIViewController) {

@@ -323,6 +323,9 @@
 		EBC6ADEF1B7E839900BD0ABC /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */; };
 		EBCE418B1B5D10BA00583551 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */; };
 		EBCE418D1B5D466B00583551 /* EditListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418C1B5D466B00583551 /* EditListViewController.swift */; };
+		EBDCA1251B87AE96000020BF /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA1241B87AE96000020BF /* XYPieChart.m */; };
+		EBDCA1271B87AEB9000020BF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDCA1261B87AEB9000020BF /* QuartzCore.framework */; };
+		EBDCA12C1B87B125000020BF /* AggrByTypeChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA12B1B87B125000020BF /* AggrByTypeChartViewController.swift */; };
 		EBDFE3A71ACE829400E48F95 /* CellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3A61ACE829400E48F95 /* CellManager.swift */; };
 		EBDFE3A91ACE82F000E48F95 /* ListItemCellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */; };
 		EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3AA1ACE935600E48F95 /* ListItemRow.swift */; };
@@ -602,6 +605,11 @@
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		EBCE418C1B5D466B00583551 /* EditListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListViewController.swift; sourceTree = "<group>"; };
+		EBDCA1231B87AE96000020BF /* XYPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYPieChart.h; sourceTree = "<group>"; };
+		EBDCA1241B87AE96000020BF /* XYPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYPieChart.m; sourceTree = "<group>"; };
+		EBDCA1261B87AEB9000020BF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
+		EBDCA12A1B87B063000020BF /* bridging_header_ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bridging_header_ios.h; sourceTree = SOURCE_ROOT; };
+		EBDCA12B1B87B125000020BF /* AggrByTypeChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AggrByTypeChartViewController.swift; sourceTree = "<group>"; };
 		EBDFE3A61ACE829400E48F95 /* CellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellManager.swift; sourceTree = "<group>"; };
 		EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCellManager.swift; sourceTree = "<group>"; };
 		EBDFE3AA1ACE935600E48F95 /* ListItemRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemRow.swift; sourceTree = "<group>"; };
@@ -664,6 +672,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBDCA1271B87AEB9000020BF /* QuartzCore.framework in Frameworks */,
 				746817AD4172A5D3EF184CB4 /* Pods_shoppin_osx.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -682,6 +691,7 @@
 		E4CDB4AFEC6C43F59CFE7A39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EBDCA1261B87AEB9000020BF /* QuartzCore.framework */,
 				CFD3968762A24D00B2ED9ADE /* libPods.a */,
 				CD0BE6D43CA3EAD8C16C1355 /* Pods_shoppin_osx.framework */,
 				AA884C051390422A612DB890 /* Pods_shoppin.framework */,
@@ -756,6 +766,7 @@
 		EB1DDEA71A3334EC00D778DE /* shoppin */ = {
 			isa = PBXGroup;
 			children = (
+				EBDCA12A1B87B063000020BF /* bridging_header_ios.h */,
 				EBF162E71A3CA1CD0048E37C /* provider */,
 				EBF162E61A3CA1AC0048E37C /* model */,
 				EB2F5D7C1A55817100DBC4AF /* common */,
@@ -940,6 +951,7 @@
 			children = (
 				EB451C521B865F0E000DE208 /* AggrByTypeTableViewController.swift */,
 				EB451C541B865F27000DE208 /* AggrByTypeTableViewCell.swift */,
+				EBDCA12B1B87B125000020BF /* AggrByTypeChartViewController.swift */,
 			);
 			name = byType;
 			sourceTree = "<group>";
@@ -999,6 +1011,7 @@
 				EB2F5D071A4A28DE00DBC4AF /* autosuggestions */,
 				EB55675B1A86231D00CD3EC6 /* common */,
 				EB4C36561B4C115E00C387C5 /* libraryCandidates */,
+				EBDCA1221B87AE96000020BF /* XYPieChart */,
 			);
 			name = shoppin_ios;
 			sourceTree = "<group>";
@@ -1164,6 +1177,16 @@
 				EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */,
 			);
 			name = validatorHelpers;
+			sourceTree = "<group>";
+		};
+		EBDCA1221B87AE96000020BF /* XYPieChart */ = {
+			isa = PBXGroup;
+			children = (
+				EBDCA1231B87AE96000020BF /* XYPieChart.h */,
+				EBDCA1241B87AE96000020BF /* XYPieChart.m */,
+			);
+			name = XYPieChart;
+			path = shoppin/XYPieChart;
 			sourceTree = "<group>";
 		};
 		EBDFE3A51ACE827C00E48F95 /* tableview */ = {
@@ -1700,6 +1723,7 @@
 				EB0FD3821B5D017C00829AE5 /* ListsTableViewController.swift in Sources */,
 				EB40A4761B550C0C000E9CAD /* Results.swift in Sources */,
 				EB2F5D5C1A5058E900DBC4AF /* TableViewListItem.swift in Sources */,
+				EBDCA12C1B87B125000020BF /* AggrByTypeChartViewController.swift in Sources */,
 				EB40A4861B55159D000E9CAD /* DBList.swift in Sources */,
 				EB2F5D621A50B91200DBC4AF /* AddItemView.swift in Sources */,
 				EB2F5D6D1A51C17200DBC4AF /* UIView.swift in Sources */,
@@ -1799,6 +1823,7 @@
 				EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */,
 				EBF3779F1B38AB1000EEB6DB /* User.swift in Sources */,
 				EB9BE41C1B2CB42B005B401A /* RemoteListItem.swift in Sources */,
+				EBDCA1251B87AE96000020BF /* XYPieChart.m in Sources */,
 				EB20FBFE1A5972C70058103B /* InventoryItemsProviderImpl.swift in Sources */,
 				EBB5A04D1B6596D400FB9C58 /* ProviderFetchModus.swift in Sources */,
 				EB4D57B01B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */,
@@ -2212,7 +2237,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.schuetz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -2234,7 +2259,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.schuetz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
