@@ -29,7 +29,9 @@ class MainWindowController: NSWindowController, LoginDelegate {
     }
     
     private func onHasUserToken() {
-        self.contentViewController = NSStoryboard.mainViewController()
+        let tabViewController = NSStoryboard.tabViewController()
+        tabViewController.selectedTabViewItemIndex = 0
+        self.contentViewController = tabViewController
     }
     
     func onLoginSuccess() {

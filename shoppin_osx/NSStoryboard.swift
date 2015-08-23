@@ -13,8 +13,8 @@ extension NSStoryboard {
     private class func mainStoryboard() -> NSStoryboard { return NSStoryboard(name: "Main", bundle: NSBundle.mainBundle()) }
     private class func signupStoryboard() -> NSStoryboard { return NSStoryboard(name: "LoginRegister", bundle: NSBundle.mainBundle()) }
     
-    class func mainViewController() -> ViewController {
-        return self.mainStoryboard().instantiateControllerWithIdentifier("MainViewController") as! ViewController
+    class func tabViewController() -> NSTabViewController {
+        return self.mainStoryboard().instantiateControllerWithIdentifier("TabViewController") as! NSTabViewController
     }
 
     class func loginViewController() -> LoginViewController {
