@@ -6,6 +6,7 @@ PODS:
   - Realm/Headers (0.94.1)
   - RealmSwift (0.94.1):
     - Realm (= 0.94.1)
+  - SwiftCharts (0.2.3)
   - SwiftValidator (2.1.1)
   - Valet (1.3.1)
 
@@ -14,6 +15,7 @@ DEPENDENCIES:
   - Nimble (from `https://github.com/Quick/Nimble.git`, branch `swift-2.0`)
   - Realm (from `https://github.com/realm/realm-cocoa.git`, branch `swift-2.0`)
   - RealmSwift (from `https://github.com/realm/realm-cocoa.git`, branch `swift-2.0`)
+  - SwiftCharts (from `https://github.com/i-schuetz/SwiftCharts.git`, branch `swift2.0`)
   - SwiftValidator (from `https://github.com/i-schuetz/SwiftValidator`, branch `swift2.0_remove_delegate_callback`)
   - Valet (~> 1.3)
 
@@ -30,6 +32,9 @@ EXTERNAL SOURCES:
   RealmSwift:
     :branch: swift-2.0
     :git: https://github.com/realm/realm-cocoa.git
+  SwiftCharts:
+    :branch: swift2.0
+    :git: https://github.com/i-schuetz/SwiftCharts.git
   SwiftValidator:
     :branch: swift2.0_remove_delegate_callback
     :git: https://github.com/i-schuetz/SwiftValidator
@@ -47,6 +52,9 @@ CHECKOUT OPTIONS:
   RealmSwift:
     :commit: 2e76fca59d9dfe0edf00cbc01f2cef85033426eb
     :git: https://github.com/realm/realm-cocoa.git
+  SwiftCharts:
+    :commit: f148020cd920e2658b8cc262639a3e0a806f0350
+    :git: https://github.com/i-schuetz/SwiftCharts.git
   SwiftValidator:
     :commit: 26f32a22fd92575bd10a9e3ff53584a416e1a5a8
     :git: https://github.com/i-schuetz/SwiftValidator
@@ -56,6 +64,7 @@ SPEC CHECKSUMS:
   Nimble: e3cf5e73a491daf21c2bc88783dbfc55ce8b8e02
   Realm: aa8ba4c47efeecd83b2fb1c882e5f33e8c5676ca
   RealmSwift: 1cfcf6f9bd4de8674797d000de346d9588ca2028
+  SwiftCharts: 3d52cb36901eff466375e601c2074102120007d5
   SwiftValidator: 79936ea870f1dba8a0824763375375bb209fe30d
   Valet: f7fb62b7b65db58eaceee7828cf8e464b1b8fb71
 

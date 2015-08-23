@@ -326,6 +326,10 @@
 		EBDCA1251B87AE96000020BF /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA1241B87AE96000020BF /* XYPieChart.m */; };
 		EBDCA1271B87AEB9000020BF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDCA1261B87AEB9000020BF /* QuartzCore.framework */; };
 		EBDCA12C1B87B125000020BF /* AggrByTypeChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA12B1B87B125000020BF /* AggrByTypeChartViewController.swift */; };
+		EBDCA12F1B88D54F000020BF /* AggrByDateChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA12E1B88D54F000020BF /* AggrByDateChartViewController.swift */; };
+		EBDCA1311B8A124B000020BF /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA1301B8A124B000020BF /* NSDate.swift */; };
+		EBDCA1321B8A124B000020BF /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA1301B8A124B000020BF /* NSDate.swift */; };
+		EBDCA1331B8A124B000020BF /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA1301B8A124B000020BF /* NSDate.swift */; };
 		EBDFE3A71ACE829400E48F95 /* CellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3A61ACE829400E48F95 /* CellManager.swift */; };
 		EBDFE3A91ACE82F000E48F95 /* ListItemCellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */; };
 		EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3AA1ACE935600E48F95 /* ListItemRow.swift */; };
@@ -610,6 +614,8 @@
 		EBDCA1261B87AEB9000020BF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		EBDCA12A1B87B063000020BF /* bridging_header_ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bridging_header_ios.h; sourceTree = SOURCE_ROOT; };
 		EBDCA12B1B87B125000020BF /* AggrByTypeChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AggrByTypeChartViewController.swift; sourceTree = "<group>"; };
+		EBDCA12E1B88D54F000020BF /* AggrByDateChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AggrByDateChartViewController.swift; sourceTree = "<group>"; };
+		EBDCA1301B8A124B000020BF /* NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDate.swift; sourceTree = "<group>"; };
 		EBDFE3A61ACE829400E48F95 /* CellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellManager.swift; sourceTree = "<group>"; };
 		EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCellManager.swift; sourceTree = "<group>"; };
 		EBDFE3AA1ACE935600E48F95 /* ListItemRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemRow.swift; sourceTree = "<group>"; };
@@ -862,6 +868,7 @@
 				EB2F5D5D1A506F5100DBC4AF /* Array.swift */,
 				EB2F5D6E1A530FBC00DBC4AF /* Float.swift */,
 				EB3144451B643559005814F0 /* UITextField.swift */,
+				EBDCA1301B8A124B000020BF /* NSDate.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -942,6 +949,7 @@
 			children = (
 				EB451C4C1B865B3D000DE208 /* AggrByDateTableViewController.swift */,
 				EB451C4F1B865CFC000DE208 /* AggrByDateTableViewCell.swift */,
+				EBDCA12E1B88D54F000020BF /* AggrByDateChartViewController.swift */,
 			);
 			name = byDate;
 			sourceTree = "<group>";
@@ -1011,7 +1019,7 @@
 				EB2F5D071A4A28DE00DBC4AF /* autosuggestions */,
 				EB55675B1A86231D00CD3EC6 /* common */,
 				EB4C36561B4C115E00C387C5 /* libraryCandidates */,
-				EBDCA1221B87AE96000020BF /* XYPieChart */,
+				EBDCA12D1B88D4FF000020BF /* charts */,
 			);
 			name = shoppin_ios;
 			sourceTree = "<group>";
@@ -1187,6 +1195,14 @@
 			);
 			name = XYPieChart;
 			path = shoppin/XYPieChart;
+			sourceTree = "<group>";
+		};
+		EBDCA12D1B88D4FF000020BF /* charts */ = {
+			isa = PBXGroup;
+			children = (
+				EBDCA1221B87AE96000020BF /* XYPieChart */,
+			);
+			name = charts;
 			sourceTree = "<group>";
 		};
 		EBDFE3A51ACE827C00E48F95 /* tableview */ = {
@@ -1808,6 +1824,7 @@
 				EBF162FA1A3CA54F0048E37C /* ListItemProvider.swift in Sources */,
 				EBB9A7381B5EB14300E5487D /* RemoteInventory.swift in Sources */,
 				EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */,
+				EBDCA1311B8A124B000020BF /* NSDate.swift in Sources */,
 				EB7E832A1B7B72B9009DEEF4 /* HistoryItemMapper.swift in Sources */,
 				EB70C2231B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBF162F51A3CA4BA0048E37C /* ProviderFactory.swift in Sources */,
@@ -1817,6 +1834,7 @@
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
 				EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */,
 				EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */,
+				EBDCA12F1B88D54F000020BF /* AggrByDateChartViewController.swift in Sources */,
 				EB40A46E1B550804000E9CAD /* RealmProvider.swift in Sources */,
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,
@@ -1893,6 +1911,7 @@
 				EB0C2A371B58329800AF6226 /* RemoteInventoryProvider.swift in Sources */,
 				EB0C1B941B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
 				EB89D33D1AD44BD400B6E0D0 /* Selectable.swift in Sources */,
+				EBDCA1321B8A124B000020BF /* NSDate.swift in Sources */,
 				EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */,
 				EB9BE4261B2CB542005B401A /* RemoteList.swift in Sources */,
 				EB40A4771B550C0C000E9CAD /* Results.swift in Sources */,
@@ -2025,6 +2044,7 @@
 				EBF377791B342B1100EEB6DB /* Product.swift in Sources */,
 				EB4D57B21B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */,
 				EB78587F1B7FD81A008AAD12 /* HistoryItemsSync.swift in Sources */,
+				EBDCA1331B8A124B000020BF /* NSDate.swift in Sources */,
 				EB6F81661B4B1CDC008680E0 /* TestRequiresAuthentication.swift in Sources */,
 				EB4D57AE1B7505DD00BC6171 /* SyncUtils.swift in Sources */,
 				EB0C1BAB1B3ED8D600F24C85 /* ProviderResult.swift in Sources */,

@@ -114,8 +114,10 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         showStatsContent(viewController)
     }
 
-    private func showHistoryGraph(data: GroupMonthYearAggregate) {
-        print("TODO showHistoryGraph")
+    private func showHistoryGraph(monthYearAggregate: GroupMonthYearAggregate) {
+        let viewController = UIStoryboard.aggrByDateChartViewController()
+        viewController.monthYearAggregate = monthYearAggregate
+        showStatsContent(viewController)
     }
 
     private func showAggrList(productAggregates: [ProductAggregate]) {

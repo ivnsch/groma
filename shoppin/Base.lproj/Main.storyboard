@@ -1156,6 +1156,24 @@
             </objects>
             <point key="canvasLocation" x="-959" y="3317"/>
         </scene>
+        <!--Aggr By Date Chart View Controller-->
+        <scene sceneID="E5E-ce-7Fe">
+            <objects>
+                <viewController storyboardIdentifier="AggrByDateChartViewController" id="M85-ry-bcg" customClass="AggrByDateChartViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Ccs-OX-fhb"/>
+                        <viewControllerLayoutGuide type="bottom" id="Do2-V6-7kk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cVy-bw-N1L">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ubV-Ka-Bnb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-327" y="3318"/>
+        </scene>
         <!--History View Controller-->
         <scene sceneID="vBG-27-nIF">
             <objects>

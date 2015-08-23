@@ -6,7 +6,7 @@
 //  Copyright © 2015 ivanschuetz. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 enum TimeUnit {
     case Month, Year
@@ -22,10 +22,12 @@ struct TimePeriod {
     }
     
     func dateOffsetComponent() -> NSDateComponents {
+        return dateOffsetComponent(quantity)
+    }
+    
+    func dateOffsetComponent(quantity: Int) -> NSDateComponents {
         
         let dateComponents = NSDateComponents()
-        
-        let quantity = self.quantity
         
         switch timeUnit {
         case .Month: dateComponents.month = quantity

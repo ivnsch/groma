@@ -103,4 +103,8 @@ extension UIStoryboard {
     class func aggrByDateTableViewController() -> AggrByDateTableViewController {
         return mainStoryboard().instantiateViewControllerWithIdentifier("AggrByDateTableViewController") as! AggrByDateTableViewController
     }
+    
+    class func aggrByDateChartViewController() -> AggrByDateChartViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("AggrByDateChartViewController") as! AggrByDateChartViewController
+    }
 }

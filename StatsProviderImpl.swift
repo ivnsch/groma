@@ -6,7 +6,7 @@
 //  Copyright © 2015 ivanschuetz. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 struct ProductAggregate {
     let product: Product
@@ -22,14 +22,31 @@ struct ProductAggregate {
     }
 }
 
-struct GroupMonthYearAggregate {
+final class GroupMonthYearAggregate {
     let group: AggregateGroup
+    let timePeriod: TimePeriod
+    let referenceDate: NSDate
     let monthYearAggregates: [MonthYearAggregate]
     
-    init(group: AggregateGroup, monthYearAggregates: [MonthYearAggregate]) {
+    init(group: AggregateGroup, timePeriod: TimePeriod, referenceDate: NSDate, monthYearAggregates: [MonthYearAggregate]) {
         self.group = group
+        self.timePeriod = timePeriod
+        self.referenceDate = referenceDate
         self.monthYearAggregates = monthYearAggregates
     }
+    
+    /**
+    Dates covered by timePeriod. The content of monthYearAggregates is irrelevant here.
+    */
+    lazy var allDates: [NSDate] = {
+        // quantity can be negative, in which case we need quantity..0, or positive, in which case we need 0..quantity
+        let dates: [NSDate] = stride(from: min(self.timePeriod.quantity + 1, 0), through: max(self.timePeriod.quantity, 0), by: 1).map {quantity in
+            let offset = self.timePeriod.dateOffsetComponent(quantity)
+            return NSCalendar.currentCalendar().dateByAddingComponents(offset, toDate: self.referenceDate, options: .WrapComponents)!
+        }
+        
+        return dates.sort{$0 < $1}
+    }()
 }
 
 struct MonthYearAggregate {
@@ -99,7 +116,8 @@ class StatsProviderImpl: StatsProvider {
     func history(timePeriod: TimePeriod, group: AggregateGroup, handler: ProviderResult<GroupMonthYearAggregate> -> ()) {
         let dateComponents = timePeriod.dateOffsetComponent()
         
-        if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: NSDate(), options: .WrapComponents) {
+        let referenceDate = NSDate() // today
+        if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: referenceDate, options: .WrapComponents) {
             
             RealmHistoryProvider().loadHistoryItems(startDate) {historyItems in
                 
@@ -121,7 +139,7 @@ class StatsProviderImpl: StatsProvider {
                     MonthYearAggregate(monthYear: key, totalCount: value.quantity, totalPrice: value.price)
                 }
                 
-                let groupMonthYearAggregate = GroupMonthYearAggregate(group: group, monthYearAggregates: monthYearAggregates)
+                let groupMonthYearAggregate = GroupMonthYearAggregate(group: group, timePeriod: timePeriod, referenceDate: referenceDate, monthYearAggregates: monthYearAggregates)
                 
                 handler(ProviderResult(status: .Success, sucessResult: groupMonthYearAggregate))
             }
