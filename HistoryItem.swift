@@ -8,7 +8,7 @@
 
 import Foundation
 
-class HistoryItem {
+class HistoryItem: Equatable {
     
     let uuid: String
     let product: Product
@@ -37,6 +37,11 @@ class HistoryItem {
         self.removed = removed
     }
 }
+
+func ==(lhs: HistoryItem, rhs: HistoryItem) -> Bool {
+    return lhs.uuid == rhs.uuid
+}
+
 
 // convenience (redundant) holder to avoid having to iterate through historyitems to find unique products and users
 // so products, users arrays are the result of extracting the unique products and users from historyItems array

@@ -328,6 +328,8 @@
 		EBC6ADEF1B7E839900BD0ABC /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */; };
 		EBCE418B1B5D10BA00583551 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */; };
 		EBCE418D1B5D466B00583551 /* EditListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418C1B5D466B00583551 /* EditListViewController.swift */; };
+		EBD236AE1B8B9DC600B88969 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD236AD1B8B9DC600B88969 /* HistoryViewController.swift */; };
+		EBD236B01B8B9E7200B88969 /* HistoryItemCellOSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD236AF1B8B9E7200B88969 /* HistoryItemCellOSX.swift */; };
 		EBDCA1251B87AE96000020BF /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA1241B87AE96000020BF /* XYPieChart.m */; };
 		EBDCA1271B87AEB9000020BF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDCA1261B87AEB9000020BF /* QuartzCore.framework */; };
 		EBDCA12C1B87B125000020BF /* AggrByTypeChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA12B1B87B125000020BF /* AggrByTypeChartViewController.swift */; };
@@ -619,6 +621,8 @@
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		EBCE418C1B5D466B00583551 /* EditListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListViewController.swift; sourceTree = "<group>"; };
+		EBD236AD1B8B9DC600B88969 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
+		EBD236AF1B8B9E7200B88969 /* HistoryItemCellOSX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemCellOSX.swift; sourceTree = "<group>"; };
 		EBDCA1231B87AE96000020BF /* XYPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XYPieChart.h; sourceTree = "<group>"; };
 		EBDCA1241B87AE96000020BF /* XYPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYPieChart.m; sourceTree = "<group>"; };
 		EBDCA1261B87AEB9000020BF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -1127,6 +1131,7 @@
 				EB4FD44C1AC6BE2A0000F952 /* extension */,
 				EB7E82EB1B79F1B7009DEEF4 /* user */,
 				EBB2AB351B8B2463007B8C59 /* inventory */,
+				EBD236AC1B8B9D9E00B88969 /* history */,
 				EB9F6CE61A8610550038355B /* AppDelegate.swift */,
 				EB9F6CE81A8610550038355B /* ViewController.swift */,
 				EB4FD4551AC6D6690000F952 /* EditListItemController.swift */,
@@ -1208,6 +1213,15 @@
 				EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */,
 			);
 			name = validatorHelpers;
+			sourceTree = "<group>";
+		};
+		EBD236AC1B8B9D9E00B88969 /* history */ = {
+			isa = PBXGroup;
+			children = (
+				EBD236AD1B8B9DC600B88969 /* HistoryViewController.swift */,
+				EBD236AF1B8B9E7200B88969 /* HistoryItemCellOSX.swift */,
+			);
+			name = history;
 			sourceTree = "<group>";
 		};
 		EBDCA1221B87AE96000020BF /* XYPieChart */ = {
@@ -1905,6 +1919,7 @@
 				EBB9A7491B5EB46C00E5487D /* InventoryMapper.swift in Sources */,
 				EB70C22A1B4D3DD40060E529 /* ListProvider.swift in Sources */,
 				EB0C2A4B1B5840F700AF6226 /* RealmInventoryProvider.swift in Sources */,
+				EBD236B01B8B9E7200B88969 /* HistoryItemCellOSX.swift in Sources */,
 				EB4FD46E1AC73C930000F952 /* Constants.swift in Sources */,
 				EBB9A7451B5EB28500E5487D /* RemoteInventoryItemsProvider.swift in Sources */,
 				EB0C1B8C1B3DA89900F24C85 /* LoginData.swift in Sources */,
@@ -1939,6 +1954,7 @@
 				EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */,
 				EB9BE4261B2CB542005B401A /* RemoteList.swift in Sources */,
 				EB40A4771B550C0C000E9CAD /* Results.swift in Sources */,
+				EBD236AE1B8B9DC600B88969 /* HistoryViewController.swift in Sources */,
 				EB0C2A311B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */,
 				EB0C2A4F1B5841C600AF6226 /* DBInventoryItem.swift in Sources */,
 				EB9BE41D1B2CB42B005B401A /* RemoteListItem.swift in Sources */,

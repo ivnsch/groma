@@ -15,19 +15,23 @@ class HistoryProviderImpl: HistoryProvider {
 
     // Note that when we have push notifications sync we will not need this
     func historyItems(handler: ProviderResult<[HistoryItem]> -> ()) {
-        self.dbProvider.loadHistoryItems {historyItems in
-            handler(ProviderResult(status: .Success, sucessResult: historyItems))
-        }
-        
-        self.remoteProvider.historyItems {result in
-            if let historyItems = result.successResult {
-                self.dbProvider.saveHistoryItems(historyItems) {saved in
-                    if !saved {
-                        print("Error: local database couldn't save history items fetched in background request")
+        self.dbProvider.loadHistoryItems {dbHistoryItems in
+            handler(ProviderResult(status: .Success, sucessResult: dbHistoryItems))
+            
+            self.remoteProvider.historyItems {result in
+                if let remoteHistoryItems = result.successResult {
+                    let historyItemsWithRelations: HistoryItemsWithRelations = HistoryItemMapper.historyItemsWithRemote(remoteHistoryItems)
+                    
+                    // if there's no cached list or there's a difference, overwrite the cached list
+                    if dbHistoryItems != historyItemsWithRelations.historyItems {
+                        
+                        self.dbProvider.saveHistoryItems(historyItemsWithRelations) {saved in
+                            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: historyItemsWithRelations.historyItems))
+                        }
                     }
+                } else {
+                    print("Error: history items background request didn't work: \(result.status)")
                 }
-            } else {
-                print("Error: history items background request didn't work: \(result.status)")
             }
         }
     }

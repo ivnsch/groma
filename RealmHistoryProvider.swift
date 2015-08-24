@@ -28,32 +28,13 @@ class RealmHistoryProvider: RealmProvider {
     
     func saveHistoryItems(historyItems: RemoteHistoryItems, handler: Bool -> ()) {
         
-        self.doInWriteTransaction({realm in
+        self.doInWriteTransaction({[weak self] realm in
             
             realm.delete(realm.objects(DBInventoryItem))
             
-            // save inventory items
             let historyItemsWithRelations = HistoryItemMapper.historyItemsWithRemote(historyItems)
             
-            for inventory in historyItemsWithRelations.inventories {
-                let dbInventory = InventoryMapper.dbWithInventory(inventory)
-                realm.add(dbInventory, update: true) // since we don't delete products (see comment above) we do update
-            }
-            
-            for product in historyItemsWithRelations.products {
-                let dbProduct = ProductMapper.dbWithProduct(product)
-                realm.add(dbProduct, update: true) // since we don't delete products (see comment above) we do update
-            }
-            
-            for user in historyItemsWithRelations.users {
-                let dbUser = SharedUserMapper.dbWithSharedUser(user)
-                realm.add(dbUser, update: true)
-            }
-            
-            for historyItem in historyItemsWithRelations.historyItems {
-                let dbInventoryItem = HistoryItemMapper.dbWithHistoryItem(historyItem)
-                realm.add(dbInventoryItem, update: true)
-            }
+            self?.saveHistoryItemsHelper(realm, historyItemsWithRelations: historyItemsWithRelations)
             
             return true
             
@@ -61,6 +42,48 @@ class RealmHistoryProvider: RealmProvider {
                 handler(success)
             }
         )
+    }
+
+    func saveHistoryItems(historyItemsWithRelations: HistoryItemsWithRelations, handler: Bool -> ()) {
+        
+        self.doInWriteTransaction({[weak self] realm in
+            
+            realm.delete(realm.objects(DBInventoryItem))
+            
+            self?.saveHistoryItemsHelper(realm, historyItemsWithRelations: historyItemsWithRelations)
+            
+            return true
+            
+            }, finishHandler: {success in
+                handler(success)
+            }
+        )
+    }
+    
+    
+    // common code, note that this is expected to be executed in a transaction
+    private func saveHistoryItemsHelper(realm: Realm, historyItemsWithRelations: HistoryItemsWithRelations) {
+        
+        // save inventory items
+        for inventory in historyItemsWithRelations.inventories {
+            let dbInventory = InventoryMapper.dbWithInventory(inventory)
+            realm.add(dbInventory, update: true) // since we don't delete products (see comment above) we do update
+        }
+        
+        for product in historyItemsWithRelations.products {
+            let dbProduct = ProductMapper.dbWithProduct(product)
+            realm.add(dbProduct, update: true) // since we don't delete products (see comment above) we do update
+        }
+        
+        for user in historyItemsWithRelations.users {
+            let dbUser = SharedUserMapper.dbWithSharedUser(user)
+            realm.add(dbUser, update: true)
+        }
+        
+        for historyItem in historyItemsWithRelations.historyItems {
+            let dbInventoryItem = HistoryItemMapper.dbWithHistoryItem(historyItem)
+            realm.add(dbInventoryItem, update: true)
+        }
     }
     
     func saveHistoryItemsSyncResult(historyItems: RemoteHistoryItems, handler: Bool -> ()) {
