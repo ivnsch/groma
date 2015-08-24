@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14E46" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8173.3"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="InventoriesViewController" customModule="shoppin_osx" customModuleProvider="target">
+            <connections>
+                <outlet property="tableView" destination="gys-nC-1ta" id="Vcw-Wp-kX7"/>
+                <outlet property="view" destination="TJK-ya-XMJ" id="ZzY-7a-HFJ"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="TJK-ya-XMJ">
+            <rect key="frame" x="0.0" y="0.0" width="379" height="479"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <scrollView autohidesScrollers="YES" horizontalLineScroll="42" horizontalPageScroll="10" verticalLineScroll="42" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="agG-CQ-T2C">
+                    <rect key="frame" x="0.0" y="56" width="379" height="371"/>
+                    <clipView key="contentView" id="Xoq-9G-hZi">
+                        <rect key="frame" x="1" y="0.0" width="238" height="134"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="40" rowSizeStyle="automatic" headerView="QYa-NR-AXN" viewBased="YES" id="gys-nC-1ta">
+                                <rect key="frame" x="0.0" y="0.0" width="376" height="0.0"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <size key="intercellSpacing" width="3" height="2"/>
+                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                <tableColumns>
+                                    <tableColumn identifier="inventoryCell" width="373.91796875" minWidth="40" maxWidth="1000" id="pvd-es-DCR">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
+                                        </tableHeaderCell>
+                                        <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="qZA-fZ-YZG">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <prototypeCellViews>
+                                            <customView id="Y8J-ug-aSa" customClass="InventoryCell" customModule="shoppin_osx" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="373" height="40"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                <subviews>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="n8j-S5-x1Q">
+                                                        <rect key="frame" x="18" y="12" width="38" height="17"/>
+                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="vDi-Wb-paM">
+                                                            <font key="font" metaFont="system"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Yg-my-KR2">
+                                                        <rect key="frame" x="311" y="3" width="48" height="32"/>
+                                                        <buttonCell key="cell" type="push" title="x" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UpU-9e-81P">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="removeTapped:" target="Y8J-ug-aSa" id="LIQ-d4-9R3"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="n8j-S5-x1Q" firstAttribute="leading" secondItem="Y8J-ug-aSa" secondAttribute="leading" constant="20" id="7or-se-kHE"/>
+                                                    <constraint firstAttribute="trailing" secondItem="3Yg-my-KR2" secondAttribute="trailing" constant="20" id="U09-GJ-Dal"/>
+                                                    <constraint firstAttribute="centerY" secondItem="n8j-S5-x1Q" secondAttribute="centerY" id="Xoh-yV-hLI"/>
+                                                    <constraint firstAttribute="centerY" secondItem="3Yg-my-KR2" secondAttribute="centerY" id="w3R-UK-fug"/>
+                                                </constraints>
+                                                <connections>
+                                                    <outlet property="nameLabel" destination="n8j-S5-x1Q" id="V1F-x9-AP9"/>
+                                                </connections>
+                                            </customView>
+                                        </prototypeCellViews>
+                                    </tableColumn>
+                                </tableColumns>
+                                <connections>
+                                    <outlet property="dataSource" destination="-2" id="UHr-pU-8Ia"/>
+                                    <outlet property="delegate" destination="-2" id="1jE-GJ-jdZ"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="Vmw-qa-0Cx">
+                        <rect key="frame" x="1" y="119" width="223" height="15"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="PCl-9o-v98">
+                        <rect key="frame" x="224" y="17" width="15" height="102"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <tableHeaderView key="headerView" id="QYa-NR-AXN">
+                        <rect key="frame" x="0.0" y="0.0" width="377" height="17"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </tableHeaderView>
+                </scrollView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HcO-c9-fi8">
+                    <rect key="frame" x="153" y="442" width="72" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Inventories" id="1YY-qE-JN5">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="t6F-Ag-Ll8">
+                    <rect key="frame" x="156" y="13" width="66" height="32"/>
+                    <buttonCell key="cell" type="push" title="Add" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ywp-L3-RpH">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="addInventoryTapped:" target="-2" id="X5C-dV-rjf"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="centerX" secondItem="HcO-c9-fi8" secondAttribute="centerX" id="APP-ht-wig"/>
+                <constraint firstItem="HcO-c9-fi8" firstAttribute="top" secondItem="TJK-ya-XMJ" secondAttribute="top" constant="20" id="PcC-BI-UmS"/>
+                <constraint firstItem="t6F-Ag-Ll8" firstAttribute="top" secondItem="agG-CQ-T2C" secondAttribute="bottom" constant="15" id="WDa-AT-7RN"/>
+                <constraint firstAttribute="bottom" secondItem="t6F-Ag-Ll8" secondAttribute="bottom" constant="20" id="fv5-yP-eUo"/>
+                <constraint firstItem="agG-CQ-T2C" firstAttribute="top" secondItem="HcO-c9-fi8" secondAttribute="bottom" constant="15" id="iXT-Ms-BMc"/>
+                <constraint firstAttribute="trailing" secondItem="agG-CQ-T2C" secondAttribute="trailing" id="pqE-cL-QGu"/>
+                <constraint firstAttribute="centerX" secondItem="t6F-Ag-Ll8" secondAttribute="centerX" id="q8Z-9d-prR"/>
+                <constraint firstItem="agG-CQ-T2C" firstAttribute="leading" secondItem="TJK-ya-XMJ" secondAttribute="leading" id="w5T-In-Iez"/>
+            </constraints>
+            <point key="canvasLocation" x="559.5" y="382.5"/>
+        </customView>
+    </objects>
+</document>

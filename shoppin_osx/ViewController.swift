@@ -480,6 +480,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     //        return "foo"
     //    }
     
+    // MARK: - NSTableViewDelegate
     
     func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
         return self.cellManagers[row].makeCell(tableView, tableColumn: tableColumn, row: row)

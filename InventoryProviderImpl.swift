@@ -17,6 +17,31 @@ class InventoryProviderImpl: InventoryProvider {
     func inventories(handler: ProviderResult<[Inventory]> -> ()) {
         self.dbInventoryProvider.loadInventories {dbInventories in
             handler(ProviderResult(status: .Success, sucessResult: dbInventories))
+            
+            self.remoteProvider.inventories {remoteResult in
+                
+                if let remoteInventories = remoteResult.successResult {
+                    let inventories: [Inventory] = remoteInventories.map{InventoryMapper.inventoryWithRemote($0)}
+                    
+                    // if there's no cached list or there's a difference, overwrite the cached list
+                    if dbInventories != inventories {
+                        
+                        self.dbInventoryProvider.saveInventories(inventories, update: true) {saved in
+                            if saved {
+                                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: inventories))
+                                
+                            } else {
+                                print("Error updating inventories - dbListsMaybe is nil")
+                            }
+                        }
+                    }
+                    
+                } else {
+                    print("get remote inventories no success, status: \(remoteResult.status)")
+                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+                    handler(ProviderResult(status: providerStatus))
+                }
+            }
         }
     }
     

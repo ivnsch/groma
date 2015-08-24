@@ -68,8 +68,12 @@ class RealmInventoryProvider: RealmProvider {
     }
 
     func saveInventory(inventory: Inventory, handler: Bool -> ()) {
-        let dbObj = InventoryMapper.dbWithInventory(inventory)
-        self.saveObj(dbObj, update: true, handler: handler)
+        self.saveInventories([inventory], handler: handler)
+    }
+    
+    func saveInventories(inventories: [Inventory], update: Bool = false, handler: Bool -> ()) {
+        let dbLists = inventories.map{InventoryMapper.dbWithInventory($0)}
+        self.saveObjs(dbLists, update: update, handler: handler)
     }
     
     func saveInventoryItems(items: [InventoryItem], handler: Bool -> ()) {
