@@ -10,7 +10,12 @@ import Foundation
 
 class UserProviderImpl: UserProvider {
    
-    let remoteProvider = RemoteUserProvider()
+    private let remoteProvider = RemoteUserProvider()
+
+    // arc
+    private let listsProvider = ProviderFactory().listProvider
+    private let inventoryProvider = ProviderFactory().inventoryProvider
+    private let historyProvider = ProviderFactory().historyProvider
     
     func login(loginData: LoginData, _ handler: ProviderResult<Any> -> ()) {
         self.remoteProvider.login(loginData) {[weak self] result in
@@ -43,15 +48,12 @@ class UserProviderImpl: UserProvider {
     }
     
     private func sync(handler: () -> ()) {
-        let listsProvider = ProviderFactory().listProvider
-        let inventoryProvider = ProviderFactory().inventoryProvider
-        let historyProvider = ProviderFactory().historyProvider
-        
-        listsProvider.syncListsWithListItems {result in
+
+        listsProvider.syncListsWithListItems {[weak self] result in
             if result.success {
-                inventoryProvider.syncInventoriesWithInventoryItems {result in
+                self!.inventoryProvider.syncInventoriesWithInventoryItems {[weak self] result in
                     if result.success {
-                        historyProvider.syncHistoryItems {result in
+                        self!.historyProvider.syncHistoryItems {result in
                             handler()
                         }
                         

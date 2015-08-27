@@ -30,7 +30,7 @@ class RealmHistoryProvider: RealmProvider {
         
         self.doInWriteTransaction({[weak self] realm in
             
-            realm.delete(realm.objects(DBInventoryItem))
+            realm.delete(realm.objects(DBHistoryItem))
             
             let historyItemsWithRelations = HistoryItemMapper.historyItemsWithRemote(historyItems)
             
@@ -48,7 +48,7 @@ class RealmHistoryProvider: RealmProvider {
         
         self.doInWriteTransaction({[weak self] realm in
             
-            realm.delete(realm.objects(DBInventoryItem))
+            realm.delete(realm.objects(DBHistoryItem))
             
             self?.saveHistoryItemsHelper(realm, historyItemsWithRelations: historyItemsWithRelations)
             
@@ -81,8 +81,8 @@ class RealmHistoryProvider: RealmProvider {
         }
         
         for historyItem in historyItemsWithRelations.historyItems {
-            let dbInventoryItem = HistoryItemMapper.dbWithHistoryItem(historyItem)
-            realm.add(dbInventoryItem, update: true)
+            let dbHistoryItem = HistoryItemMapper.dbWithHistoryItem(historyItem)
+            realm.add(dbHistoryItem, update: true)
         }
     }
     
