@@ -290,6 +290,10 @@
 		EB9F6CE91A8610550038355B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9F6CE81A8610550038355B /* ViewController.swift */; };
 		EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEA1A8610550038355B /* Images.xcassets */; };
 		EB9F6CEE1A8610550038355B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB9F6CEC1A8610550038355B /* Main.storyboard */; };
+		EBA8FACD1B8F1B39008CB746 /* UserTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA8FACC1B8F1B39008CB746 /* UserTabViewController.swift */; };
+		EBA8FACF1B8F1BEB008CB746 /* UserDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBA8FACE1B8F1BEB008CB746 /* UserDetails.storyboard */; };
+		EBA8FAD21B8F1D46008CB746 /* UserDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA8FAD01B8F1D46008CB746 /* UserDetailsViewController.swift */; };
+		EBA8FAD31B8F1D46008CB746 /* UserDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBA8FAD11B8F1D46008CB746 /* UserDetailsViewController.xib */; };
 		EBB2AB371B8B2489007B8C59 /* InventoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB361B8B2489007B8C59 /* InventoryViewController.swift */; };
 		EBB2AB391B8B27BD007B8C59 /* InventoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB381B8B27BD007B8C59 /* InventoriesViewController.swift */; };
 		EBB2AB3B1B8B29CF007B8C59 /* InventoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */; };
@@ -599,6 +603,10 @@
 		EB9F6CED1A8610550038355B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EB9F6CF31A8610550038355B /* shoppin_osxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shoppin_osxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB9F6CF81A8610550038355B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EBA8FACC1B8F1B39008CB746 /* UserTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTabViewController.swift; sourceTree = "<group>"; };
+		EBA8FACE1B8F1BEB008CB746 /* UserDetails.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = UserDetails.storyboard; sourceTree = "<group>"; };
+		EBA8FAD01B8F1D46008CB746 /* UserDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDetailsViewController.swift; sourceTree = "<group>"; };
+		EBA8FAD11B8F1D46008CB746 /* UserDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserDetailsViewController.xib; sourceTree = "<group>"; };
 		EBB2AB361B8B2489007B8C59 /* InventoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryViewController.swift; sourceTree = "<group>"; };
 		EBB2AB381B8B27BD007B8C59 /* InventoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoriesViewController.swift; sourceTree = "<group>"; };
 		EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryCell.swift; sourceTree = "<group>"; };
@@ -1085,7 +1093,11 @@
 			children = (
 				EB7E82EE1B79F1FB009DEEF4 /* LoginViewController.swift */,
 				EB7E82F41B7A141E009DEEF4 /* RegisterViewController.swift */,
+				EBA8FACC1B8F1B39008CB746 /* UserTabViewController.swift */,
 				EB7E82F61B7A14AE009DEEF4 /* LoginRegister.storyboard */,
+				EBA8FACE1B8F1BEB008CB746 /* UserDetails.storyboard */,
+				EBA8FAD01B8F1D46008CB746 /* UserDetailsViewController.swift */,
+				EBA8FAD11B8F1D46008CB746 /* UserDetailsViewController.xib */,
 			);
 			name = user;
 			sourceTree = "<group>";
@@ -1585,6 +1597,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB89D3071AD41E2D00B6E0D0 /* ListsViewController.xib in Resources */,
+				EBA8FAD31B8F1D46008CB746 /* UserDetailsViewController.xib in Resources */,
 				EB6D93A41B1B788200ED8999 /* AutosuggestionsTableViewController.xib in Resources */,
 				EB89D3491AD4536300B6E0D0 /* AddListController.xib in Resources */,
 				EBB2AB411B8B434E007B8C59 /* InventoriesViewController.xib in Resources */,
@@ -1592,6 +1605,7 @@
 				EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */,
 				EB7E82F71B7A14AE009DEEF4 /* LoginRegister.storyboard in Resources */,
 				EB9F6CEE1A8610550038355B /* Main.storyboard in Resources */,
+				EBA8FACF1B8F1BEB008CB746 /* UserDetails.storyboard in Resources */,
 				EB4FD4581AC6D8C90000F952 /* EditListItem.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1942,6 +1956,7 @@
 				EB55676B1A8643BF00CD3EC6 /* List.swift in Sources */,
 				EB4FD45C1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EB9F6CE91A8610550038355B /* ViewController.swift in Sources */,
+				EBA8FAD21B8F1D46008CB746 /* UserDetailsViewController.swift in Sources */,
 				EBB9A7331B5EB0FC00E5487D /* DBInventory.swift in Sources */,
 				EB0C1BAA1B3ED8D500F24C85 /* ProviderResult.swift in Sources */,
 				EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */,
@@ -1969,6 +1984,7 @@
 				EBF377941B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
 				EB40A46F1B550804000E9CAD /* RealmProvider.swift in Sources */,
 				EB9BE4231B2CB51F005B401A /* RemoteSection.swift in Sources */,
+				EBA8FACD1B8F1B39008CB746 /* UserTabViewController.swift in Sources */,
 				EB714AA71B66BBA800F91B94 /* DBSyncable.swift in Sources */,
 				EBF377A01B38AB1000EEB6DB /* User.swift in Sources */,
 				EBB9A73D1B5EB1C700E5487D /* InventoryItemsProvider.swift in Sources */,

@@ -41,4 +41,9 @@ extension NSView {
         }
     }
    
+    func matchSize(view: NSView) {
+        self.superview?.addConstraints([
+            NSLayoutConstraint.matchWidth(view: self, otherView: view),
+            NSLayoutConstraint.matchHeight(view: self, otherView: view)])
+    }
 }

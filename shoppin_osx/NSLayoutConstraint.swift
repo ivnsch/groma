@@ -10,6 +10,14 @@ import Cocoa
 
 extension NSLayoutConstraint {
 
+    class func matchWidth(view view: NSView, otherView: NSView) -> NSLayoutConstraint {
+        return NSLayoutConstraint.sameAttributeConstraint(view: view, otherView: otherView, multiplier: 1, constant: 0, attribute: NSLayoutAttribute.Width)
+    }
+    
+    class func matchHeight(view view: NSView, otherView: NSView) -> NSLayoutConstraint {
+        return NSLayoutConstraint.sameAttributeConstraint(view: view, otherView: otherView, multiplier: 1, constant: 0, attribute: NSLayoutAttribute.Height)
+    }
+    
     class func horizontalCenterConstraint(view: NSView, superview: NSView, multiplier: Float = 1, constant: Float = 0) -> NSLayoutConstraint {
         return self.sameAttributeConstraint(view: view, otherView: superview, multiplier: multiplier, constant: constant, attribute: NSLayoutAttribute.CenterX)
     }

@@ -9,6 +9,20 @@
 import Cocoa
 
 extension NSViewController {
+
+    func addChildViewControllerAndView(viewController: NSViewController) {
+        self.addChildViewController(viewController)
+        self.view.addSubview(viewController.view)
+    }
+    
+    func clearSubViewsAndViewControllers() {
+        for subview in self.view.subviews {
+            subview.removeFromSuperview()
+        }
+        for childViewController in self.childViewControllers {
+            childViewController.removeFromParentViewController()
+        }
+    }
     
     func successHandler(onSuccess: () -> ()) -> ((providerResult: ProviderResult<Any>) -> ()) {
         return self.resultHandler(onSuccess: onSuccess, onError: nil)

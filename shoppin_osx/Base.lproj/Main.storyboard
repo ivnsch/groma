@@ -979,11 +979,12 @@
         <!--Tab View Controller-->
         <scene sceneID="v8V-Gq-xJu">
             <objects>
-                <tabViewController storyboardIdentifier="TabViewController" selectedTabViewItemIndex="2" id="1bf-gH-PER" sceneMemberID="viewController">
+                <tabViewController storyboardIdentifier="TabViewController" selectedTabViewItemIndex="3" id="1bf-gH-PER" sceneMemberID="viewController">
                     <tabViewItems>
                         <tabViewItem id="Xbb-6y-C01"/>
                         <tabViewItem id="v3K-Xg-AYV"/>
                         <tabViewItem id="vMK-xI-cuT"/>
+                        <tabViewItem id="YXz-YX-3ZN"/>
                     </tabViewItems>
                     <tabView key="tabView" type="noTabsNoBorder" id="gFz-Sz-wrZ">
                         <rect key="frame" x="-273" y="0.0" width="1009" height="493"/>
@@ -995,6 +996,7 @@
                         <segue destination="XfG-lQ-9wD" kind="relationship" relationship="tabItems" id="n1P-6K-nmd"/>
                         <segue destination="vaY-f7-SGn" kind="relationship" relationship="tabItems" id="uvT-jH-whD"/>
                         <segue destination="mrg-49-88a" kind="relationship" relationship="tabItems" id="HfO-qx-EBp"/>
+                        <segue destination="cEy-gU-msP" kind="relationship" relationship="tabItems" id="TMT-0R-H99"/>
                     </connections>
                 </tabViewController>
                 <customObject id="7GQ-Tn-UcN" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -1249,7 +1251,7 @@
                                     </subviews>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </clipView>
-                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="UaJ-Na-VhJ">
+                                <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.5" horizontal="YES" id="UaJ-Na-VhJ">
                                     <rect key="frame" x="1" y="483" width="693" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -1277,6 +1279,19 @@
                 <customObject id="Td4-JF-ouL" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1055.5" y="1460"/>
+        </scene>
+        <!--User-->
+        <scene sceneID="IdS-xU-uSY">
+            <objects>
+                <viewController title="User" id="cEy-gU-msP" customClass="UserTabViewController" customModule="shoppin_osx" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="Mpe-wk-Xzd">
+                        <rect key="frame" x="0.0" y="0.0" width="722" height="499"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </view>
+                </viewController>
+                <customObject id="Oib-D5-2SV" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1791" y="1460.5"/>
         </scene>
     </scenes>
 </document>
