@@ -11,6 +11,8 @@ import RealmSwift
 
 class RealmHistoryProvider: RealmProvider {
 
+    private lazy var historySortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "addedDate", ascending: false)
+    
     func add(historyItem: HistoryItem, handler: Bool -> ()) {
         let dbObj = HistoryItemMapper.dbWithHistoryItem(historyItem)
         self.saveObj(dbObj, update: false, handler: handler)
@@ -18,12 +20,12 @@ class RealmHistoryProvider: RealmProvider {
     
     func loadHistoryItems(handler: [HistoryItem] -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
-        self.load(mapper, handler: handler)
+        self.load(mapper, sortDescriptor: historySortDescriptor, handler: handler)
     }
 
     func loadHistoryItems(startDate: NSDate, handler: [HistoryItem] -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
-        self.load(mapper, predicate: NSPredicate(format: "addedDate >= %@", startDate), handler: handler)
+        self.load(mapper, predicate: NSPredicate(format: "addedDate >= %@", startDate), sortDescriptor: historySortDescriptor, handler: handler)
     }
     
     func saveHistoryItems(historyItems: RemoteHistoryItems, handler: Bool -> ()) {

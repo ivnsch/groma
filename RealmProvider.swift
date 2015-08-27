@@ -73,7 +73,7 @@ class RealmProvider {
     }
     
 
-    func load<T: Object, U>(mapper: T -> U, predicate predicateMaybe: NSPredicate?, handler: [U] -> ()) {
+    func load<T: Object, U>(mapper: T -> U, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, handler: [U] -> ()) {
         
         let finished: ([U]) -> () = {result in
             dispatch_async(dispatch_get_main_queue(), {
@@ -90,6 +90,9 @@ class RealmProvider {
                 if let predicate = predicateMaybe {
                     results = results.filter(predicate)
                 }
+                if let sortDescriptor = sortDescriptorMaybe, key = sortDescriptor.key {
+                    results = results.sorted(key, ascending: sortDescriptor.ascending)
+                }
                 
                 let objs: [T] = results.toArray()
                 let models = objs.map{mapper($0)}
@@ -103,13 +106,13 @@ class RealmProvider {
         })
     }
     
-    func load<T: Object, U>(mapper: T -> U, filter filterMaybe: String? = nil, handler: [U] -> ()) {
+    func load<T: Object, U>(mapper: T -> U, filter filterMaybe: String? = nil, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, handler: [U] -> ()) {
 
         let predicateMaybe = filterMaybe.map {
             NSPredicate(format: $0, argumentArray: [])
         }
         
-        self.load(mapper, predicate: predicateMaybe, handler: handler)
+        self.load(mapper, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, handler: handler)
     }
     
     func remove<T: Object>(pred: String, handler: Bool -> (), objType: T.Type) {

@@ -26,7 +26,9 @@ class HistoryProviderImpl: HistoryProvider {
                     if dbHistoryItems != historyItemsWithRelations.historyItems {
                         
                         self.dbProvider.saveHistoryItems(historyItemsWithRelations) {saved in
-                            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: historyItemsWithRelations.historyItems))
+                            
+                            let historyItems = historyItemsWithRelations.historyItems.sort{$0.addedDate > $1.addedDate}
+                            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: historyItems))
                         }
                     }
                 } else {
