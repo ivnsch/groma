@@ -11,8 +11,30 @@ import RealmSwift
 
 extension Results {
 
-    func toArray() -> [T] {
-        return self.map{$0}
+    /**
+    Load the database result into memory
+    - parameter range:optional range to load, if nil everything will be loaded
+    If range is not fully contained in results count the returned array is determined by the intersection of range and results count
+    If range starts beyond results count an empty array is returned
+    */
+    func toArray(range: NSRange? = nil) -> [T] {
+        
+        guard range?.location < count else {
+            print("Warning: Requesting out of bounds range of results. Range: \(range), results count: \(count)")
+            return []
+        }
+        
+        let start = range?.location ?? 0
+        let end = range.map{r in
+            let endNotTrunkated: Int = (r.location + r.length)
+            return count < endNotTrunkated ? count : endNotTrunkated // note we can't use min bc Results has a min method and math min doesn't have a namespace
+        } ?? count
+        
+        let arr: [T] = (start..<end).map {
+            self[$0]
+        }
+        
+        return arr
     }
 }
 

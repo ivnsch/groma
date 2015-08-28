@@ -427,6 +427,13 @@
 		EBF3779F1B38AB1000EEB6DB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3779E1B38AB1000EEB6DB /* User.swift */; };
 		EBF377A01B38AB1000EEB6DB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3779E1B38AB1000EEB6DB /* User.swift */; };
 		EBF377A11B38AB1000EEB6DB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF3779E1B38AB1000EEB6DB /* User.swift */; };
+		EBF5D7D31B8F868E00A235C5 /* Paginator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7D21B8F868E00A235C5 /* Paginator.swift */; };
+		EBF5D7D41B8F868E00A235C5 /* Paginator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7D21B8F868E00A235C5 /* Paginator.swift */; };
+		EBF5D7D51B8F868E00A235C5 /* Paginator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7D21B8F868E00A235C5 /* Paginator.swift */; };
+		EBF5D7D71B8FB01B00A235C5 /* Synced.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7D61B8FB01B00A235C5 /* Synced.swift */; };
+		EBF5D7D81B8FB01B00A235C5 /* Synced.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7D61B8FB01B00A235C5 /* Synced.swift */; };
+		EBF5D7D91B8FB01B00A235C5 /* Synced.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7D61B8FB01B00A235C5 /* Synced.swift */; };
+		EBF5D7DB1B8FB30000A235C5 /* LoadingFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7DA1B8FB30000A235C5 /* LoadingFooter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -682,6 +689,9 @@
 		EBF377961B38A9C900EEB6DB /* AlamofireExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlamofireExtensions.swift; sourceTree = "<group>"; };
 		EBF3779A1B38AA5900EEB6DB /* Urls.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Urls.swift; sourceTree = "<group>"; };
 		EBF3779E1B38AB1000EEB6DB /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		EBF5D7D21B8F868E00A235C5 /* Paginator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Paginator.swift; sourceTree = "<group>"; };
+		EBF5D7D61B8FB01B00A235C5 /* Synced.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synced.swift; sourceTree = "<group>"; };
+		EBF5D7DA1B8FB30000A235C5 /* LoadingFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingFooter.swift; sourceTree = "<group>"; };
 		ED602ABB2DEEE49607500199 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		EF20317B4274E286EAD0FF2C /* Pods-shoppin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin/Pods-shoppin.debug.xcconfig"; sourceTree = "<group>"; };
 		F0450DFB9EA44C2CE78F6DE2 /* Pods-shoppin_osxTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin_osxTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin_osxTests/Pods-shoppin_osxTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -916,6 +926,8 @@
 				EB0C2A271B570BA700AF6226 /* ViewTags.swift */,
 				EB0C2A2F1B57BA9300AF6226 /* RequestErrorToMsgMapper.swift */,
 				EB451C401B861544000DE208 /* OrderedDictionary.swift */,
+				EBF5D7D21B8F868E00A235C5 /* Paginator.swift */,
+				EBF5D7D61B8FB01B00A235C5 /* Synced.swift */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -1293,6 +1305,7 @@
 				EBF162CD1A3C82380048E37C /* CellSpecification.swift */,
 				EBF162CE1A3C82380048E37C /* default */,
 				EBF162D71A3C82380048E37C /* TableViewSectionDelegate.swift */,
+				EBF5D7DA1B8FB30000A235C5 /* LoadingFooter.swift */,
 			);
 			name = tableView;
 			path = shoppin/TableView;
@@ -1773,6 +1786,7 @@
 				EB0C1BAD1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
 				EB451C391B85F3F0000DE208 /* StatsProvider.swift in Sources */,
 				EBB9A7301B5EB08C00E5487D /* Inventory.swift in Sources */,
+				EBF5D7D31B8F868E00A235C5 /* Paginator.swift in Sources */,
 				EB9BE4191B2CB355005B401A /* RemoteListItems.swift in Sources */,
 				EBF162FD1A3DDE5D0048E37C /* ProductMapper.swift in Sources */,
 				EB20FBFA1A5971C20058103B /* InventoryItemMapper.swift in Sources */,
@@ -1817,6 +1831,7 @@
 				EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */,
 				EB7E831E1B7B7069009DEEF4 /* HistoryProvider.swift in Sources */,
 				EB0C1BA71B3DFD0800F24C85 /* NSLayoutConstraint.swift in Sources */,
+				EBF5D7D71B8FB01B00A235C5 /* Synced.swift in Sources */,
 				EB7E832E1B7B74EF009DEEF4 /* RemoteHistoryProvider.swift in Sources */,
 				EB2F5D771A557AB000DBC4AF /* List.swift in Sources */,
 				EBF377931B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
@@ -1885,6 +1900,7 @@
 				EBF1A15F1B82428700F34105 /* HistoryItemCell.swift in Sources */,
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
 				EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */,
+				EBF5D7DB1B8FB30000A235C5 /* LoadingFooter.swift in Sources */,
 				EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */,
 				EBDCA12F1B88D54F000020BF /* AggrByDateChartViewController.swift in Sources */,
 				EB40A46E1B550804000E9CAD /* RealmProvider.swift in Sources */,
@@ -1932,6 +1948,7 @@
 				EB0C2A291B570BA700AF6226 /* ViewTags.swift in Sources */,
 				EBB9A7491B5EB46C00E5487D /* InventoryMapper.swift in Sources */,
 				EB70C22A1B4D3DD40060E529 /* ListProvider.swift in Sources */,
+				EBF5D7D81B8FB01B00A235C5 /* Synced.swift in Sources */,
 				EB0C2A4B1B5840F700AF6226 /* RealmInventoryProvider.swift in Sources */,
 				EBD236B01B8B9E7200B88969 /* HistoryItemCellOSX.swift in Sources */,
 				EB4FD46E1AC73C930000F952 /* Constants.swift in Sources */,
@@ -2051,6 +2068,7 @@
 				EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */,
 				EBB2AB3D1B8B3171007B8C59 /* InventoryItemCell.swift in Sources */,
 				EBF299841B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */,
+				EBF5D7D41B8F868E00A235C5 /* Paginator.swift in Sources */,
 				EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */,
 				EB78587E1B7FD81A008AAD12 /* HistoryItemsSync.swift in Sources */,
 				EB7E831B1B7B703B009DEEF4 /* HistoryProviderImpl.swift in Sources */,
@@ -2080,6 +2098,7 @@
 				EBF3776B1B342AB500EEB6DB /* ListItemProvider.swift in Sources */,
 				EBC6ADEF1B7E839900BD0ABC /* TestHistory.swift in Sources */,
 				EB7E833C1B7B9021009DEEF4 /* RealmCheckoutProvider.swift in Sources */,
+				EBF5D7D91B8FB01B00A235C5 /* Synced.swift in Sources */,
 				EBF3779D1B38AA5900EEB6DB /* Urls.swift in Sources */,
 				EBF377951B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
 				EB714AA41B6669AA00F91B94 /* ProviderFetchModus.swift in Sources */,
@@ -2111,6 +2130,7 @@
 				EB70C22D1B4D3DF50060E529 /* ListProviderImpl.swift in Sources */,
 				EB7E83241B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
 				EB714AA81B66BBA800F91B94 /* DBSyncable.swift in Sources */,
+				EBF5D7D51B8F868E00A235C5 /* Paginator.swift in Sources */,
 				EB4D57AA1B74B90600BC6171 /* ListSync.swift in Sources */,
 				EBB9A73E1B5EB1C700E5487D /* InventoryItemsProvider.swift in Sources */,
 				EBF3775E1B342A4900EEB6DB /* InventoryItemsProviderImpl.swift in Sources */,

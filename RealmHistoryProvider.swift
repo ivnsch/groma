@@ -18,14 +18,14 @@ class RealmHistoryProvider: RealmProvider {
         self.saveObj(dbObj, update: false, handler: handler)
     }
     
-    func loadHistoryItems(handler: [HistoryItem] -> ()) {
+    func loadHistoryItems(range: NSRange? = nil, handler: [HistoryItem] -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
-        self.load(mapper, sortDescriptor: historySortDescriptor, handler: handler)
+        self.load(mapper, sortDescriptor: historySortDescriptor, range: range, handler: handler)
     }
 
-    func loadHistoryItems(startDate: NSDate, handler: [HistoryItem] -> ()) {
+    func loadHistoryItems(range: NSRange? = nil, startDate: NSDate, handler: [HistoryItem] -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
-        self.load(mapper, predicate: NSPredicate(format: "addedDate >= %@", startDate), sortDescriptor: historySortDescriptor, handler: handler)
+        self.load(mapper, predicate: NSPredicate(format: "addedDate >= %@", startDate), sortDescriptor: historySortDescriptor, range: range, handler: handler)
     }
     
     func saveHistoryItems(historyItems: RemoteHistoryItems, handler: Bool -> ()) {

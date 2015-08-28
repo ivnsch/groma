@@ -13,28 +13,13 @@ class HistoryProviderImpl: HistoryProvider {
     let dbProvider = RealmHistoryProvider()
     let remoteProvider = RemoteHistoryProvider()
 
-    // Note that when we have push notifications sync we will not need this
-    func historyItems(handler: ProviderResult<[HistoryItem]> -> ()) {
-        self.dbProvider.loadHistoryItems {dbHistoryItems in
+    func historyItems(range: NSRange, _ handler: ProviderResult<[HistoryItem]> -> ()) {
+
+        self.dbProvider.loadHistoryItems(range) {dbHistoryItems in
             handler(ProviderResult(status: .Success, sucessResult: dbHistoryItems))
             
-            self.remoteProvider.historyItems {result in
-                if let remoteHistoryItems = result.successResult {
-                    let historyItemsWithRelations: HistoryItemsWithRelations = HistoryItemMapper.historyItemsWithRemote(remoteHistoryItems)
-                    
-                    // if there's no cached list or there's a difference, overwrite the cached list
-                    if dbHistoryItems != historyItemsWithRelations.historyItems {
-                        
-                        self.dbProvider.saveHistoryItems(historyItemsWithRelations) {saved in
-                            
-                            let historyItems = historyItemsWithRelations.historyItems.sort{$0.addedDate > $1.addedDate}
-                            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: historyItems))
-                        }
-                    }
-                } else {
-                    print("Error: history items background request didn't work: \(result.status)")
-                }
-            }
+            // no background update - the history is too long to be fetched each time, and paginated update is too complicated
+            // so we update the history only on sync (and later on push notification)
         }
     }
     

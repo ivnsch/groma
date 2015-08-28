@@ -69,7 +69,7 @@ class StatsProviderImpl: StatsProvider {
         
         if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: NSDate(), options: .WrapComponents) {
             
-            RealmHistoryProvider().loadHistoryItems(startDate) {historyItems in
+            RealmHistoryProvider().loadHistoryItems(startDate: startDate) {historyItems in
                 
                 var dict: OrderedDictionary<Product, (price: Float, quantity: Int)> = OrderedDictionary()
                 var totalPrice: Float = 0
@@ -119,7 +119,7 @@ class StatsProviderImpl: StatsProvider {
         let referenceDate = NSDate() // today
         if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: referenceDate, options: .WrapComponents) {
             
-            RealmHistoryProvider().loadHistoryItems(startDate) {historyItems in
+            RealmHistoryProvider().loadHistoryItems(startDate: startDate) {historyItems in
                 
                 var dict: OrderedDictionary<MonthYear, (price: Float, quantity: Int)> = OrderedDictionary()
                 

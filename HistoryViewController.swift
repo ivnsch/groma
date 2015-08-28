@@ -8,9 +8,15 @@
 
 import UIKit
 
-class HistoryViewController: UITableViewController {
+class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
 
     private let historyProvider = ProviderFactory().historyProvider
+    
+    private let paginator = Paginator(pageSize: 20)
+    private var loadingPage: Bool = false
+    
+    @IBOutlet var tableViewFooter: LoadingFooter!
+    @IBOutlet var tableView: UITableView!
     
     private var historyItems: [HistoryItem] = [] {
         didSet {
@@ -21,23 +27,21 @@ class HistoryViewController: UITableViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        self.historyProvider.historyItems(successHandler{historyItems in
-            self.historyItems = historyItems
-        })
+        loadPossibleNextPage()
     }
     
     // MARK: - Table view data source
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.historyItems.count
     }
     
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("historyCell", forIndexPath: indexPath) as! HistoryItemCell
         
         let historyItem = self.historyItems[indexPath.row]
@@ -53,6 +57,46 @@ class HistoryViewController: UITableViewController {
         return cell
     }
     
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let currentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        
+        if (maximumOffset - currentOffset) <= 40 {
+            loadPossibleNextPage()
+        }
+    }
+    
+    private func loadPossibleNextPage() {
+        
+        func setLoading(loading: Bool) {
+            self.loadingPage = loading
+            self.tableViewFooter.hidden = !loading
+        }
+
+        synced(self) {[weak self] in
+            let weakSelf = self!
+            
+            if !weakSelf.paginator.reachedEnd {
+                
+                if (!weakSelf.loadingPage) {
+                    setLoading(true)
+                    
+                    weakSelf.historyProvider.historyItems(weakSelf.paginator.currentPage, weakSelf.successHandler{historyItems in
+                        for historyItem in historyItems {
+                            weakSelf.historyItems.append(historyItem)
+                        }
+                        
+                        weakSelf.paginator.update(historyItems.count)
+                        
+                        weakSelf.tableView.reloadData()
+                        setLoading(false)
+                    })
+                }
+            }
+        }
+    }
+
+
     
     /*
     // Override to support conditional editing of the table view.
