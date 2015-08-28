@@ -372,7 +372,6 @@
 		EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF163001A3DE6880048E37C /* ItemsListTableViewConstants.swift */; };
 		EBF1A1541B82213200F34105 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF1A1531B82213200F34105 /* HistoryViewController.swift */; };
 		EBF1A1591B823A1100F34105 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF1A1581B823A1100F34105 /* StatsViewController.swift */; };
-		EBF1A15B1B823A5700F34105 /* StatsContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF1A15A1B823A5700F34105 /* StatsContainerViewController.swift */; };
 		EBF1A15F1B82428700F34105 /* HistoryItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF1A15E1B82428700F34105 /* HistoryItemCell.swift */; };
 		EBF299831B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */; };
 		EBF299841B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */; };
@@ -676,7 +675,6 @@
 		EBF163001A3DE6880048E37C /* ItemsListTableViewConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsListTableViewConstants.swift; sourceTree = "<group>"; };
 		EBF1A1531B82213200F34105 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		EBF1A1581B823A1100F34105 /* StatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
-		EBF1A15A1B823A5700F34105 /* StatsContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsContainerViewController.swift; sourceTree = "<group>"; };
 		EBF1A15E1B82428700F34105 /* HistoryItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemCell.swift; sourceTree = "<group>"; };
 		EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoriesWithInventoryItemsSyncResult.swift; sourceTree = "<group>"; };
 		EBF299861B791023006BDA1F /* InventorySync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventorySync.swift; sourceTree = "<group>"; };
@@ -1445,7 +1443,6 @@
 				EB451C511B865EF1000DE208 /* byType */,
 				EB451C4E1B865BF5000DE208 /* byDate */,
 				EBF1A1581B823A1100F34105 /* StatsViewController.swift */,
-				EBF1A15A1B823A5700F34105 /* StatsContainerViewController.swift */,
 			);
 			name = stats;
 			sourceTree = "<group>";
@@ -1869,7 +1866,6 @@
 				EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */,
 				EB7E83221B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
 				EB20FC071A599AE20058103B /* InventoryItemTableViewCell.swift in Sources */,
-				EBF1A15B1B823A5700F34105 /* StatsContainerViewController.swift in Sources */,
 				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
 				EB70C21F1B4D302D0060E529 /* SharedUser.swift in Sources */,
 				EB714AA61B66BBA800F91B94 /* DBSyncable.swift in Sources */,
