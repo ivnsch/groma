@@ -236,6 +236,9 @@
 		EB7858811B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7858801B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift */; };
 		EB7858821B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7858801B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift */; };
 		EB7858831B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7858801B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift */; };
+		EB792A281B95CCE10004BEEC /* RemoteSocialLoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB792A271B95CCE10004BEEC /* RemoteSocialLoginResult.swift */; };
+		EB792A291B95CCE10004BEEC /* RemoteSocialLoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB792A271B95CCE10004BEEC /* RemoteSocialLoginResult.swift */; };
+		EB792A2A1B95CCE10004BEEC /* RemoteSocialLoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB792A271B95CCE10004BEEC /* RemoteSocialLoginResult.swift */; };
 		EB7E82EF1B79F1FB009DEEF4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E82EE1B79F1FB009DEEF4 /* LoginViewController.swift */; };
 		EB7E82F31B79F97B009DEEF4 /* NSStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E82F21B79F97B009DEEF4 /* NSStoryboard.swift */; };
 		EB7E82F51B7A141E009DEEF4 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E82F41B7A141E009DEEF4 /* RegisterViewController.swift */; };
@@ -326,6 +329,8 @@
 		EBB9A74A1B5EB46C00E5487D /* InventoryMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7471B5EB46C00E5487D /* InventoryMapper.swift */; };
 		EBB9A74C1B5EB95A00E5487D /* EditInventoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A74B1B5EB95A00E5487D /* EditInventoryViewController.swift */; };
 		EBB9A7541B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7531B5FED4200E5487D /* InventoryTableViewCell.swift */; };
+		EBB9C2241B91EED3007F99A4 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBB9C2231B91EED3007F99A4 /* FBSDKCoreKit.framework */; };
+		EBB9C2281B91F8CA007F99A4 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBB9C2271B91F8CA007F99A4 /* FBSDKLoginKit.framework */; };
 		EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
@@ -575,6 +580,7 @@
 		EB7858781B7F7083008AAD12 /* RemoteHistoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteHistoryItem.swift; sourceTree = "<group>"; };
 		EB78587C1B7FD81A008AAD12 /* HistoryItemsSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemsSync.swift; sourceTree = "<group>"; };
 		EB7858801B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteHistoryItemsSyncResult.swift; sourceTree = "<group>"; };
+		EB792A271B95CCE10004BEEC /* RemoteSocialLoginResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSocialLoginResult.swift; sourceTree = "<group>"; };
 		EB7E82EE1B79F1FB009DEEF4 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		EB7E82F21B79F97B009DEEF4 /* NSStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSStoryboard.swift; sourceTree = "<group>"; };
 		EB7E82F41B7A141E009DEEF4 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
@@ -631,6 +637,9 @@
 		EBB9A7471B5EB46C00E5487D /* InventoryMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryMapper.swift; sourceTree = "<group>"; };
 		EBB9A74B1B5EB95A00E5487D /* EditInventoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditInventoryViewController.swift; sourceTree = "<group>"; };
 		EBB9A7531B5FED4200E5487D /* InventoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryTableViewCell.swift; sourceTree = "<group>"; };
+		EBB9C2231B91EED3007F99A4 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../sdks/FacebookSDKs-iOS-20150817/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
+		EBB9C2251B91F294007F99A4 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "../../../sdks/FacebookSDKs-iOS-20150817/Bolts.framework"; sourceTree = "<group>"; };
+		EBB9C2271B91F8CA007F99A4 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "../../../sdks/FacebookSDKs-iOS-20150817/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
 		EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemWithHistory.swift; sourceTree = "<group>"; };
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
@@ -701,6 +710,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				32F343E224A9A610E9AC4FC0 /* Pods_shoppin.framework in Frameworks */,
+				EBB9C2281B91F8CA007F99A4 /* FBSDKLoginKit.framework in Frameworks */,
+				EBB9C2241B91EED3007F99A4 /* FBSDKCoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -727,6 +738,9 @@
 		E4CDB4AFEC6C43F59CFE7A39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EBB9C2271B91F8CA007F99A4 /* FBSDKLoginKit.framework */,
+				EBB9C2251B91F294007F99A4 /* Bolts.framework */,
+				EBB9C2231B91EED3007F99A4 /* FBSDKCoreKit.framework */,
 				EBDCA1261B87AEB9000020BF /* QuartzCore.framework */,
 				CFD3968762A24D00B2ED9ADE /* libPods.a */,
 				CD0BE6D43CA3EAD8C16C1355 /* Pods_shoppin_osx.framework */,
@@ -1140,6 +1154,7 @@
 				EB4D57AF1B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift */,
 				EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */,
 				EB7858801B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift */,
+				EB792A271B95CCE10004BEEC /* RemoteSocialLoginResult.swift */,
 			);
 			name = remote;
 			sourceTree = "<group>";
@@ -1887,6 +1902,7 @@
 				EBF162FA1A3CA54F0048E37C /* ListItemProvider.swift in Sources */,
 				EBB9A7381B5EB14300E5487D /* RemoteInventory.swift in Sources */,
 				EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */,
+				EB792A281B95CCE10004BEEC /* RemoteSocialLoginResult.swift in Sources */,
 				EBDCA1311B8A124B000020BF /* NSDate.swift in Sources */,
 				EB7E832A1B7B72B9009DEEF4 /* HistoryItemMapper.swift in Sources */,
 				EB70C2231B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
@@ -1997,6 +2013,7 @@
 				EBF377941B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
 				EB40A46F1B550804000E9CAD /* RealmProvider.swift in Sources */,
 				EB9BE4231B2CB51F005B401A /* RemoteSection.swift in Sources */,
+				EB792A291B95CCE10004BEEC /* RemoteSocialLoginResult.swift in Sources */,
 				EBA8FACD1B8F1B39008CB746 /* UserTabViewController.swift in Sources */,
 				EB714AA71B66BBA800F91B94 /* DBSyncable.swift in Sources */,
 				EBF377A01B38AB1000EEB6DB /* User.swift in Sources */,
@@ -2149,6 +2166,7 @@
 				EBF3778F1B35808900EEB6DB /* TestListItems.swift in Sources */,
 				EBF377831B342B4F00EEB6DB /* PreferencesManager.swift in Sources */,
 				EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */,
+				EB792A2A1B95CCE10004BEEC /* RemoteSocialLoginResult.swift in Sources */,
 				EB0C2A381B58329800AF6226 /* RemoteInventoryProvider.swift in Sources */,
 				EBF377631B342A7A00EEB6DB /* RemoteListItemProvider.swift in Sources */,
 				EBF3777C1B342B2500EEB6DB /* List.swift in Sources */,
@@ -2232,6 +2250,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -2281,6 +2300,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -2326,6 +2346,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$PODS_FRAMEWORK_BUILD_PATH\"",
+					"/Users/ivanschuetzD/sdks/FacebookSDKs-iOS-20150817",
+				);
 				INFOPLIST_FILE = shoppin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2348,6 +2373,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$PODS_FRAMEWORK_BUILD_PATH\"",
+					"/Users/ivanschuetzD/sdks/FacebookSDKs-iOS-20150817",
+				);
 				INFOPLIST_FILE = shoppin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -8,6 +8,8 @@
 
 import UIKit
 import SwiftValidator
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 protocol LoginDelegate {
     func onLoginSuccess()
@@ -70,7 +72,7 @@ class LoginViewController: UIViewController, RegisterDelegate {
                 self.progressVisible()
                 self.userProvider.login(loginData, successHandler{result in
                     self.delegate?.onLoginSuccess() ?? print("Warn: no login delegate")
-                    })
+                })
                 
             } else {
                 print("Error: validation was not implemented correctly")
@@ -86,5 +88,13 @@ class LoginViewController: UIViewController, RegisterDelegate {
     
     func onRegisterSuccess() {
         self.delegate?.onRegisterFromLoginSuccess() ?? print("Warn: no login delegate")
+    }
+    
+    @IBAction func onFacebookLoginTap(sender: UIButton) {
+        self.progressVisible()
+        userProvider.facebookLogin(resultHandler(onSuccess: {
+            self.delegate?.onLoginSuccess() ?? print("Warn: no login delegate")
+            
+        }, onError: defaultErrorHandler([.SocialLoginCancelled])))
     }
 }

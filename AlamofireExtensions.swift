@@ -44,7 +44,7 @@ enum RemoteStatusCode: Int {
     case ClientParamsParsingError = 10008 // This should really not happen, but the serialization for some requests needs do catch so for overall consistency in catch we return this error
 }
 
-extension RemoteStatusCode : CustomStringConvertible {
+extension RemoteStatusCode: CustomStringConvertible {
     var description: String { get {
         switch self {
         default: return "\(self.rawValue)"

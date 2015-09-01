@@ -19,4 +19,6 @@ protocol UserProvider {
     func register(user: UserInput, _ handler: ProviderResult<Any> -> ())
     
     func logout(handler: ProviderResult<Any> -> ())
+    
+    func facebookLogin(handler: ProviderResult<Any> -> ())
 }

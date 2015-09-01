@@ -20,10 +20,12 @@ struct Urls {
 
     static let removeAll = host + "debug_clearAll"
     
+    // User
     static let register = host + "register"
     static let login = host + "login"
     static let logout = host + "logout"
-
+    static let authFacebook = host + "authenticate/facebook"
+    
     // Lists
     static let lists = host + "lists"
     static let listsWithItemsSync = host + "lists/sync"

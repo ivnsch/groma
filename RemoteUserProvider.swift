@@ -22,14 +22,12 @@ class RemoteUserProvider {
         Alamofire.request(.POST, Urls.login, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteLoginResult>) in
             
             if let successResult = remoteResult.successResult {
-                self?.storeToken(successResult.token)
-                self?.storeEmail(loginData.email)
+                self?.storeUserData(successResult.token, email: loginData.email)
             }
 
             handler(remoteResult)
         }
     }
-    
     
     func register(user: UserInput, handler: RemoteResult<RemoteRegisterResult> -> ()) {
         
@@ -38,8 +36,7 @@ class RemoteUserProvider {
         Alamofire.request(.POST, Urls.register, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteRegisterResult>) in
 
             if let successResult = remoteResult.successResult {
-                self?.storeToken(successResult.token)
-                self?.storeEmail(user.email)
+                self?.storeUserData(successResult.token, email: user.email)
             }
 
             handler(remoteResult)
@@ -81,6 +78,24 @@ class RemoteUserProvider {
         handler(RemoteResult<NoOpSerializable>(status: .Success))
     }
     
+    func authenticateWithFacebook(token: String, handler: RemoteResult<RemoteSocialLoginResult> -> ()) {
+        
+        let parameters = ["access_token": token]
+        
+        Alamofire.request(.POST, Urls.authFacebook, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteSocialLoginResult>) in
+            
+            if let successResult = remoteResult.successResult {
+                self?.storeUserData(successResult.token, email: successResult.email)
+            }
+            
+            handler(remoteResult)
+        }
+    }
+    
+    private func storeUserData(token: String, email: String) {
+        self.storeToken(token)
+        self.storeEmail(email)
+    }
     
     func toRequestParams(user: UserInput) -> [String: AnyObject] {
         return [

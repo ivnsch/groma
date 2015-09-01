@@ -39,18 +39,18 @@ extension UIViewController {
         return self.resultHandler(onSuccess: onSuccess, onError: nil)
     }
     
-    func resultHandler(onSuccess onSuccess: () -> (), onError: (() -> ())? = nil)(providerResult: ProviderResult<Any>) {
+    func resultHandler(onSuccess onSuccess: () -> (), onError: ((ProviderResult<Any>) -> ())? = nil)(providerResult: ProviderResult<Any>) {
         if providerResult.success {
             onSuccess()
             
         } else {
-            onError?() ?? self.showProviderErrorAlert(providerResult)
+            onError?(providerResult) ?? self.defaultErrorHandler()(providerResult: providerResult)
         }
         self.progressVisible(false)
     }
     
     // Result handlar for result with payload
-    func resultHandler<T>(onSuccess onSuccess: (T) -> (), onError: (() -> ())? = nil)(providerResult: ProviderResult<T>) {
+    func resultHandler<T>(onSuccess onSuccess: (T) -> (), onError: ((ProviderResult<T>) -> ())? = nil)(providerResult: ProviderResult<T>) {
         if providerResult.success {
             if let successResult = providerResult.sucessResult {
                 onSuccess(successResult)
@@ -60,11 +60,27 @@ extension UIViewController {
             }
             
         } else {
-            onError?() ?? self.showProviderErrorAlert(providerResult)
+            onError?(providerResult) ?? self.defaultErrorHandler()(providerResult: providerResult)
         }
         
         self.progressVisible(false)
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // TODO how do we unify these functions? we don't need the to know possible payload's type here, so Any would be ok but it doesn't compile for resultHandler<T>
+    
+    func defaultErrorHandler(ignore: [ProviderStatusCode] = [])(providerResult: ProviderResult<Any>) {
+        if !ignore.contains(providerResult.status) {
+            self.showProviderErrorAlert(providerResult)
+        }
+    }
+
+    func defaultErrorHandler<T>(ignore: [ProviderStatusCode] = [])(providerResult: ProviderResult<T>) {
+        if !ignore.contains(providerResult.status) {
+            self.showProviderErrorAlert(providerResult)
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     
     private func showProviderErrorAlert<T>(providerResult: ProviderResult<T>) {
         let title = "Error"

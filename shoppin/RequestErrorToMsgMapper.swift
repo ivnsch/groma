@@ -24,7 +24,10 @@ struct RequestErrorToMsgMapper {
             case .DatabaseSavingError: return "error_unknown_database"
             case .Unknown: return "error_unknown"
             case .DateCalculationError: return "error_unknown"
-            case .Success: return "success" // this is not used but we want exhaustive switch (without default case)
+            case .SocialLoginCancelled: return "social_login_cancelled" // this is not used (not an error) but we need exhaustive switch (without default case)
+            case .SocialLoginError: return "social_login_error"
+            case .SocialAlreadyExists: return "social_already_exists"
+            case .Success: return "success" // this is not used (not an error) but we need exhaustive switch (without default case)
         }
     }
 }

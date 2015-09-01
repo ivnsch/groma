@@ -20,7 +20,10 @@ enum ProviderStatusCode: Int {
     case ServerNotReachable = 102 // This is currently both server is down and no internet connection
     case UnknownServerCommunicationError = 103
     case ServerInvalidParamsError = 104 // Generic server error - invalid json, etc.
-
+    case SocialLoginError = 105
+    case SocialLoginCancelled = 106
+    case SocialAlreadyExists = 107
+    
     // DB related
     case DatabaseUnknown = 1000
     case DatabaseSavingError = 1001

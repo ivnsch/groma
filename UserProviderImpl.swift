@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import FBSDKLoginKit
 
 class UserProviderImpl: UserProvider {
    
@@ -79,6 +80,49 @@ class UserProviderImpl: UserProvider {
             return SharedUser(email: email)
         } else {
             return nil
+        }
+    }
+    
+    
+    // MARK: - Social login
+    
+    func facebookLogin(handler: ProviderResult<Any> -> ()) {
+        let login = FBSDKLoginManager()
+        login.logInWithReadPermissions(["public_profile"]) {[weak self] result, error in
+            if let error = error {
+                print("Error: Facebook login: error: \(error)")
+                handler(ProviderResult(status: .SocialLoginError))
+                
+            } else if result.isCancelled {
+                print("Facebook login cancelled")
+                handler(ProviderResult(status: .SocialLoginCancelled))
+                
+            } else {
+                print("Facebook login success, calling our server...")
+                let tokenString = result.token.tokenString
+                self?.authenticateWithFacebook(tokenString) {result in
+                    
+                    // map already exists status to "social aleready exists", to show a different error message
+                    if result.status == .AlreadyExists {
+                        handler(ProviderResult(status: .SocialAlreadyExists))
+                    } else {
+                        handler(result)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func authenticateWithFacebook(token: String, _ handler: ProviderResult<Any> -> ()) {
+        self.remoteProvider.authenticateWithFacebook(token) {[weak self] result in
+            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
+            if result.success {
+                self?.sync {
+                    handler(ProviderResult(status: providerStatus))
+                }   
+            } else {
+                handler(ProviderResult(status: providerStatus))
+            }
         }
     }
 }
