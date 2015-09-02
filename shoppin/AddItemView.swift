@@ -99,12 +99,14 @@ class AddItemView: UIView, UITextFieldDelegate {
         
         self.inputField.placeholder = "Item name"
         self.sectionInput.placeholder = "Section (optional)"
+        inputField.autocapitalizationType = .Sentences
         
         FrozenEffect.apply(self)
         
         self.sectionInput.delegate = self
         self.sectionInput.addTarget(self, action: "sectionInputFieldChanged:", forControlEvents: UIControlEvents.EditingChanged)
         sectionInput.delegate = self
+        sectionInput.autocapitalizationType = .Sentences
         
         self.originalHeight = self.heightConstraint.constant
         
