@@ -87,9 +87,9 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
     private func setItemUndone(listItem: ListItem) {
         listItem.done = false
         
-        self.listItemsProvider.update(listItem, {[weak self] `try` in
+        self.listItemsProvider.update(listItem, {[weak self] result in
             
-            if `try`.success ?? false {
+            if result.success ?? false {
                 
                 self!.listItemsTableViewController.removeListItem(listItem, animation: UITableViewRowAnimation.Bottom)
             }
@@ -109,7 +109,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         for item in listItems {
             item.done = false
         }
-        self.listItemsProvider.updateDone(listItems, {[weak self] `try` in
+        self.listItemsProvider.updateDone(listItems, {[weak self] result in
             
             self!.listItemsTableViewController.setListItems([])
         })
