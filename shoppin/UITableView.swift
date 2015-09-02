@@ -10,6 +10,15 @@ import UIKit
 
 extension UITableView {
    
+    var topInset: CGFloat {
+        set {
+            self.contentInset = UIEdgeInsetsMake(newValue, 0, 0, 0)
+        }
+        get {
+            return self.contentInset.top
+        }
+    }
+    
     func absoluteRow(indexPath: NSIndexPath) -> Int {
         var absRow = indexPath.row
         for section in 0..<indexPath.section {

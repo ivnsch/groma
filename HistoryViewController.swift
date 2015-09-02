@@ -24,6 +24,12 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.tableView.topInset = 64
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
