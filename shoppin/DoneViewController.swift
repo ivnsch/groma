@@ -48,7 +48,11 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
     }
     
     @IBAction func onCloseTap(sender: UIButton) {
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        close()
+    }
+    
+    private func close() {
+        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     private func initTableViewController() {
@@ -121,6 +125,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
 
             self!.inventoryItemsProvider.addToInventory(inventory, items: inventoryItems, self!.successHandler{result in
                 self!.setAllItemsUndone()
+                self!.close()
             })
         }
         
