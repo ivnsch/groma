@@ -104,14 +104,14 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         //do nothing
     }
     
-    private func setAllItemsUndone() {
+    private func setAllItemsUndone(onFinish: VoidFunction) {
         let listItems = self.listItemsTableViewController.items
         for item in listItems {
             item.done = false
         }
         self.listItemsProvider.updateDone(listItems, {[weak self] result in
-            
-            self!.listItemsTableViewController.setListItems([])
+            self?.listItemsTableViewController.setListItems([])
+            onFinish()
         })
     }
     
@@ -124,8 +124,9 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
             }
 
             self!.inventoryItemsProvider.addToInventory(inventory, items: inventoryItems, self!.successHandler{result in
-                self!.setAllItemsUndone()
-                self!.close()
+                self!.setAllItemsUndone {
+                    self!.close()
+                }
             })
         }
         
