@@ -18,7 +18,7 @@ protocol LoginDelegate {
     func onRegisterFromLoginSuccess()
 }
 
-class LoginViewController: UIViewController, RegisterDelegate {
+class LoginViewController: UIViewController, RegisterDelegate, GIDSignInUIDelegate, GIDSignInDelegate {
 
     let userProvider = ProviderFactory().userProvider
     
@@ -29,6 +29,8 @@ class LoginViewController: UIViewController, RegisterDelegate {
     
     private var validator: Validator?
 
+    @IBOutlet weak var signInButton: GIDSignInButton!
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -36,11 +38,26 @@ class LoginViewController: UIViewController, RegisterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        googleLoginSetup()
+        
         self.navigationController?.navigationBarHidden = false
         
         self.fillTestInput()
         
         self.initValidator()
+    }
+
+    
+    private func googleLoginSetup() {
+        // Google sign-in
+        var configureError: NSError?
+        GGLContext.sharedInstance().configureWithError(&configureError)
+        assert(configureError == nil, "Error configuring Google services: \(configureError)")
+        GIDSignIn.sharedInstance().delegate = self
+        
+        GIDSignIn.sharedInstance().uiDelegate = self
+        // Uncomment to automatically sign in the user.
+        //GIDSignIn.sharedInstance().signInSilently()
     }
 
     private func initValidator() {
@@ -70,8 +87,8 @@ class LoginViewController: UIViewController, RegisterDelegate {
                 let loginData = LoginData(email: email, password: password)
                 
                 self.progressVisible()
-                self.userProvider.login(loginData, successHandler{result in
-                    self.delegate?.onLoginSuccess() ?? print("Warn: no login delegate")
+                self.userProvider.login(loginData, successHandler{[weak self] in
+                    self?.onLoginSuccess()
                 })
                 
             } else {
@@ -90,11 +107,39 @@ class LoginViewController: UIViewController, RegisterDelegate {
         self.delegate?.onRegisterFromLoginSuccess() ?? print("Warn: no login delegate")
     }
     
+    func onLoginSuccess() {
+        delegate?.onLoginSuccess() ?? print("Warn: no login delegate")
+    }
+    
     @IBAction func onFacebookLoginTap(sender: UIButton) {
         self.progressVisible()
-        userProvider.facebookLogin(resultHandler(onSuccess: {
-            self.delegate?.onLoginSuccess() ?? print("Warn: no login delegate")
+        userProvider.facebookLogin(resultHandler(onSuccess: {[weak self] in
+            self?.onLoginSuccess()
             
         }, onError: defaultErrorHandler([.SocialLoginCancelled])))
+    }
+    
+    @IBAction func onGoogleLoginTap(sender: UIButton) {
+        GIDSignIn.sharedInstance().signIn()
+    }
+    
+    
+    // MARK: GIDSignInDelegate
+    
+    func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
+        if (error == nil) {
+            userProvider.authenticateWithGoogle(user.authentication.accessToken, resultHandler(onSuccess: {[weak self] in
+                self?.onLoginSuccess()
+                
+            }, onError: defaultErrorHandler([.SocialLoginCancelled])))
+
+            
+        } else {
+            print("\(error.localizedDescription)")
+        }
+    }
+    
+    func signIn(signIn: GIDSignIn!, didDisconnectWithUser user:GIDGoogleUser!, withError error: NSError!) {
+        // Perform any operations when the user disconnects from app here.
     }
 }

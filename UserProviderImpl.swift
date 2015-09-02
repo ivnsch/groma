@@ -86,6 +86,7 @@ class UserProviderImpl: UserProvider {
     
     // MARK: - Social login
     
+    // TODO move fb sdk logic to view controller, this is not available in osx!
     func facebookLogin(handler: ProviderResult<Any> -> ()) {
         let login = FBSDKLoginManager()
         login.logInWithReadPermissions(["public_profile"]) {[weak self] result, error in
@@ -125,4 +126,19 @@ class UserProviderImpl: UserProvider {
             }
         }
     }
+
+    
+    func authenticateWithGoogle(token: String, _ handler: ProviderResult<Any> -> ()) {
+        self.remoteProvider.authenticateWithGoogle(token) {[weak self] result in
+            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
+            if result.success {
+                self?.sync {
+                    handler(ProviderResult(status: providerStatus))
+                }
+            } else {
+                handler(ProviderResult(status: providerStatus))
+            }
+        }
+    }
+    
 }

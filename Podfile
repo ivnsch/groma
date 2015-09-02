@@ -1,5 +1,6 @@
+use_frameworks!
+
 def shared
-    use_frameworks!
     pod 'Alamofire', :git => 'https://github.com/Alamofire/Alamofire.git', :branch => 'swift-2.0'
     pod 'Valet', '~> 1.3'
     pod 'Realm', :git => 'https://github.com/realm/realm-cocoa.git', :branch => 'swift-2.0'
@@ -16,6 +17,7 @@ target 'shoppin' do
     platform :ios, '8.0'
     pod 'SwiftValidator', :git => 'https://github.com/i-schuetz/SwiftValidator', :branch => 'swift2.0_remove_delegate_callback'
     pod 'SwiftCharts', :git => 'https://github.com/i-schuetz/SwiftCharts.git', :branch => 'swift2.0'
+    pod 'Google/SignIn'
     shared
 end
 

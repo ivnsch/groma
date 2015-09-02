@@ -91,6 +91,20 @@ class RemoteUserProvider {
             handler(remoteResult)
         }
     }
+
+    func authenticateWithGoogle(token: String, handler: RemoteResult<RemoteSocialLoginResult> -> ()) {
+        
+        let parameters = ["access_token": token]
+        
+        Alamofire.request(.POST, Urls.authGoogle, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteSocialLoginResult>) in
+            
+            if let successResult = remoteResult.successResult {
+                self?.storeUserData(successResult.token, email: successResult.email)
+            }
+            
+            handler(remoteResult)
+        }
+    }
     
     private func storeUserData(token: String, email: String) {
         self.storeToken(token)

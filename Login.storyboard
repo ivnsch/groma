@@ -45,28 +45,45 @@
                                     <action selector="onRegisterTap:" destination="rg4-qz-Lat" eventType="touchUpInside" id="b1V-IP-ISq"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t83-R4-Wil">
-                                <rect key="frame" x="267" y="192" width="67" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t83-R4-Wil">
+                                <rect key="frame" x="201" y="168" width="200" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="KpM-Mj-o2X"/>
+                                    <constraint firstAttribute="width" constant="200" id="c1L-pE-YIb"/>
+                                </constraints>
                                 <state key="normal" title="Facebook"/>
                                 <connections>
                                     <action selector="onFacebookLoginTap:" destination="rg4-qz-Lat" eventType="touchUpInside" id="KyV-I1-TRX"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oU0-Br-Acd">
+                                <rect key="frame" x="200" y="236" width="200" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="5jG-AB-E7q"/>
+                                    <constraint firstAttribute="height" constant="60" id="tfz-G1-4FJ"/>
+                                </constraints>
+                                <state key="normal" title="Google"/>
+                                <connections>
+                                    <action selector="onGoogleLoginTap:" destination="rg4-qz-Lat" eventType="touchUpInside" id="g92-q2-co1"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="EgA-OH-X0u" firstAttribute="top" secondItem="TsF-zg-FLy" secondAttribute="bottom" constant="18" id="1k1-lB-RYq"/>
-                            <constraint firstItem="t83-R4-Wil" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="9HR-lP-j1l"/>
                             <constraint firstAttribute="trailing" secondItem="Yt4-Ha-XoG" secondAttribute="trailing" constant="16" id="A7N-aN-EYy"/>
                             <constraint firstItem="v0i-2j-jaS" firstAttribute="top" secondItem="EgA-OH-X0u" secondAttribute="bottom" constant="219" id="BHP-YC-cak"/>
                             <constraint firstItem="Yt4-Ha-XoG" firstAttribute="top" secondItem="Pdv-bE-LUR" secondAttribute="bottom" constant="10" id="Cmv-oP-f5o"/>
                             <constraint firstAttribute="centerX" secondItem="v0i-2j-jaS" secondAttribute="centerX" id="EV7-Ej-izx"/>
                             <constraint firstItem="TsF-zg-FLy" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="16" id="Lko-r6-N2Y"/>
-                            <constraint firstItem="t83-R4-Wil" firstAttribute="top" secondItem="EgA-OH-X0u" secondAttribute="bottom" constant="40" id="Wpn-MF-9Zb"/>
+                            <constraint firstItem="t83-R4-Wil" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="NDQ-dn-mEJ"/>
                             <constraint firstItem="TsF-zg-FLy" firstAttribute="top" secondItem="Yt4-Ha-XoG" secondAttribute="bottom" constant="14" id="bbt-tb-zJh"/>
                             <constraint firstAttribute="trailing" secondItem="TsF-zg-FLy" secondAttribute="trailing" constant="16" id="bnR-83-IbH"/>
                             <constraint firstAttribute="centerX" secondItem="EgA-OH-X0u" secondAttribute="centerX" id="hGs-ao-zBv"/>
+                            <constraint firstItem="t83-R4-Wil" firstAttribute="top" secondItem="EgA-OH-X0u" secondAttribute="bottom" constant="16" id="kf2-SC-Gzm"/>
+                            <constraint firstItem="oU0-Br-Acd" firstAttribute="top" secondItem="t83-R4-Wil" secondAttribute="bottom" constant="8" id="leG-pe-OFn"/>
                             <constraint firstItem="Yt4-Ha-XoG" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="16" id="moB-wI-T5L"/>
+                            <constraint firstItem="oU0-Br-Acd" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="tRX-L5-MV5"/>
                         </constraints>
                     </view>
                     <connections>
