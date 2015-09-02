@@ -21,9 +21,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         let frame = self.addItemView.sectionAutosuggestionsFrame(self.view)
 
-        let viewController = AutosuggestionsTableViewController(frame: frame, onSuggestionSelected: { (suggestion:String) -> () in
-            self.onSectionSuggestionSelected(suggestion)
-        })
+        let viewController = AutosuggestionsTableViewController(frame: frame)
+        viewController.onSuggestionSelected = {[weak self] in
+            self?.onSectionSuggestionSelected($0)
+        }
         
         self.addChildViewControllerAndView(viewController)
         

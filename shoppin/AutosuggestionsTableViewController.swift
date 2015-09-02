@@ -15,15 +15,11 @@ class AutosuggestionsTableViewController: UITableViewController {
     
     private let cellReuseIdentifier = "reuseIdentifier"
     
-    private var onSuggestionSelected:((String) -> ())!
+    var onSuggestionSelected: ((String) -> ())?
     
-    init(frame:CGRect, onSuggestionSelected:(String) -> ()) {
-        self.onSuggestionSelected = onSuggestionSelected
-        
+    init(frame: CGRect) {
         super.init(style: UITableViewStyle.Plain)
-        
         self.view.frame = frame
-
         self.tableView.bounces = false
     }
     
@@ -90,7 +86,7 @@ class AutosuggestionsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.onSuggestionSelected(self.filteredOptions[indexPath.row]) // TODO crash sometimes
+        onSuggestionSelected?(filteredOptions[indexPath.row])
     }
     
     /*
