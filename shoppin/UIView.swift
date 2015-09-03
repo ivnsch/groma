@@ -44,4 +44,28 @@ extension UIView {
             NSLayoutConstraint.matchWidth(view: self, otherView: view),
             NSLayoutConstraint.matchHeight(view: self, otherView: view)])
     }
+    
+    /**
+    Toggles a semi-transparent, blocking progress indicator overlay on this view
+    */
+    func defaultProgressVisible(visible: Bool = false) {
+        if visible {
+            if self.viewWithTag(ViewTags.GlobalActivityIndicator) == nil {
+                let view = UIView(frame: self.frame)
+                view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.2)
+                view.tag = ViewTags.GlobalActivityIndicator
+                
+                let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+                let size: CGFloat = 50
+                let sizeH: CGFloat = size/2
+                activityIndicator.frame = CGRect(x: self.frame.width / 2 - sizeH, y: self.frame.height / 2 - sizeH, width: size, height: size)
+                activityIndicator.startAnimating()
+                
+                view.addSubview(activityIndicator)
+                self.addSubview(view)
+            }
+        } else {
+            self.viewWithTag(ViewTags.GlobalActivityIndicator)?.removeFromSuperview()
+        }
+    }
 }

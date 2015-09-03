@@ -23,4 +23,7 @@ protocol UserProvider {
     func facebookLogin(handler: ProviderResult<Any> -> ())
     
     func authenticateWithGoogle(token: String, _ handler: ProviderResult<Any> -> ())
+    
+    func sync(handler: () -> ())
+
 }

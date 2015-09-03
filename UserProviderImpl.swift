@@ -48,7 +48,7 @@ class UserProviderImpl: UserProvider {
         self.remoteProvider.logout(remoteResultHandler(handler))
     }
     
-    private func sync(handler: () -> ()) {
+    func sync(handler: () -> ()) {
 
         listsProvider.syncListsWithListItems {[weak self] result in
             if result.success {

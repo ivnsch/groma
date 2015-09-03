@@ -94,26 +94,6 @@ extension UIViewController {
     
 
     func progressVisible(visible: Bool = true) {
-        
-        if visible {
-            
-            if self.view.viewWithTag(ViewTags.GlobalActivityIndicator) == nil {
-                let view = UIView(frame: self.view.frame)
-                view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.2)
-                view.tag = ViewTags.GlobalActivityIndicator
-                
-                let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
-                let size: CGFloat = 50
-                let sizeH: CGFloat = size/2
-                activityIndicator.frame = CGRect(x: self.view.frame.width / 2 - sizeH, y: self.view.frame.height / 2 - sizeH, width: size, height: size)
-                activityIndicator.startAnimating()
-                
-                view.addSubview(activityIndicator)
-                self.view.addSubview(view)
-            }
-    
-        } else {
-            self.view.viewWithTag(ViewTags.GlobalActivityIndicator)?.removeFromSuperview()
-        }
+        self.view.defaultProgressVisible(visible)
     }
 }

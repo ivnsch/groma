@@ -9,13 +9,17 @@
 import UIKit
 import CoreData
 import FBSDKCoreKit
+import Reachability
 
 @objc
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
+    private var reachability: Reachability!
+    
+    private let userProvider = ProviderFactory().userProvider // arc
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -36,9 +40,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = viewController
         self.window?.makeKeyAndVisible()
 
+        initReachability()
+        
         // Facebook sign-in
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
+
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
         
@@ -290,6 +297,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
+    }
+    
+    
+    // MARK: - Reachability
+    
+    private func initReachability() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"checkForReachability:", name: kReachabilityChangedNotification, object: nil)
+        self.reachability = Reachability.reachabilityForInternetConnection()
+        self.reachability.startNotifier()
+    }
+    
+    func checkForReachability(notification: NSNotification) {
+        
+        let networkReachability = notification.object as! Reachability
+        let remoteHostStatus = networkReachability.currentReachabilityStatus()
+
+        if remoteHostStatus != .NotReachable { // wifi / wwan
+            print("Device went online")
+            
+            if userProvider.loggedIn {
+                print("User is logged in, start sync")
+                window?.defaultProgressVisible(true)
+                userProvider.sync {[weak self] in
+                    print("Sync finished")
+                    self?.window?.defaultProgressVisible(false)
+                }
+            }
+        }
     }
 }
 
