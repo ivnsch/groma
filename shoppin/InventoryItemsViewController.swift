@@ -24,6 +24,7 @@ class InventoryItemsViewController: UITableViewController, InventoryItemTableVie
     
     override func viewWillAppear(animated:Bool) {
         if let inventory = self.inventory {
+            self.navigationItem.title = inventory.name
             self.loadInventoryItems(inventory)
         }
     }
