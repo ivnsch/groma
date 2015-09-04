@@ -140,31 +140,39 @@ class RealmInventoryProvider: RealmProvider {
     func add(inventoryItemsWithHistory: [InventoryItemWithHistoryEntry], handler: Bool -> ()) {
         
         self.doInWriteTransaction({[weak self] realm in
-            for var inventoryItemWithHistory in inventoryItemsWithHistory { // var because we overwrite with incremented item if already exists
-
-                // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
-                let mapper: DBInventoryItem -> InventoryItem = {InventoryItemMapper.inventoryItemWithDB($0)}
-                let inventoryItems: [InventoryItem] = self!.loadSync(realm, mapper: mapper, filter:
-                    DBInventoryItem.createFilter(inventoryItemWithHistory.inventoryItem.product, inventoryItemWithHistory.inventoryItem.inventory)) // TODO if possible don't use implicity wrapped optional here?
-                if let inventoryItem = inventoryItems.first {
-                    let currentQuantity = inventoryItem.quantity
-                    let currentQuantityDelta = inventoryItem.quantityDelta
-                    let inventoryItem = inventoryItemWithHistory.inventoryItem
-                    let incrementedInventoryItem = inventoryItem.copy(quantity: inventoryItem.quantity + currentQuantity, quantityDelta: inventoryItem.quantityDelta + currentQuantityDelta)
-                    inventoryItemWithHistory = inventoryItemWithHistory.copy(inventoryItem: incrementedInventoryItem)
+            
+            if let weakSelf = self {
+                synced(weakSelf) {
+                    for var inventoryItemWithHistory in inventoryItemsWithHistory { // var because we overwrite with incremented item if already exists
+                        
+                        // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
+                        let mapper: DBInventoryItem -> InventoryItem = {InventoryItemMapper.inventoryItemWithDB($0)}
+                        let inventoryItems: [InventoryItem] = self!.loadSync(realm, mapper: mapper, filter:
+                            DBInventoryItem.createFilter(inventoryItemWithHistory.inventoryItem.product, inventoryItemWithHistory.inventoryItem.inventory)) // TODO if possible don't use implicity wrapped optional here?
+                        if let inventoryItem = inventoryItems.first {
+                            let currentQuantity = inventoryItem.quantity
+                            let currentQuantityDelta = inventoryItem.quantityDelta
+                            let inventoryItem = inventoryItemWithHistory.inventoryItem
+                            let incrementedInventoryItem = inventoryItem.copy(quantity: inventoryItem.quantity + currentQuantity, quantityDelta: inventoryItem.quantityDelta + currentQuantityDelta)
+                            inventoryItemWithHistory = inventoryItemWithHistory.copy(inventoryItem: incrementedInventoryItem)
+                        }
+                        
+                        // save
+                        let dbInventoryItem = InventoryItemMapper.dbWithInventoryItem(inventoryItemWithHistory.inventoryItem)
+                        let dbHistoryItem = HistoryItemMapper.dbWith(inventoryItemWithHistory)
+                        realm.add(dbInventoryItem, update: true)
+                        realm.add(dbHistoryItem, update: true)
+                    }
                 }
+                return true
                 
-                // save
-                let dbInventoryItem = InventoryItemMapper.dbWithInventoryItem(inventoryItemWithHistory.inventoryItem)
-                let dbHistoryItem = HistoryItemMapper.dbWith(inventoryItemWithHistory)
-                realm.add(dbInventoryItem, update: true)
-                realm.add(dbHistoryItem, update: true)
+            } else {
+                print("Warning: no self reference in RealmInventoryProvider.add, doInWriteTransaction")
+                return false
             }
-            
-            return true
-            
             }, finishHandler: {success in
                 handler(success)
-            })
+            }
+        )
     }
 }
