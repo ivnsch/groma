@@ -471,25 +471,50 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kNJ-Rb-iDN">
-                                            <rect key="frame" x="8" y="11" width="42" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kNJ-Rb-iDN">
+                                            <rect key="frame" x="5" y="11" width="42" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cUe-dc-Y1J">
-                                            <rect key="frame" x="550" y="11" width="42" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cUe-dc-Y1J">
+                                            <rect key="frame" x="440" y="11" width="42" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yBM-4c-s6A">
+                                            <rect key="frame" x="505" y="7" width="30" height="30"/>
+                                            <state key="normal" title="+"/>
+                                            <connections>
+                                                <action selector="onIncrementTap:" destination="vCq-K7-Ar7" eventType="touchUpInside" id="5j2-Ux-DoW"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V4m-pG-OCr">
+                                            <rect key="frame" x="558" y="7" width="30" height="30"/>
+                                            <state key="normal" title="-"/>
+                                            <connections>
+                                                <action selector="onDecrementTap:" destination="vCq-K7-Ar7" eventType="touchUpInside" id="Iz1-mU-bq5"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="yBM-4c-s6A" firstAttribute="centerY" secondItem="kNJ-Rb-iDN" secondAttribute="centerY" id="2XP-BX-wOX"/>
+                                        <constraint firstItem="yBM-4c-s6A" firstAttribute="leading" secondItem="cUe-dc-Y1J" secondAttribute="trailing" constant="23" id="2dc-hq-dwR"/>
+                                        <constraint firstAttribute="trailing" secondItem="V4m-pG-OCr" secondAttribute="trailing" constant="12" id="3pT-hZ-5Pc"/>
+                                        <constraint firstItem="V4m-pG-OCr" firstAttribute="leading" secondItem="yBM-4c-s6A" secondAttribute="trailing" constant="23" id="HnA-Fu-DGR"/>
+                                        <constraint firstItem="V4m-pG-OCr" firstAttribute="centerY" secondItem="kNJ-Rb-iDN" secondAttribute="centerY" id="Kev-uA-CTH"/>
                                         <constraint firstAttribute="trailing" secondItem="cUe-dc-Y1J" secondAttribute="trailing" constant="5" id="QTF-ij-zRP"/>
                                         <constraint firstAttribute="centerY" secondItem="cUe-dc-Y1J" secondAttribute="centerY" id="XzQ-Tq-r1I"/>
                                         <constraint firstAttribute="centerY" secondItem="kNJ-Rb-iDN" secondAttribute="centerY" id="cWp-6C-OPw"/>
                                         <constraint firstItem="kNJ-Rb-iDN" firstAttribute="leading" secondItem="6tq-xY-HMg" secondAttribute="leading" constant="5" id="xfn-Al-TWH"/>
+                                        <constraint firstItem="cUe-dc-Y1J" firstAttribute="centerY" secondItem="kNJ-Rb-iDN" secondAttribute="centerY" id="yQG-zD-5o4"/>
                                     </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="QTF-ij-zRP"/>
+                                        </mask>
+                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="nameLabel" destination="kNJ-Rb-iDN" id="hw5-63-dfk"/>

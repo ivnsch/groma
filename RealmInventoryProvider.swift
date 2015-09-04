@@ -81,6 +81,12 @@ class RealmInventoryProvider: RealmProvider {
         self.saveObjs(dbObjs, update: true, handler: handler)
     }
     
+    func incrementInventoryItem(item: InventoryItem, delta: Int, handler: Bool -> ()) {
+        let incrementedInventoryItem = item.copy(quantityDelta: item.quantityDelta + delta)
+        
+        saveInventoryItems([incrementedInventoryItem], handler: handler)
+    }
+    
     // hm...
     func loadAllInventoryItems(handler: [InventoryItem] -> ()) {
         let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}
@@ -133,11 +139,25 @@ class RealmInventoryProvider: RealmProvider {
     */
     func add(inventoryItemsWithHistory: [InventoryItemWithHistoryEntry], handler: Bool -> ()) {
         
-        self.doInWriteTransaction({realm in
-            for inventoryItemWithHistory in inventoryItemsWithHistory {
+        self.doInWriteTransaction({[weak self] realm in
+            for var inventoryItemWithHistory in inventoryItemsWithHistory { // var because we overwrite with incremented item if already exists
+
+                // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
+                let mapper: DBInventoryItem -> InventoryItem = {InventoryItemMapper.inventoryItemWithDB($0)}
+                let inventoryItems: [InventoryItem] = self!.loadSync(realm, mapper: mapper, filter:
+                    DBInventoryItem.createFilter(inventoryItemWithHistory.inventoryItem.product, inventoryItemWithHistory.inventoryItem.inventory)) // TODO if possible don't use implicity wrapped optional here?
+                if let inventoryItem = inventoryItems.first {
+                    let currentQuantity = inventoryItem.quantity
+                    let currentQuantityDelta = inventoryItem.quantityDelta
+                    let inventoryItem = inventoryItemWithHistory.inventoryItem
+                    let incrementedInventoryItem = inventoryItem.copy(quantity: inventoryItem.quantity + currentQuantity, quantityDelta: inventoryItem.quantityDelta + currentQuantityDelta)
+                    inventoryItemWithHistory = inventoryItemWithHistory.copy(inventoryItem: incrementedInventoryItem)
+                }
+                
+                // save
                 let dbInventoryItem = InventoryItemMapper.dbWithInventoryItem(inventoryItemWithHistory.inventoryItem)
                 let dbHistoryItem = HistoryItemMapper.dbWith(inventoryItemWithHistory)
-                realm.add(dbInventoryItem, update: true) // TODO implement increment delta for inventory items
+                realm.add(dbInventoryItem, update: true)
                 realm.add(dbHistoryItem, update: true)
             }
             

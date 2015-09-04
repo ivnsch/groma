@@ -47,6 +47,18 @@ class RemoteInventoryItemsProvider: Any {
         }
     }
     
+    func incrementInventoryItem(inventoryItem: InventoryItem, delta: Int, handler: RemoteResult<NoOpSerializable> -> ()) {
+        let params: [String: AnyObject] = [
+            "delta": delta,
+            "productUuid": inventoryItem.product.uuid,
+            "inventoryUuid": inventoryItem.inventory.uuid
+        ]
+        
+        AlamofireHelper.authenticatedRequest(.POST, Urls.incrementInventoryItem, params).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>) in
+            handler(result)
+        }
+    }
+    
     // TODO remote inventory from inventory items, at least for sending - we want to add all the items to one inventory....... for receiving this also wastes payload, they also have the same inventory also
     private func toDictionary(inventoryItem: InventoryItemWithHistoryEntry) -> [String: AnyObject] {
         return [

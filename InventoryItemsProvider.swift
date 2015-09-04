@@ -16,4 +16,5 @@ protocol InventoryItemsProvider {
     
     func updateInventoryItem(inventory: Inventory, item: InventoryItem)
 
+    func incrementInventoryItem(item: InventoryItem, delta: Int, _ handler: ProviderResult<Any> -> ())
 }

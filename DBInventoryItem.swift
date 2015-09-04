@@ -22,8 +22,13 @@ class DBInventoryItem: DBSyncable {
         return "\(product.uuid)-\(inventory.uuid)"
     }
 
-    override static func primaryKey() -> String? {
+    override static func primaryKey() -> String {
         return "compoundKey"
     }
+    
+    // MARK: - Query utilities
+    
+    static func createFilter(product: Product, _ inventory: Inventory) -> String {
+        return "product.uuid = '\(product.uuid)' AND inventory.uuid = '\(inventory.uuid)'"
+    }
 }
-

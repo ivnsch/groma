@@ -76,6 +76,20 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
  
+    func incrementInventoryItem(item: InventoryItem, delta: Int, _ handler: ProviderResult<Any> -> ()) {
+        dbInventoryProvider.incrementInventoryItem(item, delta: delta) {[weak self] saved in
+            if saved {
+                handler(ProviderResult(status: .Success))
+
+                self?.remoteInventoryItemsProvider.incrementInventoryItem(item, delta: delta) {remoteResult in
+                    if !remoteResult.success {
+                        print("Error incrementing item in remote")
+                    }
+                }
+            }
+        }
+    }
+    
     func updateInventoryItem(inventory: Inventory, item: InventoryItem) {
         // TODO
 //        self.cdProvider.updateInventoryItem(item, handler: {try in

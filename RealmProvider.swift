@@ -85,18 +85,7 @@ class RealmProvider {
             
             do {
                 let realm = try Realm()
-                
-                var results = realm.objects(T)
-                if let predicate = predicateMaybe {
-                    results = results.filter(predicate)
-                }
-                if let sortDescriptor = sortDescriptorMaybe, key = sortDescriptor.key {
-                    results = results.sorted(key, ascending: sortDescriptor.ascending)
-                }
-
-                let objs: [T] = results.toArray(rangeMaybe)
-                let models = objs.map{mapper($0)}
-                
+                let models = self.loadSync(realm, mapper: mapper, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, range: rangeMaybe)
                 finished(models)
                 
             } catch _ {
@@ -104,6 +93,28 @@ class RealmProvider {
                 finished([]) // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
             }
         })
+    }
+    
+    func loadSync<T: Object, U>(realm: Realm, mapper: T -> U, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil) -> [U] {
+        var results = realm.objects(T)
+        if let predicate = predicateMaybe {
+            results = results.filter(predicate)
+        }
+        if let sortDescriptor = sortDescriptorMaybe, key = sortDescriptor.key {
+            results = results.sorted(key, ascending: sortDescriptor.ascending)
+        }
+        
+        let objs: [T] = results.toArray(rangeMaybe)
+        return objs.map{mapper($0)}
+    }
+
+    func loadSync<T: Object, U>(realm: Realm, mapper: T -> U, filter filterMaybe: String?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil) -> [U] {
+        
+        let predicateMaybe = filterMaybe.map {
+            NSPredicate(format: $0, argumentArray: [])
+        }
+        
+        return self.loadSync(realm, mapper: mapper, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, range: rangeMaybe)
     }
     
     func load<T: Object, U>(mapper: T -> U, filter filterMaybe: String? = nil, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil, handler: [U] -> ()) {

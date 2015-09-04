@@ -8,7 +8,7 @@
 
 import UIKit
 
-class InventoryItemsViewController: UITableViewController {
+class InventoryItemsViewController: UITableViewController, InventoryItemTableViewCellDelegate {
 
     private var inventoryItems: [InventoryItem] = []
 
@@ -53,6 +53,10 @@ class InventoryItemsViewController: UITableViewController {
         
         cell.nameLabel.text = inventoryItem.product.name
         cell.quantityLabel.text = String(inventoryItem.quantity)
+        
+        cell.inventoryItem = inventoryItem
+        cell.row = indexPath.row
+        cell.delegate = self
 
         // this was initially a local function but it seems we have to use a closure, see http://stackoverflow.com/a/26237753/930450
         // TODO change quantity / edit inventory items
@@ -68,5 +72,36 @@ class InventoryItemsViewController: UITableViewController {
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell
+    }
+    
+    // MARK: - InventoryItemTableViewCellDelegate
+    
+    func onIncrementItemTap(cell: InventoryItemTableViewCell) {
+        self.checkChangeInventoryItemQuantity(cell, delta: 1)
+    }
+    
+    func onDecrementItemTap(cell: InventoryItemTableViewCell) {
+        self.checkChangeInventoryItemQuantity(cell, delta: -1)
+    }
+    
+    /**
+    Unwrap optionals safely
+    Note that despite implicitly unwrapped may look suitable here, we prefer working with ? as general approach
+    */
+    private func checkChangeInventoryItemQuantity(cell: InventoryItemTableViewCell, delta: Int) {
+        if let inventoryItem = cell.inventoryItem, row = cell.row {
+            changeInventoryItemQuantity(cell, row: row, inventoryItem: inventoryItem, delta: delta)
+        } else {
+            print("Error: Cell has invalid state, inventory item and row must not be nil at this point")
+        }
+    }
+    
+    private func changeInventoryItemQuantity(cell: InventoryItemTableViewCell, row: Int, inventoryItem: InventoryItem, delta: Int) {
+        inventoryItemsProvider.incrementInventoryItem(inventoryItem, delta: delta, successHandler({[weak self] result in
+            let incrementedItem = inventoryItem.copy(quantity: inventoryItem.quantity + delta)
+            self?.inventoryItems[row] = incrementedItem
+            cell.quantityLabel.text = "\(incrementedItem)"
+            self?.tableView.reloadData()
+        }))
     }
 }

@@ -25,6 +25,15 @@ class InventoryItemWithHistoryEntry: Equatable {
         self.addedDate = addedDate
         self.user = user
     }
+    
+    func copy(inventoryItem inventoryItem: InventoryItem? = nil, historyItemUuid: String? = nil, addedDate: NSDate? = nil, user: SharedUser? = nil) -> InventoryItemWithHistoryEntry {
+        return InventoryItemWithHistoryEntry(
+            inventoryItem: inventoryItem ?? self.inventoryItem,
+            historyItemUuid: historyItemUuid ?? self.historyItemUuid,
+            addedDate: addedDate ?? self.addedDate,
+            user: user ?? self.user
+        )
+    }
 }
 
 func ==(lhs: InventoryItemWithHistoryEntry, rhs: InventoryItemWithHistoryEntry) -> Bool {

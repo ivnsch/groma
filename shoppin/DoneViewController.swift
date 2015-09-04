@@ -120,7 +120,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         let onHasInventory: (Inventory) -> () = {[weak self] inventory in
             
             let inventoryItems = self!.listItemsTableViewController.items.map{
-                InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.quantity, product: $0.product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
+                InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.quantity, quantityDelta: $0.quantity, product: $0.product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
             }
 
             self!.inventoryItemsProvider.addToInventory(inventory, items: inventoryItems, self!.successHandler{result in
@@ -133,7 +133,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         // WARN for now we assume user has always only one inventory. Note that general setup (database, server etc) supports multiple inventories though.
         self.progressVisible(true)
         self.inventoryProvider.inventories(successHandler{[weak self] inventories in
-            if let inventory = inventories.first {
+            if let inventory = inventories.first { // TODO list associated inventory
                 onHasInventory(inventory)
                 
             } else { // user has no inventories - create first one. Note if offline there can be inventories in server - there has to be a sync when user comes online/signs up
