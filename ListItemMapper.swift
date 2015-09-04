@@ -35,6 +35,10 @@ class ListItemMapper {
         return dbListItem
     }
     
+    /**
+    Parses the remote list items into model objects
+    Note that the list items are sorted here by order field. The backend doesn't do this.
+    */
     class func listItemsWithRemote(remoteListItems: RemoteListItems, list: List) -> ListItemsWithRelations {
         
         func toProductDict(remoteProducts: [RemoteProduct]) -> ([String: Product], [Product]) {
@@ -88,8 +92,10 @@ class ListItemMapper {
             )
         }
         
+        let sortedListItems = listItems.sortedByOrder()
+
         return (
-            listItems,
+            sortedListItems,
             products,
             sections
         )

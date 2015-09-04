@@ -63,6 +63,9 @@
 		EB0C2A561B590D3D00AF6226 /* TestInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A551B590D3D00AF6226 /* TestInventory.swift */; };
 		EB0F5F861B962D2100035175 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB0F5F851B962D2100035175 /* GoogleService-Info.plist */; };
 		EB0F5F881B98A10100035175 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F5F871B98A10100035175 /* SystemConfiguration.framework */; };
+		EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */; };
+		EB0F5F8C1B9A0A8000035175 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */; };
+		EB0F5F8D1B9A0A8000035175 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */; };
 		EB0FD3821B5D017C00829AE5 /* ListsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0FD3811B5D017C00829AE5 /* ListsTableViewController.swift */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAF1A3334EC00D778DE /* ViewController.swift */; };
@@ -489,6 +492,7 @@
 		EB0C2A551B590D3D00AF6226 /* TestInventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestInventory.swift; sourceTree = "<group>"; };
 		EB0F5F851B962D2100035175 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EB0F5F871B98A10100035175 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_ListItem.swift; sourceTree = "<group>"; };
 		EB0FD3811B5D017C00829AE5 /* ListsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsTableViewController.swift; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -792,6 +796,14 @@
 				EB0C1BA21B3DF5EA00F24C85 /* UserDetails.storyboard */,
 			);
 			name = userDetails;
+			sourceTree = "<group>";
+		};
+		EB0F5F891B9A0A5500035175 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */,
+			);
+			name = extensions;
 			sourceTree = "<group>";
 		};
 		EB1DDE9C1A3334EC00D778DE = {
@@ -1371,6 +1383,7 @@
 				EBF162FB1A3DDE4C0048E37C /* mapper */,
 				EB40A4671B5506CC000E9CAD /* realm */,
 				EB451C441B8634FD000DE208 /* internal */,
+				EB0F5F891B9A0A5500035175 /* extensions */,
 				EBF162EA1A3CA2470048E37C /* Product.swift */,
 				EBF162EC1A3CA24E0048E37C /* ListItem.swift */,
 				EBEEDD6A1A49C94F00FC3B29 /* Section.swift */,
@@ -1892,6 +1905,7 @@
 				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
 				EB70C21F1B4D302D0060E529 /* SharedUser.swift in Sources */,
 				EB714AA61B66BBA800F91B94 /* DBSyncable.swift in Sources */,
+				EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */,
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,
 				EBF299871B791023006BDA1F /* InventorySync.swift in Sources */,
 				EB0C1BA01B3DF2B500F24C85 /* UserTabItemViewController.swift in Sources */,
@@ -2065,6 +2079,7 @@
 				EBDFE3C61AD11F6700E48F95 /* NSLayoutConstraint.swift in Sources */,
 				EB7E83231B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
 				EB0C1B901B3DA97000F24C85 /* UserProvider.swift in Sources */,
+				EB0F5F8C1B9A0A8000035175 /* Array_ListItem.swift in Sources */,
 				EB70C2241B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBF377981B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
 				EB89D3471AD4536300B6E0D0 /* AddListController.swift in Sources */,
@@ -2122,6 +2137,7 @@
 				EBF5D7D91B8FB01B00A235C5 /* Synced.swift in Sources */,
 				EBF3779D1B38AA5900EEB6DB /* Urls.swift in Sources */,
 				EBF377951B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
+				EB0F5F8D1B9A0A8000035175 /* Array_ListItem.swift in Sources */,
 				EB714AA41B6669AA00F91B94 /* ProviderFetchModus.swift in Sources */,
 				EBF3775F1B342A4E00EEB6DB /* ListItemProviderMock.swift in Sources */,
 				EB40A4781B550C0C000E9CAD /* Results.swift in Sources */,

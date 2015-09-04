@@ -371,12 +371,14 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
    
     // updates list item models with current ordering in table view
+    // TODO review and remove commented / not necessary code
     private func updateListItemsModelsOrder() {
         var sectionRows = 0
         for section in self.tableViewSections {
             for (listItemIndex, tableViewListItem) in section.tableViewListItems.enumerate() {
-                let absoluteRowIndex = listItemIndex + sectionRows
-                tableViewListItem.listItem.order = absoluteRowIndex
+//                let absoluteRowIndex = listItemIndex + sectionRows
+//                tableViewListItem.listItem.order = absoluteRowIndex
+                tableViewListItem.listItem.order = listItemIndex
             }
             sectionRows += section.numberOfRows()
         }
@@ -395,6 +397,12 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
 
         self.updateListItemsModelsOrder()
         
-        self.listItemsEditTableViewDelegate?.onListItemsChangedSection(self.tableViewSections.flatMap{$0.tableViewListItems})
+        // update only list items in modified section(s)
+        var modifiedListItems = srcSection.tableViewListItems
+        if dstSection != srcSection {
+            modifiedListItems += dstSection.tableViewListItems
+        }
+        
+        self.listItemsEditTableViewDelegate?.onListItemsChangedSection(modifiedListItems)
     }
 }

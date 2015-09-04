@@ -18,7 +18,7 @@ protocol ItemActionsDelegate {
     func undoSwipe(tableViewListItem:TableViewListItem)
 }
 
-class ListItemsViewSection {
+class ListItemsViewSection: Equatable {
     
     var tableViewListItems:[TableViewListItem]
     
@@ -29,7 +29,7 @@ class ListItemsViewSection {
     var headerFontColor:UIColor = UIColor.whiteColor()
     var labelFontColor:UIColor = UIColor.blackColor()
     
-    let section:Section
+    var section: Section // as var to mutate order in-place (ListItemsTableViewController)
     
     private let hasHeader:Bool
     
@@ -183,4 +183,8 @@ class ListItemsViewSection {
     func buttonThreeActionForItemText() {
         
     }
+}
+
+func ==(lhs: ListItemsViewSection, rhs: ListItemsViewSection) -> Bool {
+    return lhs.section == rhs.section
 }

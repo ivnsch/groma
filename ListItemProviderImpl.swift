@@ -21,8 +21,16 @@ class ListItemProviderImpl: ListItemProvider {
     
     func listItems(list: List, fetchMode: ProviderFetchModus = .Both, _ handler: ProviderResult<[ListItem]> -> ()) {
 
-        self.dbProvider.loadListItems(list, handler: {dbListItems in
+        self.dbProvider.loadListItems(list, handler: {(var dbListItems) in
 
+            
+            // reorder items by position
+            // TODO ? a possible optimization is to save the list to local db sorted instead of having order field, see http://stackoverflow.com/questions/25023826/reordering-realm-io-data-in-tableview-with-swift
+            // the server still needs (internally at least) the order column
+            // TODO another optimization is to do the server items sorting in the server
+            
+            dbListItems = dbListItems.sortedByOrder() // order is relative to section (0...n) so there will be repeated numbers.
+            
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbListItems))
             
             self.remoteProvider.listItems(list: list) {remoteResult in
@@ -31,7 +39,7 @@ class ListItemProviderImpl: ListItemProvider {
                     let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems, list: list)
                     
                     // if there's no cached list or there's a difference, overwrite the cached list
-                    if (dbListItems != listItemsWithRelations.listItems) {
+                    if (dbListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
                         self.dbProvider.saveListItems(listItemsWithRelations) {saved in
                             
                             if fetchMode == .Both {
@@ -183,12 +191,18 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func update(listItems: [ListItem], _ handler: ProviderResult<Any> -> ()) {
-        return self.dbProvider.updateListItems(listItems, handler: {saved in
+        return self.dbProvider.updateListItems(listItems, handler: {[weak self] saved in
             handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
+            
+            self?.remoteProvider.update(listItems) {result in
+                if !result.success {
+                    print("Error: Updating listItems: \(listItems)")
+                }
+            }
         })
-        // TODO is this used? if yes, server!
     }
     
+    // TODO why this doesn't call the update [listItems] method
     func update(listItem: ListItem, _ handler: ProviderResult<Any> -> ()) {
         
         self.dbProvider.saveListItem(listItem) {saved in

@@ -16,7 +16,7 @@ final class ListItem: Equatable {
     var section: Section
     var list: List
    
-    var order: Int
+    var order: Int // relative to section
     
     //////////////////////////////////////////////
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
