@@ -13,6 +13,7 @@ class DBSection: DBSyncable {
 
     dynamic var uuid: String = ""
     dynamic var name: String = ""
+    dynamic var order: Int = 0
 //    let listItems = RealmSwift.List<String>()
     
     override static func primaryKey() -> String? {

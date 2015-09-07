@@ -11,10 +11,12 @@ import Foundation
 final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
+    let order: Int
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
+        self.order = representation.valueForKeyPath("order") as! Int
     }
     
     @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteSection] {
@@ -29,6 +31,6 @@ final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSeriali
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name)}"
+        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), order: \(self.order)}"
     }
 }

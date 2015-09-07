@@ -95,7 +95,7 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
     
-    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> ()) {
+    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: Int, _ handler: ProviderResult<ListItem> -> ()) {
 
         self.listItems(list, fetchMode: .First) {result in // TODO fetch items only when order not passed, because they are used only to get order
             
@@ -125,7 +125,7 @@ class ListItemProviderImpl: ListItemProvider {
                             if let existingSection = result.sucessResult {
                                 return existingSection
                             } else {
-                                return Section(uuid: NSUUID().UUIDString, name: listItemInput.section)
+                                return Section(uuid: NSUUID().UUIDString, name: listItemInput.section, order: possibleNewSectionOrder)
                             }
                         }()
                         
@@ -185,7 +185,54 @@ class ListItemProviderImpl: ListItemProvider {
             }
         }
     }
- 
+
+    func switchDone(listItems: [ListItem], list: List, done: Bool, _ handler: ProviderResult<Any> -> ()) {
+        
+        // Helper to count how many list items each section has
+        // filtered by "done" in same pass for better performance
+        func sectionCountAndFilteredByDoneDict(listItems: [ListItem], done: Bool) -> [Section: Int] {
+            var dict = [Section: Int]()
+            for listItem in listItems {
+                if listItem.done == done {
+                    if dict[listItem.section] != nil {
+                        dict[listItem.section]!++
+                    } else {
+                        dict[listItem.section] = 1
+                    }
+                }
+            }
+            return dict
+        }
+        
+        self.listItems(list, fetchMode: ProviderFetchModus.First) {result in // TODO review .First suitable here
+            
+            if let storedListItems = result.sucessResult {
+            
+                // Update done and order field - by changing "done" we are moving list items from one tableview to another
+                // we append the items at the end of the section (order == section.count)
+                var sectionsDict = sectionCountAndFilteredByDoneDict(storedListItems, done: done)
+                for listItem in listItems {
+                    listItem.done = done
+                    if let sectionCount = sectionsDict[listItem.section] {
+                        listItem.order = sectionCount
+                        sectionsDict[listItem.section]!++ // we are adding an item to section - increment count for possible next item
+                        
+                    } else { // item's section is not in target list - set order 0 (first item in section) and add section to the dictionary
+                        listItem.order = 0
+                        sectionsDict[listItem.section] = 1 // we are adding an item to section - items count is 1
+                    }
+                }
+                
+                // persist changes
+                self.update(listItems, handler)
+                
+            } else {
+                print("Error: didn't get listItems in updateBatchDone: \(result.status)")
+                handler(ProviderResult(status: .Unknown))
+            }
+        }
+    }
+    
     func updateDone(listItems: [ListItem], _ handler: ProviderResult<Any> -> ()) {
         self.update(listItems, handler)
     }

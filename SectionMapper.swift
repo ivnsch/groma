@@ -11,17 +11,18 @@ import Foundation
 class SectionMapper {
     
     class func sectionWithDB(dbSection: DBSection) -> Section {
-        return Section(uuid: dbSection.uuid, name: dbSection.name)
+        return Section(uuid: dbSection.uuid, name: dbSection.name, order: dbSection.order)
     }
     
     class func SectionWithRemote(remoteSection: RemoteSection) -> Section {
-        return Section(uuid: remoteSection.uuid, name: remoteSection.name)
+        return Section(uuid: remoteSection.uuid, name: remoteSection.name, order: remoteSection.order)
     }
     
     class func dbWithSection(section: Section) -> DBSection {
         let dbSection = DBSection()
         dbSection.uuid = section.uuid
         dbSection.name = section.name
+        dbSection.order = section.order
         return dbSection
     }
     
@@ -29,6 +30,7 @@ class SectionMapper {
         let dbSection = DBSection()
         dbSection.uuid = section.uuid
         dbSection.name = section.name
+        dbSection.order = section.order
         return dbSection
     }
 }

@@ -99,12 +99,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let product18 = Product(uuid: "27", name: "Seife", price: 0.8)
             let product19 = Product(uuid: "28", name: "Toastbrot", price: 0.7)
             
-            let section1 = Section(uuid: "100", name: "Obst")
-            let section2 = Section(uuid: "101", name: "Gemuese")
-            let section3 = Section(uuid: "102", name: "Milchprodukte")
-            let section4 = Section(uuid: "103", name: "Fleisch")
-            let section5 = Section(uuid: "104", name: "Pasta")
-            let section6 = Section(uuid: "105", name: "Getraenke")
+            let section1 = Section(uuid: "100", name: "Obst", order: 0)
+            let section2 = Section(uuid: "101", name: "Gemuese", order: 1)
+            let section3 = Section(uuid: "102", name: "Milchprodukte", order: 2)
+            let section4 = Section(uuid: "103", name: "Fleisch", order: 3)
+            let section5 = Section(uuid: "104", name: "Pasta", order: 4)
+            let section6 = Section(uuid: "105", name: "Getraenke", order: 5)
             
             let listItems = [
                 ListItem(uuid: "200", done: false, quantity: 5, product: product1, section: section1, list: list1, order: 0),
@@ -113,7 +113,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 ListItem(uuid: "204", done: false, quantity: 2, product: product4, section: section4, list: list1, order: 0),
                 ListItem(uuid: "205", done: true, quantity: 4, product: product5, section: section5, list: list1, order: 0),
                 ListItem(uuid: "206", done: true, quantity: 3, product: product6, section: section3, list: list1, order: 0),
-                ListItem(uuid: "207", done: true, quantity: 4, product: product7, section: section6, list: list1, order: 0)
+                ListItem(uuid: "207", done: true, quantity: 4, product: product7, section: section6, list: list1, order: 1)
             ]
             
             

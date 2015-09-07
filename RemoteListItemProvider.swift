@@ -141,9 +141,10 @@ class RemoteListItemProvider {
     }
 
     func add(section: Section, handler: RemoteResult<RemoteSection> -> ()) {
-        let parameters = [
+        let parameters: [String: AnyObject] = [
             "uuid": section.uuid,
-            "name": section.name
+            "name": section.name,
+            "order": section.order
         ]
         AlamofireHelper.authenticatedRequest(.POST, Urls.section, parameters).responseMyObject { (request, _, result: RemoteResult<RemoteSection>) in
             handler(result)
@@ -250,7 +251,8 @@ class RemoteListItemProvider {
             "listName": listItem.list.name,
             "sectionInput": [
                 "uuid": listItem.section.uuid,
-                "name": listItem.section.name
+                "name": listItem.section.name,
+                "order": listItem.section.order
             ],
             "order": listItem.order
         ]

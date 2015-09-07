@@ -25,7 +25,7 @@ enum ListItemsTableViewControllerStyle {
 class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section
-    private var tableViewSections:[ListItemsViewSection] = []
+    private(set) var tableViewSections:[ListItemsViewSection] = []
     
     private var lastContentOffset:CGFloat = 0
     

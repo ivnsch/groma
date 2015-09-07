@@ -85,15 +85,13 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
     }
     
     private func setItemUndone(listItem: ListItem) {
-        listItem.done = false
-        
-        self.listItemsProvider.update(listItem, {[weak self] result in
-            
-            if result.success ?? false {
-                
-                self!.listItemsTableViewController.removeListItem(listItem, animation: UITableViewRowAnimation.Bottom)
+        if let list = self.list {
+            listItemsProvider.switchDone([listItem], list: list, done: false) {[weak self] result in
+                if result.success ?? false {
+                    self!.listItemsTableViewController.removeListItem(listItem, animation: .Bottom)
+                }
             }
-        })
+        }
     }
     
     func clearThings() {
@@ -105,14 +103,14 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
     }
     
     private func setAllItemsUndone(onFinish: VoidFunction) {
-        let listItems = self.listItemsTableViewController.items
-        for item in listItems {
-            item.done = false
+        if let list = self.list {
+            listItemsProvider.switchDone(self.listItemsTableViewController.items, list: list, done: false) {[weak self] result in
+                if result.success {
+                    self?.listItemsTableViewController.setListItems([])
+                    onFinish()
+                }
+            }
         }
-        self.listItemsProvider.updateDone(listItems, {[weak self] result in
-            self?.listItemsTableViewController.setListItems([])
-            onFinish()
-        })
     }
     
     func onAddToInventoryTap() {

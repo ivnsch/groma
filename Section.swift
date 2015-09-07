@@ -11,19 +11,22 @@ import Foundation
 final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSerializable {
     let uuid: String
     let name: String
+    let order: Int
     
-    init(uuid:  String, name: String) {
+    init(uuid:  String, name: String, order: Int) {
         self.uuid = uuid
         self.name = name
+        self.order = order
     }
     
     var hashValue: Int {
-        return name.hashValue
+        return uuid.hashValue
     }
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("id") as! String
         self.name = representation.valueForKeyPath("name") as! String
+        self.order = representation.valueForKeyPath("order") as! Int
     }
     
     @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [Section] {
@@ -38,7 +41,7 @@ final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSer
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name)}"
+        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), order: \(self.order)}"
     }
 }
 

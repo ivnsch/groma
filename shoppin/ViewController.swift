@@ -343,15 +343,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private func setItemDone(listItem: ListItem) {
         listItem.done = true
-
-        self.listItemsProvider.update(listItem, {[weak self] `try` in
-            
-            if `try`.success ?? false {
-                self!.listItemsTableViewController.removeListItem(listItem, animation: UITableViewRowAnimation.Bottom)
-                
-                self!.updatePrices()
+        
+        if let list = self.currentList {
+        
+            listItemsProvider.switchDone([listItem], list: list, done: true) {[weak self] result in
+                if result.success ?? false {
+                    self!.listItemsTableViewController.removeListItem(listItem, animation: .Bottom)
+                    
+                    self!.updatePrices()
+                }
             }
-        })
+        }
     }
     
     private func addItem(listItemInput: ListItemInput) {
@@ -359,7 +361,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if let currentList = self.currentList {
             
             self.progressVisible(true)
-            self.listItemsProvider.add(listItemInput, list: currentList, order: nil, successHandler {savedListItem in
+            
+            self.listItemsProvider.add(listItemInput, list: currentList, order: nil, possibleNewSectionOrder: self.listItemsTableViewController.sections.count, successHandler {savedListItem in
                     
                 self.listItemsTableViewController.addListItem(savedListItem)
                 
@@ -377,7 +380,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if let currentList = self.currentList {
             
             let product = Product(uuid: self.updatingListItem!.product.uuid, name: listItemInput.name, price: listItemInput.price)
-            let section = Section(uuid: NSUUID().UUIDString, name: listItemInput.section)
+            let section = Section(uuid: NSUUID().UUIDString, name: listItemInput.section, order: listItem.section.order)
         
             let listItem = ListItem(uuid: self.updatingListItem!.uuid, done: self.updatingListItem!.done, quantity: listItemInput.quantity, product: product, section: section, list: currentList, order: self.updatingListItem!.order)
             
