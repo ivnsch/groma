@@ -38,7 +38,7 @@ class AggrByDateTableViewController: UITableViewController {
         let aggregate = self.monthYearAggregate!.monthYearAggregates[indexPath.row]
         
         cell.dateLabel.text = "\(aggregate.monthYear.month) / \(aggregate.monthYear.year)"
-        cell.itemPriceLabel.text = "\(aggregate.totalPrice)"
+        cell.itemPriceLabel.text = aggregate.totalPrice.toLocalCurrencyString()
 
         return cell
     }

@@ -15,17 +15,13 @@ class PricesView: UIView {
     
     var totalPrice:Float? {
         didSet {
-            self.totalPriceLabel.text = self.formattedPrice(totalPrice!)
+            self.totalPriceLabel.text = totalPrice!.toLocalCurrencyString()
         }
     }
     
     var donePrice:Float? {
         didSet {
-            self.donePriceLabel.text = self.formattedPrice(donePrice!)
+            self.donePriceLabel.text = donePrice!.toLocalCurrencyString()
         }
-    }
-    
-    private func formattedPrice(price:Float) -> String {
-        return NSNumber(float: price).stringValue + " €"
     }
 }

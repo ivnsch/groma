@@ -56,7 +56,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         cell.itemNameLabel.text = historyItem.product.name
         cell.itemQuantityLabel.text = String(historyItem.quantity)
-        cell.itemPriceLabel.text = String((Float(historyItem.quantity) * historyItem.product.price))
+        cell.itemPriceLabel.text = (Float(historyItem.quantity) * historyItem.product.price).toLocalCurrencyString()
         cell.itemDateLabel.text = String(historyItem.addedDate)
         cell.userEmailLabel.text = historyItem.user.email
         
