@@ -64,8 +64,8 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         self.listItemsTableViewController.listItemsTableViewDelegate = self
         
         //TODO the tap recognizer to clearPendingSwipeItemIfAny should be in listItemsTableViewController instead of here and in ViewController- but it didn't work (quickly) there
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "clearThings")
-        self.listItemsTableViewController.view.addGestureRecognizer(gestureRecognizer)
+//        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "clearThings")
+//        self.listItemsTableViewController.view.addGestureRecognizer(gestureRecognizer)
         
         self.listItemsTableViewController.tableViewShiftDown(64)
     }
@@ -98,8 +98,8 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         self.listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     
-    func onListItemSelected(tableViewListItem: TableViewListItem) {
-        //do nothing
+    func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
+        listItemsTableViewController.markOpen(true, indexPath: indexPath)
     }
     
     private func setAllItemsUndone(onFinish: VoidFunction) {

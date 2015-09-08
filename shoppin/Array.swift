@@ -23,4 +23,9 @@ extension Array {
         }
         return nil
     }
+    
+    // src: http://stackoverflow.com/a/30593673/930450
+    subscript (safe index: Int) -> Element? {
+        return indices ~= index ? self[index] : nil
+    }
 }

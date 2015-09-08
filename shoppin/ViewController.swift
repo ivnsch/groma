@@ -186,8 +186,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         super.setEditing(editing, animated: animated)
         
         self.listItemsTableViewController.setEditing(editing, animated: animated)
-        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
-
+//        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
+        self.gestureRecognizer.enabled = false //don't block tap on delete button
         self.addItemView.expanded = editing
         let animationTime:NSTimeInterval = animated ? 0.2 : 0
 
@@ -398,10 +398,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     }
     
-    func onListItemSelected(tableViewListItem: TableViewListItem) {
+    func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
         if self.editing {
             self.updatingListItem = tableViewListItem.listItem
             self.addItemView.setUpdateItem(tableViewListItem.listItem)
+        } else {
+            listItemsTableViewController.markOpen(true, indexPath: indexPath)
         }
     }
     

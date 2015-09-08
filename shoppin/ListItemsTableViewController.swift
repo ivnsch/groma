@@ -10,7 +10,7 @@ import UIKit
 
 protocol ListItemsTableViewDelegate {
     func onListItemClear(tableViewListItem:TableViewListItem)
-    func onListItemSelected(tableViewListItem:TableViewListItem)
+    func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath)
 }
 
 protocol ListItemsEditTableViewDelegate {
@@ -347,7 +347,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let tableViewListItem = self.tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
-        self.listItemsTableViewDelegate?.onListItemSelected(tableViewListItem)
+        self.listItemsTableViewDelegate?.onListItemSelected(tableViewListItem, indexPath: indexPath)
     }
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -368,6 +368,27 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return self.editing
+    }
+
+    /**
+    Sets pending item if open, shows cell open state
+    */
+    func markOpen(open: Bool, indexPath: NSIndexPath) {
+        if let section = tableViewSections[safe: indexPath.section], tableViewListItem = section.tableViewListItems[safe: indexPath.row] {
+            swipedTableViewListItem = tableViewListItem
+            showCellOpen(open, indexPath: indexPath)
+            
+        } else {
+            print("Warning: markOpen: \(open), indexPath not found: \(indexPath)")
+        }
+    }
+    
+    private func showCellOpen(open: Bool, indexPath: NSIndexPath) {
+        if let swipeableCell = tableView.cellForRowAtIndexPath(indexPath) as? SwipeableCell {
+            swipeableCell.setOpen(open)
+        } else {
+            print("Warning: showCellOpen: \(open), no swipeable cell for indexPath: \(indexPath)")
+        }
     }
    
     // updates list item models with current ordering in table view
