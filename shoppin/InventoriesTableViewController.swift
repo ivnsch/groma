@@ -79,9 +79,9 @@ class InventoriesTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let segueName = segue.identifier
         if segueName == "showInventoryItemsController" {
-            if let indexPath = self.tableView.indexPathForSelectedRow, inventories = self.inventories, inventoryItemsController = segue.destinationViewController as? InventoryItemsViewController {
-                inventoryItemsController.inventory = inventories[indexPath.row]
-            }
+//            if let indexPath = self.tableView.indexPathForSelectedRow, inventories = self.inventories, inventoryItemsController = segue.destinationViewController as? InventoryItemsViewController {
+//                inventoryItemsController.inventory = inventories[indexPath.row]
+//            }
         }
     }
     

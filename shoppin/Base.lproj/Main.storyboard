@@ -531,7 +531,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I1W-NC-SaH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="723" y="1168"/>
+            <point key="canvasLocation" x="25" y="1168"/>
         </scene>
         <!--User-->
         <scene sceneID="aV2-i4-Nfl">
@@ -966,7 +966,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="inventoryCell" id="u1a-DU-u8Q" customClass="InventoryTableViewCell" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="86" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="22" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="u1a-DU-u8Q" id="RL1-hp-MJZ">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -998,13 +998,10 @@
                         <barButtonItem key="leftBarButtonItem" title="Add" id="kJD-Da-9OH"/>
                         <barButtonItem key="rightBarButtonItem" title="Edit" id="xtb-wp-LD0"/>
                     </navigationItem>
-                    <connections>
-                        <segue destination="WaN-WQ-9iC" kind="show" identifier="showInventoryItemsController" id="l5y-gO-U8S"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lCj-QQ-mmP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="30" y="1168"/>
+            <point key="canvasLocation" x="723" y="1853"/>
         </scene>
         <!--Inventory-->
         <scene sceneID="8Hn-kj-aan">
@@ -1018,7 +1015,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="2fU-IV-zNd" kind="relationship" relationship="rootViewController" id="V3m-1g-fp2"/>
+                        <segue destination="WaN-WQ-9iC" kind="relationship" relationship="rootViewController" id="0E8-xO-PvC"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hDx-lZ-E3m" userLabel="First Responder" sceneMemberID="firstResponder"/>

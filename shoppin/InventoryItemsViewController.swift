@@ -12,9 +12,10 @@ class InventoryItemsViewController: UITableViewController, InventoryItemTableVie
 
     private var inventoryItems: [InventoryItem] = []
 
+    private let inventoryProvider = ProviderFactory().inventoryProvider
     private let inventoryItemsProvider = ProviderFactory().inventoryItemsProvider
     
-    var inventory: Inventory?
+    private var inventory: Inventory?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,10 +24,13 @@ class InventoryItemsViewController: UITableViewController, InventoryItemTableVie
     }
     
     override func viewWillAppear(animated:Bool) {
-        if let inventory = self.inventory {
-            self.navigationItem.title = inventory.name
-            self.loadInventoryItems(inventory)
-        }
+        self.navigationItem.title = "Inventory"
+        
+        inventoryProvider.firstInventory(successHandler {[weak self] inventory in
+//            self.navigationItem.title = inventory.name
+            self?.inventory = inventory
+            self?.loadInventoryItems(inventory)
+        })
     }
     
     private func loadInventoryItems(inventory: Inventory) {
