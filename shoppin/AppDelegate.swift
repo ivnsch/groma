@@ -20,7 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var reachability: Reachability!
     
     private let userProvider = ProviderFactory().userProvider // arc
-
+    private let listProvider = RealmListItemProvider() // arc
+    private let inventoryProvider = RealmInventoryProvider() // arc
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) {
@@ -72,11 +74,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     private func addDummyData() {
-        let listProvider = RealmListItemProvider()
-        let inventoryProvider = RealmInventoryProvider()
+
         
         let list1 = List(uuid: "1", name: "My first list")
-        listProvider.saveList(list1) {result in
+        listProvider.saveList(list1) {[weak self] result in
+            
+            guard let weakSelf = self else {return}
             
             let product1 = Product(uuid: "10", name: "Birnen", price: 3)
             let product2 = Product(uuid: "11", name: "Tomaten", price: 2)
@@ -117,10 +120,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             ]
             
             
-            listProvider.saveListItems(listItems) {saved in
+            weakSelf.listProvider.saveListItems(listItems) {saved in
             
                 let inventory1 = Inventory(uuid: "400", name: "My Home inventory")
-                inventoryProvider.saveInventory(inventory1) {saved in
+                weakSelf.inventoryProvider.saveInventory(inventory1) {saved in
                     
                     let inventoryItems = [
                         InventoryItem(quantityDelta: 1, product: product8, inventory: inventory1),
@@ -268,7 +271,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[59], historyItemUuid: "659", addedDate: NSDate(), user: user)
                     ]
                 
-                    inventoryProvider.add(inventoryWithHistoryItems) {saved in
+                    weakSelf.inventoryProvider.add(inventoryWithHistoryItems) {saved in
                         print("Done adding dummy data")
                     }
                 }
