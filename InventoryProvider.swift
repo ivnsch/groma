@@ -12,6 +12,12 @@ protocol InventoryProvider {
     
     func inventories(handler: ProviderResult<[Inventory]> -> ())
     
+    /**
+    Our app pricipially supports multiple inventories, but for now we will make it behave like there's only one
+    So we work always with the first (only) inventory
+    */
+    func firstInventory(handler: ProviderResult<Inventory> -> ())
+
     func addInventory(inventory: Inventory, _ handler: ProviderResult<Any> -> ())
     
     func updateInventory(inventory: Inventory, _ handler: ProviderResult<Any> -> ())

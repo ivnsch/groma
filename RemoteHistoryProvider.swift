@@ -63,6 +63,12 @@ class RemoteHistoryProvider {
         }
     }
     
+    func removeHistoryItem(historyItem: HistoryItem, handler: RemoteResult<NoOpSerializable> -> ()) {
+        AlamofireHelper.authenticatedRequest(.DELETE, Urls.historyItem + "/\(historyItem.uuid)").responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>) in
+            handler(result)
+        }
+    }
+    
     
     func toRequestParamsToRemove(historyItem: HistoryItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = ["uuid": historyItem.uuid]

@@ -49,4 +49,5 @@ struct Urls {
     // History
     static let historyItems = host + "historyItems"
     static let historyItemsSync = host + "historyItems/sync"
+    static let historyItem = host + "historyItem"
 }

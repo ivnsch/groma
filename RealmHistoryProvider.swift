@@ -91,4 +91,9 @@ class RealmHistoryProvider: RealmProvider {
     func saveHistoryItemsSyncResult(historyItems: RemoteHistoryItems, handler: Bool -> ()) {
         self.saveHistoryItems(historyItems, handler: handler)
     }
+    
+    func removeHistoryItem(historyItem: HistoryItem, handler: Bool -> ()) {
+        remove("uuid = '\(historyItem.uuid)'", handler: handler, objType: DBHistoryItem.self)
+    }
+    
 }

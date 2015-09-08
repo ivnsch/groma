@@ -45,6 +45,21 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
+    func firstInventory(handler: ProviderResult<Inventory> -> ()) {
+        inventories {result in
+            if let inventories = result.sucessResult {
+                if let firstInventory = inventories.first {
+                    handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: firstInventory))
+                } else {
+                    print("Warn firstInventory, success but there's no inventory")
+                    handler(ProviderResult(status: .NotFound))
+                }
+            } else {
+                handler(ProviderResult(status: result.status))
+            }
+        }
+    }
+    
     func syncInventories(handler: (ProviderResult<Any>) -> ()) {
         
         self.dbInventoryProvider.loadInventories {dbInventories in
