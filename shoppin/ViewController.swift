@@ -71,10 +71,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         super.viewWillAppear(animated)
         
         if let list = self.currentList {
-            self.listItemsProvider.listItems(list, fetchMode: .Both, successHandler{listItems in
-                self.listItemsTableViewController.setListItems(listItems.filter{!$0.done})
-            })
+            self.initWithList(list)
         }
+    }
+    
+    private func initWithList(list: List) {
+        self.listItemsProvider.listItems(list, fetchMode: .Both, successHandler{listItems in
+            self.listItemsTableViewController.setListItems(listItems.filter{!$0.done})
+        })
     }
     
     override func updateViewConstraints() {
@@ -257,8 +261,21 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     
-    func onListItemClear(tableViewListItem:TableViewListItem) {
-        self.setItemDone(tableViewListItem.listItem)
+    func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) {
+        tableViewListItem.listItem.done = true
+        
+        if let list = self.currentList {
+            
+            listItemsProvider.switchDone([tableViewListItem.listItem], list: list, done: true) {[weak self] result in
+                if result.success {
+                    self!.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
+                    self!.updatePrices()
+                }
+                onFinish()
+            }
+        } else {
+            onFinish()
+        }
     }
 
 //    func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
@@ -340,22 +357,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             })
         }
     }
-    
-    private func setItemDone(listItem: ListItem) {
-        listItem.done = true
-        
-        if let list = self.currentList {
-        
-            listItemsProvider.switchDone([listItem], list: list, done: true) {[weak self] result in
-                if result.success ?? false {
-                    self!.listItemsTableViewController.removeListItem(listItem, animation: .Bottom)
-                    
-                    self!.updatePrices()
-                }
-            }
-        }
-    }
-    
+
     private func addItem(listItemInput: ListItemInput) {
 
         if let currentList = self.currentList {
@@ -415,7 +417,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "doneViewControllerSegue" {
             if let doneViewController = segue.destinationViewController as? DoneViewController {
-                doneViewController.list = self.currentList
+                listItemsTableViewController.clearPendingSwipeItemIfAny {
+                    doneViewController.list = self.currentList
+                }
             }
         }
     }

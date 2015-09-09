@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ListItemsTableViewDelegate {
-    func onListItemClear(tableViewListItem:TableViewListItem)
+    func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction)
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath)
 }
 
@@ -38,7 +38,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     var style:ListItemsTableViewControllerStyle = .Normal
     
-    private var swipedTableViewListItem:TableViewListItem?
+    private var swipedTableViewListItem: TableViewListItem? // Item marked for "undo". Item is not submitted until undo state is cleared
     
     var tableViewInset:UIEdgeInsets {
         set {
@@ -278,12 +278,21 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     
-    func clearPendingSwipeItemIfAny() {
+    /**
+    Submits item marked as "undo" if there is any
+    - parameter: onFinish optional callback to execute after submitting (this may e.g. call a provider). If there's no pending item, this is not called.
+    */
+    func clearPendingSwipeItemIfAny(onFinish: VoidFunction? = nil) {
         if let s = self.swipedTableViewListItem {
             
-            listItemsTableViewDelegate?.onListItemClear(s)
-            self.swipedTableViewListItem = nil
-//            self.removeListItem(s.listItem, animation: UITableViewRowAnimation.Bottom)
+            listItemsTableViewDelegate?.onListItemClear(s) {
+                self.swipedTableViewListItem = nil
+                //            self.removeListItem(s.listItem, animation: UITableViewRowAnimation.Bottom)
+                
+                onFinish?()
+            }
+        } else {
+            onFinish?()
         }
     }
     

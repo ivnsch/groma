@@ -18,7 +18,13 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
     
     @IBOutlet weak var cartMenu: CartMenuView!
     
-    var list: List?
+    var list: List? {
+        didSet { // TODO check if there's a timing problem when we implement memory cache, this may be called before it's displayed (so we see no listitems)?
+            if let list = self.list {
+                self.initWithList(list)
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,12 +34,6 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         FrozenEffect.apply(self.cartMenu)
         
         self.cartMenu.delegate = self
-        
-        if let list = self.list {
-            initWithList(list)
-        } else {
-            print("Error: Invalid state: no list for done view controller!")
-        }
     }
 
     private func initWithList(list: List) {
@@ -52,7 +52,9 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
     }
     
     private func close() {
-        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        listItemsTableViewController.clearPendingSwipeItemIfAny {
+            presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
     
     private func initTableViewController() {
@@ -70,8 +72,17 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         self.listItemsTableViewController.tableViewShiftDown(64)
     }
     
-    func onListItemClear(tableViewListItem:TableViewListItem) {
-        self.setItemUndone(tableViewListItem.listItem)
+    func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) {
+        if let list = self.list {
+            listItemsProvider.switchDone([tableViewListItem.listItem], list: list, done: false) {[weak self] result in
+                if result.success {
+                    self!.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
+                }
+                onFinish()
+            }
+        } else {
+            onFinish()
+        }
     }
 
     func startSideMenuDrag() {
@@ -85,13 +96,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
     }
     
     private func setItemUndone(listItem: ListItem) {
-        if let list = self.list {
-            listItemsProvider.switchDone([listItem], list: list, done: false) {[weak self] result in
-                if result.success ?? false {
-                    self!.listItemsTableViewController.removeListItem(listItem, animation: .Bottom)
-                }
-            }
-        }
+
     }
     
     func clearThings() {
