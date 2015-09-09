@@ -380,15 +380,18 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
 
     /**
-    Sets pending item if open, shows cell open state
+    Sets pending item if open and shows cell open state. Submits currently pending item if existent.
     */
     func markOpen(open: Bool, indexPath: NSIndexPath) {
-        if let section = tableViewSections[safe: indexPath.section], tableViewListItem = section.tableViewListItems[safe: indexPath.row] {
-            swipedTableViewListItem = tableViewListItem
-            showCellOpen(open, indexPath: indexPath)
+        if let section = self.tableViewSections[safe: indexPath.section], tableViewListItem = section.tableViewListItems[safe: indexPath.row] {
+            // Note: order is important here! first show open at current index path, then remove possible pending (which can make indexPath invalid, thus later), then update pending variable with new item
+            self.showCellOpen(open, indexPath: indexPath)
+            self.clearPendingSwipeItemIfAny {
+                self.swipedTableViewListItem = tableViewListItem
+            }
             
         } else {
-            print("Warning: markOpen: \(open), indexPath not found: \(indexPath)")
+            print("Warning: markOpen: \(open), self not set or indexPath not found: \(indexPath)")
         }
     }
     
