@@ -61,16 +61,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.setEditing(false, animated: false)
         self.updatePrices()
         FrozenEffect.apply(self.pricesView)
-        
-        if let list = self.currentList {
-            self.navigationItem.title = list.name
-        }
     }
    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
         if let list = self.currentList {
+            self.navigationItem.title = list.name
             self.initWithList(list)
         }
     }

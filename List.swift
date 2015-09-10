@@ -8,7 +8,7 @@
 
 import Foundation
 
-class List: Equatable {
+class List: Equatable, Identifiable {
     let uuid: String
     let name: String
     let listItems: [ListItem] // TODO is this used? we get the items everywhere from the provider not the list object
@@ -37,8 +37,13 @@ class List: Equatable {
     var debugDescription: String {
         return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
     }
+    
+    func same(rhs: List) -> Bool {
+        return self.uuid == rhs.uuid
+    }
 }
 
+// TODO implement equality correctly, also in other model classes. Now we have identifiable for this.
 func ==(lhs: List, rhs: List) -> Bool {
     return lhs.uuid == rhs.uuid
 }

@@ -30,6 +30,11 @@ struct EditListFormInput {
     }
 }
 
+protocol EditListViewControllerDelegate {
+    func onListAdded(list: List)
+    func onListUpdated(list: List)
+}
+
 class EditListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
 
     private var listProvider = ProviderFactory().listProvider
@@ -40,6 +45,16 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
 
     private var listInputsValidator: Validator?
     private var userInputsValidator: Validator?
+    
+    var delegate: EditListViewControllerDelegate?
+    
+    var listToEdit: List? = nil {
+        didSet {
+            if let listToEdit = self.listToEdit {
+                self.listFormInput = EditListFormInput(name: listToEdit.name, users: listToEdit.users.map{SharedUser(email: $0.email)})
+            }
+        }
+    }
     
     var listFormInput = EditListFormInput(name: "", users: []) {
         didSet {
@@ -55,10 +70,6 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
                 }
             }
         }
-    }
-    
-    func prefill(list: List) { // for edit list case
-        self.listFormInput = EditListFormInput(name: list.name, users: list.users.map{SharedUser(email: $0.email)})
     }
     
     // Note, optionals because called from didSet which can be called before the outlets are initialized
@@ -104,19 +115,23 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
             if let listName = self!.listNameInputField.text {
                 
                 // FIXME code smell - not using listFormInput for the listName, are we using listFormInput correctly? Do we actually need listFormInput? Structure differently?
-                let listInput = List(uuid: NSUUID().UUIDString, name: listName, users: self!.listFormInput.users)
-                
-                self!.progressVisible(true)
-                
-                if self!.isEdit {
-                    self!.listProvider.update(listInput, self!.successHandler{list in
-                        self!.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-                        })
-                } else {
 
-                    let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listInput.name, listItems: [], users: listInput.users)
+                self!.progressVisible(true)
+                if self!.isEdit {
+                    
+                    if let listToEdit = self?.listToEdit {
+                        let updatedList = List(uuid: listToEdit.uuid, name: listName, users: self!.listFormInput.users)
+                        self!.listProvider.update(updatedList, self!.successHandler{list in
+                            self!.delegate?.onListUpdated(list)
+                        })
+                    } else {
+                        print("Error: EditListViewController without original list")
+                    }
+
+                } else {
+                    let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: self!.listFormInput.users)
                     self!.listProvider.add(listWithSharedUsers, self!.successHandler{list in
-                        self!.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+                        self!.delegate?.onListAdded(list)
                     })
                 }
                 

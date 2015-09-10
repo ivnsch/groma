@@ -28,4 +28,20 @@ extension Array {
     subscript (safe index: Int) -> Element? {
         return indices ~= index ? self[index] : nil
     }
+
+}
+
+
+extension Array where Element: Identifiable {
+    
+    /**
+    Replaces first element with same identity with element
+    */
+    mutating func update(element: Element) {
+        for i in 0..<self.count {
+            if self[i].same(element) {
+                self[i] = element
+            }
+        }
+    }
 }

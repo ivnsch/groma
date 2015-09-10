@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ListsTableViewController: UITableViewController {
+class ListsTableViewController: UITableViewController, EditListViewControllerDelegate {
 
     private let listItemsProvider = ProviderFactory().listItemProvider
 
@@ -20,6 +20,17 @@ class ListsTableViewController: UITableViewController {
         self.tableView.allowsSelectionDuringEditing = true
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.listItemsProvider.lists(successHandler{lists in
+            if (self.lists.map{$0 != lists} ?? true) { // if current list is nil or the provider list is different
+                self.lists = lists
+                self.tableView.reloadData()
+            }
+        })
+    }
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -38,16 +49,6 @@ class ListsTableViewController: UITableViewController {
         }
         
         return cell
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // in view will appear so when the modal to add/edit list is dismissed, the new data is loaded
-        self.listItemsProvider.lists(successHandler{lists in
-            self.lists = lists
-            self.tableView.reloadData()
-        })
     }
     
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -92,17 +93,27 @@ class ListsTableViewController: UITableViewController {
             }
             
         } else {
-            self.performSegueWithIdentifier("showListItemsController", sender: self)
+            triggerListItemsControllerSegue()
         }
     }
     
-    private func showAddOrEditListViewController(isEdit: Bool, listToEdit: List? = nil) {
+    private func triggerListItemsControllerSegue() {
+        self.performSegueWithIdentifier("showListItemsController", sender: self)
+    }
+    
+    private func createAddOrEditListViewController(isEdit: Bool, listToEdit: List? = nil) -> EditListViewController {
         let editListViewController = UIStoryboard.editListsViewController()
         editListViewController.isEdit = isEdit
         if let listToEdit = listToEdit {
-            editListViewController.prefill(listToEdit)
+            editListViewController.listToEdit = listToEdit
         }
-        self.presentViewController(editListViewController, animated: true, completion: nil)
+        editListViewController.delegate = self
+        return editListViewController
+    }
+    
+    private func showAddOrEditListViewController(isEdit: Bool, listToEdit: List? = nil) {
+        let editListViewController = createAddOrEditListViewController(isEdit, listToEdit: listToEdit)
+        presentViewController(editListViewController, animated: true, completion: nil)
     }
 
     @IBAction func onAddTap(sender: UIBarButtonItem) {
@@ -110,6 +121,30 @@ class ListsTableViewController: UITableViewController {
     }
     
     @IBAction func onEditTap(sender: UIBarButtonItem) {
-        self.setEditing(!self.editing, animated: true)
+        self.setEditing(!self.editing, animated: true) 
+    }
+    
+    
+    // MARK: - EditListViewController
+    
+    func onListAdded(list: List) {
+        if var lists = self.lists {
+            tableView.wrapUpdates {[weak self] in
+                self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: lists.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
+                self?.lists!.append(list)
+                
+                self?.dismissViewControllerAnimated(true) {
+                    self?.tableView.selectRowAtIndexPath(NSIndexPath(forRow: lists.count, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None) // This is used for visuals and because prepareForSegue uses selected index path to retrieve list to pass to controller
+                    self?.triggerListItemsControllerSegue()
+                }
+            }
+        }
+    }
+    
+    
+    func onListUpdated(list: List) {
+        lists?.update(list)
+        tableView.reloadData()
+        dismissViewControllerAnimated(true, completion: nil)
     }
 }
