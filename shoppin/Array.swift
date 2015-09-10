@@ -45,3 +45,12 @@ extension Array where Element: Identifiable {
         }
     }
 }
+
+extension Array where Element: Equatable {
+    
+    mutating func remove(element: Element) {
+        if let index = self.indexOf(element) {
+            self.removeAtIndex(index)
+        }
+    }
+}
