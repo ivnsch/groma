@@ -11,10 +11,6 @@ import UIKit
 class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenuDelegate {
 
     private var listItemsTableViewController: ListItemsTableViewController!
-
-    private let listItemsProvider = ProviderFactory().listItemProvider
-    private let inventoryProvider = ProviderFactory().inventoryProvider
-    private let inventoryItemsProvider = ProviderFactory().inventoryItemsProvider
     
     @IBOutlet weak var cartMenu: CartMenuView!
     
@@ -26,6 +22,8 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         }
     }
     
+    var onUIReady: VoidFunction? // avoid crash trying to access not yet initialized ui elements
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,11 +32,13 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         FrozenEffect.apply(self.cartMenu)
         
         self.cartMenu.delegate = self
+        
+        onUIReady?()
     }
 
     private func initWithList(list: List) {
         
-        self.listItemsProvider.listItems(list, fetchMode: .Both, successHandler{listItems in
+        Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{listItems in
             let doneListItems = listItems.filter{$0.done}
             self.listItemsTableViewController.setListItems(doneListItems)
         })
@@ -74,7 +74,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
     
     func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) {
         if let list = self.list {
-            listItemsProvider.switchDone([tableViewListItem.listItem], list: list, done: false) {[weak self] result in
+            Providers.listItemsProvider.switchDone([tableViewListItem.listItem], list: list, done: false) {[weak self] result in
                 if result.success {
                     self!.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
                 }
@@ -109,7 +109,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
     
     private func setAllItemsUndone(onFinish: VoidFunction) {
         if let list = self.list {
-            listItemsProvider.switchDone(self.listItemsTableViewController.items, list: list, done: false) {[weak self] result in
+            Providers.listItemsProvider.switchDone(self.listItemsTableViewController.items, list: list, done: false) {[weak self] result in
                 if result.success {
                     self?.listItemsTableViewController.setListItems([])
                     onFinish()
@@ -126,7 +126,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
                 InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.quantity, quantityDelta: $0.quantity, product: $0.product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
             }
 
-            self!.inventoryItemsProvider.addToInventory(inventory, items: inventoryItems, self!.successHandler{result in
+            Providers.inventoryItemsProvider.addToInventory(inventory, items: inventoryItems, self!.successHandler{result in
                 self!.setAllItemsUndone {
                     self!.close()
                 }
@@ -135,7 +135,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         
         // WARN for now we assume user has always only one inventory. Note that general setup (database, server etc) supports multiple inventories though.
         self.progressVisible(true)
-        self.inventoryProvider.inventories(successHandler{[weak self] inventories in
+        Providers.inventoryProvider.inventories(successHandler{[weak self] inventories in
             if let inventory = inventories.first { // TODO list associated inventory
                 onHasInventory(inventory)
                 
@@ -143,7 +143,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
                 let mySharedUser = ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail") // TODO how do we handle shared users internally (database etc) when user is offline
                 
                 let inventoryInput = Inventory(uuid: NSUUID().UUIDString, name: "Home", users: [mySharedUser])
-                self!.inventoryProvider.addInventory(inventoryInput, self!.successHandler{notused in
+                Providers.inventoryProvider.addInventory(inventoryInput, self!.successHandler{notused in
                     
                     // just a hack because we need "full" shared user to create inventory based on inventory input
                     // but full shared user is deprecated and will be removed soon, because client doesn't need anything besides email (and provider, in the future)

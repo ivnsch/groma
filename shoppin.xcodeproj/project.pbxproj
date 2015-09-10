@@ -278,6 +278,21 @@
 		EB7F59C21BA1049100E07EBA /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59C11BA1049100E07EBA /* Identifiable.swift */; };
 		EB7F59C31BA1049100E07EBA /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59C11BA1049100E07EBA /* Identifiable.swift */; };
 		EB7F59C41BA1049100E07EBA /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59C11BA1049100E07EBA /* Identifiable.swift */; };
+		EB7F59C71BA1915A00E07EBA /* MemListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59C61BA1915A00E07EBA /* MemListItemProvider.swift */; };
+		EB7F59C81BA1915A00E07EBA /* MemListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59C61BA1915A00E07EBA /* MemListItemProvider.swift */; };
+		EB7F59C91BA1915A00E07EBA /* MemListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59C61BA1915A00E07EBA /* MemListItemProvider.swift */; };
+		EB7F59CB1BA1970200E07EBA /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59CA1BA1970200E07EBA /* Dictionary.swift */; };
+		EB7F59CC1BA1970200E07EBA /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59CA1BA1970200E07EBA /* Dictionary.swift */; };
+		EB7F59CD1BA1970200E07EBA /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59CA1BA1970200E07EBA /* Dictionary.swift */; };
+		EB7F59CF1BA1D40A00E07EBA /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59CE1BA1D40A00E07EBA /* Option.swift */; };
+		EB7F59D01BA1D40A00E07EBA /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59CE1BA1D40A00E07EBA /* Option.swift */; };
+		EB7F59D11BA1D40A00E07EBA /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59CE1BA1D40A00E07EBA /* Option.swift */; };
+		EB7F59D31BA1DBF600E07EBA /* Providers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59D21BA1DBF600E07EBA /* Providers.swift */; };
+		EB7F59D41BA1DBF600E07EBA /* Providers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59D21BA1DBF600E07EBA /* Providers.swift */; };
+		EB7F59D51BA1DBF600E07EBA /* Providers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59D21BA1DBF600E07EBA /* Providers.swift */; };
+		EB7F59D71BA1E0DF00E07EBA /* Performance.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59D61BA1E0DF00E07EBA /* Performance.swift */; };
+		EB7F59D81BA1E0DF00E07EBA /* Performance.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59D61BA1E0DF00E07EBA /* Performance.swift */; };
+		EB7F59D91BA1E0DF00E07EBA /* Performance.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59D61BA1E0DF00E07EBA /* Performance.swift */; };
 		EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */; };
 		EB89D3071AD41E2D00B6E0D0 /* ListsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */; };
 		EB89D33C1AD44BD400B6E0D0 /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */; };
@@ -607,6 +622,11 @@
 		EB7E83391B7B9021009DEEF4 /* RealmCheckoutProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmCheckoutProvider.swift; sourceTree = "<group>"; };
 		EB7E8B601B2ADF620090409A /* Try.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Try.swift; sourceTree = "<group>"; };
 		EB7F59C11BA1049100E07EBA /* Identifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
+		EB7F59C61BA1915A00E07EBA /* MemListItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemListItemProvider.swift; sourceTree = "<group>"; };
+		EB7F59CA1BA1970200E07EBA /* Dictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
+		EB7F59CE1BA1D40A00E07EBA /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Option.swift; sourceTree = "<group>"; };
+		EB7F59D21BA1DBF600E07EBA /* Providers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Providers.swift; sourceTree = "<group>"; };
+		EB7F59D61BA1E0DF00E07EBA /* Performance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Performance.swift; sourceTree = "<group>"; };
 		EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
 		EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListsViewController.xib; sourceTree = "<group>"; };
 		EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
@@ -936,6 +956,8 @@
 				EB2F5D6E1A530FBC00DBC4AF /* Float.swift */,
 				EB3144451B643559005814F0 /* UITextField.swift */,
 				EBDCA1301B8A124B000020BF /* NSDate.swift */,
+				EB7F59CA1BA1970200E07EBA /* Dictionary.swift */,
+				EB7F59CE1BA1D40A00E07EBA /* Option.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -1123,6 +1145,7 @@
 			children = (
 				EB6F81311B4717C2008680E0 /* KeychainKeys.swift */,
 				EB4D57AB1B7505DD00BC6171 /* SyncUtils.swift */,
+				EB7F59D61BA1E0DF00E07EBA /* Performance.swift */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -1148,6 +1171,14 @@
 				EBA8FAD11B8F1D46008CB746 /* UserDetailsViewController.xib */,
 			);
 			name = user;
+			sourceTree = "<group>";
+		};
+		EB7F59C51BA1914700E07EBA /* memory */ = {
+			isa = PBXGroup;
+			children = (
+				EB7F59C61BA1915A00E07EBA /* MemListItemProvider.swift */,
+			);
+			name = memory;
 			sourceTree = "<group>";
 		};
 		EB9BE4141B2C6525005B401A /* remote */ = {
@@ -1411,6 +1442,7 @@
 		EBF162E71A3CA1CD0048E37C /* provider */ = {
 			isa = PBXGroup;
 			children = (
+				EB7F59C51BA1914700E07EBA /* memory */,
 				EBF162F81A3CA52F0048E37C /* impl */,
 				EBF162F31A3CA4620048E37C /* mock */,
 				EB40A46C1B5507E2000E9CAD /* realm */,
@@ -1425,6 +1457,7 @@
 				EB70C2181B4D2C940060E529 /* ListProvider.swift */,
 				EB7E831D1B7B7069009DEEF4 /* HistoryProvider.swift */,
 				EB451C381B85F3F0000DE208 /* StatsProvider.swift */,
+				EB7F59D21BA1DBF600E07EBA /* Providers.swift */,
 			);
 			name = provider;
 			path = ..;
@@ -1849,7 +1882,10 @@
 				EB2F5D621A50B91200DBC4AF /* AddItemView.swift in Sources */,
 				EB2F5D6D1A51C17200DBC4AF /* UIView.swift in Sources */,
 				EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */,
+				EB7F59D71BA1E0DF00E07EBA /* Performance.swift in Sources */,
+				EB7F59CF1BA1D40A00E07EBA /* Option.swift in Sources */,
 				EB6F812D1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
+				EB7F59D31BA1DBF600E07EBA /* Providers.swift in Sources */,
 				EB0C1B931B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
 				EB451C531B865F0E000DE208 /* AggrByTypeTableViewController.swift in Sources */,
 				EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */,
@@ -1926,6 +1962,7 @@
 				EB7E8B611B2ADF620090409A /* Try.swift in Sources */,
 				EB20FBF81A5971170058103B /* InventoryItem.swift in Sources */,
 				EBB9A7401B5EB21900E5487D /* InventoryProviderImpl.swift in Sources */,
+				EB7F59CB1BA1970200E07EBA /* Dictionary.swift in Sources */,
 				EB451C501B865CFC000DE208 /* AggrByDateTableViewCell.swift in Sources */,
 				EBF162FA1A3CA54F0048E37C /* ListItemProvider.swift in Sources */,
 				EBB9A7381B5EB14300E5487D /* RemoteInventory.swift in Sources */,
@@ -1938,6 +1975,7 @@
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
 				EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */,
 				EBF1A15F1B82428700F34105 /* HistoryItemCell.swift in Sources */,
+				EB7F59C71BA1915A00E07EBA /* MemListItemProvider.swift in Sources */,
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
 				EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */,
 				EBF5D7DB1B8FB30000A235C5 /* LoadingFooter.swift in Sources */,
@@ -1995,6 +2033,7 @@
 				EBB9A7451B5EB28500E5487D /* RemoteInventoryItemsProvider.swift in Sources */,
 				EB0C1B8C1B3DA89900F24C85 /* LoginData.swift in Sources */,
 				EB0C2A471B58405D00AF6226 /* RealmListItemProvider.swift in Sources */,
+				EB7F59C81BA1915A00E07EBA /* MemListItemProvider.swift in Sources */,
 				EB714AA31B6669AA00F91B94 /* ProviderFetchModus.swift in Sources */,
 				EB0C2A3B1B58330300AF6226 /* RemoteInventoryItem.swift in Sources */,
 				EB55677F1A8658AA00CD3EC6 /* InventoryItemsProviderImpl.swift in Sources */,
@@ -2026,6 +2065,7 @@
 				EBDCA1321B8A124B000020BF /* NSDate.swift in Sources */,
 				EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */,
 				EB9BE4261B2CB542005B401A /* RemoteList.swift in Sources */,
+				EB7F59D81BA1E0DF00E07EBA /* Performance.swift in Sources */,
 				EB40A4771B550C0C000E9CAD /* Results.swift in Sources */,
 				EBD236AE1B8B9DC600B88969 /* HistoryViewController.swift in Sources */,
 				EB0C2A311B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */,
@@ -2047,6 +2087,7 @@
 				EB714AA71B66BBA800F91B94 /* DBSyncable.swift in Sources */,
 				EBF377A01B38AB1000EEB6DB /* User.swift in Sources */,
 				EBB9A73D1B5EB1C700E5487D /* InventoryItemsProvider.swift in Sources */,
+				EB7F59D41BA1DBF600E07EBA /* Providers.swift in Sources */,
 				EBB2AB3B1B8B29CF007B8C59 /* InventoryCell.swift in Sources */,
 				EB5567601A86437800CD3EC6 /* ProductMapper.swift in Sources */,
 				EB5567711A864B6E00CD3EC6 /* ListItemProviderMock.swift in Sources */,
@@ -2060,6 +2101,7 @@
 				EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */,
 				EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */,
 				EB6D93A81B1C8CE500ED8999 /* HandlingTableView.swift in Sources */,
+				EB7F59CC1BA1970200E07EBA /* Dictionary.swift in Sources */,
 				EB7E8B621B2ADF9A0090409A /* Try.swift in Sources */,
 				EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */,
 				EB451C3A1B85F3F0000DE208 /* StatsProvider.swift in Sources */,
@@ -2114,6 +2156,7 @@
 				EBF5D7D41B8F868E00A235C5 /* Paginator.swift in Sources */,
 				EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */,
 				EB78587E1B7FD81A008AAD12 /* HistoryItemsSync.swift in Sources */,
+				EB7F59D01BA1D40A00E07EBA /* Option.swift in Sources */,
 				EB7E831B1B7B703B009DEEF4 /* HistoryProviderImpl.swift in Sources */,
 				EB7E82F51B7A141E009DEEF4 /* RegisterViewController.swift in Sources */,
 				EB40A48B1B553A19000E9CAD /* DBListItem.swift in Sources */,
@@ -2173,6 +2216,7 @@
 				EB0C1BAB1B3ED8D600F24C85 /* ProviderResult.swift in Sources */,
 				EB70C22D1B4D3DF50060E529 /* ListProviderImpl.swift in Sources */,
 				EB7E83241B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
+				EB7F59C91BA1915A00E07EBA /* MemListItemProvider.swift in Sources */,
 				EB714AA81B66BBA800F91B94 /* DBSyncable.swift in Sources */,
 				EBF5D7D51B8F868E00A235C5 /* Paginator.swift in Sources */,
 				EB4D57AA1B74B90600BC6171 /* ListSync.swift in Sources */,
@@ -2183,6 +2227,8 @@
 				EB7E83301B7B74EF009DEEF4 /* RemoteHistoryProvider.swift in Sources */,
 				EBF299891B791023006BDA1F /* InventorySync.swift in Sources */,
 				EBF377811B342B4500EEB6DB /* Constants.swift in Sources */,
+				EB7F59CD1BA1970200E07EBA /* Dictionary.swift in Sources */,
+				EB7F59D91BA1E0DF00E07EBA /* Performance.swift in Sources */,
 				EBF3776C1B342ABB00EEB6DB /* InventoryProvider.swift in Sources */,
 				EB0C1B8D1B3DA89900F24C85 /* LoginData.swift in Sources */,
 				EBF3777A1B342B1700EEB6DB /* ListItem.swift in Sources */,
@@ -2205,6 +2251,7 @@
 				EB7E832C1B7B72B9009DEEF4 /* HistoryItemMapper.swift in Sources */,
 				EB7E831C1B7B703B009DEEF4 /* HistoryProviderImpl.swift in Sources */,
 				EBB9A7341B5EB0FC00E5487D /* DBInventory.swift in Sources */,
+				EB7F59D11BA1D40A00E07EBA /* Option.swift in Sources */,
 				EB70C2251B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBF3776E1B342ACB00EEB6DB /* ListItemInput.swift in Sources */,
 				EBF3776F1B342AD300EEB6DB /* ListItemMapper.swift in Sources */,
@@ -2232,6 +2279,7 @@
 				EBF377671B342A9A00EEB6DB /* RemoteProduct.swift in Sources */,
 				EB0C1BAF1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
 				EBB9A7461B5EB28500E5487D /* RemoteInventoryItemsProvider.swift in Sources */,
+				EB7F59D51BA1DBF600E07EBA /* Providers.swift in Sources */,
 				EBF377821B342B4800EEB6DB /* Globals.swift in Sources */,
 				EB40A48C1B553A19000E9CAD /* DBListItem.swift in Sources */,
 				EB7F59C41BA1049100E07EBA /* Identifiable.swift in Sources */,

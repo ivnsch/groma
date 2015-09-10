@@ -12,6 +12,7 @@ class ListItemProviderImpl: ListItemProvider {
 
     let dbProvider = RealmListItemProvider()
     let remoteProvider = RemoteListItemProvider()
+    let memProvider = MemListItemProvider(enabled: true)
     
     func products(handler: ProviderResult<[Product]> -> ()) {
         self.dbProvider.loadProducts {dbProducts in
@@ -21,9 +22,18 @@ class ListItemProviderImpl: ListItemProvider {
     
     func listItems(list: List, fetchMode: ProviderFetchModus = .Both, _ handler: ProviderResult<[ListItem]> -> ()) {
 
-        self.dbProvider.loadListItems(list, handler: {(var dbListItems) in
+        let memListItemsMaybe = memProvider.listItems(list)
+        if let memListItems = memListItemsMaybe {
+            print("!!! listItems, returning from memory: \(memListItems)")
+            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: memListItems))
+            if fetchMode == .MemOnly {
+                return
+            }
+        }
 
-            
+        print("!!! listItems, doing background update")
+        self.dbProvider.loadListItems(list, handler: {[weak self] (var dbListItems) in
+
             // reorder items by position
             // TODO ? a possible optimization is to save the list to local db sorted instead of having order field, see http://stackoverflow.com/questions/25023826/reordering-realm-io-data-in-tableview-with-swift
             // the server still needs (internally at least) the order column
@@ -31,20 +41,30 @@ class ListItemProviderImpl: ListItemProvider {
             
             dbListItems = dbListItems.sortedByOrder() // order is relative to section (0...n) so there will be repeated numbers.
             
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbListItems))
+            // we assume the database result is always == mem result, so if returned from mem already no need to return from db
+            // TODO there's no need to load the items from db before doing the remote call (confirm this), since we assume memory == database it would be enough to compare 
+            // the server result with memory. Load from db only when there's no memory cache.
+            if !memListItemsMaybe.isSet {
+                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbListItems))
+            }
             
-            self.remoteProvider.listItems(list: list) {remoteResult in
+            print("!!! listItems, finish background db fetch, overwriting memory with: \(dbListItems)")
+            self?.memProvider.overwrite(dbListItems)
+            
+            self?.remoteProvider.listItems(list: list) {[weak self] remoteResult in
                 
                 if let remoteListItems = remoteResult.successResult {
                     let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems, list: list)
                     
                     // if there's no cached list or there's a difference, overwrite the cached list
                     if (dbListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
-                        self.dbProvider.saveListItems(listItemsWithRelations) {saved in
+                        self?.dbProvider.saveListItems(listItemsWithRelations) {saved in
                             
                             if fetchMode == .Both {
                                 handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItemsWithRelations.listItems))
                             }
+                            print("!!! listItems, finish server fetch and different items, overwriting memory with: \(listItemsWithRelations.listItems)")
+                            self?.memProvider.overwrite(listItemsWithRelations.listItems)
                         }
                     }
                     
@@ -57,18 +77,35 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func remove(listItem: ListItem, _ handler: ProviderResult<Any> -> ()) {
-        self.dbProvider.remove(listItem, handler: {removed in
-            handler(ProviderResult(status: removed ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
+        
+        let memUpdated = memProvider.removeListItem(listItem)
+        if memUpdated {
+            handler(ProviderResult(status: ProviderStatusCode.Success))
+        }
+        
+        self.dbProvider.remove(listItem, handler: {[weak self] removed in
+            if removed {
+                if !memUpdated {
+                    handler(ProviderResult(status: .Success))
+                }
+            } else {
+                handler(ProviderResult(status: .DatabaseUnknown))
+                self?.memProvider.invalidate()
+            }
         })
+        
+        // TODO server!
     }
     
     func remove(section: Section, _ handler: ProviderResult<Any> -> ()) {
+        memProvider.invalidate()
         self.dbProvider.remove(section) {removed in
             handler(ProviderResult(status: removed ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
         }
     }
     
     func remove(list: List, _ handler: ProviderResult<Any> -> ()) {
+        memProvider.invalidate()
         self.dbProvider.remove(list) {removed in
             handler(ProviderResult(status: removed ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
         }
@@ -76,21 +113,33 @@ class ListItemProviderImpl: ListItemProvider {
     
     func add(listItem: ListItem, _ handler: ProviderResult<Any> -> ()) {
 
+        let memAdded = memProvider.addListItem(listItem)
+        if memAdded {
+            handler(ProviderResult(status: .Success))
+        }
+        
+        // TODO local database first then server
+        // and review carefully what happens if adding fails after memory cache is updated
+        
+        
         // return the saved object, to get object with generated id
         
         // for now do remote first. Imagine we do coredata first, user adds the list and then a lot of items to it and server fails. The list with all items will be lost in next sync.
         // we can do special handling though, like show an error message when server fails and remove the list which was just added, and/or retry server. Or use a flag "synched = false" which tells us that these items should not be removed on sync, similar to items which were added offline. Etc.
-        self.remoteProvider.add(listItem, handler: {remoteResult in
+        self.remoteProvider.add(listItem, handler: {[weak self] remoteResult in
             
-            if let _ = remoteResult.successResult {
-                self.dbProvider.saveListItem(listItem) {saved in // currently the item returned by server is identically to the one we sent, so we just save our local item
+            if remoteResult.success {
+                self?.dbProvider.saveListItem(listItem) {saved in // currently the item returned by server is identically to the one we sent, so we just save our local item
                     let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
-                    handler(ProviderResult(status: providerStatus))
+                    if !memAdded { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
+                        handler(ProviderResult(status: providerStatus))
+                    }
                 }
                 
             } else {
                 let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
                 handler(ProviderResult(status: providerStatus))
+                self?.memProvider.invalidate()
             }
         })
     }
@@ -135,8 +184,12 @@ class ListItemProviderImpl: ListItemProvider {
                         // 2. do the update before calling the service, and add flag not synched (etc)
                         // 3. more ideas?
                         let listItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
-                        self.add(listItem, {saved in
-                            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItem))
+                        self.add(listItem, {result in
+                            if result.success {
+                                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItem))
+                            } else {
+                                handler(ProviderResult(status: result.status))
+                            }
                         })
                     }
                 }
@@ -204,8 +257,8 @@ class ListItemProviderImpl: ListItemProvider {
             return dict
         }
         
-        self.listItems(list, fetchMode: ProviderFetchModus.First) {result in // TODO review .First suitable here
-            
+        self.listItems(list, fetchMode: .MemOnly) {result in // TODO review .First suitable here
+
             if let storedListItems = result.sucessResult {
             
                 // Update done and order field - by changing "done" we are moving list items from one tableview to another
@@ -233,14 +286,21 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func updateDone(listItems: [ListItem], _ handler: ProviderResult<Any> -> ()) {
-        self.update(listItems, handler)
-    }
-    
     func update(listItems: [ListItem], _ handler: ProviderResult<Any> -> ()) {
-        return self.dbProvider.updateListItems(listItems, handler: {[weak self] saved in
-            handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
-            
+        let memUpdated = memProvider.updateListItems(listItems)
+        if memUpdated {
+            handler(ProviderResult(status: .Success))
+        }
+
+        self.dbProvider.updateListItems(listItems, handler: {[weak self] saved in
+            if saved {
+                if !memUpdated {
+                    handler(ProviderResult(status: .Success))
+                }
+            } else {
+                handler(ProviderResult(status: .DatabaseUnknown))
+                self?.memProvider.invalidate()
+            }
             self?.remoteProvider.update(listItems) {result in
                 if !result.success {
                     print("Error: Updating listItems: \(listItems)")
@@ -249,42 +309,13 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
     
-    // TODO why this doesn't call the update [listItems] method
     func update(listItem: ListItem, _ handler: ProviderResult<Any> -> ()) {
-        
-        self.dbProvider.saveListItem(listItem) {saved in
-            handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
-         
-            self.remoteProvider.update(listItem) {result in
-                if !result.success {
-                    print("Error: Updating listItem: \(listItem)")
-                }
-            }
-        }
-        // TODO is this used? if yes, server!
-  
-
-//        self.dbProvider.saveSection(listItem.section, handler: {dbSectionMaybe in
-//            self.dbProvider.updateListItem(listItem, handler: {try in
-//                handler(Try(try.success != nil))
-//            })
-//
-//        }) // creates a new section if there isn't one already
+        update(listItem, handler)
     }
     
     func sections(handler: ProviderResult<[Section]> -> ()) {
         self.dbProvider.loadSections {dbSections in
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSections))
-        }
-    }
-    
-    func measure(title: String, block: (() -> ()) -> ()) {
-        
-        let startTime = CFAbsoluteTimeGetCurrent()
-        
-        block {
-            let timeElapsed = CFAbsoluteTimeGetCurrent() - startTime
-            print("\(title):: Time: \(timeElapsed)")
         }
     }
     
@@ -336,6 +367,8 @@ class ListItemProviderImpl: ListItemProvider {
     }
 
     func syncListItems(list: List, handler: (ProviderResult<Any>) -> ()) {
+        
+        memProvider.invalidate()
         
         self.dbProvider.loadListItems(list) {dbListItems in
         
@@ -389,6 +422,10 @@ class ListItemProviderImpl: ListItemProvider {
                 }
             }
         }
+    }
+    
+    func invalidateMemCache() {
+        memProvider.invalidate()
     }
     
 //    func firstList(handler: Try<List> -> ()) {

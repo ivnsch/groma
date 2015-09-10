@@ -42,9 +42,6 @@ protocol ListItemProvider {
     
     func listItems(list: List, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[ListItem]> -> ())
     
-    // TODO remove
-    func updateDone(listItems:[ListItem], _ handler: ProviderResult<Any> -> ())
-    
     /**
     Updates done status of listItems, and their "order" field such that they are positioned at the end of the new section.
     ** Note ** word SWITCH: done expected to be != all listItem.done. This operation is meant to be used to append the items at the end of the section corresponding to new "done" state
@@ -54,4 +51,6 @@ protocol ListItemProvider {
     func switchDone(listItems: [ListItem], list: List, done: Bool, _ handler: ProviderResult<Any> -> ())
 
     func syncListItems(list: List, handler: (ProviderResult<Any>) -> ())
+    
+    func invalidateMemCache()
 }

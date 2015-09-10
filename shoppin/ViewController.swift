@@ -31,9 +31,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         return viewController
     }()
     
-    private let listItemsProvider = ProviderFactory().listItemProvider
-    private let listProvider = ProviderFactory().listProvider
-    
     private var listItemsTableViewController:ListItemsTableViewController!
     
     @IBOutlet weak var editButton: UIBarButtonItem!
@@ -73,7 +70,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func initWithList(list: List) {
-        self.listItemsProvider.listItems(list, fetchMode: .Both, successHandler{listItems in
+        Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{listItems in
             self.listItemsTableViewController.setListItems(listItems.filter{!$0.done})
         })
     }
@@ -168,7 +165,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     func onSectionInputChanged(text: String) {
         
-        self.listItemsProvider.sections(successHandler{[weak self] sections in
+        Providers.listItemsProvider.sections(successHandler{[weak self] sections in
             
             self?.sectionAutosuggestionsViewController.options = sections.map{$0.name ?? ""} //TODO make this async or add a memory cache
             self?.sectionAutosuggestionsViewController.searchText(text)
@@ -263,10 +260,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         if let list = self.currentList {
             
-            listItemsProvider.switchDone([tableViewListItem.listItem], list: list, done: true) {[weak self] result in
+            Providers.listItemsProvider.switchDone([tableViewListItem.listItem], list: list, done: true) {[weak self] result in
                 if result.success {
                     self!.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
-                    self!.updatePrices()
+                    self!.updatePrices(.MemOnly)
                 }
                 onFinish()
             }
@@ -317,19 +314,21 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
 
     func loadItems(handler: Try<[String]> -> ()) {
-        
-        self.listItemsProvider.products(successHandler{products in
+        Providers.listItemsProvider.products(successHandler{products in
             let names = products.map{$0.name}
             handler(Try(names))
         })
     }
     
     func onListItemsChangedSection(tableViewListItems: [TableViewListItem]) {
-        self.listItemsProvider.update(tableViewListItems.map{$0.listItem}, successHandler{result in
+        Providers.listItemsProvider.update(tableViewListItems.map{$0.listItem}, successHandler{result in
         })
     }
     
-    func updatePrices() {
+    /**
+    
+    */
+    func updatePrices(listItemsFetchMode: ProviderFetchModus = .Both) {
 
         func calculatePrice(listItems:[ListItem]) -> Float {
             return listItems.reduce(0, combine: {(price:Float, listItem:ListItem) -> Float in
@@ -338,7 +337,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
         
         if let currentList = self.currentList {
-            self.listItemsProvider.listItems(currentList, fetchMode: .Both, successHandler{listItems in
+            Providers.listItemsProvider.listItems(currentList, fetchMode: listItemsFetchMode, successHandler{listItems in
                     
                 //        let allListItems = self.tableViewSections.map {
                 //            $0.listItems
@@ -361,12 +360,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             
             self.progressVisible(true)
             
-            self.listItemsProvider.add(listItemInput, list: currentList, order: nil, possibleNewSectionOrder: self.listItemsTableViewController.sections.count, successHandler {savedListItem in
+            Providers.listItemsProvider.add(listItemInput, list: currentList, order: nil, possibleNewSectionOrder: self.listItemsTableViewController.sections.count, successHandler {savedListItem in
                     
                 self.listItemsTableViewController.addListItem(savedListItem)
                 
                 self.addItemView.resignFirstResponder()
-                self.updatePrices()
+                self.updatePrices(.MemOnly)
             })
             
         } else {
@@ -383,12 +382,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
             let listItem = ListItem(uuid: self.updatingListItem!.uuid, done: self.updatingListItem!.done, quantity: listItemInput.quantity, product: product, section: section, list: currentList, order: self.updatingListItem!.order)
             
-            self.listItemsProvider.update(listItem, successHandler{
+            Providers.listItemsProvider.update([listItem], successHandler{
                     
                 self.listItemsTableViewController.updateListItem(listItem)
                 
                 self.addItemView.resignFirstResponder()
-                self.updatePrices()
+                self.updatePrices(.MemOnly)
             })
             
         } else {
@@ -407,7 +406,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onListItemDeleted(tableViewListItem: TableViewListItem) {
-        self.listItemsProvider.remove(tableViewListItem.listItem, successHandler{
+        Providers.listItemsProvider.remove(tableViewListItem.listItem, successHandler{
         })
     }
     
@@ -415,7 +414,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if segue.identifier == "doneViewControllerSegue" {
             if let doneViewController = segue.destinationViewController as? DoneViewController {
                 listItemsTableViewController.clearPendingSwipeItemIfAny {
-                    doneViewController.list = self.currentList
+                    doneViewController.onUIReady = {
+                        doneViewController.list = self.currentList
+                    }
                 }
             }
         }
