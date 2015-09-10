@@ -56,8 +56,6 @@ class RemoteHistoryProvider {
             "toRemove": toRemoveDicts
         ]
         
-        print("sending: \(dictionary)")
-        
         AlamofireHelper.authenticatedRequest(.POST, Urls.historyItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteSyncResult<RemoteHistoryItems>>) in
             handler(result)
         }

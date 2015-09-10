@@ -211,8 +211,6 @@ class RemoteListItemProvider {
             "toRemove": toRemoveDicts
         ]
         
-        print("sending: \(dictionary)")
-        
         AlamofireHelper.authenticatedRequest(.POST, Urls.listsWithItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteListWithListItemsSyncResult>) in
             handler(result)
         }

@@ -83,8 +83,6 @@ class RemoteInventoryProvider: RemoteProvider {
             "toRemove": toRemoveDicts
         ]
         
-        print("sending: \(dictionary)")
-        
         AlamofireHelper.authenticatedRequest(.POST, Urls.inventoriesWithItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteInventoriesWithInventoryItemsSyncResult>) in
             handler(result)
         }
