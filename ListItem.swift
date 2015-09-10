@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class ListItem: Equatable {
+final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let uuid: String
     var done: Bool
     let quantity: Int
@@ -40,12 +40,26 @@ final class ListItem: Equatable {
         self.lastServerUpdate = lastServerUpdate
         self.removed = removed
     }
+
+    func same(listItem: ListItem) -> Bool {
+        return self.uuid == listItem.uuid
+    }
     
     var debugDescription: String {
+        return shortDebugDescription
+        //        return longDebugDescription
+    }
+    
+    private var shortDebugDescription: String {
+        return "[\(product.name), \(done), \(order)]"
+    }
+
+    private var longDebugDescription: String {
         return "{\(self.dynamicType) uuid: \(self.uuid), done: \(self.done), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.product), sectionUuid: \(self.section), listUuid: \(self.list), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
     }
 }
 
+// TODO implement equality correctly, also in other model classes. Now we have identifiable for this.
 func ==(lhs: ListItem, rhs: ListItem) -> Bool {
     return lhs.uuid == rhs.uuid
 }
