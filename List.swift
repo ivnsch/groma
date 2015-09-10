@@ -8,7 +8,7 @@
 
 import Foundation
 
-class List: Equatable, Identifiable {
+class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let listItems: [ListItem] // TODO is this used? we get the items everywhere from the provider not the list object
@@ -40,6 +40,10 @@ class List: Equatable, Identifiable {
     
     func same(rhs: List) -> Bool {
         return self.uuid == rhs.uuid
+    }
+    
+    var hashValue: Int {
+        return uuid.hashValue
     }
 }
 
