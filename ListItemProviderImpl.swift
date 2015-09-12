@@ -24,14 +24,12 @@ class ListItemProviderImpl: ListItemProvider {
 
         let memListItemsMaybe = memProvider.listItems(list)
         if let memListItems = memListItemsMaybe {
-            print("!!! listItems, returning from memory: \(memListItems)")
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: memListItems))
             if fetchMode == .MemOnly {
                 return
             }
         }
 
-        print("!!! listItems, doing background update")
         self.dbProvider.loadListItems(list, handler: {[weak self] (var dbListItems) in
 
             // reorder items by position
@@ -48,7 +46,6 @@ class ListItemProviderImpl: ListItemProvider {
                 handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbListItems))
             }
             
-            print("!!! listItems, finish background db fetch, overwriting memory with: \(dbListItems)")
             self?.memProvider.overwrite(dbListItems)
             
             self?.remoteProvider.listItems(list: list) {[weak self] remoteResult in
@@ -63,7 +60,6 @@ class ListItemProviderImpl: ListItemProvider {
                             if fetchMode == .Both {
                                 handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItemsWithRelations.listItems))
                             }
-                            print("!!! listItems, finish server fetch and different items, overwriting memory with: \(listItemsWithRelations.listItems)")
                             self?.memProvider.overwrite(listItemsWithRelations.listItems)
                         }
                     }
