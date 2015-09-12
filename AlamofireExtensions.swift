@@ -207,7 +207,7 @@ extension Alamofire.Request {
                     switch JSON {
                     case .Success(let dataObj):
                         
-                        print("JSON (request \(request?.HTTPMethod), \(request?.URL): \(dataObj)")
+//                        print("JSON (request \(request?.HTTPMethod), \(request?.URL): \(dataObj)")
 
                         let statusInt = dataObj.valueForKeyPath("status") as! Int
                         if let status = RemoteStatusCode(rawValue: statusInt) {
