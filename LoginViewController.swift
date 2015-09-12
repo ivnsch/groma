@@ -38,6 +38,8 @@ class LoginViewController: UIViewController, RegisterDelegate, GIDSignInUIDelega
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        passwordField.secureTextEntry = true
+        
         googleLoginSetup()
         
         self.navigationController?.navigationBarHidden = false

@@ -31,9 +31,15 @@ class RegisterViewController: UIViewController {
 
         self.navigationController?.navigationBarHidden = false
         
+        passwordField.secureTextEntry = true
+
         fillTestInput()
         
         initValidator()
+    }
+    
+    @IBAction func onShowPasswordChanged(sender: UISwitch) {
+        passwordField.secureTextEntry = !sender.on
     }
     
     private func initValidator() {
