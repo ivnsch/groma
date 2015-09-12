@@ -88,9 +88,13 @@ class ListItemProviderImpl: ListItemProvider {
                 handler(ProviderResult(status: .DatabaseUnknown))
                 self?.memProvider.invalidate()
             }
+            
+            self?.remoteProvider.remove(listItem) {result in
+                if !result.success {
+                    print("Error: Removing listItem: \(listItem)")
+                }
+            }
         })
-        
-        // TODO server!
     }
     
     func remove(section: Section, _ handler: ProviderResult<Any> -> ()) {
