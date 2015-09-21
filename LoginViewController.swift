@@ -18,7 +18,7 @@ protocol LoginDelegate {
     func onRegisterFromLoginSuccess()
 }
 
-class LoginViewController: UIViewController, RegisterDelegate, GIDSignInUIDelegate, GIDSignInDelegate {
+class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate {
 
     let userProvider = ProviderFactory().userProvider
     
@@ -65,7 +65,7 @@ class LoginViewController: UIViewController, RegisterDelegate, GIDSignInUIDelega
     private func initValidator() {
         let validator = Validator()
         validator.registerField(self.userNameField, rules: [EmailRule(message: "validation_email_format")])
-        validator.registerField(self.passwordField, rules: [PasswordRule(message: "password: 8 letter, 1 uppercase, 1 number")]) // TODO repl with translation key, for now this so testers understand
+        validator.registerField(self.passwordField, rules: [RequiredRule(message: "validation_pw_required")]) // TODO repl with translation key, for now this so testers understand
         self.validator = validator
     }
     
@@ -99,6 +99,13 @@ class LoginViewController: UIViewController, RegisterDelegate, GIDSignInUIDelega
         }
     }
     
+    @IBAction func onForgotPasswordTap(sender: UIButton) {
+        let forgotPasswordViewController = UIStoryboard.forgotPasswordViewController()
+        forgotPasswordViewController.delegate = self
+        forgotPasswordViewController.email = userNameField.text
+        self.navigationController?.pushViewController(forgotPasswordViewController, animated: true)
+    }
+    
     @IBAction func onRegisterTap(sender: UIButton) {
         let registerController = UIStoryboard.registerViewController()
         registerController.delegate = self
@@ -108,6 +115,14 @@ class LoginViewController: UIViewController, RegisterDelegate, GIDSignInUIDelega
     func onRegisterSuccess() {
         self.delegate?.onRegisterFromLoginSuccess() ?? print("Warn: no login delegate")
     }
+    
+    // MARK: ForgotPasswordDelegate
+    
+    func onForgotPasswordSuccess() {
+        showInfoAlert(message: "An email to reset your password was sent")
+    }
+    
+    // MARK:
     
     func onLoginSuccess() {
         delegate?.onLoginSuccess() ?? print("Warn: no login delegate")

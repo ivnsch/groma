@@ -15,6 +15,7 @@ extension UIStoryboard {
     private class func loginStoryboard() -> UIStoryboard { return UIStoryboard(name: "Login", bundle: NSBundle.mainBundle()) }
     private class func registerStoryboard() -> UIStoryboard { return UIStoryboard(name: "Register", bundle: NSBundle.mainBundle()) }
     private class func userDetailsStoryboard() -> UIStoryboard { return UIStoryboard(name: "UserDetails", bundle: NSBundle.mainBundle()) }
+    private class func forgotPasswordStoryboard() -> UIStoryboard { return UIStoryboard(name: "ForgotPassword", bundle: NSBundle.mainBundle()) }
     private class func choiceStoryboard() -> UIStoryboard { return UIStoryboard(name: "EditableChoiceModal", bundle: NSBundle.mainBundle()) }
     
     // MARK: - Main
@@ -46,23 +47,22 @@ extension UIStoryboard {
         return introStoryboard().instantiateViewControllerWithIdentifier("IntroController") as! IntroViewController
     }
 
-    // MARK: - Login
+    // MARK: - User
     
     class func loginViewController() -> LoginViewController {
         return loginStoryboard().instantiateViewControllerWithIdentifier("LoginController") as! LoginViewController
     }
     
-    
-    // MARK: - Register
-    
     class func registerViewController() -> RegisterViewController {
         return registerStoryboard().instantiateViewControllerWithIdentifier("RegisterController") as! RegisterViewController
     }
     
-    // MARK: - UserDetails
-    
     class func userDetailsViewController() -> UserDetailsViewController {
         return userDetailsStoryboard().instantiateViewControllerWithIdentifier("UserDetailsController") as! UserDetailsViewController
+    }
+    
+    class func forgotPasswordViewController() -> ForgotPasswordViewController {
+        return forgotPasswordStoryboard().instantiateViewControllerWithIdentifier("ForgotPasswordViewController") as! ForgotPasswordViewController
     }
     
     // MARK: - Modal

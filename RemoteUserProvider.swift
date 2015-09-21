@@ -43,6 +43,13 @@ class RemoteUserProvider {
         }
     }
     
+    func forgotPassword(email: String, handler: RemoteResult<NoOpSerializable> -> ()) {
+        let parameters = ["email": email, "foo": "foo"] // foo is a filler parameter bc of a bug in the server
+        Alamofire.request(.POST, Urls.forgotPassword, parameters: parameters, encoding: .JSON).responseMyObject {(request, _, remoteResult: RemoteResult<NoOpSerializable>) in
+            handler(remoteResult)
+        }
+    }
+    
     func hasToken() -> Bool {
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
         return valet?.containsObjectForKey(KeychainKeys.token) ?? {

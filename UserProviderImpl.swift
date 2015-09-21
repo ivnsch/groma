@@ -48,7 +48,7 @@ class UserProviderImpl: UserProvider {
         self.remoteProvider.logout(remoteResultHandler(handler))
     }
     
-    func sync(handler: () -> ()) {
+    func sync(handler: VoidFunction) {
 
         listsProvider.syncListsWithListItems {[weak self] result in
             if result.success {
@@ -68,6 +68,12 @@ class UserProviderImpl: UserProvider {
                 print("Error: could not sync lists (login/register): \(result.status)")
                 handler()
             }
+        }
+    }
+    
+    func forgotPassword(email: String, _ handler: ProviderResult<Any> -> ()) {
+        remoteProvider.forgotPassword(email) {result in
+            handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
         }
     }
     

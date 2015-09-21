@@ -37,7 +37,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v0i-2j-jaS">
-                                <rect key="frame" x="272" y="371" width="57" height="30"/>
+                                <rect key="frame" x="272" y="404" width="57" height="30"/>
                                 <state key="normal" title="Register">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -67,23 +67,32 @@
                                     <action selector="onGoogleLoginTap:" destination="rg4-qz-Lat" eventType="touchUpInside" id="g92-q2-co1"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QVU-Pz-cxq">
+                                <rect key="frame" x="239" y="338" width="123" height="30"/>
+                                <state key="normal" title="Forgot password?"/>
+                                <connections>
+                                    <action selector="onForgotPasswordTap:" destination="rg4-qz-Lat" eventType="touchUpInside" id="42H-u3-AaO"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="EgA-OH-X0u" firstAttribute="top" secondItem="TsF-zg-FLy" secondAttribute="bottom" constant="18" id="1k1-lB-RYq"/>
                             <constraint firstAttribute="trailing" secondItem="Yt4-Ha-XoG" secondAttribute="trailing" constant="16" id="A7N-aN-EYy"/>
-                            <constraint firstItem="v0i-2j-jaS" firstAttribute="top" secondItem="EgA-OH-X0u" secondAttribute="bottom" constant="219" id="BHP-YC-cak"/>
                             <constraint firstItem="Yt4-Ha-XoG" firstAttribute="top" secondItem="Pdv-bE-LUR" secondAttribute="bottom" constant="10" id="Cmv-oP-f5o"/>
                             <constraint firstAttribute="centerX" secondItem="v0i-2j-jaS" secondAttribute="centerX" id="EV7-Ej-izx"/>
                             <constraint firstItem="TsF-zg-FLy" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="16" id="Lko-r6-N2Y"/>
                             <constraint firstItem="t83-R4-Wil" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="NDQ-dn-mEJ"/>
+                            <constraint firstItem="QVU-Pz-cxq" firstAttribute="top" secondItem="oU0-Br-Acd" secondAttribute="bottom" constant="42" id="Udv-Lu-pHL"/>
                             <constraint firstItem="TsF-zg-FLy" firstAttribute="top" secondItem="Yt4-Ha-XoG" secondAttribute="bottom" constant="14" id="bbt-tb-zJh"/>
                             <constraint firstAttribute="trailing" secondItem="TsF-zg-FLy" secondAttribute="trailing" constant="16" id="bnR-83-IbH"/>
+                            <constraint firstItem="v0i-2j-jaS" firstAttribute="top" secondItem="QVU-Pz-cxq" secondAttribute="bottom" constant="36" id="d4g-t2-NwM"/>
                             <constraint firstAttribute="centerX" secondItem="EgA-OH-X0u" secondAttribute="centerX" id="hGs-ao-zBv"/>
                             <constraint firstItem="t83-R4-Wil" firstAttribute="top" secondItem="EgA-OH-X0u" secondAttribute="bottom" constant="16" id="kf2-SC-Gzm"/>
                             <constraint firstItem="oU0-Br-Acd" firstAttribute="top" secondItem="t83-R4-Wil" secondAttribute="bottom" constant="8" id="leG-pe-OFn"/>
                             <constraint firstItem="Yt4-Ha-XoG" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="16" id="moB-wI-T5L"/>
                             <constraint firstItem="oU0-Br-Acd" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="tRX-L5-MV5"/>
+                            <constraint firstItem="QVU-Pz-cxq" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="zca-DM-UcM"/>
                         </constraints>
                     </view>
                     <connections>

@@ -461,6 +461,9 @@
 		EBF5D7D81B8FB01B00A235C5 /* Synced.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7D61B8FB01B00A235C5 /* Synced.swift */; };
 		EBF5D7D91B8FB01B00A235C5 /* Synced.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7D61B8FB01B00A235C5 /* Synced.swift */; };
 		EBF5D7DB1B8FB30000A235C5 /* LoadingFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7DA1B8FB30000A235C5 /* LoadingFooter.swift */; };
+		EBFD15C11BA7F59600E37342 /* InfoAlertBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFD15C01BA7F59600E37342 /* InfoAlertBuilder.swift */; };
+		EBFD15C41BA7F99B00E37342 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFD15C31BA7F99B00E37342 /* ForgotPasswordViewController.swift */; };
+		EBFD15C81BA7FA6500E37342 /* ForgotPassword.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBFD15C71BA7FA6500E37342 /* ForgotPassword.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -731,6 +734,9 @@
 		EBF5D7D21B8F868E00A235C5 /* Paginator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Paginator.swift; sourceTree = "<group>"; };
 		EBF5D7D61B8FB01B00A235C5 /* Synced.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synced.swift; sourceTree = "<group>"; };
 		EBF5D7DA1B8FB30000A235C5 /* LoadingFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingFooter.swift; sourceTree = "<group>"; };
+		EBFD15C01BA7F59600E37342 /* InfoAlertBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoAlertBuilder.swift; sourceTree = "<group>"; };
+		EBFD15C31BA7F99B00E37342 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		EBFD15C71BA7FA6500E37342 /* ForgotPassword.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ForgotPassword.storyboard; sourceTree = "<group>"; };
 		ED602ABB2DEEE49607500199 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		EF20317B4274E286EAD0FF2C /* Pods-shoppin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin/Pods-shoppin.debug.xcconfig"; sourceTree = "<group>"; };
 		F0450DFB9EA44C2CE78F6DE2 /* Pods-shoppin_osxTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin_osxTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin_osxTests/Pods-shoppin_osxTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -787,6 +793,7 @@
 		EB0C1B841B3DA2DD00F24C85 /* user */ = {
 			isa = PBXGroup;
 			children = (
+				EBFD15C21BA7F98000E37342 /* forgotPassword */,
 				EB0C1BA11B3DF5CD00F24C85 /* userDetails */,
 				EB0C1B851B3DA2E500F24C85 /* login */,
 				EB0C1B981B3DBF6E00F24C85 /* register */,
@@ -1032,6 +1039,7 @@
 			isa = PBXGroup;
 			children = (
 				EB451C4A1B864A19000DE208 /* SingleSelectionPopup.swift */,
+				EBFD15C01BA7F59600E37342 /* InfoAlertBuilder.swift */,
 			);
 			name = popup;
 			sourceTree = "<group>";
@@ -1520,6 +1528,15 @@
 			name = stats;
 			sourceTree = "<group>";
 		};
+		EBFD15C21BA7F98000E37342 /* forgotPassword */ = {
+			isa = PBXGroup;
+			children = (
+				EBFD15C31BA7F99B00E37342 /* ForgotPasswordViewController.swift */,
+				EBFD15C71BA7FA6500E37342 /* ForgotPassword.storyboard */,
+			);
+			name = forgotPassword;
+			sourceTree = "<group>";
+		};
 		F5A12A83562C0B29B96FD548 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1666,6 +1683,7 @@
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
 				EB2F5D0D1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.xib in Resources */,
 				EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */,
+				EBFD15C81BA7FA6500E37342 /* ForgotPassword.storyboard in Resources */,
 				EB0C1B971B3DBD1300F24C85 /* Login.storyboard in Resources */,
 				EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */,
 				EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */,
@@ -1909,6 +1927,7 @@
 				EBF5D7D71B8FB01B00A235C5 /* Synced.swift in Sources */,
 				EB7E832E1B7B74EF009DEEF4 /* RemoteHistoryProvider.swift in Sources */,
 				EB2F5D771A557AB000DBC4AF /* List.swift in Sources */,
+				EBFD15C41BA7F99B00E37342 /* ForgotPasswordViewController.swift in Sources */,
 				EBF377931B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
 				EB78587D1B7FD81A008AAD12 /* HistoryItemsSync.swift in Sources */,
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
@@ -1946,6 +1965,7 @@
 				EB20FC071A599AE20058103B /* InventoryItemTableViewCell.swift in Sources */,
 				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
 				EB70C21F1B4D302D0060E529 /* SharedUser.swift in Sources */,
+				EBFD15C11BA7F59600E37342 /* InfoAlertBuilder.swift in Sources */,
 				EB714AA61B66BBA800F91B94 /* DBSyncable.swift in Sources */,
 				EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */,
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,

@@ -10,6 +10,8 @@ import UIKit
 
 extension UIViewController {
 
+    // MARK: - Hierachy
+    
     func addChildViewControllerAndView(viewController:UIViewController) {
         self.addChildViewControllerAndView(viewController, viewIndex: self.view.subviews.count)
     }
@@ -30,6 +32,8 @@ extension UIViewController {
             childViewController.removeFromParentViewController()
         }
     }
+
+    // MARK: - Provider result handling
     
     func successHandler(onSuccess: () -> ()) -> ((providerResult: ProviderResult<Any>) -> ()) {
         return self.resultHandler(onSuccess: onSuccess, onError: nil)
@@ -84,15 +88,20 @@ extension UIViewController {
     
     private func showProviderErrorAlert<T>(providerResult: ProviderResult<T>) {
         let title = "Error"
-        
         let message: String = RequestErrorToMsgMapper.message(providerResult.status)
-        
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "ok", style: UIAlertActionStyle.Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+        showInfoAlert(title: title, message: message)
     }
     
-
+    
+    // MARK: - Popup
+    
+    func showInfoAlert(title title: String? = nil, message: String) {
+        self.presentViewController(InfoAlertBuilder.create(title: title, message: message), animated: true, completion: nil)
+    }
+    
+    
+    // MARK: - Utils
+    
     func progressVisible(visible: Bool = true) {
         self.view.defaultProgressVisible(visible)
     }
