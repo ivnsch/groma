@@ -116,9 +116,12 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             section: listItem.section.name)
     }
     
+    /**
+    * Merge listItem and listItemInput by overwriting listItem's properties, with existing ones in listItemInput
+    */
     private func toUpdatedListItem(listItem: ListItem, listItemInput: ListItemInput) -> ListItem {
         
-        let section = Section(uuid: NSUUID().UUIDString, name: listItemInput.section) // TODO not used ids or something, given in server anyway
+        let section = Section(uuid: NSUUID().UUIDString, name: listItemInput.section, order: listItem.section.order)
         
         // for now we overwrite existing product on update (provider just sets the fields on existing product)
         // later we may want to think about this, depending how we use products
@@ -149,6 +152,12 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
                 return false
             }
         }.first?.index
+    }
+    
+    private var sectionCount: Int {
+        return cellManagers.filter {
+            $0 is HeaderCellManager
+        }.count
     }
     
     private func getListItemRowsInSection(sectionIndex: Int) -> NSIndexSet {
@@ -269,7 +278,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             editListItemController.addTappedFunc = {[weak self] listItemInput in
                 
                 // note that this also adds the section if it doesn't exist yet
-                self!.listItemsProvider.add(listItemInput, list: list, order: rowIndex, self!.successHandler{addedListItem in
+                self!.listItemsProvider.add(listItemInput, list: list, order: rowIndex, possibleNewSectionOrder: self!.sectionCount, self!.successHandler{addedListItem in
                     
                     if let _ = self!.currentList {
                         

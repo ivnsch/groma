@@ -130,7 +130,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     
     @IBAction func onFacebookLoginTap(sender: UIButton) {
         self.progressVisible()
-        userProvider.facebookLogin(resultHandler(onSuccess: {[weak self] in
+        facebookLogin(resultHandler(onSuccess: {[weak self] in
             self?.onLoginSuccess()
             
         }, onError: defaultErrorHandler([.SocialLoginCancelled])))
@@ -158,5 +158,39 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     
     func signIn(signIn: GIDSignIn!, didDisconnectWithUser user:GIDGoogleUser!, withError error: NSError!) {
         // Perform any operations when the user disconnects from app here.
+    }
+    
+    
+    // MARK: Facebook api
+    
+    /**
+    * Calls Facebook login service
+    * This would normally be in a provider, but Facebook SDK is only for iOS and OSX project would not compile
+    */
+    private func facebookLogin(handler: ProviderResult<Any> -> ()) {
+        let login = FBSDKLoginManager()
+        login.logInWithReadPermissions(["public_profile"]) {result, error in
+            if let error = error {
+                print("Error: Facebook login: error: \(error)")
+                handler(ProviderResult(status: .SocialLoginError))
+                
+            } else if result.isCancelled {
+                print("Facebook login cancelled")
+                handler(ProviderResult(status: .SocialLoginCancelled))
+                
+            } else {
+                print("Facebook login success, calling our server...")
+                let tokenString = result.token.tokenString
+                Providers.userProvider.authenticateWithFacebook(tokenString) {result in
+                    
+                    // map already exists status to "social aleready exists", to show a different error message
+                    if result.status == .AlreadyExists {
+                        handler(ProviderResult(status: .SocialAlreadyExists))
+                    } else {
+                        handler(result)
+                    }
+                }
+            }
+        }
     }
 }

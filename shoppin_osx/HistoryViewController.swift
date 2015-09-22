@@ -19,7 +19,8 @@ class HistoryViewController: NSViewController, NSTableViewDelegate, NSTableViewD
     override func viewDidAppear() {
         super.viewDidAppear()
         
-        self.historyProvider.historyItems(successHandler{[weak self] historyItems in
+        // For now hardcoded range, TODO paginator like in iOS project
+        self.historyProvider.historyItems(NSRange(location: 0, length: 10000000), successHandler{[weak self] historyItems in
             self?.historyItems = historyItems
             self?.tableView.reloadData()
         })

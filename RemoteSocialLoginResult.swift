@@ -6,7 +6,7 @@
 //  Copyright © 2015 ivanschuetz. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 class RemoteSocialLoginResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     let token: String

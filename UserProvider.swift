@@ -20,7 +20,7 @@ protocol UserProvider {
     
     func logout(handler: ProviderResult<Any> -> ())
     
-    func facebookLogin(handler: ProviderResult<Any> -> ())
+    func authenticateWithFacebook(token: String, _ handler: ProviderResult<Any> -> ())
     
     func authenticateWithGoogle(token: String, _ handler: ProviderResult<Any> -> ())
     

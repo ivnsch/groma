@@ -77,6 +77,7 @@ class ListItemCellManager: CellManager, ListItemCellDelegate {
     private let listNameKey = "listName"
     private let sectionUuidKey = "sectionUuid"
     private let sectionNameKey = "sectionName"
+    private let sectionOrderKey = "sectionOrder"
     private let listItemQuantityKey = "listItemQuantity"
     private let listItemOrderKey = "listItemOrder"
     private let listItemUuidKey = "listItemUuid"
@@ -97,7 +98,8 @@ class ListItemCellManager: CellManager, ListItemCellDelegate {
             
             let sectionUuid = aDecoder.decodeObjectForKey(sectionUuidKey) as! String
             let sectionName = aDecoder.decodeObjectForKey(sectionNameKey) as! String
-            let section = Section(uuid: sectionUuid, name: sectionName)
+            let sectionOrder = Int(aDecoder.decodeIntForKey(sectionOrderKey))
+            let section = Section(uuid: sectionUuid, name: sectionName, order: sectionOrder)
             
             let listItemUuid = aDecoder.decodeObjectForKey(listItemUuidKey) as! String
             let listItemQuantity = aDecoder.decodeIntegerForKey(listItemQuantityKey)
@@ -126,6 +128,7 @@ class ListItemCellManager: CellManager, ListItemCellDelegate {
 
         aCoder.encodeObject(listItem.section.uuid, forKey: sectionUuidKey)
         aCoder.encodeObject(listItem.section.name, forKey: sectionNameKey)
+        aCoder.encodeObject(listItem.section.order, forKey: sectionOrderKey)
         
         aCoder.encodeInteger(listItem.quantity, forKey: listItemQuantityKey)
         aCoder.encodeInteger(listItem.order, forKey: listItemOrderKey)
