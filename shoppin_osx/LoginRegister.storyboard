@@ -23,7 +23,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F8e-R9-c2V">
-                                <rect key="frame" x="58" y="170" width="220" height="32"/>
+                                <rect key="frame" x="58" y="71" width="220" height="32"/>
                                 <buttonCell key="cell" type="push" title="Not an account yet? Register" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="s2X-NH-qcQ">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -48,6 +48,16 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q6f-wH-0a4">
+                                <rect key="frame" x="84" y="172" width="169" height="32"/>
+                                <buttonCell key="cell" type="push" title="Login with Facebook" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eS0-eh-oQ5">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onLoginWithFacebookTap:" target="rex-fi-Rnc" id="uNF-CQ-0ln"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>

@@ -354,6 +354,11 @@
 		EBB9A7541B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7531B5FED4200E5487D /* InventoryTableViewCell.swift */; };
 		EBB9C2241B91EED3007F99A4 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBB9C2231B91EED3007F99A4 /* FBSDKCoreKit.framework */; };
 		EBB9C2281B91F8CA007F99A4 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBB9C2271B91F8CA007F99A4 /* FBSDKLoginKit.framework */; };
+		EBBC22EE1BB2F48A0002F6B1 /* PhAuthenticationToken.m in Sources */ = {isa = PBXBuildFile; fileRef = EBBC22E91BB2F48A0002F6B1 /* PhAuthenticationToken.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		EBBC22EF1BB2F48A0002F6B1 /* PhFacebook.m in Sources */ = {isa = PBXBuildFile; fileRef = EBBC22EB1BB2F48A0002F6B1 /* PhFacebook.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		EBBC22F01BB2F48A0002F6B1 /* PhWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBBC22ED1BB2F48A0002F6B1 /* PhWebViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		EBBC22F91BB308A20002F6B1 /* FacebookBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBBC22F81BB308A20002F6B1 /* FacebookBrowser.xib */; };
+		EBBC22FB1BB30A2C0002F6B1 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBBC22FA1BB30A2C0002F6B1 /* WebKit.framework */; };
 		EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
@@ -675,6 +680,18 @@
 		EBB9C2231B91EED3007F99A4 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../sdks/FacebookSDKs-iOS-20150817/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		EBB9C2251B91F294007F99A4 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "../../../sdks/FacebookSDKs-iOS-20150817/Bolts.framework"; sourceTree = "<group>"; };
 		EBB9C2271B91F8CA007F99A4 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "../../../sdks/FacebookSDKs-iOS-20150817/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
+		EBBC22E81BB2F48A0002F6B1 /* PhAuthenticationToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhAuthenticationToken.h; sourceTree = "<group>"; };
+		EBBC22E91BB2F48A0002F6B1 /* PhAuthenticationToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhAuthenticationToken.m; sourceTree = "<group>"; };
+		EBBC22EA1BB2F48A0002F6B1 /* PhFacebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhFacebook.h; sourceTree = "<group>"; };
+		EBBC22EB1BB2F48A0002F6B1 /* PhFacebook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhFacebook.m; sourceTree = "<group>"; };
+		EBBC22EC1BB2F48A0002F6B1 /* PhWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhWebViewController.h; sourceTree = "<group>"; };
+		EBBC22ED1BB2F48A0002F6B1 /* PhWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhWebViewController.m; sourceTree = "<group>"; };
+		EBBC22F11BB2F5A60002F6B1 /* Debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Debug.h; sourceTree = "<group>"; };
+		EBBC22F21BB2F5A60002F6B1 /* PhFacebook_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhFacebook_Prefix.pch; sourceTree = "<group>"; };
+		EBBC22F31BB2F5A60002F6B1 /* PhFacebook_URLs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhFacebook_URLs.h; sourceTree = "<group>"; };
+		EBBC22F41BB2F6610002F6B1 /* bridging_header_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bridging_header_osx.h; sourceTree = "<group>"; };
+		EBBC22F81BB308A20002F6B1 /* FacebookBrowser.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FacebookBrowser.xib; sourceTree = "<group>"; };
+		EBBC22FA1BB30A2C0002F6B1 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemWithHistory.swift; sourceTree = "<group>"; };
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
@@ -758,6 +775,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBBC22FB1BB30A2C0002F6B1 /* WebKit.framework in Frameworks */,
 				EBDCA1271B87AEB9000020BF /* QuartzCore.framework in Frameworks */,
 				746817AD4172A5D3EF184CB4 /* Pods_shoppin_osx.framework in Frameworks */,
 			);
@@ -777,6 +795,7 @@
 		E4CDB4AFEC6C43F59CFE7A39 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EBBC22FA1BB30A2C0002F6B1 /* WebKit.framework */,
 				EB0F5F871B98A10100035175 /* SystemConfiguration.framework */,
 				EBB9C2271B91F8CA007F99A4 /* FBSDKLoginKit.framework */,
 				EBB9C2251B91F294007F99A4 /* Bolts.framework */,
@@ -1225,6 +1244,8 @@
 		EB9F6CE31A8610550038355B /* shoppin_osx */ = {
 			isa = PBXGroup;
 			children = (
+				EBBC22F41BB2F6610002F6B1 /* bridging_header_osx.h */,
+				EBBC22E61BB2F4570002F6B1 /* libraryCouldNotLink */,
 				EB6D70321B19E435009572BA /* shoppin_osx.entitlements */,
 				EBDFE3C01AD00E6C00E48F95 /* utils */,
 				EBDFE3A51ACE827C00E48F95 /* tableview */,
@@ -1313,6 +1334,31 @@
 				EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */,
 			);
 			name = validatorHelpers;
+			sourceTree = "<group>";
+		};
+		EBBC22E61BB2F4570002F6B1 /* libraryCouldNotLink */ = {
+			isa = PBXGroup;
+			children = (
+				EBBC22E71BB2F4710002F6B1 /* PhFacebook */,
+			);
+			name = libraryCouldNotLink;
+			sourceTree = "<group>";
+		};
+		EBBC22E71BB2F4710002F6B1 /* PhFacebook */ = {
+			isa = PBXGroup;
+			children = (
+				EBBC22F81BB308A20002F6B1 /* FacebookBrowser.xib */,
+				EBBC22F11BB2F5A60002F6B1 /* Debug.h */,
+				EBBC22F21BB2F5A60002F6B1 /* PhFacebook_Prefix.pch */,
+				EBBC22F31BB2F5A60002F6B1 /* PhFacebook_URLs.h */,
+				EBBC22E81BB2F48A0002F6B1 /* PhAuthenticationToken.h */,
+				EBBC22E91BB2F48A0002F6B1 /* PhAuthenticationToken.m */,
+				EBBC22EA1BB2F48A0002F6B1 /* PhFacebook.h */,
+				EBBC22EB1BB2F48A0002F6B1 /* PhFacebook.m */,
+				EBBC22EC1BB2F48A0002F6B1 /* PhWebViewController.h */,
+				EBBC22ED1BB2F48A0002F6B1 /* PhWebViewController.m */,
+			);
+			name = PhFacebook;
 			sourceTree = "<group>";
 		};
 		EBD236AC1B8B9D9E00B88969 /* history */ = {
@@ -1704,6 +1750,7 @@
 				EB89D3491AD4536300B6E0D0 /* AddListController.xib in Resources */,
 				EBB2AB411B8B434E007B8C59 /* InventoriesViewController.xib in Resources */,
 				EBDFE3BB1ACEEFDC00E48F95 /* Header.xib in Resources */,
+				EBBC22F91BB308A20002F6B1 /* FacebookBrowser.xib in Resources */,
 				EB9F6CEB1A8610550038355B /* Images.xcassets in Resources */,
 				EB7E82F71B7A14AE009DEEF4 /* LoginRegister.storyboard in Resources */,
 				EB9F6CEE1A8610550038355B /* Main.storyboard in Resources */,
@@ -2063,6 +2110,7 @@
 				EB40A47B1B551176000E9CAD /* DBProduct.swift in Sources */,
 				EB40A4731B5508B6000E9CAD /* DBResult.swift in Sources */,
 				EB55675F1A86437400CD3EC6 /* ListItemMapper.swift in Sources */,
+				EBBC22EF1BB2F48A0002F6B1 /* PhFacebook.m in Sources */,
 				EB7E83271B7B723C009DEEF4 /* DBHistoryItem.swift in Sources */,
 				EB55676C1A8643C300CD3EC6 /* InventoryItem.swift in Sources */,
 				EB202B981B54109A001699E7 /* RemoteRegisterResult.swift in Sources */,
@@ -2113,6 +2161,7 @@
 				EB5567711A864B6E00CD3EC6 /* ListItemProviderMock.swift in Sources */,
 				EB70C2301B5021D50060E529 /* UserInput.swift in Sources */,
 				EB7858821B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift in Sources */,
+				EBBC22EE1BB2F48A0002F6B1 /* PhAuthenticationToken.m in Sources */,
 				EB6F812E1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EBB9A7391B5EB14300E5487D /* RemoteInventory.swift in Sources */,
 				EB5567621A86437E00CD3EC6 /* ListMapper.swift in Sources */,
@@ -2141,6 +2190,7 @@
 				EBF3779C1B38AA5900EEB6DB /* Urls.swift in Sources */,
 				EB55676A1A8643BC00CD3EC6 /* Section.swift in Sources */,
 				EB78587A1B7F7083008AAD12 /* RemoteHistoryItem.swift in Sources */,
+				EBBC22F01BB2F48A0002F6B1 /* PhWebViewController.m in Sources */,
 				EB6D93A61B1BAFB400ED8999 /* HandlingTextField.swift in Sources */,
 				EBB2AB371B8B2489007B8C59 /* InventoryViewController.swift in Sources */,
 				EB7E832F1B7B74EF009DEEF4 /* RemoteHistoryProvider.swift in Sources */,
@@ -2498,10 +2548,15 @@
 			baseConfigurationReference = B86B36921B26D43622B0EC93 /* Pods-shoppin_osx.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = shoppin_osx/shoppin_osx.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -2514,7 +2569,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = shoppin_osx/bridging_header_osx.h;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
@@ -2524,11 +2580,16 @@
 			baseConfigurationReference = 20AF746A4347B9510B7B01E5 /* Pods-shoppin_osx.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = shoppin_osx/shoppin_osx.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = shoppin_osx/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -2537,7 +2598,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = shoppin_osx/bridging_header_osx.h;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Release;
