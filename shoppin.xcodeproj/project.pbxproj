@@ -368,6 +368,12 @@
 		EBBC23051BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */; };
 		EBBC23061BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */; };
 		EBBC23071BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */; };
+		EBBC23091BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23081BB469690002F6B1 /* DBSectionSuggestion.swift */; };
+		EBBC230A1BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23081BB469690002F6B1 /* DBSectionSuggestion.swift */; };
+		EBBC230B1BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23081BB469690002F6B1 /* DBSectionSuggestion.swift */; };
+		EBBC230D1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */; };
+		EBBC230E1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */; };
+		EBBC230F1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */; };
 		EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
@@ -704,6 +710,8 @@
 		EBBC22FC1BB4080E0002F6B1 /* Suggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Suggestion.swift; sourceTree = "<group>"; };
 		EBBC23001BB4086D0002F6B1 /* DBProductSuggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBProductSuggestion.swift; sourceTree = "<group>"; };
 		EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductSuggestionMapper.swift; sourceTree = "<group>"; };
+		EBBC23081BB469690002F6B1 /* DBSectionSuggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSectionSuggestion.swift; sourceTree = "<group>"; };
+		EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionSuggestionMapper.swift; sourceTree = "<group>"; };
 		EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemWithHistory.swift; sourceTree = "<group>"; };
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
@@ -1041,6 +1049,7 @@
 				EB714AA51B66BBA800F91B94 /* DBSyncable.swift */,
 				EB7E83251B7B723C009DEEF4 /* DBHistoryItem.swift */,
 				EBBC23001BB4086D0002F6B1 /* DBProductSuggestion.swift */,
+				EBBC23081BB469690002F6B1 /* DBSectionSuggestion.swift */,
 			);
 			name = realm;
 			sourceTree = "<group>";
@@ -1566,6 +1575,7 @@
 				EB70C2221B4D33E90060E529 /* SharedUserMapper.swift */,
 				EB7E83291B7B72B9009DEEF4 /* HistoryItemMapper.swift */,
 				EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */,
+				EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */,
 			);
 			name = mapper;
 			sourceTree = "<group>";
@@ -1952,6 +1962,7 @@
 				EBF1A1591B823A1100F34105 /* StatsViewController.swift in Sources */,
 				EB451C4D1B865B3D000DE208 /* AggrByDateTableViewController.swift in Sources */,
 				EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */,
+				EBBC23091BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */,
 				EBB9A7481B5EB46C00E5487D /* InventoryMapper.swift in Sources */,
 				EBF162EB1A3CA2470048E37C /* Product.swift in Sources */,
 				EBF299831B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */,
@@ -2003,6 +2014,7 @@
 				EB9BE4221B2CB51F005B401A /* RemoteSection.swift in Sources */,
 				EBB9A73C1B5EB1C700E5487D /* InventoryItemsProvider.swift in Sources */,
 				EBF162ED1A3CA24E0048E37C /* ListItem.swift in Sources */,
+				EBBC230D1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */,
 				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
 				EB9BE41F1B2CB513005B401A /* RemoteProduct.swift in Sources */,
 				EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */,
@@ -2188,10 +2200,12 @@
 				EB1EFAC51B1EFBBC0079A35D /* AutocompleteTextField.swift in Sources */,
 				EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */,
 				EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */,
+				EBBC230E1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */,
 				EBBC23061BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */,
 				EB6D93A81B1C8CE500ED8999 /* HandlingTableView.swift in Sources */,
 				EB7F59CC1BA1970200E07EBA /* Dictionary.swift in Sources */,
 				EB7E8B621B2ADF9A0090409A /* Try.swift in Sources */,
+				EBBC230A1BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */,
 				EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */,
 				EB451C3A1B85F3F0000DE208 /* StatsProvider.swift in Sources */,
 				EB55675D1A86433700CD3EC6 /* Product.swift in Sources */,
@@ -2266,6 +2280,7 @@
 				EBF3778D1B357FA100EEB6DB /* TestUtils.swift in Sources */,
 				EB7E83281B7B723C009DEEF4 /* DBHistoryItem.swift in Sources */,
 				EB40A4881B55159D000E9CAD /* DBList.swift in Sources */,
+				EBBC230B1BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */,
 				EB7E83201B7B7069009DEEF4 /* HistoryProvider.swift in Sources */,
 				EBF3777D1B342B2E00EEB6DB /* InventoryItem.swift in Sources */,
 				EB40A4741B5508B6000E9CAD /* DBResult.swift in Sources */,
@@ -2378,6 +2393,7 @@
 				EB7F59C41BA1049100E07EBA /* Identifiable.swift in Sources */,
 				EB0C1B951B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
 				EB78587B1B7F7083008AAD12 /* RemoteHistoryItem.swift in Sources */,
+				EBBC230F1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */,
 				EBBC23031BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

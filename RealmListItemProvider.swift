@@ -90,6 +90,11 @@ class RealmListItemProvider: RealmProvider {
         let mapper = {ProductSuggestionMapper.suggestionWithDB($0)}
         self.load(mapper, handler: handler)
     }
+
+    func loadSectionSuggestions(handler: [Suggestion] -> ()) {
+        let mapper = {SectionSuggestionMapper.suggestionWithDB($0)}
+        self.load(mapper, handler: handler)
+    }
     
     // MARK: - List
     
@@ -148,7 +153,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     /**
-    Helper to save a list item with uptional saving of product name autosuggestion
+    Helper to save a list item with optional saving of product and section autosuggestion
     Expected to be executed inside a transaction
     */
     private func saveListItemHelper(realm: Realm, listItem: ListItem, updateSuggestions: Bool = true) {
@@ -157,6 +162,9 @@ class RealmListItemProvider: RealmProvider {
         
         if updateSuggestions {
             saveProductSuggestionHelper(realm, product: listItem.product)
+            
+            let sectionSuggestion = SectionSuggestionMapper.dbWithSection(listItem.section)
+            realm.add(sectionSuggestion, update: true)
         }
     }
 

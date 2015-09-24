@@ -181,9 +181,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     func onSectionInputChanged(text: String) {
         
-        Providers.listItemsProvider.sections(successHandler{[weak self] sections in
+        Providers.listItemsProvider.sectionSuggestions(successHandler{[weak self] suggestions in
             
-            self?.sectionAutosuggestionsViewController.options = sections.map{$0.name ?? ""} //TODO make this async or add a memory cache
+            self?.sectionAutosuggestionsViewController.options = suggestions.map{$0.name ?? ""} //TODO make this async or add a memory cache
             self?.sectionAutosuggestionsViewController.searchText(text)
             
             self?.sectionAutosuggestionsViewController.view.hidden = text.isEmpty

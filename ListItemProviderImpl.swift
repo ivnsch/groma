@@ -25,6 +25,12 @@ class ListItemProviderImpl: ListItemProvider {
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSuggestions))
         }
     }
+
+    func sectionSuggestions(handler: ProviderResult<[Suggestion]> -> ()) {
+        dbProvider.loadSectionSuggestions {dbSuggestions in
+            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSuggestions))
+        }
+    }
     
     func listItems(list: List, fetchMode: ProviderFetchModus = .Both, _ handler: ProviderResult<[ListItem]> -> ()) {
 

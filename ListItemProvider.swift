@@ -13,7 +13,9 @@ protocol ListItemProvider {
     func products(handler: ProviderResult<[Product]> -> ())
     
     func productSuggestions(handler: ProviderResult<[Suggestion]> -> ())
-    
+
+    func sectionSuggestions(handler: ProviderResult<[Suggestion]> -> ())
+
     func sections(handler: ProviderResult<[Section]> -> ())
 
     func remove(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
