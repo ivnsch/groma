@@ -52,7 +52,7 @@ class AutosuggestionsTableViewController: UITableViewController {
     }
     
     func searchText(text: String) {
-        self.filteredOptions = options.filter{$0.contains(text)}
+        self.filteredOptions = options.filter{$0.contains(text, caseInsensitive: true)}
         self.tableView.reloadData()
         
 //        self.tableView.sizeToFit()
