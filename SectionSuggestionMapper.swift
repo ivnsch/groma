@@ -16,6 +16,12 @@ class SectionSuggestionMapper {
         return dbSection
     }
     
+    class func dbWithSuggestion(suggestion: Suggestion) -> DBSectionSuggestion {
+        let dbSuggestion = DBSectionSuggestion()
+        dbSuggestion.name = suggestion.name
+        return dbSuggestion
+    }
+    
     class func suggestionWithDB(dbSuggestion: DBSectionSuggestion) -> Suggestion {
         return Suggestion(name: dbSuggestion.name)
     }

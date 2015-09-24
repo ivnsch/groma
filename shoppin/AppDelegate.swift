@@ -64,10 +64,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func firstLaunchSetup() {
         #if DEBUG
-            self.debugFirstLaunchSetup()
+            debugFirstLaunchSetup()
             #else
         #endif
+        // TODO async and timing, ensure any other component that touches realm runs after prefill is finished. Prefill creates the realm file.
+        // since this is done the first time it may make sense to put it in the intro screen? this way also more controllable
+        prefillDatabase()
     }
+    
+    private func prefillDatabase(onFinish: VoidFunction? = nil) {
+
+        let p = NSHomeDirectory() + "/Documents/default.realm"
+        if let prefillPath = NSBundle.mainBundle().pathForResource("prefill", ofType: "realm") {
+            print("Copying prefill database to: \(p)")
+            do {
+                try NSFileManager.defaultManager().copyItemAtPath(prefillPath, toPath: p)
+                print("Copied prefill database")
+                onFinish?()
+                
+            } catch let error as NSError {
+                print("Error copying prefill database: \(error)")
+                onFinish?()
+            }
+        } else {
+            print("Prefill database was not found")
+            onFinish?()
+        }
+    }
+    
+    
+    // MARK: - Debug
     
     private func debugFirstLaunchSetup() {
         self.addDummyData()

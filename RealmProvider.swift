@@ -38,7 +38,39 @@ class RealmProvider {
             finished(true)
         })
     }
+
+    /**
+    * Batch save
+    */
+    func saveObjs<T: Object>(objs: [T], update: Bool = false, onSaved: ((Realm) -> ())? = nil, handler: Bool -> ()) {
+        
+        let finished: (Bool) -> () = {success in
+            dispatch_async(dispatch_get_main_queue(), {
+                handler(success)
+            })
+        }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            
+            do {
+                let realm = try Realm()
+                realm.write {
+                    for obj in objs {
+                        realm.add(obj, update: update)
+                    }
+                }
+            } catch _ {
+                print("Error: creating Realm() in saveObjs")
+                finished(false)
+            }
+            
+            finished(true)
+        })
+    }
     
+    /**
+    * Batch save, refreshing last update date
+    */
     func saveObjs<T: DBSyncable>(objs: [T], update: Bool = false, onSaved: ((Realm) -> ())? = nil, handler: Bool -> ()) {
         
         let finished: (Bool) -> () = {success in

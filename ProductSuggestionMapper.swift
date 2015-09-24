@@ -15,6 +15,12 @@ class ProductSuggestionMapper {
         dbSuggestion.name = product.name
         return dbSuggestion
     }
+
+    class func dbWithSuggestion(suggestion: Suggestion) -> DBProductSuggestion {
+        let dbSuggestion = DBProductSuggestion()
+        dbSuggestion.name = suggestion.name
+        return dbSuggestion
+    }
     
     class func suggestionWithDB(dbSuggestion: DBProductSuggestion) -> Suggestion {
         return Suggestion(name: dbSuggestion.name)

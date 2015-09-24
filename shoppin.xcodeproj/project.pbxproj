@@ -374,6 +374,10 @@
 		EBBC230D1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */; };
 		EBBC230E1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */; };
 		EBBC230F1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */; };
+		EBBC23131BB475440002F6B1 /* SuggestionsPrefiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */; };
+		EBBC23151BB483E90002F6B1 /* SuggestionsPrefiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */; };
+		EBBC23171BB4840F0002F6B1 /* PrefillDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23161BB4840F0002F6B1 /* PrefillDatabase.swift */; };
+		EBBC231B1BB4A6160002F6B1 /* prefill.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBBC231A1BB4A6160002F6B1 /* prefill.realm */; };
 		EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
@@ -712,6 +716,9 @@
 		EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductSuggestionMapper.swift; sourceTree = "<group>"; };
 		EBBC23081BB469690002F6B1 /* DBSectionSuggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSectionSuggestion.swift; sourceTree = "<group>"; };
 		EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionSuggestionMapper.swift; sourceTree = "<group>"; };
+		EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SuggestionsPrefiller.swift; path = ../SuggestionsPrefiller.swift; sourceTree = "<group>"; };
+		EBBC23161BB4840F0002F6B1 /* PrefillDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefillDatabase.swift; sourceTree = "<group>"; };
+		EBBC231A1BB4A6160002F6B1 /* prefill.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefill.realm; sourceTree = "<group>"; };
 		EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemWithHistory.swift; sourceTree = "<group>"; };
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
@@ -879,6 +886,7 @@
 		EB1DDE9C1A3334EC00D778DE = {
 			isa = PBXGroup;
 			children = (
+				EBBC231A1BB4A6160002F6B1 /* prefill.realm */,
 				EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */,
 				EB1DDEA71A3334EC00D778DE /* shoppin */,
 				EB55675A1A8622E600CD3EC6 /* shoppin_ios */,
@@ -909,6 +917,7 @@
 				EBF162E61A3CA1AC0048E37C /* model */,
 				EB2F5D7C1A55817100DBC4AF /* common */,
 				EB6F81301B471793008680E0 /* utils */,
+				EBBC231C1BB4ABC80002F6B1 /* prefill */,
 				EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */,
 				EB1DDEB11A3334EC00D778DE /* Main.storyboard */,
 				EB1DDEB41A3334EC00D778DE /* Images.xcassets */,
@@ -1318,6 +1327,7 @@
 				EB0C2A551B590D3D00AF6226 /* TestInventory.swift */,
 				EBF3778C1B357FA100EEB6DB /* TestUtils.swift */,
 				EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */,
+				EBBC23161BB4840F0002F6B1 /* PrefillDatabase.swift */,
 			);
 			path = shoppin_osxTests;
 			sourceTree = "<group>";
@@ -1381,6 +1391,14 @@
 				EBBC22ED1BB2F48A0002F6B1 /* PhWebViewController.m */,
 			);
 			name = PhFacebook;
+			sourceTree = "<group>";
+		};
+		EBBC231C1BB4ABC80002F6B1 /* prefill */ = {
+			isa = PBXGroup;
+			children = (
+				EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */,
+			);
+			name = prefill;
 			sourceTree = "<group>";
 		};
 		EBD236AC1B8B9D9E00B88969 /* history */ = {
@@ -1750,6 +1768,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBBC231B1BB4A6160002F6B1 /* prefill.realm in Resources */,
 				EB4C365F1B4C142600C387C5 /* EditableChoiceModal.storyboard in Resources */,
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
 				EB2F5D0D1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.xib in Resources */,
@@ -2168,6 +2187,7 @@
 				EBD236AE1B8B9DC600B88969 /* HistoryViewController.swift in Sources */,
 				EB0C2A311B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */,
 				EB0C2A4F1B5841C600AF6226 /* DBInventoryItem.swift in Sources */,
+				EBBC23131BB475440002F6B1 /* SuggestionsPrefiller.swift in Sources */,
 				EB9BE41D1B2CB42B005B401A /* RemoteListItem.swift in Sources */,
 				EBB2AB391B8B27BD007B8C59 /* InventoriesViewController.swift in Sources */,
 				EB4FD4561AC6D6690000F952 /* EditListItemController.swift in Sources */,
@@ -2320,6 +2340,7 @@
 				EB6F81661B4B1CDC008680E0 /* TestRequiresAuthentication.swift in Sources */,
 				EB4D57AE1B7505DD00BC6171 /* SyncUtils.swift in Sources */,
 				EB0C1BAB1B3ED8D600F24C85 /* ProviderResult.swift in Sources */,
+				EBBC23171BB4840F0002F6B1 /* PrefillDatabase.swift in Sources */,
 				EB70C22D1B4D3DF50060E529 /* ListProviderImpl.swift in Sources */,
 				EB7E83241B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
 				EB7F59C91BA1915A00E07EBA /* MemListItemProvider.swift in Sources */,
@@ -2345,6 +2366,7 @@
 				EB70C2311B5021D50060E529 /* UserInput.swift in Sources */,
 				EBF377841B342B5500EEB6DB /* Selectable.swift in Sources */,
 				EBF377731B342AF000EEB6DB /* InventoryItemMapper.swift in Sources */,
+				EBBC23151BB483E90002F6B1 /* SuggestionsPrefiller.swift in Sources */,
 				EB451C481B863516000DE208 /* MonthYear.swift in Sources */,
 				EBF3778F1B35808900EEB6DB /* TestListItems.swift in Sources */,
 				EBF377831B342B4F00EEB6DB /* PreferencesManager.swift in Sources */,
