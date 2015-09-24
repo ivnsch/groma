@@ -16,6 +16,7 @@ protocol AddItemViewDelegate {
     func onAddTap(name:String, price:String, quantity:String, sectionName:String)
     func onUpdateTap(name:String, price:String, quantity:String, sectionName:String)
     func onSectionInputChanged(text: String)
+    func onProductNameInputChanged(text: String)
 }
 
 enum AddModus {
@@ -71,6 +72,15 @@ class AddItemView: UIView, UITextFieldDelegate {
             return self.sectionInput.text ?? ""
         }
     }
+
+    var productNameText: String {
+        set {
+            self.inputField.text = newValue
+        }
+        get {
+            return self.inputField.text ?? ""
+        }
+    }
     
     var delegate: AddItemViewDelegate!
     
@@ -103,14 +113,15 @@ class AddItemView: UIView, UITextFieldDelegate {
         
         FrozenEffect.apply(self)
         
-        self.sectionInput.delegate = self
-        self.sectionInput.addTarget(self, action: "sectionInputFieldChanged:", forControlEvents: UIControlEvents.EditingChanged)
         sectionInput.delegate = self
+        sectionInput.addTarget(self, action: "sectionInputFieldChanged:", forControlEvents: UIControlEvents.EditingChanged)
         sectionInput.autocapitalizationType = .Sentences
+
+        inputField.delegate = self
+        inputField.addTarget(self, action: "productNameInputFieldChanged:", forControlEvents: UIControlEvents.EditingChanged)
+        inputField.autocapitalizationType = .Sentences
         
         self.originalHeight = self.heightConstraint.constant
-        
-
     }
 
     
@@ -118,6 +129,11 @@ class AddItemView: UIView, UITextFieldDelegate {
         self.delegate.onSectionInputChanged(textField.text ?? "")
     }
 
+    
+    func productNameInputFieldChanged(textField: UITextField) {
+        self.delegate.onProductNameInputChanged(textField.text ?? "")
+    }
+    
     @IBAction func onAddTap(sender: AnyObject) {
         
         guard validator != nil else {return}
@@ -164,10 +180,17 @@ class AddItemView: UIView, UITextFieldDelegate {
         self.quantityInput.text = "1"
     }
     
-    func sectionAutosuggestionsFrame(autosuggestionsViewParentView:UIView) -> CGRect {
+    func sectionAutosuggestionsFrame(autosuggestionsViewParentView: UIView) -> CGRect {
         let sectionFrame = self.sectionInput.frame
         let originAbsolute = self.sectionInput.superview!.convertPoint(sectionFrame.origin, toView: autosuggestionsViewParentView)
         let frame = CGRectMake(originAbsolute.x, originAbsolute.y + sectionFrame.size.height, sectionFrame.size.width, 0)
+        return frame
+    }
+
+    func productAutosuggestionsFrame(autosuggestionsViewParentView: UIView) -> CGRect {
+        let productNameFrame = self.inputField.frame
+        let originAbsolute = self.inputField.superview!.convertPoint(productNameFrame.origin, toView: autosuggestionsViewParentView)
+        let frame = CGRectMake(originAbsolute.x, originAbsolute.y + productNameFrame.size.height, productNameFrame.size.width, 0)
         return frame
     }
     

@@ -63,9 +63,32 @@ class RealmListItemProvider: RealmProvider {
         self.load(mapper, handler: handler)
     }
     
-    func saveProducts(products: [Product], handler: Bool -> ()) {
-        let dbProducts = products.map{ProductMapper.dbWithProduct($0)}
-        self.saveObjs(dbProducts, update: true, handler: handler)
+    // MARK: - Product / suggestion
+    // TODO is this used, if not remove
+    func saveProducts(products: [Product], updateSuggestions: Bool = true, handler: Bool -> ()) {
+        self.doInWriteTransaction({[weak self] realm in
+        
+            for product in products {
+                let dbProduct = ProductMapper.dbWithProduct(product)
+                realm.add(dbProduct, update: true)
+                
+                if updateSuggestions {
+                    self?.saveProductSuggestionHelper(realm, product: product)
+                }
+            }
+            
+            return true
+            
+        }, finishHandler: {success in
+            handler(success)
+        })
+    }
+    
+    // MARK: - Suggestion
+
+    func loadProductSuggestions(handler: [Suggestion] -> ()) {
+        let mapper = {ProductSuggestionMapper.suggestionWithDB($0)}
+        self.load(mapper, handler: handler)
     }
     
     // MARK: - List
@@ -96,14 +119,56 @@ class RealmListItemProvider: RealmProvider {
     
     // MARK: - ListItem
     
-    func saveListItem(listItem: ListItem, handler: Bool -> ()) {
-        let dbListItem = ListItemMapper.dbWithListItem(listItem)
-        self.saveObj(dbListItem, update: true, handler: handler)
+    func saveListItem(listItem: ListItem, updateSuggestions: Bool = true, handler: Bool -> ()) {
+        self.doInWriteTransaction({[weak self] realm in
+
+            self?.saveListItemHelper(realm, listItem: listItem, updateSuggestions: updateSuggestions)
+            return true
+            
+            }, finishHandler: {success in
+                handler(success)
+        })
+
     }
     
-    func saveListItems(listItem: [ListItem], handler: Bool -> ()) {
-        let dbListItems = listItem.map{ListItemMapper.dbWithListItem($0)}
-        self.saveObjs(dbListItems, update: true, handler: handler)
+    /**
+    Batch saving/update of list items
+    */
+    func saveListItems(listItem: [ListItem], updateSuggestions: Bool = true, handler: Bool -> ()) {
+        self.doInWriteTransaction({[weak self] realm in
+            
+            for listItem in listItem {
+                self?.saveListItemHelper(realm, listItem: listItem, updateSuggestions: updateSuggestions)
+            }
+            return true
+            
+            }, finishHandler: {success in
+                handler(success)
+        })
+    }
+    
+    /**
+    Helper to save a list item with uptional saving of product name autosuggestion
+    Expected to be executed inside a transaction
+    */
+    private func saveListItemHelper(realm: Realm, listItem: ListItem, updateSuggestions: Bool = true) {
+        let dbListItem = ListItemMapper.dbWithListItem(listItem)
+        realm.add(dbListItem, update: true)
+        
+        if updateSuggestions {
+            saveProductSuggestionHelper(realm, product: listItem.product)
+        }
+    }
+
+    /**
+    Helper to save suggestion corresponding to a product
+    Expected to be executed in a write block
+    */
+    private func saveProductSuggestionHelper(realm: Realm, product: Product) {
+        // TODO update suggestions - right now only insert - product is updated based on uuid, but with autosuggestion, since no ids old names keep there
+        // so we need to either do a query for the product/old name, and delete the autosuggestion with this name or use ids
+        let suggestion = ProductSuggestionMapper.dbWithProduct(product)
+        realm.add(suggestion, update: true)
     }
     
     func loadListItems(list: List, handler: [ListItem] -> ()) {

@@ -17,7 +17,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     @IBOutlet weak var addItemView: AddItemView!
     
-    lazy var sectionAutosuggestionsViewController:AutosuggestionsTableViewController = {
+    lazy var sectionAutosuggestionsViewController: AutosuggestionsTableViewController = {
         
         let frame = self.addItemView.sectionAutosuggestionsFrame(self.view)
 
@@ -30,6 +30,22 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         return viewController
     }()
+
+    lazy var productAutosuggestionsViewController: AutosuggestionsTableViewController = {[weak self] in
+        
+        let frame = self!.addItemView.productAutosuggestionsFrame(self!.view)
+        
+        let viewController = AutosuggestionsTableViewController(frame: frame)
+        viewController.onSuggestionSelected = {
+            self!.onProductSuggestionSelected($0)
+        }
+        
+        self!.addChildViewControllerAndView(viewController)
+        
+        return viewController
+    
+    }()
+    
     
     private var listItemsTableViewController:ListItemsTableViewController!
     
@@ -173,6 +189,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             self?.sectionAutosuggestionsViewController.view.hidden = text.isEmpty
         })
     }
+
+    func onProductNameInputChanged(text: String) {
+        
+        Providers.listItemsProvider.productSuggestions(successHandler{[weak self] suggestions in
+            
+            self?.productAutosuggestionsViewController.options = suggestions.map{$0.name ?? ""} //TODO make this async or add a memory cache
+            self?.productAutosuggestionsViewController.searchText(text)
+            
+            self?.productAutosuggestionsViewController.view.hidden = text.isEmpty
+        })
+    }
     
     @IBAction func onEditTap(sender: AnyObject) {
         let editing = !self.listItemsTableViewController.editing
@@ -233,9 +260,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.listItemsTableViewController.listItemsEditTableViewDelegate = self
     }
     
-    private func onSectionSuggestionSelected(sectionSuggestion:String) {
+    private func onSectionSuggestionSelected(sectionSuggestion: String) {
         self.addItemView.sectionText = sectionSuggestion
         self.sectionAutosuggestionsViewController.view.hidden = true
+    }
+
+    private func onProductSuggestionSelected(productNameSuggestion: String) {
+        self.addItemView.productNameText = productNameSuggestion
+        self.productAutosuggestionsViewController.view.hidden = true
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
@@ -251,7 +283,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.hideKeyboard()
         
         self.sectionAutosuggestionsViewController.view.hidden = true
-        
+        self.productAutosuggestionsViewController.view.hidden = true
+
         self.listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     

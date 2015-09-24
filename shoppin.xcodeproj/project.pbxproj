@@ -359,6 +359,15 @@
 		EBBC22F01BB2F48A0002F6B1 /* PhWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EBBC22ED1BB2F48A0002F6B1 /* PhWebViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		EBBC22F91BB308A20002F6B1 /* FacebookBrowser.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBBC22F81BB308A20002F6B1 /* FacebookBrowser.xib */; };
 		EBBC22FB1BB30A2C0002F6B1 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBBC22FA1BB30A2C0002F6B1 /* WebKit.framework */; };
+		EBBC22FD1BB4080E0002F6B1 /* Suggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC22FC1BB4080E0002F6B1 /* Suggestion.swift */; };
+		EBBC22FE1BB4080E0002F6B1 /* Suggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC22FC1BB4080E0002F6B1 /* Suggestion.swift */; };
+		EBBC22FF1BB4080E0002F6B1 /* Suggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC22FC1BB4080E0002F6B1 /* Suggestion.swift */; };
+		EBBC23011BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23001BB4086D0002F6B1 /* DBProductSuggestion.swift */; };
+		EBBC23021BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23001BB4086D0002F6B1 /* DBProductSuggestion.swift */; };
+		EBBC23031BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23001BB4086D0002F6B1 /* DBProductSuggestion.swift */; };
+		EBBC23051BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */; };
+		EBBC23061BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */; };
+		EBBC23071BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */; };
 		EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
@@ -692,6 +701,9 @@
 		EBBC22F41BB2F6610002F6B1 /* bridging_header_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bridging_header_osx.h; sourceTree = "<group>"; };
 		EBBC22F81BB308A20002F6B1 /* FacebookBrowser.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FacebookBrowser.xib; sourceTree = "<group>"; };
 		EBBC22FA1BB30A2C0002F6B1 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
+		EBBC22FC1BB4080E0002F6B1 /* Suggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Suggestion.swift; sourceTree = "<group>"; };
+		EBBC23001BB4086D0002F6B1 /* DBProductSuggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBProductSuggestion.swift; sourceTree = "<group>"; };
+		EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductSuggestionMapper.swift; sourceTree = "<group>"; };
 		EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemWithHistory.swift; sourceTree = "<group>"; };
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
@@ -1028,6 +1040,7 @@
 				EBB9A7311B5EB0FC00E5487D /* DBInventory.swift */,
 				EB714AA51B66BBA800F91B94 /* DBSyncable.swift */,
 				EB7E83251B7B723C009DEEF4 /* DBHistoryItem.swift */,
+				EBBC23001BB4086D0002F6B1 /* DBProductSuggestion.swift */,
 			);
 			name = realm;
 			sourceTree = "<group>";
@@ -1488,6 +1501,7 @@
 				EBF299861B791023006BDA1F /* InventorySync.swift */,
 				EB78587C1B7FD81A008AAD12 /* HistoryItemsSync.swift */,
 				EB7E83211B7B7162009DEEF4 /* HistoryItem.swift */,
+				EBBC22FC1BB4080E0002F6B1 /* Suggestion.swift */,
 			);
 			name = model;
 			path = ..;
@@ -1551,6 +1565,7 @@
 				EBB9A7471B5EB46C00E5487D /* InventoryMapper.swift */,
 				EB70C2221B4D33E90060E529 /* SharedUserMapper.swift */,
 				EB7E83291B7B72B9009DEEF4 /* HistoryItemMapper.swift */,
+				EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */,
 			);
 			name = mapper;
 			sourceTree = "<group>";
@@ -1923,6 +1938,7 @@
 				EB451C391B85F3F0000DE208 /* StatsProvider.swift in Sources */,
 				EBB9A7301B5EB08C00E5487D /* Inventory.swift in Sources */,
 				EBF5D7D31B8F868E00A235C5 /* Paginator.swift in Sources */,
+				EBBC23011BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */,
 				EB9BE4191B2CB355005B401A /* RemoteListItems.swift in Sources */,
 				EB7F59C21BA1049100E07EBA /* Identifiable.swift in Sources */,
 				EBF162FD1A3DDE5D0048E37C /* ProductMapper.swift in Sources */,
@@ -2000,6 +2016,7 @@
 				EB451C351B85F3DA000DE208 /* StatsProviderImpl.swift in Sources */,
 				EB2F5D261A4DE56B00DBC4AF /* DoneViewController.swift in Sources */,
 				EBB9A74C1B5EB95A00E5487D /* EditInventoryViewController.swift in Sources */,
+				EBBC23051BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */,
 				EB0C2A461B58405D00AF6226 /* RealmListItemProvider.swift in Sources */,
 				EB89D33C1AD44BD400B6E0D0 /* Selectable.swift in Sources */,
 				EB0C2A281B570BA700AF6226 /* ViewTags.swift in Sources */,
@@ -2042,6 +2059,7 @@
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
 				EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */,
 				EBF1A15F1B82428700F34105 /* HistoryItemCell.swift in Sources */,
+				EBBC22FD1BB4080E0002F6B1 /* Suggestion.swift in Sources */,
 				EB7F59C71BA1915A00E07EBA /* MemListItemProvider.swift in Sources */,
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
 				EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */,
@@ -2153,6 +2171,7 @@
 				EB792A291B95CCE10004BEEC /* RemoteSocialLoginResult.swift in Sources */,
 				EBA8FACD1B8F1B39008CB746 /* UserTabViewController.swift in Sources */,
 				EB714AA71B66BBA800F91B94 /* DBSyncable.swift in Sources */,
+				EBBC22FE1BB4080E0002F6B1 /* Suggestion.swift in Sources */,
 				EBF377A01B38AB1000EEB6DB /* User.swift in Sources */,
 				EBB9A73D1B5EB1C700E5487D /* InventoryItemsProvider.swift in Sources */,
 				EB7F59D41BA1DBF600E07EBA /* Providers.swift in Sources */,
@@ -2169,6 +2188,7 @@
 				EB1EFAC51B1EFBBC0079A35D /* AutocompleteTextField.swift in Sources */,
 				EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */,
 				EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */,
+				EBBC23061BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */,
 				EB6D93A81B1C8CE500ED8999 /* HandlingTableView.swift in Sources */,
 				EB7F59CC1BA1970200E07EBA /* Dictionary.swift in Sources */,
 				EB7E8B621B2ADF9A0090409A /* Try.swift in Sources */,
@@ -2179,6 +2199,7 @@
 				EB7E833B1B7B9021009DEEF4 /* RealmCheckoutProvider.swift in Sources */,
 				EBDFE3BF1ACEF60100E48F95 /* HeaderCell.swift in Sources */,
 				EB714AAF1B67895500F91B94 /* RemoteProvider.swift in Sources */,
+				EBBC23021BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */,
 				EB6D93A31B1B788200ED8999 /* AutosuggestionsTableViewController.swift in Sources */,
 				EBB9A7351B5EB11600E5487D /* Inventory.swift in Sources */,
 				EB40A4871B55159D000E9CAD /* DBList.swift in Sources */,
@@ -2341,12 +2362,14 @@
 				EB40A46B1B5506FB000E9CAD /* DBSection.swift in Sources */,
 				EBF377691B342AA800EEB6DB /* RemoteSection.swift in Sources */,
 				EBF377801B342B4000EEB6DB /* Float.swift in Sources */,
+				EBBC22FF1BB4080E0002F6B1 /* Suggestion.swift in Sources */,
 				EB70C21D1B4D2ECE0060E529 /* RemoteSharedUser.swift in Sources */,
 				EB6F812F1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EBF3775B1B3423C200EEB6DB /* Try.swift in Sources */,
 				EB0C2A321B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */,
 				EB0C2A561B590D3D00AF6226 /* TestInventory.swift in Sources */,
 				EBF377671B342A9A00EEB6DB /* RemoteProduct.swift in Sources */,
+				EBBC23071BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */,
 				EB0C1BAF1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
 				EBB9A7461B5EB28500E5487D /* RemoteInventoryItemsProvider.swift in Sources */,
 				EB7F59D51BA1DBF600E07EBA /* Providers.swift in Sources */,
@@ -2355,6 +2378,7 @@
 				EB7F59C41BA1049100E07EBA /* Identifiable.swift in Sources */,
 				EB0C1B951B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
 				EB78587B1B7F7083008AAD12 /* RemoteHistoryItem.swift in Sources */,
+				EBBC23031BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
