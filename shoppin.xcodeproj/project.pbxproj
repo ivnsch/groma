@@ -379,6 +379,7 @@
 		EBBC23171BB4840F0002F6B1 /* PrefillDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23161BB4840F0002F6B1 /* PrefillDatabase.swift */; };
 		EBBC231B1BB4A6160002F6B1 /* prefill.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBBC231A1BB4A6160002F6B1 /* prefill.realm */; };
 		EBBC231E1BB575340002F6B1 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC231D1BB575340002F6B1 /* UIColor.swift */; };
+		EBBC23211BB580FD0002F6B1 /* FacebookLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23201BB580FD0002F6B1 /* FacebookLogin.swift */; };
 		EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
@@ -721,6 +722,7 @@
 		EBBC23161BB4840F0002F6B1 /* PrefillDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefillDatabase.swift; sourceTree = "<group>"; };
 		EBBC231A1BB4A6160002F6B1 /* prefill.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefill.realm; sourceTree = "<group>"; };
 		EBBC231D1BB575340002F6B1 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		EBBC23201BB580FD0002F6B1 /* FacebookLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookLogin.swift; sourceTree = "<group>"; };
 		EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemWithHistory.swift; sourceTree = "<group>"; };
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
@@ -846,6 +848,7 @@
 				EB0C1B851B3DA2E500F24C85 /* login */,
 				EB0C1B981B3DBF6E00F24C85 /* register */,
 				EB0C1B9F1B3DF2B500F24C85 /* UserTabItemViewController.swift */,
+				EBBC23201BB580FD0002F6B1 /* FacebookLogin.swift */,
 			);
 			name = user;
 			sourceTree = "<group>";
@@ -1977,6 +1980,7 @@
 				EB20FBFA1A5971C20058103B /* InventoryItemMapper.swift in Sources */,
 				EB20FBF21A5961360058103B /* CartMenuView.swift in Sources */,
 				EB4FD46C1AC73B590000F952 /* PreferencesManager.swift in Sources */,
+				EBBC23211BB580FD0002F6B1 /* FacebookLogin.swift in Sources */,
 				EB202B971B54109A001699E7 /* RemoteRegisterResult.swift in Sources */,
 				EB7858791B7F7083008AAD12 /* RemoteHistoryItem.swift in Sources */,
 				EB20FBFC1A5972A30058103B /* InventoryProvider.swift in Sources */,

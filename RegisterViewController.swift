@@ -13,7 +13,7 @@ protocol RegisterDelegate {
     func onRegisterSuccess()
 }
 
-class RegisterViewController: UIViewController {
+class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate {
 
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -33,9 +33,24 @@ class RegisterViewController: UIViewController {
         
         passwordField.secureTextEntry = true
 
+        googleLoginSetup()
+
         fillTestInput()
         
         initValidator()
+    }
+    
+    
+    private func googleLoginSetup() {
+        // Google sign-in
+        var configureError: NSError?
+        GGLContext.sharedInstance().configureWithError(&configureError)
+        assert(configureError == nil, "Error configuring Google services: \(configureError)")
+        GIDSignIn.sharedInstance().delegate = self
+        
+        GIDSignIn.sharedInstance().uiDelegate = self
+        // Uncomment to automatically sign in the user.
+        //GIDSignIn.sharedInstance().signInSilently()
     }
     
     @IBAction func onShowPasswordChanged(sender: UISwitch) {
@@ -76,13 +91,48 @@ class RegisterViewController: UIViewController {
                 let user = UserInput(email: email, password: password, firstName: firstName, lastName: lastName)
                 
                 self.progressVisible()
-                self.userProvider.register(user, successHandler{result in
-                    self.delegate?.onRegisterSuccess() ?? print("Warn: no register delegate")
+                self.userProvider.register(user, successHandler{[weak self] result in
+                    self?.onRegisterSuccess()
                 })
                 
             } else {
                 print("Error: validation was not implemented correctly")
             }
         }
+    }
+    
+    @IBAction func onFacebookLoginTap(sender: UIButton) {
+        progressVisible()
+        FacebookLogin.login(resultHandler(onSuccess: {[weak self] in
+            self?.onRegisterSuccess()
+            
+        }, onError: defaultErrorHandler([.SocialLoginCancelled])))
+    }
+    
+    @IBAction func onGoogleLoginTap(sender: UIButton) {
+        GIDSignIn.sharedInstance().signIn()
+    }
+    
+    
+    private func onRegisterSuccess() {
+        self.delegate?.onRegisterSuccess() ?? print("Warn: no register delegate")
+    }
+    
+    // MARK: GIDSignInDelegate
+    
+    func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
+        if (error == nil) {
+            userProvider.authenticateWithGoogle(user.authentication.accessToken, resultHandler(onSuccess: {[weak self] in
+                self?.onRegisterSuccess()
+                
+                }, onError: defaultErrorHandler([.SocialLoginCancelled])))
+            
+        } else {
+            print("\(error.localizedDescription)")
+        }
+    }
+    
+    func signIn(signIn: GIDSignIn!, didDisconnectWithUser user: GIDGoogleUser!, withError error: NSError!) {
+        // Perform any operations when the user disconnects from app here.
     }
 }

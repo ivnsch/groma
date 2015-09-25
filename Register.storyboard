@@ -55,26 +55,44 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UUT-9b-RWK">
                                 <rect key="frame" x="81" y="219" width="121" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LMD-Gz-aMB">
+                                <rect key="frame" x="267" y="398" width="67" height="30"/>
+                                <state key="normal" title="Facebook"/>
+                                <connections>
+                                    <action selector="onFacebookLoginTap:" destination="WMc-15-YTM" eventType="touchUpInside" id="G8C-Ug-ZoE"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hpq-uR-XDK">
+                                <rect key="frame" x="275" y="461" width="50" height="30"/>
+                                <state key="normal" title="Google"/>
+                                <connections>
+                                    <action selector="onGoogleLoginTap:" destination="WMc-15-YTM" eventType="touchUpInside" id="UCc-5k-dFy"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="YFC-c4-S2N" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="17" id="6Zs-4e-Pqw"/>
                             <constraint firstAttribute="trailing" secondItem="qQD-85-qkI" secondAttribute="trailing" constant="16" id="FBw-In-mZo"/>
                             <constraint firstAttribute="trailing" secondItem="n3k-3q-0Hq" secondAttribute="trailing" constant="16" id="IaX-Wt-mep"/>
+                            <constraint firstItem="LMD-Gz-aMB" firstAttribute="centerX" secondItem="Nnu-ym-gUF" secondAttribute="centerX" id="JOR-1V-7Xp"/>
+                            <constraint firstItem="LMD-Gz-aMB" firstAttribute="top" secondItem="5NA-t7-V2O" secondAttribute="bottom" constant="70" id="L2K-uh-qLz"/>
                             <constraint firstItem="5NA-t7-V2O" firstAttribute="top" secondItem="j5w-8b-ths" secondAttribute="bottom" constant="100" id="MJp-rg-6Xj"/>
                             <constraint firstItem="j5w-8b-ths" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="17" id="RQJ-l8-qvf"/>
                             <constraint firstItem="n3k-3q-0Hq" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="17" id="SAr-8A-d54"/>
                             <constraint firstAttribute="centerX" secondItem="5NA-t7-V2O" secondAttribute="centerX" id="SD7-OT-3TA"/>
                             <constraint firstItem="qQD-85-qkI" firstAttribute="top" secondItem="n3k-3q-0Hq" secondAttribute="bottom" constant="16" id="SWf-nW-QyT"/>
                             <constraint firstItem="qQD-85-qkI" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="17" id="Wt7-Lg-Sl2"/>
+                            <constraint firstItem="hpq-uR-XDK" firstAttribute="top" secondItem="LMD-Gz-aMB" secondAttribute="bottom" constant="33" id="ZUb-mN-nbf"/>
                             <constraint firstItem="UUT-9b-RWK" firstAttribute="centerY" secondItem="Zfp-Nf-jS0" secondAttribute="centerY" id="acD-xe-N8B"/>
                             <constraint firstItem="UUT-9b-RWK" firstAttribute="leading" secondItem="Zfp-Nf-jS0" secondAttribute="trailing" constant="15" id="cOC-zl-7oV"/>
                             <constraint firstAttribute="trailing" secondItem="YFC-c4-S2N" secondAttribute="trailing" constant="16" id="eMI-ce-Ota"/>
                             <constraint firstItem="YFC-c4-S2N" firstAttribute="top" secondItem="qQD-85-qkI" secondAttribute="bottom" constant="16" id="mid-u7-n1Y"/>
                             <constraint firstItem="Zfp-Nf-jS0" firstAttribute="top" secondItem="j5w-8b-ths" secondAttribute="bottom" constant="16" id="oM3-Z1-Udj"/>
+                            <constraint firstItem="hpq-uR-XDK" firstAttribute="centerX" secondItem="Nnu-ym-gUF" secondAttribute="centerX" id="ooD-TD-Igz"/>
                             <constraint firstItem="n3k-3q-0Hq" firstAttribute="top" secondItem="Zj7-Qy-iX0" secondAttribute="bottom" constant="10" id="pdS-dN-17z"/>
                             <constraint firstAttribute="trailing" secondItem="j5w-8b-ths" secondAttribute="trailing" constant="16" id="sBv-Kn-oEX"/>
                             <constraint firstItem="j5w-8b-ths" firstAttribute="top" secondItem="YFC-c4-S2N" secondAttribute="bottom" constant="16" id="sj5-co-8Cj"/>
