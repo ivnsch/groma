@@ -25,6 +25,7 @@ struct Urls {
     static let forgotPassword = host + "forgot"
     static let login = host + "login"
     static let logout = host + "logout"
+    static let removeAccount = host + "user"
     static let authFacebook = host + "authenticate/facebook"
     static let authGoogle = host + "authenticate/google"
     

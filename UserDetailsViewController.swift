@@ -10,7 +10,8 @@ import UIKit
 
 protocol UserDetailsViewControllerDelegate {
     func onLogoutSuccess()
-    func onLogoutError()
+    func onLogoutError() // TODO do we really need to notify the delegate about error?
+    func onRemoveAccount()
 }
 
 class UserDetailsViewController: UIViewController {
@@ -29,5 +30,20 @@ class UserDetailsViewController: UIViewController {
                 self.delegate?.onLogoutError() ?? print("Warn: no login delegate")
             }
         }
+    }
+    
+    @IBAction func onRemoveAccountTap(sender: NSButton) {
+        ConfirmationPopup.show(message: "Are you sure you want to remove your account?", controller: self, onOk: {[weak self] in
+            
+            if let weakSelf = self {
+                
+                weakSelf.userProvider.removeAccount(weakSelf.successHandler({
+                    
+                    AlertPopup.show(title: "Success", message: "The account was removed", controller: weakSelf, onDismiss: {
+                        weakSelf.delegate?.onRemoveAccount() ?? print("Warn: no login delegate")
+                    })
+                }))
+            }
+        })
     }
 }

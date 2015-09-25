@@ -50,6 +50,15 @@ class RemoteUserProvider {
         }
     }
     
+    func removeAccount(handler: RemoteResult<NoOpSerializable> -> ()) {
+        AlamofireHelper.authenticatedRequest(.DELETE, Urls.removeAccount).responseMyObject {[weak self] (request, _, result: RemoteResult<NoOpSerializable>) in
+            if result.success {
+                self?.removeToken()
+            }
+            handler(result)
+        }
+    }
+    
     func hasToken() -> Bool {
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
         return valet?.containsObjectForKey(KeychainKeys.token) ?? {

@@ -11,6 +11,7 @@ import Cocoa
 protocol UserDetailsViewControllerDelegate {
     func onLogoutSuccess()
     func onLogoutError()
+    func onRemoveAccount()
 }
 
 
@@ -29,6 +30,28 @@ class UserDetailsViewController: NSViewController {
             } else {
                 self.delegate?.onLogoutError() ?? print("Warn: no login delegate")
             }
+        }
+    }
+    
+    @IBAction func onRemoveAccountTap(sender: NSButton) {
+        
+        if let window = view.window {
+            
+            ConfirmationPopup.show(message: "Are you sure you want to remove your account?", window: window, onOk: {[weak self] in
+                
+                if let weakSelf = self {
+
+                    weakSelf.userProvider.removeAccount(weakSelf.successHandler({
+
+                        AlertPopup.show(title: "Success", message: "The account was removed", window: window, onDismiss: {
+                            weakSelf.delegate?.onRemoveAccount() ?? print("Warn: no login delegate")
+                        })
+                    }))
+                }
+            })
+            
+        } else {
+            print("Could not display confirmation popup because view controller has no window!")
         }
     }
 }

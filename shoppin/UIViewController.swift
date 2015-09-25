@@ -93,7 +93,7 @@ extension UIViewController {
     // MARK: - Popup
     
     func showInfoAlert(title title: String? = nil, message: String) {
-        self.presentViewController(InfoAlertBuilder.create(title: title, message: message), animated: true, completion: nil)
+        AlertPopup.show(title: title, message: message, controller: self)
     }
     
     

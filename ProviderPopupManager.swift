@@ -29,11 +29,10 @@ class ProviderPopupManager {
             let title = "Error"
             let message: String = RequestErrorToMsgMapper.message(status)
 
-            let alert = InfoAlertBuilder.create(title: title, message: message, onDismiss: {[weak self] in
+            AlertPopup.show(title: title, message: message, controller: controller, onDismiss: {[weak self] in
                 // IMPORTANT: When implementing dismissal by tapping outside, ensure the status is also cleared. See http://stackoverflow.com/a/25469305/930450
                 self?.currentStatus = nil
             })
-            controller.presentViewController(alert, animated: true, completion: nil)
         }
     }
 }

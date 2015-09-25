@@ -27,4 +27,6 @@ protocol UserProvider {
     func sync(handler: VoidFunction)
     
     func forgotPassword(email: String, _ handler: ProviderResult<Any> -> ())
+    
+    func removeAccount(handler: ProviderResult<Any> -> ())
 }

@@ -52,6 +52,9 @@ class UserTabViewController: NSViewController, UserDetailsViewControllerDelegate
         print("login error!") // TODO handle
     }
     
+    func onRemoveAccount() {
+        showLoginController()
+    }
     
     private func showUserDetailsController() {
         let userDetailsController = NSStoryboard.userDetailsViewController()

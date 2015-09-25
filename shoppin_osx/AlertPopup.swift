@@ -1,5 +1,5 @@
 //
-//  InfoAlertBuilder.swift
+//  AlertPopup.swift
 //  shoppin
 //
 //  Created by ischuetz on 25/09/15.
@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class InfoAlertBuilder {
+class AlertPopup {
 
     static func show(title title: String? = nil, message: String, window: NSWindow, onDismiss: VoidFunction? = nil) {
         let alert = NSAlert()

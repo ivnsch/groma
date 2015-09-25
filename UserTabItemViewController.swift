@@ -54,6 +54,9 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
         print("login error!") // TODO handle
     }
     
+    func onRemoveAccount() {
+        showLoginController()
+    }
     
     private func showUserDetailsController() {
         let userDetailsController = UIStoryboard.userDetailsViewController()

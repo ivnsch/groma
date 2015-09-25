@@ -22,6 +22,16 @@
                                     <action selector="onLogoutTap:" target="DFl-ow-lGH" id="iKf-J0-eVp"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dxd-bi-v4L">
+                                <rect key="frame" x="153" y="397" width="144" height="32"/>
+                                <buttonCell key="cell" type="push" title="Remove account" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QsA-8H-4AP">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="onRemoveAccountTap:" target="DFl-ow-lGH" id="7fF-xM-oTf"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                 </viewController>

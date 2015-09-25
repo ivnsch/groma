@@ -76,6 +76,12 @@ class UserProviderImpl: UserProvider {
         }
     }
     
+    func removeAccount(handler: ProviderResult<Any> -> ()) {
+        remoteProvider.removeAccount {result in
+            handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
+        }
+    }
+    
     var loggedIn: Bool {
         return remoteProvider.hasToken()
     }

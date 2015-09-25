@@ -26,10 +26,19 @@
                                     <action selector="onLogoutTap:" destination="h7G-yZ-k7i" eventType="touchUpInside" id="2IZ-Di-JNv"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eYB-7b-UeC">
+                                <rect key="frame" x="243" y="125" width="115" height="30"/>
+                                <state key="normal" title="Remove account"/>
+                                <connections>
+                                    <action selector="onRemoveAccountTap:" destination="h7G-yZ-k7i" eventType="touchUpInside" id="w9j-Rt-LJH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="eYB-7b-UeC" firstAttribute="centerX" secondItem="FsR-KS-FXf" secondAttribute="centerX" id="A8J-0I-9ii"/>
                             <constraint firstItem="7vg-i2-1c4" firstAttribute="top" secondItem="pJa-rp-3ws" secondAttribute="bottom" constant="15" id="JMg-Om-NOK"/>
+                            <constraint firstItem="eYB-7b-UeC" firstAttribute="top" secondItem="7vg-i2-1c4" secondAttribute="bottom" constant="60" id="ihM-pZ-FDb"/>
                             <constraint firstAttribute="centerX" secondItem="7vg-i2-1c4" secondAttribute="centerX" id="v37-Nk-YTL"/>
                         </constraints>
                     </view>
