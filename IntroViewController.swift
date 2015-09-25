@@ -7,9 +7,19 @@
 //
 
 import UIKit
+import SwipeView
 
-class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate {
+class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, SwipeViewDataSource, SwipeViewDelegate {
 
+    @IBOutlet weak var swipeView: SwipeView!
+    @IBOutlet weak var pageControl: UIPageControl!
+    
+    private let pageCount = 4 // later replace with array of images
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        pageControl.numberOfPages = pageCount
+    }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
@@ -51,6 +61,27 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate {
     
     func onRegisterFromLoginSuccess() {
         self.startMainStoryboard()
+    }
+    
+    // MARK: - SwipeViewDataSource
+    
+    func numberOfItemsInSwipeView(swipeView: SwipeView!) -> Int {
+        return pageCount
+    }
+    
+    func swipeView(swipeView: SwipeView!, viewForItemAtIndex index: Int, reusingView view: UIView!) -> UIView! {
+        let label = UILabel()
+        label.text = "\(index + 1)"
+        label.textAlignment = .Center
+        label.backgroundColor = UIColor.randomColor().colorWithAlphaComponent(0.4)
+        label.frame = swipeView.frame
+        return label
+    }
+    
+    // MARK: - SwipeViewDelegate
+    
+    func swipeViewCurrentItemIndexDidChange(swipeView: SwipeView!) {
+        pageControl.currentPage = swipeView.currentItemIndex
     }
 }
 

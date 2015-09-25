@@ -378,6 +378,7 @@
 		EBBC23151BB483E90002F6B1 /* SuggestionsPrefiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */; };
 		EBBC23171BB4840F0002F6B1 /* PrefillDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23161BB4840F0002F6B1 /* PrefillDatabase.swift */; };
 		EBBC231B1BB4A6160002F6B1 /* prefill.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBBC231A1BB4A6160002F6B1 /* prefill.realm */; };
+		EBBC231E1BB575340002F6B1 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC231D1BB575340002F6B1 /* UIColor.swift */; };
 		EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
@@ -719,6 +720,7 @@
 		EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SuggestionsPrefiller.swift; path = ../SuggestionsPrefiller.swift; sourceTree = "<group>"; };
 		EBBC23161BB4840F0002F6B1 /* PrefillDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefillDatabase.swift; sourceTree = "<group>"; };
 		EBBC231A1BB4A6160002F6B1 /* prefill.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefill.realm; sourceTree = "<group>"; };
+		EBBC231D1BB575340002F6B1 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemWithHistory.swift; sourceTree = "<group>"; };
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
@@ -1194,6 +1196,7 @@
 				EB2F5D6C1A51C17200DBC4AF /* UIView.swift */,
 				EB0C1BA61B3DFD0800F24C85 /* NSLayoutConstraint.swift */,
 				EB6A207C1ACC079000B9BCB2 /* UITableView.swift */,
+				EBBC231D1BB575340002F6B1 /* UIColor.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -2062,6 +2065,7 @@
 				EB70C21F1B4D302D0060E529 /* SharedUser.swift in Sources */,
 				EBFD15C11BA7F59600E37342 /* InfoAlertBuilder.swift in Sources */,
 				EB714AA61B66BBA800F91B94 /* DBSyncable.swift in Sources */,
+				EBBC231E1BB575340002F6B1 /* UIColor.swift in Sources */,
 				EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */,
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,
 				EBF299871B791023006BDA1F /* InventorySync.swift in Sources */,

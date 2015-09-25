@@ -19,6 +19,7 @@ target 'shoppin' do
     pod 'SwiftValidator', :git => 'https://github.com/i-schuetz/SwiftValidator', :branch => 'swift2.0_remove_delegate_callback'
     pod 'SwiftCharts', :git => 'https://github.com/i-schuetz/SwiftCharts.git', :branch => 'swift2.0'
     pod 'Google/SignIn'
+    pod 'SwipeView', '~> 1.3.2'
     shared
 end
 
