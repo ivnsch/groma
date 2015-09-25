@@ -553,6 +553,56 @@
             </objects>
             <point key="canvasLocation" x="-791" y="3131"/>
         </scene>
+        <!--Help-->
+        <scene sceneID="xnD-U9-GAe">
+            <objects>
+                <viewController id="y3s-BI-6fc" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3sa-HG-6lK"/>
+                        <viewControllerLayoutGuide type="bottom" id="ael-u3-p9S"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="NXh-nl-wzj">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Manual, FAQ, etc." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LON-rg-xrh">
+                                <rect key="frame" x="233" y="132" width="134" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="LON-rg-xrh" firstAttribute="top" secondItem="3sa-HG-6lK" secondAttribute="bottom" constant="68" id="lOl-M0-NSG"/>
+                            <constraint firstItem="LON-rg-xrh" firstAttribute="centerX" secondItem="NXh-nl-wzj" secondAttribute="centerX" id="yU9-yH-U7B"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Help" id="HDq-27-xgh"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pW6-6Y-ljt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-125" y="3131"/>
+        </scene>
+        <!--About-->
+        <scene sceneID="SMW-U0-hvc">
+            <objects>
+                <viewController id="imb-x4-nbm" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vCj-Rn-aKt"/>
+                        <viewControllerLayoutGuide type="bottom" id="RoX-Jf-WSu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nyx-EU-a0C">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="About" id="3A0-vx-wCG"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sxw-WL-TR0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="516" y="3132"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="iFh-OB-bje">
             <objects>
@@ -752,6 +802,44 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <segue destination="TSQ-MW-ySX" kind="show" id="wuT-l6-1oe"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="TAw-WA-NBP">
+                                        <rect key="frame" x="0.0" y="152" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="TAw-WA-NBP" id="uJp-BR-KMr">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Help" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QFq-IR-td5">
+                                                    <rect key="frame" x="8" y="11" width="36" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="y3s-BI-6fc" kind="show" id="AwB-Gu-eb2"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="WOE-WS-3uq">
+                                        <rect key="frame" x="0.0" y="196" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WOE-WS-3uq" id="Lld-xp-bAz">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="About" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RHQ-AR-gZ5">
+                                                    <rect key="frame" x="8" y="11" width="47" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="imb-x4-nbm" kind="show" id="ccQ-JU-8zR"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
