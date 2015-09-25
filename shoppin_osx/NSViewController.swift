@@ -58,14 +58,10 @@ extension NSViewController {
     
     private func showProviderErrorAlert<T>(providerResult: ProviderResult<T>) {
 //        let title = "Error"
-        
-        let message: String = RequestErrorToMsgMapper.message(providerResult.status)
-        
-        let alert = NSAlert()
-        alert.addButtonWithTitle("ok")
-        alert.messageText = message
-        alert.alertStyle = NSAlertStyle.InformationalAlertStyle
-        alert.runModal()
+        if let window = view.window {
+            ProviderPopupManager.instance.showStatusPopup(providerResult.status, window: window)
+        } else {
+            print("Trying to display modal for status code: \(providerResult.status) but view controller has no window!")
+        }
     }
-
 }

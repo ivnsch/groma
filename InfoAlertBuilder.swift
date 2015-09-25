@@ -10,9 +10,11 @@ import UIKit
 
 class InfoAlertBuilder {
     
-    static func create(title title: String? = nil, message: String) -> UIViewController {
+    static func create(title title: String? = nil, message: String, onDismiss: VoidFunction? = nil) -> UIViewController {
         let alert: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { alertAction in
+            onDismiss?()
+        }))
         return alert
     }
 }

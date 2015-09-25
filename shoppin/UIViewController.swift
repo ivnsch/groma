@@ -87,11 +87,8 @@ extension UIViewController {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     
     private func showProviderErrorAlert<T>(providerResult: ProviderResult<T>) {
-        let title = "Error"
-        let message: String = RequestErrorToMsgMapper.message(providerResult.status)
-        showInfoAlert(title: title, message: message)
+        ProviderPopupManager.instance.showStatusPopup(providerResult.status, controller: self)
     }
-    
     
     // MARK: - Popup
     

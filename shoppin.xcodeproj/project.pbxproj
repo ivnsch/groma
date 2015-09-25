@@ -380,6 +380,9 @@
 		EBBC231B1BB4A6160002F6B1 /* prefill.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBBC231A1BB4A6160002F6B1 /* prefill.realm */; };
 		EBBC231E1BB575340002F6B1 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC231D1BB575340002F6B1 /* UIColor.swift */; };
 		EBBC23211BB580FD0002F6B1 /* FacebookLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23201BB580FD0002F6B1 /* FacebookLogin.swift */; };
+		EBBC23231BB5D57C0002F6B1 /* ProviderPopupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23221BB5D57C0002F6B1 /* ProviderPopupManager.swift */; };
+		EBBC23271BB5EA760002F6B1 /* InfoAlertBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23261BB5EA760002F6B1 /* InfoAlertBuilder.swift */; };
+		EBBC23291BB5EAEF0002F6B1 /* ProviderPopupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23281BB5EAEF0002F6B1 /* ProviderPopupManager.swift */; };
 		EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
@@ -723,6 +726,9 @@
 		EBBC231A1BB4A6160002F6B1 /* prefill.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefill.realm; sourceTree = "<group>"; };
 		EBBC231D1BB575340002F6B1 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		EBBC23201BB580FD0002F6B1 /* FacebookLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookLogin.swift; sourceTree = "<group>"; };
+		EBBC23221BB5D57C0002F6B1 /* ProviderPopupManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderPopupManager.swift; sourceTree = "<group>"; };
+		EBBC23261BB5EA760002F6B1 /* InfoAlertBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InfoAlertBuilder.swift; sourceTree = "<group>"; };
+		EBBC23281BB5EAEF0002F6B1 /* ProviderPopupManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderPopupManager.swift; sourceTree = "<group>"; };
 		EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemWithHistory.swift; sourceTree = "<group>"; };
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
@@ -1175,6 +1181,7 @@
 				EB55675B1A86231D00CD3EC6 /* common */,
 				EB4C36561B4C115E00C387C5 /* libraryCandidates */,
 				EBDCA12D1B88D4FF000020BF /* charts */,
+				EBBC23241BB5D5820002F6B1 /* popup */,
 			);
 			name = shoppin_ios;
 			sourceTree = "<group>";
@@ -1290,6 +1297,7 @@
 				EB7E82EB1B79F1B7009DEEF4 /* user */,
 				EBB2AB351B8B2463007B8C59 /* inventory */,
 				EBD236AC1B8B9D9E00B88969 /* history */,
+				EBBC23251BB5EA2E0002F6B1 /* popup */,
 				EB9F6CE61A8610550038355B /* AppDelegate.swift */,
 				EB9F6CE81A8610550038355B /* ViewController.swift */,
 				EB4FD4551AC6D6690000F952 /* EditListItemController.swift */,
@@ -1405,6 +1413,23 @@
 				EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */,
 			);
 			name = prefill;
+			sourceTree = "<group>";
+		};
+		EBBC23241BB5D5820002F6B1 /* popup */ = {
+			isa = PBXGroup;
+			children = (
+				EBBC23221BB5D57C0002F6B1 /* ProviderPopupManager.swift */,
+			);
+			name = popup;
+			sourceTree = "<group>";
+		};
+		EBBC23251BB5EA2E0002F6B1 /* popup */ = {
+			isa = PBXGroup;
+			children = (
+				EBBC23261BB5EA760002F6B1 /* InfoAlertBuilder.swift */,
+				EBBC23281BB5EAEF0002F6B1 /* ProviderPopupManager.swift */,
+			);
+			name = popup;
 			sourceTree = "<group>";
 		};
 		EBD236AC1B8B9D9E00B88969 /* history */ = {
@@ -2043,6 +2068,7 @@
 				EBBC230D1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */,
 				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
 				EB9BE41F1B2CB513005B401A /* RemoteProduct.swift in Sources */,
+				EBBC23231BB5D57C0002F6B1 /* ProviderPopupManager.swift in Sources */,
 				EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */,
 				EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */,
 				EB7E83161B7B6676009DEEF4 /* RealmHistoryProvider.swift in Sources */,
@@ -2151,6 +2177,7 @@
 				EBB9A7491B5EB46C00E5487D /* InventoryMapper.swift in Sources */,
 				EB70C22A1B4D3DD40060E529 /* ListProvider.swift in Sources */,
 				EBF5D7D81B8FB01B00A235C5 /* Synced.swift in Sources */,
+				EBBC23291BB5EAEF0002F6B1 /* ProviderPopupManager.swift in Sources */,
 				EB0C2A4B1B5840F700AF6226 /* RealmInventoryProvider.swift in Sources */,
 				EBD236B01B8B9E7200B88969 /* HistoryItemCellOSX.swift in Sources */,
 				EB4FD46E1AC73C930000F952 /* Constants.swift in Sources */,
@@ -2218,6 +2245,7 @@
 				EBB2AB3B1B8B29CF007B8C59 /* InventoryCell.swift in Sources */,
 				EB5567601A86437800CD3EC6 /* ProductMapper.swift in Sources */,
 				EB5567711A864B6E00CD3EC6 /* ListItemProviderMock.swift in Sources */,
+				EBBC23271BB5EA760002F6B1 /* InfoAlertBuilder.swift in Sources */,
 				EB70C2301B5021D50060E529 /* UserInput.swift in Sources */,
 				EB7858821B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift in Sources */,
 				EBBC22EE1BB2F48A0002F6B1 /* PhAuthenticationToken.m in Sources */,
