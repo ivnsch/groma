@@ -7,12 +7,11 @@
 //
 
 import Foundation
-import Alamofire
 
 class RemoteInventoryProvider: RemoteProvider {
     
     func inventories(handler: RemoteResult<[RemoteInventory]> -> ()) {
-        AlamofireHelper.authenticatedRequest(.GET, Urls.inventory).responseMyArray { (request, _, result: RemoteResult<[RemoteInventory]>) in
+        RemoteProvider.authenticatedRequestArray(.GET, Urls.inventory) {result in
             handler(result)
         }
     }
@@ -27,21 +26,21 @@ class RemoteInventoryProvider: RemoteProvider {
             "toRemove": toRemoveParams
         ]
         
-        AlamofireHelper.authenticatedRequest(.POST, Urls.inventorySync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteSyncResult<RemoteInventory>>) in
+        RemoteProvider.authenticatedRequest(.POST, Urls.inventorySync, dictionary) {result in
             handler(result)
         }
     }
     
     func addInventory(inventory: Inventory, handler: RemoteResult<NoOpSerializable> -> ()) {
         let params = self.toRequestParams(inventory)
-        AlamofireHelper.authenticatedRequest(.POST, Urls.inventory, params).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>) in
+        RemoteProvider.authenticatedRequest(.POST, Urls.inventory, params) {result in
             handler(result)
         }
     }
     
     func updateInventory(inventory: Inventory, handler: RemoteResult<NoOpSerializable> -> ()) {
         let params = self.toRequestParams(inventory)
-        AlamofireHelper.authenticatedRequest(.PUT, Urls.inventory, params).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>) in
+        RemoteProvider.authenticatedRequest(.PUT, Urls.inventory, params) {result in
             handler(result)
         }
     }

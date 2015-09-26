@@ -17,12 +17,13 @@ enum ProviderStatusCode: Int {
     case NotFound = 5
     case InvalidCredentials = 6
     case ServerError = 101 // Generic server error - invalid json, etc.
-    case ServerNotReachable = 102 // This is currently both server is down and no internet connection
+    case ServerNotReachable = 102 // This is currently both server is down and no internet connection (detected when doing the request, opposed to .NoConnection).
     case UnknownServerCommunicationError = 103
     case ServerInvalidParamsError = 104 // Generic server error - invalid json, etc.
     case SocialLoginError = 105
     case SocialLoginCancelled = 106
     case SocialAlreadyExists = 107
+    case NoConnection = 108 // Used when we detect in advance that there's no connectivity and don't proceed making the request. When this is not used, the execution of a request without a connection results in .ServerNotReachable
     
     // DB related
     case DatabaseUnknown = 1000
@@ -95,6 +96,7 @@ struct DefaultRemoteResultMapper {
         case .BadRequest: return .ServerInvalidParamsError
         case .UnsupportedMediaType: return .ServerError
         case .ClientParamsParsingError: return .Unknown
+        case .NoConnection: return .NoConnection
         }
     }
 }

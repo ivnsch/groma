@@ -8,42 +8,19 @@
 
 import Foundation
 import Valet
-import Alamofire
 
 class RemoteInventoryItemsProvider: Any {
     
     func inventoryItems(inventory: Inventory, handler: RemoteResult<[RemoteInventoryItemWithProduct]> -> ()) {
-        AlamofireHelper.authenticatedRequest(.GET, Urls.inventoryItems, ["inventory": inventory.uuid]).responseMyArray { (request, _, result: RemoteResult<[RemoteInventoryItemWithProduct]>) in
+        RemoteProvider.authenticatedRequestArray(.GET, Urls.inventoryItems, ["inventory": inventory.uuid]) {result in
             handler(result)
         }
     }
     
     func addToInventory(inventory: Inventory, inventoryItems: [InventoryItemWithHistoryEntry], handler: RemoteResult<NoOpSerializable> -> ()) {
-        
-        // this is handled differently because the parameters are an array and default request in alamofire doesn't support this (the difference is the request.HTTPBody line)
-        let request = NSMutableURLRequest(URL: NSURL(string: Urls.inventoryItems + "/\(inventory.uuid)")!)
-        request.HTTPMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        
-        let maybeToken = valet?.stringForKey(KeychainKeys.token)
-        
-        if let token = maybeToken {
-            request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
-        } // TODO if there's no token return status code to direct to login controller or something
-        
-        let values = inventoryItems.map{[weak self] in self!.toDictionary($0)}
-        
-        do {
-            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(values, options: [])
-            
-            Alamofire.request(request).responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>) in
-                handler(result)
-            }
-            
-        } catch _ as NSError {
-            handler(RemoteResult(status: .ClientParamsParsingError))
+        let parameters = inventoryItems.map{[weak self] in self!.toDictionary($0)}
+        RemoteProvider.authenticatedRequest(.POST, Urls.inventoryItems + "/\(inventory.uuid)", parameters) {result in
+            handler(result)
         }
     }
     
@@ -53,8 +30,7 @@ class RemoteInventoryItemsProvider: Any {
             "productUuid": inventoryItem.product.uuid,
             "inventoryUuid": inventoryItem.inventory.uuid
         ]
-        
-        AlamofireHelper.authenticatedRequest(.POST, Urls.incrementInventoryItem, params).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>) in
+        RemoteProvider.authenticatedRequest(.POST, Urls.incrementInventoryItem, params) {result in
             handler(result)
         }
     }

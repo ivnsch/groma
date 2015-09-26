@@ -28,6 +28,7 @@ struct RequestErrorToMsgMapper {
             case .SocialLoginError: return "social_login_error"
             case .SocialAlreadyExists: return "social_already_exists"
             case .Success: return "success" // this is not used (not an error) but we need exhaustive switch (without default case)
+            case .NoConnection: return "error_no_internet_connection"
         }
     }
 }

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Alamofire
 import Valet
 
 class RemoteUserProvider {
@@ -15,17 +14,15 @@ class RemoteUserProvider {
     // TODO refactor providers to return remoteresult. mapping to try and NSError seems nonsensical
     
     func login(loginData: LoginData, handler: RemoteResult<RemoteLoginResult> -> ()) {
-        let parameters = [
+        let parameters: [String: AnyObject] = [
             "email": loginData.email,
             "password": loginData.password
         ]
-        Alamofire.request(.POST, Urls.login, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteLoginResult>) in
-            
-            if let successResult = remoteResult.successResult {
+        RemoteProvider.request(.POST, Urls.login, parameters) {[weak self] (result: RemoteResult<RemoteLoginResult>) in
+            if let successResult = result.successResult {
                 self?.storeUserData(successResult.token, email: loginData.email)
             }
-
-            handler(remoteResult)
+            handler(result)
         }
     }
     
@@ -33,25 +30,23 @@ class RemoteUserProvider {
         
         let parameters = self.toRequestParams(user)
         
-        Alamofire.request(.POST, Urls.register, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteRegisterResult>) in
-
-            if let successResult = remoteResult.successResult {
+        RemoteProvider.request(.POST, Urls.register, parameters) {[weak self] (result: RemoteResult<RemoteRegisterResult>) in
+            if let successResult = result.successResult {
                 self?.storeUserData(successResult.token, email: user.email)
             }
-
-            handler(remoteResult)
+            handler(result)
         }
     }
     
     func forgotPassword(email: String, handler: RemoteResult<NoOpSerializable> -> ()) {
         let parameters = ["email": email, "foo": "foo"] // foo is a filler parameter bc of a bug in the server
-        Alamofire.request(.POST, Urls.forgotPassword, parameters: parameters, encoding: .JSON).responseMyObject {(request, _, remoteResult: RemoteResult<NoOpSerializable>) in
-            handler(remoteResult)
+        RemoteProvider.request(.POST, Urls.forgotPassword, parameters) {result in
+            handler(result)
         }
     }
     
     func removeAccount(handler: RemoteResult<NoOpSerializable> -> ()) {
-        AlamofireHelper.authenticatedRequest(.DELETE, Urls.removeAccount).responseMyObject {[weak self] (request, _, result: RemoteResult<NoOpSerializable>) in
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.removeAccount) {[weak self] (result: RemoteResult<NoOpSerializable>) in
             if result.success {
                 self?.removeToken()
             }
@@ -95,30 +90,22 @@ class RemoteUserProvider {
     }
     
     func authenticateWithFacebook(token: String, handler: RemoteResult<RemoteSocialLoginResult> -> ()) {
-        
         let parameters = ["access_token": token]
-        
-        Alamofire.request(.POST, Urls.authFacebook, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteSocialLoginResult>) in
-            
-            if let successResult = remoteResult.successResult {
+        RemoteProvider.request(.POST, Urls.authFacebook, parameters) {[weak self] (result: RemoteResult<RemoteSocialLoginResult>) in
+            if let successResult = result.successResult {
                 self?.storeUserData(successResult.token, email: successResult.email)
             }
-            
-            handler(remoteResult)
+            handler(result)
         }
     }
 
     func authenticateWithGoogle(token: String, handler: RemoteResult<RemoteSocialLoginResult> -> ()) {
-        
         let parameters = ["access_token": token]
-        
-        Alamofire.request(.POST, Urls.authGoogle, parameters: parameters, encoding: .JSON).responseMyObject {[weak self] (request, _, remoteResult: RemoteResult<RemoteSocialLoginResult>) in
-            
-            if let successResult = remoteResult.successResult {
+        RemoteProvider.request(.POST, Urls.authGoogle, parameters) {[weak self] (result: RemoteResult<RemoteSocialLoginResult>) in
+            if let successResult = result.successResult {
                 self?.storeUserData(successResult.token, email: successResult.email)
             }
-            
-            handler(remoteResult)
+            handler(result)
         }
     }
     

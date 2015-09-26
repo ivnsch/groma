@@ -39,9 +39,10 @@ enum RemoteStatusCode: Int {
     case NoJson = 10003
     case NotHandledHTTPStatusCode = 10004
     case ResponseIsNil = 10005
-    case ServerNotReachable = 10006 // This is currently both server is down and no internet connection
+    case ServerNotReachable = 10006 // This is currently both server is down and no internet connection (detected when doing the request, opposed to .NoConnection).
     case UnknownServerCommunicationError = 10007 // Communication errors other than .ServerNotReachable
     case ClientParamsParsingError = 10008 // This should really not happen, but the serialization for some requests needs do catch so for overall consistency in catch we return this error
+    case NoConnection = 10009 // Used when we detect in advance that there's no connectivity and don't proceed making the request. When this is not used, the execution of a request without a connection results in .ServerNotReachable
 }
 
 extension RemoteStatusCode: CustomStringConvertible {

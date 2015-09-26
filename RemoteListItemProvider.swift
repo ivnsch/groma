@@ -7,16 +7,10 @@
 //
 
 import Foundation
-import Alamofire
 import Valet
 
 class RemoteListItemProvider {
-    
-    func products(handler: RemoteResult<[RemoteProduct]> -> ()) {
-        Alamofire.request(.GET, Urls.products).responseMyArray { (request, _, result: RemoteResult<[RemoteProduct]>) in
-            handler(result)
-        }
-    }
+
 
     // get product for name + list (unique)
     // this is necessary to find the uuid of a possibly already existing product, which may not be stored in the local database
@@ -27,7 +21,7 @@ class RemoteListItemProvider {
             "name": name,
             "listUuid": list.uuid,
         ]
-        AlamofireHelper.authenticatedRequest(.GET, Urls.productWithUnique, params).responseMyObject {(request, _, result: RemoteResult<RemoteProduct>) in
+        RemoteProvider.authenticatedRequest(.GET, Urls.productWithUnique, params) {result in
             handler(result)
         }
     }
@@ -37,95 +31,68 @@ class RemoteListItemProvider {
             "name": name,
             "listUuid": list.uuid,
         ]
-        AlamofireHelper.authenticatedRequest(.GET, Urls.sectionWithUnique, params).responseMyObject {(request, _, result: RemoteResult<RemoteSection>) in
+        RemoteProvider.authenticatedRequest(.GET, Urls.sectionWithUnique, params) {result in
             handler(result)
         }
     }
-    
-    func sections(handler: RemoteResult<[RemoteSection]> -> ()) {
-        Alamofire.request(.GET, Urls.sections).responseMyArray { (request, _, result: RemoteResult<[RemoteSection]>) in
-            handler(result)
-        }
-    }
-
     
     func lists(handler: RemoteResult<[RemoteList]> -> ()) {
-        AlamofireHelper.authenticatedRequest(.GET, Urls.lists).responseMyArray { (request, _, result: RemoteResult<[RemoteList]>) in
+        RemoteProvider.authenticatedRequestArray(.GET, Urls.lists) {result in
             handler(result)
         }
     }
 
     func listItems(list list: List, handler: RemoteResult<RemoteListItems> -> ()) {
-        AlamofireHelper.authenticatedRequest(.GET, Urls.listItems, ["list": list.uuid]).responseMyObject {(request, _, result: RemoteResult<RemoteListItems>) in
+        RemoteProvider.authenticatedRequest(.GET, Urls.listItems, ["list": list.uuid]) {result in
             handler(result)
         }
     }
     
     func remove(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
-        AlamofireHelper.authenticatedRequest(.DELETE, Urls.listItem + "/\(listItem.uuid)").responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>) in
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.listItem + "/\(listItem.uuid)") {result in
             handler(result)
         }
     }
     
     func remove(section: Section, handler: RemoteResult<NoOpSerializable> -> ()) {
-        AlamofireHelper.authenticatedRequest(.DELETE, Urls.section + "/\(section.uuid)").responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>) in
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.section + "/\(section.uuid)") {result in
             handler(result)
         }
     }
     
+    
     func remove(list: List, handler: RemoteResult<NoOpSerializable> -> ()) {
-        AlamofireHelper.authenticatedRequest(.DELETE, Urls.list + "/\(list.uuid)").responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>) in
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.list + "/\(list.uuid)") {result in
             handler(result)
         }
     }
     
     func update(list: List, handler: RemoteResult<RemoteList> -> ()) {
         let parameters = self.toRequestParams(list)
-        AlamofireHelper.authenticatedRequest(.PUT, Urls.list, parameters).responseMyObject { (request, _, result: RemoteResult<RemoteList>) in
+        RemoteProvider.authenticatedRequest(.PUT, Urls.list, parameters) {result in
             handler(result)
         }
     }
     
     func add(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
         let parameters = self.toRequestParams(listItem)
-        AlamofireHelper.authenticatedRequest(.POST, Urls.addListItem, parameters).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>) in
+        RemoteProvider.authenticatedRequest(.POST, Urls.addListItem, parameters) {result in
             handler(result)
         }
     }
     
     func update(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
         let parameters = self.toRequestParams(listItem)
-        AlamofireHelper.authenticatedRequest(.PUT, Urls.listItem, parameters).responseMyObject { (request, _, result: RemoteResult<NoOpSerializable>) in
+        RemoteProvider.authenticatedRequest(.PUT, Urls.listItem, parameters) {result in
             handler(result)
         }
     }
     
+    // TODO use update
     func update(listItems: [ListItem], handler: RemoteResult<NoOpSerializable> -> ()) {
-        // this is handled differently because the parameters are an array and default request in alamofire doesn't support this (the difference is the request.HTTPBody line)
-        
-        let request = NSMutableURLRequest(URL: NSURL(string: Urls.listItems)!)
-        request.HTTPMethod = "PUT"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-
-        let maybeToken = valet?.stringForKey(KeychainKeys.token)
-        
-        if let token = maybeToken {
-            request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
-        } // TODO if there's no token return status code to direct to login controller or something
-        
-        let values = listItems.map{self.toRequestParams($0)}
-        
-        do {
-            request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(values, options: [])
-            
-            Alamofire.request(request).responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>) in
-                handler(result)
-            }
-            
-        } catch _ as NSError {
-            handler(RemoteResult(status: .ClientParamsParsingError))
+        let parameters = listItems.map{self.toRequestParams($0)}
+        RemoteProvider.authenticatedRequest(.PUT, Urls.listItem, parameters) {result in
+            handler(result)
         }
     }
     
@@ -135,7 +102,7 @@ class RemoteListItemProvider {
             "name": list.name,
             "users": list.users.map{self.toRequestParams($0)}
         ]
-        AlamofireHelper.authenticatedRequest(.POST, Urls.list, parameters).responseMyObject { (request, _, result: RemoteResult<RemoteList>) in
+        RemoteProvider.authenticatedRequest(.POST, Urls.listItem, parameters) {result in
             handler(result)
         }
     }
@@ -146,14 +113,7 @@ class RemoteListItemProvider {
             "name": section.name,
             "order": section.order
         ]
-        AlamofireHelper.authenticatedRequest(.POST, Urls.section, parameters).responseMyObject { (request, _, result: RemoteResult<RemoteSection>) in
-            handler(result)
-        }
-    }
-    
-    
-    func list(listId: String, handler: RemoteResult<RemoteList> -> ()) {
-        Alamofire.request(.GET, Urls.list).responseMyObject { (request, _, result: RemoteResult<RemoteList>) in
+        RemoteProvider.authenticatedRequest(.POST, Urls.section, parameters) {result in
             handler(result)
         }
     }
@@ -168,8 +128,7 @@ class RemoteListItemProvider {
             "listItems": listItemsParams,
             "toRemove": toRemoveParams
         ]
-        
-        AlamofireHelper.authenticatedRequest(.POST, Urls.listItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteSyncResult<RemoteListItems>>) in
+        RemoteProvider.authenticatedRequest(.POST, Urls.listItemsSync, dictionary) {result in
             handler(result)
         }
     }
@@ -210,8 +169,8 @@ class RemoteListItemProvider {
             "lists": lystsSyncDicts,
             "toRemove": toRemoveDicts
         ]
-        
-        AlamofireHelper.authenticatedRequest(.POST, Urls.listsWithItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteListWithListItemsSyncResult>) in
+
+        RemoteProvider.authenticatedRequest(.POST, Urls.listsWithItemsSync, dictionary) {result in
             handler(result)
         }
     }

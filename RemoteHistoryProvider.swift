@@ -7,15 +7,12 @@
 //
 
 import Foundation
-import Alamofire
 
 class RemoteHistoryProvider {
 
     func historyItems(inventory: Inventory? = nil, handler: RemoteResult<RemoteHistoryItems> -> ()) {
-        
         let params: [String: AnyObject] = inventory.map{["inventory": $0.uuid]} ?? [String: AnyObject]()
-        
-        AlamofireHelper.authenticatedRequest(.GET, Urls.historyItems, params).responseMyObject {(request, _, result: RemoteResult<RemoteHistoryItems>) in
+        RemoteProvider.authenticatedRequest(.GET, Urls.historyItems, params) {result in
             handler(result)
         }
     }
@@ -62,7 +59,7 @@ class RemoteHistoryProvider {
     }
     
     func removeHistoryItem(historyItem: HistoryItem, handler: RemoteResult<NoOpSerializable> -> ()) {
-        AlamofireHelper.authenticatedRequest(.DELETE, Urls.historyItem + "/\(historyItem.uuid)").responseMyObject {(request, _, result: RemoteResult<NoOpSerializable>) in
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.historyItems + "/\(historyItem.uuid)") {result in
             handler(result)
         }
     }
