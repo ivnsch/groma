@@ -32,7 +32,7 @@ class UserDetailsViewController: UIViewController {
         }
     }
     
-    @IBAction func onRemoveAccountTap(sender: NSButton) {
+    @IBAction func onRemoveAccountTap(sender: UIButton) {
         ConfirmationPopup.show(message: "Are you sure you want to remove your account?", controller: self, onOk: {[weak self] in
             
             if let weakSelf = self {
