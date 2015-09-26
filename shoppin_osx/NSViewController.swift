@@ -39,6 +39,7 @@ extension NSViewController {
         } else {
             onError?() ?? self.showProviderErrorAlert(providerResult)
         }
+        progressVisible(false)
     }
     
     // Result handlar for result with payload
@@ -54,6 +55,7 @@ extension NSViewController {
         } else {
             onError?() ?? self.showProviderErrorAlert(providerResult)
         }
+        progressVisible(false)
     }
     
     private func showProviderErrorAlert<T>(providerResult: ProviderResult<T>) {
@@ -63,5 +65,11 @@ extension NSViewController {
         } else {
             print("Trying to display modal for status code: \(providerResult.status) but view controller has no window!")
         }
+    }
+    
+    // MARK: - Utils
+    
+    func progressVisible(visible: Bool) {
+        self.view.defaultProgressVisible(visible)
     }
 }

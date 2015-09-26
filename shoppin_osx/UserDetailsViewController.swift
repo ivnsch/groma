@@ -41,6 +41,7 @@ class UserDetailsViewController: NSViewController {
                 
                 if let weakSelf = self {
 
+                    weakSelf.progressVisible(true)
                     weakSelf.userProvider.removeAccount(weakSelf.successHandler({
 
                         AlertPopup.show(title: "Success", message: "The account was removed", window: window, onDismiss: {

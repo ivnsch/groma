@@ -39,11 +39,10 @@ class LoginViewController: NSViewController, RegisterDelegate, PhFacebookDelegat
         
         guard !(email.isEmpty || password.isEmpty) else {print("TODO validation"); return}
         
-        self.userProvider.login(LoginData(email: email, password: password)) {[weak self] result in
-            if result.success {
-                self?.delegate?.onLoginSuccess()
-            }
-        }
+        progressVisible(true)
+        self.userProvider.login(LoginData(email: email, password: password), successHandler {[weak self] in
+            self?.delegate?.onLoginSuccess()
+        })
     }
     
     override func viewDidLoad() {

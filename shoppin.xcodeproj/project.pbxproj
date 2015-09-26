@@ -385,6 +385,7 @@
 		EBBC23291BB5EAEF0002F6B1 /* ProviderPopupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23281BB5EAEF0002F6B1 /* ProviderPopupManager.swift */; };
 		EBBC232B1BB600DF0002F6B1 /* ConfirmationPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC232A1BB600DE0002F6B1 /* ConfirmationPopup.swift */; };
 		EBBC232D1BB607DA0002F6B1 /* ConfirmationPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC232C1BB607DA0002F6B1 /* ConfirmationPopup.swift */; };
+		EBBC23311BB6C91A0002F6B1 /* TaggedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23301BB6C91A0002F6B1 /* TaggedView.swift */; };
 		EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
@@ -733,6 +734,7 @@
 		EBBC23281BB5EAEF0002F6B1 /* ProviderPopupManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderPopupManager.swift; sourceTree = "<group>"; };
 		EBBC232A1BB600DE0002F6B1 /* ConfirmationPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmationPopup.swift; sourceTree = "<group>"; };
 		EBBC232C1BB607DA0002F6B1 /* ConfirmationPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmationPopup.swift; sourceTree = "<group>"; };
+		EBBC23301BB6C91A0002F6B1 /* TaggedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaggedView.swift; sourceTree = "<group>"; };
 		EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemWithHistory.swift; sourceTree = "<group>"; };
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
@@ -1302,6 +1304,7 @@
 				EB7E82EB1B79F1B7009DEEF4 /* user */,
 				EBB2AB351B8B2463007B8C59 /* inventory */,
 				EBD236AC1B8B9D9E00B88969 /* history */,
+				EBBC232E1BB6C8E80002F6B1 /* common */,
 				EBBC23251BB5EA2E0002F6B1 /* popup */,
 				EB9F6CE61A8610550038355B /* AppDelegate.swift */,
 				EB9F6CE81A8610550038355B /* ViewController.swift */,
@@ -1436,6 +1439,22 @@
 				EBBC232C1BB607DA0002F6B1 /* ConfirmationPopup.swift */,
 			);
 			name = popup;
+			sourceTree = "<group>";
+		};
+		EBBC232E1BB6C8E80002F6B1 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				EBBC232F1BB6C8ED0002F6B1 /* view */,
+			);
+			name = common;
+			sourceTree = "<group>";
+		};
+		EBBC232F1BB6C8ED0002F6B1 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				EBBC23301BB6C91A0002F6B1 /* TaggedView.swift */,
+			);
+			name = view;
 			sourceTree = "<group>";
 		};
 		EBD236AC1B8B9D9E00B88969 /* history */ = {
@@ -2221,6 +2240,7 @@
 				EB0C2A371B58329800AF6226 /* RemoteInventoryProvider.swift in Sources */,
 				EB0C1B941B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
 				EB89D33D1AD44BD400B6E0D0 /* Selectable.swift in Sources */,
+				EBBC23311BB6C91A0002F6B1 /* TaggedView.swift in Sources */,
 				EBDCA1321B8A124B000020BF /* NSDate.swift in Sources */,
 				EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */,
 				EB9BE4261B2CB542005B401A /* RemoteList.swift in Sources */,

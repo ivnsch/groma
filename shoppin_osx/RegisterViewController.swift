@@ -32,12 +32,11 @@ class RegisterViewController: NSViewController {
         guard !(email.isEmpty || password.isEmpty || firstName.isEmpty || lastName.isEmpty) else {print("TODO validation"); return}
         
         let registerData = UserInput(email: email, password: password, firstName: firstName, lastName: lastName)
-        
-        self.userProvider.register(registerData) {[weak self] result in
-            if result.success {
-                self?.delegate?.onRegisterSuccess()
-            }
-        }
+
+        progressVisible(true)
+        userProvider.register(registerData, successHandler {[weak self] in
+            self?.delegate?.onRegisterSuccess()
+        })
     }
     
     override func viewDidLoad() {

@@ -12,8 +12,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="450" height="536"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zlc-mg-0hl">
-                                <rect key="frame" x="183" y="465" width="84" height="32"/>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zlc-mg-0hl">
+                                <rect key="frame" x="183" y="408" width="84" height="32"/>
                                 <buttonCell key="cell" type="push" title="Logout" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CGx-D0-QBx">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -22,8 +22,8 @@
                                     <action selector="onLogoutTap:" target="DFl-ow-lGH" id="iKf-J0-eVp"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dxd-bi-v4L">
-                                <rect key="frame" x="153" y="397" width="144" height="32"/>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Dxd-bi-v4L">
+                                <rect key="frame" x="153" y="337" width="144" height="32"/>
                                 <buttonCell key="cell" type="push" title="Remove account" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QsA-8H-4AP">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -33,6 +33,12 @@
                                 </connections>
                             </button>
                         </subviews>
+                        <constraints>
+                            <constraint firstItem="zlc-mg-0hl" firstAttribute="top" secondItem="pKP-Hc-Irw" secondAttribute="top" constant="100" id="2i3-W3-a0U"/>
+                            <constraint firstItem="zlc-mg-0hl" firstAttribute="centerX" secondItem="pKP-Hc-Irw" secondAttribute="centerX" id="iYt-7z-1Tf"/>
+                            <constraint firstItem="Dxd-bi-v4L" firstAttribute="top" secondItem="zlc-mg-0hl" secondAttribute="bottom" constant="50" id="sh2-OR-8N2"/>
+                            <constraint firstItem="Dxd-bi-v4L" firstAttribute="centerX" secondItem="pKP-Hc-Irw" secondAttribute="centerX" id="z2A-l5-2YP"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <customObject id="cnu-IB-Rnd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
