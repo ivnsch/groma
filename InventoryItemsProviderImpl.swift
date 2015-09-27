@@ -31,8 +31,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     }
                     
                 } else {
-                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                    handler(ProviderResult(status: providerStatus))
+                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
                 }
             }
         }
@@ -65,8 +64,9 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                         
                         
                     } else {
-                        print("TODO handling of sync errors, differentiate between no connection/server not reachable and the likes (this is ok), and invalid data etc.")
+                        print("Error addToInventory: \(remoteResult.status)")
                         // (what do we do with server invalid data error? do we remove the record from the client's database? which kind of error do we show to the client!? in any case this has to be sent to error monitoring, very clearly and detailed
+                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
                     }
                 }
                 
@@ -84,6 +84,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                 self?.remoteInventoryItemsProvider.incrementInventoryItem(item, delta: delta) {remoteResult in
                     if !remoteResult.success {
                         print("Error incrementing item in remote")
+                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)                        
                     }
                 }
             }

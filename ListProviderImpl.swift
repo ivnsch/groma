@@ -18,25 +18,23 @@ class ListProviderImpl: ListProvider {
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
         // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
-        self.remoteListProvider.add(list, handler: {remoteResult in
+        
+        self.dbProvider.saveList(list, handler: {saved in
+            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: list))
             
-            if let remoteList = remoteResult.successResult {
+            self.remoteListProvider.add(list, handler: {remoteResult in
                 
-                let list = ListMapper.ListWithRemote(remoteList)
-                
-                self.dbProvider.saveList(list, handler: {saved in
-                    handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: list))
-                })
-                
-            } else {
-                print("error adding the remote list: \(remoteResult)")
-                let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                handler(ProviderResult(status: providerStatus))
-            }
+                if !remoteResult.success {
+                    print("error adding the remote list: \(remoteResult.status)")
+                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                }
+            })
         })
     }
     
     func update(listInput: List, _ handler: ProviderResult<List> -> ()) {
+        
+        // TODO db update
         
         self.remoteListProvider.update(listInput) {remoteResult in
             if let remoteList = remoteResult.successResult {
@@ -45,8 +43,14 @@ class ListProviderImpl: ListProvider {
                 handler(result)
                 
             } else {
+                
+                // TODO when db update implemented
+//                print("Error: updating list: \(remoteResult.status)")
+//                DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                
                 let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
                 handler(ProviderResult(status: providerStatus))
+                
             }
         }
     }
@@ -90,8 +94,8 @@ class ListProviderImpl: ListProvider {
                         }
                         
                     } else {
-                        let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                        handler(ProviderResult(status: providerStatus))
+                        print("Error: sync list with list items: \(remoteResult.status)")
+                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
                     }
                 }
             }

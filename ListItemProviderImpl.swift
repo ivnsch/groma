@@ -77,8 +77,7 @@ class ListItemProviderImpl: ListItemProvider {
                     }
                     
                 } else {
-                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                    handler(ProviderResult(status: providerStatus))
+                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
                 }
             }
         })
@@ -149,8 +148,7 @@ class ListItemProviderImpl: ListItemProvider {
                 }
                 
             } else {
-                let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                handler(ProviderResult(status: providerStatus))
+                DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
                 self?.memProvider.invalidate()
             }
         })
@@ -316,6 +314,7 @@ class ListItemProviderImpl: ListItemProvider {
             self?.remoteProvider.update(listItems) {result in
                 if !result.success {
                     print("Error: Updating listItems: \(listItems)")
+                    DefaultRemoteErrorHandler.handle(result.status, handler: handler)
                 }
             }
         })
@@ -356,8 +355,7 @@ class ListItemProviderImpl: ListItemProvider {
                     
                 } else {
                     print("get remote lists no success, status: \(remoteResult.status)")
-                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                    handler(ProviderResult(status: providerStatus))
+                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
                 }
             }
         }
@@ -429,8 +427,7 @@ class ListItemProviderImpl: ListItemProvider {
                     }
                     
                 } else {
-                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                    handler(ProviderResult(status: providerStatus))
+                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
                 }
             }
         }

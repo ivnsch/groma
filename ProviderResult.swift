@@ -100,3 +100,20 @@ struct DefaultRemoteResultMapper {
         }
     }
 }
+
+struct DefaultRemoteErrorHandler {
+    
+    /**
+    * Invoques handler when there's an error different than no connection or not logged in.
+    * With this we can use the app offline or without account - the error handler, which triggers the error alert is not called on connection error.
+    */
+    static func handle<T>(remoteStatus: RemoteStatusCode, handler: ProviderResult<T> -> ()) {
+        switch remoteStatus {
+        case .NoConnection, .NotAuthenticated:
+            return
+        case _:
+            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteStatus)
+            handler(ProviderResult(status: providerStatus))
+        }
+    }
+}

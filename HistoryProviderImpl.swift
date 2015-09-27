@@ -55,8 +55,7 @@ class HistoryProviderImpl: HistoryProvider {
                     }
                     
                 } else {
-                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                    handler(ProviderResult(status: providerStatus))
+                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
                 }
             }
         }

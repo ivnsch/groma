@@ -38,8 +38,7 @@ class InventoryProviderImpl: InventoryProvider {
                     
                 } else {
                     print("get remote inventories no success, status: \(remoteResult.status)")
-                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                    handler(ProviderResult(status: providerStatus))
+                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
                 }
             }
         }
@@ -100,8 +99,7 @@ class InventoryProviderImpl: InventoryProvider {
                     }
                     
                 } else {
-                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                    handler(ProviderResult(status: providerStatus))
+                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
                 }
             }
         }
@@ -142,6 +140,8 @@ class InventoryProviderImpl: InventoryProvider {
                 self.remoteProvider.addInventory(inventory) {remoteResult in
                     if !remoteResult.success {
                         print("Error: addInventory background sync failed: \(remoteResult.status)") // TODO handle, when should we remove the item from local DB, when should we send a msg to error monitoring etc.
+                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+
                     }
                 }
 
@@ -155,6 +155,9 @@ class InventoryProviderImpl: InventoryProvider {
         self.remoteProvider.updateInventory(inventory) {remoteResult in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
             handler(ProviderResult(status: providerStatus))
+            
+            // TODO update in local db, call remote bg, then this
+//            DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
         }
     }
     
@@ -179,8 +182,7 @@ class InventoryProviderImpl: InventoryProvider {
                         }
                         
                     } else {
-                        let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                        handler(ProviderResult(status: providerStatus))
+                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
                     }
                 }
             }

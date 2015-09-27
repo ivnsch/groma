@@ -138,6 +138,8 @@ class RealmListItemProvider: RealmProvider {
         self.remove("uuid = '\(list.uuid)'", handler: handler, objType: DBList.self)
     }
     
+    // TODO update list
+    
     // MARK: - ListItem
     
     func saveListItem(listItem: ListItem, updateSuggestions: Bool = true, handler: Bool -> ()) {
