@@ -87,6 +87,11 @@ class RealmInventoryProvider: RealmProvider {
         saveInventoryItems([incrementedInventoryItem], handler: handler)
     }
     
+    func removeInventoryItem(item: InventoryItem, handler: Bool -> ()) {
+        let filter = DBInventoryItem.createFilter(item.product, item.inventory)
+        self.remove(filter, handler: handler, objType: DBInventoryItem.self)
+    }
+    
     // hm...
     func loadAllInventoryItems(handler: [InventoryItem] -> ()) {
         let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}

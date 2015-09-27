@@ -62,6 +62,8 @@ class InventoryItemsViewController: UITableViewController, InventoryItemTableVie
         cell.inventoryItem = inventoryItem
         cell.row = indexPath.row
         cell.delegate = self
+        
+        cell.cancelDeleteProgress() // some recycled cells were showing red bar on top
 
         // this was initially a local function but it seems we have to use a closure, see http://stackoverflow.com/a/26237753/930450
         // TODO change quantity / edit inventory items
@@ -82,10 +84,12 @@ class InventoryItemsViewController: UITableViewController, InventoryItemTableVie
     // MARK: - InventoryItemTableViewCellDelegate
     
     func onIncrementItemTap(cell: InventoryItemTableViewCell) {
+        cell.cancelDeleteProgress()
         self.checkChangeInventoryItemQuantity(cell, delta: 1)
     }
     
     func onDecrementItemTap(cell: InventoryItemTableViewCell) {
+        cell.cancelDeleteProgress()        
         self.checkChangeInventoryItemQuantity(cell, delta: -1)
     }
     
@@ -102,14 +106,38 @@ class InventoryItemsViewController: UITableViewController, InventoryItemTableVie
     }
     
     private func changeInventoryItemQuantity(cell: InventoryItemTableViewCell, row: Int, inventoryItem: InventoryItem, delta: Int) {
-        
+
         if inventoryItem.quantity + delta >= 0 {
             
             inventoryItemsProvider.incrementInventoryItem(inventoryItem, delta: delta, successHandler({[weak self] result in
-                let incrementedItem = inventoryItem.copy(quantity: inventoryItem.quantity + delta)
-                self?.inventoryItems[row] = incrementedItem
-                cell.quantityLabel.text = "\(incrementedItem)"
-                self?.tableView.reloadData()
+
+                if let weakSelf = self {
+                    
+                    let incrementedItem = inventoryItem.copy(quantity: inventoryItem.quantity + delta)
+                    weakSelf.inventoryItems[row] = incrementedItem
+                    cell.inventoryItem = incrementedItem
+                    
+                    cell.quantityLabel.text = "\(incrementedItem.quantity)"
+                    
+                    
+                    if inventoryItem.quantity + delta == 0 {
+                        cell.startDeleteProgress {
+                            
+                            weakSelf.tableView.reloadData()
+
+                            // TODO is it necessary to have multiple [weak self] in nested blocks? (we one above in incrementInventoryItem)
+                            Providers.inventoryItemsProvider.removeInventoryItem(inventoryItem, weakSelf.successHandler{[weak self] result in
+                                
+                                if let weakSelf = self {
+                                    weakSelf.tableView.wrapUpdates {
+                                        weakSelf.inventoryItems.removeAtIndex(row)
+                                        weakSelf.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Bottom)
+                                    }
+                                }
+                            })
+                        }
+                    }
+                }
             }))
         }
     }

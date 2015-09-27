@@ -96,4 +96,10 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 //        self.cdProvider.updateInventoryItem(item, handler: {try in
 //        })
     }
+    
+    func removeInventoryItem(item: InventoryItem, _ handler: ProviderResult<Any> -> ()) {
+        dbInventoryProvider.removeInventoryItem(item) {saved in
+            handler(ProviderResult(status: .Success))
+        }
+    }
 }

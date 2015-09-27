@@ -497,6 +497,24 @@
                                                 <action selector="onDecrementTap:" destination="vCq-K7-Ar7" eventType="touchUpInside" id="Iz1-mU-bq5"/>
                                             </connections>
                                         </button>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dD0-od-4dH">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="4"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="afY-52-Udf">
+                                                    <rect key="frame" x="0.0" y="0.0" width="0.0" height="4"/>
+                                                    <color key="backgroundColor" red="1" green="0.012564138880000001" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" id="fxn-p3-hof"/>
+                                                    </constraints>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="4" id="5jm-wO-pld"/>
+                                                <constraint firstItem="afY-52-Udf" firstAttribute="top" secondItem="dD0-od-4dH" secondAttribute="top" id="I4o-NQ-IrG"/>
+                                                <constraint firstAttribute="bottom" secondItem="afY-52-Udf" secondAttribute="bottom" id="hbE-kj-riJ"/>
+                                                <constraint firstItem="afY-52-Udf" firstAttribute="leading" secondItem="dD0-od-4dH" secondAttribute="leading" id="pLg-K9-ahQ"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="yBM-4c-s6A" firstAttribute="centerY" secondItem="kNJ-Rb-iDN" secondAttribute="centerY" id="2XP-BX-wOX"/>
@@ -507,8 +525,11 @@
                                         <constraint firstAttribute="trailing" secondItem="cUe-dc-Y1J" secondAttribute="trailing" constant="5" id="QTF-ij-zRP"/>
                                         <constraint firstAttribute="centerY" secondItem="cUe-dc-Y1J" secondAttribute="centerY" id="XzQ-Tq-r1I"/>
                                         <constraint firstAttribute="centerY" secondItem="kNJ-Rb-iDN" secondAttribute="centerY" id="cWp-6C-OPw"/>
+                                        <constraint firstItem="dD0-od-4dH" firstAttribute="leading" secondItem="6tq-xY-HMg" secondAttribute="leading" id="e0W-A6-hGR"/>
+                                        <constraint firstItem="dD0-od-4dH" firstAttribute="top" secondItem="6tq-xY-HMg" secondAttribute="top" id="rPp-jd-g3h"/>
                                         <constraint firstItem="kNJ-Rb-iDN" firstAttribute="leading" secondItem="6tq-xY-HMg" secondAttribute="leading" constant="5" id="xfn-Al-TWH"/>
                                         <constraint firstItem="cUe-dc-Y1J" firstAttribute="centerY" secondItem="kNJ-Rb-iDN" secondAttribute="centerY" id="yQG-zD-5o4"/>
+                                        <constraint firstAttribute="trailing" secondItem="dD0-od-4dH" secondAttribute="trailing" id="zJV-Te-IXO"/>
                                     </constraints>
                                     <variation key="default">
                                         <mask key="constraints">
@@ -517,6 +538,8 @@
                                     </variation>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="deleteProgressContainer" destination="dD0-od-4dH" id="B6A-Jr-6gy"/>
+                                    <outlet property="deleteProgressViewWidth" destination="fxn-p3-hof" id="DxK-Hm-wh3"/>
                                     <outlet property="nameLabel" destination="kNJ-Rb-iDN" id="hw5-63-dfk"/>
                                     <outlet property="quantityLabel" destination="cUe-dc-Y1J" id="ZKv-6c-XVd"/>
                                 </connections>
