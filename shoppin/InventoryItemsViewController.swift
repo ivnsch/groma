@@ -102,11 +102,15 @@ class InventoryItemsViewController: UITableViewController, InventoryItemTableVie
     }
     
     private func changeInventoryItemQuantity(cell: InventoryItemTableViewCell, row: Int, inventoryItem: InventoryItem, delta: Int) {
-        inventoryItemsProvider.incrementInventoryItem(inventoryItem, delta: delta, successHandler({[weak self] result in
-            let incrementedItem = inventoryItem.copy(quantity: inventoryItem.quantity + delta)
-            self?.inventoryItems[row] = incrementedItem
-            cell.quantityLabel.text = "\(incrementedItem)"
-            self?.tableView.reloadData()
-        }))
+        
+        if inventoryItem.quantity + delta >= 0 {
+            
+            inventoryItemsProvider.incrementInventoryItem(inventoryItem, delta: delta, successHandler({[weak self] result in
+                let incrementedItem = inventoryItem.copy(quantity: inventoryItem.quantity + delta)
+                self?.inventoryItems[row] = incrementedItem
+                cell.quantityLabel.text = "\(incrementedItem)"
+                self?.tableView.reloadData()
+            }))
+        }
     }
 }
