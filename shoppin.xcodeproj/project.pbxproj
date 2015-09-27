@@ -377,7 +377,6 @@
 		EBBC23131BB475440002F6B1 /* SuggestionsPrefiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */; };
 		EBBC23151BB483E90002F6B1 /* SuggestionsPrefiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */; };
 		EBBC23171BB4840F0002F6B1 /* PrefillDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23161BB4840F0002F6B1 /* PrefillDatabase.swift */; };
-		EBBC231B1BB4A6160002F6B1 /* prefill.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBBC231A1BB4A6160002F6B1 /* prefill.realm */; };
 		EBBC231E1BB575340002F6B1 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC231D1BB575340002F6B1 /* UIColor.swift */; };
 		EBBC23211BB580FD0002F6B1 /* FacebookLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23201BB580FD0002F6B1 /* FacebookLogin.swift */; };
 		EBBC23231BB5D57C0002F6B1 /* ProviderPopupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23221BB5D57C0002F6B1 /* ProviderPopupManager.swift */; };
@@ -386,6 +385,7 @@
 		EBBC232B1BB600DF0002F6B1 /* ConfirmationPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC232A1BB600DE0002F6B1 /* ConfirmationPopup.swift */; };
 		EBBC232D1BB607DA0002F6B1 /* ConfirmationPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC232C1BB607DA0002F6B1 /* ConfirmationPopup.swift */; };
 		EBBC23311BB6C91A0002F6B1 /* TaggedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23301BB6C91A0002F6B1 /* TaggedView.swift */; };
+		EBBC23331BB824020002F6B1 /* prefill.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBBC23321BB824020002F6B1 /* prefill.realm */; };
 		EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
@@ -726,7 +726,6 @@
 		EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionSuggestionMapper.swift; sourceTree = "<group>"; };
 		EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SuggestionsPrefiller.swift; path = ../SuggestionsPrefiller.swift; sourceTree = "<group>"; };
 		EBBC23161BB4840F0002F6B1 /* PrefillDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefillDatabase.swift; sourceTree = "<group>"; };
-		EBBC231A1BB4A6160002F6B1 /* prefill.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefill.realm; sourceTree = "<group>"; };
 		EBBC231D1BB575340002F6B1 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		EBBC23201BB580FD0002F6B1 /* FacebookLogin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacebookLogin.swift; sourceTree = "<group>"; };
 		EBBC23221BB5D57C0002F6B1 /* ProviderPopupManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderPopupManager.swift; sourceTree = "<group>"; };
@@ -735,6 +734,7 @@
 		EBBC232A1BB600DE0002F6B1 /* ConfirmationPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmationPopup.swift; sourceTree = "<group>"; };
 		EBBC232C1BB607DA0002F6B1 /* ConfirmationPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmationPopup.swift; sourceTree = "<group>"; };
 		EBBC23301BB6C91A0002F6B1 /* TaggedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaggedView.swift; sourceTree = "<group>"; };
+		EBBC23321BB824020002F6B1 /* prefill.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefill.realm; sourceTree = "<group>"; };
 		EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemWithHistory.swift; sourceTree = "<group>"; };
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
@@ -903,7 +903,7 @@
 		EB1DDE9C1A3334EC00D778DE = {
 			isa = PBXGroup;
 			children = (
-				EBBC231A1BB4A6160002F6B1 /* prefill.realm */,
+				EBBC23321BB824020002F6B1 /* prefill.realm */,
 				EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */,
 				EB1DDEA71A3334EC00D778DE /* shoppin */,
 				EB55675A1A8622E600CD3EC6 /* shoppin_ios */,
@@ -1824,7 +1824,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBBC231B1BB4A6160002F6B1 /* prefill.realm in Resources */,
+				EBBC23331BB824020002F6B1 /* prefill.realm in Resources */,
 				EB4C365F1B4C142600C387C5 /* EditableChoiceModal.storyboard in Resources */,
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
 				EB2F5D0D1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.xib in Resources */,
