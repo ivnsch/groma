@@ -102,7 +102,7 @@ class RemoteListItemProvider {
             "name": list.name,
             "users": list.users.map{self.toRequestParams($0)}
         ]
-        RemoteProvider.authenticatedRequest(.POST, Urls.listItem, parameters) {result in
+        RemoteProvider.authenticatedRequest(.POST, Urls.list, parameters) {result in
             handler(result)
         }
     }
