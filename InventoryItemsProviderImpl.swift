@@ -145,8 +145,14 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
     
     func removeInventoryItem(item: InventoryItem, _ handler: ProviderResult<Any> -> ()) {
-        dbInventoryProvider.removeInventoryItem(item) {saved in
+        dbInventoryProvider.removeInventoryItem(item) {[weak self] saved in
             handler(ProviderResult(status: .Success))
+            
+            self?.remoteInventoryItemsProvider.removeInventoryItem(item) {result in
+                if !result.success {
+                    print("Error removing inventory item in server, result: \(result)")
+                }
+            }
         }
     }
 }

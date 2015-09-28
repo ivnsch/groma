@@ -47,6 +47,7 @@ struct Urls {
     static let inventorySync = host + "inventory/sync"
     static let inventoriesWithItemsSync = host + "inventories/sync"
     static let incrementInventoryItem = host + "incrInventoryItem"
+    static let inventoryItem = host + "inventoryItem"
     
     // History
     static let historyItems = host + "historyItems"

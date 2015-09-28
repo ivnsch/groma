@@ -23,6 +23,13 @@ class RemoteInventoryItemsProvider: Any {
             handler(result)
         }
     }
+
+    func removeInventoryItem(inventoryItem: InventoryItem, handler: RemoteResult<NoOpSerializable> -> ()) {
+        let parameters = ["productUuid": inventoryItem.product.uuid, "inventoryUuid": inventoryItem.inventory.uuid]
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.inventoryItem, parameters) {result in
+            handler(result)
+        }
+    }
     
     func incrementInventoryItem(inventoryItem: InventoryItem, delta: Int, handler: RemoteResult<NoOpSerializable> -> ()) {
         let params: [String: AnyObject] = [
