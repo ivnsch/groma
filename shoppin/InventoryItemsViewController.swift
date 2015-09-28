@@ -113,7 +113,7 @@ class InventoryItemsViewController: UITableViewController, InventoryItemTableVie
 
                 if let weakSelf = self {
                     
-                    let incrementedItem = inventoryItem.copy(quantity: inventoryItem.quantity + delta)
+                    let incrementedItem = inventoryItem.incrementQuantityCopy(delta)
                     weakSelf.inventoryItems[row] = incrementedItem
                     cell.inventoryItem = incrementedItem
                     

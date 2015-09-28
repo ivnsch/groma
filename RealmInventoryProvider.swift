@@ -19,6 +19,11 @@ class RealmInventoryProvider: RealmProvider {
         self.load(mapper, handler: handler)
     }
 
+    func findInventoryItem(item: InventoryItem, handler: InventoryItem? -> ()) {
+        let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}
+        self.loadFirst(mapper, filter: DBInventoryItem.createFilter(item.product, item.inventory), handler: handler)
+    }
+    
 //    func saveInventories(inventories: [DBInventory], handler: Bool -> ()) {
 //        self.saveObjs(inventories, update: true, handler: handler)
 //    }
@@ -66,7 +71,7 @@ class RealmInventoryProvider: RealmProvider {
         let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}
         self.load(mapper, handler: handler)
     }
-
+    
     func saveInventory(inventory: Inventory, handler: Bool -> ()) {
         self.saveInventories([inventory], handler: handler)
     }
@@ -80,9 +85,64 @@ class RealmInventoryProvider: RealmProvider {
         let dbObjs = items.map{InventoryItemMapper.dbWithInventoryItem($0)}
         self.saveObjs(dbObjs, update: true, handler: handler)
     }
+
     
-    func incrementInventoryItem(item: InventoryItem, delta: Int, handler: Bool -> ()) {
+    func saveInventoryItem(item: InventoryItem, handler: Bool -> ()) {
+        saveInventoryItems([item], handler: handler)
+    }
+
+    
+    // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
+    // param onlyDelta: if we want to update only quantityDelta field (opposed to updating both quantity and quantityDelta)
+    func incrementInventoryItem(item: InventoryItem, delta: Int, onlyDelta: Bool = false, handler: Bool -> ()) {
+
+//        synced(self)  {
+        
+            // load
+            let realm = try! Realm()
+            var results = realm.objects(DBInventoryItem)
+            results = results.filter(NSPredicate(format: DBInventoryItem.createFilter(item.product, item.inventory), argumentArray: []))
+            let objs: [DBInventoryItem] = results.toArray(nil)
+            let dbInventoryItems = objs.map{InventoryItemMapper.inventoryItemWithDB($0)}
+            let inventoryItemMaybe = dbInventoryItems.first
+            
+            if let inventoryItem = inventoryItemMaybe {
+                // increment
+                let incrementedInventoryitem: InventoryItem =  {
+                    if onlyDelta {
+                        return inventoryItem.copy(quantityDelta: inventoryItem.quantityDelta + delta)
+                    } else {
+                        return inventoryItem.incrementQuantityCopy(delta)
+                    }
+                }()
+                
+                // convert to db object
+                let dbIncrementedInventoryitem = InventoryItemMapper.dbWithInventoryItem(incrementedInventoryitem)
+                
+                
+                // save
+                realm.write {
+                    for obj in objs {
+                        obj.lastUpdate = NSDate()
+                        realm.add(dbIncrementedInventoryitem, update: true)
+                    }
+                }
+                
+                handler(true)
+                
+                
+            } else {
+                print("Inventory item not found: \(item)")
+                handler(false)
+            }
+//        }
+    }
+    
+    
+    func incrementInventoryItemOnlyDelta(item: InventoryItem, delta: Int, handler: Bool -> ()) {
         let incrementedInventoryItem = item.copy(quantityDelta: item.quantityDelta + delta)
+        
+        print("\n\nafter delta: \(delta), saving incrementedInventoryItem: \(incrementedInventoryItem)\n\n")
         
         saveInventoryItems([incrementedInventoryItem], handler: handler)
     }

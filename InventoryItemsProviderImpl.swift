@@ -16,6 +16,9 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     func inventoryItems(inventory: Inventory, _ handler: ProviderResult<[InventoryItem]> -> ()) {
     
         self.dbInventoryProvider.loadInventory{dbInventoryItems in
+            
+            print("loaded inventoryitems: \(dbInventoryItems)")
+            
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbInventoryItems))
             
             self.remoteInventoryItemsProvider.inventoryItems(inventory) {remoteResult in
@@ -76,16 +79,60 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
  
+    // For now db only query
+    private func findInventoryItem(item: InventoryItem, _ handler: ProviderResult<InventoryItem> -> ()) {
+        dbInventoryProvider.findInventoryItem(item) {inventoryItemMaybe in
+            if let inventoryItem = inventoryItemMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: inventoryItem))
+            } else {
+                handler(ProviderResult(status: .NotFound))
+            }
+        }
+    }
+    
+    
+    
+    
     func incrementInventoryItem(item: InventoryItem, delta: Int, _ handler: ProviderResult<Any> -> ()) {
-        dbInventoryProvider.incrementInventoryItem(item, delta: delta) {[weak self] saved in
-            if saved {
-                handler(ProviderResult(status: .Success))
-
-                self?.remoteInventoryItemsProvider.incrementInventoryItem(item, delta: delta) {remoteResult in
-                    if !remoteResult.success {
-                        print("Error incrementing item in remote")
-                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)                        
+        
+        // Get item from database with updated quantityDelta
+        // The reason we do this instead of using the item parameter, is that later doesn't always have valid quantityDelta
+        // -> When item is incremented we set back quantityDelta after the server's response, this is NOT communicated to the item in the view controller (so on next increment, the passed quantityDelta is invalid)
+        // Which is ok. because the UI must not have logic related with background server update
+        // Cleaner would be to create a lightweight InventoryItem version for the UI - without quantityDelta, etc. But this adds extra complexity
+        
+        dbInventoryProvider.incrementInventoryItem(item, delta: delta, onlyDelta: false) {[weak self] saved in
+            
+            handler(ProviderResult(status: .Success))
+            
+//            print("SAVED DB \(item)(+delta) in local db. now going to update remote")
+            
+            self?.remoteInventoryItemsProvider.incrementInventoryItem(item, delta: delta) {remoteResult in
+                
+                if remoteResult.success {
+                    
+//                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
+                    
+                    // Now that the item was updated in server, set back delta in local database
+                    // Note we subtract instead of set to 0, to handle possible parallel requests correctly
+                    self?.dbInventoryProvider.incrementInventoryItem(item, delta: -delta, onlyDelta: true) {saved in
+                        
+                        if saved {
+//                            self?.findInventoryItem(item) {result in
+//                                if let newitem = result.sucessResult {
+//                                    print("3. CONFIRM incremented item: \(item) + \(delta) == \(newitem)")
+//                                }
+//                            }
+                            
+                        } else {
+                            print("Error: couln't save remote inventory item")
+                        }
+                        
                     }
+                    
+                } else {
+                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                    print("Error incrementing item in remote")
                 }
             }
         }
