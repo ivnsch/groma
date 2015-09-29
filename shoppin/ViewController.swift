@@ -410,19 +410,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     func updateItem(listItem: ListItem, listItemInput:ListItemInput) {
         if let currentList = self.currentList {
             
-            let product = Product(uuid: self.updatingListItem!.product.uuid, name: listItemInput.name, price: listItemInput.price)
-            let section = Section(uuid: NSUUID().UUIDString, name: listItemInput.section, order: listItem.section.order)
-        
-            let listItem = ListItem(uuid: self.updatingListItem!.uuid, done: self.updatingListItem!.done, quantity: listItemInput.quantity, product: product, section: section, list: currentList, order: self.updatingListItem!.order)
-            
-            Providers.listItemsProvider.update([listItem], successHandler{
-                    
-                self.listItemsTableViewController.updateListItem(listItem)
+            if let updatingListItem = self.updatingListItem {
                 
-                self.addItemView.resignFirstResponder()
-                self.updatePrices(.MemOnly)
-            })
-            
+                let product = Product(uuid: updatingListItem.product.uuid, name: listItemInput.name, price: listItemInput.price) // possible product update
+                let section = Section(uuid: updatingListItem.section.uuid, name: listItemInput.section, order: listItem.section.order) // possible section update
+                
+                let listItem = ListItem(uuid: updatingListItem.uuid, done: updatingListItem.done, quantity: listItemInput.quantity, product: product, section: section, list: currentList, order: updatingListItem.order)
+                
+                Providers.listItemsProvider.update([listItem], successHandler{
+                    
+                    self.listItemsTableViewController.updateListItem(listItem)
+                    
+                    self.addItemView.resignFirstResponder()
+                    self.updatePrices(.MemOnly)
+                })
+                
+            } else {
+                print("Error: Invalid state: trying to update list item without updatingListItem")
+            }
+
         } else {
             print("Error: Invalid state: trying to update list item without current list")
         }

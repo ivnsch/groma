@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSerializable {
+final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let order: Int

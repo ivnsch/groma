@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class Product: Equatable, Hashable {
+final class Product: Equatable, Hashable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let price: Float
