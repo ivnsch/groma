@@ -69,36 +69,38 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             if !memAdded { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
                 if saved {
                     handler(ProviderResult(status: .Success))
-                    
-                    self?.remoteInventoryItemsProvider.addToInventory(inventory, inventoryItems: items) {remoteResult in
-                        
-                        if let _ = remoteResult.successResult {
-                            
-                            print("DEBUG: add remote inventory items success")
-                            
-                            
-                            // TODO is this comment still relevant?
-                            // For now no saving in local database, since there's no logic to increment in the client
-                            // TODO in the future we should do the increment in the client, as the app can be used offline-only
-                            // then call a sync with the server when we're online, where we either send the pending increments or somehow overwrite with updated items, taking into account timestamps
-                            // remember that the inventory has to support merge since it can be shared with other users
-                            //                self.dbInventoryProvider.saveInventory(items) {saved in
-                            //                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
-                            //                    handler(ProviderResult(status: providerStatus))
-                            //                }
-                            
-                            
-                            
-                        } else {
-                            print("Error addToInventory: \(remoteResult.status)")
-                            // (what do we do with server invalid data error? do we remove the record from the client's database? which kind of error do we show to the client!? in any case this has to be sent to error monitoring, very clearly and detailed
-                            DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
-                            self?.memProvider.invalidate()
-                        }
-                    }
-                    
                 } else {
                     handler(ProviderResult(status: .DatabaseSavingError))
+                }
+            }
+            
+            self?.remoteInventoryItemsProvider.addToInventory(inventory, inventoryItems: items) {remoteResult in
+                
+                if let _ = remoteResult.successResult {
+                    
+                    print("DEBUG: add remote inventory items success")
+                    
+                    
+                    // TODO is this comment still relevant?
+                    // For now no saving in local database, since there's no logic to increment in the client
+                    // TODO in the future we should do the increment in the client, as the app can be used offline-only
+                    // then call a sync with the server when we're online, where we either send the pending increments or somehow overwrite with updated items, taking into account timestamps
+                    // remember that the inventory has to support merge since it can be shared with other users
+                    //                self.dbInventoryProvider.saveInventory(items) {saved in
+                    //                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
+                    //                    handler(ProviderResult(status: providerStatus))
+                    //                }
+                    
+                    
+                    
+                } else {
+                    print("Error addToInventory: \(remoteResult.status)")
+                    // (what do we do with server invalid data error? do we remove the record from the client's database? which kind of error do we show to the client!? in any case this has to be sent to error monitoring, very clearly and detailed
+                    DefaultRemoteErrorHandler.handle(remoteResult.status) {(remoteResult: ProviderResult<Any>) in
+                        // if there's a not connection related server error, invalidate cache
+                        self?.memProvider.invalidate()
+                        handler(remoteResult)
+                    }
                 }
             }
         }
@@ -172,8 +174,11 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     
                 } else {
                     print("Error incrementing item: \(item) in remote, result: \(remoteResult)")
-                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
-                    self?.memProvider.invalidate()
+                    DefaultRemoteErrorHandler.handle(remoteResult.status)  {(remoteResult: ProviderResult<Any>) in
+                        // if there's a not connection related server error, invalidate cache
+                        self?.memProvider.invalidate()
+                        handler(remoteResult)
+                    }
                 }
             }
         }
@@ -202,9 +207,14 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                 self?.memProvider.invalidate()
             }
             
-            self?.remoteInventoryItemsProvider.removeInventoryItem(item) {result in
-                if !result.success {
-                    print("Error removing inventory item in server: \(item), result: \(result)")
+            self?.remoteInventoryItemsProvider.removeInventoryItem(item) {remoteResult in
+                if !remoteResult.success {
+                    print("Error removing inventory item in server: \(item), result: \(remoteResult)")
+                    DefaultRemoteErrorHandler.handle(remoteResult.status)  {(remoteResult: ProviderResult<Any>) in
+                        // if there's a not connection related server error, invalidate cache
+                        self?.memProvider.invalidate()
+                        handler(remoteResult)
+                    }
                 }
             }
         }

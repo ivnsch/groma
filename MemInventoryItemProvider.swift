@@ -55,6 +55,9 @@ class MemInventoryItemProvider {
         return updateInventoryItem(incremented)
     }
     
+    /**
+    * Appends inventory item to list or increments quantity if already exists
+    */
     func addInventoryItem(inventoryItem: InventoryItem) -> Bool {
         guard enabled else {return false}
         
@@ -62,7 +65,21 @@ class MemInventoryItemProvider {
         if inventoryItems[inventoryItem.inventory] == nil {
             inventoryItems[inventoryItem.inventory] = []
         }
-        inventoryItems[inventoryItem.inventory]?.append(inventoryItem)
+
+        var found = false
+        var items: [InventoryItem] = inventoryItems[inventoryItem.inventory]!
+        for i in 0..<items.count {
+            if items[i].same(inventoryItem) {
+                items[i] = items[i].copy(quantity: items[i].quantity + inventoryItem.quantity) // increment quantity
+                found = true
+                break
+            }
+        }
+        if !found {
+            items.append(inventoryItem)
+        }
+        inventoryItems[inventoryItem.inventory] = items
+        
         return true
     }
     
