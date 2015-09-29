@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Inventory: Equatable {
+struct Inventory: Equatable, Identifiable, Hashable {
     let uuid: String
     let name: String
     
@@ -34,6 +34,14 @@ struct Inventory: Equatable {
     
     var debugDescription: String {
         return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), users: \(self.users), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
+    }
+    
+    func same(inventory: Inventory) -> Bool {
+        return self.uuid == inventory.uuid
+    }
+    
+    var hashValue: Int {
+        return uuid.hashValue
     }
 }
 

@@ -54,6 +54,10 @@ class UserProviderImpl: UserProvider {
                 self!.inventoryProvider.syncInventoriesWithInventoryItems {[weak self] result in
                     if result.success {
                         self!.historyProvider.syncHistoryItems {result in
+                            
+                            Providers.listItemsProvider.invalidateMemCache()
+                            Providers.inventoryItemsProvider.invalidateMemCache()
+                            
                             handler()
                         }
                         

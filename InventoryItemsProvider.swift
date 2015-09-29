@@ -10,7 +10,7 @@ import Foundation
 
 protocol InventoryItemsProvider {
     
-    func inventoryItems(inventory: Inventory, _ handler: ProviderResult<[InventoryItem]> -> ())
+    func inventoryItems(inventory: Inventory, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[InventoryItem]> -> ())
     
     func addToInventory(inventory: Inventory, items: [InventoryItemWithHistoryEntry], _ handler: ProviderResult<Any> -> ())
     
@@ -19,4 +19,6 @@ protocol InventoryItemsProvider {
     func incrementInventoryItem(item: InventoryItem, delta: Int, _ handler: ProviderResult<Any> -> ())
     
     func removeInventoryItem(item: InventoryItem, _ handler: ProviderResult<Any> -> ())
+    
+    func invalidateMemCache()
 }

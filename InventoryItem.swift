@@ -8,7 +8,7 @@
 
 import Foundation
 
-class InventoryItem: Equatable, CustomDebugStringConvertible {
+class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let quantity: Int // TODO?
     let product: Product
     let inventory: Inventory
@@ -49,6 +49,10 @@ class InventoryItem: Equatable, CustomDebugStringConvertible {
     
     var debugDescription: String {
         return shortDebugDescription
+    }
+    
+    func same(inventoryItem: InventoryItem) -> Bool {
+        return product.uuid == inventoryItem.product.uuid && inventory.uuid == inventoryItem.inventory.uuid
     }
     
     func copy(quantity quantity: Int? = nil, quantityDelta: Int? = nil, product: Product? = nil, inventory: Inventory? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> InventoryItem {
