@@ -14,7 +14,7 @@ import Reachability
 class RemoteProvider {
 
     class func request<T: ResponseObjectSerializable>(method: Alamofire.Method, _ url: String, _ params: [String: AnyObject]? = nil, handler: RemoteResult<T> -> ()) {
-        onConnectedOrError(handler) {
+        onConnected(handler) {
             Alamofire.request(method, url, parameters: params, encoding: .JSON).responseMyObject {(request, _, result: RemoteResult<T>) in
                 handler(result)
             }
@@ -22,7 +22,7 @@ class RemoteProvider {
     }
     
     class func authenticatedRequest<T: ResponseObjectSerializable>(method: Alamofire.Method, _ url: String, _ params: [String: AnyObject]? = nil, handler: RemoteResult<T> -> ()) {
-        onConnectedOrError(handler) {
+        onConnectedAndLoggedIn(handler) {
             AlamofireHelper.authenticatedRequest(method, url, params).responseMyObject {(request, _, result: RemoteResult<T>) in
                 handler(result)
             }
@@ -30,7 +30,7 @@ class RemoteProvider {
     }
     
     class func authenticatedRequestArray<T: ResponseObjectSerializable>(method: Alamofire.Method, _ url: String, _ params: [String: AnyObject]? = nil, handler: RemoteResult<[T]> -> ()) {
-        onConnectedOrError(handler) {
+        onConnectedAndLoggedIn(handler) {
             AlamofireHelper.authenticatedRequest(method, url, params).responseMyArray {(request, _, result: RemoteResult<[T]>) in
                 handler(result)
             }
@@ -39,7 +39,7 @@ class RemoteProvider {
     
     class func authenticatedRequest<T: ResponseObjectSerializable>(method: Alamofire.Method, _ url: String, _ params: [[String: AnyObject]], handler: RemoteResult<T> -> ()) {
 
-        onConnectedOrError(handler) {
+        onConnectedAndLoggedIn(handler) {
             
             // Alamofire's short version currently doesn't support array parameter, so we need this
             
@@ -70,12 +70,28 @@ class RemoteProvider {
             }
         }
     }
-    
-    private class func onConnectedOrError<T: Any>(handler: RemoteResult<T> -> (), onConnected: VoidFunction) {
+
+    /**
+    * Calls onConnected if user has an internet connection. Otherwise calls elseHandler with corresponding status.
+    */
+    private class func onConnected<T: Any>(elseHandler: RemoteResult<T> -> (), onConnected: VoidFunction) {
         if connected {
             onConnected()
         } else {
-            handler(RemoteResult(status: .NoConnection))
+            elseHandler(RemoteResult(status: .NoConnection))
+        }
+    }
+    
+    /**
+    * Calls onConnectedAndLoggedIn if user has an internet connection and is logged in. Otherwise calls elseHandler with corresponding status.
+    */
+    private class func onConnectedAndLoggedIn<T: Any>(elseHandler: RemoteResult<T> -> (), onConnectedAndLoggedIn: VoidFunction) {
+        onConnected(elseHandler) {
+            if Providers.userProvider.loggedIn {
+                onConnectedAndLoggedIn()
+            } else {
+                elseHandler(RemoteResult(status: .NotLoggedIn))
+            }
         }
     }
     

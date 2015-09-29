@@ -97,6 +97,7 @@ struct DefaultRemoteResultMapper {
         case .UnsupportedMediaType: return .ServerError
         case .ClientParamsParsingError: return .Unknown
         case .NoConnection: return .NoConnection
+        case .NotLoggedIn: return .NotAuthenticated // for provider layer it doesn't matter if not authenticated status was determined in client or server, so we map both to .NotAuthenticated
         }
     }
 }
@@ -109,7 +110,7 @@ struct DefaultRemoteErrorHandler {
     */
     static func handle<T>(remoteStatus: RemoteStatusCode, handler: ProviderResult<T> -> ()) {
         switch remoteStatus {
-        case .NoConnection, .NotAuthenticated:
+        case .NoConnection, .NotLoggedIn, .NotAuthenticated:
             return
         case _:
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteStatus)
