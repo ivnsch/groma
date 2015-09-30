@@ -26,14 +26,11 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         
         self.dbInventoryProvider.loadInventory{[weak self] dbInventoryItems in
             
-            print("loaded inventoryitems: \(dbInventoryItems)")
-            
-            if !memItemsMaybe.isSet {
+            if (memItemsMaybe.map {$0 != dbInventoryItems}) ?? true { // if memItems is not set or different than db items
                 handler(ProviderResult(status: .Success, sucessResult: dbInventoryItems))
+                self?.memProvider.overwrite(dbInventoryItems)
             }
             
-            self?.memProvider.overwrite(dbInventoryItems)
-
             self?.remoteInventoryItemsProvider.inventoryItems(inventory) {remoteResult in
                 
                 if let remoteInventoryItems = remoteResult.successResult {

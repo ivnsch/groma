@@ -31,7 +31,7 @@ class InventoryItemsViewController: UITableViewController, InventoryItemTableVie
     }
     
     private func loadInventoryItems(inventory: Inventory) {
-        Providers.inventoryItemsProvider.inventoryItems(inventory, fetchMode: .MemOnly, successHandler{[weak self] inventoryItems in
+        Providers.inventoryItemsProvider.inventoryItems(inventory, fetchMode: .Both, successHandler{[weak self] inventoryItems in
             self?.inventoryItems = inventoryItems
             self?.tableView.reloadData()
         })
