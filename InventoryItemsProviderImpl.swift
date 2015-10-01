@@ -14,17 +14,20 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     let dbInventoryProvider = RealmInventoryProvider()
     let memProvider = MemInventoryItemProvider(enabled: true)
 
-    func inventoryItems(inventory: Inventory, fetchMode: ProviderFetchModus = .Both, _ handler: ProviderResult<[InventoryItem]> -> ()) {
+    // TODO we are sorting 3x! Optimise this. Ponder if it makes sense to do the server objects sorting in the server (where it can be done at db level)
+    func inventoryItems(inventory: Inventory, fetchMode: ProviderFetchModus = .Both, sortBy: InventorySortBy = .Count, _ handler: ProviderResult<[InventoryItem]> -> ()) {
     
         let memItemsMaybe = memProvider.inventoryItems(inventory)
         if let memItems = memItemsMaybe {
-            handler(ProviderResult(status: .Success, sucessResult: memItems))
+            handler(ProviderResult(status: .Success, sucessResult: memItems.sortBy(sortBy))) // TODO? cache the sorting? is it expensive to sort if already sorted?
             if fetchMode == .MemOnly {
                 return
             }
         }
         
-        self.dbInventoryProvider.loadInventory{[weak self] dbInventoryItems in
+        self.dbInventoryProvider.loadInventory(sortBy) {[weak self] (var dbInventoryItems) in
+            
+            dbInventoryItems = dbInventoryItems.sortBy(sortBy)
             
             if (memItemsMaybe.map {$0 != dbInventoryItems}) ?? true { // if memItems is not set or different than db items
                 handler(ProviderResult(status: .Success, sucessResult: dbInventoryItems))
@@ -34,7 +37,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             self?.remoteInventoryItemsProvider.inventoryItems(inventory) {remoteResult in
                 
                 if let remoteInventoryItems = remoteResult.successResult {
-                    let inventoryItems: [InventoryItem] = remoteInventoryItems.map{InventoryItemMapper.inventoryItemWithRemote($0, inventory: inventory)}
+                    let inventoryItems: [InventoryItem] = remoteInventoryItems.map{InventoryItemMapper.inventoryItemWithRemote($0, inventory: inventory)}.sortBy(sortBy)
                     
                     // if there's no cached list or there's a difference, overwrite the cached list
                     if (dbInventoryItems != inventoryItems) {

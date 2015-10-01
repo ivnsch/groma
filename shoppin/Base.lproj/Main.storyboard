@@ -454,10 +454,10 @@
             </objects>
             <point key="canvasLocation" x="723" y="473"/>
         </scene>
-        <!--Inventory Items View Controller-->
+        <!--Inventory Items Table View Controller-->
         <scene sceneID="5br-Um-r4q">
             <objects>
-                <tableViewController id="WaN-WQ-9iC" customClass="InventoryItemsViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="WaN-WQ-9iC" customClass="InventoryItemsTableViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="rQJ-9h-DiT">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -465,7 +465,7 @@
                         <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="inventoryCell" id="vCq-K7-Ar7" customClass="InventoryItemTableViewCell" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="86" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="22" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vCq-K7-Ar7" id="6tq-xY-HMg">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -554,7 +554,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I1W-NC-SaH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="25" y="1168"/>
+            <point key="canvasLocation" x="733" y="1168"/>
         </scene>
         <!--User-->
         <scene sceneID="aV2-i4-Nfl">
@@ -1067,6 +1067,89 @@
             </objects>
             <point key="canvasLocation" x="30" y="473"/>
         </scene>
+        <!--Inventory-->
+        <scene sceneID="8V1-Xu-ghc">
+            <objects>
+                <viewController id="uKj-eu-fKv" customClass="InventoryItemsViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dXM-Vj-ySj"/>
+                        <viewControllerLayoutGuide type="bottom" id="NpP-Cd-T0t"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="eG5-9K-sgz">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fqR-hq-Fa0">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <connections>
+                                    <segue destination="WaN-WQ-9iC" kind="embed" identifier="embedInventoryItemsTableViewSegue" id="Ki8-zI-3vK"/>
+                                </connections>
+                            </containerView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cV6-te-Foy">
+                                <rect key="frame" x="0.0" y="64" width="600" height="50"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y3S-ae-ylK">
+                                        <rect key="frame" x="8" y="14" width="61" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e9t-BE-zKI">
+                                        <rect key="frame" x="85" y="10" width="42" height="30"/>
+                                        <state key="normal" title="Count"/>
+                                        <connections>
+                                            <action selector="onSortByTap:" destination="uKj-eu-fKv" eventType="touchUpInside" id="yhL-Rb-KYb"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="6Hk-5c-jiO"/>
+                                    <constraint firstItem="e9t-BE-zKI" firstAttribute="centerY" secondItem="cV6-te-Foy" secondAttribute="centerY" id="iCu-PP-SpG"/>
+                                    <constraint firstItem="y3S-ae-ylK" firstAttribute="centerY" secondItem="cV6-te-Foy" secondAttribute="centerY" id="ul7-Rg-CvX"/>
+                                    <constraint firstItem="y3S-ae-ylK" firstAttribute="leading" secondItem="cV6-te-Foy" secondAttribute="leading" constant="8" id="zUx-0u-rJW"/>
+                                    <constraint firstItem="e9t-BE-zKI" firstAttribute="baseline" secondItem="y3S-ae-ylK" secondAttribute="baseline" id="zfw-hh-IqT"/>
+                                    <constraint firstItem="e9t-BE-zKI" firstAttribute="leading" secondItem="y3S-ae-ylK" secondAttribute="trailing" constant="16" id="zg3-DS-6l4"/>
+                                </constraints>
+                            </view>
+                            <pickerView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ut2-O3-SM2">
+                                <rect key="frame" x="0.0" y="114" width="600" height="216"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="uKj-eu-fKv" id="dwT-Qf-udR"/>
+                                    <outlet property="delegate" destination="uKj-eu-fKv" id="7Au-qk-Lge"/>
+                                </connections>
+                            </pickerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="ut2-O3-SM2" secondAttribute="trailing" id="9Jf-1i-nds"/>
+                            <constraint firstItem="fqR-hq-Fa0" firstAttribute="leading" secondItem="eG5-9K-sgz" secondAttribute="leading" id="F8c-tC-l4R"/>
+                            <constraint firstItem="fqR-hq-Fa0" firstAttribute="top" secondItem="dXM-Vj-ySj" secondAttribute="bottom" constant="8" symbolic="YES" id="LS4-zu-D2K"/>
+                            <constraint firstItem="ut2-O3-SM2" firstAttribute="top" secondItem="cV6-te-Foy" secondAttribute="bottom" id="T3q-VX-Co7"/>
+                            <constraint firstAttribute="trailing" secondItem="cV6-te-Foy" secondAttribute="trailing" id="W4z-qK-6de"/>
+                            <constraint firstItem="ut2-O3-SM2" firstAttribute="leading" secondItem="eG5-9K-sgz" secondAttribute="leading" id="aQl-si-K7n"/>
+                            <constraint firstItem="cV6-te-Foy" firstAttribute="top" secondItem="dXM-Vj-ySj" secondAttribute="bottom" id="dy3-Jx-OHz"/>
+                            <constraint firstAttribute="bottom" secondItem="fqR-hq-Fa0" secondAttribute="bottom" id="o2f-Kx-2aH"/>
+                            <constraint firstItem="cV6-te-Foy" firstAttribute="leading" secondItem="eG5-9K-sgz" secondAttribute="leading" id="thD-5o-uex"/>
+                            <constraint firstAttribute="trailing" secondItem="fqR-hq-Fa0" secondAttribute="trailing" id="zNc-X6-tVN"/>
+                            <constraint firstItem="fqR-hq-Fa0" firstAttribute="top" secondItem="eG5-9K-sgz" secondAttribute="top" id="zpX-SH-d8V"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="LS4-zu-D2K"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <navigationItem key="navigationItem" title="Inventory" id="pV4-uC-pga"/>
+                    <connections>
+                        <outlet property="sortByButton" destination="e9t-BE-zKI" id="fTY-ln-ug4"/>
+                        <outlet property="sortByPicker" destination="ut2-O3-SM2" id="T0q-90-tMR"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CvN-cx-Agm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="39" y="1168"/>
+        </scene>
         <!--Inventories-->
         <scene sceneID="zDX-It-YpC">
             <objects>
@@ -1126,7 +1209,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="WaN-WQ-9iC" kind="relationship" relationship="rootViewController" id="0E8-xO-PvC"/>
+                        <segue destination="uKj-eu-fKv" kind="relationship" relationship="rootViewController" id="jwB-Z9-zAr"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hDx-lZ-E3m" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -8,9 +8,13 @@
 
 import Foundation
 
+enum InventorySortBy {
+    case Alphabetic, Count
+}
+
 protocol InventoryItemsProvider {
     
-    func inventoryItems(inventory: Inventory, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[InventoryItem]> -> ())
+    func inventoryItems(inventory: Inventory, fetchMode: ProviderFetchModus, sortBy: InventorySortBy, _ handler: ProviderResult<[InventoryItem]> -> ())
     
     func addToInventory(inventory: Inventory, items: [InventoryItemWithHistoryEntry], _ handler: ProviderResult<Any> -> ())
     

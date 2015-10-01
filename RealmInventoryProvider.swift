@@ -67,9 +67,15 @@ class RealmInventoryProvider: RealmProvider {
 //    }
 
     
-    func loadInventory(handler: [InventoryItem] -> ()) {
+    func loadInventory(sortBy: InventorySortBy, handler: [InventoryItem] -> ()) {
         let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}
-        self.load(mapper, handler: handler)
+//        let sortFieldStr: String = {
+//            switch sortBy {
+//            case .Alphabetic: return "product.name" // Realm doesn't support this yet, see https://github.com/realm/realm-cocoa/issues/1277 so for now we do sorting in provider
+//            case .Count: return "quantity"
+//            }
+//        }()
+        self.load(mapper, /*sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), */handler: handler)
     }
     
     func saveInventory(inventory: Inventory, handler: Bool -> ()) {
