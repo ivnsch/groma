@@ -652,7 +652,7 @@
         <scene sceneID="aBY-Kl-kXd">
             <objects>
                 <navigationController storyboardIdentifier="NavigationController" automaticallyAdjustsScrollViewInsets="NO" id="c6K-Tm-JhD" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="List" id="uJG-Eo-xiW"/>
+                    <tabBarItem key="tabBarItem" title="List" image="list" id="uJG-Eo-xiW"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="FPI-Ud-Czg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1201,7 +1201,7 @@
         <scene sceneID="8Hn-kj-aan">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7A1-RK-HJT" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Inventory" id="yUm-WR-GoU"/>
+                    <tabBarItem key="tabBarItem" title="Inventory" image="inventory" id="yUm-WR-GoU"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="QjE-wI-irz">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1304,7 +1304,7 @@
                             <constraint firstItem="Clm-iQ-FWg" firstAttribute="leading" secondItem="llX-YW-eE9" secondAttribute="leading" id="zra-n3-l53"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Stats" id="omU-Id-l2V"/>
+                    <tabBarItem key="tabBarItem" title="Stats" image="stats" id="omU-Id-l2V"/>
                     <connections>
                         <outlet property="statsContentView" destination="Clm-iQ-FWg" id="AwN-r3-xcC"/>
                         <outlet property="timePeriodButton" destination="5O5-fM-mtz" id="xXa-wD-xSZ"/>
@@ -1596,7 +1596,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <tabBarItem key="tabBarItem" title="History" id="sfI-ey-1RN"/>
+                    <tabBarItem key="tabBarItem" title="History" image="history" id="sfI-ey-1RN"/>
                     <connections>
                         <outlet property="tableView" destination="XF6-Wi-vHV" id="4JU-R5-kwv"/>
                         <outlet property="tableViewFooter" destination="Lxj-To-pGn" id="mMi-wg-xQE"/>
@@ -1610,7 +1610,7 @@
         <scene sceneID="GTf-S5-Syy">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="B4w-vm-AVy" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="More" id="cLJ-PG-GFJ"/>
+                    <tabBarItem key="tabBarItem" title="More" image="more" id="cLJ-PG-GFJ"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ufI-Hd-Hpl">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1626,4 +1626,11 @@
             <point key="canvasLocation" x="-1470" y="2276"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="history" width="30" height="30"/>
+        <image name="inventory" width="30" height="30"/>
+        <image name="list" width="30" height="30"/>
+        <image name="more" width="30" height="30"/>
+        <image name="stats" width="30" height="30"/>
+    </resources>
 </document>
