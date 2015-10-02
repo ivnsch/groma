@@ -8,11 +8,9 @@
 
 import UIKit
 
-class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenuDelegate {
+class DoneViewController: UIViewController, ListItemsTableViewDelegate {
 
     private var listItemsTableViewController: ListItemsTableViewController!
-    
-    @IBOutlet weak var cartMenu: CartMenuView!
     
     var list: List? {
         didSet { // TODO check if there's a timing problem when we implement memory cache, this may be called before it's displayed (so we see no listitems)?
@@ -28,10 +26,6 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         super.viewDidLoad()
 
         self.initTableViewController()
-        
-        FrozenEffect.apply(self.cartMenu)
-        
-        self.cartMenu.delegate = self
         
         onUIReady?()
     }
@@ -69,7 +63,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
 //        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "clearThings")
 //        self.listItemsTableViewController.view.addGestureRecognizer(gestureRecognizer)
         
-        self.listItemsTableViewController.tableViewShiftDown(64)
+//        self.listItemsTableViewController.tableViewShiftDown(64)
     }
     
     func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) {
@@ -87,12 +81,6 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
 
     func startSideMenuDrag() {
         self.listItemsTableViewController.clearPendingSwipeItemIfAny()
-    }
-    
-    override func didMoveToParentViewController(parent: UIViewController?) {
-        let topInset = self.cartMenu.frame.height
-        let bottomInset = self.tabBarController?.tabBar.frame.height
-        self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0)
     }
     
     private func setItemUndone(listItem: ListItem) {
@@ -118,7 +106,11 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate, CartMenu
         }
     }
     
-    func onAddToInventoryTap() {
+    @IBAction func onAddToInventoryTap(sender: UIBarButtonItem) {
+        addAllItemsToInventory()
+    }
+    
+    private func addAllItemsToInventory() {
         
         let onHasInventory: (Inventory) -> () = {[weak self] inventory in
             

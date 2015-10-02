@@ -24,9 +24,9 @@ class ListItemsViewSection: Equatable {
     
     private let cellIdentifier = ItemsListTableViewConstants.listItemCellIdentifier
     
-    var headerBGColor:UIColor = UIColor(red: 0, green: 0, blue: 1, alpha: 1)
+    var headerBGColor:UIColor = UIColor(red: 0, green: 1, blue: 1, alpha: 1)
     
-    var headerFontColor:UIColor = UIColor.whiteColor()
+    var headerFontColor:UIColor = UIColor.blackColor()
     var labelFontColor:UIColor = UIColor.blackColor()
     
     var section: Section // as var to mutate order in-place (ListItemsTableViewController)
@@ -36,6 +36,8 @@ class ListItemsViewSection: Equatable {
     var style:ListItemsTableViewControllerStyle = .Normal
 
     var delegate:ItemActionsDelegate!
+    
+    private let headerFont = UIFont(name: "HelveticaNeue-Bold", size: 20) ?? UIFont.systemFontOfSize(16) // TODO app fonts in 1 place
     
     // this could be solved maybe with inheritance or sth like "style injection", for now this is ok
     private var finalLabelFontColor:UIColor {
@@ -92,10 +94,10 @@ class ListItemsViewSection: Equatable {
         
         if self.hasHeader {
             let label = UILabel()
-            label.text = "  " + self.section.name //FIXME - container doesn't work properly!
+            label.text = " " + self.section.name //FIXME - container doesn't work properly!
             label.backgroundColor = self.finalHeaderBGColor
             label.textColor = self.finalHeaderFontColor
-            label.font = UIFont(name: "Trebuchet MS", size: 15)
+            label.font = headerFont
             v = label
         } else {
             v = nil

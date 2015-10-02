@@ -23,7 +23,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableViewController?.tableViewTopInset = 64
+        self.tableViewController?.tableViewTopInset = 50
     }
     
     // MARK: - UIPicker

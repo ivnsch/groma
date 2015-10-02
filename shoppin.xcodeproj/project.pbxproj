@@ -79,7 +79,6 @@
 		EB202B971B54109A001699E7 /* RemoteRegisterResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB202B961B54109A001699E7 /* RemoteRegisterResult.swift */; };
 		EB202B981B54109A001699E7 /* RemoteRegisterResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB202B961B54109A001699E7 /* RemoteRegisterResult.swift */; };
 		EB202B991B54109A001699E7 /* RemoteRegisterResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB202B961B54109A001699E7 /* RemoteRegisterResult.swift */; };
-		EB20FBF21A5961360058103B /* CartMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF11A5961360058103B /* CartMenuView.swift */; };
 		EB20FBF81A5971170058103B /* InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF71A5971170058103B /* InventoryItem.swift */; };
 		EB20FBFA1A5971C20058103B /* InventoryItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBF91A5971C20058103B /* InventoryItemMapper.swift */; };
 		EB20FBFC1A5972A30058103B /* InventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFB1A5972A30058103B /* InventoryProvider.swift */; };
@@ -571,7 +570,6 @@
 		EB1DDEC31A3334EC00D778DE /* shoppinTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shoppinTests.swift; sourceTree = "<group>"; };
 		EB1EFAC41B1EFBBC0079A35D /* AutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteTextField.swift; sourceTree = "<group>"; };
 		EB202B961B54109A001699E7 /* RemoteRegisterResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteRegisterResult.swift; sourceTree = "<group>"; };
-		EB20FBF11A5961360058103B /* CartMenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartMenuView.swift; sourceTree = "<group>"; };
 		EB20FBF71A5971170058103B /* InventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItem.swift; sourceTree = "<group>"; };
 		EB20FBF91A5971C20058103B /* InventoryItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemMapper.swift; sourceTree = "<group>"; };
 		EB20FBFB1A5972A30058103B /* InventoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryProvider.swift; sourceTree = "<group>"; };
@@ -992,7 +990,6 @@
 			isa = PBXGroup;
 			children = (
 				EB2F5D251A4DE56B00DBC4AF /* DoneViewController.swift */,
-				EB20FBF11A5961360058103B /* CartMenuView.swift */,
 			);
 			name = cart;
 			path = shoppin;
@@ -2052,7 +2049,6 @@
 				EB7F59C21BA1049100E07EBA /* Identifiable.swift in Sources */,
 				EBF162FD1A3DDE5D0048E37C /* ProductMapper.swift in Sources */,
 				EB20FBFA1A5971C20058103B /* InventoryItemMapper.swift in Sources */,
-				EB20FBF21A5961360058103B /* CartMenuView.swift in Sources */,
 				EB4FD46C1AC73B590000F952 /* PreferencesManager.swift in Sources */,
 				EBBC23211BB580FD0002F6B1 /* FacebookLogin.swift in Sources */,
 				EB202B971B54109A001699E7 /* RemoteRegisterResult.swift in Sources */,
