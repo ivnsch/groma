@@ -16,6 +16,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     private let pageCount = 4 // later replace with array of images
     
+    private let pageModels: [(key: String, imageName: String)] = [
+        ("Manage your shopping lists comfortably", "intro_groceries"),
+        ("Manage your inventory, get reminders to buy low stock items", "intro_inventory"),
+        ("Analyse your shopping behaviour and get tips to save money", "intro_stats"),
+        ("Share with others in real time", "intro_share")
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         pageControl.numberOfPages = pageCount
@@ -70,18 +77,25 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     }
     
     func swipeView(swipeView: SwipeView!, viewForItemAtIndex index: Int, reusingView view: UIView!) -> UIView! {
-        let label = UILabel()
-        label.text = "\(index + 1)"
-        label.textAlignment = .Center
-        label.backgroundColor = UIColor.randomColor().colorWithAlphaComponent(0.4)
-        label.frame = swipeView.frame
-        return label
-    }
     
+        let v = (view ?? NSBundle.loadView("IntroPageView", owner: self)!) as! IntroPageView
+        
+        let pageModel = pageModels[index]
+        
+        let image = UIImage(named: pageModel.imageName)!
+        v.imageView.image = image
+        v.label.text = pageModel.key
+
+        return v
+    }
+
     // MARK: - SwipeViewDelegate
     
     func swipeViewCurrentItemIndexDidChange(swipeView: SwipeView!) {
         pageControl.currentPage = swipeView.currentItemIndex
     }
+    
+    func swipeViewItemSize(swipeView: SwipeView!) -> CGSize {
+        return swipeView.frame.size
+    }
 }
-
