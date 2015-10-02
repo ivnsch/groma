@@ -34,6 +34,8 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     private var currentStatsPresentation: StatsPresentation = .List
     private var currentTimePeriod: TimePeriod = defaultTimePeriod
     
+    private let pickerLabelFont = UIFont(name: "HelveticaNeue-Light", size: 17) ?? UIFont.systemFontOfSize(17) // TODO font in 1 place
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -70,8 +72,11 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         return timePeriods.count
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return timePeriods[row].text
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+        let label = view as? UILabel ?? UILabel()
+        label.font = pickerLabelFont
+        label.text = timePeriods[row].text
+        return label
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

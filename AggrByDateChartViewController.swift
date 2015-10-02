@@ -31,7 +31,7 @@ class AggrByDateChartViewController: UIViewController {
             return
         }
         
-        let labelSettings = ChartLabelSettings()
+        let labelSettings = ChartLabelSettings(font: UIFont(name: "HelveticaNeue-Light", size: 14) ?? UIFont.systemFontOfSize(16)) // TODO app font in 1 place)
         
         let inputDateFormatter = NSDateFormatter()
         inputDateFormatter.dateFormat = "MM yyyy"
@@ -39,7 +39,7 @@ class AggrByDateChartViewController: UIViewController {
         let outputDateFormatter = NSDateFormatter()
         outputDateFormatter.dateFormat = "MMM"
         
-        let xValues: [ChartAxisValueDate] = monthYearAggregate.allDates.map {ChartAxisValueDate(date: $0, formatter: outputDateFormatter)}
+        let xValues: [ChartAxisValueDate] = monthYearAggregate.allDates.map {ChartAxisValueDate(date: $0, formatter: outputDateFormatter, labelSettings: labelSettings)}
         
         // For each xValue we need a chart point. If there's no aggregate for a value we create one with total price 0 (no spendings)
         let chartPoints: [ChartPoint] = xValues.map {xValue in

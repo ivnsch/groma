@@ -31,7 +31,7 @@ class AggrByTypeChartViewController: UIViewController, XYPieChartDataSource {
         pieChart.pieCenter = CGPointMake((self.view.frame.width - (inset * 2)) / 2, pieChart.pieRadius + 10)
         pieChart.labelRadius = 100
         pieChart.showPercentage = true
-        pieChart.labelFont = UIFont.systemFontOfSize(16)
+        pieChart.labelFont = UIFont(name: "HelveticaNeue-Light", size: 16) ?? UIFont.systemFontOfSize(16) // TODO app font in 1 place
         pieChart.labelColor = UIColor.blackColor()
         self.view.addSubview(pieChart)
         pieChart.dataSource = self

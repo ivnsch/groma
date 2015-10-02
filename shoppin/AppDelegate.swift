@@ -43,11 +43,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
 
         initReachability()
+
+        initTitlesFont()
         
         // Facebook sign-in
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
+    private func initTitlesFont() {
+        let fontName = "HelveticaNeue-Light"
+        if let tabsFont = UIFont(name: fontName, size: 11), titleFont = UIFont(name: fontName, size: 17), segmentedControlFont = UIFont(name: fontName, size: 12) {
+            UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: tabsFont], forState: .Normal)
+            UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName : titleFont]
+            UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : titleFont], forState: .Normal)
+            UISegmentedControl.appearance().setTitleTextAttributes([NSFontAttributeName : segmentedControlFont], forState: .Normal)
+        } else {
+            print("Error: Font not found: \(fontName)")
+        }
+    }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
         
