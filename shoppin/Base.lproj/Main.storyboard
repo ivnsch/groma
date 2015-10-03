@@ -528,21 +528,14 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cUe-dc-Y1J">
-                                            <rect key="frame" x="442" y="11" width="40" height="21"/>
+                                            <rect key="frame" x="468" y="11" width="40" height="21"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yBM-4c-s6A">
-                                            <rect key="frame" x="505" y="7" width="30" height="30"/>
-                                            <state key="normal" title="+"/>
-                                            <connections>
-                                                <action selector="onIncrementTap:" destination="vCq-K7-Ar7" eventType="touchUpInside" id="5j2-Ux-DoW"/>
-                                            </connections>
-                                        </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V4m-pG-OCr">
-                                            <rect key="frame" x="558" y="7" width="30" height="30"/>
-                                            <state key="normal" title="-"/>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V4m-pG-OCr">
+                                            <rect key="frame" x="528" y="11" width="20" height="22"/>
+                                            <state key="normal" image="minus"/>
                                             <connections>
                                                 <action selector="onDecrementTap:" destination="vCq-K7-Ar7" eventType="touchUpInside" id="Iz1-mU-bq5"/>
                                             </connections>
@@ -565,18 +558,25 @@
                                                 <constraint firstItem="afY-52-Udf" firstAttribute="leading" secondItem="dD0-od-4dH" secondAttribute="leading" id="pLg-K9-ahQ"/>
                                             </constraints>
                                         </view>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yBM-4c-s6A">
+                                            <rect key="frame" x="568" y="11" width="20" height="22"/>
+                                            <state key="normal" image="plus"/>
+                                            <connections>
+                                                <action selector="onIncrementTap:" destination="vCq-K7-Ar7" eventType="touchUpInside" id="5j2-Ux-DoW"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="yBM-4c-s6A" firstAttribute="centerY" secondItem="kNJ-Rb-iDN" secondAttribute="centerY" id="2XP-BX-wOX"/>
-                                        <constraint firstItem="yBM-4c-s6A" firstAttribute="leading" secondItem="cUe-dc-Y1J" secondAttribute="trailing" constant="23" id="2dc-hq-dwR"/>
-                                        <constraint firstAttribute="trailing" secondItem="V4m-pG-OCr" secondAttribute="trailing" constant="12" id="3pT-hZ-5Pc"/>
-                                        <constraint firstItem="V4m-pG-OCr" firstAttribute="leading" secondItem="yBM-4c-s6A" secondAttribute="trailing" constant="23" id="HnA-Fu-DGR"/>
+                                        <constraint firstItem="yBM-4c-s6A" firstAttribute="leading" secondItem="V4m-pG-OCr" secondAttribute="trailing" constant="20" id="F95-Rl-wo9"/>
                                         <constraint firstItem="V4m-pG-OCr" firstAttribute="centerY" secondItem="kNJ-Rb-iDN" secondAttribute="centerY" id="Kev-uA-CTH"/>
                                         <constraint firstAttribute="trailing" secondItem="cUe-dc-Y1J" secondAttribute="trailing" constant="5" id="QTF-ij-zRP"/>
+                                        <constraint firstAttribute="trailing" secondItem="yBM-4c-s6A" secondAttribute="trailing" constant="12" id="Uol-vj-sm6"/>
                                         <constraint firstAttribute="centerY" secondItem="cUe-dc-Y1J" secondAttribute="centerY" id="XzQ-Tq-r1I"/>
                                         <constraint firstAttribute="centerY" secondItem="kNJ-Rb-iDN" secondAttribute="centerY" id="cWp-6C-OPw"/>
                                         <constraint firstItem="dD0-od-4dH" firstAttribute="leading" secondItem="6tq-xY-HMg" secondAttribute="leading" id="e0W-A6-hGR"/>
                                         <constraint firstItem="dD0-od-4dH" firstAttribute="top" secondItem="6tq-xY-HMg" secondAttribute="top" id="rPp-jd-g3h"/>
+                                        <constraint firstItem="V4m-pG-OCr" firstAttribute="leading" secondItem="cUe-dc-Y1J" secondAttribute="trailing" constant="20" id="wSN-Xo-yX8"/>
                                         <constraint firstItem="kNJ-Rb-iDN" firstAttribute="leading" secondItem="6tq-xY-HMg" secondAttribute="leading" constant="5" id="xfn-Al-TWH"/>
                                         <constraint firstItem="cUe-dc-Y1J" firstAttribute="centerY" secondItem="kNJ-Rb-iDN" secondAttribute="centerY" id="yQG-zD-5o4"/>
                                         <constraint firstAttribute="trailing" secondItem="dD0-od-4dH" secondAttribute="trailing" id="zJV-Te-IXO"/>
@@ -1686,7 +1686,9 @@
         <image name="history" width="30" height="30"/>
         <image name="inventory" width="30" height="30"/>
         <image name="list" width="30" height="30"/>
+        <image name="minus" width="20" height="20"/>
         <image name="more" width="30" height="30"/>
+        <image name="plus" width="20" height="20"/>
         <image name="stats" width="30" height="30"/>
     </resources>
 </document>
