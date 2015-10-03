@@ -1165,22 +1165,12 @@
                                     <constraint firstItem="e9t-BE-zKI" firstAttribute="leading" secondItem="y3S-ae-ylK" secondAttribute="trailing" constant="16" id="zg3-DS-6l4"/>
                                 </constraints>
                             </view>
-                            <pickerView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ut2-O3-SM2">
-                                <rect key="frame" x="0.0" y="114" width="600" height="216"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="uKj-eu-fKv" id="dwT-Qf-udR"/>
-                                    <outlet property="delegate" destination="uKj-eu-fKv" id="7Au-qk-Lge"/>
-                                </connections>
-                            </pickerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="ut2-O3-SM2" secondAttribute="trailing" id="9Jf-1i-nds"/>
                             <constraint firstItem="fqR-hq-Fa0" firstAttribute="leading" secondItem="eG5-9K-sgz" secondAttribute="leading" id="F8c-tC-l4R"/>
                             <constraint firstItem="fqR-hq-Fa0" firstAttribute="top" secondItem="dXM-Vj-ySj" secondAttribute="bottom" constant="8" symbolic="YES" id="LS4-zu-D2K"/>
-                            <constraint firstItem="ut2-O3-SM2" firstAttribute="top" secondItem="cV6-te-Foy" secondAttribute="bottom" id="T3q-VX-Co7"/>
                             <constraint firstAttribute="trailing" secondItem="cV6-te-Foy" secondAttribute="trailing" id="W4z-qK-6de"/>
-                            <constraint firstItem="ut2-O3-SM2" firstAttribute="leading" secondItem="eG5-9K-sgz" secondAttribute="leading" id="aQl-si-K7n"/>
                             <constraint firstItem="cV6-te-Foy" firstAttribute="top" secondItem="dXM-Vj-ySj" secondAttribute="bottom" id="dy3-Jx-OHz"/>
                             <constraint firstAttribute="bottom" secondItem="fqR-hq-Fa0" secondAttribute="bottom" id="o2f-Kx-2aH"/>
                             <constraint firstItem="cV6-te-Foy" firstAttribute="leading" secondItem="eG5-9K-sgz" secondAttribute="leading" id="thD-5o-uex"/>
@@ -1196,7 +1186,6 @@
                     <navigationItem key="navigationItem" title="Inventory" id="pV4-uC-pga"/>
                     <connections>
                         <outlet property="sortByButton" destination="e9t-BE-zKI" id="fTY-ln-ug4"/>
-                        <outlet property="sortByPicker" destination="ut2-O3-SM2" id="T0q-90-tMR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CvN-cx-Agm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1318,16 +1307,6 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Clm-iQ-FWg">
                                 <rect key="frame" x="0.0" y="159" width="600" height="392"/>
                             </containerView>
-                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PZK-lS-chc">
-                                <rect key="frame" x="0.0" y="335" width="600" height="216"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="216" id="SQb-i1-N2Q"/>
-                                </constraints>
-                                <connections>
-                                    <outlet property="dataSource" destination="weA-MS-NIz" id="YzJ-c6-tie"/>
-                                    <outlet property="delegate" destination="weA-MS-NIz" id="x56-Nd-70l"/>
-                                </connections>
-                            </pickerView>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="92e-Qi-n69">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
                                 <constraints>
@@ -1342,9 +1321,7 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Clm-iQ-FWg" secondAttribute="trailing" id="5GS-GY-PsL"/>
                             <constraint firstItem="5O5-fM-mtz" firstAttribute="leading" secondItem="vAy-dH-sCf" secondAttribute="trailing" constant="26" id="6gu-fJ-dCE"/>
-                            <constraint firstItem="PZK-lS-chc" firstAttribute="leading" secondItem="llX-YW-eE9" secondAttribute="leading" id="6xz-fv-s6P"/>
                             <constraint firstItem="vV1-kR-bWX" firstAttribute="top" secondItem="Clm-iQ-FWg" secondAttribute="bottom" id="7aN-Nl-3zb"/>
-                            <constraint firstItem="vV1-kR-bWX" firstAttribute="top" secondItem="PZK-lS-chc" secondAttribute="bottom" id="8O0-3G-4mr"/>
                             <constraint firstItem="Clm-iQ-FWg" firstAttribute="top" secondItem="5O5-fM-mtz" secondAttribute="bottom" constant="14" id="Ajs-lL-RD1"/>
                             <constraint firstItem="vAy-dH-sCf" firstAttribute="top" secondItem="mSi-5B-d4O" secondAttribute="bottom" constant="13" id="FfM-69-MTk"/>
                             <constraint firstItem="92e-Qi-n69" firstAttribute="top" secondItem="llX-YW-eE9" secondAttribute="top" id="GIx-5H-E7y"/>
@@ -1353,7 +1330,6 @@
                             <constraint firstItem="vAy-dH-sCf" firstAttribute="leading" secondItem="llX-YW-eE9" secondAttribute="leading" constant="20" id="jvG-uU-jTS"/>
                             <constraint firstItem="5O5-fM-mtz" firstAttribute="centerY" secondItem="vAy-dH-sCf" secondAttribute="centerY" id="kYl-xe-DKw"/>
                             <constraint firstAttribute="trailing" secondItem="92e-Qi-n69" secondAttribute="trailing" id="p7U-Il-e9s"/>
-                            <constraint firstAttribute="trailing" secondItem="PZK-lS-chc" secondAttribute="trailing" id="r3x-Gh-wzW"/>
                             <constraint firstItem="92e-Qi-n69" firstAttribute="leading" secondItem="llX-YW-eE9" secondAttribute="leading" id="tTc-Qm-bcE"/>
                             <constraint firstItem="Clm-iQ-FWg" firstAttribute="leading" secondItem="llX-YW-eE9" secondAttribute="leading" id="zra-n3-l53"/>
                         </constraints>
@@ -1362,7 +1338,6 @@
                     <connections>
                         <outlet property="statsContentView" destination="Clm-iQ-FWg" id="AwN-r3-xcC"/>
                         <outlet property="timePeriodButton" destination="5O5-fM-mtz" id="xXa-wD-xSZ"/>
-                        <outlet property="timePeriodPicker" destination="PZK-lS-chc" id="CGH-Z9-A8X"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LCT-3P-whg" userLabel="First Responder" sceneMemberID="firstResponder"/>

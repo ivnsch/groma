@@ -13,6 +13,7 @@
 		EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB0587DB1BBED86B00080626 /* IntroPageView.xib */; };
 		EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DD1BBED9C800080626 /* IntroPageView.swift */; };
 		EB0587E01BBEDAA600080626 /* NSBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DF1BBEDAA600080626 /* NSBundle.swift */; };
+		EB0870CB1BC050A300169E29 /* MyTipPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0870CA1BC050A300169E29 /* MyTipPopup.swift */; };
 		EB0C1B831B3D626500F24C85 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B821B3D626500F24C85 /* IntroViewController.swift */; };
 		EB0C1B881B3DA37100F24C85 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B861B3DA37100F24C85 /* LoginViewController.swift */; };
 		EB0C1B8B1B3DA89900F24C85 /* LoginData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B8A1B3DA89900F24C85 /* LoginData.swift */; };
@@ -530,6 +531,7 @@
 		EB0587DB1BBED86B00080626 /* IntroPageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IntroPageView.xib; sourceTree = "<group>"; };
 		EB0587DD1BBED9C800080626 /* IntroPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroPageView.swift; sourceTree = "<group>"; };
 		EB0587DF1BBEDAA600080626 /* NSBundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSBundle.swift; sourceTree = "<group>"; };
+		EB0870CA1BC050A300169E29 /* MyTipPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTipPopup.swift; sourceTree = "<group>"; };
 		EB0C1B821B3D626500F24C85 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		EB0C1B861B3DA37100F24C85 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		EB0C1B8A1B3DA89900F24C85 /* LoginData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginData.swift; sourceTree = "<group>"; };
@@ -1446,6 +1448,7 @@
 			isa = PBXGroup;
 			children = (
 				EBBC23221BB5D57C0002F6B1 /* ProviderPopupManager.swift */,
+				EB0870CA1BC050A300169E29 /* MyTipPopup.swift */,
 			);
 			name = popup;
 			sourceTree = "<group>";
@@ -2170,6 +2173,7 @@
 				EB7E832A1B7B72B9009DEEF4 /* HistoryItemMapper.swift in Sources */,
 				EB70C2231B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBF162F51A3CA4BA0048E37C /* ProviderFactory.swift in Sources */,
+				EB0870CB1BC050A300169E29 /* MyTipPopup.swift in Sources */,
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
 				EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */,
 				EBF1A15F1B82428700F34105 /* HistoryItemCell.swift in Sources */,

@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (2.0.0-beta.1)
+  - CMPopTipView (2.2.0)
   - Google/Core (1.0.7):
     - GoogleNetworkingUtilities (~> 1.0)
     - GoogleSymbolUtilities (~> 1.0)
@@ -36,6 +37,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (from `https://github.com/Alamofire/Alamofire.git`, branch `swift-2.0`)
+  - CMPopTipView (~> 2.0)
   - Google/SignIn
   - Nimble (from `https://github.com/Quick/Nimble.git`, branch `swift-2.0`)
   - Reachability (~> 3.2)
@@ -88,6 +90,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: 96feccc1e48a735edb92395cf023ba4ed52bdb45
+  CMPopTipView: a0a88404b9f46a5cfc16ce54bdb1b9bf9acb9aff
   Google: 875f5a8ade86dd02e36586e4a54814843938c7f6
   GoogleAppUtilities: c01c6a5671e9da8b9d690fdaec5959d6c2aac699
   GoogleAuthUtilities: 049ffd3a297cdffd271451b82fd4e75304f15ef3

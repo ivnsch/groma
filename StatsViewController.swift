@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CMPopTipView
 
 private enum StatsType {
     case Aggr, History
@@ -27,8 +28,9 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     ]
     
     @IBOutlet weak var statsContentView: UIView!
-    @IBOutlet weak var timePeriodPicker: UIPickerView!
     @IBOutlet weak var timePeriodButton: UIButton!
+ 
+    private var sortByPopup: CMPopTipView?
     
     private var currentStatsType: StatsType = .Aggr
     private var currentStatsPresentation: StatsPresentation = .List
@@ -38,8 +40,6 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        timePeriodPicker.hidden = true
         showStatsContent()
     }
     
@@ -49,13 +49,25 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     }
     
     
+    private func createPicker() -> UIPickerView {
+        let picker = UIPickerView(frame: CGRectMake(0, 0, 150, 100))
+        picker.delegate = self
+        picker.dataSource = self
+        return picker
+    }
+    
     @IBAction func onStatsPresentationSwitch(sender: UISegmentedControl) {
         currentStatsPresentation = sender.selectedSegmentIndex == 0 ? .List : .Graph
         showStatsContent()
     }
  
     @IBAction func onTimePeriodTap(sender: UIButton) {
-        timePeriodPicker.hidden = !timePeriodPicker.hidden
+        if let popup = self.sortByPopup {
+            popup.dismissAnimated(true)
+        } else {
+            let popup = MyTipPopup(customView: createPicker())
+            popup.presentPointingAtView(timePeriodButton, inView: view, animated: true)
+        }
     }
     
     private func showStatsContent() {
@@ -80,7 +92,6 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        timePeriodPicker.hidden = true
         let timePeriod = timePeriods[row]
         currentTimePeriod = timePeriod.timePeriod
         showStatsContent()

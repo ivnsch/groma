@@ -20,6 +20,7 @@ target 'shoppin' do
     pod 'SwiftCharts', :git => 'https://github.com/i-schuetz/SwiftCharts.git', :branch => 'swift2.0'
     pod 'Google/SignIn'
     pod 'SwipeView', '~> 1.3.2'
+    pod 'CMPopTipView', '~> 2.0'
     shared
 end
 
