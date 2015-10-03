@@ -24,7 +24,7 @@ class ListItemsViewSection: Equatable {
     
     private let cellIdentifier = ItemsListTableViewConstants.listItemCellIdentifier
     
-    var headerBGColor:UIColor = UIColor(red: 0, green: 1, blue: 1, alpha: 1)
+    var headerBGColor:UIColor = UIColor(red: 167/255, green: 1, blue: 93/255, alpha: 1)
     
     var headerFontColor:UIColor = UIColor.blackColor()
     var labelFontColor:UIColor = UIColor.blackColor()
@@ -37,7 +37,7 @@ class ListItemsViewSection: Equatable {
 
     var delegate:ItemActionsDelegate!
     
-    private let headerFont = UIFont(name: "HelveticaNeue-Bold", size: 20) ?? UIFont.systemFontOfSize(16) // TODO app fonts in 1 place
+    private let headerFont = UIFont(name: "HelveticaNeue-Bold", size: 18) ?? UIFont.systemFontOfSize(18) // TODO app fonts in 1 place
     
     // this could be solved maybe with inheritance or sth like "style injection", for now this is ok
     private var finalLabelFontColor:UIColor {

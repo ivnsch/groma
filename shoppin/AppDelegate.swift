@@ -44,22 +44,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         initReachability()
 
-        initTitlesFont()
+        initGlobalAppearance()
         
         // Facebook sign-in
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
-    private func initTitlesFont() {
-        let fontName = "HelveticaNeue-Light"
-        if let tabsFont = UIFont(name: fontName, size: 11), titleFont = UIFont(name: fontName, size: 17), segmentedControlFont = UIFont(name: fontName, size: 12) {
+    private func initGlobalAppearance() {
+        let fontName = "HelveticaNeue"
+        let lightFontName = "HelveticaNeue-Light"
+        let boldFontName = "HelveticaNeue-Bold"
+        if let tabsFont = UIFont(name: lightFontName, size: 11), barButtonsFont = UIFont(name: fontName, size: 17), titleFont = UIFont(name: boldFontName, size: 17),segmentedControlFont = UIFont(name: lightFontName, size: 12) {
             UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: tabsFont], forState: .Normal)
-            UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName : titleFont]
-            UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : titleFont], forState: .Normal)
-            UISegmentedControl.appearance().setTitleTextAttributes([NSFontAttributeName : segmentedControlFont], forState: .Normal)
+            UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: titleFont, NSForegroundColorAttributeName: UIColor.blackColor()]
+            UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName: barButtonsFont, NSForegroundColorAttributeName: UIColor.blackColor()], forState: .Normal)
+            UISegmentedControl.appearance().setTitleTextAttributes([NSFontAttributeName: segmentedControlFont], forState: .Normal)
         } else {
-            print("Error: Font not found: \(fontName)")
+            print("Error: Font not found: \(fontName) or: \(lightFontName)")
         }
+        
+        UINavigationBar.appearance().barTintColor = UIColor(red: 93/255, green: 167/255, blue: 1, alpha: 1) // color "theme": 5DA7FF (blue), FF5DA6 (pink), A7FF5D(green)
+        // grey: AEAEAE
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
