@@ -313,7 +313,7 @@ class ListItemProviderImpl: ListItemProvider {
             }
             self?.remoteProvider.update(listItems) {result in
                 if !result.success {
-                    print("Error: Updating listItems: \(listItems)")
+                    print("Error: Updating listItems: \(listItems), result: \(result)")
                     DefaultRemoteErrorHandler.handle(result.status, handler: handler)
                 }
             }
