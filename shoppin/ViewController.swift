@@ -57,7 +57,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         setEditing(false, animated: false)
         updatePrices()
-//        FrozenEffect.apply(self.pricesView)
+        FrozenEffect.apply(self.pricesView)
     }
    
     private func setAddButtonVisible(visible: Bool, animated: Bool = false) {
