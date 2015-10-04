@@ -25,8 +25,6 @@ import UIKit
 
 class SwipeableCell: UITableViewCell {
     
-    private let bounceValue:CGFloat = 20
-    
     @IBOutlet weak var button1: UIButton!
     @IBOutlet weak var button2: UIButton!
     @IBOutlet weak var button3: UIButton!
@@ -35,7 +33,7 @@ class SwipeableCell: UITableViewCell {
     
     var panRecognizer:UIPanGestureRecognizer!
     var panStartPoint:CGPoint!
-    var startingLeftLayoutConstraint:CGFloat!
+    var startingLeftLayoutConstraint: CGFloat = 0
     
     var startItemSwipe:(()->())?
     var itemSwiped:(()->())?
@@ -52,6 +50,8 @@ class SwipeableCell: UITableViewCell {
         self.panRecognizer = UIPanGestureRecognizer(target: self, action: "onPanCell:")
         self.panRecognizer.delegate = self
         self.myContentView.addGestureRecognizer(self.panRecognizer)
+        
+        myContentView.translatesAutoresizingMaskIntoConstraints = false
     }
     
     func buttonTotalWidth() -> CGFloat {
@@ -59,16 +59,12 @@ class SwipeableCell: UITableViewCell {
         //            - CGRectGetMinX(self.button2.frame)
     }
     
-    func setOpen(open:Bool) {
-        if (open) {
-            self.contentViewLeftConstraint.constant = self.buttonTotalWidth()
-            self.contentViewRightConstraint.constant = -self.buttonTotalWidth()
+    func setOpen(open: Bool, animated: Bool = false) {
+        if open {
+            setConstraintsToShowAllButtons(animated, notifyDelegateDidOpen: false)
         } else {
-            self.contentViewLeftConstraint.constant = 0
-            self.contentViewRightConstraint.constant = 0
+            resetConstraintContstantsToZero(animated, notifyDelegateDidClose: false)
         }
-        
-        self.startingLeftLayoutConstraint = self.contentViewLeftConstraint.constant
     }
     
     func resetConstraintContstantsToZero(animated:Bool, notifyDelegateDidClose:Bool) {
@@ -76,47 +72,38 @@ class SwipeableCell: UITableViewCell {
             return
         }
         
-        self.contentViewLeftConstraint.constant = -bounceValue
-        self.contentViewRightConstraint.constant = bounceValue
-        
         self.updateConstraintsIfNeeded(animated, onCompletion: { (finished) -> Void in
             
             self.contentViewLeftConstraint.constant = 0
             self.contentViewRightConstraint.constant = 0
             
-            self.updateConstraintsIfNeeded(animated, onCompletion: { (finished) -> Void in
+            self.updateConstraintsIfNeeded(animated, alpha: 1, onCompletion: { (finished) -> Void in
                 self.startingLeftLayoutConstraint = self.contentViewLeftConstraint.constant
-                
-                //                self.myContentView.alpha = 1
             })
         })
     }
     
-    func setConstraintsToShowAllButtons(animated:Bool, notifyDelegateDidOpen:Bool) {
+    func setConstraintsToShowAllButtons(animated: Bool, notifyDelegateDidOpen: Bool) {
         if self.startingLeftLayoutConstraint == self.buttonTotalWidth() && self.contentViewLeftConstraint.constant == self.buttonTotalWidth() {
             return
         }
-        
-        self.contentViewLeftConstraint.constant = self.buttonTotalWidth() + bounceValue
-        self.contentViewRightConstraint.constant = -self.buttonTotalWidth() - bounceValue
         
         self.updateConstraintsIfNeeded(animated, onCompletion: { (finished) -> Void in
             self.contentViewLeftConstraint.constant = self.buttonTotalWidth()
             self.contentViewRightConstraint.constant = -self.buttonTotalWidth()
             
             
-            self.updateConstraintsIfNeeded(animated, onCompletion: { (finished) -> Void in
+            self.updateConstraintsIfNeeded(animated, alpha: 0, onCompletion: { (finished) -> Void in
                 self.startingLeftLayoutConstraint = self.contentViewLeftConstraint.constant
-                
-                //                self.myContentView.alpha = 0
-                
+
+                if notifyDelegateDidOpen {
+                    self.itemSwiped?()
+                }
             })
         })
-        
-        self.itemSwiped?()
     }
     
-    func updateConstraintsIfNeeded(animated:Bool, onCompletion:((Bool)->Void)?) {
+    func updateConstraintsIfNeeded(animated:Bool, alpha: CGFloat? = nil, onCompletion:((Bool)->Void)?) {
         var duration:NSTimeInterval = 0
         if animated {
             duration = 0.2
@@ -125,6 +112,9 @@ class SwipeableCell: UITableViewCell {
         
         UIView.animateWithDuration(duration, delay: delay, options: UIViewAnimationOptions.CurveEaseOut, animations: {() -> Void in
             self.layoutIfNeeded()
+            if let alpha = alpha {
+                self.myContentView.alpha = alpha
+            }
             
             }, completion: onCompletion)
     }

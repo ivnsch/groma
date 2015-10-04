@@ -397,7 +397,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     private func showCellOpen(open: Bool, indexPath: NSIndexPath) {
         if let swipeableCell = tableView.cellForRowAtIndexPath(indexPath) as? SwipeableCell {
-            swipeableCell.setOpen(open)
+            swipeableCell.setOpen(open, animated: true)
         } else {
             print("Warning: showCellOpen: \(open), no swipeable cell for indexPath: \(indexPath)")
         }
