@@ -10,17 +10,11 @@ import UIKit
 import SwiftValidator
 
 protocol AddItemViewDelegate {
-    
     func onValidationErrors(errors: [UITextField: ValidationError])
-    
-    func onAddTap(name:String, price:String, quantity:String, sectionName:String)
-    func onUpdateTap(name:String, price:String, quantity:String, sectionName:String)
+    func onAddTap(name: String, price: String, quantity: String, sectionName: String)
+    func onUpdateTap(name: String, price: String, quantity: String, sectionName: String)
     func onSectionInputChanged(text: String)
     func onProductNameInputChanged(text: String)
-}
-
-enum AddModus {
-    case Add, Update
 }
 
 // TODO wrap this in controller, which also handles validating, creating listitem, maybe also storing in provider

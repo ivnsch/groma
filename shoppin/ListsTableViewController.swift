@@ -81,7 +81,9 @@ class ListsTableViewController: UITableViewController, EditListViewControllerDel
         let segueName = segue.identifier
         if segueName == "showListItemsController" {
             if let indexPath = self.tableView.indexPathForSelectedRow, lists = self.lists, listItemsController = segue.destinationViewController as? ViewController {
-                listItemsController.currentList = lists[indexPath.row]
+                listItemsController.onViewWillAppear = {
+                    listItemsController.currentList = lists[indexPath.row]
+                }
             }
         }
     }

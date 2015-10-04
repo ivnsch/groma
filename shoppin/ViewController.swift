@@ -9,57 +9,42 @@
 import UIKit
 import CoreData
 import SwiftValidator
+import KLCPopup
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, AddItemViewDelegate, ListItemsEditTableViewDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, EditListItemContentViewDelegate, ListItemsEditTableViewDelegate
 //    , UIBarPositioningDelegate
 {
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
-    
-    @IBOutlet weak var addItemView: AddItemView!
-    
-    lazy var sectionAutosuggestionsViewController: AutosuggestionsTableViewController = {
-        
-        let frame = self.addItemView.sectionAutosuggestionsFrame(self.view)
 
-        let viewController = AutosuggestionsTableViewController(frame: frame)
-        viewController.onSuggestionSelected = {[weak self] in
-            self?.onSectionSuggestionSelected($0)
-        }
-        
-        self.addChildViewControllerAndView(viewController)
-        
-        return viewController
-    }()
+    private var addEditItemPopup: KLCPopup?
+    private var addEditItemView: EditListItemContentView?
+    
+    @IBOutlet weak var addButtonContainer: UIView!
+    @IBOutlet weak var addButtonContainerBottomConstraint: NSLayoutConstraint!
 
-    lazy var productAutosuggestionsViewController: AutosuggestionsTableViewController = {[weak self] in
-        
-        let frame = self!.addItemView.productAutosuggestionsFrame(self!.view)
-        
-        let viewController = AutosuggestionsTableViewController(frame: frame)
-        viewController.onSuggestionSelected = {
-            self!.onProductSuggestionSelected($0)
-        }
-        
-        self!.addChildViewControllerAndView(viewController)
-        
-        return viewController
-    
-    }()
-    
-    
-    private var listItemsTableViewController:ListItemsTableViewController!
+    private var listItemsTableViewController: ListItemsTableViewController!
     
     @IBOutlet weak var editButton: UIBarButtonItem!
     
-    private var gestureRecognizer:UIGestureRecognizer!
+    private var gestureRecognizer: UIGestureRecognizer!
     
-    private var updatingListItem:ListItem?
+    private var updatingListItem: ListItem?
     
     @IBOutlet weak var pricesView: PricesView!
     
     @IBOutlet weak var listNameView: UILabel!
 
-    var currentList: List?
+    var currentList: List? {
+        didSet {
+            print("huhu, currentList: \(currentList)")
+            
+            if let list = self.currentList {
+                self.navigationItem.title = list.name
+                self.initWithList(list)
+            }
+        }
+    }
+    var onViewWillAppear: VoidFunction?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -68,21 +53,35 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.initTableViewController()
-
-        self.addItemView.delegate = self
-        self.setEditing(false, animated: false)
-        self.updatePrices()
-        FrozenEffect.apply(self.pricesView)
+        initTableViewController()
+        
+        setEditing(false, animated: false)
+        updatePrices()
+//        FrozenEffect.apply(self.pricesView)
     }
    
+    private func setAddButtonVisible(visible: Bool, animated: Bool = false) {
+        addButtonContainerBottomConstraint.constant = visible ? 0 : -100
+        if animated {
+            UIView.animateWithDuration(0.2) {[weak self] () -> Void in
+                self?.view.layoutIfNeeded()
+            }
+        }
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        if let list = self.currentList {
-            self.navigationItem.title = list.name
-            self.initWithList(list)
-        }
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        
+        onViewWillAppear?()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
     
     private func initWithList(list: List) {
@@ -91,70 +90,42 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         })
     }
     
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
-        
-        self.setAddItemViewAnchorPointTopCenter()
+    // MARK: - EditListItemContentViewDelegate
+
+    func onValidationErrors(errors: [UITextField: ValidationError]) {
+        // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
+//        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    //prepare add item view for scale animation, which should be top to bottom
-    private func setAddItemViewAnchorPointTopCenter() {
-        
-        if let _ = self.navigationController {
-//            let frame = self.addItemView.frame
-//            let topCenter = CGPointMake(CGRectGetMidX(frame), CGRectGetMinY(frame))
-            
-            self.addItemView.layer.anchorPoint = CGPointMake(0.5, 0)
-            
-            //        println("constraint height: \(self.addItemView.topConstraint.constant)")
-            
-//            let navbarHeight = navigationController.navigationBar.frame.height
-//            let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-            
-            //////////////////////////////////////////////////////////////////////
-            //FIXME
-            //        self.addItemView.layer.position = topCenter
-            
-            //for some reason we get -64 or alternate between -66.5 and -64 (depending where we call this) if we use this. It should be always -66.5
-            //                self.addItemView.topConstraint.constant = -topCenter.y
-            
-            //and if we use this, we get always -64. why is extra offset? our view should start exactly after status and navigation bar
-            //                let navbarHeight = self.navigationController!.navigationBar.frame.height
-            //                let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-            //                let offset = navbarHeight + statusBarHeight
-            //                self.addItemView.topConstraint.constant = -offset
-            
-            self.addItemView.topConstraint.constant = -66.5
-            //////////////////////////////////////////////////////////////////////
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
+        submitInputs(name, price: priceText, quantity: quantityText, sectionName: sectionName) {
+            addEditItemPopup?.dismiss(true)
         }
     }
     
-    // MARK: - AddItemViewDelegate
-
-    func onValidationErrors(errors: [UITextField: ValidationError]) {
-        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
-    }
-    
-    // TODO rename )After validation)
-    func onAddTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
+    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, sectionName: String, successHandler: VoidFunction? = nil) {
         
         if !name.isEmpty {
-            
             if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName) {
-                self.addItem(listItemInput)
-                self.view.endEditing(true)
-                self.addItemView.clearInputs()
+                self.addItem(listItemInput, successHandler: successHandler)
+                // self.view.endEditing(true)
             }
         }
     }
     
+    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
+        submitInputs(name, price: priceText, quantity: quantityText, sectionName: sectionName) {[weak self] in
+            self?.addEditItemView?.clearInputs()
+        }
+    }
+
     func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
         if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName) {
-            self.updateItem(self.updatingListItem!, listItemInput: listItemInput)
-            self.view.endEditing(true)
-            self.addItemView.clearInputs()
-            
-            self.updatingListItem = nil
+            self.updateItem(self.updatingListItem!, listItemInput: listItemInput) {[weak self] in
+                self?.view.endEditing(true)
+                self?.updatingListItem = nil
+                self?.addEditItemPopup?.dismiss(true)
+            }
         }
     }
     
@@ -180,24 +151,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
 
     func onSectionInputChanged(text: String) {
-        
         Providers.listItemsProvider.sectionSuggestions(successHandler{[weak self] suggestions in
-            
-            self?.sectionAutosuggestionsViewController.options = suggestions.map{$0.name ?? ""} //TODO make this async or add a memory cache
-            self?.sectionAutosuggestionsViewController.searchText(text)
-            
-            self?.sectionAutosuggestionsViewController.view.hidden = text.isEmpty
+            self?.addEditItemView?.showSectionSuggestions(text, suggestions: suggestions)
         })
     }
 
     func onProductNameInputChanged(text: String) {
-        
         Providers.listItemsProvider.productSuggestions(successHandler{[weak self] suggestions in
-            
-            self?.productAutosuggestionsViewController.options = suggestions.map{$0.name ?? ""} //TODO make this async or add a memory cache
-            self?.productAutosuggestionsViewController.searchText(text)
-            
-            self?.productAutosuggestionsViewController.view.hidden = text.isEmpty
+            self?.addEditItemView?.showProductSuggestions(text, suggestions: suggestions)
         })
     }
     
@@ -210,31 +171,23 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     override func setEditing(editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
-        self.listItemsTableViewController.setEditing(editing, animated: animated)
+        setAddButtonVisible(editing, animated: animated)
+
+        listItemsTableViewController.setEditing(editing, animated: animated)
 //        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
-        self.gestureRecognizer.enabled = false //don't block tap on delete button
-        self.addItemView.expanded = editing
-        let animationTime:NSTimeInterval = animated ? 0.2 : 0
+        gestureRecognizer.enabled = false //don't block tap on delete button
 
-//        self.addItemView.hidden = false
+        let navbarHeight = navigationController!.navigationBar.frame.height
+        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+
+        let topInset = navbarHeight + statusBarHeight + CGRectGetHeight(pricesView.frame)
         
-        UIView.animateWithDuration(animationTime, animations: { () -> Void in
-            let transform:CGAffineTransform = CGAffineTransformScale(CGAffineTransformIdentity, 1, editing ? 1 : 0.001) //0.001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
-            self.addItemView.transform = transform
-            
-
-            let navbarHeight = self.navigationController!.navigationBar.frame.height
-            let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-
-            let topInset = navbarHeight + statusBarHeight + CGRectGetHeight(self.addItemView.frame) + CGRectGetHeight(self.pricesView.frame)
-            let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
-            self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
-            self.listItemsTableViewController.tableViewTopOffset = -self.listItemsTableViewController.tableViewInset.top
-            
-        }) { p in
-//            if !editing {self.addItemView.hidden = true} // without this uitableview doesn't receive touch in read modus. Also seems to be solved using 0.001 for scale down instead of 0...
-        }
-
+        // TODO this makes a very big bottom inset why?
+//            let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + addButtonContainer.frame.height
+        let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + 20
+    
+        listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
+        listItemsTableViewController.tableViewTopOffset = -listItemsTableViewController.tableViewInset.top
         
         if editing {
             editButton.title = "Done"
@@ -260,31 +213,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.listItemsTableViewController.listItemsEditTableViewDelegate = self
     }
     
-    private func onSectionSuggestionSelected(sectionSuggestion: String) {
-        self.addItemView.sectionText = sectionSuggestion
-        self.sectionAutosuggestionsViewController.view.hidden = true
-    }
-
-    private func onProductSuggestionSelected(productNameSuggestion: String) {
-        self.addItemView.productNameText = productNameSuggestion
-        self.productAutosuggestionsViewController.view.hidden = true
-    }
-    
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         clearThings()
     }
-
-    
-    private func hideKeyboard() {
-        self.addItemView.resignFirstResponder()
-    }
     
     func clearThings() {
-        self.hideKeyboard()
-        
-        self.sectionAutosuggestionsViewController.view.hidden = true
-        self.productAutosuggestionsViewController.view.hidden = true
-
         self.listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     
@@ -314,37 +247,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //    }
 
     private func getTableViewInset() -> CGFloat {
-        let addItemViewHeight = CGRectGetHeight(self.addItemView.frame)
         let navbarHeight = self.navigationController!.navigationBar.frame.height
         let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-
-        return addItemViewHeight + navbarHeight + statusBarHeight
+        return navbarHeight + statusBarHeight
     }
-    
-//    func scrollViewDidScroll(scrollView: UIScrollView) {
-//        println(scrollView.contentOffset.y)
-//
-//        var frame1 = self.inputBar.frame
-//        frame1.origin = CGPointMake(frame1.origin.x, -scrollView.contentOffset.y)
-//        self.inputBar.frame = frame1;
-//
-//        var frame2 = self.productDetailsContainer.frame
-//        frame2.origin = CGPointMake(frame2.origin.x, -scrollView.contentOffset.y + frame2.size.height)
-//        self.productDetailsContainer.frame = frame2;
-//        
-////        var frame3 = self.shopStatusContainer.frame
-////        frame3.origin = CGPointMake(frame3.origin.x, -scrollView.contentOffset.y + frame3.size.height)
-////        self.shopStatusContainer.frame = frame3;
-//        
-//        if self.lastContentOffset < scrollView.contentOffset.y {
-//            println(scrollView.contentOffset.y)
-//
-//        }
-//
-//        self.lastContentOffset = scrollView.contentOffset.y
-//
-//    }
-
 
     func loadItems(handler: Try<[String]> -> ()) {
         Providers.listItemsProvider.products(successHandler{products in
@@ -387,18 +293,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
 
-    private func addItem(listItemInput: ListItemInput) {
+    private func addItem(listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
 
         if let currentList = self.currentList {
             
             self.progressVisible(true)
             
             Providers.listItemsProvider.add(listItemInput, list: currentList, order: nil, possibleNewSectionOrder: self.listItemsTableViewController.sections.count, successHandler {savedListItem in
-                    
                 self.listItemsTableViewController.addListItem(savedListItem)
-                
-                self.addItemView.resignFirstResponder()
                 self.updatePrices(.MemOnly)
+                
+                handler?()
             })
             
         } else {
@@ -407,7 +312,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     }
     
-    func updateItem(listItem: ListItem, listItemInput:ListItemInput) {
+    func updateItem(listItem: ListItem, listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
         if let currentList = self.currentList {
             
             if let updatingListItem = self.updatingListItem {
@@ -417,12 +322,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 
                 let listItem = ListItem(uuid: updatingListItem.uuid, done: updatingListItem.done, quantity: listItemInput.quantity, product: product, section: section, list: currentList, order: updatingListItem.order)
                 
-                Providers.listItemsProvider.update([listItem], successHandler{
-                    
+                Providers.listItemsProvider.update([listItem], successHandler {
                     self.listItemsTableViewController.updateListItem(listItem)
-                    
-                    self.addItemView.resignFirstResponder()
                     self.updatePrices(.MemOnly)
+                    
+                    handler?()
                 })
                 
             } else {
@@ -435,13 +339,30 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     }
     
+
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
         if self.editing {
+            let addEditItemView = createAndInitAddEditView()
             self.updatingListItem = tableViewListItem.listItem
-            self.addItemView.setUpdateItem(tableViewListItem.listItem)
+            addEditItemView.setUpdateItem(tableViewListItem.listItem)
+            addEditItemPopup = createAddEditPopup(addEditItemView)
+            addEditItemPopup?.show()
+            
         } else {
             listItemsTableViewController.markOpen(true, indexPath: indexPath)
         }
+    }
+    
+    private func createAndInitAddEditView() -> EditListItemContentView {
+        let addEditItemView = NSBundle.loadView("EditListItemContentView", owner: self) as! EditListItemContentView
+        addEditItemView.frame = CGRectMake(0, 0, 300, 400)
+        addEditItemView.delegate = self
+        self.addEditItemView = addEditItemView
+        return addEditItemView
+    }
+    
+    private func createAddEditPopup(contentView: EditListItemContentView) -> KLCPopup {
+        return KLCPopup(contentView: contentView, showType: KLCPopupShowType.ShrinkIn, dismissType: KLCPopupDismissType.ShrinkOut, maskType: KLCPopupMaskType.Dimmed, dismissOnBackgroundTouch: true, dismissOnContentTouch: false)
     }
     
     func onListItemDeleted(tableViewListItem: TableViewListItem) {
@@ -460,5 +381,35 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             }
         }
     }
-}
+    
+    func keyboardWillShow(notification: NSNotification) {
+        // Move popup up such that all text fields are reachable
+        UIView.animateWithDuration(0.2, animations: {[weak self]() -> Void in
+            if let addEditItemPopup = self?.addEditItemPopup {
+                // only move popup up if keyboard was down before
+                // the problem here is that jump from alpha to numbers keypad (or the other way) triggers keyboardWillShow and not keyboardWillHide
+                // so we have to avoid that popup goes up when user jumps from one field to another
+                if addEditItemPopup.tag == 0 { // note 0 is also default for "no tag"
+                    let center = CGPointMake(addEditItemPopup.center.x, addEditItemPopup.center.y - 30)
+                    addEditItemPopup.center = center
+                    addEditItemPopup.tag = 1 // 1 -> "up"
+                }
+            }
+        })
+    }
 
+    func keyboardWillHide(notification: NSNotification) {
+        UIView.animateWithDuration(0.2, animations: {[weak self] () -> Void in
+            if let popup = self?.addEditItemPopup {
+                let center = CGPointMake(popup.center.x, popup.center.y + 30)
+                popup.center = center
+                popup.tag = 0 // 0 -> "normal/center"
+            }
+        })
+    }
+    
+    @IBAction func onAddTap(sender: UIButton) {
+        addEditItemPopup = createAddEditPopup(createAndInitAddEditView())
+        addEditItemPopup?.show()
+    }
+}

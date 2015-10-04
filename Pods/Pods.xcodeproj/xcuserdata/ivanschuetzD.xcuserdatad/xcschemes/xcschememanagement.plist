@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>KLCPopup.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Nimble.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -102,7 +107,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>038E1A92AC837AFF0E21EE8CE90F2E13</key>
+		<key>166A7BDC55F9D9EB576CFD7530DD5823</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>18C1BDEFC739850E5DF1A5D063A627CB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>230DCF33B8257245E56F4904EEDF21A6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2BFF9411CFA0C8CA6235017704742BEC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -112,7 +132,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>400EAD694DDC9583348B39F9D3231C86</key>
+		<key>40F31A40C69D27A7D282EA5C8E0A7D44</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>47A8854D18653FB5F69B8A61C01F9825</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>57A6BF1CA257DFA80E7F383CE65ADE40</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -132,17 +162,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>732CF4F4B52FEE671A62AC60E1F0F69D</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>7D999B1C596CD1D550F3BBAF4FA0DC8C</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>851C0923B33D5139B19969CA624F0D9D</key>
+		<key>7503ABA10C9B06DB7A4647728F7ED5FA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -162,11 +182,6 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AD735C21D2D6C7555FF77AEF2D998B26</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>B3418244BF92146C3A97DE5E1B3E04E6</key>
 		<dict>
 			<key>primary</key>
@@ -182,17 +197,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>CE045C55B71ACC98F6A75BC58B03A98F</key>
+		<key>D07921A448F53D2D2D03F6B4F98CE7FD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>DD4FBBA31D04B2125DA54E16F3D5764C</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F4BCA330A171BD68AE72B0CCCA9B6F78</key>
 		<dict>
 			<key>primary</key>
 			<true/>
