@@ -129,6 +129,20 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
+    func productNameAutocompletions(text: String, handler: [String] -> ()) {
+        Providers.listItemsProvider.productSuggestions(successHandler{suggestions in
+            let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
+            handler(names)
+        })
+    }
+    
+    func sectionNameAutocompletions(text: String, handler: [String] -> ()) {
+        Providers.listItemsProvider.sectionSuggestions(successHandler{suggestions in
+            let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
+            handler(names)
+        })
+    }
+    
     private func processListItemInputs(name: String, priceText: String, quantityText: String, sectionName: String) -> ListItemInput? {
         //TODO?
         //        if !price {
@@ -148,18 +162,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             print("TODO validation in processListItemInputs")
             return nil
         }
-    }
-
-    func onSectionInputChanged(text: String) {
-        Providers.listItemsProvider.sectionSuggestions(successHandler{[weak self] suggestions in
-            self?.addEditItemView?.showSectionSuggestions(text, suggestions: suggestions)
-        })
-    }
-
-    func onProductNameInputChanged(text: String) {
-        Providers.listItemsProvider.productSuggestions(successHandler{[weak self] suggestions in
-            self?.addEditItemView?.showProductSuggestions(text, suggestions: suggestions)
-        })
     }
     
     @IBAction func onEditTap(sender: AnyObject) {

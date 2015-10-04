@@ -73,6 +73,8 @@
 		EB0F5F8C1B9A0A8000035175 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */; };
 		EB0F5F8D1B9A0A8000035175 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */; };
 		EB0FD3821B5D017C00829AE5 /* ListsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0FD3811B5D017C00829AE5 /* ListsTableViewController.swift */; };
+		EB1B36451BC1D001003519F2 /* MLPAutoCompleteTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1B363F1BC1D001003519F2 /* MLPAutoCompleteTextField.m */; };
+		EB1B36461BC1D001003519F2 /* NSString+Levenshtein.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1B36441BC1D001003519F2 /* NSString+Levenshtein.m */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAF1A3334EC00D778DE /* ViewController.swift */; };
 		EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB11A3334EC00D778DE /* Main.storyboard */; };
@@ -90,8 +92,6 @@
 		EB20FC071A599AE20058103B /* InventoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FC061A599AE20058103B /* InventoryItemTableViewCell.swift */; };
 		EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */; };
 		EB28C1181A58623E00E1C8BC /* PlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */; };
-		EB2F5D0C1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D0A1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift */; };
-		EB2F5D0D1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB2F5D0B1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.xib */; };
 		EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D101A4ACC4400DBC4AF /* String.swift */; };
 		EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D1C1A4B4CE300DBC4AF /* ListItemsTableViewController.swift */; };
 		EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D211A4C20E200DBC4AF /* UIViewController.swift */; };
@@ -565,6 +565,13 @@
 		EB0F5F871B98A10100035175 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_ListItem.swift; sourceTree = "<group>"; };
 		EB0FD3811B5D017C00829AE5 /* ListsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsTableViewController.swift; sourceTree = "<group>"; };
+		EB1B363E1BC1D001003519F2 /* MLPAutoCompleteTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLPAutoCompleteTextField.h; sourceTree = "<group>"; };
+		EB1B363F1BC1D001003519F2 /* MLPAutoCompleteTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLPAutoCompleteTextField.m; sourceTree = "<group>"; };
+		EB1B36401BC1D001003519F2 /* MLPAutoCompleteTextFieldDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLPAutoCompleteTextFieldDataSource.h; sourceTree = "<group>"; };
+		EB1B36411BC1D001003519F2 /* MLPAutoCompleteTextFieldDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLPAutoCompleteTextFieldDelegate.h; sourceTree = "<group>"; };
+		EB1B36421BC1D001003519F2 /* MLPAutoCompletionObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLPAutoCompletionObject.h; sourceTree = "<group>"; };
+		EB1B36431BC1D001003519F2 /* NSString+Levenshtein.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Levenshtein.h"; sourceTree = "<group>"; };
+		EB1B36441BC1D001003519F2 /* NSString+Levenshtein.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Levenshtein.m"; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -584,8 +591,6 @@
 		EB20FC061A599AE20058103B /* InventoryItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemTableViewCell.swift; sourceTree = "<group>"; };
 		EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationTitleView.swift; sourceTree = "<group>"; };
 		EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlainTableViewController.swift; sourceTree = "<group>"; };
-		EB2F5D0A1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutosuggestionsTableViewController.swift; sourceTree = "<group>"; };
-		EB2F5D0B1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AutosuggestionsTableViewController.xib; sourceTree = "<group>"; };
 		EB2F5D101A4ACC4400DBC4AF /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		EB2F5D1C1A4B4CE300DBC4AF /* ListItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsTableViewController.swift; sourceTree = "<group>"; };
 		EB2F5D211A4C20E200DBC4AF /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIViewController.swift; path = shoppin/UIViewController.swift; sourceTree = "<group>"; };
@@ -780,7 +785,7 @@
 		EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
 		EBEEDD6A1A49C94F00FC3B29 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionMapper.swift; sourceTree = "<group>"; };
-		EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "LaunchScreen-568h@2x.png"; path = "../LaunchScreen-568h@2x.png"; sourceTree = "<group>"; };
+		EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchScreen-568h@2x.png"; sourceTree = "<group>"; };
 		EBF162CD1A3C82380048E37C /* CellSpecification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellSpecification.swift; sourceTree = "<group>"; };
 		EBF162D01A3C82380048E37C /* DefaultCellIdentifierConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultCellIdentifierConstants.swift; sourceTree = "<group>"; };
 		EBF162D41A3C82380048E37C /* DefaultTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultTableViewController.swift; sourceTree = "<group>"; };
@@ -921,6 +926,28 @@
 			name = extensions;
 			sourceTree = "<group>";
 		};
+		EB1B363C1BC1CFE6003519F2 /* libraryCouldNotLink */ = {
+			isa = PBXGroup;
+			children = (
+				EB1B363D1BC1D001003519F2 /* MLPAutoCompleteTextField */,
+			);
+			name = libraryCouldNotLink;
+			sourceTree = "<group>";
+		};
+		EB1B363D1BC1D001003519F2 /* MLPAutoCompleteTextField */ = {
+			isa = PBXGroup;
+			children = (
+				EB1B363E1BC1D001003519F2 /* MLPAutoCompleteTextField.h */,
+				EB1B363F1BC1D001003519F2 /* MLPAutoCompleteTextField.m */,
+				EB1B36401BC1D001003519F2 /* MLPAutoCompleteTextFieldDataSource.h */,
+				EB1B36411BC1D001003519F2 /* MLPAutoCompleteTextFieldDelegate.h */,
+				EB1B36421BC1D001003519F2 /* MLPAutoCompletionObject.h */,
+				EB1B36431BC1D001003519F2 /* NSString+Levenshtein.h */,
+				EB1B36441BC1D001003519F2 /* NSString+Levenshtein.m */,
+			);
+			path = MLPAutoCompleteTextField;
+			sourceTree = "<group>";
+		};
 		EB1DDE9C1A3334EC00D778DE = {
 			isa = PBXGroup;
 			children = (
@@ -1029,17 +1056,6 @@
 				EBA95CB31BBC98FE00A80850 /* InventoryItemsViewController.swift */,
 			);
 			name = inventory;
-			path = shoppin;
-			sourceTree = "<group>";
-		};
-		EB2F5D071A4A28DE00DBC4AF /* autosuggestions */ = {
-			isa = PBXGroup;
-			children = (
-				EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */,
-				EB2F5D0A1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift */,
-				EB2F5D0B1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.xib */,
-			);
-			name = autosuggestions;
 			path = shoppin;
 			sourceTree = "<group>";
 		};
@@ -1199,6 +1215,7 @@
 		EB55675A1A8622E600CD3EC6 /* shoppin_ios */ = {
 			isa = PBXGroup;
 			children = (
+				EB1B363C1BC1CFE6003519F2 /* libraryCouldNotLink */,
 				EB0C1B841B3DA2DD00F24C85 /* user */,
 				EB703FE01B3B5F1C001586C5 /* intro */,
 				EB20FC021A59986C0058103B /* list */,
@@ -1207,11 +1224,11 @@
 				EBF1A1521B82211600F34105 /* history */,
 				EBF1A1571B8239E600F34105 /* stats */,
 				EBF162E31A3C853E0048E37C /* listItemsTableView */,
-				EB2F5D071A4A28DE00DBC4AF /* autosuggestions */,
 				EB55675B1A86231D00CD3EC6 /* common */,
 				EB4C36561B4C115E00C387C5 /* libraryCandidates */,
 				EBDCA12D1B88D4FF000020BF /* charts */,
 				EBBC23241BB5D5820002F6B1 /* popup */,
+				EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */,
 			);
 			name = shoppin_ios;
 			sourceTree = "<group>";
@@ -1856,7 +1873,6 @@
 				EB4C365F1B4C142600C387C5 /* EditableChoiceModal.storyboard in Resources */,
 				EB0870CD1BC05A5E00169E29 /* EditListItemContentView.xib in Resources */,
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
-				EB2F5D0D1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.xib in Resources */,
 				EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */,
 				EBFD15C81BA7FA6500E37342 /* ForgotPassword.storyboard in Resources */,
 				EB0C1B971B3DBD1300F24C85 /* Login.storyboard in Resources */,
@@ -2074,6 +2090,7 @@
 				EBF299831B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */,
 				EB0FD3821B5D017C00829AE5 /* ListsTableViewController.swift in Sources */,
 				EB40A4761B550C0C000E9CAD /* Results.swift in Sources */,
+				EB1B36461BC1D001003519F2 /* NSString+Levenshtein.m in Sources */,
 				EB2F5D5C1A5058E900DBC4AF /* TableViewListItem.swift in Sources */,
 				EBDCA12C1B87B125000020BF /* AggrByTypeChartViewController.swift in Sources */,
 				EB40A4861B55159D000E9CAD /* DBList.swift in Sources */,
@@ -2167,6 +2184,7 @@
 				EB0C1B831B3D626500F24C85 /* IntroViewController.swift in Sources */,
 				EBCE418B1B5D10BA00583551 /* ListTableViewCell.swift in Sources */,
 				EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */,
+				EB1B36451BC1D001003519F2 /* MLPAutoCompleteTextField.m in Sources */,
 				EB4D57A81B74B90600BC6171 /* ListSync.swift in Sources */,
 				EB7E8B611B2ADF620090409A /* Try.swift in Sources */,
 				EB20FBF81A5971170058103B /* InventoryItem.swift in Sources */,
@@ -2221,7 +2239,6 @@
 				EB7E83261B7B723C009DEEF4 /* DBHistoryItem.swift in Sources */,
 				EB0C2A301B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */,
 				EBF377971B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
-				EB2F5D0C1A4AC39A00DBC4AF /* AutosuggestionsTableViewController.swift in Sources */,
 				EB714AAE1B67895500F91B94 /* RemoteProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -28,6 +28,18 @@ extension Array {
     subscript (safe index: Int) -> Element? {
         return indices ~= index ? self[index] : nil
     }
+    
+    // Filters a list and maps in the same iteration.
+    // Reduce could also be used for this, but this has better performance.
+    func filterMap<T>(filterFunc: Element -> Bool, mapFunc: Element -> T) -> [T] {
+        var arr: [T] = []
+        for e in self {
+            if filterFunc(e) {
+                arr.append(mapFunc(e))
+            }
+        }
+        return arr
+    }
 
 }
 

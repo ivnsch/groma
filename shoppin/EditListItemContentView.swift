@@ -9,7 +9,6 @@
 import UIKit
 import SwiftValidator
 
-
 enum AddModus {
     case Add, Update // TODO do we need this? (legacy from AddItemView)
 }
@@ -21,18 +20,19 @@ protocol EditListItemContentViewDelegate {
     func onOkTap(name: String, price: String, quantity: String, sectionName: String)
     func onOkAndAddAnotherTap(name: String, price: String, quantity: String, sectionName: String)
     func onUpdateTap(name: String, price: String, quantity: String, sectionName: String)
-    func onSectionInputChanged(text: String)
-    func onProductNameInputChanged(text: String)
+    
+    func productNameAutocompletions(text: String, handler: [String] -> ())
+    func sectionNameAutocompletions(text: String, handler: [String] -> ())
 }
 
 private enum Action {
     case OkAndAddAnother, Ok
 }
 
-class EditListItemContentView: UIView, UITextFieldDelegate {
+class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate {
 
-    @IBOutlet weak var nameInput: UITextField!
-    @IBOutlet weak var sectionInput: UITextField!
+    @IBOutlet weak var nameInput: MLPAutoCompleteTextField!
+    @IBOutlet weak var sectionInput: MLPAutoCompleteTextField!
     @IBOutlet weak var priceInput: UITextField!
     @IBOutlet weak var quantityInput: UITextField!
     
@@ -55,52 +55,49 @@ class EditListItemContentView: UIView, UITextFieldDelegate {
     
     var delegate: EditListItemContentViewDelegate?
 
-    lazy var sectionAutosuggestionsViewController: AutosuggestionsTableViewController = {[weak self] in
-        
-        let frame = self!.sectionAutosuggestionsFrame(self!)
-        
-        let viewController = AutosuggestionsTableViewController(frame: frame)
-        viewController.onSuggestionSelected = {[weak self] in
-            self!.onSectionSuggestionSelected($0)
-        }
-        
-        self!.addSubview(viewController.view)
-
-        return viewController
-    }()
-    
-    lazy var productAutosuggestionsViewController: AutosuggestionsTableViewController = {[weak self] in
-        
-        let frame = self!.productAutosuggestionsFrame(self!)
-        
-        let viewController = AutosuggestionsTableViewController(frame: frame)
-        viewController.onSuggestionSelected = {
-            self!.onProductSuggestionSelected($0)
-        }
-        
-        self!.addSubview(viewController.view)
-        
-        return viewController
-    }()
-    
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         
         initValidator()
         
         setInputsDefaultValues()
-//        
+        
         nameInput.placeholder = "Item name"
         sectionInput.placeholder = "Section (optional)"
         
-        sectionInput.delegate = self
-        sectionInput.addTarget(self, action: "sectionInputFieldChanged:", forControlEvents: UIControlEvents.EditingChanged)
-        
-        nameInput.delegate = self
-        nameInput.addTarget(self, action: "productNameInputFieldChanged:", forControlEvents: UIControlEvents.EditingChanged)
-        
         addDismissKeyboardTapRecognizer()
+        
+        initAutocompletionTextFields()
+    }
+    
+    private func initAutocompletionTextFields() {
+        for textField in [nameInput, sectionInput] {
+            textField.autoCompleteDataSource = self
+            textField.autoCompleteTableBorderColor = UIColor.lightGrayColor()
+            textField.autoCompleteTableBorderWidth = 0.4
+            textField.autoCompleteTableBackgroundColor = UIColor.whiteColor()
+            textField.autoCompleteTableCornerRadius = 14
+            textField.autoCompleteBoldFontName = "HelveticaNeue-Bold"
+            textField.autoCompleteRegularFontName = "HelveticaNeue"
+            textField.showTextFieldDropShadowWhenAutoCompleteTableIsOpen = false
+            textField.maximumNumberOfAutoCompleteRows = 4
+        }
+    }
+    
+    func autoCompleteTextField(textField: MLPAutoCompleteTextField!, possibleCompletionsForString string: String!, completionHandler handler: (([AnyObject]!) -> Void)!) {
+        switch textField {
+        case nameInput:
+            delegate?.productNameAutocompletions(string) {completions in
+                handler(completions)
+            }
+        case sectionInput:
+            delegate?.sectionNameAutocompletions(string) {completions in
+                handler(completions)
+            }
+        case _:
+            print("Error: Not handled text field in autoCompleteTextField")
+            break
+        }
     }
     
     private func addDismissKeyboardTapRecognizer() {
@@ -179,59 +176,6 @@ class EditListItemContentView: UIView, UITextFieldDelegate {
     
     @IBAction func onOkAndAddAnotherTap(sender: UIButton) {
         submit(.OkAndAddAnother)
-    }
-
-    // FIXME passing around the text like this, weird
-    func showProductSuggestions(text: String, suggestions: [Suggestion]) {
-        productAutosuggestionsViewController.options = suggestions.map{$0.name ?? ""} //TODO make this async or add a memory cache
-        productAutosuggestionsViewController.searchText(text)
-        productAutosuggestionsViewController.view.hidden = text.isEmpty
-    }
-    
-    // FIXME passing around the text like this, weird
-    func showSectionSuggestions(text: String, suggestions: [Suggestion]) {
-        sectionAutosuggestionsViewController.options = suggestions.map{$0.name ?? ""} //TODO make this async or add a memory cache
-        sectionAutosuggestionsViewController.searchText(text)
-        sectionAutosuggestionsViewController.view.hidden = text.isEmpty
-    }
-    
-    
-    private func onSectionSuggestionSelected(sectionSuggestion: String) {
-        sectionInput.text = sectionSuggestion
-        sectionAutosuggestionsViewController.view.hidden = true
-    }
-    
-    private func onProductSuggestionSelected(productNameSuggestion: String) {
-        nameInput.text = productNameSuggestion
-        productAutosuggestionsViewController.view.hidden = true
-    }
-    
-    
-    // MARK: - UITextFieldDelegate
-    
-    func sectionInputFieldChanged(textField: UITextField) {
-        delegate?.onSectionInputChanged(textField.text ?? "")
-    }
-    
-    func productNameInputFieldChanged(textField: UITextField) {
-        delegate?.onProductNameInputChanged(textField.text ?? "")
-    }
-    
-    // MARK: - Autosuggestion
-
-    
-    func sectionAutosuggestionsFrame(autosuggestionsViewParentView: UIView) -> CGRect {
-        let sectionFrame = sectionInput.frame
-        let originAbsolute = sectionInput.superview!.convertPoint(sectionFrame.origin, toView: autosuggestionsViewParentView)
-        let frame = CGRectMake(originAbsolute.x, originAbsolute.y + sectionFrame.size.height, sectionFrame.size.width, 0)
-        return frame
-    }
-    
-    func productAutosuggestionsFrame(autosuggestionsViewParentView: UIView) -> CGRect {
-        let productNameFrame = nameInput.frame
-        let originAbsolute = nameInput.superview!.convertPoint(productNameFrame.origin, toView: autosuggestionsViewParentView)
-        let frame = CGRectMake(originAbsolute.x, originAbsolute.y + productNameFrame.size.height, productNameFrame.size.width, 0)
-        return frame
     }
     
     // Focus next input field when user presses "Next" on keypad
