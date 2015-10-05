@@ -11,14 +11,14 @@ import UIKit
 class HistoryItemCell: UITableViewCell {
 
     @IBOutlet weak var itemNameLabel: UILabel!
-    @IBOutlet weak var itemQuantityLabel: UILabel!
+    @IBOutlet weak var itemUnitLabel: UILabel!
     @IBOutlet weak var itemPriceLabel: UILabel!
-    @IBOutlet weak var itemDateLabel: UILabel!
-    @IBOutlet weak var userEmailLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        selectionStyle = .None
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

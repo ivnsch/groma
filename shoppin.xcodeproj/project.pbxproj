@@ -75,6 +75,13 @@
 		EB0FD3821B5D017C00829AE5 /* ListsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0FD3811B5D017C00829AE5 /* ListsTableViewController.swift */; };
 		EB1B36451BC1D001003519F2 /* MLPAutoCompleteTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1B363F1BC1D001003519F2 /* MLPAutoCompleteTextField.m */; };
 		EB1B36461BC1D001003519F2 /* NSString+Levenshtein.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1B36441BC1D001003519F2 /* NSString+Levenshtein.m */; };
+		EB1B364C1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1B364B1BC2CC79003519F2 /* HistoryItemGroup.swift */; };
+		EB1B364D1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1B364B1BC2CC79003519F2 /* HistoryItemGroup.swift */; };
+		EB1B364E1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1B364B1BC2CC79003519F2 /* HistoryItemGroup.swift */; };
+		EB1B36501BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB1B364F1BC31774003519F2 /* HistoryItemGroupHeaderView.xib */; };
+		EB1B36511BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB1B364F1BC31774003519F2 /* HistoryItemGroupHeaderView.xib */; };
+		EB1B36521BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB1B364F1BC31774003519F2 /* HistoryItemGroupHeaderView.xib */; };
+		EB1B36541BC31B16003519F2 /* HistoryItemGroupHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1B36531BC31B16003519F2 /* HistoryItemGroupHeaderView.swift */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAF1A3334EC00D778DE /* ViewController.swift */; };
 		EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB11A3334EC00D778DE /* Main.storyboard */; };
@@ -572,6 +579,9 @@
 		EB1B36421BC1D001003519F2 /* MLPAutoCompletionObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLPAutoCompletionObject.h; sourceTree = "<group>"; };
 		EB1B36431BC1D001003519F2 /* NSString+Levenshtein.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Levenshtein.h"; sourceTree = "<group>"; };
 		EB1B36441BC1D001003519F2 /* NSString+Levenshtein.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Levenshtein.m"; sourceTree = "<group>"; };
+		EB1B364B1BC2CC79003519F2 /* HistoryItemGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemGroup.swift; sourceTree = "<group>"; };
+		EB1B364F1BC31774003519F2 /* HistoryItemGroupHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HistoryItemGroupHeaderView.xib; sourceTree = "<group>"; };
+		EB1B36531BC31B16003519F2 /* HistoryItemGroupHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemGroupHeaderView.swift; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1629,6 +1639,7 @@
 				EBF299861B791023006BDA1F /* InventorySync.swift */,
 				EB78587C1B7FD81A008AAD12 /* HistoryItemsSync.swift */,
 				EB7E83211B7B7162009DEEF4 /* HistoryItem.swift */,
+				EB1B364B1BC2CC79003519F2 /* HistoryItemGroup.swift */,
 				EBBC22FC1BB4080E0002F6B1 /* Suggestion.swift */,
 			);
 			name = model;
@@ -1704,6 +1715,8 @@
 			children = (
 				EBF1A1531B82213200F34105 /* HistoryViewController.swift */,
 				EBF1A15E1B82428700F34105 /* HistoryItemCell.swift */,
+				EB1B36531BC31B16003519F2 /* HistoryItemGroupHeaderView.swift */,
+				EB1B364F1BC31774003519F2 /* HistoryItemGroupHeaderView.xib */,
 			);
 			name = history;
 			sourceTree = "<group>";
@@ -1876,6 +1889,7 @@
 				EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */,
 				EBFD15C81BA7FA6500E37342 /* ForgotPassword.storyboard in Resources */,
 				EB0C1B971B3DBD1300F24C85 /* Login.storyboard in Resources */,
+				EB1B36501BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */,
 				EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */,
 				EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */,
 				EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */,
@@ -1890,6 +1904,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB1B36511BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */,
 				EB89D3071AD41E2D00B6E0D0 /* ListsViewController.xib in Resources */,
 				EBA8FAD31B8F1D46008CB746 /* UserDetailsViewController.xib in Resources */,
 				EB6D93A41B1B788200ED8999 /* AutosuggestionsTableViewController.xib in Resources */,
@@ -1909,6 +1924,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB1B36521BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2058,6 +2074,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB2F5D5A1A4F5C8100DBC4AF /* SwipeableCell.swift in Sources */,
+				EB1B364C1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */,
 				EB451C551B865F27000DE208 /* AggrByTypeTableViewCell.swift in Sources */,
 				EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */,
 				EB70C2191B4D2C940060E529 /* ListProvider.swift in Sources */,
@@ -2082,6 +2099,7 @@
 				EB20FBFC1A5972A30058103B /* InventoryProvider.swift in Sources */,
 				EB0C1B9C1B3DBF9600F24C85 /* RegisterViewController.swift in Sources */,
 				EBF1A1591B823A1100F34105 /* StatsViewController.swift in Sources */,
+				EB1B36541BC31B16003519F2 /* HistoryItemGroupHeaderView.swift in Sources */,
 				EB451C4D1B865B3D000DE208 /* AggrByDateTableViewController.swift in Sources */,
 				EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */,
 				EBBC23091BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */,
@@ -2399,6 +2417,7 @@
 				EBF5D7D41B8F868E00A235C5 /* Paginator.swift in Sources */,
 				EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */,
 				EB78587E1B7FD81A008AAD12 /* HistoryItemsSync.swift in Sources */,
+				EB1B364D1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */,
 				EB7F59D01BA1D40A00E07EBA /* Option.swift in Sources */,
 				EB7E831B1B7B703B009DEEF4 /* HistoryProviderImpl.swift in Sources */,
 				EB7E82F51B7A141E009DEEF4 /* RegisterViewController.swift in Sources */,
@@ -2505,6 +2524,7 @@
 				EBF3776E1B342ACB00EEB6DB /* ListItemInput.swift in Sources */,
 				EBF3776F1B342AD300EEB6DB /* ListItemMapper.swift in Sources */,
 				EBB9A7361B5EB11700E5487D /* Inventory.swift in Sources */,
+				EB1B364E1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */,
 				EBB9A7421B5EB21900E5487D /* InventoryProviderImpl.swift in Sources */,
 				EB40A4801B5512D6000E9CAD /* DBSharedUser.swift in Sources */,
 				EBF3777E1B342B3500EEB6DB /* String.swift in Sources */,

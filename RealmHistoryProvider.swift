@@ -28,6 +28,53 @@ class RealmHistoryProvider: RealmProvider {
         self.load(mapper, predicate: NSPredicate(format: "addedDate >= %@", startDate), sortDescriptor: historySortDescriptor, range: range, handler: handler)
     }
     
+    
+    // TODO change data model! one table with groups and the other with history items, 1:n (also in server)
+    // this is very important as right now we fetch and iterate through ALL the history items, this is very inefficient
+    func loadHistoryItemsGroups(range: NSRange, _ handler: [HistoryItemGroup] -> ()) {
+
+        let finished: ([HistoryItemGroup]) -> () = {result in
+            dispatch_async(dispatch_get_main_queue(), {
+                handler(result)
+            })
+        }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            do {
+                let realm = try Realm()
+                let results = realm.objects(DBHistoryItem).sorted("addedDate", ascending: false) // not using constant because weak self etc.
+                
+                // Group by date
+                var dateDictDB: OrderedDictionary<NSDate, [DBHistoryItem]> = OrderedDictionary()
+                for result in results {
+                    if dateDictDB[result.addedDate] == nil {
+                        dateDictDB[result.addedDate] = []
+                    }
+                    dateDictDB[result.addedDate]!.append(result)
+                }
+                
+                dateDictDB = dateDictDB[range] // extract range
+                let dateDict: OrderedDictionary<NSDate, [HistoryItem]> = dateDictDB.mapDictionary {(k, v) in // we do this mapping after extract range - in groupBy iteration I think this causes to evaluate the db lazy objects which is very bad performance, since we are fetching the entire history
+                    return (k, v.map{item in HistoryItemMapper.historyItemWith(item)})
+                }
+
+                // Map date -> history item dict to HistoryItemDateGroup
+                // NOTE as user we select first user in the group. Theoretically there could be more than one user. This is a simplification based in that we think it's highly unlikely that multiple users will mark items as "bought" at the exact same point of time (milliseconds). And even if they do, having one history group with (partly) wrong user is not critical.
+                let historyItemsDateGroup: [HistoryItemGroup] = dateDict.map{k, v in
+                    let firstUser = v.first!.user // force unwrap -> if there's an array as value it must contain at least one element. If there was no history item for this date the date would not be in the dictionary
+                    return HistoryItemGroup(date: k, user: firstUser, historyItems: v)
+                }
+                
+                finished(historyItemsDateGroup)
+                
+            } catch _ {
+                print("Error: creating Realm() in loadHistoryItemsUserDateGroups, returning empty results")
+                finished([])
+            }
+        }
+    }
+    
+    
     func saveHistoryItems(historyItems: RemoteHistoryItems, handler: Bool -> ()) {
         
         self.doInWriteTransaction({[weak self] realm in

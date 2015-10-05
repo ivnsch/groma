@@ -18,11 +18,11 @@ extension Float {
         return f
     }()
     
-    func toString(maxFractionDigits: Int) -> String? {
+    func toString(maxFractionDigits: Int) -> String {
         Float.formatter.numberStyle = .DecimalStyle
         Float.formatter.maximumFractionDigits = maxFractionDigits
         Float.formatter.minimumFractionDigits = 0
-        return Float.formatter.stringFromNumber(NSNumber(float: self))
+        return Float.formatter.stringFromNumber(NSNumber(float: self))!
     }
     
     func toLocalCurrencyString() -> String {

@@ -18,7 +18,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet var tableViewFooter: LoadingFooter!
     @IBOutlet var tableView: UITableView!
     
-    private var historyItems: [HistoryItem] = [] {
+    private var historyItemsGroups: [HistoryItemGroup] = [] {
         didSet {
             self.tableView.reloadData()
         }
@@ -30,35 +30,50 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.tableView.topInset = 64
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
+        historyItemsGroups = []
+        paginator.reset() // TODO improvement either memory cache or reset only if history has changed (marked items as bought since last load)
         loadPossibleNextPage()
     }
     
     // MARK: - Table view data source
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return historyItemsGroups.count
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.historyItems.count
+        return historyItemsGroups[section].historyItems.count
     }
     
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
+    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let group = historyItemsGroups[section]
+        let view = NSBundle.loadView("HistoryItemGroupHeaderView", owner: self) as! HistoryItemGroupHeaderView
+        
+        view.userName = group.user.email
+        view.date = "\(group.date)" // TODO format
+        view.price = "\(group.totalPrice.toLocalCurrencyString())" // TODO format
+        
+        return view
+    }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("historyCell", forIndexPath: indexPath) as! HistoryItemCell
         
-        let historyItem = self.historyItems[indexPath.row]
+        let historyItem = self.historyItemsGroups[indexPath.section].historyItems[indexPath.row]
         
         // TODO format price, date
         
         cell.itemNameLabel.text = historyItem.product.name
-        cell.itemQuantityLabel.text = String(historyItem.quantity)
+        cell.itemUnitLabel.text = "\(historyItem.quantity) x \(historyItem.product.price.toLocalCurrencyString())"
         cell.itemPriceLabel.text = (Float(historyItem.quantity) * historyItem.product.price).toLocalCurrencyString()
-        cell.itemDateLabel.text = String(historyItem.addedDate)
-        cell.userEmailLabel.text = historyItem.user.email
+        
         
         return cell
     }
@@ -87,9 +102,9 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 if (!weakSelf.loadingPage) {
                     setLoading(true)
                     
-                    weakSelf.historyProvider.historyItems(weakSelf.paginator.currentPage, weakSelf.successHandler{historyItems in
+                    weakSelf.historyProvider.historyItemsGroups(weakSelf.paginator.currentPage, weakSelf.successHandler{historyItems in
                         for historyItem in historyItems {
-                            weakSelf.historyItems.append(historyItem)
+                            weakSelf.historyItemsGroups.append(historyItem)
                         }
                         
                         weakSelf.paginator.update(historyItems.count)
@@ -116,12 +131,20 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         if editingStyle == .Delete {
             
             // TODO lock? many deletes quickly could cause a crash here. >>> Or remove immediately and rever if failure result
-            let historyItem = historyItems[indexPath.row]
+            let historyItem = historyItemsGroups[indexPath.section].historyItems[indexPath.row]
             historyProvider.removeHistoryItem(historyItem, successHandler({result in
                 
                 tableView.wrapUpdates {[weak self] in
-                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-                    self?.historyItems.removeAtIndex(indexPath.row)
+                    if let weakSelf = self {
+                        
+                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                        
+                        let group = weakSelf.historyItemsGroups[indexPath.section]
+                        var historyItems = group.historyItems
+                        historyItems.removeAtIndex(indexPath.row)
+                        let updatedGroup = group.copy(historyItems: historyItems)
+                        weakSelf.historyItemsGroups[indexPath.section] = updatedGroup
+                    }
                 }
             }))
 

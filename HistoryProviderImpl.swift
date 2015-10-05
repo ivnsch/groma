@@ -23,6 +23,12 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
+    func historyItemsGroups(range: NSRange, _ handler: ProviderResult<[HistoryItemGroup]> -> ()) {
+        dbProvider.loadHistoryItemsGroups(range) {groups in
+            handler(ProviderResult(status: .Success, sucessResult: groups))
+        }
+    }
+    
     func removeHistoryItem(historyItem: HistoryItem, _ handler: ProviderResult<Any> -> ()) {
         dbProvider.removeHistoryItem(historyItem) {[weak self] success in
             if success {
@@ -34,6 +40,11 @@ class HistoryProviderImpl: HistoryProvider {
                 print("Error: coult not remove historyItem: \(historyItem)")
             }
         }
+    }
+    
+    // TODO after implement groups in separate table
+    func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, _ handler: ProviderResult<Any> -> ()) {
+        print("TODO: remove history item group")
     }
     
     func syncHistoryItems(handler: (ProviderResult<[Any]> -> ())) {

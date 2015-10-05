@@ -12,7 +12,11 @@ protocol HistoryProvider {
     
     func historyItems(range: NSRange, _ handler: ProviderResult<[HistoryItem]> -> ())
 
+    func historyItemsGroups(range: NSRange, _ handler: ProviderResult<[HistoryItemGroup]> -> ())
+
     func syncHistoryItems(handler: (ProviderResult<[Any]> -> ()))
     
     func removeHistoryItem(historyItem: HistoryItem, _ handler: ProviderResult<Any> -> ())
+    
+    func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, _ handler: ProviderResult<Any> -> ())
 }

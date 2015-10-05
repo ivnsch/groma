@@ -5,8 +5,10 @@
 //  Created by Main Account on 9/14/14.
 //  Copyright (c) 2014 Razeware. All rights reserved.
 //
+//  modified, added several methods
+//
 
-struct OrderedDictionary<KeyType: Hashable, ValueType> {
+struct OrderedDictionary<KeyType: Hashable, ValueType>: SequenceType {
     
     typealias ArrayType = [KeyType]
     typealias DictionaryType = [KeyType: ValueType]
@@ -78,5 +80,41 @@ struct OrderedDictionary<KeyType: Hashable, ValueType> {
             arr.append(f(self[i]))
         }
         return arr
+    }
+
+    func mapDictionary<T>(f: ((KeyType, ValueType)) -> ((KeyType, T))) -> OrderedDictionary<KeyType, T> {
+        var dict: OrderedDictionary<KeyType, T> = OrderedDictionary<KeyType, T>()
+        for i in 0..<self.count {
+            let mapped = f(self[i])
+            dict[mapped.0] = mapped.1
+        }
+        return dict
+    }
+    
+    func generate() -> AnyGenerator<(KeyType, ValueType)> {
+        var nextIndex = 0
+        return anyGenerator {
+            if (nextIndex < 0) {
+                return nil
+            }
+            let key = self.array[nextIndex++]
+            return (key, self.dictionary[key]!)
+        }
+    }
+    
+    subscript(range: NSRange) -> OrderedDictionary<KeyType, ValueType> {
+        get {
+            guard range.location < count else {return OrderedDictionary<KeyType, ValueType>()}
+            
+            let end = min((range.location + range.length), count)
+            
+            var dict = OrderedDictionary<KeyType, ValueType>()
+            for i in range.location..<end {
+                let keyVal = self[i]
+                dict[keyVal.0] = keyVal.1
+            }
+            
+            return dict
+        }
     }
 }

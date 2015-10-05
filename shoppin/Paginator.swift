@@ -33,4 +33,9 @@ class Paginator {
             advance()
         }
     }
+    
+    func reset() {
+        currentIndex = 0
+        reachedEnd = false
+    }
 }
