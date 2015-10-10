@@ -9,11 +9,21 @@
 import Foundation
 
 protocol ListItemProvider {
+
+    // TODO create ProductsProvider, put products methods there
+    
+    // MARK: - Product
+    
+    func product(name: String, handler: ProviderResult<Product> -> ())
     
     func products(handler: ProviderResult<[Product]> -> ())
     
+    func add(product: Product, handler: ProviderResult<Any> -> ())
+    
     func productSuggestions(handler: ProviderResult<[Suggestion]> -> ())
-
+    
+    // MARK:
+    
     func sectionSuggestions(handler: ProviderResult<[Suggestion]> -> ())
 
     func sections(handler: ProviderResult<[Section]> -> ())

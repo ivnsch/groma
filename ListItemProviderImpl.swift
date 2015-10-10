@@ -14,12 +14,28 @@ class ListItemProviderImpl: ListItemProvider {
     let remoteProvider = RemoteListItemProvider()
     let memProvider = MemListItemProvider(enabled: true)
     
+    func product(name: String, handler: ProviderResult<Product> -> ()) {
+        dbProvider.loadProductWithName(name) {dbProduct in
+            if let dbProduct = dbProduct {
+                handler(ProviderResult(status: .Success, sucessResult: dbProduct))
+            } else {
+                handler(ProviderResult(status: .NotFound))
+            }
+        }
+    }
+
     func products(handler: ProviderResult<[Product]> -> ()) {
         self.dbProvider.loadProducts {dbProducts in
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbProducts))
         }
     }
 
+    func add(product: Product, handler: ProviderResult<Any> -> ()) {
+        dbProvider.saveProducts([product]) {saved in
+            handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
+        }
+    }
+    
     func productSuggestions(handler: ProviderResult<[Suggestion]> -> ()) {
         dbProvider.loadProductSuggestions {dbSuggestions in
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSuggestions))

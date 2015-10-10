@@ -12,6 +12,11 @@ protocol HistoryProvider {
     
     func historyItems(range: NSRange, _ handler: ProviderResult<[HistoryItem]> -> ())
 
+    /**
+    * Get all history items with a date greater or equal than startDate, until today
+    */
+    func historyItems(startDate: NSDate, _ handler: ProviderResult<[HistoryItem]> -> ())
+
     func historyItemsGroups(range: NSRange, _ handler: ProviderResult<[HistoryItemGroup]> -> ())
 
     func syncHistoryItems(handler: (ProviderResult<[Any]> -> ()))

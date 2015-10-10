@@ -64,7 +64,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     // MARK: - Product / suggestion
-    // TODO is this used, if not remove
+    
     func saveProducts(products: [Product], updateSuggestions: Bool = true, handler: Bool -> ()) {
         self.doInWriteTransaction({[weak self] realm in
         

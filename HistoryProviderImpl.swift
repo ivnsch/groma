@@ -23,6 +23,13 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
+    func historyItems(startDate: NSDate, _ handler: ProviderResult<[HistoryItem]> -> ()) {
+        self.dbProvider.loadHistoryItems(startDate: startDate) {dbHistoryItems in
+            handler(ProviderResult(status: .Success, sucessResult: dbHistoryItems))
+        }
+    }
+    
+    
     func historyItemsGroups(range: NSRange, _ handler: ProviderResult<[HistoryItemGroup]> -> ()) {
         dbProvider.loadHistoryItemsGroups(range) {groups in
             handler(ProviderResult(status: .Success, sucessResult: groups))

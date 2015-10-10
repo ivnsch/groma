@@ -1,53 +1,45 @@
 //
-//  EditListItemContentView.swift
+//  AddEditPlanItemContentView.swift
 //  shoppin
 //
-//  Created by ischuetz on 03/10/15.
+//  Created by ischuetz on 08/10/15.
 //  Copyright © 2015 ivanschuetz. All rights reserved.
 //
 
 import UIKit
 import SwiftValidator
 
-
-protocol EditListItemContentViewDelegate {
+protocol AddEditPlanItemContentViewDelegate {
     
     func onValidationErrors(errors: [UITextField: ValidationError])
     
-    func onOkTap(name: String, price: String, quantity: String, sectionName: String)
-    func onOkAndAddAnotherTap(name: String, price: String, quantity: String, sectionName: String)
-    func onUpdateTap(name: String, price: String, quantity: String, sectionName: String)
+    func onOkTap(name: String, price: String, quantity: String)
+    func onOkAndAddAnotherTap(name: String, price: String, quantity: String)
+    func onUpdateTap(name: String, price: String, quantity: String)
     
     func productNameAutocompletions(text: String, handler: [String] -> ())
-    func sectionNameAutocompletions(text: String, handler: [String] -> ())
-    
-    func planItem(productName: String, handler: PlanItem? -> ())
 }
 
 private enum Action {
     case OkAndAddAnother, Ok
 }
 
-class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, OkNextButtonsViewDelegate {
-
+class AddEditPlanItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, OkNextButtonsViewDelegate {
+    
     @IBOutlet weak var nameInput: MLPAutoCompleteTextField!
-    @IBOutlet weak var sectionInput: MLPAutoCompleteTextField!
+    @IBOutlet weak var inventoryButton: UIButton!
     @IBOutlet weak var priceInput: UITextField!
     @IBOutlet weak var quantityInput: UITextField!
-
-    @IBOutlet weak var planInfoButton: UIButton!
-    
-    var planItem: PlanItem? {
-        didSet {
-            onQuantityChanged()
-        }
-    }
     
     @IBOutlet weak var okNextButtonsView: OkNextButtonsView!
     
     private var validator: Validator?
-
-    var delegate: EditListItemContentViewDelegate?
+    
+    var delegate: AddEditPlanItemContentViewDelegate?
+    
+    var inventories: [Inventory] = []
+    
+    private let pickerLabelFont = UIFont(name: "HelveticaNeue-Light", size: 17) ?? UIFont.systemFontOfSize(17) // TODO font in 1 place
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -57,7 +49,6 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
         setInputsDefaultValues()
         
         nameInput.placeholder = "Item name"
-        sectionInput.placeholder = "Section (optional)"
         
         addDismissKeyboardTapRecognizer()
         
@@ -67,9 +58,8 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
     }
     
     private func initAutocompletionTextFields() {
-        for textField in [nameInput, sectionInput] {
+        for textField in [nameInput] {
             textField.autoCompleteDataSource = self
-            textField.autoCompleteDelegate = self
             textField.autoCompleteTableBorderColor = UIColor.lightGrayColor()
             textField.autoCompleteTableBorderWidth = 0.4
             textField.autoCompleteTableBackgroundColor = UIColor.whiteColor()
@@ -89,20 +79,10 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
             delegate?.productNameAutocompletions(string) {completions in
                 handler(completions)
             }
-        case sectionInput:
-            delegate?.sectionNameAutocompletions(string) {completions in
-                handler(completions)
-            }
         case _:
             print("Error: Not handled text field in autoCompleteTextField")
             break
         }
-    }
-    
-    // MARK: - MLPAutoCompleteTextFieldDelegate
-    
-    func autoCompleteTextField(textField: MLPAutoCompleteTextField!, didSelectAutoCompleteString selectedString: String!, withAutoCompleteObject selectedObject: MLPAutoCompletionObject!, forRowAtIndexPath indexPath: NSIndexPath!) {
-        onNameInputChange(selectedString)
     }
     
     private func addDismissKeyboardTapRecognizer() {
@@ -111,16 +91,17 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
         addGestureRecognizer(tapRecognizer)
     }
     
-    func setUpdateItem(listItem:ListItem) {
+    func setUpdateItem(planItem: PlanItem) {
         okNextButtonsView.addModus = .Update
-        prefill(listItem)
+        prefill(planItem)
     }
     
-    private func prefill(listItem: ListItem) {
-        nameInput.text = listItem.product.name
-        sectionInput.text = listItem.section.name
-        quantityInput.text = String(listItem.quantity)
-        priceInput.text = listItem.product.price.toString(2)
+    func prefill(planItem: PlanItem) {
+        nameInput.text = planItem.product.name
+        quantityInput.text = String(planItem.quantity)
+        priceInput.text = planItem.product.price.toString(2)
+        
+        okNextButtonsView.addModus = .Update
     }
     
     private func setInputsDefaultValues() {
@@ -131,7 +112,6 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
     private func initValidator() {
         let validator = Validator()
         validator.registerField(nameInput, rules: [MinLengthRule(length: 1, message: "validation_item_name_not_empty")])
-        validator.registerField(sectionInput, rules: [MinLengthRule(length: 1, message: "validation_section_name_not_empty")])
         validator.registerField(priceInput, rules: [MinLengthRule(length: 1, message: "validation_price_not_empty"), FloatRule(message: "validation_price_number")])
         validator.registerField(quantityInput, rules: [MinLengthRule(length: 1, message: "validation_quantity_not_empty"), FloatRule(message: "validation_quantity_number")])
         self.validator = validator
@@ -153,22 +133,23 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
                     field.clearValidationError()
                 }
             }
-            
-            if let text = nameInput.text, priceText = priceInput.text, quantityText = quantityInput.text, sectionText = sectionInput.text {
+
+            // TODO
+            if let text = nameInput.text, priceText = priceInput.text, quantityText = quantityInput.text {
                 switch okNextButtonsView.addModus {
                 case .Add:
                     switch action {
                     case .Ok:
-                        delegate?.onOkTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+                        delegate?.onOkTap(text, price: priceText, quantity: quantityText)
                     case .OkAndAddAnother:
-                        delegate?.onOkAndAddAnotherTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+                        delegate?.onOkAndAddAnotherTap(text, price: priceText, quantity: quantityText)
                     }
                 case .Update:
-                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText)
                 }
                 
             } else {
-                print("Error: validation was not implemented correctly")
+                print("Error: validation was not implemented correctly or (TODO validate this?) no selected inventory")
             }
         }
     }
@@ -178,73 +159,29 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
         endEditing(true)
         switch textField {
         case nameInput:
-            sectionInput.becomeFirstResponder()
-        case sectionInput:
             priceInput.becomeFirstResponder()
         case priceInput:
             quantityInput.becomeFirstResponder()
         case _: break
         }
-
+        
         return true
     }
     
     func clearInputs() {
-        for field in [nameInput, sectionInput, quantityInput, priceInput] {
+        for field in [nameInput, quantityInput, priceInput] {
             field.text = ""
         }
     }
     
     func dismissKeyboard(sender: AnyObject?) {
-        for field in [nameInput, sectionInput, quantityInput, priceInput] {
+        for field in [nameInput, quantityInput, priceInput] {
             field.resignFirstResponder()
         }
     }
-
-    @IBAction func productNameEditingDidEnd(sender: AnyObject) {
-        if let text = nameInput.text {
-            onNameInputChange(text)
-        } else {
-            print("Error: unexpected, text field with no text")
-        }
-    }
-    
-    private func onNameInputChange(text: String) {
-        delegate?.planItem(text) {[weak self] planItemMaybe in
-            self?.planItem = planItemMaybe
-        }
-    }
-    
-    @IBAction func quantityEditingDidChange(sender: AnyObject) {
-        onQuantityChanged()
-    }
-    
-    func onQuantityChanged() {
-        if let text = quantityInput.text, quantity = Int(text) {
-            updatePlanLeftQuantity(quantity)
-        } else {
-            print("Error: Invalid quantity input")
-        }
-    }
-    
-    private func updatePlanLeftQuantity(inputQuantity: Int) {
-        if let planItem = planItem {
-            let planItemLeftQuantity = planItem.quantity - planItem.usedQuantity
-            let updatedLeftQuantity = planItemLeftQuantity - inputQuantity
-            planInfoButton.setTitle("\(updatedLeftQuantity) left", forState: .Normal)
-            
-        } else { // item is not planned -  don't show anything (no limits)
-            planInfoButton.setTitle("", forState: .Normal)
-        }
-    }
-    
-    func showPlanItem(planItem: PlanItem) {
-        planInfoButton.setTitle("\(planItem.quantity - planItem.usedQuantity) left", forState: .Normal)
-    }
-    
     
     // MARK: - OkNextButtonsViewDelegate
-    
+
     func onOkAddModusTap() {
         submit(.Ok)
     }
@@ -257,4 +194,3 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
         submit(.OkAndAddAnother)
     }
 }
-

@@ -1,0 +1,79 @@
+//
+//  PlanItem.swift
+//  shoppin
+//
+//  Created by ischuetz on 07/10/15.
+//  Copyright © 2015 ivanschuetz. All rights reserved.
+//
+
+import Foundation
+
+class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
+    
+    let product: Product
+    let quantity: Int
+    let usedQuantity: Int
+    let inventory: Inventory
+    
+    /** -- copied from InventoryItem --
+    Quantity delta since last sync, to be able to do increment operation in server (if we would use a plain update instead we could overwrite possible quantity updates from other clients that participate in the inventory).
+    This is always updated in paralel with quantity. E.g. if add 2 items to inventory, quantity as well as quantityDelta are incremented by 2.
+    After a successful synchronization with the server (this may be at item level, or a full sync) quantityDelta is reset to 0
+    */
+    let quantityDelta: Int
+    
+    //////////////////////////////////////////////
+    // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
+    // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
+    // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
+    let lastUpdate: NSDate
+    let lastServerUpdate: NSDate?
+    let removed: Bool
+    //////////////////////////////////////////////
+    
+    init(inventory: Inventory, product: Product, quantity: Int, quantityDelta: Int = 0, usedQuantity: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+        self.inventory = inventory
+        self.product = product
+        self.quantity = quantity
+        self.usedQuantity = usedQuantity
+        self.lastUpdate = lastUpdate
+        self.lastServerUpdate = lastServerUpdate
+        self.removed = removed
+        self.quantityDelta = quantityDelta
+    }
+    
+    func copy(inventory inventory: Inventory? = nil, product: Product? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, usedQuantity: Int? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> PlanItem {
+        return PlanItem(
+            inventory: inventory ?? self.inventory,
+            product: product ?? self.product,
+            quantity: quantity ?? self.quantity,
+            quantityDelta: quantityDelta ?? self.quantityDelta,
+            usedQuantity: usedQuantity ?? self.usedQuantity,
+            lastUpdate: lastUpdate ?? self.lastUpdate,
+            lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
+            removed: removed ?? self.removed
+        )
+    }
+    
+    func incrementQuantityCopy(delta: Int) -> PlanItem {
+        return copy(quantity: quantity + delta, quantityDelta: quantityDelta + delta)
+    }
+    
+    func same(rhs: PlanItem) -> Bool {
+        return self.product.name == rhs.product.name
+    }
+    
+    var debugDescription: String {
+        return "{\(self.dynamicType) product: \(product), quantity: \(quantity), usedQuantity: \(usedQuantity), quantityDelta: \(quantityDelta), inventory: \(inventory), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
+    }
+}
+
+func ==(lhs: PlanItem, rhs: PlanItem) -> Bool {
+    return lhs.product.name == rhs.product.name && lhs.inventory.uuid == rhs.inventory.uuid && lhs.quantity == rhs.quantity
+}
+
+
+// convenience (redundant) holder to avoid having to iterate through historyitems to find unique products and users
+// so products, users arrays are the result of extracting the unique products and users from historyItems array
+// TODO do we need this, it's for remote parsing etc. copied from inventory item.
+//typealias PlanItemsWithRelations = (planItems: [PlanItem], inventories: [Inventory], products: [Product])

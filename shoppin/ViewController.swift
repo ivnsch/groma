@@ -11,16 +11,13 @@ import CoreData
 import SwiftValidator
 import KLCPopup
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, EditListItemContentViewDelegate, ListItemsEditTableViewDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, EditListItemContentViewDelegate, ListItemsEditTableViewDelegate, AddItemViewDelegate
 //    , UIBarPositioningDelegate
 {
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
 
     private var addEditItemPopup: KLCPopup?
     private var addEditItemView: EditListItemContentView?
-    
-    @IBOutlet weak var addButtonContainer: UIView!
-    @IBOutlet weak var addButtonContainerBottomConstraint: NSLayoutConstraint!
 
     private var listItemsTableViewController: ListItemsTableViewController!
     
@@ -34,10 +31,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     @IBOutlet weak var listNameView: UILabel!
 
+    @IBOutlet weak var addItemView: AddItemView!
+    @IBOutlet weak var addButtonContainerBottomConstraint: NSLayoutConstraint!
+
     var currentList: List? {
         didSet {
-            print("huhu, currentList: \(currentList)")
-            
             if let list = self.currentList {
                 self.navigationItem.title = list.name
                 self.initWithList(list)
@@ -54,19 +52,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         super.viewDidLoad()
         
         initTableViewController()
+
+        addItemView.delegate = self
+        addItemView.bottomConstraint = addButtonContainerBottomConstraint
         
         setEditing(false, animated: false)
         updatePrices()
         FrozenEffect.apply(self.pricesView)
-    }
-   
-    private func setAddButtonVisible(visible: Bool, animated: Bool = false) {
-        addButtonContainerBottomConstraint.constant = visible ? 0 : -100
-        if animated {
-            UIView.animateWithDuration(0.2) {[weak self] () -> Void in
-                self?.view.layoutIfNeeded()
-            }
-        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -143,6 +135,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         })
     }
     
+    func planItem(productName: String, handler: PlanItem? -> ()) {
+        Providers.planProvider.planItem(productName, successHandler {planItemMaybe in
+            handler(planItemMaybe)
+        })
+    }
+    
     private func processListItemInputs(name: String, priceText: String, quantityText: String, sectionName: String) -> ListItemInput? {
         //TODO?
         //        if !price {
@@ -173,7 +171,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     override func setEditing(editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
-        setAddButtonVisible(editing, animated: animated)
+        addItemView.setVisible(editing, animated: animated)
 
         listItemsTableViewController.setEditing(editing, animated: animated)
 //        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
@@ -410,7 +408,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         })
     }
     
-    @IBAction func onAddTap(sender: UIButton) {
+    func onAddTap() {
         addEditItemPopup = createAddEditPopup(createAndInitAddEditView())
         addEditItemPopup?.show()
     }

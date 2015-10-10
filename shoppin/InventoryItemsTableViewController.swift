@@ -134,12 +134,7 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
 
                 if let weakSelf = self {
                     
-                    let incrementedItem = inventoryItem.incrementQuantityCopy(delta)
-                    weakSelf.inventoryItems[row] = incrementedItem
-                    cell.inventoryItem = incrementedItem
-                    
-                    cell.quantityLabel.text = "\(incrementedItem.quantity)"
-                    
+                    weakSelf.updateIncrementUI(inventoryItem, delta: delta, cell: cell, row: row)
                     
                     if inventoryItem.quantity + delta == 0 {
                         cell.startDeleteProgress {
@@ -150,16 +145,27 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
                             Providers.inventoryItemsProvider.removeInventoryItem(inventoryItem, weakSelf.successHandler{[weak self] result in
                                 
                                 if let weakSelf = self {
-                                    weakSelf.tableView.wrapUpdates {
-                                        weakSelf.inventoryItems.removeAtIndex(row)
-                                        weakSelf.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Bottom)
-                                    }
+                                    weakSelf.removeUI(row)
                                 }
                             })
                         }
                     }
                 }
             }))
+        }
+    }
+    
+    private func updateIncrementUI(inventoryItem: InventoryItem, delta: Int, cell: InventoryItemTableViewCell, row: Int) {
+        let incrementedItem = inventoryItem.incrementQuantityCopy(delta)
+        inventoryItems[row] = incrementedItem
+        cell.inventoryItem = incrementedItem
+        cell.quantityLabel.text = "\(incrementedItem.quantity)"
+    }
+    
+    private func removeUI(row: Int) {
+        tableView.wrapUpdates {[weak self] in
+            self?.inventoryItems.removeAtIndex(row)
+            self?.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Bottom)
         }
     }
 }

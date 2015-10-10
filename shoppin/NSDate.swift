@@ -14,6 +14,12 @@ extension NSDate: Comparable {
         let components = NSCalendar.currentCalendar().components([.Day, .Month, .Year], fromDate: self)
         return (components.day, components.month, components.year)
     }
+
+    var startOfMonth: NSDate {
+        let calendar = NSCalendar.currentCalendar()
+        let components = calendar.components([.Month, .Year], fromDate: self)
+        return calendar.dateFromComponents(components)!
+    }
 }
 
 public func <(a: NSDate, b: NSDate) -> Bool {

@@ -27,7 +27,11 @@ class RealmHistoryProvider: RealmProvider {
         let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
         self.load(mapper, predicate: NSPredicate(format: "addedDate >= %@", startDate), sortDescriptor: historySortDescriptor, range: range, handler: handler)
     }
-    
+
+    func loadHistoryItems(productName: String, startDate: NSDate, handler: [HistoryItem] -> ()) {
+        let mapper = {HistoryItemMapper.historyItemWith($0)}
+        self.load(mapper, predicate: NSPredicate(format: "product.name == %@ AND addedDate >= %@", productName, startDate), sortDescriptor: historySortDescriptor, handler: handler)
+    }
     
     // TODO change data model! one table with groups and the other with history items, 1:n (also in server)
     // this is very important as right now we fetch and iterate through ALL the history items, this is very inefficient
