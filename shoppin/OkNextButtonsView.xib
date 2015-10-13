@@ -3,9 +3,12 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeue.ttc">
+            <string>HelveticaNeue-Bold</string>
+            <string>HelveticaNeue-Bold</string>
             <string>HelveticaNeue-Bold</string>
             <string>HelveticaNeue-Bold</string>
             <string>HelveticaNeue-Bold</string>
@@ -15,21 +18,22 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OkNextButtonsView" customModule="shoppin" customModuleProvider="target">
             <connections>
                 <outlet property="addModusView" destination="Hym-Q6-Qv3" id="tIj-vG-HmG"/>
-                <outlet property="editModusView" destination="zXY-Mc-96j" id="oDs-iV-mfq"/>
+                <outlet property="editModusView" destination="OHc-YY-vra" id="x7o-61-XLa"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="125"/>
+            <rect key="frame" x="0.0" y="0.0" width="600" height="90"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hym-Q6-Qv3">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="125"/>
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="90"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Boz-sP-iJE">
-                            <rect key="frame" x="0.0" y="0.0" width="295" height="125"/>
+                            <rect key="frame" x="0.0" y="0.0" width="295" height="40"/>
                             <color key="backgroundColor" red="0.95686274509803915" green="0.16862745098039217" blue="0.54509803921568623" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
+                                <constraint firstAttribute="height" constant="40" id="FbW-eV-YKO"/>
                                 <constraint firstAttribute="height" constant="50" id="P2K-6Y-4gp"/>
                             </constraints>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
@@ -50,8 +54,32 @@
                                 <action selector="onOkAddModusTap:" destination="-1" eventType="touchUpInside" id="lzy-Hb-2dY"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rGj-3C-XCn">
+                            <rect key="frame" x="152" y="50" width="295" height="40"/>
+                            <color key="backgroundColor" red="0.6578353542434221" green="0.66059565142855681" blue="0.66513256316489366" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="e20-wk-O1g"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                            <state key="normal" title="Cancel">
+                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="14"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="e20-wk-O1g"/>
+                                </mask>
+                            </variation>
+                            <connections>
+                                <action selector="onCancelAddModusTap:" destination="-1" eventType="touchUpInside" id="ysK-4b-knB"/>
+                            </connections>
+                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1DO-X5-UrY">
-                            <rect key="frame" x="305" y="0.0" width="295" height="125"/>
+                            <rect key="frame" x="305" y="0.0" width="295" height="40"/>
                             <color key="backgroundColor" red="0.36470588240000001" green="0.65490196079999996" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
                             <state key="normal" title="Ok, next">
@@ -67,69 +95,152 @@
                             </connections>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3jW-y3-yyE">
-                            <rect key="frame" x="295" y="0.0" width="10" height="125"/>
+                            <rect key="frame" x="295" y="0.0" width="10" height="40"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="10" id="d38-7d-m42"/>
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="1DO-X5-UrY" firstAttribute="leading" secondItem="3jW-y3-yyE" secondAttribute="trailing" id="8bQ-0O-6j1"/>
                         <constraint firstAttribute="bottom" secondItem="3jW-y3-yyE" secondAttribute="bottom" id="9dS-41-AIP"/>
+                        <constraint firstItem="rGj-3C-XCn" firstAttribute="centerX" secondItem="Hym-Q6-Qv3" secondAttribute="centerX" id="Bnj-cM-Lj6"/>
                         <constraint firstItem="3jW-y3-yyE" firstAttribute="top" secondItem="Hym-Q6-Qv3" secondAttribute="top" id="EbO-Oy-o4j"/>
+                        <constraint firstItem="3jW-y3-yyE" firstAttribute="height" secondItem="Boz-sP-iJE" secondAttribute="height" id="ILZ-CR-wC8"/>
                         <constraint firstAttribute="bottom" secondItem="Boz-sP-iJE" secondAttribute="bottom" id="IRz-qN-3Kl"/>
+                        <constraint firstItem="rGj-3C-XCn" firstAttribute="width" secondItem="Boz-sP-iJE" secondAttribute="width" id="LJO-xP-BH6"/>
+                        <constraint firstItem="Boz-sP-iJE" firstAttribute="height" secondItem="Hym-Q6-Qv3" secondAttribute="height" multiplier="0.48" id="Lhm-sm-M87"/>
                         <constraint firstItem="3jW-y3-yyE" firstAttribute="leading" secondItem="Boz-sP-iJE" secondAttribute="trailing" id="MlE-bQ-zuX"/>
-                        <constraint firstAttribute="bottom" secondItem="1DO-X5-UrY" secondAttribute="bottom" id="P4a-d7-dBW"/>
                         <constraint firstItem="1DO-X5-UrY" firstAttribute="top" secondItem="Hym-Q6-Qv3" secondAttribute="top" id="PCm-0U-i1j"/>
+                        <constraint firstItem="rGj-3C-XCn" firstAttribute="height" secondItem="Boz-sP-iJE" secondAttribute="height" id="Qt2-qw-Kx4"/>
                         <constraint firstItem="Boz-sP-iJE" firstAttribute="leading" secondItem="Hym-Q6-Qv3" secondAttribute="leading" id="S1l-ae-Pf6"/>
+                        <constraint firstAttribute="bottom" secondItem="rGj-3C-XCn" secondAttribute="bottom" id="Shk-Tz-hTF"/>
+                        <constraint firstAttribute="height" constant="90" id="Shn-Cw-xAB"/>
                         <constraint firstItem="Boz-sP-iJE" firstAttribute="centerY" secondItem="Hym-Q6-Qv3" secondAttribute="centerY" id="VZH-TB-0du"/>
                         <constraint firstAttribute="height" constant="50" id="XnE-wj-kco"/>
+                        <constraint firstItem="1DO-X5-UrY" firstAttribute="height" secondItem="Boz-sP-iJE" secondAttribute="height" id="bbU-Oq-93r"/>
                         <constraint firstItem="1DO-X5-UrY" firstAttribute="width" secondItem="Boz-sP-iJE" secondAttribute="width" id="deC-Ix-Sea"/>
                         <constraint firstItem="3jW-y3-yyE" firstAttribute="centerX" secondItem="Hym-Q6-Qv3" secondAttribute="centerX" id="hzA-D6-EfH"/>
                         <constraint firstAttribute="trailing" secondItem="1DO-X5-UrY" secondAttribute="trailing" id="kVy-y0-sXI"/>
                         <constraint firstItem="Boz-sP-iJE" firstAttribute="top" secondItem="Hym-Q6-Qv3" secondAttribute="top" id="nbb-8m-glN"/>
+                        <constraint firstItem="rGj-3C-XCn" firstAttribute="top" secondItem="3jW-y3-yyE" secondAttribute="bottom" constant="8" id="oWZ-gu-gxc"/>
+                        <constraint firstItem="rGj-3C-XCn" firstAttribute="top" secondItem="Boz-sP-iJE" secondAttribute="bottom" constant="10" id="ogU-8E-yUV"/>
                         <constraint firstItem="Boz-sP-iJE" firstAttribute="leading" secondItem="Hym-Q6-Qv3" secondAttribute="leading" id="uUd-IN-Xdq"/>
                     </constraints>
                     <variation key="default">
                         <mask key="constraints">
                             <exclude reference="XnE-wj-kco"/>
+                            <exclude reference="IRz-qN-3Kl"/>
+                            <exclude reference="Lhm-sm-M87"/>
                             <exclude reference="VZH-TB-0du"/>
                             <exclude reference="uUd-IN-Xdq"/>
+                            <exclude reference="Shk-Tz-hTF"/>
+                            <exclude reference="oWZ-gu-gxc"/>
+                            <exclude reference="9dS-41-AIP"/>
                             <exclude reference="deC-Ix-Sea"/>
                         </mask>
                     </variation>
                 </view>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zXY-Mc-96j">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="125"/>
-                    <color key="backgroundColor" red="0.95686274510000002" green="0.16862745100000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
-                    <state key="normal" title="Ok">
-                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                            <integer key="value" value="14"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                    <connections>
-                        <action selector="onOkEditModusTap:" destination="-1" eventType="touchUpInside" id="fki-9Z-mlD"/>
-                    </connections>
-                </button>
+                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OHc-YY-vra">
+                    <rect key="frame" x="0.0" y="50" width="600" height="40"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zXY-Mc-96j">
+                            <rect key="frame" x="0.0" y="0.0" width="295" height="40"/>
+                            <color key="backgroundColor" red="0.95686274510000002" green="0.16862745100000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                            <state key="normal" title="Ok">
+                                <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="14"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="onOkEditModusTap:" destination="-1" eventType="touchUpInside" id="fki-9Z-mlD"/>
+                            </connections>
+                        </button>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HJ6-7t-MhJ">
+                            <rect key="frame" x="295" y="0.0" width="10" height="40"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="10" id="JNW-ar-OTx"/>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="10" id="mkL-f1-cHB"/>
+                            </constraints>
+                        </view>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IaM-Ki-Z28">
+                            <rect key="frame" x="305" y="0.0" width="295" height="40"/>
+                            <color key="backgroundColor" red="0.65783535420000006" green="0.66059565139999998" blue="0.66513256320000003" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="NDE-bV-iZV"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                            <state key="normal" title="Cancel">
+                                <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                    <integer key="value" value="14"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <variation key="default">
+                                <mask key="constraints">
+                                    <exclude reference="NDE-bV-iZV"/>
+                                </mask>
+                            </variation>
+                            <connections>
+                                <action selector="onCancelEditModusTap:" destination="-1" eventType="touchUpInside" id="qNa-nY-NAC"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="IaM-Ki-Z28" secondAttribute="trailing" id="1b2-8Z-RfY"/>
+                        <constraint firstItem="IaM-Ki-Z28" firstAttribute="centerY" secondItem="OHc-YY-vra" secondAttribute="centerY" id="3L7-Gr-FcW"/>
+                        <constraint firstItem="IaM-Ki-Z28" firstAttribute="leading" secondItem="HJ6-7t-MhJ" secondAttribute="trailing" id="CUY-Zd-RaQ"/>
+                        <constraint firstItem="zXY-Mc-96j" firstAttribute="top" secondItem="OHc-YY-vra" secondAttribute="top" id="Ch1-Rz-6ld"/>
+                        <constraint firstItem="HJ6-7t-MhJ" firstAttribute="centerY" secondItem="OHc-YY-vra" secondAttribute="centerY" id="Ecq-yE-WnR"/>
+                        <constraint firstItem="zXY-Mc-96j" firstAttribute="centerY" secondItem="OHc-YY-vra" secondAttribute="centerY" id="GDz-jg-4EI"/>
+                        <constraint firstItem="zXY-Mc-96j" firstAttribute="leading" secondItem="OHc-YY-vra" secondAttribute="leading" id="Gdw-3d-n2X"/>
+                        <constraint firstItem="HJ6-7t-MhJ" firstAttribute="centerX" secondItem="OHc-YY-vra" secondAttribute="centerX" id="Gv2-1L-3wx"/>
+                        <constraint firstItem="IaM-Ki-Z28" firstAttribute="height" secondItem="zXY-Mc-96j" secondAttribute="height" id="HjK-Yn-TjC"/>
+                        <constraint firstAttribute="bottom" secondItem="HJ6-7t-MhJ" secondAttribute="bottom" id="KaB-fi-Ybi"/>
+                        <constraint firstItem="HJ6-7t-MhJ" firstAttribute="top" secondItem="OHc-YY-vra" secondAttribute="top" id="P4W-HK-wXF"/>
+                        <constraint firstAttribute="height" constant="40" id="UjA-mj-xKe"/>
+                        <constraint firstAttribute="bottom" secondItem="IaM-Ki-Z28" secondAttribute="bottom" id="chY-mB-c2T"/>
+                        <constraint firstItem="IaM-Ki-Z28" firstAttribute="top" secondItem="OHc-YY-vra" secondAttribute="top" id="mVu-Xk-q7a"/>
+                        <constraint firstAttribute="bottom" secondItem="zXY-Mc-96j" secondAttribute="bottom" id="nDX-Dv-Rgr"/>
+                        <constraint firstItem="HJ6-7t-MhJ" firstAttribute="leading" secondItem="zXY-Mc-96j" secondAttribute="trailing" id="rpe-po-iqJ"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="GDz-jg-4EI"/>
+                            <exclude reference="nDX-Dv-Rgr"/>
+                            <exclude reference="3L7-Gr-FcW"/>
+                            <exclude reference="chY-mB-c2T"/>
+                        </mask>
+                    </variation>
+                </view>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="OHc-YY-vra" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="4SD-R6-n24"/>
+                <constraint firstItem="OHc-YY-vra" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="4ea-e2-CKB"/>
+                <constraint firstAttribute="trailing" secondItem="OHc-YY-vra" secondAttribute="trailing" id="6wf-TH-Qks"/>
                 <constraint firstItem="Hym-Q6-Qv3" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="AvS-1Y-mCy"/>
                 <constraint firstAttribute="bottom" secondItem="Hym-Q6-Qv3" secondAttribute="bottom" id="CP0-TQ-Ufa"/>
-                <constraint firstItem="zXY-Mc-96j" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Oin-aQ-ZNc"/>
-                <constraint firstAttribute="bottom" secondItem="zXY-Mc-96j" secondAttribute="bottom" id="gYu-VZ-fEe"/>
+                <constraint firstItem="OHc-YY-vra" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" multiplier="0.48" id="T1a-3F-aqo"/>
+                <constraint firstItem="zXY-Mc-96j" firstAttribute="height" secondItem="Boz-sP-iJE" secondAttribute="height" id="dtj-mW-uBn"/>
+                <constraint firstAttribute="bottom" secondItem="OHc-YY-vra" secondAttribute="bottom" id="hZF-e8-JLa"/>
                 <constraint firstItem="Hym-Q6-Qv3" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="kmz-ng-j2A"/>
-                <constraint firstAttribute="trailing" secondItem="zXY-Mc-96j" secondAttribute="trailing" id="ndh-WG-U43"/>
                 <constraint firstAttribute="trailing" secondItem="Hym-Q6-Qv3" secondAttribute="trailing" id="qBb-fF-aDB"/>
-                <constraint firstItem="zXY-Mc-96j" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="uax-1g-Z8a"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="395" y="243.5"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="kmz-ng-j2A"/>
+                    <exclude reference="4ea-e2-CKB"/>
+                    <exclude reference="T1a-3F-aqo"/>
+                </mask>
+            </variation>
+            <point key="canvasLocation" x="395" y="260"/>
         </view>
     </objects>
 </document>

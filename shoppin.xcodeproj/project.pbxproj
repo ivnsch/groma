@@ -14,8 +14,6 @@
 		EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DD1BBED9C800080626 /* IntroPageView.swift */; };
 		EB0587E01BBEDAA600080626 /* NSBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DF1BBEDAA600080626 /* NSBundle.swift */; };
 		EB0870CB1BC050A300169E29 /* MyTipPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0870CA1BC050A300169E29 /* MyTipPopup.swift */; };
-		EB0870CD1BC05A5E00169E29 /* EditListItemContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB0870CC1BC05A5E00169E29 /* EditListItemContentView.xib */; };
-		EB0870CF1BC0672F00169E29 /* EditListItemContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0870CE1BC0672F00169E29 /* EditListItemContentView.swift */; };
 		EB0C1B831B3D626500F24C85 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B821B3D626500F24C85 /* IntroViewController.swift */; };
 		EB0C1B881B3DA37100F24C85 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B861B3DA37100F24C85 /* LoginViewController.swift */; };
 		EB0C1B8B1B3DA89900F24C85 /* LoginData.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C1B8A1B3DA89900F24C85 /* LoginData.swift */; };
@@ -462,6 +460,8 @@
 		EBDFE3C21AD00E8200E48F95 /* DialogUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C11AD00E8200E48F95 /* DialogUtils.swift */; };
 		EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C31AD11EA100E48F95 /* NSView.swift */; };
 		EBDFE3C61AD11F6700E48F95 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */; };
+		EBE366351BCB23D1009543AF /* AddEditListItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE366341BCB23D1009543AF /* AddEditListItemController.swift */; };
+		EBE366371BCBC346009543AF /* BlurBubbleTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE366361BCBC346009543AF /* BlurBubbleTransition.swift */; };
 		EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6A1A49C94F00FC3B29 /* Section.swift */; };
 		EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */; };
 		EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */; };
@@ -573,8 +573,6 @@
 		EB0587DD1BBED9C800080626 /* IntroPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroPageView.swift; sourceTree = "<group>"; };
 		EB0587DF1BBEDAA600080626 /* NSBundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSBundle.swift; sourceTree = "<group>"; };
 		EB0870CA1BC050A300169E29 /* MyTipPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTipPopup.swift; sourceTree = "<group>"; };
-		EB0870CC1BC05A5E00169E29 /* EditListItemContentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditListItemContentView.xib; sourceTree = "<group>"; };
-		EB0870CE1BC0672F00169E29 /* EditListItemContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListItemContentView.swift; sourceTree = "<group>"; };
 		EB0C1B821B3D626500F24C85 /* IntroViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		EB0C1B861B3DA37100F24C85 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		EB0C1B8A1B3DA89900F24C85 /* LoginData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginData.swift; sourceTree = "<group>"; };
@@ -841,6 +839,8 @@
 		EBDFE3C11AD00E8200E48F95 /* DialogUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogUtils.swift; sourceTree = "<group>"; };
 		EBDFE3C31AD11EA100E48F95 /* NSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSView.swift; sourceTree = "<group>"; };
 		EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
+		EBE366341BCB23D1009543AF /* AddEditListItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditListItemController.swift; sourceTree = "<group>"; };
+		EBE366361BCBC346009543AF /* BlurBubbleTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurBubbleTransition.swift; sourceTree = "<group>"; };
 		EBEEDD6A1A49C94F00FC3B29 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionMapper.swift; sourceTree = "<group>"; };
 		EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchScreen-568h@2x.png"; sourceTree = "<group>"; };
@@ -1114,8 +1114,7 @@
 				EB2F5D721A55754400DBC4AF /* PricesView.swift */,
 				EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */,
 				EB1DDEAF1A3334EC00D778DE /* ViewController.swift */,
-				EB0870CE1BC0672F00169E29 /* EditListItemContentView.swift */,
-				EB0870CC1BC05A5E00169E29 /* EditListItemContentView.xib */,
+				EBE366341BCB23D1009543AF /* AddEditListItemController.swift */,
 				EB0FD3811B5D017C00829AE5 /* ListsTableViewController.swift */,
 				EBCE418C1B5D466B00583551 /* EditListViewController.swift */,
 				EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */,
@@ -1651,6 +1650,7 @@
 				EB2F5D671A50C36E00DBC4AF /* helper */,
 				EB2F5D591A4F5C8100DBC4AF /* SwipeableCell.swift */,
 				EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */,
+				EBE366361BCBC346009543AF /* BlurBubbleTransition.swift */,
 			);
 			name = view;
 			path = shoppin;
@@ -1972,7 +1972,6 @@
 			files = (
 				EBBC23331BB824020002F6B1 /* prefill.realm in Resources */,
 				EB4C365F1B4C142600C387C5 /* EditableChoiceModal.storyboard in Resources */,
-				EB0870CD1BC05A5E00169E29 /* EditListItemContentView.xib in Resources */,
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
 				EB1B365B1BC4637A003519F2 /* PlanTableViewCell_.xib in Resources */,
 				EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */,
@@ -2213,6 +2212,7 @@
 				EB6F812D1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EB7F59D31BA1DBF600E07EBA /* Providers.swift in Sources */,
 				EB0C1B931B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
+				EBE366371BCBC346009543AF /* BlurBubbleTransition.swift in Sources */,
 				EB451C531B865F0E000DE208 /* AggrByTypeTableViewController.swift in Sources */,
 				EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */,
 				EB4D57AC1B7505DD00BC6171 /* SyncUtils.swift in Sources */,
@@ -2294,7 +2294,6 @@
 				EBF299871B791023006BDA1F /* InventorySync.swift in Sources */,
 				EB0C1BA01B3DF2B500F24C85 /* UserTabItemViewController.swift in Sources */,
 				EB0C2A3E1B583BFE00AF6226 /* RemoteInventoryItemWithProduct.swift in Sources */,
-				EB0870CF1BC0672F00169E29 /* EditListItemContentView.swift in Sources */,
 				EBF162DD1A3C82380048E37C /* DefaultTableViewController.swift in Sources */,
 				EB7E831A1B7B703B009DEEF4 /* HistoryProviderImpl.swift in Sources */,
 				EBF162E51A3C85A30048E37C /* ListItemCell.swift in Sources */,
@@ -2347,6 +2346,7 @@
 				EBF3779B1B38AA5900EEB6DB /* Urls.swift in Sources */,
 				EB4FD45B1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EBF162F71A3CA5030048E37C /* ListItemProviderMock.swift in Sources */,
+				EBE366351BCB23D1009543AF /* AddEditListItemController.swift in Sources */,
 				EBF1A1541B82213200F34105 /* HistoryViewController.swift in Sources */,
 				EBB9A72E1B5EB00E00E5487D /* InventoriesTableViewController.swift in Sources */,
 				EBB9A7541B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */,

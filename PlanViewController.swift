@@ -218,6 +218,10 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
         updatePlanItem(name, price: price, quantity: quantity)
     }
     
+    func onCancelTap() {
+        addEditItemPopup?.dismiss(true)
+    }
+    
     func productNameAutocompletions(text: String, handler: [String] -> ()) {
         Providers.listItemsProvider.productSuggestions(successHandler{suggestions in
             let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}

@@ -1,22 +1,22 @@
 //
-//  EditListItemContentView.swift
+//  AddEditListItemController.swift
 //  shoppin
 //
-//  Created by ischuetz on 03/10/15.
+//  Created by ischuetz on 12/10/15.
 //  Copyright © 2015 ivanschuetz. All rights reserved.
 //
 
 import UIKit
 import SwiftValidator
 
-
-protocol EditListItemContentViewDelegate {
+protocol AddEditListItemControllerDelegate {
     
     func onValidationErrors(errors: [UITextField: ValidationError])
     
     func onOkTap(name: String, price: String, quantity: String, sectionName: String)
     func onOkAndAddAnotherTap(name: String, price: String, quantity: String, sectionName: String)
     func onUpdateTap(name: String, price: String, quantity: String, sectionName: String)
+    func onCancelTap()
     
     func productNameAutocompletions(text: String, handler: [String] -> ())
     func sectionNameAutocompletions(text: String, handler: [String] -> ())
@@ -28,14 +28,18 @@ private enum Action {
     case OkAndAddAnother, Ok
 }
 
-class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, OkNextButtonsViewDelegate {
+class AddEditListItemController: UIViewController, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, OkNextButtonsViewDelegate, UITextFieldDelegate {
 
+    var delegate: AddEditListItemControllerDelegate?
+    
     @IBOutlet weak var nameInput: MLPAutoCompleteTextField!
     @IBOutlet weak var sectionInput: MLPAutoCompleteTextField!
     @IBOutlet weak var priceInput: UITextField!
     @IBOutlet weak var quantityInput: UITextField!
-
+    
     @IBOutlet weak var planInfoButton: UIButton!
+    
+    @IBOutlet weak var titleLabel: UILabel!
     
     var planItem: PlanItem? {
         didSet {
@@ -43,14 +47,14 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
         }
     }
     
+    var updatingListItem: ListItem?
+    
     @IBOutlet weak var okNextButtonsView: OkNextButtonsView!
     
     private var validator: Validator?
-
-    var delegate: EditListItemContentViewDelegate?
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         initValidator()
         
@@ -59,11 +63,25 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
         nameInput.placeholder = "Item name"
         sectionInput.placeholder = "Section (optional)"
         
-        addDismissKeyboardTapRecognizer()
-        
         initAutocompletionTextFields()
         
         okNextButtonsView.delegate = self
+        
+        addDismissKeyboardTapRecognizer()
+        
+        if let updatingListItem = updatingListItem { // set to true on prefill, which is only called in updates. Assumes it's set before view loads e.g. in prepareforsegue.
+            okNextButtonsView.addModus = .Update
+            prefill(updatingListItem)
+            titleLabel.text = "Update item"
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        UIApplication.sharedApplication().setStatusBarStyle(.LightContent, animated: true)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        UIApplication.sharedApplication().setStatusBarStyle(.Default, animated: true)
     }
     
     private func initAutocompletionTextFields() {
@@ -103,17 +121,6 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
     
     func autoCompleteTextField(textField: MLPAutoCompleteTextField!, didSelectAutoCompleteString selectedString: String!, withAutoCompleteObject selectedObject: MLPAutoCompletionObject!, forRowAtIndexPath indexPath: NSIndexPath!) {
         onNameInputChange(selectedString)
-    }
-    
-    private func addDismissKeyboardTapRecognizer() {
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard:")
-        tapRecognizer.cancelsTouchesInView = false
-        addGestureRecognizer(tapRecognizer)
-    }
-    
-    func setUpdateItem(listItem:ListItem) {
-        okNextButtonsView.addModus = .Update
-        prefill(listItem)
     }
     
     private func prefill(listItem: ListItem) {
@@ -173,9 +180,15 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
         }
     }
     
+    private func addDismissKeyboardTapRecognizer() {
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: "dismissKeyboard:")
+        tapRecognizer.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapRecognizer)
+    }
+
     // Focus next input field when user presses "Next" on keypad
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        endEditing(true)
+        view.endEditing(true)
         switch textField {
         case nameInput:
             sectionInput.becomeFirstResponder()
@@ -185,7 +198,7 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
             quantityInput.becomeFirstResponder()
         case _: break
         }
-
+        
         return true
     }
     
@@ -200,7 +213,7 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
             field.resignFirstResponder()
         }
     }
-
+    
     @IBAction func productNameEditingDidEnd(sender: AnyObject) {
         if let text = nameInput.text {
             onNameInputChange(text)
@@ -256,5 +269,12 @@ class EditListItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, MLPAu
     func onOkNextAddModusTap() {
         submit(.OkAndAddAnother)
     }
-}
+    
+    func onCancelAddModusTap() {
+        delegate?.onCancelTap()
+    }
 
+    func onCancelEditModusTap() {
+        delegate?.onCancelTap()
+    }
+}

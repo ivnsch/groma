@@ -12,8 +12,9 @@ protocol OkNextButtonsViewDelegate {
     func onOkEditModusTap()
     func onOkAddModusTap()
     func onOkNextAddModusTap()
+    func onCancelAddModusTap()
+    func onCancelEditModusTap()
 }
-
 
 enum AddModus {
     case Add, Update
@@ -68,5 +69,13 @@ class OkNextButtonsView: UIView {
 
     @IBAction func onOkNextAddModusTap(sender: UIButton) {
         delegate?.onOkNextAddModusTap()
+    }
+    
+    @IBAction func onCancelAddModusTap(sender: UIButton) {
+        delegate?.onCancelAddModusTap()
+    }
+    
+    @IBAction func onCancelEditModusTap(sender: UIButton) {
+        delegate?.onCancelEditModusTap()
     }
 }

@@ -17,6 +17,12 @@ protocol AddItemViewDelegate {
     var delegate: AddItemViewDelegate!
     var bottomConstraint: NSLayoutConstraint?
 
+    @IBOutlet weak var addButton: UIButton!
+    
+    var addButtonCenter: CGPoint {
+        return addButton.center
+    }
+    
     override init(effect: UIVisualEffect?) {
         super.init(effect: effect)
         xibSetup()

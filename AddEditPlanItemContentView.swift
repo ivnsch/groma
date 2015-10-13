@@ -16,6 +16,7 @@ protocol AddEditPlanItemContentViewDelegate {
     func onOkTap(name: String, price: String, quantity: String)
     func onOkAndAddAnotherTap(name: String, price: String, quantity: String)
     func onUpdateTap(name: String, price: String, quantity: String)
+    func onCancelTap()
     
     func productNameAutocompletions(text: String, handler: [String] -> ())
 }
@@ -192,5 +193,13 @@ class AddEditPlanItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, ML
     
     func onOkNextAddModusTap() {
         submit(.OkAndAddAnother)
+    }
+    
+    func onCancelAddModusTap() {
+        delegate?.onCancelTap()
+    }
+    
+    func onCancelEditModusTap() {
+        delegate?.onCancelTap()
     }
 }

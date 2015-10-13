@@ -10,7 +10,11 @@
         </mutableArray>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AddItemView" customModule="shoppin" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AddItemView" customModule="shoppin" customModuleProvider="target">
+            <connections>
+                <outlet property="addButton" destination="fy0-H0-VU2" id="6FR-Fd-7cA"/>
+            </connections>
+        </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <visualEffectView opaque="NO" contentMode="scaleToFill" id="Kdi-9w-SGy">
             <rect key="frame" x="0.0" y="0.0" width="648" height="70"/>
@@ -20,11 +24,11 @@
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fy0-H0-VU2">
-                        <rect key="frame" x="244" y="12" width="161" height="46"/>
+                        <rect key="frame" x="249" y="15" width="150" height="40"/>
                         <color key="backgroundColor" red="0.95686274510000002" green="0.16862745100000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="161" id="ETo-FA-NJu"/>
-                            <constraint firstAttribute="height" constant="46" id="YhR-QJ-Aoi"/>
+                            <constraint firstAttribute="width" constant="150" id="ETo-FA-NJu"/>
+                            <constraint firstAttribute="height" constant="40" id="YhR-QJ-Aoi"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
                         <state key="normal" title="Add item">
@@ -32,7 +36,7 @@
                         </state>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                <integer key="value" value="14"/>
+                                <integer key="value" value="16"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                         <connections>

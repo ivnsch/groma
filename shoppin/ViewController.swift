@@ -9,23 +9,22 @@
 import UIKit
 import CoreData
 import SwiftValidator
-import KLCPopup
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, EditListItemContentViewDelegate, ListItemsEditTableViewDelegate, AddItemViewDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate, AddItemViewDelegate, UIViewControllerTransitioningDelegate
 //    , UIBarPositioningDelegate
 {
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
 
-    private var addEditItemPopup: KLCPopup?
-    private var addEditItemView: EditListItemContentView?
-
+    private var addEditItemController: AddEditListItemController?
+    // TODO put next vars in a struct
+    private var updatingListItem: ListItem?
+    private var updatingSelectedCell: UITableViewCell?
+    
     private var listItemsTableViewController: ListItemsTableViewController!
     
     @IBOutlet weak var editButton: UIBarButtonItem!
     
     private var gestureRecognizer: UIGestureRecognizer!
-    
-    private var updatingListItem: ListItem?
     
     @IBOutlet weak var pricesView: PricesView!
     
@@ -33,6 +32,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     @IBOutlet weak var addItemView: AddItemView!
     @IBOutlet weak var addButtonContainerBottomConstraint: NSLayoutConstraint!
+    
+    private let transition = BlurBubbleTransition()
 
     var currentList: List? {
         didSet {
@@ -63,10 +64,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
-        
+
         onViewWillAppear?()
     }
     
@@ -82,16 +80,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         })
     }
     
-    // MARK: - EditListItemContentViewDelegate
+    // MARK: - AddEditListItemControllerDelegate
 
     func onValidationErrors(errors: [UITextField: ValidationError]) {
         // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
-//        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
     func onOkTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
         submitInputs(name, price: priceText, quantity: quantityText, sectionName: sectionName) {
-            addEditItemPopup?.dismiss(true)
+            addEditItemController?.dismissViewControllerAnimated(true, completion: nil)
         }
     }
     
@@ -107,7 +105,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
         submitInputs(name, price: priceText, quantity: quantityText, sectionName: sectionName) {[weak self] in
-            self?.addEditItemView?.clearInputs()
+            self?.addEditItemController?.clearInputs()
         }
     }
 
@@ -115,8 +113,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName) {
             self.updateItem(self.updatingListItem!, listItemInput: listItemInput) {[weak self] in
                 self?.view.endEditing(true)
-                self?.updatingListItem = nil
-                self?.addEditItemPopup?.dismiss(true)
+                self?.addEditItemController?.dismissViewControllerAnimated(true, completion: nil)
             }
         }
     }
@@ -140,6 +137,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             handler(planItemMaybe)
         })
     }
+    
+    func onCancelTap() {
+        addEditItemController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // MARK:
     
     private func processListItemInputs(name: String, priceText: String, quantityText: String, sectionName: String) -> ListItemInput? {
         //TODO?
@@ -342,27 +345,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
         if self.editing {
-            let addEditItemView = createAndInitAddEditView()
-            self.updatingListItem = tableViewListItem.listItem
-            addEditItemView.setUpdateItem(tableViewListItem.listItem)
-            addEditItemPopup = createAddEditPopup(addEditItemView)
-            addEditItemPopup?.show()
+            updatingListItem = tableViewListItem.listItem
+            updatingSelectedCell = listItemsTableViewController.tableView.cellForRowAtIndexPath(indexPath)
+            
+            performSegueWithIdentifier("showAddIemSegue", sender: self)
             
         } else {
             listItemsTableViewController.markOpen(true, indexPath: indexPath)
         }
-    }
-    
-    private func createAndInitAddEditView() -> EditListItemContentView {
-        let addEditItemView = NSBundle.loadView("EditListItemContentView", owner: self) as! EditListItemContentView
-        addEditItemView.frame = CGRectMake(0, 0, 300, 400)
-        addEditItemView.delegate = self
-        self.addEditItemView = addEditItemView
-        return addEditItemView
-    }
-    
-    private func createAddEditPopup(contentView: EditListItemContentView) -> KLCPopup {
-        return KLCPopup(contentView: contentView, showType: KLCPopupShowType.ShrinkIn, dismissType: KLCPopupDismissType.ShrinkOut, maskType: KLCPopupMaskType.Dimmed, dismissOnBackgroundTouch: true, dismissOnContentTouch: false)
     }
     
     func onListItemDeleted(tableViewListItem: TableViewListItem) {
@@ -379,37 +369,56 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     }
                 }
             }
+        } else if segue.identifier == "showAddIemSegue" {
+            let controller = segue.destinationViewController as! AddEditListItemController
+            controller.delegate = self
+            addEditItemController = controller
+            
+            controller.transitioningDelegate = self
+            controller.modalPresentationStyle = .Custom
+            
+            if let updatingListItem = updatingListItem { // edit (tapped on a list item)
+                addEditItemController?.updatingListItem = updatingListItem
+            }
+
+        } else {
+            print("Invalid segue: \(segue.identifier)")
         }
     }
     
-    func keyboardWillShow(notification: NSNotification) {
-        // Move popup up such that all text fields are reachable
-        UIView.animateWithDuration(0.2, animations: {[weak self]() -> Void in
-            if let addEditItemPopup = self?.addEditItemPopup {
-                // only move popup up if keyboard was down before
-                // the problem here is that jump from alpha to numbers keypad (or the other way) triggers keyboardWillShow and not keyboardWillHide
-                // so we have to avoid that popup goes up when user jumps from one field to another
-                if addEditItemPopup.tag == 0 { // note 0 is also default for "no tag"
-                    let center = CGPointMake(addEditItemPopup.center.x, addEditItemPopup.center.y - 30)
-                    addEditItemPopup.center = center
-                    addEditItemPopup.tag = 1 // 1 -> "up"
-                }
-            }
-        })
-    }
-
-    func keyboardWillHide(notification: NSNotification) {
-        UIView.animateWithDuration(0.2, animations: {[weak self] () -> Void in
-            if let popup = self?.addEditItemPopup {
-                let center = CGPointMake(popup.center.x, popup.center.y + 30)
-                popup.center = center
-                popup.tag = 0 // 0 -> "normal/center"
-            }
-        })
+    func onAddTap() {
+        performSegueWithIdentifier("showAddIemSegue", sender: self)
     }
     
-    func onAddTap() {
-        addEditItemPopup = createAddEditPopup(createAndInitAddEditView())
-        addEditItemPopup?.show()
+    // MARK: UIViewControllerTransitioningDelegate
+    
+    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        transition.transitionMode = .Present
+        transition.duration = 0.2
+        
+        if let updatingSelectedCell = updatingSelectedCell {
+            transition.startingPoint = view.convertPoint(updatingSelectedCell.center, fromView: listItemsTableViewController.tableView)
+        } else {
+            transition.startingPoint = view.convertPoint(addItemView.addButtonCenter, fromView: addItemView)
+        }
+        FrozenEffect.apply(transition.bubble)
+        return transition
+    }
+    
+    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        transition.transitionMode = .Dismiss
+        transition.duration = 0.2
+        if let updatingSelectedCell = updatingSelectedCell {
+            transition.startingPoint = view.convertPoint(updatingSelectedCell.center, fromView: listItemsTableViewController.tableView)
+            
+            // TODO side effects in this method, not pretty - use completion block or something?
+            self.updatingSelectedCell = nil
+            updatingListItem = nil
+            
+        } else {
+            transition.startingPoint = view.convertPoint(addItemView.addButtonCenter, fromView: addItemView)
+        }
+        FrozenEffect.apply(transition.bubble)
+        return transition
     }
 }
