@@ -83,6 +83,7 @@ class ListItemProviderImpl: ListItemProvider {
                     
                     // if there's no cached list or there's a difference, overwrite the cached list
                     if (dbListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
+                        // TODO this should OVERWRITE the items not just "save"
                         self?.dbProvider.saveListItems(listItemsWithRelations) {saved in
                             
                             if fetchMode == .Both {
@@ -137,131 +138,176 @@ class ListItemProviderImpl: ListItemProvider {
             handler(ProviderResult(status: removed ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
         }
     }
-    
-    func add(listItem: ListItem, _ handler: ProviderResult<Any> -> ()) {
 
-        let memAdded = memProvider.addListItem(listItem)
-        if memAdded {
-            handler(ProviderResult(status: .Success))
-        }
+    func add(groupItems: [GroupItem], list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
         
-        // TODO local database first then server
-        // and review carefully what happens if adding fails after memory cache is updated
-        
-        
-        // return the saved object, to get object with generated id
-        
-        // for now do remote first. Imagine we do coredata first, user adds the list and then a lot of items to it and server fails. The list with all items will be lost in next sync.
-        // we can do special handling though, like show an error message when server fails and remove the list which was just added, and/or retry server. Or use a flag "synched = false" which tells us that these items should not be removed on sync, similar to items which were added offline. Etc.
-        self.remoteProvider.add(listItem, handler: {[weak self] remoteResult in
+        listItems(list, fetchMode: .MemOnly) {[weak self] result in // get listitems - we need this to determine the order of the new items
             
-            if remoteResult.success {
-                self?.dbProvider.saveListItem(listItem) {saved in // currently the item returned by server is identically to the one we sent, so we just save our local item
-                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
-                    if !memAdded { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
-                        handler(ProviderResult(status: providerStatus))
-                    }
+            if let currentListItems = result.sucessResult {
+                
+                var currentListSectionCountDict = currentListItems.sectionCountDict()
+                
+                var listItems: [ListItem] = []
+                for groupItem in groupItems {
+                    // append new listitem at the end of section
+                    let count = currentListSectionCountDict[groupItem.section] ?? 0
+                    let order = count // order is the same as index: if no elements -> order 0, if 1 elements -> order 0, 1, etc.
+                    currentListSectionCountDict[groupItem.section] = count + 1 // we inserted an item, increment (or insert, if section doesn't exist yet) count
+                    
+                    let listItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: groupItem.quantity, product: groupItem.product, section: groupItem.section, list: list, order: order)
+                    listItems.append(listItem)
+                }
+                
+                self?.add(listItems) {result in
+                    handler(result)
                 }
                 
             } else {
-                DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
-                self?.memProvider.invalidate()
+                
+                print("Error: Can't add groups: Could not get listitems.")
+                handler(ProviderResult(status: .DatabaseUnknown))
             }
-        })
+        }
     }
     
-    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: Int, _ handler: ProviderResult<ListItem> -> ()) {
+    func add(listItems: [ListItem], _ handler: ProviderResult<[ListItem]> -> ()) {
 
-        self.listItems(list, fetchMode: .First) {result in // TODO fetch items only when order not passed, because they are used only to get order
+        // TODO correct impl of add list items in memcache, reenable this
+        let memAdded = false
+//        let memAdded = memProvider.addListItems(listItems)
+//        if memAdded {
+//            handler(ProviderResult(status: .Success))
+//        }
+        
+        // TODO review carefully what happens if adding fails after memory cache is updated
+        dbProvider.saveListItems(listItems, incrementQuantity: true) {[weak self] savedListItemsMaybe in // currently the item returned by server is identically to the one we sent, so we just save our local item
+            if let savedListItems = savedListItemsMaybe {
+                if !memAdded { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
+                    handler(ProviderResult(status: .Success, sucessResult: savedListItems))
+                }
+                
+                // TODO review following comment now that we changed to do first database and then server
+                // for now do remote first. Imagine we do coredata first, user adds the list and then a lot of items to it and server fails. The list with all items will be lost in next sync.
+                // we can do special handling though, like show an error message when server fails and remove the list which was just added, and/or retry server. Or use a flag "synched = false" which tells us that these items should not be removed on sync, similar to items which were added offline. Etc.
+                // TODO review that sending savedListItems is enough for possible update case (increment) to work correctly. Will the server always have correct uuids etc.
+                self?.remoteProvider.add(savedListItems) {remoteResult in
+                    if !remoteResult.success {
+                        print("Error: adding listItem in remote: \(listItems), result: \(remoteResult)")
+                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                        self?.memProvider.invalidate()
+                    }
+                }
+                
+                
+            } else {
+                handler(ProviderResult(status: .DatabaseUnknown))
+                self?.memProvider.invalidate()
+            }
+
+        }
+    }
+    
+    func add(listItem: ListItem, _ handler: ProviderResult<ListItem> -> ()) {
+        add([listItem]) {result in
+            if let listItems = result.sucessResult {
+                if let listItem = listItems.first {
+                    handler(ProviderResult(status: .Success, sucessResult: listItem))
+                    
+                } else {
+                    print("Error: add listitem returned success result but it's an empty array")
+                    handler(ProviderResult(status: .Unknown))
+                }
+                
+            } else {
+                print("Error: add listitem didn't succeed, result: \(result)")
+                handler(ProviderResult(status: .Unknown))
+            }
+        }
+    }
+    
+    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: Int?, _ handler: ProviderResult<ListItem> -> ()) {
+
+        self.listItems(list, fetchMode: .First) {[weak self] result in // TODO fetch items only when order not passed, because they are used only to get order
             
             if let listItems = result.sucessResult {
                 
-                let order = orderMaybe ?? listItems.count
-                
-                // get product and section uui if they're already in the local db (remember that we assign uuid in the client so this logic has to be in the client)
-                self.loadProduct(listItemInput.name, list: list) {productTry in
+                self?.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, list: list) {result in
                     
-                    // load product and update or create one
-                    // if we find a product with the name we update it - this is for the case the user changes the price for an existing product while adding an item
-                    let productUuid: String = {
-                        if let existingProduct = productTry.sucessResult {
-                            return existingProduct.uuid
-                        } else {
-                            return NSUUID().UUIDString
+                    if let product = result.sucessResult {
+                        
+                        self?.mergeOrCreateSection(listItemInput.section, possibleNewOrder: possibleNewSectionOrder, list: list) {result in
+                            
+                            if let section = result.sucessResult {
+                                // WARN / TODO: we didn't do any local db udpates! currently this is done after we receive the response off addItem of the server, with the server object
+                                // in order to support offline use this has to be changed either
+                                // 1. do the update before calling the service. If service returns an error then remove?
+                                // 2. do the update before calling the service, and add flag not synched (etc)
+                                // 3. more ideas?
+                                let order = orderMaybe ?? listItems.count
+                                let listItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
+                                self?.add(listItem, {result in
+                                    if let addedListItem = result.sucessResult {
+                                        handler(ProviderResult(status: .Success, sucessResult: addedListItem))
+                                    } else {
+                                        handler(ProviderResult(status: result.status))
+                                    }
+                                })
+                            } else {
+                                print("Error fetching section: \(result.status)")
+                                handler(ProviderResult(status: .DatabaseUnknown))
+                            }
                         }
-                    }()
-                    let product = Product(uuid: productUuid, name: listItemInput.name, price: listItemInput.price)
-
-                    // load section or create one (there's no more section data in the input besides of the name, so there's nothing to update).
-                    // There is no name update since here we have only name so either the name is in db or it's not, if it's not insert a new section
-                    self.loadSection(listItemInput.section, list: list) {result in
-                        
-                        let section: Section = {
-                            if let existingSection = result.sucessResult {
-                                return existingSection
-                            } else {
-                                return Section(uuid: NSUUID().UUIDString, name: listItemInput.section, order: possibleNewSectionOrder)
-                            }
-                        }()
-                        
-                        // WARN / TODO: we didn't do any local db udpates! currently this is done after we receive the response off addItem of the server, with the server object
-                        // in order to support offline use this has to be changed either
-                        // 1. do the update before calling the service. If service returns an error then remove?
-                        // 2. do the update before calling the service, and add flag not synched (etc)
-                        // 3. more ideas?
-                        let listItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
-                        self.add(listItem, {result in
-                            if result.success {
-                                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItem))
-                            } else {
-                                handler(ProviderResult(status: result.status))
-                            }
-                        })
-                    }
-                }
-            }
-        }
-    }
-    
-    private func loadSection(name: String, list: List, handler: ProviderResult<Section> -> ()) {
-        self.dbProvider.loadSectionWithName(name) {dbSectionMaybe in
-            if let dbSection = dbSectionMaybe {
-                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSection))
-                
-            } else {
-                self.remoteProvider.section(name, list: list) {remoteResult in
-                    
-                    if let remoteSection = remoteResult.successResult {
-                        let section = SectionMapper.SectionWithRemote(remoteSection)
-                        handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: section))
-                        
                     } else {
-                        print("Error getting remote product, status: \(remoteResult.status)")
-                        let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                        handler(ProviderResult(status: providerStatus))
-                    }
-                }
-            }
-        }
-    }
-    
-    private func loadProduct(name: String, list: List, handler: ProviderResult<Product> -> ()) {
-        self.dbProvider.loadProductWithName(name) {dbProductMaybe in
-            if let dbProduct = dbProductMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: dbProduct))
-                
-            } else {
-                self.remoteProvider.product(name, list: list) {remoteResult in
-                    
-                    if let remoteProduct = remoteResult.successResult {
-                        let product = ProductMapper.ProductWithRemote(remoteProduct)
-                        handler(ProviderResult(status: .Success, sucessResult: product))
-                    } else {
-                        print("Error getting remote product, status: \(remoteResult.status)")
+                        print("Error fetching product: \(result.status)")
                         handler(ProviderResult(status: .DatabaseUnknown))
                     }
                 }
             }
+        }
+    }
+    
+    func loadSection(name: String, list: List, handler: ProviderResult<Section> -> ()) {
+        dbProvider.loadSectionWithName(name) {dbSectionMaybe in
+            if let dbSection = dbSectionMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: dbSection))
+            } else {
+                handler(ProviderResult(status: .NotFound))
+            }
+            
+//            // TODO is this necessary here?
+//            self.remoteProvider.section(name, list: list) {remoteResult in
+//                
+//                if let remoteSection = remoteResult.successResult {
+//                    let section = SectionMapper.SectionWithRemote(remoteSection)
+//                    handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: section))
+//                } else {
+//                    print("Error getting remote product, status: \(remoteResult.status)")
+//                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+//                    handler(ProviderResult(status: providerStatus))
+//                }
+//            }
+        }
+    }
+    
+    func loadProduct(name: String, list: List, handler: ProviderResult<Product> -> ()) {
+        dbProvider.loadProductWithName(name) {dbProductMaybe in
+            if let dbProduct = dbProductMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: dbProduct))
+            } else {
+                handler(ProviderResult(status: .NotFound))
+            }
+
+//            // TODO is this necessary here?
+//            self.remoteProvider.product(name, list: list) {remoteResult in
+//                
+//                if let remoteProduct = remoteResult.successResult {
+//                    let product = ProductMapper.ProductWithRemote(remoteProduct)
+//                    handler(ProviderResult(status: .Success, sucessResult: product))
+//                } else {
+//                    print("Error getting remote product, status: \(remoteResult.status)")
+//                    handler(ProviderResult(status: .DatabaseUnknown))
+//                }
+//            }
         }
     }
 
@@ -337,7 +383,8 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func update(listItem: ListItem, _ handler: ProviderResult<Any> -> ()) {
-        update(listItem, handler)
+//        update(listItem, handler)
+        print("FIXME or remove - update listitem - bad implementation")
     }
     
     func sections(handler: ProviderResult<[Section]> -> ()) {
@@ -481,4 +528,76 @@ class ListItemProviderImpl: ListItemProvider {
 //            })
 //        }
 //    }
+    
+    
+    func mergeOrCreateProduct(productName: String, productPrice: Float, list: List, _ handler: ProviderResult<Product> -> Void) {
+        
+        // get product and section uuid if they're already in the local db (remember that we assign uuid in the client so this logic has to be in the client)
+        loadProduct(productName, list: list) {result in
+            
+            // load product and update or create one
+            // if we find a product with the name we update it - this is for the case the user changes the price for an existing product while adding an item
+            let productUuidMaybe: String? = {
+                if let existingProduct = result.sucessResult {
+                    return existingProduct.uuid
+                } else {
+                    if result.status == .NotFound { // new product
+                        return NSUUID().UUIDString
+                    } else {
+                        print("Error: loading product: \(result.status)")
+                        return nil
+                    }
+                }
+            }()
+            
+            if let productUuid = productUuidMaybe {
+                let product = Product(uuid: productUuid, name: productName, price: productPrice)
+                handler(ProviderResult(status: .Success, sucessResult: product))
+            } else {
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+    
+    func mergeOrCreateSection(sectionName: String, possibleNewOrder: Int?, list: List, _ handler: ProviderResult<Section> -> Void) {
+        
+        // load section or create one (there's no more section data in the input besides of the name, so there's nothing to update).
+        // There is no name update since here we have only name so either the name is in db or it's not, if it's not insert a new section
+        loadSection(sectionName, list: list) {result in
+            
+            // load product and update or create one
+            // if we find a product with the name we update it - this is for the case the user changes the price for an existing product while adding an item
+            if let existingSection = result.sucessResult {
+                handler(ProviderResult(status: .Success, sucessResult: existingSection))
+                
+            } else {
+                if result.status == .NotFound { // new section
+                    
+                    if let order = possibleNewOrder {
+                        let section = Section(uuid: NSUUID().UUIDString, name: sectionName, order: order)
+                        handler(ProviderResult(status: .Success, sucessResult: section))
+                        
+                    } else { // no order known in advance - fetch listItems to count how many sections, order at the end
+                        
+                        Providers.listItemsProvider.listItems(list, fetchMode: ProviderFetchModus.First) {result in
+                            
+                            if let listItems = result.sucessResult {
+                                let order = listItems.sectionCount
+                                
+                                let section = Section(uuid: NSUUID().UUIDString, name: sectionName, order: order)
+                                handler(ProviderResult(status: .Success, sucessResult: section))
+                                
+                            } else {
+                                print("Error: loading section: \(result.status)")
+                                handler(ProviderResult(status: .DatabaseUnknown))
+                            }
+                        }
+                    }
+                } else {
+                    print("Error: loading section: \(result.status)")
+                    handler(ProviderResult(status: .DatabaseUnknown))
+                }
+            }
+        }
+    }
 }

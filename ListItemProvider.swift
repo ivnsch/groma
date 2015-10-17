@@ -22,37 +22,47 @@ protocol ListItemProvider {
     
     func productSuggestions(handler: ProviderResult<[Suggestion]> -> ())
     
-    // MARK:
+    func loadProduct(name: String, list: List, handler: ProviderResult<Product> -> ())
+    
+    // MARK: - Section
     
     func sectionSuggestions(handler: ProviderResult<[Suggestion]> -> ())
 
     func sections(handler: ProviderResult<[Section]> -> ())
 
-    func remove(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
-    
     func remove(section: Section, _ handler: ProviderResult<Any> -> ())
+
+    func loadSection(name: String, list: List, handler: ProviderResult<Section> -> ())
+
+    // MARK: - List
+
+    func lists(handler: ProviderResult<[List]> -> ())
+    
+    func list(listId: String, _ handler: ProviderResult<List> -> ())
+    
+    // MARK: - ListItem
+
+    func remove(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
     
     func remove(list: List, _ handler: ProviderResult<Any> -> ())
 
-    func add(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
+    func add(listItem: ListItem, _ handler: ProviderResult<ListItem> -> ())
 
+    func add(listItems: [ListItem], _ handler: ProviderResult<[ListItem]> -> ())
+    
     /**
     Adds a new list item
     The corresponding product and section will be added if no one with given unique exists
     - parameter list: list where the list item is
     - parameter order:  position of listitem in section. If nil will be appended at the end TODO always pass
-    - parameter possibleNewSectionOrder: if the section is determined to be new, position of section in list. If the section already exists this is not used. Not an optional for easy handling, just pass by default current sections count.
+    - parameter possibleNewSectionOrder: if the section is determined to be new, position of section in list. If the section already exists this is not used. If nil this will be at the end of the list (an additional database fetch will be made to count the sections).
     - parameter handler
     */
-    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int?, possibleNewSectionOrder: Int, _ handler: ProviderResult<ListItem> -> ())
+    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int?, possibleNewSectionOrder: Int?, _ handler: ProviderResult<ListItem> -> ())
     
     func update(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
 
     func update(listItems: [ListItem], _ handler: ProviderResult<Any> -> ())
-        
-    func lists(handler: ProviderResult<[List]> -> ())
-
-    func list(listId: String, _ handler: ProviderResult<List> -> ())
     
     func listItems(list: List, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[ListItem]> -> ())
     
@@ -67,4 +77,23 @@ protocol ListItemProvider {
     func syncListItems(list: List, handler: (ProviderResult<Any>) -> ())
     
     func invalidateMemCache()
+    
+    // MARK: - GroupItem / ListItem
+    
+    /**
+    * Converts group items in list items and adds them to list
+    */
+    func add(groupItems: [GroupItem], list: List, _ handler: ProviderResult<[ListItem]> -> ())
+    
+    // MARK: -
+
+    /**
+    There are some utility methods to refactor common code in ListItemsProviderImpl and ListItemGroupProviderImpl when adding new list or group items
+    Tries to load the product or section using unique (name), if existent overrides fields with corresponding input, if not existent creates a new one
+    TODO use results like everywhere else, maybe put in a different specific utility class this is rather provider-internal
+    
+    - parameter possibleNewSectionOrder: if the section is determined to be new, position of section in list. If the section already exists this is not used. If nil this will be at the end of the list (an additional database fetch will be made to count the sections).
+    */
+    func mergeOrCreateProduct(productName: String, productPrice: Float, list: List, _ handler: ProviderResult<Product> -> Void)
+    func mergeOrCreateSection(sectionName: String, possibleNewOrder: Int?, list: List, _ handler: ProviderResult<Section> -> Void)
 }

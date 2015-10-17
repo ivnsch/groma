@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import SwiftValidator
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate, AddItemViewDelegate, UIViewControllerTransitioningDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate, AddItemViewDelegate, UIViewControllerTransitioningDelegate, ListItemGroupsViewControllerDelegate
 //    , UIBarPositioningDelegate
 {
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
@@ -303,7 +303,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             self.progressVisible(true)
             
             Providers.listItemsProvider.add(listItemInput, list: currentList, order: nil, possibleNewSectionOrder: self.listItemsTableViewController.sections.count, successHandler {savedListItem in
-                self.listItemsTableViewController.addListItem(savedListItem)
+                // Our "add" can also be an update - if user adds an item with a name that already exists, it's an update (increment)
+                self.listItemsTableViewController.updateOrAddListItem(savedListItem, increment: true)
                 self.updatePrices(.MemOnly)
                 
                 handler?()
@@ -390,6 +391,33 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         performSegueWithIdentifier("showAddIemSegue", sender: self)
     }
     
+    @IBAction func onAddGroupTap(sender: UIButton) {
+        let controller = UIStoryboard.listItemsGroupsNavigationController()
+        controller.transitioningDelegate = self
+        controller.modalPresentationStyle = .Custom
+        
+        controller.navigationBar.translucent = true
+        controller.navigationBar.shadowImage = UIImage()
+        controller.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
+        controller.navigationBar.backgroundColor = UIColor.clearColor()
+        controller.view.backgroundColor = UIColor.clearColor()
+        
+        for v in controller.view.subviews {
+            v.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
+        }
+        
+        if let groupsController = controller.viewControllers.first as? ListItemGroupsViewController {
+
+            groupsController.list = currentList
+            groupsController.delegate = self
+            
+            presentViewController(controller, animated: true, completion: nil)
+            
+        } else {
+            print("Error: The groups navigation controller doesn't have a controller or it has wrong class")
+        }
+    }
+    
     // MARK: UIViewControllerTransitioningDelegate
     
     func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -421,4 +449,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         FrozenEffect.apply(transition.bubble)
         return transition
     }
+    
+    // MARK: - ListItemGroupsViewControllerDelegate
+    
+    func onGroupsAdded() {
+        if let list = currentList {
+            initWithList(list) // refresh list items
+        } else {
+            print("Invalid state, coming back from groups and no list")
+        }
+    }
+    
 }

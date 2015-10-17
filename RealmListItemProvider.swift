@@ -142,49 +142,91 @@ class RealmListItemProvider: RealmProvider {
     
     // MARK: - ListItem
     
-    func saveListItem(listItem: ListItem, updateSuggestions: Bool = true, handler: Bool -> ()) {
-        self.doInWriteTransaction({[weak self] realm in
-
-            self?.saveListItemHelper(realm, listItem: listItem, updateSuggestions: updateSuggestions)
-            return true
-            
-            }, finishHandler: {success in
-                handler(success)
-        })
-
+    func saveListItem(listItem: ListItem, updateSuggestions: Bool = true, incrementQuantity: Bool, handler: ListItem -> ()) {
+        saveListItems([listItem], incrementQuantity: incrementQuantity) {listItemsMaybe in
+            if let listItems = listItemsMaybe {
+                if let listItem = listItems.first {
+                    handler(listItem)
+                } else {
+                    // FIXME for now not calling the handler if error happen, but to be correct the handler should get optional list item.
+                    print("Error: RealmListItemProvider: saveListItem: returned empty array after (maybe) saving: \(listItem)")
+                }
+            } else {
+                // FIXME for now not calling the handler if error happen, but to be correct the handler should get optional list item.
+                print("Error: RealmListItemProvider: saveListItem: returned nil array after (maybe) saving: \(listItem)")
+            }
+        }
     }
     
     /**
-    Batch saving/update of list items
+    Batch add/update of list items
+    When used for add: incrementQuantity should be true, update: false. After clearing db (e.g. sync) also false (since there's nothing to increment)
     */
-    func saveListItems(listItem: [ListItem], updateSuggestions: Bool = true, handler: Bool -> ()) {
-        self.doInWriteTransaction({[weak self] realm in
+    func saveListItems(var listItems: [ListItem], updateSuggestions: Bool = true, incrementQuantity: Bool, handler: [ListItem]? -> ()) {
+        doInWriteTransaction({[weak self] realm in
+           
+            // if we want to increment if item with same product name exists
+            // Note that we always want this except when saveListItems is called after having cleared the database, e.g. (currently) on server sync, or when doing an update
+            if incrementQuantity {
+                // get all existing list items with product names using IN query
+                let productNamesStr: String = ",".join(listItems.map{"'\($0.product.name)'"})
+                let existingListItems = realm.objects(DBListItem).filter("product.name IN {\(productNamesStr)}") // TODO get only listitems in the list!
+                
+                let uuidToDBListItemDict: [String: DBListItem] = existingListItems.toDictionary{
+                    ($0.product.uuid, $0)
+                }
+                // merge list items with existing, in order to do update (increment quantity)
+                // this means: use uuid of existing item, increment quantity, and for the rest copy fields of new item
+                listItems = listItems.map {listItem in
+                    if let existingDBListItem = uuidToDBListItemDict[listItem.product.uuid] {
+                        return listItem.copy(uuid: existingDBListItem.uuid, quantity: listItem.quantity + existingDBListItem.quantity)
+                    } else {
+                        return listItem
+                    }
+                }
+            }
             
-            for listItem in listItem {
-                self?.saveListItemHelper(realm, listItem: listItem, updateSuggestions: updateSuggestions)
+            for listItem in listItems {
+//                self?.saveListItemHelper(realm, listItem: listItem, updateSuggestions: updateSuggestions)
+
+                // TODO possible to use batch save here?
+                let dbListItem = ListItemMapper.dbWithListItem(listItem)
+                realm.add(dbListItem, update: true)
+                
+                if updateSuggestions {
+                    self?.saveProductSuggestionHelper(realm, product: listItem.product)
+                    
+                    let sectionSuggestion = SectionSuggestionMapper.dbWithSection(listItem.section)
+                    realm.add(sectionSuggestion, update: true)
+                }
+                
             }
             return true
             
             }, finishHandler: {success in
-                handler(success)
+                if success {
+                    handler(listItems)
+                } else {
+                    handler(nil)
+                }
         })
     }
     
-    /**
-    Helper to save a list item with optional saving of product and section autosuggestion
-    Expected to be executed inside a transaction
-    */
-    private func saveListItemHelper(realm: Realm, listItem: ListItem, updateSuggestions: Bool = true) {
-        let dbListItem = ListItemMapper.dbWithListItem(listItem)
-        realm.add(dbListItem, update: true)
-        
-        if updateSuggestions {
-            saveProductSuggestionHelper(realm, product: listItem.product)
-            
-            let sectionSuggestion = SectionSuggestionMapper.dbWithSection(listItem.section)
-            realm.add(sectionSuggestion, update: true)
-        }
-    }
+//    /**
+//    Helper to save a list item with optional saving of product and section autosuggestion
+//    Expected to be executed inside a transaction
+//    */
+//    private func saveListItemHelper(realm: Realm, listItem: ListItem, updateSuggestions: Bool = true) {
+//        let dbListItem = ListItemMapper.dbWithListItem(listItem)
+//        realm.add(dbListItem, update: true)
+//        
+//        if updateSuggestions {
+//            saveProductSuggestionHelper(realm, product: listItem.product)
+//            
+//            let sectionSuggestion = SectionSuggestionMapper.dbWithSection(listItem.section)
+//            realm.add(sectionSuggestion, update: true)
+//        }
+//    }
 
     /**
     Helper to save suggestion corresponding to a product
@@ -239,7 +281,19 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func updateListItems(listItems: [ListItem], handler: Bool -> ()) {
-        self.saveListItems(listItems, handler: handler)
+        saveListItems(listItems, incrementQuantity: false) {updatedListItemsMaybe in
+            if let updatedListItems = updatedListItemsMaybe {
+                if listItems.count == updatedListItems.count {
+                    handler(true)
+                } else {
+                    print("Error: RealmListItemProvider: updateListItems: list items count != updated items count. list items: \(listItems), updated: \(updatedListItemsMaybe)")
+                    handler(false)
+                }
+            } else {
+                print("Error: RealmListItemProvider: saveListItem: returned nil array after (maybe) saving: \(updatedListItemsMaybe)")
+                handler(false)
+            }
+        }
     }
     
     func saveListsSyncResult(syncResult: RemoteListWithListItemsSyncResult, handler: Bool -> ()) {

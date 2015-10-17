@@ -43,6 +43,14 @@ final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSer
     var debugDescription: String {
         return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), order: \(self.order)}"
     }
+    
+    func copy(uuid uuid: String? = nil, name: String? = nil, order: Int? = nil) -> Section {
+        return Section(
+            uuid: uuid ?? self.uuid,
+            name: name ?? self.name,
+            order: order ?? self.order
+        )
+    }
 }
 
 func ==(lhs: Section, rhs: Section) -> Bool {

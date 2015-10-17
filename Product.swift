@@ -27,6 +27,13 @@ final class Product: Equatable, Hashable, CustomDebugStringConvertible {
         return self.uuid.hashValue
     }
     
+    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil) -> Product {
+        return Product(
+            uuid: uuid ?? self.uuid,
+            name: name ?? self.name,
+            price: price ?? self.price
+        )
+    }
 }
 
 func ==(lhs: Product, rhs: Product) -> Bool {

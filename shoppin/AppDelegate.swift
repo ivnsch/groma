@@ -164,7 +164,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             ]
             
             
-            weakSelf.listProvider.saveListItems(listItems) {saved in
+            weakSelf.listProvider.saveListItems(listItems, incrementQuantity: false) {saved in
             
                 let inventory1 = Inventory(uuid: "400", name: "My Home inventory")
                 weakSelf.inventoryProvider.saveInventory(inventory1) {saved in

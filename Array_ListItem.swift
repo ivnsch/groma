@@ -30,5 +30,27 @@ extension Array where Element: ListItem {
         }
         return dictionary
     }
+    
+    /**
+    Group list items by section (note that the listitems inside each section are ordered but the sections not)
+    */
+    func groupBySection() -> [Section: [ListItem]] {
+        var dictionary = [Section: [ListItem]]()
+        for listItem in self {
+            if dictionary[listItem.section] == nil {
+                dictionary[listItem.section] = []
+            }
+            dictionary[listItem.section]?.append(listItem)
+        }
+        return dictionary
+    }
+    
+    func sectionCountDict() -> [Section: Int] {
+        return groupBySection().map {($0, $1.count)}
+    }
+    
+    var sectionCount: Int {
+        return Set(map{$0.section}).count
+    }
 }
 

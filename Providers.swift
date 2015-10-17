@@ -24,4 +24,6 @@ struct Providers {
     static var statsProvider: StatsProvider = StatsProviderImpl()
     
     static var planProvider: PlanProvider = PlanProviderImpl()
+    
+    static var listItemGroupsProvider: ListItemGroupProvider = ListItemGroupProviderImpl()
 }

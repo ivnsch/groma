@@ -1,14 +1,14 @@
 //
-//  ListItemInput.swift
+//  GroupItemInput.swift
 //  shoppin
 //
-//  Created by ischuetz on 28/03/15.
-//  Copyright (c) 2015 ivanschuetz. All rights reserved.
+//  Created by ischuetz on 15/10/15.
+//  Copyright © 2015 ivanschuetz. All rights reserved.
 //
 
 import Foundation
 
-struct ListItemInput {
+struct GroupItemInput {
     
     let name: String
     let quantity: Int

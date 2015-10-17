@@ -57,6 +57,21 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     private var longDebugDescription: String {
         return "{\(self.dynamicType) uuid: \(self.uuid), done: \(self.done), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.product), sectionUuid: \(self.section), listUuid: \(self.list), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
     }
+    
+    func copy(uuid uuid: String? = nil, done: Bool? = nil, quantity: Int? = nil, product: Product? = nil, section: Section? = nil, list: List? = nil, order: Int? = nil) -> ListItem {
+        return ListItem(
+            uuid: uuid ?? self.uuid,
+            done: done ?? self.done,
+            quantity: quantity ?? self.quantity,
+            product: product ?? self.product,
+            section: section ?? self.section,
+            list: list ?? self.list,
+            order: order ?? self.order,
+            lastUpdate: self.lastUpdate,
+            lastServerUpdate: self.lastServerUpdate,
+            removed: self.removed
+        )
+    }
 }
 
 // TODO implement equality correctly, also in other model classes. Now we have identifiable for this.

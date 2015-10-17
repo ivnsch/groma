@@ -1,0 +1,20 @@
+//
+//  ListItemGroupProvider.swift
+//  shoppin
+//
+//  Created by ischuetz on 13/10/15.
+//  Copyright © 2015 ivanschuetz. All rights reserved.
+//
+
+import Foundation
+
+protocol ListItemGroupProvider {
+
+    func add(groups: [ListItemGroup], _ handler: ProviderResult<Any> -> Void)
+    
+    func groups(handler: ProviderResult<[ListItemGroup]> -> Void)
+    
+    func add(itemInput: GroupItemInput, group: ListItemGroup, order orderMaybe: Int?, possibleNewSectionOrder: Int?, list: List, _ handler: ProviderResult<GroupItem> -> ())
+    
+    func update(items: [GroupItem], _ handler: ProviderResult<Any> -> ())
+}

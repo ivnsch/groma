@@ -115,7 +115,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         
         self.tableView.reloadData()
     }
-    
+
     private func addListItemToSection(listItem:ListItem) {
         
         let tableViewListItem = TableViewListItem(listItem: listItem)
@@ -134,33 +134,43 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             self.tableViewSections.append(tableViewSection)
         }
     }
+
+    /**
+    Update or add list item
+    When sure it's an "add" case use addListItem - this checks first if the item exists and is thus slower
+    */
+    func updateListItem(listItem: ListItem) {
+        updateOrAddListItem(listItem, increment: false) // update means overwrite - don't increment
+    }
     
     // TODO simpler way to update, maybe just always reinit the table... also refactor rest (build sections etc) it is way more complex than it should
     // right now prefer not to always reinit the table because this can change sorting
     // so first we should implement persistent sorting, then refactor this class
-    func updateListItem(listItem:ListItem) {
-        if let indexPath = self.getIndexPath(listItem) {
-            let oldItem:TableViewListItem = self.tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
+    // -parameter: increment if, in case it's an update, the quantities of the items should be added together. If false the quantity is just overwritten like the rest of fields
+    func updateOrAddListItem(listItem: ListItem, increment: Bool) {
+        if let indexPath = getIndexPath(listItem) {
+            let oldItem = tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
+
             if (oldItem.listItem.section == listItem.section) {
-                self.tableViewSections[indexPath.section].tableViewListItems[indexPath.row] = TableViewListItem(listItem: listItem)
-                self.tableView.reloadData()
+                tableViewSections[indexPath.section].tableViewListItems[indexPath.row] = TableViewListItem(listItem: listItem)
+                tableView.reloadData()
             } else { // the item has a different (but present in tableview) section
                 //update the list item before we reinit the table, to update the section...
                 var itemIndexMaybe:Int?
-                for (index, item) in self.items.enumerate() {
+                for (index, item) in items.enumerate() {
                     if item.uuid == listItem.uuid {
                         itemIndexMaybe = index
                     }
                 }
                 if let itemIndex = itemIndexMaybe {
-                    self.items[itemIndex] = listItem
+                    items[itemIndex] = listItem
                     
-                    self.initTableViewContent()
+                    initTableViewContent()
                 }
             }
         } else { // indexpath for updated item not in the tableview, this can happen if e.g. updated item has a new section (not in tableview)
-            self.items.append(listItem) // FIXME hacky...
-            self.initTableViewContent()
+            items.append(listItem) // FIXME hacky...
+            initTableViewContent() // this will make the possible new section appear
         }
     }
     
@@ -265,10 +275,10 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         clearPendingSwipeItemIfAny()
     }
     
-    func getIndexPath(listItem:ListItem) -> NSIndexPath? {
+    func getIndexPath(listItem: ListItem) -> NSIndexPath? {
         for (sectionIndex, s) in self.tableViewSections.enumerate() {
             for (listItemIndex, l) in s.tableViewListItems.enumerate() {
-                if (listItem == l.listItem) {
+                if (listItem.same(l.listItem)) { // find by only uuid
                     let indexPath = NSIndexPath(forRow: listItemIndex, inSection: sectionIndex)
                     return indexPath
                 }

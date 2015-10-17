@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="HelveticaNeue.ttc">
+            <string>HelveticaNeue-Bold</string>
+            <string>HelveticaNeue-Bold</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OkCancelButtonsView" customModule="shoppin" customModuleProvider="target">
+            <connections>
+                <outlet property="cancelButton" destination="s2R-fv-dPX" id="V8K-Dd-lQL"/>
+                <outlet property="okButton" destination="mx7-Wc-ryS" id="kGU-ha-phg"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="40"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eh1-jZ-MoS">
+                    <rect key="frame" x="295" y="0.0" width="10" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="10" id="4DG-aY-CCF"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="10" id="f5e-n5-9mm"/>
+                        <constraint firstAttribute="width" constant="10" id="fdC-h8-f9y"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s2R-fv-dPX">
+                    <rect key="frame" x="305" y="0.0" width="295" height="40"/>
+                    <color key="backgroundColor" red="0.65783535420000006" green="0.66059565139999998" blue="0.66513256320000003" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="omE-3g-4de"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                    <state key="normal" title="Cancel">
+                        <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="14"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="omE-3g-4de"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="onCancelTap:" destination="-1" eventType="touchUpInside" id="bSu-wT-cq3"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mx7-Wc-ryS">
+                    <rect key="frame" x="0.0" y="0.0" width="295" height="40"/>
+                    <color key="backgroundColor" red="0.95686274510000002" green="0.16862745100000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                    <state key="normal" title="Ok">
+                        <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                            <integer key="value" value="14"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onOkTap:" destination="-1" eventType="touchUpInside" id="y0h-l2-36h"/>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="s2R-fv-dPX" firstAttribute="height" secondItem="mx7-Wc-ryS" secondAttribute="height" id="0pG-P0-ISL"/>
+                <constraint firstItem="eh1-jZ-MoS" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="2fw-5c-tNd"/>
+                <constraint firstItem="s2R-fv-dPX" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="8n3-Kg-bvi"/>
+                <constraint firstAttribute="bottom" secondItem="s2R-fv-dPX" secondAttribute="bottom" id="EhD-SI-Xio"/>
+                <constraint firstItem="s2R-fv-dPX" firstAttribute="leading" secondItem="eh1-jZ-MoS" secondAttribute="trailing" id="MVF-zG-wyc"/>
+                <constraint firstItem="eh1-jZ-MoS" firstAttribute="leading" secondItem="mx7-Wc-ryS" secondAttribute="trailing" id="ccj-h9-PPs"/>
+                <constraint firstItem="mx7-Wc-ryS" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="jmp-9P-dKl"/>
+                <constraint firstItem="eh1-jZ-MoS" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="mk4-wZ-AJx"/>
+                <constraint firstAttribute="bottom" secondItem="mx7-Wc-ryS" secondAttribute="bottom" id="pf8-C3-RjH"/>
+                <constraint firstItem="eh1-jZ-MoS" firstAttribute="leading" secondItem="mx7-Wc-ryS" secondAttribute="trailing" id="qp1-8r-6fC"/>
+                <constraint firstAttribute="trailing" secondItem="s2R-fv-dPX" secondAttribute="trailing" id="vaM-Cd-xay"/>
+                <constraint firstItem="mx7-Wc-ryS" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="yf7-D2-AXH"/>
+                <constraint firstItem="s2R-fv-dPX" firstAttribute="leading" secondItem="eh1-jZ-MoS" secondAttribute="trailing" id="zC7-x4-sqU"/>
+                <constraint firstAttribute="bottom" secondItem="eh1-jZ-MoS" secondAttribute="bottom" id="zv1-aR-gnq"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="395" y="761"/>
+        </view>
+    </objects>
+</document>

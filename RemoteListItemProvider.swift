@@ -16,6 +16,7 @@ class RemoteListItemProvider {
     // this is necessary to find the uuid of a possibly already existing product, which may not be stored in the local database
     // (e.g. user uses 2 devices, device 2 doesn't have the recently added products in device 1 in it's local database, so it has to request the server)
     // Note that this overall needs more development, since device 2 can add products offline and we can get conflicts (same name, diff uuids) with the server
+    // TODO do we really need list here ? didnt we want to make products global?
     func product(name: String, list: List, handler: RemoteResult<RemoteProduct> -> ()) {
         let params = [
             "name": name,
@@ -77,6 +78,14 @@ class RemoteListItemProvider {
     func add(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
         let parameters = self.toRequestParams(listItem)
         RemoteProvider.authenticatedRequest(.POST, Urls.addListItem, parameters) {result in
+            handler(result)
+        }
+    }
+
+    func add(listItems: [ListItem], handler: RemoteResult<NoOpSerializable> -> ()) {
+        let parameters = toRequestParams(listItems)
+        // TODO server!!!!!!!!!!
+        RemoteProvider.authenticatedRequest(.POST, Urls.addListItems, parameters) {result in
             handler(result)
         }
     }
@@ -192,6 +201,10 @@ class RemoteListItemProvider {
             "email": sharedUser.email,
             "foo": "" // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
         ]
+    }
+
+    func toRequestParams(listItems: [ListItem]) -> [[String: AnyObject]] {
+        return listItems.map{toRequestParams($0)}
     }
     
     func toRequestParams(listItem: ListItem) -> [String: AnyObject] {

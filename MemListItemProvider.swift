@@ -34,6 +34,15 @@ class MemListItemProvider {
         listItems[listItem.list]?.append(listItem)
         return true
     }
+
+    func addListItems(listItems: [ListItem]) -> Bool {
+        guard enabled else {return false}
+        
+        for listItem in listItems {
+            addListItem(listItem)
+        }
+        return true
+    }
     
     func removeListItem(listItem: ListItem) -> Bool {
         guard enabled else {return false}

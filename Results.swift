@@ -36,6 +36,16 @@ extension Results {
         
         return arr
     }
+    
+    // Copied from Array extension - we need this for results also
+    func toDictionary<K: Hashable, V>(mapFunc: T -> (K, V)) -> [K: V] {
+        var dict = [K: V]()
+        for e in self {
+            let (k, v) = mapFunc(e)
+            dict[k] = v
+        }
+        return dict
+    }
 }
 
 extension RealmSwift.List {
