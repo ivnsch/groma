@@ -8,9 +8,13 @@
 
 import Foundation
 
+enum ListItemStatus: Int {
+    case Todo = 0, Done = 1, Stash = 2
+}
+
 final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let uuid: String
-    var done: Bool
+    var status: ListItemStatus
     let quantity: Int
     let product: Product
     var section: Section
@@ -28,9 +32,9 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     //////////////////////////////////////////////
     
     
-    init(uuid: String, done: Bool, quantity: Int, product: Product, section: Section, list: List, order: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, status: ListItemStatus, quantity: Int, product: Product, section: Section, list: List, order: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
-        self.done = done
+        self.status = status
         self.quantity = quantity
         self.product = product
         self.section = section
@@ -51,17 +55,17 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     private var shortDebugDescription: String {
-        return "[\(product.name), \(done), \(order)]"
+        return "[\(product.name), \(status), \(order)]"
     }
 
     private var longDebugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), done: \(self.done), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.product), sectionUuid: \(self.section), listUuid: \(self.list), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
+        return "{\(self.dynamicType) uuid: \(self.uuid), status: \(self.status), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.product), sectionUuid: \(self.section), listUuid: \(self.list), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
     }
     
-    func copy(uuid uuid: String? = nil, done: Bool? = nil, quantity: Int? = nil, product: Product? = nil, section: Section? = nil, list: List? = nil, order: Int? = nil) -> ListItem {
+    func copy(uuid uuid: String? = nil, status: ListItemStatus? = nil, quantity: Int? = nil, product: Product? = nil, section: Section? = nil, list: List? = nil, order: Int? = nil) -> ListItem {
         return ListItem(
             uuid: uuid ?? self.uuid,
-            done: done ?? self.done,
+            status: status ?? self.status,
             quantity: quantity ?? self.quantity,
             product: product ?? self.product,
             section: section ?? self.section,

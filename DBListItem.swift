@@ -12,7 +12,7 @@ import RealmSwift
 class DBListItem: DBSyncable {
     
     dynamic var uuid: String = ""
-    dynamic var done: Bool = false
+    dynamic var status: Int = 0
     dynamic var quantity: Int = 0
     dynamic var section: DBSection = DBSection()
     dynamic var product: DBProduct = DBProduct()

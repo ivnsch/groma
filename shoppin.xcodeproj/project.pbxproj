@@ -65,6 +65,7 @@
 		EB0C2A4F1B5841C600AF6226 /* DBInventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A4D1B5841C500AF6226 /* DBInventoryItem.swift */; };
 		EB0C2A501B5841C600AF6226 /* DBInventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A4D1B5841C500AF6226 /* DBInventoryItem.swift */; };
 		EB0C2A561B590D3D00AF6226 /* TestInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A551B590D3D00AF6226 /* TestInventory.swift */; };
+		EB0CC08C1BD2BC93004A17B4 /* StashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0CC08B1BD2BC93004A17B4 /* StashViewController.swift */; };
 		EB0F5F861B962D2100035175 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB0F5F851B962D2100035175 /* GoogleService-Info.plist */; };
 		EB0F5F881B98A10100035175 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F5F871B98A10100035175 /* SystemConfiguration.framework */; };
 		EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */; };
@@ -101,6 +102,7 @@
 		EB1B36751BC4832D003519F2 /* PlanItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1B36741BC4832D003519F2 /* PlanItemMapper.swift */; };
 		EB1B36761BC4832D003519F2 /* PlanItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1B36741BC4832D003519F2 /* PlanItemMapper.swift */; };
 		EB1B36771BC4832D003519F2 /* PlanItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1B36741BC4832D003519F2 /* PlanItemMapper.swift */; };
+		EB1B7D181BD2DBBC006DFDEE /* SuggestionsPrefiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAF1A3334EC00D778DE /* ViewController.swift */; };
 		EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB11A3334EC00D778DE /* Main.storyboard */; };
@@ -452,7 +454,6 @@
 		EBBC232B1BB600DF0002F6B1 /* ConfirmationPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC232A1BB600DE0002F6B1 /* ConfirmationPopup.swift */; };
 		EBBC232D1BB607DA0002F6B1 /* ConfirmationPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC232C1BB607DA0002F6B1 /* ConfirmationPopup.swift */; };
 		EBBC23311BB6C91A0002F6B1 /* TaggedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23301BB6C91A0002F6B1 /* TaggedView.swift */; };
-		EBBC23331BB824020002F6B1 /* prefill.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBBC23321BB824020002F6B1 /* prefill.realm */; };
 		EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
@@ -634,6 +635,7 @@
 		EB0C2A491B5840F700AF6226 /* RealmInventoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmInventoryProvider.swift; sourceTree = "<group>"; };
 		EB0C2A4D1B5841C500AF6226 /* DBInventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBInventoryItem.swift; sourceTree = "<group>"; };
 		EB0C2A551B590D3D00AF6226 /* TestInventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestInventory.swift; sourceTree = "<group>"; };
+		EB0CC08B1BD2BC93004A17B4 /* StashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StashViewController.swift; sourceTree = "<group>"; };
 		EB0F5F851B962D2100035175 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EB0F5F871B98A10100035175 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_ListItem.swift; sourceTree = "<group>"; };
@@ -1031,6 +1033,14 @@
 			name = userDetails;
 			sourceTree = "<group>";
 		};
+		EB0CC08A1BD2BC6A004A17B4 /* stash */ = {
+			isa = PBXGroup;
+			children = (
+				EB0CC08B1BD2BC93004A17B4 /* StashViewController.swift */,
+			);
+			name = stash;
+			sourceTree = "<group>";
+		};
 		EB0F5F891B9A0A5500035175 /* extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1380,6 +1390,7 @@
 				EB703FE01B3B5F1C001586C5 /* intro */,
 				EB20FC021A59986C0058103B /* list */,
 				EB20FC011A5998490058103B /* cart */,
+				EB0CC08A1BD2BC6A004A17B4 /* stash */,
 				EB20FC031A599A2B0058103B /* inventory */,
 				EBF1A1521B82211600F34105 /* history */,
 				EBF1A1571B8239E600F34105 /* stats */,
@@ -2086,7 +2097,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBBC23331BB824020002F6B1 /* prefill.realm in Resources */,
 				EB4C365F1B4C142600C387C5 /* EditableChoiceModal.storyboard in Resources */,
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
 				EB1B365B1BC4637A003519F2 /* PlanTableViewCell_.xib in Resources */,
@@ -2368,6 +2378,7 @@
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
 				EBDA75461BCD5CF800E34AC3 /* RealmListItemGroupProvider.swift in Sources */,
 				EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */,
+				EB1B7D181BD2DBBC006DFDEE /* SuggestionsPrefiller.swift in Sources */,
 				EB451C4B1B864A19000DE208 /* SingleSelectionPopup.swift in Sources */,
 				EB4C4F631BC9358A00DCA048 /* Array_HistoryItem.swift in Sources */,
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
@@ -2491,6 +2502,7 @@
 				EB70C2171B4D2C690060E529 /* ListProviderImpl.swift in Sources */,
 				EBDA754A1BCD5D3E00E34AC3 /* DBListItemGroup.swift in Sources */,
 				EB0C1BA91B3EC00700F24C85 /* ProviderResult.swift in Sources */,
+				EB0CC08C1BD2BC93004A17B4 /* StashViewController.swift in Sources */,
 				EB1B36571BC44D9A003519F2 /* PlanViewController.swift in Sources */,
 				EB1B36711BC48278003519F2 /* RealmPlanProvider.swift in Sources */,
 				EB40A48A1B553A19000E9CAD /* DBListItem.swift in Sources */,

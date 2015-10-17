@@ -30,8 +30,11 @@ class RealmProvider {
                 realm.write {
                     realm.add(obj, update: update)
                 }
-            } catch _ { // TODO doesn't compile when writing here (and in the other methods) ErrorType or let error as NSError, why?
-                print("Error: creating Realm() in saveObj")
+            } catch let error as NSError {
+                print("Error: creating Realm() in saveObj: \(error)")
+                finished(false)
+            } catch _ {
+                print("Error: creating Realm() in saveObj (unknown)")
                 finished(false)
             }
             
@@ -59,8 +62,11 @@ class RealmProvider {
                         realm.add(obj, update: update)
                     }
                 }
+            } catch let error as NSError {
+                print("Error: creating Realm() in saveObjs: \(error)")
+                finished(false)
             } catch _ {
-                print("Error: creating Realm() in saveObjs")
+                print("Error: creating Realm() in saveObjs (unknown)")
                 finished(false)
             }
             
@@ -89,8 +95,11 @@ class RealmProvider {
                         realm.add(obj, update: update)
                     }
                 }
+            } catch let error as NSError {
+                print("Error: creating Realm() in saveObjs: \(error)")
+                finished(false)
             } catch _ {
-                print("Error: creating Realm() in saveObjs")
+                print("Error: creating Realm() in saveObjs (unknown)")
                 finished(false)
             }
 
@@ -198,10 +207,11 @@ class RealmProvider {
                     finished(f(realm))
                 }
                 
-            }
-            
-            catch _ {
-                print("Error: creating Realm() in doInWriteTransaction")
+            } catch let error as NSError {
+                print("Error: creating Realm() in doInWriteTransaction: \(error)")
+                finished(false)
+            } catch _ {
+                print("Error: creating Realm() in doInWriteTransaction (unknown)")
                 finished(false)
             }
         })

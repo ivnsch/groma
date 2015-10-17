@@ -76,7 +76,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private func initWithList(list: List) {
         Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{listItems in
-            self.listItemsTableViewController.setListItems(listItems.filter{!$0.done})
+            self.listItemsTableViewController.setListItems(listItems.filter{$0.status == .Todo})
         })
     }
     
@@ -225,11 +225,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) {
-        tableViewListItem.listItem.done = true
+        tableViewListItem.listItem.status = .Done
         
         if let list = self.currentList {
             
-            Providers.listItemsProvider.switchDone([tableViewListItem.listItem], list: list, done: true) {[weak self] result in
+            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Done) {[weak self] result in
                 if result.success {
                     self!.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
                     self!.updatePrices(.MemOnly)
@@ -287,7 +287,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 
                 let totalPrice:Float = calculatePrice(listItems)
                 
-                let doneListItems = listItems.filter{$0.done}
+                let doneListItems = listItems.filter{$0.status == .Done}
                 let donePrice:Float = calculatePrice(doneListItems)
                 
                 self.pricesView.totalPrice = totalPrice
@@ -324,7 +324,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 let product = Product(uuid: updatingListItem.product.uuid, name: listItemInput.name, price: listItemInput.price) // possible product update
                 let section = Section(uuid: updatingListItem.section.uuid, name: listItemInput.section, order: listItem.section.order) // possible section update
                 
-                let listItem = ListItem(uuid: updatingListItem.uuid, done: updatingListItem.done, quantity: listItemInput.quantity, product: product, section: section, list: currentList, order: updatingListItem.order)
+                let listItem = ListItem(uuid: updatingListItem.uuid, status: updatingListItem.status, quantity: listItemInput.quantity, product: product, section: section, list: currentList, order: updatingListItem.order)
                 
                 Providers.listItemsProvider.update([listItem], successHandler {
                     self.listItemsTableViewController.updateListItem(listItem)
@@ -382,6 +382,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 addEditItemController?.updatingListItem = updatingListItem
             }
 
+        } else if segue.identifier == "stashSegue" {
+            if let stashViewController = segue.destinationViewController as? StashViewController {
+                listItemsTableViewController.clearPendingSwipeItemIfAny {
+                    stashViewController.onUIReady = {
+                        stashViewController.list = self.currentList
+                    }
+                }
+            }
+            
         } else {
             print("Invalid segue: \(segue.identifier)")
         }

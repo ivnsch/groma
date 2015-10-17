@@ -210,7 +210,7 @@ class RemoteListItemProvider {
     func toRequestParams(listItem: ListItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
             "uuid": listItem.uuid,
-            "done": listItem.done,
+            "status": listItem.status.rawValue,
             "quantity": listItem.quantity,
             "productInput": [
                 "uuid": listItem.product.uuid,

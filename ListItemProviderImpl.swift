@@ -154,7 +154,7 @@ class ListItemProviderImpl: ListItemProvider {
                     let order = count // order is the same as index: if no elements -> order 0, if 1 elements -> order 0, 1, etc.
                     currentListSectionCountDict[groupItem.section] = count + 1 // we inserted an item, increment (or insert, if section doesn't exist yet) count
                     
-                    let listItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: groupItem.quantity, product: groupItem.product, section: groupItem.section, list: list, order: order)
+                    let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: groupItem.quantity, product: groupItem.product, section: groupItem.section, list: list, order: order)
                     listItems.append(listItem)
                 }
                 
@@ -172,17 +172,15 @@ class ListItemProviderImpl: ListItemProvider {
     
     func add(listItems: [ListItem], _ handler: ProviderResult<[ListItem]> -> ()) {
 
-        // TODO correct impl of add list items in memcache, reenable this
-        let memAdded = false
-//        let memAdded = memProvider.addListItems(listItems)
-//        if memAdded {
-//            handler(ProviderResult(status: .Success))
-//        }
+        let addedListItemsMaybe = memProvider.addListItems(listItems)
+        if let addedListItems = addedListItemsMaybe {
+            handler(ProviderResult(status: .Success, sucessResult: addedListItems))
+        }
         
         // TODO review carefully what happens if adding fails after memory cache is updated
         dbProvider.saveListItems(listItems, incrementQuantity: true) {[weak self] savedListItemsMaybe in // currently the item returned by server is identically to the one we sent, so we just save our local item
             if let savedListItems = savedListItemsMaybe {
-                if !memAdded { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
+                if !addedListItemsMaybe.isSet { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
                     handler(ProviderResult(status: .Success, sucessResult: savedListItems))
                 }
                 
@@ -214,12 +212,12 @@ class ListItemProviderImpl: ListItemProvider {
                     handler(ProviderResult(status: .Success, sucessResult: listItem))
                     
                 } else {
-                    print("Error: add listitem returned success result but it's an empty array")
+                    print("Error: add listitem returned success result but it's an empty array. ListItem: \(listItem)")
                     handler(ProviderResult(status: .Unknown))
                 }
                 
             } else {
-                print("Error: add listitem didn't succeed, result: \(result)")
+                print("Error: add listitem didn't succeed, listItem: \(listItem), result: \(result)")
                 handler(ProviderResult(status: .Unknown))
             }
         }
@@ -244,7 +242,7 @@ class ListItemProviderImpl: ListItemProvider {
                                 // 2. do the update before calling the service, and add flag not synched (etc)
                                 // 3. more ideas?
                                 let order = orderMaybe ?? listItems.count
-                                let listItem = ListItem(uuid: NSUUID().UUIDString, done: false, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
+                                let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
                                 self?.add(listItem, {result in
                                     if let addedListItem = result.sucessResult {
                                         handler(ProviderResult(status: .Success, sucessResult: addedListItem))
@@ -311,14 +309,14 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
 
-    func switchDone(listItems: [ListItem], list: List, done: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func switchStatus(listItems: [ListItem], list: List, status: ListItemStatus, _ handler: ProviderResult<Any> -> ()) {
         
         // Helper to count how many list items each section has
         // filtered by "done" in same pass for better performance
-        func sectionCountAndFilteredByDoneDict(listItems: [ListItem], done: Bool) -> [Section: Int] {
+        func sectionCountAndFilteredByDoneDict(listItems: [ListItem], status: ListItemStatus) -> [Section: Int] {
             var dict = [Section: Int]()
             for listItem in listItems {
-                if listItem.done == done {
+                if listItem.status == status {
                     if dict[listItem.section] != nil {
                         dict[listItem.section]!++
                     } else {
@@ -335,9 +333,9 @@ class ListItemProviderImpl: ListItemProvider {
             
                 // Update done and order field - by changing "done" we are moving list items from one tableview to another
                 // we append the items at the end of the section (order == section.count)
-                var sectionsDict = sectionCountAndFilteredByDoneDict(storedListItems, done: done)
+                var sectionsDict = sectionCountAndFilteredByDoneDict(storedListItems, status: status)
                 for listItem in listItems {
-                    listItem.done = done
+                    listItem.status = status
                     if let sectionCount = sectionsDict[listItem.section] {
                         listItem.order = sectionCount
                         sectionsDict[listItem.section]!++ // we are adding an item to section - increment count for possible next item

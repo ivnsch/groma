@@ -52,5 +52,14 @@ extension Array where Element: ListItem {
     var sectionCount: Int {
         return Set(map{$0.section}).count
     }
+    
+    func findFirstWithProductName(productName: String) -> ListItem? {
+        for listItem in self {
+            if listItem.product.name == productName {
+                return listItem
+            }
+        }
+        return nil
+    }
 }
 

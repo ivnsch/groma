@@ -11,7 +11,7 @@ import Foundation
 final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let uuid: String
-    var done: Bool
+    var status: Int
     let quantity: Int
     let productUuid: String
     var sectionUuid: String
@@ -21,7 +21,7 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
-        self.done = representation.valueForKeyPath("done") as! Bool
+        self.status = representation.valueForKeyPath("status") as! Int
         self.quantity = representation.valueForKeyPath("quantity") as! Int
         self.productUuid = representation.valueForKeyPath("productUuid") as! String
         self.sectionUuid = representation.valueForKeyPath("sectionUuid") as! String
@@ -42,6 +42,6 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), done: \(self.done), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.productUuid), sectionUuid: \(self.sectionUuid), listUuid: \(self.listUuid), listUpdate: \(self.lastUpdate)}"
+        return "{\(self.dynamicType) uuid: \(self.uuid), status: \(self.status), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.productUuid), sectionUuid: \(self.sectionUuid), listUuid: \(self.listUuid), listUpdate: \(self.lastUpdate)}"
     }
 }

@@ -33,7 +33,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     private func initWithList(list: List) {
         
         Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{listItems in
-            let doneListItems = listItems.filter{$0.done}
+            let doneListItems = listItems.filter{$0.status == .Done}
             self.listItemsTableViewController.setListItems(doneListItems)
         })
         // FIXME note that list's listItems are not set, so we don't use this, maybe just remove this variable, or set it
@@ -68,7 +68,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     
     func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) {
         if let list = self.list {
-            Providers.listItemsProvider.switchDone([tableViewListItem.listItem], list: list, done: false) {[weak self] result in
+            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Todo) {[weak self] result in
                 if result.success {
                     self!.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
                 }
@@ -95,9 +95,9 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
         listItemsTableViewController.markOpen(true, indexPath: indexPath)
     }
     
-    private func setAllItemsUndone(onFinish: VoidFunction) {
+    private func sendAllItemToStash(onFinish: VoidFunction) {
         if let list = self.list {
-            Providers.listItemsProvider.switchDone(self.listItemsTableViewController.items, list: list, done: false) {[weak self] result in
+            Providers.listItemsProvider.switchStatus(self.listItemsTableViewController.items, list: list, status: .Stash) {[weak self] result in
                 if result.success {
                     self?.listItemsTableViewController.setListItems([])
                     onFinish()
@@ -119,8 +119,8 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
             }
 
             Providers.inventoryItemsProvider.addToInventory(inventory, items: inventoryItems, self!.successHandler{result in
-                self!.setAllItemsUndone {
-                    self!.close()
+                self?.sendAllItemToStash {
+                    self?.close()
                 }
             })
         }

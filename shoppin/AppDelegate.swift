@@ -154,13 +154,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let section6 = Section(uuid: "105", name: "Getraenke", order: 5)
             
             let listItems = [
-                ListItem(uuid: "200", done: false, quantity: 5, product: product1, section: section1, list: list1, order: 0),
-                ListItem(uuid: "201", done: false, quantity: 2, product: product2, section: section2, list: list1, order: 0),
-                ListItem(uuid: "203", done: false, quantity: 3, product: product3, section: section6, list: list1, order: 0),
-                ListItem(uuid: "204", done: false, quantity: 2, product: product4, section: section4, list: list1, order: 0),
-                ListItem(uuid: "205", done: true, quantity: 4, product: product5, section: section5, list: list1, order: 0),
-                ListItem(uuid: "206", done: true, quantity: 3, product: product6, section: section3, list: list1, order: 0),
-                ListItem(uuid: "207", done: true, quantity: 4, product: product7, section: section6, list: list1, order: 1)
+                ListItem(uuid: "200", status: .Todo, quantity: 5, product: product1, section: section1, list: list1, order: 0),
+                ListItem(uuid: "201", status: .Todo, quantity: 2, product: product2, section: section2, list: list1, order: 0),
+                ListItem(uuid: "203", status: .Todo, quantity: 3, product: product3, section: section6, list: list1, order: 0),
+                ListItem(uuid: "204", status: .Todo, quantity: 2, product: product4, section: section4, list: list1, order: 0),
+                ListItem(uuid: "205", status: .Todo, quantity: 4, product: product5, section: section5, list: list1, order: 0),
+                ListItem(uuid: "206", status: .Todo, quantity: 3, product: product6, section: section3, list: list1, order: 0),
+                ListItem(uuid: "207", status: .Todo, quantity: 4, product: product7, section: section6, list: list1, order: 1)
             ]
             
             

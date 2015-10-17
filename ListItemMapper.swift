@@ -14,14 +14,14 @@ class ListItemMapper {
         let product = ProductMapper.productWithDB(dbListItem.product)
         let section = SectionMapper.sectionWithDB(dbListItem.section)
         let list = ListMapper.listWithDB(dbListItem.list)
-        return ListItem(uuid: dbListItem.uuid, done: dbListItem.done, quantity: dbListItem.quantity, product: product, section: section, list: list, order: dbListItem.order)
+        return ListItem(uuid: dbListItem.uuid, status: ListItemStatus(rawValue: dbListItem.status)!, quantity: dbListItem.quantity, product: product, section: section, list: list, order: dbListItem.order)
     }
     
     class func dbWithListItem(listItem: ListItem) -> DBListItem {
         let dbListItem = DBListItem()
         dbListItem.uuid = listItem.uuid
         dbListItem.quantity = listItem.quantity // TODO float
-        dbListItem.done = listItem.done
+        dbListItem.status = listItem.status.rawValue
         dbListItem.order = listItem.order
         
         dbListItem.product = ProductMapper.dbWithProduct(listItem.product)
@@ -83,7 +83,7 @@ class ListItemMapper {
         let listItems = remoteListItemsArr.map {remoteListItem in
             ListItem(
                 uuid: remoteListItem.uuid,
-                done: remoteListItem.done,
+                status: ListItemStatus(rawValue: remoteListItem.status)!,
                 quantity: remoteListItem.quantity,
                 product: productsDict[remoteListItem.productUuid]!,
                 section: sectionsDict[remoteListItem.sectionUuid]!,
