@@ -28,6 +28,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     @IBOutlet weak var pricesView: PricesView!
     
+    @IBOutlet weak var stashLabel: UILabel!
+    @IBOutlet weak var stashView: UIView!
+    @IBOutlet weak var pricesViewWidthConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var listNameView: UILabel!
 
     @IBOutlet weak var addItemView: AddItemView!
@@ -66,12 +70,49 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         super.viewWillAppear(animated)
 
         onViewWillAppear?()
+        
+        updateStashView(withDelay: true)
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+    // Update stash view after a delay. The delay is for design reason, to let user see what's hapenning otherwise not clear together with view controller transition
+    // but it ALSO turned to fix bug when user adds to stash and goes back to view controller too fast - count would not be updated (count fetch is quicker than writing items to database). FIXME (not critical) don't depend on this delay to fix this bug.
+    func updateStashView(withDelay withDelay: Bool) {
+        func f() {
+            if let list = currentList {
+                Providers.listItemsProvider.listItemCount(ListItemStatus.Stash, list: list, successHandler {[weak self] count in
+                    let countText = String(count)
+                    if countText != self?.stashLabel.text { // don't animate if there's no change
+                        self?.stashLabel.text = countText
+                        self?.setStashViewOpen(count > 0, withDelay: true)
+                    }
+                })
+            }
+        }
+        
+        if withDelay {
+            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(0.3 * Double(NSEC_PER_SEC)))
+            dispatch_after(delay, dispatch_get_main_queue()) {
+                f()
+            }
+        } else {
+            f()
+        }
+    }
+    
+    // TODO constraint constant to show exact width of stash view (depends on label length)
+    private func setStashViewOpen(open: Bool, withDelay: Bool) {
+        if open {
+            stashView.alpha = 0
+            pricesViewWidthConstraint.constant = -100
+            
+        } else {
+            stashView.alpha = 1
+            pricesViewWidthConstraint.constant = 0
+        }
+        UIView.animateWithDuration(0.5) {[weak self] in
+            self?.view.layoutIfNeeded()
+            self?.stashView.alpha = self?.stashView.alpha == 0 ? 1 : 0
+        }
     }
     
     private func initWithList(list: List) {

@@ -96,4 +96,9 @@ protocol ListItemProvider {
     */
     func mergeOrCreateProduct(productName: String, productPrice: Float, list: List, _ handler: ProviderResult<Product> -> Void)
     func mergeOrCreateSection(sectionName: String, possibleNewOrder: Int?, list: List, _ handler: ProviderResult<Section> -> Void)
+    
+    /**
+    Gets list items count with a certain status in a certain list
+    */
+    func listItemCount(status: ListItemStatus, list: List, _ handler: ProviderResult<Int> -> Void)
 }

@@ -598,4 +598,14 @@ class ListItemProviderImpl: ListItemProvider {
             }
         }
     }
+    
+    func listItemCount(status: ListItemStatus, list: List, _ handler: ProviderResult<Int> -> Void) {
+        dbProvider.listItemCount(status, list: list) {countMaybe in
+            if let count = countMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: count))
+            } else {
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
 }

@@ -296,6 +296,27 @@ class RealmListItemProvider: RealmProvider {
         }
     }
     
+    /**
+    Gets list items count with a certain status in a certain list
+    */
+    func listItemCount(status: ListItemStatus, list: List, handler: Int? -> Void) {
+        let finished: Int? -> Void = {result in
+            dispatch_async(dispatch_get_main_queue(), {
+                handler(result)
+            })
+        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            do {
+                let realm = try Realm()
+                let count = realm.objects(DBListItem).filter("status = \(status.rawValue) AND list.uuid = '\(list.uuid)'").count
+                finished(count)
+            } catch _ {
+                print("Error: creating Realm() in load, returning empty results")
+                finished(nil) // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
+            }
+        })
+    }
+    
     func saveListsSyncResult(syncResult: RemoteListWithListItemsSyncResult, handler: Bool -> ()) {
         
         self.doInWriteTransaction({realm in
