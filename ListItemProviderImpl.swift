@@ -223,43 +223,90 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: Int?, _ handler: ProviderResult<ListItem> -> ()) {
+    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: Int?, _ handler: ProviderResult<ListItem> -> Void) {
 
-        self.listItems(list, fetchMode: .First) {[weak self] result in // TODO fetch items only when order not passed, because they are used only to get order
+        mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, list: list) {[weak self] result in
             
-            if let listItems = result.sucessResult {
+            if let product = result.sucessResult {
                 
-                self?.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, list: list) {result in
+                self?.mergeOrCreateSection(listItemInput.section, possibleNewOrder: possibleNewSectionOrder, list: list) {result in
                     
-                    if let product = result.sucessResult {
+                    if let section = result.sucessResult {
                         
-                        self?.mergeOrCreateSection(listItemInput.section, possibleNewOrder: possibleNewSectionOrder, list: list) {result in
-                            
-                            if let section = result.sucessResult {
-                                // WARN / TODO: we didn't do any local db udpates! currently this is done after we receive the response off addItem of the server, with the server object
-                                // in order to support offline use this has to be changed either
-                                // 1. do the update before calling the service. If service returns an error then remove?
-                                // 2. do the update before calling the service, and add flag not synched (etc)
-                                // 3. more ideas?
-                                let order = orderMaybe ?? listItems.count
-                                let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order, note: listItemInput.note)
-                                self?.add(listItem, {result in
-                                    if let addedListItem = result.sucessResult {
-                                        handler(ProviderResult(status: .Success, sucessResult: addedListItem))
-                                    } else {
-                                        handler(ProviderResult(status: result.status))
-                                    }
-                                })
-                            } else {
-                                print("Error fetching section: \(result.status)")
-                                handler(ProviderResult(status: .DatabaseUnknown))
-                            }
-                        }
+                        self?.addListItem(product, section: section, quantity: listItemInput.quantity, list: list, note: listItemInput.note, order: orderMaybe, handler)
+
                     } else {
-                        print("Error fetching product: \(result.status)")
+                        print("Error fetching section: \(result.status)")
                         handler(ProviderResult(status: .DatabaseUnknown))
                     }
                 }
+            } else {
+                print("Error fetching product: \(result.status)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+    
+
+    func addListItem(product: Product, sectionName: String, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
+
+        mergeOrCreateSection(sectionName, possibleNewOrder: nil, list: list) {[weak self] result in
+         
+            if let section = result.sucessResult {
+                self?.listItems(list, fetchMode: .First) {[weak self] result in // TODO fetch items only when order not passed, because they are used only to get order
+                    
+                    if let listItems = result.sucessResult {
+                        // WARN / TODO: we didn't do any local db udpates! currently this is done after we receive the response off addItem of the server, with the server object
+                        // in order to support offline use this has to be changed either
+                        // 1. do the update before calling the service. If service returns an error then remove?
+                        // 2. do the update before calling the service, and add flag not synched (etc)
+                        // 3. more ideas?
+                        let order = orderMaybe ?? listItems.count
+                        let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: quantity, product: product, section: section, list: list, order: order, note: note)
+                        self?.add(listItem, {result in
+                            if let addedListItem = result.sucessResult {
+                                handler(ProviderResult(status: .Success, sucessResult: addedListItem))
+                            } else {
+                                handler(ProviderResult(status: result.status))
+                            }
+                        })
+                        
+                    } else {
+                        print("Error fetching listItems: \(result.status)")
+                        handler(ProviderResult(status: .DatabaseUnknown))
+                    }
+                }
+                
+            } else {
+                print("Error fetching section: \(result.status)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+
+    func addListItem(product: Product, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
+        
+        self.listItems(list, fetchMode: .First) {[weak self] result in // TODO fetch items only when order not passed, because they are used only to get order
+            
+            if let listItems = result.sucessResult {
+                // WARN / TODO: we didn't do any local db udpates! currently this is done after we receive the response off addItem of the server, with the server object
+                // in order to support offline use this has to be changed either
+                // 1. do the update before calling the service. If service returns an error then remove?
+                // 2. do the update before calling the service, and add flag not synched (etc)
+                // 3. more ideas?
+                let order = orderMaybe ?? listItems.count
+                let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: quantity, product: product, section: section, list: list, order: order, note: note)
+                self?.add(listItem, {result in
+                    if let addedListItem = result.sucessResult {
+                        handler(ProviderResult(status: .Success, sucessResult: addedListItem))
+                    } else {
+                        handler(ProviderResult(status: result.status))
+                    }
+                })
+                
+            } else {
+                print("Error fetching listItems: \(result.status)")
+                handler(ProviderResult(status: .DatabaseUnknown))
             }
         }
     }

@@ -18,6 +18,7 @@ extension UIStoryboard {
     private class func userDetailsStoryboard() -> UIStoryboard { return UIStoryboard(name: "UserDetails", bundle: NSBundle.mainBundle()) }
     private class func forgotPasswordStoryboard() -> UIStoryboard { return UIStoryboard(name: "ForgotPassword", bundle: NSBundle.mainBundle()) }
     private class func choiceStoryboard() -> UIStoryboard { return UIStoryboard(name: "EditableChoiceModal", bundle: NSBundle.mainBundle()) }
+    private class func quickAddListItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "QuickAddListItem", bundle: NSBundle.mainBundle()) }
     
     // MARK: - List items
     
@@ -121,4 +122,11 @@ extension UIStoryboard {
     class func aggrByDateChartViewController() -> AggrByDateChartViewController {
         return mainStoryboard().instantiateViewControllerWithIdentifier("AggrByDateChartViewController") as! AggrByDateChartViewController
     }
+    
+    // MARK: Quick add
+
+    class func quickAddListItemViewController() -> QuickAddListItemViewController {
+        return quickAddListItemStoryboard().instantiateViewControllerWithIdentifier("QuickAddListItemViewController") as! QuickAddListItemViewController
+    }
+    
 }

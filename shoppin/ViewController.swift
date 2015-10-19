@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import SwiftValidator
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate, AddItemViewDelegate, UIViewControllerTransitioningDelegate, ListItemGroupsViewControllerDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate, AddItemViewDelegate, UIViewControllerTransitioningDelegate, ListItemGroupsViewControllerDelegate, QuickAddListItemDelegate
 //    , UIBarPositioningDelegate
 {
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
@@ -342,11 +342,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             
             self.progressVisible(true)
             
-            Providers.listItemsProvider.add(listItemInput, list: currentList, order: nil, possibleNewSectionOrder: self.listItemsTableViewController.sections.count, successHandler {savedListItem in
-                // Our "add" can also be an update - if user adds an item with a name that already exists, it's an update (increment)
-                self.listItemsTableViewController.updateOrAddListItem(savedListItem, increment: true)
-                self.updatePrices(.MemOnly)
-                
+            Providers.listItemsProvider.add(listItemInput, list: currentList, order: nil, possibleNewSectionOrder: listItemsTableViewController.sections.count, successHandler {[weak self] savedListItem in
+                self?.onListItemAddedToProvider(savedListItem)
                 handler?()
             })
             
@@ -354,6 +351,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             print("Error: Invalid state: trying to add item without current list")
         }
 
+    }
+    
+    
+    private func onListItemAddedToProvider(savedListItem: ListItem) {
+        // Our "add" can also be an update - if user adds an item with a name that already exists, it's an update (increment)
+        listItemsTableViewController.updateOrAddListItem(savedListItem, increment: true)
+        updatePrices(.MemOnly)
     }
     
     func updateItem(listItem: ListItem, listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
@@ -467,6 +471,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
+    // in progress - for now there's no entry point element for this
+    private func showQuickAdd() {
+        let quickAddController = UIStoryboard.quickAddListItemViewController()
+        quickAddController.delegate = self
+        presentViewController(quickAddController, animated: true, completion: nil)
+    }
+    
     // MARK: UIViewControllerTransitioningDelegate
     
     func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -509,4 +520,34 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
+    // MARK: - QuickAddListItemDelegate
+    
+    func onCloseQuickAddTap() {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func onAddGroup(group: ListItemGroup) {
+        if let list = currentList {
+            Providers.listItemsProvider.add(group.items, list: list, successHandler {[weak self] addedListItems in
+                self?.dismissViewControllerAnimated(true) {
+                    self?.onGroupsAdded()
+                }
+            })
+        } else {
+            print("Error: Add product from quick list but there's no current list in ViewController'")
+        }
+    }
+    
+    func onAddProduct(product: Product) {
+        // TODO section in products, how?
+        if let list = currentList {
+            Providers.listItemsProvider.addListItem(product, sectionName: "TODO", quantity: 1, list: list, note: nil, order: nil, successHandler {[weak self] savedListItem in
+                self?.dismissViewControllerAnimated(true) {
+                    self?.onListItemAddedToProvider(savedListItem)
+                }
+            })
+        } else {
+            print("Error: Add product from quick list but there's no current list in ViewController'")
+        }
+    }
 }

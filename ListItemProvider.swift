@@ -58,7 +58,9 @@ protocol ListItemProvider {
     - parameter possibleNewSectionOrder: if the section is determined to be new, position of section in list. If the section already exists this is not used. If nil this will be at the end of the list (an additional database fetch will be made to count the sections).
     - parameter handler
     */
-    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int?, possibleNewSectionOrder: Int?, _ handler: ProviderResult<ListItem> -> ())
+    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int?, possibleNewSectionOrder: Int?, _ handler: ProviderResult<ListItem> -> Void)
+    
+    func addListItem(product: Product, sectionName: String, quantity: Int, list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<ListItem> -> Void)
     
     func update(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
 
