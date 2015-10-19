@@ -242,7 +242,7 @@ class ListItemProviderImpl: ListItemProvider {
                                 // 2. do the update before calling the service, and add flag not synched (etc)
                                 // 3. more ideas?
                                 let order = orderMaybe ?? listItems.count
-                                let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order)
+                                let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: listItemInput.quantity, product: product, section: section, list: list, order: order, note: listItemInput.note)
                                 self?.add(listItem, {result in
                                     if let addedListItem = result.sucessResult {
                                         handler(ProviderResult(status: .Success, sucessResult: addedListItem))

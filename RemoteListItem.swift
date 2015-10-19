@@ -17,6 +17,7 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
     var sectionUuid: String
     var listUuid: String
     var order: Int
+    let note: String?
     let lastUpdate: NSDate
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
@@ -27,6 +28,7 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
         self.sectionUuid = representation.valueForKeyPath("sectionUuid") as! String
         self.listUuid = representation.valueForKeyPath("listUuid") as! String
         self.order = representation.valueForKeyPath("order") as! Int
+        self.note = representation.valueForKeyPath("note") as! String? // TODO is this correct way for optional here?
         self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
     }
     
@@ -42,6 +44,6 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), status: \(self.status), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.productUuid), sectionUuid: \(self.sectionUuid), listUuid: \(self.listUuid), listUpdate: \(self.lastUpdate)}"
+        return "{\(self.dynamicType) uuid: \(uuid), status: \(status), quantity: \(quantity), order: \(order), note: \(note), productUuid: \(productUuid), sectionUuid: \(sectionUuid), listUuid: \(listUuid), listUpdate: \(lastUpdate)}"
     }
 }

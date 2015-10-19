@@ -19,8 +19,10 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let product: Product
     var section: Section
     var list: List
-   
+
     var order: Int // relative to section
+
+    var note: String?
     
     //////////////////////////////////////////////
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
@@ -32,7 +34,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     //////////////////////////////////////////////
     
     
-    init(uuid: String, status: ListItemStatus, quantity: Int, product: Product, section: Section, list: List, order: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, status: ListItemStatus, quantity: Int, product: Product, section: Section, list: List, order: Int, note: String? = nil, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.status = status
         self.quantity = quantity
@@ -40,6 +42,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         self.section = section
         self.list = list
         self.order = order
+        self.note = note
         self.lastUpdate = lastUpdate
         self.lastServerUpdate = lastServerUpdate
         self.removed = removed
@@ -59,10 +62,10 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
 
     private var longDebugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), status: \(self.status), quantity: \(self.quantity), order: \(self.order), productUuid: \(self.product), sectionUuid: \(self.section), listUuid: \(self.list), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
+        return "{\(self.dynamicType) uuid: \(uuid), status: \(status), quantity: \(quantity), order: \(order), note: \(note), productUuid: \(product), sectionUuid: \(section), listUuid: \(list), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
     }
     
-    func copy(uuid uuid: String? = nil, status: ListItemStatus? = nil, quantity: Int? = nil, product: Product? = nil, section: Section? = nil, list: List? = nil, order: Int? = nil) -> ListItem {
+    func copy(uuid uuid: String? = nil, status: ListItemStatus? = nil, quantity: Int? = nil, product: Product? = nil, section: Section? = nil, list: List? = nil, order: Int? = nil, note: String? = nil) -> ListItem {
         return ListItem(
             uuid: uuid ?? self.uuid,
             status: status ?? self.status,
@@ -71,6 +74,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
             section: section ?? self.section,
             list: list ?? self.list,
             order: order ?? self.order,
+            note: note ?? self.note,
             lastUpdate: self.lastUpdate,
             lastServerUpdate: self.lastServerUpdate,
             removed: self.removed

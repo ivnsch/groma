@@ -18,7 +18,7 @@ class DBListItem: DBSyncable {
     dynamic var product: DBProduct = DBProduct()
     dynamic var list: DBList = DBList()
     dynamic var order: Int = 0 // TODO is this still necessary with realm?
-    
+    dynamic var note: String = "" // TODO review if we can use optionals in realm, if not check if in newer version
     
     override static func primaryKey() -> String? {
         return "uuid"

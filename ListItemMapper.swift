@@ -14,7 +14,7 @@ class ListItemMapper {
         let product = ProductMapper.productWithDB(dbListItem.product)
         let section = SectionMapper.sectionWithDB(dbListItem.section)
         let list = ListMapper.listWithDB(dbListItem.list)
-        return ListItem(uuid: dbListItem.uuid, status: ListItemStatus(rawValue: dbListItem.status)!, quantity: dbListItem.quantity, product: product, section: section, list: list, order: dbListItem.order)
+        return ListItem(uuid: dbListItem.uuid, status: ListItemStatus(rawValue: dbListItem.status)!, quantity: dbListItem.quantity, product: product, section: section, list: list, order: dbListItem.order, note: dbListItem.note)
     }
     
     class func dbWithListItem(listItem: ListItem) -> DBListItem {
@@ -23,6 +23,7 @@ class ListItemMapper {
         dbListItem.quantity = listItem.quantity // TODO float
         dbListItem.status = listItem.status.rawValue
         dbListItem.order = listItem.order
+        dbListItem.note = listItem.note ?? "" // TODO check if db obj can have optional if yes remove ??
         
         dbListItem.product = ProductMapper.dbWithProduct(listItem.product)
         dbListItem.section = SectionMapper.dbWithSection(listItem.section)
@@ -88,7 +89,8 @@ class ListItemMapper {
                 product: productsDict[remoteListItem.productUuid]!,
                 section: sectionsDict[remoteListItem.sectionUuid]!,
                 list: list,
-                order: remoteListItem.order
+                order: remoteListItem.order,
+                note: remoteListItem.note
             )
         }
         

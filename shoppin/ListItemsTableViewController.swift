@@ -306,6 +306,8 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
+    // MARK: - ListItemsViewSection
+    
     func startItemSwipe(tableViewListItem: TableViewListItem) {
         clearPendingSwipeItemIfAny()
     }
@@ -322,6 +324,15 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         self.swipedTableViewListItem = nil
     }
 
+    func onNoteTap(tableViewListItem: TableViewListItem) {
+        if let note = tableViewListItem.listItem.note {
+            AlertPopup.show(message: note, controller: self)
+            
+        } else {
+            print("Error: Invalid state in onNoteTap. There's no note. When there's no note there should be no button so we shouldn't be here.")
+        }
+    }
+    
     // MARK: - Table view data source
 
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

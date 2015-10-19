@@ -13,9 +13,10 @@ enum ListItemsViewSectionStyle {
 }
 
 protocol ItemActionsDelegate {
-    func startItemSwipe(tableViewListItem:TableViewListItem)
-    func endItemSwipe(tableViewListItem:TableViewListItem)
-    func undoSwipe(tableViewListItem:TableViewListItem)
+    func startItemSwipe(tableViewListItem: TableViewListItem)
+    func endItemSwipe(tableViewListItem: TableViewListItem)
+    func undoSwipe(tableViewListItem: TableViewListItem)
+    func onNoteTap(tableViewListItem: TableViewListItem)
 }
 
 class ListItemsViewSection: Equatable {
@@ -149,15 +150,20 @@ class ListItemsViewSection: Equatable {
         
         cell.labelColor = self.finalLabelFontColor
 //        cell.delegate = self
-        cell.itemSwiped = { // use a closure to capture listitem
-            self.delegate.endItemSwipe(tableViewListItem)
+        cell.itemSwiped = {[weak self] in // use a closure to capture listitem
+            self?.delegate.endItemSwipe(tableViewListItem)
         }
-        cell.startItemSwipe = {
-            self.delegate.startItemSwipe(tableViewListItem)
+        cell.startItemSwipe = {[weak self] in
+            self?.delegate.startItemSwipe(tableViewListItem)
         }
-        cell.buttonTwoTap = {
-            self.delegate.undoSwipe(tableViewListItem)
+        cell.buttonTwoTap = {[weak self] in
+            self?.delegate.undoSwipe(tableViewListItem)
         }
+        cell.onNoteTapFunc = {[weak self] in
+            self?.delegate.onNoteTap(tableViewListItem)
+        }
+        
+        cell.noteButton.hidden = tableViewListItem.listItem.note?.isEmpty ?? true
         
         cell.setOpen(tableViewListItem.swiped)
 

@@ -39,10 +39,13 @@ class SwipeableCell: UITableViewCell {
     var itemSwiped:(()->())?
     var buttonTwoTap:(()->())?
     
+    var onNoteTapFunc: VoidFunction?
+    
     @IBOutlet weak var contentViewRightConstraint:NSLayoutConstraint!
     @IBOutlet weak var contentViewLeftConstraint:NSLayoutConstraint!
     
 //    var delegate:SwipeableCellDelegate!
+    @IBOutlet weak var noteButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -241,5 +244,9 @@ class SwipeableCell: UITableViewCell {
 //        self.delegate.buttonTwoActionForItemText()
         self.buttonTwoTap?()
         self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: false)
+    }
+    
+    @IBAction func onNoteTap(sender: UIButton) {
+        onNoteTapFunc?()
     }
 }

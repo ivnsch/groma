@@ -115,13 +115,13 @@ class AddEditListItemGroupViewController: UIViewController, UITableViewDataSourc
         presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
-        addItem(name, price: priceText, quantity: quantityText, sectionName: sectionName) {[weak self] in
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, note: String?) {
+        addItem(name, price: priceText, quantity: quantityText, sectionName: sectionName, note: note) {[weak self] in
             self?.dismissGroupsItemsController()
         }
     }
     
-    private func addItem(name: String, price priceText: String, quantity quantityText: String, sectionName: String, onFinish: VoidFunction) {
+    private func addItem(name: String, price priceText: String, quantity quantityText: String, sectionName: String, note: String?, onFinish: VoidFunction) {
         if let price = priceText.floatValue, quantity = Int(quantityText), list = list {
             let itemInput = GroupItemInput(name: name, quantity: quantity, price: price, section: sectionName)
             
@@ -136,7 +136,7 @@ class AddEditListItemGroupViewController: UIViewController, UITableViewDataSourc
         }
     }
 
-    private func updateItem(input: GroupItemInput, groupItem: GroupItem) {
+    private func updateItem(input: GroupItemInput, groupItem: GroupItem, note: String?) {
         let updatedProduct = Product(uuid: groupItem.product.uuid, name: input.name, price: input.price)
         let updatedSection = Section(uuid: groupItem.section.uuid, name: input.section, order: groupItem.section.order)
         let updatedItem = GroupItem(uuid: groupItem.uuid, quantity: input.quantity, product: updatedProduct, section: updatedSection)
@@ -147,16 +147,16 @@ class AddEditListItemGroupViewController: UIViewController, UITableViewDataSourc
     }
     
     
-    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
-        addItem(name, price: priceText, quantity: quantityText, sectionName: sectionName) {
+    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, note: String?) {
+        addItem(name, price: priceText, quantity: quantityText, sectionName: sectionName, note: note) {
         }
     }
     
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String) {
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, note: String?) {
         if let price = priceText.floatValue, quantity = Int(quantityText), groupItem = selectedGroupItem {
             let itemInput = GroupItemInput(name: name, quantity: quantity, price: price, section: sectionName)
             
-            updateItem(itemInput, groupItem: groupItem)
+            updateItem(itemInput, groupItem: groupItem, note: note)
             
         } else {
             print("Error: validation was not implemented correctly - price or quantity are not numbers, or list is not set")
@@ -167,6 +167,9 @@ class AddEditListItemGroupViewController: UIViewController, UITableViewDataSourc
     private func showGroupItemsController() {
         let viewController = UIStoryboard.createListItemsViewController()
         viewController.delegate = self
+        viewController.onViewDidLoad = {
+            viewController.modus = .GroupItem
+        }
         navigationController?.pushViewController(viewController, animated: true)
     }
     

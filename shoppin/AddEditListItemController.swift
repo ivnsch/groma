@@ -13,9 +13,9 @@ protocol AddEditListItemControllerDelegate {
     
     func onValidationErrors(errors: [UITextField: ValidationError])
     
-    func onOkTap(name: String, price: String, quantity: String, sectionName: String)
-    func onOkAndAddAnotherTap(name: String, price: String, quantity: String, sectionName: String)
-    func onUpdateTap(name: String, price: String, quantity: String, sectionName: String)
+    func onOkTap(name: String, price: String, quantity: String, sectionName: String, note: String?)
+    func onOkAndAddAnotherTap(name: String, price: String, quantity: String, sectionName: String, note: String?)
+    func onUpdateTap(name: String, price: String, quantity: String, sectionName: String, note: String?)
     func onCancelTap()
     
     func productNameAutocompletions(text: String, handler: [String] -> ())
@@ -28,6 +28,12 @@ private enum Action {
     case OkAndAddAnother, Ok
 }
 
+// FIXME use instead a "fragment" (custom view) with the common inputs and use this in 2 separate view controllers
+// then we can also use different delegates, now the delegate is passed "note" parameter for group item as well where it doesn't exist, not nice
+enum AddEditListItemControllerModus {
+    case ListItem, GroupItem
+}
+
 class AddEditListItemController: UIViewController, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, OkNextButtonsViewDelegate, UITextFieldDelegate {
 
     var delegate: AddEditListItemControllerDelegate?
@@ -36,6 +42,9 @@ class AddEditListItemController: UIViewController, MLPAutoCompleteTextFieldDataS
     @IBOutlet weak var sectionInput: MLPAutoCompleteTextField!
     @IBOutlet weak var priceInput: UITextField!
     @IBOutlet weak var quantityInput: UITextField!
+    
+    @IBOutlet weak var noteLabel: UILabel! // to hide it in .GroupItem modus...
+    @IBOutlet weak var noteInput: UITextField!
     
     @IBOutlet weak var planInfoButton: UIButton!
     
@@ -48,10 +57,23 @@ class AddEditListItemController: UIViewController, MLPAutoCompleteTextFieldDataS
     }
     
     var updatingListItem: ListItem?
+
+    var modus: AddEditListItemControllerModus = .ListItem {
+        didSet {
+            if let noteInput = noteInput, noteLabel = noteLabel {
+                noteInput.hidden = modus == .GroupItem
+                noteLabel.hidden = modus == .GroupItem
+            } else {
+                print("Error: Trying to set modus before outlet is initialised")
+            }
+        }
+    }
     
     @IBOutlet weak var okNextButtonsView: OkNextButtonsView!
     
     private var validator: Validator?
+    
+    var onViewDidLoad: VoidFunction?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +83,8 @@ class AddEditListItemController: UIViewController, MLPAutoCompleteTextFieldDataS
         setInputsDefaultValues()
         
         nameInput.placeholder = "Item name"
-        sectionInput.placeholder = "Section (optional)"
+        sectionInput.placeholder = "Section"
+        noteInput.placeholder = "Note (optional)"
         
         initAutocompletionTextFields()
         
@@ -74,6 +97,8 @@ class AddEditListItemController: UIViewController, MLPAutoCompleteTextFieldDataS
             prefill(updatingListItem)
             titleLabel.text = "Update item"
         }
+        
+        onViewDidLoad?()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -128,6 +153,7 @@ class AddEditListItemController: UIViewController, MLPAutoCompleteTextFieldDataS
         sectionInput.text = listItem.section.name
         quantityInput.text = String(listItem.quantity)
         priceInput.text = listItem.product.price.toString(2)
+        noteInput.text = listItem.note
     }
     
     private func setInputsDefaultValues() {
@@ -166,12 +192,12 @@ class AddEditListItemController: UIViewController, MLPAutoCompleteTextFieldDataS
                 case .Add:
                     switch action {
                     case .Ok:
-                        delegate?.onOkTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+                        delegate?.onOkTap(text, price: priceText, quantity: quantityText, sectionName: sectionText, note: noteInput.text)
                     case .OkAndAddAnother:
-                        delegate?.onOkAndAddAnotherTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+                        delegate?.onOkAndAddAnotherTap(text, price: priceText, quantity: quantityText, sectionName: sectionText, note: noteInput.text)
                     }
                 case .Update:
-                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, sectionName: sectionText)
+                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, sectionName: sectionText, note: noteInput.text)
                 }
                 
             } else {
