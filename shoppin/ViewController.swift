@@ -60,12 +60,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
         addItemView.delegate = self
         addItemView.bottomConstraint = addButtonContainerBottomConstraint
-        
-        setEditing(false, animated: false)
+        setEditing(false, animated: false, closeAddControllerIfOpen: false)
         updatePrices()
         FrozenEffect.apply(self.pricesView)
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -208,13 +207,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     @IBAction func onEditTap(sender: AnyObject) {
         let editing = !self.listItemsTableViewController.editing
         
-        self.setEditing(editing, animated: true)
+        self.setEditing(editing, animated: true, closeAddControllerIfOpen: true)
     }
     
-    override func setEditing(editing: Bool, animated: Bool) {
+    // Parameter closeAddControllerIfOpen should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
+    func setEditing(editing: Bool, animated: Bool, closeAddControllerIfOpen: Bool) {
         super.setEditing(editing, animated: animated)
         
         addItemView.setVisible(editing, animated: animated)
+
+        if closeAddControllerIfOpen && quickAddController.open {
+            setQuickAddOpen(false)
+        }
 
         listItemsTableViewController.setEditing(editing, animated: animated)
 //        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
@@ -356,7 +360,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private func onListItemAddedToProvider(savedListItem: ListItem) {
         // Our "add" can also be an update - if user adds an item with a name that already exists, it's an update (increment)
-        listItemsTableViewController.updateOrAddListItem(savedListItem, increment: true)
+        listItemsTableViewController.updateOrAddListItem(savedListItem, increment: true, scrollToSelection: true)
         updatePrices(.MemOnly)
     }
     
@@ -440,9 +444,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
+    // MARK: - AddItemViewDelegate
+    
     func onAddTap() {
-        performSegueWithIdentifier("showAddIemSegue", sender: self)
+//        performSegueWithIdentifier("showAddIemSegue", sender: self) for now not used TODO remove this, onAddGroupTap, UIViewControllerTransitioningDelegate, etc. if this will not be used
+        setQuickAddOpen(!quickAddController.open)
     }
+    
+    /////////////////////////////////////
+    /// for now not used TODO remove this, onAddGroupTap, UIViewControllerTransitioningDelegate, etc. if this will not be used
+    /////////////////////////////////////
     
     @IBAction func onAddGroupTap(sender: UIButton) {
         let controller = UIStoryboard.listItemsGroupsNavigationController()
@@ -469,13 +480,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         } else {
             print("Error: The groups navigation controller doesn't have a controller or it has wrong class")
         }
-    }
-    
-    // in progress - for now there's no entry point element for this
-    private func showQuickAdd() {
-        let quickAddController = UIStoryboard.quickAddListItemViewController()
-        quickAddController.delegate = self
-        presentViewController(quickAddController, animated: true, completion: nil)
     }
     
     // MARK: UIViewControllerTransitioningDelegate
@@ -510,6 +514,85 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         return transition
     }
     
+    /////////////////////////////////////
+    /////////////////////////////////////
+    /////////////////////////////////////
+    
+    
+    private lazy var quickAddController: QuickAddListItemViewController = {
+        let quickAddController = UIStoryboard.quickAddListItemViewController()
+        quickAddController.delegate = self
+        
+        let height: CGFloat = 350
+        
+        self.view.addSubview(quickAddController.view)
+        let navbarHeight = self.navigationController!.navigationBar.frame.height
+        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+        quickAddController.view.frame = CGRectMake(0, navbarHeight + statusBarHeight + CGRectGetHeight(self.pricesView.frame), self.view.frame.width, height)
+
+        // swift anchor
+        quickAddController.view.layer.anchorPoint = CGPointMake(0.5, 0)
+        quickAddController.view.frame.origin = CGPointMake(0, quickAddController.view.frame.origin.y - height / 2)
+        
+        let transform: CGAffineTransform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 0.001) //0.001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
+        quickAddController.view.transform = transform
+        return quickAddController
+    }()
+    
+    private lazy var tableViewOverlay: UIView = {
+        let view = UIButton()
+        view.backgroundColor = UIColor.blackColor()
+//        view.userInteractionEnabled = true
+        view.alpha = 0
+//        view.addTarget(self, action: "onQuickAddOverlayTap:", forControlEvents: .TouchUpInside)
+        return view
+    }()
+
+    // Usability improvement? (Dismiss add view easily, on the other side it also makes it easy to close by mistake)
+//    func onQuickAddOverlayTap(sender: UIButton) {
+//        setQuickAddOpen(false)
+//    }
+    
+    // in progress - for now there's no entry point element for this
+    private func setQuickAddOpen(open: Bool) {
+        quickAddController.open = open
+        animateQuickAddView(quickAddController.view, open: open)
+        if open {
+            addItemView.setButtonText("Close")
+            addItemView.setButtonColor(UIColor(red: 177/255, green: 177/255, blue: 177/255, alpha: 1))
+        } else {
+            addItemView.setButtonText("Add item")
+            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
+        }
+    }
+    
+    private func animateQuickAddView(view: UIView, open: Bool) {
+        let navbarHeight = self.navigationController!.navigationBar.frame.height
+        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+        
+        if open {
+            tableViewOverlay.frame = self.view.frame
+            self.view.insertSubview(tableViewOverlay, aboveSubview: listItemsTableViewController.tableView)
+        } else {
+            tableViewOverlay.removeFromSuperview()
+        }
+        
+        UIView.animateWithDuration(0.3) {
+            if open {
+               self.tableViewOverlay.alpha = 0.2
+            } else {
+               self.tableViewOverlay.alpha = 0
+            }
+            view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, open ? 1 : 0.001)
+            
+            let topInset = navbarHeight + statusBarHeight + CGRectGetHeight(view.frame) + CGRectGetHeight(self.pricesView.frame)
+            let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
+            self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
+            self.listItemsTableViewController.tableViewTopOffset = -self.listItemsTableViewController.tableViewInset.top
+        }
+    }
+    
+
     // MARK: - ListItemGroupsViewControllerDelegate
     
     func onGroupsAdded() {
@@ -523,15 +606,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     // MARK: - QuickAddListItemDelegate
     
     func onCloseQuickAddTap() {
-        dismissViewControllerAnimated(true, completion: nil)
+        setQuickAddOpen(false)
     }
     
     func onAddGroup(group: ListItemGroup) {
         if let list = currentList {
             Providers.listItemsProvider.add(group.items, list: list, successHandler {[weak self] addedListItems in
-                self?.dismissViewControllerAnimated(true) {
-                    self?.onGroupsAdded()
-                }
+                self?.onGroupsAdded()
+                
             })
         } else {
             print("Error: Add product from quick list but there's no current list in ViewController'")
@@ -542,9 +624,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         // TODO section in products, how?
         if let list = currentList {
             Providers.listItemsProvider.addListItem(product, sectionName: "TODO", quantity: 1, list: list, note: nil, order: nil, successHandler {[weak self] savedListItem in
-                self?.dismissViewControllerAnimated(true) {
-                    self?.onListItemAddedToProvider(savedListItem)
-                }
+                self?.onListItemAddedToProvider(savedListItem)
             })
         } else {
             print("Error: Add product from quick list but there's no current list in ViewController'")

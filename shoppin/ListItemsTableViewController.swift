@@ -147,7 +147,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     // right now prefer not to always reinit the table because this can change sorting
     // so first we should implement persistent sorting, then refactor this class
     // -parameter: increment if, in case it's an update, the quantities of the items should be added together. If false the quantity is just overwritten like the rest of fields
-    func updateOrAddListItem(listItem: ListItem, increment: Bool) {
+    func updateOrAddListItem(listItem: ListItem, increment: Bool, scrollToSelection: Bool = false) {
         if let indexPath = getIndexPath(listItem) {
             let oldItem = tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
 
@@ -168,9 +168,19 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                     initTableViewContent()
                 }
             }
+            
+            if scrollToSelection {
+                tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Middle, animated: true)
+            }
+            
         } else { // indexpath for updated item not in the tableview, this can happen if e.g. updated item has a new section (not in tableview)
             items.append(listItem) // FIXME hacky...
             initTableViewContent() // this will make the possible new section appear
+            
+            if scrollToSelection {
+                let lastIndexPath = NSIndexPath(forRow: tableViewSections[tableViewSections.count - 1].tableViewListItems.count - 1, inSection: tableViewSections.count - 1)
+                tableView.scrollToRowAtIndexPath(lastIndexPath, atScrollPosition: .Middle, animated: true)
+            }
         }
     }
     

@@ -61,4 +61,12 @@ protocol AddItemViewDelegate {
             print("Error: AddItemView: trying to animate without top constraint")
         }
     }
+    
+    func setButtonText(text: String) {
+        addButton.setTitle(text, forState: .Normal)
+    }
+    
+    func setButtonColor(color: UIColor) {
+        addButton.backgroundColor = color
+    }
 }

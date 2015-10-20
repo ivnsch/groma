@@ -54,6 +54,8 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
         }
     }
     
+    var open: Bool = false
+    
     private func loadGroups() {
         Providers.listItemGroupsProvider.groups(successHandler{[weak self] groups in
             self?.quickAddItems = groups.map{QuickAddGroup($0)}
