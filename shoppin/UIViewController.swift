@@ -12,11 +12,11 @@ extension UIViewController {
 
     // MARK: - Hierachy
     
-    func addChildViewControllerAndView(viewController:UIViewController) {
+    func addChildViewControllerAndView(viewController: UIViewController) {
         self.addChildViewControllerAndView(viewController, viewIndex: self.view.subviews.count)
     }
     
-    func addChildViewControllerAndView(viewController:UIViewController, viewIndex:Int) {
+    func addChildViewControllerAndView(viewController: UIViewController, viewIndex:Int) {
         self.addChildViewController(viewController)
         
         self.view.insertSubview(viewController.view, atIndex: viewIndex)
@@ -24,13 +24,20 @@ extension UIViewController {
         viewController.didMoveToParentViewController(self)
     }
 
-    func clearSubViewsAndViewControllers() {
-        for subview in self.view.subviews {
-            subview.removeFromSuperview()
-        }
+    func addChildViewControllerAndMove(viewController: UIViewController) {
+        addChildViewController(viewController)
+        viewController.didMoveToParentViewController(self)
+    }
+    
+    func removeChildViewControllers() {
         for childViewController in self.childViewControllers {
             childViewController.removeFromParentViewController()
         }
+    }
+    
+    func clearSubViewsAndViewControllers() {
+        view.removeSubviews()
+        removeChildViewControllers()
     }
 
     // MARK: - Provider result handling

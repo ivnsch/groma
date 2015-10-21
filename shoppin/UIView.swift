@@ -15,16 +15,24 @@ extension UIView {
         self.centerYInParent(constantY)
     }
     
-    func centerYInParent(constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: self.superview, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: CGFloat(constant))
-        self.superview!.addConstraint(c)
+    func centerYInView(view: UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterY, multiplier: 1, constant: CGFloat(constant))
+        view.addConstraint(c)
+        return c
+    }
+
+    func centerXInView(view: UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: CGFloat(constant))
+        view.addConstraint(c)
         return c
     }
     
+    func centerYInParent(constant:Float = 0) -> NSLayoutConstraint {
+        return centerYInView(superview!, constant: constant)
+    }
+    
     func centerXInParent(constant:Float = 0) -> NSLayoutConstraint {
-        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: self.superview, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: CGFloat(constant))
-        self.superview!.addConstraint(c)
-        return c
+        return centerXInView(superview!, constant: constant)
     }
     
     func positionBelowView(view:UIView, constant:Float = 0) -> NSLayoutConstraint {
@@ -38,11 +46,36 @@ extension UIView {
         self.superview!.addConstraint(c)
         return c
     }
+
+    func alignLeft(view:UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.Left, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Left, multiplier: 1, constant: CGFloat(constant))
+        self.superview!.addConstraint(c)
+        return c
+    }
+    
+    func alignRight(view:UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Right, multiplier: 1, constant: CGFloat(constant))
+        self.superview!.addConstraint(c)
+        return c
+    }
+    
+    func alignBottom(view:UIView, constant:Float = 0) -> NSLayoutConstraint {
+        let c = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: view, attribute: NSLayoutAttribute.Bottom, multiplier: 1, constant: CGFloat(constant))
+        self.superview!.addConstraint(c)
+        return c
+    }
     
     func matchSize(view: UIView) {
         self.superview?.addConstraints([
             NSLayoutConstraint.matchWidth(view: self, otherView: view),
             NSLayoutConstraint.matchHeight(view: self, otherView: view)])
+    }
+    
+    func fill(view: UIView) {
+        alignTop(view)
+        alignLeft(view)
+        alignRight(view)
+        alignBottom(view)
     }
     
     /**
@@ -66,6 +99,12 @@ extension UIView {
             }
         } else {
             self.viewWithTag(ViewTags.GlobalActivityIndicator)?.removeFromSuperview()
+        }
+    }
+    
+    func removeSubviews() {
+        for subview in subviews {
+            subview.removeFromSuperview()
         }
     }
 }

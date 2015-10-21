@@ -562,10 +562,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     private func initTopControllerView(view: UIView, height: CGFloat) {
-        view.addSubview(view)
+        self.view.addSubview(view)
         let navbarHeight = navigationController!.navigationBar.frame.height
         let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-        view.frame = CGRectMake(0, navbarHeight + statusBarHeight + CGRectGetHeight(pricesView.frame), view.frame.width, height)
+        view.frame = CGRectMake(0, navbarHeight + statusBarHeight + CGRectGetHeight(pricesView.frame), self.view.frame.width, height)
         
         // swift anchor
         view.layer.anchorPoint = CGPointMake(0.5, 0)

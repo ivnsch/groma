@@ -18,6 +18,10 @@ enum QuickAddItemType {
     case Product, Group
 }
 
+enum QuickAddContent {
+    case Items, AddProduct
+}
+
 class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
@@ -27,7 +31,10 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
     @IBOutlet weak var orderAlphabeticallyButton: UIButton!
     @IBOutlet weak var showGroupsButton: UIButton!
     @IBOutlet weak var showProductsButton: UIButton!
+    @IBOutlet weak var showAddProductsOrGroupButton: UIButton!
     
+    @IBOutlet weak var tabContainer: UIView!
+
     var delegate: QuickAddListItemDelegate?
     
     var itemType: QuickAddItemType = .Product // for now product/group mutually exclusive (no mixed tableview)
@@ -147,6 +154,34 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
         loadProducts()
         toggleItemTypeButtons(true)
     }
+    
+    @IBAction func onAddProductsOrGroupsTap(sender: UIButton) {
+        showContent(.AddProduct)
+    }
+    
+    private func showContent(content: QuickAddContent) {
+        let controller: UIViewController = {
+            switch content {
+            case .Items:
+                // TODO
+                let c = AddElementViewController()
+                return c
+            case .AddProduct:
+                let c = AddElementViewController()
+                return c
+            }
+        }()
+        
+        removeChildViewControllers()
+        tabContainer.removeSubviews()
+        
+        addChildViewControllerAndMove(controller)
+        tabContainer.addSubview(controller.view)
+        
+        controller.view.translatesAutoresizingMaskIntoConstraints = false
+        controller.view.fill(tabContainer)
+    }
+    
     
     // Toggle for showProduct state - if showing product, show product button has to be disabled and group enabled, same for group
     // Assumes only 2 possible states, product and group (Bool)
