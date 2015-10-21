@@ -128,8 +128,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onOkTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, note: String?) {
-        submitInputs(name, price: priceText, quantity: quantityText, sectionName: sectionName, note: note) {
-            addEditItemController?.dismissViewControllerAnimated(true, completion: nil)
+        submitInputs(name, price: priceText, quantity: quantityText, sectionName: sectionName, note: note) {[weak self] in
+            self?.view.endEditing(true)
+            self?.setQuickAddOpen(false)
+//            addEditItemController?.dismissViewControllerAnimated(true, completion: nil)
         }
     }
 
@@ -143,7 +145,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName, note: note) {
             self.updateItem(self.updatingListItem!, listItemInput: listItemInput) {[weak self] in
                 self?.view.endEditing(true)
-                self?.addEditItemController?.dismissViewControllerAnimated(true, completion: nil)
+                self?.setQuickAddOpen(false)
+//                self?.addEditItemController?.dismissViewControllerAnimated(true, completion: nil)
             }
         }
     }
@@ -397,7 +400,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             updatingListItem = tableViewListItem.listItem
             updatingSelectedCell = listItemsTableViewController.tableView.cellForRowAtIndexPath(indexPath)
             
-            performSegueWithIdentifier("showAddIemSegue", sender: self)
+//            performSegueWithIdentifier("showAddIemSegue", sender: self)
+
+            addEditController.updatingListItem = updatingListItem
+            addEditController.delegate = self
+            
+            setAddEditListItemOpen(true)
             
         } else {
             listItemsTableViewController.markOpen(true, indexPath: indexPath)
@@ -448,7 +456,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func onAddTap() {
 //        performSegueWithIdentifier("showAddIemSegue", sender: self) for now not used TODO remove this, onAddGroupTap, UIViewControllerTransitioningDelegate, etc. if this will not be used
-        setQuickAddOpen(!quickAddController.open)
+        
+        // TODO add modus, add another etc. also find generally a better way to associate actions with open view controller?
+        if addEditController.open {
+            addEditController.submit(.Update)
+            
+        } else {
+            setQuickAddOpen(!quickAddController.open)
+        }
     }
     
     /////////////////////////////////////
@@ -519,26 +534,102 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     /////////////////////////////////////
     
     
-    private lazy var quickAddController: QuickAddListItemViewController = {
-        let quickAddController = UIStoryboard.quickAddListItemViewController()
-        quickAddController.delegate = self
-        
-        let height: CGFloat = 350
-        
-        self.view.addSubview(quickAddController.view)
-        let navbarHeight = self.navigationController!.navigationBar.frame.height
-        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-        quickAddController.view.frame = CGRectMake(0, navbarHeight + statusBarHeight + CGRectGetHeight(self.pricesView.frame), self.view.frame.width, height)
+    
+    // MARK: - quick add
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    /// quick add
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
-        // swift anchor
-        quickAddController.view.layer.anchorPoint = CGPointMake(0.5, 0)
-        quickAddController.view.frame.origin = CGPointMake(0, quickAddController.view.frame.origin.y - height / 2)
-        
-        let transform: CGAffineTransform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 0.001) //0.001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
-        quickAddController.view.transform = transform
-        return quickAddController
+    private lazy var quickAddController: QuickAddListItemViewController = {
+        let controller = UIStoryboard.quickAddListItemViewController()
+        controller.delegate = self
+        self.initTopControllerView(controller.view, height: 350)
+        return controller
     }()
     
+    private func setQuickAddOpen(open: Bool) {
+        quickAddController.open = open
+        animateTopView(quickAddController.view, open: open)
+        if open {
+            addItemView.setButtonText("Close")
+            addItemView.setButtonColor(UIColor(red: 177/255, green: 177/255, blue: 177/255, alpha: 1))
+        } else {
+            addItemView.setButtonText("Add item")
+            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
+        }
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    private func initTopControllerView(view: UIView, height: CGFloat) {
+        view.addSubview(view)
+        let navbarHeight = navigationController!.navigationBar.frame.height
+        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+        view.frame = CGRectMake(0, navbarHeight + statusBarHeight + CGRectGetHeight(pricesView.frame), view.frame.width, height)
+        
+        // swift anchor
+        view.layer.anchorPoint = CGPointMake(0.5, 0)
+        view.frame.origin = CGPointMake(0, view.frame.origin.y - height / 2)
+        
+        let transform: CGAffineTransform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 0.001) //0.001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
+        view.transform = transform
+    }
+    
+    
+    // MARK: - add/edit
+    ///////////////////////1//////////////////////////////////////////////////////////////////////
+    /// add edit add
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    
+    private lazy var addEditController: AddEditListItemViewController = {
+        let controller = UIStoryboard.addEditListItemViewController()
+        self.initTopControllerView(controller.view, height: 200)
+        return controller
+    }()
+    
+    private func setAddEditListItemOpen(open: Bool) {
+        addEditController.open = open
+        animateTopView(addEditController.view, open: open)
+        if open {
+            addItemView.setButtonText("Save")
+            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
+        } else {
+            addItemView.setButtonText("Add item")
+            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
+        }
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
+    
+    private func animateTopView(view: UIView, open: Bool) {
+        let navbarHeight = self.navigationController!.navigationBar.frame.height
+        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+        
+        if open {
+            tableViewOverlay.frame = self.view.frame
+            self.view.insertSubview(tableViewOverlay, aboveSubview: listItemsTableViewController.tableView)
+        } else {
+            tableViewOverlay.removeFromSuperview()
+        }
+        
+        UIView.animateWithDuration(0.3) {
+            if open {
+                self.tableViewOverlay.alpha = 0.2
+            } else {
+                self.tableViewOverlay.alpha = 0
+            }
+            view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, open ? 1 : 0.001)
+            
+            let topInset = navbarHeight + statusBarHeight + CGRectGetHeight(view.frame) + CGRectGetHeight(self.pricesView.frame)
+            let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
+            self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
+            self.listItemsTableViewController.tableViewTopOffset = -self.listItemsTableViewController.tableViewInset.top
+        }
+    }
+
     private lazy var tableViewOverlay: UIView = {
         let view = UIButton()
         view.backgroundColor = UIColor.blackColor()
@@ -553,45 +644,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //        setQuickAddOpen(false)
 //    }
     
-    // in progress - for now there's no entry point element for this
-    private func setQuickAddOpen(open: Bool) {
-        quickAddController.open = open
-        animateQuickAddView(quickAddController.view, open: open)
-        if open {
-            addItemView.setButtonText("Close")
-            addItemView.setButtonColor(UIColor(red: 177/255, green: 177/255, blue: 177/255, alpha: 1))
-        } else {
-            addItemView.setButtonText("Add item")
-            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
-        }
-    }
-    
-    private func animateQuickAddView(view: UIView, open: Bool) {
-        let navbarHeight = self.navigationController!.navigationBar.frame.height
-        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-        
-        if open {
-            tableViewOverlay.frame = self.view.frame
-            self.view.insertSubview(tableViewOverlay, aboveSubview: listItemsTableViewController.tableView)
-        } else {
-            tableViewOverlay.removeFromSuperview()
-        }
-        
-        UIView.animateWithDuration(0.3) {
-            if open {
-               self.tableViewOverlay.alpha = 0.2
-            } else {
-               self.tableViewOverlay.alpha = 0
-            }
-            view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, open ? 1 : 0.001)
-            
-            let topInset = navbarHeight + statusBarHeight + CGRectGetHeight(view.frame) + CGRectGetHeight(self.pricesView.frame)
-            let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
-            self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
-            self.listItemsTableViewController.tableViewTopOffset = -self.listItemsTableViewController.tableViewInset.top
-        }
-    }
-    
+
 
     // MARK: - ListItemGroupsViewControllerDelegate
     

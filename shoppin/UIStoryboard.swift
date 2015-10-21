@@ -19,7 +19,8 @@ extension UIStoryboard {
     private class func forgotPasswordStoryboard() -> UIStoryboard { return UIStoryboard(name: "ForgotPassword", bundle: NSBundle.mainBundle()) }
     private class func choiceStoryboard() -> UIStoryboard { return UIStoryboard(name: "EditableChoiceModal", bundle: NSBundle.mainBundle()) }
     private class func quickAddListItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "QuickAddListItem", bundle: NSBundle.mainBundle()) }
-    
+    private class func addEditListItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditListItem", bundle: NSBundle.mainBundle()) }
+
     // MARK: - List items
     
     class func todoItemsViewController() -> ViewController {
@@ -128,5 +129,10 @@ extension UIStoryboard {
     class func quickAddListItemViewController() -> QuickAddListItemViewController {
         return quickAddListItemStoryboard().instantiateViewControllerWithIdentifier("QuickAddListItemViewController") as! QuickAddListItemViewController
     }
+
+    // MARK: Add edit list item
     
+    class func addEditListItemViewController() -> AddEditListItemViewController {
+        return addEditListItemStoryboard().instantiateViewControllerWithIdentifier("AddEditListItem") as! AddEditListItemViewController
+    }
 }

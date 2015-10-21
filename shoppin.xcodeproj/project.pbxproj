@@ -357,6 +357,8 @@
 		EB85F4731BD5605000E19E9B /* ProductProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F4721BD5605000E19E9B /* ProductProviderImpl.swift */; };
 		EB85F4741BD5605000E19E9B /* ProductProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F4721BD5605000E19E9B /* ProductProviderImpl.swift */; };
 		EB85F4751BD5605000E19E9B /* ProductProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F4721BD5605000E19E9B /* ProductProviderImpl.swift */; };
+		EB85F47C1BD6ED8F00E19E9B /* AddEditListItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F47B1BD6ED8F00E19E9B /* AddEditListItemViewController.swift */; };
+		EB85F47F1BD6EDBC00E19E9B /* AddEditListItem.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB85F47E1BD6EDBC00E19E9B /* AddEditListItem.storyboard */; };
 		EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */; };
 		EB89D3071AD41E2D00B6E0D0 /* ListsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */; };
 		EB89D33C1AD44BD400B6E0D0 /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */; };
@@ -807,6 +809,8 @@
 		EB85F46A1BD54FD300E19E9B /* QuickAddGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddGroup.swift; sourceTree = "<group>"; };
 		EB85F46E1BD5600A00E19E9B /* ProductProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductProvider.swift; sourceTree = "<group>"; };
 		EB85F4721BD5605000E19E9B /* ProductProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductProviderImpl.swift; sourceTree = "<group>"; };
+		EB85F47B1BD6ED8F00E19E9B /* AddEditListItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditListItemViewController.swift; sourceTree = "<group>"; };
+		EB85F47E1BD6EDBC00E19E9B /* AddEditListItem.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddEditListItem.storyboard; sourceTree = "<group>"; };
 		EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
 		EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListsViewController.xib; sourceTree = "<group>"; };
 		EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
@@ -1205,6 +1209,7 @@
 		EB20FC021A59986C0058103B /* list */ = {
 			isa = PBXGroup;
 			children = (
+				EB85F47D1BD6ED9500E19E9B /* addEdit */,
 				EB2F5D721A55754400DBC4AF /* PricesView.swift */,
 				EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */,
 				EB1DDEAF1A3334EC00D778DE /* ViewController.swift */,
@@ -1521,6 +1526,15 @@
 				EB85F45C1BD54C7300E19E9B /* QuickAddItemCell.swift */,
 			);
 			name = cell;
+			sourceTree = "<group>";
+		};
+		EB85F47D1BD6ED9500E19E9B /* addEdit */ = {
+			isa = PBXGroup;
+			children = (
+				EB85F47B1BD6ED8F00E19E9B /* AddEditListItemViewController.swift */,
+				EB85F47E1BD6EDBC00E19E9B /* AddEditListItem.storyboard */,
+			);
+			name = addEdit;
 			sourceTree = "<group>";
 		};
 		EB9BE4141B2C6525005B401A /* remote */ = {
@@ -2153,6 +2167,7 @@
 				EB4C365F1B4C142600C387C5 /* EditableChoiceModal.storyboard in Resources */,
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
 				EB1B365B1BC4637A003519F2 /* PlanTableViewCell_.xib in Resources */,
+				EB85F47F1BD6EDBC00E19E9B /* AddEditListItem.storyboard in Resources */,
 				EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */,
 				EBFD15C81BA7FA6500E37342 /* ForgotPassword.storyboard in Resources */,
 				EB0C1B971B3DBD1300F24C85 /* Login.storyboard in Resources */,
@@ -2454,6 +2469,7 @@
 				EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */,
 				EB7E83161B7B6676009DEEF4 /* RealmHistoryProvider.swift in Sources */,
 				EBA575671BCFFB2700A0A825 /* GroupItem.swift in Sources */,
+				EB85F47C1BD6ED8F00E19E9B /* AddEditListItemViewController.swift in Sources */,
 				EBB9A7441B5EB28500E5487D /* RemoteInventoryItemsProvider.swift in Sources */,
 				EB1FC5151BC68F61004E1114 /* AddEditPlanItemContentView.swift in Sources */,
 				EB0C1BA51B3DF5FB00F24C85 /* UserDetailsViewController.swift in Sources */,

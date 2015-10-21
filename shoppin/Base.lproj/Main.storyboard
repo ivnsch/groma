@@ -624,7 +624,7 @@
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V4m-pG-OCr">
                                             <rect key="frame" x="528" y="11" width="20" height="22"/>
-                                            <state key="normal" image="67DFD42C-19E9-4E9A-8A70-19563E7E1904"/>
+                                            <state key="normal" image="0F4B2DE1-5FBA-4F81-8E98-49A78DFABE13"/>
                                             <connections>
                                                 <action selector="onDecrementTap:" destination="vCq-K7-Ar7" eventType="touchUpInside" id="Iz1-mU-bq5"/>
                                             </connections>
@@ -649,7 +649,7 @@
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yBM-4c-s6A">
                                             <rect key="frame" x="568" y="11" width="20" height="22"/>
-                                            <state key="normal" image="ECABA4FA-A0A8-4BA2-905A-37D81AE9B965"/>
+                                            <state key="normal" image="B44C7520-0534-4FC5-A409-5EE6971A9F26"/>
                                             <connections>
                                                 <action selector="onIncrementTap:" destination="vCq-K7-Ar7" eventType="touchUpInside" id="5j2-Ux-DoW"/>
                                             </connections>
@@ -1932,7 +1932,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="67DFD42C-19E9-4E9A-8A70-19563E7E1904" width="20" height="20">
+        <image name="0F4B2DE1-5FBA-4F81-8E98-49A78DFABE13" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGSUpYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK8QEAcI
 ERYbHCUmJysyNzo9Q0ZVJG51bGzUCQoLDA0ODxBWJGNsYXNzXE5TSW1hZ2VGbGFnc1ZOU1JlcHNXTlND
@@ -2018,7 +2018,7 @@ EeMR5xHuEfYSAxIIEgoSDBIREhkSHBIhEikSLBI+EkESRgAAAAAAAAIBAAAAAAAAAE0AAAAAAAAAAAAA
 AAAAABJIA
 </mutableData>
         </image>
-        <image name="ECABA4FA-A0A8-4BA2-905A-37D81AE9B965" width="20" height="20">
+        <image name="B44C7520-0534-4FC5-A409-5EE6971A9F26" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGSUpYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK8QEAcI
 ERYbHCUmJysyNzo9Q0ZVJG51bGzUCQoLDA0ODxBWJGNsYXNzXE5TSW1hZ2VGbGFnc1ZOU1JlcHNXTlND
