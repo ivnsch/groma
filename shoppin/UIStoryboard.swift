@@ -20,7 +20,8 @@ extension UIStoryboard {
     private class func choiceStoryboard() -> UIStoryboard { return UIStoryboard(name: "EditableChoiceModal", bundle: NSBundle.mainBundle()) }
     private class func quickAddListItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "QuickAddListItem", bundle: NSBundle.mainBundle()) }
     private class func addEditListItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditListItem", bundle: NSBundle.mainBundle()) }
-
+    private class func quickAddGroupStoryboard() -> UIStoryboard { return UIStoryboard(name: "QuickAddGroup", bundle: NSBundle.mainBundle()) }
+    
     // MARK: - List items
     
     class func todoItemsViewController() -> ViewController {
@@ -126,13 +127,24 @@ extension UIStoryboard {
     
     // MARK: Quick add
 
-    class func quickAddListItemViewController() -> QuickAddListItemViewController {
-        return quickAddListItemStoryboard().instantiateViewControllerWithIdentifier("QuickAddListItemViewController") as! QuickAddListItemViewController
+    class func quickAddViewController() -> QuickAddViewController {
+        return quickAddListItemStoryboard().instantiateViewControllerWithIdentifier("QuickAddViewController") as! QuickAddViewController
     }
 
     // MARK: Add edit list item
     
     class func addEditListItemViewController() -> AddEditListItemViewController {
         return addEditListItemStoryboard().instantiateViewControllerWithIdentifier("AddEditListItem") as! AddEditListItemViewController
+    }
+    
+    
+    // MARK: Quick add group
+    
+    class func quickAddGroupViewController() -> QuickAddGroupViewController {
+        return quickAddGroupStoryboard().instantiateViewControllerWithIdentifier("QuickAddGroupViewController") as! QuickAddGroupViewController
+    }
+    
+    class func quickAddGroupItemsViewController() -> QuickAddGroupItemsViewController {
+        return quickAddGroupStoryboard().instantiateViewControllerWithIdentifier("QuickAddGroupItemsViewController") as! QuickAddGroupItemsViewController
     }
 }

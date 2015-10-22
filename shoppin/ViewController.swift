@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import SwiftValidator
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate, AddItemViewDelegate, UIViewControllerTransitioningDelegate, ListItemGroupsViewControllerDelegate, QuickAddListItemDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate, AddItemViewDelegate, UIViewControllerTransitioningDelegate, ListItemGroupsViewControllerDelegate, QuickAddDelegate
 //    , UIBarPositioningDelegate
 {
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
@@ -540,10 +540,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     /// quick add
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    private lazy var quickAddController: QuickAddListItemViewController = {
-        let controller = UIStoryboard.quickAddListItemViewController()
+    private lazy var quickAddController: QuickAddViewController = {
+        let controller = UIStoryboard.quickAddViewController()
         controller.delegate = self
-        self.initTopControllerView(controller.view, height: 350)
+        let height: CGFloat = 350
+        self.initTopControllerView(controller.view, height: height)
+//        controller.originalViewFrame = CGRectMake(controller.view.frame.origin.x, controller.view.frame.origin.y, controller.view.frame.width, height)
         return controller
     }()
     
@@ -577,7 +579,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     
     // MARK: - add/edit
-    ///////////////////////1//////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
     /// add edit add
     /////////////////////////////////////////////////////////////////////////////////////////////
     
@@ -656,7 +658,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
-    // MARK: - QuickAddListItemDelegate
+    // MARK: - QuickAddDelegate
     
     func onCloseQuickAddTap() {
         setQuickAddOpen(false)
@@ -683,4 +685,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             print("Error: Add product from quick list but there's no current list in ViewController'")
         }
     }
+    
+    // was used to expand the quick add embedded view controller to fill available space when adding group items. Maybe will be used again in the future.
+//    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect) {
+//        
+//        let topOffset = myTopOffset + pricesView.frame.height
+//        
+//        UIView.animateWithDuration(0.3) {[weak self] in
+//            if let weakSelf = self {
+//                if expanded {
+//                    weakSelf.quickAddController.view.frame = CGRectMake(originalFrame.origin.x, originalFrame.origin.y - topOffset, originalFrame.width, weakSelf.view.frame.height)
+////                    weakSelf.quickAddController.view.frame.origin = CGPointMake(originalFrame.origin.x, originalFrame.origin.y - topOffset)
+////                    weakSelf.quickAddController.view.transform = CGAffineTransformMakeScale(1, 1.5)
+//                } else {
+//                    weakSelf.quickAddController.view.frame = CGRectMake(originalFrame.origin.x, originalFrame.origin.y, originalFrame.width, originalFrame.height)
+////                    weakSelf.quickAddController.view.frame.origin = CGPointMake(originalFrame.origin.x, originalFrame.origin.y)
+////                    weakSelf.quickAddController.view.transform = CGAffineTransformMakeScale(1, 1.0)
+//                }
+////                            self?.view.layoutIfNeeded()
+//            }
+//        }
+//    }
 }

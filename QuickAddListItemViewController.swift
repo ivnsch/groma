@@ -12,6 +12,7 @@ protocol QuickAddListItemDelegate {
     func onAddProduct(product: Product)
     func onAddGroup(group: ListItemGroup)
     func onCloseQuickAddTap()
+//    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
 }
 
 enum QuickAddItemType {
@@ -22,24 +23,22 @@ enum QuickAddContent {
     case Items, AddProduct
 }
 
+// Table view controller with searchbox, used for items or groups quick add
 class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     
-    
-    @IBOutlet weak var orderAlphabeticallyButton: UIButton!
-    @IBOutlet weak var showGroupsButton: UIButton!
-    @IBOutlet weak var showProductsButton: UIButton!
-    @IBOutlet weak var showAddProductsOrGroupButton: UIButton!
-    
-    @IBOutlet weak var tabContainer: UIView!
-
     var delegate: QuickAddListItemDelegate?
+    var itemType: QuickAddItemType = .Product { // for now product/group mutually exclusive (no mixed tableview)
+        didSet {
+            if itemType != oldValue {
+                loadItems()
+            }
+        }
+    }
     
-    var itemType: QuickAddItemType = .Product // for now product/group mutually exclusive (no mixed tableview)
-    
-    var quickAddItems: [QuickAddItem] = [] {
+    private var quickAddItems: [QuickAddItem] = [] {
         didSet {
             filteredQuickAddItems = quickAddItems
         }
@@ -50,9 +49,13 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
             tableView.reloadData()
         }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadItems()
+    }
+    
+    func loadItems() {
         switch itemType {
         case .Product:
             loadProducts()
@@ -60,8 +63,6 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
             loadGroups()
         }
     }
-    
-    var open: Bool = false
     
     private func loadGroups() {
         Providers.listItemGroupsProvider.groups(successHandler{[weak self] groups in
@@ -124,69 +125,5 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
         } else {
             print("Error: invalid model type in quickAddItems, select cell. \(item)")
         }
-    }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-    
-    @IBAction func onCloseTap(sender: UIButton) {
-        delegate?.onCloseQuickAddTap()
-    }
-    
-    @IBAction func onOrderAlphabeticallyTap(sender: UIButton) {
-        // TODO
-    }
-    
-    @IBAction func onShowGroupsTap(sender: UIButton) {
-        loadGroups()
-        toggleItemTypeButtons(false)
-    }
-    
-    @IBAction func onShowProductsTap(sender: UIButton) {
-        loadProducts()
-        toggleItemTypeButtons(true)
-    }
-    
-    @IBAction func onAddProductsOrGroupsTap(sender: UIButton) {
-        showContent(.AddProduct)
-    }
-    
-    private func showContent(content: QuickAddContent) {
-        let controller: UIViewController = {
-            switch content {
-            case .Items:
-                // TODO
-                let c = AddElementViewController()
-                return c
-            case .AddProduct:
-                let c = AddElementViewController()
-                return c
-            }
-        }()
-        
-        removeChildViewControllers()
-        tabContainer.removeSubviews()
-        
-        addChildViewControllerAndMove(controller)
-        tabContainer.addSubview(controller.view)
-        
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
-        controller.view.fill(tabContainer)
-    }
-    
-    
-    // Toggle for showProduct state - if showing product, show product button has to be disabled and group enabled, same for group
-    // Assumes only 2 possible states, product and group (Bool)
-    private func toggleItemTypeButtons(showProduct: Bool) {
-        showGroupsButton.enabled = showProduct
-        showProductsButton.enabled = !showProduct
     }
 }
