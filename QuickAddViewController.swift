@@ -11,7 +11,7 @@ import UIKit
 
 protocol QuickAddDelegate {
     func onAddProduct(product: Product)
-    func onAddGroup(group: ListItemGroup)
+    func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?)
     func onCloseQuickAddTap()
     //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
 }
@@ -24,7 +24,7 @@ private typealias AddProductOrGroupSegment = (content: AddProductOrGroupContent,
 
 
 // The container for quick add, manages top bar buttons and a navigation controller for content (quick add list, add products, add groups)
-class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
+class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickAddGroupViewControllerDelegate {
     
     @IBOutlet weak var orderAlphabeticallyButton: UIButton!
     @IBOutlet weak var showGroupsButton: UIButton!
@@ -165,7 +165,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
         // the group controller is always shown after product (it's in segment control, which is not visible until product is shown) so show group is always a push
         //        if navController?.viewControllers.last as? AddEditListItemViewController == nil {
         let controller = UIStoryboard.quickAddGroupViewController()
-        //        controller.delegate = productDelegate
+        controller.delegate = self
         navController?.pushViewController(controller, animated: true)
         setAddProductOrGroupSegmentedControlExpanded(true)
         //        }
@@ -262,15 +262,26 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
     
     // MARK: - QuickAddListItemDelegate
     
+    // group was selected in group quick list
     func onAddGroup(group: ListItemGroup) {
-        delegate?.onAddGroup(group)
+        delegate?.onAddGroup(group, onFinish: nil)
     }
     
+    // product was selected in product quick list
     func onAddProduct(product: Product) {
         delegate?.onAddProduct(product)
     }
     
     func onCloseQuickAddTap() {
         delegate?.onCloseQuickAddTap()
+    }
+    
+    // MARK: - QuickAddGroupViewControllerDelegate
+    
+    // group was created in input view
+    func onGroupCreated(group: ListItemGroup) {
+        delegate?.onAddGroup(group) {[weak self] in
+            self?.navController?.popToRootViewControllerAnimated(true)
+        }
     }
 }

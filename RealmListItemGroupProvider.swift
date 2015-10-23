@@ -16,13 +16,18 @@ class RealmListItemGroupProvider: RealmProvider {
         self.saveObjs(dbObjs, update: true, handler: handler)
     }
 
-    func add(groupItem: GroupItem, handler: Bool -> Void) {
-        let dbObj = GroupItemMapper.dbWith(groupItem)
-        self.saveObj(dbObj, update: true, handler: handler)
+    func add(groupItems: [GroupItem], handler: Bool -> Void) {
+        let dbObjs = groupItems.map{GroupItemMapper.dbWith($0)}
+        self.saveObjs(dbObjs, update: true, handler: handler)
     }
     
     func groups(handler: [ListItemGroup] -> Void) {
         let mapper = {ListItemGroupMapper.listItemGroupWith($0)}
         self.load(mapper, handler: handler)
+    }
+    
+    func groupItems(group: ListItemGroup, handler: [GroupItem] -> Void) {
+        let mapper = {GroupItemMapper.groupItemWith($0)}
+        self.load(mapper, filter: "uuid = '\(group.uuid)'", handler: handler)
     }
 }

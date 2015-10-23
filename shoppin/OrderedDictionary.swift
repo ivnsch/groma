@@ -20,6 +20,14 @@ struct OrderedDictionary<KeyType: Hashable, ValueType>: SequenceType {
         return self.array.count
     }
     
+    var values: [ValueType] {
+        var arr: [ValueType] = []
+        for (_, v) in self {
+            arr.append(v)
+        }
+        return arr
+    }
+    
     mutating func insert(value: ValueType, forKey key: KeyType, atIndex index: Int) -> ValueType? {
         var adjustedIndex = index
         
@@ -82,6 +90,14 @@ struct OrderedDictionary<KeyType: Hashable, ValueType>: SequenceType {
         return arr
     }
 
+    func mapValues<T>(f: ValueType -> T) -> [T] {
+        var arr: [T] = []
+        for (_, v) in self {
+            arr.append(f(v))
+        }
+        return arr
+    }
+    
     func mapDictionary<T>(f: ((KeyType, ValueType)) -> ((KeyType, T))) -> OrderedDictionary<KeyType, T> {
         var dict: OrderedDictionary<KeyType, T> = OrderedDictionary<KeyType, T>()
         for i in 0..<self.count {
@@ -90,15 +106,19 @@ struct OrderedDictionary<KeyType: Hashable, ValueType>: SequenceType {
         }
         return dict
     }
-    
+
     func generate() -> AnyGenerator<(KeyType, ValueType)> {
         var nextIndex = 0
         return anyGenerator {
             if (nextIndex < 0) {
                 return nil
             }
-            let key = self.array[nextIndex++]
-            return (key, self.dictionary[key]!)
+            if nextIndex < self.array.count {
+                let key = self.array[nextIndex++]
+                return (key, self.dictionary[key]!)
+            } else {
+                return nil
+            }
         }
     }
     

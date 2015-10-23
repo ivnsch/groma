@@ -664,10 +664,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         setQuickAddOpen(false)
     }
     
-    func onAddGroup(group: ListItemGroup) {
+    func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
         if let list = currentList {
+
+            // TODO save "group list item" don't desintegrate group immediatly
+            
             Providers.listItemsProvider.add(group.items, list: list, successHandler {[weak self] addedListItems in
                 self?.onGroupsAdded()
+                onFinish?()
                 
             })
         } else {

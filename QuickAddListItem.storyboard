@@ -63,7 +63,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5lx-2K-eME">
                                 <rect key="frame" x="570" y="0.0" width="0.0" height="46"/>
                                 <subviews>
-                                    <segmentedControl opaque="NO" alpha="0.0" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="a7q-1A-cbN">
+                                    <segmentedControl opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="a7q-1A-cbN">
                                         <rect key="frame" x="5" y="9" width="0.0" height="29"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <segments>
@@ -83,7 +83,7 @@
                                 <color key="backgroundColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" id="2Ad-ly-05f"/>
-                                    <constraint firstAttribute="trailing" secondItem="a7q-1A-cbN" secondAttribute="trailing" priority="999" constant="5" id="6j0-fi-EGo"/>
+                                    <constraint firstAttribute="trailing" secondItem="a7q-1A-cbN" secondAttribute="trailing" priority="998" constant="5" id="6j0-fi-EGo"/>
                                     <constraint firstItem="a7q-1A-cbN" firstAttribute="leading" secondItem="5lx-2K-eME" secondAttribute="leading" priority="999" constant="5" id="SAc-n4-2JY"/>
                                     <constraint firstItem="a7q-1A-cbN" firstAttribute="centerY" secondItem="5lx-2K-eME" secondAttribute="centerY" id="vr1-1l-jHS"/>
                                 </constraints>
@@ -138,7 +138,7 @@
         <!--Quick Add List Item View Controller-->
         <scene sceneID="Snb-ui-sGj">
             <objects>
-                <viewController id="D7z-ak-UdL" customClass="QuickAddListItemViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="QuickAddListItemViewController" id="D7z-ak-UdL" customClass="QuickAddListItemViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="nqt-Ce-gBZ"/>
                         <viewControllerLayoutGuide type="bottom" id="K2B-pl-wW7"/>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="KGk-i7-Jjw" customClass="QuantityCell" customModule="shoppin" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="452" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="452" height="43"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nxF-qX-KbO">
+                        <rect key="frame" x="14" y="11" width="40" height="21"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mMS-69-W8S">
+                        <rect key="frame" x="310" y="11" width="40" height="21"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6AR-ed-38T">
+                        <rect key="frame" x="364" y="10" width="30" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="22" id="apA-Ow-xP6"/>
+                            <constraint firstAttribute="width" constant="30" id="dWj-3o-rOL"/>
+                        </constraints>
+                        <state key="normal" image="plus"/>
+                        <connections>
+                            <action selector="onPlusTap" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Qfh-tS-hOl"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zky-W9-az2">
+                        <rect key="frame" x="408" y="10" width="30" height="22"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="22" id="a6b-qi-7K3"/>
+                            <constraint firstAttribute="width" constant="30" id="aIZ-Sr-zAv"/>
+                        </constraints>
+                        <state key="normal" image="minus"/>
+                        <connections>
+                            <action selector="onMinusTap" destination="KGk-i7-Jjw" eventType="touchUpInside" id="tKv-sr-0BU"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="6AR-ed-38T" firstAttribute="leading" secondItem="mMS-69-W8S" secondAttribute="trailing" constant="14" id="3UD-yR-Xxc"/>
+                    <constraint firstItem="zky-W9-az2" firstAttribute="centerY" secondItem="nxF-qX-KbO" secondAttribute="centerY" id="8ca-dr-KZ2"/>
+                    <constraint firstAttribute="trailing" secondItem="zky-W9-az2" secondAttribute="trailing" constant="14" id="LTg-pi-Hrj"/>
+                    <constraint firstItem="nxF-qX-KbO" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="QMi-5l-6id"/>
+                    <constraint firstItem="6AR-ed-38T" firstAttribute="centerY" secondItem="nxF-qX-KbO" secondAttribute="centerY" id="cMr-gm-azJ"/>
+                    <constraint firstItem="zky-W9-az2" firstAttribute="leading" secondItem="6AR-ed-38T" secondAttribute="trailing" constant="14" id="kfh-c1-1qX"/>
+                    <constraint firstItem="nxF-qX-KbO" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="14" id="o7N-Wd-PYh"/>
+                    <constraint firstItem="mMS-69-W8S" firstAttribute="centerY" secondItem="nxF-qX-KbO" secondAttribute="centerY" id="zxP-c3-HrE"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="nameLabel" destination="nxF-qX-KbO" id="AFP-C6-RTq"/>
+                <outlet property="quantityLabel" destination="mMS-69-W8S" id="XmF-Pl-I5Q"/>
+            </connections>
+            <point key="canvasLocation" x="433" y="467"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="minus" width="20" height="20"/>
+        <image name="plus" width="20" height="20"/>
+    </resources>
+</document>

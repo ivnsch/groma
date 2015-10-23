@@ -50,9 +50,13 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
         }
     }
 
+    var onViewDidLoad: VoidFunction? // ensure called after outlets set
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadItems()
+        
+        onViewDidLoad?()
     }
     
     func loadItems() {

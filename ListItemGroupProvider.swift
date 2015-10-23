@@ -14,7 +14,11 @@ protocol ListItemGroupProvider {
     
     func groups(handler: ProviderResult<[ListItemGroup]> -> Void)
     
+    func groupItems(group: ListItemGroup, handler: ProviderResult<[GroupItem]> -> Void)
+
     func add(itemInput: GroupItemInput, group: ListItemGroup, order orderMaybe: Int?, possibleNewSectionOrder: Int?, list: List, _ handler: ProviderResult<GroupItem> -> ())
     
+    func add(groupItems: [GroupItem], _ handler: ProviderResult<Any> -> Void)
+
     func update(items: [GroupItem], _ handler: ProviderResult<Any> -> ())
 }

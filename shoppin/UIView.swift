@@ -71,6 +71,40 @@ extension UIView {
             NSLayoutConstraint.matchHeight(view: self, otherView: view)])
     }
     
+    func fillSuperview() {
+        if let superview = superview {
+            fill(superview)
+        } else {
+            print("Warn: call fillSuperview but there's no superview")
+        }
+    }
+
+    func fillSuperviewWidth() {
+        if let superview = superview {
+            fillWidth(superview)
+        } else {
+            print("Warn: call fillSuperviewWidth but there's no superview")
+        }
+    }
+    
+    func fillSuperviewHeight() {
+        if let superview = superview {
+            fillHeight(superview)
+        } else {
+            print("Warn: call fillSuperviewHeight but there's no superview")
+        }
+    }
+    
+    func fillWidth(view: UIView) {
+        alignLeft(view)
+        alignRight(view)
+    }
+    
+    func fillHeight(view: UIView) {
+        alignTop(view)
+        alignBottom(view)
+    }
+    
     func fill(view: UIView) {
         alignTop(view)
         alignLeft(view)
