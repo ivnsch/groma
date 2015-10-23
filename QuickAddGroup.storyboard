@@ -9,6 +9,7 @@
         <mutableArray key="HelveticaNeueLights.ttc">
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -37,6 +38,52 @@
                                     <outlet property="delegate" destination="LaR-3b-dWg" id="k8p-qC-JdM"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8VO-2m-2hW">
+                                <rect key="frame" x="0.0" y="66" width="600" height="534"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E4t-92-mPX">
+                                        <rect key="frame" x="150" y="117" width="300" height="300"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="200" id="R3v-EF-hnW"/>
+                                            <constraint firstAttribute="width" constant="300" id="a6L-9F-HRh"/>
+                                            <constraint firstAttribute="height" constant="300" id="hbk-Io-Xk4"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                        <state key="normal" title="Add items">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="R3v-EF-hnW"/>
+                                            </mask>
+                                        </variation>
+                                        <connections>
+                                            <segue destination="zOe-yY-DsZ" kind="show" identifier="itemsSegue" id="0de-Zg-Y1b"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.93333333330000001" green="0.93333333330000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="E4t-92-mPX" firstAttribute="centerX" secondItem="8VO-2m-2hW" secondAttribute="centerX" id="0dH-89-DbT"/>
+                                    <constraint firstItem="E4t-92-mPX" firstAttribute="centerY" secondItem="8VO-2m-2hW" secondAttribute="centerY" id="8B6-C9-iey"/>
+                                    <constraint firstItem="E4t-92-mPX" firstAttribute="top" secondItem="8VO-2m-2hW" secondAttribute="top" constant="251" id="8wV-fa-BwF"/>
+                                    <constraint firstItem="E4t-92-mPX" firstAttribute="centerX" secondItem="8VO-2m-2hW" secondAttribute="centerX" id="Rn2-HA-xlr"/>
+                                    <constraint firstAttribute="trailing" secondItem="E4t-92-mPX" secondAttribute="trailing" constant="200" id="S0j-NM-0Tw"/>
+                                    <constraint firstAttribute="bottom" secondItem="E4t-92-mPX" secondAttribute="bottom" constant="250" id="WOH-bD-4r3"/>
+                                    <constraint firstItem="E4t-92-mPX" firstAttribute="centerY" secondItem="8VO-2m-2hW" secondAttribute="centerY" id="YKn-NR-ohA"/>
+                                    <constraint firstItem="E4t-92-mPX" firstAttribute="leading" secondItem="8VO-2m-2hW" secondAttribute="leading" constant="200" id="d45-GK-LeP"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="0dH-89-DbT"/>
+                                        <exclude reference="8wV-fa-BwF"/>
+                                        <exclude reference="S0j-NM-0Tw"/>
+                                        <exclude reference="WOH-bD-4r3"/>
+                                        <exclude reference="YKn-NR-ohA"/>
+                                        <exclude reference="d45-GK-LeP"/>
+                                    </mask>
+                                </variation>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x5a-VN-w2G">
                                 <rect key="frame" x="536" y="556" width="30" height="30"/>
                                 <state key="normal" title="+"/>
@@ -54,7 +101,9 @@
                         </subviews>
                         <color key="backgroundColor" red="0.93333333330000001" green="0.93333333330000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="8VO-2m-2hW" secondAttribute="trailing" id="2bm-sm-Glz"/>
                             <constraint firstAttribute="bottom" secondItem="j1J-8C-pFk" secondAttribute="bottom" constant="20" id="4Ka-Jf-fJH"/>
+                            <constraint firstItem="8VO-2m-2hW" firstAttribute="top" secondItem="RTT-bF-XGs" secondAttribute="bottom" constant="8" id="75C-rh-oIv"/>
                             <constraint firstItem="jt7-pV-7tU" firstAttribute="leading" secondItem="WTu-FE-bgq" secondAttribute="leading" id="FhU-D4-L9X"/>
                             <constraint firstItem="CED-hh-IGt" firstAttribute="top" secondItem="jt7-pV-7tU" secondAttribute="bottom" id="HXg-q1-beM"/>
                             <constraint firstItem="j1J-8C-pFk" firstAttribute="centerX" secondItem="WTu-FE-bgq" secondAttribute="centerX" id="IXg-M1-C02"/>
@@ -63,20 +112,23 @@
                             <constraint firstAttribute="trailing" secondItem="RTT-bF-XGs" secondAttribute="trailing" constant="14" id="Xn3-Zh-OWN"/>
                             <constraint firstItem="RTT-bF-XGs" firstAttribute="centerX" secondItem="WTu-FE-bgq" secondAttribute="centerX" id="aA1-FN-GJf"/>
                             <constraint firstAttribute="trailing" secondItem="jt7-pV-7tU" secondAttribute="trailing" id="f0S-ao-6Tg"/>
+                            <constraint firstItem="8VO-2m-2hW" firstAttribute="leading" secondItem="WTu-FE-bgq" secondAttribute="leading" id="f54-d9-AbY"/>
                             <constraint firstItem="j1J-8C-pFk" firstAttribute="centerY" secondItem="WTu-FE-bgq" secondAttribute="centerY" id="hz2-42-b4t"/>
+                            <constraint firstAttribute="bottom" secondItem="8VO-2m-2hW" secondAttribute="bottom" id="jrU-1Z-Jv5"/>
                             <constraint firstItem="RTT-bF-XGs" firstAttribute="top" secondItem="Nnt-7w-KhV" secondAttribute="bottom" constant="8" id="mun-HO-Kck"/>
                             <constraint firstItem="jt7-pV-7tU" firstAttribute="top" secondItem="RTT-bF-XGs" secondAttribute="bottom" constant="8" id="o12-6S-38Q"/>
                             <constraint firstItem="RTT-bF-XGs" firstAttribute="leading" secondItem="WTu-FE-bgq" secondAttribute="leading" constant="14" id="pLk-mn-Ems"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="hz2-42-b4t"/>
                                 <exclude reference="aA1-FN-GJf"/>
+                                <exclude reference="hz2-42-b4t"/>
                             </mask>
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" id="5do-uf-nw9"/>
                     <connections>
+                        <outlet property="emptyItemsView" destination="8VO-2m-2hW" id="vOP-eV-B41"/>
                         <outlet property="groupNameInput" destination="RTT-bF-XGs" id="qM3-86-vH1"/>
                         <outlet property="itemsTableView" destination="jt7-pV-7tU" id="f1A-Og-wxF"/>
                     </connections>
@@ -146,4 +198,7 @@
             <point key="canvasLocation" x="3024" y="496"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="3CT-sT-Fwg"/>
+    </inferredMetricsTieBreakers>
 </document>

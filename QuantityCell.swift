@@ -44,6 +44,8 @@ class QuantityCell: UITableViewCell {
         super.awakeFromNib()
 
         selectionStyle = .None
+        
+        backgroundColor = UIColor.clearColor()
     }
     
     @IBAction func onPlusTap() {

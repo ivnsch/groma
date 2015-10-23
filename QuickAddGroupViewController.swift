@@ -17,10 +17,12 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
 
     @IBOutlet weak var groupNameInput: UITextField!
     @IBOutlet weak var itemsTableView: UITableView!
+    @IBOutlet weak var emptyItemsView: UIView!
 
     private var groupItems: [GroupItem] = [] {
         didSet {
             itemsTableView.reloadData()
+            emptyItemsView.hidden = !groupItems.isEmpty
         }
     }
     
