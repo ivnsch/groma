@@ -11,7 +11,7 @@ import CoreData
 import SwiftValidator
 import SnapKit
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate, AddItemViewDelegate, ListItemGroupsViewControllerDelegate, QuickAddDelegate, LiquidFloatingActionButtonDataSource, LiquidFloatingActionButtonDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate, AddItemViewDelegate, ListItemGroupsViewControllerDelegate, QuickAddDelegate
 //    , UIBarPositioningDelegate
 {
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
@@ -24,6 +24,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private var listItemsTableViewController: ListItemsTableViewController!
     
     @IBOutlet weak var editButton: UIBarButtonItem!
+    
+    @IBOutlet weak var addButton: UIButton!
     
     private var gestureRecognizer: UIGestureRecognizer!
     
@@ -61,9 +63,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         setEditing(false, animated: false, closeAddControllerIfOpen: false)
         updatePrices()
         FrozenEffect.apply(self.pricesView)
-        
-    
-        initAddButton()
     }
     
 
@@ -226,7 +225,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             setQuickAddOpen(false)
         }
         
-//        self.setAddButtonTransparent(!editing, animate: true)
+        self.setAddButtonTransparent(!editing, animate: true)
         
         listItemsTableViewController.setEditing(editing, animated: animated)
 //        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
@@ -640,30 +639,30 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
             self.listItemsTableViewController.tableViewTopOffset = -self.listItemsTableViewController.tableViewInset.top
             
-//            if animateAddButton {
-//                self.setAddButtonTransparent(!open && !self.editing, animate: false) // on edit modus it's always opaque. So transparent only if not edit and closed
-//                self.setAddButtonModus(open)
-//            }
+            if animateAddButton {
+                self.setAddButtonTransparent(!open && !self.editing, animate: false) // on edit modus it's always opaque. So transparent only if not edit and closed
+                self.setAddButtonModus(open)
+            }
         }
     }
     
-//    private func setAddButtonTransparent(transparent: Bool, animate: Bool) {
-//        func f() {
-//            addItemButton.alpha = transparent ? 0.05 : 1
-//        }
-//        if animate {
-//            UIView.animateWithDuration(0.3) {
-//                f()
-//            }
-//        } else {
-//            f()
-//        }
-//    }
-//    
-//    // close: true: close, false: add
-//    private func setAddButtonModus(close: Bool) {
-//        addItemButton.transform = CGAffineTransformMakeRotation((close ? -CGFloat(M_PI_4) : 0))
-//    }
+    private func setAddButtonTransparent(transparent: Bool, animate: Bool) {
+        func f() {
+            addButton.alpha = transparent ? 0.05 : 1
+        }
+        if animate {
+            UIView.animateWithDuration(0.3) {
+                f()
+            }
+        } else {
+            f()
+        }
+    }
+    
+    // close: true: close, false: add
+    private func setAddButtonModus(close: Bool) {
+        addButton.transform = CGAffineTransformMakeRotation((close ? -CGFloat(M_PI_4) : 0))
+    }
 
     private lazy var tableViewOverlay: UIView = {
         let view = UIButton()
@@ -747,102 +746,4 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     @IBAction func onAddButtonTap(sender: UIButton) {
         setQuickAddOpen(!quickAddController.open)
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    class CustomCell: LiquidFloatingCell {
-        var name: String = "sample"
-        
-        init(icon: UIImage, name: String) {
-            self.name = name
-            super.init(icon: icon)
-        }
-        
-        required init(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-        
-        override func setupView(view: UIView) {
-            super.setupView(view)
-            let label = UILabel()
-            label.text = name
-            label.textColor = UIColor.whiteColor()
-
-            label.font = UIFont(name: "Helvetica-Neue", size: 12)
-            addSubview(label)
-            label.snp_makeConstraints { make in
-                make.left.equalTo(self).offset(-80)
-                make.width.equalTo(75)
-                make.top.height.equalTo(self)
-            }
-        }
-    }
-
-    
-    
-    var cells: [LiquidFloatingCell] = []
-    var floatingActionButton: LiquidFloatingActionButton!
-    
-    func initAddButton() {
-        let createButton: (CGRect, LiquidFloatingActionButtonAnimateStyle) -> LiquidFloatingActionButton = { (frame, style) in
-            let floatingActionButton = LiquidFloatingActionButton(frame: frame)
-            floatingActionButton.enableShadow = false
-//            floatingActionButton.open
-            floatingActionButton.animateStyle = style
-            floatingActionButton.dataSource = self
-            floatingActionButton.delegate = self
-            return floatingActionButton
-        }
-        
-        let cellFactory: (String, UIColor) -> LiquidFloatingCell = { (iconName, color) in
-            let cell = LiquidFloatingCell(icon: UIImage(named: iconName)!, color: color)
-            return cell
-        }
-        let customCellFactory: (String) -> LiquidFloatingCell = { (iconName) in
-            let cell = CustomCell(icon: UIImage(named: iconName)!, name: iconName)
-            return cell
-        }
-        cells.append(cellFactory("flt_back", UIColor.blueColor()))
-        cells.append(cellFactory("flt_done", UIColor.greenColor()))
-        
-        let floatingFrame = CGRect(x: self.view.frame.width - 56 - 16, y: self.view.frame.height - 56 - 56, width: 56, height: 56)
-        let bottomRightButton = createButton(floatingFrame, .Left)
-        
-        bottomRightButton.cellRadiusRatio = 0.5
-        
-        
-//        let floatingFrame2 = CGRect(x: 16, y: 16, width: 56, height: 56)
-//        let topLeftButton = createButton(floatingFrame2, .Down)
-        
-        self.view.addSubview(bottomRightButton)
-//        self.view.addSubview(topLeftButton)
-    }
-    
-    
-    func numberOfCells(liquidFloatingActionButton: LiquidFloatingActionButton) -> Int {
-        return cells.count
-    }
-    
-    func cellForIndex(index: Int) -> LiquidFloatingCell {
-        return cells[index]
-    }
-    
-    func liquidFloatingActionButton(liquidFloatingActionButton: LiquidFloatingActionButton, didSelectItemAtIndex index: Int) {
-        print("did Tapped! \(index)")
-        liquidFloatingActionButton.close()
-        
-        
-    }
-    
 }

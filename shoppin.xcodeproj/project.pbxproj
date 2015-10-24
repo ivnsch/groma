@@ -425,15 +425,10 @@
 		EBA8FAD21B8F1D46008CB746 /* UserDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA8FAD01B8F1D46008CB746 /* UserDetailsViewController.swift */; };
 		EBA8FAD31B8F1D46008CB746 /* UserDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBA8FAD11B8F1D46008CB746 /* UserDetailsViewController.xib */; };
 		EBA95CB41BBC98FE00A80850 /* InventoryItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA95CB31BBC98FE00A80850 /* InventoryItemsViewController.swift */; };
-		EBAEB22B1BDBDA0A00FCDA5C /* LiquittableCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB22A1BDBDA0A00FCDA5C /* LiquittableCircle.swift */; };
-		EBAEB22D1BDBDA4A00FCDA5C /* SimpleCircleLiquidEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB22C1BDBDA4A00FCDA5C /* SimpleCircleLiquidEngine.swift */; };
 		EBAEB22F1BDBDB2F00FCDA5C /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB22E1BDBDB2F00FCDA5C /* CGPoint.swift */; };
 		EBAEB2311BDBDBE100FCDA5C /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB2301BDBDBE100FCDA5C /* CGRect.swift */; };
 		EBAEB2321BDBDBE100FCDA5C /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB2301BDBDBE100FCDA5C /* CGRect.swift */; };
 		EBAEB2331BDBDBE100FCDA5C /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB2301BDBDBE100FCDA5C /* CGRect.swift */; };
-		EBAEB2351BDBDC5800FCDA5C /* ArrayEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB2341BDBDC5800FCDA5C /* ArrayEx.swift */; };
-		EBAEB2371BDBDD1200FCDA5C /* LiquidUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB2361BDBDD1200FCDA5C /* LiquidUtil.swift */; };
-		EBAEB2391BDBDF9800FCDA5C /* LiquidFloatingActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB2381BDBDF9800FCDA5C /* LiquidFloatingActionButton.swift */; };
 		EBB2AB371B8B2489007B8C59 /* InventoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB361B8B2489007B8C59 /* InventoryViewController.swift */; };
 		EBB2AB391B8B27BD007B8C59 /* InventoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB381B8B27BD007B8C59 /* InventoriesViewController.swift */; };
 		EBB2AB3B1B8B29CF007B8C59 /* InventoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */; };
@@ -882,13 +877,8 @@
 		EBA8FAD01B8F1D46008CB746 /* UserDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDetailsViewController.swift; sourceTree = "<group>"; };
 		EBA8FAD11B8F1D46008CB746 /* UserDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserDetailsViewController.xib; sourceTree = "<group>"; };
 		EBA95CB31BBC98FE00A80850 /* InventoryItemsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemsViewController.swift; sourceTree = "<group>"; };
-		EBAEB22A1BDBDA0A00FCDA5C /* LiquittableCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiquittableCircle.swift; sourceTree = "<group>"; };
-		EBAEB22C1BDBDA4A00FCDA5C /* SimpleCircleLiquidEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleCircleLiquidEngine.swift; sourceTree = "<group>"; };
 		EBAEB22E1BDBDB2F00FCDA5C /* CGPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
 		EBAEB2301BDBDBE100FCDA5C /* CGRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
-		EBAEB2341BDBDC5800FCDA5C /* ArrayEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayEx.swift; sourceTree = "<group>"; };
-		EBAEB2361BDBDD1200FCDA5C /* LiquidUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiquidUtil.swift; sourceTree = "<group>"; };
-		EBAEB2381BDBDF9800FCDA5C /* LiquidFloatingActionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiquidFloatingActionButton.swift; sourceTree = "<group>"; };
 		EBB2AB361B8B2489007B8C59 /* InventoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryViewController.swift; sourceTree = "<group>"; };
 		EBB2AB381B8B27BD007B8C59 /* InventoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoriesViewController.swift; sourceTree = "<group>"; };
 		EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryCell.swift; sourceTree = "<group>"; };
@@ -1487,7 +1477,6 @@
 				EB4C36561B4C115E00C387C5 /* libraryCandidates */,
 				EBDCA12D1B88D4FF000020BF /* charts */,
 				EBBC23241BB5D5820002F6B1 /* popup */,
-				EBAEB2291BDBD9D300FCDA5C /* floatingButton */,
 				EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */,
 			);
 			name = shoppin_ios;
@@ -1736,18 +1725,6 @@
 				EBA575641BCECC0000A0A825 /* QuantityView.xib */,
 			);
 			name = quantityView;
-			sourceTree = "<group>";
-		};
-		EBAEB2291BDBD9D300FCDA5C /* floatingButton */ = {
-			isa = PBXGroup;
-			children = (
-				EBAEB22A1BDBDA0A00FCDA5C /* LiquittableCircle.swift */,
-				EBAEB22C1BDBDA4A00FCDA5C /* SimpleCircleLiquidEngine.swift */,
-				EBAEB2341BDBDC5800FCDA5C /* ArrayEx.swift */,
-				EBAEB2361BDBDD1200FCDA5C /* LiquidUtil.swift */,
-				EBAEB2381BDBDF9800FCDA5C /* LiquidFloatingActionButton.swift */,
-			);
-			name = floatingButton;
 			sourceTree = "<group>";
 		};
 		EBB2AB351B8B2463007B8C59 /* inventory */ = {
@@ -2483,7 +2460,6 @@
 				EBF162EB1A3CA2470048E37C /* Product.swift in Sources */,
 				EB1B365D1BC4653C003519F2 /* PlanTableViewCell.swift in Sources */,
 				EBF299831B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */,
-				EBAEB2351BDBDC5800FCDA5C /* ArrayEx.swift in Sources */,
 				EB0FD3821B5D017C00829AE5 /* ListsTableViewController.swift in Sources */,
 				EB40A4761B550C0C000E9CAD /* Results.swift in Sources */,
 				EB1B36461BC1D001003519F2 /* NSString+Levenshtein.m in Sources */,
@@ -2582,13 +2558,11 @@
 				EB7E833A1B7B9021009DEEF4 /* RealmCheckoutProvider.swift in Sources */,
 				EB0C2A3A1B58330300AF6226 /* RemoteInventoryItem.swift in Sources */,
 				EB0C2A4E1B5841C600AF6226 /* DBInventoryItem.swift in Sources */,
-				EBAEB22D1BDBDA4A00FCDA5C /* SimpleCircleLiquidEngine.swift in Sources */,
 				EB0C2A4A1B5840F700AF6226 /* RealmInventoryProvider.swift in Sources */,
 				EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */,
 				EB7E83221B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
 				EBA288DB1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */,
 				EB20FC071A599AE20058103B /* InventoryItemTableViewCell.swift in Sources */,
-				EBAEB22B1BDBDA0A00FCDA5C /* LiquittableCircle.swift in Sources */,
 				EBA575621BCECBDF00A0A825 /* QuantityView.swift in Sources */,
 				EBA575551BCD99F400A0A825 /* ListItemGroupsViewController.swift in Sources */,
 				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
@@ -2600,7 +2574,6 @@
 				EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */,
 				EB1B36751BC4832D003519F2 /* PlanItemMapper.swift in Sources */,
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,
-				EBAEB2371BDBDD1200FCDA5C /* LiquidUtil.swift in Sources */,
 				EB1FC51C1BC694CC004E1114 /* OkNextButtonsView.swift in Sources */,
 				EBF299871B791023006BDA1F /* InventorySync.swift in Sources */,
 				EB0C1BA01B3DF2B500F24C85 /* UserTabItemViewController.swift in Sources */,
@@ -2624,7 +2597,6 @@
 				EB451C501B865CFC000DE208 /* AggrByDateTableViewCell.swift in Sources */,
 				EBF162FA1A3CA54F0048E37C /* ListItemProvider.swift in Sources */,
 				EB85F45D1BD54C7300E19E9B /* QuickAddItemCell.swift in Sources */,
-				EBAEB2391BDBDF9800FCDA5C /* LiquidFloatingActionButton.swift in Sources */,
 				EBB9A7381B5EB14300E5487D /* RemoteInventory.swift in Sources */,
 				EB7BFA7B1BDA5BE500F4C74A /* QuantityCell.swift in Sources */,
 				EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */,
