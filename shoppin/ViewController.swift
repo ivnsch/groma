@@ -9,8 +9,9 @@
 import UIKit
 import CoreData
 import SwiftValidator
+import SnapKit
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate, AddItemViewDelegate, UIViewControllerTransitioningDelegate, ListItemGroupsViewControllerDelegate, QuickAddDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate, AddItemViewDelegate, ListItemGroupsViewControllerDelegate, QuickAddDelegate, LiquidFloatingActionButtonDataSource, LiquidFloatingActionButtonDelegate
 //    , UIBarPositioningDelegate
 {
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
@@ -34,9 +35,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     @IBOutlet weak var listNameView: UILabel!
 
-    @IBOutlet weak var addItemView: AddItemView!
-    @IBOutlet weak var addButtonContainerBottomConstraint: NSLayoutConstraint!
-    
     private let transition = BlurBubbleTransition()
 
     var currentList: List? {
@@ -58,12 +56,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         initTableViewController()
 
-        addItemView.delegate = self
-        addItemView.bottomConstraint = addButtonContainerBottomConstraint
+//        addItemView.delegate = self
+//        addItemView.bottomConstraint = addButtonContainerBottomConstraint
         setEditing(false, animated: false, closeAddControllerIfOpen: false)
         updatePrices()
         FrozenEffect.apply(self.pricesView)
+        
+    
+        initAddButton()
     }
+    
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -217,12 +219,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     func setEditing(editing: Bool, animated: Bool, closeAddControllerIfOpen: Bool) {
         super.setEditing(editing, animated: animated)
         
-        addItemView.setVisible(editing, animated: animated)
+//        addItemView.setVisible(editing, animated: animated)
+        // TODO alpha of add button
 
         if closeAddControllerIfOpen && quickAddController.open {
             setQuickAddOpen(false)
         }
-
+        
+//        self.setAddButtonTransparent(!editing, animate: true)
+        
         listItemsTableViewController.setEditing(editing, animated: animated)
 //        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
         gestureRecognizer.enabled = false //don't block tap on delete button
@@ -426,19 +431,21 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     }
                 }
             }
-        } else if segue.identifier == "showAddIemSegue" {
-            let controller = segue.destinationViewController as! AddEditListItemController
-            controller.delegate = self
-            addEditItemController = controller
-            
-            controller.transitioningDelegate = self
-            controller.modalPresentationStyle = .Custom
-            
-            if let updatingListItem = updatingListItem { // edit (tapped on a list item)
-                addEditItemController?.updatingListItem = updatingListItem
-            }
-
-        } else if segue.identifier == "stashSegue" {
+        }
+//        else if segue.identifier == "showAddIemSegue" {
+//            let controller = segue.destinationViewController as! AddEditListItemController
+//            controller.delegate = self
+//            addEditItemController = controller
+//            
+//            controller.transitioningDelegate = self
+//            controller.modalPresentationStyle = .Custom
+//            
+//            if let updatingListItem = updatingListItem { // edit (tapped on a list item)
+//                addEditItemController?.updatingListItem = updatingListItem
+//            }
+//
+//        }
+        else if segue.identifier == "stashSegue" {
             if let stashViewController = segue.destinationViewController as? StashViewController {
                 listItemsTableViewController.clearPendingSwipeItemIfAny {
                     stashViewController.onUIReady = {
@@ -470,64 +477,64 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     /// for now not used TODO remove this, onAddGroupTap, UIViewControllerTransitioningDelegate, etc. if this will not be used
     /////////////////////////////////////
     
-    @IBAction func onAddGroupTap(sender: UIButton) {
-        let controller = UIStoryboard.listItemsGroupsNavigationController()
-        controller.transitioningDelegate = self
-        controller.modalPresentationStyle = .Custom
-        
-        controller.navigationBar.translucent = true
-        controller.navigationBar.shadowImage = UIImage()
-        controller.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
-        controller.navigationBar.backgroundColor = UIColor.clearColor()
-        controller.view.backgroundColor = UIColor.clearColor()
-        
-        for v in controller.view.subviews {
-            v.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
-        }
-        
-        if let groupsController = controller.viewControllers.first as? ListItemGroupsViewController {
-
-            groupsController.list = currentList
-            groupsController.delegate = self
-            
-            presentViewController(controller, animated: true, completion: nil)
-            
-        } else {
-            print("Error: The groups navigation controller doesn't have a controller or it has wrong class")
-        }
-    }
+//    @IBAction func onAddGroupTap(sender: UIButton) {
+//        let controller = UIStoryboard.listItemsGroupsNavigationController()
+//        controller.transitioningDelegate = self
+//        controller.modalPresentationStyle = .Custom
+//        
+//        controller.navigationBar.translucent = true
+//        controller.navigationBar.shadowImage = UIImage()
+//        controller.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
+//        controller.navigationBar.backgroundColor = UIColor.clearColor()
+//        controller.view.backgroundColor = UIColor.clearColor()
+//        
+//        for v in controller.view.subviews {
+//            v.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
+//        }
+//        
+//        if let groupsController = controller.viewControllers.first as? ListItemGroupsViewController {
+//
+//            groupsController.list = currentList
+//            groupsController.delegate = self
+//            
+//            presentViewController(controller, animated: true, completion: nil)
+//            
+//        } else {
+//            print("Error: The groups navigation controller doesn't have a controller or it has wrong class")
+//        }
+//    }
     
-    // MARK: UIViewControllerTransitioningDelegate
-    
-    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        transition.transitionMode = .Present
-        transition.duration = 0.2
-        
-        if let updatingSelectedCell = updatingSelectedCell {
-            transition.startingPoint = view.convertPoint(updatingSelectedCell.center, fromView: listItemsTableViewController.tableView)
-        } else {
-            transition.startingPoint = view.convertPoint(addItemView.addButtonCenter, fromView: addItemView)
-        }
-        FrozenEffect.apply(transition.bubble)
-        return transition
-    }
-    
-    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        transition.transitionMode = .Dismiss
-        transition.duration = 0.2
-        if let updatingSelectedCell = updatingSelectedCell {
-            transition.startingPoint = view.convertPoint(updatingSelectedCell.center, fromView: listItemsTableViewController.tableView)
-            
-            // TODO side effects in this method, not pretty - use completion block or something?
-            self.updatingSelectedCell = nil
-            updatingListItem = nil
-            
-        } else {
-            transition.startingPoint = view.convertPoint(addItemView.addButtonCenter, fromView: addItemView)
-        }
-        FrozenEffect.apply(transition.bubble)
-        return transition
-    }
+//    // MARK: UIViewControllerTransitioningDelegate
+//    
+//    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//        transition.transitionMode = .Present
+//        transition.duration = 0.2
+//        
+//        if let updatingSelectedCell = updatingSelectedCell {
+//            transition.startingPoint = view.convertPoint(updatingSelectedCell.center, fromView: listItemsTableViewController.tableView)
+//        } else {
+//            transition.startingPoint = view.convertPoint(addItemView.addButtonCenter, fromView: addItemView)
+//        }
+//        FrozenEffect.apply(transition.bubble)
+//        return transition
+//    }
+//    
+//    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//        transition.transitionMode = .Dismiss
+//        transition.duration = 0.2
+//        if let updatingSelectedCell = updatingSelectedCell {
+//            transition.startingPoint = view.convertPoint(updatingSelectedCell.center, fromView: listItemsTableViewController.tableView)
+//            
+//            // TODO side effects in this method, not pretty - use completion block or something?
+//            self.updatingSelectedCell = nil
+//            updatingListItem = nil
+//            
+//        } else {
+//            transition.startingPoint = view.convertPoint(addItemView.addButtonCenter, fromView: addItemView)
+//        }
+//        FrozenEffect.apply(transition.bubble)
+//        return transition
+//    }
     
     /////////////////////////////////////
     /////////////////////////////////////
@@ -552,13 +559,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private func setQuickAddOpen(open: Bool) {
         quickAddController.open = open
         animateTopView(quickAddController.view, open: open)
-        if open {
-            addItemView.setButtonText("Close")
-            addItemView.setButtonColor(UIColor(red: 177/255, green: 177/255, blue: 177/255, alpha: 1))
-        } else {
-            addItemView.setButtonText("Add item")
-            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
-        }
+//        if open {
+//            addItemView.setButtonText("Close")
+//            addItemView.setButtonColor(UIColor(red: 177/255, green: 177/255, blue: 177/255, alpha: 1))
+//        } else {
+//            addItemView.setButtonText("Add item")
+//            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
+//        }
+        
+        
+
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -592,13 +602,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private func setAddEditListItemOpen(open: Bool) {
         addEditController.open = open
         animateTopView(addEditController.view, open: open)
-        if open {
-            addItemView.setButtonText("Save")
-            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
-        } else {
-            addItemView.setButtonText("Add item")
-            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
-        }
+//        if open {
+//            addItemView.setButtonText("Save")
+//            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
+//        } else {
+//            addItemView.setButtonText("Add item")
+//            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
+//        }
     }
     
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -606,7 +616,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     
     
-    private func animateTopView(view: UIView, open: Bool) {
+    private func animateTopView(view: UIView, open: Bool, animateAddButton: Bool = true) {
         let navbarHeight = self.navigationController!.navigationBar.frame.height
         let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
         
@@ -629,8 +639,31 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
             self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
             self.listItemsTableViewController.tableViewTopOffset = -self.listItemsTableViewController.tableViewInset.top
+            
+//            if animateAddButton {
+//                self.setAddButtonTransparent(!open && !self.editing, animate: false) // on edit modus it's always opaque. So transparent only if not edit and closed
+//                self.setAddButtonModus(open)
+//            }
         }
     }
+    
+//    private func setAddButtonTransparent(transparent: Bool, animate: Bool) {
+//        func f() {
+//            addItemButton.alpha = transparent ? 0.05 : 1
+//        }
+//        if animate {
+//            UIView.animateWithDuration(0.3) {
+//                f()
+//            }
+//        } else {
+//            f()
+//        }
+//    }
+//    
+//    // close: true: close, false: add
+//    private func setAddButtonModus(close: Bool) {
+//        addItemButton.transform = CGAffineTransformMakeRotation((close ? -CGFloat(M_PI_4) : 0))
+//    }
 
     private lazy var tableViewOverlay: UIView = {
         let view = UIButton()
@@ -710,4 +743,106 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //            }
 //        }
 //    }
+    
+    @IBAction func onAddButtonTap(sender: UIButton) {
+        setQuickAddOpen(!quickAddController.open)
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    class CustomCell: LiquidFloatingCell {
+        var name: String = "sample"
+        
+        init(icon: UIImage, name: String) {
+            self.name = name
+            super.init(icon: icon)
+        }
+        
+        required init(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        override func setupView(view: UIView) {
+            super.setupView(view)
+            let label = UILabel()
+            label.text = name
+            label.textColor = UIColor.whiteColor()
+
+            label.font = UIFont(name: "Helvetica-Neue", size: 12)
+            addSubview(label)
+            label.snp_makeConstraints { make in
+                make.left.equalTo(self).offset(-80)
+                make.width.equalTo(75)
+                make.top.height.equalTo(self)
+            }
+        }
+    }
+
+    
+    
+    var cells: [LiquidFloatingCell] = []
+    var floatingActionButton: LiquidFloatingActionButton!
+    
+    func initAddButton() {
+        let createButton: (CGRect, LiquidFloatingActionButtonAnimateStyle) -> LiquidFloatingActionButton = { (frame, style) in
+            let floatingActionButton = LiquidFloatingActionButton(frame: frame)
+            floatingActionButton.enableShadow = false
+//            floatingActionButton.open
+            floatingActionButton.animateStyle = style
+            floatingActionButton.dataSource = self
+            floatingActionButton.delegate = self
+            return floatingActionButton
+        }
+        
+        let cellFactory: (String, UIColor) -> LiquidFloatingCell = { (iconName, color) in
+            let cell = LiquidFloatingCell(icon: UIImage(named: iconName)!, color: color)
+            return cell
+        }
+        let customCellFactory: (String) -> LiquidFloatingCell = { (iconName) in
+            let cell = CustomCell(icon: UIImage(named: iconName)!, name: iconName)
+            return cell
+        }
+        cells.append(cellFactory("flt_back", UIColor.blueColor()))
+        cells.append(cellFactory("flt_done", UIColor.greenColor()))
+        
+        let floatingFrame = CGRect(x: self.view.frame.width - 56 - 16, y: self.view.frame.height - 56 - 56, width: 56, height: 56)
+        let bottomRightButton = createButton(floatingFrame, .Left)
+        
+        bottomRightButton.cellRadiusRatio = 0.5
+        
+        
+//        let floatingFrame2 = CGRect(x: 16, y: 16, width: 56, height: 56)
+//        let topLeftButton = createButton(floatingFrame2, .Down)
+        
+        self.view.addSubview(bottomRightButton)
+//        self.view.addSubview(topLeftButton)
+    }
+    
+    
+    func numberOfCells(liquidFloatingActionButton: LiquidFloatingActionButton) -> Int {
+        return cells.count
+    }
+    
+    func cellForIndex(index: Int) -> LiquidFloatingCell {
+        return cells[index]
+    }
+    
+    func liquidFloatingActionButton(liquidFloatingActionButton: LiquidFloatingActionButton, didSelectItemAtIndex index: Int) {
+        print("did Tapped! \(index)")
+        liquidFloatingActionButton.close()
+        
+        
+    }
+    
 }

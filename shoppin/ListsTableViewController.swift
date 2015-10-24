@@ -82,7 +82,7 @@ class ListsTableViewController: UITableViewController, EditListViewControllerDel
         if segueName == "showListItemsController" {
             if let indexPath = self.tableView.indexPathForSelectedRow, lists = self.lists, listItemsController = segue.destinationViewController as? ViewController {
                 let list = lists[indexPath.row] // having this outside of the onViewWillAppear appears to have fixed an inexplicable bad access in the currentList assignement line
-                listItemsController.onViewWillAppear = {
+                listItemsController.onViewWillAppear = { // FIXME crash here once when tapped on "edit"
                     listItemsController.currentList = list
                 }
             }

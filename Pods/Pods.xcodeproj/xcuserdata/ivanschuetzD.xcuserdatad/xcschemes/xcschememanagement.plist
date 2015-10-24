@@ -89,6 +89,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SnapKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>SwiftCharts.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -107,17 +112,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>04F51A4BEB3779A0A96DC52EDBF21CFB</key>
+		<key>11A4E8190636891FE052F08BB0024E3E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>166A7BDC55F9D9EB576CFD7530DD5823</key>
+		<key>192686DA5077F517616FAFFAC5C8E8B4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>317A22E4F0A2C4AE34D65A7CC6DEBF2F</key>
+		<key>20F2D9CB9555E4BD4C185FD97BEC6005</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -127,12 +132,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>357C28F6F0A8B4ACD5DF2BEB70F8A200</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>595D0DCB8BC381AC899C363F8A88E8D2</key>
+		<key>4EDA452517A913B556C7860F490D5FD3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -152,12 +152,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>806A5E060ED493520CB8E26D80ED3969</key>
+		<key>7231902FDF6C898C2443A10082D91F26</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>833BDA2E9D6BAFC875BEEB2C7A39594F</key>
+		<key>88069D4818AF97459E08E6198CEF475B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -167,17 +167,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>91D7B10332E931C8EE8BADC4847D4130</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>93D9A98F2C4B0AA549B6EB5773748958</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9B7131B51703A13CB98EA9D1FB54BE56</key>
+		<key>9ED80DA417427BA215175B7A89934077</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9ED80DA417427BA215175B7A89934077</key>
+		<key>B0E71D9AD3EFCDD82A2B3A5F0833D753</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B1C75EAD9BD049F860D1C058D1F87C10</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -197,12 +207,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>BABB341C457885E3D75962428BC6D411</key>
+		<key>DD4FBBA31D04B2125DA54E16F3D5764C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DD4FBBA31D04B2125DA54E16F3D5764C</key>
+		<key>FBD474006A0DD1DA6D5DE2E5A69AD3D7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
