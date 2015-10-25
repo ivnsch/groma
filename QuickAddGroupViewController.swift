@@ -12,6 +12,7 @@ import SwiftValidator
 protocol QuickAddGroupViewControllerDelegate {
     func onGroupCreated(group: ListItemGroup)
     func onGroupItemsOpen()
+    func onGroupItemsSubmit()
 }
 
 class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, QuickAddGroupItemsViewControllerDelegate, QuantityCellDelegate {
@@ -118,6 +119,7 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
     func onSubmit(items: [GroupItem]) {
         groupItems = items
         dismissItemsSelectionController()
+        delegate?.onGroupItemsSubmit()
     }
     
     func onCancel() {

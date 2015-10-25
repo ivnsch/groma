@@ -44,9 +44,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     private let transition = BlurBubbleTransition()
     
-    private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0)
-    private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0)
-    private let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: CGFloat(-M_PI_4))
+    private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0, xRight: 20)
+    private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0, xRight: 20)
+    private let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: CGFloat(-M_PI_4), xRight: 20)
     
     var currentList: List? {
         didSet {
@@ -663,15 +663,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onAddProductOpen() {
-        floatingViews.setActions([toggleButtonActiveAction, FLoatingButtonAttributedAction(action: .Submit)])
+        floatingViews.setActions([toggleButtonActiveAction.copy(xRight: nil), FLoatingButtonAttributedAction(action: .Submit)])
     }
     
     func onAddGroupOpen() {
-        floatingViews.setActions([toggleButtonActiveAction, FLoatingButtonAttributedAction(action: .Submit), FLoatingButtonAttributedAction(action: .Add)])
+        floatingViews.setActions([toggleButtonActiveAction.copy(xRight: nil), FLoatingButtonAttributedAction(action: .Submit), FLoatingButtonAttributedAction(action: .Add)])
     }
     
     func onAddGroupItemsOpen() {
-        floatingViews.setActions([toggleButtonActiveAction, FLoatingButtonAttributedAction(action: .Submit), FLoatingButtonAttributedAction(action: .Back)])
+        floatingViews.setActions([toggleButtonActiveAction.copy(xRight: nil), FLoatingButtonAttributedAction(action: .Submit), FLoatingButtonAttributedAction(action: .Back)])
     }
     
     

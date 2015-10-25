@@ -313,6 +313,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         delegate?.onAddGroupItemsOpen()
     }
     
+    func onGroupItemsSubmit() {
+        delegate?.onAddGroupOpen()
+    }
+    
     // MARK: - Actions dispatch
     
     func handleFloatingButtonAction(action: FLoatingButtonAction) {
