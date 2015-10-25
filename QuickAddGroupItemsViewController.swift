@@ -40,13 +40,8 @@ class QuickAddGroupItemsViewController: UIViewController, QuickAddListItemDelega
         self.groupItemsController = groupItemsController
     }
     
-    @IBAction func onOkTap(sender: UIButton) {
-        
+    func submit() {
         delegate?.onSubmit(itemsDictionary.values)
-    }
-    
-    @IBAction func onCancelTap(sender: UIButton) {
-        delegate?.onCancel()
     }
     
     // MARK: - QuickAddListItemDelegate

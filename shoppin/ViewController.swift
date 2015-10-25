@@ -11,9 +11,12 @@ import CoreData
 import SwiftValidator
 import SnapKit
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate, AddItemViewDelegate, ListItemGroupsViewControllerDelegate, QuickAddDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate, ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate
 //    , UIBarPositioningDelegate
 {
+    
+    // TODO remove fields that are not necessary anymore
+    
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
 
     private var addEditItemController: AddEditListItemController?
@@ -22,13 +25,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private var updatingSelectedCell: UITableViewCell?
     
     private var listItemsTableViewController: ListItemsTableViewController!
+
+    private var currentTopController: UIViewController?
     
     @IBOutlet weak var editButton: UIBarButtonItem!
     
-    @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var floatingViews: FloatingViews!
     
     private var gestureRecognizer: UIGestureRecognizer!
-    
+
     @IBOutlet weak var pricesView: PricesView!
     
     @IBOutlet weak var stashLabel: UILabel!
@@ -58,13 +63,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         initTableViewController()
 
-//        addItemView.delegate = self
-//        addItemView.bottomConstraint = addButtonContainerBottomConstraint
-        setEditing(false, animated: false, closeAddControllerIfOpen: false)
+        setEditing(false, animated: false, tryCloseTopViewController: false)
         updatePrices()
         FrozenEffect.apply(self.pricesView)
+        
     }
     
+    private func initFloatingViews() {
+        floatingViews.setActions([.Toggle])
+        floatingViews.delegate = self
+    }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -72,6 +80,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         onViewWillAppear?()
         
         updateStashView(withDelay: true)
+        
+        initFloatingViews()
     }
     
     // Update stash view after a delay. The delay is for design reason, to let user see what's hapenning otherwise not clear together with view controller transition
@@ -130,8 +140,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func onOkTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, note: String?) {
         submitInputs(name, price: priceText, quantity: quantityText, sectionName: sectionName, note: note) {[weak self] in
-            self?.view.endEditing(true)
-            self?.setQuickAddOpen(false)
+            self?.setEditing(false, animated: true, tryCloseTopViewController: true)
+//            self?.setQuickAddOpen(false)
 //            addEditItemController?.dismissViewControllerAnimated(true, completion: nil)
         }
     }
@@ -145,8 +155,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, note: String?) {
         if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName, note: note) {
             self.updateItem(self.updatingListItem!, listItemInput: listItemInput) {[weak self] in
-                self?.view.endEditing(true)
-                self?.setQuickAddOpen(false)
+            self?.setEditing(false, animated: true, tryCloseTopViewController: true)
+//                self?.setAddEditListItemOpen(false)
 //                self?.addEditItemController?.dismissViewControllerAnimated(true, completion: nil)
             }
         }
@@ -211,22 +221,32 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     @IBAction func onEditTap(sender: AnyObject) {
         let editing = !self.listItemsTableViewController.editing
         
-        self.setEditing(editing, animated: true, closeAddControllerIfOpen: true)
+        self.setEditing(editing, animated: true, tryCloseTopViewController: true)
     }
     
-    // Parameter closeAddControllerIfOpen should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
-    func setEditing(editing: Bool, animated: Bool, closeAddControllerIfOpen: Bool) {
+    // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
+    func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
         super.setEditing(editing, animated: animated)
+        
+        if editing == false {
+            view.endEditing(true)
+        }
         
 //        addItemView.setVisible(editing, animated: animated)
         // TODO alpha of add button
 
-        if closeAddControllerIfOpen && quickAddController.open {
-            setQuickAddOpen(false)
+        if tryCloseTopViewController {
+            if quickAddController.open {
+                setQuickAddOpen(false)
+            } else if addEditController.open {
+                setAddEditListItemOpen(false)
+            }
         }
         
-        self.setAddButtonTransparent(!editing, animate: true)
-        
+        if editing == false {
+            self.floatingViews.setActions([.Toggle]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button)
+        }
+
         listItemsTableViewController.setEditing(editing, animated: animated)
 //        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
         gestureRecognizer.enabled = false //don't block tap on delete button
@@ -458,88 +478,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
-    // MARK: - AddItemViewDelegate
-    
-    func onAddTap() {
-//        performSegueWithIdentifier("showAddIemSegue", sender: self) for now not used TODO remove this, onAddGroupTap, UIViewControllerTransitioningDelegate, etc. if this will not be used
-        
-        // TODO add modus, add another etc. also find generally a better way to associate actions with open view controller?
-        if addEditController.open {
-            addEditController.submit(.Update)
-            
-        } else {
-            setQuickAddOpen(!quickAddController.open)
-        }
-    }
-    
-    /////////////////////////////////////
-    /// for now not used TODO remove this, onAddGroupTap, UIViewControllerTransitioningDelegate, etc. if this will not be used
-    /////////////////////////////////////
-    
-//    @IBAction func onAddGroupTap(sender: UIButton) {
-//        let controller = UIStoryboard.listItemsGroupsNavigationController()
-//        controller.transitioningDelegate = self
-//        controller.modalPresentationStyle = .Custom
-//        
-//        controller.navigationBar.translucent = true
-//        controller.navigationBar.shadowImage = UIImage()
-//        controller.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
-//        controller.navigationBar.backgroundColor = UIColor.clearColor()
-//        controller.view.backgroundColor = UIColor.clearColor()
-//        
-//        for v in controller.view.subviews {
-//            v.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
-//        }
-//        
-//        if let groupsController = controller.viewControllers.first as? ListItemGroupsViewController {
-//
-//            groupsController.list = currentList
-//            groupsController.delegate = self
-//            
-//            presentViewController(controller, animated: true, completion: nil)
-//            
-//        } else {
-//            print("Error: The groups navigation controller doesn't have a controller or it has wrong class")
-//        }
-//    }
-    
-//    // MARK: UIViewControllerTransitioningDelegate
-//    
-//    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-//        transition.transitionMode = .Present
-//        transition.duration = 0.2
-//        
-//        if let updatingSelectedCell = updatingSelectedCell {
-//            transition.startingPoint = view.convertPoint(updatingSelectedCell.center, fromView: listItemsTableViewController.tableView)
-//        } else {
-//            transition.startingPoint = view.convertPoint(addItemView.addButtonCenter, fromView: addItemView)
-//        }
-//        FrozenEffect.apply(transition.bubble)
-//        return transition
-//    }
-//    
-//    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-//        transition.transitionMode = .Dismiss
-//        transition.duration = 0.2
-//        if let updatingSelectedCell = updatingSelectedCell {
-//            transition.startingPoint = view.convertPoint(updatingSelectedCell.center, fromView: listItemsTableViewController.tableView)
-//            
-//            // TODO side effects in this method, not pretty - use completion block or something?
-//            self.updatingSelectedCell = nil
-//            updatingListItem = nil
-//            
-//        } else {
-//            transition.startingPoint = view.convertPoint(addItemView.addButtonCenter, fromView: addItemView)
-//        }
-//        FrozenEffect.apply(transition.bubble)
-//        return transition
-//    }
-    
-    /////////////////////////////////////
-    /////////////////////////////////////
-    /////////////////////////////////////
-    
-    
     
     // MARK: - quick add
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -550,7 +488,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let controller = UIStoryboard.quickAddViewController()
         controller.delegate = self
         let height: CGFloat = 350
-        self.initTopControllerView(controller.view, height: height)
+        self.initTopController(controller, height: height)
 //        controller.originalViewFrame = CGRectMake(controller.view.frame.origin.x, controller.view.frame.origin.y, controller.view.frame.width, height)
         return controller
     }()
@@ -558,6 +496,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private func setQuickAddOpen(open: Bool) {
         quickAddController.open = open
         animateTopView(quickAddController.view, open: open)
+        
+        if open {
+            currentTopController = quickAddController
+        } else {
+            currentTopController = nil
+        }
+        
 //        if open {
 //            addItemView.setButtonText("Close")
 //            addItemView.setButtonColor(UIColor(red: 177/255, green: 177/255, blue: 177/255, alpha: 1))
@@ -572,7 +517,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     /////////////////////////////////////////////////////////////////////////////////////////////
 
-    private func initTopControllerView(view: UIView, height: CGFloat) {
+    private func initTopController(controller: UIViewController, height: CGFloat) {
+        let view = controller.view
         self.view.addSubview(view)
         let navbarHeight = navigationController!.navigationBar.frame.height
         let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
@@ -594,13 +540,24 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private lazy var addEditController: AddEditListItemViewController = {
         let controller = UIStoryboard.addEditListItemViewController()
-        self.initTopControllerView(controller.view, height: 200)
+        self.initTopController(controller, height: 250)
         return controller
     }()
     
     private func setAddEditListItemOpen(open: Bool) {
         addEditController.open = open
+        
         animateTopView(addEditController.view, open: open)
+        
+        if open {
+            currentTopController = quickAddController
+            floatingViews.setActions([.Toggle, .Submit])
+
+        } else {
+            currentTopController = nil
+            floatingViews.setActions([.Toggle]) // this is done with setEditing false
+        }
+        
 //        if open {
 //            addItemView.setButtonText("Save")
 //            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
@@ -613,9 +570,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     /////////////////////////////////////////////////////////////////////////////////////////////
     
     
-    
-    
-    private func animateTopView(view: UIView, open: Bool, animateAddButton: Bool = true) {
+    private func animateTopView(view: UIView, open: Bool) {
         let navbarHeight = self.navigationController!.navigationBar.frame.height
         let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
         
@@ -638,30 +593,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
             self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
             self.listItemsTableViewController.tableViewTopOffset = -self.listItemsTableViewController.tableViewInset.top
-            
-            if animateAddButton {
-                self.setAddButtonTransparent(!open && !self.editing, animate: false) // on edit modus it's always opaque. So transparent only if not edit and closed
-                self.setAddButtonModus(open)
-            }
         }
-    }
-    
-    private func setAddButtonTransparent(transparent: Bool, animate: Bool) {
-        func f() {
-            addButton.alpha = transparent ? 0.05 : 1
-        }
-        if animate {
-            UIView.animateWithDuration(0.3) {
-                f()
-            }
-        } else {
-            f()
-        }
-    }
-    
-    // close: true: close, false: add
-    private func setAddButtonModus(close: Bool) {
-        addButton.transform = CGAffineTransformMakeRotation((close ? -CGFloat(M_PI_4) : 0))
     }
 
     private lazy var tableViewOverlay: UIView = {
@@ -722,6 +654,23 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
+    func onQuickListOpen() {
+        floatingViews.setActions([.Toggle])
+    }
+    
+    func onAddProductOpen() {
+        floatingViews.setActions([.Toggle, .Submit])
+    }
+    
+    func onAddGroupOpen() {
+        floatingViews.setActions([.Toggle, .Submit, .Add])
+    }
+    
+    func onAddGroupItemsOpen() {
+        floatingViews.setActions([.Toggle, .Submit, .Back])
+    }
+    
+    
     // was used to expand the quick add embedded view controller to fill available space when adding group items. Maybe will be used again in the future.
 //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect) {
 //        
@@ -743,7 +692,46 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //        }
 //    }
     
-    @IBAction func onAddButtonTap(sender: UIButton) {
-        setQuickAddOpen(!quickAddController.open)
+    // MARK: - BottonPanelViewDelegate
+    
+    func onSubmitAction(action: FLoatingButtonAction) {
+        handleFloatingViewAction(action)
+    }
+    
+    private func handleFloatingViewAction(action: FLoatingButtonAction) {
+        switch action {
+        case .Toggle:
+            // if any top controller is open, close it
+            if quickAddController.open || addEditController.open {
+                if quickAddController.open {
+                    setQuickAddOpen(false)
+                }
+                if addEditController.open {
+                    setAddEditListItemOpen(false)
+                }
+                floatingViews.setActions([.Toggle]) // reset floating actions
+                
+            } else { // if there's no top controller open, open the quick add controller
+                setQuickAddOpen(true)
+            }
+        
+        case .Add, .Back, .Submit: sendActionToTopController(action)
+        }
+    }
+    
+    private func sendActionToTopController(action: FLoatingButtonAction) {
+        if let quickAddViewController = currentTopController as? QuickAddViewController { // quick add case
+            quickAddViewController.handleFloatingButtonAction(action) // delegate dispatching to quick add controller
+            
+        } else if let addEditListItemViewController = currentTopController as? AddEditListItemViewController { // update case
+            // here we do dispatching in place as it's relatively simple and don't want to contaminate to many view controllers with floating button code
+            // there should be a separate component to do all this but no time now. TODO improve
+            
+            switch action {
+            case .Submit:
+                addEditListItemViewController.submit(AddEditListItemViewControllerAction.Update)
+            case .Back, .Add, .Toggle: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(addEditListItemViewController) instance")
+            }
+        }
     }
 }

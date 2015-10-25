@@ -11,6 +11,7 @@ import SwiftValidator
 
 protocol QuickAddGroupViewControllerDelegate {
     func onGroupCreated(group: ListItemGroup)
+    func onGroupItemsOpen()
 }
 
 class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, QuickAddGroupItemsViewControllerDelegate, QuantityCellDelegate {
@@ -18,7 +19,7 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
     @IBOutlet weak var groupNameInput: UITextField!
     @IBOutlet weak var itemsTableView: UITableView!
     @IBOutlet weak var emptyItemsView: UIView!
-
+ 
     private var groupItems: [GroupItem] = [] {
         didSet {
             itemsTableView.reloadData()
@@ -27,7 +28,8 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     private let cellIdentifier = "cell"
-
+    private let itemsSegueIdentifier = "itemsSegue"
+    
     private var validator: Validator?
 
     var delegate: QuickAddGroupViewControllerDelegate?
@@ -72,18 +74,15 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "itemsSegue" {
+        if segue.identifier == itemsSegueIdentifier {
             let controller = segue.destinationViewController as! QuickAddGroupItemsViewController
             // TODO in edit case (or add case after adding items) pass existing items
             controller.delegate = self
+            delegate?.onGroupItemsOpen()
         }
     }
     
-    @IBAction func onSaveTap(sender: UIButton) {
-        submit()
-    }
-    
-    private func submit() {
+    func submit() {
         guard validator != nil else {return}
         
         if let errors = validator?.validate() {
@@ -123,6 +122,11 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
     
     func onCancel() {
         dismissItemsSelectionController()
+    }
+    
+    // entry point for external switch request, internal segue (tap on empty tableview) is in the storyboard
+    func showAddItemsController() {
+        performSegueWithIdentifier(itemsSegueIdentifier, sender: self)
     }
     
     private func dismissItemsSelectionController() {

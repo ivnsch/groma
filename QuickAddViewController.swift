@@ -14,6 +14,11 @@ protocol QuickAddDelegate {
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?)
     func onCloseQuickAddTap()
     //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
+    
+    func onQuickListOpen()
+    func onAddProductOpen()
+    func onAddGroupOpen()
+    func onAddGroupItemsOpen()
 }
 
 private enum AddProductOrGroupContent {
@@ -131,7 +136,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     // returns: status changed: if it was showing and was subsequently hidden
     private func hideAddProductController() -> Bool {
         if navController?.viewControllers.last as? AddEditListItemViewController != nil {
+            
             navController?.popViewControllerAnimated(true)
+            delegate?.onQuickListOpen()
+            
             setAddProductOrGroupSegmentedControlExpanded(false)
             return true
         }
@@ -147,6 +155,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
                 //        controller.delegate = productDelegate
                 navController?.pushViewController(controller, animated: true)
                 setAddProductOrGroupSegmentedControlExpanded(true)
+                delegate?.onAddProductOpen()
                 return true
         }
         return false
@@ -154,7 +163,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     
     private func hideAddProductOrGroupController() -> Bool {
         if (navController?.viewControllers.last as? AddEditListItemViewController != nil) || (navController?.viewControllers.last as? QuickAddGroupViewController != nil) {
+            
             navController?.popToRootViewControllerAnimated(true)
+            delegate?.onQuickListOpen()
+            
             setAddProductOrGroupSegmentedControlExpanded(false)
             return true
         }
@@ -168,6 +180,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         controller.delegate = self
         navController?.pushViewController(controller, animated: true)
         setAddProductOrGroupSegmentedControlExpanded(true)
+        delegate?.onAddGroupOpen()
         //        }
         return false
     }
@@ -177,10 +190,14 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     private func hideAddGroupController(toRoot: Bool = false) -> Bool {
         if navController?.viewControllers.last as? QuickAddGroupViewController != nil {
             if toRoot {
+                
                 navController?.popToRootViewControllerAnimated(true)
+                delegate?.onQuickListOpen()
+                
                 setAddProductOrGroupSegmentedControlExpanded(false)
             } else {
                 navController?.popViewControllerAnimated(true)
+                delegate?.onAddProductOpen()
             }
             return true
         }
@@ -222,7 +239,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         if let quickAddListItemViewController = navController?.presentedViewController as? QuickAddListItemViewController {
             onHasController(quickAddListItemViewController)
         } else {
+
             navController?.popToRootViewControllerAnimated(true) // assumption: QuickAddListItemViewController is root
+            delegate?.onQuickListOpen()
+            
             if let quickAddListItemViewController = quickAddListItemViewController {
                 onHasController(quickAddListItemViewController)
             } else {
@@ -243,7 +263,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         if let quickAddListItemViewController = navController?.presentedViewController as? QuickAddListItemViewController {
             onHasController(quickAddListItemViewController)
         } else {
+            
             navController?.popToRootViewControllerAnimated(true) // assumption: QuickAddListItemViewController is root
+            delegate?.onQuickListOpen()
+            
             if let quickAddListItemViewController = quickAddListItemViewController {
                 onHasController(quickAddListItemViewController)
             } else {
@@ -282,6 +305,57 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     func onGroupCreated(group: ListItemGroup) {
         delegate?.onAddGroup(group) {[weak self] in
             self?.navController?.popToRootViewControllerAnimated(true)
+            self?.delegate?.onQuickListOpen()
         }
+    }
+    
+    func onGroupItemsOpen() {
+        delegate?.onAddGroupItemsOpen()
+    }
+    
+    // MARK: - Actions dispatch
+    
+    func handleFloatingButtonAction(action: FLoatingButtonAction) {
+        let showingController = navController?.viewControllers.last
+        
+        if let _ = showingController as? QuickAddListItemViewController {
+            print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
+            
+            
+        } else if let addEditListItemViewController = showingController as? AddEditListItemViewController {
+            switch action {
+            case .Submit:
+                addEditListItemViewController.submit(AddEditListItemViewControllerAction.Add)
+            case .Back:
+                navController?.popViewControllerAnimated(true)
+                delegate?.onQuickListOpen() // we are now back in quick list
+            case .Add, .Toggle: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
+            }
+            
+            
+        } else if let quickAddGroupViewController = showingController as? QuickAddGroupViewController {
+            switch action {
+            case .Submit:
+                quickAddGroupViewController.submit()
+            case .Back:
+                navController?.popViewControllerAnimated(true)
+                delegate?.onAddProductOpen() // we are now back in product
+            case .Add:
+                quickAddGroupViewController.showAddItemsController()
+            case .Toggle: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
+            }
+            
+            
+        } else if let quickAddGroupItemsViewController = showingController as? QuickAddGroupItemsViewController {
+            switch action {
+            case .Submit:
+                quickAddGroupItemsViewController.submit()
+            case .Back:
+                navController?.popViewControllerAnimated(true)
+                delegate?.onAddGroupOpen() // we are now back in group
+            case .Add, .Toggle: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
+            }
+        }
+        
     }
 }

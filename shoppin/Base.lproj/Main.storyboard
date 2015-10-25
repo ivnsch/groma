@@ -378,32 +378,22 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <button opaque="NO" alpha="0.050000000000000003" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sGS-rt-Xjg">
-                                <rect key="frame" x="530" y="481" width="50" height="50"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xg1-Fv-W18" customClass="FloatingViews" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="491" width="600" height="60"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="50" id="SUO-YQ-EPg"/>
-                                    <constraint firstAttribute="height" constant="50" id="ezh-Kp-0bU"/>
+                                    <constraint firstAttribute="height" constant="60" id="tdf-pE-TsP"/>
                                 </constraints>
-                                <state key="normal" image="flt_plus"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="25"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="onAddButtonTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="eNY-0D-Uqq"/>
-                                </connections>
-                            </button>
+                            </view>
                         </subviews>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Xg1-Fv-W18" secondAttribute="trailing" id="1gB-6b-v3H"/>
                             <constraint firstItem="wdp-hj-bbA" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="9xN-31-it7"/>
                             <constraint firstItem="wdp-hj-bbA" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="AQR-S1-FCJ"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Xg1-Fv-W18" secondAttribute="bottom" id="Dfi-Dk-ydQ"/>
                             <constraint firstAttribute="trailing" secondItem="ecb-Lc-6L8" secondAttribute="trailing" id="I8w-Yl-hUM"/>
                             <constraint firstAttribute="trailing" secondItem="wdp-hj-bbA" secondAttribute="trailing" id="YsO-Um-Uah"/>
+                            <constraint firstItem="Xg1-Fv-W18" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ecO-tR-bn6"/>
                             <constraint firstItem="ecb-Lc-6L8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="g70-Wg-cDP"/>
-                            <constraint firstAttribute="trailing" secondItem="sGS-rt-Xjg" secondAttribute="trailing" constant="20" id="kUM-CU-zQU"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="sGS-rt-Xjg" secondAttribute="bottom" constant="20" id="pgh-R6-fRv"/>
                             <constraint firstItem="wdp-hj-bbA" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="rQC-nu-lkT"/>
                             <constraint firstItem="ecb-Lc-6L8" firstAttribute="leading" secondItem="wdp-hj-bbA" secondAttribute="trailing" id="sKr-8W-iXo"/>
                         </constraints>
@@ -421,8 +411,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="addButton" destination="sGS-rt-Xjg" id="EUn-eb-jmc"/>
                         <outlet property="editButton" destination="4xW-aG-kPS" id="JWp-Ab-CNE"/>
+                        <outlet property="floatingViews" destination="Xg1-Fv-W18" id="v6A-Gn-q5e"/>
                         <outlet property="pricesView" destination="wdp-hj-bbA" id="64l-Vh-k1d"/>
                         <outlet property="pricesViewWidthConstraint" destination="rQC-nu-lkT" id="Ybw-Nn-c8C"/>
                         <outlet property="stashLabel" destination="5T8-dN-c0D" id="A7H-H3-0HJ"/>
@@ -633,7 +623,7 @@
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V4m-pG-OCr">
                                             <rect key="frame" x="528" y="11" width="20" height="22"/>
-                                            <state key="normal" image="BDDA77ED-295B-430A-A2C6-C9C9232853EC"/>
+                                            <state key="normal" image="EEBC93D3-0839-460B-A0B3-E308642A431F"/>
                                             <connections>
                                                 <action selector="onDecrementTap:" destination="vCq-K7-Ar7" eventType="touchUpInside" id="Iz1-mU-bq5"/>
                                             </connections>
@@ -658,7 +648,7 @@
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yBM-4c-s6A">
                                             <rect key="frame" x="568" y="11" width="20" height="22"/>
-                                            <state key="normal" image="98FE73D8-88BA-438C-A0A8-7F06AF19C827"/>
+                                            <state key="normal" image="35A46B6C-E00F-475D-BC51-8AFD48976A33"/>
                                             <connections>
                                                 <action selector="onIncrementTap:" destination="vCq-K7-Ar7" eventType="touchUpInside" id="5j2-Ux-DoW"/>
                                             </connections>
@@ -1941,7 +1931,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="98FE73D8-88BA-438C-A0A8-7F06AF19C827" width="20" height="20">
+        <image name="35A46B6C-E00F-475D-BC51-8AFD48976A33" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGSUpYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK8QEAcI
 ERYbHCUmJysyNzo9Q0ZVJG51bGzUCQoLDA0ODxBWJGNsYXNzXE5TSW1hZ2VGbGFnc1ZOU1JlcHNXTlND
@@ -2027,7 +2017,7 @@ EdMR2BHnEesR8hH6EgcSDBIOEhASFRIdEiASJRItEjASQhJFEkoAAAAAAAACAQAAAAAAAABNAAAAAAAA
 AAAAAAAAAAASTA
 </mutableData>
         </image>
-        <image name="BDDA77ED-295B-430A-A2C6-C9C9232853EC" width="20" height="20">
+        <image name="EEBC93D3-0839-460B-A0B3-E308642A431F" width="20" height="20">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGSUpYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK8QEAcI
 ERYbHCUmJysyNzo9Q0ZVJG51bGzUCQoLDA0ODxBWJGNsYXNzXE5TSW1hZ2VGbGFnc1ZOU1JlcHNXTlND
@@ -2114,7 +2104,6 @@ AAAAABJIA
 </mutableData>
         </image>
         <image name="cart" width="30" height="30"/>
-        <image name="flt_plus" width="40" height="40"/>
         <image name="history" width="30" height="30"/>
         <image name="inventory" width="30" height="30"/>
         <image name="list" width="30" height="30"/>

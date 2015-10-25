@@ -429,6 +429,8 @@
 		EBAEB2311BDBDBE100FCDA5C /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB2301BDBDBE100FCDA5C /* CGRect.swift */; };
 		EBAEB2321BDBDBE100FCDA5C /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB2301BDBDBE100FCDA5C /* CGRect.swift */; };
 		EBAEB2331BDBDBE100FCDA5C /* CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB2301BDBDBE100FCDA5C /* CGRect.swift */; };
+		EBAEB23C1BDC262400FCDA5C /* FloatingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB23B1BDC262400FCDA5C /* FloatingViews.swift */; };
+		EBAEB23E1BDC263800FCDA5C /* FloatingViews.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBAEB23D1BDC263800FCDA5C /* FloatingViews.xib */; };
 		EBB2AB371B8B2489007B8C59 /* InventoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB361B8B2489007B8C59 /* InventoryViewController.swift */; };
 		EBB2AB391B8B27BD007B8C59 /* InventoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB381B8B27BD007B8C59 /* InventoriesViewController.swift */; };
 		EBB2AB3B1B8B29CF007B8C59 /* InventoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */; };
@@ -879,6 +881,8 @@
 		EBA95CB31BBC98FE00A80850 /* InventoryItemsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemsViewController.swift; sourceTree = "<group>"; };
 		EBAEB22E1BDBDB2F00FCDA5C /* CGPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
 		EBAEB2301BDBDBE100FCDA5C /* CGRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRect.swift; sourceTree = "<group>"; };
+		EBAEB23B1BDC262400FCDA5C /* FloatingViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingViews.swift; sourceTree = "<group>"; };
+		EBAEB23D1BDC263800FCDA5C /* FloatingViews.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FloatingViews.xib; sourceTree = "<group>"; };
 		EBB2AB361B8B2489007B8C59 /* InventoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryViewController.swift; sourceTree = "<group>"; };
 		EBB2AB381B8B27BD007B8C59 /* InventoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoriesViewController.swift; sourceTree = "<group>"; };
 		EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryCell.swift; sourceTree = "<group>"; };
@@ -1727,6 +1731,15 @@
 			name = quantityView;
 			sourceTree = "<group>";
 		};
+		EBAEB23A1BDC25FE00FCDA5C /* floatingViews */ = {
+			isa = PBXGroup;
+			children = (
+				EBAEB23B1BDC262400FCDA5C /* FloatingViews.swift */,
+				EBAEB23D1BDC263800FCDA5C /* FloatingViews.xib */,
+			);
+			name = floatingViews;
+			sourceTree = "<group>";
+		};
 		EBB2AB351B8B2463007B8C59 /* inventory */ = {
 			isa = PBXGroup;
 			children = (
@@ -1884,6 +1897,7 @@
 		EBEEDD631A49A7B500FC3B29 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				EBAEB23A1BDC25FE00FCDA5C /* floatingViews */,
 				EBA575631BCECBE500A0A825 /* quantityView */,
 				EBDA75511BCD95EC00E34AC3 /* okCancelButtons */,
 				EB1FC5181BC69495004E1114 /* okNextButtons */,
@@ -2223,6 +2237,7 @@
 			files = (
 				EB7BFA7C1BDA5BE500F4C74A /* QuantityCell.xib in Resources */,
 				EB4C365F1B4C142600C387C5 /* EditableChoiceModal.storyboard in Resources */,
+				EBAEB23E1BDC263800FCDA5C /* FloatingViews.xib in Resources */,
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
 				EB1B365B1BC4637A003519F2 /* PlanTableViewCell_.xib in Resources */,
 				EB85F47F1BD6EDBC00E19E9B /* AddEditListItem.storyboard in Resources */,
@@ -2487,6 +2502,7 @@
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
 				EBA5756D1BD00A2500A0A825 /* DBGroupItem.swift in Sources */,
 				EB85F4511BD5392200E19E9B /* QuickAddListItemViewController.swift in Sources */,
+				EBAEB23C1BDC262400FCDA5C /* FloatingViews.swift in Sources */,
 				EBCE418D1B5D466B00583551 /* EditListViewController.swift in Sources */,
 				EB40A4721B5508B6000E9CAD /* DBResult.swift in Sources */,
 				EB40A47E1B5512D6000E9CAD /* DBSharedUser.swift in Sources */,

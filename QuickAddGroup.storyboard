@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeueLights.ttc">
@@ -84,36 +83,17 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x5a-VN-w2G">
-                                <rect key="frame" x="536" y="556" width="30" height="30"/>
-                                <state key="normal" title="+"/>
-                                <connections>
-                                    <segue destination="zOe-yY-DsZ" kind="show" identifier="itemsSegue" id="3CT-sT-Fwg"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j1J-8C-pFk">
-                                <rect key="frame" x="284" y="550" width="32" height="30"/>
-                                <state key="normal" title="save"/>
-                                <connections>
-                                    <action selector="onSaveTap:" destination="LaR-3b-dWg" eventType="touchUpInside" id="kUm-9y-Mfo"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.93333333330000001" green="0.93333333330000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="8VO-2m-2hW" secondAttribute="trailing" id="2bm-sm-Glz"/>
-                            <constraint firstAttribute="bottom" secondItem="j1J-8C-pFk" secondAttribute="bottom" constant="20" id="4Ka-Jf-fJH"/>
                             <constraint firstItem="8VO-2m-2hW" firstAttribute="top" secondItem="RTT-bF-XGs" secondAttribute="bottom" constant="8" id="75C-rh-oIv"/>
                             <constraint firstItem="jt7-pV-7tU" firstAttribute="leading" secondItem="WTu-FE-bgq" secondAttribute="leading" id="FhU-D4-L9X"/>
                             <constraint firstItem="CED-hh-IGt" firstAttribute="top" secondItem="jt7-pV-7tU" secondAttribute="bottom" id="HXg-q1-beM"/>
-                            <constraint firstItem="j1J-8C-pFk" firstAttribute="centerX" secondItem="WTu-FE-bgq" secondAttribute="centerX" id="IXg-M1-C02"/>
-                            <constraint firstItem="CED-hh-IGt" firstAttribute="top" secondItem="x5a-VN-w2G" secondAttribute="bottom" constant="14" id="RIp-4s-akd"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="x5a-VN-w2G" secondAttribute="trailing" constant="14" id="SPu-ul-uK0"/>
                             <constraint firstAttribute="trailing" secondItem="RTT-bF-XGs" secondAttribute="trailing" constant="14" id="Xn3-Zh-OWN"/>
                             <constraint firstItem="RTT-bF-XGs" firstAttribute="centerX" secondItem="WTu-FE-bgq" secondAttribute="centerX" id="aA1-FN-GJf"/>
                             <constraint firstAttribute="trailing" secondItem="jt7-pV-7tU" secondAttribute="trailing" id="f0S-ao-6Tg"/>
                             <constraint firstItem="8VO-2m-2hW" firstAttribute="leading" secondItem="WTu-FE-bgq" secondAttribute="leading" id="f54-d9-AbY"/>
-                            <constraint firstItem="j1J-8C-pFk" firstAttribute="centerY" secondItem="WTu-FE-bgq" secondAttribute="centerY" id="hz2-42-b4t"/>
                             <constraint firstAttribute="bottom" secondItem="8VO-2m-2hW" secondAttribute="bottom" id="jrU-1Z-Jv5"/>
                             <constraint firstItem="RTT-bF-XGs" firstAttribute="top" secondItem="Nnt-7w-KhV" secondAttribute="bottom" constant="8" id="mun-HO-Kck"/>
                             <constraint firstItem="jt7-pV-7tU" firstAttribute="top" secondItem="RTT-bF-XGs" secondAttribute="bottom" constant="8" id="o12-6S-38Q"/>
@@ -122,7 +102,6 @@
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="aA1-FN-GJf"/>
-                                <exclude reference="hz2-42-b4t"/>
                             </mask>
                         </variation>
                     </view>
@@ -158,20 +137,6 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Op-9j-tJg">
                                 <rect key="frame" x="0.0" y="36" width="600" height="564"/>
                             </containerView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ep5-ki-Dw0">
-                                <rect key="frame" x="285" y="550" width="30" height="30"/>
-                                <state key="normal" title="Ok"/>
-                                <connections>
-                                    <action selector="onOkTap:" destination="zOe-yY-DsZ" eventType="touchUpInside" id="6sc-2l-8H7"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mks-eE-Ses">
-                                <rect key="frame" x="385" y="550" width="48" height="30"/>
-                                <state key="normal" title="Cancel"/>
-                                <connections>
-                                    <action selector="onCancelTap:" destination="zOe-yY-DsZ" eventType="touchUpInside" id="MAP-Ja-u2K"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.93333333330000001" green="0.93333333330000001" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -179,13 +144,9 @@
                             <constraint firstAttribute="trailing" secondItem="1Op-9j-tJg" secondAttribute="trailing" id="3oO-MG-bkK"/>
                             <constraint firstItem="1Op-9j-tJg" firstAttribute="top" secondItem="U1B-3P-Mnb" secondAttribute="bottom" constant="8" id="7WQ-DY-U2d"/>
                             <constraint firstItem="jf0-Gk-ZBd" firstAttribute="top" secondItem="1Op-9j-tJg" secondAttribute="bottom" id="O5x-C0-OPs"/>
-                            <constraint firstItem="ep5-ki-Dw0" firstAttribute="centerX" secondItem="qjf-2A-FIv" secondAttribute="centerX" id="Pcl-7Z-dgZ"/>
-                            <constraint firstItem="jf0-Gk-ZBd" firstAttribute="top" secondItem="Mks-eE-Ses" secondAttribute="bottom" constant="20" id="bSM-qE-1K2"/>
                             <constraint firstAttribute="trailing" secondItem="U1B-3P-Mnb" secondAttribute="trailing" constant="14" id="gkc-PC-dDF"/>
                             <constraint firstItem="1Op-9j-tJg" firstAttribute="leading" secondItem="qjf-2A-FIv" secondAttribute="leading" id="qfE-Oz-TBR"/>
                             <constraint firstItem="U1B-3P-Mnb" firstAttribute="leading" secondItem="qjf-2A-FIv" secondAttribute="leading" constant="14" id="t45-bb-t1J"/>
-                            <constraint firstItem="jf0-Gk-ZBd" firstAttribute="top" secondItem="ep5-ki-Dw0" secondAttribute="bottom" constant="20" id="wRV-pX-8QM"/>
-                            <constraint firstItem="Mks-eE-Ses" firstAttribute="leading" secondItem="ep5-ki-Dw0" secondAttribute="trailing" constant="70" id="zwI-Vs-HTq"/>
                         </constraints>
                     </view>
                     <connections>
@@ -198,7 +159,4 @@
             <point key="canvasLocation" x="3024" y="496"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="3CT-sT-Fwg"/>
-    </inferredMetricsTieBreakers>
 </document>
