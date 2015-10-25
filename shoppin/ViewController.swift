@@ -43,7 +43,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     @IBOutlet weak var listNameView: UILabel!
 
     private let transition = BlurBubbleTransition()
-
+    
+    private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0)
+    private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0)
+    private let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: CGFloat(-M_PI_4))
+    
     var currentList: List? {
         didSet {
             if let list = self.currentList {
@@ -70,7 +74,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func initFloatingViews() {
-        floatingViews.setActions([.Toggle])
+        floatingViews.setActions([toggleButtonInactiveAction])
         floatingViews.delegate = self
     }
 
@@ -243,9 +247,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             }
         }
         
-        if editing == false {
-            self.floatingViews.setActions([.Toggle]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button)
-        }
+        floatingViews.setActions([editing ? toggleButtonAvailableAction : toggleButtonInactiveAction]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button), and set appropiate alpha
 
         listItemsTableViewController.setEditing(editing, animated: animated)
 //        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
@@ -551,11 +553,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         if open {
             currentTopController = quickAddController
-            floatingViews.setActions([.Toggle, .Submit])
+            floatingViews.setActions([
+                toggleButtonActiveAction,
+                FLoatingButtonAttributedAction(action: .Submit)])
 
         } else {
             currentTopController = nil
-            floatingViews.setActions([.Toggle]) // this is done with setEditing false
+            floatingViews.setActions([toggleButtonInactiveAction]) // this is done with setEditing false
         }
         
 //        if open {
@@ -655,19 +659,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onQuickListOpen() {
-        floatingViews.setActions([.Toggle])
+        floatingViews.setActions([toggleButtonActiveAction])
     }
     
     func onAddProductOpen() {
-        floatingViews.setActions([.Toggle, .Submit])
+        floatingViews.setActions([toggleButtonActiveAction, FLoatingButtonAttributedAction(action: .Submit)])
     }
     
     func onAddGroupOpen() {
-        floatingViews.setActions([.Toggle, .Submit, .Add])
+        floatingViews.setActions([toggleButtonActiveAction, FLoatingButtonAttributedAction(action: .Submit), FLoatingButtonAttributedAction(action: .Add)])
     }
     
     func onAddGroupItemsOpen() {
-        floatingViews.setActions([.Toggle, .Submit, .Back])
+        floatingViews.setActions([toggleButtonActiveAction, FLoatingButtonAttributedAction(action: .Submit), FLoatingButtonAttributedAction(action: .Back)])
     }
     
     
@@ -709,10 +713,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 if addEditController.open {
                     setAddEditListItemOpen(false)
                 }
-                floatingViews.setActions([.Toggle]) // reset floating actions
+                floatingViews.setActions([toggleButtonInactiveAction])  // reset floating actions
                 
             } else { // if there's no top controller open, open the quick add controller
                 setQuickAddOpen(true)
+                floatingViews.setActions([toggleButtonActiveAction])
             }
         
         case .Add, .Back, .Submit: sendActionToTopController(action)

@@ -8,20 +8,35 @@
 
 import UIKit
 
-enum FLoatingButtonAction: Int {
-    case Add = 1, Toggle = 2, Back = 3, Submit = 4
+enum FLoatingButtonAction {
+    case Add, Toggle, Back, Submit
 }
+
+struct FLoatingButtonAttributedAction {
+    let action: FLoatingButtonAction
+    let alpha: CGFloat
+    let rotation: CGFloat
+    
+    init(action: FLoatingButtonAction, alpha: CGFloat = 1, rotation: CGFloat = 0) {
+        self.action = action
+        self.alpha = alpha
+        self.rotation = rotation
+    }
+}
+
 
 class FloatingViewModel {
     let action: FLoatingButtonAction
     let imgName: String
     let alpha: CGFloat
+    let rotation: CGFloat
     let onTap: VoidFunction
-    
-    init(action: FLoatingButtonAction, imgName: String, alpha: CGFloat, onTap: VoidFunction) {
+
+    init(action: FLoatingButtonAction, imgName: String, alpha: CGFloat, rotation: CGFloat, onTap: VoidFunction) {
         self.action = action
         self.imgName = imgName
         self.alpha = alpha
+        self.rotation = rotation
         self.onTap = onTap
     }
 }
@@ -69,18 +84,23 @@ class FloatingViews: UIView {
     var delegate: BottonPanelViewDelegate?
     
     func setActions(actions: [FLoatingButtonAction]) {
+        let attributedActions = actions.map{FLoatingButtonAttributedAction(action: $0)}
+        setActions(attributedActions)
+    }
+
+    func setActions(actions: [FLoatingButtonAttributedAction]) {
         
-        func toModel(action: FLoatingButtonAction) -> FloatingViewModel {
+        func toModel(attributedAction: FLoatingButtonAttributedAction) -> FloatingViewModel {
             let imgName: String = {
-                switch action {
+                switch attributedAction.action {
                 case .Add: return "flt_plus"
-                case .Toggle: return "flt_close"
+                case .Toggle: return "flt_plus"
                 case .Back: return "flt_back"
                 case .Submit: return "flt_done"
                 }
             }()
-            return FloatingViewModel(action: action, imgName: imgName, alpha: 1, onTap: {[weak self] in
-                self?.submitAction(action)
+            return FloatingViewModel(action: attributedAction.action, imgName: imgName, alpha: attributedAction.alpha, rotation: attributedAction.rotation, onTap: {[weak self] in
+                self?.submitAction(attributedAction.action)
             })
         }
         
@@ -116,7 +136,8 @@ class FloatingViews: UIView {
             button.addTarget(self, action: "onButtonTap:", forControlEvents: .TouchUpInside)
             button.tag = i
             button.alpha = model.alpha
-
+            button.transform = CGAffineTransformMakeRotation(model.rotation)
+            
             let centerXFromRight = (halfButtonWidth + (CGFloat(i) * distanceX))
             
             addSubview(button)
@@ -148,8 +169,7 @@ class FloatingViews: UIView {
         
         let vConstraits = namedViews.flatMap {NSLayoutConstraint.constraintsWithVisualFormat("V:|-(\(top))-[\($0.0)]", options: NSLayoutFormatOptions(), metrics: nil, views: viewsDict)}
         
-        self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(hConstraintStr, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDict)
-            + vConstraits)
+        addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(hConstraintStr, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDict) + vConstraits)
     }
     
 
