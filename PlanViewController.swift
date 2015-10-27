@@ -206,16 +206,16 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String) {
-        addPlanItem(name, price: priceText, quantity: quantityText)
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String) {
+        addPlanItem(name, price: priceText, quantity: quantityText, category: category)
     }
 
-    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String) {
-        addPlanItem(name, price: priceText, quantity: quantityText)
+    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, category: String) {
+        addPlanItem(name, price: priceText, quantity: quantityText, category: category)
     }
     
-    func onUpdateTap(name: String, price: String, quantity: String) {
-        updatePlanItem(name, price: price, quantity: quantity)
+    func onUpdateTap(name: String, price: String, quantity: String, category: String) {
+        updatePlanItem(name, price: price, quantity: quantity, category: category)
     }
     
     func onCancelTap() {
@@ -229,8 +229,8 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
         })
     }
     
-    private func updatePlanItem(name: String, price priceText: String, quantity quantityText: String) {
-        if let planItemInput = toPlanItemInput(name, priceText: priceText, quantityText: quantityText), inventory = currentInventory {
+    private func updatePlanItem(name: String, price priceText: String, quantity quantityText: String, category: String) {
+        if let planItemInput = toPlanItemInput(name, priceText: priceText, quantityText: quantityText, category: category), inventory = currentInventory {
             Providers.planProvider.updatePlanItem(planItemInput, inventory: inventory, successHandler{[weak self] planItem in
                 self?.addEditItemPopup?.dismiss(true)
                 self?.updateItemUI(planItem)
@@ -240,8 +240,8 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
 
-    private func addPlanItem(name: String, price priceText: String, quantity quantityText: String) {
-        if let planItemInput = toPlanItemInput(name, priceText: priceText, quantityText: quantityText), inventory = currentInventory {
+    private func addPlanItem(name: String, price priceText: String, quantity quantityText: String, category: String) {
+        if let planItemInput = toPlanItemInput(name, priceText: priceText, quantityText: quantityText, category: category), inventory = currentInventory {
             Providers.planProvider.addPlanItem(planItemInput, inventory: inventory, successHandler{[weak self] planItem in
                 self?.addEditItemPopup?.dismiss(true)
                 self?.addItemUI(planItem)
@@ -261,9 +261,9 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.reloadData()
     }
     
-    private func toPlanItemInput(name: String, priceText: String, quantityText: String) -> PlanItemInput? {
+    private func toPlanItemInput(name: String, priceText: String, quantityText: String, category: String) -> PlanItemInput? {
         if let price = priceText.floatValue, quantity = Int(quantityText) {
-            return PlanItemInput(name: name, quantity: quantity, price: price)
+            return PlanItemInput(name: name, quantity: quantity, price: price, category: category)
         } else {
             print("TODO validation in toPlanItemInput")
             return nil

@@ -124,34 +124,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         listProvider.saveList(list1) {[weak self] result in
             
             guard let weakSelf = self else {return}
-            
-            let product1 = Product(uuid: "10", name: "Birnen", price: 3)
-            let product2 = Product(uuid: "11", name: "Tomaten", price: 2)
-            let product3 = Product(uuid: "12", name: "Schwarzer Tee", price: 2)
-            let product4 = Product(uuid: "13", name: "Haenchen", price: 5)
-            let product5 = Product(uuid: "14", name: "Spaguetti", price: 0.8)
-            let product6 = Product(uuid: "15", name: "Sahne", price: 1)
-            let product7 = Product(uuid: "16", name: "Pfefferminz Tee", price: 1)
 
-            let product8 = Product(uuid: "17", name: "Kartoffeln", price: 1.2)
-            let product9 = Product(uuid: "18", name: "Thunfisch", price: 0.9)
-            let product10 = Product(uuid: "19", name: "Zitronen", price: 1.3)
-            let product11 = Product(uuid: "20", name: "Kidney bohnen", price: 1)
-            let product12 = Product(uuid: "21", name: "Klopapier", price: 3.4)
-            let product13 = Product(uuid: "22", name: "Putzmittel boden", price: 5.1)
-            let product14 = Product(uuid: "23", name: "Bier", price: 0.8)
-            let product15 = Product(uuid: "24", name: "Cola (1L)", price: 1.2)
-            let product16 = Product(uuid: "25", name: "Salz", price: 0.7)
-            let product17 = Product(uuid: "26", name: "Zucker", price: 0.9)
-            let product18 = Product(uuid: "27", name: "Seife", price: 0.8)
-            let product19 = Product(uuid: "28", name: "Toastbrot", price: 0.7)
-            
             let section1 = Section(uuid: "100", name: "Obst", order: 0)
             let section2 = Section(uuid: "101", name: "Gemuese", order: 1)
             let section3 = Section(uuid: "102", name: "Milchprodukte", order: 2)
             let section4 = Section(uuid: "103", name: "Fleisch", order: 3)
             let section5 = Section(uuid: "104", name: "Pasta", order: 4)
             let section6 = Section(uuid: "105", name: "Getraenke", order: 5)
+            let cleaning = Section(uuid: "106", name: "Putzmittel", order: 6)
+            let hygienic = Section(uuid: "107", name: "Hygiene", order: 7)
+            let spices = Section(uuid: "108", name: "Gewürze", order: 8)
+            let bread = Section(uuid: "109", name: "Brot", order: 8)
+
+            let fruitsCat = "Obst"
+            let vegetablesCat = "Gemuese"
+            let milkCat = "Milchprodukte"
+            let meatCat = "Fleisch"
+            let pastaCat = "Pasta"
+            let drinksCat = "Getraenke"
+            let cleaningCat = "Putzmittel"
+            let hygienicCat = "Hygiene"
+            let spicesCat = "Gewürze"
+            let breadCat = "Brot"
+            
+            let product1 = Product(uuid: "10", name: "Birnen", price: 3, category: fruitsCat)
+            let product2 = Product(uuid: "11", name: "Tomaten", price: 2, category: vegetablesCat)
+            let product3 = Product(uuid: "12", name: "Schwarzer Tee", price: 2, category: drinksCat)
+            let product4 = Product(uuid: "13", name: "Haenchen", price: 5, category: meatCat)
+            let product5 = Product(uuid: "14", name: "Spaguetti", price: 0.8, category: pastaCat)
+            let product6 = Product(uuid: "15", name: "Sahne", price: 1, category: milkCat)
+            let product7 = Product(uuid: "16", name: "Pfefferminz Tee", price: 1, category: drinksCat)
+
+            let product8 = Product(uuid: "17", name: "Kartoffeln", price: 1.2, category: vegetablesCat)
+            let product9 = Product(uuid: "18", name: "Thunfisch", price: 0.9, category: meatCat)
+            let product10 = Product(uuid: "19", name: "Zitronen", price: 1.3, category: fruitsCat)
+            let product11 = Product(uuid: "20", name: "Kidney bohnen", price: 1, category: vegetablesCat)
+            let product12 = Product(uuid: "21", name: "Klopapier", price: 3.4, category: cleaningCat)
+            let product13 = Product(uuid: "22", name: "Putzmittel boden", price: 5.1, category: hygienicCat)
+            let product14 = Product(uuid: "23", name: "Bier", price: 0.8, category: drinksCat)
+            let product15 = Product(uuid: "24", name: "Cola (1L)", price: 1.2, category: drinksCat)
+            let product16 = Product(uuid: "25", name: "Salz", price: 0.7, category: spicesCat)
+            let product17 = Product(uuid: "26", name: "Zucker", price: 0.9, category: spicesCat)
+            let product18 = Product(uuid: "27", name: "Seife", price: 0.8, category: hygienicCat)
+            let product19 = Product(uuid: "28", name: "Toastbrot", price: 0.7, category: breadCat)
+
             
             let listItems = [
                 ListItem(uuid: "200", status: .Todo, quantity: 5, product: product1, section: section1, list: list1, order: 0),
@@ -162,7 +178,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 ListItem(uuid: "206", status: .Todo, quantity: 3, product: product6, section: section3, list: list1, order: 0),
                 ListItem(uuid: "207", status: .Todo, quantity: 4, product: product7, section: section6, list: list1, order: 1)
             ]
-            
             
             weakSelf.listProvider.saveListItems(listItems, incrementQuantity: false) {saved in
             

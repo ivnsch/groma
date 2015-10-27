@@ -37,28 +37,19 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     // TODO it should not be necessary to pass list here
     func add(itemInput: GroupItemInput, group: ListItemGroup, order orderMaybe: Int? = nil, possibleNewSectionOrder: Int?, list: List, _ handler: ProviderResult<GroupItem> -> ()) {
         
-        Providers.listItemsProvider.mergeOrCreateProduct(itemInput.name, productPrice: itemInput.price, list: list) {[weak self] result in
+        Providers.listItemsProvider.mergeOrCreateProduct(itemInput.name, productPrice: itemInput.price, category: itemInput.category) {[weak self] result in
             
             if let product = result.sucessResult {
 
-                Providers.listItemsProvider.mergeOrCreateSection(itemInput.section, possibleNewOrder: possibleNewSectionOrder, list: list) {result in
-                    
-                    if let section = result.sucessResult {
-                        
-                        let groupItem = GroupItem(uuid: NSUUID().UUIDString, quantity: itemInput.quantity, product: product, section: section)
-                        
-                        self?.add(groupItem, {result in
-                            if result.success {
-                                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: groupItem))
-                            } else {
-                                handler(ProviderResult(status: result.status))
-                            }
-                        })
+                let groupItem = GroupItem(uuid: NSUUID().UUIDString, quantity: itemInput.quantity, product: product)
+                
+                self?.add(groupItem, {result in
+                    if result.success {
+                        handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: groupItem))
                     } else {
-                        print("Error fetching section: \(result.status)")
-                        handler(ProviderResult(status: .DatabaseUnknown))
+                        handler(ProviderResult(status: result.status))
                     }
-                }
+                })
                 
             } else {
                 print("Error fetching product: \(result.status)")

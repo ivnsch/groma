@@ -7,13 +7,16 @@
 //
 
 import UIKit
-
+import SwiftValidator
 
 protocol QuickAddDelegate {
     func onAddProduct(product: Product)
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?)
     func onCloseQuickAddTap()
     //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
+    
+    func onValidationErrors(errors: [UITextField: ValidationError])
+    func planItem(productName: String, handler: PlanItem? -> ())
     
     func onQuickListOpen()
     func onAddProductOpen()
@@ -46,6 +49,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     @IBOutlet weak var addProductOrGroupSegmentedControlContainerWidthConstraint: NSLayoutConstraint!
     
     var delegate: QuickAddDelegate?
+    
+    var productDelegate: AddEditListItemControllerDelegate?
     
     var itemType: QuickAddItemType = .Product // for now product/group mutually exclusive (no mixed tableview)
     
@@ -152,7 +157,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         if !hideAddGroupController() // if group controller is showing, show product means only pop
             && navController?.viewControllers.last as? AddEditListItemViewController == nil { // don't show if already showing
                 let controller = UIStoryboard.addEditListItemViewController()
-                //        controller.delegate = productDelegate
+                controller.delegate = productDelegate
                 navController?.pushViewController(controller, animated: true)
                 setAddProductOrGroupSegmentedControlExpanded(true)
                 delegate?.onAddProductOpen()
@@ -316,6 +321,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     func onGroupItemsSubmit() {
         delegate?.onAddGroupOpen()
     }
+    
+    
+    
     
     // MARK: - Actions dispatch
     

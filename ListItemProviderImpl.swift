@@ -145,16 +145,31 @@ class ListItemProviderImpl: ListItemProvider {
             
             if let currentListItems = result.sucessResult {
                 
-                var currentListSectionCountDict = currentListItems.sectionCountDict()
+                // TODO! check if count is really being incremented (maybe tuple immutable?)
+                var currentSectionNameToSectionAndContainedListItemsCount = currentListItems.groupBySection().map{($0.name, (section: $0, count: $1.count))}
                 
                 var listItems: [ListItem] = []
+                var sectionCount = currentSectionNameToSectionAndContainedListItemsCount.count // neeeded to set order field in possible new sections
+                
                 for groupItem in groupItems {
                     // append new listitem at the end of section
-                    let count = currentListSectionCountDict[groupItem.section] ?? 0
+                    let count = currentSectionNameToSectionAndContainedListItemsCount[groupItem.product.category]?.count ?? 0
                     let order = count // order is the same as index: if no elements -> order 0, if 1 elements -> order 0, 1, etc.
-                    currentListSectionCountDict[groupItem.section] = count + 1 // we inserted an item, increment (or insert, if section doesn't exist yet) count
+                    currentSectionNameToSectionAndContainedListItemsCount[groupItem.product.category]?.count = count + 1 // we inserted an item, increment (or insert, if section doesn't exist yet) count
                     
-                    let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: groupItem.quantity, product: groupItem.product, section: groupItem.section, list: list, order: order)
+                    // create a section if there's is no section in the list yet with same name as category
+                    let section: Section = {
+                        currentSectionNameToSectionAndContainedListItemsCount[groupItem.product.category]?.section ?? {
+
+                            // we are appending a new section to the existing sections in the list, increment section count so next new section has correct order
+                            sectionCount++
+                            
+                            // section order -> append at the end -> section count (currentSectionNameToSectionAndContainedListItemsCount.count is section count)
+                            return Section(uuid: NSUUID().UUIDString, name: groupItem.product.category, order: currentSectionNameToSectionAndContainedListItemsCount.count)
+                        }()
+                    }()
+                    
+                    let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: groupItem.quantity, product: groupItem.product, section: section, list: list, order: order)
                     listItems.append(listItem)
                 }
                 
@@ -163,7 +178,6 @@ class ListItemProviderImpl: ListItemProvider {
                 }
                 
             } else {
-                
                 print("Error: Can't add groups: Could not get listitems.")
                 handler(ProviderResult(status: .DatabaseUnknown))
             }
@@ -225,23 +239,23 @@ class ListItemProviderImpl: ListItemProvider {
     
     func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: Int?, _ handler: ProviderResult<ListItem> -> Void) {
 
-        mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, list: list) {[weak self] result in
-            
-            if let product = result.sucessResult {
+        mergeOrCreateSection(listItemInput.section, possibleNewOrder: possibleNewSectionOrder, list: list) {[weak self] result in
+
+            if let section = result.sucessResult {
                 
-                self?.mergeOrCreateSection(listItemInput.section, possibleNewOrder: possibleNewSectionOrder, list: list) {result in
+                self?.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.category) {result in
+            
+                    if let product = result.sucessResult {
                     
-                    if let section = result.sucessResult {
-                        
                         self?.addListItem(product, section: section, quantity: listItemInput.quantity, list: list, note: listItemInput.note, order: orderMaybe, handler)
 
                     } else {
-                        print("Error fetching section: \(result.status)")
+                        print("Error fetching product: \(result.status)")
                         handler(ProviderResult(status: .DatabaseUnknown))
                     }
                 }
             } else {
-                print("Error fetching product: \(result.status)")
+                print("Error fetching section: \(result.status)")
                 handler(ProviderResult(status: .DatabaseUnknown))
             }
         }
@@ -311,8 +325,9 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
+    // TODO! use list
     func loadSection(name: String, list: List, handler: ProviderResult<Section> -> ()) {
-        dbProvider.loadSectionWithName(name) {dbSectionMaybe in
+        dbProvider.loadSection(name) {dbSectionMaybe in
             if let dbSection = dbSectionMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: dbSection))
             } else {
@@ -334,7 +349,7 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func loadProduct(name: String, list: List, handler: ProviderResult<Product> -> ()) {
+    func loadProduct(name: String, handler: ProviderResult<Product> -> ()) {
         dbProvider.loadProductWithName(name) {dbProductMaybe in
             if let dbProduct = dbProductMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: dbProduct))
@@ -432,8 +447,8 @@ class ListItemProviderImpl: ListItemProvider {
         print("FIXME or remove - update listitem - bad implementation")
     }
     
-    func sections(handler: ProviderResult<[Section]> -> ()) {
-        self.dbProvider.loadSections {dbSections in
+    func sections(names: [String], handler: ProviderResult<[Section]> -> ()) {
+        self.dbProvider.loadSections(names) {dbSections in
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSections))
         }
     }
@@ -575,10 +590,10 @@ class ListItemProviderImpl: ListItemProvider {
 //    }
     
     
-    func mergeOrCreateProduct(productName: String, productPrice: Float, list: List, _ handler: ProviderResult<Product> -> Void) {
+    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, _ handler: ProviderResult<Product> -> Void) {
         
         // get product and section uuid if they're already in the local db (remember that we assign uuid in the client so this logic has to be in the client)
-        loadProduct(productName, list: list) {result in
+        loadProduct(productName) {result in
             
             // load product and update or create one
             // if we find a product with the name we update it - this is for the case the user changes the price for an existing product while adding an item
@@ -596,7 +611,7 @@ class ListItemProviderImpl: ListItemProvider {
             }()
             
             if let productUuid = productUuidMaybe {
-                let product = Product(uuid: productUuid, name: productName, price: productPrice)
+                let product = Product(uuid: productUuid, name: productName, price: productPrice, category: category)
                 handler(ProviderResult(status: .Success, sucessResult: product))
             } else {
                 handler(ProviderResult(status: .DatabaseUnknown))

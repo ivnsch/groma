@@ -54,7 +54,7 @@ class QuickAddGroupItemsViewController: UIViewController, QuickAddListItemDelega
             itemsDictionary[product.uuid] = item.copy(quantity: item.quantity + quantity)
         } else {
             // TODO section
-            itemsDictionary[product.uuid] = GroupItem(uuid: NSUUID().UUIDString, quantity: quantity, product: product, section: Section(uuid: "TODO", name: "TODO", order: 1))
+            itemsDictionary[product.uuid] = GroupItem(uuid: NSUUID().UUIDString, quantity: quantity, product: product)
         }
         
         itemsLabel.text = buildItemsLabelString() // TODO incr/decr quantity in QuickAddListItemViewController. Hold numbers there (also show in light blue in tableview) (and pass current quantity to delegate?)

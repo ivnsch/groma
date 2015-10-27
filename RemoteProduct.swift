@@ -12,11 +12,13 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     let uuid: String
     let name: String
     let price: Float
+    var category: String
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
         self.price = representation.valueForKeyPath("price") as! Float
+        self.category = representation.valueForKeyPath("category") as! String
     }
     
     @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteProduct] {
@@ -31,6 +33,6 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), price: \(self.price)}"
+        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), price: \(self.price), category: \(self.category)}"
     }
 }

@@ -10,8 +10,8 @@ import Foundation
 
 extension Dictionary {
     
-    func map<T>(f: ((Key, Value)) -> ((Key, T))) -> Dictionary<Key, T> {
-        var dict: Dictionary<Key, T> = Dictionary<Key, T>()
+    func map<T, U>(f: ((Key, Value)) -> ((T, U))) -> Dictionary<T, U> {
+        var dict: Dictionary<T, U> = Dictionary<T, U>()
         for (k, v) in self {
             let mapped = f(k, v)
             dict[mapped.0] = mapped.1

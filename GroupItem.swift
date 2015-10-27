@@ -12,7 +12,6 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let uuid: String
     let quantity: Int
     let product: Product
-    let section: Section
     
     //////////////////////////////////////////////
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
@@ -24,11 +23,10 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
     //////////////////////////////////////////////
     
     
-    init(uuid: String, quantity: Int, product: Product, section: Section, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, quantity: Int, product: Product, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.quantity = quantity
         self.product = product
-        self.section = section
         self.lastUpdate = lastUpdate
         self.lastServerUpdate = lastServerUpdate
         self.removed = removed
@@ -39,7 +37,7 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), quantity: \(self.quantity), product: \(self.product), section: \(self.section), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
+        return "{\(self.dynamicType) uuid: \(self.uuid), quantity: \(self.quantity), product: \(self.product), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
     }
     
     func copy(uuid uuid: String? = nil, quantity: Int? = nil, product: Product? = nil, order: Int? = nil) -> GroupItem {
@@ -47,7 +45,6 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,
             product: product ?? self.product,
-            section: section ?? self.section,
             lastUpdate: self.lastUpdate,
             lastServerUpdate: self.lastServerUpdate,
             removed: self.removed

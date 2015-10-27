@@ -14,7 +14,9 @@ class ProductMapper {
         return Product(
             uuid: dbProduct.uuid,
             name: dbProduct.name,
-            price: dbProduct.price)
+            price: dbProduct.price,
+            category: dbProduct.category
+        )
     }
     
     class func dbWithProduct(product: Product) -> DBProduct {
@@ -22,11 +24,16 @@ class ProductMapper {
         dbProduct.uuid = product.uuid
         dbProduct.name = product.name
         dbProduct.price = product.price
+        dbProduct.category = product.category
         return dbProduct
     }
     
     class func ProductWithRemote(remoteProduct: RemoteProduct) -> Product {
-        return Product(uuid: remoteProduct.uuid, name: remoteProduct.name, price: remoteProduct.price)
+        return Product(
+            uuid: remoteProduct.uuid,
+            name: remoteProduct.name,
+            price: remoteProduct.price,
+            category: remoteProduct.category)
     }
     
     class func dbProductWithRemote(product: RemoteProduct) -> DBProduct {
@@ -34,6 +41,7 @@ class ProductMapper {
         dbProduct.uuid = product.uuid
         dbProduct.name = product.name
         dbProduct.price = product.price
+        dbProduct.category = product.category
         return dbProduct
     }
 }

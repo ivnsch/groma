@@ -22,13 +22,13 @@ protocol ListItemProvider {
     
     func productSuggestions(handler: ProviderResult<[Suggestion]> -> ())
     
-    func loadProduct(name: String, list: List, handler: ProviderResult<Product> -> ())
+    func loadProduct(name: String, handler: ProviderResult<Product> -> ())
     
     // MARK: - Section
     
     func sectionSuggestions(handler: ProviderResult<[Suggestion]> -> ())
 
-    func sections(handler: ProviderResult<[Section]> -> ())
+    func sections(names: [String], handler: ProviderResult<[Section]> -> ())
 
     func remove(section: Section, _ handler: ProviderResult<Any> -> ())
 
@@ -96,7 +96,7 @@ protocol ListItemProvider {
     
     - parameter possibleNewSectionOrder: if the section is determined to be new, position of section in list. If the section already exists this is not used. If nil this will be at the end of the list (an additional database fetch will be made to count the sections).
     */
-    func mergeOrCreateProduct(productName: String, productPrice: Float, list: List, _ handler: ProviderResult<Product> -> Void)
+    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, _ handler: ProviderResult<Product> -> Void)
     func mergeOrCreateSection(sectionName: String, possibleNewOrder: Int?, list: List, _ handler: ProviderResult<Section> -> Void)
     
     /**

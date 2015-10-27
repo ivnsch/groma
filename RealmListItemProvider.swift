@@ -18,14 +18,16 @@ class RealmListItemProvider: RealmProvider {
         self.loadFirst(mapper, filter: "uuid = '\(uuid)'", handler: handler)
     }
     
-    func loadSectionWithName(name: String, handler: Section? -> ()) {
-        let mapper = {SectionMapper.sectionWithDB($0)}
-        self.loadFirst(mapper, filter: "name = '\(name)'", handler: handler)
+    func loadSection(name: String, handler: Section? -> ()) {
+        loadSections([name]) {sections in
+            handler(sections.first)
+        }
     }
     
-    func loadSections(handler: [Section] -> ()) {
+    func loadSections(names: [String], handler: [Section] -> ()) {
         let mapper = {SectionMapper.sectionWithDB($0)}
-        self.load(mapper, handler: handler)
+        let sectionsNamesStr: String = ",".join(names.map{"'\($0)'"})
+        self.load(mapper, filter: "name IN {\(sectionsNamesStr)}", handler: handler)
     }
     
     func saveSection(section: Section, handler: Bool -> ()) {

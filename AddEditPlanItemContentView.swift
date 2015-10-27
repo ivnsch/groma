@@ -13,9 +13,9 @@ protocol AddEditPlanItemContentViewDelegate {
     
     func onValidationErrors(errors: [UITextField: ValidationError])
     
-    func onOkTap(name: String, price: String, quantity: String)
-    func onOkAndAddAnotherTap(name: String, price: String, quantity: String)
-    func onUpdateTap(name: String, price: String, quantity: String)
+    func onOkTap(name: String, price: String, quantity: String, category: String)
+    func onOkAndAddAnotherTap(name: String, price: String, quantity: String, category: String)
+    func onUpdateTap(name: String, price: String, quantity: String, category: String)
     func onCancelTap()
     
     func productNameAutocompletions(text: String, handler: [String] -> ())
@@ -136,17 +136,20 @@ class AddEditPlanItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, ML
             }
 
             // TODO
+            
+            // TODO category
             if let text = nameInput.text, priceText = priceInput.text, quantityText = quantityInput.text {
                 switch okNextButtonsView.addModus {
                 case .Add:
                     switch action {
                     case .Ok:
-                        delegate?.onOkTap(text, price: priceText, quantity: quantityText)
+
+                        delegate?.onOkTap(text, price: priceText, quantity: quantityText, category: "TODO category plan")
                     case .OkAndAddAnother:
-                        delegate?.onOkAndAddAnotherTap(text, price: priceText, quantity: quantityText)
+                        delegate?.onOkAndAddAnotherTap(text, price: priceText, quantity: quantityText, category: "TODO category plan")
                     }
                 case .Update:
-                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText)
+                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, category: "TODO category plan")
                 }
                 
             } else {

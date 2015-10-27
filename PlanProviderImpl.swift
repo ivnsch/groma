@@ -55,10 +55,10 @@ class PlanProviderImpl: PlanProvider {
         
         Providers.listItemsProvider.product(itemInput.name) {result in
             if let product = result.sucessResult {
-                let mergedProduct = Product(uuid: product.uuid, name: itemInput.name, price: itemInput.price)
+                let mergedProduct = Product(uuid: product.uuid, name: itemInput.name, price: itemInput.price, category: itemInput.category)
                 onHasProduct(mergedProduct, isUpdate: true)
             } else {
-                let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price)
+                let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: itemInput.category)
                 Providers.listItemsProvider.add(product) {result in
                     if result.success {
                         onHasProduct(product, isUpdate: false)

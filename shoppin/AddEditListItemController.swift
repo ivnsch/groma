@@ -13,9 +13,9 @@ protocol AddEditListItemControllerDelegate {
     
     func onValidationErrors(errors: [UITextField: ValidationError])
     
-    func onOkTap(name: String, price: String, quantity: String, sectionName: String, note: String?)
-    func onOkAndAddAnotherTap(name: String, price: String, quantity: String, sectionName: String, note: String?)
-    func onUpdateTap(name: String, price: String, quantity: String, sectionName: String, note: String?)
+    func onOkTap(name: String, price: String, quantity: String, category: String, sectionName: String, note: String?)
+    func onOkAndAddAnotherTap(name: String, price: String, quantity: String, category: String, sectionName: String, note: String?)
+    func onUpdateTap(name: String, price: String, quantity: String, category: String, sectionName: String, note: String?)
     func onCancelTap()
     
     func productNameAutocompletions(text: String, handler: [String] -> ())
@@ -187,17 +187,18 @@ class AddEditListItemController: UIViewController, MLPAutoCompleteTextFieldDataS
                 }
             }
             
-            if let text = nameInput.text, priceText = priceInput.text, quantityText = quantityInput.text, sectionText = sectionInput.text {
+            // TODO! new field for category
+            if let text = nameInput.text, priceText = priceInput.text, quantityText = quantityInput.text, category = sectionInput.text, sectionName = sectionInput.text {
                 switch okNextButtonsView.addModus {
                 case .Add:
                     switch action {
                     case .Ok:
-                        delegate?.onOkTap(text, price: priceText, quantity: quantityText, sectionName: sectionText, note: noteInput.text)
+                        delegate?.onOkTap(text, price: priceText, quantity: quantityText, category: category, sectionName: sectionName, note: noteInput.text)
                     case .OkAndAddAnother:
-                        delegate?.onOkAndAddAnotherTap(text, price: priceText, quantity: quantityText, sectionName: sectionText, note: noteInput.text)
+                        delegate?.onOkAndAddAnotherTap(text, price: priceText, quantity: quantityText, category: category, sectionName: sectionName, note: noteInput.text)
                     }
                 case .Update:
-                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, sectionName: sectionText, note: noteInput.text)
+                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, category: category, sectionName: sectionName, note: noteInput.text)
                 }
                 
             } else {

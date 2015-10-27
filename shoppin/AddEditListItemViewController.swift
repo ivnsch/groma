@@ -113,14 +113,15 @@ class AddEditListItemViewController: UIViewController {
                 }
             }
             
-            if let text = nameInput.text, priceText = priceInput.text, quantityText = quantityInput.text, sectionText = sectionInput.text {
+            // TODO new input field for section,
+            if let text = nameInput.text, priceText = priceInput.text, quantityText = quantityInput.text, category = sectionInput.text {
                 switch action {
                 case .Add:
-                    delegate?.onOkTap(text, price: priceText, quantity: quantityText, sectionName: sectionText, note: noteInput.text)
+                    delegate?.onOkTap(text, price: priceText, quantity: quantityText, category: category, sectionName: category, note: noteInput.text)
                 case .AddAndAddAnother:
-                    delegate?.onOkAndAddAnotherTap(text, price: priceText, quantity: quantityText, sectionName: sectionText, note: noteInput.text)
+                    delegate?.onOkAndAddAnotherTap(text, price: priceText, quantity: quantityText, category: category, sectionName: category, note: noteInput.text)
                 case .Update:
-                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, sectionName: sectionText, note: noteInput.text)
+                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, category: category, sectionName: category, note: noteInput.text)
                 }
                 
             } else {

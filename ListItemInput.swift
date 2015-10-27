@@ -13,13 +13,15 @@ struct ListItemInput {
     let name: String
     let quantity: Int
     let price: Float
+    let category: String
     let section: String
     let note: String?
     
-    init(name: String, quantity: Int, price: Float, section: String, note: String?) {
+    init(name: String, quantity: Int, price: Float, category: String, section: String, note: String?) {
         self.name = name
         self.quantity = quantity
         self.price = price
+        self.category = category
         self.section = section
         self.note = note
     }

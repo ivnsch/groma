@@ -115,15 +115,15 @@ class AddEditListItemGroupViewController: UIViewController, UITableViewDataSourc
         presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, note: String?) {
-        addItem(name, price: priceText, quantity: quantityText, sectionName: sectionName, note: note) {[weak self] in
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, sectionName: String, note: String?) {
+        addItem(name, price: priceText, quantity: quantityText, category: category, note: note) {[weak self] in
             self?.dismissGroupsItemsController()
         }
     }
     
-    private func addItem(name: String, price priceText: String, quantity quantityText: String, sectionName: String, note: String?, onFinish: VoidFunction) {
+    private func addItem(name: String, price priceText: String, quantity quantityText: String, category: String, note: String?, onFinish: VoidFunction) {
         if let price = priceText.floatValue, quantity = Int(quantityText), list = list {
-            let itemInput = GroupItemInput(name: name, quantity: quantity, price: price, section: sectionName)
+            let itemInput = GroupItemInput(name: name, quantity: quantity, price: price, category: category)
             
             Providers.listItemGroupsProvider.add(itemInput, group: group, order: nil, possibleNewSectionOrder: nil, list: list, successHandler{[weak self] addedItem in
                 self?.group.items.append(addedItem)
@@ -137,9 +137,8 @@ class AddEditListItemGroupViewController: UIViewController, UITableViewDataSourc
     }
 
     private func updateItem(input: GroupItemInput, groupItem: GroupItem, note: String?) {
-        let updatedProduct = Product(uuid: groupItem.product.uuid, name: input.name, price: input.price)
-        let updatedSection = Section(uuid: groupItem.section.uuid, name: input.section, order: groupItem.section.order)
-        let updatedItem = GroupItem(uuid: groupItem.uuid, quantity: input.quantity, product: updatedProduct, section: updatedSection)
+        let updatedProduct = Product(uuid: groupItem.product.uuid, name: input.name, price: input.price, category: input.category)
+        let updatedItem = GroupItem(uuid: groupItem.uuid, quantity: input.quantity, product: updatedProduct)
         
         Providers.listItemGroupsProvider.update([updatedItem], successHandler{[weak self] in
             self?.dismissGroupsItemsController()
@@ -147,14 +146,14 @@ class AddEditListItemGroupViewController: UIViewController, UITableViewDataSourc
     }
     
     
-    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, note: String?) {
-        addItem(name, price: priceText, quantity: quantityText, sectionName: sectionName, note: note) {
+    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, category: String, sectionName: String, note: String?) {
+        addItem(name, price: priceText, quantity: quantityText, category: category, note: note) {
         }
     }
     
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, note: String?) {
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, sectionName: String, note: String?) {
         if let price = priceText.floatValue, quantity = Int(quantityText), groupItem = selectedGroupItem {
-            let itemInput = GroupItemInput(name: name, quantity: quantity, price: price, section: sectionName)
+            let itemInput = GroupItemInput(name: name, quantity: quantity, price: price, category: category)
             
             updateItem(itemInput, groupItem: groupItem, note: note)
             

@@ -13,6 +13,8 @@ final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSer
     let name: String
     let order: Int
     
+    // TODO! list reference - a section belongs to a list
+    
     init(uuid:  String, name: String, order: Int) {
         self.uuid = uuid
         self.name = name
