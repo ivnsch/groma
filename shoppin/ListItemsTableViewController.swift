@@ -40,27 +40,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     private var swipedTableViewListItem: TableViewListItem? // Item marked for "undo". Item is not submitted until undo state is cleared
     
-    var tableViewInset:UIEdgeInsets {
-        set {
-            self.tableView.contentInset = newValue
-            
-            //TODO do we need this
-            self.tableView.setNeedsLayout()
-            self.tableView.layoutIfNeeded()
-        }
-        get {
-            return self.tableView.contentInset
-        }
-    }
-    
-    var tableViewTopOffset:CGFloat {
-        set {
-            self.tableView.contentOffset = CGPointMake(0, newValue)
-        }
-        get {
-            return self.tableView.contentOffset.y
-        }
-    }
+
     
     func touchEnabled(enabled:Bool) {
         self.tableView.userInteractionEnabled = enabled
@@ -76,8 +56,8 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     func tableViewShiftDown(offset: CGFloat) { // offset/inset to start at given offset but scroll behind it
-        self.tableViewInset = UIEdgeInsetsMake(offset, 0, 0, 0)
-        self.tableViewTopOffset = -self.tableViewInset.top
+        self.tableView.inset = UIEdgeInsetsMake(offset, 0, 0, 0)
+        self.tableView.topOffset = -self.tableView.inset.top
     }
     
     override func viewWillLayoutSubviews() {

@@ -68,6 +68,7 @@ extension Array where Element: Identifiable {
 
 extension Array where Element: Equatable {
     
+    // safe element removal
     mutating func remove(element: Element) {
         if let index = self.indexOf(element) {
             self.removeAtIndex(index)

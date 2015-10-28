@@ -9,7 +9,6 @@
 import UIKit
 import CoreData
 import SwiftValidator
-import SnapKit
 
 class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate
 //    , UIBarPositioningDelegate
@@ -164,7 +163,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func productNameAutocompletions(text: String, handler: [String] -> ()) {
-        Providers.listItemsProvider.productSuggestions(successHandler{suggestions in
+        Providers.productProvider.productSuggestions(successHandler{suggestions in
             let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
             handler(names)
         })
@@ -259,8 +258,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //            let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + addButtonContainer.frame.height
         let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + 20
     
-        listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
-        listItemsTableViewController.tableViewTopOffset = -listItemsTableViewController.tableViewInset.top
+        listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
+        listItemsTableViewController.tableView.topOffset = -listItemsTableViewController.tableView.inset.top
         
         if editing {
             editButton.title = "Done"
@@ -326,7 +325,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
 
     func loadItems(handler: Try<[String]> -> ()) {
-        Providers.listItemsProvider.products(successHandler{products in
+        Providers.productProvider.products(successHandler{products in
             let names = products.map{$0.name}
             handler(Try(names))
         })
@@ -593,8 +592,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             
             let topInset = navbarHeight + statusBarHeight + CGRectGetHeight(view.frame) + CGRectGetHeight(self.pricesView.frame)
             let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
-            self.listItemsTableViewController.tableViewInset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
-            self.listItemsTableViewController.tableViewTopOffset = -self.listItemsTableViewController.tableViewInset.top
+            self.listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
+            self.listItemsTableViewController.tableView.topOffset = -self.listItemsTableViewController.tableView.inset.top
         }
     }
 

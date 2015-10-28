@@ -9,20 +9,6 @@
 import Foundation
 
 protocol ListItemProvider {
-
-    // TODO create ProductsProvider, put products methods there
-    
-    // MARK: - Product
-    
-    func product(name: String, handler: ProviderResult<Product> -> ())
-    
-    func products(handler: ProviderResult<[Product]> -> ())
-    
-    func add(product: Product, handler: ProviderResult<Any> -> ())
-    
-    func productSuggestions(handler: ProviderResult<[Suggestion]> -> ())
-    
-    func loadProduct(name: String, handler: ProviderResult<Product> -> ())
     
     // MARK: - Section
     
@@ -90,13 +76,12 @@ protocol ListItemProvider {
     // MARK: -
 
     /**
-    There are some utility methods to refactor common code in ListItemsProviderImpl and ListItemGroupProviderImpl when adding new list or group items
-    Tries to load the product or section using unique (name), if existent overrides fields with corresponding input, if not existent creates a new one
+    Utility method to refactor common code in ListItemsProviderImpl and ListItemGroupProviderImpl when adding new list or group items
+    Tries to load using unique (name), if existent overrides fields with corresponding input, if not existent creates a new one
     TODO use results like everywhere else, maybe put in a different specific utility class this is rather provider-internal
     
     - parameter possibleNewSectionOrder: if the section is determined to be new, position of section in list. If the section already exists this is not used. If nil this will be at the end of the list (an additional database fetch will be made to count the sections).
     */
-    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, _ handler: ProviderResult<Product> -> Void)
     func mergeOrCreateSection(sectionName: String, possibleNewOrder: Int?, list: List, _ handler: ProviderResult<Section> -> Void)
     
     /**

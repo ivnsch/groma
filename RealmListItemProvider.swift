@@ -65,26 +65,74 @@ class RealmListItemProvider: RealmProvider {
         self.load(mapper, handler: handler)
     }
     
-    // MARK: - Product / suggestion
-    
-    func saveProducts(products: [Product], updateSuggestions: Bool = true, handler: Bool -> ()) {
-        self.doInWriteTransaction({[weak self] realm in
+    func deleteProductAndDependencies(product: Product, handler: Bool -> Void) {
         
-            for product in products {
-                let dbProduct = ProductMapper.dbWithProduct(product)
-                realm.add(dbProduct, update: true)
-                
-                if updateSuggestions {
-                    self?.saveProductSuggestionHelper(realm, product: product)
-                }
-            }
+        doInWriteTransaction({realm in
+            let productResult = realm.objects(DBProduct).filter("uuid = '\(product.uuid)'")
+            realm.delete(productResult)
+            let inventoryResult = realm.objects(DBInventoryItem).filter("product.uuid = '\(product.uuid)'")
+            realm.delete(inventoryResult)
+            let historyResult = realm.objects(DBHistoryItem).filter("product.uuid = '\(product.uuid)'")
+            realm.delete(historyResult)
+            let planResult = realm.objects(DBPlanItem).filter("product.uuid = '\(product.uuid)'")
+            realm.delete(planResult)
             
             return true
             
-        }, finishHandler: {success in
-            handler(success)
+            }, finishHandler: {success in
+                handler(success)
         })
     }
+    
+    func saveProduct(productInput: ProductInput, updateSuggestions: Bool = true, update: Bool = true, handler: Product? -> ()) {
+        
+        loadProductWithName(productInput.name) {[weak self] productMaybe in
+
+            if productMaybe.isSet && !update {
+                print("Product with name: \(productInput.name), already exists, no update")
+                handler(nil)
+                return
+            }
+            
+            let uuid: String = {
+                if let existingProduct = productMaybe { // since realm doesn't support unique besides primary key yet, we have to fetch first possibly existing product
+                    return existingProduct.uuid
+                } else {
+                    return NSUUID().UUIDString
+                }
+            }()
+            
+            let product = Product(uuid: uuid, name: productInput.name, price: productInput.price, category: productInput.category)
+            
+            self?.saveProducts([product]) {saved in
+                if saved {
+                    handler(product)
+                } else {
+                    print("Error: RealmListItemProvider.saveProductError, could not save product: \(product)")
+                    handler(nil)
+                }
+            }
+        }
+    }
+
+    func saveProducts(products: [Product], updateSuggestions: Bool = true, update: Bool = true, handler: Bool -> ()) {
+        
+        for product in products { // product marked as var to be able to update uuid
+            
+            doInWriteTransaction({[weak self] realm in
+                let dbProduct = ProductMapper.dbWithProduct(product)
+                realm.add(dbProduct, update: update)
+                if updateSuggestions {
+                    self?.saveProductSuggestionHelper(realm, product: product)
+                }
+                return true
+                
+                }, finishHandler: {success in
+                    handler(success)
+            })
+        }
+    }
+    
     
     // MARK: - Suggestion
 

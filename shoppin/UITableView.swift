@@ -10,6 +10,28 @@ import UIKit
 
 extension UITableView {
    
+    var inset: UIEdgeInsets {
+        set {
+            self.contentInset = newValue
+            
+            //TODO do we need this
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }
+        get {
+            return self.contentInset
+        }
+    }
+    
+    var topOffset: CGFloat {
+        set {
+            self.contentOffset = CGPointMake(0, newValue)
+        }
+        get {
+            return self.contentOffset.y
+        }
+    }
+    
     var topInset: CGFloat {
         set {
             self.contentInset = UIEdgeInsetsMake(newValue, 0, 0, 0)

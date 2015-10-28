@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class Product: Equatable, Hashable, CustomDebugStringConvertible {
+final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let price: Float
@@ -22,20 +22,24 @@ final class Product: Equatable, Hashable, CustomDebugStringConvertible {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), price: \(self.price), category: \(self.category)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), price: \(price), category: \(category)}"
     }
 
     var hashValue: Int {
         return self.uuid.hashValue
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, section: Section? = nil) -> Product {
+    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: String? = nil) -> Product {
         return Product(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             price: price ?? self.price,
             category: category ?? self.category
         )
+    }
+    
+    func same(rhs: Product) -> Bool {
+        return uuid == rhs.uuid
     }
 }
 

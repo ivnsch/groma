@@ -19,4 +19,8 @@ class DBSection: DBSyncable {
     override static func primaryKey() -> String? {
         return "uuid"
     }
+    
+    override class func indexedProperties() -> [String] {
+        return ["name"]
+    }
 }

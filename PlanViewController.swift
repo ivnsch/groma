@@ -223,7 +223,7 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func productNameAutocompletions(text: String, handler: [String] -> ()) {
-        Providers.listItemsProvider.productSuggestions(successHandler{suggestions in
+        Providers.productProvider.productSuggestions(successHandler{suggestions in
             let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
             handler(names)
         })

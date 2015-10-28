@@ -185,7 +185,7 @@ class AddEditListItemGroupViewController: UIViewController, UITableViewDataSourc
     }
     
     func productNameAutocompletions(text: String, handler: [String] -> ()) {
-        Providers.listItemsProvider.productSuggestions(successHandler{suggestions in
+        Providers.productProvider.productSuggestions(successHandler{suggestions in
             handler(suggestions.map{$0.name})
         })
     }

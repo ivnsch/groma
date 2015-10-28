@@ -37,7 +37,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     // TODO it should not be necessary to pass list here
     func add(itemInput: GroupItemInput, group: ListItemGroup, order orderMaybe: Int? = nil, possibleNewSectionOrder: Int?, list: List, _ handler: ProviderResult<GroupItem> -> ()) {
         
-        Providers.listItemsProvider.mergeOrCreateProduct(itemInput.name, productPrice: itemInput.price, category: itemInput.category) {[weak self] result in
+        Providers.productProvider.mergeOrCreateProduct(itemInput.name, productPrice: itemInput.price, category: itemInput.category) {[weak self] result in
             
             if let product = result.sucessResult {
 

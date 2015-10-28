@@ -21,7 +21,8 @@ extension UIStoryboard {
     private class func quickAddListItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "QuickAddListItem", bundle: NSBundle.mainBundle()) }
     private class func addEditListItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditListItem", bundle: NSBundle.mainBundle()) }
     private class func quickAddGroupStoryboard() -> UIStoryboard { return UIStoryboard(name: "QuickAddGroup", bundle: NSBundle.mainBundle()) }
-    
+    private class func manageProductsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageProducts", bundle: NSBundle.mainBundle()) }
+
     // MARK: - List items
     
     class func todoItemsViewController() -> ViewController {
@@ -151,5 +152,18 @@ extension UIStoryboard {
     class func quickAddListItemViewController() -> QuickAddListItemViewController {
         return quickAddListItemStoryboard().instantiateViewControllerWithIdentifier("QuickAddListItemViewController") as! QuickAddListItemViewController
     }
+    
+    // MARK: Manage products
+    
+    
+    class func manageProductsViewController() -> ManageProductsViewController {
+        return manageProductsStoryboard().instantiateViewControllerWithIdentifier("ManageProductsController") as! ManageProductsViewController
+    }
+
+    class func addEditProductController() -> AddEditProductController {
+        return manageProductsStoryboard().instantiateViewControllerWithIdentifier("AddEditProductController") as! AddEditProductController
+    }
+    
+    
     
 }
