@@ -8,7 +8,17 @@
 
 import UIKit
 
-class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+final class SectionModel<T> {
+    var expanded: Bool
+    let obj: T
+    
+    init(expanded: Bool = false, obj: T) {
+        self.expanded = expanded
+        self.obj = obj
+    }
+}
+
+class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, HistoryItemGroupHeaderViewDelegate {
 
     private let historyProvider = ProviderFactory().historyProvider
     
@@ -18,7 +28,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet var tableViewFooter: LoadingFooter!
     @IBOutlet var tableView: UITableView!
     
-    private var historyItemsGroups: [HistoryItemGroup] = [] {
+    private var sectionModels: [SectionModel<HistoryItemGroup>] = [] {
         didSet {
             self.tableView.reloadData()
         }
@@ -27,13 +37,13 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.topInset = 64
+        self.tableView.topInset = 44 // in my understanding this should be 64 which is the actual size of nav bar but it needs 44 for some reason
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        historyItemsGroups = []
+        sectionModels = []
         paginator.reset() // TODO improvement either memory cache or reset only if history has changed (marked items as bought since last load)
         loadPossibleNextPage()
     }
@@ -41,11 +51,12 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     // MARK: - Table view data source
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return historyItemsGroups.count
+        return sectionModels.count
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return historyItemsGroups[section].historyItems.count
+        let sectionModel = sectionModels[section]
+        return sectionModel.expanded ? sectionModel.obj.historyItems.count : 0
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -53,12 +64,17 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let group = historyItemsGroups[section]
+        let sectionModel = sectionModels[section]
+        let group = sectionModel.obj
         let view = NSBundle.loadView("HistoryItemGroupHeaderView", owner: self) as! HistoryItemGroupHeaderView
         
         view.userName = group.user.email
         view.date = "\(group.date)" // TODO format
         view.price = "\(group.totalPrice.toLocalCurrencyString())" // TODO format
+        
+        view.sectionIndex = section
+        view.sectionModel = sectionModel
+        view.delegate = self
         
         return view
     }
@@ -66,7 +82,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("historyCell", forIndexPath: indexPath) as! HistoryItemCell
         
-        let historyItem = self.historyItemsGroups[indexPath.section].historyItems[indexPath.row]
+        let historyItem = sectionModels[indexPath.section].obj.historyItems[indexPath.row]
         
         // TODO format price, date
         
@@ -74,8 +90,13 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         cell.itemUnitLabel.text = "\(historyItem.quantity) x \(historyItem.product.price.toLocalCurrencyString())"
         cell.itemPriceLabel.text = (Float(historyItem.quantity) * historyItem.product.price).toLocalCurrencyString()
         
-        
         return cell
+    }
+    
+    // MARK: - UITableViewDelegate
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        print("select: \(indexPath)")
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -104,7 +125,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                     
                     weakSelf.historyProvider.historyItemsGroups(weakSelf.paginator.currentPage, weakSelf.successHandler{historyItems in
                         for historyItem in historyItems {
-                            weakSelf.historyItemsGroups.append(historyItem)
+                            weakSelf.sectionModels.append(SectionModel(obj: historyItem))
                         }
                         
                         weakSelf.paginator.update(historyItems.count)
@@ -117,8 +138,6 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
 
-
-    
     
     // Override to support conditional editing of the table view.
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -131,7 +150,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         if editingStyle == .Delete {
             
             // TODO lock? many deletes quickly could cause a crash here. >>> Or remove immediately and rever if failure result
-            let historyItem = historyItemsGroups[indexPath.section].historyItems[indexPath.row]
+            let historyItem = sectionModels[indexPath.section].obj.historyItems[indexPath.row]
             historyProvider.removeHistoryItem(historyItem, successHandler({result in
                 
                 tableView.wrapUpdates {[weak self] in
@@ -139,11 +158,11 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                         
                         tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
                         
-                        let group = weakSelf.historyItemsGroups[indexPath.section]
+                        let group = weakSelf.sectionModels[indexPath.section].obj
                         var historyItems = group.historyItems
                         historyItems.removeAtIndex(indexPath.row)
                         let updatedGroup = group.copy(historyItems: historyItems)
-                        weakSelf.historyItemsGroups[indexPath.section] = updatedGroup
+                        weakSelf.sectionModels[indexPath.section] = SectionModel(obj: updatedGroup)
                     }
                 }
             }))
@@ -152,6 +171,34 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }
+    
+    // MARK: - HistoryItemGroupHeaderViewDelegate
+    
+    func onHeaderTap(header: HistoryItemGroupHeaderView, sectionIndex: Int, sectionModel: SectionModel<HistoryItemGroup>) {
+        setHeaderExpanded(header, sectionIndex: sectionIndex, sectionModel: sectionModel)
+    }
+    
+    private func setHeaderExpanded(header: HistoryItemGroupHeaderView, sectionIndex: Int, sectionModel: SectionModel<HistoryItemGroup>) {
+        
+        let sectionIndexPaths: [NSIndexPath] = (0..<sectionModel.obj.historyItems.count).map {
+            return NSIndexPath(forRow: $0, inSection: sectionIndex)
+        }
+        
+        if sectionModel.expanded { // collapse
+            tableView.wrapUpdates {[weak self] in
+                self?.tableView.deleteRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
+                sectionModel.expanded = false
+            }
+        } else { // expand
+            tableView.wrapUpdates {[weak self] in
+                self?.tableView.insertRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
+                sectionModel.expanded = true
+            }
+            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: sectionIndex), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+        }
+    }
+    
+    
     /*
     // Override to support rearranging the table view.
     override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {

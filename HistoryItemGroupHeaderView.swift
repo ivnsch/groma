@@ -8,11 +8,20 @@
 
 import UIKit
 
+protocol HistoryItemGroupHeaderViewDelegate {
+    func onHeaderTap(header: HistoryItemGroupHeaderView, sectionIndex: Int, sectionModel: SectionModel<HistoryItemGroup>)
+}
+
 class HistoryItemGroupHeaderView: UIView {
 
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
+    
+    var sectionIndex: Int?
+    var sectionModel: SectionModel<HistoryItemGroup>?
+    
+    var delegate: HistoryItemGroupHeaderViewDelegate!
     
     var date: String {
         set {
@@ -39,6 +48,14 @@ class HistoryItemGroupHeaderView: UIView {
         }
         get {
             return priceLabel.text ?? ""
+        }
+    }
+
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if let sectionIndex = sectionIndex, sectionModel = sectionModel {
+            delegate?.onHeaderTap(self, sectionIndex: sectionIndex, sectionModel: sectionModel)
+        } else {
+            print("Error: HistoryItemGroupHeaderView.touchesEnded: no headerIndex or group")
         }
     }
 }
