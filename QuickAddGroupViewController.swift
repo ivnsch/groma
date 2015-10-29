@@ -11,6 +11,8 @@ import SwiftValidator
 
 protocol QuickAddGroupViewControllerDelegate {
     func onGroupCreated(group: ListItemGroup)
+    func onGroupUpdated(group: ListItemGroup)
+    func onEmptyViewTap()
     func onGroupItemsOpen()
     func onGroupItemsSubmit()
 }
@@ -21,10 +23,24 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
     @IBOutlet weak var itemsTableView: UITableView!
     @IBOutlet weak var emptyItemsView: UIView!
  
-    private var groupItems: [GroupItem] = [] {
+    var groupItems: [GroupItem] = [] {
         didSet {
             itemsTableView.reloadData()
-            emptyItemsView.hidden = !groupItems.isEmpty
+            updateEmptyViewState()
+        }
+    }
+    
+    var editingGroup: ListItemGroup? {
+        didSet {
+            if let editingGroup = editingGroup {
+                if groupNameInput != nil { // test outlets already initialised
+                    groupNameInput.text = editingGroup.name
+                    groupItems = editingGroup.items
+                    
+                } else {
+                    print("Error: trying to set editingItem before outlets initialised. Doing nothing")
+                }
+            }
         }
     }
     
@@ -34,14 +50,25 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
     private var validator: Validator?
 
     var delegate: QuickAddGroupViewControllerDelegate?
+
+    var itemsSelectionController: QuickAddGroupItemsViewController?
     
-    // TODO in edit case, pass the group and pre-fill
+    var onViewDidLoad: VoidFunction?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         itemsTableView.registerNib(UINib(nibName: "QuantityCell", bundle: nil), forCellReuseIdentifier: cellIdentifier)
         
         initValidator()
+        
+        updateEmptyViewState()
+     
+        onViewDidLoad?()
+    }
+    
+    private func updateEmptyViewState() {
+        emptyItemsView.hidden = !groupItems.isEmpty
+        itemsTableView.hidden = groupItems.isEmpty
     }
     
     private func initValidator() {
@@ -50,6 +77,9 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
         self.validator = validator
     }
     
+    @IBAction func onEmptyViewTap() {
+        delegate?.onEmptyViewTap()
+    }
     
     // MARK: - UITableViewDataSource
     
@@ -80,6 +110,7 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
             // TODO in edit case (or add case after adding items) pass existing items
             controller.delegate = self
             delegate?.onGroupItemsOpen()
+            itemsSelectionController = controller
         }
     }
     
@@ -100,13 +131,21 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
             }
             
             if let name = groupNameInput.text {
-                let group = ListItemGroup(uuid: NSUUID().UUIDString, name: name, items: groupItems)
-                Providers.listItemGroupsProvider.add([group], successHandler{[weak self] in
-                    // TODO show a "toast" confirmation
-                    // add group to view controller (list) - scroll to it
-                    self?.delegate?.onGroupCreated(group)
-                })
                 
+                if let editingGroup = editingGroup { // edit
+                    let updatedGroup = editingGroup.copy(name: name, items: groupItems)
+                    Providers.listItemGroupsProvider.update(updatedGroup, successHandler{[weak self] in
+                        self?.delegate?.onGroupUpdated(updatedGroup)
+                    })
+                    
+                } else { // add
+                    let group = ListItemGroup(uuid: NSUUID().UUIDString, name: name, items: groupItems)
+                    Providers.listItemGroupsProvider.add([group], successHandler{[weak self] in
+                        // TODO show a "toast" confirmation (quick view)
+                        // add group to view controller (list) - scroll to it
+                        self?.delegate?.onGroupCreated(group)
+                    })
+                }
             } else {
                 print("Error: validation was not implemented correctly")
             }

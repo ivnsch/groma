@@ -179,6 +179,11 @@
 		EB4147BC1BE0338800549CE4 /* ProductInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4147BB1BE0338800549CE4 /* ProductInput.swift */; };
 		EB4147BD1BE0338800549CE4 /* ProductInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4147BB1BE0338800549CE4 /* ProductInput.swift */; };
 		EB4147BE1BE0338800549CE4 /* ProductInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4147BB1BE0338800549CE4 /* ProductInput.swift */; };
+		EB4147C31BE11D7C00549CE4 /* ManageGroups.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB4147C21BE11D7C00549CE4 /* ManageGroups.storyboard */; };
+		EB4147C61BE12B6000549CE4 /* ManageGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4147C41BE12B6000549CE4 /* ManageGroupsViewController.swift */; };
+		EB4147C91BE16BE500549CE4 /* ManageGroupsAddEditController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4147C81BE16BE500549CE4 /* ManageGroupsAddEditController.swift */; };
+		EB4147CB1BE16C1900549CE4 /* ManageGroupsSelectItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4147CA1BE16C1900549CE4 /* ManageGroupsSelectItemsController.swift */; };
+		EB4147CD1BE2288E00549CE4 /* ManageGroupsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4147CC1BE2288E00549CE4 /* ManageGroupsCell.swift */; };
 		EB451C351B85F3DA000DE208 /* StatsProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB451C341B85F3DA000DE208 /* StatsProviderImpl.swift */; };
 		EB451C361B85F3DA000DE208 /* StatsProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB451C341B85F3DA000DE208 /* StatsProviderImpl.swift */; };
 		EB451C371B85F3DA000DE208 /* StatsProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB451C341B85F3DA000DE208 /* StatsProviderImpl.swift */; };
@@ -769,6 +774,11 @@
 		EB4147B71BDFE9FB00549CE4 /* ManageProductsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageProductsCell.swift; sourceTree = "<group>"; };
 		EB4147B91BE0091700549CE4 /* AddEditProductController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditProductController.swift; sourceTree = "<group>"; };
 		EB4147BB1BE0338800549CE4 /* ProductInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductInput.swift; sourceTree = "<group>"; };
+		EB4147C21BE11D7C00549CE4 /* ManageGroups.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ManageGroups.storyboard; sourceTree = "<group>"; };
+		EB4147C41BE12B6000549CE4 /* ManageGroupsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageGroupsViewController.swift; sourceTree = "<group>"; };
+		EB4147C81BE16BE500549CE4 /* ManageGroupsAddEditController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageGroupsAddEditController.swift; sourceTree = "<group>"; };
+		EB4147CA1BE16C1900549CE4 /* ManageGroupsSelectItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageGroupsSelectItemsController.swift; sourceTree = "<group>"; };
+		EB4147CC1BE2288E00549CE4 /* ManageGroupsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageGroupsCell.swift; sourceTree = "<group>"; };
 		EB451C341B85F3DA000DE208 /* StatsProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsProviderImpl.swift; sourceTree = "<group>"; };
 		EB451C381B85F3F0000DE208 /* StatsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsProvider.swift; sourceTree = "<group>"; };
 		EB451C401B861544000DE208 /* OrderedDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderedDictionary.swift; sourceTree = "<group>"; };
@@ -1413,6 +1423,18 @@
 			name = realm;
 			sourceTree = "<group>";
 		};
+		EB4147BF1BE11D2600549CE4 /* manageGroups */ = {
+			isa = PBXGroup;
+			children = (
+				EB4147C21BE11D7C00549CE4 /* ManageGroups.storyboard */,
+				EB4147C41BE12B6000549CE4 /* ManageGroupsViewController.swift */,
+				EB4147CC1BE2288E00549CE4 /* ManageGroupsCell.swift */,
+				EB4147C81BE16BE500549CE4 /* ManageGroupsAddEditController.swift */,
+				EB4147CA1BE16C1900549CE4 /* ManageGroupsSelectItemsController.swift */,
+			);
+			name = manageGroups;
+			sourceTree = "<group>";
+		};
 		EB451C441B8634FD000DE208 /* internal */ = {
 			isa = PBXGroup;
 			children = (
@@ -1512,6 +1534,7 @@
 				EB1B36551BC44D73003519F2 /* plan */,
 				EBF162E31A3C853E0048E37C /* listItemsTableView */,
 				EB0A058E1BDFCE5C00D1E29D /* manageProducts */,
+				EB4147BF1BE11D2600549CE4 /* manageGroups */,
 				EB55675B1A86231D00CD3EC6 /* common */,
 				EB4C36561B4C115E00C387C5 /* libraryCandidates */,
 				EBDCA12D1B88D4FF000020BF /* charts */,
@@ -2291,6 +2314,7 @@
 				EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */,
 				EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */,
 				EB0A05921BDFCE8D00D1E29D /* ManageProducts.storyboard in Resources */,
+				EB4147C31BE11D7C00549CE4 /* ManageGroups.storyboard in Resources */,
 				EB0C1BA31B3DF5EA00F24C85 /* UserDetails.storyboard in Resources */,
 				EB0F5F861B962D2100035175 /* GoogleService-Info.plist in Resources */,
 				EB1FC5171BC68F73004E1114 /* AddEditPlanItemContentView.xib in Resources */,
@@ -2665,6 +2689,7 @@
 				EB70C2231B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBF162F51A3CA4BA0048E37C /* ProviderFactory.swift in Sources */,
 				EB0870CB1BC050A300169E29 /* MyTipPopup.swift in Sources */,
+				EB4147CD1BE2288E00549CE4 /* ManageGroupsCell.swift in Sources */,
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
 				EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */,
 				EBF1A15F1B82428700F34105 /* HistoryItemCell.swift in Sources */,
@@ -2680,11 +2705,13 @@
 				EBDCA12F1B88D54F000020BF /* AggrByDateChartViewController.swift in Sources */,
 				EB40A46E1B550804000E9CAD /* RealmProvider.swift in Sources */,
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
+				EB4147CB1BE16C1900549CE4 /* ManageGroupsSelectItemsController.swift in Sources */,
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,
 				EB85F4631BD54E8D00E19E9B /* QuickAddItem.swift in Sources */,
 				EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */,
 				EBF3779F1B38AB1000EEB6DB /* User.swift in Sources */,
 				EB9BE41C1B2CB42B005B401A /* RemoteListItem.swift in Sources */,
+				EB4147C61BE12B6000549CE4 /* ManageGroupsViewController.swift in Sources */,
 				EB2433EA1BC5A04D00986897 /* AddItemView.swift in Sources */,
 				EBDCA1251B87AE96000020BF /* XYPieChart.m in Sources */,
 				EB20FBFE1A5972C70058103B /* InventoryItemsProviderImpl.swift in Sources */,
@@ -2694,6 +2721,7 @@
 				EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */,
 				EB7858751B7F6F69008AAD12 /* RemoteHistoryItems.swift in Sources */,
 				EB0C1B8B1B3DA89900F24C85 /* LoginData.swift in Sources */,
+				EB4147C91BE16BE500549CE4 /* ManageGroupsAddEditController.swift in Sources */,
 				EBF162E21A3C83D50048E37C /* ListItemsViewSection.swift in Sources */,
 				EBF3779B1B38AA5900EEB6DB /* Urls.swift in Sources */,
 				EB4FD45B1AC701410000F952 /* ListItemInput.swift in Sources */,

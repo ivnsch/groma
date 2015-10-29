@@ -22,7 +22,8 @@ extension UIStoryboard {
     private class func addEditListItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditListItem", bundle: NSBundle.mainBundle()) }
     private class func quickAddGroupStoryboard() -> UIStoryboard { return UIStoryboard(name: "QuickAddGroup", bundle: NSBundle.mainBundle()) }
     private class func manageProductsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageProducts", bundle: NSBundle.mainBundle()) }
-
+    private class func manageGroupsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageGroups", bundle: NSBundle.mainBundle()) }
+    
     // MARK: - List items
     
     class func todoItemsViewController() -> ViewController {
@@ -155,7 +156,6 @@ extension UIStoryboard {
     
     // MARK: Manage products
     
-    
     class func manageProductsViewController() -> ManageProductsViewController {
         return manageProductsStoryboard().instantiateViewControllerWithIdentifier("ManageProductsController") as! ManageProductsViewController
     }
@@ -164,6 +164,17 @@ extension UIStoryboard {
         return manageProductsStoryboard().instantiateViewControllerWithIdentifier("AddEditProductController") as! AddEditProductController
     }
     
+    // MARK: Manage groups
     
+    class func manageGroupsController() -> ManageGroupsViewController {
+        return manageGroupsStoryboard().instantiateViewControllerWithIdentifier("ManageGroupsViewController") as! ManageGroupsViewController
+    }
     
+    class func manageGroupsAddEditController() -> ManageGroupsAddEditController {
+        return manageGroupsStoryboard().instantiateViewControllerWithIdentifier("ManageGroupsAddEditController") as! ManageGroupsAddEditController
+    }
+    
+    class func manageGroupsSelectItemsController() -> ManageGroupsSelectItemsController {
+        return manageGroupsStoryboard().instantiateViewControllerWithIdentifier("ManageGroupsSelectItemsController") as! ManageGroupsSelectItemsController
+    }
 }

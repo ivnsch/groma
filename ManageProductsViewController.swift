@@ -103,7 +103,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
                     self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
                     
                     self?.products.remove(product)
-                    self?.onUpdatedProducts()
+                    self?.filteredProducts.remove(product)
                 }
             })
         }

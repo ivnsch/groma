@@ -314,6 +314,11 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         }
     }
     
+    func onGroupUpdated(group: ListItemGroup) {
+        // do nothing - no group update in quick add (yet?)
+        print("Warn: QuickAddViewController.onGroupUpdated called, this should not happen!")
+    }
+    
     func onGroupItemsOpen() {
         delegate?.onAddGroupItemsOpen()
     }
@@ -322,7 +327,14 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         delegate?.onAddGroupOpen()
     }
     
-    
+    func onEmptyViewTap() {
+        if let addEditGroupController = navController?.viewControllers.last as? QuickAddGroupViewController {
+            addEditGroupController.showAddItemsController()
+            
+        } else {
+            print("Error: QuickAddViewController.onEmptyViewTap: Invalid state: if tap on empty view current controller should be AddEditListItemViewController (since this view is in this controller)")
+        }
+    }
     
     
     // MARK: - Actions dispatch

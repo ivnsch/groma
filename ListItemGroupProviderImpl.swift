@@ -34,6 +34,12 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
+    func remove(group: ListItemGroup, _ handler: ProviderResult<Any> -> Void) {
+        dbGroupsProvider.remove(group) {saved in
+            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
+        }
+    }
+    
     // TODO it should not be necessary to pass list here
     func add(itemInput: GroupItemInput, group: ListItemGroup, order orderMaybe: Int? = nil, possibleNewSectionOrder: Int?, list: List, _ handler: ProviderResult<GroupItem> -> ()) {
         
@@ -74,5 +80,11 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     
     func update(items: [GroupItem], _ handler: ProviderResult<Any> -> ()) {
         print("TODO")
+    }
+    
+    func update(group: ListItemGroup, _ handler: ProviderResult<Any> -> ()) {
+        dbGroupsProvider.update([group]) {saved in
+            handler(ProviderResult(status: saved ? .Success : .DatabaseSavingError))
+        }
     }
 }

@@ -8,6 +8,8 @@
 
 import UIKit
 
+// TODO rename this controller in only groups controller and remove the old groups controller. Also delegate methods not with "Add" but simply "Tap" - the implementation of this delegate decides what the tap means.
+
 protocol QuickAddListItemDelegate {
     func onAddProduct(product: Product)
     func onAddGroup(group: ListItemGroup)
@@ -38,7 +40,8 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
         }
     }
     
-    private var quickAddItems: [QuickAddItem] = [] {
+    // TODO generic name maybe items or so
+    var quickAddItems: [QuickAddItem] = [] {
         didSet {
             filteredQuickAddItems = quickAddItems
         }
@@ -49,6 +52,8 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
             tableView.reloadData()
         }
     }
+    
+    var open: Bool = false
 
     var onViewDidLoad: VoidFunction? // ensure called after outlets set
     
@@ -129,5 +134,14 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
         } else {
             print("Error: invalid model type in quickAddItems, select cell. \(item)")
         }
+    }
+    
+    func scrollToBottom() {
+        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: quickAddItems.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
+    }
+    
+    override func setEditing(editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        tableView.editing = editing
     }
 }
