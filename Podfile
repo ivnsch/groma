@@ -17,7 +17,7 @@ end
 target 'shoppin' do
     platform :ios, '8.0'
     pod 'SwiftValidator', :git => 'https://github.com/i-schuetz/SwiftValidator', :branch => 'swift2.0_remove_delegate_callback'
-    pod 'SwiftCharts', :git => 'https://github.com/i-schuetz/SwiftCharts.git', :branch => 'swift2.0'
+    pod 'SwiftCharts', :git => 'https://github.com/i-schuetz/SwiftCharts.git', :branch => 'swift2.0', :commit => 'f148020cd920e2658b8cc262639a3e0a806f0350'
     pod 'Google/SignIn'
     pod 'SwipeView', '~> 1.3.2'
     pod 'CMPopTipView', '~> 2.0'

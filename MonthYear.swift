@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MonthYear: Equatable, Hashable {
+class MonthYear: Equatable, Hashable, CustomDebugStringConvertible {
     
     let month: Int
     let year: Int
@@ -20,6 +20,18 @@ class MonthYear: Equatable, Hashable {
     
     var hashValue: Int {
         return month * 10 + year // TODO review this
+    }
+    
+    var debugDescription: String {
+        return "{\(self.dynamicType) month: \(month), year: \(year)}"
+    }
+    
+    func toDate() -> NSDate? {
+        let gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        let components = NSDateComponents()
+        components.month = month
+        components.year = year
+        return gregorian!.dateFromComponents(components)
     }
 }
 

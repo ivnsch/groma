@@ -20,6 +20,24 @@ extension NSDate: Comparable {
         let components = calendar.components([.Month, .Year], fromDate: self)
         return calendar.dateFromComponents(components)!
     }
+    
+    static func startOfMonth(month: Int, year: Int) -> NSDate? {
+        let gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        let components = NSDateComponents()
+        components.month = month
+        components.year = year
+        return gregorian!.dateFromComponents(components)
+    }
+    
+    // src http://stackoverflow.com/a/4482938/930450
+    static func endOfMonth(month: Int, year: Int) -> NSDate? {
+        let gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+        let components = NSDateComponents()
+        components.month = month + 1
+        components.year = year
+        components.day = 0
+        return gregorian!.dateFromComponents(components)
+    }
 }
 
 public func <(a: NSDate, b: NSDate) -> Bool {

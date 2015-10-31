@@ -33,6 +33,20 @@ class RealmHistoryProvider: RealmProvider {
         self.load(mapper, predicate: NSPredicate(format: "product.name == %@ AND addedDate >= %@", productName, startDate), sortDescriptor: historySortDescriptor, handler: handler)
     }
     
+    func loadHistoryItems(monthYear: MonthYear, handler: [HistoryItem] -> Void) {
+        if let startDate = NSDate.startOfMonth(monthYear.month, year: monthYear.year), endDate = NSDate.endOfMonth(monthYear.month, year: monthYear.year) {
+            loadHistoryItems(startDate, endDate: endDate, handler)
+        } else {
+            print("Error: Invalid month year components to get start/end date: \(monthYear)")
+            handler([])
+        }
+    }
+    
+    func loadHistoryItems(startDate: NSDate, endDate: NSDate, _ handler: [HistoryItem] -> Void) {
+        let mapper = {HistoryItemMapper.historyItemWith($0)}
+        self.load(mapper, predicate: NSPredicate(format: "addedDate >= %@ AND addedDate <= %@", startDate, endDate), sortDescriptor: historySortDescriptor, handler: handler)
+    }
+    
     // TODO change data model! one table with groups and the other with history items, 1:n (also in server)
     // this is very important as right now we fetch and iterate through ALL the history items, this is very inefficient
     func loadHistoryItemsGroups(range: NSRange, _ handler: [HistoryItemGroup] -> ()) {

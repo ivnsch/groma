@@ -17,6 +17,8 @@ protocol HistoryProvider {
     */
     func historyItems(startDate: NSDate, _ handler: ProviderResult<[HistoryItem]> -> ())
 
+    func historyItems(monthYear: MonthYear, _ handler: ProviderResult<[HistoryItem]> -> Void)
+    
     func historyItemsGroups(range: NSRange, _ handler: ProviderResult<[HistoryItemGroup]> -> ())
 
     func syncHistoryItems(handler: (ProviderResult<[Any]> -> ()))

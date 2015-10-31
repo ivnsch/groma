@@ -29,6 +29,11 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
+    func historyItems(monthYear: MonthYear, _ handler: ProviderResult<[HistoryItem]> -> Void) {
+        dbProvider.loadHistoryItems(monthYear) {dbHistoryItems in
+            handler(ProviderResult(status: .Success, sucessResult: dbHistoryItems))
+        }
+    }
     
     func historyItemsGroups(range: NSRange, _ handler: ProviderResult<[HistoryItemGroup]> -> ()) {
         dbProvider.loadHistoryItemsGroups(range) {groups in

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+        </mutableArray>
+    </customFonts>
+    <scenes>
+        <!--Stats Details View Controller-->
+        <scene sceneID="s1X-EF-qwj">
+            <objects>
+                <viewController storyboardIdentifier="StatsDetailsViewController" id="wlY-zp-AGi" customClass="StatsDetailsViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="IeH-eW-FBS"/>
+                        <viewControllerLayoutGuide type="bottom" id="rsY-fS-xcF"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="lsH-jB-nK2">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="fiZ-BY-4Y4">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="aggrCell" id="Y7b-7J-A6G" customClass="ProductAggregateCell" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Y7b-7J-A6G" id="P8H-kl-UdR">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Td7-f1-22Z">
+                                                    <rect key="frame" x="14" y="11" width="44" height="21"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LH7-ME-daK">
+                                                    <rect key="frame" x="549" y="1" width="37" height="21"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Percent" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2kV-4s-JdU">
+                                                    <rect key="frame" x="542" y="24" width="44" height="16"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                                    <color key="textColor" red="0.53812699450000001" green="0.64471197270000002" blue="0.8089261968" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Td7-f1-22Z" firstAttribute="centerY" secondItem="P8H-kl-UdR" secondAttribute="centerY" id="L9m-Cp-GYD"/>
+                                                <constraint firstItem="LH7-ME-daK" firstAttribute="centerY" secondItem="P8H-kl-UdR" secondAttribute="centerY" constant="-10" id="M61-vb-jT1"/>
+                                                <constraint firstItem="Td7-f1-22Z" firstAttribute="leading" secondItem="P8H-kl-UdR" secondAttribute="leading" constant="14" id="aK5-PZ-rg5"/>
+                                                <constraint firstAttribute="trailing" secondItem="2kV-4s-JdU" secondAttribute="trailing" constant="14" id="cTJ-WS-qH6"/>
+                                                <constraint firstItem="2kV-4s-JdU" firstAttribute="centerY" secondItem="P8H-kl-UdR" secondAttribute="centerY" constant="10" id="qwe-ap-ppi"/>
+                                                <constraint firstAttribute="trailing" secondItem="LH7-ME-daK" secondAttribute="trailing" constant="14" id="sA1-9v-rqz"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="nameLabel" destination="Td7-f1-22Z" id="u6D-N4-eoe"/>
+                                            <outlet property="percentLabel" destination="2kV-4s-JdU" id="3Id-GM-kOa"/>
+                                            <outlet property="priceLabel" destination="LH7-ME-daK" id="tfk-he-tdQ"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="wlY-zp-AGi" id="mQL-bv-5OG"/>
+                                    <outlet property="delegate" destination="wlY-zp-AGi" id="zWH-zQ-CnT"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="fiZ-BY-4Y4" firstAttribute="leading" secondItem="lsH-jB-nK2" secondAttribute="leading" id="54r-AX-0Ep"/>
+                            <constraint firstItem="fiZ-BY-4Y4" firstAttribute="top" secondItem="IeH-eW-FBS" secondAttribute="bottom" id="8lQ-vK-4in"/>
+                            <constraint firstItem="fiZ-BY-4Y4" firstAttribute="top" secondItem="lsH-jB-nK2" secondAttribute="top" id="diz-1F-Rtk"/>
+                            <constraint firstItem="rsY-fS-xcF" firstAttribute="top" secondItem="fiZ-BY-4Y4" secondAttribute="bottom" id="mAb-9e-PLj"/>
+                            <constraint firstAttribute="trailing" secondItem="fiZ-BY-4Y4" secondAttribute="trailing" id="weo-Il-Nd8"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="8lQ-vK-4in"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="fiZ-BY-4Y4" id="3dW-or-miY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kmf-Vk-Z3h" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="520" y="516"/>
+        </scene>
+    </scenes>
+</document>

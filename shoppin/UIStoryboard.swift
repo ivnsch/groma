@@ -23,6 +23,7 @@ extension UIStoryboard {
     private class func quickAddGroupStoryboard() -> UIStoryboard { return UIStoryboard(name: "QuickAddGroup", bundle: NSBundle.mainBundle()) }
     private class func manageProductsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageProducts", bundle: NSBundle.mainBundle()) }
     private class func manageGroupsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageGroups", bundle: NSBundle.mainBundle()) }
+    private class func statsStoryboard() -> UIStoryboard { return UIStoryboard(name: "Stats", bundle: NSBundle.mainBundle()) }
     
     // MARK: - List items
     
@@ -110,23 +111,7 @@ extension UIStoryboard {
     class func statsViewController() -> StatsViewController {
         return mainStoryboard().instantiateViewControllerWithIdentifier("StatsViewController") as! StatsViewController
     }
-    
-    class func aggrByTypeTableViewController() -> AggrByTypeTableViewController {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("AggrByTypeTableViewController") as! AggrByTypeTableViewController
-    }
 
-    class func aggrByTypeChartViewController() -> AggrByTypeChartViewController {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("AggrByTypeChartViewController") as! AggrByTypeChartViewController
-    }
-    
-    class func aggrByDateTableViewController() -> AggrByDateTableViewController {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("AggrByDateTableViewController") as! AggrByDateTableViewController
-    }
-    
-    class func aggrByDateChartViewController() -> AggrByDateChartViewController {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("AggrByDateChartViewController") as! AggrByDateChartViewController
-    }
-    
     // MARK: Quick add
 
     class func quickAddViewController() -> QuickAddViewController {
@@ -176,5 +161,10 @@ extension UIStoryboard {
     
     class func manageGroupsSelectItemsController() -> ManageGroupsSelectItemsController {
         return manageGroupsStoryboard().instantiateViewControllerWithIdentifier("ManageGroupsSelectItemsController") as! ManageGroupsSelectItemsController
+    }
+    
+    
+    class func statsDetailsViewController() -> StatsDetailsViewController {
+        return statsStoryboard().instantiateViewControllerWithIdentifier("StatsDetailsViewController") as! StatsDetailsViewController
     }
 }

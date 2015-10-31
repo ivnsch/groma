@@ -29,6 +29,7 @@ extension Array {
         return indices ~= index ? self[index] : nil
     }
     
+    // TODO maybe this is not very useful now that collect was added?
     // Filters a list and maps in the same iteration.
     // Reduce could also be used for this, but this has better performance.
     func filterMap<T>(filterFunc: Element -> Bool, mapFunc: Element -> T) -> [T] {
@@ -41,6 +42,16 @@ extension Array {
         return arr
     }
 
+    func collect<T>(f: Element -> T?) -> [T] {
+        var arr: [T] = []
+        for e in self {
+            if let e = f(e) {
+                arr.append(e)
+            }
+        }
+        return arr
+    }
+    
     func toDictionary<K: Hashable, V>(mapFunc: Element -> (K, V)) -> [K: V] {
         var dict = [K: V]()
         for e in self {

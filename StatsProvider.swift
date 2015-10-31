@@ -12,7 +12,7 @@ enum TimeUnit {
     case Month, Year
 }
 
-struct TimePeriod {
+struct TimePeriod: Equatable {
     let quantity: Int
     let timeUnit: TimeUnit
     
@@ -38,6 +38,10 @@ struct TimePeriod {
     }
 }
 
+func ==(lhs: TimePeriod, rhs: TimePeriod) -> Bool {
+    return lhs.quantity == rhs.quantity && lhs.timeUnit == rhs.timeUnit
+}
+
 enum GroupByAttribute {
     case Name/*, Category*/ //TODO categories
 }
@@ -49,9 +53,11 @@ enum AggregateGroup {
 }
 
 protocol StatsProvider {
-
-    func aggregate(timePeriod: TimePeriod, groupBy: GroupByAttribute, handler: ProviderResult<[ProductAggregate]> -> ())
     
-    func history(timePeriod: TimePeriod, group: AggregateGroup, handler: ProviderResult<GroupMonthYearAggregate> -> ())
+    func aggregate(monthYear: MonthYear, groupBy: GroupByAttribute, _ handler: ProviderResult<[ProductAggregate]> -> ())
+
+    func aggregate(timePeriod: TimePeriod, groupBy: GroupByAttribute, _ handler: ProviderResult<[ProductAggregate]> -> ())
+    
+    func history(timePeriod: TimePeriod, group: AggregateGroup, _ handler: ProviderResult<GroupMonthYearAggregate> -> ())
     
 }

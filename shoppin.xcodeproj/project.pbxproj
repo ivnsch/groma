@@ -197,10 +197,6 @@
 		EB451C471B863516000DE208 /* MonthYear.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB451C451B863516000DE208 /* MonthYear.swift */; };
 		EB451C481B863516000DE208 /* MonthYear.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB451C451B863516000DE208 /* MonthYear.swift */; };
 		EB451C4B1B864A19000DE208 /* SingleSelectionPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB451C4A1B864A19000DE208 /* SingleSelectionPopup.swift */; };
-		EB451C4D1B865B3D000DE208 /* AggrByDateTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB451C4C1B865B3D000DE208 /* AggrByDateTableViewController.swift */; };
-		EB451C501B865CFC000DE208 /* AggrByDateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB451C4F1B865CFC000DE208 /* AggrByDateTableViewCell.swift */; };
-		EB451C531B865F0E000DE208 /* AggrByTypeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB451C521B865F0E000DE208 /* AggrByTypeTableViewController.swift */; };
-		EB451C551B865F27000DE208 /* AggrByTypeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB451C541B865F27000DE208 /* AggrByTypeTableViewCell.swift */; };
 		EB4C36551B4BD5A700C387C5 /* TestSharedLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */; };
 		EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */; };
 		EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */; };
@@ -394,6 +390,7 @@
 		EB89D3471AD4536300B6E0D0 /* AddListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D3441AD4536300B6E0D0 /* AddListController.swift */; };
 		EB89D3491AD4536300B6E0D0 /* AddListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB89D3451AD4536300B6E0D0 /* AddListController.xib */; };
 		EB89D34D1AD5235600B6E0D0 /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D34C1AD5235600B6E0D0 /* ListCell.swift */; };
+		EB969FE11BE4371200F5BC35 /* ProductAggregateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB969FE01BE4371200F5BC35 /* ProductAggregateCell.swift */; };
 		EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
 		EB9BE4171B2C6556005B401A /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
 		EB9BE4191B2CB355005B401A /* RemoteListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4181B2CB355005B401A /* RemoteListItems.swift */; };
@@ -513,6 +510,11 @@
 		EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADEF1B7E839900BD0ABC /* TestHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */; };
+		EBC9D2381BE3F2F50088E3CF /* TimerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC9D2371BE3F2F50088E3CF /* TimerUtils.swift */; };
+		EBC9D2391BE3F2FA0088E3CF /* TimerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC9D2371BE3F2F50088E3CF /* TimerUtils.swift */; };
+		EBC9D23A1BE3F2FB0088E3CF /* TimerUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC9D2371BE3F2F50088E3CF /* TimerUtils.swift */; };
+		EBC9D23C1BE41F440088E3CF /* StatsDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC9D23B1BE41F440088E3CF /* StatsDetailsViewController.swift */; };
+		EBC9D23E1BE4213B0088E3CF /* Stats.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBC9D23D1BE4213B0088E3CF /* Stats.storyboard */; };
 		EBCE418B1B5D10BA00583551 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */; };
 		EBCE418D1B5D466B00583551 /* EditListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418C1B5D466B00583551 /* EditListViewController.swift */; };
 		EBD236AE1B8B9DC600B88969 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD236AD1B8B9DC600B88969 /* HistoryViewController.swift */; };
@@ -537,8 +539,6 @@
 		EBDA75591BCD966D00E34AC3 /* OkCancelButtonsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBDA75561BCD966D00E34AC3 /* OkCancelButtonsView.xib */; };
 		EBDCA1251B87AE96000020BF /* XYPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA1241B87AE96000020BF /* XYPieChart.m */; };
 		EBDCA1271B87AEB9000020BF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDCA1261B87AEB9000020BF /* QuartzCore.framework */; };
-		EBDCA12C1B87B125000020BF /* AggrByTypeChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA12B1B87B125000020BF /* AggrByTypeChartViewController.swift */; };
-		EBDCA12F1B88D54F000020BF /* AggrByDateChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA12E1B88D54F000020BF /* AggrByDateChartViewController.swift */; };
 		EBDCA1311B8A124B000020BF /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA1301B8A124B000020BF /* NSDate.swift */; };
 		EBDCA1321B8A124B000020BF /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA1301B8A124B000020BF /* NSDate.swift */; };
 		EBDCA1331B8A124B000020BF /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA1301B8A124B000020BF /* NSDate.swift */; };
@@ -784,10 +784,6 @@
 		EB451C401B861544000DE208 /* OrderedDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderedDictionary.swift; sourceTree = "<group>"; };
 		EB451C451B863516000DE208 /* MonthYear.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthYear.swift; sourceTree = "<group>"; };
 		EB451C4A1B864A19000DE208 /* SingleSelectionPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleSelectionPopup.swift; sourceTree = "<group>"; };
-		EB451C4C1B865B3D000DE208 /* AggrByDateTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AggrByDateTableViewController.swift; sourceTree = "<group>"; };
-		EB451C4F1B865CFC000DE208 /* AggrByDateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AggrByDateTableViewCell.swift; sourceTree = "<group>"; };
-		EB451C521B865F0E000DE208 /* AggrByTypeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AggrByTypeTableViewController.swift; sourceTree = "<group>"; };
-		EB451C541B865F27000DE208 /* AggrByTypeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AggrByTypeTableViewCell.swift; sourceTree = "<group>"; };
 		EB49F5E91AC6CBEE00BBEDA2 /* shoppin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = shoppin.entitlements; sourceTree = "<group>"; };
 		EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSharedLists.swift; sourceTree = "<group>"; };
 		EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableChoiceModal.swift; sourceTree = "<group>"; };
@@ -871,6 +867,7 @@
 		EB89D3441AD4536300B6E0D0 /* AddListController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddListController.swift; sourceTree = "<group>"; };
 		EB89D3451AD4536300B6E0D0 /* AddListController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddListController.xib; sourceTree = "<group>"; };
 		EB89D34C1AD5235600B6E0D0 /* ListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
+		EB969FE01BE4371200F5BC35 /* ProductAggregateCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductAggregateCell.swift; sourceTree = "<group>"; };
 		EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemProvider.swift; sourceTree = "<group>"; };
 		EB9BE4181B2CB355005B401A /* RemoteListItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItems.swift; sourceTree = "<group>"; };
 		EB9BE41B1B2CB42B005B401A /* RemoteListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItem.swift; sourceTree = "<group>"; };
@@ -958,6 +955,9 @@
 		EBBC23321BB824020002F6B1 /* prefill.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefill.realm; sourceTree = "<group>"; };
 		EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemWithHistory.swift; sourceTree = "<group>"; };
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
+		EBC9D2371BE3F2F50088E3CF /* TimerUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerUtils.swift; sourceTree = "<group>"; };
+		EBC9D23B1BE41F440088E3CF /* StatsDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsDetailsViewController.swift; sourceTree = "<group>"; };
+		EBC9D23D1BE4213B0088E3CF /* Stats.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Stats.storyboard; sourceTree = "<group>"; };
 		EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		EBCE418C1B5D466B00583551 /* EditListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListViewController.swift; sourceTree = "<group>"; };
 		EBD236AD1B8B9DC600B88969 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
@@ -974,8 +974,6 @@
 		EBDCA1241B87AE96000020BF /* XYPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XYPieChart.m; sourceTree = "<group>"; };
 		EBDCA1261B87AEB9000020BF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		EBDCA12A1B87B063000020BF /* bridging_header_ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bridging_header_ios.h; sourceTree = SOURCE_ROOT; };
-		EBDCA12B1B87B125000020BF /* AggrByTypeChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AggrByTypeChartViewController.swift; sourceTree = "<group>"; };
-		EBDCA12E1B88D54F000020BF /* AggrByDateChartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AggrByDateChartViewController.swift; sourceTree = "<group>"; };
 		EBDCA1301B8A124B000020BF /* NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDate.swift; sourceTree = "<group>"; };
 		EBDFE3A61ACE829400E48F95 /* CellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellManager.swift; sourceTree = "<group>"; };
 		EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCellManager.swift; sourceTree = "<group>"; };
@@ -1453,26 +1451,6 @@
 			name = popup;
 			sourceTree = "<group>";
 		};
-		EB451C4E1B865BF5000DE208 /* byDate */ = {
-			isa = PBXGroup;
-			children = (
-				EB451C4C1B865B3D000DE208 /* AggrByDateTableViewController.swift */,
-				EB451C4F1B865CFC000DE208 /* AggrByDateTableViewCell.swift */,
-				EBDCA12E1B88D54F000020BF /* AggrByDateChartViewController.swift */,
-			);
-			name = byDate;
-			sourceTree = "<group>";
-		};
-		EB451C511B865EF1000DE208 /* byType */ = {
-			isa = PBXGroup;
-			children = (
-				EB451C521B865F0E000DE208 /* AggrByTypeTableViewController.swift */,
-				EB451C541B865F27000DE208 /* AggrByTypeTableViewCell.swift */,
-				EBDCA12B1B87B125000020BF /* AggrByTypeChartViewController.swift */,
-			);
-			name = byType;
-			sourceTree = "<group>";
-		};
 		EB4C36561B4C115E00C387C5 /* libraryCandidates */ = {
 			isa = PBXGroup;
 			children = (
@@ -1580,6 +1558,7 @@
 				EB6F81311B4717C2008680E0 /* KeychainKeys.swift */,
 				EB4D57AB1B7505DD00BC6171 /* SyncUtils.swift */,
 				EB7F59D61BA1E0DF00E07EBA /* Performance.swift */,
+				EBC9D2371BE3F2F50088E3CF /* TimerUtils.swift */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -2136,9 +2115,10 @@
 		EBF1A1571B8239E600F34105 /* stats */ = {
 			isa = PBXGroup;
 			children = (
-				EB451C511B865EF1000DE208 /* byType */,
-				EB451C4E1B865BF5000DE208 /* byDate */,
 				EBF1A1581B823A1100F34105 /* StatsViewController.swift */,
+				EBC9D23D1BE4213B0088E3CF /* Stats.storyboard */,
+				EBC9D23B1BE41F440088E3CF /* StatsDetailsViewController.swift */,
+				EB969FE01BE4371200F5BC35 /* ProductAggregateCell.swift */,
 			);
 			name = stats;
 			sourceTree = "<group>";
@@ -2312,6 +2292,7 @@
 				EBDA75571BCD966D00E34AC3 /* OkCancelButtonsView.xib in Resources */,
 				EBA575651BCECC0000A0A825 /* QuantityView.xib in Resources */,
 				EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */,
+				EBC9D23E1BE4213B0088E3CF /* Stats.storyboard in Resources */,
 				EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */,
 				EB0A05921BDFCE8D00D1E29D /* ManageProducts.storyboard in Resources */,
 				EB4147C31BE11D7C00549CE4 /* ManageGroups.storyboard in Resources */,
@@ -2501,9 +2482,9 @@
 			files = (
 				EB2F5D5A1A4F5C8100DBC4AF /* SwipeableCell.swift in Sources */,
 				EB1B364C1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */,
-				EB451C551B865F27000DE208 /* AggrByTypeTableViewCell.swift in Sources */,
 				EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */,
 				EB70C2191B4D2C940060E529 /* ListProvider.swift in Sources */,
+				EB969FE11BE4371200F5BC35 /* ProductAggregateCell.swift in Sources */,
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				EB6F81321B4717C2008680E0 /* KeychainKeys.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
@@ -2531,7 +2512,6 @@
 				EB4147BA1BE0091700549CE4 /* AddEditProductController.swift in Sources */,
 				EB0A05901BDFCE8200D1E29D /* ManageProductsViewController.swift in Sources */,
 				EB1B36541BC31B16003519F2 /* HistoryItemGroupHeaderView.swift in Sources */,
-				EB451C4D1B865B3D000DE208 /* AggrByDateTableViewController.swift in Sources */,
 				EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */,
 				EBBC23091BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */,
 				EBB9A7481B5EB46C00E5487D /* InventoryMapper.swift in Sources */,
@@ -2542,7 +2522,6 @@
 				EB40A4761B550C0C000E9CAD /* Results.swift in Sources */,
 				EB1B36461BC1D001003519F2 /* NSString+Levenshtein.m in Sources */,
 				EB2F5D5C1A5058E900DBC4AF /* TableViewListItem.swift in Sources */,
-				EBDCA12C1B87B125000020BF /* AggrByTypeChartViewController.swift in Sources */,
 				EB40A4861B55159D000E9CAD /* DBList.swift in Sources */,
 				EBAEB2311BDBDBE100FCDA5C /* CGRect.swift in Sources */,
 				EB2F5D6D1A51C17200DBC4AF /* UIView.swift in Sources */,
@@ -2554,7 +2533,6 @@
 				EB7F59D31BA1DBF600E07EBA /* Providers.swift in Sources */,
 				EB0C1B931B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
 				EBE366371BCBC346009543AF /* BlurBubbleTransition.swift in Sources */,
-				EB451C531B865F0E000DE208 /* AggrByTypeTableViewController.swift in Sources */,
 				EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */,
 				EB4D57AC1B7505DD00BC6171 /* SyncUtils.swift in Sources */,
 				EB85F4671BD54FA800E19E9B /* QuickAddProduct.swift in Sources */,
@@ -2626,6 +2604,7 @@
 				EB1B36691BC47E32003519F2 /* PlanItem.swift in Sources */,
 				EB451C351B85F3DA000DE208 /* StatsProviderImpl.swift in Sources */,
 				EB2F5D261A4DE56B00DBC4AF /* DoneViewController.swift in Sources */,
+				EBC9D2381BE3F2F50088E3CF /* TimerUtils.swift in Sources */,
 				EBB9A74C1B5EB95A00E5487D /* EditInventoryViewController.swift in Sources */,
 				EBBC23051BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */,
 				EBBC232B1BB600DF0002F6B1 /* ConfirmationPopup.swift in Sources */,
@@ -2675,7 +2654,6 @@
 				EB20FBF81A5971170058103B /* InventoryItem.swift in Sources */,
 				EBB9A7401B5EB21900E5487D /* InventoryProviderImpl.swift in Sources */,
 				EB7F59CB1BA1970200E07EBA /* Dictionary.swift in Sources */,
-				EB451C501B865CFC000DE208 /* AggrByDateTableViewCell.swift in Sources */,
 				EBF162FA1A3CA54F0048E37C /* ListItemProvider.swift in Sources */,
 				EB85F45D1BD54C7300E19E9B /* QuickAddItemCell.swift in Sources */,
 				EBB9A7381B5EB14300E5487D /* RemoteInventory.swift in Sources */,
@@ -2702,7 +2680,6 @@
 				EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */,
 				EB4147B81BDFE9FB00549CE4 /* ManageProductsCell.swift in Sources */,
 				EBA5755B1BCDC59D00A0A825 /* ListItemGroupItemsViewController.swift in Sources */,
-				EBDCA12F1B88D54F000020BF /* AggrByDateChartViewController.swift in Sources */,
 				EB40A46E1B550804000E9CAD /* RealmProvider.swift in Sources */,
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
 				EB4147CB1BE16C1900549CE4 /* ManageGroupsSelectItemsController.swift in Sources */,
@@ -2714,6 +2691,7 @@
 				EB4147C61BE12B6000549CE4 /* ManageGroupsViewController.swift in Sources */,
 				EB2433EA1BC5A04D00986897 /* AddItemView.swift in Sources */,
 				EBDCA1251B87AE96000020BF /* XYPieChart.m in Sources */,
+				EBC9D23C1BE41F440088E3CF /* StatsDetailsViewController.swift in Sources */,
 				EB20FBFE1A5972C70058103B /* InventoryItemsProviderImpl.swift in Sources */,
 				EBB5A04D1B6596D400FB9C58 /* ProviderFetchModus.swift in Sources */,
 				EB4D57B01B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */,
@@ -2895,6 +2873,7 @@
 				EB7E83231B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
 				EB0C1B901B3DA97000F24C85 /* UserProvider.swift in Sources */,
 				EBA288DC1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */,
+				EBC9D2391BE3F2FA0088E3CF /* TimerUtils.swift in Sources */,
 				EB0F5F8C1B9A0A8000035175 /* Array_ListItem.swift in Sources */,
 				EB70C2241B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBF377981B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
@@ -2958,6 +2937,7 @@
 				EB40A4741B5508B6000E9CAD /* DBResult.swift in Sources */,
 				EB0C1B911B3DA97000F24C85 /* UserProvider.swift in Sources */,
 				EBF3775D1B342A3700EEB6DB /* ListItemProviderImpl.swift in Sources */,
+				EBC9D23A1BE3F2FB0088E3CF /* TimerUtils.swift in Sources */,
 				EBA288DD1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */,
 				EBF377911B38A80100EEB6DB /* TestUsers.swift in Sources */,
 				EBF3776B1B342AB500EEB6DB /* ListItemProvider.swift in Sources */,
