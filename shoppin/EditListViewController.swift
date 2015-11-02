@@ -117,10 +117,13 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
                 // FIXME code smell - not using listFormInput for the listName, are we using listFormInput correctly? Do we actually need listFormInput? Structure differently?
 
                 self!.progressVisible(true)
+                
+                let bgColor = randomColor(luminosity: .Light) // for now random TODO picker (optional - default is random)
+                
                 if self!.isEdit {
                     
                     if let listToEdit = self?.listToEdit {
-                        let updatedList = List(uuid: listToEdit.uuid, name: listName, users: self!.listFormInput.users)
+                        let updatedList = List(uuid: listToEdit.uuid, name: listName, users: self!.listFormInput.users, bgColor: bgColor)
                         self!.listProvider.update(updatedList, self!.successHandler{list in
                             self!.delegate?.onListUpdated(list)
                         })
@@ -129,7 +132,7 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
                     }
 
                 } else {
-                    let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: self!.listFormInput.users)
+                    let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: self!.listFormInput.users, bgColor: bgColor)
                     self!.listProvider.add(listWithSharedUsers, self!.successHandler{list in
                         self!.delegate?.onListAdded(list)
                     })

@@ -27,8 +27,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     private var currentTopController: UIViewController?
     
-    @IBOutlet weak var editButton: UIBarButtonItem!
-    
     @IBOutlet weak var floatingViews: FloatingViews!
     
     private var gestureRecognizer: UIGestureRecognizer!
@@ -40,19 +38,27 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     @IBOutlet weak var pricesViewWidthConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var listNameView: UILabel!
+    
+    @IBOutlet weak var topBar: UIView!
 
+    @IBOutlet weak var editButton: UIButton!
+    
     private let transition = BlurBubbleTransition()
     
     private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0, xRight: 20)
     private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0, xRight: 20)
     private let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: CGFloat(-M_PI_4), xRight: 20)
     
+    
+    private var titleLabel: UILabel?
+    
+    var expandDelegate: Foo?
+    
+
+    
     var currentList: List? {
         didSet {
-            if let list = self.currentList {
-                self.navigationItem.title = list.name
-                self.initWithList(list)
-            }
+            updatePossibleList()
         }
     }
     var onViewWillAppear: VoidFunction?
@@ -61,6 +67,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         super.init(coder: aDecoder)
     }
 
+    
+    @IBAction func onBackTap() {
+        onExpand(false)
+        expandDelegate?.setExpanded(false)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -70,6 +82,57 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         updatePrices()
         FrozenEffect.apply(self.pricesView)
         
+        initTitleLabel()
+    }
+
+    private func initTitleLabel() {
+        let label = UILabel()
+        label.font = UIFont(name: "HelveticaNeue", size: 17) ?? UIFont.systemFontOfSize(16) // TODO app font in 1 place
+        label.textColor = UIColor.blackColor()
+        topBar.addSubview(label)
+        titleLabel = label
+    }
+
+    func onExpand(expanding: Bool) {
+        animateTitle(expanding)
+    }
+    
+    func setThemeColor(color: UIColor) {
+        topBar.backgroundColor = color
+        view.backgroundColor = UIColor.whiteColor()
+        listItemsTableViewController.view.backgroundColor = color.colorWithAlphaComponent(0.5)
+        
+        navigationController?.navigationBar.backgroundColor = color // for cart & stash
+        navigationController?.navigationBar.barTintColor = color
+    }
+    
+    private func updatePossibleList() {
+        if let list = self.currentList {
+            self.navigationItem.title = list.name
+            self.initWithList(list)
+        }
+    }
+
+    private func setTitleLabelText(text: String) {
+        titleLabel?.text = text
+        titleLabel?.sizeToFit()
+        let center = CGPointMake(view.center.x, topBar.center.y)
+        titleLabel?.center = center
+    }
+    
+    private func animateTitle(expanding: Bool) {
+        
+        if let label = self.titleLabel {
+            let left = CGPointMake(14 + label.frame.width / 2, self.topBar.center.y)
+            let center = CGPointMake(self.view.center.x, self.topBar.center.y)
+            
+            label.center = expanding ? left : center
+            UIView.animateWithDuration(0.3) { // note: speed has to be same as expand controller anim, otherwise "jump"
+                label.center = expanding ? center : left
+            }
+        } else {
+            print("Warn: ViewController.animateTitle: no label")
+        }
     }
     
     private func initFloatingViews() {
@@ -80,7 +143,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
+        navigationController?.setNavigationBarHidden(true, animated: true)
+
+        updatePossibleList() // if there's a list already (e.g. come back from cart or stash - reload. If not (come from lists) onViewWillAppear triggers it.
+        
         onViewWillAppear?()
+        onViewWillAppear = nil
         
         updateStashView(withDelay: true)
         
@@ -129,6 +197,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func initWithList(list: List) {
+
+        setTitleLabelText(list.name)
+        
         Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{listItems in
             self.listItemsTableViewController.setListItems(listItems.filter{$0.status == .Todo})
         })
@@ -156,8 +227,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, category: category, sectionName: sectionName, note: note) {
             self.updateItem(self.updatingListItem!, listItemInput: listItemInput) {[weak self] in
             self?.setEditing(false, animated: true, tryCloseTopViewController: true)
-//                self?.setAddEditListItemOpen(false)
-//                self?.addEditItemController?.dismissViewControllerAnimated(true, completion: nil)
             }
         }
     }
@@ -249,22 +318,23 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
         gestureRecognizer.enabled = false //don't block tap on delete button
 
-        let navbarHeight = navigationController!.navigationBar.frame.height
-        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-
-        let topInset = navbarHeight + statusBarHeight + CGRectGetHeight(pricesView.frame)
+        let navbarHeight = topBar.frame.height
+//        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+//
+        let topInset = navbarHeight + CGRectGetHeight(pricesView.frame)
         
         // TODO this makes a very big bottom inset why?
 //            let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + addButtonContainer.frame.height
-        let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + 20
+//        let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + 20
+        let bottomInset: CGFloat = 0
     
         listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
         listItemsTableViewController.tableView.topOffset = -listItemsTableViewController.tableView.inset.top
         
         if editing {
-            editButton.title = "Done"
+            editButton.setTitle("Done", forState: .Normal)
         } else {
-            editButton.title = "Edit"
+            editButton.setTitle("Edit", forState: .Normal)
         }
     }
     
@@ -319,9 +389,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //    }
 
     private func getTableViewInset() -> CGFloat {
-        let navbarHeight = self.navigationController!.navigationBar.frame.height
-        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-        return navbarHeight + statusBarHeight
+        return topBar.frame.height
     }
 
     func loadItems(handler: Try<[String]> -> ()) {
@@ -518,10 +586,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     private func initTopController(controller: UIViewController, height: CGFloat) {
         let view = controller.view
-        self.view.addSubview(view)
-        let navbarHeight = navigationController!.navigationBar.frame.height
-        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-        view.frame = CGRectMake(0, navbarHeight + statusBarHeight + CGRectGetHeight(pricesView.frame), self.view.frame.width, height)
+
+        view.frame = CGRectMake(0, CGRectGetHeight(topBar.frame) + CGRectGetHeight(pricesView.frame), self.view.frame.width, height)
         
         // swift anchor
         view.layer.anchorPoint = CGPointMake(0.5, 0)
@@ -545,7 +611,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private func setAddEditListItemOpen(open: Bool) {
         addEditController.open = open
-        
         animateTopView(addEditController.view, open: open)
         
         if open {
@@ -572,17 +637,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     
     private func animateTopView(view: UIView, open: Bool) {
-        let navbarHeight = self.navigationController!.navigationBar.frame.height
-        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-        
         if open {
+            self.view.addSubview(view)
             tableViewOverlay.frame = self.view.frame
             self.view.insertSubview(tableViewOverlay, aboveSubview: listItemsTableViewController.tableView)
         } else {
             tableViewOverlay.removeFromSuperview()
         }
         
-        UIView.animateWithDuration(0.3) {
+        UIView.animateWithDuration(0.3, animations: {
             if open {
                 self.tableViewOverlay.alpha = 0.2
             } else {
@@ -590,10 +653,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             }
             view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, open ? 1 : 0.001)
             
-            let topInset = navbarHeight + statusBarHeight + CGRectGetHeight(view.frame) + CGRectGetHeight(self.pricesView.frame)
+            let topInset = CGRectGetHeight(self.topBar.frame) + CGRectGetHeight(view.frame) + CGRectGetHeight(self.pricesView.frame)
             let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
             self.listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
             self.listItemsTableViewController.tableView.topOffset = -self.listItemsTableViewController.tableView.inset.top
+            
+            }) { finished in
+        
+            if !open {
+                view.removeFromSuperview()
+            }
         }
     }
 

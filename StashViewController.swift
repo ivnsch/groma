@@ -27,7 +27,9 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
         super.viewDidLoad()
         
         initTableViewController()
-        
+     
+        navigationController?.setNavigationBarHidden(false, animated: true)
+
         onUIReady?()
     }
     

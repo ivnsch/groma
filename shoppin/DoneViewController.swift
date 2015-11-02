@@ -27,6 +27,8 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
 
         self.initTableViewController()
         
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        
         onUIReady?()
     }
 

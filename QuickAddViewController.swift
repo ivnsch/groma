@@ -84,10 +84,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         }
     }
     
-    @IBAction func onCloseTap(sender: UIButton) {
-        delegate?.onCloseQuickAddTap()
-    }
-    
     @IBAction func onOrderAlphabeticallyTap(sender: UIButton) {
         // TODO
     }

@@ -15,6 +15,8 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
     
     let users: [SharedUser] // note that this will be empty if using the app offline (TODO think about showing myself in this list - right now also this will not appear offline)
     
+    let bgColor: UIColor
+    
     //////////////////////////////////////////////
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
     // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
@@ -24,18 +26,19 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid: String, name: String, listItems:[ListItem] = [], users: [SharedUser] = [], lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, name: String, listItems:[ListItem] = [], users: [SharedUser] = [], bgColor: UIColor, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.name = name
         self.listItems = listItems
         self.users = users
+        self.bgColor = bgColor
         self.lastUpdate = lastUpdate
         self.lastServerUpdate = lastServerUpdate
         self.removed = removed
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), bgColor: \(bgColor), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
     }
     
     func same(rhs: List) -> Bool {

@@ -40,7 +40,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     private var swipedTableViewListItem: TableViewListItem? // Item marked for "undo". Item is not submitted until undo state is cleared
     
-
+    var headerBGColor: UIColor?
     
     func touchEnabled(enabled:Bool) {
         self.tableView.userInteractionEnabled = enabled
@@ -85,6 +85,13 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         let(tableViewSections, sections) = self.buildTableViewSections(self.items)
         self.tableViewSections = tableViewSections
         self.sections = sections
+        
+        if let headerBGColor = headerBGColor {
+            for section in tableViewSections {
+                section.headerBGColor = headerBGColor
+            }
+        }
+
         self.tableView.reloadData()
     }
     
