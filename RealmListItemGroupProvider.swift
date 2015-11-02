@@ -26,10 +26,22 @@ class RealmListItemGroupProvider: RealmProvider {
         let dbObjs = groupItems.map{GroupItemMapper.dbWith($0)}
         self.saveObjs(dbObjs, update: true, handler: handler)
     }
-    
+
+    // TODO remove
     func groups(handler: [ListItemGroup] -> Void) {
         let mapper = {ListItemGroupMapper.listItemGroupWith($0)}
         self.load(mapper, handler: handler)
+    }
+
+    func groups(range: NSRange, handler: [ListItemGroup] -> Void) {
+        let mapper = {ListItemGroupMapper.listItemGroupWith($0)}
+        self.load(mapper, range: range, handler: handler)
+    }
+
+    func groupsContainingText(text: String, handler: [ListItemGroup] -> Void) {
+        let mapper = {ListItemGroupMapper.listItemGroupWith($0)}
+        let filter = "name CONTAINS[c] '\(text)'"
+        self.load(mapper, filter: filter, handler: handler)
     }
     
     func groupItems(group: ListItemGroup, handler: [GroupItem] -> Void) {

@@ -15,6 +15,10 @@ protocol ListItemGroupProvider {
     func update(group: ListItemGroup, _ handler: ProviderResult<Any> -> Void)
 
     func groups(handler: ProviderResult<[ListItemGroup]> -> Void)
+
+    func groups(range: NSRange, _ handler: ProviderResult<[ListItemGroup]> -> Void)
+
+    func groupsContainingText(text: String, _ handler: ProviderResult<[ListItemGroup]> -> Void)
     
     func groupItems(group: ListItemGroup, handler: ProviderResult<[GroupItem]> -> Void)
 

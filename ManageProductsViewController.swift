@@ -49,7 +49,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         super.viewWillAppear(animated)
 
         products = []
-        paginator.reset() // TODO improvement either memory cache or reset only if history has changed (marked items as bought since last load)
+        paginator.reset()
         loadPossibleNextPage()
     }
     

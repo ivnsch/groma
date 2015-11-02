@@ -13,7 +13,12 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
     private var editButton: UIBarButtonItem!
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet var tableViewFooter: LoadingFooter!
+
     @IBOutlet weak var searchBar: UISearchBar!
+    
+    private let paginator = Paginator(pageSize: 20)
+    private var loadingPage: Bool = false
     
     private var groups: [ListItemGroup] = [] {
         didSet {
@@ -37,6 +42,14 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
         Providers.listItemGroupsProvider.groups(successHandler {[weak self] groups in
             self?.groups = groups
         })
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        groups = []
+        paginator.reset()
+        loadPossibleNextPage()
     }
 
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
@@ -90,13 +103,13 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     private func filter(searchText: String) {
-        filteredGroups = {
-            if searchText.isEmpty {
-                return groups
-            } else {
-                return groups.filter{$0.name.contains(searchText, caseInsensitive: true)}
-            }
-        }()
+        if searchText.isEmpty {
+            filteredGroups = groups
+        } else {
+            Providers.listItemGroupsProvider.groupsContainingText(searchText, successHandler{[weak self] groups in
+                self?.filteredGroups = groups
+            })
+        }
     }
     
     private func clearSearch() {
@@ -166,5 +179,33 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
     func onEditTap(sender: UIBarButtonItem) {
 //        setEditing(!self.editing, animated: true)
 //        groupsController.setEditing(self.editing, animated: true)
+    }
+    
+    private func loadPossibleNextPage() {
+        
+        func setLoading(loading: Bool) {
+            self.loadingPage = loading
+            self.tableViewFooter.hidden = !loading
+        }
+        
+        synced(self) {[weak self] in
+            let weakSelf = self!
+            
+            if !weakSelf.paginator.reachedEnd {
+                
+                if (!weakSelf.loadingPage) {
+                    setLoading(true)
+                    
+                    Providers.listItemGroupsProvider.groups(weakSelf.paginator.currentPage, weakSelf.successHandler{groups in
+                        weakSelf.groups.appendAll(groups)
+                        
+                        weakSelf.paginator.update(groups.count)
+                        
+                        weakSelf.tableView.reloadData()
+                        setLoading(false)
+                    })
+                }
+            }
+        }
     }
 }

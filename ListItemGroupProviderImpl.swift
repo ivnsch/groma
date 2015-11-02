@@ -22,12 +22,25 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
+    // TODO remove
     func groups(handler: ProviderResult<[ListItemGroup]> -> Void) {
         dbGroupsProvider.groups {groups in
             handler(ProviderResult(status: .Success, sucessResult: groups))
         }
     }
 
+    func groups(range: NSRange, _ handler: ProviderResult<[ListItemGroup]> -> Void) {
+        dbGroupsProvider.groups(range) {groups in
+            handler(ProviderResult(status: .Success, sucessResult: groups))
+        }
+    }
+
+    func groupsContainingText(text: String, _ handler: ProviderResult<[ListItemGroup]> -> Void) {
+        dbGroupsProvider.groupsContainingText(text) {groups in
+            handler(ProviderResult(status: .Success, sucessResult: groups))
+        }
+    }
+    
     func groupItems(group: ListItemGroup, handler: ProviderResult<[GroupItem]> -> Void) {
         dbGroupsProvider.groupItems(group) {items in
             handler(ProviderResult(status: .Success, sucessResult: items))
