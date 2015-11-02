@@ -38,7 +38,7 @@ class ListItemsViewSection: Equatable {
 
     var delegate:ItemActionsDelegate!
     
-    private let headerFont = Fonts.regularBold
+    private let headerFont = Fonts.regular
     
     // this could be solved maybe with inheritance or sth like "style injection", for now this is ok
     private var finalLabelFontColor:UIColor {
