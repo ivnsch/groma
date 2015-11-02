@@ -1387,14 +1387,14 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y3S-ae-ylK">
-                                        <rect key="frame" x="8" y="14" width="58" height="21"/>
+                                        <rect key="frame" x="467" y="14" width="58" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e9t-BE-zKI">
-                                        <rect key="frame" x="82" y="10" width="40" height="30"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                        <rect key="frame" x="541" y="9" width="45" height="33"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <state key="normal" title="Count"/>
                                         <connections>
                                             <action selector="onSortByTap:" destination="uKj-eu-fKv" eventType="touchUpInside" id="yhL-Rb-KYb"/>
@@ -1405,8 +1405,8 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="6Hk-5c-jiO"/>
                                     <constraint firstItem="e9t-BE-zKI" firstAttribute="centerY" secondItem="cV6-te-Foy" secondAttribute="centerY" id="iCu-PP-SpG"/>
+                                    <constraint firstAttribute="trailing" secondItem="e9t-BE-zKI" secondAttribute="trailing" constant="14" id="ijp-zC-Fnp"/>
                                     <constraint firstItem="y3S-ae-ylK" firstAttribute="centerY" secondItem="cV6-te-Foy" secondAttribute="centerY" id="ul7-Rg-CvX"/>
-                                    <constraint firstItem="y3S-ae-ylK" firstAttribute="leading" secondItem="cV6-te-Foy" secondAttribute="leading" constant="8" id="zUx-0u-rJW"/>
                                     <constraint firstItem="e9t-BE-zKI" firstAttribute="baseline" secondItem="y3S-ae-ylK" secondAttribute="baseline" id="zfw-hh-IqT"/>
                                     <constraint firstItem="e9t-BE-zKI" firstAttribute="leading" secondItem="y3S-ae-ylK" secondAttribute="trailing" constant="16" id="zg3-DS-6l4"/>
                                 </constraints>
