@@ -13,9 +13,21 @@ class ProductProviderImpl: ProductProvider {
 
     let dbProvider = RealmListItemProvider()
 
-    // TODO pagination
+    // TODO delete - use only range
     func products(handler: ProviderResult<[Product]> -> Void) {
         dbProvider.loadProducts {products in
+            handler(ProviderResult(status: .Success, sucessResult: products))
+        }
+    }
+    
+    func products(range: NSRange, _ handler: ProviderResult<[Product]> -> Void) {
+        dbProvider.loadProducts(range) {products in
+            handler(ProviderResult(status: .Success, sucessResult: products))
+        }
+    }
+    
+    func productsContainingText(text: String,  _ handler: ProviderResult<[Product]> -> Void) {
+        dbProvider.productsContainingText(text) {products in
             handler(ProviderResult(status: .Success, sucessResult: products))
         }
     }

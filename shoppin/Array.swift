@@ -42,6 +42,8 @@ extension Array {
         return arr
     }
 
+    // Filter + map
+    // parameter f, mapping and filtering function if returns nil -> filter out
     func collect<T>(f: Element -> T?) -> [T] {
         var arr: [T] = []
         for e in self {
@@ -59,6 +61,12 @@ extension Array {
             dict[k] = v
         }
         return dict
+    }
+    
+    mutating func appendAll(array: [Element]) {
+        for element in array {
+            self.append(element)
+        }
     }
 }
 

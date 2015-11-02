@@ -12,9 +12,14 @@ import SwiftValidator
 class ManageProductsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BottonPanelViewDelegate, AddEditProductControllerDelegate, UISearchBarDelegate {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet var tableViewFooter: LoadingFooter!
+
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var floatingViews: FloatingViews!
     private var editButton: UIBarButtonItem!
+    
+    private let paginator = Paginator(pageSize: 20)
+    private var loadingPage: Bool = false
     
     private var products: [Product] = [] {
         didSet {
@@ -39,6 +44,14 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         self.initTopController(controller, height: height)
         return controller
     }()
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        products = []
+        paginator.reset() // TODO improvement either memory cache or reset only if history has changed (marked items as bought since last load)
+        loadPossibleNextPage()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,13 +127,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     private func filter(searchText: String) {
-        filteredProducts = {
-            if searchText.isEmpty {
-                return products
-            } else {
-                return products.filter{$0.name.contains(searchText, caseInsensitive: true)}
-            }
-        }()
+        if searchText.isEmpty {
+            filteredProducts = products
+        } else {
+            Providers.productProvider.productsContainingText(searchText, successHandler{[weak self] products in
+                self?.filteredProducts = products
+            })
+        }
     }
     
     private func onUpdatedProducts() {
@@ -303,4 +316,33 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             floatingViews.setActions([toggleButtonInactiveAction]) // this is done with setEditing false
         }
     }
+    
+    private func loadPossibleNextPage() {
+        
+        func setLoading(loading: Bool) {
+            self.loadingPage = loading
+            self.tableViewFooter.hidden = !loading
+        }
+        
+        synced(self) {[weak self] in
+            let weakSelf = self!
+            
+            if !weakSelf.paginator.reachedEnd {
+                
+                if (!weakSelf.loadingPage) {
+                    setLoading(true)
+                    
+                    Providers.productProvider.products(weakSelf.paginator.currentPage, weakSelf.successHandler{products in
+                        weakSelf.products.appendAll(products)
+                        
+                        weakSelf.paginator.update(products.count)
+                        
+                        weakSelf.tableView.reloadData()
+                        setLoading(false)
+                    })
+                }
+            }
+        }
+    }
+
 }

@@ -11,10 +11,16 @@ import Foundation
 // TODO move product-only method from list item provider here
 protocol ProductProvider {
 
+    // TODO remove only ranged
     func products(handler: ProviderResult<[Product]> -> Void)
+
+    func products(range: NSRange, _ handler: ProviderResult<[Product]> -> Void)
     
     func product(name: String, handler: ProviderResult<Product> -> ())
     
+    // filter by name, containing text
+    func productsContainingText(text: String,  _ handler: ProviderResult<[Product]> -> Void)
+
     // Note: this does not check name uniqueness! If need to add a new product use add(productInput), this checks name uniqueness
     // TODO remove this method? Does add(productInput) covers all add use cases?
     func add(product: Product, _ handler: ProviderResult<Any> -> ())

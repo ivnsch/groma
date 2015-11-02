@@ -59,10 +59,22 @@ class RealmListItemProvider: RealmProvider {
         let mapper = {ProductMapper.productWithDB($0)}
         self.loadFirst(mapper, filter: "name = '\(name)'", handler: handler)
     }
-    
+
+    // TODO remove, only ranged
     func loadProducts(handler: [Product] -> ()) {
         let mapper = {ProductMapper.productWithDB($0)}
         self.load(mapper, handler: handler)
+    }
+    
+    func loadProducts(range: NSRange, handler: [Product] -> ()) {
+        let mapper = {ProductMapper.productWithDB($0)}
+        self.load(mapper, range: range, handler: handler)
+    }
+
+    func productsContainingText(text: String, handler: [Product] -> ()) {
+        let mapper = {ProductMapper.productWithDB($0)}
+        let filter = "name CONTAINS[c] '\(text)'"
+        self.load(mapper, filter: filter, handler: handler)
     }
     
     func deleteProductAndDependencies(product: Product, handler: Bool -> Void) {

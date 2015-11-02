@@ -113,7 +113,7 @@ class RealmProvider {
         })
     }
     
-
+    // TODO range: can't we just subscript result instead of do this programmatically (take a look into https://github.com/realm/realm-cocoa/issues/1904)
     func load<T: Object, U>(mapper: T -> U, predicate predicateMaybe: NSPredicate?, sortDescriptor sortDescriptorMaybe: NSSortDescriptor? = nil, range rangeMaybe: NSRange? = nil, handler: [U] -> ()) {
         
         let finished: ([U]) -> () = {result in
