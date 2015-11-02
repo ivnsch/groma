@@ -1,0 +1,28 @@
+//
+//  Fonts.swift
+//  shoppin
+//
+//  Created by ischuetz on 02/11/15.
+//  Copyright © 2015 ivanschuetz. All rights reserved.
+//
+
+import UIKit
+
+class Fonts {
+
+    static let fontName: String = "HelveticaNeue"
+    static let fontNameLight: String = "\(fontName)-Light"
+    static let fontNameBold: String = "\(fontName)-Bold"
+    
+    static let regularSize: CGFloat = 17
+    static let smallSize: CGFloat = 15
+    static let verySmallSize: CGFloat = 13
+    
+    static var regular: UIFont = {UIFont(name: fontName, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
+    
+    static var regularLight: UIFont = {UIFont(name: fontNameLight, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
+    static var smallLight: UIFont = {UIFont(name: fontNameLight, size: smallSize) ?? UIFont.systemFontOfSize(smallSize)}()
+    static var verySmallLight: UIFont = {UIFont(name: fontNameLight, size: verySmallSize) ?? UIFont.systemFontOfSize(verySmallSize)}()
+    
+    static var regularBold: UIFont = {UIFont(name: fontNameBold, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
+}

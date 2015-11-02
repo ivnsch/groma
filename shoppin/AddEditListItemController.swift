@@ -117,8 +117,8 @@ class AddEditListItemController: UIViewController, MLPAutoCompleteTextFieldDataS
             textField.autoCompleteTableBorderWidth = 0.4
             textField.autoCompleteTableBackgroundColor = UIColor.whiteColor()
             textField.autoCompleteTableCornerRadius = 14
-            textField.autoCompleteBoldFontName = "HelveticaNeue-Bold"
-            textField.autoCompleteRegularFontName = "HelveticaNeue"
+            textField.autoCompleteBoldFontName = Fonts.fontNameBold
+            textField.autoCompleteRegularFontName = Fonts.fontName
             textField.showTextFieldDropShadowWhenAutoCompleteTableIsOpen = false
             textField.maximumNumberOfAutoCompleteRows = 4
         }

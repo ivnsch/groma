@@ -40,8 +40,6 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     private var currentStatsPresentation: StatsPresentation = .List
     private var currentTimePeriod: TimePeriod = defaultTimePeriod
     
-    private let pickerLabelFont = UIFont(name: "HelveticaNeue-Light", size: 17) ?? UIFont.systemFontOfSize(17) // TODO font in 1 place
-    
     private var chart: Chart?
     
     private let gradientPicker: GradientPicker = GradientPicker(width: 200)
@@ -79,7 +77,7 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     
     func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
         let label = view as? UILabel ?? UILabel()
-        label.font = pickerLabelFont
+        label.font = Fonts.regularLight
         label.text = timePeriods[row].text
         return label
     }
@@ -110,7 +108,7 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
             return
         }
         
-        let labelSettings = ChartLabelSettings(font: UIFont(name: "HelveticaNeue-Light", size: 13) ?? UIFont.systemFontOfSize(16)) // TODO app font in 1 place)
+        let labelSettings = ChartLabelSettings(font: Fonts.verySmallLight)
         
         let outputDateFormatter = NSDateFormatter()
         outputDateFormatter.dateFormat = "MMM"
@@ -235,7 +233,7 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
             
             let yOffset = pos ? -posOffset : posOffset
             label.text = "\(Float(chartPointModel.chartPoint.y.scalar).toLocalCurrencyString())"
-            label.font = UIFont(name: "HelveticaNeue-Light", size: 13) ?? UIFont.systemFontOfSize(16) // TODO app font in 1 place
+            label.font = Fonts.verySmallLight
             label.sizeToFit()
             label.center = CGPointMake(chartPointModel.screenLoc.x, pos ? innerFrame.origin.y : innerFrame.origin.y + innerFrame.size.height)
             label.alpha = 0

@@ -520,6 +520,7 @@
 		EBCE418D1B5D466B00583551 /* EditListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418C1B5D466B00583551 /* EditListViewController.swift */; };
 		EBD236AE1B8B9DC600B88969 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD236AD1B8B9DC600B88969 /* HistoryViewController.swift */; };
 		EBD236B01B8B9E7200B88969 /* HistoryItemCellOSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD236AF1B8B9E7200B88969 /* HistoryItemCellOSX.swift */; };
+		EBD827FA1BE79A280072F9FA /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827F91BE79A280072F9FA /* Fonts.swift */; };
 		EBDA75401BCD5C2100E34AC3 /* ListItemGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA753F1BCD5C2100E34AC3 /* ListItemGroup.swift */; };
 		EBDA75421BCD5C8C00E34AC3 /* ListItemGroupProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA75411BCD5C8C00E34AC3 /* ListItemGroupProvider.swift */; };
 		EBDA75441BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA75431BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift */; };
@@ -964,6 +965,7 @@
 		EBCE418C1B5D466B00583551 /* EditListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditListViewController.swift; sourceTree = "<group>"; };
 		EBD236AD1B8B9DC600B88969 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		EBD236AF1B8B9E7200B88969 /* HistoryItemCellOSX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemCellOSX.swift; sourceTree = "<group>"; };
+		EBD827F91BE79A280072F9FA /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		EBDA753F1BCD5C2100E34AC3 /* ListItemGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroup.swift; sourceTree = "<group>"; };
 		EBDA75411BCD5C8C00E34AC3 /* ListItemGroupProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupProvider.swift; sourceTree = "<group>"; };
 		EBDA75431BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupProviderImpl.swift; sourceTree = "<group>"; };
@@ -1529,6 +1531,7 @@
 		EB55675B1A86231D00CD3EC6 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				EBD827F81BE79A110072F9FA /* util */,
 				EB7BFA781BDA5BBE00F4C74A /* cellQuantity */,
 				EB55675C1A86233700CD3EC6 /* extensions */,
 				EBEEDD631A49A7B500FC3B29 /* view */,
@@ -1884,6 +1887,14 @@
 				EBD236AF1B8B9E7200B88969 /* HistoryItemCellOSX.swift */,
 			);
 			name = history;
+			sourceTree = "<group>";
+		};
+		EBD827F81BE79A110072F9FA /* util */ = {
+			isa = PBXGroup;
+			children = (
+				EBD827F91BE79A280072F9FA /* Fonts.swift */,
+			);
+			name = util;
 			sourceTree = "<group>";
 		};
 		EBDA75511BCD95EC00E34AC3 /* okCancelButtons */ = {
@@ -2543,6 +2554,7 @@
 				EB0587E01BBEDAA600080626 /* NSBundle.swift in Sources */,
 				EB0C1B8F1B3DA97000F24C85 /* UserProvider.swift in Sources */,
 				EB40A4691B5506FB000E9CAD /* DBSection.swift in Sources */,
+				EBD827FA1BE79A280072F9FA /* Fonts.swift in Sources */,
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
 				EBA5756D1BD00A2500A0A825 /* DBGroupItem.swift in Sources */,
 				EB85F4511BD5392200E19E9B /* QuickAddListItemViewController.swift in Sources */,

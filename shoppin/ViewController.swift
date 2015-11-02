@@ -88,7 +88,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     private func initTitleLabel() {
         let label = UILabel()
-        label.font = UIFont(name: "HelveticaNeue", size: 17) ?? UIFont.systemFontOfSize(16) // TODO app font in 1 place
+        label.font = Fonts.regular
         label.textColor = UIColor.whiteColor()
         topBar.addSubview(label)
         titleLabel = label

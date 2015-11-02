@@ -17,8 +17,6 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     
     private var tableViewController: InventoryItemsTableViewController?
 
-    private let pickerLabelFont = UIFont(name: "HelveticaNeue-Light", size: 17) ?? UIFont.systemFontOfSize(17) // TODO font in 1 place
-
     private let sortByOptions: [(value: InventorySortBy, key: String)] = [
         (.Count, "Count"), (.Alphabetic, "Alphabetic")
     ]
@@ -53,7 +51,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     
     func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
         let label = view as? UILabel ?? UILabel()
-        label.font = pickerLabelFont
+        label.font = Fonts.regularLight
         label.text = sortByOptions[row].key
         return label
     }

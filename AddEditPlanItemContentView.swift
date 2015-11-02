@@ -39,8 +39,6 @@ class AddEditPlanItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, ML
     var delegate: AddEditPlanItemContentViewDelegate?
     
     var inventories: [Inventory] = []
-    
-    private let pickerLabelFont = UIFont(name: "HelveticaNeue-Light", size: 17) ?? UIFont.systemFontOfSize(17) // TODO font in 1 place
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -65,8 +63,8 @@ class AddEditPlanItemContentView: UIView, MLPAutoCompleteTextFieldDataSource, ML
             textField.autoCompleteTableBorderWidth = 0.4
             textField.autoCompleteTableBackgroundColor = UIColor.whiteColor()
             textField.autoCompleteTableCornerRadius = 14
-            textField.autoCompleteBoldFontName = "HelveticaNeue-Bold"
-            textField.autoCompleteRegularFontName = "HelveticaNeue"
+            textField.autoCompleteBoldFontName = Fonts.fontNameBold
+            textField.autoCompleteRegularFontName = Fonts.fontName
             textField.showTextFieldDropShadowWhenAutoCompleteTableIsOpen = false
             textField.maximumNumberOfAutoCompleteRows = 4
         }

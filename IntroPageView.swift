@@ -15,6 +15,6 @@ class IntroPageView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        label.font = UIFont(name: "HelveticaNeue-Light", size: 14) ?? UIFont.systemFontOfSize(16) // TODO app font in 1 place)
+        label.font = Fonts.smallLight
     }
 }
