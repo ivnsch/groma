@@ -37,7 +37,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.topInset = 44 // in my understanding this should be 64 which is the actual size of nav bar but it needs 44 for some reason
+        self.tableView.topInset = 64 // in my understanding this should be 64 which is the actual size of nav bar but it needs 44 for some reason
     }
     
     override func viewWillAppear(animated: Bool) {
