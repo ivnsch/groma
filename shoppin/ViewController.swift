@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import SwiftValidator
+import ChameleonFramework
 
 class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate
 //    , UIBarPositioningDelegate
@@ -88,7 +89,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private func initTitleLabel() {
         let label = UILabel()
         label.font = UIFont(name: "HelveticaNeue", size: 17) ?? UIFont.systemFontOfSize(16) // TODO app font in 1 place
-        label.textColor = UIColor.blackColor()
+        label.textColor = UIColor.whiteColor()
         topBar.addSubview(label)
         titleLabel = label
     }
@@ -100,7 +101,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     func setThemeColor(color: UIColor) {
         topBar.backgroundColor = color
         view.backgroundColor = UIColor.whiteColor()
-        listItemsTableViewController.view.backgroundColor = color.colorWithAlphaComponent(0.5)
+        
+        let colorArray = NSArray(ofColorsWithColorScheme: ColorScheme.Complementary, with: color, flatScheme: true)
+        listItemsTableViewController.view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
+        listItemsTableViewController.headerBGColor = colorArray[1] as? UIColor // as? to silence warning
         
         navigationController?.navigationBar.backgroundColor = color // for cart & stash
         navigationController?.navigationBar.barTintColor = color

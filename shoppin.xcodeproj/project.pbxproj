@@ -198,10 +198,6 @@
 		EB451C481B863516000DE208 /* MonthYear.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB451C451B863516000DE208 /* MonthYear.swift */; };
 		EB451C4B1B864A19000DE208 /* SingleSelectionPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB451C4A1B864A19000DE208 /* SingleSelectionPopup.swift */; };
 		EB4612BA1BE56D970049DAD1 /* ExpandCellAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4612B91BE56D970049DAD1 /* ExpandCellAnimator.swift */; };
-		EB4612C41BE6D2440049DAD1 /* ColorDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4612C01BE6D2440049DAD1 /* ColorDefinition.swift */; };
-		EB4612C51BE6D2440049DAD1 /* Hue.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4612C11BE6D2440049DAD1 /* Hue.swift */; };
-		EB4612C61BE6D2440049DAD1 /* Luminosity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4612C21BE6D2440049DAD1 /* Luminosity.swift */; };
-		EB4612C71BE6D2440049DAD1 /* RandomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4612C31BE6D2440049DAD1 /* RandomColor.swift */; };
 		EB4C36551B4BD5A700C387C5 /* TestSharedLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */; };
 		EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */; };
 		EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */; };
@@ -790,10 +786,6 @@
 		EB451C451B863516000DE208 /* MonthYear.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthYear.swift; sourceTree = "<group>"; };
 		EB451C4A1B864A19000DE208 /* SingleSelectionPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleSelectionPopup.swift; sourceTree = "<group>"; };
 		EB4612B91BE56D970049DAD1 /* ExpandCellAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandCellAnimator.swift; sourceTree = "<group>"; };
-		EB4612C01BE6D2440049DAD1 /* ColorDefinition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorDefinition.swift; sourceTree = "<group>"; };
-		EB4612C11BE6D2440049DAD1 /* Hue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hue.swift; sourceTree = "<group>"; };
-		EB4612C21BE6D2440049DAD1 /* Luminosity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Luminosity.swift; sourceTree = "<group>"; };
-		EB4612C31BE6D2440049DAD1 /* RandomColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomColor.swift; sourceTree = "<group>"; };
 		EB49F5E91AC6CBEE00BBEDA2 /* shoppin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = shoppin.entitlements; sourceTree = "<group>"; };
 		EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSharedLists.swift; sourceTree = "<group>"; };
 		EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableChoiceModal.swift; sourceTree = "<group>"; };
@@ -1181,7 +1173,6 @@
 		EB1B363C1BC1CFE6003519F2 /* libraryCouldNotLink */ = {
 			isa = PBXGroup;
 			children = (
-				EB4612BF1BE6D2340049DAD1 /* randomColor */,
 				EB1B363D1BC1D001003519F2 /* MLPAutoCompleteTextField */,
 			);
 			name = libraryCouldNotLink;
@@ -1461,17 +1452,6 @@
 				EBBC232A1BB600DE0002F6B1 /* ConfirmationPopup.swift */,
 			);
 			name = popup;
-			sourceTree = "<group>";
-		};
-		EB4612BF1BE6D2340049DAD1 /* randomColor */ = {
-			isa = PBXGroup;
-			children = (
-				EB4612C01BE6D2440049DAD1 /* ColorDefinition.swift */,
-				EB4612C11BE6D2440049DAD1 /* Hue.swift */,
-				EB4612C21BE6D2440049DAD1 /* Luminosity.swift */,
-				EB4612C31BE6D2440049DAD1 /* RandomColor.swift */,
-			);
-			name = randomColor;
 			sourceTree = "<group>";
 		};
 		EB4C36561B4C115E00C387C5 /* libraryCandidates */ = {
@@ -2511,7 +2491,6 @@
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				EB6F81321B4717C2008680E0 /* KeychainKeys.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
-				EB4612C61BE6D2440049DAD1 /* Luminosity.swift in Sources */,
 				EB0C1B881B3DA37100F24C85 /* LoginViewController.swift in Sources */,
 				EBA95CB41BBC98FE00A80850 /* InventoryItemsViewController.swift in Sources */,
 				EBDA75531BCD960900E34AC3 /* OkCancelButtonsView.swift in Sources */,
@@ -2572,7 +2551,6 @@
 				EB40A4721B5508B6000E9CAD /* DBResult.swift in Sources */,
 				EB40A47E1B5512D6000E9CAD /* DBSharedUser.swift in Sources */,
 				EBB9A7321B5EB0FC00E5487D /* DBInventory.swift in Sources */,
-				EB4612C41BE6D2440049DAD1 /* ColorDefinition.swift in Sources */,
 				EB0A058D1BDFCD6B00D1E29D /* MoreViewController.swift in Sources */,
 				EB28C1181A58623E00E1C8BC /* PlainTableViewController.swift in Sources */,
 				EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */,
@@ -2597,7 +2575,6 @@
 				EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */,
 				EB1B7D181BD2DBBC006DFDEE /* SuggestionsPrefiller.swift in Sources */,
 				EB451C4B1B864A19000DE208 /* SingleSelectionPopup.swift in Sources */,
-				EB4612C71BE6D2440049DAD1 /* RandomColor.swift in Sources */,
 				EB4C4F631BC9358A00DCA048 /* Array_HistoryItem.swift in Sources */,
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
 				EB4147BC1BE0338800549CE4 /* ProductInput.swift in Sources */,
@@ -2717,7 +2694,6 @@
 				EB9BE41C1B2CB42B005B401A /* RemoteListItem.swift in Sources */,
 				EB4147C61BE12B6000549CE4 /* ManageGroupsViewController.swift in Sources */,
 				EB2433EA1BC5A04D00986897 /* AddItemView.swift in Sources */,
-				EB4612C51BE6D2440049DAD1 /* Hue.swift in Sources */,
 				EBDCA1251B87AE96000020BF /* XYPieChart.m in Sources */,
 				EBC9D23C1BE41F440088E3CF /* StatsDetailsViewController.swift in Sources */,
 				EB20FBFE1A5972C70058103B /* InventoryItemsProviderImpl.swift in Sources */,

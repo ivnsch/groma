@@ -22,6 +22,7 @@ target 'shoppin' do
     pod 'SwipeView', '~> 1.3.2'
     pod 'CMPopTipView', '~> 2.0'
     pod 'KLCPopup', '~> 1.0'
+    pod 'ChameleonFramework/Swift'
     shared
 end
 

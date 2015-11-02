@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import FBSDKCoreKit
 import Reachability
+import ChameleonFramework
 
 @objc
 @UIApplicationMain
@@ -62,9 +63,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             print("Error: Font not found: \(fontName) or: \(lightFontName)")
         }
-        
-        UINavigationBar.appearance().barTintColor = UIColor(red: 93/255, green: 167/255, blue: 1, alpha: 1) // color "theme": 5DA7FF (blue), FF5DA6 (pink), A7FF5D(green)
+
+//        UINavigationBar.appearance().barTintColor = UIColor(red: 93/255, green: 167/255, blue: 1, alpha: 1) // color "theme": 5DA7FF (blue), FF5DA6 (pink), A7FF5D(green)
         // grey: AEAEAE
+//        UINavigationBar.appearance().tintColor = UIColor.blackColor()
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
@@ -119,8 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func addDummyData() {
 
-        
-        let list1 = List(uuid: "1", name: "My first list", bgColor: randomColor(luminosity: .Light))
+        let list1 = List(uuid: "1", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark))
         listProvider.saveList(list1) {[weak self] result in
             
             guard let weakSelf = self else {return}
@@ -341,6 +342,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
+        
+        // add more lists...
+        //        let lists = [
+        //            List(uuid: "2", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "3", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "4", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "5", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "6", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "7", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "8", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "9", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "10", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "11", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "12", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "13", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "14", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "15", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "16", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "17", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "18", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "19", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "20", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "21", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "22", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark)),
+        //            List(uuid: "23", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark))
+        //        ]
+        //        listProvider.saveLists(lists, update: true) {[weak self] result in
+        //        }
     }
     
     func applicationWillResignActive(application: UIApplication) {

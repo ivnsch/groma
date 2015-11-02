@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ChameleonFramework
 
 class ListMapper {
     
@@ -29,7 +30,7 @@ class ListMapper {
         let dbList = DBList()
         dbList.uuid = list.uuid
         dbList.name = list.name
-        dbList.setBgColor(randomColor(luminosity: .Light)) // for now no synchronisation of colors with remote
+        dbList.setBgColor(RandomFlatColorWithShade(.Dark)) // for now no synchronisation of colors with remote
         let dbSharedUsers = list.users.map{SharedUserMapper.dbWithSharedUser($0)}
         for dbObj in dbSharedUsers {
             dbList.users.append(dbObj)
@@ -44,6 +45,6 @@ class ListMapper {
     }
     
     class func ListWithRemote(remoteList: RemoteList) -> List {
-        return List(uuid: remoteList.uuid, name: remoteList.name, users: remoteList.users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: randomColor(luminosity: .Light) /* for now no synchronisation of colors with remote*/)
+        return List(uuid: remoteList.uuid, name: remoteList.name, users: remoteList.users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: RandomFlatColorWithShade(.Dark) /* for now no synchronisation of colors with remote*/)
     }
 }

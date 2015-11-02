@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftValidator
+import ChameleonFramework
 
 struct EditListFormInput {
     let name: String
@@ -118,7 +119,7 @@ class EditListViewController: UIViewController, UITableViewDelegate, UITableView
 
                 self!.progressVisible(true)
                 
-                let bgColor = randomColor(luminosity: .Light) // for now random TODO picker (optional - default is random)
+                let bgColor = RandomFlatColorWithShade(.Dark) // for now random TODO picker (optional - default is random)
                 
                 if self!.isEdit {
                     

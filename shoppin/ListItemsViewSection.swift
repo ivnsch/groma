@@ -27,7 +27,7 @@ class ListItemsViewSection: Equatable {
     
     var headerBGColor:UIColor = UIColor(red: 167/255, green: 1, blue: 93/255, alpha: 1)
     
-    var headerFontColor:UIColor = UIColor.blackColor()
+    var headerFontColor:UIColor = UIColor.whiteColor()
     var labelFontColor:UIColor = UIColor.blackColor()
     
     var section: Section // as var to mutate order in-place (ListItemsTableViewController)

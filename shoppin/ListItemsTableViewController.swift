@@ -89,6 +89,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         if let headerBGColor = headerBGColor {
             for section in tableViewSections {
                 section.headerBGColor = headerBGColor
+                section.headerFontColor = UIColor(contrastingBlackOrWhiteColorOn: headerBGColor, isFlat: true)
             }
         }
 

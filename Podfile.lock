@@ -1,5 +1,8 @@
 PODS:
   - Alamofire (2.0.0-beta.1)
+  - ChameleonFramework/Default (2.0.4)
+  - ChameleonFramework/Swift (2.0.4):
+    - ChameleonFramework/Default
   - CMPopTipView (2.2.0)
   - Google/Core (1.0.7):
     - GoogleNetworkingUtilities (~> 1.0)
@@ -38,6 +41,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (from `https://github.com/Alamofire/Alamofire.git`, branch `swift-2.0`)
+  - ChameleonFramework/Swift
   - CMPopTipView (~> 2.0)
   - Google/SignIn
   - KLCPopup (~> 1.0)
@@ -95,6 +99,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: 96feccc1e48a735edb92395cf023ba4ed52bdb45
+  ChameleonFramework: 5abe69b1f2a6cc79c3c435fcd9d3d855748225ee
   CMPopTipView: a0a88404b9f46a5cfc16ce54bdb1b9bf9acb9aff
   Google: 875f5a8ade86dd02e36586e4a54814843938c7f6
   GoogleAppUtilities: c01c6a5671e9da8b9d690fdaec5959d6c2aac699
