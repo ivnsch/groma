@@ -48,6 +48,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 
     
     @IBAction func skipTapped(sender: UIButton) {
+        PreferencesManager.savePreference(PreferencesManagerKey.showIntro, value: false)
         self.startMainStoryboard()
     }
     
@@ -63,10 +64,12 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     }
     
     func onLoginSuccess() {
+        PreferencesManager.savePreference(PreferencesManagerKey.showIntro, value: false)
         self.startMainStoryboard()
     }
     
     func onRegisterFromLoginSuccess() {
+        PreferencesManager.savePreference(PreferencesManagerKey.showIntro, value: false)
         self.startMainStoryboard()
     }
     

@@ -32,10 +32,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         let viewController: UIViewController = {
-            if ProviderFactory().userProvider.loggedIn {
-                return UIStoryboard.mainTabController()
-            } else {
+            if PreferencesManager.loadPreference(PreferencesManagerKey.showIntro) ?? true {
                 return UIStoryboard.introNavController()
+            } else {
+                return UIStoryboard.mainTabController()
             }
         }()
         
