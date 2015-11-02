@@ -15,7 +15,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     let memProvider = MemInventoryItemProvider(enabled: true)
 
     // TODO we are sorting 3x! Optimise this. Ponder if it makes sense to do the server objects sorting in the server (where it can be done at db level)
-    func inventoryItems(inventory: Inventory, fetchMode: ProviderFetchModus = .Both, sortBy: InventorySortBy = .Count, _ handler: ProviderResult<[InventoryItem]> -> ()) {
+    func inventoryItems(range: NSRange, inventory: Inventory, fetchMode: ProviderFetchModus = .Both, sortBy: InventorySortBy = .Count, _ handler: ProviderResult<[InventoryItem]> -> ()) {
     
         let memItemsMaybe = memProvider.inventoryItems(inventory)
         if let memItems = memItemsMaybe {
@@ -25,9 +25,11 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             }
         }
         
-        self.dbInventoryProvider.loadInventory(sortBy) {[weak self] (var dbInventoryItems) in
+        // FIXME: sortBy and range don't work in db (see notes in implementation). For now we have to do this programmatically
+        self.dbInventoryProvider.loadInventory(sortBy, range: range) {[weak self] (var dbInventoryItems) in
             
             dbInventoryItems = dbInventoryItems.sortBy(sortBy)
+            dbInventoryItems = dbInventoryItems[range]
             
             if (memItemsMaybe.map {$0 != dbInventoryItems}) ?? true { // if memItems is not set or different than db items
                 handler(ProviderResult(status: .Success, sucessResult: dbInventoryItems))

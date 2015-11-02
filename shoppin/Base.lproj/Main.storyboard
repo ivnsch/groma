@@ -61,6 +61,7 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -654,6 +655,36 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="4ee-aS-jZm" customClass="LoadingFooter" customModule="shoppin" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="66" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="pbM-2n-03h">
+                                    <rect key="frame" x="8" y="12" width="20" height="20"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="20" id="6wd-LS-pSf"/>
+                                        <constraint firstAttribute="height" constant="20" id="myq-VG-ugz"/>
+                                    </constraints>
+                                </activityIndicatorView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QIt-nx-kQe">
+                                    <rect key="frame" x="36" y="12" width="59" height="21"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="3yj-Yy-jcZ"/>
+                                <constraint firstItem="QIt-nx-kQe" firstAttribute="centerY" secondItem="pbM-2n-03h" secondAttribute="centerY" id="7e4-ly-POP"/>
+                                <constraint firstItem="pbM-2n-03h" firstAttribute="leading" secondItem="4ee-aS-jZm" secondAttribute="leading" constant="8" id="LkZ-4p-1zo"/>
+                                <constraint firstItem="pbM-2n-03h" firstAttribute="centerY" secondItem="4ee-aS-jZm" secondAttribute="centerY" id="ZO2-y6-IhI"/>
+                                <constraint firstItem="QIt-nx-kQe" firstAttribute="leading" secondItem="pbM-2n-03h" secondAttribute="trailing" constant="8" id="a9n-xd-D0a"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="activityIndicator" destination="pbM-2n-03h" id="Waf-tT-4Tb"/>
+                            </connections>
+                        </view>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="inventoryCell" id="vCq-K7-Ar7" customClass="InventoryItemTableViewCell" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="22" width="600" height="44"/>
@@ -742,6 +773,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="8Vd-34-Lev"/>
+                    <connections>
+                        <outlet property="tableViewFooter" destination="4ee-aS-jZm" id="zjm-yl-0HY"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I1W-NC-SaH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

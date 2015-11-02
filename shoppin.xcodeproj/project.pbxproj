@@ -521,6 +521,9 @@
 		EBD236AE1B8B9DC600B88969 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD236AD1B8B9DC600B88969 /* HistoryViewController.swift */; };
 		EBD236B01B8B9E7200B88969 /* HistoryItemCellOSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD236AF1B8B9E7200B88969 /* HistoryItemCellOSX.swift */; };
 		EBD827FA1BE79A280072F9FA /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827F91BE79A280072F9FA /* Fonts.swift */; };
+		EBD827FC1BE8237C0072F9FA /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827FB1BE8237C0072F9FA /* NSRange.swift */; };
+		EBD827FD1BE8237C0072F9FA /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827FB1BE8237C0072F9FA /* NSRange.swift */; };
+		EBD827FE1BE8237C0072F9FA /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827FB1BE8237C0072F9FA /* NSRange.swift */; };
 		EBDA75401BCD5C2100E34AC3 /* ListItemGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA753F1BCD5C2100E34AC3 /* ListItemGroup.swift */; };
 		EBDA75421BCD5C8C00E34AC3 /* ListItemGroupProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA75411BCD5C8C00E34AC3 /* ListItemGroupProvider.swift */; };
 		EBDA75441BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA75431BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift */; };
@@ -966,6 +969,7 @@
 		EBD236AD1B8B9DC600B88969 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		EBD236AF1B8B9E7200B88969 /* HistoryItemCellOSX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemCellOSX.swift; sourceTree = "<group>"; };
 		EBD827F91BE79A280072F9FA /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		EBD827FB1BE8237C0072F9FA /* NSRange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSRange.swift; sourceTree = "<group>"; };
 		EBDA753F1BCD5C2100E34AC3 /* ListItemGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroup.swift; sourceTree = "<group>"; };
 		EBDA75411BCD5C8C00E34AC3 /* ListItemGroupProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupProvider.swift; sourceTree = "<group>"; };
 		EBDA75431BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupProviderImpl.swift; sourceTree = "<group>"; };
@@ -1357,6 +1361,7 @@
 				EB7BFA701BD9981400F4C74A /* OrderedDictionary_Quantities.swift */,
 				EB7BFA741BD99CB600F4C74A /* Addable.swift */,
 				EB7BFA7D1BDAF96A00F4C74A /* Int.swift */,
+				EBD827FB1BE8237C0072F9FA /* NSRange.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -2721,6 +2726,7 @@
 				EB4FD45B1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EBF162F71A3CA5030048E37C /* ListItemProviderMock.swift in Sources */,
 				EBE366351BCB23D1009543AF /* AddEditListItemController.swift in Sources */,
+				EBD827FC1BE8237C0072F9FA /* NSRange.swift in Sources */,
 				EBF1A1541B82213200F34105 /* HistoryViewController.swift in Sources */,
 				EBB9A72E1B5EB00E00E5487D /* InventoriesTableViewController.swift in Sources */,
 				EBB9A7541B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */,
@@ -2905,6 +2911,7 @@
 				EBDA75471BCD5CF800E34AC3 /* RealmListItemGroupProvider.swift in Sources */,
 				EB4D57B11B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */,
 				EB6F81331B4717C2008680E0 /* KeychainKeys.swift in Sources */,
+				EBD827FD1BE8237C0072F9FA /* NSRange.swift in Sources */,
 				EB7BFA7F1BDAF96A00F4C74A /* Int.swift in Sources */,
 				EB7E83171B7B6676009DEEF4 /* RealmHistoryProvider.swift in Sources */,
 				EB451C421B861544000DE208 /* OrderedDictionary.swift in Sources */,
@@ -3003,6 +3010,7 @@
 				EBF5D7D51B8F868E00A235C5 /* Paginator.swift in Sources */,
 				EB4D57AA1B74B90600BC6171 /* ListSync.swift in Sources */,
 				EBB9A73E1B5EB1C700E5487D /* InventoryItemsProvider.swift in Sources */,
+				EBD827FE1BE8237C0072F9FA /* NSRange.swift in Sources */,
 				EB1B36671BC47DF9003519F2 /* PlanProviderImpl.swift in Sources */,
 				EBF3775E1B342A4900EEB6DB /* InventoryItemsProviderImpl.swift in Sources */,
 				EB40A4701B550804000E9CAD /* RealmProvider.swift in Sources */,

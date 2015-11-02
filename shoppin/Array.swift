@@ -68,6 +68,15 @@ extension Array {
             self.append(element)
         }
     }
+    
+    // safe "slice"
+    subscript(range: NSRange) -> Array<Element> {
+        get {
+            guard range.location < count else {return []}
+            let end = min((range.location + range.length), count)
+            return Array(self[range.location..<end])
+        }
+    }
 }
 
 

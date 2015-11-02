@@ -11,7 +11,8 @@ import UIKit
 class InventoryItemsTableViewController: UITableViewController, InventoryItemTableViewCellDelegate {
 
     private var inventoryItems: [InventoryItem] = []
-    
+    @IBOutlet var tableViewFooter: LoadingFooter!
+
     var sortBy: InventorySortBy? {
         didSet {
             loadInventory()
@@ -31,6 +32,9 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
         }
     }
     
+    private let paginator = Paginator(pageSize: 20)
+    private var loadingPage: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,23 +45,17 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
         self.navigationItem.title = "Inventory"
         
         onViewWillAppear?()
-    }
-
-    
-    private func loadInventoryItems(inventory: Inventory) {
-        if let sortBy = self.sortBy {
-            Providers.inventoryItemsProvider.inventoryItems(inventory, fetchMode: .Both, sortBy: sortBy, successHandler{[weak self] inventoryItems in
-                self?.inventoryItems = inventoryItems
-                self?.tableView.reloadData()
-            })
-        }
+        
+        inventoryItems = []
+        paginator.reset()
+        loadPossibleNextPage()
     }
     
     private func loadInventory() {
         Providers.inventoryProvider.firstInventory(successHandler {[weak self] inventory in
             //            self.navigationItem.title = inventory.name
             self?.inventory = inventory
-            self?.loadInventoryItems(inventory)
+            self?.loadPossibleNextPage()
         })
     }
     
@@ -166,6 +164,40 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
         tableView.wrapUpdates {[weak self] in
             self?.inventoryItems.removeAtIndex(row)
             self?.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Bottom)
+        }
+    }
+    
+    private func loadPossibleNextPage() {
+        
+        func setLoading(loading: Bool) {
+            self.loadingPage = loading
+            self.tableViewFooter.hidden = !loading
+        }
+        
+        if let inventory = inventory, sortBy = sortBy {
+            
+            synced(self) {[weak self] in
+                let weakSelf = self!
+                
+                if !weakSelf.paginator.reachedEnd {
+                    
+                    if (!weakSelf.loadingPage) {
+                        setLoading(true)
+                        
+                        Providers.inventoryItemsProvider.inventoryItems(weakSelf.paginator.currentPage, inventory: inventory, fetchMode: .Both, sortBy: sortBy, weakSelf.successHandler{inventoryItems in
+                            weakSelf.inventoryItems.appendAll(inventoryItems)
+                            
+                            weakSelf.paginator.update(inventoryItems.count)
+                            
+                            weakSelf.tableView.reloadData()
+                            setLoading(false)
+                        })
+                    }
+                }
+            }
+            
+        } else {
+            print("Warn: InventoryItemsTableViewController.loadPossibleNextPage: can't load page, inventory or sortBy not set")
         }
     }
 }

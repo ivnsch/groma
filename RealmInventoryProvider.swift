@@ -67,7 +67,7 @@ class RealmInventoryProvider: RealmProvider {
 //    }
 
     
-    func loadInventory(sortBy: InventorySortBy, handler: [InventoryItem] -> ()) {
+    func loadInventory(sortBy: InventorySortBy, range: NSRange, handler: [InventoryItem] -> ()) {
         let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}
 //        let sortFieldStr: String = {
 //            switch sortBy {
@@ -75,7 +75,8 @@ class RealmInventoryProvider: RealmProvider {
 //            case .Count: return "quantity"
 //            }
 //        }()
-        self.load(mapper, /*sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), */handler: handler)
+        // range also not possible because sorting is not psosible. If we can't sort first then range is incorrect.
+        self.load(mapper, /*range: range, sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), */handler: handler)
     }
     
     func saveInventory(inventory: Inventory, handler: Bool -> ()) {
