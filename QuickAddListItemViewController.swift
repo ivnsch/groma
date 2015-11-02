@@ -30,7 +30,8 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-    
+    @IBOutlet var tableViewFooter: LoadingFooter!
+
     var delegate: QuickAddListItemDelegate?
     var itemType: QuickAddItemType = .Product { // for now product/group mutually exclusive (no mixed tableview)
         didSet {
@@ -57,11 +58,22 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
 
     var onViewDidLoad: VoidFunction? // ensure called after outlets set
     
+    private let paginator = Paginator(pageSize: 20)
+    private var loadingPage: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadItems()
         
         onViewDidLoad?()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        quickAddItems = []
+        paginator.reset()
+        loadPossibleNextPage()
     }
     
     func loadItems() {
@@ -86,13 +98,24 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        filteredQuickAddItems = {
-            if searchText.isEmpty {
-                return quickAddItems
-            } else {
-                return quickAddItems.filter{$0.labelText.contains(searchText, caseInsensitive: true)}
+        filter(searchText)
+    }
+    
+    private func filter(searchText: String) {
+        if searchText.isEmpty {
+            filteredQuickAddItems = quickAddItems
+        } else {
+            switch itemType {
+            case .Product:
+                Providers.productProvider.productsContainingText(searchText, successHandler{[weak self] products in
+                    self?.quickAddItems = products.map{QuickAddProduct($0)}
+                })
+            case .Group:
+                Providers.listItemGroupsProvider.groupsContainingText(searchText, successHandler{[weak self] groups in
+                    self?.quickAddItems = groups.map{QuickAddGroup($0)}
+                })
             }
-        }()
+        }
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -143,5 +166,46 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
     override func setEditing(editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         tableView.editing = editing
+    }
+    
+    private func loadPossibleNextPage() {
+        
+        func setLoading(loading: Bool) {
+            self.loadingPage = loading
+            self.tableViewFooter.hidden = !loading
+        }
+        
+        func onItemsLoaded(items: [QuickAddItem]) {
+            quickAddItems.appendAll(items)
+            
+            paginator.update(items.count)
+            
+            tableView.reloadData()
+            setLoading(false)
+        }
+        
+        synced(self) {[weak self] in
+            let weakSelf = self!
+            
+            if !weakSelf.paginator.reachedEnd {
+                
+                if (!weakSelf.loadingPage) {
+                    setLoading(true)
+                    
+                    switch weakSelf.itemType {
+                    case .Product:
+                        Providers.productProvider.products(weakSelf.paginator.currentPage, weakSelf.successHandler{products in
+                            let quickAddItems = products.map{QuickAddProduct($0)}
+                            onItemsLoaded(quickAddItems)
+                        })
+                    case .Group:
+                        Providers.listItemGroupsProvider.groups(weakSelf.paginator.currentPage, weakSelf.successHandler{groups in
+                            let quickAddItems = groups.map{QuickAddGroup($0)}
+                            onItemsLoaded(quickAddItems)
+                        })
+                    }
+                }
+            }
+        }
     }
 }

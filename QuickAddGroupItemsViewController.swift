@@ -31,6 +31,7 @@ class QuickAddGroupItemsViewController: UIViewController, QuickAddListItemDelega
         
         let groupItemsController = UIStoryboard.quickAddListItemViewController()
         itemsTableViewContainer.addSubview(groupItemsController.view)
+        addChildViewController(groupItemsController)
           groupItemsController.view.translatesAutoresizingMaskIntoConstraints = false
         groupItemsController.view.fillSuperview()
         groupItemsController.delegate = self
