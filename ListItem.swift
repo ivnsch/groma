@@ -33,6 +33,9 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let removed: Bool
     //////////////////////////////////////////////
     
+    var totalPrice: Float {
+        return Float(quantity) * product.price
+    }
     
     init(uuid: String, status: ListItemStatus, quantity: Int, product: Product, section: Section, list: List, order: Int, note: String? = nil, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid

@@ -69,6 +69,8 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
         //        self.listItemsTableViewController.tableViewShiftDown(64)
     }
     
+    // MARK: - ListItemsTableViewDelegate
+
     func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) {
         if let list = list {
             Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Todo) {[weak self] result in
@@ -82,6 +84,16 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
         }
     }
     
+    func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
+        listItemsTableViewController.markOpen(true, indexPath: indexPath)
+    }
+    
+    func onListItemReset(tableViewListItem: TableViewListItem) {
+        // do nothing
+    }
+    
+    // MARK: -
+    
     func startSideMenuDrag() {
         listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
@@ -92,10 +104,6 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     
     func clearThings() {
         self.listItemsTableViewController.clearPendingSwipeItemIfAny()
-    }
-    
-    func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
-        listItemsTableViewController.markOpen(true, indexPath: indexPath)
     }
     
     private func resetAllItems() {

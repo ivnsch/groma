@@ -61,5 +61,28 @@ extension Array where Element: ListItem {
         }
         return nil
     }
+    
+    var totalPrice: Float {
+        return reduce(0) {price, listItem in
+            price + listItem.totalPrice
+        }
+    }
+
+    // Total price excluding stash
+    var totalPriceTodoAndCart: Float {
+        return reduce(0) {price, listItem in
+            price + (listItem.status == .Stash ? 0 : listItem.totalPrice)
+        }
+    }
+
+    var totalPriceDone: Float {
+        return reduce(0) {price, listItem in
+            price + (listItem.status == .Done ? listItem.totalPrice : 0)
+        }
+    }
+    
+    func filterDone() -> Array<Element> {
+        return self.filter{$0.status == .Done}
+    }
 }
 

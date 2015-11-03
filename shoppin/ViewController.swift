@@ -80,8 +80,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         initTableViewController()
 
         setEditing(false, animated: false, tryCloseTopViewController: false)
-        updatePrices()
-        FrozenEffect.apply(self.pricesView)
         
         initTitleLabel()
     }
@@ -157,6 +155,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         updateStashView(withDelay: true)
         
         initFloatingViews()
+        
+        updatePrices()
     }
     
     // Update stash view after a delay. The delay is for design reason, to let user see what's hapenning otherwise not clear together with view controller transition
@@ -188,7 +188,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private func setStashViewOpen(open: Bool, withDelay: Bool) {
         if open {
             stashView.alpha = 0
-            pricesViewWidthConstraint.constant = -100
+            pricesViewWidthConstraint.constant = -60
             
         } else {
             stashView.alpha = 1
@@ -367,6 +367,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     
+    // MARK: - ListItemsTableViewDelegate
+    
     func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) {
         tableViewListItem.listItem.status = .Done
         
@@ -384,6 +386,41 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
 
+    func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
+        if self.editing {
+            updatingListItem = tableViewListItem.listItem
+            updatingSelectedCell = listItemsTableViewController.tableView.cellForRowAtIndexPath(indexPath)
+            
+            //            performSegueWithIdentifier("showAddIemSegue", sender: self)
+            
+            addEditController.updatingListItem = updatingListItem
+            addEditController.delegate = self
+            
+            setAddEditListItemOpen(true)
+            
+        } else {
+
+            listItemsTableViewController.markOpen(true, indexPath: indexPath, onFinish: {[weak self] in
+                // "fake" update of price labels - the update has not been submitted yet to provider, since we just opened the cell and the item is submitted only after "undo" is cleared
+                // we do this for simplicity purposes, if we submitted on cell open we would have to revert the update on "undo".
+                // Note that after item is submitted we fetch from provider and update the labels again, to "be sure" (this time without animation). There's no real reason for this, just in case.
+                // Note also callback onFinish - when there's another undo item it will be submitted automatically, which triggers a provider and price view update
+                // so we have to ensure our fake update comes after this possible update, otherwise it's overwritten.
+                let updatedPrice = (self?.pricesView.donePrice ?? 0) + tableViewListItem.listItem.totalPrice
+                self?.pricesView.setDonePrice(updatedPrice, animated: true)
+            })
+        }
+    }
+    
+    func onListItemReset(tableViewListItem: TableViewListItem) {
+        // since we do a "fake" update of done price label when item is marked as undo (provider is not updated yet), we have to set label back when undo is reverted
+        // this is done by simply reloading the prices from the provider
+        updatePrices()
+    }
+
+    
+    // MARK: -
+    
 //    func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
 //        return UIBarPosition.TopAttached
 //    }
@@ -409,34 +446,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     /**
-    
+    Update price labels (total, done) using state in provider
     */
     func updatePrices(listItemsFetchMode: ProviderFetchModus = .Both) {
-
-        func calculatePrice(listItems:[ListItem]) -> Float {
-            return listItems.reduce(0, combine: {(price:Float, listItem:ListItem) -> Float in
-                return price + (listItem.product.price * Float(listItem.quantity))
-            })
-        }
-        
         if let currentList = self.currentList {
             Providers.listItemsProvider.listItems(currentList, fetchMode: listItemsFetchMode, successHandler{listItems in
-                    
-                //        let allListItems = self.tableViewSections.map {
-                //            $0.listItems
-                //        }.reduce([], combine: +)
-                
-                let totalPrice:Float = calculatePrice(listItems)
-                
-                let doneListItems = listItems.filter{$0.status == .Done}
-                let donePrice:Float = calculatePrice(doneListItems)
-                
-                self.pricesView.totalPrice = totalPrice
-                self.pricesView.donePrice = donePrice
+                self.pricesView.setTotalPrice(listItems.totalPriceTodoAndCart, animated: false)
+                // The reason we exclude stash from total price is that when user is in the store they want to know what they will have to pay at the end (if they buy the complete list - this may not be necessarily the case though), which is todo + stash
+                self.pricesView.setDonePrice(listItems.totalPriceDone, animated: false)
             })
         }
     }
-
+    
     private func addItem(listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
 
         if let currentList = self.currentList {
@@ -486,24 +507,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             print("Error: Invalid state: trying to update list item without current list")
         }
 
-    }
-    
-
-    func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
-        if self.editing {
-            updatingListItem = tableViewListItem.listItem
-            updatingSelectedCell = listItemsTableViewController.tableView.cellForRowAtIndexPath(indexPath)
-            
-//            performSegueWithIdentifier("showAddIemSegue", sender: self)
-
-            addEditController.updatingListItem = updatingListItem
-            addEditController.delegate = self
-            
-            setAddEditListItemOpen(true)
-            
-        } else {
-            listItemsTableViewController.markOpen(true, indexPath: indexPath)
-        }
     }
     
     func onListItemDeleted(tableViewListItem: TableViewListItem) {

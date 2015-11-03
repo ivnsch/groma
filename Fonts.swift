@@ -13,7 +13,8 @@ class Fonts {
     static let fontName: String = "HelveticaNeue"
     static let fontNameLight: String = "\(fontName)-Light"
     static let fontNameBold: String = "\(fontName)-Bold"
-    
+
+    static let largeSize: CGFloat = 19
     static let regularSize: CGFloat = 17
     static let smallSize: CGFloat = 15
     static let verySmallSize: CGFloat = 13
@@ -23,6 +24,7 @@ class Fonts {
     static var regularLight: UIFont = {UIFont(name: fontNameLight, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
     static var smallLight: UIFont = {UIFont(name: fontNameLight, size: smallSize) ?? UIFont.systemFontOfSize(smallSize)}()
     static var verySmallLight: UIFont = {UIFont(name: fontNameLight, size: verySmallSize) ?? UIFont.systemFontOfSize(verySmallSize)}()
-    
+
+    static var largeBold: UIFont = {UIFont(name: fontNameBold, size: largeSize) ?? UIFont.systemFontOfSize(largeSize)}()
     static var regularBold: UIFont = {UIFont(name: fontNameBold, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
 }

@@ -68,6 +68,8 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
 //        self.listItemsTableViewController.tableViewShiftDown(64)
     }
     
+    // MARK: - ListItemsTableViewDelegate
+
     func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) {
         if let list = self.list {
             Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Todo) {[weak self] result in
@@ -81,18 +83,6 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
         }
     }
 
-    func startSideMenuDrag() {
-        self.listItemsTableViewController.clearPendingSwipeItemIfAny()
-    }
-    
-    private func setItemUndone(listItem: ListItem) {
-
-    }
-    
-    func clearThings() {
-        self.listItemsTableViewController.clearPendingSwipeItemIfAny()
-    }
-    
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
         listItemsTableViewController.markOpen(true, indexPath: indexPath)
     }
@@ -106,6 +96,24 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
                 }
             }
         }
+    }
+    
+    func onListItemReset(tableViewListItem: TableViewListItem) {
+        // do nothing
+    }
+    
+    // MARK: -
+    
+    func startSideMenuDrag() {
+        self.listItemsTableViewController.clearPendingSwipeItemIfAny()
+    }
+    
+    private func setItemUndone(listItem: ListItem) {
+
+    }
+    
+    func clearThings() {
+        self.listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     
     @IBAction func onAddToInventoryTap(sender: UIBarButtonItem) {

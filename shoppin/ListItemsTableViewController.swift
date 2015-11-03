@@ -9,8 +9,9 @@
 import UIKit
 
 protocol ListItemsTableViewDelegate {
-    func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction)
-    func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath)
+    func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) // submit item marked as undo
+    func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) // mark as undo
+    func onListItemReset(tableViewListItem: TableViewListItem) // revert undo
 }
 
 protocol ListItemsEditTableViewDelegate {
@@ -314,11 +315,13 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
 //        let allListItems = self.tableViewSections.map {
 //            $0.listItems
 //            }.reduce([], combine: +)
-        
+     
+        // TODO call also onListItemSelected here? (like in selection)
         self.swipedTableViewListItem = tableViewListItem
     }
     
     func undoSwipe(tableViewListItem: TableViewListItem) {
+        listItemsTableViewDelegate?.onListItemReset(tableViewListItem)
         self.swipedTableViewListItem = nil
     }
 
@@ -400,13 +403,15 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
 
     /**
     Sets pending item if open and shows cell open state. Submits currently pending item if existent.
+    parameter onFinish: After cell marked open and automatic update of possible second "undo" item (to "done").
     */
-    func markOpen(open: Bool, indexPath: NSIndexPath) {
+    func markOpen(open: Bool, indexPath: NSIndexPath, onFinish: VoidFunction? = nil) {
         if let section = self.tableViewSections[safe: indexPath.section], tableViewListItem = section.tableViewListItems[safe: indexPath.row] {
             // Note: order is important here! first show open at current index path, then remove possible pending (which can make indexPath invalid, thus later), then update pending variable with new item
             self.showCellOpen(open, indexPath: indexPath)
             self.clearPendingSwipeItemIfAny {
                 self.swipedTableViewListItem = tableViewListItem
+                onFinish?()
             }
             
         } else {
