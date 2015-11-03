@@ -402,7 +402,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
 
     /**
-    Sets pending item if open and shows cell open state. Submits currently pending item if existent.
+    Sets pending item (mark as undo" if open and shows cell open state. Submits currently pending item if existent.
     parameter onFinish: After cell marked open and automatic update of possible second "undo" item (to "done").
     */
     func markOpen(open: Bool, indexPath: NSIndexPath, onFinish: VoidFunction? = nil) {

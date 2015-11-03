@@ -34,8 +34,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     @IBOutlet weak var pricesView: PricesView!
     
-    @IBOutlet weak var stashLabel: UILabel!
-    @IBOutlet weak var stashView: UIView!
+    @IBOutlet weak var stashView: StashView!
     @IBOutlet weak var pricesViewWidthConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var listNameView: UILabel!
@@ -106,6 +105,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         navigationController?.navigationBar.backgroundColor = color // for cart & stash
         navigationController?.navigationBar.barTintColor = color
+        
+//        stashView.bgColor = colorArray[3] as? UIColor
+//        if let bgColor = stashView.bgColor {
+//            stashView.setTextColor(UIColor(contrastingBlackOrWhiteColorOn: bgColor, isFlat: true))
+//        } else {
+//            print("Error: ViewController.setThemeColor, colorArray[3] is not a color")
+//        }
+        stashView.setNeedsDisplay()
     }
     
     private func updatePossibleList() {
@@ -165,10 +172,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         func f() {
             if let list = currentList {
                 Providers.listItemsProvider.listItemCount(ListItemStatus.Stash, list: list, successHandler {[weak self] count in
-                    let countText = String(count)
-                    if countText != self?.stashLabel.text { // don't animate if there's no change
-                        self?.stashLabel.text = countText
-                        self?.setStashViewOpen(count > 0, withDelay: true)
+                    if count != self?.stashView.quantity { // don't animate if there's no change
+                        self?.stashView.quantity = count
+                        self?.pricesView.setExpanded(count == 0)
+                        self?.stashView.setOpen(count > 0)
                     }
                 })
             }
@@ -181,22 +188,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             }
         } else {
             f()
-        }
-    }
-    
-    // TODO constraint constant to show exact width of stash view (depends on label length)
-    private func setStashViewOpen(open: Bool, withDelay: Bool) {
-        if open {
-            stashView.alpha = 0
-            pricesViewWidthConstraint.constant = -60
-            
-        } else {
-            stashView.alpha = 1
-            pricesViewWidthConstraint.constant = 0
-        }
-        UIView.animateWithDuration(0.5) {[weak self] in
-            self?.view.layoutIfNeeded()
-            self?.stashView.alpha = self?.stashView.alpha == 0 ? 1 : 0
         }
     }
     

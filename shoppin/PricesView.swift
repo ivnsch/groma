@@ -12,14 +12,14 @@ class PricesView: UIView {
 
     @IBOutlet weak var totalPriceLabel: UILabel!
     @IBOutlet weak var donePriceLabel: UILabel!
+    @IBOutlet weak var widthConstraint: NSLayoutConstraint!
     
     private(set) var totalPrice: Float?
     private(set) var donePrice: Float?
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         backgroundColor = UIColor.clearColor() // we add the background with layer (because of triangle shape)
-//        rightTriangle()
     }
     
     func setTotalPrice(price: Float, animated: Bool) {
@@ -64,32 +64,19 @@ class PricesView: UIView {
         }
     }
     
-    private func path()  -> CGPath {
-        
-        let w = bounds.width
-        let h = bounds.height
-        let aw: CGFloat = 20 // arrow width
-        
-        let path = CGPathCreateMutable()
-        
-        CGPathMoveToPoint(path , nil, 0, 0)
-        CGPathAddLineToPoint(path, nil, w - aw, 0)
-        CGPathAddLineToPoint(path, nil, w, h / 2);
-        CGPathAddLineToPoint(path, nil, w - aw, h)
-        CGPathAddLineToPoint(path, nil, 0, h)
-
-        CGPathCloseSubpath(path)
-        
-        return path
-    }
-    
-    
     override func drawRect(rect: CGRect) {
-
         let ctx = UIGraphicsGetCurrentContext()
         CGContextSetFillColorWithColor(ctx, UIColor.whiteColor().CGColor)
         CGContextBeginPath(ctx)
-        CGContextAddPath(ctx, path())
+        CGContextAddPath(ctx, Shapes.arrowToRightBGPath(bounds.size, arrowWidth: 20))
         CGContextDrawPath(ctx, CGPathDrawingMode.Fill)
+    }
+    
+    // expanded: covers all width, contracted: space to see stash view
+    func setExpanded(expanded: Bool) {
+        widthConstraint.constant = expanded ? 0 : -80
+        UIView.animateWithDuration(0.5) {[weak self] in
+            self?.layoutIfNeeded()
+        }
     }
 }

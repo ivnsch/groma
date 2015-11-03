@@ -524,6 +524,8 @@
 		EBD827FC1BE8237C0072F9FA /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827FB1BE8237C0072F9FA /* NSRange.swift */; };
 		EBD827FD1BE8237C0072F9FA /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827FB1BE8237C0072F9FA /* NSRange.swift */; };
 		EBD827FE1BE8237C0072F9FA /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827FB1BE8237C0072F9FA /* NSRange.swift */; };
+		EBD828001BE95C8B0072F9FA /* StashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827FF1BE95C8B0072F9FA /* StashView.swift */; };
+		EBD828031BE95CD80072F9FA /* Shapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD828021BE95CD80072F9FA /* Shapes.swift */; };
 		EBDA75401BCD5C2100E34AC3 /* ListItemGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA753F1BCD5C2100E34AC3 /* ListItemGroup.swift */; };
 		EBDA75421BCD5C8C00E34AC3 /* ListItemGroupProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA75411BCD5C8C00E34AC3 /* ListItemGroupProvider.swift */; };
 		EBDA75441BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA75431BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift */; };
@@ -970,6 +972,8 @@
 		EBD236AF1B8B9E7200B88969 /* HistoryItemCellOSX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemCellOSX.swift; sourceTree = "<group>"; };
 		EBD827F91BE79A280072F9FA /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		EBD827FB1BE8237C0072F9FA /* NSRange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSRange.swift; sourceTree = "<group>"; };
+		EBD827FF1BE95C8B0072F9FA /* StashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StashView.swift; sourceTree = "<group>"; };
+		EBD828021BE95CD80072F9FA /* Shapes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shapes.swift; sourceTree = "<group>"; };
 		EBDA753F1BCD5C2100E34AC3 /* ListItemGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroup.swift; sourceTree = "<group>"; };
 		EBDA75411BCD5C8C00E34AC3 /* ListItemGroupProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupProvider.swift; sourceTree = "<group>"; };
 		EBDA75431BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupProviderImpl.swift; sourceTree = "<group>"; };
@@ -1304,6 +1308,7 @@
 			children = (
 				EB85F47D1BD6ED9500E19E9B /* addEdit */,
 				EB2F5D721A55754400DBC4AF /* PricesView.swift */,
+				EBD827FF1BE95C8B0072F9FA /* StashView.swift */,
 				EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */,
 				EB1DDEAF1A3334EC00D778DE /* ViewController.swift */,
 				EBE366341BCB23D1009543AF /* AddEditListItemController.swift */,
@@ -1527,6 +1532,7 @@
 				EB4C36561B4C115E00C387C5 /* libraryCandidates */,
 				EBDCA12D1B88D4FF000020BF /* charts */,
 				EBBC23241BB5D5820002F6B1 /* popup */,
+				EBD828011BE95CC80072F9FA /* utils */,
 				EB0A058B1BDFCD4100D1E29D /* more */,
 				EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */,
 			);
@@ -1900,6 +1906,14 @@
 				EBD827F91BE79A280072F9FA /* Fonts.swift */,
 			);
 			name = util;
+			sourceTree = "<group>";
+		};
+		EBD828011BE95CC80072F9FA /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				EBD828021BE95CD80072F9FA /* Shapes.swift */,
+			);
+			name = utils;
 			sourceTree = "<group>";
 		};
 		EBDA75511BCD95EC00E34AC3 /* okCancelButtons */ = {
@@ -2573,6 +2587,7 @@
 				EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */,
 				EB7858811B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift in Sources */,
 				EB70C21B1B4D2ECE0060E529 /* RemoteSharedUser.swift in Sources */,
+				EBD828001BE95C8B0072F9FA /* StashView.swift in Sources */,
 				EB20FC051A599A500058103B /* InventoryItemsTableViewController.swift in Sources */,
 				EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */,
 				EB7E831E1B7B7069009DEEF4 /* HistoryProvider.swift in Sources */,
@@ -2651,6 +2666,7 @@
 				EBA288D71BB9FCC3001A2B95 /* MemInventoryItemProvider.swift in Sources */,
 				EB714AA61B66BBA800F91B94 /* DBSyncable.swift in Sources */,
 				EBBC231E1BB575340002F6B1 /* UIColor.swift in Sources */,
+				EBD828031BE95CD80072F9FA /* Shapes.swift in Sources */,
 				EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */,
 				EB1B36751BC4832D003519F2 /* PlanItemMapper.swift in Sources */,
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,
