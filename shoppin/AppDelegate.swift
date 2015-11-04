@@ -63,7 +63,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             print("Error: Font not found: \(fontName) or: \(lightFontName)")
         }
-
+        
+        UITabBar.appearance().tintColor = UIColor.blackColor()
+        UITabBar.appearance().barTintColor = UIColor.whiteColor()
+        UITabBar.appearance().translucent = false
+        
 //        UINavigationBar.appearance().barTintColor = UIColor(red: 93/255, green: 167/255, blue: 1, alpha: 1) // color "theme": 5DA7FF (blue), FF5DA6 (pink), A7FF5D(green)
         // grey: AEAEAE
 //        UINavigationBar.appearance().tintColor = UIColor.blackColor()
