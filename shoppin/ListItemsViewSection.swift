@@ -163,6 +163,8 @@ class ListItemsViewSection: Equatable {
             self?.delegate.onNoteTap(tableViewListItem)
         }
         
+        cell.backgroundColor = UIColor.clearColor()
+        
         cell.noteButton.hidden = tableViewListItem.listItem.note?.isEmpty ?? true
         
         cell.setOpen(tableViewListItem.swiped)
