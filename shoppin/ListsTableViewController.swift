@@ -67,6 +67,9 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         v.backgroundColor = c
         cell.selectedBackgroundView = v
         
+        let compl = UIColor(contrastingBlackOrWhiteColorOn: c, isFlat: true)
+        cell.listName.textColor = compl
+        
         return cell
     }
     

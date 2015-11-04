@@ -103,8 +103,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         listItemsTableViewController.view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
         listItemsTableViewController.headerBGColor = colorArray[1] as? UIColor // as? to silence warning
         
-        navigationController?.navigationBar.backgroundColor = color // for cart & stash
-        navigationController?.navigationBar.barTintColor = color
+        let compl = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
+        editButton.setTitleColor(compl, forState: .Normal)
+        
+        // adjust nav controller for cart & stash (in this controller we use a custom view).
+        navigationController?.setColors(color, textColor: compl)
+
+        titleLabel?.textColor = compl
         
 //        stashView.bgColor = colorArray[3] as? UIColor
 //        if let bgColor = stashView.bgColor {
@@ -508,6 +513,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "doneViewControllerSegue" {
             if let doneViewController = segue.destinationViewController as? DoneViewController {
+                doneViewController.navigationItemTextColor = titleLabel?.textColor
                 listItemsTableViewController.clearPendingSwipeItemIfAny {
                     doneViewController.onUIReady = {
                         doneViewController.list = self.currentList
@@ -530,6 +536,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //        }
         else if segue.identifier == "stashSegue" {
             if let stashViewController = segue.destinationViewController as? StashViewController {
+                stashViewController.navigationItemTextColor = titleLabel?.textColor
                 listItemsTableViewController.clearPendingSwipeItemIfAny {
                     stashViewController.onUIReady = {
                         stashViewController.list = self.currentList

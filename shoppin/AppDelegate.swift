@@ -57,8 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let boldFontName = "HelveticaNeue-Bold"
         if let tabsFont = UIFont(name: lightFontName, size: 11), barButtonsFont = UIFont(name: fontName, size: 17), titleFont = UIFont(name: boldFontName, size: 17),segmentedControlFont = UIFont(name: lightFontName, size: 12) {
             UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: tabsFont], forState: .Normal)
-            UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: titleFont, NSForegroundColorAttributeName: UIColor.blackColor()]
-            UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName: barButtonsFont, NSForegroundColorAttributeName: UIColor.blackColor()], forState: .Normal)
+            UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: titleFont, NSForegroundColorAttributeName: Theme.navigationBarTextColor]
+            UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName: barButtonsFont, NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
             UISegmentedControl.appearance().setTitleTextAttributes([NSFontAttributeName: segmentedControlFont], forState: .Normal)
         } else {
             print("Error: Font not found: \(fontName) or: \(lightFontName)")
