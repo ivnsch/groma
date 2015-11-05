@@ -312,7 +312,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             }
         }
         
-        floatingViews.setActions([editing ? toggleButtonAvailableAction : toggleButtonInactiveAction]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button), and set appropiate alpha
+        floatingViews.setActions(editing ? [toggleButtonAvailableAction, FLoatingButtonAttributedAction(action: .Add)] : [toggleButtonInactiveAction]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button), and set appropiate alpha
 
         listItemsTableViewController.setEditing(editing, animated: animated)
 //        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
@@ -789,8 +789,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 setQuickAddOpen(true)
                 floatingViews.setActions([toggleButtonActiveAction])
             }
-        
-        case .Add, .Back, .Submit: sendActionToTopController(action)
+        case .Add:
+            listItemsTableViewController.setAllSectionsExpanded(!listItemsTableViewController.sectionsExpanded)
+            
+        case .Back, .Submit: sendActionToTopController(action)
         }
     }
     

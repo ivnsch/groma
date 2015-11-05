@@ -47,6 +47,8 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         self.tableView.userInteractionEnabled = enabled
     }
     
+    var sectionsExpanded: Bool = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -340,29 +342,36 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     func onHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
         if let sectionIndex = getIndex(section.section) {
-            toggleSectionExpanded(sectionIndex, section: section)
+            setSectionExpanded(!section.expanded, sectionIndex: sectionIndex, section: section)
         } else {
             print("Error: ListItemsTableViewController.onHeaderTap: Invalid state: No section index found for section, which is in table view")
         }
     }
     
-    private func toggleSectionExpanded(sectionIndex: Int, section: ListItemsViewSection) {
+    func setAllSectionsExpanded(expanded: Bool) {
+        for (index, section) in tableViewSections.enumerate() {
+            setSectionExpanded(expanded, sectionIndex: index, section: section)
+        }
+        sectionsExpanded = expanded
+    }
+    
+    private func setSectionExpanded(expanded: Bool, sectionIndex: Int, section: ListItemsViewSection) {
         
         let sectionIndexPaths: [NSIndexPath] = (0..<section.tableViewListItems.count).map {
             return NSIndexPath(forRow: $0, inSection: sectionIndex)
         }
         
-        if section.expanded { // collapse
-            tableView.wrapUpdates {[weak self] in
-                self?.tableView.deleteRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
-                section.expanded = false
-            }
-        } else { // expand
+        if expanded {
             tableView.wrapUpdates {[weak self] in
                 self?.tableView.insertRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
                 section.expanded = true
             }
             tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: sectionIndex), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+        } else {
+            tableView.wrapUpdates {[weak self] in
+                self?.tableView.deleteRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
+                section.expanded = false
+            }
         }
     }
     
