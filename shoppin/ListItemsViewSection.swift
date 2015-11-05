@@ -145,12 +145,16 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
             self?.delegate.onNoteTap(tableViewListItem)
         }
         
-        cell.backgroundColor = UIColor.clearColor()
-        
         cell.noteButton.hidden = tableViewListItem.listItem.note?.isEmpty ?? true
         
         cell.setOpen(tableViewListItem.swiped)
-
+        if tableViewListItem.swiped {
+            cell.backgroundColor = UIColor.clearColor()
+        } else {
+            cell.backgroundColor = UIColor.whiteColor()
+        }
+        
+        
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell

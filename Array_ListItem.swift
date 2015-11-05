@@ -13,8 +13,17 @@ extension Array where Element: ListItem {
     /**
     Sorts increasingly by section and list item order
     */
-    func sortedByOrder() -> [Element] {
-        return self.sort {($0.section.order <= $1.section.order) && ($0.order <= $1.order)}
+    func sortedByOrder() -> [ListItem] {
+        let bySection = self.sort {($0.section.order <= $1.section.order)}.groupBySectionOrdered()
+        
+        var listItemsFlat: [ListItem] = []
+        for section in bySection {
+            for listItem in section.1 {
+                listItemsFlat.append(listItem)
+            }
+        }
+        
+        return listItemsFlat
     }
     
     /**
@@ -36,6 +45,17 @@ extension Array where Element: ListItem {
     */
     func groupBySection() -> [Section: [ListItem]] {
         var dictionary = [Section: [ListItem]]()
+        for listItem in self {
+            if dictionary[listItem.section] == nil {
+                dictionary[listItem.section] = []
+            }
+            dictionary[listItem.section]?.append(listItem)
+        }
+        return dictionary
+    }
+    
+    func groupBySectionOrdered() -> OrderedDictionary<Section, [ListItem]> {
+        var dictionary = OrderedDictionary<Section, [ListItem]>()
         for listItem in self {
             if dictionary[listItem.section] == nil {
                 dictionary[listItem.section] = []

@@ -261,6 +261,15 @@
 		EB6F81661B4B1CDC008680E0 /* TestRequiresAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81631B4B1CDC008680E0 /* TestRequiresAuthentication.swift */; };
 		EB70327B1BEB6FFA00779EBB /* ListItemsSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70327A1BEB6FFA00779EBB /* ListItemsSectionHeaderView.swift */; };
 		EB70327D1BEB700900779EBB /* ListItemsSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB70327C1BEB700900779EBB /* ListItemsSectionHeaderView.xib */; };
+		EB7032801BEBBBB100779EBB /* ReorderSectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70327E1BEBBBB100779EBB /* ReorderSectionTableViewController.swift */; };
+		EB7032831BEBBC6400779EBB /* ReorderSectionTableViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB7032821BEBBC6400779EBB /* ReorderSectionTableViewController.storyboard */; };
+		EB7032851BEBBD5D00779EBB /* ReorderSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7032841BEBBD5D00779EBB /* ReorderSectionCell.swift */; };
+		EB7032871BEBF2B300779EBB /* SectionProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7032861BEBF2B300779EBB /* SectionProviderImpl.swift */; };
+		EB7032881BEBF2B300779EBB /* SectionProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7032861BEBF2B300779EBB /* SectionProviderImpl.swift */; };
+		EB7032891BEBF2B300779EBB /* SectionProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7032861BEBF2B300779EBB /* SectionProviderImpl.swift */; };
+		EB70328B1BEBF31A00779EBB /* SectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70328A1BEBF31A00779EBB /* SectionProvider.swift */; };
+		EB70328C1BEBF31A00779EBB /* SectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70328A1BEBF31A00779EBB /* SectionProvider.swift */; };
+		EB70328D1BEBF31A00779EBB /* SectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70328A1BEBF31A00779EBB /* SectionProvider.swift */; };
 		EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB703FE11B3B5F3A001586C5 /* Intro.storyboard */; };
 		EB70C2171B4D2C690060E529 /* ListProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2161B4D2C690060E529 /* ListProviderImpl.swift */; };
 		EB70C2191B4D2C940060E529 /* ListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2181B4D2C940060E529 /* ListProvider.swift */; };
@@ -825,6 +834,11 @@
 		EB6F81631B4B1CDC008680E0 /* TestRequiresAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestRequiresAuthentication.swift; sourceTree = "<group>"; };
 		EB70327A1BEB6FFA00779EBB /* ListItemsSectionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsSectionHeaderView.swift; sourceTree = "<group>"; };
 		EB70327C1BEB700900779EBB /* ListItemsSectionHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListItemsSectionHeaderView.xib; sourceTree = "<group>"; };
+		EB70327E1BEBBBB100779EBB /* ReorderSectionTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderSectionTableViewController.swift; sourceTree = "<group>"; };
+		EB7032821BEBBC6400779EBB /* ReorderSectionTableViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ReorderSectionTableViewController.storyboard; sourceTree = "<group>"; };
+		EB7032841BEBBD5D00779EBB /* ReorderSectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReorderSectionCell.swift; sourceTree = "<group>"; };
+		EB7032861BEBF2B300779EBB /* SectionProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionProviderImpl.swift; sourceTree = "<group>"; };
+		EB70328A1BEBF31A00779EBB /* SectionProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionProvider.swift; sourceTree = "<group>"; };
 		EB703FE11B3B5F3A001586C5 /* Intro.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Intro.storyboard; sourceTree = "<group>"; };
 		EB70C2161B4D2C690060E529 /* ListProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListProviderImpl.swift; sourceTree = "<group>"; };
 		EB70C2181B4D2C940060E529 /* ListProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListProvider.swift; sourceTree = "<group>"; };
@@ -2034,6 +2048,9 @@
 				EB2F5D5B1A5058E900DBC4AF /* TableViewListItem.swift */,
 				EB70327A1BEB6FFA00779EBB /* ListItemsSectionHeaderView.swift */,
 				EB70327C1BEB700900779EBB /* ListItemsSectionHeaderView.xib */,
+				EB70327E1BEBBBB100779EBB /* ReorderSectionTableViewController.swift */,
+				EB7032821BEBBC6400779EBB /* ReorderSectionTableViewController.storyboard */,
+				EB7032841BEBBD5D00779EBB /* ReorderSectionCell.swift */,
 			);
 			name = listItemsTableView;
 			path = shoppin;
@@ -2095,6 +2112,7 @@
 				EB451C381B85F3F0000DE208 /* StatsProvider.swift */,
 				EB1B36601BC47D88003519F2 /* PlanProvider.swift */,
 				EB7F59D21BA1DBF600E07EBA /* Providers.swift */,
+				EB70328A1BEBF31A00779EBB /* SectionProvider.swift */,
 			);
 			name = provider;
 			path = ..;
@@ -2122,6 +2140,7 @@
 				EB1B36641BC47DF9003519F2 /* PlanProviderImpl.swift */,
 				EBDA75431BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift */,
 				EB85F4721BD5605000E19E9B /* ProductProviderImpl.swift */,
+				EB7032861BEBF2B300779EBB /* SectionProviderImpl.swift */,
 			);
 			name = impl;
 			sourceTree = "<group>";
@@ -2335,6 +2354,7 @@
 				EB1B36501BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */,
 				EB1FC51A1BC694AF004E1114 /* OkNextButtonsView.xib in Resources */,
 				EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */,
+				EB7032831BEBBC6400779EBB /* ReorderSectionTableViewController.storyboard in Resources */,
 				EBDA75571BCD966D00E34AC3 /* OkCancelButtonsView.xib in Resources */,
 				EBA575651BCECC0000A0A825 /* QuantityView.xib in Resources */,
 				EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */,
@@ -2592,6 +2612,7 @@
 				EBA5756D1BD00A2500A0A825 /* DBGroupItem.swift in Sources */,
 				EB85F4511BD5392200E19E9B /* QuickAddListItemViewController.swift in Sources */,
 				EBAEB23C1BDC262400FCDA5C /* FloatingViews.swift in Sources */,
+				EB7032801BEBBBB100779EBB /* ReorderSectionTableViewController.swift in Sources */,
 				EBCE418D1B5D466B00583551 /* EditListViewController.swift in Sources */,
 				EB40A4721B5508B6000E9CAD /* DBResult.swift in Sources */,
 				EB40A47E1B5512D6000E9CAD /* DBSharedUser.swift in Sources */,
@@ -2604,6 +2625,7 @@
 				EBD828001BE95C8B0072F9FA /* StashView.swift in Sources */,
 				EB20FC051A599A500058103B /* InventoryItemsTableViewController.swift in Sources */,
 				EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */,
+				EB7032851BEBBD5D00779EBB /* ReorderSectionCell.swift in Sources */,
 				EB7E831E1B7B7069009DEEF4 /* HistoryProvider.swift in Sources */,
 				EB0C1BA71B3DFD0800F24C85 /* NSLayoutConstraint.swift in Sources */,
 				EBF5D7D71B8FB01B00A235C5 /* Synced.swift in Sources */,
@@ -2682,6 +2704,7 @@
 				EB714AA61B66BBA800F91B94 /* DBSyncable.swift in Sources */,
 				EBBC231E1BB575340002F6B1 /* UIColor.swift in Sources */,
 				EBD828031BE95CD80072F9FA /* Shapes.swift in Sources */,
+				EB7032871BEBF2B300779EBB /* SectionProviderImpl.swift in Sources */,
 				EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */,
 				EB1B36751BC4832D003519F2 /* PlanItemMapper.swift in Sources */,
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,
@@ -2775,6 +2798,7 @@
 				EB5529E41BC6F2A800EDCEAF /* PlanItemInput.swift in Sources */,
 				EB0C2A301B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */,
 				EBF377971B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
+				EB70328B1BEBF31A00779EBB /* SectionProvider.swift in Sources */,
 				EB714AAE1B67895500F91B94 /* RemoteProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2859,6 +2883,7 @@
 				EB0C2A3F1B583BFE00AF6226 /* RemoteInventoryItemWithProduct.swift in Sources */,
 				EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */,
 				EBDA754F1BCD621C00E34AC3 /* ListItemGroupMapper.swift in Sources */,
+				EB70328C1BEBF31A00779EBB /* SectionProvider.swift in Sources */,
 				EB70C21C1B4D2ECE0060E529 /* RemoteSharedUser.swift in Sources */,
 				EB4FD45E1AC715FF0000F952 /* Array.swift in Sources */,
 				EB4147BD1BE0338800549CE4 /* ProductInput.swift in Sources */,
@@ -2886,6 +2911,7 @@
 				EB6F812E1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EBB9A7391B5EB14300E5487D /* RemoteInventory.swift in Sources */,
 				EB5567621A86437E00CD3EC6 /* ListMapper.swift in Sources */,
+				EB7032881BEBF2B300779EBB /* SectionProviderImpl.swift in Sources */,
 				EB7E83141B7B3A5E009DEEF4 /* MainWindowController.swift in Sources */,
 				EB1EFAC51B1EFBBC0079A35D /* AutocompleteTextField.swift in Sources */,
 				EB9F6CE71A8610550038355B /* AppDelegate.swift in Sources */,
@@ -3032,6 +3058,7 @@
 				EB78587F1B7FD81A008AAD12 /* HistoryItemsSync.swift in Sources */,
 				EBDCA1331B8A124B000020BF /* NSDate.swift in Sources */,
 				EB6F81661B4B1CDC008680E0 /* TestRequiresAuthentication.swift in Sources */,
+				EB70328D1BEBF31A00779EBB /* SectionProvider.swift in Sources */,
 				EB4D57AE1B7505DD00BC6171 /* SyncUtils.swift in Sources */,
 				EB0C1BAB1B3ED8D600F24C85 /* ProviderResult.swift in Sources */,
 				EBBC23171BB4840F0002F6B1 /* PrefillDatabase.swift in Sources */,
@@ -3080,6 +3107,7 @@
 				EBF377631B342A7A00EEB6DB /* RemoteListItemProvider.swift in Sources */,
 				EBF3777C1B342B2500EEB6DB /* List.swift in Sources */,
 				EBF3778B1B357F1800EEB6DB /* TestLists.swift in Sources */,
+				EB7032891BEBF2B300779EBB /* SectionProviderImpl.swift in Sources */,
 				EB7E832C1B7B72B9009DEEF4 /* HistoryItemMapper.swift in Sources */,
 				EB7E831C1B7B703B009DEEF4 /* HistoryProviderImpl.swift in Sources */,
 				EBB9A7341B5EB0FC00E5487D /* DBInventory.swift in Sources */,

@@ -85,9 +85,10 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     private func initTableViewContent() {
-        let(tableViewSections, sections) = self.buildTableViewSections(self.items)
+        let(tableViewSections, sections) = buildTableViewSections(items)
         self.tableViewSections = tableViewSections
         self.sections = sections
+        sectionsExpanded = true
         
         if let headerBGColor = headerBGColor {
             for section in tableViewSections {
@@ -341,32 +342,43 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     func onHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
-        if let sectionIndex = getIndex(section.section) {
-            setSectionExpanded(!section.expanded, sectionIndex: sectionIndex, section: section)
-        } else {
-            print("Error: ListItemsTableViewController.onHeaderTap: Invalid state: No section index found for section, which is in table view")
-        }
+        // for now nothing - expand/contract works but not together with new expand/collapse all functionality, this crashes because of indexpath inconsistencies
+//        if let sectionIndex = getIndex(section.section) {
+//            setSectionExpanded(!section.expanded, sectionIndex: sectionIndex, section: section, animated: true)
+//        } else {
+//            print("Error: ListItemsTableViewController.onHeaderTap: Invalid state: No section index found for section, which is in table view")
+//        }
     }
     
-    func setAllSectionsExpanded(expanded: Bool) {
+    func setAllSectionsExpanded(expanded: Bool, animated: Bool, onComplete: VoidFunction? = nil) {
+        
+        var completed = 0
         for (index, section) in tableViewSections.enumerate() {
-            setSectionExpanded(expanded, sectionIndex: index, section: section)
+            setSectionExpanded(expanded, sectionIndex: index, section: section, animated: animated, onComplete: {[weak self] in
+                completed++
+                if completed == self?.tableViewSections.count {
+                    onComplete?()
+                }
+            })
         }
         sectionsExpanded = expanded
     }
     
-    private func setSectionExpanded(expanded: Bool, sectionIndex: Int, section: ListItemsViewSection) {
+    private func setSectionExpanded(expanded: Bool, sectionIndex: Int, section: ListItemsViewSection, animated: Bool, onComplete: VoidFunction? = nil) {
         
         let sectionIndexPaths: [NSIndexPath] = (0..<section.tableViewListItems.count).map {
             return NSIndexPath(forRow: $0, inSection: sectionIndex)
         }
         
+        if let onComplete = onComplete {
+            CATransaction.setCompletionBlock(onComplete)
+        }
+
         if expanded {
             tableView.wrapUpdates {[weak self] in
                 self?.tableView.insertRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
                 section.expanded = true
             }
-            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: sectionIndex), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
         } else {
             tableView.wrapUpdates {[weak self] in
                 self?.tableView.deleteRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)

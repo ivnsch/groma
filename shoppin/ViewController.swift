@@ -11,7 +11,7 @@ import CoreData
 import SwiftValidator
 import ChameleonFramework
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate
 //    , UIBarPositioningDelegate
 {
     
@@ -197,11 +197,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func initWithList(list: List) {
-
         setTitleLabelText(list.name)
-        
+        udpateListItems(list)
+    }
+    
+    private func udpateListItems(list: List, onFinish: VoidFunction? = nil) {
         Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{listItems in
             self.listItemsTableViewController.setListItems(listItems.filter{$0.status == .Todo})
+            onFinish?()
         })
     }
     
@@ -239,7 +242,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func sectionNameAutocompletions(text: String, handler: [String] -> ()) {
-        Providers.listItemsProvider.sectionSuggestions(successHandler{suggestions in
+        Providers.sectionProvider.sectionSuggestions(successHandler{suggestions in
             let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
             handler(names)
         })
@@ -790,7 +793,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 floatingViews.setActions([toggleButtonActiveAction])
             }
         case .Add:
-            listItemsTableViewController.setAllSectionsExpanded(!listItemsTableViewController.sectionsExpanded)
+            toggleReorderSections()
             
         case .Back, .Submit: sendActionToTopController(action)
         }
@@ -811,4 +814,72 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             }
         }
     }
+    
+    // MARK: - Reorder sections
+    
+    private var sectionsTableViewController: ReorderSectionTableViewController?
+    private var lockToggleSectionsTableView: Bool = false // prevent condition in which user presses toggle too quickly many times and sectionsTableViewController doesn't go away
+    
+    func toggleReorderSections() {
+        
+        if !lockToggleSectionsTableView {
+            lockToggleSectionsTableView = true
+            
+            if let sectionsTableViewController = sectionsTableViewController { // hide
+                
+                sectionsTableViewController.setCellHeight(30, animated: true)
+                sectionsTableViewController.setEdit(false, animated: true) {
+                    sectionsTableViewController.removeFromParentViewController()
+                    sectionsTableViewController.view.removeFromSuperview()
+                    self.sectionsTableViewController = nil
+                    self.listItemsTableViewController.setAllSectionsExpanded(!self.listItemsTableViewController.sectionsExpanded, animated: true)
+                    self.lockToggleSectionsTableView = false
+                }
+            } else {
+                
+                listItemsTableViewController.setAllSectionsExpanded(!listItemsTableViewController.sectionsExpanded, animated: true, onComplete: { // show
+                    let sectionsTableViewController = UIStoryboard.reorderSectionTableViewController()
+                    
+                    sectionsTableViewController.cellBgColor = self.listItemsTableViewController.headerBGColor
+                    sectionsTableViewController.textColor = UIColor(contrastingBlackOrWhiteColorOn: self.listItemsTableViewController.headerBGColor, isFlat: true)
+                    sectionsTableViewController.sections = self.listItemsTableViewController.sections
+                    sectionsTableViewController.delegate = self
+                    
+                    sectionsTableViewController.onViewDidLoad = {
+                        let navbarHeight = self.topBar.frame.height
+                        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+                        let topInset = navbarHeight + CGRectGetHeight(self.pricesView.frame) - statusBarHeight
+                        // TODO this makes a very big bottom inset why?
+                        //            let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + addButtonContainer.frame.height
+                        //        let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + 20
+                        let bottomInset: CGFloat = 0
+                        sectionsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
+                        //                sectionsTableViewController.tableView.topOffset = -self.listItemsTableViewController.tableView.inset.top
+                        
+                        sectionsTableViewController.view.backgroundColor = self.listItemsTableViewController.view.backgroundColor
+                        sectionsTableViewController.tableView.backgroundColor = self.listItemsTableViewController.view.backgroundColor
+                        
+                        self.lockToggleSectionsTableView = false
+                    }
+                    
+                    sectionsTableViewController.view.frame = self.listItemsTableViewController.view.frame
+                    self.addChildViewControllerAndView(sectionsTableViewController, viewIndex: 1)
+                    self.sectionsTableViewController = sectionsTableViewController
+                })
+            }
+        }
+    }
+    
+    // MARK: - ReorderSectionTableViewControllerDelegate
+    
+    func onSectionsUpdated() {
+        if let list = currentList {
+            self.udpateListItems(list) {
+                self.listItemsTableViewController.setAllSectionsExpanded(false, animated: false) // set back background tableview to to closed state (update re-adds everything - expanded). This is necessary for consistency tableview rows/models
+            }
+        } else {
+            print("Error: ViewController.onSectionOrderUpdated: Invalid state, reordering sections and no list")
+        }
+    }
+    
 }

@@ -14,6 +14,8 @@ struct Providers {
     
     static var productProvider: ProductProvider = ProductProviderImpl()
     
+    static var sectionProvider: SectionProvider = SectionProviderImpl()
+    
     static var inventoryProvider: InventoryProvider = InventoryProviderImpl()
     static var inventoryItemsProvider: InventoryItemsProvider = InventoryItemsProviderImpl()
     

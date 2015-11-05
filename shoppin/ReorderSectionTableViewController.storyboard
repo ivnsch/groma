@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+        </mutableArray>
+    </customFonts>
+    <scenes>
+        <!--Reorder Section Table View Controller-->
+        <scene sceneID="5bY-WD-zlb">
+            <objects>
+                <viewController storyboardIdentifier="ReorderSectionTableViewController" id="CBf-eh-09G" customClass="ReorderSectionTableViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="dRy-9t-9rf"/>
+                        <viewControllerLayoutGuide type="bottom" id="gSH-HF-bwM"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="BB1-gy-Bhj">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BSU-bb-r3O">
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="sectionCell" id="pJH-sp-9hv" customClass="ReorderSectionCell" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pJH-sp-9hv" id="5DA-mJ-e6r">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hZG-Sh-ogp">
+                                                    <rect key="frame" x="8" y="11" width="40" height="21"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="hZG-Sh-ogp" firstAttribute="leading" secondItem="5DA-mJ-e6r" secondAttribute="leading" constant="8" id="VgO-yf-twa"/>
+                                                <constraint firstItem="hZG-Sh-ogp" firstAttribute="centerY" secondItem="5DA-mJ-e6r" secondAttribute="centerY" id="hnO-2i-70y"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="nameLabel" destination="hZG-Sh-ogp" id="Z5H-ej-XOU"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="CBf-eh-09G" id="tmY-vL-D1i"/>
+                                    <outlet property="delegate" destination="CBf-eh-09G" id="OgI-5H-kgH"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="BSU-bb-r3O" firstAttribute="top" secondItem="dRy-9t-9rf" secondAttribute="bottom" id="4Jh-zt-T8z"/>
+                            <constraint firstItem="gSH-HF-bwM" firstAttribute="top" secondItem="BSU-bb-r3O" secondAttribute="bottom" id="AuU-by-aT5"/>
+                            <constraint firstItem="BSU-bb-r3O" firstAttribute="leading" secondItem="BB1-gy-Bhj" secondAttribute="leading" id="Q2e-2L-XoK"/>
+                            <constraint firstAttribute="trailing" secondItem="BSU-bb-r3O" secondAttribute="trailing" id="cMI-k0-vUv"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="BSU-bb-r3O" id="ziH-Ee-8kP"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hs6-zS-270" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="203" y="312"/>
+        </scene>
+    </scenes>
+</document>

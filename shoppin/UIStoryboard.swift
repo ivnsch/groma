@@ -24,6 +24,7 @@ extension UIStoryboard {
     private class func manageProductsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageProducts", bundle: NSBundle.mainBundle()) }
     private class func manageGroupsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageGroups", bundle: NSBundle.mainBundle()) }
     private class func statsStoryboard() -> UIStoryboard { return UIStoryboard(name: "Stats", bundle: NSBundle.mainBundle()) }
+    private class func reorderSectionsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ReorderSectionTableViewController", bundle: NSBundle.mainBundle()) }
     
     // MARK: - List items
     
@@ -166,5 +167,12 @@ extension UIStoryboard {
     
     class func statsDetailsViewController() -> StatsDetailsViewController {
         return statsStoryboard().instantiateViewControllerWithIdentifier("StatsDetailsViewController") as! StatsDetailsViewController
+    }
+    
+    
+    // MARK: Reorder sections
+    
+    class func reorderSectionTableViewController() -> ReorderSectionTableViewController {
+        return reorderSectionsStoryboard().instantiateViewControllerWithIdentifier("ReorderSectionTableViewController") as! ReorderSectionTableViewController
     }
 }

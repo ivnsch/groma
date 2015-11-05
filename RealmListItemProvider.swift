@@ -46,7 +46,11 @@ class RealmListItemProvider: RealmProvider {
     func remove(section: Section, handler: Bool -> ()) {
         self.remove("uuid = '\(section.uuid)'", handler: handler, objType: DBSection.self)
     }
-    
+
+    func update(sections: [Section], handler: Bool -> ()) {
+        let dbSections = sections.map{SectionMapper.dbWithSection($0)}
+        self.saveObjs(dbSections, update: true, handler: handler)
+    }
     
     // MARK: - Product
     
