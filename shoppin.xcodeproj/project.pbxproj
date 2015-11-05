@@ -259,6 +259,8 @@
 		EB6F81331B4717C2008680E0 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81311B4717C2008680E0 /* KeychainKeys.swift */; };
 		EB6F81341B4717C2008680E0 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81311B4717C2008680E0 /* KeychainKeys.swift */; };
 		EB6F81661B4B1CDC008680E0 /* TestRequiresAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81631B4B1CDC008680E0 /* TestRequiresAuthentication.swift */; };
+		EB70327B1BEB6FFA00779EBB /* ListItemsSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70327A1BEB6FFA00779EBB /* ListItemsSectionHeaderView.swift */; };
+		EB70327D1BEB700900779EBB /* ListItemsSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB70327C1BEB700900779EBB /* ListItemsSectionHeaderView.xib */; };
 		EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB703FE11B3B5F3A001586C5 /* Intro.storyboard */; };
 		EB70C2171B4D2C690060E529 /* ListProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2161B4D2C690060E529 /* ListProviderImpl.swift */; };
 		EB70C2191B4D2C940060E529 /* ListProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70C2181B4D2C940060E529 /* ListProvider.swift */; };
@@ -821,6 +823,8 @@
 		EB6F812C1B46E2C4008680E0 /* RemoteLoginResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteLoginResult.swift; sourceTree = "<group>"; };
 		EB6F81311B4717C2008680E0 /* KeychainKeys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainKeys.swift; sourceTree = "<group>"; };
 		EB6F81631B4B1CDC008680E0 /* TestRequiresAuthentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestRequiresAuthentication.swift; sourceTree = "<group>"; };
+		EB70327A1BEB6FFA00779EBB /* ListItemsSectionHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsSectionHeaderView.swift; sourceTree = "<group>"; };
+		EB70327C1BEB700900779EBB /* ListItemsSectionHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListItemsSectionHeaderView.xib; sourceTree = "<group>"; };
 		EB703FE11B3B5F3A001586C5 /* Intro.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Intro.storyboard; sourceTree = "<group>"; };
 		EB70C2161B4D2C690060E529 /* ListProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListProviderImpl.swift; sourceTree = "<group>"; };
 		EB70C2181B4D2C940060E529 /* ListProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListProvider.swift; sourceTree = "<group>"; };
@@ -2028,6 +2032,8 @@
 				EBF162E41A3C85A30048E37C /* ListItemCell.swift */,
 				EB2F5D1C1A4B4CE300DBC4AF /* ListItemsTableViewController.swift */,
 				EB2F5D5B1A5058E900DBC4AF /* TableViewListItem.swift */,
+				EB70327A1BEB6FFA00779EBB /* ListItemsSectionHeaderView.swift */,
+				EB70327C1BEB700900779EBB /* ListItemsSectionHeaderView.xib */,
 			);
 			name = listItemsTableView;
 			path = shoppin;
@@ -2314,6 +2320,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB7BFA7C1BDA5BE500F4C74A /* QuantityCell.xib in Resources */,
+				EB70327D1BEB700900779EBB /* ListItemsSectionHeaderView.xib in Resources */,
 				EB4C365F1B4C142600C387C5 /* EditableChoiceModal.storyboard in Resources */,
 				EBAEB23E1BDC263800FCDA5C /* FloatingViews.xib in Resources */,
 				EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */,
@@ -2523,6 +2530,7 @@
 				EB1B364C1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */,
 				EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */,
 				EB70C2191B4D2C940060E529 /* ListProvider.swift in Sources */,
+				EB70327B1BEB6FFA00779EBB /* ListItemsSectionHeaderView.swift in Sources */,
 				EB969FE11BE4371200F5BC35 /* ProductAggregateCell.swift in Sources */,
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				EB6F81321B4717C2008680E0 /* KeychainKeys.swift in Sources */,

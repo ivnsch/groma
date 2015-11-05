@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+final class Section: Hashable, Identifiable, ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let order: Int
@@ -52,6 +52,10 @@ final class Section: Hashable, ResponseObjectSerializable, ResponseCollectionSer
             name: name ?? self.name,
             order: order ?? self.order
         )
+    }
+    
+    func same(section: Section) -> Bool {
+        return section.uuid == self.uuid
     }
 }
 

@@ -250,12 +250,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 // remove table view section
                 self.tableViewSections.removeAtIndex(indexPath.section)
                 // remove model section TODO better way
-                var sectionIndexMaybe:Int?
-                for (index, section) in self.sections.enumerate() {
-                    if section == tableViewSection.section {
-                        sectionIndexMaybe = index
-                    }
-                }
+                let sectionIndexMaybe: Int? = getIndex(tableViewSection.section)
                 if let sectionIndex = sectionIndexMaybe {
                     self.sections.removeAtIndex(sectionIndex)
                     self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: animation)
@@ -286,6 +281,15 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         return nil
     }
     
+    func getIndex(section: Section) -> Int? {
+        for (index, s) in self.sections.enumerate() {
+            if section.same(s) {
+                return index
+            }
+        }
+        return nil
+    }
+    
     
     /**
     Submits item marked as "undo" if there is any
@@ -305,7 +309,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
-    // MARK: - ListItemsViewSection
+    // MARK: - ItemActionsDelegate
     
     func startItemSwipe(tableViewListItem: TableViewListItem) {
         clearPendingSwipeItemIfAny()
@@ -333,6 +337,35 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             print("Error: Invalid state in onNoteTap. There's no note. When there's no note there should be no button so we shouldn't be here.")
         }
     }
+    
+    func onHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
+        if let sectionIndex = getIndex(section.section) {
+            toggleSectionExpanded(sectionIndex, section: section)
+        } else {
+            print("Error: ListItemsTableViewController.onHeaderTap: Invalid state: No section index found for section, which is in table view")
+        }
+    }
+    
+    private func toggleSectionExpanded(sectionIndex: Int, section: ListItemsViewSection) {
+        
+        let sectionIndexPaths: [NSIndexPath] = (0..<section.tableViewListItems.count).map {
+            return NSIndexPath(forRow: $0, inSection: sectionIndex)
+        }
+        
+        if section.expanded { // collapse
+            tableView.wrapUpdates {[weak self] in
+                self?.tableView.deleteRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
+                section.expanded = false
+            }
+        } else { // expand
+            tableView.wrapUpdates {[weak self] in
+                self?.tableView.insertRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
+                section.expanded = true
+            }
+            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: sectionIndex), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+        }
+    }
+    
     
     // MARK: - Table view data source
 

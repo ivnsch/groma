@@ -17,29 +17,31 @@ protocol ItemActionsDelegate {
     func endItemSwipe(tableViewListItem: TableViewListItem)
     func undoSwipe(tableViewListItem: TableViewListItem)
     func onNoteTap(tableViewListItem: TableViewListItem)
+    func onHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection)
 }
 
-class ListItemsViewSection: Equatable {
+class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
     
-    var tableViewListItems:[TableViewListItem]
+    var tableViewListItems: [TableViewListItem]
     
     private let cellIdentifier = ItemsListTableViewConstants.listItemCellIdentifier
     
-    var headerBGColor:UIColor = UIColor(red: 167/255, green: 1, blue: 93/255, alpha: 1)
-    
-    var headerFontColor:UIColor = UIColor.whiteColor()
-    var labelFontColor:UIColor = UIColor.blackColor()
+    var headerBGColor: UIColor = UIColor(red: 167/255, green: 1, blue: 93/255, alpha: 1)
+    var headerFontColor: UIColor = UIColor.whiteColor()
+    var labelFontColor: UIColor = UIColor.blackColor()
     
     var section: Section // as var to mutate order in-place (ListItemsTableViewController)
     
-    private let hasHeader:Bool
+    var expanded: Bool = true
     
-    var style:ListItemsTableViewControllerStyle = .Normal
+    private let hasHeader: Bool
+    
+    var style: ListItemsTableViewControllerStyle = .Normal
 
-    var delegate:ItemActionsDelegate!
+    var delegate: ItemActionsDelegate!
     
     private let headerFont = Fonts.regular
-    
+
     // this could be solved maybe with inheritance or sth like "style injection", for now this is ok
     private var finalLabelFontColor:UIColor {
         var color:UIColor
@@ -91,37 +93,17 @@ class ListItemsViewSection: Equatable {
     }
     
     func viewForHeader() -> UIView? {
-        var v:UIView?
-        
         if self.hasHeader {
-            let label = UILabel()
-            label.text = " " + self.section.name //FIXME - container doesn't work properly!
-            label.backgroundColor = self.finalHeaderBGColor
-            label.textColor = self.finalHeaderFontColor
-            label.font = headerFont
-            v = label
+            let view = NSBundle.loadView("ListItemsSectionHeaderView", owner: self) as! ListItemsSectionHeaderView
+            view.section = section
+            view.backgroundColor = finalHeaderBGColor
+            view.nameLabel.textColor = finalHeaderFontColor
+            view.nameLabel.font = headerFont
+            view.delegate = self
+            return view
         } else {
-            v = nil
+            return nil
         }
-        
-//        let container = UIView()
-//        container.addSubview(v)
-//        
-//        let views:Dictionary = ["label": v]
-//        for view in views.values {
-//            view.setTranslatesAutoresizingMaskIntoConstraints(false)
-//        }
-//
-//        let metrics:Dictionary = ["padding": 5]
-//        
-//        for constraint in [
-//            "H:|-(padding)-[label]",
-//            "V:|-(padding)-[label]-(padding)-|"
-//            ] {
-//                container.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat(constraint, options: NSLayoutFormatOptions.allZeros, metrics: metrics, views: views))
-//        }
-        
-        return v
     }
     
     func viewForFooter() -> UIView? {
@@ -175,7 +157,7 @@ class ListItemsViewSection: Equatable {
     }
     
     func numberOfRows() -> Int {
-        return tableViewListItems.count
+        return expanded ? tableViewListItems.count : 0
     }
     
     func addItem(tableViewListItem:TableViewListItem) {
@@ -192,6 +174,12 @@ class ListItemsViewSection: Equatable {
     
     func buttonThreeActionForItemText() {
         
+    }
+    
+    // MARK: - ListItemsSectionHeaderViewDelegate
+    
+    func onHeaderTap(header: ListItemsSectionHeaderView) {
+        delegate?.onHeaderTap(header, section: self)
     }
 }
 
