@@ -22,11 +22,11 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
     
     private var groups: [ListItemGroup] = [] {
         didSet {
-            filteredGroups = groups
+            filteredGroups = ItemWithCellAttributes.toItemsWithCellAttributes(groups)
         }
     }
     
-    private var filteredGroups: [ListItemGroup] = [] {
+    private var filteredGroups: [ItemWithCellAttributes<ListItemGroup>] = [] {
         didSet {
             tableView.reloadData()
         }
@@ -88,10 +88,10 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
         if editingStyle == .Delete {
             let group = filteredGroups[indexPath.row]
             
-            Providers.listItemGroupsProvider.remove(group, successHandler{[weak self] in
+            Providers.listItemGroupsProvider.remove(group.item, successHandler{[weak self] in
                 self?.tableView.wrapUpdates {
                     self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-                    self?.groups.remove(group)
+                    self?.groups.remove(group.item)
                     self?.filteredGroups.remove(group)
                 }
             })
@@ -104,17 +104,20 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
     
     private func filter(searchText: String) {
         if searchText.isEmpty {
-            filteredGroups = groups
+            filteredGroups = ItemWithCellAttributes.toItemsWithCellAttributes(groups)
         } else {
             Providers.listItemGroupsProvider.groupsContainingText(searchText, successHandler{[weak self] groups in
-                self?.filteredGroups = groups
+                let groupsWithCellAttributes = groups.map{group in
+                    return ItemWithCellAttributes(item: group, boldRange: group.name.range(searchText, caseInsensitive: true))
+                }
+                self?.filteredGroups = groupsWithCellAttributes
             })
         }
     }
     
     private func clearSearch() {
         searchBar.text = ""
-        filteredGroups = groups
+        filteredGroups = ItemWithCellAttributes.toItemsWithCellAttributes(groups)
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -209,3 +212,4 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
 }
+

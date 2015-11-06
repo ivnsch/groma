@@ -80,6 +80,7 @@
 		EB1219D91BD82D11004351E0 /* QuickAddGroupItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1219D81BD82D11004351E0 /* QuickAddGroupItemsViewController.swift */; };
 		EB1219DB1BD8EB23004351E0 /* QuickAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */; };
 		EB135B941BED21490093DE70 /* ExpandFloatingButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB135B931BED21490093DE70 /* ExpandFloatingButtonModel.swift */; };
+		EB135B961BED5F130093DE70 /* ItemWithCellAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB135B951BED5F130093DE70 /* ItemWithCellAttributes.swift */; };
 		EB1B36451BC1D001003519F2 /* MLPAutoCompleteTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1B363F1BC1D001003519F2 /* MLPAutoCompleteTextField.m */; };
 		EB1B36461BC1D001003519F2 /* NSString+Levenshtein.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1B36441BC1D001003519F2 /* NSString+Levenshtein.m */; };
 		EB1B364C1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1B364B1BC2CC79003519F2 /* HistoryItemGroup.swift */; };
@@ -724,6 +725,7 @@
 		EB1219D81BD82D11004351E0 /* QuickAddGroupItemsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddGroupItemsViewController.swift; sourceTree = "<group>"; };
 		EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddViewController.swift; sourceTree = "<group>"; };
 		EB135B931BED21490093DE70 /* ExpandFloatingButtonModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandFloatingButtonModel.swift; sourceTree = "<group>"; };
+		EB135B951BED5F130093DE70 /* ItemWithCellAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemWithCellAttributes.swift; sourceTree = "<group>"; };
 		EB1B363E1BC1D001003519F2 /* MLPAutoCompleteTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLPAutoCompleteTextField.h; sourceTree = "<group>"; };
 		EB1B363F1BC1D001003519F2 /* MLPAutoCompleteTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLPAutoCompleteTextField.m; sourceTree = "<group>"; };
 		EB1B36401BC1D001003519F2 /* MLPAutoCompleteTextFieldDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLPAutoCompleteTextFieldDataSource.h; sourceTree = "<group>"; };
@@ -1930,6 +1932,7 @@
 			isa = PBXGroup;
 			children = (
 				EBD827F91BE79A280072F9FA /* Fonts.swift */,
+				EB135B951BED5F130093DE70 /* ItemWithCellAttributes.swift */,
 			);
 			name = util;
 			sourceTree = "<group>";
@@ -2622,6 +2625,7 @@
 				EBB9A7321B5EB0FC00E5487D /* DBInventory.swift in Sources */,
 				EB0A058D1BDFCD6B00D1E29D /* MoreViewController.swift in Sources */,
 				EB28C1181A58623E00E1C8BC /* PlainTableViewController.swift in Sources */,
+				EB135B961BED5F130093DE70 /* ItemWithCellAttributes.swift in Sources */,
 				EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */,
 				EB7858811B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift in Sources */,
 				EB70C21B1B4D2ECE0060E529 /* RemoteSharedUser.swift in Sources */,

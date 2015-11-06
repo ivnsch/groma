@@ -14,12 +14,16 @@ class ManageGroupsCell: UITableViewCell {
     @IBOutlet weak var groupItemCountLabel: UILabel!
     @IBOutlet weak var groupPriceLabel: UILabel!
     
-    var group: ListItemGroup? {
+    var group: ItemWithCellAttributes<ListItemGroup>? {
         didSet {
             if let group = group {
-                groupNameLabel.text = group.name
-                groupItemCountLabel.text = "\(group.totalQuantity) items"
-                groupPriceLabel.text = group.totalPrice.toLocalCurrencyString()
+                if let boldRange = group.boldRange {
+                    groupNameLabel.attributedText = group.item.name.makeAttributedBoldRegular(boldRange)
+                } else {
+                    groupNameLabel.text = group.item.name
+                }
+                groupItemCountLabel.text = "\(group.item.totalQuantity) items"
+                groupPriceLabel.text = group.item.totalPrice.toLocalCurrencyString()
             }
         }
     }

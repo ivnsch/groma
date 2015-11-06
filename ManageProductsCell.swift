@@ -14,17 +14,17 @@ class ManageProductsCell: UITableViewCell {
     @IBOutlet weak var productCategoryLabel: UILabel!
     @IBOutlet weak var productPriceLabel: UILabel!
     
-    var product: ProductWithCellAttributes? {
+    var product: ItemWithCellAttributes<Product>? {
         didSet {
             if let product = product {
                 if let boldRange = product.boldRange {
-                    productNameLabel.attributedText = product.product.name.makeAttributedBoldRegular(boldRange)
+                    productNameLabel.attributedText = product.item.name.makeAttributedBoldRegular(boldRange)
                 } else {
-                    productNameLabel.text = product.product.name
+                    productNameLabel.text = product.item.name
                 }
                 
-                productCategoryLabel.text = product.product.category
-                productPriceLabel.text = product.product.price.toLocalCurrencyString()
+                productCategoryLabel.text = product.item.category
+                productPriceLabel.text = product.item.price.toLocalCurrencyString()
             }
         }
     }
