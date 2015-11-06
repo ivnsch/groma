@@ -23,15 +23,16 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     
     private var products: [Product] = [] {
         didSet {
-            filteredProducts = products
+            filteredProductsWithCellAttributes = toProductsWithCellAttributes(products)
         }
     }
 
-    private var filteredProducts: [Product] = [] {
+    private var filteredProductsWithCellAttributes: [ProductWithCellAttributes] = [] {
         didSet {
             tableView.reloadData()
         }
     }
+
     
     private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0, xRight: 20)
     private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0, xRight: 20)
@@ -44,6 +45,15 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         self.initTopController(controller, height: height)
         return controller
     }()
+    
+
+    private func toProductWithCellAttributes(product: Product) -> ProductWithCellAttributes {
+        return ProductWithCellAttributes(product: product, boldRange: nil)
+    }
+
+    private func toProductsWithCellAttributes(products: [Product]) -> [ProductWithCellAttributes] {
+        return products.map{toProductWithCellAttributes($0)}
+    }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -91,13 +101,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredProducts.count
+        return filteredProductsWithCellAttributes.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("productCell", forIndexPath: indexPath) as! ManageProductsCell
 
-        let product = filteredProducts[indexPath.row]
+        let product = filteredProductsWithCellAttributes[indexPath.row]
 
         cell.product = product
         return cell
@@ -110,13 +120,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
 
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            let product = filteredProducts[indexPath.row]
-            Providers.productProvider.delete(product, successHandler{[weak self] in
+            let product = filteredProductsWithCellAttributes[indexPath.row]
+            Providers.productProvider.delete(product.product, successHandler{[weak self] in
                 self?.tableView.wrapUpdates {
                     self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
                     
-                    self?.products.remove(product)
-                    self?.filteredProducts.remove(product)
+                    self?.products.remove(product.product)
+                    self?.filteredProductsWithCellAttributes.remove(product)
                 }
             })
         }
@@ -128,10 +138,16 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
 
     private func filter(searchText: String) {
         if searchText.isEmpty {
-            filteredProducts = products
+            filteredProductsWithCellAttributes = toProductsWithCellAttributes(products)
         } else {
             Providers.productProvider.productsContainingText(searchText, successHandler{[weak self] products in
-                self?.filteredProducts = products
+                if let weakSelf = self {
+
+                    let productWithCellAttributes = products.map{product in
+                        return ProductWithCellAttributes(product: product, boldRange: product.name.range(searchText, caseInsensitive: true))
+                    }
+                    weakSelf.filteredProductsWithCellAttributes = productWithCellAttributes
+                }
             })
         }
     }
@@ -143,7 +159,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
  
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        addEditProductController.editingData = AddEditProductControllerEditingData(product: filteredProducts[indexPath.row], indexPath: indexPath)
+        addEditProductController.editingData = AddEditProductControllerEditingData(product: filteredProductsWithCellAttributes[indexPath.row].product, indexPath: indexPath)
         setAddEditProductControllerOpen(true)
     }
     
@@ -181,7 +197,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     
     private func clearSearch() {
         searchBar.text = ""
-        filteredProducts = products
+        filteredProductsWithCellAttributes = toProductsWithCellAttributes(products)
     }
     
     // MARK - BottonPanelViewDelegate
@@ -247,7 +263,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
                 weakSelf.products.append(product)
                 weakSelf.onUpdatedProducts()
                 
-                weakSelf.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: weakSelf.filteredProducts.count - 1, inSection: 0), atScrollPosition: .Middle, animated: true)
+                weakSelf.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: weakSelf.filteredProductsWithCellAttributes.count - 1, inSection: 0), atScrollPosition: .Middle, animated: true)
                 weakSelf.setAddEditProductControllerOpen(false)
                 weakSelf.addEditProductController.clear()
             }
@@ -345,4 +361,17 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
 
+}
+
+
+struct ProductWithCellAttributes: Equatable {
+    let product: Product
+    let boldRange: NSRange?
+    init (product: Product, boldRange: NSRange?) {
+        self.product = product
+        self.boldRange = boldRange
+    }
+}
+func ==(lhs: ProductWithCellAttributes, rhs: ProductWithCellAttributes) -> Bool {
+    return lhs.product == rhs.product
 }

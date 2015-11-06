@@ -19,6 +19,16 @@ extension String {
 
         return self.rangeOfString(str, options: options) != nil
     }
+
+    func range(str: String, caseInsensitive: Bool = false) -> NSRange? {
+        
+        var options = NSStringCompareOptions()
+        if caseInsensitive {
+            options = options.union(NSStringCompareOptions.CaseInsensitiveSearch)
+        }
+        // Cast to NSString - It's currently a bit easier to work with NSRange, than convert between Range and NSRange (needed for e.g. attributedString)
+        return (self as NSString).rangeOfString(str, options: options)
+    }
     
     var floatValue: Float? {
         return NSNumberFormatter().numberFromString(self)?.floatValue
@@ -33,6 +43,12 @@ extension String {
         default:
             return nil
         }
+    }
+    
+    func makeAttributedBoldRegular(range: NSRange) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: self, attributes: [NSFontAttributeName: Fonts.regularLight])
+        attributedString.setAttributes([NSFontAttributeName: Fonts.regularBold], range: range)
+        return attributedString
     }
     
 //    func startsWith(str:String) -> Bool {
