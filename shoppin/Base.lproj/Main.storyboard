@@ -19,6 +19,7 @@
             <string>HelveticaNeue</string>
             <string>HelveticaNeue</string>
             <string>HelveticaNeue</string>
+            <string>HelveticaNeue</string>
         </mutableArray>
         <mutableArray key="HelveticaNeueLights.ttc">
             <string>HelveticaNeue-Light</string>
@@ -235,7 +236,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yYc-iE-66L">
-                                        <rect key="frame" x="556" y="16" width="30" height="32"/>
+                                        <rect key="frame" x="14" y="16" width="30" height="32"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                         <state key="normal" title="Edit">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -244,18 +245,30 @@
                                             <action selector="onEditTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="NML-1P-Hem"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yF9-jw-JoJ">
+                                        <rect key="frame" x="556" y="17" width="30" height="30"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                        <state key="normal" title="Add">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onAddTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fhs-oW-XPV"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="yF9-jw-JoJ" secondAttribute="trailing" constant="14" id="5CF-Hl-9Ez"/>
                                     <constraint firstAttribute="height" constant="64" id="7pv-aL-nlg"/>
                                     <constraint firstItem="str-bv-Io6" firstAttribute="leading" secondItem="Mf8-a8-xj0" secondAttribute="leading" id="A0i-T2-uOG"/>
-                                    <constraint firstAttribute="trailing" secondItem="yYc-iE-66L" secondAttribute="trailing" constant="14" id="ANw-yb-tnH"/>
                                     <constraint firstItem="str-bv-Io6" firstAttribute="leading" secondItem="Mf8-a8-xj0" secondAttribute="leading" constant="14" id="FV8-e7-ivI"/>
                                     <constraint firstItem="str-bv-Io6" firstAttribute="centerY" secondItem="Mf8-a8-xj0" secondAttribute="centerY" id="LMT-20-Fkp"/>
                                     <constraint firstItem="yYc-iE-66L" firstAttribute="centerY" secondItem="Mf8-a8-xj0" secondAttribute="centerY" id="QqU-oe-Ry6"/>
+                                    <constraint firstItem="yF9-jw-JoJ" firstAttribute="centerY" secondItem="Mf8-a8-xj0" secondAttribute="centerY" id="RK5-iM-blk"/>
                                     <constraint firstAttribute="trailing" secondItem="str-bv-Io6" secondAttribute="trailing" id="SlF-hl-cIt"/>
                                     <constraint firstAttribute="bottom" secondItem="str-bv-Io6" secondAttribute="bottom" id="lGs-dh-ltZ"/>
                                     <constraint firstItem="str-bv-Io6" firstAttribute="top" secondItem="Mf8-a8-xj0" secondAttribute="top" id="sqF-fD-9RR"/>
+                                    <constraint firstItem="yYc-iE-66L" firstAttribute="leading" secondItem="Mf8-a8-xj0" secondAttribute="leading" constant="14" id="xkK-eG-JYi"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -405,6 +418,7 @@
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="addButton" destination="yF9-jw-JoJ" id="Vbv-Fn-txO"/>
                         <outlet property="editButton" destination="yYc-iE-66L" id="aIW-aY-5fy"/>
                         <outlet property="floatingViews" destination="Xg1-Fv-W18" id="v6A-Gn-q5e"/>
                         <outlet property="pricesView" destination="wdp-hj-bbA" id="64l-Vh-k1d"/>

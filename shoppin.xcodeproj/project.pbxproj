@@ -79,6 +79,7 @@
 		EB1219D71BD829BC004351E0 /* QuickAddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1219D61BD829BC004351E0 /* QuickAddGroupViewController.swift */; };
 		EB1219D91BD82D11004351E0 /* QuickAddGroupItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1219D81BD82D11004351E0 /* QuickAddGroupItemsViewController.swift */; };
 		EB1219DB1BD8EB23004351E0 /* QuickAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */; };
+		EB135B941BED21490093DE70 /* ExpandFloatingButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB135B931BED21490093DE70 /* ExpandFloatingButtonModel.swift */; };
 		EB1B36451BC1D001003519F2 /* MLPAutoCompleteTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1B363F1BC1D001003519F2 /* MLPAutoCompleteTextField.m */; };
 		EB1B36461BC1D001003519F2 /* NSString+Levenshtein.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1B36441BC1D001003519F2 /* NSString+Levenshtein.m */; };
 		EB1B364C1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1B364B1BC2CC79003519F2 /* HistoryItemGroup.swift */; };
@@ -722,6 +723,7 @@
 		EB1219D61BD829BC004351E0 /* QuickAddGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddGroupViewController.swift; sourceTree = "<group>"; };
 		EB1219D81BD82D11004351E0 /* QuickAddGroupItemsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddGroupItemsViewController.swift; sourceTree = "<group>"; };
 		EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddViewController.swift; sourceTree = "<group>"; };
+		EB135B931BED21490093DE70 /* ExpandFloatingButtonModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandFloatingButtonModel.swift; sourceTree = "<group>"; };
 		EB1B363E1BC1D001003519F2 /* MLPAutoCompleteTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLPAutoCompleteTextField.h; sourceTree = "<group>"; };
 		EB1B363F1BC1D001003519F2 /* MLPAutoCompleteTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLPAutoCompleteTextField.m; sourceTree = "<group>"; };
 		EB1B36401BC1D001003519F2 /* MLPAutoCompleteTextFieldDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLPAutoCompleteTextFieldDataSource.h; sourceTree = "<group>"; };
@@ -1814,6 +1816,7 @@
 			children = (
 				EBAEB23B1BDC262400FCDA5C /* FloatingViews.swift */,
 				EBAEB23D1BDC263800FCDA5C /* FloatingViews.xib */,
+				EB135B931BED21490093DE70 /* ExpandFloatingButtonModel.swift */,
 			);
 			name = floatingViews;
 			sourceTree = "<group>";
@@ -2676,6 +2679,7 @@
 				EB1B36691BC47E32003519F2 /* PlanItem.swift in Sources */,
 				EB451C351B85F3DA000DE208 /* StatsProviderImpl.swift in Sources */,
 				EB2F5D261A4DE56B00DBC4AF /* DoneViewController.swift in Sources */,
+				EB135B941BED21490093DE70 /* ExpandFloatingButtonModel.swift in Sources */,
 				EBC9D2381BE3F2F50088E3CF /* TimerUtils.swift in Sources */,
 				EBB9A74C1B5EB95A00E5487D /* EditInventoryViewController.swift in Sources */,
 				EBBC23051BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */,

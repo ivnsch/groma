@@ -203,7 +203,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         case .Submit:
             addEditProductController.submit()
             
-        case .Add, .Back: break
+        case .Add, .Back, .Expand: break
         }
     }
     

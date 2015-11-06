@@ -42,19 +42,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     @IBOutlet weak var topBar: UIView!
 
     @IBOutlet weak var editButton: UIButton!
-    
+    @IBOutlet weak var addButton: UIButton!
+
     private let transition = BlurBubbleTransition()
-    
-    private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0, xRight: 20)
-    private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0, xRight: 20)
-    private let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: CGFloat(-M_PI_4), xRight: 20)
-    
     
     private var titleLabel: UILabel?
     
     var expandDelegate: Foo?
     
-
+    private let expandButtonModel: ExpandFloatingButtonModel = ExpandFloatingButtonModel()
     
     var currentList: List? {
         didSet {
@@ -111,6 +107,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
         titleLabel?.textColor = compl
         
+        expandButtonModel.bgColor = (colorArray[4] as! UIColor).lightenByPercentage(0.5)
+        expandButtonModel.pathColor = UIColor(contrastingBlackOrWhiteColorOn: expandButtonModel.bgColor, isFlat: true)
+
 //        stashView.bgColor = colorArray[3] as? UIColor
 //        if let bgColor = stashView.bgColor {
 //            stashView.setTextColor(UIColor(contrastingBlackOrWhiteColorOn: bgColor, isFlat: true))
@@ -150,7 +149,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func initFloatingViews() {
-        floatingViews.setActions([toggleButtonInactiveAction])
+        floatingViews.setActions(Array<FLoatingButtonAction>())
         floatingViews.delegate = self
     }
 
@@ -295,6 +294,23 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         self.setEditing(editing, animated: true, tryCloseTopViewController: true)
     }
+
+    @IBAction func onAddTap(sender: AnyObject) {
+        // if any top controller is open, close it
+        if quickAddController.open || addEditController.open {
+            if quickAddController.open {
+                setQuickAddOpen(false)
+            }
+            if addEditController.open {
+                setAddEditListItemOpen(false)
+            }
+            floatingViews.setActions(Array<FLoatingButtonAction>())  // reset floating actions
+            
+        } else { // if there's no top controller open, open the quick add controller
+            setQuickAddOpen(true)
+            floatingViews.setActions(Array<FLoatingButtonAction>())
+        }
+    }
     
     // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
     func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
@@ -314,8 +330,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 setAddEditListItemOpen(false)
             }
         }
+        if editing {
+            self.floatingViews.setActions([expandButtonModel.collapsedAction])
+        } else {
+            floatingViews.setActions(Array<FLoatingButtonAction>())
+        }
         
-        floatingViews.setActions(editing ? [toggleButtonAvailableAction, FLoatingButtonAttributedAction(action: .Add)] : [toggleButtonInactiveAction]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button), and set appropiate alpha
+//        floatingViews.setActions(editing ? [toggleButtonAvailableAction, FLoatingButtonAttributedAction(action: .Add)] : [toggleButtonInactiveAction]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button), and set appropiate alpha
 
         listItemsTableViewController.setEditing(editing, animated: animated)
 //        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
@@ -624,12 +645,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if open {
             currentTopController = quickAddController
             floatingViews.setActions([
-                toggleButtonActiveAction,
                 FLoatingButtonAttributedAction(action: .Submit)])
 
         } else {
             currentTopController = nil
-            floatingViews.setActions([toggleButtonInactiveAction]) // this is done with setEditing false
+            floatingViews.setActions(Array<FLoatingButtonAction>()) // this is done with setEditing false
         }
         
 //        if open {
@@ -732,19 +752,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onQuickListOpen() {
-        floatingViews.setActions([toggleButtonActiveAction])
+        floatingViews.setActions(Array<FLoatingButtonAction>())
     }
     
     func onAddProductOpen() {
-        floatingViews.setActions([toggleButtonActiveAction.copy(xRight: nil), FLoatingButtonAttributedAction(action: .Submit)])
+        floatingViews.setActions([FLoatingButtonAttributedAction(action: .Submit)])
     }
     
     func onAddGroupOpen() {
-        floatingViews.setActions([toggleButtonActiveAction.copy(xRight: nil), FLoatingButtonAttributedAction(action: .Submit), FLoatingButtonAttributedAction(action: .Add)])
+        floatingViews.setActions([FLoatingButtonAttributedAction(action: .Submit), FLoatingButtonAttributedAction(action: .Add)])
     }
     
     func onAddGroupItemsOpen() {
-        floatingViews.setActions([toggleButtonActiveAction.copy(xRight: nil), FLoatingButtonAttributedAction(action: .Submit), FLoatingButtonAttributedAction(action: .Back)])
+        floatingViews.setActions([FLoatingButtonAttributedAction(action: .Submit), FLoatingButtonAttributedAction(action: .Back)])
     }
     
     
@@ -786,16 +806,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 if addEditController.open {
                     setAddEditListItemOpen(false)
                 }
-                floatingViews.setActions([toggleButtonInactiveAction])  // reset floating actions
+                floatingViews.setActions(Array<FLoatingButtonAction>())  // reset floating actions
                 
             } else { // if there's no top controller open, open the quick add controller
                 setQuickAddOpen(true)
-                floatingViews.setActions([toggleButtonActiveAction])
+                floatingViews.setActions(Array<FLoatingButtonAction>())
             }
-        case .Add:
+        case .Expand: // expand / collapse sections in edit mode
             toggleReorderSections()
             
-        case .Back, .Submit: sendActionToTopController(action)
+        case .Back, .Submit, .Add: sendActionToTopController(action)
         }
     }
     
@@ -810,7 +830,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             switch action {
             case .Submit:
                 addEditListItemViewController.submit(AddEditListItemViewControllerAction.Update)
-            case .Back, .Add, .Toggle: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(addEditListItemViewController) instance")
+            case .Back, .Add, .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(addEditListItemViewController) instance")
             }
         }
     }
@@ -820,12 +840,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private var sectionsTableViewController: ReorderSectionTableViewController?
     private var lockToggleSectionsTableView: Bool = false // prevent condition in which user presses toggle too quickly many times and sectionsTableViewController doesn't go away
     
-    func toggleReorderSections() {
+    
+    // Toggles between expanded and collapsed section mode. For this a second tableview with only sections is added or removed from foreground. Animates floating button.
+    private func toggleReorderSections() {
         
         if !lockToggleSectionsTableView {
             lockToggleSectionsTableView = true
             
-            if let sectionsTableViewController = sectionsTableViewController { // hide
+            if let sectionsTableViewController = sectionsTableViewController { // collapse
                 
                 sectionsTableViewController.setCellHeight(30, animated: true)
                 sectionsTableViewController.setEdit(false, animated: true) {
@@ -834,10 +856,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     self.sectionsTableViewController = nil
                     self.listItemsTableViewController.setAllSectionsExpanded(!self.listItemsTableViewController.sectionsExpanded, animated: true)
                     self.lockToggleSectionsTableView = false
+                    
+                    self.floatingViews.setActions([self.expandButtonModel.collapsedAction])
                 }
             } else {
                 
-                listItemsTableViewController.setAllSectionsExpanded(!listItemsTableViewController.sectionsExpanded, animated: true, onComplete: { // show
+                listItemsTableViewController.setAllSectionsExpanded(!listItemsTableViewController.sectionsExpanded, animated: true, onComplete: { // expand
                     let sectionsTableViewController = UIStoryboard.reorderSectionTableViewController()
                     
                     sectionsTableViewController.cellBgColor = self.listItemsTableViewController.headerBGColor
@@ -865,6 +889,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     sectionsTableViewController.view.frame = self.listItemsTableViewController.view.frame
                     self.addChildViewControllerAndView(sectionsTableViewController, viewIndex: 1)
                     self.sectionsTableViewController = sectionsTableViewController
+                    
+                    self.floatingViews.setActions([self.expandButtonModel.expandedAction])
                 })
             }
         }
@@ -881,5 +907,4 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             print("Error: ViewController.onSectionOrderUpdated: Invalid state, reordering sections and no list")
         }
     }
-    
 }

@@ -349,7 +349,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
             case .Back:
                 navController?.popViewControllerAnimated(true)
                 delegate?.onQuickListOpen() // we are now back in quick list
-            case .Add, .Toggle: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
+            case .Add, .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
             }
             
             
@@ -362,7 +362,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
                 delegate?.onAddProductOpen() // we are now back in product
             case .Add:
                 quickAddGroupViewController.showAddItemsController()
-            case .Toggle: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
+            case .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
             }
             
             
@@ -373,7 +373,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
             case .Back:
                 navController?.popViewControllerAnimated(true)
                 delegate?.onAddGroupOpen() // we are now back in group
-            case .Add, .Toggle: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
+            case .Add, .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
             }
         }
         

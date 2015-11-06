@@ -9,7 +9,7 @@
 import UIKit
 
 enum FLoatingButtonAction {
-    case Add, Toggle, Back, Submit
+    case Add, Toggle, Back, Submit, Expand
 }
 
 struct FLoatingButtonAttributedAction {
@@ -18,13 +18,19 @@ struct FLoatingButtonAttributedAction {
     let rotation: CGFloat
     let xRight: CGFloat?
     let enabled: Bool
+    let paths: [CGPath]?
+    let backgroundColor: UIColor?
+    let pathColor: UIColor?
     
-    init(action: FLoatingButtonAction, alpha: CGFloat = 1, rotation: CGFloat = 0, xRight: CGFloat? = nil, enabled: Bool = true) {
+    init(action: FLoatingButtonAction, alpha: CGFloat = 1, rotation: CGFloat = 0, xRight: CGFloat? = nil, enabled: Bool = true, paths: [CGPath]? = nil, backgroundColor: UIColor? = nil, pathColor: UIColor? = nil) {
         self.action = action
         self.alpha = alpha
         self.rotation = rotation
         self.xRight = xRight
         self.enabled = enabled
+        self.paths = paths
+        self.backgroundColor = backgroundColor
+        self.pathColor = pathColor
     }
     
     // NOTE: xRight must be passed because field is an optional, if we make passing optional and want to set it to nil it's not possible
@@ -41,21 +47,27 @@ struct FLoatingButtonAttributedAction {
 
 class FloatingViewModel {
     let action: FLoatingButtonAction
-    let imgName: String
+    let imgName: String?
     let alpha: CGFloat
     let rotation: CGFloat
     let xRight: CGFloat?
     let enabled: Bool
     let onTap: VoidFunction
-    
-    init(action: FLoatingButtonAction, imgName: String, alpha: CGFloat, rotation: CGFloat, xRight: CGFloat? = nil, enabled: Bool, onTap: VoidFunction) {
+    let paths: [CGPath]?
+    let backgroundColor: UIColor?
+    let pathColor: UIColor?
+
+    init(action: FLoatingButtonAction, imgName: String?, alpha: CGFloat, rotation: CGFloat, xRight: CGFloat? = nil, enabled: Bool, paths: [CGPath]? = nil, backgroundColor: UIColor? = nil, pathColor: UIColor? = nil, onTap: VoidFunction) {
         self.action = action
         self.imgName = imgName
         self.alpha = alpha
         self.rotation = rotation
         self.xRight = xRight
         self.enabled = enabled
+        self.paths = paths
         self.onTap = onTap
+        self.backgroundColor = backgroundColor
+        self.pathColor = pathColor
     }
 }
 
@@ -68,6 +80,8 @@ class ButtonWithConstraints: UIButton {
     
     var right: NSLayoutConstraint? = nil
 
+    var paths: [CGPath] = []
+    
     init() {
         super.init(frame: CGRectNull)
     }
@@ -127,15 +141,16 @@ class FloatingViews: UIView {
     func setActions(actions: [FLoatingButtonAttributedAction]) {
         
         func toModel(attributedAction: FLoatingButtonAttributedAction) -> FloatingViewModel {
-            let imgName: String = {
+            let imgName: String? = {
                 switch attributedAction.action {
                 case .Add: return "flt_plus"
                 case .Toggle: return "flt_plus"
                 case .Back: return "flt_back"
                 case .Submit: return "flt_done"
+                case .Expand: return nil
                 }
             }()
-            return FloatingViewModel(action: attributedAction.action, imgName: imgName, alpha: attributedAction.alpha, rotation: attributedAction.rotation, xRight: attributedAction.xRight, enabled: attributedAction.enabled, onTap: {[weak self] in
+            return FloatingViewModel(action: attributedAction.action, imgName: imgName, alpha: attributedAction.alpha, rotation: attributedAction.rotation, xRight: attributedAction.xRight, enabled: attributedAction.enabled, paths: attributedAction.paths, backgroundColor: attributedAction.backgroundColor, pathColor: attributedAction.pathColor, onTap: {[weak self] in
                 self?.submitAction(attributedAction.action)
             })
         }
@@ -173,9 +188,30 @@ class FloatingViews: UIView {
     
     private func createButton(model: FloatingViewModel) -> ButtonWithConstraints {
         let button = ButtonWithConstraints()
-        button.backgroundColor = UIColor.whiteColor()
+        button.backgroundColor = model.backgroundColor ?? UIColor.whiteColor() // note that bgColor is set again in animation, to be able to animate color changes
         button.layer.cornerRadius = buttonWidth / CGFloat(2)
-        button.setImage(UIImage(named: model.imgName), forState: .Normal)
+        button.clipsToBounds = true
+        
+        if let imgName = model.imgName {
+            button.setImage(UIImage(named: imgName), forState: .Normal)
+        }
+        
+        // Add the sublayers (empty). The paths are added during animation.
+        if let paths = model.paths {
+            for path in paths {
+                let sublayer = CAShapeLayer()
+                sublayer.fillColor     = UIColor.clearColor().CGColor
+                sublayer.anchorPoint   = CGPointMake(0, 0)
+                sublayer.lineJoin      = kCALineJoinRound
+                sublayer.lineCap       = kCALineCapRound
+                sublayer.contentsScale = layer.contentsScale
+                sublayer.lineWidth     = 1
+                sublayer.strokeColor   = model.pathColor?.CGColor ?? UIColor.blackColor().CGColor
+                button.layer.addSublayer(sublayer)
+                button.paths.append(path)
+            }
+        }
+
         button.addTarget(self, action: "onButtonTap:", forControlEvents: .TouchUpInside)
         button.alpha = model.alpha
         button.transform = CGAffineTransformMakeRotation(model.rotation)
@@ -219,14 +255,14 @@ class FloatingViews: UIView {
             return u
         }
         
-        let hConstraintStr = "H:[v0]-\(xFromRight)-|"
+        let hConstraintStr = "H:[v0]-(\(xFromRight))-|"
         
         let vConstraits = namedViews.flatMap {NSLayoutConstraint.constraintsWithVisualFormat("V:|-(\(top))-[\($0.0)]", options: NSLayoutFormatOptions(), metrics: nil, views: viewsDict)}
         
         let hConstraints = NSLayoutConstraint.constraintsWithVisualFormat(hConstraintStr, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDict)
         
         view.right = hConstraints.first!
-        
+
         addConstraints(hConstraints + vConstraits)
     }
     
@@ -239,22 +275,58 @@ class FloatingViews: UIView {
         return nil
     }
     
+    // src: https://github.com/yannickl/DynamicButton/blob/master/DynamicButton/DynamicButton.swift
+    private func animationWithKeyPath(keyPath: String, damping: CGFloat = 10, initialVelocity: CGFloat = 0, stiffness: CGFloat = 100) -> CABasicAnimation {
+        guard #available(iOS 9, *) else {
+            let basic = CABasicAnimation(keyPath: keyPath)
+            basic.duration = 0.3
+            basic.fillMode = kCAFillModeForwards
+            basic.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+            return basic
+        }
+        
+        let spring = CASpringAnimation(keyPath: keyPath)
+        spring.duration = spring.settlingDuration
+        spring.damping = damping
+        spring.initialVelocity = initialVelocity
+        spring.stiffness = stiffness
+        spring.fillMode = kCAFillModeForwards
+        spring.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+        
+        return spring
+    }
     
     private func animate(button: ButtonWithConstraints, target: PositionedModel, onComplete: VoidFunction? = nil) {
         
         button.right?.constant = target.position.x
-        
+
+        // animate possible path(s)
+        if let paths = target.paths {
+            for (index, path) in paths.enumerate() {
+                let anim = animationWithKeyPath("path", damping: 10)
+                anim.fromValue = button.paths[index]
+                anim.toValue = path
+                // TODO cleaner implementation, this index based access and casting is super unsafe
+                (button.layer.sublayers![index] as! CAShapeLayer).addAnimation(anim, forKey: "path")
+                (button.layer.sublayers![index] as! CAShapeLayer).path = path
+            }
+            button.paths = paths
+        }
+
+        // animate possible alpha and rotation change
         UIView.animateWithDuration(0.3, animations: {[weak self] in
             self?.layoutIfNeeded()
             button.alpha = target.alpha
             button.transform = CGAffineTransformMakeRotation(target.rotation)
-  
+            if let backgroundColor = target.backgroundColor {
+                button.backgroundColor = backgroundColor
+            }
         }, completion: {finished in
             onComplete?()
         })
     }
     
-    private typealias PositionedModel = (action: FLoatingButtonAction, position: CGPoint, alpha: CGFloat, rotation: CGFloat)
+    private typealias PositionedModel = (action: FLoatingButtonAction, position: CGPoint, alpha: CGFloat, rotation: CGFloat, paths: [CGPath]?, backgroundColor: UIColor?, pathColor: UIColor?)
     
     // TODO ensure while add/remove buttons (index change) no access to buttons or models based on index / tag
     
@@ -273,7 +345,7 @@ class FloatingViews: UIView {
                 var position = calculateModelPosition(i, modelsCount: newModels.count)
                 position.x = newModel.xRight ?? position.x
                 
-                let positionedModel = PositionedModel(newModel.action, position, newModel.alpha, newModel.rotation)
+                let positionedModel = PositionedModel(newModel.action, position, newModel.alpha, newModel.rotation, newModel.paths, newModel.backgroundColor, newModel.pathColor)
                 toUpdate.append((existingButton, positionedModel))
                 existingButton.tag = i
                 
@@ -286,7 +358,7 @@ class FloatingViews: UIView {
                 var position = calculateModelPosition(i, modelsCount: newModels.count)
                 position.x = newModel.xRight ?? position.x
 
-                let positionedModel = PositionedModel(newModel.action, position, newModel.alpha, newModel.rotation)
+                let positionedModel = PositionedModel(newModel.action, position, newModel.alpha, newModel.rotation, newModel.paths, newModel.backgroundColor, newModel.pathColor)
                 toUpdate.append((button, positionedModel))
                 button.tag = i
             }
@@ -299,7 +371,7 @@ class FloatingViews: UIView {
                 
                 // animation target for removed elements: position on the right corner
                 let position = calculateModelPosition(0, modelsCount: newModels.count)
-                let positionedModel = PositionedModel(oldModel.action, position, 0, oldModel.rotation)
+                let positionedModel = PositionedModel(oldModel.action, position, 0, oldModel.rotation, oldModel.paths, oldModel.backgroundColor, oldModel.pathColor)
                 
                 toRemove.append(button: button, targetModel: positionedModel)
             }
@@ -314,6 +386,9 @@ class FloatingViews: UIView {
             sendSubviewToBack(button)
             buttons.append(button)
             positionView(button, xFromRight: position.x, top: position.y) // TODO behind existing buttons
+            // set size
+            button.widthConstraint(buttonWidth)
+            button.heightConstraint(buttonWidth)
         }
         setNeedsLayout()
         layoutIfNeeded()
@@ -326,6 +401,8 @@ class FloatingViews: UIView {
         // animate the removed buttons to the bottom right
         for t in toRemove {
             animate(t.button, target: t.targetModel) {[weak self] in
+                // FIXME! models are updated immediately, but this - the update of corresponding buttons, after animation complete, so in the meantime (currently 0.3 seconds), inconsistent state which can lead to out of bounds when trying to access models using button index or viceversa.
+                // model & corresponding buttons should be updated exactly at the same time as this represents same state. (Would is maybe make sense to have only 1 class, e.g. put all the state in the buttons or something?)
                 t.button.removeFromSuperview()
                 self?.buttons.remove(t.button)
             }
