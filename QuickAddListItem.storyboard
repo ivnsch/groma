@@ -8,6 +8,8 @@
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeueLights.ttc">
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -203,8 +205,8 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nxq-pO-n22">
-                                                    <rect key="frame" x="8" y="11" width="42" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <rect key="frame" x="8" y="11" width="40" height="21"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -225,25 +227,16 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="group" translatesAutoresizingMaskIntoConstraints="NO" id="lfb-tR-jla">
-                                                    <rect key="frame" x="8" y="14" width="15" height="15"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="15" id="SVQ-OX-qe2"/>
-                                                        <constraint firstAttribute="width" constant="15" id="jCF-6n-fO1"/>
-                                                    </constraints>
-                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DM5-w6-50D">
-                                                    <rect key="frame" x="31" y="11" width="42" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <rect key="frame" x="8" y="11" width="40" height="21"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="lfb-tR-jla" firstAttribute="leading" secondItem="8UK-Ng-ggY" secondAttribute="leading" constant="8" id="1ko-MP-xQd"/>
-                                                <constraint firstItem="DM5-w6-50D" firstAttribute="centerY" secondItem="lfb-tR-jla" secondAttribute="centerY" id="831-mi-lMH"/>
-                                                <constraint firstItem="lfb-tR-jla" firstAttribute="centerY" secondItem="8UK-Ng-ggY" secondAttribute="centerY" id="Jkd-58-tus"/>
-                                                <constraint firstItem="DM5-w6-50D" firstAttribute="leading" secondItem="lfb-tR-jla" secondAttribute="trailing" constant="8" id="mj8-ra-597"/>
+                                                <constraint firstItem="DM5-w6-50D" firstAttribute="leading" secondItem="8UK-Ng-ggY" secondAttribute="leading" constant="8" id="bjC-Qm-MVd"/>
+                                                <constraint firstItem="DM5-w6-50D" firstAttribute="centerY" secondItem="8UK-Ng-ggY" secondAttribute="centerY" id="hcg-9Y-FS6"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -298,7 +291,4 @@
             <point key="canvasLocation" x="1504" y="546"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="group" width="25" height="25"/>
-    </resources>
 </document>

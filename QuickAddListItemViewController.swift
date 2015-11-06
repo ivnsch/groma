@@ -103,16 +103,16 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
     
     private func filter(searchText: String) {
         if searchText.isEmpty {
-            filteredQuickAddItems = quickAddItems
+            filteredQuickAddItems = quickAddItems.map{$0.clearBoldRangeCopy()}
         } else {
             switch itemType {
             case .Product:
                 Providers.productProvider.productsContainingText(searchText, successHandler{[weak self] products in
-                    self?.quickAddItems = products.map{QuickAddProduct($0)}
+                    self?.quickAddItems = products.map{QuickAddProduct($0, boldRange: $0.name.range(searchText, caseInsensitive: true))}
                 })
             case .Group:
                 Providers.listItemGroupsProvider.groupsContainingText(searchText, successHandler{[weak self] groups in
-                    self?.quickAddItems = groups.map{QuickAddGroup($0)}
+                    self?.quickAddItems = groups.map{QuickAddGroup($0, boldRange: $0.name.range(searchText, caseInsensitive: true))}
                 })
             }
         }

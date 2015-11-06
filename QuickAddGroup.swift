@@ -11,12 +11,17 @@ import Foundation
 class QuickAddGroup: QuickAddItem {
     
     let group: ListItemGroup
-    
-    init(_ group: ListItemGroup) {
+
+    init(_ group: ListItemGroup, boldRange: NSRange? = nil) {
         self.group = group
+        super.init(boldRange: boldRange)
     }
     
     override var labelText: String {
         return group.name
+    }
+    
+    override func clearBoldRangeCopy() -> QuickAddGroup {
+        return QuickAddGroup(group)
     }
 }

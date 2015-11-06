@@ -15,7 +15,11 @@ class QuickAddItemCell: UITableViewCell {
     var item: QuickAddProduct? {
         didSet {
             if let item = item {
-                nameLabel.text = item.labelText
+                if let boldRange = item.boldRange {
+                    nameLabel.attributedText = item.product.name.makeAttributedBoldRegular(boldRange)
+                } else {
+                    nameLabel.text = item.product.name
+                }
             }
         }
     }

@@ -15,7 +15,11 @@ class QuickAddGroupCell: UITableViewCell {
     var item: QuickAddGroup? {
         didSet {
             if let item = item {
-                nameLabel.text = item.labelText
+                if let boldRange = item.boldRange {
+                    nameLabel.attributedText = item.group.name.makeAttributedBoldRegular(boldRange)
+                } else {
+                    nameLabel.text = item.group.name
+                }
             }
         }
     }

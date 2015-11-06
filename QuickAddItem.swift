@@ -12,7 +12,17 @@ import Foundation
 // maybe we can use directly Product and ListItemGroup in table view - so we don't have to call map?
 class QuickAddItem {
 
+    var boldRange: NSRange?
+    
+    init(boldRange: NSRange? = nil) {
+        self.boldRange = boldRange
+    }
+    
     var labelText: String {
         fatalError("Override")
+    }
+    
+    func clearBoldRangeCopy() -> QuickAddItem {
+        return QuickAddItem()
     }
 }
