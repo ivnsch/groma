@@ -749,18 +749,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private lazy var tableViewOverlay: UIView = {
         let view = UIButton()
         view.backgroundColor = UIColor.blackColor()
-//        view.userInteractionEnabled = true
+        view.userInteractionEnabled = true
         view.alpha = 0
-//        view.addTarget(self, action: "onQuickAddOverlayTap:", forControlEvents: .TouchUpInside)
+        view.addTarget(self, action: "onTableViewOverlayTap:", forControlEvents: .TouchUpInside)
         return view
     }()
 
-    // Usability improvement? (Dismiss add view easily, on the other side it also makes it easy to close by mistake)
-//    func onQuickAddOverlayTap(sender: UIButton) {
-//        setQuickAddOpen(false)
-//    }
-    
-
+    // closes top controller (whichever it may be)
+    func onTableViewOverlayTap(sender: UIButton) {
+        if quickAddController.open {
+            setQuickAddOpen(false)
+        }
+        if addEditController.open {
+            setAddEditListItemOpen(false)
+        }
+        if editSectionController.open {
+            let tableView: UITableView = sectionsTableViewController?.tableView ?? listItemsTableViewController.tableView
+            setEditSectionControllerOpen(false, tableView: tableView)
+        }
+    }
 
     // MARK: - ListItemGroupsViewControllerDelegate
     
@@ -916,7 +923,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if !lockToggleSectionsTableView {
             lockToggleSectionsTableView = true
             
-            if let sectionsTableViewController = sectionsTableViewController { // collapse
+            if let sectionsTableViewController = sectionsTableViewController { // expand - remove sections table view
                 
                 sectionsTableViewController.setCellHeight(30, animated: true)
                 sectionsTableViewController.setEdit(false, animated: true) {
@@ -930,10 +937,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 }
             } else {
                 
-                listItemsTableViewController.setAllSectionsExpanded(!listItemsTableViewController.sectionsExpanded, animated: true, onComplete: { // expand
+                listItemsTableViewController.setAllSectionsExpanded(!listItemsTableViewController.sectionsExpanded, animated: true, onComplete: { // collapse - add sections table view
                     let sectionsTableViewController = UIStoryboard.reorderSectionTableViewController()
                     
                     sectionsTableViewController.cellBgColor = self.listItemsTableViewController.headerBGColor
+                    sectionsTableViewController.selectedCellBgColor = self.expandButtonModel.bgColor
                     sectionsTableViewController.textColor = UIColor(contrastingBlackOrWhiteColorOn: self.listItemsTableViewController.headerBGColor, isFlat: true)
                     sectionsTableViewController.sections = self.listItemsTableViewController.sections
                     sectionsTableViewController.delegate = self

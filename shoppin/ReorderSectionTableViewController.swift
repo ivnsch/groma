@@ -22,6 +22,7 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
     var onViewDidLoad: VoidFunction?
     
     var cellBgColor: UIColor?
+    var selectedCellBgColor: UIColor?
     var textColor: UIColor?
     
     var cellHeight: CGFloat = 30
@@ -72,6 +73,14 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
         cell.contentView.backgroundColor = cellBgColor ?? UIColor.whiteColor()
         cell.backgroundColor = cellBgColor ?? UIColor.whiteColor()
         cell.nameLabel.textColor = textColor ?? UIColor.blackColor()
+        
+        let bgColorView = UIView(frame: cell.frame)
+        let finalSelectedCellBgColor = selectedCellBgColor ?? UIColor.redColor()
+        bgColorView.backgroundColor = finalSelectedCellBgColor
+        cell.nameLabel.highlightedTextColor = UIColor(contrastingBlackOrWhiteColorOn: finalSelectedCellBgColor, isFlat: true)
+
+        cell.selectedBackgroundView = bgColorView
+        
         return cell
     }
 
