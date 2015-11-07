@@ -390,6 +390,8 @@ class FloatingViews: UIView {
             button.widthConstraint(buttonWidth)
             button.heightConstraint(buttonWidth)
         }
+        
+        // TODO is this necessary?
         setNeedsLayout()
         layoutIfNeeded()
         
