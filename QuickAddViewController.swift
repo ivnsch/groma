@@ -50,7 +50,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     
     var delegate: QuickAddDelegate?
     
-    var productDelegate: AddEditListItemControllerDelegate?
+    var productDelegate: AddEditListItemViewControllerDelegate?
     
     var itemType: QuickAddItemType = .Product // for now product/group mutually exclusive (no mixed tableview)
     

@@ -15,7 +15,7 @@
         </mutableArray>
     </customFonts>
     <scenes>
-        <!--Add Edit List Item View Controller-->
+        <!--Auto Complete Data Source-->
         <scene sceneID="mqV-uX-op9">
             <objects>
                 <viewController storyboardIdentifier="AddEditListItem" id="CI5-0y-OAL" customClass="AddEditListItemViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
@@ -40,10 +40,14 @@
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Section (e.g. vegetables)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="i1w-xi-aFz">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Section (e.g. vegetables)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="i1w-xi-aFz" customClass="MLPAutoCompleteTextField">
                                 <rect key="frame" x="14" y="56" width="572" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="next"/>
+                                <connections>
+                                    <outlet property="autoCompleteDataSource" destination="CI5-0y-OAL" id="B3X-dn-HRa"/>
+                                    <outlet property="autoCompleteDelegate" destination="CI5-0y-OAL" id="qlf-hn-ADn"/>
+                                </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Personal note (optional)" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="m1p-2K-Ljh">
                                 <rect key="frame" x="14" y="182" width="572" height="30"/>

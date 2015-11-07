@@ -11,7 +11,7 @@ import CoreData
 import SwiftValidator
 import ChameleonFramework
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemViewControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate
 //    , UIBarPositioningDelegate
 {
     
@@ -208,7 +208,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         })
     }
     
-    // MARK: - AddEditListItemControllerDelegate
+    // MARK: - AddEditListItemViewControllerDelegate
 
     func onValidationErrors(errors: [UITextField: ValidationError]) {
         // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)

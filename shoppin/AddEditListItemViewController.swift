@@ -14,10 +14,13 @@ protocol AddEditListItemViewControllerDelegate {
     
     func onValidationErrors(errors: [UITextField: ValidationError])
     
-    func onOkTap(name: String, price: String, quantity: String, sectionName: String, note: String?)
-    func onOkAndAddAnotherTap(name: String, price: String, quantity: String, sectionName: String, note: String?)
-    func onUpdateTap(name: String, price: String, quantity: String, sectionName: String, note: String?)
+    func onOkTap(name: String, price: String, quantity: String, category: String, sectionName: String, note: String?)
+    func onOkAndAddAnotherTap(name: String, price: String, quantity: String, category: String, sectionName: String, note: String?)
+    func onUpdateTap(name: String, price: String, quantity: String, category: String, sectionName: String, note: String?)
     func onCancelTap()
+    
+    func productNameAutocompletions(text: String, handler: [String] -> ())
+    func sectionNameAutocompletions(text: String, handler: [String] -> ())
     
     func planItem(productName: String, handler: PlanItem? -> ())
 }
@@ -26,10 +29,10 @@ enum AddEditListItemViewControllerAction {
     case AddAndAddAnother, Add, Update
 }
 
-class AddEditListItemViewController: UIViewController {
+class AddEditListItemViewController: UIViewController, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate {
 
     @IBOutlet weak var nameInput: UITextField!
-    @IBOutlet weak var sectionInput: UITextField!
+    @IBOutlet weak var sectionInput: MLPAutoCompleteTextField!
     @IBOutlet weak var priceInput: UITextField!
     @IBOutlet weak var quantityInput: UITextField!
     
@@ -37,7 +40,7 @@ class AddEditListItemViewController: UIViewController {
     
     @IBOutlet weak var planInfoButton: UIButton!
     
-    var delegate: AddEditListItemControllerDelegate?
+    var delegate: AddEditListItemViewControllerDelegate?
     
     var planItem: PlanItem? {
         didSet {
@@ -197,5 +200,31 @@ class AddEditListItemViewController: UIViewController {
     
     func showPlanItem(planItem: PlanItem) {
         planInfoButton.setTitle("\(planItem.quantity - planItem.usedQuantity) left", forState: .Normal)
+    }
+    
+    
+    // MARK: - MLPAutoCompleteTextFieldDataSource
+    
+    func autoCompleteTextField(textField: MLPAutoCompleteTextField!, possibleCompletionsForString string: String!, completionHandler handler: (([AnyObject]!) -> Void)!) {
+        switch textField {
+        case nameInput:
+            delegate?.productNameAutocompletions(string) {completions in
+                // don't use autocompletions for product - now that there's quick add, the only reason the user is here is because we don't have the product, so autocompletion doesn't make sense
+//                handler(completions)
+            }
+        case sectionInput:
+            delegate?.sectionNameAutocompletions(string) {completions in
+                handler(completions)
+            }
+        case _:
+            print("Error: Not handled text field in autoCompleteTextField")
+            break
+        }
+    }
+    
+    // MARK: - MLPAutoCompleteTextFieldDelegate
+    
+    func autoCompleteTextField(textField: MLPAutoCompleteTextField!, didSelectAutoCompleteString selectedString: String!, withAutoCompleteObject selectedObject: MLPAutoCompletionObject!, forRowAtIndexPath indexPath: NSIndexPath!) {
+        onNameInputChange(selectedString)
     }
 }
