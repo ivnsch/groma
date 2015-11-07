@@ -36,6 +36,8 @@ protocol ProductProvider {
     
     func loadProduct(name: String, handler: ProviderResult<Product> -> ())
     
+    func categoriesContaining(name: String, _ handler: ProviderResult<[String]> -> ())
+
     /**
     Utility method to refactor common code in ListItemsProviderImpl and ListItemGroupProviderImpl when adding new list or group items
     Tries to load using unique (name), if existent overrides fields with corresponding input, if not existent creates a new one

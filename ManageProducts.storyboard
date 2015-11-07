@@ -174,7 +174,7 @@
             </objects>
             <point key="canvasLocation" x="477" y="491"/>
         </scene>
-        <!--Add Edit Product Controller-->
+        <!--Auto Complete Data Source-->
         <scene sceneID="AWS-np-XEb">
             <objects>
                 <viewController storyboardIdentifier="AddEditProductController" id="dwY-bU-F5k" customClass="AddEditProductController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
@@ -191,10 +191,14 @@
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Category" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XZp-uO-cO9">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Category" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XZp-uO-cO9" customClass="MLPAutoCompleteTextField">
                                 <rect key="frame" x="14" y="70" width="572" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="autoCompleteDataSource" destination="dwY-bU-F5k" id="Gqk-E8-UHp"/>
+                                    <outlet property="autoCompleteDelegate" destination="dwY-bU-F5k" id="4Wg-QG-dbR"/>
+                                </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Price" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JIc-DT-P1w">
                                 <rect key="frame" x="14" y="115" width="100" height="30"/>

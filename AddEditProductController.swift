@@ -24,10 +24,10 @@ struct AddEditProductControllerEditingData {
     }
 }
 
-class AddEditProductController: UIViewController {
+class AddEditProductController: UIViewController, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate {
 
     @IBOutlet weak var nameInput: UITextField!
-    @IBOutlet weak var categoryInput: UITextField!
+    @IBOutlet weak var categoryInput: MLPAutoCompleteTextField!
     @IBOutlet weak var priceInput: UITextField!
     
     var delegate: AddEditProductControllerDelegate?
@@ -51,6 +51,7 @@ class AddEditProductController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initValidator()
+        categoryInput.defaultAutocompleteStyle()
     }
     
     private func initValidator() {
@@ -99,5 +100,13 @@ class AddEditProductController: UIViewController {
     func clear() {
         editingData = nil
         clearInputFields()
+    }
+    
+    // MARK: - MLPAutoCompleteTextFieldDataSource
+    
+    func autoCompleteTextField(textField: MLPAutoCompleteTextField!, possibleCompletionsForString string: String!, completionHandler handler: (([AnyObject]!) -> Void)!) {
+        Providers.productProvider.categoriesContaining(string, successHandler{categories in
+            handler(categories)
+        })
     }
 }

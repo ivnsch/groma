@@ -102,6 +102,11 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
+    func categoriesContaining(name: String, _ handler: ProviderResult<[String]> -> Void) {
+        dbProvider.categoriesContaining(name) {dbCategories in
+            handler(ProviderResult(status: .Success, sucessResult: dbCategories))
+        }
+    }
     
     func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, _ handler: ProviderResult<Product> -> Void) {
         

@@ -149,6 +149,13 @@ class RealmListItemProvider: RealmProvider {
         }
     }
     
+    func categoriesContaining(text: String, handler: [String] -> Void) {
+        let mapper: DBProduct -> String = {$0.category}
+        self.load(mapper, filter: "category CONTAINS[c] '\(text)'") {categories in
+            let distinctCategories = NSOrderedSet(array: categories).array as! [String] // TODO re-check: Realm can't distinct yet https://github.com/realm/realm-cocoa/issues/1103
+            handler(distinctCategories)
+        }
+    }
     
     // MARK: - Suggestion
 

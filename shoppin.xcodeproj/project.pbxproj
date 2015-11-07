@@ -304,6 +304,7 @@
 		EB714ABF1B681AF700F91B94 /* RemoteSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB714ABE1B681AF700F91B94 /* RemoteSyncResult.swift */; };
 		EB714AC01B681AF700F91B94 /* RemoteSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB714ABE1B681AF700F91B94 /* RemoteSyncResult.swift */; };
 		EB714AC11B681AF700F91B94 /* RemoteSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB714ABE1B681AF700F91B94 /* RemoteSyncResult.swift */; };
+		EB76A7A11BEE6F1600486F30 /* MLPAutoCompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB76A7A01BEE6F1500486F30 /* MLPAutoCompleteTextField.swift */; };
 		EB7858751B7F6F69008AAD12 /* RemoteHistoryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7858741B7F6F69008AAD12 /* RemoteHistoryItems.swift */; };
 		EB7858761B7F6F69008AAD12 /* RemoteHistoryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7858741B7F6F69008AAD12 /* RemoteHistoryItems.swift */; };
 		EB7858771B7F6F69008AAD12 /* RemoteHistoryItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7858741B7F6F69008AAD12 /* RemoteHistoryItems.swift */; };
@@ -857,6 +858,7 @@
 		EB714AA51B66BBA800F91B94 /* DBSyncable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSyncable.swift; sourceTree = "<group>"; };
 		EB714AAD1B67895500F91B94 /* RemoteProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProvider.swift; sourceTree = "<group>"; };
 		EB714ABE1B681AF700F91B94 /* RemoteSyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSyncResult.swift; sourceTree = "<group>"; };
+		EB76A7A01BEE6F1500486F30 /* MLPAutoCompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLPAutoCompleteTextField.swift; sourceTree = "<group>"; };
 		EB7858741B7F6F69008AAD12 /* RemoteHistoryItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteHistoryItems.swift; sourceTree = "<group>"; };
 		EB7858781B7F7083008AAD12 /* RemoteHistoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteHistoryItem.swift; sourceTree = "<group>"; };
 		EB78587C1B7FD81A008AAD12 /* HistoryItemsSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemsSync.swift; sourceTree = "<group>"; };
@@ -1597,6 +1599,7 @@
 				EBAEB22E1BDBDB2F00FCDA5C /* CGPoint.swift */,
 				EBAEB2301BDBDBE100FCDA5C /* CGRect.swift */,
 				EBD828041BEA441B0072F9FA /* UINavigationController.swift */,
+				EB76A7A01BEE6F1500486F30 /* MLPAutoCompleteTextField.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -2734,6 +2737,7 @@
 				EB1FC51C1BC694CC004E1114 /* OkNextButtonsView.swift in Sources */,
 				EBF299871B791023006BDA1F /* InventorySync.swift in Sources */,
 				EB0C1BA01B3DF2B500F24C85 /* UserTabItemViewController.swift in Sources */,
+				EB76A7A11BEE6F1600486F30 /* MLPAutoCompleteTextField.swift in Sources */,
 				EB0C2A3E1B583BFE00AF6226 /* RemoteInventoryItemWithProduct.swift in Sources */,
 				EBF162DD1A3C82380048E37C /* DefaultTableViewController.swift in Sources */,
 				EB85F4731BD5605000E19E9B /* ProductProviderImpl.swift in Sources */,
