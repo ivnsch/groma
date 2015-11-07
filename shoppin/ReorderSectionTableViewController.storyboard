@@ -23,7 +23,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BSU-bb-r3O">
-                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="sectionCell" id="pJH-sp-9hv" customClass="ReorderSectionCell" customModule="shoppin" customModuleProvider="target">
@@ -61,8 +61,16 @@
                             <constraint firstItem="BSU-bb-r3O" firstAttribute="top" secondItem="dRy-9t-9rf" secondAttribute="bottom" id="4Jh-zt-T8z"/>
                             <constraint firstItem="gSH-HF-bwM" firstAttribute="top" secondItem="BSU-bb-r3O" secondAttribute="bottom" id="AuU-by-aT5"/>
                             <constraint firstItem="BSU-bb-r3O" firstAttribute="leading" secondItem="BB1-gy-Bhj" secondAttribute="leading" id="Q2e-2L-XoK"/>
+                            <constraint firstAttribute="bottom" secondItem="BSU-bb-r3O" secondAttribute="bottom" id="VIG-zO-eMn"/>
                             <constraint firstAttribute="trailing" secondItem="BSU-bb-r3O" secondAttribute="trailing" id="cMI-k0-vUv"/>
+                            <constraint firstItem="BSU-bb-r3O" firstAttribute="top" secondItem="BB1-gy-Bhj" secondAttribute="top" id="rsX-Gj-dhN"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="4Jh-zt-T8z"/>
+                                <exclude reference="AuU-by-aT5"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="tableView" destination="BSU-bb-r3O" id="ziH-Ee-8kP"/>

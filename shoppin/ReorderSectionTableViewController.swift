@@ -10,6 +10,7 @@ import UIKit
 
 protocol ReorderSectionTableViewControllerDelegate {
     func onSectionsUpdated()
+    func onSectionSelected(section: Section)
 }
 
 class ReorderSectionTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -30,6 +31,8 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.allowsSelectionDuringEditing = true
+        
         onViewDidLoad?()
     }
 
@@ -111,5 +114,10 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
 
     func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let section = sections[indexPath.row]
+        delegate?.onSectionSelected(section)
     }
 }

@@ -114,6 +114,10 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
         // do nothing
     }
     
+    func onSectionHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
+        // do nothing
+    }
+    
     // MARK: -
     
     func startSideMenuDrag() {

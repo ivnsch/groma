@@ -11,7 +11,7 @@ import CoreData
 import SwiftValidator
 import ChameleonFramework
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate
 //    , UIBarPositioningDelegate
 {
     
@@ -438,6 +438,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         // this is done by simply reloading the prices from the provider
         updatePrices()
     }
+    
+    func onSectionHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
+        if editing {
+            setEditSectionControllerOpen(true, tableView: listItemsTableViewController.tableView)
+            editSectionController.section = section.section
+        }
+    }
 
     
     // MARK: -
@@ -595,7 +602,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private func setQuickAddOpen(open: Bool) {
         quickAddController.open = open
-        animateTopView(quickAddController.view, open: open)
+        animateTopView(quickAddController.view, open: open, tableView: listItemsTableViewController.tableView)
         
         if open {
             currentTopController = quickAddController
@@ -644,7 +651,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private func setAddEditListItemOpen(open: Bool) {
         addEditController.open = open
-        animateTopView(addEditController.view, open: open)
+        animateTopView(addEditController.view, open: open, tableView: listItemsTableViewController.tableView)
         
         if open {
             currentTopController = quickAddController
@@ -668,11 +675,52 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     /////////////////////////////////////////////////////////////////////////////////////////////
     
     
-    private func animateTopView(view: UIView, open: Bool) {
+    
+    // MARK: - edit section
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    /// edit section
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    
+    private lazy var editSectionController: EditSectionViewController = {
+        let controller = EditSectionViewController()
+        controller.delegate = self
+        self.initTopController(controller, height: 60)
+        return controller
+    }()
+    
+    private func setEditSectionControllerOpen(open: Bool, tableView: UITableView) {
+        editSectionController.open = open
+        animateTopView(editSectionController.view, open: open, tableView: tableView)
+        
+        if open {
+            currentTopController = editSectionController
+            floatingViews.setActions([
+                FLoatingButtonAttributedAction(action: .Submit)])
+            
+        } else {
+            currentTopController = nil
+            floatingViews.setActions(Array<FLoatingButtonAction>()) // this is done with setEditing false
+        }
+        
+        //        if open {
+        //            addItemView.setButtonText("Save")
+        //            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
+        //        } else {
+        //            addItemView.setButtonText("Add item")
+        //            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
+        //        }
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    
+    // parameter: tableView: This is normally the listitem's table view, except when we are in section-only mode, which needs a different table view
+    private func animateTopView(view: UIView, open: Bool, tableView: UITableView) {
         if open {
             self.view.addSubview(view)
-            tableViewOverlay.frame = self.view.frame
-            self.view.insertSubview(tableViewOverlay, aboveSubview: listItemsTableViewController.tableView)
+            let topInset = CGRectGetHeight(topBar.frame) + CGRectGetHeight(view.bounds) + CGRectGetHeight(pricesView.frame)
+            tableViewOverlay.frame = CGRectMake(tableView.frame.origin.x, tableView.frame.origin.y + topInset, tableView.frame.width, tableView.frame.height - tableView.topInset)
+            self.view.insertSubview(tableViewOverlay, aboveSubview: tableView)
+            self.view.bringSubviewToFront(floatingViews)
         } else {
             tableViewOverlay.removeFromSuperview()
         }
@@ -687,8 +735,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             
             let topInset = CGRectGetHeight(self.topBar.frame) + CGRectGetHeight(view.frame) + CGRectGetHeight(self.pricesView.frame)
             let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
-            self.listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
-            self.listItemsTableViewController.tableView.topOffset = -self.listItemsTableViewController.tableView.inset.top
+            tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
+            tableView.topOffset = -tableView.inset.top
             
             }) { finished in
         
@@ -818,9 +866,26 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             }
         case .Expand: // expand / collapse sections in edit mode
             toggleReorderSections()
+        
+        case .Submit:
+            if editSectionController.open {
+                editSectionController.submit()
+                
+            } else {
+                sendActionToTopController(action)
+            }
             
-        case .Back, .Submit, .Add: sendActionToTopController(action)
+        case .Back, .Add: sendActionToTopController(action)
         }
+    }
+    
+    // MARK: - EditSectionViewControllerDelegate
+    
+    func onSectionUpdated(section: Section) {
+        // use table view of controller which is showing
+        let tableView: UITableView = sectionsTableViewController?.tableView ?? listItemsTableViewController.tableView
+        setEditSectionControllerOpen(false, tableView: tableView)
+        listItemsTableViewController.updateSection(section)
     }
     
     private func sendActionToTopController(action: FLoatingButtonAction) {
@@ -875,8 +940,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     
                     sectionsTableViewController.onViewDidLoad = {
                         let navbarHeight = self.topBar.frame.height
-                        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-                        let topInset = navbarHeight + CGRectGetHeight(self.pricesView.frame) - statusBarHeight
+                        let topInset = navbarHeight + CGRectGetHeight(self.pricesView.frame)
                         // TODO this makes a very big bottom inset why?
                         //            let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + addButtonContainer.frame.height
                         //        let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + 20
@@ -909,6 +973,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             }
         } else {
             print("Error: ViewController.onSectionOrderUpdated: Invalid state, reordering sections and no list")
+        }
+    }
+    
+    func onSectionSelected(section: Section) {
+        if let sectionsTableViewController = sectionsTableViewController {
+            setEditSectionControllerOpen(true, tableView: sectionsTableViewController.tableView)
+            editSectionController.section = section
+        } else {
+            print("Error: ViewController.onSectionSelected: Invalid state: onSectionSelected called but there's no sectionsTableViewController")
         }
     }
     

@@ -12,11 +12,12 @@ protocol ListItemsTableViewDelegate {
     func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) // submit item marked as undo
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) // mark as undo
     func onListItemReset(tableViewListItem: TableViewListItem) // revert undo
+    func onSectionHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection)
 }
 
 protocol ListItemsEditTableViewDelegate {
-    func onListItemsChangedSection(tableViewListItems:[TableViewListItem])
-    func onListItemDeleted(tableViewListItem:TableViewListItem)
+    func onListItemsChangedSection(tableViewListItems: [TableViewListItem])
+    func onListItemDeleted(tableViewListItem: TableViewListItem)
 }
 
 enum ListItemsTableViewControllerStyle {
@@ -26,18 +27,18 @@ enum ListItemsTableViewControllerStyle {
 class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section
-    private(set) var tableViewSections:[ListItemsViewSection] = []
+    private(set) var tableViewSections: [ListItemsViewSection] = []
     
-    private var lastContentOffset:CGFloat = 0
+    private var lastContentOffset: CGFloat = 0
     
-    var scrollViewDelegate:UIScrollViewDelegate?
-    var listItemsTableViewDelegate:ListItemsTableViewDelegate?
-    var listItemsEditTableViewDelegate:ListItemsEditTableViewDelegate?
+    var scrollViewDelegate: UIScrollViewDelegate?
+    var listItemsTableViewDelegate: ListItemsTableViewDelegate?
+    var listItemsEditTableViewDelegate: ListItemsEditTableViewDelegate?
 
-    private(set) var sections:[Section] = [] // quick access. Sorting not necessarily same as in tableViewSections
-    private(set) var items:[ListItem] = [] // quick access. Sorting not necessarily same as in tableViewSections
+    private(set) var sections: [Section] = [] // quick access. Sorting not necessarily same as in tableViewSections
+    private(set) var items: [ListItem] = [] // quick access. Sorting not necessarily same as in tableViewSections
     
-    var style:ListItemsTableViewControllerStyle = .Normal
+    var style: ListItemsTableViewControllerStyle = .Normal
     
     private var swipedTableViewListItem: TableViewListItem? // Item marked for "undo". Item is not submitted until undo state is cleared
     
@@ -79,7 +80,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
 //        self.tableView.setEditing(true, animated: true)
     }
     
-    func setListItems(items:[ListItem]) { // as function instead of variable+didSet because didSet is called each time we modify the array
+    func setListItems(items: [ListItem]) { // as function instead of variable+didSet because didSet is called each time we modify the array
         self.items = items
         self.initTableViewContent()
     }
@@ -174,6 +175,20 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 tableView.scrollToRowAtIndexPath(lastIndexPath, atScrollPosition: .Middle, animated: true)
             }
         }
+    }
+    
+    // Updates a section based on identity (uuid). Note that this isn't usable for order update, as updating order requires to update the order field of sections below
+    func updateSection(section: Section) {
+        
+        // This is maybe not the most performant way to do this update but it guarantees consistency as it uses the "official" entry point to initialise the table, which is setListItems
+        let updatedItems: [ListItem] = items.map{item in
+            if item.section.same(section) {
+                return item.copy(section: section)
+            } else {
+                return item
+            }
+        }
+        setListItems(updatedItems)
     }
     
     // loops through list items to generate tableview sections, returns also found sections so we don't have to loop 2x
@@ -342,12 +357,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     func onHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
-        // for now nothing - expand/contract works but not together with new expand/collapse all functionality, this crashes because of indexpath inconsistencies
-//        if let sectionIndex = getIndex(section.section) {
-//            setSectionExpanded(!section.expanded, sectionIndex: sectionIndex, section: section, animated: true)
-//        } else {
-//            print("Error: ListItemsTableViewController.onHeaderTap: Invalid state: No section index found for section, which is in table view")
-//        }
+        listItemsTableViewDelegate?.onSectionHeaderTap(header, section: section)
     }
     
     func setAllSectionsExpanded(expanded: Bool, animated: Bool, onComplete: VoidFunction? = nil) {

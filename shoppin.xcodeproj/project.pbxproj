@@ -249,6 +249,8 @@
 		EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162E81A3CA1F00048E37C /* ListItemProviderImpl.swift */; };
 		EB55677F1A8658AA00CD3EC6 /* InventoryItemsProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFD1A5972C70058103B /* InventoryItemsProviderImpl.swift */; };
 		EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F41A3CA4BA0048E37C /* ProviderFactory.swift */; };
+		EB5AD1951BEE2ED400BC6A2F /* EditSectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5AD1931BEE2ED400BC6A2F /* EditSectionViewController.swift */; };
+		EB5AD1961BEE2ED400BC6A2F /* EditSectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB5AD1941BEE2ED400BC6A2F /* EditSectionViewController.xib */; };
 		EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6A207C1ACC079000B9BCB2 /* UITableView.swift */; };
 		EB6D93A31B1B788200ED8999 /* AutosuggestionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6D93A11B1B788200ED8999 /* AutosuggestionsTableViewController.swift */; };
 		EB6D93A41B1B788200ED8999 /* AutosuggestionsTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB6D93A21B1B788200ED8999 /* AutosuggestionsTableViewController.xib */; };
@@ -827,6 +829,8 @@
 		EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		EB5529E31BC6F2A800EDCEAF /* PlanItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanItemInput.swift; sourceTree = "<group>"; };
 		EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-osx-Bridging-Header.h"; sourceTree = "<group>"; };
+		EB5AD1931BEE2ED400BC6A2F /* EditSectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditSectionViewController.swift; sourceTree = "<group>"; };
+		EB5AD1941BEE2ED400BC6A2F /* EditSectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditSectionViewController.xib; sourceTree = "<group>"; };
 		EB6A207C1ACC079000B9BCB2 /* UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITableView.swift; path = shoppin/UITableView.swift; sourceTree = "<group>"; };
 		EB6D70321B19E435009572BA /* shoppin_osx.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = shoppin_osx.entitlements; sourceTree = "<group>"; };
 		EB6D93A11B1B788200ED8999 /* AutosuggestionsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutosuggestionsTableViewController.swift; sourceTree = "<group>"; };
@@ -1332,7 +1336,8 @@
 		EB20FC021A59986C0058103B /* list */ = {
 			isa = PBXGroup;
 			children = (
-				EB85F47D1BD6ED9500E19E9B /* addEdit */,
+				EB5AD1921BEE2EA500BC6A2F /* editSection */,
+				EB85F47D1BD6ED9500E19E9B /* addEditListItem */,
 				EB2F5D721A55754400DBC4AF /* PricesView.swift */,
 				EBD827FF1BE95C8B0072F9FA /* StashView.swift */,
 				EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */,
@@ -1596,6 +1601,15 @@
 			name = extensions;
 			sourceTree = "<group>";
 		};
+		EB5AD1921BEE2EA500BC6A2F /* editSection */ = {
+			isa = PBXGroup;
+			children = (
+				EB5AD1931BEE2ED400BC6A2F /* EditSectionViewController.swift */,
+				EB5AD1941BEE2ED400BC6A2F /* EditSectionViewController.xib */,
+			);
+			name = editSection;
+			sourceTree = "<group>";
+		};
 		EB6F81301B471793008680E0 /* utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -1671,13 +1685,13 @@
 			name = cell;
 			sourceTree = "<group>";
 		};
-		EB85F47D1BD6ED9500E19E9B /* addEdit */ = {
+		EB85F47D1BD6ED9500E19E9B /* addEditListItem */ = {
 			isa = PBXGroup;
 			children = (
 				EB85F47B1BD6ED8F00E19E9B /* AddEditListItemViewController.swift */,
 				EB85F47E1BD6EDBC00E19E9B /* AddEditListItem.storyboard */,
 			);
-			name = addEdit;
+			name = addEditListItem;
 			sourceTree = "<group>";
 		};
 		EB9BE4141B2C6525005B401A /* remote */ = {
@@ -2369,6 +2383,7 @@
 				EB0A05921BDFCE8D00D1E29D /* ManageProducts.storyboard in Resources */,
 				EB4147C31BE11D7C00549CE4 /* ManageGroups.storyboard in Resources */,
 				EB0C1BA31B3DF5EA00F24C85 /* UserDetails.storyboard in Resources */,
+				EB5AD1961BEE2ED400BC6A2F /* EditSectionViewController.xib in Resources */,
 				EB0F5F861B962D2100035175 /* GoogleService-Info.plist in Resources */,
 				EB1FC5171BC68F73004E1114 /* AddEditPlanItemContentView.xib in Resources */,
 				EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */,
@@ -2793,6 +2808,7 @@
 				EBF1A1541B82213200F34105 /* HistoryViewController.swift in Sources */,
 				EBB9A72E1B5EB00E00E5487D /* InventoriesTableViewController.swift in Sources */,
 				EBB9A7541B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */,
+				EB5AD1951BEE2ED400BC6A2F /* EditSectionViewController.swift in Sources */,
 				EB2F5D6F1A530FBC00DBC4AF /* Float.swift in Sources */,
 				EB70C2171B4D2C690060E529 /* ListProviderImpl.swift in Sources */,
 				EBDA754A1BCD5D3E00E34AC3 /* DBListItemGroup.swift in Sources */,
