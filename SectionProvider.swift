@@ -17,6 +17,7 @@ protocol SectionProvider {
     
     func update(sections: [Section], _ handler: ProviderResult<Any> -> ())
 
+    // TODO! return sections only for searched text, more efficient than fetching everything and let autocomplete library filter
     func sectionSuggestions(handler: ProviderResult<[Suggestion]> -> ())
     
     func sections(names: [String], handler: ProviderResult<[Section]> -> ())
