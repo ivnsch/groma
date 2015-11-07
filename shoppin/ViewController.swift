@@ -11,7 +11,7 @@ import CoreData
 import SwiftValidator
 import ChameleonFramework
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate
 //    , UIBarPositioningDelegate
 {
     
@@ -96,6 +96,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         view.backgroundColor = UIColor.whiteColor()
         
         let colorArray = NSArray(ofColorsWithColorScheme: ColorScheme.Complementary, with: color, flatScheme: true)
+        view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
         listItemsTableViewController.view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
         listItemsTableViewController.headerBGColor = colorArray[1] as? UIColor // as? to silence warning
         
@@ -538,9 +539,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if segue.identifier == "doneViewControllerSegue" {
             if let doneViewController = segue.destinationViewController as? DoneViewController {
                 doneViewController.navigationItemTextColor = titleLabel?.textColor
+                doneViewController.delegate = self
                 listItemsTableViewController.clearPendingSwipeItemIfAny {
                     doneViewController.onUIReady = {
                         doneViewController.list = self.currentList
+                        doneViewController.backgroundColor = self.view.backgroundColor
                     }
                 }
             }
@@ -564,6 +567,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 listItemsTableViewController.clearPendingSwipeItemIfAny {
                     stashViewController.onUIReady = {
                         stashViewController.list = self.currentList
+                        stashViewController.backgroundColor = self.view.backgroundColor
                     }
                 }
             }
@@ -906,5 +910,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         } else {
             print("Error: ViewController.onSectionOrderUpdated: Invalid state, reordering sections and no list")
         }
+    }
+    
+    // MARK: - CartViewControllerDelegate
+    
+    func onEmptyCartTap() {
+        navigationController?.popViewControllerAnimated(true)
+        performSegueWithIdentifier("stashSegue", sender: self)
     }
 }

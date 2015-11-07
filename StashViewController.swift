@@ -25,6 +25,15 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     
     var navigationItemTextColor: UIColor?
 
+    var backgroundColor: UIColor? {
+        didSet {
+            if let backgroundColor = backgroundColor {
+                view.backgroundColor = backgroundColor
+                listItemsTableViewController.tableView.backgroundColor = backgroundColor
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

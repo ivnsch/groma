@@ -27,7 +27,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
     private let cellIdentifier = ItemsListTableViewConstants.listItemCellIdentifier
     
     var headerBGColor: UIColor = UIColor(red: 167/255, green: 1, blue: 93/255, alpha: 1)
-    var headerFontColor: UIColor = UIColor.whiteColor()
+    var headerFontColor: UIColor = UIColor.blackColor()
     var labelFontColor: UIColor = UIColor.blackColor()
     
     var section: Section // as var to mutate order in-place (ListItemsTableViewController)
@@ -45,11 +45,11 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
     // this could be solved maybe with inheritance or sth like "style injection", for now this is ok
     private var finalLabelFontColor:UIColor {
         var color:UIColor
-        if self.style == .Gray {
-            color = UIColor.lightGrayColor()
-        } else {
+//        if self.style == .Gray {
+//            color = UIColor.lightGrayColor()
+//        } else {
             color = self.labelFontColor
-        }
+//        }
         return color
     }
     
@@ -65,11 +65,11 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
     
     private var finalHeaderFontColor: UIColor {
         var color:UIColor
-        if self.style == .Gray {
-            color = UIColor.grayColor()
-        } else {
+//        if self.style == .Gray {
+//            color = UIColor.grayColor()
+//        } else {
             color = self.headerFontColor
-        }
+//        }
         return color
     }
     

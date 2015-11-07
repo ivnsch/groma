@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol CartViewControllerDelegate {
+    func onEmptyCartTap()
+}
+
 class DoneViewController: UIViewController, ListItemsTableViewDelegate {
 
     private var listItemsTableViewController: ListItemsTableViewController!
@@ -23,6 +27,24 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     var onUIReady: VoidFunction? // avoid crash trying to access not yet initialized ui elements
     
     var navigationItemTextColor: UIColor?
+    
+    var backgroundColor: UIColor? {
+        didSet {
+            if let backgroundColor = backgroundColor {
+                view.backgroundColor = backgroundColor
+                listItemsTableViewController.tableView.backgroundColor = backgroundColor
+                let contrasting = UIColor(contrastingBlackOrWhiteColorOn: backgroundColor, isFlat: true)
+                emptyCartLabel.textColor = contrasting
+                emptyCartStashLabel.textColor = contrasting
+            }
+        }
+    }
+
+    @IBOutlet weak var emptyView: UIView!
+    @IBOutlet weak var emptyCartLabel: UILabel!
+    @IBOutlet weak var emptyCartStashLabel: UILabel!
+    
+    var delegate: CartViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,13 +69,41 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     
     private func initWithList(list: List) {
         
-        Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{listItems in
-            let doneListItems = listItems.filter{$0.status == .Done}
-            self.listItemsTableViewController.setListItems(doneListItems)
+        Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{[weak self] listItems in
+            
+            if let weakSelf = self {
+                let doneListItems = listItems.filter{$0.status == .Done}
+                weakSelf.listItemsTableViewController.setListItems(doneListItems)
+                self?.updateEmptyView()
+            }
         })
         // FIXME note that list's listItems are not set, so we don't use this, maybe just remove this variable, or set it
 //        let donelistItems = list.listItems.filter{$0.done}
 //        self.listItemsTableViewController.setListItems(donelistItems)
+    }
+    
+    private func updateEmptyView() {
+        if let list = self.list {
+            let cartEmpty = listItemsTableViewController.sections.isEmpty
+            
+            emptyView.hidden = !cartEmpty
+            emptyCartStashLabel.hidden = true
+            UIView.animateWithDuration(0.3) {[weak self] in
+                self?.emptyView.alpha = cartEmpty ? 1 : 0 // note alpha starts with 0 (storyboard)
+            }
+            
+            if cartEmpty {
+                Providers.listItemsProvider.listItemCount(.Stash, list: list, successHandler {[weak self] count in
+                    self?.emptyCartStashLabel.text = "There are \(count) items in the stash"
+                    self?.emptyCartStashLabel.hidden = count == 0
+                    UIView.animateWithDuration(0.3) {[weak self] in
+                        self?.emptyCartStashLabel.alpha = count == 0 ? 0 : 1
+                    }
+                })
+            }
+        } else {
+            print("Warn: DoneViewController.updateEmptyView: trying to update empty view without a list")
+        }
     }
     
     @IBAction func onCloseTap(sender: UIButton) {
@@ -62,7 +112,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     
     private func close() {
         listItemsTableViewController.clearPendingSwipeItemIfAny {
-            presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+            navigationController?.popViewControllerAnimated(true)
         }
     }
     
@@ -88,6 +138,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
             Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Todo) {[weak self] result in
                 if result.success {
                     self!.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
+                    self?.updateEmptyView()
                 }
                 onFinish()
             }
@@ -105,6 +156,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
             Providers.listItemsProvider.switchStatus(self.listItemsTableViewController.items, list: list, status: .Stash) {[weak self] result in
                 if result.success {
                     self?.listItemsTableViewController.setListItems([])
+                    self?.updateEmptyView()
                     onFinish()
                 }
             }
@@ -149,7 +201,6 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
         }
         
         // WARN for now we assume user has always only one inventory. Note that general setup (database, server etc) supports multiple inventories though.
-        self.progressVisible(true)
         Providers.inventoryProvider.inventories(successHandler{[weak self] inventories in
             if let inventory = inventories.first { // TODO list associated inventory
                 onHasInventory(inventory)
@@ -169,5 +220,19 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
                 })
             }
         })
+    }
+    
+    @IBAction func onEmptyCartTap() {
+        if !emptyCartStashLabel.hidden { // emptyCartStashLabel.hidden means: stash item count is 0 which means we don't direct the user to stash when tap on empty items button
+            // quick "tapped" effect
+            emptyCartLabel.textColor = emptyCartLabel.textColor.colorWithAlphaComponent(0.3)
+            emptyCartStashLabel.textColor = emptyCartStashLabel.textColor.colorWithAlphaComponent(0.3)
+            delay(0.3) {[weak self] in
+                self?.emptyCartLabel.textColor = self?.emptyCartLabel.textColor.colorWithAlphaComponent(1)
+                self?.emptyCartStashLabel.textColor = self?.emptyCartStashLabel.textColor.colorWithAlphaComponent(1)
+            }
+            
+            delegate?.onEmptyCartTap()
+        }
     }
 }
