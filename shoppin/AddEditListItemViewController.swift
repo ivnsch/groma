@@ -29,7 +29,7 @@ enum AddEditListItemViewControllerAction {
     case AddAndAddAnother, Add, Update
 }
 
-class AddEditListItemViewController: UIViewController, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate {
+class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate {
 
     @IBOutlet weak var nameInput: UITextField!
     @IBOutlet weak var sectionInput: MLPAutoCompleteTextField!
@@ -76,6 +76,8 @@ class AddEditListItemViewController: UIViewController, MLPAutoCompleteTextFieldD
         initValidator()
         
         setInputsDefaultValues()
+        
+        updatePlanLeftQuantity(0) // no quantity yet -> 0
     }
     
     private func prefill(listItem: ListItem) {
@@ -175,6 +177,11 @@ class AddEditListItemViewController: UIViewController, MLPAutoCompleteTextFieldD
         }
     }
     
+    @IBAction func productNameEditingDidChange(sender: AnyObject) {
+        let text = nameInput.text ?? ""
+        onNameInputChange(text)
+    }
+    
     @IBAction func quantityEditingDidChange(sender: AnyObject) {
         onQuantityChanged()
     }
@@ -191,7 +198,23 @@ class AddEditListItemViewController: UIViewController, MLPAutoCompleteTextFieldD
         if let planItem = planItem {
             let planItemLeftQuantity = planItem.quantity - planItem.usedQuantity
             let updatedLeftQuantity = planItemLeftQuantity - inputQuantity
-            planInfoButton.setTitle("\(updatedLeftQuantity) left", forState: .Normal)
+
+            // default
+            planInfoButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+            planInfoButton.titleLabel?.font = Fonts.verySmallLight
+            
+            if planItemLeftQuantity <= 0 {
+                if planItemLeftQuantity == 0 {
+                    planInfoButton.setTitle("\(updatedLeftQuantity) left", forState: .Normal)
+                } else {
+                    planInfoButton.setTitle("\(abs(updatedLeftQuantity)) overflow!", forState: .Normal)
+                    planInfoButton.titleLabel?.font = Fonts.verySmallBold
+                }
+                planInfoButton.setTitleColor(UIColor.redColor(), forState: .Normal)
+            } else {
+                planInfoButton.setTitle("\(updatedLeftQuantity) left", forState: .Normal)
+
+            }
             
         } else { // item is not planned -  don't show anything (no limits)
             planInfoButton.setTitle("", forState: .Normal)
@@ -201,7 +224,6 @@ class AddEditListItemViewController: UIViewController, MLPAutoCompleteTextFieldD
     func showPlanItem(planItem: PlanItem) {
         planInfoButton.setTitle("\(planItem.quantity - planItem.usedQuantity) left", forState: .Normal)
     }
-    
     
     // MARK: - MLPAutoCompleteTextFieldDataSource
     
@@ -226,5 +248,19 @@ class AddEditListItemViewController: UIViewController, MLPAutoCompleteTextFieldD
     
     func autoCompleteTextField(textField: MLPAutoCompleteTextField!, didSelectAutoCompleteString selectedString: String!, withAutoCompleteObject selectedObject: MLPAutoCompletionObject!, forRowAtIndexPath indexPath: NSIndexPath!) {
         onNameInputChange(selectedString)
+    }
+    
+    @IBAction func onQuantityPlusTap(button: UIButton) {
+        if let quantityText = quantityInput.text, quantity = Int(quantityText) {
+            quantityInput.text = "\(quantity + 1)"
+        } else {
+            quantityInput.text = "1"
+        }
+    }
+    
+    @IBAction func onQuantityMinusTap(button: UIButton) {
+        if let quantityText = quantityInput.text, quantity = Int(quantityText) {
+            quantityInput.text = "\(quantity - 1)"
+        }
     }
 }

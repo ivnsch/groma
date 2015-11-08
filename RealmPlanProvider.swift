@@ -40,7 +40,7 @@ class RealmPlanProvider: RealmProvider {
                     let usedQuantity = historyItems.totalQuantity
                     return PlanItemMapper.planItemWith(dbPlanItem, usedQuantity: usedQuantity)
                 }
-                weakSelf.loadFirst(mapper, filter: "product.name = '\(productName)'", handler: handler)
+                weakSelf.loadFirst(mapper, filter: "product.name == '\(productName)'", handler: handler)
                 
             } else {
                 print("Error: RealmPlanProvider.planItems, self is nil")
