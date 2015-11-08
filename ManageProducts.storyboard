@@ -28,19 +28,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vfl-sL-5cx">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="64" id="Cnx-xF-CFG"/>
-                                </constraints>
-                                <items>
-                                    <navigationItem title="Manage products" id="oMg-OO-bNO">
-                                        <barButtonItem key="rightBarButtonItem" title="Edit" id="mBj-ur-XEY"/>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OmL-Fh-5Jp">
-                                <rect key="frame" x="0.0" y="108" width="600" height="492"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="ubd-oF-jDC" customClass="LoadingFooter" customModule="shoppin" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="72" width="600" height="44"/>
@@ -127,7 +116,7 @@
                                 </connections>
                             </tableView>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="YRv-YV-FHW">
-                                <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="Mm3-oP-cdT" id="eeF-sP-AId"/>
@@ -142,26 +131,17 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="OmL-Fh-5Jp" firstAttribute="top" secondItem="vfl-sL-5cx" secondAttribute="bottom" id="9gD-hm-k4o"/>
-                            <constraint firstItem="vfl-sL-5cx" firstAttribute="top" secondItem="NzI-sb-8VM" secondAttribute="top" id="BTY-Kr-U32"/>
                             <constraint firstItem="syK-9o-0B1" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="Dc2-u2-0rX"/>
                             <constraint firstItem="609-Sf-sF9" firstAttribute="top" secondItem="syK-9o-0B1" secondAttribute="bottom" id="Ggy-Vq-Zne"/>
                             <constraint firstItem="YRv-YV-FHW" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="H45-ve-tyE"/>
-                            <constraint firstItem="YRv-YV-FHW" firstAttribute="top" secondItem="vfl-sL-5cx" secondAttribute="bottom" id="HXt-Po-an5"/>
-                            <constraint firstAttribute="trailing" secondItem="vfl-sL-5cx" secondAttribute="trailing" id="HkG-9w-XoT"/>
                             <constraint firstItem="609-Sf-sF9" firstAttribute="top" secondItem="OmL-Fh-5Jp" secondAttribute="bottom" id="hd0-uw-kdN"/>
                             <constraint firstItem="OmL-Fh-5Jp" firstAttribute="top" secondItem="YRv-YV-FHW" secondAttribute="bottom" id="lHP-Wq-RS6"/>
                             <constraint firstAttribute="trailing" secondItem="OmL-Fh-5Jp" secondAttribute="trailing" id="mT4-Ox-0dR"/>
-                            <constraint firstItem="vfl-sL-5cx" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="mxn-O2-ZFW"/>
+                            <constraint firstItem="YRv-YV-FHW" firstAttribute="top" secondItem="cpC-kT-urS" secondAttribute="bottom" id="r0h-wq-1Zj"/>
                             <constraint firstAttribute="trailing" secondItem="syK-9o-0B1" secondAttribute="trailing" id="raA-ml-Dwm"/>
                             <constraint firstItem="OmL-Fh-5Jp" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="vTI-qs-AUn"/>
                             <constraint firstAttribute="trailing" secondItem="YRv-YV-FHW" secondAttribute="trailing" id="xdj-aG-Wa9"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="9gD-hm-k4o"/>
-                            </mask>
-                        </variation>
                     </view>
                     <connections>
                         <outlet property="floatingViews" destination="syK-9o-0B1" id="Wln-QJ-l53"/>

@@ -12,4 +12,8 @@ extension Int {
     var degreesToRadians : CGFloat {
         return CGFloat(self) * CGFloat(M_PI) / 180.0
     }
+    
+    var isEven: Bool {
+        return self % 2 == 0
+    }
 }

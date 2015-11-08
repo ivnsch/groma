@@ -18,13 +18,15 @@ class Fonts {
     static let regularSize: CGFloat = 17
     static let smallSize: CGFloat = 15
     static let verySmallSize: CGFloat = 13
+    static let superSmallSize: CGFloat = 11
     
     static var regular: UIFont = {UIFont(name: fontName, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
     
     static var regularLight: UIFont = {UIFont(name: fontNameLight, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
     static var smallLight: UIFont = {UIFont(name: fontNameLight, size: smallSize) ?? UIFont.systemFontOfSize(smallSize)}()
     static var verySmallLight: UIFont = {UIFont(name: fontNameLight, size: verySmallSize) ?? UIFont.systemFontOfSize(verySmallSize)}()
-
+    static var superSmallLight: UIFont = {UIFont(name: fontNameLight, size: superSmallSize) ?? UIFont.systemFontOfSize(superSmallSize)}()
+    
     static var largeBold: UIFont = {UIFont(name: fontNameBold, size: largeSize) ?? UIFont.systemFontOfSize(largeSize)}()
     static var regularBold: UIFont = {UIFont(name: fontNameBold, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
 }

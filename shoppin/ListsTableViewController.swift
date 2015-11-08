@@ -18,6 +18,9 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     @IBOutlet weak var topBar: UIView!
     @IBOutlet weak var topBarConstraint: NSLayoutConstraint!
 
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var addButton: UIBarButtonItem!
+    @IBOutlet weak var editButton: UIBarButtonItem!
     
     private let listItemsProvider = ProviderFactory().listItemProvider
 
@@ -33,6 +36,13 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         self.tableView.allowsSelectionDuringEditing = true
         
         originalNavBarFrame = topBar.frame
+        
+        topBar.backgroundColor = Theme.navigationBarBackgroundColor
+//        titleLabel.textColor = Theme.navigationBarTextColor
+//        addButton.setTitleColor(Theme.navigationBarTextColor, forState: .Normal)
+//        editButton.setTitleColor(Theme.navigationBarTextColor, forState: .Normal)
+        view.backgroundColor = Theme.mainViewsBGColor
+        tableView.backgroundColor = Theme.mainViewsBGColor
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -152,7 +162,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
                 
                 
 //                expandCellAnimator.animateTransition(true, fromViewYOffset: 60, expandedViewFrame: nil)
-                expandCellAnimator.animateTransition(true, topOffsetY: 60)
+                expandCellAnimator.animateTransition(true, topOffsetY: 64)
                 
             } else {
                 print("Warn: no cell for indexPath: \(indexPath)")
@@ -268,7 +278,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     
     
     func setExpanded(expanded: Bool) {
-        expandCellAnimator.animateTransition(false, topOffsetY: 60)
+        expandCellAnimator.animateTransition(false, topOffsetY: 64)
     }
     
     func animationsComplete(wasExpanding: Bool, frontView: UIView) {

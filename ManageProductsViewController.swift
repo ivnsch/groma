@@ -266,9 +266,9 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     private func initTopController(controller: UIViewController, height: CGFloat) {
         let view = controller.view
         self.view.addSubview(view)
-        let navbarHeight = navigationController!.navigationBar.frame.height
-        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-        view.frame = CGRectMake(0, navbarHeight + statusBarHeight, self.view.frame.width, height)
+//        let navbarHeight = navigationController!.navigationBar.frame.height
+//        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+        view.frame = CGRectMake(0, 0, self.view.frame.width, height)
         
         // swift anchor
         view.layer.anchorPoint = CGPointMake(0.5, 0)

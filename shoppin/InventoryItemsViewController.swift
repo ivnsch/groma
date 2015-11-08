@@ -12,6 +12,7 @@ import CMPopTipView
 class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
 
     @IBOutlet weak var sortByButton: UIButton!
+    @IBOutlet weak var settingsView: UIView!
     
     private var sortByPopup: CMPopTipView?
     
@@ -24,6 +25,8 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableViewController?.tableViewTopInset = 50
+        
+        settingsView.backgroundColor = Theme.topSettingsBarsBackgroundColor
     }
     
     private func createPicker() -> UIPickerView {

@@ -52,25 +52,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     private func initGlobalAppearance() {
-        let fontName = "HelveticaNeue"
-        let lightFontName = "HelveticaNeue-Light"
-        let boldFontName = "HelveticaNeue-Bold"
-        if let tabsFont = UIFont(name: lightFontName, size: 11), barButtonsFont = UIFont(name: fontName, size: 17), titleFont = UIFont(name: boldFontName, size: 17),segmentedControlFont = UIFont(name: lightFontName, size: 12) {
-            UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: tabsFont], forState: .Normal)
-            UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: titleFont, NSForegroundColorAttributeName: Theme.navigationBarTextColor]
-            UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName: barButtonsFont, NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
-            UISegmentedControl.appearance().setTitleTextAttributes([NSFontAttributeName: segmentedControlFont], forState: .Normal)
-        } else {
-            print("Error: Font not found: \(fontName) or: \(lightFontName)")
-        }
+        UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.superSmallLight], forState: .Normal)
+        UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: Fonts.regular, NSForegroundColorAttributeName: Theme.navigationBarTextColor]
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.regular, NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
+        UISegmentedControl.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.verySmallLight], forState: .Normal)
         
-        UITabBar.appearance().tintColor = UIColor.blackColor()
-        UITabBar.appearance().barTintColor = UIColor.whiteColor()
-        UITabBar.appearance().translucent = false
-        
-//        UINavigationBar.appearance().barTintColor = UIColor(red: 93/255, green: 167/255, blue: 1, alpha: 1) // color "theme": 5DA7FF (blue), FF5DA6 (pink), A7FF5D(green)
-        // grey: AEAEAE
-//        UINavigationBar.appearance().tintColor = UIColor.blackColor()
+        UITabBar.appearance().tintColor = Theme.tabBarSelectedColor
+//        UITabBar.appearance().barTintColor = Theme.tabBarBackgroundColor
+//        UITabBar.appearance().translucent = false
+
+//        UINavigationBar.appearance().barTintColor = Theme.navigationBarBackgroundColor
+        UINavigationBar.appearance().tintColor = Theme.navigationBarTextColor
+//        UINavigationBar.appearance().translucent = false
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
