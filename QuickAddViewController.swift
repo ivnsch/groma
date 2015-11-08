@@ -39,6 +39,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     @IBOutlet weak var showProductsButton: UIButton!
     @IBOutlet weak var showAddProductsOrGroupButton: UIButton!
 
+    var addProductsOrGroupBgColor: UIColor?
+    
     @IBOutlet weak var addProductOrGroupSegmentedControl: UISegmentedControl!
     @IBOutlet weak var addProductOrGroupSegmentedControlContainer: UIView!
     private var addProductOrGroupSegments: [AddProductOrGroupSegment] = [
@@ -70,6 +72,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         super.viewDidLoad()
         
         initAddProductOrGroupSegments()
+        
+        showAddProductsOrGroupButton.backgroundColor = addProductsOrGroupBgColor
+        addProductOrGroupSegmentedControlContainer.backgroundColor = addProductsOrGroupBgColor
     }
     
     // MARK: - Navigation
@@ -153,6 +158,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         if !hideAddGroupController() // if group controller is showing, show product means only pop
             && navController?.viewControllers.last as? AddEditListItemViewController == nil { // don't show if already showing
                 let controller = UIStoryboard.addEditListItemViewController()
+                controller.view.backgroundColor = addProductsOrGroupBgColor
                 controller.delegate = productDelegate
                 navController?.pushViewController(controller, animated: true)
                 setAddProductOrGroupSegmentedControlExpanded(true)
@@ -178,6 +184,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         // the group controller is always shown after product (it's in segment control, which is not visible until product is shown) so show group is always a push
         //        if navController?.viewControllers.last as? AddEditListItemViewController == nil {
         let controller = UIStoryboard.quickAddGroupViewController()
+        controller.view.backgroundColor = addProductsOrGroupBgColor
         controller.delegate = self
         navController?.pushViewController(controller, animated: true)
         setAddProductOrGroupSegmentedControlExpanded(true)

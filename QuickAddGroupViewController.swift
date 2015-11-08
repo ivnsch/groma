@@ -109,6 +109,7 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
             let controller = segue.destinationViewController as! QuickAddGroupItemsViewController
             // TODO in edit case (or add case after adding items) pass existing items
             controller.delegate = self
+            controller.view.backgroundColor = view.backgroundColor
             delegate?.onGroupItemsOpen()
             itemsSelectionController = controller
         }

@@ -594,6 +594,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let controller = UIStoryboard.quickAddViewController()
         controller.delegate = self
         controller.productDelegate = self
+        if let backgroundColor = self.view.backgroundColor {
+            controller.addProductsOrGroupBgColor = UIColor.opaqueColorByApplyingTransparentColorOrBackground(backgroundColor.colorWithAlphaComponent(0.3), backgroundColor: UIColor.whiteColor())
+        }
         let height: CGFloat = 350
         self.initTopController(controller, height: height)
 //        controller.originalViewFrame = CGRectMake(controller.view.frame.origin.x, controller.view.frame.origin.y, controller.view.frame.width, height)

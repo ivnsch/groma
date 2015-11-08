@@ -63,4 +63,26 @@ extension UIColor {
     }
     /////////////////////////////////////////////////////////////////////////////////////
     
+        static func opaqueColorByApplyingTransparentColorOrBackground(transparentColor: UIColor, backgroundColor: UIColor) -> UIColor {
+            let bgView = UIView(frame: CGRectMake(0, 0, 1, 1))
+            bgView.backgroundColor = backgroundColor
+            let overlayView = UIView(frame: CGRectMake(0, 0, 1, 1))
+            overlayView.backgroundColor = transparentColor
+            bgView.addSubview(overlayView)
+            
+            let image = UIView.imageWithView(bgView)
+            
+            let provider = CGImageGetDataProvider(image.CGImage)
+            let pixelData = CGDataProviderCopyData(provider)
+            let data = CFDataGetBytePtr(pixelData)
+            
+            let color = UIColor(
+                red: CGFloat(data[0]) / 255.0,
+                green: CGFloat(data[1]) / 255.0,
+                blue: CGFloat(data[2]) / 255.0,
+                alpha: 1
+            )
+            return color
+        }
+
 }
