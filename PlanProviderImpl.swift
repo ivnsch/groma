@@ -29,14 +29,25 @@ class PlanProviderImpl: PlanProvider {
     }
 
     func addPlanItem(itemInput: PlanItemInput, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
-        addOrUpdatePlanItem(itemInput, inventory: inventory, handler)
+        addOrIncrementPlanItem(itemInput, inventory: inventory, handler)
+    }
+
+    func updatePlanItem(planItem: PlanItem, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
+        dbProvider.update(planItem) {updated in
+            if updated {
+                // update product can change the name or price, and the products can be referenced by list items, so we have to invalidate memory cache.
+                Providers.listItemsProvider.invalidateMemCache()
+
+                handler(ProviderResult(status: .Success, sucessResult: planItem))
+            } else {
+                handler(ProviderResult(status: .DatabaseSavingError))
+            }
+        }
     }
     
-    func updatePlanItem(itemInput: PlanItemInput, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
-        addOrUpdatePlanItem(itemInput, inventory: inventory, handler)
-    }
     
-    private func addOrUpdatePlanItem(itemInput: PlanItemInput, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
+    // TODO review this, adding product with existing name shows a new items in list this shouldn't happen. Maybe it's only the tableview
+    private func addOrIncrementPlanItem(itemInput: PlanItemInput, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
         
         func onHasProduct(product: Product, isUpdate: Bool) {
             let planItem = PlanItem(inventory: inventory, product: product, quantity: itemInput.quantity, usedQuantity: -1)
@@ -53,17 +64,30 @@ class PlanProviderImpl: PlanProvider {
             }
         }
         
-        Providers.productProvider.product(itemInput.name) {result in
-            if let product = result.sucessResult {
-                let mergedProduct = Product(uuid: product.uuid, name: itemInput.name, price: itemInput.price, category: itemInput.category)
-                onHasProduct(mergedProduct, isUpdate: true)
-            } else {
-                let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: itemInput.category)
-                Providers.productProvider.add(product) {result in
-                    if result.success {
-                        onHasProduct(product, isUpdate: false)
-                    } else {
-                        handler(ProviderResult(status: .DatabaseSavingError))
+        planItem(itemInput.name) {[weak self] result in
+            if let existingPlanItemMaybe = result.sucessResult, existingPlanItem = existingPlanItemMaybe {
+         
+                // if item with product and inventory already exists, increment it
+                let updatedProduct = existingPlanItem.product.copy(name: itemInput.name, price: itemInput.price, category: itemInput.category)
+                let updatedPlanItem = existingPlanItem.copy(product: updatedProduct, quantity: existingPlanItem.quantity + itemInput.quantity, quantityDelta: existingPlanItem.quantityDelta + itemInput.quantity)
+                self?.updatePlanItem(updatedPlanItem, inventory: inventory, handler)
+                
+            } else { // if it doesn't exist, add it
+                
+                // check if product exists
+                Providers.productProvider.product(itemInput.name) {result in
+                    if let product = result.sucessResult { // products exists - update it and reference it
+                        let mergedProduct = Product(uuid: product.uuid, name: itemInput.name, price: itemInput.price, category: itemInput.category)
+                        onHasProduct(mergedProduct, isUpdate: true)
+                    } else { // product doesn't exist - add it
+                        let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: itemInput.category)
+                        Providers.productProvider.add(product) {result in
+                            if result.success {
+                                onHasProduct(product, isUpdate: false)
+                            } else {
+                                handler(ProviderResult(status: .DatabaseSavingError))
+                            }
+                        }
                     }
                 }
             }

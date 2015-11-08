@@ -64,8 +64,11 @@ class RealmPlanProvider: RealmProvider {
         return dict
     }
     
-    
     func add(item: PlanItem, handler: Bool -> ()) {
+        update(item, handler: handler)
+    }
+
+    func update(item: PlanItem, handler: Bool -> ()) {
         let dbObj = PlanItemMapper.dbWith(item)
         self.saveObj(dbObj, update: true, handler: handler)
     }

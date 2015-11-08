@@ -85,12 +85,23 @@ extension Array where Element: Identifiable {
     /**
     Replaces first element with same identity with element
     */
-    mutating func update(element: Element) {
+    mutating func update(element: Element) -> Bool {
         for i in 0..<self.count {
             if self[i].same(element) {
                 self[i] = element
+                return true
             }
         }
+        return false
+    }
+    
+    func indexOfUsingIdentifiable(element: Element) -> Int? {
+        for i in 0..<self.count {
+            if self[i].same(element) {
+                return i
+            }
+        }
+        return nil
     }
 }
 

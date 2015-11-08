@@ -110,13 +110,13 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The cart is empty" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hEq-5G-XWq">
                                         <rect key="frame" x="226" y="259" width="148" height="23"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="19"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are x items in the stash" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tVm-ZY-nIu">
                                         <rect key="frame" x="189" y="300" width="223" height="20"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yjV-hY-4U9">
@@ -1663,16 +1663,21 @@
                                 </constraints>
                                 <items>
                                     <navigationItem title="Plan" id="ZiM-PJ-RVJ">
-                                        <barButtonItem key="rightBarButtonItem" title="Edit" id="g98-Uu-8pw">
+                                        <barButtonItem key="leftBarButtonItem" title="Edit" id="g98-Uu-8pw">
                                             <connections>
                                                 <action selector="onEditTap:" destination="i9r-NR-Csk" id="1vy-cd-ptM"/>
+                                            </connections>
+                                        </barButtonItem>
+                                        <barButtonItem key="rightBarButtonItem" title="Add" id="aoL-lm-TPl">
+                                            <connections>
+                                                <action selector="onAddTap:" destination="i9r-NR-Csk" id="whm-rz-SCu"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tu6-pm-qhv">
-                                <rect key="frame" x="0.0" y="134" width="600" height="417"/>
+                                <rect key="frame" x="0.0" y="124" width="600" height="427"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="planCell" id="Egm-eb-YKK" customClass="PlanTableViewCell" customModule="shoppin" customModuleProvider="target">
@@ -1746,13 +1751,6 @@
                                     <outlet property="delegate" destination="i9r-NR-Csk" id="u22-T8-kHf"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ojU-HC-z6v" customClass="AddItemView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="481" width="600" height="70"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="70" id="AY2-NR-NfZ"/>
-                                    <constraint firstAttribute="height" constant="70" id="zGW-Bk-GcL"/>
-                                </constraints>
-                            </view>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f3l-QV-Mmq">
                                 <rect key="frame" x="0.0" y="64" width="600" height="60"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Zdo-DT-hgW">
@@ -1796,26 +1794,22 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="jkq-Wn-IDg" secondAttribute="trailing" id="3Vs-yU-39Y"/>
-                            <constraint firstAttribute="trailing" secondItem="ojU-HC-z6v" secondAttribute="trailing" id="6fN-Jc-iuP"/>
                             <constraint firstItem="f3l-QV-Mmq" firstAttribute="leading" secondItem="3mJ-ak-oyf" secondAttribute="leading" id="HeB-Ge-epb"/>
                             <constraint firstItem="tu6-pm-qhv" firstAttribute="leading" secondItem="3mJ-ak-oyf" secondAttribute="leading" id="M7E-Z4-uRC"/>
-                            <constraint firstItem="tu6-pm-qhv" firstAttribute="top" secondItem="jkq-Wn-IDg" secondAttribute="bottom" constant="70" id="NsI-O8-Tnh"/>
+                            <constraint firstItem="tu6-pm-qhv" firstAttribute="top" secondItem="jkq-Wn-IDg" secondAttribute="bottom" constant="60" id="NsI-O8-Tnh"/>
                             <constraint firstItem="huw-fJ-7Im" firstAttribute="top" secondItem="tu6-pm-qhv" secondAttribute="bottom" id="Pxm-TQ-RCm"/>
                             <constraint firstItem="jkq-Wn-IDg" firstAttribute="leading" secondItem="3mJ-ak-oyf" secondAttribute="leading" id="WZo-Fb-1Wp"/>
                             <constraint firstAttribute="trailing" secondItem="tu6-pm-qhv" secondAttribute="trailing" id="XNl-1H-g48"/>
-                            <constraint firstItem="huw-fJ-7Im" firstAttribute="top" secondItem="ojU-HC-z6v" secondAttribute="bottom" id="cq7-LQ-eEA"/>
                             <constraint firstItem="jkq-Wn-IDg" firstAttribute="top" secondItem="3mJ-ak-oyf" secondAttribute="top" id="iYC-dU-uYW"/>
                             <constraint firstAttribute="trailing" secondItem="f3l-QV-Mmq" secondAttribute="trailing" id="kRy-sw-Ruc"/>
-                            <constraint firstItem="ojU-HC-z6v" firstAttribute="leading" secondItem="3mJ-ak-oyf" secondAttribute="leading" id="m5R-CN-t2n"/>
                             <constraint firstItem="f3l-QV-Mmq" firstAttribute="top" secondItem="jkq-Wn-IDg" secondAttribute="bottom" id="pQn-PW-MoS"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Plan" image="plan" id="bsU-MP-TUW"/>
                     <connections>
-                        <outlet property="addItemView" destination="ojU-HC-z6v" id="Q8h-Wr-6W7"/>
-                        <outlet property="addItemViewBottomConstraint" destination="cq7-LQ-eEA" id="gQy-yW-elg"/>
                         <outlet property="consumedPriceLabel" destination="cHf-5C-flA" id="8tD-Sb-6p5"/>
                         <outlet property="editButton" destination="g98-Uu-8pw" id="IBV-eo-6h7"/>
+                        <outlet property="navigationBar" destination="jkq-Wn-IDg" id="whR-gJ-9s2"/>
                         <outlet property="priceDeltaLastMonthLabel" destination="s6d-yk-qc7" id="dyD-fU-dyK"/>
                         <outlet property="tableView" destination="tu6-pm-qhv" id="Ugr-dj-e1O"/>
                         <outlet property="totalPriceLabel" destination="pzX-Lu-bqO" id="Q8h-iP-K6h"/>

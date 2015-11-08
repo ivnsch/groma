@@ -16,7 +16,7 @@ protocol PlanProvider {
     
     func addPlanItem(itemInput: PlanItemInput, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void)
 
-    func updatePlanItem(itemInput: PlanItemInput, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void)
+    func updatePlanItem(planItem: PlanItem, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void)
     
     func removePlanItem(item: PlanItem, _ handler: ProviderResult<Any> -> Void)
     

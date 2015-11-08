@@ -18,6 +18,7 @@ extension MLPAutoCompleteTextField {
         autoCompleteBoldFontName = Fonts.fontNameBold
         autoCompleteRegularFontName = Fonts.fontName
         showTextFieldDropShadowWhenAutoCompleteTableIsOpen = false
+        reverseAutoCompleteSuggestionsBoldEffect = true // to mark the matched part as bold and the rest regular
         maximumNumberOfAutoCompleteRows = 4
     }
 }
