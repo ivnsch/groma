@@ -13,14 +13,14 @@ protocol QuickAddGroupItemsViewControllerDelegate {
     func onCancel()
 }
 
-class QuickAddGroupItemsViewController: UIViewController, QuickAddListItemDelegate {
+class QuickAddGroupItemsViewController: UIViewController, QuickAddGroupItemsTableViewControllerDelegate {
 
     @IBOutlet weak var itemsLabel: UILabel!
     @IBOutlet weak var itemsTableViewContainer: UIView!
     
     var list: List? // TODO list should not be necessary here
     
-    var groupItemsController: QuickAddListItemViewController?
+    var groupItemsController: QuickAddGroupItemsTableViewController?
     
     private var itemsDictionary = OrderedDictionary<String, GroupItem>()
     
@@ -29,15 +29,12 @@ class QuickAddGroupItemsViewController: UIViewController, QuickAddListItemDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let groupItemsController = UIStoryboard.quickAddListItemViewController()
+        let groupItemsController = UIStoryboard.wuickAddGroupItemsTableViewController()
         itemsTableViewContainer.addSubview(groupItemsController.view)
         addChildViewController(groupItemsController)
           groupItemsController.view.translatesAutoresizingMaskIntoConstraints = false
         groupItemsController.view.fillSuperview()
         groupItemsController.delegate = self
-        groupItemsController.onViewDidLoad = { // ensure called after outlets set
-            groupItemsController.itemType = .Product
-        }
         self.groupItemsController = groupItemsController
     }
     
@@ -45,31 +42,74 @@ class QuickAddGroupItemsViewController: UIViewController, QuickAddListItemDelega
         delegate?.onSubmit(itemsDictionary.values)
     }
     
-    // MARK: - QuickAddListItemDelegate
+    // MARK: - QuickAddGroupItemsTableViewControllerDelegate
     
-    func onAddProduct(product: Product) { // TODO quantity
+    func incrementProduct(product: Product, quantity: Int) {
         
-        let quantity = 1 // TODO
+        let incrementedItem: GroupItem = {
+            if let item = itemsDictionary[product.uuid] {
+                return item.copy(quantity: item.quantity + quantity)
+            } else {
+                // TODO section
+                return GroupItem(uuid: NSUUID().UUIDString, quantity: quantity, product: product)
+            }
+        }()
         
-        if let item = itemsDictionary[product.uuid] {
-            itemsDictionary[product.uuid] = item.copy(quantity: item.quantity + quantity)
+        if incrementedItem.quantity > 0 {
+            itemsDictionary[incrementedItem.product.uuid] = incrementedItem
         } else {
-            // TODO section
-            itemsDictionary[product.uuid] = GroupItem(uuid: NSUUID().UUIDString, quantity: quantity, product: product)
+            itemsDictionary.removeIfExists(incrementedItem.product.uuid)
         }
         
-        itemsLabel.text = buildItemsLabelString() // TODO incr/decr quantity in QuickAddListItemViewController. Hold numbers there (also show in light blue in tableview) (and pass current quantity to delegate?)
-    }
+        let text = buildItemsLabelString() // TODO incr/decr quantity in QuickAddListItemViewController. Hold numbers there (also show in light blue in tableview) (and pass current quantity to delegate?)
+        
+        // Highlight updated quantity
+        // Note on noBreakSpaceStr: Since the products names in text have no break space we also have to look for product name with no break space
+        if let productNameRange = text.range(incrementedItem.product.name.noBreakSpaceStr(), caseInsensitive: true) {
 
-    private func buildItemsLabelString() -> String {
-        return ", ".join(itemsDictionary.mapValues{"\($0.product.name) \($0.quantity)x"})
+            if productNameRange.location != NSNotFound {
+                let rangeAfterProductName = NSRange(location: productNameRange.end, length: text.characters.count - productNameRange.end)
+                
+                do {
+                    // look for the quantity of product - first number in rangeAfterProductName
+                    let regex = try NSRegularExpression(pattern: "\\d+", options: [])
+                    let quantityRange = regex.rangeOfFirstMatchInString(text, options: [], range: rangeAfterProductName)
+                    
+                    if quantityRange.location != NSNotFound {
+                        let attributedText = text.makeAttributed(quantityRange, normalFont: Fonts.verySmallLight, font: Fonts.verySmallBold)
+                        itemsLabel.attributedText = attributedText
+                    } else {
+                        itemsLabel.text = text
+                    }
+
+                } catch _ {
+                    print("Error with regex")
+                    
+                    
+                }
+            } else {  // product was not found in text - this happens when it's removed (q
+                itemsLabel.text = text
+            }
+        }
     }
     
-    func onAddGroup(group: ListItemGroup) {
-        // not used
+    private func buildItemsLabelString() -> String {
+        // use no break space in product names and between product and quantity, this way line break comes only with space before comma
+        return ", ".join(itemsDictionary.mapValues{
+            let productNameNoBreakSpaces = $0.product.name.noBreakSpaceStr()
+            return "\(productNameNoBreakSpaces)\u{00A0}\($0.quantity)x"}
+        )
     }
     
     func onCloseQuickAddTap() {
         // not used
+    }
+    
+    func onGroupItemMinusTap(product: Product) {
+        incrementProduct(product, quantity: -1)
+    }
+
+    func onGroupItemPlusTap(product: Product) {
+        incrementProduct(product, quantity: 1)
     }
 }

@@ -45,10 +45,26 @@ extension String {
         }
     }
     
-    func makeAttributedBoldRegular(range: NSRange) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: self, attributes: [NSFontAttributeName: Fonts.regularLight])
-        attributedString.setAttributes([NSFontAttributeName: Fonts.regularBold], range: range)
+    func makeAttributed(substring: String, normalFont: UIFont, font: UIFont, caseInsensitive: Bool = false) -> NSAttributedString {
+        let substringRange = range(substring, caseInsensitive: caseInsensitive)
+        return makeAttributed(substringRange, normalFont: normalFont, font: font)
+    }
+
+    func makeAttributed(range: NSRange?, normalFont: UIFont, font: UIFont) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: self, attributes: [NSFontAttributeName: normalFont])
+        if let range = range {
+            attributedString.setAttributes([NSFontAttributeName: font], range: range)
+        }
         return attributedString
+    }
+    
+    func makeAttributedBoldRegular(range: NSRange) -> NSAttributedString {
+        return makeAttributed(range, normalFont: Fonts.regularLight, font: Fonts.regularBold)
+    }
+    
+    // replace possible spaces with spaces that look like spaces but don't cause line break
+    func noBreakSpaceStr() -> String {
+        return stringByReplacingOccurrencesOfString(" ", withString: "\u{00A0}")
     }
     
 //    func startsWith(str:String) -> Bool {

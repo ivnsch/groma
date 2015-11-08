@@ -47,6 +47,14 @@ struct OrderedDictionary<KeyType: Hashable, ValueType>: SequenceType {
         
         return existingValue
     }
+
+    mutating func removeIfExists(key: KeyType) -> (KeyType, ValueType)? {
+        if let index = array.indexOf(key) {
+            return removeAtIndex(index)
+        } else {
+            return nil
+        }
+    }
     
     mutating func removeAtIndex(index: Int) -> (KeyType, ValueType) {
         precondition(index < self.array.count, "Index out-of-bounds")

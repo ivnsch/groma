@@ -19,6 +19,7 @@ extension UIStoryboard {
     private class func forgotPasswordStoryboard() -> UIStoryboard { return UIStoryboard(name: "ForgotPassword", bundle: NSBundle.mainBundle()) }
     private class func choiceStoryboard() -> UIStoryboard { return UIStoryboard(name: "EditableChoiceModal", bundle: NSBundle.mainBundle()) }
     private class func quickAddListItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "QuickAddListItem", bundle: NSBundle.mainBundle()) }
+    private class func quickAddGroupItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "QuickAddGroupItems", bundle: NSBundle.mainBundle()) }
     private class func addEditListItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditListItem", bundle: NSBundle.mainBundle()) }
     private class func quickAddGroupStoryboard() -> UIStoryboard { return UIStoryboard(name: "QuickAddGroup", bundle: NSBundle.mainBundle()) }
     private class func manageProductsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageProducts", bundle: NSBundle.mainBundle()) }
@@ -138,6 +139,10 @@ extension UIStoryboard {
 
     class func quickAddListItemViewController() -> QuickAddListItemViewController {
         return quickAddListItemStoryboard().instantiateViewControllerWithIdentifier("QuickAddListItemViewController") as! QuickAddListItemViewController
+    }
+
+    class func wuickAddGroupItemsTableViewController() -> QuickAddGroupItemsTableViewController {
+        return quickAddGroupItemStoryboard().instantiateViewControllerWithIdentifier("QuickAddGroupItemsTableViewController") as! QuickAddGroupItemsTableViewController
     }
     
     // MARK: Manage products

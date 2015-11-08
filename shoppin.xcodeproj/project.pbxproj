@@ -464,6 +464,9 @@
 		EBB2AB3B1B8B29CF007B8C59 /* InventoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */; };
 		EBB2AB3D1B8B3171007B8C59 /* InventoryItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB3C1B8B3171007B8C59 /* InventoryItemCell.swift */; };
 		EBB2AB411B8B434E007B8C59 /* InventoriesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBB2AB401B8B434E007B8C59 /* InventoriesViewController.xib */; };
+		EBB526681BEFB89A0002A286 /* QuickAddGroupItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBB526671BEFB89A0002A286 /* QuickAddGroupItems.storyboard */; };
+		EBB5266A1BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526691BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift */; };
+		EBB5266C1BEFBA850002A286 /* QuickAddProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5266B1BEFBA850002A286 /* QuickAddProductCell.swift */; };
 		EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */; };
 		EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */; };
 		EBB5A04D1B6596D400FB9C58 /* ProviderFetchModus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */; };
@@ -948,6 +951,9 @@
 		EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryCell.swift; sourceTree = "<group>"; };
 		EBB2AB3C1B8B3171007B8C59 /* InventoryItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemCell.swift; sourceTree = "<group>"; };
 		EBB2AB401B8B434E007B8C59 /* InventoriesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InventoriesViewController.xib; sourceTree = "<group>"; };
+		EBB526671BEFB89A0002A286 /* QuickAddGroupItems.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = QuickAddGroupItems.storyboard; sourceTree = "<group>"; };
+		EBB526691BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddGroupItemsTableViewController.swift; sourceTree = "<group>"; };
+		EBB5266B1BEFBA850002A286 /* QuickAddProductCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddProductCell.swift; sourceTree = "<group>"; };
 		EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationErrorMsgBuilder.swift; sourceTree = "<group>"; };
 		EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationAlert.swift; sourceTree = "<group>"; };
 		EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderFetchModus.swift; sourceTree = "<group>"; };
@@ -1208,6 +1214,9 @@
 				EB1219D41BD828E0004351E0 /* QuickAddGroup.storyboard */,
 				EB1219D61BD829BC004351E0 /* QuickAddGroupViewController.swift */,
 				EB1219D81BD82D11004351E0 /* QuickAddGroupItemsViewController.swift */,
+				EBB5266B1BEFBA850002A286 /* QuickAddProductCell.swift */,
+				EBB526691BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift */,
+				EBB526671BEFB89A0002A286 /* QuickAddGroupItems.storyboard */,
 			);
 			name = quickAddGroup;
 			sourceTree = "<group>";
@@ -2370,6 +2379,7 @@
 				EB85F47F1BD6EDBC00E19E9B /* AddEditListItem.storyboard in Resources */,
 				EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */,
 				EBFD15C81BA7FA6500E37342 /* ForgotPassword.storyboard in Resources */,
+				EBB526681BEFB89A0002A286 /* QuickAddGroupItems.storyboard in Resources */,
 				EB0C1B971B3DBD1300F24C85 /* Login.storyboard in Resources */,
 				EBA575571BCDBB8F00A0A825 /* ListItemGroups.storyboard in Resources */,
 				EB85F4531BD5393800E19E9B /* QuickAddListItem.storyboard in Resources */,
@@ -2633,6 +2643,7 @@
 				EB0C1B8F1B3DA97000F24C85 /* UserProvider.swift in Sources */,
 				EB40A4691B5506FB000E9CAD /* DBSection.swift in Sources */,
 				EBD827FA1BE79A280072F9FA /* Fonts.swift in Sources */,
+				EBB5266C1BEFBA850002A286 /* QuickAddProductCell.swift in Sources */,
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
 				EBA5756D1BD00A2500A0A825 /* DBGroupItem.swift in Sources */,
 				EB85F4511BD5392200E19E9B /* QuickAddListItemViewController.swift in Sources */,
@@ -2640,6 +2651,7 @@
 				EB7032801BEBBBB100779EBB /* ReorderSectionTableViewController.swift in Sources */,
 				EBCE418D1B5D466B00583551 /* EditListViewController.swift in Sources */,
 				EB40A4721B5508B6000E9CAD /* DBResult.swift in Sources */,
+				EBB5266A1BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift in Sources */,
 				EB40A47E1B5512D6000E9CAD /* DBSharedUser.swift in Sources */,
 				EBB9A7321B5EB0FC00E5487D /* DBInventory.swift in Sources */,
 				EB0A058D1BDFCD6B00D1E29D /* MoreViewController.swift in Sources */,
