@@ -27,7 +27,8 @@ extension String {
             options = options.union(NSStringCompareOptions.CaseInsensitiveSearch)
         }
         // Cast to NSString - It's currently a bit easier to work with NSRange, than convert between Range and NSRange (needed for e.g. attributedString)
-        return (self as NSString).rangeOfString(str, options: options)
+        let range = (self as NSString).rangeOfString(str, options: options)
+        return range.location == NSNotFound ? nil : range
     }
     
     var floatValue: Float? {
@@ -65,6 +66,14 @@ extension String {
     // replace possible spaces with spaces that look like spaces but don't cause line break
     func noBreakSpaceStr() -> String {
         return stringByReplacingOccurrencesOfString(" ", withString: "\u{00A0}")
+    }
+    
+    // http://stackoverflow.com/a/30450559/930450
+    // NOTE: FIXME: that returned height a bit short at least in HelpViewController (see comment there). Maybe related with missing NSParagraphStyleAttributeName attribute, wrapping etc?
+    func heightWithConstrainedWidth(width: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: width, height: CGFloat.max)
+        let boundingBox = self.boundingRectWithSize(constraintRect, options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
+        return boundingBox.height
     }
     
 //    func startsWith(str:String) -> Bool {

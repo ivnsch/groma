@@ -467,6 +467,23 @@
 		EBB526681BEFB89A0002A286 /* QuickAddGroupItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBB526671BEFB89A0002A286 /* QuickAddGroupItems.storyboard */; };
 		EBB5266A1BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526691BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift */; };
 		EBB5266C1BEFBA850002A286 /* QuickAddProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5266B1BEFBA850002A286 /* QuickAddProductCell.swift */; };
+		EBB5266F1BEFD8A20002A286 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5266E1BEFD8A20002A286 /* HelpViewController.swift */; };
+		EBB526711BEFD8C10002A286 /* HelpProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526701BEFD8C10002A286 /* HelpProviderImpl.swift */; };
+		EBB526731BEFD8E90002A286 /* HelpItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526721BEFD8E90002A286 /* HelpItem.swift */; };
+		EBB526741BEFD8E90002A286 /* HelpItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526721BEFD8E90002A286 /* HelpItem.swift */; };
+		EBB526751BEFD8E90002A286 /* HelpItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526721BEFD8E90002A286 /* HelpItem.swift */; };
+		EBB526771BEFE10B0002A286 /* HelpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526761BEFE10B0002A286 /* HelpProvider.swift */; };
+		EBB526781BEFE10B0002A286 /* HelpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526761BEFE10B0002A286 /* HelpProvider.swift */; };
+		EBB526791BEFE10B0002A286 /* HelpProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526761BEFE10B0002A286 /* HelpProvider.swift */; };
+		EBB5267B1BEFE20E0002A286 /* HelpHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5267A1BEFE20E0002A286 /* HelpHeaderView.swift */; };
+		EBB5267D1BEFE21F0002A286 /* HelpCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5267C1BEFE21F0002A286 /* HelpCell.swift */; };
+		EBB5267F1BEFE39F0002A286 /* HelpHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBB5267E1BEFE39F0002A286 /* HelpHeaderView.xib */; };
+		EBB526811BEFE5490002A286 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526801BEFE5490002A286 /* Double.swift */; };
+		EBB526821BEFE5490002A286 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526801BEFE5490002A286 /* Double.swift */; };
+		EBB526831BEFE5490002A286 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526801BEFE5490002A286 /* Double.swift */; };
+		EBB526851BEFE6DD0002A286 /* SectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526841BEFE6DD0002A286 /* SectionModel.swift */; };
+		EBB526861BEFE6DD0002A286 /* SectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526841BEFE6DD0002A286 /* SectionModel.swift */; };
+		EBB526871BEFE6DD0002A286 /* SectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526841BEFE6DD0002A286 /* SectionModel.swift */; };
 		EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */; };
 		EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */; };
 		EBB5A04D1B6596D400FB9C58 /* ProviderFetchModus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */; };
@@ -954,6 +971,15 @@
 		EBB526671BEFB89A0002A286 /* QuickAddGroupItems.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = QuickAddGroupItems.storyboard; sourceTree = "<group>"; };
 		EBB526691BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddGroupItemsTableViewController.swift; sourceTree = "<group>"; };
 		EBB5266B1BEFBA850002A286 /* QuickAddProductCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddProductCell.swift; sourceTree = "<group>"; };
+		EBB5266E1BEFD8A20002A286 /* HelpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
+		EBB526701BEFD8C10002A286 /* HelpProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpProviderImpl.swift; sourceTree = "<group>"; };
+		EBB526721BEFD8E90002A286 /* HelpItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpItem.swift; sourceTree = "<group>"; };
+		EBB526761BEFE10B0002A286 /* HelpProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpProvider.swift; sourceTree = "<group>"; };
+		EBB5267A1BEFE20E0002A286 /* HelpHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpHeaderView.swift; sourceTree = "<group>"; };
+		EBB5267C1BEFE21F0002A286 /* HelpCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpCell.swift; sourceTree = "<group>"; };
+		EBB5267E1BEFE39F0002A286 /* HelpHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpHeaderView.xib; sourceTree = "<group>"; };
+		EBB526801BEFE5490002A286 /* Double.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
+		EBB526841BEFE6DD0002A286 /* SectionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionModel.swift; sourceTree = "<group>"; };
 		EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationErrorMsgBuilder.swift; sourceTree = "<group>"; };
 		EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationAlert.swift; sourceTree = "<group>"; };
 		EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderFetchModus.swift; sourceTree = "<group>"; };
@@ -1408,6 +1434,7 @@
 				EB7BFA701BD9981400F4C74A /* OrderedDictionary_Quantities.swift */,
 				EB7BFA741BD99CB600F4C74A /* Addable.swift */,
 				EB7BFA7D1BDAF96A00F4C74A /* Int.swift */,
+				EBB526801BEFE5490002A286 /* Double.swift */,
 				EBD827FB1BE8237C0072F9FA /* NSRange.swift */,
 			);
 			name = extensions;
@@ -1576,6 +1603,7 @@
 				EBBC23241BB5D5820002F6B1 /* popup */,
 				EBD828011BE95CC80072F9FA /* utils */,
 				EB0A058B1BDFCD4100D1E29D /* more */,
+				EBB5266D1BEFD8820002A286 /* help */,
 				EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */,
 			);
 			name = shoppin_ios;
@@ -1861,6 +1889,17 @@
 			name = inventory;
 			sourceTree = "<group>";
 		};
+		EBB5266D1BEFD8820002A286 /* help */ = {
+			isa = PBXGroup;
+			children = (
+				EBB5266E1BEFD8A20002A286 /* HelpViewController.swift */,
+				EBB5267A1BEFE20E0002A286 /* HelpHeaderView.swift */,
+				EBB5267C1BEFE21F0002A286 /* HelpCell.swift */,
+				EBB5267E1BEFE39F0002A286 /* HelpHeaderView.xib */,
+			);
+			name = help;
+			sourceTree = "<group>";
+		};
 		EBB5A0441B65391200FB9C58 /* validatorHelpers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1959,6 +1998,7 @@
 			children = (
 				EBD827F91BE79A280072F9FA /* Fonts.swift */,
 				EB135B951BED5F130093DE70 /* ItemWithCellAttributes.swift */,
+				EBB526841BEFE6DD0002A286 /* SectionModel.swift */,
 			);
 			name = util;
 			sourceTree = "<group>";
@@ -2118,6 +2158,7 @@
 				EB85F4621BD54E8D00E19E9B /* QuickAddItem.swift */,
 				EB85F4661BD54FA800E19E9B /* QuickAddProduct.swift */,
 				EB85F46A1BD54FD300E19E9B /* QuickAddGroup.swift */,
+				EBB526721BEFD8E90002A286 /* HelpItem.swift */,
 			);
 			name = model;
 			path = ..;
@@ -2145,6 +2186,7 @@
 				EB1B36601BC47D88003519F2 /* PlanProvider.swift */,
 				EB7F59D21BA1DBF600E07EBA /* Providers.swift */,
 				EB70328A1BEBF31A00779EBB /* SectionProvider.swift */,
+				EBB526761BEFE10B0002A286 /* HelpProvider.swift */,
 			);
 			name = provider;
 			path = ..;
@@ -2173,6 +2215,7 @@
 				EBDA75431BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift */,
 				EB85F4721BD5605000E19E9B /* ProductProviderImpl.swift */,
 				EB7032861BEBF2B300779EBB /* SectionProviderImpl.swift */,
+				EBB526701BEFD8C10002A286 /* HelpProviderImpl.swift */,
 			);
 			name = impl;
 			sourceTree = "<group>";
@@ -2385,6 +2428,7 @@
 				EB85F4531BD5393800E19E9B /* QuickAddListItem.storyboard in Resources */,
 				EB1219D51BD828E0004351E0 /* QuickAddGroup.storyboard in Resources */,
 				EB1B36501BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */,
+				EBB5267F1BEFE39F0002A286 /* HelpHeaderView.xib in Resources */,
 				EB1FC51A1BC694AF004E1114 /* OkNextButtonsView.xib in Resources */,
 				EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */,
 				EB7032831BEBBC6400779EBB /* ReorderSectionTableViewController.storyboard in Resources */,
@@ -2604,6 +2648,7 @@
 				EB4FD46C1AC73B590000F952 /* PreferencesManager.swift in Sources */,
 				EBA575691BD009DE00A0A825 /* GroupItemMapper.swift in Sources */,
 				EBBC23211BB580FD0002F6B1 /* FacebookLogin.swift in Sources */,
+				EBB526731BEFD8E90002A286 /* HelpItem.swift in Sources */,
 				EB202B971B54109A001699E7 /* RemoteRegisterResult.swift in Sources */,
 				EB1B366D1BC48238003519F2 /* DBPlanItem.swift in Sources */,
 				EB7858791B7F7083008AAD12 /* RemoteHistoryItem.swift in Sources */,
@@ -2631,6 +2676,7 @@
 				EB7F59CF1BA1D40A00E07EBA /* Option.swift in Sources */,
 				EBDA75441BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift in Sources */,
 				EB6F812D1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
+				EBB5267D1BEFE21F0002A286 /* HelpCell.swift in Sources */,
 				EB7F59D31BA1DBF600E07EBA /* Providers.swift in Sources */,
 				EB0C1B931B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
 				EBE366371BCBC346009543AF /* BlurBubbleTransition.swift in Sources */,
@@ -2673,6 +2719,7 @@
 				EBDA75421BCD5C8C00E34AC3 /* ListItemGroupProvider.swift in Sources */,
 				EBAEB22F1BDBDB2F00FCDA5C /* CGPoint.swift in Sources */,
 				EBF377931B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
+				EBB526851BEFE6DD0002A286 /* SectionModel.swift in Sources */,
 				EB78587D1B7FD81A008AAD12 /* HistoryItemsSync.swift in Sources */,
 				EB7BFA751BD99CB600F4C74A /* Addable.swift in Sources */,
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
@@ -2772,6 +2819,7 @@
 				EBF162FA1A3CA54F0048E37C /* ListItemProvider.swift in Sources */,
 				EB85F45D1BD54C7300E19E9B /* QuickAddItemCell.swift in Sources */,
 				EBB9A7381B5EB14300E5487D /* RemoteInventory.swift in Sources */,
+				EBB526771BEFE10B0002A286 /* HelpProvider.swift in Sources */,
 				EB7BFA7B1BDA5BE500F4C74A /* QuantityCell.swift in Sources */,
 				EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */,
 				EB1219D91BD82D11004351E0 /* QuickAddGroupItemsViewController.swift in Sources */,
@@ -2782,6 +2830,7 @@
 				EB70C2231B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBF162F51A3CA4BA0048E37C /* ProviderFactory.swift in Sources */,
 				EB0870CB1BC050A300169E29 /* MyTipPopup.swift in Sources */,
+				EBB5266F1BEFD8A20002A286 /* HelpViewController.swift in Sources */,
 				EB4147CD1BE2288E00549CE4 /* ManageGroupsCell.swift in Sources */,
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
 				EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */,
@@ -2794,6 +2843,7 @@
 				EBA5755E1BCECA6000A0A825 /* ListItemGroupCell.swift in Sources */,
 				EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */,
 				EB4147B81BDFE9FB00549CE4 /* ManageProductsCell.swift in Sources */,
+				EBB526711BEFD8C10002A286 /* HelpProviderImpl.swift in Sources */,
 				EBA5755B1BCDC59D00A0A825 /* ListItemGroupItemsViewController.swift in Sources */,
 				EB40A46E1B550804000E9CAD /* RealmProvider.swift in Sources */,
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
@@ -2810,6 +2860,7 @@
 				EB20FBFE1A5972C70058103B /* InventoryItemsProviderImpl.swift in Sources */,
 				EBB5A04D1B6596D400FB9C58 /* ProviderFetchModus.swift in Sources */,
 				EB4D57B01B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */,
+				EBB526811BEFE5490002A286 /* Double.swift in Sources */,
 				EB40A47A1B551176000E9CAD /* DBProduct.swift in Sources */,
 				EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */,
 				EB7858751B7F6F69008AAD12 /* RemoteHistoryItems.swift in Sources */,
@@ -2829,6 +2880,7 @@
 				EB70C2171B4D2C690060E529 /* ListProviderImpl.swift in Sources */,
 				EBDA754A1BCD5D3E00E34AC3 /* DBListItemGroup.swift in Sources */,
 				EB0C1BA91B3EC00700F24C85 /* ProviderResult.swift in Sources */,
+				EBB5267B1BEFE20E0002A286 /* HelpHeaderView.swift in Sources */,
 				EB0CC08C1BD2BC93004A17B4 /* StashViewController.swift in Sources */,
 				EB1B36571BC44D9A003519F2 /* PlanViewController.swift in Sources */,
 				EB1B36711BC48278003519F2 /* RealmPlanProvider.swift in Sources */,
@@ -2900,6 +2952,7 @@
 				EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */,
 				EB7F59C31BA1049100E07EBA /* Identifiable.swift in Sources */,
 				EB5567611A86437B00CD3EC6 /* SectionMapper.swift in Sources */,
+				EBB526781BEFE10B0002A286 /* HelpProvider.swift in Sources */,
 				EBDFE3A71ACE829400E48F95 /* CellManager.swift in Sources */,
 				EB0C2A371B58329800AF6226 /* RemoteInventoryProvider.swift in Sources */,
 				EB0C1B941B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
@@ -2909,6 +2962,7 @@
 				EBDCA1321B8A124B000020BF /* NSDate.swift in Sources */,
 				EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */,
 				EB9BE4261B2CB542005B401A /* RemoteList.swift in Sources */,
+				EBB526821BEFE5490002A286 /* Double.swift in Sources */,
 				EB7F59D81BA1E0DF00E07EBA /* Performance.swift in Sources */,
 				EB40A4771B550C0C000E9CAD /* Results.swift in Sources */,
 				EBD236AE1B8B9DC600B88969 /* HistoryViewController.swift in Sources */,
@@ -2981,6 +3035,7 @@
 				EB7E82EF1B79F1FB009DEEF4 /* LoginViewController.swift in Sources */,
 				EBF3779C1B38AA5900EEB6DB /* Urls.swift in Sources */,
 				EB55676A1A8643BC00CD3EC6 /* Section.swift in Sources */,
+				EBB526741BEFD8E90002A286 /* HelpItem.swift in Sources */,
 				EB78587A1B7F7083008AAD12 /* RemoteHistoryItem.swift in Sources */,
 				EBBC22F01BB2F48A0002F6B1 /* PhWebViewController.m in Sources */,
 				EBBC232D1BB607DA0002F6B1 /* ConfirmationPopup.swift in Sources */,
@@ -3023,6 +3078,7 @@
 				EB55675E1A86435B00CD3EC6 /* ListItemProvider.swift in Sources */,
 				EBB2AB3D1B8B3171007B8C59 /* InventoryItemCell.swift in Sources */,
 				EBF299841B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */,
+				EBB526861BEFE6DD0002A286 /* SectionModel.swift in Sources */,
 				EBF5D7D41B8F868E00A235C5 /* Paginator.swift in Sources */,
 				EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */,
 				EB78587E1B7FD81A008AAD12 /* HistoryItemsSync.swift in Sources */,
@@ -3101,6 +3157,7 @@
 				EB70328D1BEBF31A00779EBB /* SectionProvider.swift in Sources */,
 				EB4D57AE1B7505DD00BC6171 /* SyncUtils.swift in Sources */,
 				EB0C1BAB1B3ED8D600F24C85 /* ProviderResult.swift in Sources */,
+				EBB526791BEFE10B0002A286 /* HelpProvider.swift in Sources */,
 				EBBC23171BB4840F0002F6B1 /* PrefillDatabase.swift in Sources */,
 				EB70C22D1B4D3DF50060E529 /* ListProviderImpl.swift in Sources */,
 				EB7E83241B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
@@ -3123,6 +3180,8 @@
 				EBDA75501BCD621C00E34AC3 /* ListItemGroupMapper.swift in Sources */,
 				EB7BFA731BD9981400F4C74A /* OrderedDictionary_Quantities.swift in Sources */,
 				EB0C1B8D1B3DA89900F24C85 /* LoginData.swift in Sources */,
+				EBB526831BEFE5490002A286 /* Double.swift in Sources */,
+				EBB526871BEFE6DD0002A286 /* SectionModel.swift in Sources */,
 				EBA5756B1BD009DE00A0A825 /* GroupItemMapper.swift in Sources */,
 				EB1B36631BC47D88003519F2 /* PlanProvider.swift in Sources */,
 				EBF3777A1B342B1700EEB6DB /* ListItem.swift in Sources */,
@@ -3185,6 +3244,7 @@
 				EB0C2A561B590D3D00AF6226 /* TestInventory.swift in Sources */,
 				EBF377671B342A9A00EEB6DB /* RemoteProduct.swift in Sources */,
 				EB85F4691BD54FA800E19E9B /* QuickAddProduct.swift in Sources */,
+				EBB526751BEFD8E90002A286 /* HelpItem.swift in Sources */,
 				EBBC23071BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */,
 				EB0C1BAF1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
 				EBB9A7461B5EB28500E5487D /* RemoteInventoryItemsProvider.swift in Sources */,

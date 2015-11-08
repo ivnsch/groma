@@ -1,0 +1,14 @@
+//
+//  HelpProvider.swift
+//  shoppin
+//
+//  Created by ischuetz on 08/11/15.
+//  Copyright © 2015 ivanschuetz. All rights reserved.
+//
+
+import Foundation
+
+protocol HelpProvider {
+
+    func helpItems(handler: ProviderResult<[HelpItem]> -> Void)
+}

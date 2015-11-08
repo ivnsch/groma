@@ -8,16 +8,6 @@
 
 import UIKit
 
-final class SectionModel<T> {
-    var expanded: Bool
-    let obj: T
-    
-    init(expanded: Bool = false, obj: T) {
-        self.expanded = expanded
-        self.obj = obj
-    }
-}
-
 class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, HistoryItemGroupHeaderViewDelegate {
 
     private let historyProvider = ProviderFactory().historyProvider
