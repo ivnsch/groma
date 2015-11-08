@@ -34,7 +34,6 @@ private typealias AddProductOrGroupSegment = (content: AddProductOrGroupContent,
 // The container for quick add, manages top bar buttons and a navigation controller for content (quick add list, add products, add groups)
 class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickAddGroupViewControllerDelegate {
     
-    @IBOutlet weak var orderAlphabeticallyButton: UIButton!
     @IBOutlet weak var showGroupsButton: UIButton!
     @IBOutlet weak var showProductsButton: UIButton!
     @IBOutlet weak var showAddProductsOrGroupButton: UIButton!
@@ -89,11 +88,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         }
     }
     
-    @IBAction func onOrderAlphabeticallyTap(sender: UIButton) {
-        // TODO
-    }
-    
-
     // Toggle for showProduct state - if showing product, show product button has to be disabled and group enabled, same for group
     // Assumes only 2 possible states, product and group (Bool)
     // TODO use image, button should not be disabled

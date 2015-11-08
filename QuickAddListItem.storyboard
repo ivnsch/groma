@@ -45,16 +45,6 @@
                                     <action selector="onShowGroupsTap:" destination="3Uk-Rq-zKd" eventType="touchUpInside" id="QHD-pf-eiY"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IcE-zr-GFR">
-                                <rect key="frame" x="444" y="0.0" width="30" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="9z9-LU-mL7"/>
-                                </constraints>
-                                <state key="normal" title="A"/>
-                                <connections>
-                                    <action selector="onOrderAlphabeticallyTap:" destination="3Uk-Rq-zKd" eventType="touchUpInside" id="iXg-hN-Fj7"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H9s-Os-9qI">
                                 <rect key="frame" x="570" y="0.0" width="30" height="40"/>
                                 <color key="backgroundColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
@@ -75,8 +65,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5lx-2K-eME">
                                 <rect key="frame" x="570" y="0.0" width="0.0" height="40"/>
                                 <subviews>
-                                    <segmentedControl opaque="NO" alpha="0.0" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="a7q-1A-cbN">
-                                        <rect key="frame" x="5" y="1" width="0.0" height="29"/>
+                                    <segmentedControl opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="a7q-1A-cbN">
+                                        <rect key="frame" x="5" y="6" width="0.0" height="29"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <segments>
                                             <segment title="Product"/>
@@ -113,13 +103,11 @@
                             <constraint firstItem="H9s-Os-9qI" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="gYK-ka-YZ1"/>
                             <constraint firstAttribute="trailing" secondItem="wh4-4g-FV0" secondAttribute="trailing" id="ght-OL-w3S"/>
                             <constraint firstItem="H9s-Os-9qI" firstAttribute="leading" secondItem="5lx-2K-eME" secondAttribute="trailing" id="lVs-CT-ofW"/>
-                            <constraint firstItem="dif-9Z-2lr" firstAttribute="leading" secondItem="IcE-zr-GFR" secondAttribute="trailing" constant="14" id="lXc-Lh-pkV"/>
                             <constraint firstItem="5lx-2K-eME" firstAttribute="leading" secondItem="s1F-jF-pKk" secondAttribute="trailing" constant="8" id="oaU-1S-wpH"/>
                             <constraint firstItem="s1F-jF-pKk" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="r6Y-TF-qQJ"/>
                             <constraint firstItem="wh4-4g-FV0" firstAttribute="top" secondItem="H9s-Os-9qI" secondAttribute="bottom" id="u81-wJ-tIv"/>
                             <constraint firstAttribute="trailing" secondItem="H9s-Os-9qI" secondAttribute="trailing" id="uOh-JP-CK8"/>
                             <constraint firstItem="s1F-jF-pKk" firstAttribute="leading" secondItem="dif-9Z-2lr" secondAttribute="trailing" constant="14" id="y9G-Fd-oqV"/>
-                            <constraint firstItem="IcE-zr-GFR" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="yym-lk-no5"/>
                             <constraint firstItem="wh4-4g-FV0" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" id="zHj-UK-arQ"/>
                         </constraints>
                         <variation key="default">
@@ -134,7 +122,6 @@
                         <outlet property="addProductOrGroupSegmentedControl" destination="a7q-1A-cbN" id="ha9-yX-SA9"/>
                         <outlet property="addProductOrGroupSegmentedControlContainer" destination="5lx-2K-eME" id="oxb-Eg-P8f"/>
                         <outlet property="addProductOrGroupSegmentedControlContainerWidthConstraint" destination="2Ad-ly-05f" id="MFl-G5-mc6"/>
-                        <outlet property="orderAlphabeticallyButton" destination="IcE-zr-GFR" id="oNc-AJ-5PB"/>
                         <outlet property="showAddProductsOrGroupButton" destination="H9s-Os-9qI" id="gQT-CB-BuQ"/>
                         <outlet property="showGroupsButton" destination="dif-9Z-2lr" id="KYM-N8-79r"/>
                         <outlet property="showProductsButton" destination="s1F-jF-pKk" id="HS5-dV-G2W"/>
