@@ -10,7 +10,7 @@ import Foundation
 
 class MemListItemProvider {
 
-    private var listItems = [List: [ListItem]]()
+    private var listItems: [List: [ListItem]]? = [List: [ListItem]]()
     
     private let enabled: Bool
     
@@ -20,6 +20,7 @@ class MemListItemProvider {
     
     func listItems(list: List) -> [ListItem]? {
         guard enabled else {return nil}
+        guard var listItems = listItems else {return nil}
         
         return listItems[list]
     }
@@ -27,6 +28,7 @@ class MemListItemProvider {
     // returns nil only if memory cache is not enabled
     func addListItem(listItem: ListItem) -> ListItem? {
         guard enabled else {return nil}
+        guard var listItems = listItems else {return nil}
         
         // TODO more elegant way to write this?
         if listItems[listItem.list] == nil {
@@ -51,6 +53,7 @@ class MemListItemProvider {
     // returns nil only if memory cache is not enabled
     func addListItems(listItems: [ListItem]) -> [ListItem]? {
         guard enabled else {return nil}
+        guard self.listItems != nil else {return nil}
         
         var addedListItems: [ListItem] = []
         for listItem in listItems {
@@ -62,6 +65,7 @@ class MemListItemProvider {
     
     func removeListItem(listItem: ListItem) -> Bool {
         guard enabled else {return false}
+        guard var listItems = listItems else {return false}
         
         // TODO more elegant way to write this?
         if listItems[listItem.list] != nil {
@@ -74,6 +78,7 @@ class MemListItemProvider {
     
     func updateListItem(listItem: ListItem) -> Bool {
         guard enabled else {return false}
+        guard var listItems = listItems else {return false}
         
         // TODO more elegant way to write this?
         if listItems[listItem.list] != nil {
@@ -86,6 +91,7 @@ class MemListItemProvider {
 
     func updateListItems(listItems: [ListItem]) -> Bool {
         guard enabled else {return false}
+        guard self.listItems != nil else {return false}
         
         for listItem in listItems {
             if !updateListItem(listItem) {
@@ -105,9 +111,12 @@ class MemListItemProvider {
         return true
     }
     
+    // Sets list items to nil
+    // With this access to memory cache will be disabled (guards - check for nil) until the next overwrite
+    // If we didn't set to nil we would be able to e.g. add list items to a emptied memory cache in which case it will not match the database contents
     func invalidate() {
         guard enabled else {return}
         
-        listItems = [List: [ListItem]]()
+        listItems = nil
     }
 }
