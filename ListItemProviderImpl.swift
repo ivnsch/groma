@@ -224,36 +224,40 @@ class ListItemProviderImpl: ListItemProvider {
 
     func addListItem(product: Product, sectionName: String, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
 
-        Providers.sectionProvider.mergeOrCreateSection(sectionName, possibleNewOrder: nil, list: list) {[weak self] result in
-         
-            if let section = result.sucessResult {
-                self?.listItems(list, fetchMode: .First) {[weak self] result in // TODO fetch items only when order not passed, because they are used only to get order
-                    
-                    if let listItems = result.sucessResult {
-                        // WARN / TODO: we didn't do any local db udpates! currently this is done after we receive the response off addItem of the server, with the server object
-                        // in order to support offline use this has to be changed either
-                        // 1. do the update before calling the service. If service returns an error then remove?
-                        // 2. do the update before calling the service, and add flag not synched (etc)
-                        // 3. more ideas?
-                        let order = orderMaybe ?? listItems.count
-                        let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: quantity, product: product, section: section, list: list, order: order, note: note)
-                        self?.add(listItem, {result in
-                            if let addedListItem = result.sucessResult {
-                                handler(ProviderResult(status: .Success, sucessResult: addedListItem))
-                            } else {
-                                handler(ProviderResult(status: result.status))
-                            }
-                        })
-                        
-                    } else {
-                        print("Error fetching listItems: \(result.status)")
-                        handler(ProviderResult(status: .DatabaseUnknown))
+        func onHasSection(section: Section, listItems: [ListItem]) {
+            
+            // WARN / TODO: we didn't do any local db udpates! currently this is done after we receive the response off addItem of the server, with the server object
+            // in order to support offline use this has to be changed either
+            // 1. do the update before calling the service. If service returns an error then remove?
+            // 2. do the update before calling the service, and add flag not synched (etc)
+            // 3. more ideas?
+            let order = orderMaybe ?? listItems.count
+            let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: quantity, product: product, section: section, list: list, order: order, note: note)
+            add(listItem, {result in
+                if let addedListItem = result.sucessResult {
+                    handler(ProviderResult(status: .Success, sucessResult: addedListItem))
+                } else {
+                    handler(ProviderResult(status: result.status))
+                }
+            })
+        }
+        
+        // Get the list items in order to:
+        // 1. Use existing section if any: the passed sectionName in this case is ignored. Tthis is done because this method is used for product category which has lower prio than existing section. Which corresponds to use case, user adds a product from quick list - if there's already a listitem with the product's name then we want to increment the existing item, without changing it section, not add it to section corresponding to products category. TODO check this method only used for this use case if yes change parameter name to category if not review if current logic needs to be changed
+        // 2. Determine order field of new item (existing items count)
+        listItems(list, fetchMode: .First) {result in
+            
+            if let listItems = result.sucessResult {
+                
+                if let existingListItem = listItems.findFirstWithProductName(product.name) {
+                    onHasSection(existingListItem.section, listItems: listItems)
+                } else {
+                    Providers.sectionProvider.mergeOrCreateSection(sectionName, possibleNewOrder: nil, list: list) {result in
+                        if let section = result.sucessResult {
+                            onHasSection(section, listItems: listItems)
+                        }
                     }
                 }
-                
-            } else {
-                print("Error fetching section: \(result.status)")
-                handler(ProviderResult(status: .DatabaseUnknown))
             }
         }
     }
