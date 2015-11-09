@@ -34,10 +34,12 @@ private typealias AddProductOrGroupSegment = (content: AddProductOrGroupContent,
 // The container for quick add, manages top bar buttons and a navigation controller for content (quick add list, add products, add groups)
 class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickAddGroupViewControllerDelegate {
     
-    @IBOutlet weak var showGroupsButton: UIButton!
-    @IBOutlet weak var showProductsButton: UIButton!
-    @IBOutlet weak var showAddProductsOrGroupButton: UIButton!
-
+    @IBOutlet weak var showGroupsButton: ButtonMore!
+    @IBOutlet weak var showProductsButton: ButtonMore!
+    @IBOutlet weak var showAddProductsOrGroupButton: ButtonMore!
+    @IBOutlet weak var currentQuickAddLabel: UILabel!
+    @IBOutlet weak var currentQuickAddLabelLeftConstraint: NSLayoutConstraint!
+    
     var addProductsOrGroupBgColor: UIColor?
     
     @IBOutlet weak var addProductOrGroupSegmentedControl: UISegmentedControl!
@@ -169,6 +171,15 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
             delegate?.onQuickListOpen()
             
             setAddProductOrGroupSegmentedControlExpanded(false)
+        
+            if (navController?.viewControllers.last as? AddEditListItemViewController != nil) {
+                showGroupsButton.selected = false
+                showProductsButton.selected = true
+            } else if (navController?.viewControllers.last as? QuickAddGroupViewController != nil) {
+                showGroupsButton.selected = true
+                showProductsButton.selected = false
+            }
+            
             return true
         }
         return false
@@ -235,6 +246,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
             controller.itemType = .Group
             toggleItemTypeButtons(true)
             setAddProductOrGroupSegmentedControlExpanded(false)
+            
+            showGroupsButton.selected = true
+            showProductsButton.selected = false
+            updateQuickAddTop(.Group)
         }
         
         // update current controller or pop to controller and then update
@@ -259,6 +274,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
             controller.itemType = .Product
             toggleItemTypeButtons(true)
             setAddProductOrGroupSegmentedControlExpanded(false)
+            
+            showProductsButton.selected = true
+            showGroupsButton.selected = false
+            updateQuickAddTop(.Product)
         }
         
         // update current controller or pop to controller and then update
@@ -278,12 +297,48 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     }
     
     @IBAction func onAddProductsOrGroupsTap(sender: UIButton) {
+        
+        showProductsButton.selected = false
+        showGroupsButton.selected = false
+        updateQuickAddTop(.AddNew)
+        
         toggleAddProductController()
+    }
+
+    
+    private enum QuickAddTopState {
+        case Product, Group, AddNew
+    }
+    private func updateQuickAddTop(topState: QuickAddTopState) {
+        currentQuickAddLabelLeftConstraint.constant = 200
+        UIView.animateWithDuration(0.15, animations: {[weak self] in
+            self?.currentQuickAddLabel.alpha = 0
+            self?.view.layoutIfNeeded()
+            
+        }, completion: {[weak self] finished in
+            
+            if topState != .AddNew {
+                
+                self?.currentQuickAddLabelLeftConstraint.constant = -150
+                self?.view.layoutIfNeeded()
+                self?.currentQuickAddLabelLeftConstraint.constant = 14
+                if topState == .Product {
+                    self?.currentQuickAddLabel.text = "Items"
+                } else {
+                    self?.currentQuickAddLabel.text = "Groups"
+                }
+                
+                UIView.animateWithDuration(0.15) {
+                    self?.view.layoutIfNeeded()
+                    self?.currentQuickAddLabel.alpha = 1
+                }
+            }
+        })
     }
     
     //////////////////////////////////////////
     //////////////////////////////////////////
-
+    
     
     // MARK: - QuickAddListItemDelegate
     

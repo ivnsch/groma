@@ -61,6 +61,18 @@ extension UIColor {
             alpha: 1.0
         )
     }
+
+    // TODO port to swift and use for buttons pressed state
+    // src http://stackoverflow.com/a/10670141/930450
+//    -(UIColor*) darkerShade {
+//    
+//    float red, green, blue, alpha;
+//    [self getRed:&red green:&green blue:&blue alpha:&alpha];
+//    
+//    double multiplier = 0.8f;
+//    return [UIColor colorWithRed:red * multiplier green:green * multiplier blue:blue*multiplier alpha:alpha];
+//    }
+    
     /////////////////////////////////////////////////////////////////////////////////////
     
         static func opaqueColorByApplyingTransparentColorOrBackground(transparentColor: UIColor, backgroundColor: UIColor) -> UIColor {

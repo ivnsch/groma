@@ -484,6 +484,7 @@
 		EBB526851BEFE6DD0002A286 /* SectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526841BEFE6DD0002A286 /* SectionModel.swift */; };
 		EBB526861BEFE6DD0002A286 /* SectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526841BEFE6DD0002A286 /* SectionModel.swift */; };
 		EBB526871BEFE6DD0002A286 /* SectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526841BEFE6DD0002A286 /* SectionModel.swift */; };
+		EBB526891BF016910002A286 /* ButtonMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526881BF016910002A286 /* ButtonMore.swift */; };
 		EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */; };
 		EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */; };
 		EBB5A04D1B6596D400FB9C58 /* ProviderFetchModus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */; };
@@ -980,6 +981,7 @@
 		EBB5267E1BEFE39F0002A286 /* HelpHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HelpHeaderView.xib; sourceTree = "<group>"; };
 		EBB526801BEFE5490002A286 /* Double.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		EBB526841BEFE6DD0002A286 /* SectionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionModel.swift; sourceTree = "<group>"; };
+		EBB526881BF016910002A286 /* ButtonMore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonMore.swift; sourceTree = "<group>"; };
 		EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationErrorMsgBuilder.swift; sourceTree = "<group>"; };
 		EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationAlert.swift; sourceTree = "<group>"; };
 		EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderFetchModus.swift; sourceTree = "<group>"; };
@@ -2073,6 +2075,7 @@
 				EB2F5D591A4F5C8100DBC4AF /* SwipeableCell.swift */,
 				EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */,
 				EBE366361BCBC346009543AF /* BlurBubbleTransition.swift */,
+				EBB526881BF016910002A286 /* ButtonMore.swift */,
 			);
 			name = view;
 			path = shoppin;
@@ -2697,6 +2700,7 @@
 				EB7032801BEBBBB100779EBB /* ReorderSectionTableViewController.swift in Sources */,
 				EBCE418D1B5D466B00583551 /* EditListViewController.swift in Sources */,
 				EB40A4721B5508B6000E9CAD /* DBResult.swift in Sources */,
+				EBB526891BF016910002A286 /* ButtonMore.swift in Sources */,
 				EBB5266A1BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift in Sources */,
 				EB40A47E1B5512D6000E9CAD /* DBSharedUser.swift in Sources */,
 				EBB9A7321B5EB0FC00E5487D /* DBInventory.swift in Sources */,
