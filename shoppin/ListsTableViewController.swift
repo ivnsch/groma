@@ -133,9 +133,6 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         } else {
             if let cell = tableView.cellForRowAtIndexPath(indexPath) {
 
-
-//                let listItemsController = UIStoryboard.hiho()
-                
                 let listItemsController = UIStoryboard.todoItemsViewController()
                 listItemsController.view.frame = view.frame
                 addChildViewController(listItemsController)
@@ -159,9 +156,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
                 expandCellAnimator.fromView = tableView
                 expandCellAnimator.toView = listItemsController.view
                 expandCellAnimator.inView = view
-                
-                
-//                expandCellAnimator.animateTransition(true, fromViewYOffset: 60, expandedViewFrame: nil)
+
                 expandCellAnimator.animateTransition(true, topOffsetY: 64)
                 
             } else {
@@ -219,55 +214,6 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     // MARK: - ExpandCellAnimatorDelegate
     
     func animationsForCellAnimator(isExpanding: Bool, frontView: UIView) {
-//        if isExpanding {
-//            var navBarFrame = self.navigationController!.navigationBar.frame
-//            
-//            
-////            let newFrame = CGRectMake(0, -(navBarFrame.height), navBarFrame.width, navBarFrame.height)
-//            let newFrame = CGRectMake(0, -(self.originalNavBarFrame.origin.y + navBarFrame.height), navBarFrame.width, navBarFrame.height)
-//            
-//            self.navigationController!.navigationBar.frame = newFrame
-//            
-//            // TODO
-//            //                    c.myLab.center = CGPointMake(frontView.center.x, c.myLab.center.y)
-//            
-//            
-//        } else {
-//            var navBarFrame = self.navigationController!.navigationBar.frame
-//            let newFrame = CGRectMake(0, self.originalNavBarFrame.origin.y, navBarFrame.width, navBarFrame.height)
-//            self.navigationController!.navigationBar.frame = newFrame
-//            
-//            // delegate?.onExpandingAnim(false)
-//            // self.toViewAnimationsAdapter?.animationsForCollapsingView?(frontView)
-//        }
-        
-//        if isExpanding {
-//            
-//            var navBarFrame = topBar.frame
-//
-////            //            let newFrame = CGRectMake(0, -(navBarFrame.height), navBarFrame.width, navBarFrame.height)
-////            let newFrame = CGRectMake(0, -(self.originalNavBarFrame.origin.y + navBarFrame.height), navBarFrame.width, navBarFrame.height)
-////            
-////            topBar.frame = newFrame
-//            
-//            topBarConstraint.constant = -navBarFrame.height
-//            
-//            // TODO
-//            //                    c.myLab.center = CGPointMake(frontView.center.x, c.myLab.center.y)
-//            
-//            
-//        } else {
-////            var navBarFrame = topBar.frame
-////            let newFrame = CGRectMake(0, self.originalNavBarFrame.origin.y, navBarFrame.width, navBarFrame.height)
-////            topBar.frame = newFrame
-//            
-//            topBarConstraint.constant = 0
-//
-//            
-//            // delegate?.onExpandingAnim(false)
-//            // self.toViewAnimationsAdapter?.animationsForCollapsingView?(frontView)
-//        }
-        
         var navBarFrame = topBar.frame
         if isExpanding {
             topBar.transform = CGAffineTransformMakeTranslation(0, -navBarFrame.height)
@@ -282,33 +228,8 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func animationsComplete(wasExpanding: Bool, frontView: UIView) {
-
-
-//        if wasExpanding {
-//            navigationController?.setNavigationBarHidden(true, animated: false)
-//        } else {
-//            navigationController?.setNavigationBarHidden(false, animated: false)
-//        }
     }
     
     func prepareAnimations(willExpand: Bool, frontView: UIView) {
-//                    var navBarFrame = topBar.frame
-//        if willExpand {
-//            
-//
-//
-//            topBar.transform = CGAffineTransformMakeTranslation(0, -navBarFrame.height)
-//            
-//            
-////            topBarConstraint.constant = -navBarFrame.height
-//            
-//        } else {
-////            topBarConstraint.constant = 0
-//            topBar.transform = CGAffineTransformMakeTranslation(0, navBarFrame.height)
-//            
-//        }
-//        view.updateConstraints()
-//        view.layoutIfNeeded()
-        
     }
 }
