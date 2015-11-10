@@ -27,6 +27,9 @@ extension UIStoryboard {
     private class func statsStoryboard() -> UIStoryboard { return UIStoryboard(name: "Stats", bundle: NSBundle.mainBundle()) }
     private class func reorderSectionsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ReorderSectionTableViewController", bundle: NSBundle.mainBundle()) }
     private class func addEditListStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditList", bundle: NSBundle.mainBundle()) }
+    private class func addEditInventoryStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditInventory", bundle: NSBundle.mainBundle()) }
+    private class func addEditSharedUsersStoryboard() -> UIStoryboard { return UIStoryboard(name: "SharedUsersViewController", bundle: NSBundle.mainBundle()) }
+
     
     // MARK: - List items
     
@@ -98,9 +101,9 @@ extension UIStoryboard {
 //        return mainStoryboard().instantiateViewControllerWithIdentifier("editListsViewController") as! EditListViewController
 //    }
     
-    // MARK: - Inventory
-    class func editInventoriesViewController() -> EditInventoryViewController {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("editInventoriesViewController") as! EditInventoryViewController
+    
+    class func addEditInventory() -> AddEditInventoryController {
+        return addEditInventoryStoryboard().instantiateViewControllerWithIdentifier("AddEditInventoryController") as! AddEditInventoryController
     }
 
     // MARK: - History
@@ -190,6 +193,13 @@ extension UIStoryboard {
     
     class func listColorPicker() -> FlatColorPickerController {
         return addEditListStoryboard().instantiateViewControllerWithIdentifier("FlatColorPickerController") as! FlatColorPickerController
+    }
+ 
+    
+    // MARK: Shared users
+    
+    class func sharedUsersViewController() -> SharedUsersViewController {
+        return addEditSharedUsersStoryboard().instantiateViewControllerWithIdentifier("SharedUsersViewController") as! SharedUsersViewController
     }
     
 }

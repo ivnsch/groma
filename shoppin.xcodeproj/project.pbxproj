@@ -247,6 +247,11 @@
 		EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162E81A3CA1F00048E37C /* ListItemProviderImpl.swift */; };
 		EB55677F1A8658AA00CD3EC6 /* InventoryItemsProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFD1A5972C70058103B /* InventoryItemsProviderImpl.swift */; };
 		EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F41A3CA4BA0048E37C /* ProviderFactory.swift */; };
+		EB5737B31BF25DFB00D52FB8 /* AddEditInventoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5737B21BF25DFB00D52FB8 /* AddEditInventoryController.swift */; };
+		EB5737B51BF25E1100D52FB8 /* AddEditInventory.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB5737B41BF25E1100D52FB8 /* AddEditInventory.storyboard */; };
+		EB5737B71BF2612300D52FB8 /* InventorySharedUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5737B61BF2612300D52FB8 /* InventorySharedUserCell.swift */; };
+		EB5737B91BF27B0700D52FB8 /* SharedUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5737B81BF27B0700D52FB8 /* SharedUsersViewController.swift */; };
+		EB5737BB1BF27B1800D52FB8 /* SharedUsersViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB5737BA1BF27B1800D52FB8 /* SharedUsersViewController.storyboard */; };
 		EB5AD1951BEE2ED400BC6A2F /* EditSectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5AD1931BEE2ED400BC6A2F /* EditSectionViewController.swift */; };
 		EB5AD1961BEE2ED400BC6A2F /* EditSectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB5AD1941BEE2ED400BC6A2F /* EditSectionViewController.xib */; };
 		EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6A207C1ACC079000B9BCB2 /* UITableView.swift */; };
@@ -514,7 +519,6 @@
 		EBB9A7481B5EB46C00E5487D /* InventoryMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7471B5EB46C00E5487D /* InventoryMapper.swift */; };
 		EBB9A7491B5EB46C00E5487D /* InventoryMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7471B5EB46C00E5487D /* InventoryMapper.swift */; };
 		EBB9A74A1B5EB46C00E5487D /* InventoryMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7471B5EB46C00E5487D /* InventoryMapper.swift */; };
-		EBB9A74C1B5EB95A00E5487D /* EditInventoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A74B1B5EB95A00E5487D /* EditInventoryViewController.swift */; };
 		EBB9A7541B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7531B5FED4200E5487D /* InventoryTableViewCell.swift */; };
 		EBB9C2241B91EED3007F99A4 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBB9C2231B91EED3007F99A4 /* FBSDKCoreKit.framework */; };
 		EBB9C2281B91F8CA007F99A4 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBB9C2271B91F8CA007F99A4 /* FBSDKLoginKit.framework */; };
@@ -855,6 +859,11 @@
 		EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		EB5529E31BC6F2A800EDCEAF /* PlanItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanItemInput.swift; sourceTree = "<group>"; };
 		EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-osx-Bridging-Header.h"; sourceTree = "<group>"; };
+		EB5737B21BF25DFB00D52FB8 /* AddEditInventoryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditInventoryController.swift; sourceTree = "<group>"; };
+		EB5737B41BF25E1100D52FB8 /* AddEditInventory.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddEditInventory.storyboard; sourceTree = "<group>"; };
+		EB5737B61BF2612300D52FB8 /* InventorySharedUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventorySharedUserCell.swift; sourceTree = "<group>"; };
+		EB5737B81BF27B0700D52FB8 /* SharedUsersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUsersViewController.swift; sourceTree = "<group>"; };
+		EB5737BA1BF27B1800D52FB8 /* SharedUsersViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SharedUsersViewController.storyboard; sourceTree = "<group>"; };
 		EB5AD1931BEE2ED400BC6A2F /* EditSectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditSectionViewController.swift; sourceTree = "<group>"; };
 		EB5AD1941BEE2ED400BC6A2F /* EditSectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditSectionViewController.xib; sourceTree = "<group>"; };
 		EB6A207C1ACC079000B9BCB2 /* UITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UITableView.swift; path = shoppin/UITableView.swift; sourceTree = "<group>"; };
@@ -1001,7 +1010,6 @@
 		EBB9A73F1B5EB21900E5487D /* InventoryProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryProviderImpl.swift; sourceTree = "<group>"; };
 		EBB9A7431B5EB28500E5487D /* RemoteInventoryItemsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryItemsProvider.swift; sourceTree = "<group>"; };
 		EBB9A7471B5EB46C00E5487D /* InventoryMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryMapper.swift; sourceTree = "<group>"; };
-		EBB9A74B1B5EB95A00E5487D /* EditInventoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditInventoryViewController.swift; sourceTree = "<group>"; };
 		EBB9A7531B5FED4200E5487D /* InventoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryTableViewCell.swift; sourceTree = "<group>"; };
 		EBB9C2231B91EED3007F99A4 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../sdks/FacebookSDKs-iOS-20150817/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		EBB9C2251B91F294007F99A4 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "../../../sdks/FacebookSDKs-iOS-20150817/Bolts.framework"; sourceTree = "<group>"; };
@@ -1411,9 +1419,13 @@
 				EB20FC041A599A500058103B /* InventoryItemsTableViewController.swift */,
 				EB20FC061A599AE20058103B /* InventoryItemTableViewCell.swift */,
 				EBB9A72D1B5EB00E00E5487D /* InventoriesTableViewController.swift */,
-				EBB9A74B1B5EB95A00E5487D /* EditInventoryViewController.swift */,
 				EBB9A7531B5FED4200E5487D /* InventoryTableViewCell.swift */,
 				EBA95CB31BBC98FE00A80850 /* InventoryItemsViewController.swift */,
+				EB5737B21BF25DFB00D52FB8 /* AddEditInventoryController.swift */,
+				EB5737B61BF2612300D52FB8 /* InventorySharedUserCell.swift */,
+				EB5737B41BF25E1100D52FB8 /* AddEditInventory.storyboard */,
+				EB5737B81BF27B0700D52FB8 /* SharedUsersViewController.swift */,
+				EB5737BA1BF27B1800D52FB8 /* SharedUsersViewController.storyboard */,
 			);
 			name = inventory;
 			path = shoppin;
@@ -2455,6 +2467,7 @@
 				EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */,
 				EBC9D23E1BE4213B0088E3CF /* Stats.storyboard in Resources */,
 				EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */,
+				EB5737B51BF25E1100D52FB8 /* AddEditInventory.storyboard in Resources */,
 				EB0A05921BDFCE8D00D1E29D /* ManageProducts.storyboard in Resources */,
 				EB4147C31BE11D7C00549CE4 /* ManageGroups.storyboard in Resources */,
 				EB0C1BA31B3DF5EA00F24C85 /* UserDetails.storyboard in Resources */,
@@ -2464,6 +2477,7 @@
 				EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */,
 				EB0C1B9A1B3DBF7F00F24C85 /* Register.storyboard in Resources */,
 				EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */,
+				EB5737BB1BF27B1800D52FB8 /* SharedUsersViewController.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2776,13 +2790,13 @@
 				EB85F45B1BD54C6300E19E9B /* QuickAddGroupCell.swift in Sources */,
 				EBD828051BEA441B0072F9FA /* UINavigationController.swift in Sources */,
 				EB0C2A361B58329800AF6226 /* RemoteInventoryProvider.swift in Sources */,
+				EB5737B91BF27B0700D52FB8 /* SharedUsersViewController.swift in Sources */,
 				EB1B36651BC47DF9003519F2 /* PlanProviderImpl.swift in Sources */,
 				EB1B36691BC47E32003519F2 /* PlanItem.swift in Sources */,
 				EB451C351B85F3DA000DE208 /* StatsProviderImpl.swift in Sources */,
 				EB2F5D261A4DE56B00DBC4AF /* DoneViewController.swift in Sources */,
 				EB135B941BED21490093DE70 /* ExpandFloatingButtonModel.swift in Sources */,
 				EBC9D2381BE3F2F50088E3CF /* TimerUtils.swift in Sources */,
-				EBB9A74C1B5EB95A00E5487D /* EditInventoryViewController.swift in Sources */,
 				EBBC23051BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */,
 				EBBC232B1BB600DF0002F6B1 /* ConfirmationPopup.swift in Sources */,
 				EB0C2A461B58405D00AF6226 /* RealmListItemProvider.swift in Sources */,
@@ -2806,6 +2820,7 @@
 				EB70C21F1B4D302D0060E529 /* SharedUser.swift in Sources */,
 				EBFD15C11BA7F59600E37342 /* AlertPopup.swift in Sources */,
 				EBA288D71BB9FCC3001A2B95 /* MemInventoryItemProvider.swift in Sources */,
+				EB5737B71BF2612300D52FB8 /* InventorySharedUserCell.swift in Sources */,
 				EB714AA61B66BBA800F91B94 /* DBSyncable.swift in Sources */,
 				EBBC231E1BB575340002F6B1 /* UIColor.swift in Sources */,
 				EBD828031BE95CD80072F9FA /* Shapes.swift in Sources */,
@@ -2838,6 +2853,7 @@
 				EB3C9E2A1BEA47FF00886197 /* Theme.swift in Sources */,
 				EB7F59CB1BA1970200E07EBA /* Dictionary.swift in Sources */,
 				EB4612BA1BE56D970049DAD1 /* ExpandCellAnimator.swift in Sources */,
+				EB5737B31BF25DFB00D52FB8 /* AddEditInventoryController.swift in Sources */,
 				EBF162FA1A3CA54F0048E37C /* ListItemProvider.swift in Sources */,
 				EB85F45D1BD54C7300E19E9B /* QuickAddItemCell.swift in Sources */,
 				EBB9A7381B5EB14300E5487D /* RemoteInventory.swift in Sources */,

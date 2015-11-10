@@ -103,6 +103,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         let compl = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
         editButton.setTitleColor(compl, forState: .Normal)
+        addButton.setTitleColor(compl, forState: .Normal)
         
         // adjust nav controller for cart & stash (in this controller we use a custom view).
         navigationController?.setColors(color, textColor: compl)

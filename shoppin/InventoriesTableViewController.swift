@@ -97,12 +97,12 @@ class InventoriesTableViewController: UITableViewController {
     }
     
     private func showAddOrEditListViewController(isEdit: Bool, inventoryToEdit: Inventory? = nil) {
-        let editInventoriesViewController = UIStoryboard.editInventoriesViewController()
-        editInventoriesViewController.isEdit = isEdit
-        if let inventoryToEdit = inventoryToEdit {
-            editInventoriesViewController.prefill(inventoryToEdit)
-        }
-        self.presentViewController(editInventoriesViewController, animated: true, completion: nil)
+//        let editInventoriesViewController = UIStoryboard.editInventoriesViewController()
+//        editInventoriesViewController.isEdit = isEdit
+//        if let inventoryToEdit = inventoryToEdit {
+//            editInventoriesViewController.prefill(inventoryToEdit)
+//        }
+//        self.presentViewController(editInventoriesViewController, animated: true, completion: nil)
     }
     
     @IBAction func onAddTap(sender: UIBarButtonItem) {

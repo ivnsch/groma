@@ -152,12 +152,12 @@ class InventoryProviderImpl: InventoryProvider {
     }
     
     func updateInventory(inventory: Inventory, _ handler: ProviderResult<Any> -> ()) {
-        self.remoteProvider.updateInventory(inventory) {remoteResult in
-            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-            handler(ProviderResult(status: providerStatus))
-            
-            // TODO update in local db, call remote bg, then this
-//            DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+        dbInventoryProvider.saveInventory(inventory, update: true) {saved in
+            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
+        
+            self.remoteProvider.updateInventory(inventory) {remoteResult in
+                DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+            }
         }
     }
     

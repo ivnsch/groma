@@ -101,9 +101,6 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
             if let weakSelf = self {
                 
                 if let listName = weakSelf.listNameInputField.text {
-                    
-                    // FIXME code smell - not using listFormInput for the listName, are we using listFormInput correctly? Do we actually need listFormInput? Structure differently?
-
                     if let listToEdit = weakSelf.listToEdit {
                         let updatedList = listToEdit.copy(name: listName, users: weakSelf.sharedUsers, bgColor: weakSelf.colorButton.tintColor)
                         weakSelf.listProvider.update([updatedList], weakSelf.successHandler{
@@ -153,7 +150,7 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     @IBAction func onAddUserTap(sender: UIButton) {
-        self.validateInputs(self.userInputsValidator) {[weak self] in
+        self.validateInputs(userInputsValidator) {[weak self] in
             if let weakSelf = self {
                 if let input = weakSelf.addUserInputField.text {
                     // TODO do later a verification here if email exists in the server

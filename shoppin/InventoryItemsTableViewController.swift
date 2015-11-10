@@ -13,15 +13,17 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
     private var inventoryItems: [InventoryItem] = []
     @IBOutlet var tableViewFooter: LoadingFooter!
 
-    var sortBy: InventorySortBy? {
-        didSet {
-            loadInventory()
-        }
-    }
+    var sortBy: InventorySortBy?
     
     var onViewWillAppear: VoidFunction? // to be able to ensure sortBy is not set before UI is ready
     
-    private var inventory: Inventory?
+    var inventory: Inventory? {
+        didSet {
+            inventoryItems = []
+            paginator.reset()
+            loadPossibleNextPage()
+        }
+    }
     
     var tableViewTopInset: CGFloat {
         get {
@@ -42,21 +44,7 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
     }
     
     override func viewWillAppear(animated:Bool) {
-        self.navigationItem.title = "Inventory"
-        
         onViewWillAppear?()
-        
-        inventoryItems = []
-        paginator.reset()
-        loadPossibleNextPage()
-    }
-    
-    private func loadInventory() {
-        Providers.inventoryProvider.firstInventory(successHandler {[weak self] inventory in
-            //            self.navigationItem.title = inventory.name
-            self?.inventory = inventory
-            self?.loadPossibleNextPage()
-        })
     }
     
     // MARK: - Table view data source

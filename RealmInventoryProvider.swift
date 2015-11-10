@@ -79,8 +79,8 @@ class RealmInventoryProvider: RealmProvider {
         self.load(mapper, /*range: range, sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), */handler: handler)
     }
     
-    func saveInventory(inventory: Inventory, handler: Bool -> ()) {
-        self.saveInventories([inventory], handler: handler)
+    func saveInventory(inventory: Inventory, update: Bool = true, handler: Bool -> ()) {
+        self.saveInventories([inventory], update: update, handler: handler)
     }
     
     func saveInventories(inventories: [Inventory], update: Bool = true, handler: Bool -> ()) {

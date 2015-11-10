@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+        </mutableArray>
+    </customFonts>
+    <scenes>
+        <!--Add Edit Inventory Controller-->
+        <scene sceneID="FUT-Mh-RUP">
+            <objects>
+                <viewController storyboardIdentifier="AddEditInventoryController" id="qh3-A7-5jc" customClass="AddEditInventoryController" customModule="shoppin" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="MpK-gu-0CU"/>
+                        <viewControllerLayoutGuide type="bottom" id="bJm-54-p51"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="u8X-Mh-pC8">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Inventory name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="y1d-HR-mnB">
+                                <rect key="frame" x="14" y="28" width="572" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="q7D-PP-X2T"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kbL-wQ-lFF" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="288" y="72" width="25" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="R5b-kz-1xk"/>
+                                </constraints>
+                                <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <state key="normal" image="add_user"/>
+                                <connections>
+                                    <action selector="onAddUsersTap" destination="qh3-A7-5jc" eventType="touchUpInside" id="Dwd-BT-myh"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gfb-B4-wqS">
+                                <rect key="frame" x="321" y="85" width="0.0" height="0.0"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="y1d-HR-mnB" secondAttribute="trailing" constant="14" id="Jot-oy-W2P"/>
+                            <constraint firstItem="Gfb-B4-wqS" firstAttribute="centerY" secondItem="kbL-wQ-lFF" secondAttribute="centerY" id="N48-Yi-CKJ"/>
+                            <constraint firstItem="Gfb-B4-wqS" firstAttribute="leading" secondItem="kbL-wQ-lFF" secondAttribute="trailing" constant="8" id="NyZ-Y4-KV2"/>
+                            <constraint firstItem="kbL-wQ-lFF" firstAttribute="centerX" secondItem="u8X-Mh-pC8" secondAttribute="centerX" id="tO0-FJ-5ns"/>
+                            <constraint firstItem="y1d-HR-mnB" firstAttribute="leading" secondItem="u8X-Mh-pC8" secondAttribute="leading" constant="14" id="tiS-EL-6K7"/>
+                            <constraint firstItem="kbL-wQ-lFF" firstAttribute="top" secondItem="y1d-HR-mnB" secondAttribute="bottom" constant="14" id="uId-jt-X20"/>
+                            <constraint firstItem="y1d-HR-mnB" firstAttribute="top" secondItem="MpK-gu-0CU" secondAttribute="bottom" constant="8" id="wqd-0I-hKH"/>
+                        </constraints>
+                    </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="600" height="600"/>
+                    <connections>
+                        <outlet property="inventoryNameInputField" destination="y1d-HR-mnB" id="jGO-Vd-NTG"/>
+                        <outlet property="userCountLabel" destination="Gfb-B4-wqS" id="txY-Cx-7iY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8aW-yL-mdI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="733" y="572"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="add_user" width="25" height="25"/>
+    </resources>
+</document>

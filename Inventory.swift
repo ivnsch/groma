@@ -43,6 +43,17 @@ struct Inventory: Equatable, Identifiable, Hashable {
     var hashValue: Int {
         return uuid.hashValue
     }
+    
+    func copy(uuid uuid: String? = nil, name: String? = nil, users: [SharedUser]? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> Inventory {
+        return Inventory(
+            uuid: uuid ?? self.uuid,
+            name: name ?? self.name,
+            users: users ?? self.users,
+            lastUpdate: lastUpdate ?? self.lastUpdate,
+            lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
+            removed: removed ?? self.removed
+        )
+    }
 }
 
 func ==(lhs: Inventory, rhs: Inventory) -> Bool {
