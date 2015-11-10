@@ -26,10 +26,11 @@ class MyTipPopup: CMPopTipView {
     
     private func sharedInit() {
         hasShadow = false
-        borderWidth = 0
+        borderWidth = 1
         has3DStyle = false
         hasGradientBackground = false
-        backgroundColor = UIColor(red: 1, green: 93/255, blue: 166/255, alpha: 1)
+        borderColor = UIColor(red: 1, green: 93/255, blue: 166/255, alpha: 1)
+        backgroundColor = UIColor.whiteColor()
         dismissTapAnywhere = true
         disableTapToDismiss = false
         animation = CMPopTipAnimationPop
