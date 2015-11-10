@@ -53,6 +53,7 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     override func viewWillDisappear(animated: Bool) {
         UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Theme.navigationBarTextColor]
+        listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     
     private func initWithList(list: List) {
@@ -134,10 +135,14 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     
     private func resetAllItems() {
         if let list = list {
-            Providers.listItemsProvider.switchStatus(listItemsTableViewController.items, list: list, status: .Todo) {[weak self] result in
-                if result.success {
-                    self?.listItemsTableViewController.setListItems([])
-                    self?.close()
+            listItemsTableViewController.clearPendingSwipeItemIfAny {[weak self] in
+                if let weakSelf = self {
+                    Providers.listItemsProvider.switchStatus(weakSelf.listItemsTableViewController.items, list: list, status: .Todo) {result in
+                        if result.success {
+                            weakSelf.listItemsTableViewController.setListItems([])
+                            weakSelf.close()
+                        }
+                    }
                 }
             }
         }

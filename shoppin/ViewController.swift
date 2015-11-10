@@ -29,8 +29,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private var currentTopController: UIViewController?
     
     @IBOutlet weak var floatingViews: FloatingViews!
-    
-    private var gestureRecognizer: UIGestureRecognizer!
 
     @IBOutlet weak var pricesView: PricesView!
     
@@ -88,6 +86,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
 
     func onExpand(expanding: Bool) {
+        if !expanding {
+            clearPossibleUndo()
+        }
         animateTitle(expanding)
     }
     
@@ -291,12 +292,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     @IBAction func onEditTap(sender: AnyObject) {
+        
+        clearPossibleUndo()
+
         let editing = !self.listItemsTableViewController.editing
         
         self.setEditing(editing, animated: true, tryCloseTopViewController: true)
     }
 
     @IBAction func onAddTap(sender: AnyObject) {
+        
+        clearPossibleUndo()
+        
         // if any top controller is open, close it
         if quickAddController.open || addEditController.open {
             if quickAddController.open {
@@ -311,6 +318,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             setQuickAddOpen(true)
             floatingViews.setActions(Array<FLoatingButtonAction>())
         }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        clearPossibleUndo()
     }
     
     // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
@@ -340,8 +351,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //        floatingViews.setActions(editing ? [toggleButtonAvailableAction, FLoatingButtonAttributedAction(action: .Add)] : [toggleButtonInactiveAction]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button), and set appropiate alpha
 
         listItemsTableViewController.setEditing(editing, animated: animated)
-//        self.gestureRecognizer.enabled = !editing //don't block tap on delete button
-        gestureRecognizer.enabled = false //don't block tap on delete button
 
         let navbarHeight = topBar.frame.height
 //        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
@@ -373,18 +382,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         self.addChildViewControllerAndView(self.listItemsTableViewController, viewIndex: 0)
         
-        self.gestureRecognizer = UITapGestureRecognizer(target: self, action: "clearThings")
-        self.listItemsTableViewController.view.addGestureRecognizer(gestureRecognizer)
         self.listItemsTableViewController.scrollViewDelegate = self
         self.listItemsTableViewController.listItemsTableViewDelegate = self
         self.listItemsTableViewController.listItemsEditTableViewDelegate = self
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        clearThings()
+        clearPossibleUndo()
     }
     
-    func clearThings() {
+    func clearPossibleUndo() {
         self.listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     

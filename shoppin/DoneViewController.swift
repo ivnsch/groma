@@ -65,6 +65,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     override func viewWillDisappear(animated: Bool) {
         UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Theme.navigationBarTextColor]
+        listItemsTableViewController.clearPendingSwipeItemIfAny()
     }
     
     private func initWithList(list: List) {
@@ -204,26 +205,32 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
             })
         }
         
-        // WARN for now we assume user has always only one inventory. Note that general setup (database, server etc) supports multiple inventories though.
-        Providers.inventoryProvider.inventories(successHandler{[weak self] inventories in
-            if let inventory = inventories.first { // TODO list associated inventory
-                onHasInventory(inventory)
+        listItemsTableViewController.clearPendingSwipeItemIfAny {[weak self] in
+            
+            if let weakSelf = self {
                 
-            } else { // user has no inventories - create first one. Note if offline there can be inventories in server - there has to be a sync when user comes online/signs up
-                let mySharedUser = ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail") // TODO how do we handle shared users internally (database etc) when user is offline
-                
-                let inventoryInput = Inventory(uuid: NSUUID().UUIDString, name: "Home", users: [mySharedUser])
-                Providers.inventoryProvider.addInventory(inventoryInput, self!.successHandler{notused in
-                    
-                    // just a hack because we need "full" shared user to create inventory based on inventory input
-                    // but full shared user is deprecated and will be removed soon, because client doesn't need anything besides email (and provider, in the future)
-                    // so for now we create full shared user where these attributes are empty
-                    let sharedUsers = inventoryInput.users.map{SharedUser(email: $0.email)}
-                    
-                    onHasInventory(Inventory(uuid: inventoryInput.uuid, name: inventoryInput.name, users: sharedUsers))
+                // WARN for now we assume user has always only one inventory. Note that general setup (database, server etc) supports multiple inventories though.
+                Providers.inventoryProvider.inventories(weakSelf.successHandler{inventories in
+                    if let inventory = inventories.first { // TODO list associated inventory
+                        onHasInventory(inventory)
+                        
+                    } else { // user has no inventories - create first one. Note if offline there can be inventories in server - there has to be a sync when user comes online/signs up
+                        let mySharedUser = ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail") // TODO how do we handle shared users internally (database etc) when user is offline
+                        
+                        let inventoryInput = Inventory(uuid: NSUUID().UUIDString, name: "Home", users: [mySharedUser])
+                        Providers.inventoryProvider.addInventory(inventoryInput, weakSelf.successHandler{notused in
+                            
+                            // just a hack because we need "full" shared user to create inventory based on inventory input
+                            // but full shared user is deprecated and will be removed soon, because client doesn't need anything besides email (and provider, in the future)
+                            // so for now we create full shared user where these attributes are empty
+                            let sharedUsers = inventoryInput.users.map{SharedUser(email: $0.email)}
+                            
+                            onHasInventory(Inventory(uuid: inventoryInput.uuid, name: inventoryInput.name, users: sharedUsers))
+                        })
+                    }
                 })
             }
-        })
+        }
     }
     
     @IBAction func onEmptyCartTap() {
