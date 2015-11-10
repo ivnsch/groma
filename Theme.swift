@@ -24,6 +24,6 @@ struct Theme {
     static var tabBarSelectedColor = UIColor.blackColor()
     static var mainViewsBGColor = lightGrey
 //    static var topSettingsBarsBackgroundColor = UIColor(red: 239/255, green: 239/255, blue: 244/255, alpha: 1)
-    static var topSettingsBarsBackgroundColor = UIColor.flatWhiteColor()
+    static var topSettingsBarsBackgroundColor = UIColor.whiteColor()
     static var interleavedCellsBackgroundColor = UIColor.whiteColor()
 }
