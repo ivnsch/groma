@@ -53,6 +53,15 @@ extension Array {
         }
         return arr
     }
+
+    // More performant variant of array.enumerate().map{index, element}. We call it like this: array.mapEnumerate{index, Element in return Foo}
+    func mapEnumerate<T>(f: (Int, Element) -> T) -> [T] {
+        var arr: [T] = []
+        for i in 0..<self.count {
+            arr.append(f(i, self[i]))
+        }
+        return arr
+    }
     
     func toDictionary<K: Hashable, V>(mapFunc: Element -> (K, V)) -> [K: V] {
         var dict = [K: V]()

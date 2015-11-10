@@ -7,10 +7,45 @@
 //
 
 import UIKit
+import ChameleonFramework
 
 class ListTableViewCell: UITableViewCell {
 
     @IBOutlet weak var listName: UILabel!
+    @IBOutlet weak var userCountLabel: UILabel!
+    @IBOutlet weak var usersIcon: UIImageView!
+    
+    var list: List? {
+        didSet {
+            if let list = list {
+                listName.text = list.name
+
+                let c = list.bgColor
+                contentView.backgroundColor = c
+                backgroundColor = c
+                let v = UIView()
+                v.backgroundColor = c
+                selectedBackgroundView = v
+
+                let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: list.bgColor, isFlat: true)
+                listName.textColor = contrastingTextColor
+                
+                let showUserInfo = list.users.count > 0
+                
+                usersIcon.hidden = !showUserInfo
+                userCountLabel.hidden = !showUserInfo
+                
+                if showUserInfo {
+                    userCountLabel.text = "\(list.users.count)"
+                    usersIcon.tintColor = contrastingTextColor
+                    userCountLabel.textColor = contrastingTextColor
+                } else {
+                    userCountLabel.text = ""
+                }
+
+            }
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()

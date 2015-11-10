@@ -1,15 +1,22 @@
 //
-//  CGRectEx.swift
-//  LiquidLoading
+//  CGRect.swift
+//  shoppin
 //
-//  Created by Takuma Yoshida on 2015/08/20.
-//  Copyright (c) 2015年 yoavlt. All rights reserved.
+//  Created by ischuetz on 09/11/15.
+//  Copyright © 2015 ivanschuetz. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 extension CGRect {
+
+    func copy(x: CGFloat? = nil, y: CGFloat? = nil, width: CGFloat? = nil, height: CGFloat? = nil) -> CGRect {
+        return CGRectMake(
+            x ?? self.origin.x,
+            y ?? self.origin.y,
+            width ?? self.width,
+            height ?? self.height)
+    }
     
     /////////////////////////////////////////////////////////////////////////////////////
     // Added because of LiquidFloatingActionButton library (library is not directly included - only some modified parts copied)

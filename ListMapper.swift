@@ -16,6 +16,7 @@ class ListMapper {
         dbList.uuid = list.uuid
         dbList.name = list.name
         dbList.setBgColor(list.bgColor)
+        dbList.order = list.order
         let dbSharedUsers = list.users.map{SharedUserMapper.dbWithSharedUser($0)}
         for dbObj in dbSharedUsers {
             dbList.users.append(dbObj)
@@ -31,6 +32,7 @@ class ListMapper {
         dbList.uuid = list.uuid
         dbList.name = list.name
         dbList.setBgColor(RandomFlatColorWithShade(.Dark)) // for now no synchronisation of colors with remote
+        dbList.order = list.order
         let dbSharedUsers = list.users.map{SharedUserMapper.dbWithSharedUser($0)}
         for dbObj in dbSharedUsers {
             dbList.users.append(dbObj)
@@ -41,10 +43,10 @@ class ListMapper {
     
     class func listWithDB(dbList: DBList) -> List {
         let users = dbList.users.toArray().map{SharedUserMapper.sharedUserWithDB($0)}
-        return List(uuid: dbList.uuid, name: dbList.name, users: users, bgColor: dbList.bgColor())
+        return List(uuid: dbList.uuid, name: dbList.name, users: users, bgColor: dbList.bgColor(), order: dbList.order)
     }
     
     class func ListWithRemote(remoteList: RemoteList) -> List {
-        return List(uuid: remoteList.uuid, name: remoteList.name, users: remoteList.users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: RandomFlatColorWithShade(.Dark) /* for now no synchronisation of colors with remote*/)
+        return List(uuid: remoteList.uuid, name: remoteList.name, users: remoteList.users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: RandomFlatColorWithShade(.Dark) /* for now no synchronisation of colors with remote*/, order: remoteList.order)
     }
 }

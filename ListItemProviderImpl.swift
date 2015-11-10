@@ -365,53 +365,6 @@ class ListItemProviderImpl: ListItemProvider {
         print("FIXME or remove - update listitem - bad implementation")
     }
     
-
-    func lists(handler: ProviderResult<[List]> -> ()) {
-        self.dbProvider.loadLists{dbLists in
-            
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbLists))
-            
-            self.remoteProvider.lists {remoteResult in
-
-                if let remoteLists = remoteResult.successResult {
-                    let lists: [List] = remoteLists.map{ListMapper.ListWithRemote($0)}
-                    
-                    // if there's no cached list or there's a difference, overwrite the cached list
-                    if dbLists != lists {
-                        
-                        self.dbProvider.saveLists(lists, update: true) {saved in
-                            if saved {
-                                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: lists))
-                                
-                            } else {
-                                print("Error updating lists - dbListsMaybe is nil")
-                            }
-                        }
-                    }
-                    
-                } else {
-                    print("get remote lists no success, status: \(remoteResult.status)")
-                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
-                }
-            }
-        }
-    }
-    
-    // TODO is this used? Also what id, is it uuid?
-    func list(listId: String, _ handler: ProviderResult<List> -> ()) {
-        // return the saved object, to get object with generated id
-        self.dbProvider.loadList(listId) {dbListMaybe in
-            if let dbList = dbListMaybe {
-                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbList))
-                
-            } else {
-                print("Error: couldn't loadList: \(listId)")
-                handler(ProviderResult(status: ProviderStatusCode.NotFound))
-            }
-
-        }
-    }
-
     func syncListItems(list: List, handler: (ProviderResult<Any>) -> ()) {
         
         memProvider.invalidate()

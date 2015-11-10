@@ -26,6 +26,7 @@ extension UIStoryboard {
     private class func manageGroupsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ManageGroups", bundle: NSBundle.mainBundle()) }
     private class func statsStoryboard() -> UIStoryboard { return UIStoryboard(name: "Stats", bundle: NSBundle.mainBundle()) }
     private class func reorderSectionsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ReorderSectionTableViewController", bundle: NSBundle.mainBundle()) }
+    private class func addEditListStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditList", bundle: NSBundle.mainBundle()) }
     
     // MARK: - List items
     
@@ -92,10 +93,10 @@ extension UIStoryboard {
         return choiceStoryboard().instantiateViewControllerWithIdentifier("editableChoiceModal") as! EditableChoiceModal
     }
     
-    // MARK: - Lists
-    class func editListsViewController() -> EditListViewController {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("editListsViewController") as! EditListViewController
-    }
+//    // MARK: - Lists
+//    class func editListsViewController() -> EditListViewController {
+//        return mainStoryboard().instantiateViewControllerWithIdentifier("editListsViewController") as! EditListViewController
+//    }
     
     // MARK: - Inventory
     class func editInventoriesViewController() -> EditInventoryViewController {
@@ -180,4 +181,15 @@ extension UIStoryboard {
     class func reorderSectionTableViewController() -> ReorderSectionTableViewController {
         return reorderSectionsStoryboard().instantiateViewControllerWithIdentifier("ReorderSectionTableViewController") as! ReorderSectionTableViewController
     }
+    
+    // MARK: Add edit list
+    
+    class func addEditList() -> AddEditListController {
+        return addEditListStoryboard().instantiateViewControllerWithIdentifier("AddEditListController") as! AddEditListController
+    }
+    
+    class func listColorPicker() -> FlatColorPickerController {
+        return addEditListStoryboard().instantiateViewControllerWithIdentifier("FlatColorPickerController") as! FlatColorPickerController
+    }
+    
 }

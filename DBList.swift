@@ -14,6 +14,8 @@ class DBList: DBSyncable {
     dynamic var uuid: String = ""
     dynamic var name: String = ""
     dynamic var bgColorData: NSData = NSData()
+    dynamic var order: Int = 0
+    
     let users = RealmSwift.List<DBSharedUser>()
 
     func bgColor() -> UIColor {

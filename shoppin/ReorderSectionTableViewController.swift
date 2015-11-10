@@ -110,7 +110,7 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
         let section = sections[fromIndexPath.row]
         sections.removeAtIndex(fromIndexPath.row)
         
-        sections.insert(section, atIndex: toIndexPath.row + (fromIndexPath.row < toIndexPath.row ? 0 : 0))
+        sections.insert(section, atIndex: toIndexPath.row)
         
         sections = sections.enumerate().map{index, section in
             section.copy(order: index)

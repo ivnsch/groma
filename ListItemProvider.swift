@@ -9,15 +9,7 @@
 import Foundation
 
 protocol ListItemProvider {
-    
-    // MARK: - List
-
-    func lists(handler: ProviderResult<[List]> -> ())
-    
-    func list(listId: String, _ handler: ProviderResult<List> -> ())
-    
-    // MARK: - ListItem
-
+  
     func remove(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
     
     func remove(list: List, _ handler: ProviderResult<Any> -> ())

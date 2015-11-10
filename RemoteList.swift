@@ -11,7 +11,8 @@ import Foundation
 final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
-    let users: [RemoteSharedUser]    
+    let order: Int
+    let users: [RemoteSharedUser]
     let lastUpdate: NSDate
 
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
@@ -19,6 +20,7 @@ final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializab
         let list: AnyObject = representation.valueForKeyPath("list")!
         self.uuid = list.valueForKeyPath("uuid") as! String
         self.name = list.valueForKeyPath("name") as! String
+        self.order = list.valueForKeyPath("order") as! Int
         let unserializedUsers: AnyObject = representation.valueForKeyPath("users")!
         self.users = RemoteSharedUser.collection(response: response, representation: unserializedUsers)
         self.lastUpdate = NSDate(timeIntervalSince1970: list.valueForKeyPath("lastUpdate") as! Double)
@@ -36,6 +38,6 @@ final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializab
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), users: \(self.users), lastUpdate: \(self.lastUpdate)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), users: \(users), lastUpdate: \(lastUpdate)}"
     }
 }

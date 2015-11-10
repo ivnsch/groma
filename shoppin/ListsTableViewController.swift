@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol Foo {
+protocol Foo { // TODO is this used?
     func setExpanded(expanded: Bool)
 }
 
-class ListsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, EditListViewControllerDelegate, ExpandCellAnimatorDelegate, Foo {
+class ListsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AddEditListControllerDelegate, ExpandCellAnimatorDelegate, Foo, BottonPanelViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var topBar: UIView!
@@ -30,6 +30,8 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     
     private var originalNavBarFrame: CGRect = CGRectZero
     
+    @IBOutlet weak var floatingViews: FloatingViews!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -47,8 +49,12 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-
-        self.listItemsProvider.lists(successHandler{lists in
+        initFloatingViews()
+        initLists()
+    }
+    
+    private func initLists() {
+        Providers.listProvider.lists(successHandler{lists in
             if self.lists != lists { // if current list is nil or the provider list is different
                 self.lists = lists
                 self.tableView.reloadData()
@@ -68,17 +74,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         let cell = tableView.dequeueReusableCellWithIdentifier("listCell", forIndexPath: indexPath) as! ListTableViewCell
     
         let list = lists[indexPath.row]
-        cell.listName.text = list.name
-        
-        let c = list.bgColor
-        cell.contentView.backgroundColor = c
-        cell.backgroundColor = c
-        let v = UIView()
-        v.backgroundColor = c
-        cell.selectedBackgroundView = v
-        
-        let compl = UIColor(contrastingBlackOrWhiteColorOn: c, isFlat: true)
-        cell.listName.textColor = compl
+        cell.list = list
         
         return cell
     }
@@ -93,15 +89,34 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
 
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-        // Delete the row from the data source
-        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+            
+            let list = lists[indexPath.row]
+            
+            // update the table view in advance, so delete animation is quick. If something goes wrong we reload the content in onError and do default error handling
+            tableView.wrapUpdates {[weak self] in
+                self?.lists.remove(list)
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
+            }
+            Providers.listProvider.remove(list, resultHandler(onSuccess: {
+                }, onError: {[weak self] result in
+                    self?.initLists()
+                    self?.defaultErrorHandler()(providerResult: result)
+                }
+            ))
         }
     }
-
-    // Override to support rearranging the table view.
+    
     func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
+        
+        let list = lists[fromIndexPath.row]
+        lists.removeAtIndex(fromIndexPath.row)
+        lists.insert(list, atIndex: toIndexPath.row)
+        
+        let updatedLists = self.lists.mapEnumerate{index, list in list.copy(order: index)}
+        
+        Providers.listProvider.update(updatedLists, successHandler{[weak self] in
+            self?.lists = lists
+        })
     }
     
     func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
@@ -126,9 +141,12 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if self.editing {            
-//            if let indexPath = self.tableView.indexPathForSelectedRow, lists = self.lists {
-            self.showAddOrEditListViewController(true, listToEdit: lists[indexPath.row])
+        
+        let list = self.lists[indexPath.row]
+
+        if self.editing {
+            addEditListController.listToEdit = list
+            setAddEditListControllerOpen(true)
             
         } else {
             if let cell = tableView.cellForRowAtIndexPath(indexPath) {
@@ -141,11 +159,8 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
                 
                 listItemsController.onViewWillAppear = { // FIXME crash here once when tapped on "edit"
                     listItemsController.setThemeColor(cell.backgroundColor!)
-                    if let indexPath = self.tableView.indexPathForSelectedRow {
-                        let list = self.lists[indexPath.row] // having this outside of the onViewWillAppear appears to have fixed an inexplicable bad access in the currentList assignement line
-                        listItemsController.currentList = list
-                        listItemsController.onExpand(true)
-                    }
+                    listItemsController.currentList = list
+                    listItemsController.onExpand(true)
                 }
 
                 let f = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, cell.frame.width, cell.frame.height)
@@ -165,27 +180,54 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         }
     }
     
-    private func createAddOrEditListViewController(isEdit: Bool, listToEdit: List? = nil) -> EditListViewController {
-        let editListViewController = UIStoryboard.editListsViewController()
-        editListViewController.isEdit = isEdit
-        if let listToEdit = listToEdit {
-            editListViewController.listToEdit = listToEdit
-        }
-        editListViewController.delegate = self
-        return editListViewController
-    }
+//    private func createAddOrEditListViewController(isEdit: Bool, listToEdit: List? = nil) -> EditListViewController {
+//        let editListViewController = UIStoryboard.editListsViewController()
+//        editListViewController.isEdit = isEdit
+//        if let listToEdit = listToEdit {
+//            editListViewController.listToEdit = listToEdit
+//        }
+//        editListViewController.delegate = self
+//        return editListViewController
+//    }
     
-    private func showAddOrEditListViewController(isEdit: Bool, listToEdit: List? = nil) {
-        let editListViewController = createAddOrEditListViewController(isEdit, listToEdit: listToEdit)
-        presentViewController(editListViewController, animated: true, completion: nil)
-    }
+//    private func showAddOrEditListViewController(isEdit: Bool, listToEdit: List? = nil) {
+//        let editListViewController = createAddOrEditListViewController(isEdit, listToEdit: listToEdit)
+//        presentViewController(editListViewController, animated: true, completion: nil)
+//    }
 
     @IBAction func onAddTap(sender: UIBarButtonItem) {
-        self.showAddOrEditListViewController(false)
+        setAddEditListControllerOpen(!addEditListController.open)
     }
     
     @IBAction func onEditTap(sender: UIBarButtonItem) {
-        self.setEditing(!self.editing, animated: true) 
+        self.setEditing(!self.editing, animated: true, tryCloseTopViewController: true)
+    }
+    
+    // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
+    func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
+        super.setEditing(editing, animated: animated)
+        
+        if editing == false {
+            view.endEditing(true)
+        }
+        
+        if tryCloseTopViewController {
+            if !editing {
+                if addEditListController.open {
+                    setAddEditListControllerOpen(false)
+                }
+            }
+        }
+        
+//        floatingViews.setActions([editing ? toggleButtonAvailableAction : toggleButtonInactiveAction]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button), and set appropiate alpha
+        
+        tableView.setEditing(editing, animated: animated)
+        
+        if editing {
+            editButton.title = "Done"
+        } else {
+            editButton.title = "Edit"
+        }
     }
     
     
@@ -193,13 +235,10 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     
     func onListAdded(list: List) {
         tableView.wrapUpdates {[weak self] in
-            
             if let weakSelf = self {
                 self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.lists.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
                 self?.lists.append(list)
-                
-                self?.dismissViewControllerAnimated(true) {
-                }
+                self?.setAddEditListControllerOpen(false)
             }
         }
     }
@@ -208,7 +247,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     func onListUpdated(list: List) {
         lists.update(list)
         tableView.reloadData()
-        dismissViewControllerAnimated(true, completion: nil)
+        setAddEditListControllerOpen(false)
     }
     
     // MARK: - ExpandCellAnimatorDelegate
@@ -231,5 +270,118 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func prepareAnimations(willExpand: Bool, frontView: UIView) {
+    }
+    
+    
+    private func initFloatingViews() {
+        floatingViews.setActions(Array<FLoatingButtonAction>())
+        floatingViews.delegate = self
+    }
+    
+    // MARK: - Add edit list 
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    
+    private var currentTopController: UIViewController?
+
+    
+    private func initTopController(controller: UIViewController, height: CGFloat) {
+        let view = controller.view
+        
+        view.frame = CGRectMake(0, CGRectGetHeight(topBar.frame), self.view.frame.width, height)
+        
+        // swift anchor
+        view.layer.anchorPoint = CGPointMake(0.5, 0)
+        view.frame.origin = CGPointMake(0, view.frame.origin.y - height / 2)
+        
+        let transform: CGAffineTransform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 0.001) //0.001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
+        view.transform = transform
+    }
+    
+    private lazy var addEditListController: AddEditListController = {
+        let controller = UIStoryboard.addEditList()
+        controller.delegate = self
+        controller.currentListsCount = self.lists.count
+        controller.view.clipsToBounds = true
+        self.initTopController(controller, height: 90)
+        return controller
+    }()
+    
+    private func setAddEditListControllerOpen(open: Bool) {
+        addEditListController.open = open
+        
+        if open {
+            floatingViews.setActions([FLoatingButtonAttributedAction(action: .Submit)])
+        } else {
+            floatingViews.setActions(Array<FLoatingButtonAction>())
+            addEditListController.clear()
+        }
+        
+        animateTopView(addEditListController, open: open, tableView: tableView)
+    }
+    
+    
+    // parameter: tableView: This is normally the listitem's table view, except when we are in section-only mode, which needs a different table view
+    private func animateTopView(controller: UIViewController, open: Bool, tableView: UITableView) {
+        let view = controller.view
+        if open {
+            self.addChildViewControllerAndView(controller)
+            let topInset = CGRectGetHeight(view.bounds)
+            tableViewOverlay.frame = CGRectMake(tableView.frame.origin.x, tableView.frame.origin.y + topInset, tableView.frame.width, tableView.frame.height - tableView.topInset)
+            self.view.insertSubview(tableViewOverlay, aboveSubview: tableView)
+//            self.view.bringSubviewToFront(floatingViews)
+        } else {
+            tableViewOverlay.removeFromSuperview()
+        }
+        
+        UIView.animateWithDuration(0.3, animations: {
+            if open {
+                self.tableViewOverlay.alpha = 0.2
+            } else {
+                self.tableViewOverlay.alpha = 0
+            }
+            view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, open ? 1 : 0.001)
+            
+            let topInset = CGRectGetHeight(view.frame)
+            
+            let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
+            tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
+            tableView.topOffset = -tableView.inset.top
+            
+            }) { finished in
+                
+                if !open {
+                    controller.removeFromParentViewControllerWithView()
+                }
+        }
+    }
+    
+    private lazy var tableViewOverlay: UIView = {
+        let view = UIButton()
+        view.backgroundColor = UIColor.blackColor()
+        view.userInteractionEnabled = true
+        view.alpha = 0
+        view.addTarget(self, action: "onTableViewOverlayTap:", forControlEvents: .TouchUpInside)
+        return view
+    }()
+    
+    // closes top controller (whichever it may be)
+    func onTableViewOverlayTap(sender: UIButton) {
+        if addEditListController.open {
+            setAddEditListControllerOpen(false)
+        }
+    }
+    
+    // MARK: - BottonPanelViewDelegate
+    
+    func onSubmitAction(action: FLoatingButtonAction) {
+        handleFloatingViewAction(action)
+    }
+    
+    private func handleFloatingViewAction(action: FLoatingButtonAction) {
+        switch action {
+        case .Submit:
+            addEditListController.submit()
+        default: break
+        }
     }
 }

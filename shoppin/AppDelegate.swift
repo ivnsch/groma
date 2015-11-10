@@ -118,7 +118,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func addDummyData() {
 
-        let list1 = List(uuid: "1", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark))
+        let list1 = List(uuid: "1", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0)
         listProvider.saveList(list1) {[weak self] result in
             
             guard let weakSelf = self else {return}
