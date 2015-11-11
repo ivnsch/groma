@@ -71,8 +71,11 @@ class AddEditInventoryController: UIViewController, SharedUsersViewControllerDel
             if let weakSelf = self {
                 
                 if let inventoryName = weakSelf.inventoryNameInputField.text {
-                    if let inventoryToEdit = weakSelf.inventoryToEdit, sharedUsersController = weakSelf.sharedUsersController {
-                        let updatedInventory = inventoryToEdit.copy(name: inventoryName, users: sharedUsersController.sharedUsers)
+                    if let inventoryToEdit = weakSelf.inventoryToEdit {
+                        
+                        let sharedUsers = weakSelf.sharedUsersController?.sharedUsers ?? inventoryToEdit.users // shared users controller is only initialised if user taps on the add users button
+                        
+                        let updatedInventory = inventoryToEdit.copy(name: inventoryName, users: sharedUsers)
                         Providers.inventoryProvider.updateInventory(updatedInventory, weakSelf.successHandler{
                             weakSelf.delegate?.onInventoryUpdated(updatedInventory)
                         })

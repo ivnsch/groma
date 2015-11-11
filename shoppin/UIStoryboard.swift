@@ -29,6 +29,7 @@ extension UIStoryboard {
     private class func addEditListStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditList", bundle: NSBundle.mainBundle()) }
     private class func addEditInventoryStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditInventory", bundle: NSBundle.mainBundle()) }
     private class func addEditSharedUsersStoryboard() -> UIStoryboard { return UIStoryboard(name: "SharedUsersViewController", bundle: NSBundle.mainBundle()) }
+    private class func addEditInventoryItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditInventoryItem", bundle: NSBundle.mainBundle()) }
 
     
     // MARK: - List items
@@ -106,6 +107,10 @@ extension UIStoryboard {
         return addEditInventoryStoryboard().instantiateViewControllerWithIdentifier("AddEditInventoryController") as! AddEditInventoryController
     }
 
+    class func addEditInventoryItem() -> AddEditInventoryItemController {
+        return addEditInventoryItemStoryboard().instantiateViewControllerWithIdentifier("AddEditInventoryItemController") as! AddEditInventoryItemController
+    }
+    
     // MARK: - History
     
     class func historyViewController() -> HistoryViewController {

@@ -8,12 +8,16 @@
 
 import UIKit
 import CMPopTipView
+import SwiftValidator
 
-class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, AddEditInventoryControllerDelegate, BottonPanelViewDelegate {
+class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, AddEditInventoryControllerDelegate, BottonPanelViewDelegate, AddEditInventoryItemControllerDelegate, InventoryItemsTableViewControllerDelegate {
 
     @IBOutlet weak var sortByButton: UIButton!
     @IBOutlet weak var settingsView: UIView!
     
+    @IBOutlet weak var editButton: UIBarButtonItem!
+    @IBOutlet weak var addButton: UIBarButtonItem!
+
     private var sortByPopup: CMPopTipView?
     
     private var tableViewController: InventoryItemsTableViewController?
@@ -102,6 +106,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "embedInventoryItemsTableViewSegue" {
             tableViewController = segue.destinationViewController as? InventoryItemsTableViewController
+            tableViewController?.delegate = self
         }
     }
     
@@ -154,7 +159,20 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         return controller
     }()
     
+    private lazy var addEditInventoryItemController: AddEditInventoryItemController = {
+        let controller = UIStoryboard.addEditInventoryItem()
+        controller.delegate = self
+        
+        self.initTopController(controller, height: 180)
+        return controller
+    }()
+    
     private func setAddEditInventoryControllerOpen(open: Bool) {
+        
+        if addEditInventoryItemController.open {
+           setAddEditInventoryItemControllerOpen(false)
+        }
+        
         addEditInventoryController.open = open
         
         if open {
@@ -169,6 +187,25 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         }
     }
     
+    private func setAddEditInventoryItemControllerOpen(open: Bool) {
+        
+        if addEditInventoryController.open {
+            setAddEditInventoryControllerOpen(false)
+        }
+        
+        addEditInventoryItemController.open = open
+        
+        if open {
+            floatingViews.setActions([FLoatingButtonAttributedAction(action: .Submit)])
+        } else {
+            floatingViews.setActions(Array<FLoatingButtonAction>())
+            addEditInventoryItemController.clear()
+        }
+        
+        if let tableView = tableViewController?.tableView {
+            animateTopView(addEditInventoryItemController, open: open, tableView: tableView)
+        }
+    }
     
     // parameter: tableView: This is normally the listitem's table view, except when we are in section-only mode, which needs a different table view
     private func animateTopView(controller: UIViewController, open: Bool, tableView: UITableView) {
@@ -217,7 +254,26 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         if addEditInventoryController.open {
             setAddEditInventoryControllerOpen(false)
         }
+        if addEditInventoryItemController.open {
+            setAddEditInventoryItemControllerOpen(false)
+        }
     }
+    
+    @IBAction func onEditTap(sender: UIButton) {
+        
+        if let tableViewController = tableViewController {
+            tableViewController.setEditing(!tableViewController.editing, animated: true)
+            editButton.title = tableViewController.editing ? "Done" : "Edit"
+            
+        } else {
+            print("Warn: InventoryItemsViewController.onEditTap edit tap but no tableViewController")
+        }
+    }
+
+    // No add directly to inventory for now (or maybe ever). Otherwise user may get confused about how to use the app - it should be clear that items are added automatically when making cart as bought.
+//    @IBAction func onAddTap(sender: UIButton) {
+//        setAddEditInventoryItemControllerOpen(!addEditInventoryItemController.open)
+//    }
     
     // MARK: - BottonPanelViewDelegate
     
@@ -228,8 +284,61 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     private func handleFloatingViewAction(action: FLoatingButtonAction) {
         switch action {
         case .Submit:
-            addEditInventoryController.submit()
+            if addEditInventoryController.open {
+                addEditInventoryController.submit()
+            } else if addEditInventoryItemController.open {
+                addEditInventoryItemController.submit()
+            } else {
+                print("Warn: InventoryItemsViewController.handleFloatingViewAction: .Submit called but no top view controller is open")
+            }
         default: break
+        }
+    }
+    
+    // MARK: - AddEditInventoryItemControllerDelegate
+    
+    
+    func onSubmit(name: String, category: String, price: Float, quantity: Int, editingInventoryItem: InventoryItem?) {
+        
+        if let inventory = inventory {
+            
+            if let editingInventoryItem = editingInventoryItem {
+                let updatedProduct = editingInventoryItem.product.copy(name: name, price: price, category: category)
+                // TODO! calculate quantity delta correctly?
+                let updatedInventoryItem = editingInventoryItem.copy(quantity: quantity, quantityDelta: quantity, product: updatedProduct)
+                Providers.inventoryItemsProvider.updateInventoryItem(inventory, item: updatedInventoryItem, successHandler {[weak self] in
+                    // we have pagination so we don't know if the item is visible atm. For now simply cause a reload and start at first page. TODO nicer solution
+                    self?.tableViewController?.clearAndLoadFirstPage()
+                    self?.addEditInventoryItemController.clear()
+                    self?.setAddEditInventoryItemControllerOpen(false)
+                })
+                
+            } else {
+                
+                let input = InventoryItemInput(name: name, quantity: quantity, price: price, category: category)
+                Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, successHandler{[weak self] addedInventoryWithHistoryEntry in
+                    // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end. TODO nicer solution
+                    self?.tableViewController?.clearAndLoadFirstPage()
+                    self?.addEditInventoryItemController.clear()
+                    self?.setAddEditInventoryItemControllerOpen(false)
+                })
+            }
+        }
+    }
+    
+    func onCancelTap() {
+    }
+
+    func onValidationErrors(errors: [UITextField : ValidationError]) {
+        presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+    }
+    
+    // MARK: - InventoryItemsTableViewControllerDelegate
+    
+    func onInventoryItemSelected(inventoryItem: InventoryItem, indexPath: NSIndexPath) {
+        if tableViewController?.editing ?? false {
+            setAddEditInventoryItemControllerOpen(true)
+            addEditInventoryItemController.editingInventoryItem = inventoryItem
         }
     }
 }

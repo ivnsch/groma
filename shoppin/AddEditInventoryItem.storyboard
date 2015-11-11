@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+        </mutableArray>
+    </customFonts>
+    <scenes>
+        <!--Auto Complete Data Source-->
+        <scene sceneID="uhH-3v-eUf">
+            <objects>
+                <viewController storyboardIdentifier="AddEditInventoryItemController" id="rAp-S4-9FP" customClass="AddEditInventoryItemController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3Pg-V1-PiQ"/>
+                        <viewControllerLayoutGuide type="bottom" id="QxX-CW-6jW"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ecb-hC-ehK">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Item name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RAU-sK-eCS" customClass="MLPAutoCompleteTextField">
+                                <rect key="frame" x="14" y="28" width="572" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="autoCompleteDataSource" destination="rAp-S4-9FP" id="Bdk-k2-0ub"/>
+                                    <outlet property="autoCompleteDelegate" destination="rAp-S4-9FP" id="L3Q-iI-DLj"/>
+                                </connections>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Category" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UHv-iZ-Cer" customClass="MLPAutoCompleteTextField">
+                                <rect key="frame" x="14" y="71" width="572" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="autoCompleteDataSource" destination="rAp-S4-9FP" id="2jF-ak-JCo"/>
+                                    <outlet property="autoCompleteDelegate" destination="rAp-S4-9FP" id="Izs-DS-HkB"/>
+                                </connections>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Price" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zWo-Ja-8yL">
+                                <rect key="frame" x="14" y="116" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="9G5-Y7-nBU"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="BNv-dp-L7T"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Quantity" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kYg-lP-ums">
+                                <rect key="frame" x="14" y="161" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Nga-Ls-B4y"/>
+                                    <constraint firstAttribute="width" constant="100" id="QqG-en-0od"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next"/>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="UHv-iZ-Cer" secondAttribute="trailing" constant="14" id="4On-RC-jda"/>
+                            <constraint firstItem="zWo-Ja-8yL" firstAttribute="top" secondItem="UHv-iZ-Cer" secondAttribute="bottom" constant="15" id="AIc-vF-9q9"/>
+                            <constraint firstItem="RAU-sK-eCS" firstAttribute="top" secondItem="3Pg-V1-PiQ" secondAttribute="bottom" constant="8" id="FXw-aw-ymW"/>
+                            <constraint firstItem="RAU-sK-eCS" firstAttribute="leading" secondItem="ecb-hC-ehK" secondAttribute="leading" constant="14" id="Fc1-cl-UN5"/>
+                            <constraint firstAttribute="trailing" secondItem="RAU-sK-eCS" secondAttribute="trailing" constant="14" id="OCC-8A-SHE"/>
+                            <constraint firstItem="zWo-Ja-8yL" firstAttribute="leading" secondItem="ecb-hC-ehK" secondAttribute="leading" constant="14" id="hFh-mB-WPl"/>
+                            <constraint firstItem="UHv-iZ-Cer" firstAttribute="top" secondItem="RAU-sK-eCS" secondAttribute="bottom" constant="13" id="rA2-Gz-0tO"/>
+                            <constraint firstItem="UHv-iZ-Cer" firstAttribute="leading" secondItem="ecb-hC-ehK" secondAttribute="leading" constant="14" id="t7J-fL-z5G"/>
+                            <constraint firstItem="kYg-lP-ums" firstAttribute="top" secondItem="zWo-Ja-8yL" secondAttribute="bottom" constant="15" id="uc6-Vx-aMS"/>
+                            <constraint firstItem="kYg-lP-ums" firstAttribute="leading" secondItem="ecb-hC-ehK" secondAttribute="leading" constant="14" id="wt5-cw-VVx"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="categoryInput" destination="UHv-iZ-Cer" id="FKE-Hb-XB6"/>
+                        <outlet property="nameInput" destination="RAU-sK-eCS" id="Vfw-ng-CaG"/>
+                        <outlet property="priceInput" destination="zWo-Ja-8yL" id="9NX-xa-9pl"/>
+                        <outlet property="quantityInput" destination="kYg-lP-ums" id="knH-zV-uMp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gye-CP-u2Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="534" y="382"/>
+        </scene>
+    </scenes>
+</document>

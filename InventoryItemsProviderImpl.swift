@@ -59,6 +59,33 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
+    func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> Void) {
+        
+        Providers.productProvider.product(itemInput.name) {[weak self] productResult in
+            
+            // TODO consistent handling everywhere of optional results - return always either .Success & Option(None) or .NotFound & non-optional.
+            if productResult.success || productResult.status == .NotFound {
+
+                let product = productResult.sucessResult ?? Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: itemInput.category)
+                
+                // TODO! quantity delta I think should increment previous quantity delta not overwrite?
+                let inventoryItemWithHistoryEntry = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: itemInput.quantity, quantityDelta: itemInput.quantity, product: product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
+
+                self?.addToInventory(inventory, items: [inventoryItemWithHistoryEntry]) {result in
+                    if result.success {
+                        handler(ProviderResult(status: .Success, sucessResult: inventoryItemWithHistoryEntry))
+                    } else {
+                        print("Error: InventoryItemsProviderImpl.addToInventory: couldn't add to inventory, result: \(result)")
+                        handler(ProviderResult(status: .DatabaseUnknown))
+                    }
+                }
+            } else {
+                print("Error: InventoryItemsProviderImpl.addToInventory: Error fetching product, result: \(productResult)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+    
     func addToInventory(inventory: Inventory, items: [InventoryItemWithHistoryEntry], _ handler: ProviderResult<Any> -> ()) {
         
         let memAdded = memProvider.addInventoryItems(items)
@@ -186,10 +213,17 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    func updateInventoryItem(inventory: Inventory, item: InventoryItem) {
-        // TODO
-//        self.cdProvider.updateInventoryItem(item, handler: {try in
-//        })
+    func updateInventoryItem(inventory: Inventory, item: InventoryItem, _ handler: ProviderResult<Any> -> Void) {
+        memProvider.updateInventoryItem(item)
+        
+        dbInventoryProvider.saveInventoryItems([item]) {[weak self] updated in
+            if !updated {
+                self?.memProvider.invalidate()
+            }
+            
+            handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
+            // TODO server
+        }
     }
     
     func removeInventoryItem(item: InventoryItem, _ handler: ProviderResult<Any> -> ()) {

@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol InventoryItemsTableViewControllerDelegate {
+    func onInventoryItemSelected(inventoryItem: InventoryItem, indexPath: NSIndexPath)
+}
+
 class InventoryItemsTableViewController: UITableViewController, InventoryItemTableViewCellDelegate {
 
     private var inventoryItems: [InventoryItem] = []
@@ -19,9 +23,7 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
     
     var inventory: Inventory? {
         didSet {
-            inventoryItems = []
-            paginator.reset()
-            loadPossibleNextPage()
+            clearAndLoadFirstPage()
         }
     }
     
@@ -34,13 +36,24 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
         }
     }
     
+    var delegate: InventoryItemsTableViewControllerDelegate?
+    
     private let paginator = Paginator(pageSize: 20)
     private var loadingPage: Bool = false
+    
+    func clearAndLoadFirstPage() {
+        inventoryItems = []
+        paginator.reset()
+        tableView.reloadData()
+        loadPossibleNextPage()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
+        tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
+        
+        tableView.allowsSelectionDuringEditing = true
     }
     
     override func viewWillAppear(animated:Bool) {
@@ -86,6 +99,32 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+         
+            // update the table view in advance, so delete animation is quick. If something goes wrong we reload the content in onError and do default error handling
+            let planItem = inventoryItems[indexPath.row]
+            tableView.wrapUpdates {[weak self] in
+                self?.inventoryItems.remove(planItem)
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
+            }
+            Providers.inventoryItemsProvider.removeInventoryItem(planItem, resultHandler(onSuccess: {
+            }, onError: {[weak self] result in
+                self?.inventory = self?.inventory // trigger reset and reload
+                self?.defaultErrorHandler()(providerResult: result)
+            }))
+        }
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let inventoryItem = inventoryItems[indexPath.row]
+        delegate?.onInventoryItemSelected(inventoryItem, indexPath: indexPath)
     }
     
     // MARK: - InventoryItemTableViewCellDelegate

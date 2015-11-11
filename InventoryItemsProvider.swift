@@ -18,7 +18,9 @@ protocol InventoryItemsProvider {
     
     func addToInventory(inventory: Inventory, items: [InventoryItemWithHistoryEntry], _ handler: ProviderResult<Any> -> ())
     
-    func updateInventoryItem(inventory: Inventory, item: InventoryItem)
+    func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> ())
+
+    func updateInventoryItem(inventory: Inventory, item: InventoryItem, _ handler: ProviderResult<Any> -> Void)
 
     func incrementInventoryItem(item: InventoryItem, delta: Int, _ handler: ProviderResult<Any> -> ())
     
