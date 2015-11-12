@@ -122,29 +122,19 @@
                                     <outlet property="delegate" destination="Mm3-oP-cdT" id="eeF-sP-AId"/>
                                 </connections>
                             </searchBar>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="syK-9o-0B1" customClass="FloatingViews" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="540" width="600" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="fAB-O3-ThW"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="syK-9o-0B1" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="Dc2-u2-0rX"/>
-                            <constraint firstItem="609-Sf-sF9" firstAttribute="top" secondItem="syK-9o-0B1" secondAttribute="bottom" id="Ggy-Vq-Zne"/>
                             <constraint firstItem="YRv-YV-FHW" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="H45-ve-tyE"/>
                             <constraint firstItem="609-Sf-sF9" firstAttribute="top" secondItem="OmL-Fh-5Jp" secondAttribute="bottom" id="hd0-uw-kdN"/>
                             <constraint firstItem="OmL-Fh-5Jp" firstAttribute="top" secondItem="YRv-YV-FHW" secondAttribute="bottom" id="lHP-Wq-RS6"/>
                             <constraint firstAttribute="trailing" secondItem="OmL-Fh-5Jp" secondAttribute="trailing" id="mT4-Ox-0dR"/>
                             <constraint firstItem="YRv-YV-FHW" firstAttribute="top" secondItem="cpC-kT-urS" secondAttribute="bottom" id="r0h-wq-1Zj"/>
-                            <constraint firstAttribute="trailing" secondItem="syK-9o-0B1" secondAttribute="trailing" id="raA-ml-Dwm"/>
                             <constraint firstItem="OmL-Fh-5Jp" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="vTI-qs-AUn"/>
                             <constraint firstAttribute="trailing" secondItem="YRv-YV-FHW" secondAttribute="trailing" id="xdj-aG-Wa9"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="floatingViews" destination="syK-9o-0B1" id="Wln-QJ-l53"/>
                         <outlet property="searchBar" destination="YRv-YV-FHW" id="1OM-dG-Aq0"/>
                         <outlet property="tableView" destination="OmL-Fh-5Jp" id="DJQ-TI-TmF"/>
                         <outlet property="tableViewFooter" destination="ubd-oF-jDC" id="ddQ-V6-Dck"/>

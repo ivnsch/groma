@@ -15,9 +15,9 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     @IBOutlet var tableViewFooter: LoadingFooter!
 
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var floatingViews: FloatingViews!
     private var editButton: UIBarButtonItem!
-    
+    private var addButton: UIBarButtonItem!
+
     private let paginator = Paginator(pageSize: 20)
     private var loadingPage: Bool = false
     
@@ -57,7 +57,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        initNavBar()
+        initNavBar([.Add, .Edit])
         
         tableView.allowsSelectionDuringEditing = true
         
@@ -67,24 +67,33 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
-    private func initNavBar() {
-//        navigationController?.title = "Manage products"
+    private func initNavBar(actions: [UIBarButtonSystemItem]) {
         navigationItem.title = "Manage products"
-        let editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "onEditTap:")
-        self.editButton = editButton
-        navigationItem.setRightBarButtonItem(editButton, animated: true)
+        
+        var buttons: [UIBarButtonItem] = []
+        
+        for action in actions {
+            switch action {
+            case .Add:
+                let button = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "onAddTap:")
+                self.addButton = button
+                buttons.append(button)
+            case .Edit:
+                let button = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "onEditTap:")
+                self.editButton = button
+                buttons.append(button)
+            case .Save:
+                let button = UIBarButtonItem(barButtonSystemItem: .Save, target: self, action: "onSubmitTap:")
+                buttons.append(button)
+            case .Cancel:
+                let button = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "onCancelTap:")
+                buttons.append(button)
+            default: break
+            }
+        }
+        navigationItem.rightBarButtonItems = buttons
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        initFloatingViews()
-    }
-    
-    private func initFloatingViews() {
-        floatingViews.setActions([toggleButtonInactiveAction])
-        floatingViews.delegate = self
-    }
-
     // MARK: - Table view data source
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -170,7 +179,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             }
         }
         
-        floatingViews.setActions([editing ? toggleButtonAvailableAction : toggleButtonInactiveAction]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button), and set appropiate alpha
+        initNavBar([.Cancel, .Save]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button), and set appropiate alpha
         
         tableView.setEditing(editing, animated: animated)
 
@@ -186,6 +195,26 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         self.setEditing(!self.editing, animated: true, tryCloseTopViewController: true)
     }
     
+    func onAddTap(sender: UIBarButtonItem) {
+        if addEditProductController.open {
+            setAddEditProductControllerOpen(false)
+            initNavBar([.Add, .Edit])
+            
+        } else {
+            clearSearch() // clear filter to avoid confusion, if we add an item it may be not in current filter and user will not see it appearing.
+            setAddEditProductControllerOpen(true)
+            initNavBar([.Cancel, .Save])
+        }
+    }
+    
+    func onSubmitTap(sender: UIBarButtonItem) {
+        addEditProductController.submit()
+    }
+
+    func onCancelTap(sender: UIBarButtonItem) {
+        setAddEditProductControllerOpen(false)
+    }
+    
     private func clearSearch() {
         searchBar.text = ""
         filteredProducts = ItemWithCellAttributes.toItemsWithCellAttributes(products)
@@ -198,12 +227,10 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         case .Toggle:
             if addEditProductController.open {
                 setAddEditProductControllerOpen(false)
-                floatingViews.setActions([toggleButtonInactiveAction])
                 
             } else {
                 clearSearch() // clear filter to avoid confusion, if we add an item it may be not in current filter and user will not see it appearing.
                 setAddEditProductControllerOpen(true)
-                floatingViews.setActions([toggleButtonActiveAction, FLoatingButtonAttributedAction(action: .Submit)])
             }
             
             
@@ -266,9 +293,9 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     private func initTopController(controller: UIViewController, height: CGFloat) {
         let view = controller.view
         self.view.addSubview(view)
-//        let navbarHeight = navigationController!.navigationBar.frame.height
-//        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-        view.frame = CGRectMake(0, 0, self.view.frame.width, height)
+        let navbarHeight = navigationController!.navigationBar.frame.height
+        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+        view.frame = CGRectMake(0, navbarHeight + statusBarHeight, self.view.frame.width, height)
         
         // swift anchor
         view.layer.anchorPoint = CGPointMake(0.5, 0)
@@ -308,19 +335,23 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         let view = UIButton()
         view.backgroundColor = UIColor.blackColor()
         view.alpha = 0
+        view.addTarget(self, action: "onOverlayTap:", forControlEvents: .TouchUpInside)
         return view
     }()
     
+    func onOverlayTap(sender: UIButton) {
+        setAddEditProductControllerOpen(false)
+    }
     
     private func setAddEditProductControllerOpen(open: Bool) {
         addEditProductController.open = open
         animateTopView(addEditProductController.view, open: open)
         
         if open {
-            floatingViews.setActions([toggleButtonActiveAction, FLoatingButtonAttributedAction(action: .Submit)])
+            initNavBar([.Save, .Cancel])
             
         } else {
-            floatingViews.setActions([toggleButtonInactiveAction]) // this is done with setEditing false
+            initNavBar([.Add, .Edit])
         }
     }
     
