@@ -205,7 +205,7 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
 
     @IBAction func onColorTap() {
         let picker = UIStoryboard.listColorPicker()
-        self.view.layoutIfNeeded()
+        self.view.layoutIfNeeded() // TODO is this necessary? don't think so check and remove
         
         if let parentViewController = parentViewController {
             

@@ -43,5 +43,5 @@ protocol ProductProvider {
     Tries to load using unique (name), if existent overrides fields with corresponding input, if not existent creates a new one
     TODO use results like everywhere else, maybe put in a different specific utility class this is rather provider-internal
     */
-    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, _ handler: ProviderResult<Product> -> Void)
+    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, baseQuantity: Float, unit: ProductUnit, _ handler: ProviderResult<Product> -> Void)
 }

@@ -63,6 +63,19 @@ extension String {
         return makeAttributed(range, normalFont: Fonts.regularLight, font: Fonts.regularBold)
     }
     
+    // src: http://stackoverflow.com/a/27880748/930450
+    func firstRangeOfRegex(regex: String) -> NSRange? {
+        do {
+            let regex = try NSRegularExpression(pattern: regex, options: [])
+            let nsString = self as NSString
+            let results = regex.matchesInString(self, options: [], range: NSMakeRange(0, nsString.length))
+            return results.first?.range
+        } catch let error as NSError {
+            print("invalid regex: \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
     // replace possible spaces with spaces that look like spaces but don't cause line break
     func noBreakSpaceStr() -> String {
         return stringByReplacingOccurrencesOfString(" ", withString: "\u{00A0}")

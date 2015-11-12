@@ -119,13 +119,18 @@ class AddEditPlanItemController: UIViewController, MLPAutoCompleteTextFieldDataS
                 }
             }
             
-            if let name = nameInput.text, category = categoryInput.text, priceText = priceInput.text, quantityText = quantityInput.text {
+            // TODO!! base quantity
+            // TODO!! unit
+            let baseQuantityFoo: String? = ""
+            let unitFoo: String? = ""
+            
+            if let name = nameInput.text, category = categoryInput.text, priceText = priceInput.text, quantityText = quantityInput.text, baseQuantity = baseQuantityFoo?.floatValue, unitText = unitFoo, unitInt = Int(unitText), unit = ProductUnit(rawValue: unitInt) {
                 
                 if let editingPlanItem = editingPlanItem {
-                    updatePlanItem(editingPlanItem, name: name, price: priceText, quantity: quantityText, category: category)
+                    updatePlanItem(editingPlanItem, name: name, price: priceText, quantity: quantityText, category: category, baseQuantity: baseQuantity, unit: unit)
 
                 } else {
-                    addPlanItem(name, price: priceText, quantity: quantityText, category: category)
+                    addPlanItem(name, price: priceText, quantity: quantityText, category: category, baseQuantity: baseQuantity, unit: unit)
                 }
                 
             } else {
@@ -134,10 +139,10 @@ class AddEditPlanItemController: UIViewController, MLPAutoCompleteTextFieldDataS
         }
     }
 
-    private func updatePlanItem(planItem: PlanItem, name: String, price priceText: String, quantity quantityText: String, category: String) {
+    private func updatePlanItem(planItem: PlanItem, name: String, price priceText: String, quantity quantityText: String, category: String, baseQuantity: Float, unit: ProductUnit) {
         if let price = priceText.floatValue, quantity = Int(quantityText), inventory = currentInventory {
             
-            let updatedProduct = planItem.product.copy(name: name, price: price, category: category)
+            let updatedProduct = planItem.product.copy(name: name, price: price, category: category, baseQuantity: baseQuantity, unit: unit)
             let quantityDelta = quantity - planItem.quantity // TODO! this is not most likely not correct, needs to include also planItem.quantityDelta?
             let updatedPlanItem = planItem.copy(product: updatedProduct, quantity: quantity, quantityDelta: quantityDelta)
             
@@ -149,17 +154,17 @@ class AddEditPlanItemController: UIViewController, MLPAutoCompleteTextFieldDataS
         }
     }
 
-    private func addPlanItem(name: String, price priceText: String, quantity quantityText: String, category: String) {
-        if let planItemInput = toPlanItemInput(name, priceText: priceText, quantityText: quantityText, category: category), inventory = currentInventory {
+    private func addPlanItem(name: String, price priceText: String, quantity quantityText: String, category: String, baseQuantity: Float, unit: ProductUnit) {
+        if let planItemInput = toPlanItemInput(name, priceText: priceText, quantityText: quantityText, category: category, baseQuantity: baseQuantity, unit: unit), inventory = currentInventory {
             Providers.planProvider.addPlanItem(planItemInput, inventory: inventory, successHandler{[weak self] planItem in
                 self?.delegate?.onPlanItemAdded(planItem)
             })
         }
     }
     
-    private func toPlanItemInput(name: String, priceText: String, quantityText: String, category: String) -> PlanItemInput? {
+    private func toPlanItemInput(name: String, priceText: String, quantityText: String, category: String, baseQuantity: Float, unit: ProductUnit) -> PlanItemInput? {
         if let price = priceText.floatValue, quantity = Int(quantityText) {
-            return PlanItemInput(name: name, quantity: quantity, price: price, category: category)
+            return PlanItemInput(name: name, quantity: quantity, price: price, category: category, baseQuantity: baseQuantity, unit: unit)
         } else {
             print("TODO validation in toPlanItemInput")
             return nil

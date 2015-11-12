@@ -15,7 +15,9 @@ class ProductMapper {
             uuid: dbProduct.uuid,
             name: dbProduct.name,
             price: dbProduct.price,
-            category: dbProduct.category
+            category: dbProduct.category,
+            baseQuantity: dbProduct.baseQuantity,
+            unit: ProductUnit(rawValue: dbProduct.unit)!
         )
     }
     
@@ -25,6 +27,8 @@ class ProductMapper {
         dbProduct.name = product.name
         dbProduct.price = product.price
         dbProduct.category = product.category
+        dbProduct.baseQuantity = product.baseQuantity
+        dbProduct.unit = product.unit.rawValue
         return dbProduct
     }
     
@@ -33,7 +37,10 @@ class ProductMapper {
             uuid: remoteProduct.uuid,
             name: remoteProduct.name,
             price: remoteProduct.price,
-            category: remoteProduct.category)
+            category: remoteProduct.category,
+            baseQuantity: remoteProduct.baseQuantity,
+            unit: ProductUnit(rawValue: remoteProduct.unit)!
+        )
     }
     
     class func dbProductWithRemote(product: RemoteProduct) -> DBProduct {
@@ -42,6 +49,8 @@ class ProductMapper {
         dbProduct.name = product.name
         dbProduct.price = product.price
         dbProduct.category = product.category
+        dbProduct.baseQuantity = product.baseQuantity
+        dbProduct.unit = product.unit
         return dbProduct
     }
 }

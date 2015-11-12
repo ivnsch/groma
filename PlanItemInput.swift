@@ -14,11 +14,15 @@ class PlanItemInput {
     let quantity: Int
     let price: Float
     let category: String
+    let baseQuantity: Float
+    let unit: ProductUnit
     
-    init(name: String, quantity: Int, price: Float, category: String) {
+    init(name: String, quantity: Int, price: Float, category: String, baseQuantity: Float, unit: ProductUnit) {
         self.name = name
         self.quantity = quantity
         self.price = price
         self.category = category
+        self.baseQuantity = baseQuantity
+        self.unit = unit
     }
 }

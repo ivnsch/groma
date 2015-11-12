@@ -220,11 +220,11 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
          presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onSubmit(name: String, category: String, price: Float, editingData: AddEditProductControllerEditingData?) {
+    func onSubmit(name: String, category: String, price: Float, baseQuantity: Float, unit: ProductUnit, editingData: AddEditProductControllerEditingData?) {
         if let editingData = editingData {
             updateProduct(editingData, name: name, category: category, price: price)
         } else {
-            addProduct(name, category: category, price: price)
+            addProduct(name, category: category, price: price, baseQuantity: baseQuantity, unit: unit)
         }
     }
     
@@ -247,8 +247,8 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         })
     }
     
-    private func addProduct(name: String, category: String, price: Float) {
-        let product = ProductInput(name: name, price: price, category: category)
+    private func addProduct(name: String, category: String, price: Float, baseQuantity: Float, unit: ProductUnit) {
+        let product = ProductInput(name: name, price: price, category: category, baseQuantity: baseQuantity, unit: unit)
         Providers.productProvider.add(product, successHandler {[weak self] product in
             if let weakSelf = self {
                 weakSelf.products.append(product)

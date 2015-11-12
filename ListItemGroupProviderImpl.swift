@@ -55,26 +55,28 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     
     // TODO it should not be necessary to pass list here
     func add(itemInput: GroupItemInput, group: ListItemGroup, order orderMaybe: Int? = nil, possibleNewSectionOrder: Int?, list: List, _ handler: ProviderResult<GroupItem> -> ()) {
-        
-        Providers.productProvider.mergeOrCreateProduct(itemInput.name, productPrice: itemInput.price, category: itemInput.category) {[weak self] result in
-            
-            if let product = result.sucessResult {
 
-                let groupItem = GroupItem(uuid: NSUUID().UUIDString, quantity: itemInput.quantity, product: product)
-                
-                self?.add(groupItem, {result in
-                    if result.success {
-                        handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: groupItem))
-                    } else {
-                        handler(ProviderResult(status: result.status))
-                    }
-                })
-                
-            } else {
-                print("Error fetching product: \(result.status)")
-                handler(ProviderResult(status: .DatabaseUnknown))
-            }
-        }
+        // TODO! remove? commented because of product update with base quantity and unit, would have to update GroupItemInput but it doesn't seem to be used anymore?
+        // TODO review this as part of removal of old groups controllers
+//        Providers.productProvider.mergeOrCreateProduct(itemInput.name, productPrice: itemInput.price, category: itemInput.category) {[weak self] result in
+//            
+//            if let product = result.sucessResult {
+//
+//                let groupItem = GroupItem(uuid: NSUUID().UUIDString, quantity: itemInput.quantity, product: product)
+//                
+//                self?.add(groupItem, {result in
+//                    if result.success {
+//                        handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: groupItem))
+//                    } else {
+//                        handler(ProviderResult(status: result.status))
+//                    }
+//                })
+//                
+//            } else {
+//                print("Error fetching product: \(result.status)")
+//                handler(ProviderResult(status: .DatabaseUnknown))
+//            }
+//        }
     }
 
     func add(groupItems: [GroupItem], _ handler: ProviderResult<Any> -> Void) {

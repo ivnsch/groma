@@ -132,11 +132,25 @@
                                     <action selector="onQuantityMinusTap:" destination="CI5-0y-OAL" eventType="touchUpInside" id="aqx-Jk-yLo"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C4Q-wd-uas">
+                                <rect key="frame" x="128" y="147" width="25" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="NGg-Za-gsf"/>
+                                    <constraint firstAttribute="width" constant="25" id="cBn-qI-Lmb"/>
+                                </constraints>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <state key="normal" image="scale"/>
+                                <connections>
+                                    <action selector="onScaleTap:" destination="CI5-0y-OAL" eventType="touchUpInside" id="edL-jU-qlG"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="f4w-nF-ub6" firstAttribute="top" secondItem="NrU-fN-qdF" secondAttribute="bottom" constant="8" id="1Cm-xD-dgV"/>
+                            <constraint firstItem="C4Q-wd-uas" firstAttribute="centerY" secondItem="NrU-fN-qdF" secondAttribute="centerY" id="4bI-qW-N0B"/>
                             <constraint firstItem="dP0-Aq-TGf" firstAttribute="leading" secondItem="vWS-vL-cob" secondAttribute="trailing" constant="6" id="5S6-YJ-ngY"/>
+                            <constraint firstItem="C4Q-wd-uas" firstAttribute="leading" secondItem="NrU-fN-qdF" secondAttribute="trailing" constant="14" id="5oJ-AF-3jR"/>
                             <constraint firstItem="sBJ-AI-qaE" firstAttribute="top" secondItem="vWS-vL-cob" secondAttribute="bottom" constant="8" id="9Nl-Nf-12L"/>
                             <constraint firstItem="2SH-hF-BN5" firstAttribute="top" secondItem="wVp-8h-Y71" secondAttribute="bottom" constant="8" id="ATI-dC-Czz"/>
                             <constraint firstItem="QI2-Ca-fzJ" firstAttribute="top" secondItem="If7-20-6Xv" secondAttribute="top" constant="14" id="CGB-ob-XUo"/>
@@ -180,7 +194,10 @@
                         <outlet property="noteInput" destination="m1p-2K-Ljh" id="G1y-un-RdJ"/>
                         <outlet property="planInfoButton" destination="8jH-zQ-N7C" id="Qo7-Pc-HFR"/>
                         <outlet property="priceInput" destination="NrU-fN-qdF" id="VSS-IP-I2d"/>
+                        <outlet property="priceLabel" destination="PSf-BM-K6D" id="p0c-me-GbG"/>
                         <outlet property="quantityInput" destination="vWS-vL-cob" id="Jgc-GC-VfN"/>
+                        <outlet property="quantityLabel" destination="f4w-nF-ub6" id="CC8-g6-Opo"/>
+                        <outlet property="scaleButton" destination="C4Q-wd-uas" id="YP7-4C-39o"/>
                         <outlet property="sectionInput" destination="i1w-xi-aFz" id="8ba-aL-isS"/>
                     </connections>
                 </viewController>
@@ -192,5 +209,6 @@
     <resources>
         <image name="minus" width="20" height="20"/>
         <image name="plus" width="20" height="20"/>
+        <image name="scale" width="25" height="25"/>
     </resources>
 </document>

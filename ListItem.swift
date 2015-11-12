@@ -34,7 +34,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     //////////////////////////////////////////////
     
     var totalPrice: Float {
-        return Float(quantity) * product.price
+        return Float(quantity) * product.price / product.baseQuantity
     }
     
     init(uuid: String, status: ListItemStatus, quantity: Int, product: Product, section: Section, list: List, order: Int, note: String? = nil, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {

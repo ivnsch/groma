@@ -11,8 +11,9 @@ import CMPopTipView
 
 class MyTipPopup: CMPopTipView {
 
-    override init(customView: UIView) {
+    init(customView: UIView, borderColor: UIColor? = UIColor(red: 1, green: 93/255, blue: 166/255, alpha: 1)) {
         super.init(customView: customView)
+        self.borderColor = borderColor
         sharedInit()
     }
 
@@ -29,7 +30,6 @@ class MyTipPopup: CMPopTipView {
         borderWidth = 1
         has3DStyle = false
         hasGradientBackground = false
-        borderColor = UIColor(red: 1, green: 93/255, blue: 166/255, alpha: 1)
         backgroundColor = UIColor.whiteColor()
         dismissTapAnywhere = true
         disableTapToDismiss = false

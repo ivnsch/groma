@@ -77,10 +77,10 @@ class PlanProviderImpl: PlanProvider {
                 // check if product exists
                 Providers.productProvider.product(itemInput.name) {result in
                     if let product = result.sucessResult { // products exists - update it and reference it
-                        let mergedProduct = Product(uuid: product.uuid, name: itemInput.name, price: itemInput.price, category: itemInput.category)
+                        let mergedProduct = Product(uuid: product.uuid, name: itemInput.name, price: itemInput.price, category: itemInput.category, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit)
                         onHasProduct(mergedProduct, isUpdate: true)
                     } else { // product doesn't exist - add it
-                        let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: itemInput.category)
+                        let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: itemInput.category, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit)
                         Providers.productProvider.add(product) {result in
                             if result.success {
                                 onHasProduct(product, isUpdate: false)

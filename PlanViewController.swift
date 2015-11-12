@@ -177,7 +177,7 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     private func updateTotalPlanPrice() {
         let price = planItems.reduce(0) {sum, element in
-            sum + (Float(element.quantity) * element.product.price)
+            sum + element.totalPrice
         }
         totalPriceLabel.text = price.toLocalCurrencyString()
     }
@@ -245,9 +245,9 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
 //        }
     }
     
-    private func toPlanItemInput(name: String, priceText: String, quantityText: String, category: String) -> PlanItemInput? {
+    private func toPlanItemInput(name: String, priceText: String, quantityText: String, category: String, baseQuantity: Float, unit: ProductUnit) -> PlanItemInput? {
         if let price = priceText.floatValue, quantity = Int(quantityText) {
-            return PlanItemInput(name: name, quantity: quantity, price: price, category: category)
+            return PlanItemInput(name: name, quantity: quantity, price: price, category: category, baseQuantity: baseQuantity, unit: unit)
         } else {
             print("TODO validation in toPlanItemInput")
             return nil

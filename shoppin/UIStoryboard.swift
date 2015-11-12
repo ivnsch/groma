@@ -30,6 +30,7 @@ extension UIStoryboard {
     private class func addEditInventoryStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditInventory", bundle: NSBundle.mainBundle()) }
     private class func addEditSharedUsersStoryboard() -> UIStoryboard { return UIStoryboard(name: "SharedUsersViewController", bundle: NSBundle.mainBundle()) }
     private class func addEditInventoryItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditInventoryItem", bundle: NSBundle.mainBundle()) }
+    private class func scaleStoryboard() -> UIStoryboard { return UIStoryboard(name: "Scale", bundle: NSBundle.mainBundle()) }
 
     
     // MARK: - List items
@@ -206,5 +207,10 @@ extension UIStoryboard {
     class func sharedUsersViewController() -> SharedUsersViewController {
         return addEditSharedUsersStoryboard().instantiateViewControllerWithIdentifier("SharedUsersViewController") as! SharedUsersViewController
     }
+
+    // MARK: ScaleViewController
     
+    class func scaleViewController() -> ScaleViewController {
+        return scaleStoryboard().instantiateViewControllerWithIdentifier("ScaleViewController") as! ScaleViewController
+    }
 }

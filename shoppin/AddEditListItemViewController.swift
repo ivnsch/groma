@@ -14,9 +14,9 @@ protocol AddEditListItemViewControllerDelegate {
     
     func onValidationErrors(errors: [UITextField: ValidationError])
     
-    func onOkTap(name: String, price: String, quantity: String, category: String, sectionName: String, note: String?)
-    func onOkAndAddAnotherTap(name: String, price: String, quantity: String, category: String, sectionName: String, note: String?)
-    func onUpdateTap(name: String, price: String, quantity: String, category: String, sectionName: String, note: String?)
+    func onOkTap(name: String, price: String, quantity: String, category: String, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
+    func onOkAndAddAnotherTap(name: String, price: String, quantity: String, category: String, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
+    func onUpdateTap(name: String, price: String, quantity: String, category: String, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
     func onCancelTap()
     
     func productNameAutocompletions(text: String, handler: [String] -> ())
@@ -29,16 +29,22 @@ enum AddEditListItemViewControllerAction {
     case AddAndAddAnother, Add, Update
 }
 
-class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate {
+class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, ScaleViewControllerDelegate {
 
     @IBOutlet weak var nameInput: UITextField!
     @IBOutlet weak var sectionInput: MLPAutoCompleteTextField!
+    @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var priceInput: UITextField!
+    @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var quantityInput: UITextField!
     
     @IBOutlet weak var noteInput: UITextField!
     
     @IBOutlet weak var planInfoButton: UIButton!
+    
+    @IBOutlet weak var scaleButton: UIButton!
+    
+    private var scaleInputs: ProductScaleData?
     
     var delegate: AddEditListItemViewControllerDelegate?
     
@@ -120,13 +126,18 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             
             // TODO new input field for section,
             if let text = nameInput.text, priceText = priceInput.text, quantityText = quantityInput.text, category = sectionInput.text {
+                
+                let baseQuantity = scaleInputs?.baseQuantity ?? 1
+                let unit = scaleInputs?.unit ?? .None
+                // the price from scaleInputs is inserted in price field, so we have it already
+                
                 switch action {
                 case .Add:
-                    delegate?.onOkTap(text, price: priceText, quantity: quantityText, category: category, sectionName: category, note: noteInput.text)
+                    delegate?.onOkTap(text, price: priceText, quantity: quantityText, category: category, sectionName: category, note: noteInput.text, baseQuantity: baseQuantity, unit: unit)
                 case .AddAndAddAnother:
-                    delegate?.onOkAndAddAnotherTap(text, price: priceText, quantity: quantityText, category: category, sectionName: category, note: noteInput.text)
+                    delegate?.onOkAndAddAnotherTap(text, price: priceText, quantity: quantityText, category: category, sectionName: category, note: noteInput.text, baseQuantity: baseQuantity, unit: unit)
                 case .Update:
-                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, category: category, sectionName: category, note: noteInput.text)
+                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, category: category, sectionName: category, note: noteInput.text, baseQuantity: baseQuantity, unit: unit)
                 }
                 
             } else {
@@ -250,6 +261,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         onNameInputChange(selectedString)
     }
     
+    // MARK: -
+    
     @IBAction func onQuantityPlusTap(button: UIButton) {
         if let quantityText = quantityInput.text, quantity = Int(quantityText) {
             quantityInput.text = "\(quantity + 1)"
@@ -261,6 +274,125 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     @IBAction func onQuantityMinusTap(button: UIButton) {
         if let quantityText = quantityInput.text, quantity = Int(quantityText) {
             quantityInput.text = "\(quantity - 1)"
+        }
+    }
+    
+    
+    private var showingScaleController: ScaleViewController?
+    private var overlay: UIView?
+    
+    @IBAction func onScaleTap(button: UIButton) {
+
+        if let windowView = UIApplication.sharedApplication().keyWindow { // add popup and overlay on top of everything
+            
+            let scaleController = UIStoryboard.scaleViewController()
+            
+            let overlay = UIButton(frame: CGRectMake(0, 0, 400, 700))
+            overlay.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.3)
+            self.overlay = overlay
+            overlay.addTarget(self, action: "onOverlayTap:", forControlEvents: .TouchUpInside)
+            
+            let w: CGFloat = 280
+            let h: CGFloat = 300
+            let top: CGFloat = 200
+            scaleController.view.frame = CGRectMake((view.frame.width - w) / 2, top, w, h)
+            
+            overlay.alpha = 0
+            windowView.addSubview(overlay)
+            windowView.addSubview(scaleController.view)
+            
+            scaleController.delegate = self
+            showingScaleController = scaleController
+
+            let prefillScaleInputs = ProductScaleData(
+                price: priceInput.text?.floatValue ?? 0, // current price input
+                baseQuantity: scaleInputs?.baseQuantity ?? 1, // if no scale input has been done yet - default quantity is 1
+                unit: scaleInputs?.unit ?? .None // if no scale input has been done yet - default unit is 1
+            )
+            scaleController.prefill(prefillScaleInputs)
+            
+            // set anchor point such that popup start at button's center
+            let buttonCenterInPopup = scaleController.view.convertPoint(CGPointMake(scaleButton.center.x, scaleButton.center.y), fromView: view)
+            let fractionX = buttonCenterInPopup.x / w
+            let fractionY = buttonCenterInPopup.y / h
+            scaleController.view.layer.anchorPoint = CGPointMake(fractionX, fractionY)
+            
+            scaleController.view.frame = CGRectMake((view.frame.width - w) / 2, top, w, h)
+            scaleController.view.transform = CGAffineTransformMakeScale(0, 0)
+            
+            UIView.animateWithDuration(0.3) {
+                scaleController.view.transform = CGAffineTransformMakeScale(1, 1)
+                overlay.alpha = 1
+            }
+            
+        } else {
+            print("Warn: AddEditListItemViewController.onScaleTap: unexpected: no window")
+        }
+    }
+    
+    func onOverlayTap(sender: UIButton) {
+        dismissScaleControllerIfShowing()
+    }
+    
+    private func dismissScaleControllerIfShowing() {
+        if let showingScaleController = showingScaleController {
+            UIView.animateWithDuration(0.3, animations: {[weak self] in
+                showingScaleController.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
+                self?.overlay?.alpha = 0
+                }, completion: {finished in
+                    self.showingScaleController = nil
+                    self.showingScaleController?.view.removeFromSuperview()
+                    
+                    self.overlay?.removeFromSuperview()
+                    self.overlay = nil
+                }
+            )
+        }
+    }
+    
+    // MARK: - ScaleViewControllerDelegate
+    
+    func onScaleViewControllerValidationErrors(errors: [UITextField : ValidationError]) {
+        presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+    }
+    
+    func onScaleViewControllerSubmit(scaleInputs: ProductScaleData) {
+        
+        dismissScaleControllerIfShowing()
+
+        self.scaleInputs = scaleInputs
+
+        let (price, baseQuantity, unit) = (scaleInputs.price, scaleInputs.baseQuantity, scaleInputs.unit)
+        
+        let priceStaticText = "Price"
+        let quantityStaticText = "Quantity"
+        
+        priceInput.text = price.toString(2)
+
+        // .None with quantity 1 is the default doesn't need special labels TODO! review quantity 0 - validators aren't hindering users to enter this. Ensure quantity is never be 0 at least in lists (in inventory it may be allowed)
+        if unit == .None && (baseQuantity == 0 || baseQuantity == 1) {
+            priceLabel.text = priceStaticText
+            quantityLabel.text = quantityStaticText
+            
+        } else { // entered custom units (or .None with a base quantity > 1, which doesn't make sense but who knows) - display custom labels
+            priceInput.text = price.toString(2)
+            
+            // highlight shortly the updated unit infos
+            let priceText = "\(priceStaticText) (\(baseQuantity)\(unit.shortText))"
+            let quantityUnitText = unit == .None ? "" : " (\(unit.shortText))"
+            let quantityText = "\(quantityStaticText)\(quantityUnitText)"
+            
+            if let priceUnitRange = priceText.firstRangeOfRegex("\\(.*\\)") {
+                priceLabel.attributedText = priceText.makeAttributed(priceUnitRange, normalFont: Fonts.verySmallLight, font: Fonts.verySmallBold)
+            }
+            if let quantityUnitRange = quantityText.firstRangeOfRegex("\\(.*\\)") {
+                quantityLabel.attributedText = quantityText.makeAttributed(quantityUnitRange, normalFont: Fonts.verySmallLight, font: Fonts.verySmallBold)
+            }
+
+            delay(2) {[weak self] in
+                self?.priceLabel.text = priceText
+                self?.quantityLabel.text = quantityText
+            }
         }
     }
 }

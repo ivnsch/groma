@@ -118,7 +118,7 @@ class RealmListItemProvider: RealmProvider {
                 }
             }()
             
-            let product = Product(uuid: uuid, name: productInput.name, price: productInput.price, category: productInput.category)
+            let product = Product(uuid: uuid, name: productInput.name, price: productInput.price, category: productInput.category, baseQuantity: productInput.baseQuantity, unit: productInput.unit)
             
             self?.saveProducts([product]) {saved in
                 if saved {

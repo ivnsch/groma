@@ -87,6 +87,8 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         setTimePeriod(timePeriod)
     }
 
+    // MARK: -
+    
     private func updateChart(timePeriod: TimePeriod) {
         Providers.statsProvider.history(timePeriod, group: AggregateGroup.All, successHandler{[weak self] aggregate in
             self?.initChart(aggregate)

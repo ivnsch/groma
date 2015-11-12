@@ -11,7 +11,7 @@ import SwiftValidator
 
 protocol AddEditProductControllerDelegate {
     func onValidationErrors(errors: [UITextField: ValidationError])
-    func onSubmit(name: String, category: String, price: Float, editingData: AddEditProductControllerEditingData?)
+    func onSubmit(name: String, category: String, price: Float, baseQuantity: Float, unit: ProductUnit, editingData: AddEditProductControllerEditingData?)
     func onCancelTap()
 }
 
@@ -81,9 +81,14 @@ class AddEditProductController: UIViewController, MLPAutoCompleteTextFieldDataSo
                 }
             }
             
+            // TODO!! base quantity
+            // TODO!! unit
+            let baseQuantityFoo: String? = ""
+            let unitFoo: String? = ""
+            
             // TODO! new field for category
-            if let name = nameInput.text, category = categoryInput.text, price = priceInput.text?.floatValue {
-                delegate?.onSubmit(name, category: category, price: price, editingData: editingData)
+            if let name = nameInput.text, category = categoryInput.text, price = priceInput.text?.floatValue, baseQuantity = baseQuantityFoo?.floatValue, unitText = unitFoo, unitInt = Int(unitText), unit = ProductUnit(rawValue: unitInt)  {
+                delegate?.onSubmit(name, category: category, price: price, baseQuantity: baseQuantity, unit: unit, editingData: editingData)
                 
             } else {
                 print("Error: validation was not implemented correctly")

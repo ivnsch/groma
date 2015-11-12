@@ -315,13 +315,14 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
                 
             } else {
                 
-                let input = InventoryItemInput(name: name, quantity: quantity, price: price, category: category)
-                Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, successHandler{[weak self] addedInventoryWithHistoryEntry in
-                    // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end. TODO nicer solution
-                    self?.tableViewController?.clearAndLoadFirstPage()
-                    self?.addEditInventoryItemController.clear()
-                    self?.setAddEditInventoryItemControllerOpen(false)
-                })
+                print("Not supported: Adding directly to inventory")
+//                let input = InventoryItemInput(name: name, quantity: quantity, price: price, category: category)
+//                Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, successHandler{[weak self] addedInventoryWithHistoryEntry in
+//                    // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end. TODO nicer solution
+//                    self?.tableViewController?.clearAndLoadFirstPage()
+//                    self?.addEditInventoryItemController.clear()
+//                    self?.setAddEditInventoryItemControllerOpen(false)
+//                })
             }
         }
     }

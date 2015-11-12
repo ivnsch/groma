@@ -570,6 +570,8 @@
 		EBD558C61BF366350048F287 /* InventoryItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD558C51BF366350048F287 /* InventoryItemInput.swift */; };
 		EBD558C71BF366350048F287 /* InventoryItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD558C51BF366350048F287 /* InventoryItemInput.swift */; };
 		EBD558C81BF366350048F287 /* InventoryItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD558C51BF366350048F287 /* InventoryItemInput.swift */; };
+		EBD558CB1BF3C1090048F287 /* ScaleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD558CA1BF3C1090048F287 /* ScaleViewController.swift */; };
+		EBD558CD1BF3C11E0048F287 /* Scale.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBD558CC1BF3C11E0048F287 /* Scale.storyboard */; };
 		EBD827FA1BE79A280072F9FA /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827F91BE79A280072F9FA /* Fonts.swift */; };
 		EBD827FC1BE8237C0072F9FA /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827FB1BE8237C0072F9FA /* NSRange.swift */; };
 		EBD827FD1BE8237C0072F9FA /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827FB1BE8237C0072F9FA /* NSRange.swift */; };
@@ -1058,6 +1060,8 @@
 		EBD236AD1B8B9DC600B88969 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		EBD236AF1B8B9E7200B88969 /* HistoryItemCellOSX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemCellOSX.swift; sourceTree = "<group>"; };
 		EBD558C51BF366350048F287 /* InventoryItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemInput.swift; sourceTree = "<group>"; };
+		EBD558CA1BF3C1090048F287 /* ScaleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleViewController.swift; sourceTree = "<group>"; };
+		EBD558CC1BF3C11E0048F287 /* Scale.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Scale.storyboard; sourceTree = "<group>"; };
 		EBD827F91BE79A280072F9FA /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		EBD827FB1BE8237C0072F9FA /* NSRange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSRange.swift; sourceTree = "<group>"; };
 		EBD827FF1BE95C8B0072F9FA /* StashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StashView.swift; sourceTree = "<group>"; };
@@ -1652,6 +1656,7 @@
 		EB55675B1A86231D00CD3EC6 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				EBD558C91BF3C0ED0048F287 /* scale */,
 				EBD827F81BE79A110072F9FA /* util */,
 				EB7BFA781BDA5BBE00F4C74A /* cellQuantity */,
 				EB55675C1A86233700CD3EC6 /* extensions */,
@@ -2030,6 +2035,15 @@
 				EBD236AF1B8B9E7200B88969 /* HistoryItemCellOSX.swift */,
 			);
 			name = history;
+			sourceTree = "<group>";
+		};
+		EBD558C91BF3C0ED0048F287 /* scale */ = {
+			isa = PBXGroup;
+			children = (
+				EBD558CA1BF3C1090048F287 /* ScaleViewController.swift */,
+				EBD558CC1BF3C11E0048F287 /* Scale.storyboard */,
+			);
+			name = scale;
 			sourceTree = "<group>";
 		};
 		EBD827F81BE79A110072F9FA /* util */ = {
@@ -2490,6 +2504,7 @@
 				EB0C1B9A1B3DBF7F00F24C85 /* Register.storyboard in Resources */,
 				EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */,
 				EB5737BB1BF27B1800D52FB8 /* SharedUsersViewController.storyboard in Resources */,
+				EBD558CD1BF3C11E0048F287 /* Scale.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2757,6 +2772,7 @@
 				EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */,
 				EB7032851BEBBD5D00779EBB /* ReorderSectionCell.swift in Sources */,
 				EB7E831E1B7B7069009DEEF4 /* HistoryProvider.swift in Sources */,
+				EBD558CB1BF3C1090048F287 /* ScaleViewController.swift in Sources */,
 				EB0C1BA71B3DFD0800F24C85 /* NSLayoutConstraint.swift in Sources */,
 				EBF5D7D71B8FB01B00A235C5 /* Synced.swift in Sources */,
 				EB7E832E1B7B74EF009DEEF4 /* RemoteHistoryProvider.swift in Sources */,

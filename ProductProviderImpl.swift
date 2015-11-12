@@ -108,7 +108,7 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, _ handler: ProviderResult<Product> -> Void) {
+    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, baseQuantity: Float, unit: ProductUnit, _ handler: ProviderResult<Product> -> Void) {
         
         // get product and section uuid if they're already in the local db (remember that we assign uuid in the client so this logic has to be in the client)
         loadProduct(productName) {result in
@@ -129,7 +129,7 @@ class ProductProviderImpl: ProductProvider {
             }()
             
             if let productUuid = productUuidMaybe {
-                let product = Product(uuid: productUuid, name: productName, price: productPrice, category: category)
+                let product = Product(uuid: productUuid, name: productName, price: productPrice, category: category, baseQuantity: baseQuantity, unit: unit)
                 handler(ProviderResult(status: .Success, sucessResult: product))
             } else {
                 handler(ProviderResult(status: .DatabaseUnknown))

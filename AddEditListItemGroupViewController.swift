@@ -137,12 +137,12 @@ class AddEditListItemGroupViewController: UIViewController, UITableViewDataSourc
     }
 
     private func updateItem(input: GroupItemInput, groupItem: GroupItem, note: String?) {
-        let updatedProduct = Product(uuid: groupItem.product.uuid, name: input.name, price: input.price, category: input.category)
-        let updatedItem = GroupItem(uuid: groupItem.uuid, quantity: input.quantity, product: updatedProduct)
-        
-        Providers.listItemGroupsProvider.update([updatedItem], successHandler{[weak self] in
-            self?.dismissGroupsItemsController()
-        })
+//        let updatedProduct = Product(uuid: groupItem.product.uuid, name: input.name, price: input.price, category: input.category)
+//        let updatedItem = GroupItem(uuid: groupItem.uuid, quantity: input.quantity, product: updatedProduct)
+//        
+//        Providers.listItemGroupsProvider.update([updatedItem], successHandler{[weak self] in
+//            self?.dismissGroupsItemsController()
+//        })
     }
     
     

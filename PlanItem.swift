@@ -31,6 +31,10 @@ class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let removed: Bool
     //////////////////////////////////////////////
     
+    var totalPrice: Float {
+        return Float(quantity) * product.price / product.baseQuantity
+    }
+    
     init(inventory: Inventory, product: Product, quantity: Int, quantityDelta: Int = 0, usedQuantity: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.inventory = inventory
         self.product = product

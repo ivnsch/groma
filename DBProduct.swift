@@ -15,6 +15,8 @@ class DBProduct: DBSyncable {
     dynamic var name: String = ""
     dynamic var price: Float = 0
     dynamic var category: String = ""
+    dynamic var baseQuantity: Float = 0
+    dynamic var unit: Int = 0
     
     override static func primaryKey() -> String? {
         return "uuid"
