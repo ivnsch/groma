@@ -1009,12 +1009,8 @@
                                 </constraints>
                                 <items>
                                     <navigationItem title="Lists" id="8Mr-41-cVT">
-                                        <barButtonItem key="leftBarButtonItem" title="Edit" id="bAo-t6-Vua">
-                                            <connections>
-                                                <action selector="onEditTap:" destination="t6f-Nk-XXC" id="4g7-6O-zYk"/>
-                                            </connections>
-                                        </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Add" id="jJz-Wg-TM9">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="bAo-t6-Vua"/>
+                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="jJz-Wg-TM9">
                                             <connections>
                                                 <action selector="onAddTap:" destination="t6f-Nk-XXC" id="wuQ-6O-2bc"/>
                                             </connections>
@@ -1022,39 +1018,22 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rDU-La-MlH" customClass="FloatingViews" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="491" width="600" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="80H-HG-dWJ"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="G5v-db-SwF" firstAttribute="leading" secondItem="HgS-af-eEO" secondAttribute="leading" id="0pC-w4-N3o"/>
                             <constraint firstItem="3ev-iS-SRh" firstAttribute="leading" secondItem="HgS-af-eEO" secondAttribute="leading" id="2YM-F3-0OG"/>
-                            <constraint firstItem="rjA-gd-xUp" firstAttribute="top" secondItem="rDU-La-MlH" secondAttribute="bottom" id="3WL-0j-N9B"/>
                             <constraint firstAttribute="trailing" secondItem="G5v-db-SwF" secondAttribute="trailing" id="JC3-By-DmO"/>
-                            <constraint firstItem="rDU-La-MlH" firstAttribute="top" secondItem="G5v-db-SwF" secondAttribute="bottom" id="MwV-IU-w6O"/>
                             <constraint firstItem="rjA-gd-xUp" firstAttribute="top" secondItem="3ev-iS-SRh" secondAttribute="bottom" id="Trn-Mb-yRS"/>
                             <constraint firstAttribute="trailing" secondItem="3ev-iS-SRh" secondAttribute="trailing" id="d4b-w6-uHh"/>
                             <constraint firstItem="G5v-db-SwF" firstAttribute="top" secondItem="HgS-af-eEO" secondAttribute="top" id="g0V-jL-UWb"/>
-                            <constraint firstItem="rDU-La-MlH" firstAttribute="leading" secondItem="HgS-af-eEO" secondAttribute="leading" id="geW-mb-dzG"/>
-                            <constraint firstAttribute="trailing" secondItem="rDU-La-MlH" secondAttribute="trailing" id="nMZ-t4-zPz"/>
                             <constraint firstItem="3ev-iS-SRh" firstAttribute="top" secondItem="G5v-db-SwF" secondAttribute="bottom" id="teg-Ks-f53"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="MwV-IU-w6O"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="typ-Z1-YB4"/>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="addButton" destination="jJz-Wg-TM9" id="XCr-UW-WAT"/>
-                        <outlet property="editButton" destination="bAo-t6-Vua" id="Sv7-hL-eap"/>
-                        <outlet property="floatingViews" destination="rDU-La-MlH" id="AcN-JB-V5j"/>
                         <outlet property="tableView" destination="3ev-iS-SRh" id="QcL-J6-Uxt"/>
                         <outlet property="topBar" destination="G5v-db-SwF" id="8vW-vz-1FB"/>
                     </connections>

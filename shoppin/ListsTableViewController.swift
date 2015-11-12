@@ -12,15 +12,15 @@ protocol Foo { // TODO is this used?
     func setExpanded(expanded: Bool)
 }
 
-class ListsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AddEditListControllerDelegate, ExpandCellAnimatorDelegate, Foo, BottonPanelViewDelegate {
+class ListsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AddEditListControllerDelegate, ExpandCellAnimatorDelegate, Foo {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var topBar: UIView!
+    @IBOutlet weak var topBar: UINavigationBar!
     @IBOutlet weak var topBarConstraint: NSLayoutConstraint!
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var addButton: UIBarButtonItem!
-    @IBOutlet weak var editButton: UIBarButtonItem!
+    private weak var editButton: UIBarButtonItem!
     
     private let listItemsProvider = ProviderFactory().listItemProvider
 
@@ -45,11 +45,19 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
 //        editButton.setTitleColor(Theme.navigationBarTextColor, forState: .Normal)
         view.backgroundColor = Theme.mainViewsBGColor
         tableView.backgroundColor = Theme.mainViewsBGColor
+        
+         // adding a new nav item, because code was written when topbar was a custom view, after adding nav controller and using it's item expanding list once makes navbar disappear, don't have time to investigate now
+        let navItem = UINavigationItem(title: "Test")
+        topBar.items = [navItem]
+        let editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "onEditTap:")
+        topBar.items?.first?.leftBarButtonItems = [editButton]
+        self.editButton = editButton
+        
+        initNavBarRightButtons([.Add])
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        initFloatingViews()
         initLists()
     }
     
@@ -60,6 +68,39 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
                 self.tableView.reloadData()
             }
         })
+    }
+    
+    private func initNavBarRightButtons(actions: [UIBarButtonSystemItem]) {
+        navigationItem.title = "Manage products"
+        
+        var buttons: [UIBarButtonItem] = []
+        
+        for action in actions {
+            switch action {
+            case .Add:
+                let button = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "onAddTap:")
+                self.addButton = button
+                buttons.append(button)
+            case .Save:
+                let button = UIBarButtonItem(barButtonSystemItem: .Save, target: self, action: "onSubmitTap:")
+                buttons.append(button)
+            case .Cancel:
+                let button = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "onCancelTap:")
+                buttons.append(button)
+            default: break
+            }
+        }
+        
+        topBar.items?.first?.rightBarButtonItems = buttons
+    }
+    
+    func onSubmitTap(sender: UIBarButtonItem) {
+        addEditListController.submit()
+    }
+    
+    func onCancelTap(sender: UIBarButtonItem) {
+        setAddEditListControllerOpen(false)
+        initNavBarRightButtons([.Add])
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -179,21 +220,6 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
             }
         }
     }
-    
-//    private func createAddOrEditListViewController(isEdit: Bool, listToEdit: List? = nil) -> EditListViewController {
-//        let editListViewController = UIStoryboard.editListsViewController()
-//        editListViewController.isEdit = isEdit
-//        if let listToEdit = listToEdit {
-//            editListViewController.listToEdit = listToEdit
-//        }
-//        editListViewController.delegate = self
-//        return editListViewController
-//    }
-    
-//    private func showAddOrEditListViewController(isEdit: Bool, listToEdit: List? = nil) {
-//        let editListViewController = createAddOrEditListViewController(isEdit, listToEdit: listToEdit)
-//        presentViewController(editListViewController, animated: true, completion: nil)
-//    }
 
     @IBAction func onAddTap(sender: UIBarButtonItem) {
         setAddEditListControllerOpen(!addEditListController.open)
@@ -207,7 +233,11 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
         super.setEditing(editing, animated: animated)
         
-        if editing == false {
+        if editing {
+            initNavBarRightButtons([.Save, .Cancel])
+            
+        } else {
+            initNavBarRightButtons([.Add])
             view.endEditing(true)
         }
         
@@ -218,8 +248,6 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
                 }
             }
         }
-        
-//        floatingViews.setActions([editing ? toggleButtonAvailableAction : toggleButtonInactiveAction]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button), and set appropiate alpha
         
         tableView.setEditing(editing, animated: animated)
         
@@ -272,12 +300,6 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     func prepareAnimations(willExpand: Bool, frontView: UIView) {
     }
     
-    
-    private func initFloatingViews() {
-        floatingViews.setActions(Array<FLoatingButtonAction>())
-        floatingViews.delegate = self
-    }
-    
     // MARK: - Add edit list 
     /////////////////////////////////////////////////////////////////////////////////////////////
     
@@ -302,7 +324,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         controller.delegate = self
         controller.currentListsCount = self.lists.count
         controller.view.clipsToBounds = true
-        self.initTopController(controller, height: 90)
+        self.initTopController(controller, height: 250)
         return controller
     }()
     
@@ -310,9 +332,10 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         addEditListController.open = open
         
         if open {
-            floatingViews.setActions([FLoatingButtonAttributedAction(action: .Submit)])
+            initNavBarRightButtons([.Save, .Cancel])
+
         } else {
-            floatingViews.setActions(Array<FLoatingButtonAction>())
+            initNavBarRightButtons([.Add])
             addEditListController.clear()
         }
         
@@ -368,20 +391,6 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     func onTableViewOverlayTap(sender: UIButton) {
         if addEditListController.open {
             setAddEditListControllerOpen(false)
-        }
-    }
-    
-    // MARK: - BottonPanelViewDelegate
-    
-    func onSubmitAction(action: FLoatingButtonAction) {
-        handleFloatingViewAction(action)
-    }
-    
-    private func handleFloatingViewAction(action: FLoatingButtonAction) {
-        switch action {
-        case .Submit:
-            addEditListController.submit()
-        default: break
         }
     }
 }
