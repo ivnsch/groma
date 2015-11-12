@@ -19,7 +19,7 @@
         <!--Manage Products View Controller-->
         <scene sceneID="fpw-he-bCA">
             <objects>
-                <viewController storyboardIdentifier="ManageProductsController" id="Mm3-oP-cdT" customClass="ManageProductsViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ManageProductsController" automaticallyAdjustsScrollViewInsets="NO" id="Mm3-oP-cdT" customClass="ManageProductsViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="cpC-kT-urS"/>
                         <viewControllerLayoutGuide type="bottom" id="609-Sf-sF9"/>
