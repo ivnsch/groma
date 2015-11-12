@@ -68,7 +68,12 @@ class ListProviderImpl: ListProvider {
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
         // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
         dbProvider.saveList(list, handler: {saved in
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: list))
+            
+            if saved {
+                handler(ProviderResult(status: .Success, sucessResult: list))
+            } else {
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
             
             self.remoteListProvider.add(list, handler: {remoteResult in
                 
