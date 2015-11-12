@@ -82,7 +82,9 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.initValidator()
+        initValidator()
+        
+        listNameInputField.becomeFirstResponder()
     }
     
     @IBAction func onDoneTap(sender: UIBarButtonItem) {
