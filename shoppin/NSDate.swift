@@ -10,7 +10,7 @@ import Foundation
 
 extension NSDate: Comparable {
 
-    var dayMonthYear: (Int, Int, Int) {
+    var dayMonthYear: (day: Int, month: Int, year: Int) {
         let components = NSCalendar.currentCalendar().components([.Day, .Month, .Year], fromDate: self)
         return (components.day, components.month, components.year)
     }
@@ -19,6 +19,12 @@ extension NSDate: Comparable {
         let calendar = NSCalendar.currentCalendar()
         let components = calendar.components([.Month, .Year], fromDate: self)
         return calendar.dateFromComponents(components)!
+    }
+    
+    var daysInMonth: Int {
+        let calendar = NSCalendar.currentCalendar()
+        let days = calendar.rangeOfUnit(.Day, inUnit: .Month, forDate: self)
+        return days.length
     }
     
     static func startOfMonth(month: Int, year: Int) -> NSDate? {

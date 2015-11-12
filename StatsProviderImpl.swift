@@ -22,7 +22,7 @@ struct ProductAggregate {
     }
 }
 
-final class GroupMonthYearAggregate {
+final class GroupMonthYearAggregate: Equatable {
     let group: AggregateGroup
     let timePeriod: TimePeriod
     let referenceDate: NSDate
@@ -49,7 +49,11 @@ final class GroupMonthYearAggregate {
     }()
 }
 
-struct MonthYearAggregate {
+func ==(lhs: GroupMonthYearAggregate, rhs: GroupMonthYearAggregate) -> Bool {
+    return lhs.group == rhs.group && lhs.timePeriod == rhs.timePeriod && lhs.referenceDate == rhs.referenceDate && lhs.monthYearAggregates == rhs.monthYearAggregates
+}
+
+struct MonthYearAggregate: Equatable {
     let monthYear: MonthYear
     let totalCount: Int
     let totalPrice: Float
@@ -60,7 +64,9 @@ struct MonthYearAggregate {
         self.totalPrice = totalPrice
     }
 }
-
+func ==(lhs: MonthYearAggregate, rhs: MonthYearAggregate) -> Bool {
+    return lhs.monthYear == rhs.monthYear && lhs.totalCount == rhs.totalCount && lhs.totalPrice == rhs.totalPrice
+}
 
 class StatsProviderImpl: StatsProvider {
 

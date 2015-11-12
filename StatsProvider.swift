@@ -46,10 +46,17 @@ enum GroupByAttribute {
     case Name/*, Category*/ //TODO categories
 }
 
-enum AggregateGroup {
+enum AggregateGroup: Equatable {
     case All
 //    case CategoryItem(Category) // TODO sth like this
     case ProductItem(Product)
+}
+func ==(lhs: AggregateGroup, rhs: AggregateGroup) -> Bool {
+    switch (lhs, rhs) {
+    case (.ProductItem(_), .ProductItem(_)): return true
+    case (.All, .All): return true
+    default: return false
+    }
 }
 
 protocol StatsProvider {

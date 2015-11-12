@@ -33,6 +33,12 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     @IBOutlet weak var timePeriodButton: UIButton!
     @IBOutlet weak var chartView: ChartBaseView!
     @IBOutlet weak var averageLabel: UILabel!
+    @IBOutlet weak var dailyAverageLabel: UILabel!
+    @IBOutlet weak var monthEstimateLabel: UILabel!
+
+    @IBOutlet weak var averageLabelLabel: UILabel!
+    @IBOutlet weak var dailyAverageLabelLabel: UILabel!
+    @IBOutlet weak var monthEstimateLabelLabel: UILabel!
     
     private var sortByPopup: CMPopTipView?
     
@@ -44,10 +50,16 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     
     private let gradientPicker: GradientPicker = GradientPicker(width: 200)
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setTimePeriod(timePeriods[0])
+    private let avgLineDelay: Float = 0.3
+    private let avgLineDuration = 0.3
+    
+    private var aggregate: GroupMonthYearAggregate?
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        setTimePeriod((aggregate?.timePeriod).flatMap{findTimePeriodWithText($0)} ?? timePeriods[0])
     }
+    
     private func createPicker() -> UIPickerView {
         let picker = UIPickerView(frame: CGRectMake(0, 0, 150, 100))
         picker.delegate = self
@@ -64,6 +76,14 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         }
     }
 
+    private func findTimePeriodWithText(timePeriod: TimePeriod) -> TimePeriodWithText? {
+        for timePeriodWithText in timePeriods {
+            if timePeriodWithText.timePeriod == timePeriod {
+                return timePeriodWithText
+            }
+        }
+        return nil
+    }
     
     // MARK: - UIPicker
     
@@ -91,7 +111,12 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     
     private func updateChart(timePeriod: TimePeriod) {
         Providers.statsProvider.history(timePeriod, group: AggregateGroup.All, successHandler{[weak self] aggregate in
-            self?.initChart(aggregate)
+            if self?.aggregate?.timePeriod != aggregate.timePeriod || self?.aggregate?.monthYearAggregates ?? [] != aggregate.monthYearAggregates { // don't reload if there are no changes
+                self?.aggregate = aggregate
+                
+                self?.initChart(aggregate)
+                self?.initThisMonthSpendingsLabels(aggregate)
+            }
         })
     }
     
@@ -99,6 +124,31 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         currentTimePeriod = timePeriod.timePeriod
         updateChart(timePeriod.timePeriod)
         timePeriodButton.setTitle(timePeriod.text, forState: .Normal)
+    }
+    
+    private func initThisMonthSpendingsLabels(monthYearAggregate: GroupMonthYearAggregate) {
+        if let lastMonthYearAggregate = monthYearAggregate.monthYearAggregates.last { // the spendings of this months (which is always the last in the returned aggregate)
+            
+            let today = NSDate()
+            let dailyAvgSpendingsThisMonth = lastMonthYearAggregate.totalPrice / Float(today.dayMonthYear.day)
+            let projectedTotalSpendingsThisMonth = Float(today.daysInMonth) * dailyAvgSpendingsThisMonth
+            
+            dailyAverageLabel.alpha = 0
+            monthEstimateLabel.alpha = 0
+            dailyAverageLabelLabel.alpha = 0
+            monthEstimateLabelLabel.alpha = 0
+            dailyAverageLabel.text = dailyAvgSpendingsThisMonth.toLocalCurrencyString()
+            monthEstimateLabel.text = projectedTotalSpendingsThisMonth.toLocalCurrencyString()
+            UIView.animateWithDuration(NSTimeInterval(avgLineDuration), delay: NSTimeInterval(avgLineDelay), options: UIViewAnimationOptions.CurveLinear, animations: {[weak self] in
+                self?.dailyAverageLabel.alpha = 1
+                self?.monthEstimateLabel.alpha = 1
+                self?.dailyAverageLabelLabel.alpha = 1
+                self?.monthEstimateLabelLabel.alpha = 1
+            }, completion: nil)
+            
+        } else {
+            print("Error: StatsViewController.initThisMonthSpendingsLabels no last month")
+        }
     }
     
     private func initChart(monthYearAggregate: GroupMonthYearAggregate) {
@@ -253,24 +303,27 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         
         // average layer
         let avgChartPoint = ChartPoint(x: ChartAxisValueFloat(0), y: ChartAxisValueFloat(avg))
-        let avgLineDelay: Float = 0.3
-        let avgLineDuration = 0.3
+
         let avgLayer = ChartPointsViewsLayer(xAxis: xAxis, yAxis: yAxis, innerFrame: innerFrame, chartPoints: [avgChartPoint], viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
             let line = HandlingView(frame: CGRectMake(xAxis.p1.x, chartPointModel.screenLoc.y, 0, 1))
             line.backgroundColor = UIColor.blueColor()
-            line.movedToSuperViewHandler = {
-                UIView.animateWithDuration(avgLineDuration) {
-                    let extra = barWidth / 2
-                    line.frame = CGRectMake(xAxis.p1.x - extra, chartPointModel.screenLoc.y, xAxis.length + extra * 2, 1)
+            line.movedToSuperViewHandler = {[weak self] in
+                if let weakSelf = self {
+                    UIView.animateWithDuration(weakSelf.avgLineDuration) {
+                        let extra = barWidth / 2
+                        line.frame = CGRectMake(xAxis.p1.x - extra, chartPointModel.screenLoc.y, xAxis.length + extra * 2, 1)
+                    }
                 }
             }
             return line
         }, displayDelay: avgLineDelay)
 
         averageLabel.alpha = 0
-        averageLabel.text = "Average: \(Float(avg).toLocalCurrencyString()) / Month"
+        averageLabelLabel.alpha = 0
+        averageLabel.text = Float(avg).toLocalCurrencyString()
         UIView.animateWithDuration(NSTimeInterval(avgLineDuration), delay: NSTimeInterval(avgLineDelay), options: UIViewAnimationOptions.CurveLinear, animations: {[weak self] in
             self?.averageLabel.alpha = 1
+            self?.averageLabelLabel.alpha = 1
         }, completion: nil)
 
         
