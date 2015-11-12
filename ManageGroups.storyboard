@@ -146,24 +146,8 @@
                     <view key="view" contentMode="scaleToFill" id="daC-Ko-NPM">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lQM-2H-V04" customClass="FloatingViews" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="540" width="600" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="nj5-y0-C5Z"/>
-                                </constraints>
-                            </view>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="lQM-2H-V04" secondAttribute="trailing" id="AlD-A4-RRu"/>
-                            <constraint firstItem="DZF-LI-w21" firstAttribute="top" secondItem="lQM-2H-V04" secondAttribute="bottom" id="FzY-Yc-ee9"/>
-                            <constraint firstItem="lQM-2H-V04" firstAttribute="leading" secondItem="daC-Ko-NPM" secondAttribute="leading" id="cz9-ol-mHQ"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="floatingViews" destination="lQM-2H-V04" id="8G0-rs-mEQ"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KIR-Vm-g1Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -180,25 +164,8 @@
                     <view key="view" contentMode="scaleToFill" id="TnG-M9-Fsy">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t31-L4-hvt" customClass="FloatingViews" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="540" width="600" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="4fr-K7-cAL"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="uB0-Bu-jGk"/>
-                                </constraints>
-                            </view>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="YgC-jH-jRf" firstAttribute="top" secondItem="t31-L4-hvt" secondAttribute="bottom" id="6M6-hP-U7R"/>
-                            <constraint firstItem="t31-L4-hvt" firstAttribute="leading" secondItem="TnG-M9-Fsy" secondAttribute="leading" id="bIh-o4-X6H"/>
-                            <constraint firstAttribute="trailing" secondItem="t31-L4-hvt" secondAttribute="trailing" id="s3Z-ow-q65"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="floatingViews" destination="t31-L4-hvt" id="4t7-E0-VIQ"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vRx-Xr-T6A" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -57,7 +57,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        initNavBar([.Add, .Edit])
+        initNavBar([.Add])
         
         tableView.allowsSelectionDuringEditing = true
         
@@ -198,7 +198,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     func onAddTap(sender: UIBarButtonItem) {
         if addEditProductController.open {
             setAddEditProductControllerOpen(false)
-            initNavBar([.Add, .Edit])
+            initNavBar([.Add])
             
         } else {
             clearSearch() // clear filter to avoid confusion, if we add an item it may be not in current filter and user will not see it appearing.
@@ -351,7 +351,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             initNavBar([.Save, .Cancel])
             
         } else {
-            initNavBar([.Add, .Edit])
+            initNavBar([.Add])
         }
     }
     

@@ -16,9 +16,7 @@ protocol ManageGroupsAddEditControllerDelegate {
     func onGroupItemsSubmit()
 }
 
-class ManageGroupsAddEditController: UIViewController, QuickAddGroupViewControllerDelegate, BottonPanelViewDelegate, ManageGroupsSelectItemsControllerDelegate {
-
-    @IBOutlet weak var floatingViews: FloatingViews!
+class ManageGroupsAddEditController: UIViewController, QuickAddGroupViewControllerDelegate, ManageGroupsSelectItemsControllerDelegate {
 
     private lazy var addEditGroupController: QuickAddGroupViewController = {
         let controller = UIStoryboard.quickAddGroupViewController()
@@ -38,14 +36,31 @@ class ManageGroupsAddEditController: UIViewController, QuickAddGroupViewControll
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        initNavBar()
+        initNavBar([.Add, .Save])
         initEmbeddedAddEditController()
-        initFloatingViews()
     }
-
-    private func initFloatingViews() {
-        floatingViews.setActions([FLoatingButtonAttributedAction(action: .Submit, xRight: 20)])
-        floatingViews.delegate = self
+    
+    private func initNavBar(actions: [UIBarButtonSystemItem]) {
+        navigationItem.title = "Manage products"
+        
+        var buttons: [UIBarButtonItem] = []
+        
+        for action in actions {
+            switch action {
+            case .Add:
+                let button = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "onAddTap:")
+                buttons.append(button)
+            case .Save:
+                let button = UIBarButtonItem(barButtonSystemItem: .Save, target: self, action: "onSubmitTap:")
+                buttons.append(button)
+            default: break
+            }
+        }
+        navigationItem.rightBarButtonItems = buttons
+    }
+    
+    func onSubmitTap(sender: UIBarButtonItem) {
+        addEditGroupController.submit()
     }
     
     private func initEmbeddedAddEditController() {
@@ -58,11 +73,6 @@ class ManageGroupsAddEditController: UIViewController, QuickAddGroupViewControll
         addEditGroupController.view.fillSuperview()
         addEditGroupController.view.backgroundColor = UIColor.whiteColor()
     }
-
-    private func initNavBar() {
-        let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "onAddTap:")
-        navigationItem.setRightBarButtonItem(addButton, animated: true)
-    }
     
     func onAddTap(sender: UIBarButtonItem) {
         showSelectItemsController()
@@ -72,18 +82,6 @@ class ManageGroupsAddEditController: UIViewController, QuickAddGroupViewControll
         let controller = UIStoryboard.manageGroupsSelectItemsController()
         controller.delegate = self
         navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    // MARK: - BottonPanelViewDelegate
-    
-    func onSubmitAction(action: FLoatingButtonAction) {
-        switch action {
-        case .Submit:
-            addEditGroupController.submit()
-        default:
-            print("Warn: ManageGroupsAddEditController not handled action: \(action)")
-            break
-        }
     }
     
     // MARK: - QuickAddGroupViewControllerDelegate

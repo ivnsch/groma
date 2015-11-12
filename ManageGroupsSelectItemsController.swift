@@ -12,9 +12,7 @@ protocol ManageGroupsSelectItemsControllerDelegate {
     func onSubmit(items: [GroupItem])
 }
 
-class ManageGroupsSelectItemsController: UIViewController, QuickAddGroupItemsViewControllerDelegate, BottonPanelViewDelegate {
-
-    @IBOutlet weak var floatingViews: FloatingViews!
+class ManageGroupsSelectItemsController: UIViewController, QuickAddGroupItemsViewControllerDelegate {
 
     var delegate: ManageGroupsSelectItemsControllerDelegate?
     
@@ -27,9 +25,29 @@ class ManageGroupsSelectItemsController: UIViewController, QuickAddGroupItemsVie
     override func viewDidLoad() {
         super.viewDidLoad()
         initEmbeddedController()
-        initFloatingViews()
-        
+        initNavBar([.Save])
+
         navigationItem.title = "Add items"
+    }
+    
+    private func initNavBar(actions: [UIBarButtonSystemItem]) {
+        navigationItem.title = "Manage products"
+        
+        var buttons: [UIBarButtonItem] = []
+        
+        for action in actions {
+            switch action {
+            case .Save:
+                let button = UIBarButtonItem(barButtonSystemItem: .Save, target: self, action: "onSubmitTap:")
+                buttons.append(button)
+            default: break
+            }
+        }
+        navigationItem.rightBarButtonItems = buttons
+    }
+    
+    func onSubmitTap(sender: UIBarButtonItem) {
+        itemsController.submit()
     }
 
     func initEmbeddedController() {
@@ -40,11 +58,6 @@ class ManageGroupsSelectItemsController: UIViewController, QuickAddGroupItemsVie
         itemsController.view.backgroundColor = UIColor.whiteColor()
     }
     
-    private func initFloatingViews() {
-        floatingViews.setActions([FLoatingButtonAttributedAction(action: .Submit, xRight: 20)])
-        floatingViews.delegate = self
-    }
-    
     // MARK: - QuickAddGroupItemsViewControllerDelegate
     
     func onSubmit(items: [GroupItem]) {
@@ -53,17 +66,5 @@ class ManageGroupsSelectItemsController: UIViewController, QuickAddGroupItemsVie
 
     func onCancel() {
         navigationController?.popViewControllerAnimated(true)
-    }
-    
-    // MARK: - BottonPanelViewDelegate
-    
-    func onSubmitAction(action: FLoatingButtonAction) {
-        switch action {
-        case .Submit:
-            itemsController.submit()
-        default:
-            print("Warn: ManageGroupsAddEditController not handled action: \(action)")
-            break
-        }
     }
 }

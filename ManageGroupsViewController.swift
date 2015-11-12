@@ -44,6 +44,28 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
         })
     }
     
+    
+    // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
+    private func initNavBar(actions: [UIBarButtonSystemItem]) {
+        navigationItem.title = "Manage products"
+        
+        var buttons: [UIBarButtonItem] = []
+        
+        for action in actions {
+            switch action {
+            case .Add:
+                let button = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "onAddTap:")
+                buttons.append(button)
+            case .Edit:
+                let button = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "onEditTap:")
+                self.editButton = button
+                buttons.append(button)
+            default: break
+            }
+        }
+        navigationItem.rightBarButtonItems = buttons
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -176,7 +198,6 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
         clearSearch() // clear filter to avoid confusion, if we add a group it may be not in current filter and user will not see it appearing.
         showAddEditController()
     }
-    
     
     // For now not used, user can delete by swipe & confirm. And edit items by just tapping on them
     func onEditTap(sender: UIBarButtonItem) {
