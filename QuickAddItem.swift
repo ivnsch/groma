@@ -13,6 +13,8 @@ import Foundation
 class QuickAddItem {
 
     var boldRange: NSRange?
+    var textSize: CGSize? = nil
+    var didAnimateAlready: Bool = false
     
     init(boldRange: NSRange? = nil) {
         self.boldRange = boldRange

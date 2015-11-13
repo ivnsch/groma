@@ -147,10 +147,6 @@ extension UIStoryboard {
         return quickAddGroupStoryboard().instantiateViewControllerWithIdentifier("QuickAddGroupItemsViewController") as! QuickAddGroupItemsViewController
     }
 
-    class func quickAddListItemViewController() -> QuickAddListItemViewController {
-        return quickAddListItemStoryboard().instantiateViewControllerWithIdentifier("QuickAddListItemViewController") as! QuickAddListItemViewController
-    }
-
     class func wuickAddGroupItemsTableViewController() -> QuickAddGroupItemsTableViewController {
         return quickAddGroupItemStoryboard().instantiateViewControllerWithIdentifier("QuickAddGroupItemsTableViewController") as! QuickAddGroupItemsTableViewController
     }

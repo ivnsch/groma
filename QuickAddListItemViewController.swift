@@ -14,7 +14,7 @@ protocol QuickAddListItemDelegate {
     func onAddProduct(product: Product)
     func onAddGroup(group: ListItemGroup)
     func onCloseQuickAddTap()
-//    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
+    //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
 }
 
 enum QuickAddItemType {
@@ -25,13 +25,13 @@ enum QuickAddContent {
     case Items, AddProduct
 }
 
+
 // Table view controller with searchbox, used for items or groups quick add
-class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate {
-
+class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
+    
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet var tableViewFooter: LoadingFooter!
-
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     var delegate: QuickAddListItemDelegate?
     var itemType: QuickAddItemType = .Product { // for now product/group mutually exclusive (no mixed tableview)
         didSet {
@@ -50,12 +50,12 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
     
     private var filteredQuickAddItems: [QuickAddItem] = [] {
         didSet {
-            tableView.reloadData()
+            collectionView.reloadData()
         }
     }
     
     var open: Bool = false
-
+    
     var onViewDidLoad: VoidFunction? // ensure called after outlets set
     
     private let paginator = Paginator(pageSize: 20)
@@ -90,7 +90,7 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
             self?.quickAddItems = groups.map{QuickAddGroup($0)}
         })
     }
-
+    
     private func loadProducts() {
         Providers.productProvider.products(successHandler{[weak self] products in
             self?.quickAddItems = products.map{QuickAddProduct($0)}
@@ -117,34 +117,59 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
             }
         }
     }
-
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return filteredQuickAddItems.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let item = filteredQuickAddItems[indexPath.row]
-
-        var cell: UITableViewCell
+        
+        var cell: UICollectionViewCell
         if let productItem = item as? QuickAddProduct {
-            let itemCell = tableView.dequeueReusableCellWithIdentifier("itemCell", forIndexPath: indexPath) as! QuickAddItemCell
+            let itemCell = collectionView.dequeueReusableCellWithReuseIdentifier("itemCell", forIndexPath: indexPath) as! QuickAddItemCell
             itemCell.item = productItem
+            itemCell.nameLabel.textColor = UIColor.whiteColor()
             cell = itemCell
             
         } else if let groupItem = item as? QuickAddGroup {
-            let groupCell = tableView.dequeueReusableCellWithIdentifier("groupCell", forIndexPath: indexPath) as! QuickAddGroupCell
+            let groupCell = collectionView.dequeueReusableCellWithReuseIdentifier("groupCell", forIndexPath: indexPath) as! QuickAddGroupCell
             groupCell.item = groupItem
+            groupCell.nameLabel.textColor = UIColor.whiteColor()
             cell = groupCell
             
         } else {
             print("Error: invalid model type in quickAddItems: \(item)")
-            cell = tableView.dequeueReusableCellWithIdentifier("itemCell", forIndexPath: indexPath) // assign something so it compiles
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier("itemCell", forIndexPath: indexPath) // assign something so it compiles
         }
+     
+        cell.contentView.backgroundColor = UIColor.flatGrayColorDark()
         
+        if !item.didAnimateAlready { // show cell grow animation while scrolling down
+            cell.transform = CGAffineTransformMakeScale(0.5, 0.5)
+            let delay = NSTimeInterval(Double(indexPath.row) * 0.4 / Double(filteredQuickAddItems.count))
+            UIView.animateWithDuration(0.2, delay: delay, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: [], animations: {
+                cell.transform = CGAffineTransformMakeScale(1, 1)
+                }, completion: {finished in
+                    item.didAnimateAlready = true
+            })
+        }
         return cell
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        let item = filteredQuickAddItems[indexPath.row]
+        
+        if let textSize = item.textSize {
+            return textSize
+        } else {
+            let textSize = item.labelText.size(Fonts.regularLight).increase(12, dy: 6)
+            filteredQuickAddItems[indexPath.row].textSize = textSize // cache calculated text size
+            return textSize
+        }
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
         let item = filteredQuickAddItems[indexPath.row]
         
@@ -159,20 +184,21 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
         }
     }
     
+    
     func scrollToBottom() {
-        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: quickAddItems.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
+        collectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: quickAddItems.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
     }
     
     override func setEditing(editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        tableView.editing = editing
+//        collectionView.editing = editing // TODO! collection view doesn't know this - for what did we need editing with tableview here anyway?
     }
     
     private func loadPossibleNextPage() {
         
         func setLoading(loading: Bool) {
             self.loadingPage = loading
-            self.tableViewFooter.hidden = !loading
+//            self.tableViewFooter.hidden = !loading
         }
         
         func onItemsLoaded(items: [QuickAddItem]) {
@@ -180,7 +206,7 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIT
             
             paginator.update(items.count)
             
-            tableView.reloadData()
+            collectionView.reloadData()
             setLoading(false)
         }
         

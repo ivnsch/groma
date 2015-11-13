@@ -89,6 +89,10 @@ extension String {
         return boundingBox.height
     }
     
+    func size(font: UIFont) -> CGSize {
+        return (self as NSString).sizeWithAttributes([NSFontAttributeName: font])
+    }
+    
 //    func startsWith(str:String) -> Bool {
 //        var startsWith = false
 //        if let range = self.rangeOfString(str) {
