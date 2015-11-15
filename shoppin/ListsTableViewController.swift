@@ -32,6 +32,8 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     
     @IBOutlet weak var floatingViews: FloatingViews!
 
+    private var topAddEditListControllerManager: ExpandableTopViewController<AddEditListController>?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -54,8 +56,21 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         self.editButton = editButton
         
         initNavBarRightButtons([.Add])
+        
+        topAddEditListControllerManager = initTopAddEditListControllerManager()
     }
 
+    private func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditListController> {
+        let top = CGRectGetHeight(topBar.frame)
+        return ExpandableTopViewController(top: top, height: 250, parentViewController: self, tableView: tableView) {[weak self] in
+            let controller = UIStoryboard.addEditList()
+            controller.delegate = self
+            controller.currentListsCount = self!.lists.count
+            controller.view.clipsToBounds = true
+            return controller
+        }
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         initLists()
@@ -95,11 +110,11 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func onSubmitTap(sender: UIBarButtonItem) {
-        addEditListController.submit()
+        topAddEditListControllerManager?.controller?.submit()
     }
     
     func onCancelTap(sender: UIBarButtonItem) {
-        setAddEditListControllerOpen(false)
+        topAddEditListControllerManager?.expand(false)
         initNavBarRightButtons([.Add])
     }
     
@@ -186,8 +201,8 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         let list = self.lists[indexPath.row]
 
         if self.editing {
-            addEditListController.listToEdit = list
-            setAddEditListControllerOpen(true)
+            topAddEditListControllerManager?.controller?.listToEdit = list
+            topAddEditListControllerManager?.expand(true)
             
         } else {
             if let cell = tableView.cellForRowAtIndexPath(indexPath) {
@@ -222,7 +237,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     }
 
     @IBAction func onAddTap(sender: UIBarButtonItem) {
-        setAddEditListControllerOpen(!addEditListController.open)
+        topAddEditListControllerManager?.expand(!(topAddEditListControllerManager?.expanded ?? true)) // toggle - if for some reason variable isn't set, set expanded false (!true)
     }
     
     @IBAction func onEditTap(sender: UIBarButtonItem) {
@@ -243,9 +258,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         
         if tryCloseTopViewController {
             if !editing {
-                if addEditListController.open {
-                    setAddEditListControllerOpen(false)
-                }
+                topAddEditListControllerManager?.expand(false)
             }
         }
         
@@ -266,7 +279,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
             if let weakSelf = self {
                 self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.lists.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
                 self?.lists.append(list)
-                self?.setAddEditListControllerOpen(false)
+                self?.topAddEditListControllerManager?.expand(false)
             }
         }
     }
@@ -275,7 +288,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     func onListUpdated(list: List) {
         lists.update(list)
         tableView.reloadData()
-        setAddEditListControllerOpen(false)
+        topAddEditListControllerManager?.expand(false)
     }
     
     // MARK: - ExpandCellAnimatorDelegate
@@ -298,99 +311,5 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func prepareAnimations(willExpand: Bool, frontView: UIView) {
-    }
-    
-    // MARK: - Add edit list 
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    
-    private var currentTopController: UIViewController?
-
-    
-    private func initTopController(controller: UIViewController, height: CGFloat) {
-        let view = controller.view
-        
-        view.frame = CGRectMake(0, CGRectGetHeight(topBar.frame), self.view.frame.width, height)
-        
-        // swift anchor
-        view.layer.anchorPoint = CGPointMake(0.5, 0)
-        view.frame.origin = CGPointMake(0, view.frame.origin.y - height / 2)
-        
-        let transform: CGAffineTransform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 0.001) //0.001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
-        view.transform = transform
-    }
-    
-    private lazy var addEditListController: AddEditListController = {
-        let controller = UIStoryboard.addEditList()
-        controller.delegate = self
-        controller.currentListsCount = self.lists.count
-        controller.view.clipsToBounds = true
-        self.initTopController(controller, height: 250)
-        return controller
-    }()
-    
-    private func setAddEditListControllerOpen(open: Bool) {
-        addEditListController.open = open
-        
-        if open {
-            initNavBarRightButtons([.Save, .Cancel])
-
-        } else {
-            initNavBarRightButtons([.Add])
-            addEditListController.clear()
-        }
-        
-        animateTopView(addEditListController, open: open, tableView: tableView)
-    }
-    
-    
-    // parameter: tableView: This is normally the listitem's table view, except when we are in section-only mode, which needs a different table view
-    private func animateTopView(controller: UIViewController, open: Bool, tableView: UITableView) {
-        let view = controller.view
-        if open {
-            self.addChildViewControllerAndView(controller)
-            let topInset = CGRectGetHeight(view.bounds)
-            tableViewOverlay.frame = CGRectMake(tableView.frame.origin.x, tableView.frame.origin.y + topInset, tableView.frame.width, tableView.frame.height - tableView.topInset)
-            self.view.insertSubview(tableViewOverlay, aboveSubview: tableView)
-//            self.view.bringSubviewToFront(floatingViews)
-        } else {
-            tableViewOverlay.removeFromSuperview()
-        }
-        
-        UIView.animateWithDuration(0.3, animations: {
-            if open {
-                self.tableViewOverlay.alpha = 0.2
-            } else {
-                self.tableViewOverlay.alpha = 0
-            }
-            view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, open ? 1 : 0.001)
-            
-            let topInset = CGRectGetHeight(view.frame)
-            
-            let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
-            tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
-            tableView.topOffset = -tableView.inset.top
-            
-            }) { finished in
-                
-                if !open {
-                    controller.removeFromParentViewControllerWithView()
-                }
-        }
-    }
-    
-    private lazy var tableViewOverlay: UIView = {
-        let view = UIButton()
-        view.backgroundColor = UIColor.blackColor()
-        view.userInteractionEnabled = true
-        view.alpha = 0
-        view.addTarget(self, action: "onTableViewOverlayTap:", forControlEvents: .TouchUpInside)
-        return view
-    }()
-    
-    // closes top controller (whichever it may be)
-    func onTableViewOverlayTap(sender: UIButton) {
-        if addEditListController.open {
-            setAddEditListControllerOpen(false)
-        }
     }
 }

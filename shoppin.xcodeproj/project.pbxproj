@@ -580,6 +580,7 @@
 		EBD828001BE95C8B0072F9FA /* StashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827FF1BE95C8B0072F9FA /* StashView.swift */; };
 		EBD828031BE95CD80072F9FA /* Shapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD828021BE95CD80072F9FA /* Shapes.swift */; };
 		EBD828051BEA441B0072F9FA /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD828041BEA441B0072F9FA /* UINavigationController.swift */; };
+		EBDA09F81BF8DBE50039E1E8 /* ExpandableTopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA09F71BF8DBE50039E1E8 /* ExpandableTopViewController.swift */; };
 		EBDA75401BCD5C2100E34AC3 /* ListItemGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA753F1BCD5C2100E34AC3 /* ListItemGroup.swift */; };
 		EBDA75421BCD5C8C00E34AC3 /* ListItemGroupProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA75411BCD5C8C00E34AC3 /* ListItemGroupProvider.swift */; };
 		EBDA75441BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDA75431BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift */; };
@@ -1069,6 +1070,7 @@
 		EBD827FF1BE95C8B0072F9FA /* StashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StashView.swift; sourceTree = "<group>"; };
 		EBD828021BE95CD80072F9FA /* Shapes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shapes.swift; sourceTree = "<group>"; };
 		EBD828041BEA441B0072F9FA /* UINavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
+		EBDA09F71BF8DBE50039E1E8 /* ExpandableTopViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandableTopViewController.swift; sourceTree = "<group>"; };
 		EBDA753F1BCD5C2100E34AC3 /* ListItemGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroup.swift; sourceTree = "<group>"; };
 		EBDA75411BCD5C8C00E34AC3 /* ListItemGroupProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupProvider.swift; sourceTree = "<group>"; };
 		EBDA75431BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupProviderImpl.swift; sourceTree = "<group>"; };
@@ -1659,6 +1661,7 @@
 		EB55675B1A86231D00CD3EC6 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				EBDA09F61BF8DBBD0039E1E8 /* topView */,
 				EBD558C91BF3C0ED0048F287 /* scale */,
 				EBD827F81BE79A110072F9FA /* util */,
 				EB7BFA781BDA5BBE00F4C74A /* cellQuantity */,
@@ -2066,6 +2069,14 @@
 				EB3C9E291BEA47FF00886197 /* Theme.swift */,
 			);
 			name = utils;
+			sourceTree = "<group>";
+		};
+		EBDA09F61BF8DBBD0039E1E8 /* topView */ = {
+			isa = PBXGroup;
+			children = (
+				EBDA09F71BF8DBE50039E1E8 /* ExpandableTopViewController.swift */,
+			);
+			name = topView;
 			sourceTree = "<group>";
 		};
 		EBDA75511BCD95EC00E34AC3 /* okCancelButtons */ = {
@@ -2715,6 +2726,7 @@
 				EBB526731BEFD8E90002A286 /* HelpItem.swift in Sources */,
 				EB202B971B54109A001699E7 /* RemoteRegisterResult.swift in Sources */,
 				EB1B366D1BC48238003519F2 /* DBPlanItem.swift in Sources */,
+				EBDA09F81BF8DBE50039E1E8 /* ExpandableTopViewController.swift in Sources */,
 				EB7858791B7F7083008AAD12 /* RemoteHistoryItem.swift in Sources */,
 				EB20FBFC1A5972A30058103B /* InventoryProvider.swift in Sources */,
 				EB0C1B9C1B3DBF9600F24C85 /* RegisterViewController.swift in Sources */,

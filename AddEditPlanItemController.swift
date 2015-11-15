@@ -134,7 +134,7 @@ class AddEditPlanItemController: UIViewController, MLPAutoCompleteTextFieldDataS
                 }
                 
             } else {
-                print("Error: validation was not implemented correctly or (TODO validate this?) no selected inventory")
+                print("Error: validation was not implemented correctly or (TODO validate this?) no selected unit") // TODO use quick add here and use the units
             }
         }
     }

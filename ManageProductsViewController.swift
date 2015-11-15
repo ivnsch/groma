@@ -32,20 +32,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             tableView.reloadData()
         }
     }
-
     
     private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0, xRight: 20)
     private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0, xRight: 20)
     private let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: CGFloat(-M_PI_4))
     
-    private lazy var addEditProductController: AddEditProductController = {
-        let controller = UIStoryboard.addEditProductController()
-        controller.delegate = self
-        let height: CGFloat = 140
-        self.initTopController(controller, height: height)
-        return controller
-    }()
-    
+    private var addEditProductControllerManager: ExpandableTopViewController<AddEditProductController>?
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -61,10 +54,25 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         
         tableView.allowsSelectionDuringEditing = true
         
+        addEditProductControllerManager = initAddEditProductControllerManager()
+
         Providers.productProvider.products(successHandler {[weak self] products in
             self?.products = products
         })
     }
+    
+    private func initAddEditProductControllerManager() -> ExpandableTopViewController<AddEditProductController> {
+        
+        let navbarHeight = navigationController!.navigationBar.frame.height
+        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
+        let top = navbarHeight + statusBarHeight
+        return ExpandableTopViewController(top: top, height: 140, openInset: -CGRectGetHeight(self.searchBar.frame), parentViewController: self, tableView: tableView) {[weak self] in
+            let controller = UIStoryboard.addEditProductController()
+            controller.delegate = self
+            return controller
+        }
+    }
+    
 
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
     private func initNavBar(actions: [UIBarButtonSystemItem]) {
@@ -159,8 +167,8 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
  
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        addEditProductController.editingData = AddEditProductControllerEditingData(product: filteredProducts[indexPath.row].item, indexPath: indexPath)
-        setAddEditProductControllerOpen(true)
+        addEditProductControllerManager?.controller?.editingData = AddEditProductControllerEditingData(product: filteredProducts[indexPath.row].item, indexPath: indexPath)
+        addEditProductControllerManager?.expand(true)
     }
     
     // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
@@ -173,9 +181,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         
         if tryCloseTopViewController {
             if !editing {
-                if addEditProductController.open {
-                    setAddEditProductControllerOpen(false)
-                }
+                addEditProductControllerManager?.expand(false)
             }
         }
         
@@ -196,7 +202,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func onAddTap(sender: UIBarButtonItem) {
-        if addEditProductController.open {
+        if addEditProductControllerManager?.expanded ?? false {
             setAddEditProductControllerOpen(false)
             initNavBar([.Add])
             
@@ -208,7 +214,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func onSubmitTap(sender: UIBarButtonItem) {
-        addEditProductController.submit()
+        addEditProductControllerManager?.controller?.submit()
     }
 
     func onCancelTap(sender: UIBarButtonItem) {
@@ -225,8 +231,8 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     func onSubmitAction(action: FLoatingButtonAction) {
         switch action {
         case .Toggle:
-            if addEditProductController.open {
-                setAddEditProductControllerOpen(false)
+            if addEditProductControllerManager?.expanded ?? false {
+                addEditProductControllerManager?.expand(false)
                 
             } else {
                 clearSearch() // clear filter to avoid confusion, if we add an item it may be not in current filter and user will not see it appearing.
@@ -235,7 +241,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             
             
         case .Submit:
-            addEditProductController.submit()
+            addEditProductControllerManager?.controller?.submit()
             
         case .Add, .Back, .Expand: break
         }
@@ -257,7 +263,6 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     
     func onCancelTap() {
         setAddEditProductControllerOpen(false)
-        addEditProductController.clear()
     }
 
     private func updateProduct(editingData: AddEditProductControllerEditingData, name: String, category: String, price: Float) {
@@ -268,8 +273,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
                 weakSelf.onUpdatedProducts()
                 
                 weakSelf.tableView.scrollToRowAtIndexPath(editingData.indexPath, atScrollPosition: .Middle, animated: true)
-                weakSelf.setAddEditProductControllerOpen(false)
-                weakSelf.addEditProductController.clear()
+                weakSelf.addEditProductControllerManager?.expand(false)
             }
         })
     }
@@ -282,70 +286,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
                 weakSelf.onUpdatedProducts()
                 
                 weakSelf.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: weakSelf.filteredProducts.count - 1, inSection: 0), atScrollPosition: .Middle, animated: true)
-                weakSelf.setAddEditProductControllerOpen(false)
-                weakSelf.addEditProductController.clear()
+                weakSelf.addEditProductControllerManager?.expand(false)
             }
         })
     }
-    
-    // MARK: - Top view
-    
-    private func initTopController(controller: UIViewController, height: CGFloat) {
-        let view = controller.view
-        self.view.addSubview(view)
-        let navbarHeight = navigationController!.navigationBar.frame.height
-        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-        view.frame = CGRectMake(0, navbarHeight + statusBarHeight, self.view.frame.width, height)
-        
-        // swift anchor
-        view.layer.anchorPoint = CGPointMake(0.5, 0)
-        view.frame.origin = CGPointMake(0, view.frame.origin.y - height / 2)
-        
-        let transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 0.001) //0.001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
-        view.transform = transform
-    }
-    
-    
-    private func animateTopView(view: UIView, open: Bool) {
-        if open {
-            tableViewOverlay.frame = self.view.frame
-            self.view.insertSubview(tableViewOverlay, aboveSubview: tableView)
-        } else {
-            tableViewOverlay.removeFromSuperview()
-        }
-        
-        UIView.animateWithDuration(0.3) {
-            if open {
-                self.tableViewOverlay.alpha = 0.2
-            } else {
-                self.tableViewOverlay.alpha = 0
-            }
-            view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, open ? 1 : 0.001)
 
-            self.searchBar.hidden = open
-
-            let topInset = open ? (CGRectGetHeight(view.frame) - CGRectGetHeight(self.searchBar.frame)) : CGRectGetHeight(view.frame)
-            let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
-            self.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
-            self.tableView.topOffset = -self.tableView.inset.top
-        }
-    }
-    
-    private lazy var tableViewOverlay: UIView = {
-        let view = UIButton()
-        view.backgroundColor = UIColor.blackColor()
-        view.alpha = 0
-        view.addTarget(self, action: "onOverlayTap:", forControlEvents: .TouchUpInside)
-        return view
-    }()
-    
-    func onOverlayTap(sender: UIButton) {
-        setAddEditProductControllerOpen(false)
-    }
-    
     private func setAddEditProductControllerOpen(open: Bool) {
-        addEditProductController.open = open
-        animateTopView(addEditProductController.view, open: open)
+        addEditProductControllerManager?.expand(open)
         
         if open {
             initNavBar([.Save, .Cancel])

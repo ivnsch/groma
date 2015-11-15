@@ -146,13 +146,14 @@ class AddEditInventoryController: UIViewController, SharedUsersViewControllerDel
         } else { // open
             
             let sharedUsersController = UIStoryboard.sharedUsersViewController()
-
-            sharedUsersController.view.frame = CGRectMake(0, originalHeight, view.frame.width, 100)
+            sharedUsersController.view.clipsToBounds = true
+            
+            sharedUsersController.view.frame = CGRectMake(0, originalHeight, view.frame.width, 0)
             
             sharedUsersController.view.layer.anchorPoint = CGPointMake(0.5, 0)
-            sharedUsersController.view.frame.origin = CGPointMake(0, sharedUsersController.view.frame.origin.y - 100 / 2)
-            
-            sharedUsersController.view.transform = CGAffineTransformMakeScale(1, 0.001)
+            sharedUsersController.view.frame.origin = CGPointMake(0, sharedUsersController.view.frame.origin.y - (0 / 2))
+
+//            sharedUsersController.view.transform = CGAffineTransformMakeScale(1, 0.001)
             addChildViewControllerAndView(sharedUsersController)
             self.sharedUsersController = sharedUsersController
 
@@ -160,11 +161,13 @@ class AddEditInventoryController: UIViewController, SharedUsersViewControllerDel
             if let sharedUsers = inventoryToEdit?.users {
                 sharedUsersController.sharedUsers = sharedUsers
             }
+            
+            view.layoutIfNeeded()
 
             UIView.animateWithDuration(0.3) {[weak self] in
                 self?.view.frame = self!.view.frame.copy(height: 260)
                 self?.view.layoutIfNeeded()
-                sharedUsersController.view.transform = CGAffineTransformMakeScale(1, 1)
+////                sharedUsersController.view.transform = CGAffineTransformMakeScale(1, 1)
             }
         }
     }

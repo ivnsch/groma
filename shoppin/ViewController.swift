@@ -57,6 +57,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     var onViewWillAppear: VoidFunction?
     
+    private var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
+    private var topAddEditListItemControllerManager: ExpandableTopViewController<AddEditListItemViewController>?
+    private var topEditSectionControllerManager: ExpandableTopViewController<EditSectionViewController>?
+
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -75,8 +80,41 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         setEditing(false, animated: false, tryCloseTopViewController: false)
         
         initTitleLabel()
+        
+        topQuickAddControllerManager = initTopQuickAddControllerManager()
+        topAddEditListItemControllerManager = initAddEditListItemControllerManager()
+        topEditSectionControllerManager = initEditSectionControllerManager()
+    }
+    
+    private func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
+        let top = CGRectGetHeight(topBar.frame) + CGRectGetHeight(pricesView.frame)
+        return ExpandableTopViewController(top: top, height: 350, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
+            let controller = UIStoryboard.quickAddViewController()
+            controller.delegate = self
+            controller.productDelegate = self
+            if let backgroundColor = self?.view.backgroundColor {
+                controller.addProductsOrGroupBgColor = UIColor.opaqueColorByApplyingTransparentColorOrBackground(backgroundColor.colorWithAlphaComponent(0.3), backgroundColor: UIColor.whiteColor())
+            }
+            return controller
+        }
+    }
+    
+    private func initAddEditListItemControllerManager() -> ExpandableTopViewController<AddEditListItemViewController> {
+        let top = CGRectGetHeight(topBar.frame) + CGRectGetHeight(pricesView.frame)
+        return ExpandableTopViewController(top: top, height: 300, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {
+            return UIStoryboard.addEditListItemViewController()
+        }
     }
 
+    private func initEditSectionControllerManager() -> ExpandableTopViewController<EditSectionViewController> {
+        let top = CGRectGetHeight(topBar.frame) + CGRectGetHeight(pricesView.frame)
+        return ExpandableTopViewController(top: top, height: 60, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
+            let controller = EditSectionViewController()
+            controller.delegate = self
+            return controller
+        }
+    }
+    
     private func initTitleLabel() {
         let label = UILabel()
         label.font = Fonts.regular
@@ -306,17 +344,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         clearPossibleUndo()
         
         // if any top controller is open, close it
-        if quickAddController.open || addEditController.open {
-            if quickAddController.open {
-                setQuickAddOpen(false)
-            }
-            if addEditController.open {
-                setAddEditListItemOpen(false)
-            }
+        if topQuickAddControllerManager?.expanded ?? false || topAddEditListItemControllerManager?.expanded ?? false {
+            topQuickAddControllerManager?.expand(false)
+            topAddEditListItemControllerManager?.expand(false)
+
             floatingViews.setActions(Array<FLoatingButtonAction>())  // reset floating actions
             
         } else { // if there's no top controller open, open the quick add controller
-            setQuickAddOpen(true)
+            topQuickAddControllerManager?.expand(true)
             floatingViews.setActions(Array<FLoatingButtonAction>())
         }
     }
@@ -337,11 +372,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         // TODO alpha of add button
 
         if tryCloseTopViewController {
-            if quickAddController.open {
-                setQuickAddOpen(false)
-            } else if addEditController.open {
-                setAddEditListItemOpen(false)
-            }
+            topQuickAddControllerManager?.expand(false)
+            topAddEditListItemControllerManager?.expand(false)
         }
         if editing {
             self.floatingViews.setActions([expandButtonModel.collapsedAction])
@@ -422,10 +454,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             
             //            performSegueWithIdentifier("showAddIemSegue", sender: self)
             
-            addEditController.updatingListItem = updatingListItem
-            addEditController.delegate = self
             
-            setAddEditListItemOpen(true)
+            topAddEditListItemControllerManager?.controller?.updatingListItem = updatingListItem
+            topAddEditListItemControllerManager?.controller?.delegate = self
+            topAddEditListItemControllerManager?.expand(true)
+//            addEditController.updatingListItem = updatingListItem
+//            addEditController.delegate = self
+//            
+//            setAddEditListItemOpen(true)
             
         } else {
 
@@ -449,8 +485,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func onSectionHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
         if editing {
-            setEditSectionControllerOpen(true, tableView: listItemsTableViewController.tableView)
-            editSectionController.section = section.section
+            topEditSectionControllerManager?.tableView = listItemsTableViewController.tableView
+            topEditSectionControllerManager?.controller?.section = section.section
+            topEditSectionControllerManager?.expand(true)
         }
     }
 
@@ -595,194 +632,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             print("Invalid segue: \(segue.identifier)")
         }
     }
-    
-    
-    // MARK: - quick add
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    /// quick add
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-    private lazy var quickAddController: QuickAddViewController = {
-        let controller = UIStoryboard.quickAddViewController()
-        controller.delegate = self
-        controller.productDelegate = self
-        if let backgroundColor = self.view.backgroundColor {
-            controller.addProductsOrGroupBgColor = UIColor.opaqueColorByApplyingTransparentColorOrBackground(backgroundColor.colorWithAlphaComponent(0.3), backgroundColor: UIColor.whiteColor())
-        }
-        let height: CGFloat = 350
-        self.initTopController(controller, height: height)
-//        controller.originalViewFrame = CGRectMake(controller.view.frame.origin.x, controller.view.frame.origin.y, controller.view.frame.width, height)
-        return controller
-    }()
-    
-    private func setQuickAddOpen(open: Bool) {
-        quickAddController.open = open
-        animateTopView(quickAddController.view, open: open, tableView: listItemsTableViewController.tableView)
-        
-        if open {
-            currentTopController = quickAddController
-        } else {
-            currentTopController = nil
-        }
-        
-//        if open {
-//            addItemView.setButtonText("Close")
-//            addItemView.setButtonColor(UIColor(red: 177/255, green: 177/255, blue: 177/255, alpha: 1))
-//        } else {
-//            addItemView.setButtonText("Add item")
-//            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
-//        }
-        
-        
-
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-    private func initTopController(controller: UIViewController, height: CGFloat) {
-        let view = controller.view
-
-        view.frame = CGRectMake(0, CGRectGetHeight(topBar.frame) + CGRectGetHeight(pricesView.frame), self.view.frame.width, height)
-        
-        // swift anchor
-        view.layer.anchorPoint = CGPointMake(0.5, 0)
-        view.frame.origin = CGPointMake(0, view.frame.origin.y - height / 2)
-        
-        let transform: CGAffineTransform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 0.001) //0.001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
-        view.transform = transform
-    }
-    
-    
-    // MARK: - add/edit
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    /// add edit add
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    
-    private lazy var addEditController: AddEditListItemViewController = {
-        let controller = UIStoryboard.addEditListItemViewController()
-        self.initTopController(controller, height: 250)
-        return controller
-    }()
-    
-    private func setAddEditListItemOpen(open: Bool) {
-        addEditController.open = open
-        animateTopView(addEditController.view, open: open, tableView: listItemsTableViewController.tableView)
-        
-        if open {
-            currentTopController = quickAddController
-            floatingViews.setActions([
-                FLoatingButtonAttributedAction(action: .Submit)])
-
-        } else {
-            currentTopController = nil
-            floatingViews.setActions(Array<FLoatingButtonAction>()) // this is done with setEditing false
-        }
-        
-//        if open {
-//            addItemView.setButtonText("Save")
-//            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
-//        } else {
-//            addItemView.setButtonText("Add item")
-//            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
-//        }
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    
-    
-    
-    // MARK: - edit section
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    /// edit section
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    
-    private lazy var editSectionController: EditSectionViewController = {
-        let controller = EditSectionViewController()
-        controller.delegate = self
-        self.initTopController(controller, height: 60)
-        return controller
-    }()
-    
-    private func setEditSectionControllerOpen(open: Bool, tableView: UITableView) {
-        editSectionController.open = open
-        animateTopView(editSectionController.view, open: open, tableView: tableView)
-        
-        if open {
-            currentTopController = editSectionController
-            floatingViews.setActions([
-                FLoatingButtonAttributedAction(action: .Submit)])
-            
-        } else {
-            currentTopController = nil
-            floatingViews.setActions(Array<FLoatingButtonAction>()) // this is done with setEditing false
-        }
-        
-        //        if open {
-        //            addItemView.setButtonText("Save")
-        //            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
-        //        } else {
-        //            addItemView.setButtonText("Add item")
-        //            addItemView.setButtonColor(UIColor(red: 244/255, green: 43/255, blue: 139/255, alpha: 1))
-        //        }
-    }
-    
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    
-    // parameter: tableView: This is normally the listitem's table view, except when we are in section-only mode, which needs a different table view
-    private func animateTopView(view: UIView, open: Bool, tableView: UITableView) {
-        if open {
-            self.view.addSubview(view)
-            let topInset = CGRectGetHeight(topBar.frame) + CGRectGetHeight(view.bounds) + CGRectGetHeight(pricesView.frame)
-            tableViewOverlay.frame = CGRectMake(tableView.frame.origin.x, tableView.frame.origin.y + topInset, tableView.frame.width, tableView.frame.height - tableView.topInset)
-            self.view.insertSubview(tableViewOverlay, aboveSubview: tableView)
-            self.view.bringSubviewToFront(floatingViews)
-        } else {
-            tableViewOverlay.removeFromSuperview()
-        }
-        
-        UIView.animateWithDuration(0.3, animations: {
-            if open {
-                self.tableViewOverlay.alpha = 0.2
-            } else {
-                self.tableViewOverlay.alpha = 0
-            }
-            view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, open ? 1 : 0.001)
-            
-            let topInset = CGRectGetHeight(self.topBar.frame) + CGRectGetHeight(view.frame) + CGRectGetHeight(self.pricesView.frame)
-            let bottomInset = self.navigationController?.tabBarController?.tabBar.frame.height
-            tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
-            tableView.topOffset = -tableView.inset.top
-            
-            }) { finished in
-        
-            if !open {
-                view.removeFromSuperview()
-            }
-        }
-    }
-
-    private lazy var tableViewOverlay: UIView = {
-        let view = UIButton()
-        view.backgroundColor = UIColor.blackColor()
-        view.userInteractionEnabled = true
-        view.alpha = 0
-        view.addTarget(self, action: "onTableViewOverlayTap:", forControlEvents: .TouchUpInside)
-        return view
-    }()
-
-    // closes top controller (whichever it may be)
-    func onTableViewOverlayTap(sender: UIButton) {
-        if quickAddController.open {
-            setQuickAddOpen(false)
-        }
-        if addEditController.open {
-            setAddEditListItemOpen(false)
-        }
-        if editSectionController.open {
-            let tableView: UITableView = sectionsTableViewController?.tableView ?? listItemsTableViewController.tableView
-            setEditSectionControllerOpen(false, tableView: tableView)
-        }
-    }
 
     // MARK: - ListItemGroupsViewControllerDelegate
     
@@ -797,7 +646,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     // MARK: - QuickAddDelegate
     
     func onCloseQuickAddTap() {
-        setQuickAddOpen(false)
+        topQuickAddControllerManager?.expand(false)
     }
     
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
@@ -873,25 +722,22 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         switch action {
         case .Toggle:
             // if any top controller is open, close it
-            if quickAddController.open || addEditController.open {
-                if quickAddController.open {
-                    setQuickAddOpen(false)
-                }
-                if addEditController.open {
-                    setAddEditListItemOpen(false)
-                }
+            if topQuickAddControllerManager?.expanded ?? false || topAddEditListItemControllerManager?.expanded ?? false {
+                topQuickAddControllerManager?.expand(false)
+                topAddEditListItemControllerManager?.expand(false)
+                
                 floatingViews.setActions(Array<FLoatingButtonAction>())  // reset floating actions
                 
             } else { // if there's no top controller open, open the quick add controller
-                setQuickAddOpen(true)
+                topQuickAddControllerManager?.expand(true)
                 floatingViews.setActions(Array<FLoatingButtonAction>())
             }
         case .Expand: // expand / collapse sections in edit mode
             toggleReorderSections()
         
         case .Submit:
-            if editSectionController.open {
-                editSectionController.submit()
+            if topEditSectionControllerManager?.expanded ?? false {
+                topEditSectionControllerManager?.controller?.submit()
                 
             } else {
                 sendActionToTopController(action)
@@ -906,7 +752,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     func onSectionUpdated(section: Section) {
         // use table view of controller which is showing
         let tableView: UITableView = sectionsTableViewController?.tableView ?? listItemsTableViewController.tableView
-        setEditSectionControllerOpen(false, tableView: tableView)
+        topEditSectionControllerManager?.tableView = tableView
+        topEditSectionControllerManager?.expand(false)
         listItemsTableViewController.updateSection(section)
     }
     
@@ -1001,8 +848,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func onSectionSelected(section: Section) {
         if let sectionsTableViewController = sectionsTableViewController {
-            setEditSectionControllerOpen(true, tableView: sectionsTableViewController.tableView)
-            editSectionController.section = section
+            topEditSectionControllerManager?.tableView = sectionsTableViewController.tableView
+            topEditSectionControllerManager?.expand(true)
+            topEditSectionControllerManager?.controller?.section = section
         } else {
             print("Error: ViewController.onSectionSelected: Invalid state: onSectionSelected called but there's no sectionsTableViewController")
         }

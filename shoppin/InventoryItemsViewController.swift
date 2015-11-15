@@ -10,7 +10,7 @@ import UIKit
 import CMPopTipView
 import SwiftValidator
 
-class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, AddEditInventoryControllerDelegate, BottonPanelViewDelegate, AddEditInventoryItemControllerDelegate, InventoryItemsTableViewControllerDelegate {
+class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, AddEditInventoryControllerDelegate, BottonPanelViewDelegate, AddEditInventoryItemControllerDelegate, InventoryItemsTableViewControllerDelegate, ExpandableTopViewControllerDelegate {
 
     @IBOutlet weak var sortByButton: UIButton!
     @IBOutlet weak var settingsView: UIView!
@@ -30,7 +30,10 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     
     
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
-    
+
+    private var addEditInventoryControllerManager: ExpandableTopViewController<AddEditInventoryController>?
+    private var addEditInventoryItemControllerManager: ExpandableTopViewController<AddEditInventoryItemController>?
+
     // Warn: Setting this before prepareForSegue for tableViewController has no effect
     private var inventory: Inventory? {
         didSet {
@@ -49,11 +52,45 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         navSingleTap.numberOfTapsRequired = 1
         navigationController?.navigationBar.subviews.first?.userInteractionEnabled = true
         navigationController?.navigationBar.subviews.first?.addGestureRecognizer(navSingleTap)
+        
+        if let tableView = tableViewController?.tableView {
+            addEditInventoryControllerManager = initAddEditInventoryControllerManager(tableView)
+            addEditInventoryItemControllerManager = initAddEditInventoryItemsManager(tableView)
+            
+        } else {
+            print("Error: InventoryItemsViewController.viewDidLoad no tableview in tableViewController")
+        }
+        
+    }
+
+    private func initAddEditInventoryControllerManager(tableView: UITableView) -> ExpandableTopViewController<AddEditInventoryController> {
+        let top: CGFloat = navigationController!.navigationBar.frame.maxY
+        let manager: ExpandableTopViewController<AddEditInventoryController> = ExpandableTopViewController(top: top, height: 90, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
+            let controller = UIStoryboard.addEditInventory()
+            controller.delegate = self
+//            controller.view.clipsToBounds = true
+            return controller
+        }
+        manager.delegate = self
+        return manager
+    }
+    
+    
+    private func initAddEditInventoryItemsManager(tableView: UITableView) -> ExpandableTopViewController<AddEditInventoryItemController> {
+        let top: CGFloat = navigationController!.navigationBar.frame.maxY
+        let manager: ExpandableTopViewController<AddEditInventoryItemController> = ExpandableTopViewController(top: top, height: 180, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
+            let controller = UIStoryboard.addEditInventoryItem()
+            controller.delegate = self
+            return controller
+        }
+        manager.delegate = self
+        return manager
     }
     
     func navSingleTap() {
-        addEditInventoryController.inventoryToEdit = inventory
-        setAddEditInventoryControllerOpen(!addEditInventoryController.open)
+        addEditInventoryControllerManager?.controller?.inventoryToEdit = inventory
+        addEditInventoryItemControllerManager?.expand(false)
+        addEditInventoryControllerManager?.expand(!(addEditInventoryControllerManager?.expanded ?? true)) // if for some reason manager was not set, contract (!true)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -128,135 +165,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     
     func onInventoryUpdated(inventory: Inventory) {
         self.inventory = inventory
-        setAddEditInventoryControllerOpen(false)
-    }
-    
-    // MARK: - Edit Inventory
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    
-    private var currentTopController: UIViewController?
-    
-    
-    private func initTopController(controller: UIViewController, height: CGFloat) {
-        let view = controller.view
-        
-        view.frame = CGRectMake(0, navigationController!.navigationBar.frame.maxY, self.view.frame.width, height)
-        
-        // swift anchor
-        view.layer.anchorPoint = CGPointMake(0.5, 0)
-        view.frame.origin = CGPointMake(0, view.frame.origin.y - height / 2)
-        
-        let transform: CGAffineTransform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 0.001) //0.001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
-        view.transform = transform
-    }
-    
-    private lazy var addEditInventoryController: AddEditInventoryController = {
-        let controller = UIStoryboard.addEditInventory()
-        controller.delegate = self
-        controller.view.clipsToBounds = true
-        
-        self.initTopController(controller, height: 90)
-        return controller
-    }()
-    
-    private lazy var addEditInventoryItemController: AddEditInventoryItemController = {
-        let controller = UIStoryboard.addEditInventoryItem()
-        controller.delegate = self
-        
-        self.initTopController(controller, height: 180)
-        return controller
-    }()
-    
-    private func setAddEditInventoryControllerOpen(open: Bool) {
-        
-        if addEditInventoryItemController.open {
-           setAddEditInventoryItemControllerOpen(false)
-        }
-        
-        addEditInventoryController.open = open
-        
-        if open {
-            floatingViews.setActions([FLoatingButtonAttributedAction(action: .Submit)])
-        } else {
-            floatingViews.setActions(Array<FLoatingButtonAction>())
-            addEditInventoryController.clear()
-        }
-        
-        if let tableView = tableViewController?.tableView {
-            animateTopView(addEditInventoryController, open: open, tableView: tableView)
-        }
-    }
-    
-    private func setAddEditInventoryItemControllerOpen(open: Bool) {
-        
-        if addEditInventoryController.open {
-            setAddEditInventoryControllerOpen(false)
-        }
-        
-        addEditInventoryItemController.open = open
-        
-        if open {
-            floatingViews.setActions([FLoatingButtonAttributedAction(action: .Submit)])
-        } else {
-            floatingViews.setActions(Array<FLoatingButtonAction>())
-            addEditInventoryItemController.clear()
-        }
-        
-        if let tableView = tableViewController?.tableView {
-            animateTopView(addEditInventoryItemController, open: open, tableView: tableView)
-        }
-    }
-    
-    // parameter: tableView: This is normally the listitem's table view, except when we are in section-only mode, which needs a different table view
-    private func animateTopView(controller: UIViewController, open: Bool, tableView: UITableView) {
-        let view = controller.view
-        if open {
-            self.addChildViewControllerAndView(controller)
-
-            tableViewOverlay.frame = self.view.frame
-            self.view.insertSubview(tableViewOverlay, aboveSubview: tableView)
-            self.view.bringSubviewToFront(floatingViews)
-            self.view.bringSubviewToFront(controller.view)
-        } else {
-            tableViewOverlay.removeFromSuperview()
-        }
-
-        UIView.animateWithDuration(0.3, animations: {
-            if open {
-                self.tableViewOverlay.alpha = 0.2
-            } else {
-                self.tableViewOverlay.alpha = 0
-            }
-            view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, open ? 1 : 0.001)
-
-            self.topControlTopConstraint.constant = view.frame.height
-            self.view.layoutIfNeeded()
-            
-            }) { finished in
-                
-                if !open {
-                    controller.removeFromParentViewControllerWithView()
-                }
-        }
-    }
-    
-    private lazy var tableViewOverlay: UIView = {
-        let view = UIButton()
-        view.backgroundColor = UIColor.blackColor()
-        view.userInteractionEnabled = true
-        view.alpha = 0
-        view.addTarget(self, action: "onTableViewOverlayTap:", forControlEvents: .TouchUpInside)
-        return view
-    }()
-    
-    // closes top controller (whichever it may be)
-    func onTableViewOverlayTap(sender: UIButton) {
-        if addEditInventoryController.open {
-            setAddEditInventoryControllerOpen(false)
-        }
-        if addEditInventoryItemController.open {
-            setAddEditInventoryItemControllerOpen(false)
-        }
+        addEditInventoryControllerManager?.expand(false)
     }
     
     @IBAction func onEditTap(sender: UIButton) {
@@ -284,10 +193,10 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     private func handleFloatingViewAction(action: FLoatingButtonAction) {
         switch action {
         case .Submit:
-            if addEditInventoryController.open {
-                addEditInventoryController.submit()
-            } else if addEditInventoryItemController.open {
-                addEditInventoryItemController.submit()
+            if addEditInventoryControllerManager?.expanded ?? false {
+                addEditInventoryControllerManager?.controller?.submit()
+            } else if addEditInventoryItemControllerManager?.expanded ?? false {
+                addEditInventoryItemControllerManager?.controller?.submit()
             } else {
                 print("Warn: InventoryItemsViewController.handleFloatingViewAction: .Submit called but no top view controller is open")
             }
@@ -309,8 +218,8 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
                 Providers.inventoryItemsProvider.updateInventoryItem(inventory, item: updatedInventoryItem, successHandler {[weak self] in
                     // we have pagination so we don't know if the item is visible atm. For now simply cause a reload and start at first page. TODO nicer solution
                     self?.tableViewController?.clearAndLoadFirstPage()
-                    self?.addEditInventoryItemController.clear()
-                    self?.setAddEditInventoryItemControllerOpen(false)
+                    self?.addEditInventoryItemControllerManager?.controller?.clear()
+                    self?.addEditInventoryItemControllerManager?.expand(false)
                 })
                 
             } else {
@@ -338,8 +247,15 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     
     func onInventoryItemSelected(inventoryItem: InventoryItem, indexPath: NSIndexPath) {
         if tableViewController?.editing ?? false {
-            setAddEditInventoryItemControllerOpen(true)
-            addEditInventoryItemController.editingInventoryItem = inventoryItem
+            addEditInventoryItemControllerManager?.expand(true)
+            addEditInventoryItemControllerManager?.controller?.editingInventoryItem = inventoryItem
         }
+    }
+    
+    // MARK: - ExpandableTopViewControllerDelegate
+    
+    func animationsForExpand(expand: Bool, view: UIView) {
+        topControlTopConstraint.constant = view.frame.height
+        self.view.layoutIfNeeded()
     }
 }

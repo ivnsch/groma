@@ -31,12 +31,27 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var currentInventory: Inventory?
     
+    private var addEditPlanItemControllerManager: ExpandableTopViewController<AddEditPlanItemController>?
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.allowsSelectionDuringEditing = true
         
         setEditing(false, animated: false)
+
+        addEditPlanItemControllerManager = initAddEditPlanItemControllerManager()
+    }
+    
+    private func initAddEditPlanItemControllerManager() -> ExpandableTopViewController<AddEditPlanItemController> {
+        let top = CGRectGetHeight(navigationBar.frame) + 60
+        return ExpandableTopViewController(top: top, height: 250, parentViewController: self, tableView: tableView) {[weak self] in
+            let controller = AddEditPlanItemController()
+            controller.currentInventory = self?.currentInventory
+            controller.delegate = self
+            return controller
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -90,8 +105,8 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let planItem = planItems[indexPath.row]
-        addEditController.editingPlanItem = planItem
-        setAddEditPlanItemOpen(true)
+        addEditPlanItemControllerManager?.expand(true)
+        addEditPlanItemControllerManager?.controller?.editingPlanItem = planItem
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -187,7 +202,7 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     @IBAction func onAddTap(sender: UIBarButtonItem) {
-        setAddEditPlanItemOpen(!addEditController.open)
+        setAddEditPlanItemOpen(!(addEditPlanItemControllerManager?.expanded ?? true)) // if for some reason not set, contract (!true)
     }
     
     override func setEditing(editing: Bool, animated: Bool) {
@@ -224,15 +239,17 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
         updateTotalPlanPrice()
         tableView.reloadData()
         tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: planItems.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
-        addEditController.clearInputs()
+        addEditPlanItemControllerManager?.controller?.clearInputs()
     }
 
     private func updateItemUI(planItem: PlanItem) {
         planItems.update(planItem)
         updateTotalPlanPrice()
         tableView.reloadData()
-        addEditController.clearInputs()
-        addEditController.clearEditingItem()
+        
+        // this is not necessary anymore because the expand manager always re-creates the controller but this implementation detail may change
+        addEditPlanItemControllerManager?.controller?.clearInputs()
+        addEditPlanItemControllerManager?.controller?.clearEditingItem()
 
         setAddEditPlanItemOpen(false)
         
@@ -254,91 +271,16 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    // TODO refactor top controller with list items, manage products etc.
-    
-    private lazy var addEditController: AddEditPlanItemController = {
-        let controller = AddEditPlanItemController()
-        self.initTopController(controller, height: 250)
-        controller.currentInventory = self.currentInventory
-        controller.delegate = self
-        return controller
-    }()
+
     
     private func setAddEditPlanItemOpen(open: Bool) {
         
         if !open {
-            addEditController.clearInputs()
-            addEditController.clearEditingItem()
+            // this is not necessary anymore because the expand manager always re-creates the controller but this implementation detail may change
+            addEditPlanItemControllerManager?.controller?.clearInputs()
+            addEditPlanItemControllerManager?.controller?.clearEditingItem()
         }
 
-        addEditController.open = open
-
-        animateTopView(addEditController, open: open, tableView: tableView)
-    }
-    
-    
-    private func initTopController(controller: UIViewController, height: CGFloat) {
-        let view = controller.view
-
-        view.frame = CGRectMake(0, CGRectGetHeight(navigationBar.frame) + 60, self.view.frame.width, height) // 60 total view height
-        
-        // swift anchor
-        view.layer.anchorPoint = CGPointMake(0.5, 0)
-        view.frame.origin = CGPointMake(0, view.frame.origin.y - height / 2)
-        
-        let transform: CGAffineTransform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 0.001) //0.001 seems to be necessary for scale down animation to be visible, with 0 the view just disappears
-        view.transform = transform
-    }
-    
-    // parameter: tableView: This is normally the listitem's table view, except when we are in section-only mode, which needs a different table view
-    private func animateTopView(controller: UIViewController, open: Bool, tableView: UITableView) {
-        let view = controller.view
-        if open {
-            self.addChildViewControllerAndView(controller)
-            let topInset = CGRectGetHeight(navigationBar.frame) + CGRectGetHeight(view.bounds) + 60 // 60 total view height
-            tableViewOverlay.frame = CGRectMake(tableView.frame.origin.x, topInset, tableView.frame.width, tableView.frame.height - tableView.topInset)
-            self.view.insertSubview(tableViewOverlay, aboveSubview: tableView)
-        } else {
-            tableViewOverlay.removeFromSuperview()
-        }
-        
-        UIView.animateWithDuration(0.3, animations: {
-            if open {
-                self.tableViewOverlay.alpha = 0.2
-            } else {
-                self.tableViewOverlay.alpha = 0
-            }
-            view.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, open ? 1 : 0.001)
-            
-            let topInset = open ? CGRectGetHeight(view.frame) : 0
-//            let topInset: CGFloat = 0
-            let bottomInset = self.tabBarController?.tabBar.frame.height
-            tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset!, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
-            tableView.topOffset = -tableView.inset.top
-            
-            }) { finished in
-                
-                if !open {
-                    controller.removeFromParentViewControllerWithView()
-                }
-        }
-    }
-    
-    private lazy var tableViewOverlay: UIView = {
-        let view = UIButton()
-        view.backgroundColor = UIColor.blackColor()
-        view.userInteractionEnabled = true
-        view.alpha = 0
-        view.addTarget(self, action: "onTableViewOverlayTap:", forControlEvents: .TouchUpInside)
-        return view
-    }()
-    
-    // closes top controller (whichever it may be)
-    func onTableViewOverlayTap(sender: UIButton) {
-        if addEditController.open {
-            setAddEditPlanItemOpen(false)
-        }
-    }    
+        addEditPlanItemControllerManager?.expand(open)
+    } 
 }
