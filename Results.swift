@@ -46,6 +46,16 @@ extension Results {
         }
         return dict
     }
+    
+    func findFirst(function: (element: T) -> Bool) -> T? {
+        for e in self {
+            if function(element: e) {
+                return e
+            }
+        }
+        return nil
+    }
+    
 }
 
 extension RealmSwift.List {

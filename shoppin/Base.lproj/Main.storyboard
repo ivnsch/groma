@@ -412,7 +412,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UQu-hi-P8a">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
                                         <connections>
-                                            <segue destination="yD7-GV-3hX" kind="show" identifier="doneViewControllerSegue" id="0t3-de-w6S"/>
+                                            <action selector="onCartTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="487-Fb-qWM"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -473,6 +473,7 @@
                         <outlet property="stashView" destination="ecb-Lc-6L8" id="Wj9-eR-Tta"/>
                         <outlet property="topBar" destination="Mf8-a8-xj0" id="oGu-bF-E6Q"/>
                         <segue destination="Rgi-b6-ROt" kind="presentation" identifier="showAddIemSegue" id="ao7-Nt-6rn"/>
+                        <segue destination="yD7-GV-3hX" kind="show" identifier="doneViewControllerSegue" id="83z-nz-sEV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

@@ -550,13 +550,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         })
     }
     
+    @IBAction func onCartTap(sender: UIButton) {
+        performSegueWithIdentifier("doneViewControllerSegue", sender: self)
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "doneViewControllerSegue" {
             if let doneViewController = segue.destinationViewController as? DoneViewController {
                 doneViewController.navigationItemTextColor = titleLabel?.textColor
                 doneViewController.delegate = self
-                listItemsTableViewController.clearPendingSwipeItemIfAny {
-                    doneViewController.onUIReady = {
+                doneViewController.onUIReady = {
+                    self.listItemsTableViewController.clearPendingSwipeItemIfAny {
                         doneViewController.list = self.currentList
                         doneViewController.backgroundColor = self.view.backgroundColor
                     }

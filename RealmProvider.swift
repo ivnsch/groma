@@ -216,6 +216,33 @@ class RealmProvider {
             }
         })
     }
+
+    func doInWriteTransactionSync(f: Realm -> Bool) -> Bool {
+        do {
+            let realm = try Realm()
+
+            realm.write {
+                f(realm)
+            }
+            return true
+            
+        } catch let error as NSError {
+            print("Error: creating Realm() in doInWriteTransaction: \(error)")
+            return false
+        } catch _ {
+            print("Error: creating Realm() in doInWriteTransaction (unknown)")
+            return false
+        }
+    }
+    
+    
+    func doInWriteLockedTransaction(f: Realm -> Bool, finishHandler: Bool -> ()) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
+            if let weakSelf = self {
+                finishHandler(weakSelf.doInWriteTransactionSync(f))
+            }
+        })
+    }
     
     
     // resetLastUpdateToServer = true should be always used when this method is called for sync

@@ -68,7 +68,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         return "{\(self.dynamicType) uuid: \(uuid), status: \(status), quantity: \(quantity), order: \(order), note: \(note), productUuid: \(product), sectionUuid: \(section), listUuid: \(list), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
     }
     
-    func copy(uuid uuid: String? = nil, status: ListItemStatus? = nil, quantity: Int? = nil, product: Product? = nil, section: Section? = nil, list: List? = nil, order: Int? = nil, note: String? = nil) -> ListItem {
+    func copy(uuid uuid: String? = nil, status: ListItemStatus? = nil, quantity: Int? = nil, product: Product? = nil, section: Section? = nil, list: List? = nil, order: Int? = nil, note: String?) -> ListItem {
         return ListItem(
             uuid: uuid ?? self.uuid,
             status: status ?? self.status,

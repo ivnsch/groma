@@ -14,3 +14,10 @@ func synced(lock: AnyObject, closure: () -> ()) {
     closure()
     objc_sync_exit(lock)
 }
+
+func syncedRet<T>(lock: AnyObject, closure: () -> T) -> T {
+    objc_sync_enter(lock)
+    let t = closure()
+    objc_sync_exit(lock)
+    return t
+}

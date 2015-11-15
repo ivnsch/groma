@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 class ListItemProviderImpl: ListItemProvider {
 
@@ -223,70 +224,105 @@ class ListItemProviderImpl: ListItemProvider {
     
 
     func addListItem(product: Product, sectionName: String, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
-
-        func onHasSection(section: Section, listItems: [ListItem]) {
-            
-            // WARN / TODO: we didn't do any local db udpates! currently this is done after we receive the response off addItem of the server, with the server object
-            // in order to support offline use this has to be changed either
-            // 1. do the update before calling the service. If service returns an error then remove?
-            // 2. do the update before calling the service, and add flag not synched (etc)
-            // 3. more ideas?
-            let order = orderMaybe ?? listItems.count
-            let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: quantity, product: product, section: section, list: list, order: order, note: note)
-            add(listItem, {result in
-                if let addedListItem = result.sucessResult {
+        
+        let finished: (addedListItem: ListItem?) -> () = {addedListItem in
+            dispatch_async(dispatch_get_main_queue(), {
+                if let addedListItem = addedListItem {
                     handler(ProviderResult(status: .Success, sucessResult: addedListItem))
                 } else {
-                    handler(ProviderResult(status: result.status))
+                    handler(ProviderResult(status: .DatabaseUnknown))
                 }
             })
         }
         
-        // Get the list items in order to:
-        // 1. Use existing section if any: the passed sectionName in this case is ignored. Tthis is done because this method is used for product category which has lower prio than existing section. Which corresponds to use case, user adds a product from quick list - if there's already a listitem with the product's name then we want to increment the existing item, without changing it section, not add it to section corresponding to products category. TODO check this method only used for this use case if yes change parameter name to category if not review if current logic needs to be changed
-        // 2. Determine order field of new item (existing items count)
-        listItems(list, fetchMode: .First) {result in
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
             
-            if let listItems = result.sucessResult {
-                
-                if let existingListItem = listItems.findFirstWithProductName(product.name) {
-                    onHasSection(existingListItem.section, listItems: listItems)
-                } else {
-                    Providers.sectionProvider.mergeOrCreateSection(sectionName, possibleNewOrder: nil, list: list) {result in
-                        if let section = result.sucessResult {
-                            onHasSection(section, listItems: listItems)
+            if let weakSelf = self {
+                synced(weakSelf) {
+                    do {
+                        let memAddedListItemMaybe = weakSelf.memProvider.addOrUpdateListItem(product, sectionNameMaybe: sectionName, quantity: quantity, list: list, note: note)
+                        if let addedListItem = memAddedListItemMaybe {
+                            finished(addedListItem: addedListItem)
                         }
+                        
+                        self?.dbProvider.doInWriteTransaction({realm in
+                            
+                            // even if we have the possibly updated item from mem cache, do always a fetch to db and use this item - to guarantee max. consistency.s
+                            // theoretically the state in mem should match the state in db so this fetch should not be necessary, but for now let's be secure.
+                            
+                            // see if there's already a listitem for this product in the list - if yes only increment it
+                            if let existingListItem = realm.objects(DBListItem).filter("product.name == '\(product.name)'").first {
+                                existingListItem.quantity += quantity
+                                
+                                // possible updates (when user submits a new list item using add edit product controller)
+                                //                if let sectionName = section.name {
+                                existingListItem.section.name = sectionName
+                                //                }
+                                if let note = note {
+                                    existingListItem.note = note
+                                }
+                                
+                                // let incrementedListItem = existingListItem.copy(quantity: existingListItem.quantity + 1)
+                                // TODO!! update sectionnaeme, note (for case where this is from add product with inputs)
+                                realm.add(existingListItem, update: true)
+                                let savedListItem = ListItemMapper.listItemWithDB(existingListItem)
+                                
+                                if memAddedListItemMaybe == nil { // if mem cache is disabled, return the item from db
+                                    finished(addedListItem: savedListItem)
+                                }
+                                
+                            } else { // no list item for product in the list, create a new one
+                                
+                                // see if there's already a section for the new list item in the list, if not create a new one
+                                let listItemsInList = realm.objects(DBListItem).filter("list.uuid == '\(list.uuid)'")
+                                //                let sectionName = sectionNameMaybe ?? product.category
+                                let sectionName = sectionName ?? product.category
+                                let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
+                                    return SectionMapper.sectionWithDB(item.section)
+                                    } ?? { // section not existent create a new one
+                                        let sectionCount = Set(listItemsInList.map{$0.section}).count
+                                        
+                                        // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
+                                        return memAddedListItemMaybe?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, order: sectionCount)
+                                        }()
+                                
+                                
+                                // calculate list item order, which is at the end of it's section (==count of listitems in section). Note that currently we are doing this iteration even if we just created the section, where order is always 0. This if for clarity - can be optimised later (TODO)
+                                var listItemOrder = 0
+                                for existingListItem in listItemsInList {
+                                    if existingListItem.section.uuid == section.uuid {
+                                        listItemOrder++
+                                    }
+                                }
+                                
+                                // create the list item and save it
+                                // memcache uuid: if we created a new listitem in memcache use this uuid so our data is consistent mem/db
+                                let listItem = ListItem(uuid: memAddedListItemMaybe?.uuid ?? NSUUID().UUIDString, status: .Todo, quantity: quantity, product: product, section: section, list: list, order: listItemOrder)
+                                let dbListItem = ListItemMapper.dbWithListItem(listItem)
+                                realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
+                                let savedListItem = ListItemMapper.listItemWithDB(dbListItem)
+                                
+                                if memAddedListItemMaybe == nil { // if mem cache is disabled, return the item from db
+                                    finished(addedListItem: savedListItem)
+                                }
+                            }
+                            
+                            return true
+                            
+                            }, finishHandler: {success in
+                                if !success { // if we are in finish handler and !success it means there was an exception accessing db somewhere.
+                                    handler(ProviderResult(status: .DatabaseUnknown))
+                                }
+                        })
                     }
                 }
             }
-        }
+        })
     }
 
     func addListItem(product: Product, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
-        
-        self.listItems(list, fetchMode: .First) {[weak self] result in // TODO fetch items only when order not passed, because they are used only to get order
-            
-            if let listItems = result.sucessResult {
-                // WARN / TODO: we didn't do any local db udpates! currently this is done after we receive the response off addItem of the server, with the server object
-                // in order to support offline use this has to be changed either
-                // 1. do the update before calling the service. If service returns an error then remove?
-                // 2. do the update before calling the service, and add flag not synched (etc)
-                // 3. more ideas?
-                let order = orderMaybe ?? listItems.count
-                let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: quantity, product: product, section: section, list: list, order: order, note: note)
-                self?.add(listItem, {result in
-                    if let addedListItem = result.sucessResult {
-                        handler(ProviderResult(status: .Success, sucessResult: addedListItem))
-                    } else {
-                        handler(ProviderResult(status: result.status))
-                    }
-                })
-                
-            } else {
-                print("Error fetching listItems: \(result.status)")
-                handler(ProviderResult(status: .DatabaseUnknown))
-            }
-        }
+        // for now call the other func, which will fetch the section again... review if this is bad for performance otherwise let like this
+        addListItem(product, sectionName: section.name, quantity: quantity, list: list, note: note, order: orderMaybe, handler)
     }
 
     func switchStatus(listItems: [ListItem], list: List, status: ListItemStatus, _ handler: ProviderResult<Any> -> ()) {

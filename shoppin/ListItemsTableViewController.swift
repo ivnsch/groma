@@ -166,13 +166,14 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Middle, animated: true)
             }
             
-        } else { // indexpath for updated item not in the tableview, this can happen if e.g. updated item has a new section (not in tableview)
+        } else { // indexpath for updated item not in the tableview, item is new or has a new section
             items.append(listItem) // FIXME hacky...
             initTableViewContent() // this will make the possible new section appear
             
             if scrollToSelection {
-                let lastIndexPath = NSIndexPath(forRow: tableViewSections[tableViewSections.count - 1].tableViewListItems.count - 1, inSection: tableViewSections.count - 1)
-                tableView.scrollToRowAtIndexPath(lastIndexPath, atScrollPosition: .Middle, animated: true)
+                if let indexPath = getIndexPath(listItem) { // lookup indexpath where new item was inserted (initTableViewContent puts the item where it belongs)
+                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Middle, animated: true)
+                }
             }
         }
     }
@@ -183,7 +184,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         // This is maybe not the most performant way to do this update but it guarantees consistency as it uses the "official" entry point to initialise the table, which is setListItems
         let updatedItems: [ListItem] = items.map{item in
             if item.section.same(section) {
-                return item.copy(section: section)
+                return item.copy(section: section, note: nil)
             } else {
                 return item
             }
