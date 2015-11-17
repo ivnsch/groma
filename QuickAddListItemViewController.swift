@@ -163,7 +163,7 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
         if let textSize = item.textSize {
             return textSize
         } else {
-            let textSize = item.labelText.size(Fonts.regularLight).increase(12, dy: 6)
+            let textSize = item.labelText.size(Fonts.regularLight).increase(6, dy: 6)
             filteredQuickAddItems[indexPath.row].textSize = textSize // cache calculated text size
             return textSize
         }

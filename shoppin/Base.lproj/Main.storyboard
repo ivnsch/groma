@@ -431,7 +431,10 @@
                                     <constraint firstItem="HHn-gV-K9h" firstAttribute="leading" secondItem="Dqp-d5-Ldb" secondAttribute="trailing" constant="8" id="xiW-kM-yB7"/>
                                 </constraints>
                                 <connections>
+                                    <outlet property="cartImg" destination="Dqp-d5-Ldb" id="a1O-zO-VgO"/>
+                                    <outlet property="cartImgLeftConstraint" destination="pcT-UX-maN" id="F4G-rs-Wfp"/>
                                     <outlet property="donePriceLabel" destination="HHn-gV-K9h" id="d9v-gT-KQ3"/>
+                                    <outlet property="heightConstraint" destination="XTX-5C-Avu" id="q55-7c-8Al"/>
                                     <outlet property="totalPriceLabel" destination="O2F-Jz-CeL" id="EoQ-8V-xnJ"/>
                                     <outlet property="widthConstraint" destination="rQC-nu-lkT" id="yDs-1e-dvG"/>
                                 </connections>

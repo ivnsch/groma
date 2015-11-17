@@ -8,8 +8,9 @@
 
 import UIKit
 
-protocol ExpandableTopViewControllerDelegate {
-    func animationsForExpand(expand: Bool, view: UIView)
+@objc protocol ExpandableTopViewControllerDelegate {
+    func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView)
+    optional func onExpandableClose()
 }
 
 class ExpandableTopViewController<T: UIViewController>: NSObject {
@@ -17,8 +18,8 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
     private let top: CGFloat
     private let height: CGFloat
     private let animateTableViewInset: Bool
-    private let openInset: CGFloat // extra table view inset (additionally to the view's height when expanded)
-    private let closeInset: CGFloat
+    private let openInset: CGFloat // extra table view inset while open (additionally to the view's height when expanded)
+    private let closeInset: CGFloat // extra table view inset while closed (additionally to the view's height when expanded)
     private weak var parentController: UIViewController?
     weak var tableView: UITableView?
     private let controllerBuilder: Void -> T // initialise lazily the controller
@@ -32,7 +33,6 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
     
     var delegate: ExpandableTopViewControllerDelegate?
     
-    // top & close inset - some view controllers need different values here, don't know exactly why. No time!
     init(top: CGFloat, height: CGFloat, animateTableViewInset: Bool = true, openInset: CGFloat = 0, closeInset: CGFloat = 0, parentViewController: UIViewController, tableView: UITableView, controllerBuilder: Void -> T) {
         self.top = top
         self.height = height
@@ -89,7 +89,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
             
             if expanded {
                 // create and add overlay
-                let overlayTop = top + height
+                let overlayTop = openInset + height
                 let overlay = createOverlay()
                 overlay.frame = CGRectMake(tableView.frame.origin.x, overlayTop, tableView.frame.width, tableView.frame.height)
                 parentController.view.insertSubview(overlay, aboveSubview: tableView)
@@ -125,7 +125,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
                         tableView.topOffset = -tableView.inset.top
                     }
 
-                    weakSelf.delegate?.animationsForExpand(expanded, view: view)
+                    weakSelf.delegate?.animationsForExpand(weakSelf.controller!, expand: expanded, view: view)
                     
                 } else {
                     print("Warn: ExpandableTopViewController.animateTopView: no self or view")
@@ -147,5 +147,6 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
     
     func onOverlayTap(sender: UIButton) {
         expand(false)
+        delegate?.onExpandableClose?()
     }
 }

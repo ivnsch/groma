@@ -254,7 +254,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     
     // MARK: - ExpandableTopViewControllerDelegate
     
-    func animationsForExpand(expand: Bool, view: UIView) {
+    func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
         topControlTopConstraint.constant = view.frame.height
         self.view.layoutIfNeeded()
     }

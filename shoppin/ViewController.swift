@@ -11,7 +11,7 @@ import CoreData
 import SwiftValidator
 import ChameleonFramework
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemViewControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemViewControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate
 //    , UIBarPositioningDelegate
 {
     
@@ -87,8 +87,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
-        let top = CGRectGetHeight(topBar.frame) + CGRectGetHeight(pricesView.frame)
-        return ExpandableTopViewController(top: top, height: 350, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
+        let top = CGRectGetHeight(topBar.frame) + pricesView.frame.height
+        let openInset = CGRectGetHeight(topBar.frame) + pricesView.minimizedHeight
+        let closedInset = top
+        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: 290, openInset: openInset, closeInset: closedInset, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
             controller.productDelegate = self
@@ -97,13 +99,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             }
             return controller
         }
+        manager.delegate = self
+        return manager
     }
     
     private func initAddEditListItemControllerManager() -> ExpandableTopViewController<AddEditListItemViewController> {
-        let top = CGRectGetHeight(topBar.frame) + CGRectGetHeight(pricesView.frame)
-        return ExpandableTopViewController(top: top, height: 300, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {
+        let top = CGRectGetHeight(topBar.frame) + pricesView.frame.height
+        let openInset = CGRectGetHeight(topBar.frame) + pricesView.minimizedHeight
+        let closedInset = top
+        let manager: ExpandableTopViewController<AddEditListItemViewController> =  ExpandableTopViewController(top: top, height: 240, openInset: openInset, closeInset: closedInset, parentViewController: self, tableView: listItemsTableViewController.tableView) {
             return UIStoryboard.addEditListItemViewController()
         }
+        manager.delegate = self
+        return manager
     }
 
     private func initEditSectionControllerManager() -> ExpandableTopViewController<EditSectionViewController> {
@@ -219,7 +227,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 Providers.listItemsProvider.listItemCount(ListItemStatus.Stash, list: list, successHandler {[weak self] count in
                     if count != self?.stashView.quantity { // don't animate if there's no change
                         self?.stashView.quantity = count
-                        self?.pricesView.setExpanded(count == 0)
+                        self?.pricesView.setExpandedHorizontal(count == 0)
                         self?.stashView.setOpen(count > 0)
                     }
                 })
@@ -348,10 +356,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             topQuickAddControllerManager?.expand(false)
             topAddEditListItemControllerManager?.expand(false)
 
+            pricesView.setExpandedVertical(true)
+            
             floatingViews.setActions(Array<FLoatingButtonAction>())  // reset floating actions
             
         } else { // if there's no top controller open, open the quick add controller
             topQuickAddControllerManager?.expand(true)
+            
+            pricesView.setExpandedVertical(false)
+            
             floatingViews.setActions(Array<FLoatingButtonAction>())
         }
     }
@@ -374,9 +387,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if tryCloseTopViewController {
             topQuickAddControllerManager?.expand(false)
             topAddEditListItemControllerManager?.expand(false)
+            pricesView.setExpandedVertical(true)
         }
         if editing {
-            self.floatingViews.setActions([expandButtonModel.collapsedAction])
+            floatingViews.setActions([expandButtonModel.collapsedAction])
         } else {
             floatingViews.setActions(Array<FLoatingButtonAction>())
         }
@@ -458,6 +472,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             topAddEditListItemControllerManager?.controller?.updatingListItem = updatingListItem
             topAddEditListItemControllerManager?.controller?.delegate = self
             topAddEditListItemControllerManager?.expand(true)
+            pricesView.setExpandedVertical(false)
 //            addEditController.updatingListItem = updatingListItem
 //            addEditController.delegate = self
 //            
@@ -861,5 +876,21 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     func onEmptyCartTap() {
         navigationController?.popViewControllerAnimated(true)
         performSegueWithIdentifier("stashSegue", sender: self)
+    }
+    
+    // MARK: - ExpandableTopViewControllerDelegate
+    
+    func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
+        if controller is QuickAddViewController || controller is AddEditListItemViewController {
+            if expand {
+                view.frame.origin.y = CGRectGetHeight(topBar.frame) + pricesView.minimizedHeight
+            } else {
+                view.frame.origin.y = CGRectGetHeight(topBar.frame) + pricesView.originalHeight
+            }
+        }
+    }
+    
+    func onExpandableClose() {
+        pricesView.setExpandedVertical(true)
     }
 }
