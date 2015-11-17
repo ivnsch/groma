@@ -18,6 +18,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet var tableViewFooter: LoadingFooter!
     @IBOutlet var tableView: UITableView!
     
+    private var dateFormatter: NSDateFormatter!
+    
     private var sectionModels: [SectionModel<HistoryItemGroup>] = [] {
         didSet {
             self.tableView.reloadData()
@@ -27,7 +29,11 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.tableView.topInset = 64 // in my understanding this should be 64 which is the actual size of nav bar but it needs 44 for some reason
+        tableView.topInset = 64 // in my understanding this should be 64 which is the actual size of nav bar but it needs 44 for some reason
+        
+        dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = .FullStyle
+        dateFormatter.timeStyle = .ShortStyle
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -59,8 +65,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         let view = NSBundle.loadView("HistoryItemGroupHeaderView", owner: self) as! HistoryItemGroupHeaderView
         
         view.userName = group.user.email
-        view.date = "\(group.date)" // TODO format
-        view.price = "\(group.totalPrice.toLocalCurrencyString())" // TODO format
+        view.date = dateFormatter.stringFromDate(group.date)
+        view.price = group.totalPrice.toLocalCurrencyString()
         
         view.sectionIndex = section
         view.sectionModel = sectionModel
