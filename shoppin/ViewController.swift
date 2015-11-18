@@ -11,7 +11,7 @@ import CoreData
 import SwiftValidator
 import ChameleonFramework
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemViewControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemViewControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate
 //    , UIBarPositioningDelegate
 {
     
@@ -37,10 +37,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     @IBOutlet weak var listNameView: UILabel!
     
-    @IBOutlet weak var topBar: UIView!
-
-    @IBOutlet weak var editButton: UIButton!
-    @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var topBar: ListTopBarView!
 
     private let transition = BlurBubbleTransition()
     
@@ -65,12 +62,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-
-    
-    @IBAction func onBackTap() {
-        onExpand(false)
-        expandDelegate?.setExpanded(false)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,6 +75,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         topQuickAddControllerManager = initTopQuickAddControllerManager()
         topAddEditListItemControllerManager = initAddEditListItemControllerManager()
         topEditSectionControllerManager = initEditSectionControllerManager()
+        
+        topBar.delegate = self
+        
+        floatingViews.userInteractionEnabled = false
     }
     
     private func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
@@ -134,8 +129,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     func onExpand(expanding: Bool) {
         if !expanding {
             clearPossibleUndo()
+            topBar.setLeftButtonIds([])
+            topBar.setRightButtonIds([])
         }
-        animateTitle(expanding)
+        topBar.animateTitleLabelLeft(expanding)
     }
     
     func setThemeColor(color: UIColor) {
@@ -148,8 +145,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         listItemsTableViewController.headerBGColor = colorArray[1] as? UIColor // as? to silence warning
         
         let compl = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
-        editButton.setTitleColor(compl, forState: .Normal)
-        addButton.setTitleColor(compl, forState: .Normal)
         
         // adjust nav controller for cart & stash (in this controller we use a custom view).
         navigationController?.setColors(color, textColor: compl)
@@ -165,6 +160,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //        } else {
 //            print("Error: ViewController.setThemeColor, colorArray[3] is not a color")
 //        }
+        
+        topBar.fgColor = compl
+            
         stashView.setNeedsDisplay()
     }
     
@@ -175,28 +173,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
 
-    private func setTitleLabelText(text: String) {
-        titleLabel?.text = text
-        titleLabel?.sizeToFit()
-        let center = CGPointMake(view.center.x, topBar.center.y)
-        titleLabel?.center = center
-    }
-    
-    private func animateTitle(expanding: Bool) {
-        
-        if let label = self.titleLabel {
-            let left = CGPointMake(14 + label.frame.width / 2, self.topBar.center.y)
-            let center = CGPointMake(self.view.center.x, self.topBar.center.y)
-            
-            label.center = expanding ? left : center
-            UIView.animateWithDuration(0.3) { // note: speed has to be same as expand controller anim, otherwise "jump"
-                label.center = expanding ? center : left
-            }
-        } else {
-            print("Warn: ViewController.animateTitle: no label")
-        }
-    }
-    
     private func initFloatingViews() {
         floatingViews.setActions(Array<FLoatingButtonAction>())
         floatingViews.delegate = self
@@ -245,7 +221,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func initWithList(list: List) {
-        setTitleLabelText(list.name)
+        topBar.title = list.name
         udpateListItems(list)
     }
     
@@ -338,16 +314,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
-    @IBAction func onEditTap(sender: AnyObject) {
-        
-        clearPossibleUndo()
-
-        let editing = !self.listItemsTableViewController.editing
-        
-        self.setEditing(editing, animated: true, tryCloseTopViewController: true)
-    }
-
-    @IBAction func onAddTap(sender: AnyObject) {
+    private func toggleTopAddController() {
         
         clearPossibleUndo()
         
@@ -355,16 +322,20 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if topQuickAddControllerManager?.expanded ?? false || topAddEditListItemControllerManager?.expanded ?? false {
             topQuickAddControllerManager?.expand(false)
             topAddEditListItemControllerManager?.expand(false)
-
-            pricesView.setExpandedVertical(true)
             
+            pricesView.setExpandedVertical(true)
+
+            topBar.setLeftButtonIds([.Edit])
+            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
             floatingViews.setActions(Array<FLoatingButtonAction>())  // reset floating actions
             
         } else { // if there's no top controller open, open the quick add controller
             topQuickAddControllerManager?.expand(true)
             
             pricesView.setExpandedVertical(false)
-            
+
+            topBar.setLeftButtonIds([])
+            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
             floatingViews.setActions(Array<FLoatingButtonAction>())
         }
     }
@@ -380,9 +351,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if editing == false {
             view.endEditing(true)
         }
-        
-//        addItemView.setVisible(editing, animated: animated)
-        // TODO alpha of add button
 
         if tryCloseTopViewController {
             topQuickAddControllerManager?.expand(false)
@@ -392,10 +360,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if editing {
             floatingViews.setActions([expandButtonModel.collapsedAction])
         } else {
+            topBar.setRightButtonIds([.ToggleOpen])
             floatingViews.setActions(Array<FLoatingButtonAction>())
         }
-        
-//        floatingViews.setActions(editing ? [toggleButtonAvailableAction, FLoatingButtonAttributedAction(action: .Add)] : [toggleButtonInactiveAction]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button), and set appropiate alpha
 
         listItemsTableViewController.setEditing(editing, animated: animated)
 
@@ -411,12 +378,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
         listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
         listItemsTableViewController.tableView.topOffset = -listItemsTableViewController.tableView.inset.top
-        
-        if editing {
-            editButton.setTitle("Done", forState: .Normal)
-        } else {
-            editButton.setTitle("Edit", forState: .Normal)
-        }
     }
     
     // TODO do we still need this? This was prob used by done view controller to update our list
@@ -690,19 +651,37 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onQuickListOpen() {
-        floatingViews.setActions(Array<FLoatingButtonAction>())
+        topBar.setBackVisible(false)
+        topBar.setLeftButtonModels([])
+        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
     }
     
     func onAddProductOpen() {
-        floatingViews.setActions([FLoatingButtonAttributedAction(action: .Submit)])
+        topBar.setBackVisible(false)
+        topBar.setLeftButtonModels([])
+        topBar.setRightButtonModels([
+            TopBarButtonModel(buttonId: .Submit),
+            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+        ])
     }
     
     func onAddGroupOpen() {
-        floatingViews.setActions([FLoatingButtonAttributedAction(action: .Submit), FLoatingButtonAttributedAction(action: .Add)])
+        topBar.setBackVisible(false)
+        topBar.setLeftButtonModels([])
+        topBar.setRightButtonModels([
+            TopBarButtonModel(buttonId: .Add),
+            TopBarButtonModel(buttonId: .Submit),
+            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+        ])
     }
     
     func onAddGroupItemsOpen() {
-        floatingViews.setActions([FLoatingButtonAttributedAction(action: .Submit), FLoatingButtonAttributedAction(action: .Back)])
+        topBar.setBackVisible(true)
+        topBar.setLeftButtonModels([])
+        topBar.setRightButtonModels([
+            TopBarButtonModel(buttonId: .Submit),
+            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+        ])
     }
     
     
@@ -735,30 +714,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private func handleFloatingViewAction(action: FLoatingButtonAction) {
         switch action {
-        case .Toggle:
-            // if any top controller is open, close it
-            if topQuickAddControllerManager?.expanded ?? false || topAddEditListItemControllerManager?.expanded ?? false {
-                topQuickAddControllerManager?.expand(false)
-                topAddEditListItemControllerManager?.expand(false)
-                
-                floatingViews.setActions(Array<FLoatingButtonAction>())  // reset floating actions
-                
-            } else { // if there's no top controller open, open the quick add controller
-                topQuickAddControllerManager?.expand(true)
-                floatingViews.setActions(Array<FLoatingButtonAction>())
-            }
         case .Expand: // expand / collapse sections in edit mode
             toggleReorderSections()
-        
-        case .Submit:
-            if topEditSectionControllerManager?.expanded ?? false {
-                topEditSectionControllerManager?.controller?.submit()
-                
-            } else {
-                sendActionToTopController(action)
-            }
-            
-        case .Back, .Add: sendActionToTopController(action)
+        default: break
         }
     }
     
@@ -773,17 +731,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func sendActionToTopController(action: FLoatingButtonAction) {
-        if let quickAddViewController = currentTopController as? QuickAddViewController { // quick add case
-            quickAddViewController.handleFloatingButtonAction(action) // delegate dispatching to quick add controller
-            
-        } else if let addEditListItemViewController = currentTopController as? AddEditListItemViewController { // update case
+        
+        if topQuickAddControllerManager?.expanded ?? false {
+            topQuickAddControllerManager?.controller?.handleFloatingButtonAction(action)
+        } else if topAddEditListItemControllerManager?.expanded ?? false {
             // here we do dispatching in place as it's relatively simple and don't want to contaminate to many view controllers with floating button code
             // there should be a separate component to do all this but no time now. TODO improve
             
             switch action {
             case .Submit:
-                addEditListItemViewController.submit(AddEditListItemViewControllerAction.Update)
-            case .Back, .Add, .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(addEditListItemViewController) instance")
+                topAddEditListItemControllerManager?.controller?.submit(AddEditListItemViewControllerAction.Update)
+            case .Back, .Add, .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(topAddEditListItemControllerManager?.controller) instance")
             }
         }
     }
@@ -892,5 +850,45 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func onExpandableClose() {
         pricesView.setExpandedVertical(true)
+        topBar.setBackVisible(false)
+        topBar.setLeftButtonIds([.Edit])
+        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+    }
+    
+    // MARK: - ListTopBarViewDelegate
+    
+    func onTopBarBackButtonTap() {
+        sendActionToTopController(.Back)
+    }
+    
+    func onTopBarTitleTap() {
+        onExpand(false)
+        expandDelegate?.setExpanded(false)
+    }
+    
+    func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
+        switch buttonId {
+        case .Add:
+            sendActionToTopController(.Add)
+        case .Submit:
+            if topEditSectionControllerManager?.expanded ?? false {
+                topEditSectionControllerManager?.controller?.submit()
+            } else {
+                sendActionToTopController(.Submit)
+            }
+        case .ToggleOpen:
+            toggleTopAddController()
+        case .Edit:
+            clearPossibleUndo()
+            let editing = !self.listItemsTableViewController.editing
+            self.setEditing(editing, animated: true, tryCloseTopViewController: true)
+        }
+    }
+    
+    func onCenterTitleAnimComplete(center: Bool) {
+        if center {
+            topBar.setLeftButtonIds([.Edit])
+            topBar.setRightButtonIds([.ToggleOpen])
+        }
     }
 }

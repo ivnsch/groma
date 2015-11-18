@@ -19,6 +19,14 @@ struct OrderedDictionary<KeyType: Hashable, ValueType>: SequenceType {
     var count: Int {
         return self.array.count
     }
+
+    var keys: [KeyType] {
+        var arr: [KeyType] = []
+        for (k, _) in self {
+            arr.append(k)
+        }
+        return arr
+    }
     
     var values: [ValueType] {
         var arr: [ValueType] = []
@@ -144,5 +152,13 @@ struct OrderedDictionary<KeyType: Hashable, ValueType>: SequenceType {
             
             return dict
         }
+    }
+    
+    func toDictionary() -> Dictionary<KeyType, ValueType> {
+        var dict = [KeyType: ValueType]()
+        for entry in self {
+            dict[entry.0] = entry.1
+        }
+        return dict
     }
 }

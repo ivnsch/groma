@@ -604,6 +604,8 @@
 		EBDCA1311B8A124B000020BF /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA1301B8A124B000020BF /* NSDate.swift */; };
 		EBDCA1321B8A124B000020BF /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA1301B8A124B000020BF /* NSDate.swift */; };
 		EBDCA1331B8A124B000020BF /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDCA1301B8A124B000020BF /* NSDate.swift */; };
+		EBDF8D0F1BFB7E2A00F6830A /* ListTopBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDF8D0E1BFB7E2A00F6830A /* ListTopBarView.swift */; };
+		EBDF8D111BFB7E4200F6830A /* ListTopBarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBDF8D101BFB7E4200F6830A /* ListTopBarView.xib */; };
 		EBDFE3A71ACE829400E48F95 /* CellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3A61ACE829400E48F95 /* CellManager.swift */; };
 		EBDFE3A91ACE82F000E48F95 /* ListItemCellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */; };
 		EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3AA1ACE935600E48F95 /* ListItemRow.swift */; };
@@ -1084,6 +1086,8 @@
 		EBDCA1261B87AEB9000020BF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		EBDCA12A1B87B063000020BF /* bridging_header_ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bridging_header_ios.h; sourceTree = SOURCE_ROOT; };
 		EBDCA1301B8A124B000020BF /* NSDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDate.swift; sourceTree = "<group>"; };
+		EBDF8D0E1BFB7E2A00F6830A /* ListTopBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListTopBarView.swift; sourceTree = "<group>"; };
+		EBDF8D101BFB7E4200F6830A /* ListTopBarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ListTopBarView.xib; sourceTree = "<group>"; };
 		EBDFE3A61ACE829400E48F95 /* CellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellManager.swift; sourceTree = "<group>"; };
 		EBDFE3A81ACE82F000E48F95 /* ListItemCellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemCellManager.swift; sourceTree = "<group>"; };
 		EBDFE3AA1ACE935600E48F95 /* ListItemRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemRow.swift; sourceTree = "<group>"; };
@@ -1410,6 +1414,7 @@
 		EB20FC021A59986C0058103B /* list */ = {
 			isa = PBXGroup;
 			children = (
+				EBDF8D0D1BFB7DC700F6830A /* topbar */,
 				EB5AD1921BEE2EA500BC6A2F /* editSection */,
 				EB85F47D1BD6ED9500E19E9B /* addEditListItem */,
 				EB2F5D721A55754400DBC4AF /* PricesView.swift */,
@@ -2106,6 +2111,15 @@
 			name = charts;
 			sourceTree = "<group>";
 		};
+		EBDF8D0D1BFB7DC700F6830A /* topbar */ = {
+			isa = PBXGroup;
+			children = (
+				EBDF8D0E1BFB7E2A00F6830A /* ListTopBarView.swift */,
+				EBDF8D101BFB7E4200F6830A /* ListTopBarView.xib */,
+			);
+			name = topbar;
+			sourceTree = "<group>";
+		};
 		EBDFE3A51ACE827C00E48F95 /* tableview */ = {
 			isa = PBXGroup;
 			children = (
@@ -2482,6 +2496,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB7BFA7C1BDA5BE500F4C74A /* QuantityCell.xib in Resources */,
+				EBDF8D111BFB7E4200F6830A /* ListTopBarView.xib in Resources */,
 				EB70327D1BEB700900779EBB /* ListItemsSectionHeaderView.xib in Resources */,
 				EB4C365F1B4C142600C387C5 /* EditableChoiceModal.storyboard in Resources */,
 				EBAEB23E1BDC263800FCDA5C /* FloatingViews.xib in Resources */,
@@ -2719,6 +2734,7 @@
 				EB9BE4191B2CB355005B401A /* RemoteListItems.swift in Sources */,
 				EB7F59C21BA1049100E07EBA /* Identifiable.swift in Sources */,
 				EBF162FD1A3DDE5D0048E37C /* ProductMapper.swift in Sources */,
+				EBDF8D0F1BFB7E2A00F6830A /* ListTopBarView.swift in Sources */,
 				EB20FBFA1A5971C20058103B /* InventoryItemMapper.swift in Sources */,
 				EB4FD46C1AC73B590000F952 /* PreferencesManager.swift in Sources */,
 				EBA575691BD009DE00A0A825 /* GroupItemMapper.swift in Sources */,
