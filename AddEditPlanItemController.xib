@@ -5,9 +5,6 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="HelveticaNeue.ttc">
-            <string>HelveticaNeue</string>
-        </mutableArray>
         <mutableArray key="HelveticaNeueLights.ttc">
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
@@ -22,7 +19,6 @@
                 <outlet property="nameInput" destination="wud-Mu-Cn2" id="7nR-yy-qHC"/>
                 <outlet property="priceInput" destination="c2b-ss-jlP" id="Ru2-F7-TN5"/>
                 <outlet property="quantityInput" destination="X90-LT-c0f" id="hfB-UT-9Iz"/>
-                <outlet property="submitButton" destination="Fnk-QD-qBv" id="t1X-c5-Wnh"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -65,25 +61,6 @@
                         <outlet property="autoCompleteDelegate" destination="-1" id="7cB-nW-Uiq"/>
                     </connections>
                 </textField>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fnk-QD-qBv">
-                    <rect key="frame" x="250" y="556" width="100" height="30"/>
-                    <color key="backgroundColor" red="0.19215686274509802" green="0.19215686274509802" blue="0.19215686274509802" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="100" id="0o8-NA-nhv"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
-                    <state key="normal" title="Ok">
-                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                            <integer key="value" value="8"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                    <connections>
-                        <action selector="onSubmitTap:" destination="-1" eventType="touchUpInside" id="9kS-u9-ehf"/>
-                    </connections>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qqB-tQ-of9">
                     <rect key="frame" x="120" y="135" width="40" height="40"/>
                     <constraints>
@@ -113,14 +90,11 @@
                 <constraint firstItem="X90-LT-c0f" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="14" id="5Mb-Ik-1se"/>
                 <constraint firstItem="01o-Dx-b2a" firstAttribute="centerY" secondItem="qqB-tQ-of9" secondAttribute="centerY" id="5W0-Rn-Z5l"/>
                 <constraint firstItem="X90-LT-c0f" firstAttribute="top" secondItem="c2b-ss-jlP" secondAttribute="bottom" constant="12" id="7qG-XG-SVH"/>
-                <constraint firstItem="Fnk-QD-qBv" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="8sC-6e-Tqa"/>
                 <constraint firstItem="c2b-ss-jlP" firstAttribute="top" secondItem="RVE-1V-oVS" secondAttribute="bottom" constant="12" id="APS-vt-4Nm"/>
                 <constraint firstAttribute="trailing" secondItem="RVE-1V-oVS" secondAttribute="trailing" constant="14" id="Hac-Ke-Dgg"/>
                 <constraint firstAttribute="trailing" secondItem="wud-Mu-Cn2" secondAttribute="trailing" constant="14" id="Miu-df-95v"/>
-                <constraint firstAttribute="bottom" secondItem="Fnk-QD-qBv" secondAttribute="bottom" constant="14" id="Oan-nT-kxc"/>
                 <constraint firstItem="RVE-1V-oVS" firstAttribute="top" secondItem="wud-Mu-Cn2" secondAttribute="bottom" constant="12" id="UMW-bn-2Mm"/>
                 <constraint firstItem="RVE-1V-oVS" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="14" id="Vhy-d8-cRc"/>
-                <constraint firstItem="Fnk-QD-qBv" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="XyH-ke-X3g"/>
                 <constraint firstItem="qqB-tQ-of9" firstAttribute="centerY" secondItem="X90-LT-c0f" secondAttribute="centerY" id="fLR-rY-TDT"/>
                 <constraint firstItem="X90-LT-c0f" firstAttribute="top" secondItem="c2b-ss-jlP" secondAttribute="bottom" constant="12" id="jm0-ti-wx0"/>
                 <constraint firstItem="wud-Mu-Cn2" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="14" id="kgo-TP-JL9"/>
@@ -128,11 +102,6 @@
                 <constraint firstItem="wud-Mu-Cn2" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="14" id="vLa-bC-LcJ"/>
                 <constraint firstItem="01o-Dx-b2a" firstAttribute="leading" secondItem="qqB-tQ-of9" secondAttribute="trailing" constant="6" id="vaL-Ld-8eY"/>
             </constraints>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="XyH-ke-X3g"/>
-                </mask>
-            </variation>
         </view>
     </objects>
     <resources>

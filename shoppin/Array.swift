@@ -63,7 +63,7 @@ extension Array {
         return arr
     }
     
-    func toDictionary<K: Hashable, V>(mapFunc: Element -> (K, V)) -> [K: V] {
+    func toDictionary<K: Hashable, V>(mapFunc: Element -> (K, V?)) -> [K: V] {
         var dict = [K: V]()
         for e in self {
             let (k, v) = mapFunc(e)

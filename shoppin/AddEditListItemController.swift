@@ -31,7 +31,7 @@ private enum Action {
 // FIXME use instead a "fragment" (custom view) with the common inputs and use this in 2 separate view controllers
 // then we can also use different delegates, now the delegate is passed "note" parameter for group item as well where it doesn't exist, not nice
 enum AddEditListItemControllerModus {
-    case ListItem, GroupItem
+    case ListItem, GroupItem, PlanItem
 }
 
 class AddEditListItemController: UIViewController, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, OkNextButtonsViewDelegate, UITextFieldDelegate {
@@ -39,6 +39,7 @@ class AddEditListItemController: UIViewController, MLPAutoCompleteTextFieldDataS
     var delegate: AddEditListItemControllerDelegate?
     
     @IBOutlet weak var nameInput: MLPAutoCompleteTextField!
+    @IBOutlet weak var sectionLabel: UILabel!
     @IBOutlet weak var sectionInput: MLPAutoCompleteTextField!
     @IBOutlet weak var priceInput: UITextField!
     @IBOutlet weak var quantityInput: UITextField!
@@ -60,9 +61,20 @@ class AddEditListItemController: UIViewController, MLPAutoCompleteTextFieldDataS
 
     var modus: AddEditListItemControllerModus = .ListItem {
         didSet {
-            if let noteInput = noteInput, noteLabel = noteLabel {
-                noteInput.hidden = modus == .GroupItem
-                noteLabel.hidden = modus == .GroupItem
+            if let noteInput = noteInput, noteLabel = noteLabel { // just confirm outlets are initialised (don't need to check all...)
+                let showNote = modus == .ListItem
+                noteInput.hidden = !showNote
+                noteLabel.hidden = !showNote
+                
+                switch modus {
+                case .ListItem:
+                    sectionLabel.text = "Section"
+                case .GroupItem:
+                    sectionLabel.text = "Section"
+                case .PlanItem:
+                    sectionLabel.text = "Category" // plan items don't have section, but we need a category for the new product (note for list and group items we save the section as category - user can change the category later using the product manager. This is for simple usability, mostly section == category otherwise interface may be a bit confusing)
+                }
+
             } else {
                 print("Error: Trying to set modus before outlet is initialised")
             }

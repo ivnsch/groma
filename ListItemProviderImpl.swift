@@ -225,27 +225,17 @@ class ListItemProviderImpl: ListItemProvider {
 
     func addListItem(product: Product, sectionName: String, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
         
-        let finished: (addedListItem: ListItem?) -> () = {addedListItem in
-            dispatch_async(dispatch_get_main_queue(), {
-                if let addedListItem = addedListItem {
-                    handler(ProviderResult(status: .Success, sucessResult: addedListItem))
-                } else {
-                    handler(ProviderResult(status: .DatabaseUnknown))
-                }
-            })
-        }
-        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
             
             if let weakSelf = self {
-                synced(weakSelf) {
+                let addedListItemMaybe: ListItem? = syncedRet(weakSelf) {
                     do {
                         let memAddedListItemMaybe = weakSelf.memProvider.addOrUpdateListItem(product, sectionNameMaybe: sectionName, quantity: quantity, list: list, note: note)
                         if let addedListItem = memAddedListItemMaybe {
-                            finished(addedListItem: addedListItem)
+                            return addedListItem
                         }
                         
-                        self?.dbProvider.doInWriteTransaction({realm in
+                        return weakSelf.dbProvider.doInWriteTransactionSync({realm in
                             
                             // even if we have the possibly updated item from mem cache, do always a fetch to db and use this item - to guarantee max. consistency.s
                             // theoretically the state in mem should match the state in db so this fetch should not be necessary, but for now let's be secure.
@@ -268,7 +258,7 @@ class ListItemProviderImpl: ListItemProvider {
                                 let savedListItem = ListItemMapper.listItemWithDB(existingListItem)
                                 
                                 if memAddedListItemMaybe == nil { // if mem cache is disabled, return the item from db
-                                    finished(addedListItem: savedListItem)
+                                    return savedListItem
                                 }
                                 
                             } else { // no list item for product in the list, create a new one
@@ -284,7 +274,7 @@ class ListItemProviderImpl: ListItemProvider {
                                         
                                         // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
                                         return memAddedListItemMaybe?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, order: sectionCount)
-                                        }()
+                                    }()
                                 
                                 
                                 // calculate list item order, which is at the end of it's section (==count of listitems in section). Note that currently we are doing this iteration even if we just created the section, where order is always 0. This if for clarity - can be optimised later (TODO)
@@ -303,19 +293,23 @@ class ListItemProviderImpl: ListItemProvider {
                                 let savedListItem = ListItemMapper.listItemWithDB(dbListItem)
                                 
                                 if memAddedListItemMaybe == nil { // if mem cache is disabled, return the item from db
-                                    finished(addedListItem: savedListItem)
+                                    return savedListItem
                                 }
                             }
                             
-                            return true
-                            
-                            }, finishHandler: {success in
-                                if !success { // if we are in finish handler and !success it means there was an exception accessing db somewhere.
-                                    handler(ProviderResult(status: .DatabaseUnknown))
-                                }
+                            print("Warn: ListItemProviderImpl.addListItem: No item saved: returning nil")
+                            return nil
                         })
                     }
                 }
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    if let addedListItem = addedListItemMaybe {
+                        handler(ProviderResult(status: .Success, sucessResult: addedListItem))
+                    } else {
+                        handler(ProviderResult(status: .DatabaseUnknown))
+                    }
+                })
             }
         })
     }

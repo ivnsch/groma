@@ -68,6 +68,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     
     private let toolButtonsHeight: CGFloat = 50 // for now hardcoded, since theres no toolbar-view yet (only buttons + constraits constants). TODO
 
+    var modus: AddEditListItemControllerModus = .ListItem
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -155,6 +156,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
             && navController?.viewControllers.last as? AddEditListItemViewController == nil { // don't show if already showing
                 let controller = UIStoryboard.addEditListItemViewController()
                 controller.view.backgroundColor = addProductsOrGroupBgColor
+                controller.modus = modus
                 controller.delegate = productDelegate
                 navController?.pushViewController(controller, animated: true)
                 setAddProductOrGroupSegmentedControlExpanded(true)

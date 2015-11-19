@@ -197,6 +197,7 @@
                     <connections>
                         <outlet property="nameInput" destination="wVp-8h-Y71" id="n7K-AW-RGP"/>
                         <outlet property="noteInput" destination="m1p-2K-Ljh" id="G1y-un-RdJ"/>
+                        <outlet property="noteLabel" destination="sBJ-AI-qaE" id="HUb-zN-rhx"/>
                         <outlet property="planInfoButton" destination="8jH-zQ-N7C" id="Qo7-Pc-HFR"/>
                         <outlet property="priceInput" destination="NrU-fN-qdF" id="VSS-IP-I2d"/>
                         <outlet property="priceLabel" destination="PSf-BM-K6D" id="p0c-me-GbG"/>
@@ -204,6 +205,7 @@
                         <outlet property="quantityLabel" destination="f4w-nF-ub6" id="CC8-g6-Opo"/>
                         <outlet property="scaleButton" destination="C4Q-wd-uas" id="YP7-4C-39o"/>
                         <outlet property="sectionInput" destination="i1w-xi-aFz" id="8ba-aL-isS"/>
+                        <outlet property="sectionLabel" destination="2SH-hF-BN5" id="jO1-w8-vS9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tgx-6o-HeU" userLabel="First Responder" sceneMemberID="firstResponder"/>

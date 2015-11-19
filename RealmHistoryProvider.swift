@@ -106,7 +106,7 @@ class RealmHistoryProvider: RealmProvider {
             return true
             
             }, finishHandler: {success in
-                handler(success)
+                handler(success ?? false)
             }
         )
     }
@@ -122,7 +122,7 @@ class RealmHistoryProvider: RealmProvider {
             return true
             
             }, finishHandler: {success in
-                handler(success)
+                handler(success ?? false)
             }
         )
     }

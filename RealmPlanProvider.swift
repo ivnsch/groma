@@ -15,7 +15,13 @@ class RealmPlanProvider: RealmProvider {
 
     // TODO optimize - fetch first plan items, is it possible (and better) to fetch only history items for the fetched plan items?
     func planItems(startDate: NSDate, handler: [PlanItem] -> ()) {
+        
+        print("GET plantitems for startedte : \(startDate)")
+
         dbHistoryProvider.loadHistoryItems(startDate: NSDate().startOfMonth) {[weak self] historyItems in
+            
+                    print("GET plantitems loadedhistory")
+            
             if let weakSelf = self {
                 let productQuantities = weakSelf.productsTotalQuantities(historyItems)
                 // Use history to calculate how much has been already consumed of each product in current time period
@@ -63,6 +69,232 @@ class RealmPlanProvider: RealmProvider {
         }
         return dict
     }
+
+    func addOrIncrementProducts(products: [Product], inventory: Inventory, _ handler: [PlanItem]? -> Void) {
+        
+        doInWriteTransaction ({[weak self] realm in
+            if let weakSelf = self {
+                
+                return syncedRet(weakSelf) {
+                    
+                    let productNames = products.map{$0.name}
+                    let productNamesStr: String = ",".join(productNames.map{"'\($0)'"})
+
+                    // get all possible already existing plan items in a dictionary
+                    let existingPlanItemsSet = Set(realm.objects(DBPlanItem).filter("product.name IN {\(productNamesStr)}"))
+                    let existingPlanItemsDict: [String: DBPlanItem] = productNames.toDictionary {productName in
+                        (productName, existingPlanItemsSet.filter{$0.product.name == productName}.first)
+                    }
+                    
+                    // the items that we will write to the database both new as to be updated
+                    var planItemsToSave: [DBPlanItem] = []
+                    
+                    // iterate through input items and update or create depending if item with same product name already exists or not
+                    for product in products {
+                        if let existingPlanItem = existingPlanItemsDict[product.name] {
+                            
+                            // update the plan item
+                            // TODO review + 1 in relation with product's base unit (if this is e.g. 100g, does it makes sense to add only 1? Note also that it seems natural that plan item displays quantity in this units - that is 100g, 200g
+                            existingPlanItem.quantity = existingPlanItem.quantity + 1
+                            existingPlanItem.quantityDelta = existingPlanItem.quantityDelta + 1 // TODO review this
+                            //                            existingPlanItem.product = existingPlanItemProduct
+                            
+                            planItemsToSave.append(existingPlanItem)
+                            
+                        } else { // plan item with same product name doesn't exist - create a new one
+                            
+                            let planItem = DBPlanItem()
+                            planItem.inventory = InventoryMapper.dbWithInventory(inventory)
+                            planItem.product = ProductMapper.dbWithProduct(product)
+                            
+                            planItemsToSave.append(planItem)
+                        }
+                    }
+                    
+                    realm.add(planItemsToSave, update: true)
+                    
+                    
+                    // fetch history to see how many items have been used so far
+                    let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
+                    let dbHistoryItems = weakSelf.loadSync(realm, mapper: mapper, predicate: NSPredicate(format: "addedDate >= %@",  NSDate().startOfMonth))
+                    let productQuantities = weakSelf.productsTotalQuantities(dbHistoryItems)
+                    let savedPlanItems: [PlanItem] = planItemsToSave.map{
+                        let usedQuantity = productQuantities[$0.product.uuid] ?? 0
+                        return PlanItemMapper.planItemWith($0, usedQuantity: usedQuantity)
+                    }
+                    
+                    return savedPlanItems
+                }
+                
+            } else {
+                print("Warn: RealmPlanProvider.addOrIncrementProducts weakSelf is nil")
+                return nil
+            }
+            
+            }) {savedPlanItemsMaybe in
+                handler(savedPlanItemsMaybe)
+        }
+    }
+    
+    func addOrIncrementPlanItems(planItems: [PlanItem], inventory: Inventory, _ handler: [PlanItem]? -> Void) {
+        
+        doInWriteTransaction ({[weak self] realm in
+            if let weakSelf = self {
+                
+                return syncedRet(weakSelf) {
+                    
+                    let productNames = planItems.map{$0.product.name}
+                    let productNamesStr: String = ",".join(productNames.map{"'\($0)'"})
+                    
+                    // get all possible already existing plan items in a dictionary
+                    let existingPlanItemsSet = Set(realm.objects(DBPlanItem).filter("product.name IN {\(productNamesStr)}"))
+                    let existingPlanItemsDict: [String: DBPlanItem] = productNames.toDictionary {productName in
+                        (productName, existingPlanItemsSet.filter{$0.product.name == productName}.first)
+                    }
+                    
+                    // the items that we will write to the database both new as to be updated
+                    var planItemsToSave: [DBPlanItem] = []
+                    
+                    // iterate through input items and update or create depending if item with same product name already exists or not
+                    for planItemInput in planItems {
+                        if let existingPlanItem = existingPlanItemsDict[planItemInput.product.name] {
+                            
+                            // update the plan item
+                            existingPlanItem.quantity = existingPlanItem.quantity + planItemInput.quantity
+                            existingPlanItem.quantityDelta = existingPlanItem.quantityDelta + planItemInput.quantity // TODO review this
+//                            existingPlanItem.product = existingPlanItemProduct
+                            
+                            planItemsToSave.append(existingPlanItem)
+                            
+                        } else { // plan item with same product name doesn't exist - create a new one
+                            let planItem = DBPlanItem()
+                            planItem.inventory = InventoryMapper.dbWithInventory(inventory)
+                            planItem.product = ProductMapper.dbWithProduct(planItemInput.product)
+                            planItem.quantity = planItemInput.quantity
+                            planItem.quantityDelta = planItemInput.quantity // on a new obj quantity delta is always quantity (quantity which has not been synced yet)
+                            
+                            planItemsToSave.append(planItem)
+                        }
+                    }
+                    
+                    realm.add(planItemsToSave, update: true)
+                    
+                    // fetch history to see how many items have been used so far
+                    let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
+                    let dbHistoryItems = weakSelf.loadSync(realm, mapper: mapper, predicate: NSPredicate(format: "addedDate >= %@",  NSDate().startOfMonth))
+                    let productQuantities = weakSelf.productsTotalQuantities(dbHistoryItems)
+                    let savedPlanItems: [PlanItem] = planItemsToSave.map{
+                        let usedQuantity = productQuantities[$0.product.uuid] ?? 0
+                        return PlanItemMapper.planItemWith($0, usedQuantity: usedQuantity)
+                    }
+                    
+                    return savedPlanItems
+
+                }
+                
+            } else {
+                print("Warn: RealmPlanProvider.addOrIncrementProducts weakSelf is nil")
+                return nil
+            }
+            
+            }) {savedPlanItemsMaybe in
+                handler(savedPlanItemsMaybe)
+        }
+    }
+    
+    func addOrUpdateWithIncrement(planItemsInput: [PlanItemInput], inventory: Inventory, _ handler: [PlanItem]? -> Void) {
+        
+        doInWriteTransaction ({[weak self] realm in
+            if let weakSelf = self {
+                
+                return syncedRet(weakSelf) {
+                    
+                    let productNames = planItemsInput.map{$0.name}
+                    let productNamesStr: String = ",".join(productNames.map{"'\($0)'"})
+                    
+                    // get all possible already existing plan items in a dictionary
+                    let existingPlanItemsSet = Set(realm.objects(DBPlanItem).filter("product.name IN {\(productNamesStr)}"))
+                    let existingPlanItemsDict: [String: DBPlanItem] = productNames.toDictionary {productName in
+                        (productName, existingPlanItemsSet.filter{$0.product.name == productName}.first)
+                    }
+                    
+                    // the items that we will write to the database both new as to be updated
+                    var planItemsToSave: [DBPlanItem] = []
+                    
+                    // iterate through input items and update or create depending if item with same product name already exists or not
+                    for planItemInput in planItemsInput {
+                        if let existingPlanItem = existingPlanItemsDict[planItemInput.name] {
+                            
+                            // update the product - if the new plan item has e.g. a different category, we overwrite the old one
+                            // note that this will update the product for all the app
+                            let existingPlanItemProduct = existingPlanItem.product
+                            existingPlanItemProduct.category = planItemInput.category
+                            existingPlanItemProduct.baseQuantity = planItemInput.baseQuantity
+                            existingPlanItemProduct.unit = planItemInput.unit.rawValue
+                            existingPlanItemProduct.price = planItemInput.price
+                            
+                            // update the plan item
+                            existingPlanItem.quantity = existingPlanItem.quantity + planItemInput.quantity
+                            existingPlanItem.quantityDelta = existingPlanItem.quantityDelta + planItemInput.quantity // TODO review this
+                            existingPlanItem.product = existingPlanItemProduct
+                            
+                            planItemsToSave.append(existingPlanItem)
+                            
+                        } else { // plan item with same product name doesn't exist - create a new one
+                            
+                            // TODO this could be optimised by fetching all the products in advance, at once. But for now we do a single fetch for each product
+                            // code would need some structure changes for this
+                            //                            let productsNamesStr: String = ",".join(productNames.map{"'\($0)'"})
+                            //                            let existingProducts = realm.objects(DBProduct).filter("name IN {\(productsNamesStr)}")
+                            
+                            // check if a product with the plan item name's already exist, to reference it, otherwise create a new product
+                            let product: DBProduct = {
+                                return (realm.objects(DBProduct).filter("name == '\(planItemInput.name)'").first) ?? {
+                                    let product = DBProduct()
+                                    product.uuid = NSUUID().UUIDString
+                                    product.name = planItemInput.name
+                                    product.price = planItemInput.price
+                                    product.category = planItemInput.category
+                                    product.baseQuantity = planItemInput.baseQuantity
+                                    product.unit = planItemInput.unit.rawValue
+                                    return product
+                                    }()
+                                }()
+                            
+                            // create the new plan item
+                            let planItem = DBPlanItem()
+                            planItem.inventory = InventoryMapper.dbWithInventory(inventory)
+                            planItem.product = product
+                            planItem.quantity = planItemInput.quantity
+                            planItem.quantityDelta = planItemInput.quantity // on a new obj quantity delta is always quantity (quantity which has not been synced yet)
+                            
+                            planItemsToSave.append(planItem)
+                        }
+                    }
+                    
+                    realm.add(planItemsToSave, update: true)
+                    
+                    // fetch history to see how many items have been used so far
+                    let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
+                    let dbHistoryItems = weakSelf.loadSync(realm, mapper: mapper, predicate: NSPredicate(format: "addedDate >= %@",  NSDate().startOfMonth))
+                    let productQuantities = weakSelf.productsTotalQuantities(dbHistoryItems)
+                    let savedPlanItems: [PlanItem] = planItemsToSave.map{
+                        let usedQuantity = productQuantities[$0.product.uuid] ?? 0
+                        return PlanItemMapper.planItemWith($0, usedQuantity: usedQuantity)
+                    }
+                    
+                    return savedPlanItems
+                }
+                
+            } else {
+                print("Warn: RealmPlanProvider.addOrIncrementProducts weakSelf is nil")
+                return nil
+            }
+            
+            }) {savedPlanItemsMaybe in
+                handler(savedPlanItemsMaybe)
+        }
+    }
     
     func add(item: PlanItem, handler: Bool -> ()) {
         update(item, handler: handler)
@@ -78,44 +310,53 @@ class RealmPlanProvider: RealmProvider {
     }
     
     func increment(item: PlanItem, delta: Int, onlyDelta: Bool = false, handler: Bool -> ()) {
-        
-        // load
-        let realm = try! Realm()
-        var results = realm.objects(DBPlanItem)
-        results = results.filter(NSPredicate(format: "product.name = '\(item.product.name)'", argumentArray: []))
-        let objs: [DBPlanItem] = results.toArray(nil)
-        let dbPlanItems = objs.map{PlanItemMapper.planItemWith($0, usedQuantity: -1)} // usedQuantity is ignored here (we only convert to DB object and it doesn't use this), FIXME it's not good to have not used fields like this
-        let planItemMaybe = dbPlanItems.first
-        
-        if let planItem = planItemMaybe {
-        // increment
-        let incrementedPlanItem: PlanItem =  {
-            if onlyDelta {
-                return planItem.copy(quantityDelta: planItem.quantityDelta + delta)
+
+        doInWriteTransaction ({[weak self] realm in
+            if let weakSelf = self {
+            
+                return syncedRet(weakSelf) {
+                    // load
+                    var results = realm.objects(DBPlanItem)
+                    results = results.filter(NSPredicate(format: "product.name = '\(item.product.name)'", argumentArray: []))
+                    let objs: [DBPlanItem] = results.toArray(nil)
+                    let dbPlanItems = objs.map{PlanItemMapper.planItemWith($0, usedQuantity: -1)} // usedQuantity is ignored here (we only convert to DB object and it doesn't use this), FIXME it's not good to have not used fields like this
+                    let planItemMaybe = dbPlanItems.first
+                    
+                    if let planItem = planItemMaybe {
+                        // increment
+                        let incrementedPlanItem: PlanItem =  {
+                            if onlyDelta {
+                                return planItem.copy(quantityDelta: planItem.quantityDelta + delta)
+                            } else {
+                                return planItem.incrementQuantityCopy(delta)
+                            }
+                        }()
+                        
+                        // convert to db object
+                        let dbIncrementedPlanItem = PlanItemMapper.dbWith(incrementedPlanItem)
+                        
+                        // save
+                        for obj in objs {
+                            obj.lastUpdate = NSDate()
+                            realm.add(dbIncrementedPlanItem, update: true)
+                        }
+                        
+                        return true
+                        
+                    } else {
+                        print("Plan item not found: \(item)")
+                        return false
+                    }
+                }
+
             } else {
-                return planItem.incrementQuantityCopy(delta)
+                print("Warn: RealmPlanProvider.increment weakSelf is nil")
+                return false
             }
-        }()
-        
-        // convert to db object
-        let dbIncrementedPlanItem = PlanItemMapper.dbWith(incrementedPlanItem)
-        
-        
-        // save
-        realm.write {
-            for obj in objs {
-                obj.lastUpdate = NSDate()
-                realm.add(dbIncrementedPlanItem, update: true)
-            }
-        }
-        
-        handler(true)
-        
-        
-        } else {
-            print("Plan item not found: \(item)")
-            handler(false)
+
+            
+            }) {success in
+                handler(success ?? false)
         }
     }
-    
 }

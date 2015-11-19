@@ -16,6 +16,14 @@ protocol PlanProvider {
     
     func addPlanItem(itemInput: PlanItemInput, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void)
 
+    func addGroupItems(groupItems: [GroupItem], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void)
+
+    func addPlanItems(planItemsInput: [PlanItemInput], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void)
+
+    func addProducts(products: [Product], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void)
+
+    func addProduct(product: Product, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void)
+
     func updatePlanItem(planItem: PlanItem, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void)
     
     func removePlanItem(item: PlanItem, _ handler: ProviderResult<Any> -> Void)

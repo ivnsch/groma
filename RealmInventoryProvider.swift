@@ -201,7 +201,7 @@ class RealmInventoryProvider: RealmProvider {
             return true
             
         }, finishHandler: {success in
-            handler(success)
+            handler(success ?? false)
         })
     }
 
@@ -243,7 +243,7 @@ class RealmInventoryProvider: RealmProvider {
                 return false
             }
             }, finishHandler: {success in
-                handler(success)
+                handler(success ?? false)
             }
         )
     }

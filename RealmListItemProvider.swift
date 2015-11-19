@@ -63,7 +63,7 @@ class RealmListItemProvider: RealmProvider {
         let mapper = {ProductMapper.productWithDB($0)}
         self.loadFirst(mapper, filter: "name = '\(name)'", handler: handler)
     }
-
+    
     // TODO remove, only ranged
     func loadProducts(handler: [Product] -> ()) {
         let mapper = {ProductMapper.productWithDB($0)}
@@ -96,7 +96,7 @@ class RealmListItemProvider: RealmProvider {
             return true
             
             }, finishHandler: {success in
-                handler(success)
+                handler(success ?? false)
         })
     }
     
@@ -144,7 +144,7 @@ class RealmListItemProvider: RealmProvider {
                 return true
                 
                 }, finishHandler: {success in
-                    handler(success)
+                    handler(success ?? false)
             })
         }
     }
@@ -273,85 +273,66 @@ class RealmListItemProvider: RealmProvider {
                 }
                 
             }
-            return true
+            return listItems
             
-            }, finishHandler: {success in
-                if success {
-                    handler(listItems)
-                } else {
-                    handler(nil)
-                }
+            }, finishHandler: {listItemsMaybe in
+                handler(listItemsMaybe)
         })
     }
     
     
     func addListItem(product: Product, sectionNameMaybe: String?, quantity: Int, list: List, note noteMaybe: String? = nil, _ handler: ListItem? -> Void) {
         
-        var savedListItem: ListItem?
-
-        doInWriteLockedTransaction({realm in
-
-            // see if there's already a listitem for this product in the list - if yes only increment it
-            if let existingListItem = realm.objects(DBListItem).filter("product.name == '\(product.name)'").first {
-                existingListItem.quantity += quantity
+        doInWriteTransaction({realm in
+            return syncedRet(self) {
                 
-                // possible updates (when user submits a new list item using add edit product controller)
-                if let sectionName = sectionNameMaybe {
-                    existingListItem.section.name = sectionName
-                }
-                if let note = noteMaybe {
-                    existingListItem.note = note
-                }
-                
-//                let incrementedListItem = existingListItem.copy(quantity: existingListItem.quantity + 1)
-                // TODO!! update sectionnaeme, note (for case where this is from add product with inputs)
-                realm.add(existingListItem, update: true)
-                savedListItem = ListItemMapper.listItemWithDB(existingListItem)
-                return true
-                
-            } else { // no list item for product in the list, create a new one
-                
-                // see if there's already a section for the new list item in the list, if not create a new one
-                let listItemsInList = realm.objects(DBListItem).filter("list.uuid == '\(list.uuid)'")
-                let sectionName = sectionNameMaybe ?? product.category
-                let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
-                    return SectionMapper.sectionWithDB(item.section)
-                    } ?? {
-                        let sectionCount = Set(listItemsInList.map{$0.section}).count
-                        return Section(uuid: NSUUID().UUIDString, name: sectionName, order: sectionCount)
-                    }()
-                
-                
-                // calculate list item order, which is at the end of it's section (==count of listitems in section). Note that currently we are doing this iteration even if we just created the section, where order is always 0. This if for clarity - can be optimised later (TODO)
-                var listItemOrder = 0
-                for existingListItem in listItemsInList {
-                    if existingListItem.section.uuid == section.uuid {
-                        listItemOrder++
+                // see if there's already a listitem for this product in the list - if yes only increment it
+                if let existingListItem = realm.objects(DBListItem).filter("product.name == '\(product.name)'").first {
+                    existingListItem.quantity += quantity
+                    
+                    // possible updates (when user submits a new list item using add edit product controller)
+                    if let sectionName = sectionNameMaybe {
+                        existingListItem.section.name = sectionName
                     }
-                }
-                
-                // create the list item and save it
-                let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: quantity, product: product, section: section, list: list, order: listItemOrder)
-                let dbListItem = ListItemMapper.dbWithListItem(listItem)
-                realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
-                savedListItem = ListItemMapper.listItemWithDB(dbListItem)
-            }
-            
-            return true
-            
-            }, finishHandler: {success in
-                if success {
-                    if let savedListItem = savedListItem {
-                        handler(savedListItem)
-                    } else {
-                        handler(nil)
+                    if let note = noteMaybe {
+                        existingListItem.note = note
                     }
                     
-                } else {
-                    handler(nil)
+                    // TODO!! update sectionnaeme, note (for case where this is from add product with inputs)
+                    realm.add(existingListItem, update: true)
+                    return ListItemMapper.listItemWithDB(existingListItem)
+                    
+                } else { // no list item for product in the list, create a new one
+                    
+                    // see if there's already a section for the new list item in the list, if not create a new one
+                    let listItemsInList = realm.objects(DBListItem).filter("list.uuid == '\(list.uuid)'")
+                    let sectionName = sectionNameMaybe ?? product.category
+                    let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
+                        return SectionMapper.sectionWithDB(item.section)
+                        } ?? {
+                            let sectionCount = Set(listItemsInList.map{$0.section}).count
+                            return Section(uuid: NSUUID().UUIDString, name: sectionName, order: sectionCount)
+                            }()
+                    
+                    
+                    // calculate list item order, which is at the end of it's section (==count of listitems in section). Note that currently we are doing this iteration even if we just created the section, where order is always 0. This if for clarity - can be optimised later (TODO)
+                    var listItemOrder = 0
+                    for existingListItem in listItemsInList {
+                        if existingListItem.section.uuid == section.uuid {
+                            listItemOrder++
+                        }
+                    }
+                    
+                    // create the list item and save it
+                    let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: quantity, product: product, section: section, list: list, order: listItemOrder)
+                    let dbListItem = ListItemMapper.dbWithListItem(listItem)
+                    realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
+                    return ListItemMapper.listItemWithDB(dbListItem)
                 }
+            }
+        }, finishHandler: {(savedListItemMaybe: ListItem?) in
+                handler(savedListItemMaybe)
         })
-        
     }
 
     
@@ -462,7 +443,7 @@ class RealmListItemProvider: RealmProvider {
     
     func saveListsSyncResult(syncResult: RemoteListWithListItemsSyncResult, handler: Bool -> ()) {
         
-        self.doInWriteTransaction({realm in
+        doInWriteTransaction({realm in
             
             let inventories = realm.objects(DBList)
             let inventoryItems = realm.objects(DBListItem)
@@ -513,7 +494,7 @@ class RealmListItemProvider: RealmProvider {
             return true
             
             }, finishHandler: {success in
-                handler(success)
+                handler(success ?? false)
         })
     }
 }

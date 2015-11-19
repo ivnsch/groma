@@ -132,7 +132,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             topBar.setLeftButtonIds([])
             topBar.setRightButtonIds([])
         }
-        topBar.animateTitleLabelLeft(expanding)
+        topBar.positionTitleLabelLeft(expanding, animated: true)
     }
     
     func setThemeColor(color: UIColor) {
@@ -244,6 +244,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
 
+    // TODO remove this, not used
     func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, category: String, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
         submitInputs(name, price: priceText, quantity: quantityText, category: category, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {[weak self] in
             self?.addEditItemController?.clearInputs()

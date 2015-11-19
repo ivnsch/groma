@@ -1521,8 +1521,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tu6-pm-qhv">
-                                <rect key="frame" x="0.0" y="114" width="600" height="437"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tu6-pm-qhv">
+                                <rect key="frame" x="0.0" y="95" width="600" height="456"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="planCell" id="Egm-eb-YKK" customClass="PlanTableViewCell" customModule="shoppin" customModuleProvider="target">
@@ -1659,51 +1659,37 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jkq-Wn-IDg">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CfT-xl-nnZ" customClass="ListTopBarView" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="64" id="bLs-XT-GzZ"/>
+                                    <constraint firstAttribute="height" constant="64" id="HkX-A8-UIi"/>
                                 </constraints>
-                                <items>
-                                    <navigationItem title="Plan" id="ZiM-PJ-RVJ">
-                                        <barButtonItem key="leftBarButtonItem" title="Edit" id="g98-Uu-8pw">
-                                            <connections>
-                                                <action selector="onEditTap:" destination="i9r-NR-Csk" id="1vy-cd-ptM"/>
-                                            </connections>
-                                        </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Add" id="aoL-lm-TPl">
-                                            <connections>
-                                                <action selector="onAddTap:" destination="i9r-NR-Csk" id="whm-rz-SCu"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="jkq-Wn-IDg" secondAttribute="trailing" id="3Vs-yU-39Y"/>
+                            <constraint firstItem="CfT-xl-nnZ" firstAttribute="leading" secondItem="3mJ-ak-oyf" secondAttribute="leading" id="1oM-8v-YQk"/>
+                            <constraint firstItem="f3l-QV-Mmq" firstAttribute="top" secondItem="CfT-xl-nnZ" secondAttribute="bottom" id="8PQ-dw-IWB"/>
                             <constraint firstItem="f3l-QV-Mmq" firstAttribute="leading" secondItem="3mJ-ak-oyf" secondAttribute="leading" id="HeB-Ge-epb"/>
                             <constraint firstItem="tu6-pm-qhv" firstAttribute="leading" secondItem="3mJ-ak-oyf" secondAttribute="leading" id="M7E-Z4-uRC"/>
-                            <constraint firstItem="tu6-pm-qhv" firstAttribute="top" secondItem="jkq-Wn-IDg" secondAttribute="bottom" constant="50" id="NsI-O8-Tnh"/>
                             <constraint firstItem="Uj7-De-kRG" firstAttribute="top" secondItem="f3l-QV-Mmq" secondAttribute="bottom" id="PbP-sj-yiE"/>
                             <constraint firstItem="huw-fJ-7Im" firstAttribute="top" secondItem="tu6-pm-qhv" secondAttribute="bottom" id="Pxm-TQ-RCm"/>
                             <constraint firstItem="Uj7-De-kRG" firstAttribute="leading" secondItem="3mJ-ak-oyf" secondAttribute="leading" id="VuX-Fh-DOt"/>
-                            <constraint firstItem="jkq-Wn-IDg" firstAttribute="leading" secondItem="3mJ-ak-oyf" secondAttribute="leading" id="WZo-Fb-1Wp"/>
                             <constraint firstAttribute="trailing" secondItem="tu6-pm-qhv" secondAttribute="trailing" id="XNl-1H-g48"/>
-                            <constraint firstItem="jkq-Wn-IDg" firstAttribute="top" secondItem="3mJ-ak-oyf" secondAttribute="top" id="iYC-dU-uYW"/>
+                            <constraint firstItem="CfT-xl-nnZ" firstAttribute="top" secondItem="3mJ-ak-oyf" secondAttribute="top" id="bdJ-1W-je4"/>
+                            <constraint firstAttribute="trailing" secondItem="CfT-xl-nnZ" secondAttribute="trailing" id="c66-xS-bt9"/>
                             <constraint firstAttribute="trailing" secondItem="f3l-QV-Mmq" secondAttribute="trailing" id="kRy-sw-Ruc"/>
-                            <constraint firstItem="f3l-QV-Mmq" firstAttribute="top" secondItem="jkq-Wn-IDg" secondAttribute="bottom" id="pQn-PW-MoS"/>
+                            <constraint firstItem="tu6-pm-qhv" firstAttribute="top" secondItem="Uj7-De-kRG" secondAttribute="bottom" id="nXU-pO-zFg"/>
                             <constraint firstAttribute="trailing" secondItem="Uj7-De-kRG" secondAttribute="trailing" id="uzd-Ln-Bck"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Plan" image="plan" id="bsU-MP-TUW"/>
                     <connections>
                         <outlet property="consumedPriceLabel" destination="cHf-5C-flA" id="8tD-Sb-6p5"/>
-                        <outlet property="editButton" destination="g98-Uu-8pw" id="IBV-eo-6h7"/>
-                        <outlet property="navigationBar" destination="jkq-Wn-IDg" id="whR-gJ-9s2"/>
                         <outlet property="priceDeltaLastMonthLabel" destination="s6d-yk-qc7" id="dyD-fU-dyK"/>
                         <outlet property="tableView" destination="tu6-pm-qhv" id="Ugr-dj-e1O"/>
+                        <outlet property="topBar" destination="CfT-xl-nnZ" id="MVp-cu-kWh"/>
                         <outlet property="totalPriceLabel" destination="pzX-Lu-bqO" id="Q8h-iP-K6h"/>
                     </connections>
                 </viewController>

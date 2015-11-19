@@ -105,12 +105,17 @@ class ListTopBarView: UIView {
     }
     
     // parameter: center => center, !center => left
-    func animateTitleLabelLeft(center: Bool) {
+    func positionTitleLabelLeft(center: Bool, animated: Bool) {
         titleLabelLeftConstraint?.constant = center ? self.center.x - titleLabel.frame.width / 2 : CGFloat(titleLabelLeftConstant)
-        UIView.animateWithDuration(0.3, animations: {[weak self] in
-            self?.layoutIfNeeded()
-            }) {[weak self] finished in
-                self?.delegate?.onCenterTitleAnimComplete(center)
+        if animated {
+            UIView.animateWithDuration(0.3, animations: {[weak self] in
+                self?.layoutIfNeeded()
+                }) {[weak self] finished in
+                    self?.delegate?.onCenterTitleAnimComplete(center)
+            }
+        } else {
+            layoutIfNeeded()
+            delegate?.onCenterTitleAnimComplete(center)
         }
     }
     

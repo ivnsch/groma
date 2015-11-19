@@ -192,58 +192,51 @@ class RealmProvider {
         })
     }
     
-    func doInWriteTransaction(f: Realm -> Bool, finishHandler: Bool -> ()) {
+    func doInWriteTransaction<T>(f: Realm -> T?, finishHandler: T? -> Void) {
         
-        let finished: (Bool) -> () = {success in
+        let finished: T? -> Void = {obj in
             dispatch_async(dispatch_get_main_queue(), {
-                finishHandler(success)
+                finishHandler(obj)
             })
         }
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             do {
                 let realm = try Realm()
+                var obj: T?
                 realm.write {
-                    finished(f(realm))
+                    obj = f(realm)
                 }
+                finished(obj)
                 
             } catch let error as NSError {
                 print("Error: creating Realm() in doInWriteTransaction: \(error)")
-                finished(false)
+                finished(nil)
             } catch _ {
                 print("Error: creating Realm() in doInWriteTransaction (unknown)")
-                finished(false)
+                finished(nil)
             }
         })
     }
 
-    func doInWriteTransactionSync(f: Realm -> Bool) -> Bool {
+    func doInWriteTransactionSync<T>(f: Realm -> T?) -> T? {
         do {
             let realm = try Realm()
 
+            var obj: T?
             realm.write {
-                f(realm)
+                obj = f(realm)
             }
-            return true
+            return obj
             
         } catch let error as NSError {
             print("Error: creating Realm() in doInWriteTransaction: \(error)")
-            return false
+            return nil
         } catch _ {
             print("Error: creating Realm() in doInWriteTransaction (unknown)")
-            return false
+            return nil
         }
     }
-    
-    
-    func doInWriteLockedTransaction(f: Realm -> Bool, finishHandler: Bool -> ()) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
-            if let weakSelf = self {
-                finishHandler(weakSelf.doInWriteTransactionSync(f))
-            }
-        })
-    }
-    
     
     // resetLastUpdateToServer = true should be always used when this method is called for sync
     func overwrite<T: DBSyncable>(newObjects: [T], resetLastUpdateToServer: Bool = true, handler: Bool -> ()) {
@@ -266,7 +259,7 @@ class RealmProvider {
             return true
             
         }, finishHandler: {saved in
-            handler(saved)
+            handler(saved ?? false)
         })
     }
 }

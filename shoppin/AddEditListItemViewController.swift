@@ -32,12 +32,14 @@ enum AddEditListItemViewControllerAction {
 class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, ScaleViewControllerDelegate {
 
     @IBOutlet weak var nameInput: UITextField!
+    @IBOutlet weak var sectionLabel: UILabel!
     @IBOutlet weak var sectionInput: MLPAutoCompleteTextField!
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var priceInput: UITextField!
     @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var quantityInput: UITextField!
     
+    @IBOutlet weak var noteLabel: UILabel!
     @IBOutlet weak var noteInput: UITextField!
     
     @IBOutlet weak var planInfoButton: UIButton!
@@ -61,11 +63,40 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             }
         }
     }
+
+    // when the view controller is used in .PlanItem modus... // FIXME besser structure
+    var updatingPlanItem: PlanItem? {
+        didSet {
+            if let updatingPlanItem = updatingPlanItem {
+                prefill(updatingPlanItem)
+            }
+        }
+    }
     
     var modus: AddEditListItemControllerModus = .ListItem {
         didSet {
             if let noteInput = noteInput {
                 noteInput.hidden = modus == .GroupItem
+                
+                let showNote = modus == .ListItem
+                noteInput.hidden = !showNote
+                noteLabel.hidden = !showNote
+                
+                let sectionText = "Section"
+                let categoryText = "Category"
+                let sectionPlaceHolderText = "Section (e.g. vegetables)"
+                let categoryPlaceHolderText = "Category (e.g. vegetables)"
+                
+                switch modus {
+                case .ListItem:
+                    fallthrough
+                case .GroupItem:
+                    sectionLabel.text = sectionText
+                    sectionInput.placeholder = sectionPlaceHolderText
+                case .PlanItem:
+                    sectionLabel.text = categoryText // plan items don't have section, but we need a category for the new product (note for list and group items we save the section as category - user can change the category later using the product manager. This is for simple usability, mostly section == category otherwise interface may be a bit confusing)
+                    sectionInput.placeholder = categoryPlaceHolderText
+                }
             } else {
                 print("Error: Trying to set modus before outlet is initialised")
             }
@@ -76,8 +107,12 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     private var validator: Validator?
     
+    var onViewDidLoad: VoidFunction?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        onViewDidLoad?()
         
         initValidator()
         
@@ -92,6 +127,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         quantityInput.text = String(listItem.quantity)
         priceInput.text = listItem.product.price.toString(2)
         noteInput.text = listItem.note
+    }
+
+    private func prefill(planItem: PlanItem) {
+        nameInput.text = planItem.product.name
+        sectionInput.text = planItem.product.category
+        quantityInput.text = String(planItem.quantity)
+        priceInput.text = planItem.product.price.toString(2)
     }
     
     private func setInputsDefaultValues() {

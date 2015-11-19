@@ -32,6 +32,54 @@ class PlanProviderImpl: PlanProvider {
         addOrIncrementPlanItem(itemInput, inventory: inventory, handler)
     }
 
+    func addGroupItems(groupItems: [GroupItem], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void) {
+        let planItems = groupItems.map{
+            PlanItem(inventory: inventory, product: $0.product, quantity: $0.quantity, usedQuantity: 0)
+        }
+        addPlanItems(planItems, inventory: inventory, handler)
+    }
+    
+    func addPlanItems(planItems: [PlanItem], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void) {
+        dbProvider.addOrIncrementPlanItems(planItems, inventory: inventory) {planItemsMaybe in
+            if let planItems = planItemsMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: planItems))
+            } else {
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+    
+    func addPlanItems(planItemsInput: [PlanItemInput], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void) {
+        dbProvider.addOrUpdateWithIncrement(planItemsInput, inventory: inventory) {planItemsMaybe in
+            if let planItems = planItemsMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: planItems))
+            } else {
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+    
+    func addProducts(products: [Product], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void) {
+        dbProvider.addOrIncrementProducts(products, inventory: inventory) {planItemsMaybe in
+            if let planItems = planItemsMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: planItems))
+            } else {
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+    
+    func addProduct(product: Product, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
+        addProducts([product], inventory: inventory) {result in
+            if let planItem = result.sucessResult?.first {
+                handler(ProviderResult(status: .Success, sucessResult: planItem))
+            } else {
+                print("Error: Could not get the plan item: \(result)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+
     func updatePlanItem(planItem: PlanItem, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
         dbProvider.update(planItem) {updated in
             if updated {
@@ -44,8 +92,7 @@ class PlanProviderImpl: PlanProvider {
             }
         }
     }
-    
-    
+
     // TODO review this, adding product with existing name shows a new items in list this shouldn't happen. Maybe it's only the tableview
     private func addOrIncrementPlanItem(itemInput: PlanItemInput, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
         
