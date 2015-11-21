@@ -162,7 +162,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Category" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XZp-uO-cO9" customClass="MLPAutoCompleteTextField">
-                                <rect key="frame" x="14" y="70" width="572" height="30"/>
+                                <rect key="frame" x="14" y="70" width="539" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
@@ -179,17 +179,31 @@
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="05Y-q0-NKC" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="561" y="72" width="25" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="Btm-oD-3M3"/>
+                                    <constraint firstAttribute="width" constant="25" id="UCa-CA-lpE"/>
+                                </constraints>
+                                <color key="tintColor" red="0.95686274510000002" green="0.16862745100000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" image="dot"/>
+                                <connections>
+                                    <action selector="onSectionColorButtonTap:" destination="dwY-bU-F5k" eventType="touchUpInside" id="Y6t-fn-LhT"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="JIc-DT-P1w" firstAttribute="top" secondItem="XZp-uO-cO9" secondAttribute="bottom" constant="15" id="3SZ-cw-eDh"/>
                             <constraint firstItem="Vx0-LZ-jty" firstAttribute="top" secondItem="Er3-xl-lEW" secondAttribute="bottom" constant="8" id="887-ez-eXn"/>
                             <constraint firstItem="Vx0-LZ-jty" firstAttribute="leading" secondItem="9Od-Vz-K0l" secondAttribute="leading" constant="14" id="9m0-s7-Vp3"/>
-                            <constraint firstAttribute="trailing" secondItem="XZp-uO-cO9" secondAttribute="trailing" constant="14" id="RcP-VV-jeG"/>
                             <constraint firstItem="XZp-uO-cO9" firstAttribute="top" secondItem="Vx0-LZ-jty" secondAttribute="bottom" constant="12" id="Sa3-Gq-PjC"/>
                             <constraint firstAttribute="trailing" secondItem="Vx0-LZ-jty" secondAttribute="trailing" constant="14" id="Ue4-5Z-yP8"/>
+                            <constraint firstItem="05Y-q0-NKC" firstAttribute="centerY" secondItem="XZp-uO-cO9" secondAttribute="centerY" id="Wej-pD-mEO"/>
                             <constraint firstItem="JIc-DT-P1w" firstAttribute="leading" secondItem="9Od-Vz-K0l" secondAttribute="leading" constant="14" id="X9V-n5-2Yh"/>
+                            <constraint firstAttribute="trailing" secondItem="05Y-q0-NKC" secondAttribute="trailing" constant="14" id="a5v-K7-6Ga"/>
                             <constraint firstItem="XZp-uO-cO9" firstAttribute="leading" secondItem="9Od-Vz-K0l" secondAttribute="leading" constant="14" id="c1D-go-2Zi"/>
+                            <constraint firstItem="05Y-q0-NKC" firstAttribute="leading" secondItem="XZp-uO-cO9" secondAttribute="trailing" constant="8" id="yzT-OO-PMp"/>
                         </constraints>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -198,6 +212,7 @@
                         <outlet property="categoryInput" destination="XZp-uO-cO9" id="0FL-ig-EFE"/>
                         <outlet property="nameInput" destination="Vx0-LZ-jty" id="upj-N3-K8t"/>
                         <outlet property="priceInput" destination="JIc-DT-P1w" id="flS-Hx-yDy"/>
+                        <outlet property="sectionColorButton" destination="05Y-q0-NKC" id="rbW-21-VGw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oqh-iR-6pP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -205,4 +220,7 @@
             <point key="canvasLocation" x="1186" y="491"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="dot" width="25" height="25"/>
+    </resources>
 </document>

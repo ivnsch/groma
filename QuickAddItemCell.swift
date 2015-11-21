@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ChameleonFramework
 
 class QuickAddItemCell: UICollectionViewCell {
     
@@ -16,6 +17,8 @@ class QuickAddItemCell: UICollectionViewCell {
         didSet {
             if let item = item {
                 nameLabel.text = item.labelText
+                contentView.backgroundColor = item.product.category.color.colorWithAlphaComponent(0.5)
+                nameLabel.textColor = UIColor.darkTextColor()
             }
         }
     }

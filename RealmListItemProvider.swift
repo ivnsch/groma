@@ -118,13 +118,31 @@ class RealmListItemProvider: RealmProvider {
                 }
             }()
             
-            let product = Product(uuid: uuid, name: productInput.name, price: productInput.price, category: productInput.category, baseQuantity: productInput.baseQuantity, unit: productInput.unit)
-            
-            self?.saveProducts([product]) {saved in
-                if saved {
-                    handler(product)
+            Providers.productCategoryProvider.categoryWithName(productInput.category) {result in
+                
+                if result.success {
+                    
+                    let category: ProductCategory = {
+                        if let existingCategory = result.sucessResult {
+                            return existingCategory.copy(name: productInput.category, color: productInput.categoryColor)
+                        } else {
+                            return ProductCategory(uuid: NSUUID().UUIDString, name: productInput.category, color: productInput.categoryColor)
+                        }
+                    }()
+                    
+                    let product = Product(uuid: uuid, name: productInput.name, price: productInput.price, category: category, baseQuantity: productInput.baseQuantity, unit: productInput.unit)
+                    
+                    self?.saveProducts([product]) {saved in
+                        if saved {
+                            handler(product)
+                        } else {
+                            print("Error: RealmListItemProvider.saveProductError, could not save product: \(product)")
+                            handler(nil)
+                        }
+                    }
+
                 } else {
-                    print("Error: RealmListItemProvider.saveProductError, could not save product: \(product)")
+                    print("Error: RealmListItemProvider.saveProduct, couldn't fetch category: \(result)")
                     handler(nil)
                 }
             }
@@ -150,7 +168,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func categoriesContaining(text: String, handler: [String] -> Void) {
-        let mapper: DBProduct -> String = {$0.category}
+        let mapper: DBProduct -> String = {$0.category.name}
         self.load(mapper, filter: "category CONTAINS[c] '\(text)'") {categories in
             let distinctCategories = NSOrderedSet(array: categories).array as! [String] // TODO re-check: Realm can't distinct yet https://github.com/realm/realm-cocoa/issues/1103
             handler(distinctCategories)
@@ -306,7 +324,7 @@ class RealmListItemProvider: RealmProvider {
                     
                     // see if there's already a section for the new list item in the list, if not create a new one
                     let listItemsInList = realm.objects(DBListItem).filter("list.uuid == '\(list.uuid)'")
-                    let sectionName = sectionNameMaybe ?? product.category
+                    let sectionName = sectionNameMaybe ?? product.category.name
                     let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
                         return SectionMapper.sectionWithDB(item.section)
                         } ?? {

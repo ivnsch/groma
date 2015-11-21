@@ -15,7 +15,7 @@ class ProductMapper {
             uuid: dbProduct.uuid,
             name: dbProduct.name,
             price: dbProduct.price,
-            category: dbProduct.category,
+            category: ProductCategoryMapper.categoryWithDB(dbProduct.category),
             baseQuantity: dbProduct.baseQuantity,
             unit: ProductUnit(rawValue: dbProduct.unit)!
         )
@@ -26,7 +26,7 @@ class ProductMapper {
         dbProduct.uuid = product.uuid
         dbProduct.name = product.name
         dbProduct.price = product.price
-        dbProduct.category = product.category
+        dbProduct.category = ProductCategoryMapper.dbWithCategory(product.category)
         dbProduct.baseQuantity = product.baseQuantity
         dbProduct.unit = product.unit.rawValue
         return dbProduct
@@ -37,7 +37,7 @@ class ProductMapper {
             uuid: remoteProduct.uuid,
             name: remoteProduct.name,
             price: remoteProduct.price,
-            category: remoteProduct.category,
+            category: ProductCategoryMapper.categoryWithRemote(remoteProduct.category),
             baseQuantity: remoteProduct.baseQuantity,
             unit: ProductUnit(rawValue: remoteProduct.unit)!
         )
@@ -48,7 +48,7 @@ class ProductMapper {
         dbProduct.uuid = product.uuid
         dbProduct.name = product.name
         dbProduct.price = product.price
-        dbProduct.category = product.category
+        dbProduct.category = ProductCategoryMapper.dbCategoryWithRemote(product.category)
         dbProduct.baseQuantity = product.baseQuantity
         dbProduct.unit = product.unit
         return dbProduct

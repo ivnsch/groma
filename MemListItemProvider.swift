@@ -78,7 +78,7 @@ class MemListItemProvider {
         } else {
             
             // see if there's already a section for the new list item in the list, if not create a new one
-            let sectionName = sectionNameMaybe ?? product.category
+            let sectionName = sectionNameMaybe ?? product.category.name
             let section = (listItems[list]!.findFirst{$0.section.name == sectionName})?.section ?? {
                 let sectionCount = listItems[list]!.sectionCount
                 return Section(uuid: NSUUID().UUIDString, name: sectionName, order: sectionCount)

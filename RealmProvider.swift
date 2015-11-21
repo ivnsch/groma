@@ -12,6 +12,8 @@ import RealmSwift
 // TODO maybe remove the mapping toArray later if we want to stick with realm, as this can increase performance
 // this would mean the provider is more coupled with realm but that's ok in this case
 
+// TODO!! currently there's no way for the client to know there was an error in realm - it will return either empty array or nil, being equivalent with "not found"
+// do we really want this? or rather return also a status code (at least maybe an "either") so client can show error accordingly? Or maybe it's enough to send error to error tracking?
 class RealmProvider {
 
     func saveObj<T: DBSyncable>(obj: T, update: Bool = false, handler: Bool -> ()) {

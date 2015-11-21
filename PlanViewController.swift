@@ -10,7 +10,7 @@ import UIKit
 import KLCPopup
 import SwiftValidator
 
-class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PlanTableViewCellDelegate, AddEditPlanItemContentViewDelegate
+class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PlanTableViewCellDelegate/*, AddEditPlanItemContentViewDelegate*/
 , QuickAddDelegate, AddEditListItemViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate
 {
 
@@ -271,12 +271,8 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    // MARK: - AddEditPlanItemContentViewDelegate
-    
-    func onValidationErrors(errors: [UITextField: ValidationError]) {
-        // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
-        presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
-    }
+//    // MARK: - AddEditPlanItemContentViewDelegate
+//    
 
     func onPlanItemAdded(planItem: PlanItem) {
         addItemUI(planItem)
@@ -309,16 +305,16 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
         setAddEditPlanItemOpen(false)
     }
-    
-    private func toPlanItemInput(name: String, priceText: String, quantityText: String, category: String, baseQuantity: Float, unit: ProductUnit) -> PlanItemInput? {
-        if let price = priceText.floatValue, quantity = Int(quantityText) {
-            return PlanItemInput(name: name, quantity: quantity, price: price, category: category, baseQuantity: baseQuantity, unit: unit)
-        } else {
-            print("TODO validation in toPlanItemInput")
-            return nil
-        }
-    }
-    
+//
+//    private func toPlanItemInput(name: String, priceText: String, quantityText: String, category: String, baseQuantity: Float, unit: ProductUnit) -> PlanItemInput? {
+//        if let price = priceText.floatValue, quantity = Int(quantityText) {
+//            return PlanItemInput(name: name, quantity: quantity, price: price, category: category, baseQuantity: baseQuantity, unit: unit)
+//        } else {
+//            print("TODO validation in toPlanItemInput")
+//            return nil
+//        }
+//    }
+//    
 
     
     private func setAddEditPlanItemOpen(open: Bool) {
@@ -333,6 +329,11 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     // MARK: - QuickAddDelegate
+    
+    func onValidationErrors(errors: [UITextField: ValidationError]) {
+        // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
+        presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+    }
     
     func onCloseQuickAddTap() {
         topQuickAddControllerManager?.expand(false)
@@ -419,12 +420,12 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - AddEditListItemViewControllerDelegate
 
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
 
         if !name.isEmpty {
             
             if let price = priceText.floatValue, quantity = Int(quantityText), inventory = currentInventory {
-                let planItemInput = PlanItemInput(name: name, quantity: quantity, price: price, category: category, baseQuantity: baseQuantity, unit: unit)
+                let planItemInput = PlanItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit)
                 
                 Providers.planProvider.addPlanItems([planItemInput], inventory: inventory, self.successHandler{[weak self] planItems in
                     self?.initPlanItems() // TODO update only added?
@@ -437,12 +438,12 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     // TODO remove not used
-    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, category: String, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
+    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
     }
     
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
         if let updatingPlanItem = updatingPlanItem, price = priceText.floatValue, quantity = Int(quantityText), inventory = currentInventory {
-            updatePlanItem(updatingPlanItem, inventory: inventory, name: name, price: price, quantity: quantity, category: category, baseQuantity: baseQuantity, unit: unit)
+            updatePlanItem(updatingPlanItem, inventory: inventory, name: name, price: price, quantity: quantity, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit)
         } else {
             print("Error: AddEditPlanItemController.updatePlanItem: validation not implemented correctly or currentInventory not set")
         }
@@ -467,8 +468,9 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func onCancelTap() {
     }
     
-    private func updatePlanItem(planItem: PlanItem, inventory: Inventory, name: String, price: Float, quantity: Int, category: String, baseQuantity: Float, unit: ProductUnit) {
-        let updatedProduct = planItem.product.copy(name: name, price: price, category: category, baseQuantity: baseQuantity, unit: unit)
+    private func updatePlanItem(planItem: PlanItem, inventory: Inventory, name: String, price: Float, quantity: Int, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit) {
+        let updatedCategory = planItem.product.category.copy(name: category, color: categoryColor)
+        let updatedProduct = planItem.product.copy(name: name, price: price, category: updatedCategory, baseQuantity: baseQuantity, unit: unit)
         let quantityDelta = quantity - planItem.quantity // TODO! this is not most likely not correct, needs to include also planItem.quantityDelta?
         let updatedPlanItem = planItem.copy(product: updatedProduct, quantity: quantity, quantityDelta: quantityDelta)
         

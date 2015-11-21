@@ -11,7 +11,7 @@ import SwiftValidator
 
 protocol AddEditProductControllerDelegate {
     func onValidationErrors(errors: [UITextField: ValidationError])
-    func onSubmit(name: String, category: String, price: Float, baseQuantity: Float, unit: ProductUnit, editingData: AddEditProductControllerEditingData?)
+    func onSubmit(name: String, category: String, categoryColor: UIColor, price: Float, baseQuantity: Float, unit: ProductUnit, editingData: AddEditProductControllerEditingData?)
     func onCancelTap()
 }
 
@@ -24,10 +24,11 @@ struct AddEditProductControllerEditingData {
     }
 }
 
-class AddEditProductController: UIViewController, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate {
+class AddEditProductController: UIViewController, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, FlatColorPickerControllerDelegate {
 
     @IBOutlet weak var nameInput: UITextField!
     @IBOutlet weak var categoryInput: MLPAutoCompleteTextField!
+    @IBOutlet weak var sectionColorButton: UIButton!
     @IBOutlet weak var priceInput: UITextField!
     
     var delegate: AddEditProductControllerDelegate?
@@ -40,13 +41,17 @@ class AddEditProductController: UIViewController, MLPAutoCompleteTextFieldDataSo
         didSet {
             if let editingData = editingData {
                 nameInput.text = editingData.product.name
-                categoryInput.text = editingData.product.category
+                categoryInput.text = editingData.product.category.name
                 priceInput.text = editingData.product.price.toString(2)
+                sectionColorButton.tintColor = editingData.product.category.color
+                sectionColorButton.imageView?.tintColor = editingData.product.category.color
             } else {
                 clearInputFields()
             }
         }
     }
+    
+    private var showingColorPicker: FlatColorPickerController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,12 +88,11 @@ class AddEditProductController: UIViewController, MLPAutoCompleteTextFieldDataSo
             
             // TODO!! base quantity
             // TODO!! unit
-            let baseQuantityFoo: String? = ""
-            let unitFoo: String? = ""
-            
-            // TODO! new field for category
+            let baseQuantityFoo: String? = "1"
+            let unitFoo: String? = "0"
+
             if let name = nameInput.text, category = categoryInput.text, price = priceInput.text?.floatValue, baseQuantity = baseQuantityFoo?.floatValue, unitText = unitFoo, unitInt = Int(unitText), unit = ProductUnit(rawValue: unitInt)  {
-                delegate?.onSubmit(name, category: category, price: price, baseQuantity: baseQuantity, unit: unit, editingData: editingData)
+                delegate?.onSubmit(name, category: category, categoryColor: sectionColorButton.tintColor, price: price, baseQuantity: baseQuantity, unit: unit, editingData: editingData)
                 
             } else {
                 print("Error: validation was not implemented correctly")
@@ -113,5 +117,77 @@ class AddEditProductController: UIViewController, MLPAutoCompleteTextFieldDataSo
         Providers.productProvider.categoriesContaining(string, successHandler{categories in
             handler(categories)
         })
+    }
+    
+    @IBAction func onSectionColorButtonTap(sender: UIButton) {
+        
+        if let windowView = UIApplication.sharedApplication().keyWindow { // add popup and overlay on top of everything
+            
+            let picker = UIStoryboard.listColorPicker()
+            
+            // TODO dynamic
+            let topBarHeight: CGFloat = 64
+            let tabBarHeight: CGFloat = 49
+            
+            picker.view.frame = CGRectMake(0, topBarHeight, windowView.frame.width, windowView.frame.height - topBarHeight - tabBarHeight)
+            
+            windowView.addSubview(picker.view)
+            picker.delegate = self
+            showingColorPicker = picker
+            
+            let buttonPointInParent = windowView.convertPoint(CGPointMake(sectionColorButton.center.x, sectionColorButton.center.y - topBarHeight), fromView: view)
+            let fractionX = buttonPointInParent.x / windowView.frame.width
+            let fractionY = buttonPointInParent.y / (windowView.frame.height - topBarHeight - tabBarHeight)
+            
+            picker.view.layer.anchorPoint = CGPointMake(fractionX, fractionY)
+            
+            picker.view.frame = CGRectMake(0, topBarHeight, windowView.frame.width, windowView.frame.height - topBarHeight - tabBarHeight)
+            
+            picker.view.transform = CGAffineTransformMakeScale(0, 0)
+            
+            UIView.animateWithDuration(0.3) {
+                picker.view.transform = CGAffineTransformMakeScale(1, 1)
+            }
+            
+        } else {
+            print("Warn: AddEditListItemViewController.onSectionColorButtonTap: unexpected: no window")
+        }
+    }
+    
+    // MARK: - FlatColorPickerControllerDelegate
+    
+    func onColorPicked(color: UIColor) {
+        dismissColorPicker(color)
+    }
+    
+    func onDismiss() {
+        dismissColorPicker(nil) // not used see FIXME in FlatColorPickerController.viewDidLoad
+    }
+    
+    private func dismissColorPicker(selectedColor: UIColor?) {
+        if let showingColorPicker = showingColorPicker {
+            
+            UIView.animateWithDuration(0.3, animations: {
+                showingColorPicker.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
+                
+                }, completion: {finished in
+                    self.showingColorPicker = nil
+                    self.showingColorPicker?.removeFromParentViewControllerWithView()
+                    
+                    UIView.animateWithDuration(0.3) {
+                        if let selectedColor = selectedColor {
+                            self.sectionColorButton.tintColor = selectedColor
+                            self.sectionColorButton.imageView?.tintColor = selectedColor
+                        }
+                    }
+                    UIView.animateWithDuration(0.15) {
+                        self.sectionColorButton.transform = CGAffineTransformMakeScale(2, 2)
+                        UIView.animateWithDuration(0.15) {
+                            self.sectionColorButton.transform = CGAffineTransformMakeScale(1, 1)
+                        }
+                    }
+                }
+            )
+        }
     }
 }

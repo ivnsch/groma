@@ -212,7 +212,8 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         if let inventory = inventory {
             
             if let editingInventoryItem = editingInventoryItem {
-                let updatedProduct = editingInventoryItem.product.copy(name: name, price: price, category: category)
+                let updatedCategory = editingInventoryItem.product.category.copy(name: category)
+                let updatedProduct = editingInventoryItem.product.copy(name: name, price: price, category: updatedCategory)
                 // TODO! calculate quantity delta correctly?
                 let updatedInventoryItem = editingInventoryItem.copy(quantity: quantity, quantityDelta: quantity, product: updatedProduct)
                 Providers.inventoryItemsProvider.updateInventoryItem(inventory, item: updatedInventoryItem, successHandler {[weak self] in

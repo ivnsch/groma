@@ -129,22 +129,19 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
         if let productItem = item as? QuickAddProduct {
             let itemCell = collectionView.dequeueReusableCellWithReuseIdentifier("itemCell", forIndexPath: indexPath) as! QuickAddItemCell
             itemCell.item = productItem
-            itemCell.nameLabel.textColor = UIColor.whiteColor()
             cell = itemCell
             
         } else if let groupItem = item as? QuickAddGroup {
             let groupCell = collectionView.dequeueReusableCellWithReuseIdentifier("groupCell", forIndexPath: indexPath) as! QuickAddGroupCell
             groupCell.item = groupItem
-            groupCell.nameLabel.textColor = UIColor.whiteColor()
             cell = groupCell
             
         } else {
             print("Error: invalid model type in quickAddItems: \(item)")
             cell = collectionView.dequeueReusableCellWithReuseIdentifier("itemCell", forIndexPath: indexPath) // assign something so it compiles
+            cell.contentView.backgroundColor = UIColor.flatGrayColorDark()
         }
      
-        cell.contentView.backgroundColor = UIColor.flatGrayColorDark()
-        
         if !item.didAnimateAlready { // show cell grow animation while scrolling down
             cell.transform = CGAffineTransformMakeScale(0.5, 0.5)
             let delay = NSTimeInterval(Double(indexPath.row) * 0.4 / Double(filteredQuickAddItems.count))

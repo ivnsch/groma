@@ -23,7 +23,7 @@ class ManageProductsCell: UITableViewCell {
                     productNameLabel.text = product.item.name
                 }
                 
-                productCategoryLabel.text = product.item.category
+                productCategoryLabel.text = product.item.category.name
                 productPriceLabel.text = product.item.price.toLocalCurrencyString()
             }
         }

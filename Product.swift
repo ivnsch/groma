@@ -34,11 +34,11 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
     let uuid: String
     let name: String
     let price: Float
-    let category: String
+    let category: ProductCategory
     let baseQuantity: Float
     let unit: ProductUnit
     
-    init(uuid: String, name: String, price: Float, category: String, baseQuantity: Float, unit: ProductUnit) {
+    init(uuid: String, name: String, price: Float, category: ProductCategory, baseQuantity: Float, unit: ProductUnit) {
         self.uuid = uuid
         self.name = name
         self.price = price
@@ -55,7 +55,7 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
         return self.uuid.hashValue
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: String? = nil, baseQuantity: Float? = nil, unit: ProductUnit? = nil) -> Product {
+    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: ProductCategory? = nil, baseQuantity: Float? = nil, unit: ProductUnit? = nil) -> Product {
         return Product(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,

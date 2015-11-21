@@ -32,7 +32,7 @@ class AddEditInventoryItemController: UIViewController, MLPAutoCompleteTextField
         didSet {
             if let editingInventoryItem = editingInventoryItem {
                 nameInput.text = editingInventoryItem.product.name
-                categoryInput.text = editingInventoryItem.product.category
+                categoryInput.text = editingInventoryItem.product.category.name
                 priceInput.text = editingInventoryItem.product.price.toString(2)
                 quantityInput.text = "\(editingInventoryItem.quantity)"
             } else {

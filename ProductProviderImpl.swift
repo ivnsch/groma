@@ -108,31 +108,40 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, baseQuantity: Float, unit: ProductUnit, _ handler: ProviderResult<Product> -> Void) {
-        
-        // get product and section uuid if they're already in the local db (remember that we assign uuid in the client so this logic has to be in the client)
+    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, _ handler: ProviderResult<Product> -> Void) {
+
+        // load product and update or create one
+        // if we find a product with the name we update it - this is for the case the user changes the price etc for an existing product while adding an item
         loadProduct(productName) {result in
-            
-            // load product and update or create one
-            // if we find a product with the name we update it - this is for the case the user changes the price for an existing product while adding an item
-            let productUuidMaybe: String? = {
-                if let existingProduct = result.sucessResult {
-                    return existingProduct.uuid
-                } else {
-                    if result.status == .NotFound { // new product
-                        return NSUUID().UUIDString
-                    } else {
-                        print("Error: loading product: \(result.status)")
-                        return nil
+            if let existingProduct = result.sucessResult {
+                let updatedCateogry = existingProduct.category.copy(name: category, color: categoryColor)
+                let updatedProduct = existingProduct.copy(name: productName, price: productPrice, category: updatedCateogry, baseQuantity: baseQuantity, unit: unit)
+                handler(ProviderResult(status: .Success, sucessResult: updatedProduct))
+                
+            } else { // product doesn't exist
+                
+                // check if a category with given name already exist
+                Providers.productCategoryProvider.categoryWithName(category) {result in
+                    
+                    func onHasCategory(category: ProductCategory) {
+                        let newProduct = Product(uuid: NSUUID().UUIDString, name: productName, price: productPrice, category: category, baseQuantity: baseQuantity, unit: unit)
+                        handler(ProviderResult(status: .Success, sucessResult: newProduct))
                     }
+                    
+                    if let existingCategory = result.sucessResult {
+                        let udpatedCategory = existingCategory.copy(name: category, color: categoryColor)
+                        onHasCategory(udpatedCategory)
+                        
+                    } else if result.status == .NotFound {
+                        let newCategory = ProductCategory(uuid: NSUUID().UUIDString, name: category, color: categoryColor)
+                        onHasCategory(newCategory)
+                        
+                    } else {
+                        print("Error: ProductProviderImpl.mergeOrCreateProduct: Couldn't fetch category: \(result)")
+                        handler(ProviderResult(status: .DatabaseUnknown))
+                    }
+
                 }
-            }()
-            
-            if let productUuid = productUuidMaybe {
-                let product = Product(uuid: productUuid, name: productName, price: productPrice, category: category, baseQuantity: baseQuantity, unit: unit)
-                handler(ProviderResult(status: .Success, sucessResult: product))
-            } else {
-                handler(ProviderResult(status: .DatabaseUnknown))
             }
         }
     }

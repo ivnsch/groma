@@ -167,8 +167,8 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
  
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        addEditProductControllerManager?.controller?.editingData = AddEditProductControllerEditingData(product: filteredProducts[indexPath.row].item, indexPath: indexPath)
         addEditProductControllerManager?.expand(true)
+        addEditProductControllerManager?.controller?.editingData = AddEditProductControllerEditingData(product: filteredProducts[indexPath.row].item, indexPath: indexPath)
     }
     
     // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
@@ -253,11 +253,11 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
          presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onSubmit(name: String, category: String, price: Float, baseQuantity: Float, unit: ProductUnit, editingData: AddEditProductControllerEditingData?) {
+    func onSubmit(name: String, category: String, categoryColor: UIColor, price: Float, baseQuantity: Float, unit: ProductUnit, editingData: AddEditProductControllerEditingData?) {
         if let editingData = editingData {
-            updateProduct(editingData, name: name, category: category, price: price)
+            updateProduct(editingData, name: name, category: category, categoryColor: categoryColor, price: price)
         } else {
-            addProduct(name, category: category, price: price, baseQuantity: baseQuantity, unit: unit)
+            addProduct(name, category: category, categoryColor: categoryColor, price: price, baseQuantity: baseQuantity, unit: unit)
         }
     }
     
@@ -265,8 +265,9 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         setAddEditProductControllerOpen(false)
     }
 
-    private func updateProduct(editingData: AddEditProductControllerEditingData, name: String, category: String, price: Float) {
-        let updatedProduct = editingData.product.copy(name: name, price: price, category: category)
+    private func updateProduct(editingData: AddEditProductControllerEditingData, name: String, category: String, categoryColor: UIColor, price: Float) {
+        let updatedCategory = editingData.product.category.copy(name: category, color: categoryColor)
+        let updatedProduct = editingData.product.copy(name: name, price: price, category: updatedCategory)
         Providers.productProvider.update(updatedProduct, successHandler{[weak self] in
             if let weakSelf = self {
                 weakSelf.products.update(updatedProduct)
@@ -278,8 +279,9 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         })
     }
     
-    private func addProduct(name: String, category: String, price: Float, baseQuantity: Float, unit: ProductUnit) {
-        let product = ProductInput(name: name, price: price, category: category, baseQuantity: baseQuantity, unit: unit)
+    private func addProduct(name: String, category: String, categoryColor: UIColor, price: Float, baseQuantity: Float, unit: ProductUnit) {
+        
+        let product = ProductInput(name: name, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit)
         Providers.productProvider.add(product, successHandler {[weak self] product in
             if let weakSelf = self {
                 weakSelf.products.append(product)

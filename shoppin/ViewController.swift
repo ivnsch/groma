@@ -239,20 +239,20 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
-        submitInputs(name, price: priceText, quantity: quantityText, category: category, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
+        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {
         }
     }
 
     // TODO remove this, not used
-    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, category: String, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
-        submitInputs(name, price: priceText, quantity: quantityText, category: category, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {[weak self] in
+    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
+        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {[weak self] in
             self?.addEditItemController?.clearInputs()
         }
     }
     
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
-        if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, category: category, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
+        if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {
             self.updateItem(self.updatingListItem!, listItemInput: listItemInput) {[weak self] in
             self?.setEditing(false, animated: true, tryCloseTopViewController: true)
             }
@@ -283,9 +283,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         addEditItemController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, successHandler: VoidFunction? = nil) {
+    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, successHandler: VoidFunction? = nil) {
         if !name.isEmpty {
-            if let listItemInput = processListItemInputs(name, priceText: priceText, quantityText: quantityText, category: category, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {
+            if let listItemInput = processListItemInputs(name, priceText: priceText, quantityText: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {
                 addItem(listItemInput, successHandler: successHandler)
                 // self.view.endEditing(true)
             }
@@ -294,7 +294,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     // MARK:
     
-    private func processListItemInputs(name: String, priceText: String, quantityText: String, category: String, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) -> ListItemInput? {
+    private func processListItemInputs(name: String, priceText: String, quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) -> ListItemInput? {
         //TODO?
         //        if !price {
         //            price = 0
@@ -307,7 +307,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             let quantity = Int(quantityText) ?? 1
             let sectionName = sectionName ?? defaultSectionIdentifier
             
-            return ListItemInput(name: name, quantity: quantity, price: price, category: category, section: sectionName, note: note, baseQuantity: baseQuantity, unit: unit)
+            return ListItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, section: sectionName, note: note, baseQuantity: baseQuantity, unit: unit)
             
         } else {
             print("TODO validation in processListItemInputs")
@@ -427,18 +427,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if self.editing {
             updatingListItem = tableViewListItem.listItem
             updatingSelectedCell = listItemsTableViewController.tableView.cellForRowAtIndexPath(indexPath)
+
+            topAddEditListItemControllerManager?.expand(true)
             
-            //            performSegueWithIdentifier("showAddIemSegue", sender: self)
-            
+            pricesView.setExpandedVertical(false)
             
             topAddEditListItemControllerManager?.controller?.updatingListItem = updatingListItem
             topAddEditListItemControllerManager?.controller?.delegate = self
-            topAddEditListItemControllerManager?.expand(true)
-            pricesView.setExpandedVertical(false)
-//            addEditController.updatingListItem = updatingListItem
-//            addEditController.delegate = self
-//            
-//            setAddEditListItemOpen(true)
             
         } else {
 
@@ -512,8 +507,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
         if let currentList = self.currentList {
             
-            self.progressVisible(true)
-            
             Providers.listItemsProvider.add(listItemInput, list: currentList, order: nil, possibleNewSectionOrder: listItemsTableViewController.sections.count, successHandler {[weak self] savedListItem in
                 self?.onListItemAddedToProvider(savedListItem)
                 handler?()
@@ -537,7 +530,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             
             if let updatingListItem = self.updatingListItem {
                 
-                let product = Product(uuid: updatingListItem.product.uuid, name: listItemInput.name, price: listItemInput.price, category: listItemInput.category, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit) // possible product update
+                let category = listItem.product.category.copy(name: listItemInput.category, color: listItemInput.categoryColor)
+                let product = Product(uuid: updatingListItem.product.uuid, name: listItemInput.name, price: listItemInput.price, category: category, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit) // possible product update
                 let section = Section(uuid: updatingListItem.section.uuid, name: listItemInput.section, order: listItem.section.order) // possible section update
                 
                 let listItem = ListItem(uuid: updatingListItem.uuid, status: updatingListItem.status, quantity: listItemInput.quantity, product: product, section: section, list: currentList, order: updatingListItem.order, note: listItemInput.note)
@@ -643,7 +637,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func onAddProduct(product: Product) {
         if let list = currentList {
-            Providers.listItemsProvider.addListItem(product, sectionName: product.category, quantity: 1, list: list, note: nil, order: nil, successHandler {[weak self] savedListItem in
+            Providers.listItemsProvider.addListItem(product, sectionName: product.category.name, quantity: 1, list: list, note: nil, order: nil, successHandler {[weak self] savedListItem in
                 self?.onListItemAddedToProvider(savedListItem)
             })
         } else {

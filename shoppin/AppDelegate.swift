@@ -26,10 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) {
+//        if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) {
             PreferencesManager.savePreference(PreferencesManagerKey.hasLaunchedBefore, value: true)
             self.firstLaunchSetup()
-        }
+//        }
         
         let viewController: UIViewController = {
             if PreferencesManager.loadPreference(PreferencesManagerKey.showIntro) ?? true {
@@ -134,16 +134,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let spices = Section(uuid: "108", name: "Gewürze", order: 8)
             let bread = Section(uuid: "109", name: "Brot", order: 8)
 
-            let fruitsCat = "Obst"
-            let vegetablesCat = "Gemuese"
-            let milkCat = "Milchprodukte"
-            let meatCat = "Fleisch"
-            let pastaCat = "Pasta"
-            let drinksCat = "Getraenke"
-            let cleaningCat = "Putzmittel"
-            let hygienicCat = "Hygiene"
-            let spicesCat = "Gewürze"
-            let breadCat = "Brot"
+            
+            
+            let fruitsCat = ProductCategory(uuid: "1", name: "Obst", color: UIColor.flatRedColor())
+            let vegetablesCat = ProductCategory(uuid: "2", name: "Gemuese", color: UIColor.flatGreenColor())
+            let milkCat = ProductCategory(uuid: "3", name: "Milchprodukte", color: UIColor.flatYellowColor())
+            let meatCat = ProductCategory(uuid: "4", name: "Fleisch", color: UIColor.flatRedColorDark())
+            let fishCat = ProductCategory(uuid: "5", name: "Fisch", color: UIColor.flatBlueColorDark())
+            let pastaCat = ProductCategory(uuid: "6", name: "Pasta", color: UIColor.flatWhiteColorDark())
+            let drinksCat = ProductCategory(uuid: "7", name: "Getraenke", color: UIColor.flatBlueColor().lightenByPercentage(0.5))
+            let cleaningCat = ProductCategory(uuid: "8", name: "Putzmittel", color: UIColor.flatMagentaColor())
+            let hygienicCat = ProductCategory(uuid: "9", name: "Hygiene", color: UIColor.flatGrayColor())
+            let spicesCat = ProductCategory(uuid: "10", name: "Gewürze", color: UIColor.flatBrownColor())
+            let breadCat = ProductCategory(uuid: "11", name: "Brot", color: UIColor.flatYellowColorDark())
             
             let product1 = Product(uuid: "10", name: "Birnen", price: 3, category: fruitsCat, baseQuantity: 1, unit: .None)
             let product2 = Product(uuid: "11", name: "Tomaten", price: 2, category: vegetablesCat, baseQuantity: 1, unit: .None)
@@ -154,7 +157,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let product7 = Product(uuid: "16", name: "Pfefferminz Tee", price: 1, category: drinksCat, baseQuantity: 1, unit: .None)
 
             let product8 = Product(uuid: "17", name: "Kartoffeln", price: 1.2, category: vegetablesCat, baseQuantity: 1, unit: .None)
-            let product9 = Product(uuid: "18", name: "Thunfisch", price: 0.9, category: meatCat, baseQuantity: 1, unit: .None)
+            let product9 = Product(uuid: "18", name: "Thunfisch", price: 0.9, category: fishCat, baseQuantity: 1, unit: .None)
             let product10 = Product(uuid: "19", name: "Zitronen", price: 1.3, category: fruitsCat, baseQuantity: 1, unit: .None)
             let product11 = Product(uuid: "20", name: "Kidney bohnen", price: 1, category: vegetablesCat, baseQuantity: 1, unit: .None)
             let product12 = Product(uuid: "21", name: "Klopapier", price: 3.4, category: cleaningCat, baseQuantity: 1, unit: .None)

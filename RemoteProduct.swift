@@ -12,7 +12,7 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     let uuid: String
     let name: String
     let price: Float
-    var category: String
+    var category: RemoteProductCategory
     let baseQuantity: Float
     let unit: Int
     
@@ -20,7 +20,9 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
         self.price = representation.valueForKeyPath("price") as! Float
-        self.category = representation.valueForKeyPath("category") as! String
+//        self.category = representation.valueForKeyPath("category") as! String
+        let unserializedCategory: AnyObject = representation.valueForKeyPath("category")!
+        self.category = RemoteProductCategory(response: response, representation: unserializedCategory)!
         self.baseQuantity = representation.valueForKeyPath("baseQuantity") as! Float
         self.unit = representation.valueForKeyPath("unit") as! Int
     }

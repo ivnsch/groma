@@ -14,7 +14,7 @@ class DBProduct: DBSyncable {
     dynamic var uuid: String = ""
     dynamic var name: String = ""
     dynamic var price: Float = 0
-    dynamic var category: String = ""
+    dynamic var category: DBProductCategory = DBProductCategory()
     dynamic var baseQuantity: Float = 0
     dynamic var unit: Int = 0
     

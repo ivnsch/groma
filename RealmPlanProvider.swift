@@ -228,7 +228,11 @@ class RealmPlanProvider: RealmProvider {
                             // update the product - if the new plan item has e.g. a different category, we overwrite the old one
                             // note that this will update the product for all the app
                             let existingPlanItemProduct = existingPlanItem.product
-                            existingPlanItemProduct.category = planItemInput.category
+                            let updatedCategory = DBProductCategory()
+                            updatedCategory.uuid = existingPlanItemProduct.category.uuid
+                            updatedCategory.name = planItemInput.category
+                            updatedCategory.setColor(planItemInput.categoryColor)
+                            existingPlanItemProduct.category = updatedCategory
                             existingPlanItemProduct.baseQuantity = planItemInput.baseQuantity
                             existingPlanItemProduct.unit = planItemInput.unit.rawValue
                             existingPlanItemProduct.price = planItemInput.price
@@ -249,17 +253,28 @@ class RealmPlanProvider: RealmProvider {
                             
                             // check if a product with the plan item name's already exist, to reference it, otherwise create a new product
                             let product: DBProduct = {
+                               
                                 return (realm.objects(DBProduct).filter("name == '\(planItemInput.name)'").first) ?? {
+                                    
+                                    // check if category with given name exists or create a new one
+                                    let category: DBProductCategory = (realm.objects(DBProductCategory).filter("name == '\(planItemInput.category)'").first) ?? {
+                                        let category = DBProductCategory()
+                                        category.uuid = NSUUID().UUIDString
+                                        category.name = planItemInput.category
+                                        category.setColor(planItemInput.categoryColor)
+                                        return category
+                                    }()
+                                    
                                     let product = DBProduct()
                                     product.uuid = NSUUID().UUIDString
                                     product.name = planItemInput.name
                                     product.price = planItemInput.price
-                                    product.category = planItemInput.category
+                                    product.category = category
                                     product.baseQuantity = planItemInput.baseQuantity
                                     product.unit = planItemInput.unit.rawValue
                                     return product
-                                    }()
                                 }()
+                            }()
                             
                             // create the new plan item
                             let planItem = DBPlanItem()
