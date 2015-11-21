@@ -15,7 +15,7 @@ final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializab
     let users: [RemoteSharedUser]
     let lastUpdate: NSDate
 
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(response: NSHTTPURLResponse, representation: AnyObject) {
         
         let list: AnyObject = representation.valueForKeyPath("list")!
         self.uuid = list.valueForKeyPath("uuid") as! String
@@ -26,7 +26,7 @@ final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializab
         self.lastUpdate = NSDate(timeIntervalSince1970: list.valueForKeyPath("lastUpdate") as! Double)
     }
     
-    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteList] {
+    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteList] {
         var lists = [RemoteList]()
         for obj in representation as! [AnyObject] {
             if let list = RemoteList(response: response, representation: obj) {

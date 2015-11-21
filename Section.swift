@@ -25,13 +25,13 @@ final class Section: Hashable, Identifiable, ResponseObjectSerializable, Respons
         return uuid.hashValue
     }
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("id") as! String
         self.name = representation.valueForKeyPath("name") as! String
         self.order = representation.valueForKeyPath("order") as! Int
     }
     
-    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [Section] {
+    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [Section] {
         var sections = [Section]()
         for obj in representation as! [AnyObject] {
             if let section = Section(response: response, representation: obj) {

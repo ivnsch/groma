@@ -13,14 +13,14 @@ final class RemoteProductCategory: ResponseObjectSerializable, ResponseCollectio
     let name: String
     var color: UIColor
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
 //        self.color = representation.valueForKeyPath("color") as! // TODO
         self.color = UIColor.purpleColor()
     }
     
-    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteProductCategory] {
+    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteProductCategory] {
         var products = [RemoteProductCategory]()
         for obj in representation as! [AnyObject] {
             if let product = RemoteProductCategory(response: response, representation: obj) {

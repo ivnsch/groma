@@ -14,7 +14,7 @@ final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSeria
     let lastUpdate: NSDate
     let users: [RemoteSharedUser]
 
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(response: NSHTTPURLResponse, representation: AnyObject) {
         let inventory: AnyObject = representation.valueForKeyPath("inventory")!
         self.uuid = inventory.valueForKeyPath("uuid") as! String
         self.name = inventory.valueForKeyPath("name") as! String
@@ -23,7 +23,7 @@ final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSeria
         self.users = RemoteSharedUser.collection(response: response, representation: unserializedUsers)
     }
     
-    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventory] {
+    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventory] {
         var sections = [RemoteInventory]()
         for obj in representation as! [AnyObject] {
             if let section = RemoteInventory(response: response, representation: obj) {

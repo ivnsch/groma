@@ -26,7 +26,7 @@ final class RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSer
         self.addedDate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("addedDate") as! Double)
     }
     
-    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteHistoryItem] {
+    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteHistoryItem] {
         var listItems = [RemoteHistoryItem]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteHistoryItem(response: response, representation: obj) {

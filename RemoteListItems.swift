@@ -27,7 +27,7 @@ final class RemoteListItems: ResponseObjectSerializable, ResponseCollectionSeria
     }
     
     // Only for compatibility purpose with sync result, which always sends result as an array. With RemoteListItems we get always 1 element array
-    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteListItems] {
+    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteListItems] {
         var listItems = [RemoteListItems]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteListItems(response: response, representation: obj) {

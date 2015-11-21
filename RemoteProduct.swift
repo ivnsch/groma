@@ -16,7 +16,7 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     let baseQuantity: Float
     let unit: Int
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
         self.price = representation.valueForKeyPath("price") as! Float
@@ -27,7 +27,7 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
         self.unit = representation.valueForKeyPath("unit") as! Int
     }
     
-    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteProduct] {
+    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteProduct] {
         var products = [RemoteProduct]()
         for obj in representation as! [AnyObject] {
             if let product = RemoteProduct(response: response, representation: obj) {

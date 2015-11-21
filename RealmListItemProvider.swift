@@ -26,7 +26,7 @@ class RealmListItemProvider: RealmProvider {
     
     func loadSections(names: [String], handler: [Section] -> ()) {
         let mapper = {SectionMapper.sectionWithDB($0)}
-        let sectionsNamesStr: String = ",".join(names.map{"'\($0)'"})
+        let sectionsNamesStr: String = names.map{"'\($0)'"}.joinWithSeparator(",")
         self.load(mapper, filter: "name IN {\(sectionsNamesStr)}", handler: handler)
     }
     
@@ -260,7 +260,7 @@ class RealmListItemProvider: RealmProvider {
             // Note that we always want this except when saveListItems is called after having cleared the database, e.g. (currently) on server sync, or when doing an update
             if incrementQuantity {
                 // get all existing list items with product names using IN query
-                let productNamesStr: String = ",".join(listItems.map{"'\($0.product.name)'"})
+                let productNamesStr: String = listItems.map{"'\($0.product.name)'"}.joinWithSeparator(",")
                 let existingListItems = realm.objects(DBListItem).filter("product.name IN {\(productNamesStr)}") // TODO get only listitems in the list!
                 
                 let uuidToDBListItemDict: [String: DBListItem] = existingListItems.toDictionary{

@@ -19,7 +19,7 @@ final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSeriali
         self.order = representation.valueForKeyPath("order") as! Int
     }
     
-    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteSection] {
+    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteSection] {
         var sections = [RemoteSection]()
         for obj in representation as! [AnyObject] {
             if let section = RemoteSection(response: response, representation: obj) {

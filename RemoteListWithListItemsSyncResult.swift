@@ -16,7 +16,7 @@ final class RemoteListItemsSyncResult: ResponseObjectSerializable, ResponseColle
     let couldNotDelete: [String]
     
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.listUuid = representation.valueForKeyPath("listUuid") as! String
         
         let listItems = representation.valueForKeyPath("listItems")!
@@ -26,7 +26,7 @@ final class RemoteListItemsSyncResult: ResponseObjectSerializable, ResponseColle
         self.couldNotDelete = representation.valueForKeyPath("couldNotDelete") as! [String]
     }
     
-    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteListItemsSyncResult] {
+    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteListItemsSyncResult] {
         var listItemsSyncResult = [RemoteListItemsSyncResult]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteListItemsSyncResult(response: response, representation: obj) {

@@ -21,7 +21,7 @@ final class RemoteInventoryItemsSyncResult: ResponseObjectSerializable, Response
         self.couldNotDelete = couldNotDelete
     }
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.inventoryUuid = representation.valueForKeyPath("inventoryUuid") as! String
         
         let inventoryItems = representation.valueForKeyPath("inventoryItems") as! [AnyObject]
@@ -31,7 +31,7 @@ final class RemoteInventoryItemsSyncResult: ResponseObjectSerializable, Response
         self.couldNotDelete = representation.valueForKeyPath("couldNotDelete") as! [String]
     }
     
-    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventoryItemsSyncResult] {
+    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventoryItemsSyncResult] {
         var inventoryItemsSyncResult = [RemoteInventoryItemsSyncResult]()
         for obj in representation as! [AnyObject] {
             if let inventoryItem = RemoteInventoryItemsSyncResult(response: response, representation: obj) {

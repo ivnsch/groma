@@ -26,10 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-//        if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) {
+        if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) {
             PreferencesManager.savePreference(PreferencesManagerKey.hasLaunchedBefore, value: true)
             self.firstLaunchSetup()
-//        }
+        }
         
         let viewController: UIViewController = {
             if PreferencesManager.loadPreference(PreferencesManagerKey.showIntro) ?? true {

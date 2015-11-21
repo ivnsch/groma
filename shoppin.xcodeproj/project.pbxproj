@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		32F343E224A9A610E9AC4FC0 /* Pods_shoppin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA884C051390422A612DB890 /* Pods_shoppin.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		3D320F1F161F7AF32A6A8B13 /* Pods_shoppin_osxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F6916CBE86100FE4744418F /* Pods_shoppin_osxTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		746817AD4172A5D3EF184CB4 /* Pods_shoppin_osx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0BE6D43CA3EAD8C16C1355 /* Pods_shoppin_osx.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		32F343E224A9A610E9AC4FC0 /* Pods_shoppin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA884C051390422A612DB890 /* Pods_shoppin.framework */; };
+		3D320F1F161F7AF32A6A8B13 /* Pods_shoppin_osxTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F6916CBE86100FE4744418F /* Pods_shoppin_osxTests.framework */; };
+		746817AD4172A5D3EF184CB4 /* Pods_shoppin_osx.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD0BE6D43CA3EAD8C16C1355 /* Pods_shoppin_osx.framework */; };
 		EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB0587DB1BBED86B00080626 /* IntroPageView.xib */; };
 		EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DD1BBED9C800080626 /* IntroPageView.swift */; };
 		EB0587E01BBEDAA600080626 /* NSBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DF1BBEDAA600080626 /* NSBundle.swift */; };

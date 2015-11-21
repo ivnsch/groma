@@ -95,10 +95,9 @@ class QuickAddGroupItemsViewController: UIViewController, QuickAddGroupItemsTabl
     
     private func buildItemsLabelString() -> String {
         // use no break space in product names and between product and quantity, this way line break comes only with space before comma
-        return ", ".join(itemsDictionary.mapValues{
+        return itemsDictionary.mapValues{
             let productNameNoBreakSpaces = $0.product.name.noBreakSpaceStr()
-            return "\(productNameNoBreakSpaces)\u{00A0}\($0.quantity)x"}
-        )
+            return "\(productNameNoBreakSpaces)\u{00A0}\($0.quantity)x"}.joinWithSeparator(", ")
     }
     
     func onCloseQuickAddTap() {

@@ -15,7 +15,7 @@ final class RemoteHistoryItems: ResponseObjectSerializable, ResponseCollectionSe
     let products: [RemoteProduct]
     let users: [RemoteSharedUser]
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(response: NSHTTPURLResponse, representation: AnyObject) {
         
         let historyItems = representation.valueForKeyPath("historyItems") as! [AnyObject]
         self.historyItems = RemoteHistoryItem.collection(response: response, representation: historyItems)
@@ -32,7 +32,7 @@ final class RemoteHistoryItems: ResponseObjectSerializable, ResponseCollectionSe
     
     // Make it conform because of type declaration in RemoteSyncResult (TODO better way?)
     // Only for compatibility purpose with sync result, which always sends result as an array. With RemoteListItems we get always 1 element array
-    @objc static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteHistoryItems] {
+    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteHistoryItems] {
         var listItems = [RemoteHistoryItems]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteHistoryItems(response: response, representation: obj) {

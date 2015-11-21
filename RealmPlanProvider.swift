@@ -78,7 +78,7 @@ class RealmPlanProvider: RealmProvider {
                 return syncedRet(weakSelf) {
                     
                     let productNames = products.map{$0.name}
-                    let productNamesStr: String = ",".join(productNames.map{"'\($0)'"})
+                    let productNamesStr: String = productNames.map{"'\($0)'"}.joinWithSeparator(",")
 
                     // get all possible already existing plan items in a dictionary
                     let existingPlanItemsSet = Set(realm.objects(DBPlanItem).filter("product.name IN {\(productNamesStr)}"))
@@ -144,7 +144,7 @@ class RealmPlanProvider: RealmProvider {
                 return syncedRet(weakSelf) {
                     
                     let productNames = planItems.map{$0.product.name}
-                    let productNamesStr: String = ",".join(productNames.map{"'\($0)'"})
+                    let productNamesStr: String = productNames.map{"'\($0)'"}.joinWithSeparator(",")
                     
                     // get all possible already existing plan items in a dictionary
                     let existingPlanItemsSet = Set(realm.objects(DBPlanItem).filter("product.name IN {\(productNamesStr)}"))
@@ -210,7 +210,7 @@ class RealmPlanProvider: RealmProvider {
                 return syncedRet(weakSelf) {
                     
                     let productNames = planItemsInput.map{$0.name}
-                    let productNamesStr: String = ",".join(productNames.map{"'\($0)'"})
+                    let productNamesStr: String = productNames.map{"'\($0)'"}.joinWithSeparator(",")
                     
                     // get all possible already existing plan items in a dictionary
                     let existingPlanItemsSet = Set(realm.objects(DBPlanItem).filter("product.name IN {\(productNamesStr)}"))

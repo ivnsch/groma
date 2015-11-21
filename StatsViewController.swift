@@ -189,7 +189,7 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         let avg = CGFloat(sum) / CGFloat(chartPoints.count) // month average
         
 
-        class EmptyAxisValue: ChartAxisValueFloat {
+        class EmptyAxisValue: ChartAxisValueDouble {
             override var labels: [ChartAxisLabel] {
                 return []
             }
@@ -210,16 +210,16 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         
         let cp: [ChartPoint] = xValues.map {xValue in
             let (_, month, year) = xValue.date.dayMonthYear
-            let axisValue2: Float = {
+            let axisValue2: Double = {
                 if let aggr = (monthYearAggregate.monthYearAggregates.findFirst {monthYearAggregate in // find aggregate
                     monthYearAggregate.monthYear.month == month && monthYearAggregate.monthYear.year == year
                     }) {
-                        return aggr.totalPrice
+                        return Double(aggr.totalPrice)
                 } else {
                     return 0
                 }
             }()
-            return ChartPoint(x: xValue, y: ChartAxisValueFloat(CGFloat(axisValue2)))
+            return ChartPoint(x: xValue, y: ChartAxisValueDouble(axisValue2))
         }
 
 
