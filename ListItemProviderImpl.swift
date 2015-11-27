@@ -225,7 +225,7 @@ class ListItemProviderImpl: ListItemProvider {
 
     func addListItem(product: Product, sectionName: String, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
         
-        typealias BGResult = (success: Bool, listItem: ListItem?) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything)
+        typealias BGResult = (success: Bool, listItem: ListItem) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything)
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
             
@@ -262,9 +262,7 @@ class ListItemProviderImpl: ListItemProvider {
                                 realm.add(existingListItem, update: true)
                                 let savedListItem = ListItemMapper.listItemWithDB(existingListItem)
                                 
-                                if memAddedListItemMaybe == nil { // if mem cache is disabled, return the item from db
-                                    return (success: true, listItem: savedListItem)
-                                }
+                                return (success: true, listItem: savedListItem)
                                 
                             } else { // no list item for product in the list, create a new one
                                 
@@ -297,12 +295,8 @@ class ListItemProviderImpl: ListItemProvider {
                                 realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
                                 let savedListItem = ListItemMapper.listItemWithDB(dbListItem)
                                 
-                                if memAddedListItemMaybe == nil { // if mem cache is disabled, return the item from db
-                                    return (success: true, listItem: savedListItem)
-                                }
+                                return (success: true, listItem: savedListItem)
                             }
-                            
-                            return (success: true, listItem: nil)
                         })
                     }
                 }
@@ -311,12 +305,33 @@ class ListItemProviderImpl: ListItemProvider {
 
                     if let bgResult = bgResultMaybe { // bg ran successfully
                         
-                        if let addedListItem = bgResult.listItem { // bg returned a list item
-                            handler(ProviderResult(status: .Success, sucessResult: addedListItem))
+                        if self?.memProvider.enabled ?? false {
+                            // bgResult & mem enabled -> do nothing: added item was returned to handler already (after add to mem provider), no need to return it again
+                            
                         } else {
-                            // bg was successful but didn't return a list item, this happens when the item was returned from the memory cache
-                            // in this case we do nothing - the client already has the added object
+                            // mem provider is not enabled - controller is waiting for result - return it
+                            handler(ProviderResult(status: .Success, sucessResult: bgResult.listItem))
                         }
+                        
+//                        if let addedListItem = bgResult.listItem { // bg returned a list item
+//                            handler(ProviderResult(status: .Success, sucessResult: bgResult.addedListItem))
+//
+//                        
+//                        } else {
+//                            // bg was successful but didn't return a list item, this happens when the item was returned from the memory cache
+//                            // in this case we do nothing - the client already has the added object
+//                        }
+                        
+                        
+                        // add to server
+                        self?.remoteProvider.add(bgResult.listItem) {remoteResult in
+                            if !remoteResult.success {
+                                print("Error: adding listItem in remote: \(bgResult.listItem), result: \(remoteResult)")
+                                DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                                self?.memProvider.invalidate()
+                            }
+                        }
+                        
                         
                     } else { // there was a database error
                         handler(ProviderResult(status: .DatabaseUnknown))
