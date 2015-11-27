@@ -23,6 +23,7 @@ target 'shoppin' do
     pod 'CMPopTipView', '~> 2.0'
     pod 'KLCPopup', '~> 1.0'
     pod 'ChameleonFramework/Swift'
+    pod 'Starscream'
     shared
 end
 

@@ -12,7 +12,7 @@ class MemListItemProvider {
 
     private var listItems: [List: [ListItem]]? = [List: [ListItem]]()
     
-    private let enabled: Bool
+    let enabled: Bool
     
     init(enabled: Bool = true) {
         self.enabled = enabled

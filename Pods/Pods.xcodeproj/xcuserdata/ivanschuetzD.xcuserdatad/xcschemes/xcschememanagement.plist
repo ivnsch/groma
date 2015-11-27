@@ -114,6 +114,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Starscream.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>SwiftCharts.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -132,12 +137,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>02EA92F44AAEAE015ED9BEC64CEBB8A4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>054976843AF8614B353A04C448805B60</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>19E18231A37F144D495913CB8E04794B</key>
+		<key>0C89C6D6854D822B696DA7EAC0DD9716</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1258ED6969E559A9AE0DD7762B16CDC6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -147,22 +162,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>3139E7FD668C4D3B4FEF4B67B43CA04B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>3AECCC066251457FA5B508D599900008</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6417C4713FCC0E6CE35CB91F4F49C219</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>6705E5E926AF6AC4F83F0B106BCDFD10</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>688F9C09765C493C328B4E3249E54FE1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -207,22 +217,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A6AB4596F007D99E04B5338F71E6A718</key>
+		<key>AAEB40C2E046A32C57050D85F6FD3218</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A9C91320C3A9C8886D2CB910AB6242A1</key>
+		<key>AE418539A3230C78AC380A101515F66F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>AE4F696CC357FA27AC16FF75A72C8C40</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>B8E858BB0FCF7F09481F4394B7BEA9D9</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -237,17 +242,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E87F26964E13608A42426150CB904527</key>
+		<key>E4EBEFB7ABC114A335426DB2698952D3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F7D51404910CA6410571AF871E35B84E</key>
+		<key>E71037C2A21B2BFD87E46AB45774396D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F881DDC0108655CB1CC5D83196B16E10</key>
+		<key>EE997344CB191727728EF05AD6A940C0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EF266E236136E6489AB0E844295FC6DF</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -34,6 +34,7 @@ PODS:
   - Realm/Headers (0.94.1)
   - RealmSwift (0.94.1):
     - Realm (= 0.94.1)
+  - Starscream (1.0.2)
   - SwiftCharts (0.3)
   - SwiftValidator (2.1.1)
   - SwipeView (1.3.2)
@@ -49,6 +50,7 @@ DEPENDENCIES:
   - Reachability (~> 3.2)
   - Realm (from `https://github.com/realm/realm-cocoa.git`, branch `swift-2.0`)
   - RealmSwift (from `https://github.com/realm/realm-cocoa.git`, branch `swift-2.0`)
+  - Starscream
   - SwiftCharts (~> 0.3)
   - SwiftValidator (from `https://github.com/i-schuetz/SwiftValidator`, branch `swift2.0_remove_delegate_callback`)
   - SwipeView (~> 1.3.2)
@@ -98,6 +100,7 @@ SPEC CHECKSUMS:
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   Realm: aa8ba4c47efeecd83b2fb1c882e5f33e8c5676ca
   RealmSwift: 1cfcf6f9bd4de8674797d000de346d9588ca2028
+  Starscream: 40e2c4c1c770d811f24116b8b7dbeb4542c56767
   SwiftCharts: c66a449d58f9c811c467f865a47b1b6136b49499
   SwiftValidator: 79936ea870f1dba8a0824763375375bb209fe30d
   SwipeView: bd67cfaf7760c036438446b3ccb28a3b84fce009

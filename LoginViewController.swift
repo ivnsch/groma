@@ -20,8 +20,6 @@ protocol LoginDelegate {
 
 class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate {
 
-    let userProvider = ProviderFactory().userProvider
-    
     @IBOutlet weak var userNameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
@@ -87,7 +85,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                 let loginData = LoginData(email: email, password: password)
                 
                 self.progressVisible()
-                self.userProvider.login(loginData, successHandler{[weak self] in
+                Providers.userProvider.login(loginData, successHandler{[weak self] in
                     self?.onLoginSuccess()
                 })
                 
@@ -143,7 +141,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
         if (error == nil) {
-            userProvider.authenticateWithGoogle(user.authentication.accessToken, resultHandler(onSuccess: {[weak self] in
+            Providers.userProvider.authenticateWithGoogle(user.authentication.accessToken, resultHandler(onSuccess: {[weak self] in
                 self?.onLoginSuccess()
                 
             }, onError: defaultErrorHandler([.SocialLoginCancelled])))

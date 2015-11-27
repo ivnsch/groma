@@ -12,16 +12,14 @@ class UserProviderImpl: UserProvider {
    
     private let remoteProvider = RemoteUserProvider()
 
-    // arc
-    private let listsProvider = ProviderFactory().listProvider
-    private let inventoryProvider = ProviderFactory().inventoryProvider
-    private let historyProvider = ProviderFactory().historyProvider
+    private var incomingSocket: MyWebSocket? // arc
     
     func login(loginData: LoginData, _ handler: ProviderResult<Any> -> ()) {
         self.remoteProvider.login(loginData) {[weak self] result in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
                 self?.sync {
+                    self?.incomingSocket = MyWebSocket()
                     handler(ProviderResult(status: providerStatus))
                 }
             } else {
@@ -35,6 +33,7 @@ class UserProviderImpl: UserProvider {
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
                 self?.sync {
+                    self?.incomingSocket = MyWebSocket()
                     handler(ProviderResult(status: providerStatus))
                 }
             } else {
@@ -49,11 +48,11 @@ class UserProviderImpl: UserProvider {
     
     func sync(handler: VoidFunction) {
 
-        listsProvider.syncListsWithListItems {[weak self] result in
+        Providers.listProvider.syncListsWithListItems {result in
             if result.success {
-                self!.inventoryProvider.syncInventoriesWithInventoryItems {[weak self] result in
+                Providers.inventoryProvider.syncInventoriesWithInventoryItems {result in
                     if result.success {
-                        self!.historyProvider.syncHistoryItems {result in
+                        Providers.historyProvider.syncHistoryItems {result in
                             
                             Providers.listItemsProvider.invalidateMemCache()
                             Providers.inventoryItemsProvider.invalidateMemCache()

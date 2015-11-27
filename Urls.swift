@@ -10,7 +10,8 @@ import Foundation
 
 struct Urls {
 
-    private static let host: String = "http://192.168.0.20:9000/"
+    static let hostIPPort: String = "192.168.0.20:9000"
+    private static let host: String = "http://\(hostIPPort)/"
 
     static let productWithUnique = host + "productWithUnique"
     static let sectionWithUnique = host + "sectionWithUnique"
