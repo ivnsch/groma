@@ -32,23 +32,36 @@ class ProductMapper {
         return dbProduct
     }
     
-    class func ProductWithRemote(remoteProduct: RemoteProduct) -> Product {
+    class func productWithRemote(remoteProduct: RemoteProduct, categoriesDict: [String: RemoteProductCategory]) -> Product? {
+        if let category = categoriesDict[remoteProduct.uuid] {
+            return productWithRemote(remoteProduct, category: ProductCategoryMapper.categoryWithRemote(category))
+        } else {
+            print("Error: ProductMapper.productWithRemote: Got product with category uuid: \(remoteProduct.categoryUuid) which is not in the category dict: \(categoriesDict)")
+            return nil
+        }
+    }
+    
+    class func productWithRemote(remoteProduct: RemoteProduct, category: RemoteProductCategory) -> Product {
+        return productWithRemote(remoteProduct, category: ProductCategoryMapper.categoryWithRemote(category))
+    }
+    
+    class func productWithRemote(remoteProduct: RemoteProduct, category: ProductCategory) -> Product {
         return Product(
             uuid: remoteProduct.uuid,
             name: remoteProduct.name,
             price: remoteProduct.price,
-            category: ProductCategoryMapper.categoryWithRemote(remoteProduct.category),
+            category: category,
             baseQuantity: remoteProduct.baseQuantity,
             unit: ProductUnit(rawValue: remoteProduct.unit)!
         )
     }
     
-    class func dbProductWithRemote(product: RemoteProduct) -> DBProduct {
+    class func dbProductWithRemote(product: RemoteProduct, category: RemoteProductCategory) -> DBProduct {
         let dbProduct = DBProduct()
         dbProduct.uuid = product.uuid
         dbProduct.name = product.name
         dbProduct.price = product.price
-        dbProduct.category = ProductCategoryMapper.dbCategoryWithRemote(product.category)
+        dbProduct.category = ProductCategoryMapper.dbCategoryWithRemote(category)
         dbProduct.baseQuantity = product.baseQuantity
         dbProduct.unit = product.unit
         return dbProduct

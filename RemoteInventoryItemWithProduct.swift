@@ -8,9 +8,11 @@
 
 import Foundation
 
+// TODO review this, seems sync sends us redundant objects? This should not be the case - it should be like in list items response
 final class RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let inventoryItem: RemoteInventoryItem
     let product: RemoteProduct
+    let productCategory: RemoteProductCategory
     let lastUpdate: NSDate
     
     
@@ -20,6 +22,9 @@ final class RemoteInventoryItemWithProduct: ResponseObjectSerializable, Response
         let inventoryItem: AnyObject = representation.valueForKeyPath("inventoryItem")!
         self.inventoryItem = RemoteInventoryItem(response: response, representation: inventoryItem)!
 
+        let productCategory: AnyObject = representation.valueForKeyPath("productCategory")!
+        self.productCategory = RemoteProductCategory(response: response, representation: productCategory)!
+        
         let product: AnyObject = representation.valueForKeyPath("product")!
         self.product = RemoteProduct(response: response, representation: product)!
         
@@ -37,6 +42,6 @@ final class RemoteInventoryItemWithProduct: ResponseObjectSerializable, Response
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) inventoryItem: \(self.inventoryItem), product: \(self.product), lastUpdate: \(self.lastUpdate)}"
+        return "{\(self.dynamicType) inventoryItem: \(inventoryItem), productCategory: \(productCategory), product: \(product), lastUpdate: \(lastUpdate)}"
     }
 }

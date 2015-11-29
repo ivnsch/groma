@@ -109,6 +109,7 @@ class RemoteListItemProvider {
         let parameters: [String: AnyObject] = [
             "uuid": list.uuid,
             "name": list.name,
+            "order": list.order,
             "users": list.users.map{self.toRequestParams($0)}
         ]
         RemoteProvider.authenticatedRequest(.POST, Urls.list, parameters) {result in
@@ -153,6 +154,7 @@ class RemoteListItemProvider {
             var dict: [String: AnyObject] = [
                 "uuid": list.uuid,
                 "name": list.name,
+                "order": list.order,
                 "users": sharedUsers,
             ]
             
@@ -216,6 +218,9 @@ class RemoteListItemProvider {
                 "uuid": listItem.product.uuid,
                 "name": listItem.product.name,
                 "price": listItem.product.price,
+                "baseQuantity": listItem.product.baseQuantity,
+                "unit": listItem.product.unit.rawValue,
+                "category": toRequestParams(listItem.product.category)
             ],
             "listUuid": listItem.list.uuid,
             "listName": listItem.list.name,
@@ -232,12 +237,23 @@ class RemoteListItemProvider {
         }
         
         return dict
+
+    }
+    
+    
+    func toRequestParams(productCategory: ProductCategory) -> [String: AnyObject] {
+        return [
+            "uuid": productCategory.uuid,
+            "name": productCategory.name,
+            "color": productCategory.color.hexStr
+        ]
     }
     
     func toRequestParamsShort(list: List) -> [String: AnyObject] {
         return [
             "uuid": list.uuid,
-            "name": list.name
+            "name": list.name,
+            "order": list.order
         ]
     }
     

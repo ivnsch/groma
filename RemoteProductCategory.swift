@@ -16,8 +16,11 @@ final class RemoteProductCategory: ResponseObjectSerializable, ResponseCollectio
     init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
-//        self.color = representation.valueForKeyPath("color") as! // TODO
-        self.color = UIColor.purpleColor()
+        let colorStr = representation.valueForKeyPath("color") as! String
+        self.color = UIColor(hexString: colorStr) ?? {
+            print("Error: RemoteProductCategory.init: Invalid color hex: \(colorStr)")
+            return UIColor.blackColor()
+        }()
     }
     
     static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteProductCategory] {

@@ -11,14 +11,26 @@ import Foundation
 final class RemoteListItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
 
     let products: [RemoteProduct]
+    let productsCategories: [RemoteProductCategory]
     let sections: [RemoteSection]
     let listItems: [RemoteListItem]
+    
+    var productsCategoriesDict: [String: RemoteProductCategory] {
+        var dict = [String: RemoteProductCategory]()
+        for productCategory in productsCategories {
+            dict[productCategory.uuid] = productCategory
+        }
+        return dict
+    }
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
         
         let products = representation.valueForKeyPath("products") as! [AnyObject]
         self.products = RemoteProduct.collection(response: response, representation: products)
 
+        let productsCategories = representation.valueForKeyPath("productsCategories") as! [AnyObject]
+        self.productsCategories = RemoteProductCategory.collection(response: response, representation: productsCategories)
+        
         let sections = representation.valueForKeyPath("sections") as! [AnyObject]
         self.sections = RemoteSection.collection(response: response, representation: sections)
         
@@ -39,6 +51,6 @@ final class RemoteListItems: ResponseObjectSerializable, ResponseCollectionSeria
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) products: [\(self.products)], listItems: [\(self.listItems)}"
+        return "{\(self.dynamicType) productsCategories: [\(self.productsCategories)], products: [\(self.products)], listItems: [\(self.listItems)}"
     }
 }

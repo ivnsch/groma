@@ -65,14 +65,29 @@ class HistoryItemMapper {
             return (dict, arr)
         }
         
-        func toProductDict(remoteProducts: [RemoteProduct]) -> ([String: Product], [Product]) {
+        func toProductCategoryDict(remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
+            var dict: [String: ProductCategory] = [:]
+            var arr: [ProductCategory] = []
+            for remoteProductCategory in remoteProductsCategories {
+                let category = ProductCategoryMapper.categoryWithRemote(remoteProductCategory)
+                dict[remoteProductCategory.uuid] = category
+                arr.append(category)
+                
+            }
+            return (dict, arr)
+        }
+        
+        func toProductDict(remoteProducts: [RemoteProduct], categories: [String: ProductCategory]) -> ([String: Product], [Product]) {
             var dict: [String: Product] = [:]
             var arr: [Product] = []
             for remoteProduct in remoteProducts {
-                let product = ProductMapper.ProductWithRemote(remoteProduct)
-                dict[remoteProduct.uuid] = product
-                arr.append(product)
-                
+                if let category = categories[remoteProduct.categoryUuid] {
+                    let product = ProductMapper.productWithRemote(remoteProduct, category: category)
+                    dict[remoteProduct.uuid] = product
+                    arr.append(product)
+                } else {
+                    print("Error: ListItemMapper.listItemsWithRemote: Got product with category uuid: \(remoteProduct.categoryUuid) which is not in the category dict: \(categories)")
+                }
             }
             return (dict, arr)
         }
@@ -87,8 +102,9 @@ class HistoryItemMapper {
             }
             return (dict, arr)
         }
-        
-        let (productsDict, products) = toProductDict(remoteListItems.products)
+
+        let (productsCategoriesDict, productsCategories) = toProductCategoryDict(remoteListItems.productsCategories) // TODO review if productsCategories array is necessary if not remove
+        let (productsDict, products) = toProductDict(remoteListItems.products, categories: productsCategoriesDict)
         let (usersDict, users) = toUserDict(remoteListItems.users)
         let (inventoriesDict, inventories) = toInventoryDict(remoteListItems.inventories)
         

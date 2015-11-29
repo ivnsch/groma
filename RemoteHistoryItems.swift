@@ -12,6 +12,7 @@ final class RemoteHistoryItems: ResponseObjectSerializable, ResponseCollectionSe
     
     let historyItems: [RemoteHistoryItem]
     let inventories: [RemoteInventory]
+    let productsCategories: [RemoteProductCategory]
     let products: [RemoteProduct]
     let users: [RemoteSharedUser]
     
@@ -19,10 +20,13 @@ final class RemoteHistoryItems: ResponseObjectSerializable, ResponseCollectionSe
         
         let historyItems = representation.valueForKeyPath("historyItems") as! [AnyObject]
         self.historyItems = RemoteHistoryItem.collection(response: response, representation: historyItems)
-
+        
         let inventories = representation.valueForKeyPath("inventories") as! [AnyObject]
         self.inventories = RemoteInventory.collection(response: response, representation: inventories)
         
+        let productsCategories = representation.valueForKeyPath("productsCategories") as! [AnyObject]
+        self.productsCategories = RemoteProductCategory.collection(response: response, representation: productsCategories)
+
         let products = representation.valueForKeyPath("products") as! [AnyObject]
         self.products = RemoteProduct.collection(response: response, representation: products)
         
@@ -45,6 +49,6 @@ final class RemoteHistoryItems: ResponseObjectSerializable, ResponseCollectionSe
     
     
     var debugDescription: String {
-        return "{\(self.dynamicType) historyItems: [\(self.historyItems)], inventories: [\(self.inventories)], products: [\(self.products)], users: [\(self.users)]}"
+        return "{\(self.dynamicType) historyItems: [\(self.historyItems)], inventories: [\(self.inventories)], productsCategories: [\(self.productsCategories)], products: [\(self.products)], users: [\(self.users)]}"
     }
 }

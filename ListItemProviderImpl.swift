@@ -440,8 +440,9 @@ class ListItemProviderImpl: ListItemProvider {
                 // in the server this is more important, since a little garbage from each client sums up. But for now also ignored.
                 
                 if let syncResult = remoteResult.successResult, items = syncResult.items.first {
-                    
-                    self.dbProvider.saveProducts(items.products.map{ProductMapper.ProductWithRemote($0)}) {productSaved in
+                    // Note: next line: flatMap filters out possible optionals (in normal case no optionals are expected)
+                    let products: [Product] = items.products.flatMap{ProductMapper.productWithRemote($0, categoriesDict: items.productsCategoriesDict)}
+                    self.dbProvider.saveProducts(products) {productSaved in
                         if productSaved {
                             
                             self.dbProvider.saveSections(items.sections.map{SectionMapper.SectionWithRemote($0)}) {sectionsSaved in
