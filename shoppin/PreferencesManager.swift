@@ -13,12 +13,13 @@ enum PreferencesManagerKey: String {
     case listId = "listId"
     case hasLaunchedBefore = "hasLaunchedBefore"
     case email = "email"
+    case deviceId = "did"
     case showIntro = "showIntro"
 }
 
 class PreferencesManager {
 
-    class func savePreference<T: AnyObject>(key:PreferencesManagerKey, value:T) {
+    class func savePreference<T: AnyObject>(key: PreferencesManagerKey, value: T) {
         self.savePreference(key: key.rawValue, value: value)
     }
     
@@ -53,6 +54,12 @@ class PreferencesManager {
     class private func savePreference<T: AnyObject>(key key: String, value: T) {
         let userDefaults = NSUserDefaults.standardUserDefaults()
         userDefaults.setObject(value, forKey: key)
+        userDefaults.synchronize()
+    }
+
+    class func clearPreference(key key: PreferencesManagerKey) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setObject(nil, forKey: key.rawValue)
         userDefaults.synchronize()
     }
     

@@ -65,7 +65,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     override func viewWillDisappear(animated: Bool) {
         UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Theme.navigationBarTextColor]
-        listItemsTableViewController.clearPendingSwipeItemIfAny()
+        listItemsTableViewController.clearPendingSwipeItemIfAny(true)
     }
     
     private func initWithList(list: List) {
@@ -112,7 +112,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     private func close() {
-        listItemsTableViewController.clearPendingSwipeItemIfAny {
+        listItemsTableViewController.clearPendingSwipeItemIfAny(true) {
             navigationController?.popViewControllerAnimated(true)
         }
     }
@@ -134,9 +134,9 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     
     // MARK: - ListItemsTableViewDelegate
 
-    func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) {
+    func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) {
         if let list = self.list {
-            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Todo) {[weak self] result in
+            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Todo, remote: notifyRemote) {[weak self] result in
                 if result.success {
                     self!.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
                     self?.updateEmptyView()
@@ -149,12 +149,12 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     }
 
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
-        listItemsTableViewController.markOpen(true, indexPath: indexPath)
+        listItemsTableViewController.markOpen(true, indexPath: indexPath, notifyRemote: true)
     }
     
     private func sendAllItemToStash(onFinish: VoidFunction) {
         if let list = self.list {
-            Providers.listItemsProvider.switchStatus(self.listItemsTableViewController.items, list: list, status: .Stash) {[weak self] result in
+            Providers.listItemsProvider.switchStatus(self.listItemsTableViewController.items, list: list, status: .Stash, remote: true) {[weak self] result in
                 if result.success {
                     self?.listItemsTableViewController.setListItems([])
                     self?.updateEmptyView()
@@ -175,7 +175,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     // MARK: -
     
     func startSideMenuDrag() {
-        self.listItemsTableViewController.clearPendingSwipeItemIfAny()
+        self.listItemsTableViewController.clearPendingSwipeItemIfAny(true)
     }
     
     private func setItemUndone(listItem: ListItem) {
@@ -183,7 +183,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     func clearThings() {
-        self.listItemsTableViewController.clearPendingSwipeItemIfAny()
+        self.listItemsTableViewController.clearPendingSwipeItemIfAny(true)
     }
     
     @IBAction func onAddToInventoryTap(sender: UIBarButtonItem) {
@@ -205,7 +205,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
             })
         }
         
-        listItemsTableViewController.clearPendingSwipeItemIfAny {[weak self] in
+        listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
             
             if let weakSelf = self {
                 

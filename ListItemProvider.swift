@@ -14,9 +14,9 @@ protocol ListItemProvider {
     
     func remove(list: List, _ handler: ProviderResult<Any> -> ())
 
-    func add(listItem: ListItem, _ handler: ProviderResult<ListItem> -> ())
+    func add(listItem: ListItem, remote: Bool, _ handler: ProviderResult<ListItem> -> ())
 
-    func add(listItems: [ListItem], _ handler: ProviderResult<[ListItem]> -> ())
+    func add(listItems: [ListItem], remote: Bool, _ handler: ProviderResult<[ListItem]> -> ())
     
     /**
     Adds a new list item
@@ -32,7 +32,7 @@ protocol ListItemProvider {
     
     func update(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
 
-    func update(listItems: [ListItem], _ handler: ProviderResult<Any> -> ())
+    func update(listItems: [ListItem], remote: Bool, _ handler: ProviderResult<Any> -> ())
     
     func listItems(list: List, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[ListItem]> -> ())
     
@@ -42,7 +42,7 @@ protocol ListItemProvider {
     so we must not use it against the same tableview/state where we already are, because the items will update "order" field incorrectly by basically being appended after themselves.
     TODO cleaner implementation, maybe split in smaller methods. The method should not lead to inconsistent result when used in wrong context (see explanation above)
     */
-    func switchStatus(listItems: [ListItem], list: List, status: ListItemStatus, _ handler: ProviderResult<Any> -> ())
+    func switchStatus(listItems: [ListItem], list: List, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     func syncListItems(list: List, handler: (ProviderResult<Any>) -> ())
     

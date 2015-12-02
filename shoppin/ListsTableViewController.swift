@@ -238,6 +238,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
 
     @IBAction func onAddTap(sender: UIBarButtonItem) {
         topAddEditListControllerManager?.expand(!(topAddEditListControllerManager?.expanded ?? true)) // toggle - if for some reason variable isn't set, set expanded false (!true)
+        initNavBarRightButtons([.Save])
     }
     
     @IBAction func onEditTap(sender: UIBarButtonItem) {
@@ -280,6 +281,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
                 self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.lists.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
                 self?.lists.append(list)
                 self?.topAddEditListControllerManager?.expand(false)
+                self?.initNavBarRightButtons([.Add])
             }
         }
     }

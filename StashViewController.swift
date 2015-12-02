@@ -53,7 +53,7 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     override func viewWillDisappear(animated: Bool) {
         UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Theme.navigationBarTextColor]
-        listItemsTableViewController.clearPendingSwipeItemIfAny()
+        listItemsTableViewController.clearPendingSwipeItemIfAny(true)
     }
     
     private func initWithList(list: List) {
@@ -72,7 +72,7 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     private func close() {
-        listItemsTableViewController.clearPendingSwipeItemIfAny {
+        listItemsTableViewController.clearPendingSwipeItemIfAny(true) {
             presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
         }
     }
@@ -94,9 +94,9 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     
     // MARK: - ListItemsTableViewDelegate
 
-    func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) {
+    func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) {
         if let list = list {
-            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Todo) {[weak self] result in
+            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Todo, remote: notifyRemote) {[weak self] result in
                 if result.success {
                     self?.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
                 }
@@ -108,7 +108,7 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
-        listItemsTableViewController.markOpen(true, indexPath: indexPath)
+        listItemsTableViewController.markOpen(true, indexPath: indexPath, notifyRemote: true)
     }
     
     func onListItemReset(tableViewListItem: TableViewListItem) {
@@ -122,7 +122,7 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     // MARK: -
     
     func startSideMenuDrag() {
-        listItemsTableViewController.clearPendingSwipeItemIfAny()
+        listItemsTableViewController.clearPendingSwipeItemIfAny(true)
     }
     
     private func setItemUndone(listItem: ListItem) {
@@ -130,14 +130,14 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     func clearThings() {
-        self.listItemsTableViewController.clearPendingSwipeItemIfAny()
+        self.listItemsTableViewController.clearPendingSwipeItemIfAny(true)
     }
     
     private func resetAllItems() {
         if let list = list {
-            listItemsTableViewController.clearPendingSwipeItemIfAny {[weak self] in
+            listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
                 if let weakSelf = self {
-                    Providers.listItemsProvider.switchStatus(weakSelf.listItemsTableViewController.items, list: list, status: .Todo) {result in
+                    Providers.listItemsProvider.switchStatus(weakSelf.listItemsTableViewController.items, list: list, status: .Todo, remote: true) {result in
                         if result.success {
                             weakSelf.listItemsTableViewController.setListItems([])
                             weakSelf.close()

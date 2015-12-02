@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ListItemsTableViewDelegate {
-    func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) // submit item marked as undo
+    func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) // submit item marked as undo
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) // mark as undo
     func onListItemReset(tableViewListItem: TableViewListItem) // revert undo
     func onSectionHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection)
@@ -128,42 +128,57 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
 
+    func updateListItems(listItems: [ListItem], notifyRemote: Bool) {
+        for listItem in listItems {
+            updateListItem(listItem, notifyRemote: notifyRemote)
+        }
+    }
+    
     /**
     Update or add list item
     When sure it's an "add" case use addListItem - this checks first if the item exists and is thus slower
     */
-    func updateListItem(listItem: ListItem) {
-        updateOrAddListItem(listItem, increment: false) // update means overwrite - don't increment
+    func updateListItem(listItem: ListItem, notifyRemote: Bool) {
+        updateOrAddListItem(listItem, increment: false, notifyRemote: notifyRemote) // update means overwrite - don't increment
     }
     
     // TODO simpler way to update, maybe just always reinit the table... also refactor rest (build sections etc) it is way more complex than it should
     // right now prefer not to always reinit the table because this can change sorting
     // so first we should implement persistent sorting, then refactor this class
     // -parameter: increment if, in case it's an update, the quantities of the items should be added together. If false the quantity is just overwritten like the rest of fields
-    func updateOrAddListItem(listItem: ListItem, increment: Bool, scrollToSelection: Bool = false) {
+    func updateOrAddListItem(listItem: ListItem, increment: Bool, scrollToSelection: Bool = false, notifyRemote: Bool) {
         if let indexPath = getIndexPath(listItem) {
             let oldItem = tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
 
-            if (oldItem.listItem.section == listItem.section) {
-                tableViewSections[indexPath.section].tableViewListItems[indexPath.row] = TableViewListItem(listItem: listItem)
-                tableView.reloadData()
-            } else { // the item has a different (but present in tableview) section
-                //update the list item before we reinit the table, to update the section...
-                var itemIndexMaybe:Int?
-                for (index, item) in items.enumerate() {
-                    if item.uuid == listItem.uuid {
-                        itemIndexMaybe = index
+            if oldItem.listItem.status != listItem.status {
+                // the item is in this tableview but has now a diff status - delete (swipe) it from tableview. This is used by websockets
+                // when another user e.g. sends to item to cart we want to show the receiving users the item being "swiped" and then deleted
+                markOpen(true, indexPath: indexPath, notifyRemote: notifyRemote) {[weak self] in // swipe
+                    self?.clearPendingSwipeItemIfAny(notifyRemote) // delete
+                }
+                
+            } else {
+                if (oldItem.listItem.section == listItem.section) {
+                    tableViewSections[indexPath.section].tableViewListItems[indexPath.row] = TableViewListItem(listItem: listItem)
+                    tableView.reloadData()
+                } else { // the item has a different (but present in tableview) section
+                    //update the list item before we reinit the table, to update the section...
+                    var itemIndexMaybe:Int?
+                    for (index, item) in items.enumerate() {
+                        if item.uuid == listItem.uuid {
+                            itemIndexMaybe = index
+                        }
+                    }
+                    if let itemIndex = itemIndexMaybe {
+                        items[itemIndex] = listItem
+                        
+                        initTableViewContent()
                     }
                 }
-                if let itemIndex = itemIndexMaybe {
-                    items[itemIndex] = listItem
-                    
-                    initTableViewContent()
+                
+                if scrollToSelection {
+                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Middle, animated: true)
                 }
-            }
-            
-            if scrollToSelection {
-                tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Middle, animated: true)
             }
             
         } else { // indexpath for updated item not in the tableview, item is new or has a new section
@@ -285,7 +300,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
 //        let velocity = scrollView.panGestureRecognizer.velocityInView(scrollView.superview)
 //        let scrollingUp = (velocity.y < 0)
         
-        clearPendingSwipeItemIfAny()
+        clearPendingSwipeItemIfAny(true)
     }
     
     func getIndexPath(listItem: ListItem) -> NSIndexPath? {
@@ -314,10 +329,10 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     Submits item marked as "undo" if there is any
     - parameter: onFinish optional callback to execute after submitting (this may e.g. call a provider). If there's no pending item, this is not called.
     */
-    func clearPendingSwipeItemIfAny(onFinish: VoidFunction? = nil) {
+    func clearPendingSwipeItemIfAny(notifyRemote: Bool, onFinish: VoidFunction? = nil) {
         if let s = self.swipedTableViewListItem {
             
-            listItemsTableViewDelegate?.onListItemClear(s) {
+            listItemsTableViewDelegate?.onListItemClear(s, notifyRemote: notifyRemote) {
                 self.swipedTableViewListItem = nil
                 //            self.removeListItem(s.listItem, animation: UITableViewRowAnimation.Bottom)
                 
@@ -331,7 +346,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     // MARK: - ItemActionsDelegate
     
     func startItemSwipe(tableViewListItem: TableViewListItem) {
-        clearPendingSwipeItemIfAny()
+        clearPendingSwipeItemIfAny(true)
     }
     
     func endItemSwipe(tableViewListItem: TableViewListItem) {
@@ -470,11 +485,11 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     Sets pending item (mark as undo" if open and shows cell open state. Submits currently pending item if existent.
     parameter onFinish: After cell marked open and automatic update of possible second "undo" item (to "done").
     */
-    func markOpen(open: Bool, indexPath: NSIndexPath, onFinish: VoidFunction? = nil) {
+    func markOpen(open: Bool, indexPath: NSIndexPath, notifyRemote: Bool, onFinish: VoidFunction? = nil) {
         if let section = self.tableViewSections[safe: indexPath.section], tableViewListItem = section.tableViewListItems[safe: indexPath.row] {
             // Note: order is important here! first show open at current index path, then remove possible pending (which can make indexPath invalid, thus later), then update pending variable with new item
             self.showCellOpen(open, indexPath: indexPath)
-            self.clearPendingSwipeItemIfAny {
+            self.clearPendingSwipeItemIfAny(notifyRemote) {
                 self.swipedTableViewListItem = tableViewListItem
                 onFinish?()
             }

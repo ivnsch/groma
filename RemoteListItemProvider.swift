@@ -90,12 +90,12 @@ class RemoteListItemProvider {
         }
     }
     
-    func update(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
-        let parameters = self.toRequestParams(listItem)
-        RemoteProvider.authenticatedRequest(.PUT, Urls.listItem, parameters) {result in
-            handler(result)
-        }
-    }
+//    func update(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
+//        let parameters = self.toRequestParams(listItem)
+//        RemoteProvider.authenticatedRequest(.PUT, Urls.listItem, parameters) {result in
+//            handler(result)
+//        }
+//    }
     
     // TODO use update
     func update(listItems: [ListItem], handler: RemoteResult<NoOpSerializable> -> ()) {

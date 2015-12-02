@@ -145,7 +145,7 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func add(listItems: [ListItem], _ handler: ProviderResult<[ListItem]> -> ()) {
+    func add(listItems: [ListItem], remote: Bool = true, _ handler: ProviderResult<[ListItem]> -> ()) {
 
         let addedListItemsMaybe = memProvider.addListItems(listItems)
         if let addedListItems = addedListItemsMaybe {
@@ -159,19 +159,20 @@ class ListItemProviderImpl: ListItemProvider {
                     handler(ProviderResult(status: .Success, sucessResult: savedListItems))
                 }
                 
-                // TODO review following comment now that we changed to do first database and then server
-                // for now do remote first. Imagine we do coredata first, user adds the list and then a lot of items to it and server fails. The list with all items will be lost in next sync.
-                // we can do special handling though, like show an error message when server fails and remove the list which was just added, and/or retry server. Or use a flag "synched = false" which tells us that these items should not be removed on sync, similar to items which were added offline. Etc.
-                // TODO review that sending savedListItems is enough for possible update case (increment) to work correctly. Will the server always have correct uuids etc.
-                self?.remoteProvider.add(savedListItems) {remoteResult in
-                    if !remoteResult.success {
-                        print("Error: adding listItem in remote: \(listItems), result: \(remoteResult)")
-                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
-                        self?.memProvider.invalidate()
+                if remote {
+                    // TODO review following comment now that we changed to do first database and then server
+                    // for now do remote first. Imagine we do coredata first, user adds the list and then a lot of items to it and server fails. The list with all items will be lost in next sync.
+                    // we can do special handling though, like show an error message when server fails and remove the list which was just added, and/or retry server. Or use a flag "synched = false" which tells us that these items should not be removed on sync, similar to items which were added offline. Etc.
+                    // TODO review that sending savedListItems is enough for possible update case (increment) to work correctly. Will the server always have correct uuids etc.
+                    self?.remoteProvider.add(savedListItems) {remoteResult in
+                        if !remoteResult.success {
+                            print("Error: adding listItem in remote: \(listItems), result: \(remoteResult)")
+                            DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                            self?.memProvider.invalidate()
+                        }
                     }
                 }
-                
-                
+
             } else {
                 handler(ProviderResult(status: .DatabaseUnknown))
                 self?.memProvider.invalidate()
@@ -180,7 +181,7 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func add(listItem: ListItem, _ handler: ProviderResult<ListItem> -> ()) {
+    func add(listItem: ListItem, remote: Bool = true, _ handler: ProviderResult<ListItem> -> ()) {
         add([listItem]) {result in
             if let listItems = result.sucessResult {
                 if let listItem = listItems.first {
@@ -346,7 +347,7 @@ class ListItemProviderImpl: ListItemProvider {
         addListItem(product, sectionName: section.name, quantity: quantity, list: list, note: note, order: orderMaybe, handler)
     }
 
-    func switchStatus(listItems: [ListItem], list: List, status: ListItemStatus, _ handler: ProviderResult<Any> -> ()) {
+    func switchStatus(listItems: [ListItem], list: List, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         
         // Helper to count how many list items each section has
         // filtered by "done" in same pass for better performance
@@ -384,7 +385,7 @@ class ListItemProviderImpl: ListItemProvider {
                 }
                 
                 // persist changes
-                self.update(listItems, handler)
+                self.update(listItems, remote: remote, handler)
                 
             } else {
                 print("Error: didn't get listItems in updateBatchDone: \(result.status)")
@@ -393,7 +394,7 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func update(listItems: [ListItem], _ handler: ProviderResult<Any> -> ()) {
+    func update(listItems: [ListItem], remote: Bool = true, _ handler: ProviderResult<Any> -> ()) {
         let memUpdated = memProvider.updateListItems(listItems)
         if memUpdated {
             handler(ProviderResult(status: .Success))
@@ -408,10 +409,13 @@ class ListItemProviderImpl: ListItemProvider {
                 handler(ProviderResult(status: .DatabaseUnknown))
                 self?.memProvider.invalidate()
             }
-            self?.remoteProvider.update(listItems) {result in
-                if !result.success {
-                    print("Error: Updating listItems: \(listItems), result: \(result)")
-                    DefaultRemoteErrorHandler.handle(result.status, handler: handler)
+            
+            if remote {
+                self?.remoteProvider.update(listItems) {result in
+                    if !result.success {
+                        print("Error: Updating listItems: \(listItems), result: \(result)")
+                        DefaultRemoteErrorHandler.handle(result.status, handler: handler)
+                    }
                 }
             }
         })

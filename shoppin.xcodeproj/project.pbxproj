@@ -724,6 +724,12 @@
 		EBF5D7D81B8FB01B00A235C5 /* Synced.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7D61B8FB01B00A235C5 /* Synced.swift */; };
 		EBF5D7D91B8FB01B00A235C5 /* Synced.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7D61B8FB01B00A235C5 /* Synced.swift */; };
 		EBF5D7DB1B8FB30000A235C5 /* LoadingFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7DA1B8FB30000A235C5 /* LoadingFooter.swift */; };
+		EBF608AD1C0B913C00EDB33E /* ListItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608AC1C0B913C00EDB33E /* ListItemParser.swift */; settings = {ASSET_TAGS = (); }; };
+		EBF608AE1C0B913C00EDB33E /* ListItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608AC1C0B913C00EDB33E /* ListItemParser.swift */; settings = {ASSET_TAGS = (); }; };
+		EBF608AF1C0B913C00EDB33E /* ListItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608AC1C0B913C00EDB33E /* ListItemParser.swift */; settings = {ASSET_TAGS = (); }; };
+		EBF608B11C0CF26A00EDB33E /* UserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B01C0CF26900EDB33E /* UserIdentity.swift */; settings = {ASSET_TAGS = (); }; };
+		EBF608B21C0CF26A00EDB33E /* UserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B01C0CF26900EDB33E /* UserIdentity.swift */; settings = {ASSET_TAGS = (); }; };
+		EBF608B31C0CF26A00EDB33E /* UserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B01C0CF26900EDB33E /* UserIdentity.swift */; settings = {ASSET_TAGS = (); }; };
 		EBFD15C11BA7F59600E37342 /* AlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFD15C01BA7F59600E37342 /* AlertPopup.swift */; };
 		EBFD15C41BA7F99B00E37342 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFD15C31BA7F99B00E37342 /* ForgotPasswordViewController.swift */; };
 		EBFD15C81BA7FA6500E37342 /* ForgotPassword.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBFD15C71BA7FA6500E37342 /* ForgotPassword.storyboard */; };
@@ -1168,6 +1174,8 @@
 		EBF5D7D21B8F868E00A235C5 /* Paginator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Paginator.swift; sourceTree = "<group>"; };
 		EBF5D7D61B8FB01B00A235C5 /* Synced.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Synced.swift; sourceTree = "<group>"; };
 		EBF5D7DA1B8FB30000A235C5 /* LoadingFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingFooter.swift; sourceTree = "<group>"; };
+		EBF608AC1C0B913C00EDB33E /* ListItemParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemParser.swift; sourceTree = "<group>"; };
+		EBF608B01C0CF26900EDB33E /* UserIdentity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserIdentity.swift; sourceTree = "<group>"; };
 		EBFD15C01BA7F59600E37342 /* AlertPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertPopup.swift; sourceTree = "<group>"; };
 		EBFD15C31BA7F99B00E37342 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		EBFD15C71BA7FA6500E37342 /* ForgotPassword.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ForgotPassword.storyboard; sourceTree = "<group>"; };
@@ -2258,6 +2266,7 @@
 				EBA575661BCFFB2700A0A825 /* GroupItem.swift */,
 				EBEEDD6A1A49C94F00FC3B29 /* Section.swift */,
 				EB2F5D761A557AB000DBC4AF /* List.swift */,
+				EBF608B01C0CF26900EDB33E /* UserIdentity.swift */,
 				EBF3779E1B38AB1000EEB6DB /* User.swift */,
 				EB70C21E1B4D302D0060E529 /* SharedUser.swift */,
 				EBB9A72F1B5EB08C00E5487D /* Inventory.swift */,
@@ -2395,6 +2404,7 @@
 			isa = PBXGroup;
 			children = (
 				EBFDD6A41C0235000012523D /* MyWebSocket.swift */,
+				EBF608AC1C0B913C00EDB33E /* ListItemParser.swift */,
 			);
 			name = socket;
 			sourceTree = "<group>";
@@ -2888,6 +2898,7 @@
 				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
 				EB9BE41F1B2CB513005B401A /* RemoteProduct.swift in Sources */,
 				EB7BFA711BD9981400F4C74A /* OrderedDictionary_Quantities.swift in Sources */,
+				EBF608AD1C0B913C00EDB33E /* ListItemParser.swift in Sources */,
 				EBBC23231BB5D57C0002F6B1 /* ProviderPopupManager.swift in Sources */,
 				EB2F5D221A4C20E200DBC4AF /* UIViewController.swift in Sources */,
 				EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */,
@@ -2941,6 +2952,7 @@
 				EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */,
 				EB1B36751BC4832D003519F2 /* PlanItemMapper.swift in Sources */,
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,
+				EBF608B11C0CF26A00EDB33E /* UserIdentity.swift in Sources */,
 				EB1FC51C1BC694CC004E1114 /* OkNextButtonsView.swift in Sources */,
 				EBF299871B791023006BDA1F /* InventorySync.swift in Sources */,
 				EB0C1BA01B3DF2B500F24C85 /* UserTabItemViewController.swift in Sources */,
@@ -3098,6 +3110,7 @@
 				EB9BE4201B2CB513005B401A /* RemoteProduct.swift in Sources */,
 				EB0C2A2D1B57BA3C00AF6226 /* NSViewController.swift in Sources */,
 				EBDFE3B11ACED1F600E48F95 /* ListItemCell.swift in Sources */,
+				EBF608AE1C0B913C00EDB33E /* ListItemParser.swift in Sources */,
 				EB55676B1A8643BF00CD3EC6 /* List.swift in Sources */,
 				EB4FD45C1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EB1B36621BC47D88003519F2 /* PlanProvider.swift in Sources */,
@@ -3178,6 +3191,7 @@
 				EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */,
 				EB451C3A1B85F3F0000DE208 /* StatsProvider.swift in Sources */,
 				EB55675D1A86433700CD3EC6 /* Product.swift in Sources */,
+				EBF608B21C0CF26A00EDB33E /* UserIdentity.swift in Sources */,
 				EB7858761B7F6F69008AAD12 /* RemoteHistoryItems.swift in Sources */,
 				EB7E833B1B7B9021009DEEF4 /* RealmCheckoutProvider.swift in Sources */,
 				EBDFE3BF1ACEF60100E48F95 /* HeaderCell.swift in Sources */,
@@ -3340,6 +3354,7 @@
 				EB1B36671BC47DF9003519F2 /* PlanProviderImpl.swift in Sources */,
 				EBF3775E1B342A4900EEB6DB /* InventoryItemsProviderImpl.swift in Sources */,
 				EB40A4701B550804000E9CAD /* RealmProvider.swift in Sources */,
+				EBF608AF1C0B913C00EDB33E /* ListItemParser.swift in Sources */,
 				EB70C2211B4D302D0060E529 /* SharedUser.swift in Sources */,
 				EB7E83301B7B74EF009DEEF4 /* RemoteHistoryProvider.swift in Sources */,
 				EBF299891B791023006BDA1F /* InventorySync.swift in Sources */,
@@ -3371,6 +3386,7 @@
 				EBF3778F1B35808900EEB6DB /* TestListItems.swift in Sources */,
 				EBF377831B342B4F00EEB6DB /* PreferencesManager.swift in Sources */,
 				EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */,
+				EBF608B31C0CF26A00EDB33E /* UserIdentity.swift in Sources */,
 				EB792A2A1B95CCE10004BEEC /* RemoteSocialLoginResult.swift in Sources */,
 				EB0C2A381B58329800AF6226 /* RemoteInventoryProvider.swift in Sources */,
 				EBDA75551BCD960900E34AC3 /* OkCancelButtonsView.swift in Sources */,

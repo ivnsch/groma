@@ -29,4 +29,8 @@ protocol UserProvider {
     func forgotPassword(email: String, _ handler: ProviderResult<Any> -> ())
     
     func removeAccount(handler: ProviderResult<Any> -> ())
+    
+    func connectWebsocketIfLoggedIn()
+    
+    func disconnectWebsocket()
 }

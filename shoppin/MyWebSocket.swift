@@ -11,30 +11,51 @@ import Valet
 
 class MyWebSocket: WebSocketDelegate {
     
-    private let socket: WebSocket
+    private var socket: WebSocket?
+
+    private var subscribedLists: [String] = []
+    private var subscribedInventories: [String] = []
     
     init() {
-        socket = WebSocket(url: NSURL(string: "ws://\(Urls.hostIPPort)/ws")!)
-        socket.delegate = self
-        
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
         let maybeToken = valet?.stringForKey(KeychainKeys.token)
         if let token = maybeToken {
-            socket.headers["X-Auth-Token"] = token
+            socket = WebSocket(url: NSURL(string: "ws://\(Urls.hostIPPort)/ws")!)
+            socket?.delegate = self
+            socket?.headers["X-Auth-Token"] = token
+            socket?.headers["Content-Type"] = "application/json"
+            socket?.connect()
         }
-        socket.headers["Content-Type"] = "application/json"
-
-        socket.connect()
+    }
+    
+    // Unsubscribes if the user is logged in. After the server acks the socket connection is disconnected.
+    func disconnect() {
+        do {
+            let dict = ["topics": subscribedLists + subscribedInventories]
+            let data = try NSJSONSerialization.dataWithJSONObject(dict, options: NSJSONWritingOptions())
+            if let str = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
+                
+                print("Websocket: Sending string: \(str)")
+                socket?.writeString(str)
+                
+            } else {
+                print("Error: MyWebSocket.disconnect: invalid serialization result: dict: \(dict), data: \(data)")
+            }
+        } catch let e as NSError {
+            print("Error: MyWebSocket.disconnect: serializing json: \(e)")
+        }
     }
     
     func websocketDidConnect(socket: WebSocket) {
         print("Websocket: Connected")
         
+        let deviceId = NSUUID().UUIDString
+
         Providers.listProvider.lists {listsResult in
             
             if let lists = listsResult.sucessResult {
                 
-                Providers.inventoryProvider.inventories {inventoriesResult in
+                Providers.inventoryProvider.inventories {[weak self] inventoriesResult in
                     
                     if let inventories = inventoriesResult.sucessResult {
                         
@@ -43,12 +64,16 @@ class MyWebSocket: WebSocketDelegate {
                         let inventoriesUuids = inventories.map{$0.uuid}
                         
                         do {
-                            let dict = ["lists": listsUuids, "inventories": inventoriesUuids]
+                            let dict = ["lists": listsUuids, "inventories": inventoriesUuids, "deviceId": deviceId]
                             let data = try NSJSONSerialization.dataWithJSONObject(dict, options: NSJSONWritingOptions())
                             if let str = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
                                 
                                 print("Websocket: Sending string: \(str)")
                                 socket.writeString(str)
+                                
+                                PreferencesManager.savePreference(PreferencesManagerKey.deviceId, value: NSString(string: deviceId))
+                                self?.subscribedLists = listsUuids
+                                self?.subscribedInventories = inventoriesUuids
                                 
                             } else {
                                 print("Error: MyWebSocket.websocketDidConnect: invalid serialization result: dict: \(dict), data: \(data)")
@@ -88,17 +113,54 @@ class MyWebSocket: WebSocketDelegate {
                 let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions())
                 if let dict =  json as? Dictionary<String, AnyObject>  {
                     
-                    print("Websocket: Parsed dictionary: \(dict)")
-                    
-                    let verb = dict["verb"]
-                    let topic = dict["topic"]
-                    let data = dict["message"]
-                    
-                    print("Websocket: Verb: \(verb), topic: \(topic), data: \(data)")
-                    // TODO notification payload
-                    NSNotificationCenter.defaultCenter().postNotificationName("NotificationIdentifier", object: nil)
+                    if let verb = dict["verb"] as? String, category = dict["category"] as? String, topic = dict["topic"] as? String, data = dict["message"] {
+                        print("Websocket: Verb: \(verb), category: \(category), topic: \(topic), data: \(data)")
+                        
+                        switch category {
+                        case "listitem":
+                            switch verb {
+                            case "update":
+                                let listItem = ListItemParser.parse(data)
+                                NSNotificationCenter.defaultCenter().postNotificationName("listItems", object: nil, userInfo: ["value": [listItem]])
 
+                            default: print("Not handled verb: \(verb)")
+                            }
+                            
+
+                        case "listitems":
+                            switch verb {
+                            case "update":
+                                let dataarr = data as! [AnyObject]
+                                let listItems = ListItemParser.parseArray(dataarr)
+                                NSNotificationCenter.defaultCenter().postNotificationName("listItems", object: nil, userInfo: ["value": listItems])
+                                
+                            default: print("Not handled verb: \(verb)")
+                            }
+                        
+                        
+                        default: print("Not handled category: \(category)")
+                        }
+                        
+                        
+                    } else {
+//                        print("not handled websocket format: \(dict)")
+                        
+                        if let msg = dict["msg"] as? String {
+                            if msg == "unsubscribed" {
+                                socket.disconnect()
+                                PreferencesManager.clearPreference(key: PreferencesManagerKey.deviceId)
+                            }
+                        } else {
+                            print("not handled websocket format: \(dict)")
+                        }
+                    }
+
+                } else {
+                    print("Warn: Websocket: Returned json could not be converted to dictionary: \(json)")
                 }
+                
+                
+                
             } catch let e as NSError {
                 print("Error: MyWebSocket.websocketDidReceiveMessage: deserializing json: \(e)")
             }

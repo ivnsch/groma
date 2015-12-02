@@ -79,6 +79,29 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         topBar.delegate = self
         
         floatingViews.userInteractionEnabled = false
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketUpdateListItems:", name: "listItems", object: nil)
+    }
+    
+    func onWebsocketUpdateListItems(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, [ListItem]> {
+            if let listItems = info["value"] {
+                Providers.listItemsProvider.update(listItems, remote: false, successHandler{[weak self] in
+                    self?.listItemsTableViewController.updateListItems(listItems, notifyRemote: false)
+                    self?.updatePrices(.MemOnly)
+                })
+
+            } else {
+                print("Error: ViewController.onWebsocketAddListItems: no value")
+            }
+        } else {
+            print("Error: ViewController.onWebsocketAddListItems: no userInfo")
+        }
+    }
+    
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     private func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
@@ -401,17 +424,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func clearPossibleUndo() {
-        self.listItemsTableViewController.clearPendingSwipeItemIfAny()
+        self.listItemsTableViewController.clearPendingSwipeItemIfAny(true)
     }
     
     // MARK: - ListItemsTableViewDelegate
     
-    func onListItemClear(tableViewListItem: TableViewListItem, onFinish: VoidFunction) {
+    func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) {
         tableViewListItem.listItem.status = .Done
         
         if let list = self.currentList {
             
-            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Done) {[weak self] result in
+            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Done, remote: notifyRemote) {[weak self] result in
                 if result.success {
                     self!.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
                     self!.updatePrices(.MemOnly)
@@ -437,7 +460,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             
         } else {
 
-            listItemsTableViewController.markOpen(true, indexPath: indexPath, onFinish: {[weak self] in
+            listItemsTableViewController.markOpen(true, indexPath: indexPath, notifyRemote: true, onFinish: {[weak self] in
                 // "fake" update of price labels - the update has not been submitted yet to provider, since we just opened the cell and the item is submitted only after "undo" is cleared
                 // we do this for simplicity purposes, if we submitted on cell open we would have to revert the update on "undo".
                 // Note that after item is submitted we fetch from provider and update the labels again, to "be sure" (this time without animation). There's no real reason for this, just in case.
@@ -486,7 +509,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onListItemsChangedSection(tableViewListItems: [TableViewListItem]) {
-        Providers.listItemsProvider.update(tableViewListItems.map{$0.listItem}, successHandler{result in
+        Providers.listItemsProvider.update(tableViewListItems.map{$0.listItem}, remote: true, successHandler{result in
         })
     }
     
@@ -521,7 +544,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private func onListItemAddedToProvider(savedListItem: ListItem) {
         // Our "add" can also be an update - if user adds an item with a name that already exists, it's an update (increment)
-        listItemsTableViewController.updateOrAddListItem(savedListItem, increment: true, scrollToSelection: true)
+        listItemsTableViewController.updateOrAddListItem(savedListItem, increment: true, scrollToSelection: true, notifyRemote: true)
         updatePrices(.MemOnly)
     }
     
@@ -536,8 +559,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 
                 let listItem = ListItem(uuid: updatingListItem.uuid, status: updatingListItem.status, quantity: listItemInput.quantity, product: product, section: section, list: currentList, order: updatingListItem.order, note: listItemInput.note)
                 
-                Providers.listItemsProvider.update([listItem], successHandler {
-                    self.listItemsTableViewController.updateListItem(listItem)
+                Providers.listItemsProvider.update([listItem], remote: true, successHandler {
+                    self.listItemsTableViewController.updateListItem(listItem, notifyRemote: true)
                     self.updatePrices(.MemOnly)
                     
                     handler?()
@@ -568,7 +591,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 doneViewController.navigationItemTextColor = titleLabel?.textColor
                 doneViewController.delegate = self
                 doneViewController.onUIReady = {
-                    self.listItemsTableViewController.clearPendingSwipeItemIfAny {
+                    self.listItemsTableViewController.clearPendingSwipeItemIfAny(true) {
                         doneViewController.list = self.currentList
                         doneViewController.backgroundColor = self.view.backgroundColor
                     }
@@ -591,7 +614,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         else if segue.identifier == "stashSegue" {
             if let stashViewController = segue.destinationViewController as? StashViewController {
                 stashViewController.navigationItemTextColor = titleLabel?.textColor
-                listItemsTableViewController.clearPendingSwipeItemIfAny {
+                listItemsTableViewController.clearPendingSwipeItemIfAny(true) {
                     stashViewController.onUIReady = {
                         stashViewController.list = self.currentList
                         stashViewController.backgroundColor = self.view.backgroundColor

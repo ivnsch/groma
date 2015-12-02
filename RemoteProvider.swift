@@ -55,6 +55,10 @@ class RemoteProvider {
                 request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
             } // TODO if there's no token return status code to direct to login controller or something
             
+            if let deviceId: String = PreferencesManager.loadPreference(PreferencesManagerKey.deviceId) {
+                request.setValue(deviceId, forHTTPHeaderField: "did")
+            }
+            
             do {
                 request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
                 

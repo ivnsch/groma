@@ -12,14 +12,14 @@ class UserProviderImpl: UserProvider {
    
     private let remoteProvider = RemoteUserProvider()
 
-    private var incomingSocket: MyWebSocket? // arc
+    private var webSocket: MyWebSocket? // arc
     
     func login(loginData: LoginData, _ handler: ProviderResult<Any> -> ()) {
         self.remoteProvider.login(loginData) {[weak self] result in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
                 self?.sync {
-                    self?.incomingSocket = MyWebSocket()
+                    self?.connectWebsocketIfLoggedIn()
                     handler(ProviderResult(status: providerStatus))
                 }
             } else {
@@ -33,7 +33,7 @@ class UserProviderImpl: UserProvider {
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
                 self?.sync {
-                    self?.incomingSocket = MyWebSocket()
+                    self?.connectWebsocketIfLoggedIn()
                     handler(ProviderResult(status: providerStatus))
                 }
             } else {
@@ -71,6 +71,14 @@ class UserProviderImpl: UserProvider {
                 handler()
             }
         }
+    }
+
+    func connectWebsocketIfLoggedIn() {
+        webSocket = MyWebSocket()
+    }
+    
+    func disconnectWebsocket() {
+        webSocket?.disconnect()
     }
     
     func forgotPassword(email: String, _ handler: ProviderResult<Any> -> ()) {

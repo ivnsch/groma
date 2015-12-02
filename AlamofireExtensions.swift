@@ -130,6 +130,10 @@ struct AlamofireHelper {
             mutableURLRequest.setValue(token, forHTTPHeaderField: "X-Auth-Token")
         } // TODO if there's no token return status code to direct to login controller or something
         
+        if let deviceId: String = PreferencesManager.loadPreference(PreferencesManagerKey.deviceId) {
+            mutableURLRequest.setValue(deviceId, forHTTPHeaderField: "did")
+        }
+        
         // TODO: server: when encoding is not supported the response is nil! It should send a valid response. Happened testing listItems (GET) with JSON encoding
         let encoding = method == .GET ? Alamofire.ParameterEncoding.URL : Alamofire.ParameterEncoding.JSON
             
@@ -152,6 +156,10 @@ struct AlamofireHelper {
         if let token = maybeToken {
             request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
         } // TODO if there's no token return status code to direct to login controller or something
+        
+        if let deviceId: String = PreferencesManager.loadPreference(PreferencesManagerKey.deviceId) {
+            request.setValue(deviceId, forHTTPHeaderField: "did")
+        }
         
         // TODO review, force try parameter serialization. For now like this because there's no known reason why this would fail, and simplifies code significantly
         request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(parameters, options: [])
