@@ -11,7 +11,7 @@ import CoreData
 import SwiftValidator
 import ChameleonFramework
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemViewControllerDelegate,ListItemGroupsViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate
 //    , UIBarPositioningDelegate
 {
     
@@ -627,15 +627,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
 
-    // MARK: - ListItemGroupsViewControllerDelegate
-    
-    func onGroupsAdded() {
-        if let list = currentList {
-            initWithList(list) // refresh list items
-        } else {
-            print("Invalid state, coming back from groups and no list")
-        }
-    }
     
     // MARK: - QuickAddDelegate
     
@@ -649,7 +640,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             // TODO save "group list item" don't desintegrate group immediatly
             
             Providers.listItemsProvider.add(group.items, list: list, successHandler {[weak self] addedListItems in
-                self?.onGroupsAdded()
+                if let list = self?.currentList {
+                    self?.initWithList(list) // refresh list items
+                } else {
+                    print("Warn: Group was added but couldn't reinit list, self or currentList is not set: self: \(self), currentlist: \(self?.currentList)")
+                }
                 onFinish?()
                 
             })

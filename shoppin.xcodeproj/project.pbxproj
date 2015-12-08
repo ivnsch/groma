@@ -131,7 +131,6 @@
 		EB20FC071A599AE20058103B /* InventoryItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FC061A599AE20058103B /* InventoryItemTableViewCell.swift */; };
 		EB2433EA1BC5A04D00986897 /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2433E91BC5A04D00986897 /* AddItemView.swift */; };
 		EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB2433EC1BC5A46800986897 /* AddItemView.xib */; };
-		EB2600651BD10D9600333237 /* ListItemGroupItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2600641BD10D9600333237 /* ListItemGroupItemCell.swift */; settings = {ASSET_TAGS = (); }; };
 		EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */; };
 		EB28C1181A58623E00E1C8BC /* PlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */; };
 		EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D101A4ACC4400DBC4AF /* String.swift */; };
@@ -446,11 +445,6 @@
 		EBA288DB1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA288DA1BB9FEE6001A2B95 /* Array_InventoryItem.swift */; };
 		EBA288DC1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA288DA1BB9FEE6001A2B95 /* Array_InventoryItem.swift */; };
 		EBA288DD1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA288DA1BB9FEE6001A2B95 /* Array_InventoryItem.swift */; };
-		EBA575551BCD99F400A0A825 /* ListItemGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA575541BCD99F400A0A825 /* ListItemGroupsViewController.swift */; };
-		EBA575571BCDBB8F00A0A825 /* ListItemGroups.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBA575561BCDBB8F00A0A825 /* ListItemGroups.storyboard */; };
-		EBA575591BCDC57000A0A825 /* AddEditListItemGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA575581BCDC57000A0A825 /* AddEditListItemGroupViewController.swift */; };
-		EBA5755B1BCDC59D00A0A825 /* ListItemGroupItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA5755A1BCDC59D00A0A825 /* ListItemGroupItemsViewController.swift */; };
-		EBA5755E1BCECA6000A0A825 /* ListItemGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA5755C1BCECA6000A0A825 /* ListItemGroupCell.swift */; };
 		EBA575621BCECBDF00A0A825 /* QuantityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA575611BCECBDF00A0A825 /* QuantityView.swift */; };
 		EBA575651BCECC0000A0A825 /* QuantityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBA575641BCECC0000A0A825 /* QuantityView.xib */; };
 		EBA575671BCFFB2700A0A825 /* GroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA575661BCFFB2700A0A825 /* GroupItem.swift */; };
@@ -854,7 +848,6 @@
 		EB20FC061A599AE20058103B /* InventoryItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemTableViewCell.swift; sourceTree = "<group>"; };
 		EB2433E91BC5A04D00986897 /* AddItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		EB2433EC1BC5A46800986897 /* AddItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddItemView.xib; sourceTree = "<group>"; };
-		EB2600641BD10D9600333237 /* ListItemGroupItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupItemCell.swift; sourceTree = "<group>"; };
 		EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationTitleView.swift; sourceTree = "<group>"; };
 		EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlainTableViewController.swift; sourceTree = "<group>"; };
 		EB2F5D101A4ACC4400DBC4AF /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -1019,11 +1012,6 @@
 		EBA18C251BF56E3B009291F2 /* CGSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGSize.swift; sourceTree = "<group>"; };
 		EBA288D61BB9FCC3001A2B95 /* MemInventoryItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemInventoryItemProvider.swift; sourceTree = "<group>"; };
 		EBA288DA1BB9FEE6001A2B95 /* Array_InventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_InventoryItem.swift; sourceTree = "<group>"; };
-		EBA575541BCD99F400A0A825 /* ListItemGroupsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupsViewController.swift; sourceTree = "<group>"; };
-		EBA575561BCDBB8F00A0A825 /* ListItemGroups.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ListItemGroups.storyboard; sourceTree = "<group>"; };
-		EBA575581BCDC57000A0A825 /* AddEditListItemGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditListItemGroupViewController.swift; sourceTree = "<group>"; };
-		EBA5755A1BCDC59D00A0A825 /* ListItemGroupItemsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupItemsViewController.swift; sourceTree = "<group>"; };
-		EBA5755C1BCECA6000A0A825 /* ListItemGroupCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemGroupCell.swift; sourceTree = "<group>"; };
 		EBA575611BCECBDF00A0A825 /* QuantityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuantityView.swift; sourceTree = "<group>"; };
 		EBA575641BCECC0000A0A825 /* QuantityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuantityView.xib; sourceTree = "<group>"; };
 		EBA575661BCFFB2700A0A825 /* GroupItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupItem.swift; sourceTree = "<group>"; };
@@ -1522,15 +1510,6 @@
 			name = addItemView;
 			sourceTree = "<group>";
 		};
-		EB2600631BD10D6300333237 /* addEditGroupViewController */ = {
-			isa = PBXGroup;
-			children = (
-				EBA575581BCDC57000A0A825 /* AddEditListItemGroupViewController.swift */,
-				EB2600641BD10D9600333237 /* ListItemGroupItemCell.swift */,
-			);
-			name = addEditGroupViewController;
-			sourceTree = "<group>";
-		};
 		EB2F5D0F1A4ACC2500DBC4AF /* extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -1698,7 +1677,6 @@
 			isa = PBXGroup;
 			children = (
 				EB85F44F1BD538FC00E19E9B /* quickAdd */,
-				EBA575531BCD99D100A0A825 /* listItemGroups */,
 				EB1B363C1BC1CFE6003519F2 /* libraryCouldNotLink */,
 				EB0C1B841B3DA2DD00F24C85 /* user */,
 				EB703FE01B3B5F1C001586C5 /* intro */,
@@ -1958,26 +1936,6 @@
 				EB9F6CF81A8610550038355B /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		EBA575531BCD99D100A0A825 /* listItemGroups */ = {
-			isa = PBXGroup;
-			children = (
-				EB2600631BD10D6300333237 /* addEditGroupViewController */,
-				EBA575601BCECA6600A0A825 /* groupsViewController */,
-				EBA5755A1BCDC59D00A0A825 /* ListItemGroupItemsViewController.swift */,
-				EBA575561BCDBB8F00A0A825 /* ListItemGroups.storyboard */,
-			);
-			name = listItemGroups;
-			sourceTree = "<group>";
-		};
-		EBA575601BCECA6600A0A825 /* groupsViewController */ = {
-			isa = PBXGroup;
-			children = (
-				EBA5755C1BCECA6000A0A825 /* ListItemGroupCell.swift */,
-				EBA575541BCD99F400A0A825 /* ListItemGroupsViewController.swift */,
-			);
-			name = groupsViewController;
 			sourceTree = "<group>";
 		};
 		EBA575631BCECBE500A0A825 /* quantityView */ = {
@@ -2589,7 +2547,6 @@
 				EBFD15C81BA7FA6500E37342 /* ForgotPassword.storyboard in Resources */,
 				EBB526681BEFB89A0002A286 /* QuickAddGroupItems.storyboard in Resources */,
 				EB0C1B971B3DBD1300F24C85 /* Login.storyboard in Resources */,
-				EBA575571BCDBB8F00A0A825 /* ListItemGroups.storyboard in Resources */,
 				EB85F4531BD5393800E19E9B /* QuickAddListItem.storyboard in Resources */,
 				EB1219D51BD828E0004351E0 /* QuickAddGroup.storyboard in Resources */,
 				EB1B36501BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */,
@@ -2953,7 +2910,6 @@
 				EB89D33C1AD44BD400B6E0D0 /* Selectable.swift in Sources */,
 				EB85F46B1BD54FD300E19E9B /* QuickAddGroup.swift in Sources */,
 				EBDA75401BCD5C2100E34AC3 /* ListItemGroup.swift in Sources */,
-				EB2600651BD10D9600333237 /* ListItemGroupItemCell.swift in Sources */,
 				EB0C2A281B570BA700AF6226 /* ViewTags.swift in Sources */,
 				EB7BFA7E1BDAF96A00F4C74A /* Int.swift in Sources */,
 				EB7524531BF582FA00A97A10 /* QuickAddItemCell.swift in Sources */,
@@ -2967,7 +2923,6 @@
 				EB20FC071A599AE20058103B /* InventoryItemTableViewCell.swift in Sources */,
 				EB9032111BF2C49200DA7454 /* AddEditInventoryItemController.swift in Sources */,
 				EBA575621BCECBDF00A0A825 /* QuantityView.swift in Sources */,
-				EBA575551BCD99F400A0A825 /* ListItemGroupsViewController.swift in Sources */,
 				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
 				EB70C21F1B4D302D0060E529 /* SharedUser.swift in Sources */,
 				EBFD15C11BA7F59600E37342 /* AlertPopup.swift in Sources */,
@@ -2992,7 +2947,6 @@
 				EB7E831A1B7B703B009DEEF4 /* HistoryProviderImpl.swift in Sources */,
 				EBF162E51A3C85A30048E37C /* ListItemCell.swift in Sources */,
 				EB0C1B831B3D626500F24C85 /* IntroViewController.swift in Sources */,
-				EBA575591BCDC57000A0A825 /* AddEditListItemGroupViewController.swift in Sources */,
 				EB79AC271BF0E3B700685B30 /* AddEditListController.swift in Sources */,
 				EBCE418B1B5D10BA00583551 /* ListTableViewCell.swift in Sources */,
 				EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */,
@@ -3031,11 +2985,9 @@
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
 				EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */,
 				EBF5D7DB1B8FB30000A235C5 /* LoadingFooter.swift in Sources */,
-				EBA5755E1BCECA6000A0A825 /* ListItemGroupCell.swift in Sources */,
 				EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */,
 				EB4147B81BDFE9FB00549CE4 /* ManageProductsCell.swift in Sources */,
 				EBB526711BEFD8C10002A286 /* HelpProviderImpl.swift in Sources */,
-				EBA5755B1BCDC59D00A0A825 /* ListItemGroupItemsViewController.swift in Sources */,
 				EB40A46E1B550804000E9CAD /* RealmProvider.swift in Sources */,
 				EBA7AC961BFE95AF00247A8C /* RemoteProductCategory.swift in Sources */,
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
