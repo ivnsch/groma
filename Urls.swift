@@ -54,4 +54,8 @@ struct Urls {
     static let historyItems = host + "historyItems"
     static let historyItemsSync = host + "historyItems/sync"
     static let historyItem = host + "historyItem"
+    
+    // Plan
+    static let planItems = host + "planItems"
+    static let planItem = host + "planItem"
 }

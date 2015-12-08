@@ -11,7 +11,8 @@ import UIKit
 class PlanProviderImpl: PlanProvider {
 
     let dbProvider = RealmPlanProvider()
-
+    let remoteProvider = RemotePlanItemsProvider()
+    
     func planItems(handler: ProviderResult<[PlanItem]> -> Void) {
         dbProvider.planItems(NSDate().startOfMonth) {dbItems in
             handler(ProviderResult(status: .Success, sucessResult: dbItems))
@@ -39,6 +40,7 @@ class PlanProviderImpl: PlanProvider {
         addPlanItems(planItems, inventory: inventory, handler)
     }
     
+    // TODO remote
     func addPlanItems(planItems: [PlanItem], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void) {
         dbProvider.addOrIncrementPlanItems(planItems, inventory: inventory) {planItemsMaybe in
             if let planItems = planItemsMaybe {
@@ -49,6 +51,7 @@ class PlanProviderImpl: PlanProvider {
         }
     }
     
+    // TODO is this used? if yes needs remote
     func addPlanItems(planItemsInput: [PlanItemInput], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void) {
         dbProvider.addOrUpdateWithIncrement(planItemsInput, inventory: inventory) {planItemsMaybe in
             if let planItems = planItemsMaybe {
@@ -59,6 +62,7 @@ class PlanProviderImpl: PlanProvider {
         }
     }
     
+    // TODO is this used? if yes needs remote
     func addProducts(products: [Product], inventory: Inventory, _ handler: ProviderResult<[PlanItem]> -> Void) {
         dbProvider.addOrIncrementProducts(products, inventory: inventory) {planItemsMaybe in
             if let planItems = planItemsMaybe {
@@ -70,9 +74,17 @@ class PlanProviderImpl: PlanProvider {
     }
     
     func addProduct(product: Product, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
-        addProducts([product], inventory: inventory) {result in
+        addProducts([product], inventory: inventory) {[weak self] result in
             if let planItem = result.sucessResult?.first {
                 handler(ProviderResult(status: .Success, sucessResult: planItem))
+                
+                self?.remoteProvider.addUpdatePlanItem(planItem) {remoteResult in
+                    if !remoteResult.success {
+                        print("Error: addOrIncrementPlanItem: \(planItem), result: \(remoteResult)")
+                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                    }
+                }
+                
             } else {
                 print("Error: Could not get the plan item: \(result)")
                 handler(ProviderResult(status: .DatabaseUnknown))
@@ -81,12 +93,20 @@ class PlanProviderImpl: PlanProvider {
     }
 
     func updatePlanItem(planItem: PlanItem, inventory: Inventory, _ handler: ProviderResult<PlanItem> -> Void) {
-        dbProvider.update(planItem) {updated in
+        dbProvider.update(planItem) {[weak self] updated in
             if updated {
                 // update product can change the name or price, and the products can be referenced by list items, so we have to invalidate memory cache.
                 Providers.listItemsProvider.invalidateMemCache()
 
                 handler(ProviderResult(status: .Success, sucessResult: planItem))
+                
+                self?.remoteProvider.addUpdatePlanItem(planItem) {remoteResult in
+                    if !remoteResult.success {
+                        print("Error: addOrIncrementPlanItem: \(planItem), result: \(remoteResult)")
+                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                    }
+                }
+                
             } else {
                 handler(ProviderResult(status: .DatabaseSavingError))
             }
@@ -98,13 +118,21 @@ class PlanProviderImpl: PlanProvider {
         
         func onHasProduct(product: Product, isUpdate: Bool) {
             let planItem = PlanItem(inventory: inventory, product: product, quantity: itemInput.quantity, usedQuantity: -1)
-            dbProvider.add(planItem) {saved in
+            dbProvider.add(planItem) {[weak self] saved in
                 if saved {
                     if isUpdate {
                         // update product can change the name or price, and the products can be referenced by list items, so we have to invalidate memory cache.
                         Providers.listItemsProvider.invalidateMemCache()
                     }
                     handler(ProviderResult(status: .Success, sucessResult: planItem))
+                    
+                    self?.remoteProvider.addUpdatePlanItem(planItem) {remoteResult in
+                        if !remoteResult.success {
+                            print("Error: addOrIncrementPlanItem: \(planItem), result: \(remoteResult)")
+                            DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                        }
+                    }
+                    
                 } else {
                     handler(ProviderResult(status: .DatabaseSavingError))
                 }

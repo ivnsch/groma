@@ -105,7 +105,7 @@ class RemoteListItemProvider {
         }
     }
     
-    func add(list: List, handler: RemoteResult<RemoteList> -> ()) {
+    func add(list: List, handler: RemoteResult<NoOpSerializable> -> ()) {
         let parameters: [String: AnyObject] = [
             "uuid": list.uuid,
             "name": list.name,

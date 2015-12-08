@@ -80,4 +80,4 @@ func ==(lhs: PlanItem, rhs: PlanItem) -> Bool {
 // convenience (redundant) holder to avoid having to iterate through historyitems to find unique products and users
 // so products, users arrays are the result of extracting the unique products and users from historyItems array
 // TODO do we need this, it's for remote parsing etc. copied from inventory item.
-//typealias PlanItemsWithRelations = (planItems: [PlanItem], inventories: [Inventory], products: [Product])
+typealias PlanItemsWithRelations = (planItems: [PlanItem], inventory: Inventory, products: [Product])
