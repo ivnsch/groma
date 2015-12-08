@@ -141,7 +141,7 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
                     
                 } else { // add
                     let group = ListItemGroup(uuid: NSUUID().UUIDString, name: name, items: groupItems)
-                    Providers.listItemGroupsProvider.add([group], successHandler{[weak self] in
+                    Providers.listItemGroupsProvider.add(group, successHandler{[weak self] in
                         // TODO show a "toast" confirmation (quick view)
                         // add group to view controller (list) - scroll to it
                         self?.delegate?.onGroupCreated(group)

@@ -214,14 +214,7 @@ class RemoteListItemProvider {
             "uuid": listItem.uuid,
             "status": listItem.status.rawValue,
             "quantity": listItem.quantity,
-            "productInput": [
-                "uuid": listItem.product.uuid,
-                "name": listItem.product.name,
-                "price": listItem.product.price,
-                "baseQuantity": listItem.product.baseQuantity,
-                "unit": listItem.product.unit.rawValue,
-                "category": toRequestParams(listItem.product.category)
-            ],
+            "productInput": toRequestParams(listItem.product),
             "listUuid": listItem.list.uuid,
             "listName": listItem.list.name,
             "sectionInput": [
@@ -240,6 +233,16 @@ class RemoteListItemProvider {
 
     }
     
+    func toRequestParams(product: Product) -> [String: AnyObject] {
+        return [
+            "uuid": product.uuid,
+            "name": product.name,
+            "price": product.price,
+            "baseQuantity": product.baseQuantity,
+            "unit": product.unit.rawValue,
+            "category": toRequestParams(product.category)
+        ]
+    }
     
     func toRequestParams(productCategory: ProductCategory) -> [String: AnyObject] {
         return [

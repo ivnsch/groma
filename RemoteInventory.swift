@@ -35,6 +35,6 @@ final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSeria
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name)}, lastUpdate: \(self.lastUpdate), users: \(self.users)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name)}, lastUpdate: \(lastUpdate), users: \(users)}"
     }
 }

@@ -81,7 +81,7 @@ class AddEditListItemGroupViewController: UIViewController, UITableViewDataSourc
             }
             if let name = groupNameInput.text {
                 let group = ListItemGroup(uuid: self.group.uuid, name: name, items: self.group.items)
-                Providers.listItemGroupsProvider.add([group], successHandler {[weak self] in
+                Providers.listItemGroupsProvider.add(group, successHandler {[weak self] in
                     self?.dismissController()
                 })
             } else {
@@ -125,11 +125,11 @@ class AddEditListItemGroupViewController: UIViewController, UITableViewDataSourc
         if let price = priceText.floatValue, quantity = Int(quantityText), list = list {
             let itemInput = GroupItemInput(name: name, quantity: quantity, price: price, category: category)
             
-            Providers.listItemGroupsProvider.add(itemInput, group: group, order: nil, possibleNewSectionOrder: nil, list: list, successHandler{[weak self] addedItem in
-                self?.group.items.append(addedItem)
-                self?.itemsTableView.reloadData()
-                onFinish()
-            })
+//            Providers.listItemGroupsProvider.add(itemInput, group: group, order: nil, possibleNewSectionOrder: nil, list: list, successHandler{[weak self] addedItem in
+//                self?.group.items.append(addedItem)
+//                self?.itemsTableView.reloadData()
+//                onFinish()
+//            })
             
         } else {
             print("Error: validation was not implemented correctly - price or quantity are not numbers, or list is not set")

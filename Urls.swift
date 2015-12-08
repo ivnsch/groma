@@ -58,4 +58,10 @@ struct Urls {
     // Plan
     static let planItems = host + "planItems"
     static let planItem = host + "planItem"
+    
+    // Group
+    static let groups = host + "groups"
+    static let group = host + "group"
+    static let groupItems = host + "groupItems"
+    static let groupItem = host + "groupItem"
 }

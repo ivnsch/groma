@@ -24,11 +24,7 @@ class RemoteHistoryProvider {
             let sharedUserDict: [String: AnyObject] = self.toRequestParams(historyItem.user)
             
             // TODO refactor with product dict in other places, put all the parameters dictionaries outside the providers
-            let productDict = [
-                "uuid": historyItem.product.uuid,
-                "name": historyItem.product.name,
-                "price": historyItem.product.price
-            ]
+            let productDict = RemoteListItemProvider().toRequestParams(historyItem.product)
             
             var dict: [String: AnyObject] = [
                 "uuid": historyItem.uuid,
