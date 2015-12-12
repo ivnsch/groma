@@ -116,7 +116,7 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
             section.copy(order: index)
         }
 
-        Providers.sectionProvider.update(sections, successHandler{[weak self] in
+        Providers.sectionProvider.update(sections, remote: true, successHandler{[weak self] in
             self?.delegate?.onSectionsUpdated()
         })
     }

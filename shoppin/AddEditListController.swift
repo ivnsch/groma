@@ -105,14 +105,14 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
                 if let listName = weakSelf.listNameInputField.text {
                     if let listToEdit = weakSelf.listToEdit {
                         let updatedList = listToEdit.copy(name: listName, users: weakSelf.sharedUsers, bgColor: weakSelf.colorButton.tintColor)
-                        weakSelf.listProvider.update([updatedList], weakSelf.successHandler{
+                        weakSelf.listProvider.update([updatedList], remote: true, weakSelf.successHandler{
                             weakSelf.delegate?.onListUpdated(updatedList)
                         })
                     
                     } else {
                         if let currentListsCount = weakSelf.currentListsCount {
                             let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: weakSelf.sharedUsers, bgColor: weakSelf.colorButton.tintColor, order: currentListsCount)
-                            weakSelf.listProvider.add(listWithSharedUsers, weakSelf.successHandler{list in
+                            weakSelf.listProvider.add(listWithSharedUsers, remote: true, weakSelf.successHandler{list in
                                 weakSelf.delegate?.onListAdded(list)
                             })
                         } else {

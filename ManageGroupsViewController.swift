@@ -42,8 +42,13 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
         Providers.listItemGroupsProvider.groups(successHandler {[weak self] groups in
             self?.groups = groups
         })
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketGroup:", name: WSNotificationName.Group.rawValue, object: nil)
     }
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
     
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
     private func initNavBar(actions: [UIBarButtonSystemItem]) {
@@ -110,13 +115,31 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
         if editingStyle == .Delete {
             let group = filteredGroups[indexPath.row]
             
-            Providers.listItemGroupsProvider.remove(group.item, successHandler{[weak self] in
-                self?.tableView.wrapUpdates {
-                    self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-                    self?.groups.remove(group.item)
-                    self?.filteredGroups.remove(group)
-                }
+            Providers.listItemGroupsProvider.remove(group.item, remote: true, successHandler{[weak self] in
+                self?.removeGroupUI(group, indexPath: indexPath)
             })
+        }
+    }
+    
+    private func indexPathForGroup(group: ListItemGroup) -> NSIndexPath? {
+        let indexMaybe = groups.enumerate().filter{$0.element.same(group)}.first?.index
+        return indexMaybe.map{NSIndexPath(forRow: $0, inSection: 0)}
+    }
+
+    private func removeGroupUI(group: ListItemGroup) {
+        if let indexPath = indexPathForGroup(group) {
+            let wrappedProduct = ItemWithCellAttributes<ListItemGroup>(item: group, boldRange: nil)
+            removeGroupUI(wrappedProduct, indexPath: indexPath)
+        } else {
+            print("ManageGroupsViewController.removeGroupUI: Info: group to be removed was not in table view: \(group)")
+        }
+    }
+    
+    private func removeGroupUI(group: ItemWithCellAttributes<ListItemGroup>, indexPath: NSIndexPath) {
+        tableView.wrapUpdates {[weak self ] in
+            self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            self?.groups.remove(group.item)
+            self?.filteredGroups.remove(group)
         }
     }
     
@@ -232,5 +255,25 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
             }
         }
     }
+    
+    // MARK: - Websocket
+    
+    func onWebsocketGroup(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<ListItemGroup>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Add:
+                    onGroupCreated(notification.obj)
+                case .Update:
+                    onGroupUpdated(notification.obj)
+                case .Delete:
+                    removeGroupUI(notification.obj)
+                }
+            } else {
+                print("Error: ManageGroupsViewController.onWebsocketProduct: no value")
+            }
+        } else {
+            print("Error: ManageGroupsViewController.onWebsocketProduct: no userInfo")
+        }
+    }
 }
-

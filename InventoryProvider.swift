@@ -18,9 +18,9 @@ protocol InventoryProvider {
     */
     func firstInventory(handler: ProviderResult<Inventory> -> ())
 
-    func addInventory(inventory: Inventory, _ handler: ProviderResult<Any> -> ())
+    func addInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
-    func updateInventory(inventory: Inventory, _ handler: ProviderResult<Any> -> ())
+    func updateInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
     func syncInventoriesWithInventoryItems(handler: (ProviderResult<[Any]> -> ()))
 

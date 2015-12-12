@@ -42,9 +42,15 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func add(product: Product, _ handler: ProviderResult<Any> -> ()) {
+    func add(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         dbProvider.saveProducts([product], update: true) {saved in
             handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
+            
+            if saved {
+                if remote {
+                    // TODO server
+                }
+            }
         }
     }
 
@@ -58,18 +64,26 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func update(product: Product, _ handler: ProviderResult<Any> -> ()) {
+    func update(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         dbProvider.saveProducts([product], update: true) {saved in
             if saved {
                 Providers.listItemsProvider.invalidateMemCache() // reflect product updates in possible referencing list items
+                
+                if remote {
+                    // TODO server
+                }
             }
             handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
         }
     }
     
-    func delete(product: Product, _ handler: ProviderResult<Any> -> ()) {
+    func delete(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         dbProvider.deleteProductAndDependencies(product) {saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
+            
+            if remote {
+                // TODO server
+            }
         }
     }
     

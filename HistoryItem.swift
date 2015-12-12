@@ -8,7 +8,7 @@
 
 import Foundation
 
-class HistoryItem: Equatable {
+class HistoryItem: Equatable, Identifiable {
     
     let uuid: String
     let product: Product
@@ -35,6 +35,10 @@ class HistoryItem: Equatable {
         self.lastUpdate = lastUpdate
         self.lastServerUpdate = lastServerUpdate
         self.removed = removed
+    }
+    
+    func same(rhs: HistoryItem) -> Bool {
+        return uuid == rhs.uuid
     }
 }
 

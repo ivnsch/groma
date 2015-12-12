@@ -34,11 +34,22 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         dateFormatter = NSDateFormatter()
         dateFormatter.dateStyle = .FullStyle
         dateFormatter.timeStyle = .ShortStyle
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketHistoryItem:", name: WSNotificationName.HistoryItem.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryWithHistoryAfterSave:", name: WSNotificationName.InventoryItemsWithHistoryAfterSave.rawValue, object: nil)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
+        loadHistory()
+    }
+    
+    private func loadHistory() {
         sectionModels = []
         paginator.reset() // TODO improvement either memory cache or reset only if history has changed (marked items as bought since last load)
         loadPossibleNextPage()
@@ -150,16 +161,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             historyProvider.removeHistoryItem(historyItem, successHandler({result in
                 
                 tableView.wrapUpdates {[weak self] in
-                    if let weakSelf = self {
-                        
-                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-                        
-                        let group = weakSelf.sectionModels[indexPath.section].obj
-                        var historyItems = group.historyItems
-                        historyItems.removeAtIndex(indexPath.row)
-                        let updatedGroup = group.copy(historyItems: historyItems)
-                        weakSelf.sectionModels[indexPath.section] = SectionModel(obj: updatedGroup)
-                    }
+                    self?.removeHistoryItemUI(indexPath)
                 }
             }))
 
@@ -168,6 +170,30 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
+    private func removeHistoryItemUI(indexPath: NSIndexPath) {
+        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+        let group = sectionModels[indexPath.section].obj
+        var historyItems = group.historyItems
+        historyItems.removeAtIndex(indexPath.row)
+        let updatedGroup = group.copy(historyItems: historyItems)
+        sectionModels[indexPath.section] = SectionModel(obj: updatedGroup)
+    }
+    
+    private func removeHistoryItemUI(historyItem: HistoryItem) {
+        var removed = false
+        for sectionModel in sectionModels {
+            for item in sectionModel.obj.historyItems {
+                if item.same(historyItem) {
+                    sectionModel.obj.historyItems.removeUsingIdentifiable(item)
+                    removed = true
+                }
+            }
+        }
+        if !removed {
+            print("Info: HistoryViewController.removeHistoryItemUI: historyItem was not in table view: \(historyItem)")
+        }
+    }
+
     // MARK: - HistoryItemGroupHeaderViewDelegate
     
     func onHeaderTap(header: HistoryItemGroupHeaderView, sectionIndex: Int, sectionModel: SectionModel<HistoryItemGroup>) {
@@ -195,28 +221,56 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
+    // MARK: - Websocket
     
+    func onWebsocketHistoryItem(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<HistoryItem>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Delete:
+                    removeHistoryItemUI(notification.obj)
+                default: print("Error: HistoryViewController.onWebsocketHistoryItem: Not handled: \(notification.verb)")
+                }
+            } else {
+                print("Error: HistoryViewController.onWebsocketHistoryItem: no value")
+            }
+        } else {
+            print("Error: HistoryViewController.onWebsocketHistoryItem: no userInfo")
+        }
     }
-    */
     
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-    // Return false if you do not want the item to be re-orderable.
-    return true
+    func onWebsocketProduct(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Update:
+                    // TODO!! update all listitems that reference this product
+                    print("Warn: TODO onWebsocketProduct")
+                case .Delete:
+                    // TODO!! delete all listitems that reference this product
+                    print("Warn: TODO onWebsocketProduct")
+                default: break // no error msg here, since we will receive .Add but not handle it in this view controller
+                }
+            } else {
+                print("Error: HistoryViewController.onWebsocketProduct: no value")
+            }
+        } else {
+            print("Error: HistoryViewController.onWebsocketProduct: no userInfo")
+        }
     }
-    */
     
-    /*
-    // MARK: - Navigation
     
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
+    // This is called when added items to inventory / history, so we have to update
+    func onWebsocketInventoryWithHistoryAfterSave(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSEmptyNotification> {
+            
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Add:
+                    loadHistory()
+                default: print("Error: InventoryItemsViewController.onWebsocketInventoryWithHistoryAfterSave: History: not implemented: \(notification.verb)")
+                }
+            }
+        }
     }
-    */
 }

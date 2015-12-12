@@ -58,8 +58,14 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         initNavBarRightButtons([.Add])
         
         topAddEditListControllerManager = initTopAddEditListControllerManager()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
     }
 
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     private func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditListController> {
         let top = CGRectGetHeight(topBar.frame)
         return ExpandableTopViewController(top: top, height: 250, parentViewController: self, tableView: tableView) {[weak self] in
@@ -153,7 +159,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
                 self?.lists.remove(list)
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
             }
-            Providers.listProvider.remove(list, resultHandler(onSuccess: {
+            Providers.listProvider.remove(list, remote: true, resultHandler(onSuccess: {
                 }, onError: {[weak self] result in
                     self?.initLists()
                     self?.defaultErrorHandler()(providerResult: result)
@@ -170,7 +176,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         
         let updatedLists = self.lists.mapEnumerate{index, list in list.copy(order: index)}
         
-        Providers.listProvider.update(updatedLists, successHandler{[weak self] in
+        Providers.listProvider.update(updatedLists, remote: true, successHandler{[weak self] in
             self?.lists = lists
         })
     }
@@ -296,7 +302,7 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     // MARK: - ExpandCellAnimatorDelegate
     
     func animationsForCellAnimator(isExpanding: Bool, frontView: UIView) {
-        var navBarFrame = topBar.frame
+        let navBarFrame = topBar.frame
         if isExpanding {
             topBar.transform = CGAffineTransformMakeTranslation(0, -navBarFrame.height)
         } else {
@@ -313,5 +319,42 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func prepareAnimations(willExpand: Bool, frontView: UIView) {
+    }
+    
+    
+    // MARK: - Websocket
+    
+    func onWebsocketList(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<List>> {
+            if let notification = info[WSNotificationValue] {
+                
+                let list = notification.obj
+                
+                switch notification.verb {
+                case .Add:
+                    Providers.listProvider.add(list, remote: false, successHandler {[weak self] savedList in
+                        self?.onListAdded(savedList)
+                    })
+                    
+                case .Update:
+                    Providers.listProvider.update(list, remote: false, successHandler{[weak self] in
+                        self?.onListUpdated(list)
+                    })
+                    
+                case .Delete:
+                    Providers.listProvider.remove(list, remote: false, successHandler{[weak self] in
+                        if let index = self?.lists.remove(list) {
+                            self?.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Top)
+                        } else {
+                            print("Warn: ViewController.onWebsocketList: Removed list item was not found in tableView")
+                        }
+                    })
+                }
+            } else {
+                print("Error: ViewController.onWebsocketList: no value")
+            }
+        } else {
+            print("Error: ViewController.onWebsocketList: no userInfo")
+        }
     }
 }

@@ -42,14 +42,20 @@ class HistoryProviderImpl: HistoryProvider {
     }
     
     func removeHistoryItem(historyItem: HistoryItem, _ handler: ProviderResult<Any> -> ()) {
-        dbProvider.removeHistoryItem(historyItem) {[weak self] success in
+        removeHistoryItem(historyItem.uuid, remote: true, handler)
+    }
+    
+    func removeHistoryItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        dbProvider.removeHistoryItem(uuid) {[weak self] success in
             if success {
-                self?.remoteProvider.removeHistoryItem(historyItem) {result in
-                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status)
-                    handler(ProviderResult(status: providerStatus))
+                if remote {
+                    self?.remoteProvider.removeHistoryItem(uuid) {result in
+                        let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status)
+                        handler(ProviderResult(status: providerStatus))
+                    }
                 }
             } else {
-                print("Error: coult not remove historyItem: \(historyItem)")
+                print("Error: coult not remove historyItem: \(uuid)")
             }
         }
     }

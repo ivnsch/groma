@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Inventory: Equatable, Identifiable, Hashable {
+class Inventory: Equatable, Identifiable, Hashable {
     let uuid: String
     let name: String
     

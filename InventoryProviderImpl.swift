@@ -131,17 +131,17 @@ class InventoryProviderImpl: InventoryProvider {
 //        }
 //    }
     
-    func addInventory(inventory: Inventory, _ handler: ProviderResult<Any> -> ()) {
-        self.dbInventoryProvider.saveInventory(inventory) {saved in
+    func addInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        self.dbInventoryProvider.saveInventory(inventory) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
-                
-                // background TODO should we sync like now only when local DB save was success or also when it failed
-                self.remoteProvider.addInventory(inventory) {remoteResult in
-                    if !remoteResult.success {
-                        print("Error: addInventory background sync failed: \(remoteResult.status)") // TODO handle, when should we remove the item from local DB, when should we send a msg to error monitoring etc.
-                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
-
+                if remote {
+                    // background TODO should we sync like now only when local DB save was success or also when it failed
+                    self?.remoteProvider.addInventory(inventory) {remoteResult in
+                        if !remoteResult.success {
+                            print("Error: addInventory background sync failed: \(remoteResult.status)") // TODO handle, when should we remove the item from local DB, when should we send a msg to error monitoring etc.
+                            DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                        }
                     }
                 }
 
@@ -151,12 +151,13 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    func updateInventory(inventory: Inventory, _ handler: ProviderResult<Any> -> ()) {
-        dbInventoryProvider.saveInventory(inventory, update: true) {saved in
+    func updateInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        dbInventoryProvider.saveInventory(inventory, update: true) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
-        
-            self.remoteProvider.updateInventory(inventory) {remoteResult in
-                DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+            if remote {
+                self?.remoteProvider.updateInventory(inventory) {remoteResult in
+                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                }
             }
         }
     }

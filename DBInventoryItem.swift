@@ -27,8 +27,16 @@ class DBInventoryItem: DBSyncable {
     }
     
     // MARK: - Query utilities
+
+    static func createFilter(item: InventoryItem) -> String {
+        return createFilter(item.product.uuid, item.inventory.uuid)
+    }
     
     static func createFilter(product: Product, _ inventory: Inventory) -> String {
-        return "product.uuid = '\(product.uuid)' AND inventory.uuid = '\(inventory.uuid)'"
+        return createFilter(product.uuid, inventory.uuid)
+    }
+    
+    static func createFilter(productUuid: String, _ inventoryUuid: String) -> String {
+        return "product.uuid = '\(productUuid)' AND inventory.uuid = '\(inventoryUuid)'"
     }
 }

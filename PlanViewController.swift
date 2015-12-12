@@ -50,6 +50,13 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
         addEditPlanItemControllerManager = initAddEditPlanItemControllerManager()
         
         initTopBar()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketPlanItem:", name: WSNotificationName.PlanItem.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)        
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     private func initTopBar() {
@@ -167,15 +174,33 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             // update the table view in advance, so delete animation is quick. If something goes wrong we reload the content in onError and do default error handling
             let planItem = planItems[indexPath.row]
-            tableView.wrapUpdates {[weak self] in
-                self?.planItems.remove(planItem)
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
-            }
+            removePlanItemUI(planItem)
             Providers.planProvider.removePlanItem(planItem, resultHandler(onSuccess: {
             }, onError: {[weak self] result in
                 self?.initPlanItems()
                 self?.defaultErrorHandler()(providerResult: result)
             }))
+        }
+    }
+    
+    private func indexPathForPlanItem(planItem: PlanItem) -> NSIndexPath? {
+        let indexMaybe = planItems.enumerate().filter{$0.element.same(planItem)}.first?.index
+        return indexMaybe.map{NSIndexPath(forRow: $0, inSection: 0)}
+    }
+    
+    private func removePlanItemUI(planItem: PlanItem) {
+        if let indexPath = indexPathForPlanItem(planItem) {
+            removePlanItemUI(planItem, indexPath: indexPath)
+        } else {
+            print("ManageProductsViewController.removePlanItemUI: Info: planItem to be updated was not in table view: \(planItem)")
+        }
+    }
+
+    
+    private func removePlanItemUI(planItem: PlanItem, indexPath: NSIndexPath) {
+        tableView.wrapUpdates {[weak self] in
+            self?.planItems.remove(planItem)
+            self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
         }
     }
     
@@ -429,8 +454,7 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
                 Providers.planProvider.addPlanItems([planItemInput], inventory: inventory, self.successHandler{[weak self] planItems in
                     self?.initPlanItems() // TODO update only added?
-                    return
-                    })
+                })
             } else {
                 print("TODO validation in processListItemInputs >>>") // TODO why do we get text here in delegate validation can be done in quick add, we have a method that receives validation errors!
             }
@@ -559,6 +583,47 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 addEditPlanItemControllerManager?.controller?.submit(.Update)
             case .Back, .Add, .Toggle, .Expand: print("PlanViewController.sendActionToTopController: Invalid action: \(action)")
             }
+        }
+    }
+    
+    // MARK: - Websocket
+    
+    func onWebsocketPlanItem(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<PlanItem>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Add:
+                    initPlanItems() // TODO update only added?
+                case .Update:
+                    onPlanItemUpdated(notification.obj)
+                case .Delete:
+                    removePlanItemUI(notification.obj)
+                }
+            } else {
+                print("Error: PlanViewController.onWebsocketPlanItem: no value")
+            }
+        } else {
+            print("Error: PlanViewController.onWebsocketPlanItem: no userInfo")
+        }
+    }
+    
+    func onWebsocketProduct(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Update:
+                    // TODO!! update all listitems that reference this product
+                    print("Warn: TODO onWebsocketProduct")
+                case .Delete:
+                    // TODO!! delete all listitems that reference this product
+                    print("Warn: TODO onWebsocketProduct")
+                default: break // no error msg here, since we will receive .Add but not handle it in this view controller
+                }
+            } else {
+                print("Error: PlanViewController.onWebsocketProduct: no value")
+            }
+        } else {
+            print("Error: PlanViewController.onWebsocketProduct: no userInfo")
         }
     }
 }

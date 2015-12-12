@@ -67,7 +67,7 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
     
-    func remove(listItem: ListItem, _ handler: ProviderResult<Any> -> ()) {
+    func remove(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         
         let memUpdated = memProvider.removeListItem(listItem)
         if memUpdated {
@@ -83,10 +83,11 @@ class ListItemProviderImpl: ListItemProvider {
                 handler(ProviderResult(status: .DatabaseUnknown))
                 self?.memProvider.invalidate()
             }
-            
-            self?.remoteProvider.remove(listItem) {result in
-                if !result.success {
-                    print("Error: Removing listItem: \(listItem)")
+            if remote {
+                self?.remoteProvider.remove(listItem) {result in
+                    if !result.success {
+                        print("Error: Removing listItem: \(listItem)")
+                    }
                 }
             }
         })
@@ -421,9 +422,8 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
     
-    func update(listItem: ListItem, _ handler: ProviderResult<Any> -> ()) {
-//        update(listItem, handler)
-        print("FIXME or remove - update listitem - bad implementation")
+    func update(listItem: ListItem, remote: Bool = true, _ handler: ProviderResult<Any> -> ()) {
+        update([listItem], remote: remote, handler)
     }
     
     func syncListItems(list: List, handler: (ProviderResult<Any>) -> ()) {

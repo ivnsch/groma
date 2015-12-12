@@ -59,6 +59,12 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         Providers.productProvider.products(successHandler {[weak self] products in
             self?.products = products
         })
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     private func initAddEditProductControllerManager() -> ExpandableTopViewController<AddEditProductController> {
@@ -129,14 +135,26 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             let product = filteredProducts[indexPath.row]
-            Providers.productProvider.delete(product.item, successHandler{[weak self] in
-                self?.tableView.wrapUpdates {
-                    self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-                    
-                    self?.products.remove(product.item)
-                    self?.filteredProducts.remove(product)
-                }
+            Providers.productProvider.delete(product.item, remote: true, successHandler{[weak self] in
+                self?.removeProductUI(product, indexPath: indexPath)
             })
+        }
+    }
+
+    private func removeProductUI(product: Product) {
+        if let indexPath = indexPathForProduct(product) {
+            let wrappedProduct = ItemWithCellAttributes<Product>(item: product, boldRange: nil)
+            removeProductUI(wrappedProduct, indexPath: indexPath)   
+        } else {
+            print("ManageProductsViewController.removeProductUI: Info: product to be updated was not in table view: \(product)")
+        }
+    }
+    
+    private func removeProductUI(product: ItemWithCellAttributes<Product>, indexPath: NSIndexPath) {
+        tableView.wrapUpdates {[weak self] in
+            self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            self?.products.remove(product.item)
+            self?.filteredProducts.remove(product)
         }
     }
     
@@ -268,14 +286,8 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     private func updateProduct(editingData: AddEditProductControllerEditingData, name: String, category: String, categoryColor: UIColor, price: Float) {
         let updatedCategory = editingData.product.category.copy(name: category, color: categoryColor)
         let updatedProduct = editingData.product.copy(name: name, price: price, category: updatedCategory)
-        Providers.productProvider.update(updatedProduct, successHandler{[weak self] in
-            if let weakSelf = self {
-                weakSelf.products.update(updatedProduct)
-                weakSelf.onUpdatedProducts()
-                
-                weakSelf.tableView.scrollToRowAtIndexPath(editingData.indexPath, atScrollPosition: .Middle, animated: true)
-                weakSelf.addEditProductControllerManager?.expand(false)
-            }
+        Providers.productProvider.update(updatedProduct, remote: true, successHandler{[weak self] in
+            self?.updateProductUI(updatedProduct, indexPath: editingData.indexPath)
         })
     }
     
@@ -283,14 +295,36 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         
         let product = ProductInput(name: name, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit)
         Providers.productProvider.add(product, successHandler {[weak self] product in
-            if let weakSelf = self {
-                weakSelf.products.append(product)
-                weakSelf.onUpdatedProducts()
-                
-                weakSelf.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: weakSelf.filteredProducts.count - 1, inSection: 0), atScrollPosition: .Middle, animated: true)
-                weakSelf.addEditProductControllerManager?.expand(false)
-            }
+            self?.addProductUI(product)
         })
+    }
+    
+    private func indexPathForProduct(product: Product) -> NSIndexPath? {
+        let indexMaybe = products.enumerate().filter{$0.element.same(product)}.first?.index
+        return indexMaybe.map{NSIndexPath(forRow: $0, inSection: 0)}
+    }
+
+    private func updateProductUI(product: Product) {
+        if let indexPath = indexPathForProduct(product) {
+            updateProductUI(product, indexPath: indexPath)
+        } else {
+            print("ManageProductsViewController.updateProductUI: Info: product to be updated was not in table view: \(product)")
+        }
+    }
+    
+    private func updateProductUI(product: Product, indexPath: NSIndexPath) {
+        products.update(product)
+        onUpdatedProducts()
+        
+        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Middle, animated: true)
+        addEditProductControllerManager?.expand(false)
+    }
+    
+    private func addProductUI(product: Product) {
+        products.append(product)
+        onUpdatedProducts()
+        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: filteredProducts.count - 1, inSection: 0), atScrollPosition: .Middle, animated: true)
+        addEditProductControllerManager?.expand(false)
     }
 
     private func setAddEditProductControllerOpen(open: Bool) {
@@ -329,6 +363,28 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
                     })
                 }
             }
+        }
+    }
+
+    
+    // MARK: - Websocket
+    
+    func onWebsocketProduct(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Add:
+                    addProductUI(notification.obj)
+                case .Update:
+                    updateProductUI(notification.obj)
+                case .Delete:
+                    removeProductUI(notification.obj)
+                }
+            } else {
+                print("Error: ManageProductsViewController.onWebsocketProduct: no value")
+            }
+        } else {
+            print("Error: ManageProductsViewController.onWebsocketProduct: no userInfo")
         }
     }
 }

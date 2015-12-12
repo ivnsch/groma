@@ -37,7 +37,6 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     // Warn: Setting this before prepareForSegue for tableViewController has no effect
     private var inventory: Inventory? {
         didSet {
-            tableViewController?.sortBy = .Count
             tableViewController?.inventory = inventory
             if let inventory = inventory {
                 navigationItem.title = inventory.name
@@ -60,9 +59,18 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         } else {
             print("Error: InventoryItemsViewController.viewDidLoad no tableview in tableViewController")
         }
-        
-    }
 
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryItems:", name: WSNotificationName.InventoryItems.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryItem:", name: WSNotificationName.InventoryItem.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryWithHistoryAfterSave:", name: WSNotificationName.InventoryItemsWithHistoryAfterSave.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)        
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     private func initAddEditInventoryControllerManager(tableView: UITableView) -> ExpandableTopViewController<AddEditInventoryController> {
         let top: CGFloat = navigationController!.navigationBar.frame.maxY
         let manager: ExpandableTopViewController<AddEditInventoryController> = ExpandableTopViewController(top: top, height: 90, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
@@ -100,6 +108,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         
         Providers.inventoryProvider.firstInventory(successHandler {[weak self] inventory in
             self?.navigationItem.title = inventory.name
+            self?.tableViewController?.sortBy = .Count
             self?.inventory = inventory
         })
     }
@@ -164,6 +173,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     // MARK: - AddEditInventoryViewController
     
     func onInventoryUpdated(inventory: Inventory) {
+        tableViewController?.sortBy = .Count
         self.inventory = inventory
         addEditInventoryControllerManager?.expand(false)
     }
@@ -208,24 +218,18 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     
     
     func onSubmit(name: String, category: String, price: Float, quantity: Int, editingInventoryItem: InventoryItem?) {
-        
-        if let inventory = inventory {
+        if let editingInventoryItem = editingInventoryItem {
+            let updatedCategory = editingInventoryItem.product.category.copy(name: category)
+            let updatedProduct = editingInventoryItem.product.copy(name: name, price: price, category: updatedCategory)
+            // TODO! calculate quantity delta correctly?
+            let updatedInventoryItem = editingInventoryItem.copy(quantity: quantity, quantityDelta: quantity, product: updatedProduct)
+            Providers.inventoryItemsProvider.updateInventoryItem(updatedInventoryItem, remote: true, successHandler {[weak self] in
+                self?.onInventoryItemUpdated()
+            })
             
-            if let editingInventoryItem = editingInventoryItem {
-                let updatedCategory = editingInventoryItem.product.category.copy(name: category)
-                let updatedProduct = editingInventoryItem.product.copy(name: name, price: price, category: updatedCategory)
-                // TODO! calculate quantity delta correctly?
-                let updatedInventoryItem = editingInventoryItem.copy(quantity: quantity, quantityDelta: quantity, product: updatedProduct)
-                Providers.inventoryItemsProvider.updateInventoryItem(inventory, item: updatedInventoryItem, successHandler {[weak self] in
-                    // we have pagination so we don't know if the item is visible atm. For now simply cause a reload and start at first page. TODO nicer solution
-                    self?.tableViewController?.clearAndLoadFirstPage()
-                    self?.addEditInventoryItemControllerManager?.controller?.clear()
-                    self?.addEditInventoryItemControllerManager?.expand(false)
-                })
-                
-            } else {
-                
-                print("Not supported: Adding directly to inventory")
+        } else {
+            
+            print("Not supported: Adding directly to inventory")
 //                let input = InventoryItemInput(name: name, quantity: quantity, price: price, category: category)
 //                Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, successHandler{[weak self] addedInventoryWithHistoryEntry in
 //                    // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end. TODO nicer solution
@@ -233,8 +237,14 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
 //                    self?.addEditInventoryItemController.clear()
 //                    self?.setAddEditInventoryItemControllerOpen(false)
 //                })
-            }
         }
+    }
+    
+    func onInventoryItemUpdated() {
+        // we have pagination so we don't know if the item is visible atm. For now simply cause a reload and start at first page. TODO nicer solution
+        tableViewController?.clearAndLoadFirstPage()
+        addEditInventoryItemControllerManager?.controller?.clear()
+        addEditInventoryItemControllerManager?.expand(false)
     }
     
     func onCancelTap() {
@@ -258,5 +268,131 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
         topControlTopConstraint.constant = view.frame.height
         self.view.layoutIfNeeded()
+    }
+    
+    
+    // MARK: - Websocket
+    
+    func onWebsocketInventory(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<Inventory>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+//                case .Add: // we only use 1 inventory currently
+                case .Update:
+                    // TODO review this carefully, if we update the inventory here but the provider saving fails currently nothing happens
+                    // and changes the user do to this not saved inventory get lost
+                    // Ideally in the future we trigger also notifications when saving fails, such that the controllers revert their changes (and maybe show non-modal small error notification)
+                    // added following temporary uuid check just to help avoiding issues here (should not happen though!)
+                    if let inventory = inventory {
+                        if notification.obj.uuid == inventory.uuid {
+                            self.inventory = notification.obj
+                        } else {
+                            print("Error: Invalid state: we should not get updates for an inventory with a different uuid than our inventory")
+                        }
+                    } else {
+                        print("Info: Received a websocket inventory update before inventory is loaded. Doing nothing.")
+                    }
+                    
+//                case .Delete: // we only use 1 inventory currently and it can't be deleted
+//                    removeProductUI(notification.obj)
+                default: print("Error: InventoryItemsViewController.onWebsocketInventory: not implemented: \(notification.verb)")
+
+                }
+            } else {
+                print("Error: ViewController.onWebsocketInventory: no userInfo")
+            }
+        }
+    }
+    
+    func onWebsocketInventoryItems(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<InventoryItemIncrement>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case WSNotificationVerb.Add:
+                    let incr = notification.obj
+                    Providers.inventoryItemsProvider.incrementInventoryItem(incr, remote: false, successHandler{[weak self] inventoryItem in
+                        self?.tableViewController?.updateIncrementUI(inventoryItem, delta: incr.delta)
+                    })
+                default: print("Error: ViewController.onWebsocketInventoryItems: Not handled: \(notification.verb)")
+                }
+            } else {
+                print("Error: ViewController.onWebsocketInventoryItems: no value")
+            }
+        } else {
+            print("Error: ViewController.onWebsocketInventoryItems: no userInfo")
+        }
+    }
+    
+    func onWebsocketInventoryItem(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<Any>> {
+            
+            if let notification = info[WSNotificationValue] {
+
+                switch notification.verb {
+                case .Update:
+                    if let inventoryItem = notification.obj as? InventoryItem {
+                        Providers.inventoryItemsProvider.updateInventoryItem(inventoryItem, remote: false, successHandler {[weak self] in
+                            self?.onInventoryItemUpdated()
+                        })
+                    } else {
+                        print("Error: InventoryItemsViewController.onWebsocketInventoryItem: not expected type in: \(notification.verb): \(notification.obj)")
+                    }
+                    
+                    // TODO? increment is covered in onWebsocketInventoryItems, but user can e.g. change name (update of product in this case, but still triggered from inventory...)
+                    
+                case .Delete:
+                    if let inventoryItemId = notification.obj as? InventoryItemId {
+                        Providers.inventoryItemsProvider.removeInventoryItem(inventoryItemId.productUuid, inventoryUuid: inventoryItemId.inventoryUuid, remote: true, successHandler{[weak self] result in
+                            self?.tableViewController?.remove(inventoryItemId.inventoryUuid, inventoryItemProductUuid: inventoryItemId.productUuid)
+                        })
+                    } else {
+                        print("Error: InventoryItemsViewController.onWebsocketInventoryItem: not expected type in: \(notification.verb): \(notification.obj)")
+                    }
+                    
+                default: print("Error: InventoryItemsViewController.onWebsocketInventoryItem: not implemented: \(notification.verb)")
+                }
+                
+            } else {
+                print("Error: InventoryItemsViewController.onWebsocketUpdateListItem: no value")
+            }
+            
+        } else {
+            print("Error: InventoryItemsViewController.onWebsocketAddListItems: no userInfo")
+        }
+    }
+    
+    func onWebsocketInventoryWithHistoryAfterSave(note: NSNotification) {
+        
+        // TODO!! (not only websocket related) InventoryItemWithHistoryEntry has only history item uuid, this is also sent like this to the server. Should we not send the item instead of only the uuid. At the very last this should be the case here with websocket since when we receive history item from another user/device we definitely don't have it yet so this uuid references nothing
+        if let info = note.userInfo as? Dictionary<String, WSEmptyNotification> {
+        
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Add:
+                    onInventoryItemUpdated()
+                default: print("Error: InventoryItemsViewController.onWebsocketInventoryWithHistoryAfterSave: History: not implemented: \(notification.verb)")
+                }
+            }
+        }
+    }
+    
+    func onWebsocketProduct(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Update:
+                    // TODO!! update all listitems that reference this product
+                    print("Warn: TODO onWebsocketProduct")
+                case .Delete:
+                    // TODO!! delete all listitems that reference this product
+                    print("Warn: TODO onWebsocketProduct")
+                default: break // no error msg here, since we will receive .Add but not handle it in this view controller
+                }
+            } else {
+                print("Error: InventoryItemsViewController.onWebsocketProduct: no value")
+            }
+        } else {
+            print("Error: InventoryItemsViewController.onWebsocketProduct: no userInfo")
+        }
     }
 }

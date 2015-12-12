@@ -55,8 +55,21 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     
     private var aggregate: GroupMonthYearAggregate?
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryWithHistoryAfterSave:", name: WSNotificationName.InventoryItemsWithHistoryAfterSave.rawValue, object: nil)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        loadChart()
+    }
+    
+    private func loadChart() {
         setTimePeriod((aggregate?.timePeriod).flatMap{findTimePeriodWithText($0)} ?? timePeriods[0])
     }
     
@@ -348,6 +361,19 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         }
         navigationController?.pushViewController(detailsController, animated: true)
         
+    }
+    
+    // This is called when added items to inventory / history, which means the chart has to be updated
+    func onWebsocketInventoryWithHistoryAfterSave(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSEmptyNotification> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Add:
+                    loadChart()
+                default: print("Error: InventoryItemsViewController.onWebsocketInventoryWithHistoryAfterSave: History: not implemented: \(notification.verb)")
+                }
+            }
+        }
     }
 }
 

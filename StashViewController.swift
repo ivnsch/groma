@@ -48,6 +48,16 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
         navigationController?.setNavigationBarHidden(false, animated: true)
 
         onUIReady?()
+        
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItems:", name: WSNotificationName.ListItems.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItem:", name: WSNotificationName.ListItem.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketSection:", name: WSNotificationName.Section.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)        
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -150,5 +160,93 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     
     @IBAction func onResetTap(sender: UIBarButtonItem) {
         resetAllItems()
+    }
+    
+    
+    // MARK: - Websocket
+    
+    func onWebsocketListItems(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<[ListItem]>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case WSNotificationVerb.Update:
+                    listItemsTableViewController.updateListItems(notification.obj, notifyRemote: false)
+                    
+                default: print("Error: StashViewController.onWebsocketUpdateListItems: Not handled: \(notification.verb)")
+                }
+            } else {
+                print("Error: StashViewController.onWebsocketAddListItems: no value")
+            }
+        } else {
+            print("Error: StashViewController.onWebsocketAddListItems: no userInfo")
+        }
+    }
+    
+    func onWebsocketListItem(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<ListItem>> {
+            if let notification = info[WSNotificationValue] {
+                
+                let listItem = notification.obj
+                
+                switch notification.verb {
+                case .Add:
+                    listItemsTableViewController.updateOrAddListItem(listItem, increment: true, scrollToSelection: true, notifyRemote: false)
+                    
+                case .Update:
+                    listItemsTableViewController.updateListItem(listItem, notifyRemote: false)
+                    
+                case .Delete:
+                    listItemsTableViewController.removeListItem(listItem, animation: .Bottom)
+                }
+            } else {
+                print("Error: StashViewController.onWebsocketUpdateListItem: no value")
+            }
+        } else {
+            print("Error: StashViewController.onWebsocketAddListItems: no userInfo")
+        }
+    }
+    
+    func onWebsocketSection(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<Section>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                    // There's no direct add of section
+                    //                case .Add:
+                    //                    addProductUI(notification.obj)
+                case .Update:
+                    // TODO what do we do here, if we reload the list (section order can be updated, not only name) can conflict with current state e.g. if user is editing or just swiping and item. For now do nothing - user will see updated section the next time list it's loaded
+                    //                    updateProductUI(notification.obj)
+                    print("Warn: TODO websocket section update")
+                case .Delete:
+                    // TODO similar to .Update comment
+                    print("Warn: TODO websocket section delete")
+                default: print("Error: StashViewController.onWebsocketSection: Not handled: \(notification.verb)")
+                }
+            } else {
+                print("Error: StashViewController.onWebsocketUpdateListItem: no value")
+            }
+        } else {
+            print("Error: StashViewController.onWebsocketAddListItems: no userInfo")
+        }
+    }
+    
+    func onWebsocketProduct(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Update:
+                    // TODO!! update all listitems that reference this product
+                    print("Warn: TODO onWebsocketProduct")
+                case .Delete:
+                    // TODO!! delete all listitems that reference this product
+                    print("Warn: TODO onWebsocketProduct")
+                default: break // no error msg here, since we will receive .Add but not handle it in this view controller
+                }
+            } else {
+                print("Error: StashViewController.onWebsocketProduct: no value")
+            }
+        } else {
+            print("Error: StashViewController.onWebsocketProduct: no userInfo")
+        }
     }
 }

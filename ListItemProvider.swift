@@ -10,8 +10,8 @@ import Foundation
 
 protocol ListItemProvider {
   
-    func remove(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
-    
+    func remove(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
+
     func remove(list: List, _ handler: ProviderResult<Any> -> ())
 
     func add(listItem: ListItem, remote: Bool, _ handler: ProviderResult<ListItem> -> ())
@@ -30,7 +30,7 @@ protocol ListItemProvider {
     
     func addListItem(product: Product, sectionName: String, quantity: Int, list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<ListItem> -> Void)
     
-    func update(listItem: ListItem, _ handler: ProviderResult<Any> -> ())
+    func update(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     func update(listItems: [ListItem], remote: Bool, _ handler: ProviderResult<Any> -> ())
     

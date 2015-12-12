@@ -112,14 +112,24 @@ extension Array where Element: Identifiable {
         }
         return nil
     }
+    
+    mutating func removeUsingIdentifiable(element: Element) -> Int? {
+        if let index = self.indexOfUsingIdentifiable(element) {
+            self.removeAtIndex(index)
+            return index
+        }
+        return nil
+    }
 }
 
 extension Array where Element: Equatable {
     
-    // safe element removal
-    mutating func remove(element: Element) {
+    // safe element removal, and returns index of removed element optional
+    mutating func remove(element: Element) -> Int? {
         if let index = self.indexOf(element) {
             self.removeAtIndex(index)
+            return index
         }
+        return nil
     }
 }

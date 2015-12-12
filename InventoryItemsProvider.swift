@@ -16,16 +16,20 @@ protocol InventoryItemsProvider {
     
     func inventoryItems(range: NSRange, inventory: Inventory, fetchMode: ProviderFetchModus, sortBy: InventorySortBy, _ handler: ProviderResult<[InventoryItem]> -> ())
     
-    func addToInventory(inventory: Inventory, items: [InventoryItemWithHistoryEntry], _ handler: ProviderResult<Any> -> ())
+    func addToInventory(items: [InventoryItemWithHistoryEntry], remote: Bool, _ handler: ProviderResult<Any> -> ())
 
 // see comment in impl why this is disabled
 //    func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> ())
 
-    func updateInventoryItem(inventory: Inventory, item: InventoryItem, _ handler: ProviderResult<Any> -> Void)
+    func updateInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 
     func incrementInventoryItem(item: InventoryItem, delta: Int, _ handler: ProviderResult<Any> -> ())
     
-    func removeInventoryItem(item: InventoryItem, _ handler: ProviderResult<Any> -> ())
+    func incrementInventoryItem(item: InventoryItemIncrement, remote: Bool, _ handler: ProviderResult<InventoryItem> -> ())
+
+    func removeInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
+    func removeInventoryItem(productUuid: String, inventoryUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
+
     func invalidateMemCache()
 }

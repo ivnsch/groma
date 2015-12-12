@@ -33,29 +33,26 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
 
-    func add(group: ListItemGroup, _ handler: ProviderResult<Any> -> Void) {
+    func add(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         dbGroupsProvider.add(group) {[weak self] saved in
-            if saved {
-                handler(ProviderResult(status: .Success))
+            handler(ProviderResult(status: saved ? .Success : .DatabaseSavingError))
 
+            if saved && remote {
                 self?.remoteGroupsProvider.addGroup(group) {remoteResult in
                     if !remoteResult.success {
                         print("Error: adding group in remote: \(group), result: \(remoteResult)")
                         DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
                     }
                 }
-                
-            } else {
-                handler(ProviderResult(status: .DatabaseSavingError))
             }
         }
     }
     
-    func update(group: ListItemGroup, _ handler: ProviderResult<Any> -> ()) {
+    func update(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         dbGroupsProvider.update(group) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseSavingError))
             
-            if saved {
+            if saved && remote {
                 self?.remoteGroupsProvider.updateGroup(group) {remoteResult in
                     if !remoteResult.success {
                         print("Error: updating group in remote: \(group), result: \(remoteResult)")
@@ -66,11 +63,11 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func remove(group: ListItemGroup, _ handler: ProviderResult<Any> -> Void) {
+    func remove(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         dbGroupsProvider.remove(group) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             
-            if saved {
+            if saved && remote {
                 self?.remoteGroupsProvider.removeGroup(group) {remoteResult in
                     if !remoteResult.success {
                         print("Error: removing group in remote: \(group), result: \(remoteResult)")
@@ -87,7 +84,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func add(item: GroupItem, group: ListItemGroup, _ handler: ProviderResult<Any> -> Void) {
+    func add(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         dbGroupsProvider.add(item) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
@@ -107,7 +104,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func update(item: GroupItem, group: ListItemGroup, _ handler: ProviderResult<Any> -> ()) {
+    func update(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         dbGroupsProvider.update(item) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
@@ -127,13 +124,13 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func remove(item: GroupItem, _ handler: ProviderResult<Any> -> Void) {
+    func remove(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         dbGroupsProvider.remove(item) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
                 if saved {
-                    self?.remoteGroupsProvider.removeGroupItem(item) {remoteResult in
+                    self?.remoteGroupsProvider.removeGroupItem(item, group: group) {remoteResult in
                         if !remoteResult.success {
                             print("Error: removeGroupItem in remote: \(item), result: \(remoteResult)")
                             DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)

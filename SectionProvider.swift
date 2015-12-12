@@ -13,10 +13,12 @@ protocol SectionProvider {
     // TODO! use list
     func loadSection(name: String, list: List, handler: ProviderResult<Section> -> ())
     
-    func remove(section: Section, _ handler: ProviderResult<Any> -> ())
-    
-    func update(sections: [Section], _ handler: ProviderResult<Any> -> ())
+    func add(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
+    func update(sections: [Section], remote: Bool, _ handler: ProviderResult<Any> -> ())
+
+    func remove(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    
     // TODO! return sections only for searched text, more efficient than fetching everything and let autocomplete library filter
     func sectionSuggestions(handler: ProviderResult<[Suggestion]> -> ())
     

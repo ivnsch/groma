@@ -18,9 +18,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     
     var list: List? {
         didSet { // TODO check if there's a timing problem when we implement memory cache, this may be called before it's displayed (so we see no listitems)?
-            if let list = self.list {
-                self.initWithList(list)
-            }
+            loadList()
         }
     }
     
@@ -60,12 +58,28 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
         navigationController?.setNavigationBarHidden(false, animated: true)
 
         onUIReady?()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItems:", name: WSNotificationName.ListItems.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItem:", name: WSNotificationName.ListItem.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketSection:", name: WSNotificationName.Section.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryWithHistoryAfterSave:", name: WSNotificationName.InventoryItemsWithHistoryAfterSave.rawValue, object: nil)
     }
 
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     override func viewWillDisappear(animated: Bool) {
         UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Theme.navigationBarTextColor]
         listItemsTableViewController.clearPendingSwipeItemIfAny(true)
+    }
+    
+    private func loadList() {
+        if let list = list {
+            initWithList(list)
+        }
     }
     
     private func initWithList(list: List) {
@@ -198,7 +212,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
                 InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.quantity, quantityDelta: $0.quantity, product: $0.product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
             }
 
-            Providers.inventoryItemsProvider.addToInventory(inventory, items: inventoryItems, self!.successHandler{result in
+            Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, self!.successHandler{result in
                 self?.sendAllItemToStash {
                     self?.close()
                 }
@@ -218,7 +232,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
                         let mySharedUser = ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail") // TODO how do we handle shared users internally (database etc) when user is offline
                         
                         let inventoryInput = Inventory(uuid: NSUUID().UUIDString, name: "Home", users: [mySharedUser])
-                        Providers.inventoryProvider.addInventory(inventoryInput, weakSelf.successHandler{notused in
+                        Providers.inventoryProvider.addInventory(inventoryInput, remote: true, weakSelf.successHandler{notused in
                             
                             // just a hack because we need "full" shared user to create inventory based on inventory input
                             // but full shared user is deprecated and will be removed soon, because client doesn't need anything besides email (and provider, in the future)
@@ -244,6 +258,107 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
             }
             
             delegate?.onEmptyCartTap()
+        }
+    }
+    
+    // MARK: - Websocket
+    
+    func onWebsocketListItems(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<[ListItem]>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case WSNotificationVerb.Update:
+                    listItemsTableViewController.updateListItems(notification.obj, notifyRemote: false)
+                    
+                default: print("Error: DoneViewController.onWebsocketUpdateListItems: Not handled: \(notification.verb)")
+                }
+            } else {
+                print("Error: DoneViewController.onWebsocketAddListItems: no value")
+            }
+        } else {
+            print("Error: DoneViewController.onWebsocketAddListItems: no userInfo")
+        }
+    }
+    
+    func onWebsocketListItem(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<ListItem>> {
+            if let notification = info[WSNotificationValue] {
+                
+                let listItem = notification.obj
+                
+                switch notification.verb {
+                case .Add:
+                    listItemsTableViewController.updateOrAddListItem(listItem, increment: true, scrollToSelection: true, notifyRemote: false)
+                    
+                case .Update:
+                    listItemsTableViewController.updateListItem(listItem, notifyRemote: false)
+                    
+                case .Delete:
+                    listItemsTableViewController.removeListItem(listItem, animation: .Bottom)
+                }
+            } else {
+                print("Error: DoneViewController.onWebsocketUpdateListItem: no value")
+            }
+        } else {
+            print("Error: DoneViewController.onWebsocketAddListItems: no userInfo")
+        }
+    }
+    
+    func onWebsocketSection(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<Section>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                    // There's no direct add of section
+                    //                case .Add:
+                    //                    addProductUI(notification.obj)
+                case .Update:
+                    // TODO what do we do here, if we reload the list (section order can be updated, not only name) can conflict with current state e.g. if user is editing or just swiping and item. For now do nothing - user will see updated section the next time list it's loaded
+                    //                    updateProductUI(notification.obj)
+                    print("Warn: TODO websocket section update")
+                case .Delete:
+                    // TODO similar to .Update comment
+                    print("Warn: TODO websocket section delete")
+                default: print("Error: DoneViewController.onWebsocketSection: Not handled: \(notification.verb)")
+                }
+            } else {
+                print("Error: DoneViewController.onWebsocketUpdateListItem: no value")
+            }
+        } else {
+            print("Error: DoneViewController.onWebsocketAddListItems: no userInfo")
+        }
+    }
+    
+    func onWebsocketProduct(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Update:
+                    // TODO!! update all listitems that reference this product
+                    print("Warn: TODO onWebsocketProduct")
+                case .Delete:
+                    // TODO!! delete all listitems that reference this product
+                    print("Warn: TODO onWebsocketProduct")
+                default: break // no error msg here, since we will receive .Add but not handle it in this view controller
+                }
+            } else {
+                print("Error: DoneViewController.onWebsocketProduct: no value")
+            }
+        } else {
+            print("Error: DoneViewController.onWebsocketProduct: no userInfo")
+        }
+    }
+    
+    // This is called when added items to inventory which means they were removed from done controller, so we have to remove them
+    func onWebsocketInventoryWithHistoryAfterSave(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSEmptyNotification> {
+            
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Add:
+                    loadList()
+                default: print("Error: InventoryItemsViewController.onWebsocketInventoryWithHistoryAfterSave: History: not implemented: \(notification.verb)")
+                }
+            }
         }
     }
 }

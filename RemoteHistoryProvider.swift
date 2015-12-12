@@ -54,8 +54,8 @@ class RemoteHistoryProvider {
         }
     }
     
-    func removeHistoryItem(historyItem: HistoryItem, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.historyItems + "/\(historyItem.uuid)") {result in
+    func removeHistoryItem(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.historyItems + "/\(uuid)") {result in
             handler(result)
         }
     }

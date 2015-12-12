@@ -16,16 +16,25 @@ class RemoteInventoryItemsProvider: Any {
             handler(result)
         }
     }
-    
-    func addToInventory(inventory: Inventory, inventoryItems: [InventoryItemWithHistoryEntry], handler: RemoteResult<NoOpSerializable> -> ()) {
+
+    // Adds inventoryItems to remote, IMPORTANT: All items are assumed to have the same inventory TODO maybe implement server service such that we don't have to put inventory uuid in url, and just use the inventory for each inventory item for the insert
+    func addToInventory(inventoryItems: [InventoryItemWithHistoryEntry], handler: RemoteResult<NoOpSerializable> -> ()) {
         let parameters = inventoryItems.map{[weak self] in self!.toDictionary($0)}
-        RemoteProvider.authenticatedRequest(.POST, Urls.inventoryItems + "/\(inventory.uuid)", parameters) {result in
-            handler(result)
+        if let inventoryUuid = inventoryItems.first?.inventoryItem.inventory.uuid {
+            RemoteProvider.authenticatedRequest(.POST, Urls.inventoryItems + "/\(inventoryUuid)", parameters) {result in
+                handler(result)
+            }
+        } else {
+            print("Warn: RemoteInventoryItemsProvider.addToInventory: called without items. Remote service was not called.")
         }
     }
 
     func removeInventoryItem(inventoryItem: InventoryItem, handler: RemoteResult<NoOpSerializable> -> ()) {
-        let parameters = ["productUuid": inventoryItem.product.uuid, "inventoryUuid": inventoryItem.inventory.uuid]
+        removeInventoryItem(inventoryItem.product.uuid, inventoryUuid: inventoryItem.inventory.uuid, handler: handler)
+    }
+
+    func removeInventoryItem(productUuid: String, inventoryUuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
+        let parameters = ["productUuid": productUuid, "inventoryUuid": inventoryUuid]
         RemoteProvider.authenticatedRequest(.DELETE, Urls.inventoryItem, parameters) {result in
             handler(result)
         }

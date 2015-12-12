@@ -38,8 +38,15 @@ class ManageGroupsAddEditController: UIViewController, QuickAddGroupViewControll
 
         initNavBar([.Add, .Save])
         initEmbeddedAddEditController()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketGroupItem:", name: WSNotificationName.GroupItem.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)        
     }
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+
     private func initNavBar(actions: [UIBarButtonSystemItem]) {
         navigationItem.title = "Manage products"
         
@@ -111,5 +118,50 @@ class ManageGroupsAddEditController: UIViewController, QuickAddGroupViewControll
     func onSubmit(items: [GroupItem]) {
         addEditGroupController.groupItems = items
         navigationController?.popViewControllerAnimated(true)
+    }
+    
+    // MARK: - Websocket
+    
+    func onWebsocketGroupItem(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<GroupItem>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                    // .Add use case doesn't exist yet, see note in MyWebsocketDispatcher.processGroupItem
+//                case .Add:
+//                    addEditGroupController.addGroupItemUI(notification.obj)
+                case .Update:
+                    addEditGroupController.updateGroupItemUI(notification.obj)
+                case .Delete:
+                    addEditGroupController.removeGroupItemUI(notification.obj)
+                    
+                default: print("ManageGroupsAddEditController.onWebsocketGroupItem not handled: \(notification.verb)")
+
+                }
+            } else {
+                print("Error: ManageGroupsAddEditController.onWebsocketGroupItem: no value")
+            }
+        } else {
+            print("Error: ManageGroupsAddEditController.onWebsocketGroupItem: no userInfo")
+        }
+    }
+    
+    func onWebsocketProduct(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Update:
+                    // TODO!! update all listitems that reference this product
+                    print("Warn: TODO onWebsocketProduct")
+                case .Delete:
+                    // TODO!! delete all listitems that reference this product
+                    print("Warn: TODO onWebsocketProduct")
+                default: break // no error msg here, since we will receive .Add but not handle it in this view controller
+                }
+            } else {
+                print("Error: ManageGroupsAddEditController.onWebsocketProduct: no value")
+            }
+        } else {
+            print("Error: ManageGroupsAddEditController.onWebsocketProduct: no userInfo")
+        }
     }
 }

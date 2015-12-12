@@ -23,14 +23,14 @@ protocol ProductProvider {
 
     // Note: this does not check name uniqueness! If need to add a new product use add(productInput), this checks name uniqueness
     // TODO remove this method? Does add(productInput) covers all add use cases?
-    func add(product: Product, _ handler: ProviderResult<Any> -> ())
+    func add(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     // Upsert based on name
     func add(productInput: ProductInput, _ handler: ProviderResult<Product> -> ())
     
-    func update(product: Product, _ handler: ProviderResult<Any> -> ())
+    func update(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
-    func delete(product: Product, _ handler: ProviderResult<Any> -> ())
+    func delete(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     func productSuggestions(handler: ProviderResult<[Suggestion]> -> ())
     

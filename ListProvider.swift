@@ -16,11 +16,13 @@ protocol ListProvider {
   
     // TODO move list-only methods from listitemsprovider here
 
-    func add(list: List, _ handler: ProviderResult<List> -> ())
+    func add(list: List, remote: Bool, _ handler: ProviderResult<List> -> ())
 
-    func update(lists: [List], _ handler: ProviderResult<Any> -> ())
+    func update(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ())
+
+    func update(lists: [List], remote: Bool, _ handler: ProviderResult<Any> -> ())
     
-    func remove(list: List, _ handler: ProviderResult<Any> -> ())
+    func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
     func syncListsWithListItems(handler: (ProviderResult<[Any]> -> ()))
 }

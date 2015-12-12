@@ -135,13 +135,13 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
                 
                 if let editingGroup = editingGroup { // edit
                     let updatedGroup = editingGroup.copy(name: name, items: groupItems)
-                    Providers.listItemGroupsProvider.update(updatedGroup, successHandler{[weak self] in
+                    Providers.listItemGroupsProvider.update(updatedGroup, remote: true, successHandler{[weak self] in
                         self?.delegate?.onGroupUpdated(updatedGroup)
                     })
                     
                 } else { // add
                     let group = ListItemGroup(uuid: NSUUID().UUIDString, name: name, items: groupItems)
-                    Providers.listItemGroupsProvider.add(group, successHandler{[weak self] in
+                    Providers.listItemGroupsProvider.add(group, remote: true, successHandler{[weak self] in
                         // TODO show a "toast" confirmation (quick view)
                         // add group to view controller (list) - scroll to it
                         self?.delegate?.onGroupCreated(group)
@@ -153,6 +153,19 @@ class QuickAddGroupViewController: UIViewController, UITableViewDataSource, UITa
         }
     }
     
+    func addGroupItemUI(item: GroupItem) {
+        groupItems.append(item) // TODO confirm, does this reload tableview?
+    }
+    
+    func updateGroupItemUI(item: GroupItem) {
+        groupItems.update(item)
+        itemsTableView.reloadData()
+    }
+    
+    func removeGroupItemUI(item: GroupItem) {
+        groupItems.remove(item)
+        itemsTableView.reloadData()        
+    }
     
     // MARK: - QuickAddGroupItemsViewControllerDelegate
     

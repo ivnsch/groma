@@ -166,7 +166,7 @@ class PlanProviderImpl: PlanProvider {
 
                             // add the product
                             let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: category, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit)
-                            Providers.productProvider.add(product) {result in
+                            Providers.productProvider.add(product, remote: true) {result in
                                 if result.success {
                                     onHasProduct(product, isUpdate: false)
                                 } else {

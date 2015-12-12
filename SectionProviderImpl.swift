@@ -35,18 +35,34 @@ class SectionProviderImpl: SectionProvider {
             //            }
         }
     }
-    
-    func remove(section: Section, _ handler: ProviderResult<Any> -> ()) {
+
+    func add(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         Providers.listItemsProvider.invalidateMemCache()
-        self.dbProvider.remove(section) {removed in
-            handler(ProviderResult(status: removed ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
+        self.dbProvider.saveSection(section) {saved in
+            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
+            if saved && remote {
+                // TODO!! server
+            }
         }
     }
     
-    func update(sections: [Section], _ handler: ProviderResult<Any> -> ()) {
+    func remove(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        Providers.listItemsProvider.invalidateMemCache()
+        self.dbProvider.remove(section) {removed in
+            handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
+            if removed && remote {
+                // TODO!! server
+            }
+        }
+    }
+    
+    func update(sections: [Section], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         Providers.listItemsProvider.invalidateMemCache()
         self.dbProvider.update(sections) {updated in
-            handler(ProviderResult(status: updated ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
+            handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
+            if updated && remote {
+                // TODO!! server
+            }
         }
     }
     

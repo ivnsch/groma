@@ -114,7 +114,7 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
                 self?.inventoryItems.remove(planItem)
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
             }
-            Providers.inventoryItemsProvider.removeInventoryItem(planItem, resultHandler(onSuccess: {
+            Providers.inventoryItemsProvider.removeInventoryItem(planItem, remote: true, resultHandler(onSuccess: {
             }, onError: {[weak self] result in
                 self?.inventory = self?.inventory // trigger reset and reload
                 self?.defaultErrorHandler()(providerResult: result)
@@ -167,7 +167,7 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
                             weakSelf.tableView.reloadData()
 
                             // TODO is it necessary to have multiple [weak self] in nested blocks? (we one above in incrementInventoryItem)
-                            Providers.inventoryItemsProvider.removeInventoryItem(inventoryItem, weakSelf.successHandler{[weak self] result in
+                            Providers.inventoryItemsProvider.removeInventoryItem(inventoryItem, remote: true, weakSelf.successHandler{[weak self] result in
                                 
                                 if let weakSelf = self {
                                     weakSelf.removeUI(row)
@@ -179,12 +179,40 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
             }))
         }
     }
+
+    func updateIncrementUI(inventoryItem: InventoryItem, delta: Int) {
+        if let (index, item) = (inventoryItems.enumerate().filter{$0.element.same(inventoryItem)}.first), cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) {
+            if let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) as? InventoryItemTableViewCell {
+                updateIncrementUI(item, delta: delta, cell: cell, row: index)
+            } else {
+                print("Warn: InventoryItemsTableViewController.updateIncrementUI: Couldn't retrieve cell for index: \(index)")
+            }
+        } else {
+            print("Warn: InventoryItemsTableViewController.updateIncrementUI: Didn't find inventoryItem: \(inventoryItem)")
+        }
+    }
     
     private func updateIncrementUI(inventoryItem: InventoryItem, delta: Int, cell: InventoryItemTableViewCell, row: Int) {
         let incrementedItem = inventoryItem.incrementQuantityCopy(delta)
         inventoryItems[row] = incrementedItem
         cell.inventoryItem = incrementedItem
         cell.quantityLabel.text = "\(incrementedItem.quantity)"
+    }
+    
+    func remove(inventoryItem: InventoryItem) {
+        if let (index, _) = (inventoryItems.enumerate().filter{$0.element.same(inventoryItem)}.first) {
+            removeUI(index)
+        } else {
+            print("Warn: InventoryItemsTableViewController.remove: didn't find intentoryItme: \(inventoryItem)")
+        }
+    }
+    
+    func remove(inventoryItemInventoryUuid: String, inventoryItemProductUuid: String) {
+        if let (index, _) = (inventoryItems.enumerate().filter{$0.element.inventory.uuid == inventoryItemInventoryUuid && $0.element.product.uuid == inventoryItemProductUuid}.first) {
+            removeUI(index)
+        } else {
+            print("Warn: InventoryItemsTableViewController.remove: didn't find intentoryItme: inventoryItemInventoryUuid: \(inventoryItemInventoryUuid), inventoryItemProductUuid: \(inventoryItemProductUuid)")
+        }
     }
     
     private func removeUI(row: Int) {

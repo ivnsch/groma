@@ -24,6 +24,11 @@ class RealmInventoryProvider: RealmProvider {
         self.loadFirst(mapper, filter: DBInventoryItem.createFilter(item.product, item.inventory), handler: handler)
     }
     
+    func findInventoryItem(productUuid: String, inventoryUuid: String, _ handler: InventoryItem? -> Void) {
+        let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}
+        self.loadFirst(mapper, filter: DBInventoryItem.createFilter(productUuid, inventoryUuid), handler: handler)
+    }
+    
 //    func saveInventories(inventories: [DBInventory], handler: Bool -> ()) {
 //        self.saveObjs(inventories, update: true, handler: handler)
 //    }
@@ -154,8 +159,13 @@ class RealmInventoryProvider: RealmProvider {
         saveInventoryItems([incrementedInventoryItem], handler: handler)
     }
     
-    func removeInventoryItem(item: InventoryItem, handler: Bool -> ()) {
-        let filter = DBInventoryItem.createFilter(item.product, item.inventory)
+    func removeInventoryItem(inventoryItem: InventoryItem, handler: Bool -> ()) {
+        let filter = DBInventoryItem.createFilter(inventoryItem)
+        self.remove(filter, handler: handler, objType: DBInventoryItem.self)
+    }
+    
+    func removeInventoryItem(productUuid: String, inventoryUuid: String, handler: Bool -> ()) {
+        let filter = DBInventoryItem.createFilter(productUuid, inventoryUuid)
         self.remove(filter, handler: handler, objType: DBInventoryItem.self)
     }
     

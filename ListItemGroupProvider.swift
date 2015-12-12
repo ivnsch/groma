@@ -18,17 +18,19 @@ protocol ListItemGroupProvider {
 
     func groupsContainingText(text: String, _ handler: ProviderResult<[ListItemGroup]> -> Void)
     
-    func add(groups: ListItemGroup, _ handler: ProviderResult<Any> -> Void)
+    func add(groups: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
-    func update(group: ListItemGroup, _ handler: ProviderResult<Any> -> Void)
+    func update(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 
-    func remove(group: ListItemGroup, _ handler: ProviderResult<Any> -> Void)
+    func remove(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 
     // group items
     
     func groupItems(group: ListItemGroup, handler: ProviderResult<[GroupItem]> -> Void)
     
-    func update(item: GroupItem, group: ListItemGroup, _ handler: ProviderResult<Any> -> ())
+    func add(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+
+    func update(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
-    func remove(item: GroupItem, _ handler: ProviderResult<Any> -> Void)
+    func remove(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 }

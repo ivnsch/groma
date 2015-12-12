@@ -62,7 +62,7 @@ class ListProviderImpl: ListProvider {
         }
     }
 
-    func add(list: List, _ handler: ProviderResult<List> -> ()) {
+    func add(list: List, remote: Bool, _ handler: ProviderResult<List> -> ()) {
         
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
@@ -75,23 +75,32 @@ class ListProviderImpl: ListProvider {
                 handler(ProviderResult(status: .DatabaseUnknown))
             }
             
-            self.remoteListProvider.add(list, handler: {remoteResult in
-                
-                if !remoteResult.success {
-                    print("error adding the remote list: \(remoteResult.status)")
-                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
-                }
-            })
+            if remote {
+                self.remoteListProvider.add(list, handler: {remoteResult in
+                    
+                    if !remoteResult.success {
+                        print("error adding the remote list: \(remoteResult.status)")
+                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                    }
+                })
+            }
         })
     }
+
+    func update(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        update([list], remote: remote, handler)
+    }
     
-    func update(lists: [List], _ handler: ProviderResult<Any> -> ()) {
+    func update(lists: [List], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         dbProvider.saveLists(lists, update: true) {updated in
             handler(ProviderResult(status: updated ? .Success : .DatabaseSavingError))
         }
+        if remote {
+            // TODO!! remote
+        }
     }
     
-    func remove(list: List, _ handler: ProviderResult<Any> -> ()) {
+    func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
@@ -99,8 +108,10 @@ class ListProviderImpl: ListProvider {
         
         self.dbProvider.remove(list, handler: {removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseSavingError))
-            
-            // TODO remote
+          
+            if remote {
+                // TODO!! remote
+            }
         })
     }
 

@@ -24,6 +24,8 @@ protocol HistoryProvider {
     func syncHistoryItems(handler: (ProviderResult<[Any]> -> ()))
     
     func removeHistoryItem(historyItem: HistoryItem, _ handler: ProviderResult<Any> -> ())
-    
+
+    func removeHistoryItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
+
     func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, _ handler: ProviderResult<Any> -> ())
 }

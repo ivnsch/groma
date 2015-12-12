@@ -87,7 +87,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 //        }
 //    }
     
-    func addToInventory(inventory: Inventory, items: [InventoryItemWithHistoryEntry], _ handler: ProviderResult<Any> -> ()) {
+    func addToInventory(items: [InventoryItemWithHistoryEntry], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         
         let memAdded = memProvider.addInventoryItems(items)
         if memAdded {
@@ -104,32 +104,34 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                 }
             }
             
-            self?.remoteInventoryItemsProvider.addToInventory(inventory, inventoryItems: items) {remoteResult in
-                
-                if let _ = remoteResult.successResult {
+            if remote {
+                self?.remoteInventoryItemsProvider.addToInventory(items) {remoteResult in
                     
-                    print("DEBUG: add remote inventory items success")
-                    
-                    
-                    // TODO is this comment still relevant?
-                    // For now no saving in local database, since there's no logic to increment in the client
-                    // TODO in the future we should do the increment in the client, as the app can be used offline-only
-                    // then call a sync with the server when we're online, where we either send the pending increments or somehow overwrite with updated items, taking into account timestamps
-                    // remember that the inventory has to support merge since it can be shared with other users
-                    //                self.dbInventoryProvider.saveInventory(items) {saved in
-                    //                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
-                    //                    handler(ProviderResult(status: providerStatus))
-                    //                }
-                    
-                    
-                    
-                } else {
-                    print("Error addToInventory: \(remoteResult.status)")
-                    // (what do we do with server invalid data error? do we remove the record from the client's database? which kind of error do we show to the client!? in any case this has to be sent to error monitoring, very clearly and detailed
-                    DefaultRemoteErrorHandler.handle(remoteResult.status) {(remoteResult: ProviderResult<Any>) in
-                        // if there's a not connection related server error, invalidate cache
-                        self?.memProvider.invalidate()
-                        handler(remoteResult)
+                    if let _ = remoteResult.successResult {
+                        
+                        print("DEBUG: add remote inventory items success")
+                        
+                        
+                        // TODO is this comment still relevant?
+                        // For now no saving in local database, since there's no logic to increment in the client
+                        // TODO in the future we should do the increment in the client, as the app can be used offline-only
+                        // then call a sync with the server when we're online, where we either send the pending increments or somehow overwrite with updated items, taking into account timestamps
+                        // remember that the inventory has to support merge since it can be shared with other users
+                        //                self.dbInventoryProvider.saveInventory(items) {saved in
+                        //                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
+                        //                    handler(ProviderResult(status: providerStatus))
+                        //                }
+                        
+                        
+                        
+                    } else {
+                        print("Error addToInventory: \(remoteResult.status)")
+                        // (what do we do with server invalid data error? do we remove the record from the client's database? which kind of error do we show to the client!? in any case this has to be sent to error monitoring, very clearly and detailed
+                        DefaultRemoteErrorHandler.handle(remoteResult.status) {(remoteResult: ProviderResult<Any>) in
+                            // if there's a not connection related server error, invalidate cache
+                            self?.memProvider.invalidate()
+                            handler(remoteResult)
+                        }
                     }
                 }
             }
@@ -153,7 +155,36 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
+    // only db no memory cache or remote, this is currently used only by websocket update (when receive websocket increment, fetch inventory item in order to increment it locally)
+    private func findInventoryItem(productUuid: String, inventoryUuid: String, _ handler: ProviderResult<InventoryItem> -> ()) {
+        dbInventoryProvider.findInventoryItem(productUuid, inventoryUuid: inventoryUuid) {inventoryItemMaybe in
+            if let inventoryItem = inventoryItemMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: inventoryItem))
+            } else {
+                handler(ProviderResult(status: .NotFound))
+            }
+        }
+    }
     
+    func incrementInventoryItem(item: InventoryItemIncrement, remote: Bool, _ handler: ProviderResult<InventoryItem> -> ()) {
+        findInventoryItem(item.productUuid, inventoryUuid: item.inventoryUuid) {[weak self] result in
+            if let inventoryItem = result.sucessResult {
+                
+                self?.incrementInventoryItem(inventoryItem, delta: item.delta) {result in
+                    if result.success {
+                        handler(ProviderResult(status: .Success, sucessResult: inventoryItem))
+                    } else {
+                        handler(ProviderResult(status: .DatabaseSavingError))
+                    }
+                }
+                
+            } else {
+                print("InventoryItemsProviderImpl.incrementInventoryItem: Didn't find inventory item to increment, for: \(item)")
+                handler(ProviderResult(status: .NotFound))
+            }
+        }
+    }
+
     func incrementInventoryItem(item: InventoryItem, delta: Int, _ handler: ProviderResult<Any> -> ()) {
         
         // Get item from database with updated quantityDelta
@@ -214,7 +245,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    func updateInventoryItem(inventory: Inventory, item: InventoryItem, _ handler: ProviderResult<Any> -> Void) {
+    func updateInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         memProvider.updateInventoryItem(item)
         
         dbInventoryProvider.saveInventoryItems([item]) {[weak self] updated in
@@ -223,18 +254,21 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             }
             
             handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
-            // TODO server
+            
+            if remote {
+                // TODO server
+            }
         }
     }
     
-    func removeInventoryItem(item: InventoryItem, _ handler: ProviderResult<Any> -> ()) {
+    func removeInventoryItem(productUuid: String, inventoryUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         
-        let memUpdated = memProvider.removeInventoryItem(item)
+        let memUpdated = memProvider.removeInventoryItem(productUuid, productUuid: inventoryUuid)
         if memUpdated {
             handler(ProviderResult(status: .Success))
         }
         
-        dbInventoryProvider.removeInventoryItem(item) {[weak self] removed in
+        dbInventoryProvider.removeInventoryItem(productUuid, inventoryUuid: inventoryUuid) {[weak self] removed in
             if removed {
                 if !memUpdated {
                     handler(ProviderResult(status: .Success))
@@ -244,17 +278,23 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                 self?.memProvider.invalidate()
             }
             
-            self?.remoteInventoryItemsProvider.removeInventoryItem(item) {remoteResult in
-                if !remoteResult.success {
-                    print("Error removing inventory item in server: \(item), result: \(remoteResult)")
-                    DefaultRemoteErrorHandler.handle(remoteResult.status)  {(remoteResult: ProviderResult<Any>) in
-                        // if there's a not connection related server error, invalidate cache
-                        self?.memProvider.invalidate()
-                        handler(remoteResult)
+            if remote {
+                self?.remoteInventoryItemsProvider.removeInventoryItem(productUuid, inventoryUuid: inventoryUuid) {remoteResult in
+                    if !remoteResult.success {
+                        print("Error removing inventory item in server: productUuid: \(productUuid), inventoryUuid: \(inventoryUuid), result: \(remoteResult)")
+                        DefaultRemoteErrorHandler.handle(remoteResult.status)  {(remoteResult: ProviderResult<Any>) in
+                            // if there's a not connection related server error, invalidate cache
+                            self?.memProvider.invalidate()
+                            handler(remoteResult)
+                        }
                     }
                 }
             }
         }
+    }
+
+    func removeInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        removeInventoryItem(item.product.uuid, inventoryUuid: item.inventory.uuid, remote: remote, handler)
     }
     
     func invalidateMemCache() {

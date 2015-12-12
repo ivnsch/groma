@@ -50,20 +50,20 @@ class RemoteListItemProvider {
     }
     
     func remove(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.listItem + "/\(listItem.uuid)") {result in
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.listItem + "/\(listItem.uuid)", toRequestParams(listItem)) {result in
             handler(result)
         }
     }
     
     func remove(section: Section, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.section + "/\(section.uuid)") {result in
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.section + "/\(section.uuid)", toRequestParams(section)) {result in
             handler(result)
         }
     }
     
     
     func remove(list: List, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.list + "/\(list.uuid)") {result in
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.list + "/\(list.uuid)", toRequestPrams(list)) {result in
             handler(result)
         }
     }
@@ -106,12 +106,7 @@ class RemoteListItemProvider {
     }
     
     func add(list: List, handler: RemoteResult<NoOpSerializable> -> ()) {
-        let parameters: [String: AnyObject] = [
-            "uuid": list.uuid,
-            "name": list.name,
-            "order": list.order,
-            "users": list.users.map{self.toRequestParams($0)}
-        ]
+        let parameters = toRequestPrams(list)
         RemoteProvider.authenticatedRequest(.POST, Urls.list, parameters) {result in
             handler(result)
         }
@@ -198,6 +193,15 @@ class RemoteListItemProvider {
     
     //////////////////
     
+    func toRequestPrams(list: List) -> [String: AnyObject] {
+        return [
+            "uuid": list.uuid,
+            "name": list.name,
+            "order": list.order,
+            "users": list.users.map{self.toRequestParams($0)}
+        ]
+    }
+    
     func toRequestParams(sharedUser: SharedUser) -> [String: AnyObject] {
         return [
             "email": sharedUser.email,
@@ -208,6 +212,14 @@ class RemoteListItemProvider {
     func toRequestParams(listItems: [ListItem]) -> [[String: AnyObject]] {
         return listItems.map{toRequestParams($0)}
     }
+
+    func toRequestParams(section: Section) -> [String: AnyObject] {
+        return [
+            "uuid": section.uuid,
+            "name": section.name,
+            "order": section.order
+        ]
+    }
     
     func toRequestParams(listItem: ListItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
@@ -217,11 +229,7 @@ class RemoteListItemProvider {
             "productInput": toRequestParams(listItem.product),
             "listUuid": listItem.list.uuid,
             "listName": listItem.list.name,
-            "sectionInput": [
-                "uuid": listItem.section.uuid,
-                "name": listItem.section.name,
-                "order": listItem.section.order
-            ],
+            "sectionInput": toRequestParams(listItem.section),
             "order": listItem.order
         ]
         
