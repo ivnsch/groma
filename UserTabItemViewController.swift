@@ -18,8 +18,6 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
         } else {
             self.showLoginController()
         }
-
-        
     }
 
     // MARK: - LoginDelegate
@@ -85,7 +83,10 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
             controller.removeFromParentViewController()
         }
         self.addChildViewControllerAndView(newController)
-        newController.view.matchSize(self.view)
-
+        newController.view.translatesAutoresizingMaskIntoConstraints = false
+        // for some reason matchSize constraint doesn't work properly here (gap at the bottom) so need + 50
+        view.addConstraints([
+            NSLayoutConstraint.matchWidth(view: newController.view, otherView: view)])
+        newController.view.heightConstraint(view.frame.height + 50)
     }
 }

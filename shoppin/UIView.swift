@@ -128,7 +128,7 @@ extension UIView {
     func defaultProgressVisible(visible: Bool = false) {
         if visible {
             if self.viewWithTag(ViewTags.GlobalActivityIndicator) == nil {
-                let view = UIView(frame: self.frame)
+                let view = UIView(frame: self.bounds)
                 view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.2)
                 view.tag = ViewTags.GlobalActivityIndicator
                 
@@ -142,6 +142,7 @@ extension UIView {
                 self.addSubview(view)
             }
         } else {
+                            self.backgroundColor = UIColor.whiteColor()
             self.viewWithTag(ViewTags.GlobalActivityIndicator)?.removeFromSuperview()
         }
     }

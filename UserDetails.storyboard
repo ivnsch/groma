@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeueLights.ttc">
@@ -24,7 +24,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7vg-i2-1c4">
-                                <rect key="frame" x="277" y="35" width="46" height="30"/>
+                                <rect key="frame" x="277" y="90" width="46" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Logout">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -34,7 +34,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eYB-7b-UeC">
-                                <rect key="frame" x="245" y="125" width="110" height="30"/>
+                                <rect key="frame" x="245" y="180" width="110" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Remove account"/>
                                 <connections>
@@ -45,7 +45,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="eYB-7b-UeC" firstAttribute="centerX" secondItem="FsR-KS-FXf" secondAttribute="centerX" id="A8J-0I-9ii"/>
-                            <constraint firstItem="7vg-i2-1c4" firstAttribute="top" secondItem="pJa-rp-3ws" secondAttribute="bottom" constant="15" id="JMg-Om-NOK"/>
+                            <constraint firstItem="7vg-i2-1c4" firstAttribute="top" secondItem="FsR-KS-FXf" secondAttribute="top" constant="90" id="axm-iD-Vh3"/>
                             <constraint firstItem="eYB-7b-UeC" firstAttribute="top" secondItem="7vg-i2-1c4" secondAttribute="bottom" constant="60" id="ihM-pZ-FDb"/>
                             <constraint firstAttribute="centerX" secondItem="7vg-i2-1c4" secondAttribute="centerX" id="v37-Nk-YTL"/>
                         </constraints>
