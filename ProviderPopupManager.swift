@@ -35,4 +35,23 @@ class ProviderPopupManager {
             })
         }
     }
+    
+    func showRemoteValidationPopup(status: ProviderStatusCode, error: RemoteInvalidParametersResult, controller: UIViewController) {
+        
+        if (currentStatus.map {$0 != status}) ?? true { // if there's no popup or if there's a popup with different status code
+            currentStatus = status
+            
+            let title = "Validation failed"
+            
+            let message = error.pathErrors.map {e in
+                let pathErrorsStr = e.validationErrors.map{$0.msg}.joinWithSeparator(", ")
+                return ("Field: \(e.path), errors: \(pathErrorsStr)")
+            }.joinWithSeparator("\n")
+            
+            AlertPopup.show(title: title, message: message, controller: controller, onDismiss: {[weak self] in
+                // IMPORTANT: When implementing dismissal by tapping outside, ensure the status is also cleared. See http://stackoverflow.com/a/25469305/930450
+                self?.currentStatus = nil
+            })
+        }
+    }
 }

@@ -38,7 +38,7 @@ class InventoryProviderImpl: InventoryProvider {
                     
                 } else {
                     print("get remote inventories no success, status: \(remoteResult.status)")
-                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                 }
             }
         }
@@ -99,7 +99,7 @@ class InventoryProviderImpl: InventoryProvider {
                     }
                     
                 } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                 }
             }
         }
@@ -140,7 +140,7 @@ class InventoryProviderImpl: InventoryProvider {
                     self?.remoteProvider.addInventory(inventory) {remoteResult in
                         if !remoteResult.success {
                             print("Error: addInventory background sync failed: \(remoteResult.status)") // TODO handle, when should we remove the item from local DB, when should we send a msg to error monitoring etc.
-                            DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                         }
                     }
                 }
@@ -156,7 +156,7 @@ class InventoryProviderImpl: InventoryProvider {
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             if remote {
                 self?.remoteProvider.updateInventory(inventory) {remoteResult in
-                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                 }
             }
         }
@@ -183,7 +183,7 @@ class InventoryProviderImpl: InventoryProvider {
                         }
                         
                     } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 }
             }

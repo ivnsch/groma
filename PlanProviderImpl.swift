@@ -81,7 +81,7 @@ class PlanProviderImpl: PlanProvider {
                 self?.remoteProvider.addUpdatePlanItem(planItem) {remoteResult in
                     if !remoteResult.success {
                         print("Error: addOrIncrementPlanItem: \(planItem), result: \(remoteResult)")
-                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 }
                 
@@ -103,7 +103,7 @@ class PlanProviderImpl: PlanProvider {
                 self?.remoteProvider.addUpdatePlanItem(planItem) {remoteResult in
                     if !remoteResult.success {
                         print("Error: addOrIncrementPlanItem: \(planItem), result: \(remoteResult)")
-                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 }
                 
@@ -129,7 +129,7 @@ class PlanProviderImpl: PlanProvider {
                     self?.remoteProvider.addUpdatePlanItem(planItem) {remoteResult in
                         if !remoteResult.success {
                             print("Error: addOrIncrementPlanItem: \(planItem), result: \(remoteResult)")
-                            DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                         }
                     }
                     

@@ -66,20 +66,20 @@ extension UIViewController {
     }
     
     // Result handlar for result with payload
-    func resultHandler<T>(onSuccess onSuccess: (T) -> (), onError: ((ProviderResult<T>) -> ())? = nil)(providerResult: ProviderResult<T>) {
+    func resultHandler<T>(onSuccess onSuccess: (T) -> Void, onError: ((ProviderResult<T>) -> Void)? = nil)(providerResult: ProviderResult<T>) {
         if providerResult.success {
             if let successResult = providerResult.sucessResult {
                 onSuccess(successResult)
             } else {
                 print("Error: Invalid state: handler expects result with payload, result is success but has no payload")
-                self.showProviderErrorAlert(ProviderResult<Any>(status: ProviderStatusCode.Unknown))
+                showProviderErrorAlert(ProviderResult<Any>(status: ProviderStatusCode.Unknown))
             }
             
         } else {
-            onError?(providerResult) ?? self.defaultErrorHandler()(providerResult: providerResult)
+            onError?(providerResult) ?? defaultErrorHandler()(providerResult: providerResult)
         }
         
-        self.progressVisible(false)
+        progressVisible(false)
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,13 +93,26 @@ extension UIViewController {
 
     func defaultErrorHandler<T>(ignore: [ProviderStatusCode] = [])(providerResult: ProviderResult<T>) {
         if !ignore.contains(providerResult.status) {
-            self.showProviderErrorAlert(providerResult)
+            
+            if providerResult.status == .ServerInvalidParamsError {
+                if let error = providerResult.error {
+                    showRemoteValidationErrorAlert(providerResult.status, error: error)
+                } else {
+                    print("UIViewController.defaultErrorHandler: Invalid state: Has invalid credentials status but no error obj: \(providerResult)")
+                }
+            } else {
+                showProviderErrorAlert(providerResult)
+            }
         }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     
     private func showProviderErrorAlert<T>(providerResult: ProviderResult<T>) {
         ProviderPopupManager.instance.showStatusPopup(providerResult.status, controller: self)
+    }
+    
+    private func showRemoteValidationErrorAlert(status: ProviderStatusCode, error: RemoteInvalidParametersResult) {
+        ProviderPopupManager.instance.showRemoteValidationPopup(status, error: error, controller: self)
     }
     
     // MARK: - Popup

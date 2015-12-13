@@ -37,40 +37,32 @@ enum ProviderStatusCode: Int {
 public class ProviderResult<T>: CustomDebugStringConvertible {
     let status: ProviderStatusCode
     let sucessResult: T?
-    let errorMsg: String?
+    let error: RemoteInvalidParametersResult? // if we have more errors later, make this more generic - don't couple with remote (map it) and also not with validation
     
     var success: Bool {
         return self.status == .Success
     }
     
-    var error: NSError? {
-        if !self.success {
-            return NSError(domain: "remote", code: self.status.rawValue, userInfo: ["msg": self.errorMsg ?? ""])
-        } else {
-            return nil
-        }
-    }
-    
     convenience init(status: ProviderStatusCode, sucessResult: T) {
-        self.init(status: status, sucessResult: sucessResult, errorMsg: nil)
+        self.init(status: status, sucessResult: sucessResult, error: nil)
     }
     
-    convenience init(status: ProviderStatusCode, errorMsg: String?) {
-        self.init(status: status, sucessResult: nil, errorMsg: errorMsg)
+    convenience init(status: ProviderStatusCode, error: RemoteInvalidParametersResult?) {
+        self.init(status: status, sucessResult: nil, error: error)
     }
     
     convenience init(status: ProviderStatusCode) {
-        self.init(status: status, sucessResult: nil, errorMsg: nil)
+        self.init(status: status, sucessResult: nil, error: nil)
     }
     
-    private init(status: ProviderStatusCode, sucessResult: T?, errorMsg: String?) {
+    private init(status: ProviderStatusCode, sucessResult: T?, error: RemoteInvalidParametersResult?) {
         self.status = status
         self.sucessResult = sucessResult
-        self.errorMsg = errorMsg
+        self.error = error
     }
     
     public var debugDescription: String {
-        return "{\(self.dynamicType) status: \(self.status), model: \(self.sucessResult), errorMsg: \(self.errorMsg)}"
+        return "{\(self.dynamicType) status: \(status), model: \(sucessResult), error: \(error)}"
     }
 }
 
@@ -79,7 +71,7 @@ struct DefaultRemoteResultMapper {
     static func toProviderStatus(remoteStatus: RemoteStatusCode) -> ProviderStatusCode {
         switch remoteStatus {
         case .AlreadyExists: return .AlreadyExists
-        case .InvalidParameters: return .ServerError
+        case .InvalidParameters: return .ServerInvalidParamsError
         case .NotAuthenticated: return .NotAuthenticated
         case .NotFound: return .NotFound
         case .ParsingError: return .ServerError
@@ -93,7 +85,7 @@ struct DefaultRemoteResultMapper {
         case .ServerNotReachable: return .ServerNotReachable
         case .UnknownServerCommunicationError: return .UnknownServerCommunicationError
         case .InternalServerError: return .ServerError
-        case .BadRequest: return .ServerInvalidParamsError
+        case .BadRequest: return .ServerError
         case .UnsupportedMediaType: return .ServerError
         case .ClientParamsParsingError: return .Unknown
         case .NoConnection: return .NoConnection
@@ -108,13 +100,13 @@ struct DefaultRemoteErrorHandler {
     * Invoques handler if there's an error different than no connection or not logged in.
     * With this we can use the app offline or without account - the error handler, which triggers the error alert is not called on connection error.
     */
-    static func handle<T>(remoteStatus: RemoteStatusCode, handler: ProviderResult<T> -> ()) {
-        switch remoteStatus {
+    static func handle<T, U>(remoteResult: RemoteResult<T>, handler: ProviderResult<U> -> ()) {
+        switch remoteResult.status {
         case .NoConnection, .NotLoggedIn, .NotAuthenticated:
             return
         case _:
-            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteStatus)
-            handler(ProviderResult(status: providerStatus))
+            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+            handler(ProviderResult(status: providerStatus, error: remoteResult.error)) // TODO when remote fails somehow trigger a revert of local updates
         }
     }
 }

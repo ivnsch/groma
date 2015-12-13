@@ -41,7 +41,7 @@ class ListProviderImpl: ListProvider {
                     
                 } else {
                     print("get remote lists no success, status: \(remoteResult.status)")
-                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                 }
             }
         }
@@ -80,7 +80,7 @@ class ListProviderImpl: ListProvider {
                     
                     if !remoteResult.success {
                         print("error adding the remote list: \(remoteResult.status)")
-                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 })
             }
@@ -137,7 +137,7 @@ class ListProviderImpl: ListProvider {
                         
                     } else {
                         print("Error: sync list with list items: \(remoteResult.status)")
-                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 }
             }

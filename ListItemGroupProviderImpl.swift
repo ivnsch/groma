@@ -41,7 +41,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 self?.remoteGroupsProvider.addGroup(group) {remoteResult in
                     if !remoteResult.success {
                         print("Error: adding group in remote: \(group), result: \(remoteResult)")
-                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 }
             }
@@ -56,7 +56,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 self?.remoteGroupsProvider.updateGroup(group) {remoteResult in
                     if !remoteResult.success {
                         print("Error: updating group in remote: \(group), result: \(remoteResult)")
-                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 }
             }
@@ -71,7 +71,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 self?.remoteGroupsProvider.removeGroup(group) {remoteResult in
                     if !remoteResult.success {
                         print("Error: removing group in remote: \(group), result: \(remoteResult)")
-                        DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 }
             }
@@ -93,7 +93,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                     self?.remoteGroupsProvider.addGroupItem(item, group: group) {remoteResult in
                         if !remoteResult.success {
                             print("Error: adding group item in remote: \(item), result: \(remoteResult)")
-                            DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                         }
                     }
                 }
@@ -113,7 +113,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                     self?.remoteGroupsProvider.updateGroupItem(item, group: group) {remoteResult in
                         if !remoteResult.success {
                             print("Error: updating group item in remote: \(item), result: \(remoteResult)")
-                            DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                         }
                     }
                 }
@@ -133,7 +133,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                     self?.remoteGroupsProvider.removeGroupItem(item, group: group) {remoteResult in
                         if !remoteResult.success {
                             print("Error: removeGroupItem in remote: \(item), result: \(remoteResult)")
-                            DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                         }
                     }
                 }

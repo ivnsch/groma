@@ -64,6 +64,56 @@ extension Request {
     }
 }
 
+
+final class RemoteValidationError {
+    let msg: String
+    let args: [String]
+
+    init?(json: AnyObject) {
+        msg = json.valueForKeyPath("message") as! String
+        args = json.valueForKeyPath("args") as! [String]
+    }
+}
+
+final class RemotePathValidationError {
+    let path: String
+    let validationErrors: [RemoteValidationError]
+    
+    init?(json: AnyObject) {
+        path = json.valueForKeyPath("path") as! String
+        
+        let validationErrorsObjs = json.valueForKeyPath("validationErrors") as! [AnyObject]
+        var validationErrors: [RemoteValidationError] = []
+        for json in validationErrorsObjs {
+            if let validationError = RemoteValidationError(json: json) {
+                validationErrors.append(validationError)
+            } else {
+                self.validationErrors = [] // swift compiler requires to have initialised all stored properties before returning nil from initialiser
+                return nil // don't return anything if parsing of one error fails. Note that our model objects are not programmed for failure though, if structure is wrong it will crash in most cases (forced casting). This should be improved in the future.
+            }
+        }
+        self.validationErrors = validationErrors
+    }
+}
+
+final class RemoteInvalidParametersResult {
+    let pathErrors: [RemotePathValidationError]
+
+    init?(json: AnyObject) {
+        let jsonArray = json as! [AnyObject]
+        var pathErrors: [RemotePathValidationError] = []
+        for json in jsonArray {
+            if let path = RemotePathValidationError(json: json) {
+                pathErrors.append(path)
+            } else {
+                self.pathErrors = [] // swift compiler requires to have initialised all stored properties before returning nil from initialiser
+                return nil // don't return anything if parsing of one error fails. Note that our model objects are not programmed for failure though, if structure is wrong it will crash in most cases (forced casting). This should be improved in the future.
+            }
+        }
+        self.pathErrors = pathErrors
+    }
+}
+
 //////////////////
 // json
 
@@ -84,32 +134,32 @@ public class RemoteResult<T>: CustomDebugStringConvertible {
     // Callers can assume that if successResult != nil, status == .Success. If the reponse's status is != .Success no data will be parsed and subsequently successResult not set.
     let successResult: T?
     
-    let errorMsg: String?
+    let error: RemoteInvalidParametersResult?
     
     var success: Bool {
         return self.status == .Success
     }
     
     convenience init(status: RemoteStatusCode, sucessResult: T) {
-        self.init(status: status, sucessResult: sucessResult, errorMsg: nil)
+        self.init(status: status, sucessResult: sucessResult, error: nil)
     }
     
-    convenience init(status: RemoteStatusCode, errorMsg: String?) {
-        self.init(status: status, sucessResult: nil, errorMsg: errorMsg)
+    convenience init(status: RemoteStatusCode, error: RemoteInvalidParametersResult?) {
+        self.init(status: status, sucessResult: nil, error: error)
     }
     
     convenience init(status: RemoteStatusCode) {
-        self.init(status: status, sucessResult: nil, errorMsg: nil)
+        self.init(status: status, sucessResult: nil, error: nil)
     }
     
-    private init(status: RemoteStatusCode, sucessResult: T?, errorMsg: String?) {
+    private init(status: RemoteStatusCode, sucessResult: T?, error: RemoteInvalidParametersResult?) {
         self.status = status
         self.successResult = sucessResult
-        self.errorMsg = errorMsg
+        self.error = error
     }
     
     public var debugDescription: String {
-        return "{\(self.dynamicType) status: \(self.status), model: \(self.successResult), errorMsg: \(self.errorMsg)}"
+        return "{\(self.dynamicType) status: \(status), model: \(successResult), error: \(error)}"
     }
 }
 
@@ -256,23 +306,43 @@ extension Alamofire.Request {
 
                         let statusInt = dataObj.valueForKeyPath("status") as! Int
                         if let status = RemoteStatusCode(rawValue: statusInt) {
-                            if status == .Success {
+                            if status == .Success || status == .InvalidParameters {
                                 
-                                if let data: AnyObject = dataObj.valueForKeyPath("data") {
-                                    
-                                    if let sucessResult = dataParser(data, response) {
-                                        let remoteResult = RemoteResult(status: status, sucessResult: sucessResult)
-                                        return Result.Success(remoteResult)
+                                if status == .Success {
+                                    if let data: AnyObject = dataObj.valueForKeyPath("data") {
                                         
-                                    } else {
-                                        print("Error parsing result object")
+                                        if let sucessResult = dataParser(data, response) {
+                                            let remoteResult = RemoteResult(status: status, sucessResult: sucessResult)
+                                            return Result.Success(remoteResult)
+                                            
+                                        } else {
+                                            print("Error parsing result object")
+                                            return Result.Success(RemoteResult<T>(status: .ParsingError))
+                                        }
+                                        
+                                    } else { // the result has no data
+                                        return Result.Success(RemoteResult<T>(status: status))
+                                    }
+                                } else if status == .InvalidParameters {
+                                    if let data: AnyObject = dataObj.valueForKeyPath("data") {
+                                        
+                                        if let invalidParametersObj = RemoteInvalidParametersResult(json: data) {
+                                            return Result.Success(RemoteResult<T>(status: .InvalidParameters, error: invalidParametersObj))
+                                            
+                                        } else {
+                                            print("Error parsing result object in invalid parameters response")
+                                            return Result.Success(RemoteResult<T>(status: .ParsingError))
+                                        }
+                                        
+                                    } else { // the result has no data
+                                        print("Error: AlamofireHelper.responseHandler: unexpected format in invalid parameters response")
                                         return Result.Success(RemoteResult<T>(status: .ParsingError))
                                     }
                                     
-                                } else { // the result has no data
-                                    return Result.Success(RemoteResult<T>(status: status))
+                                } else {
+                                    print("Error: AlamofireHelper.responseHandler forgot to handle a status in nested if: \(status)")
+                                    return Result.Success(RemoteResult<T>(status: .Unknown))
                                 }
-                                
                                 
                             } else { // status != success
                                 return Result.Success(RemoteResult<T>(status: status))

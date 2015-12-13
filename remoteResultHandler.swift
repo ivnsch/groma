@@ -14,11 +14,11 @@ func remoteResultHandler<T, U>(providerResultHandler: (ProviderResult<T>) -> ())
     let remoteStatus = remoteResult.status
     
     if !remoteResult.success {
-        print("Response error, status: \(remoteResult.status), message: \(remoteResult.errorMsg)")
+        print("Response error, status: \(remoteResult.status), message: \(remoteResult.error)")
     }
     
     let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteStatus)
-    providerResultHandler(ProviderResult(status: providerStatus))
+    providerResultHandler(ProviderResult(status: providerStatus, error: remoteResult.error))
 }
 
 //// possible funtion to map remote provider to provider result + data (model) object. Not sure if it makes sense

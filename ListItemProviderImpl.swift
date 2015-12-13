@@ -61,7 +61,7 @@ class ListItemProviderImpl: ListItemProvider {
                     }
                     
                 } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                 }
             }
         })
@@ -168,7 +168,7 @@ class ListItemProviderImpl: ListItemProvider {
                     self?.remoteProvider.add(savedListItems) {remoteResult in
                         if !remoteResult.success {
                             print("Error: adding listItem in remote: \(listItems), result: \(remoteResult)")
-                            DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                             self?.memProvider.invalidate()
                         }
                     }
@@ -329,7 +329,7 @@ class ListItemProviderImpl: ListItemProvider {
                         self?.remoteProvider.add(bgResult.listItem) {remoteResult in
                             if !remoteResult.success {
                                 print("Error: adding listItem in remote: \(bgResult.listItem), result: \(remoteResult)")
-                                DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                                DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                                 self?.memProvider.invalidate()
                             }
                         }
@@ -415,7 +415,7 @@ class ListItemProviderImpl: ListItemProvider {
                 self?.remoteProvider.update(listItems) {result in
                     if !result.success {
                         print("Error: Updating listItems: \(listItems), result: \(result)")
-                        DefaultRemoteErrorHandler.handle(result.status, handler: handler)
+                        DefaultRemoteErrorHandler.handle(result, handler: handler)
                     }
                 }
             }
@@ -478,7 +478,7 @@ class ListItemProviderImpl: ListItemProvider {
                     }
                     
                 } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                 }
             }
         }

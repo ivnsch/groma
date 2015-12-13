@@ -84,7 +84,7 @@ class HistoryProviderImpl: HistoryProvider {
                     }
                     
                 } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult.status, handler: handler)
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                 }
             }
         }
