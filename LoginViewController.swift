@@ -128,9 +128,9 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         delegate?.onLoginSuccess() ?? print("Warn: no login delegate")
     }
     
-    @IBAction func onGoogleLoginTap(sender: UIButton) {
-        GIDSignIn.sharedInstance().signIn()
-    }
+//    @IBAction func onGoogleLoginTap(sender: UIButton) {
+//        GIDSignIn.sharedInstance().signIn()
+//    }
     
     
     // MARK: GIDSignInDelegate

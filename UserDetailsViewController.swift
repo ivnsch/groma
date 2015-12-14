@@ -25,7 +25,8 @@ class UserDetailsViewController: UIViewController {
         Providers.userProvider.logout {remoteResult in
             
             FBSDKLoginManager().logOut() // in case we logged in using fb
-
+            GIDSignIn.sharedInstance().signOut()  // in case we logged in using google
+            
             if remoteResult.success ?? false {
                 self.delegate?.onLogoutSuccess() ?? print("Warn: no login delegate")
                 
@@ -35,12 +36,16 @@ class UserDetailsViewController: UIViewController {
         }
     }
     
+    
     @IBAction func onRemoveAccountTap(sender: UIButton) {
         ConfirmationPopup.show(message: "Are you sure you want to remove your account?", controller: self, onOk: {[weak self] in
             
             if let weakSelf = self {
                 
                 Providers.userProvider.removeAccount(weakSelf.successHandler({
+                    // note possible credentials login token deleted in removeAccount
+                    FBSDKLoginManager().logOut() // in case we logged in using fb
+                    GIDSignIn.sharedInstance().signOut()  // in case we logged in using google
                     
                     AlertPopup.show(title: "Success", message: "The account was removed", controller: weakSelf, onDismiss: {
                         weakSelf.delegate?.onRemoveAccount() ?? print("Warn: no login delegate")
