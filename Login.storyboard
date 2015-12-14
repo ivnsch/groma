@@ -16,7 +16,7 @@
         </mutableArray>
     </customFonts>
     <scenes>
-        <!--Login View Controller-->
+        <!--Delegate-->
         <scene sceneID="oOj-9D-kDN">
             <objects>
                 <viewController storyboardIdentifier="LoginController" id="rg4-qz-Lat" customClass="LoginViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
@@ -49,7 +49,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v0i-2j-jaS">
-                                <rect key="frame" x="273" y="464" width="54" height="30"/>
+                                <rect key="frame" x="273" y="449" width="54" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Register">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -58,20 +58,20 @@
                                     <action selector="onRegisterTap:" destination="rg4-qz-Lat" eventType="touchUpInside" id="b1V-IP-ISq"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t83-R4-Wil">
-                                <rect key="frame" x="200" y="228" width="200" height="60"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t83-R4-Wil" customClass="FBSDKLoginButton">
+                                <rect key="frame" x="175" y="228" width="250" height="45"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="KpM-Mj-o2X"/>
-                                    <constraint firstAttribute="width" constant="200" id="c1L-pE-YIb"/>
+                                    <constraint firstAttribute="height" constant="45" id="KpM-Mj-o2X"/>
+                                    <constraint firstAttribute="width" constant="250" id="c1L-pE-YIb"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Facebook"/>
                                 <connections>
-                                    <action selector="onFacebookLoginTap:" destination="rg4-qz-Lat" eventType="touchUpInside" id="KyV-I1-TRX"/>
+                                    <outlet property="delegate" destination="rg4-qz-Lat" id="YHK-Am-pJc"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oU0-Br-Acd">
-                                <rect key="frame" x="200" y="296" width="200" height="60"/>
+                                <rect key="frame" x="200" y="281" width="200" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="5jG-AB-E7q"/>
                                     <constraint firstAttribute="height" constant="60" id="tfz-G1-4FJ"/>
@@ -83,7 +83,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QVU-Pz-cxq">
-                                <rect key="frame" x="241" y="398" width="118" height="30"/>
+                                <rect key="frame" x="241" y="383" width="118" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Forgot password?"/>
                                 <connections>
@@ -112,6 +112,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="fbButton" destination="t83-R4-Wil" id="0Ui-Vf-SgW"/>
                         <outlet property="passwordField" destination="TsF-zg-FLy" id="EPF-z5-er4"/>
                         <outlet property="userNameField" destination="Yt4-Ha-XoG" id="6hb-wf-wFB"/>
                     </connections>

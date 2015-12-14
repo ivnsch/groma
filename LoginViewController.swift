@@ -18,11 +18,13 @@ protocol LoginDelegate {
     func onRegisterFromLoginSuccess()
 }
 
-class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate {
+class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate {
 
     @IBOutlet weak var userNameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
+    @IBOutlet weak var fbButton: FBSDKLoginButton!
+
     var delegate: LoginDelegate?
     
     private var validator: Validator?
@@ -43,6 +45,8 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         self.fillTestInput()
         
         self.initValidator()
+        
+        fbButton.readPermissions = ["public_profile"]
     }
 
     
@@ -124,14 +128,6 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         delegate?.onLoginSuccess() ?? print("Warn: no login delegate")
     }
     
-    @IBAction func onFacebookLoginTap(sender: UIButton) {
-        self.progressVisible()
-        FacebookLogin.login(resultHandler(onSuccess: {[weak self] in
-            self?.onLoginSuccess()
-            
-        }, onError: defaultErrorHandler([.SocialLoginCancelled])))
-    }
-    
     @IBAction func onGoogleLoginTap(sender: UIButton) {
         GIDSignIn.sharedInstance().signIn()
     }
@@ -154,5 +150,38 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     
     func signIn(signIn: GIDSignIn!, didDisconnectWithUser user: GIDGoogleUser!, withError error: NSError!) {
         // Perform any operations when the user disconnects from app here.
+    }
+    
+    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+        
+        if let error = error {
+            print("Error: Facebook login: error: \(error)")
+            defaultErrorHandler()(providerResult: ProviderResult(status: .SocialLoginError))
+            progressVisible(false)
+            
+        } else if result.isCancelled {
+            print("Facebook login cancelled")
+            progressVisible(false)
+            
+        } else {
+            
+            
+            print("Facebook login success, calling our server...")
+            let tokenString = result.token.tokenString
+            Providers.userProvider.authenticateWithFacebook(tokenString) {[weak self] providerResult in
+                // map already exists status to "social aleready exists", to show a different error message
+                if providerResult.status == .AlreadyExists {
+                    self?.defaultErrorHandler()(providerResult: ProviderResult(status: .SocialAlreadyExists))
+                } else {
+                    //                handler(result)
+                    self?.onLoginSuccess()
+                }
+                self?.progressVisible(false)
+            }
+        }
+    }
+    
+    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+        FBSDKLoginManager().logOut()
     }
 }

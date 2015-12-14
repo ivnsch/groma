@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 protocol UserDetailsViewControllerDelegate {
     func onLogoutSuccess()
@@ -16,13 +18,14 @@ protocol UserDetailsViewControllerDelegate {
 
 class UserDetailsViewController: UIViewController {
 
-    let userProvider = ProviderFactory().userProvider
-
     var delegate: UserDetailsViewControllerDelegate?
     
     @IBAction func onLogoutTap(sender: UIButton) {
         
-        self.userProvider.logout {remoteResult in
+        Providers.userProvider.logout {remoteResult in
+            
+            FBSDKLoginManager().logOut() // in case we logged in using fb
+
             if remoteResult.success ?? false {
                 self.delegate?.onLogoutSuccess() ?? print("Warn: no login delegate")
                 
@@ -37,7 +40,7 @@ class UserDetailsViewController: UIViewController {
             
             if let weakSelf = self {
                 
-                weakSelf.userProvider.removeAccount(weakSelf.successHandler({
+                Providers.userProvider.removeAccount(weakSelf.successHandler({
                     
                     AlertPopup.show(title: "Success", message: "The account was removed", controller: weakSelf, onDismiss: {
                         weakSelf.delegate?.onRemoveAccount() ?? print("Warn: no login delegate")
