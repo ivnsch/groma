@@ -128,11 +128,6 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         delegate?.onLoginSuccess() ?? print("Warn: no login delegate")
     }
     
-//    @IBAction func onGoogleLoginTap(sender: UIButton) {
-//        GIDSignIn.sharedInstance().signIn()
-//    }
-    
-    
     // MARK: GIDSignInDelegate
     
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
@@ -152,20 +147,18 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         // Perform any operations when the user disconnects from app here.
     }
     
+    // TODO refactor, same code as in RegisterViewController
     func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
-        
         if let error = error {
             print("Error: Facebook login: error: \(error)")
             defaultErrorHandler()(providerResult: ProviderResult(status: .SocialLoginError))
             progressVisible(false)
-            
+            FBSDKLoginManager().logOut() // toggle "logout" label on button
         } else if result.isCancelled {
             print("Facebook login cancelled")
             progressVisible(false)
-            
+            FBSDKLoginManager().logOut() // toggle "logout" label on button
         } else {
-            
-            
             print("Facebook login success, calling our server...")
             let tokenString = result.token.tokenString
             Providers.userProvider.authenticateWithFacebook(tokenString) {[weak self] providerResult in

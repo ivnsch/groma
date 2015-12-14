@@ -8,12 +8,14 @@
 
 import UIKit
 import SwiftValidator
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 protocol RegisterDelegate {
     func onRegisterSuccess()
 }
 
-class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate {
+class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate {
 
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -101,18 +103,36 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         }
     }
     
-    @IBAction func onFacebookLoginTap(sender: UIButton) {
-        progressVisible()
-        FacebookLogin.login(resultHandler(onSuccess: {[weak self] in
-            self?.onRegisterSuccess()
-            
-        }, onError: defaultErrorHandler([.SocialLoginCancelled])))
+    // TODO refactor, same code as in LoginController
+    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {        
+        if let error = error {
+            print("Error: Facebook login: error: \(error)")
+            defaultErrorHandler()(providerResult: ProviderResult(status: .SocialLoginError))
+            progressVisible(false)
+            FBSDKLoginManager().logOut() // toggle "logout" label on button
+        } else if result.isCancelled {
+            print("Facebook login cancelled")
+            progressVisible(false)
+            FBSDKLoginManager().logOut() // toggle "logout" label on button
+        } else {
+            print("Facebook login success, calling our server...")
+            let tokenString = result.token.tokenString
+            Providers.userProvider.authenticateWithFacebook(tokenString) {[weak self] providerResult in
+                // map already exists status to "social aleready exists", to show a different error message
+                if providerResult.status == .AlreadyExists {
+                    self?.defaultErrorHandler()(providerResult: ProviderResult(status: .SocialAlreadyExists))
+                } else {
+                    //                handler(result)
+                    self?.onRegisterSuccess()
+                }
+                self?.progressVisible(false)
+            }
+        }
     }
     
-    @IBAction func onGoogleLoginTap(sender: UIButton) {
-        GIDSignIn.sharedInstance().signIn()
+    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+        FBSDKLoginManager().logOut()
     }
-    
     
     private func onRegisterSuccess() {
         self.delegate?.onRegisterSuccess() ?? print("Warn: no register delegate")
