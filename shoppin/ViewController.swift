@@ -19,7 +19,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
 
-    private var addEditItemController: AddEditListItemController?
     // TODO put next vars in a struct
     private var updatingListItem: ListItem?
     private var updatingSelectedCell: UITableViewCell?
@@ -253,13 +252,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
 
-    // TODO remove this, not used
-    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
-        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {[weak self] in
-            self?.addEditItemController?.clearInputs()
-        }
-    }
-    
     func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
         if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {
             self.updateItem(self.updatingListItem!, listItemInput: listItemInput) {[weak self] in
@@ -286,10 +278,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         Providers.planProvider.planItem(productName, successHandler {planItemMaybe in
             handler(planItemMaybe)
         })
-    }
-    
-    func onCancelTap() {
-        addEditItemController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
     private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, successHandler: VoidFunction? = nil) {
@@ -583,21 +571,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     }
                 }
             }
-        }
-//        else if segue.identifier == "showAddIemSegue" {
-//            let controller = segue.destinationViewController as! AddEditListItemController
-//            controller.delegate = self
-//            addEditItemController = controller
-//            
-//            controller.transitioningDelegate = self
-//            controller.modalPresentationStyle = .Custom
-//            
-//            if let updatingListItem = updatingListItem { // edit (tapped on a list item)
-//                addEditItemController?.updatingListItem = updatingListItem
-//            }
-//
-//        }
-        else if segue.identifier == "stashSegue" {
+        } else if segue.identifier == "stashSegue" {
             if let stashViewController = segue.destinationViewController as? StashViewController {
                 stashViewController.navigationItemTextColor = titleLabel?.textColor
                 listItemsTableViewController.clearPendingSwipeItemIfAny(true) {

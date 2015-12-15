@@ -662,7 +662,6 @@
 		EBDFE3C21AD00E8200E48F95 /* DialogUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C11AD00E8200E48F95 /* DialogUtils.swift */; };
 		EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C31AD11EA100E48F95 /* NSView.swift */; };
 		EBDFE3C61AD11F6700E48F95 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */; };
-		EBE366351BCB23D1009543AF /* AddEditListItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE366341BCB23D1009543AF /* AddEditListItemController.swift */; };
 		EBE366371BCBC346009543AF /* BlurBubbleTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE366361BCBC346009543AF /* BlurBubbleTransition.swift */; };
 		EBE81DE31C1A08C900EA5644 /* WSUserParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE81DE21C1A08C900EA5644 /* WSUserParser.swift */; settings = {ASSET_TAGS = (); }; };
 		EBEBA6B21BF14C36000E5653 /* ListSharedUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEBA6B01BF14C36000E5653 /* ListSharedUserCell.swift */; };
@@ -1173,7 +1172,6 @@
 		EBDFE3C11AD00E8200E48F95 /* DialogUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogUtils.swift; sourceTree = "<group>"; };
 		EBDFE3C31AD11EA100E48F95 /* NSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSView.swift; sourceTree = "<group>"; };
 		EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
-		EBE366341BCB23D1009543AF /* AddEditListItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditListItemController.swift; sourceTree = "<group>"; };
 		EBE366361BCBC346009543AF /* BlurBubbleTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurBubbleTransition.swift; sourceTree = "<group>"; };
 		EBE81DE21C1A08C900EA5644 /* WSUserParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSUserParser.swift; sourceTree = "<group>"; };
 		EBEBA6B01BF14C36000E5653 /* ListSharedUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListSharedUserCell.swift; sourceTree = "<group>"; };
@@ -1504,7 +1502,6 @@
 				EBD827FF1BE95C8B0072F9FA /* StashView.swift */,
 				EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */,
 				EB1DDEAF1A3334EC00D778DE /* ViewController.swift */,
-				EBE366341BCB23D1009543AF /* AddEditListItemController.swift */,
 				EB0FD3811B5D017C00829AE5 /* ListsTableViewController.swift */,
 				EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */,
 				EB4612B91BE56D970049DAD1 /* ExpandCellAnimator.swift */,
@@ -3071,7 +3068,6 @@
 				EBF3779B1B38AA5900EEB6DB /* Urls.swift in Sources */,
 				EB4FD45B1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EBF162F71A3CA5030048E37C /* ListItemProviderMock.swift in Sources */,
-				EBE366351BCB23D1009543AF /* AddEditListItemController.swift in Sources */,
 				EBD827FC1BE8237C0072F9FA /* NSRange.swift in Sources */,
 				EBF1A1541B82213200F34105 /* HistoryViewController.swift in Sources */,
 				EBB9A72E1B5EB00E00E5487D /* InventoriesTableViewController.swift in Sources */,

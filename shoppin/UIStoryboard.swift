@@ -43,11 +43,6 @@ extension UIStoryboard {
         return mainStoryboard().instantiateViewControllerWithIdentifier("ListItemsTableViewController") as! ListItemsTableViewController
     }
     
-    class func createListItemsViewController() -> AddEditListItemController {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("CreateListItemViewController") as! AddEditListItemController
-    }
-    
-    
     // MARK: - Groups
     
     class func listItemsGroupsNavigationController() -> UINavigationController {

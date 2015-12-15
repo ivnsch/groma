@@ -15,9 +15,7 @@ protocol AddEditListItemViewControllerDelegate {
     func onValidationErrors(errors: [UITextField: ValidationError])
     
     func onOkTap(name: String, price: String, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
-    func onOkAndAddAnotherTap(name: String, price: String, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
     func onUpdateTap(name: String, price: String, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
-    func onCancelTap()
     
     func productNameAutocompletions(text: String, handler: [String] -> ())
     func sectionNameAutocompletions(text: String, handler: [String] -> ())
@@ -26,7 +24,13 @@ protocol AddEditListItemViewControllerDelegate {
 }
 
 enum AddEditListItemViewControllerAction {
-    case AddAndAddAnother, Add, Update
+    case Add, Update
+}
+
+// FIXME use instead a "fragment" (custom view) with the common inputs and use this in 2 separate view controllers
+// then we can also use different delegates, now the delegate is passed "note" parameter for group item as well where it doesn't exist, not nice
+enum AddEditListItemControllerModus {
+    case ListItem, GroupItem, PlanItem
 }
 
 class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, ScaleViewControllerDelegate, FlatColorPickerControllerDelegate {
@@ -187,8 +191,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 switch action {
                 case .Add:
                     delegate?.onOkTap(text, price: priceText, quantity: quantityText, category: category, categoryColor: sectionColorButton.tintColor, sectionName: category, note: noteInput.text, baseQuantity: baseQuantity, unit: unit)
-                case .AddAndAddAnother:
-                    delegate?.onOkAndAddAnotherTap(text, price: priceText, quantity: quantityText, category: category, categoryColor: sectionColorButton.tintColor, sectionName: category, note: noteInput.text, baseQuantity: baseQuantity, unit: unit)
                 case .Update:
                     delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, category: category, categoryColor: sectionColorButton.tintColor, sectionName: category, note: noteInput.text, baseQuantity: baseQuantity, unit: unit)
                 }
