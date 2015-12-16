@@ -44,6 +44,14 @@ extension NSDate: Comparable {
         components.day = 0
         return gregorian!.dateFromComponents(components)
     }
+    
+    static func currentMonthName() -> String {
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "MMMM"
+        NSDate().dayMonthYear.month
+        formatter.locale = NSLocale.currentLocale()
+        return formatter.stringFromDate(NSDate())
+    }
 }
 
 public func <(a: NSDate, b: NSDate) -> Bool {

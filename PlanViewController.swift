@@ -66,7 +66,7 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     private func initTopBar() {
-        topBar.title = "Plan"
+        topBar.title = "Plan (\(NSDate.currentMonthName()))"
         topBar.positionTitleLabelLeft(true, animated: false)
         topBar.delegate = self
         topBar.setLeftButtonIds([.Edit])

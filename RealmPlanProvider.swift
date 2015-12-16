@@ -15,12 +15,8 @@ class RealmPlanProvider: RealmProvider {
 
     // TODO optimize - fetch first plan items, is it possible (and better) to fetch only history items for the fetched plan items?
     func planItems(startDate: NSDate, handler: [PlanItem] -> ()) {
-        
-        print("GET plantitems for startedte : \(startDate)")
 
         dbHistoryProvider.loadHistoryItems(startDate: NSDate().startOfMonth) {[weak self] historyItems in
-            
-                    print("GET plantitems loadedhistory")
             
             if let weakSelf = self {
                 let productQuantities = weakSelf.productsTotalQuantities(historyItems)
