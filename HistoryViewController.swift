@@ -18,6 +18,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet var tableViewFooter: LoadingFooter!
     @IBOutlet var tableView: UITableView!
     
+    @IBOutlet weak var emptyHistoryView: UIView!
+
     private var dateFormatter: NSDateFormatter!
     
     private var sectionModels: [SectionModel<HistoryItemGroup>] = [] {
@@ -134,6 +136,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                         for historyItem in historyItems {
                             weakSelf.sectionModels.append(SectionModel(obj: historyItem))
                         }
+                        
+                        weakSelf.emptyHistoryView.setHiddenAnimated(weakSelf.sectionModels.count > 0)
                         
                         weakSelf.paginator.update(historyItems.count)
                         

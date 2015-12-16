@@ -17,6 +17,8 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
 
     @IBOutlet weak var searchBar: UISearchBar!
     
+    @IBOutlet weak var emptyGroupsView: UIView!
+
     private let paginator = Paginator(pageSize: 20)
     private var loadingPage: Bool = false
     
@@ -43,11 +45,19 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
             self?.groups = groups
         })
         
+        // TODO custom empty view, put this there
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyGroupsViewTap:"))
+        emptyGroupsView.addGestureRecognizer(tapRecognizer)
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketGroup:", name: WSNotificationName.Group.rawValue, object: nil)
     }
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func onEmptyGroupsViewTap(sender: UITapGestureRecognizer) {
+        handleAddTap()
     }
     
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
@@ -117,6 +127,7 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
             
             Providers.listItemGroupsProvider.remove(group.item, remote: true, successHandler{[weak self] in
                 self?.removeGroupUI(group, indexPath: indexPath)
+                
             })
         }
     }
@@ -140,6 +151,7 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
             self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             self?.groups.remove(group.item)
             self?.filteredGroups.remove(group)
+            self?.updateEmptyView()
         }
     }
     
@@ -182,6 +194,7 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
     
     func onGroupCreated(group: ListItemGroup) {
         groups.append(group)
+        updateEmptyView()
         tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: groups.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
         navigationController?.popViewControllerAnimated(true)
     }
@@ -218,6 +231,10 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
     }
 
     func onAddTap(sender: UIBarButtonItem) {
+        handleAddTap()
+    }
+    
+    private func handleAddTap() {
         clearSearch() // clear filter to avoid confusion, if we add a group it may be not in current filter and user will not see it appearing.
         showAddEditController()
     }
@@ -246,6 +263,8 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
                     Providers.listItemGroupsProvider.groups(weakSelf.paginator.currentPage, weakSelf.successHandler{groups in
                         weakSelf.groups.appendAll(groups)
                         
+                        weakSelf.updateEmptyView()
+                        
                         weakSelf.paginator.update(groups.count)
                         
                         weakSelf.tableView.reloadData()
@@ -254,6 +273,10 @@ class ManageGroupsViewController: UIViewController, UITableViewDataSource, UITab
                 }
             }
         }
+    }
+    
+    private func updateEmptyView() {
+        emptyGroupsView.setHiddenAnimated(!groups.isEmpty)
     }
     
     // MARK: - Websocket

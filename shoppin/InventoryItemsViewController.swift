@@ -10,10 +10,11 @@ import UIKit
 import CMPopTipView
 import SwiftValidator
 
-class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, AddEditInventoryControllerDelegate, BottonPanelViewDelegate, AddEditInventoryItemControllerDelegate, InventoryItemsTableViewControllerDelegate, ExpandableTopViewControllerDelegate {
+class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, AddEditInventoryControllerDelegate, AddEditInventoryItemControllerDelegate, InventoryItemsTableViewControllerDelegate, ExpandableTopViewControllerDelegate {
 
     @IBOutlet weak var sortByButton: UIButton!
     @IBOutlet weak var settingsView: UIView!
+    @IBOutlet weak var emptyInventoryView: UIView!
     
     @IBOutlet weak var editButton: UIBarButtonItem!
     @IBOutlet weak var addButton: UIBarButtonItem!
@@ -21,8 +22,6 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     private var sortByPopup: CMPopTipView?
     
     private var tableViewController: InventoryItemsTableViewController?
-
-    @IBOutlet weak var floatingViews: FloatingViews!
 
     private let sortByOptions: [(value: InventorySortBy, key: String)] = [
         (.Count, "Count"), (.Alphabetic, "Alphabetic")
@@ -60,15 +59,29 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
             print("Error: InventoryItemsViewController.viewDidLoad no tableview in tableViewController")
         }
 
+        // TODO custom empty view, put this there
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyInventoryViewTap:"))
+        emptyInventoryView.addGestureRecognizer(tapRecognizer)
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryItems:", name: WSNotificationName.InventoryItems.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryItem:", name: WSNotificationName.InventoryItem.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryWithHistoryAfterSave:", name: WSNotificationName.InventoryItemsWithHistoryAfterSave.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
     }
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    func onEmptyInventoryViewTap(sender: UITapGestureRecognizer) {
+        // TODO
+    }
+    
+    private func updateEmptyInventoryView() {
+        if let inventoryItems = tableViewController?.inventoryItems {
+            emptyInventoryView.setHiddenAnimated(!inventoryItems.isEmpty)
+        }
     }
     
     private func initAddEditInventoryControllerManager(tableView: UITableView) -> ExpandableTopViewController<AddEditInventoryController> {
@@ -103,8 +116,6 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-
-        initFloatingViews()
         
         Providers.inventoryProvider.firstInventory(successHandler {[weak self] inventory in
             self?.navigationItem.title = inventory.name
@@ -163,11 +174,6 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
             let popup = MyTipPopup(customView: createPicker())
             popup.presentPointingAtView(sortByButton, inView: view, animated: true)
         }
-    }
-    
-    private func initFloatingViews() {
-        floatingViews.setActions(Array<FLoatingButtonAction>())
-        floatingViews.delegate = self
     }
     
     // MARK: - AddEditInventoryViewController
@@ -263,6 +269,10 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         }
     }
     
+    func onLoadedInventoryItems(inventoryItems: [InventoryItem]) {
+        updateEmptyInventoryView()
+    }
+    
     // MARK: - ExpandableTopViewControllerDelegate
     
     func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
@@ -344,6 +354,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
                     if let inventoryItemId = notification.obj as? InventoryItemId {
                         Providers.inventoryItemsProvider.removeInventoryItem(inventoryItemId.productUuid, inventoryUuid: inventoryItemId.inventoryUuid, remote: true, successHandler{[weak self] result in
                             self?.tableViewController?.remove(inventoryItemId.inventoryUuid, inventoryItemProductUuid: inventoryItemId.productUuid)
+                            self?.updateEmptyInventoryView()
                         })
                     } else {
                         print("Error: InventoryItemsViewController.onWebsocketInventoryItem: not expected type in: \(notification.verb): \(notification.obj)")

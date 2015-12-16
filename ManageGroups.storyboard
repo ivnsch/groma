@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
@@ -113,19 +115,58 @@
                                     <outlet property="delegate" destination="wMW-hq-x7g" id="HKw-Xi-Drr"/>
                                 </connections>
                             </searchBar>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zzg-ZF-G2x">
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Gug-Mg-B8p">
+                                        <rect key="frame" x="200" y="190" width="200" height="200"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="200" id="BxF-0u-1V0"/>
+                                            <constraint firstAttribute="width" constant="200" id="sug-Iv-Ktr"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no groups yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MhZ-PB-9wJ">
+                                        <rect key="frame" x="213" y="402" width="175" height="21"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to add your first group" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pxj-1t-Cm4">
+                                        <rect key="frame" x="226" y="431" width="148" height="16"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="Gug-Mg-B8p" firstAttribute="centerY" secondItem="zzg-ZF-G2x" secondAttribute="centerY" id="0Yz-ZB-emm"/>
+                                    <constraint firstItem="Gug-Mg-B8p" firstAttribute="centerX" secondItem="zzg-ZF-G2x" secondAttribute="centerX" id="6oJ-gn-GRT"/>
+                                    <constraint firstItem="MhZ-PB-9wJ" firstAttribute="top" secondItem="Gug-Mg-B8p" secondAttribute="bottom" constant="12" id="B6N-EC-ioO"/>
+                                    <constraint firstItem="Pxj-1t-Cm4" firstAttribute="centerX" secondItem="zzg-ZF-G2x" secondAttribute="centerX" id="c9f-cz-8cX"/>
+                                    <constraint firstItem="MhZ-PB-9wJ" firstAttribute="centerX" secondItem="zzg-ZF-G2x" secondAttribute="centerX" id="dQP-uy-uzo"/>
+                                    <constraint firstItem="Pxj-1t-Cm4" firstAttribute="top" secondItem="MhZ-PB-9wJ" secondAttribute="bottom" constant="8" id="zdS-8I-Tat"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="MQj-PX-4JQ" firstAttribute="top" secondItem="Cbp-sj-VxG" secondAttribute="bottom" id="6uh-YF-Ft5"/>
                             <constraint firstItem="mMh-dB-Ulv" firstAttribute="leading" secondItem="Buc-0n-Z6r" secondAttribute="leading" id="G7f-aH-or7"/>
+                            <constraint firstAttribute="trailing" secondItem="zzg-ZF-G2x" secondAttribute="trailing" id="HPm-Kj-0Mf"/>
                             <constraint firstItem="MQj-PX-4JQ" firstAttribute="leading" secondItem="Buc-0n-Z6r" secondAttribute="leading" id="OzQ-gi-DOT"/>
+                            <constraint firstItem="68r-rY-cyM" firstAttribute="top" secondItem="zzg-ZF-G2x" secondAttribute="bottom" id="WYU-Dc-kBJ"/>
                             <constraint firstItem="68r-rY-cyM" firstAttribute="top" secondItem="mMh-dB-Ulv" secondAttribute="bottom" id="YbU-4T-rQR"/>
+                            <constraint firstItem="zzg-ZF-G2x" firstAttribute="leading" secondItem="Buc-0n-Z6r" secondAttribute="leading" id="YpZ-pZ-Fwt"/>
                             <constraint firstAttribute="trailing" secondItem="mMh-dB-Ulv" secondAttribute="trailing" id="eyY-M7-2ln"/>
                             <constraint firstItem="mMh-dB-Ulv" firstAttribute="top" secondItem="MQj-PX-4JQ" secondAttribute="bottom" id="nqB-t5-OBZ"/>
+                            <constraint firstItem="zzg-ZF-G2x" firstAttribute="top" secondItem="Cbp-sj-VxG" secondAttribute="bottom" id="sdg-Fo-614"/>
                             <constraint firstAttribute="trailing" secondItem="MQj-PX-4JQ" secondAttribute="trailing" id="yy4-47-bkE"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="emptyGroupsView" destination="zzg-ZF-G2x" id="Ym1-Eg-A6M"/>
                         <outlet property="searchBar" destination="MQj-PX-4JQ" id="Kje-Im-T8a"/>
                         <outlet property="tableView" destination="mMh-dB-Ulv" id="OD5-Ec-LhO"/>
                         <outlet property="tableViewFooter" destination="ahH-js-iy2" id="nsH-8N-KtQ"/>

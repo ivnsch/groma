@@ -19,6 +19,8 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var priceDeltaLastMonthLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var emptyPlanView: UIView!
+
     @IBOutlet weak var editButton: UIBarButtonItem!
     
     @IBOutlet weak var topBar: ListTopBarView!
@@ -50,6 +52,10 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
         addEditPlanItemControllerManager = initAddEditPlanItemControllerManager()
         
         initTopBar()
+        
+        // TODO custom empty view, put this there
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyPlanViewTap:"))
+        emptyPlanView.addGestureRecognizer(tapRecognizer)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketPlanItem:", name: WSNotificationName.PlanItem.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)        
@@ -117,9 +123,18 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
         })
     }
     
+    func onEmptyPlanViewTap(sender: UITapGestureRecognizer) {
+        toggleTopAddController()
+    }
+    
+    private func updateEmptyPlanView() {
+        emptyPlanView.setHiddenAnimated(!planItems.isEmpty)
+    }
+    
     private func initPlanItems(scrollToItem: PlanItem? = nil) {
         Providers.planProvider.planItems(successHandler {[weak self] planItems in
             self?.planItems = planItems
+            self?.updateEmptyPlanView()
             
             if let scrollToItem = scrollToItem {
                 if let index = self?.planItems.indexOfUsingIdentifiable(scrollToItem) {
@@ -265,6 +280,7 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.wrapUpdates {[weak self] in
             self?.planItems.removeAtIndex(row)
             self?.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Bottom)
+            self?.updateEmptyPlanView()
         }
     }
     

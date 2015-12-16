@@ -153,12 +153,24 @@ extension UIView {
         }
     }
     
-        // src http://stackoverflow.com/a/32042439/930450
-        class func imageWithView(view: UIView) -> UIImage {
-            UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0)
-            view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
-            let img = UIGraphicsGetImageFromCurrentImageContext()
-            UIGraphicsEndImageContext()
-            return img
+    // src http://stackoverflow.com/a/32042439/930450
+    class func imageWithView(view: UIView) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.opaque, 0.0)
+        view.drawViewHierarchyInRect(view.bounds, afterScreenUpdates: true)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img
+    }
+    
+    func setHiddenAnimated(hidden: Bool) {
+        if hidden != self.hidden {
+            self.hidden = false
+            alpha = hidden ? 1 : 0
+            UIView.animateWithDuration(0.3, animations: {[weak self] in
+                self?.alpha = hidden ? 0 : 1
+                }) {[weak self] complete in
+                    self?.hidden = hidden
+            }
         }
+    }
 }

@@ -34,6 +34,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     @IBOutlet weak var stashView: StashView!
     @IBOutlet weak var pricesViewWidthConstraint: NSLayoutConstraint!
     
+    // TODO 1 custom view for empty
+    @IBOutlet weak var emptyListView: UIView!
+    @IBOutlet weak var emptyListViewImg: UIImageView!
+    @IBOutlet weak var emptyListViewLabel1: UILabel!
+    @IBOutlet weak var emptyListViewLabel2: UILabel!
+    
     @IBOutlet weak var listNameView: UILabel!
     
     @IBOutlet weak var topBar: ListTopBarView!
@@ -136,6 +142,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     func onExpand(expanding: Bool) {
         if !expanding {
+            emptyListView.hidden = true
             clearPossibleUndo()
             topBar.setLeftButtonIds([])
             topBar.setRightButtonIds([])
@@ -170,7 +177,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //        }
         
         topBar.fgColor = compl
-            
+        
+        emptyListViewImg.tintColor = compl
+        emptyListViewLabel1.textColor = compl
+        emptyListViewLabel2.textColor = compl
+        
         stashView.setNeedsDisplay()
     }
     
@@ -201,7 +212,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         initFloatingViews()
         
         updatePrices()
+     
+        // TODO custom empty view, put this there
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyListViewTap:"))
+        emptyListView.addGestureRecognizer(tapRecognizer)
     }
+    
+    func onEmptyListViewTap(sender: UITapGestureRecognizer) {
+        toggleTopAddController() // this is meant to only open the menu, but toggle is ok since if we can tap on empty view it means it's closed
+    }
+    
     
     // Update stash view after a delay. The delay is for design reason, to let user see what's hapenning otherwise not clear together with view controller transition
     // but it ALSO turned to fix bug when user adds to stash and goes back to view controller too fast - count would not be updated (count fetch is quicker than writing items to database). FIXME (not critical) don't depend on this delay to fix this bug.
@@ -234,8 +254,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func udpateListItems(list: List, onFinish: VoidFunction? = nil) {
-        Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{listItems in
-            self.listItemsTableViewController.setListItems(listItems.filter{$0.status == .Todo})
+        Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{[weak self] listItems in
+            self?.listItemsTableViewController.setListItems(listItems.filter{$0.status == .Todo})
+            self?.updateEmptyView()
             onFinish?()
         })
     }
@@ -410,14 +431,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             
             Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Done, remote: notifyRemote) {[weak self] result in
                 if result.success {
-                    self!.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
-                    self!.updatePrices(.MemOnly)
+                    self?.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
+                    self?.updatePrices(.MemOnly)
+                    self?.updateEmptyView()
                 }
                 onFinish()
             }
         } else {
             onFinish()
         }
+    }
+    
+    private func updateEmptyView() {
+        emptyListView.setHiddenAnimated(!listItemsTableViewController.items.isEmpty)
     }
 
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
@@ -520,6 +546,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         // Our "add" can also be an update - if user adds an item with a name that already exists, it's an update (increment)
         listItemsTableViewController.updateOrAddListItem(savedListItem, increment: true, scrollToSelection: true, notifyRemote: notifyRemote)
         updatePrices(.MemOnly)
+        updateEmptyView()
     }
     
     func updateItem(listItem: ListItem, listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
@@ -551,7 +578,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onListItemDeleted(tableViewListItem: TableViewListItem) {
-        Providers.listItemsProvider.remove(tableViewListItem.listItem, remote: true, successHandler{
+        Providers.listItemsProvider.remove(tableViewListItem.listItem, remote: true, successHandler{[weak self] in
+            self?.updateEmptyView()
         })
     }
     

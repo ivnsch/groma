@@ -40,6 +40,8 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     @IBOutlet weak var dailyAverageLabelLabel: UILabel!
     @IBOutlet weak var monthEstimateLabelLabel: UILabel!
     
+    @IBOutlet weak var emptyStatsView: UIView!
+
     private var sortByPopup: CMPopTipView?
     
     private var currentStatsType: StatsType = .Aggr
@@ -125,8 +127,8 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     private func updateChart(timePeriod: TimePeriod) {
         Providers.statsProvider.history(timePeriod, group: AggregateGroup.All, successHandler{[weak self] aggregate in
             if self?.aggregate?.timePeriod != aggregate.timePeriod || self?.aggregate?.monthYearAggregates ?? [] != aggregate.monthYearAggregates { // don't reload if there are no changes
+                self?.emptyStatsView.setHiddenAnimated(!aggregate.monthYearAggregates.isEmpty)
                 self?.aggregate = aggregate
-                
                 self?.initChart(aggregate)
                 self?.initThisMonthSpendingsLabels(aggregate)
             }

@@ -10,11 +10,12 @@ import UIKit
 
 protocol InventoryItemsTableViewControllerDelegate {
     func onInventoryItemSelected(inventoryItem: InventoryItem, indexPath: NSIndexPath)
+    func onLoadedInventoryItems(inventoryItems: [InventoryItem]) // passes all inventory items currently in controller, after load (not only loaded page)
 }
 
 class InventoryItemsTableViewController: UITableViewController, InventoryItemTableViewCellDelegate {
 
-    private var inventoryItems: [InventoryItem] = []
+    private(set) var inventoryItems: [InventoryItem] = []
     @IBOutlet var tableViewFooter: LoadingFooter!
 
     var sortBy: InventorySortBy?
@@ -241,6 +242,8 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
                         
                         Providers.inventoryItemsProvider.inventoryItems(weakSelf.paginator.currentPage, inventory: inventory, fetchMode: .Both, sortBy: sortBy, weakSelf.successHandler{inventoryItems in
                             weakSelf.inventoryItems.appendAll(inventoryItems)
+                            
+                            weakSelf.delegate?.onLoadedInventoryItems(weakSelf.inventoryItems)
                             
                             weakSelf.paginator.update(inventoryItems.count)
                             
