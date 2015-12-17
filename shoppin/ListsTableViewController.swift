@@ -1,67 +1,49 @@
 //
-//  ListsViewController.swift
+//  ExpandableTableViewListModel.swift
 //  shoppin
 //
-//  Created by ischuetz on 20/07/15.
-//  Copyright (c) 2015 ivanschuetz. All rights reserved.
+//  Created by ischuetz on 16/12/15.
+//  Copyright © 2015 ivanschuetz. All rights reserved.
 //
 
 import UIKit
 
-protocol Foo { // TODO is this used?
-    func setExpanded(expanded: Bool)
+class ExpandableTableViewListModel: ExpandableTableViewModel {
+    
+    let list: List
+    
+    init (list: List) {
+        self.list = list
+    }
+    
+    override var name: String {
+        return list.name
+    }
+    
+    override var bgColor: UIColor {
+        return list.bgColor
+    }
+    
+    override var users: [SharedUser] {
+        return list.users
+    }
+    
+    override func same(rhs: ExpandableTableViewModel) -> Bool {
+        return list.same((rhs as! ExpandableTableViewListModel).list)
+    }
 }
 
-class ListsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AddEditListControllerDelegate, ExpandCellAnimatorDelegate, Foo {
+class ListsTableViewController: ExpandableItemsTableViewController, AddEditListControllerDelegate {
 
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var topBar: UINavigationBar!
-    @IBOutlet weak var topBarConstraint: NSLayoutConstraint!
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var addButton: UIBarButtonItem!
-    private weak var editButton: UIBarButtonItem!
+    var topAddEditListControllerManager: ExpandableTopViewController<AddEditListController>?
     
-    private let listItemsProvider = ProviderFactory().listItemProvider
-
-    private var lists: [List] = []
-    
-    private let expandCellAnimator = ExpandCellAnimator()
-    
-    private var originalNavBarFrame: CGRect = CGRectZero
-    
-    @IBOutlet weak var floatingViews: FloatingViews!
-
-    private var topAddEditListControllerManager: ExpandableTopViewController<AddEditListController>?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.allowsSelectionDuringEditing = true
-        
-        originalNavBarFrame = topBar.frame
-        
-        topBar.backgroundColor = Theme.navigationBarBackgroundColor
-//        titleLabel.textColor = Theme.navigationBarTextColor
-//        addButton.setTitleColor(Theme.navigationBarTextColor, forState: .Normal)
-//        editButton.setTitleColor(Theme.navigationBarTextColor, forState: .Normal)
-        view.backgroundColor = Theme.mainViewsBGColor
-        tableView.backgroundColor = Theme.mainViewsBGColor
-        
-         // adding a new nav item, because code was written when topbar was a custom view, after adding nav controller and using it's item expanding list once makes navbar disappear, don't have time to investigate now
-        let navItem = UINavigationItem(title: "Test")
-        topBar.items = [navItem]
-        let editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "onEditTap:")
-        topBar.items?.first?.leftBarButtonItems = [editButton]
-        self.editButton = editButton
-        
-        initNavBarRightButtons([.Add])
-        
         topAddEditListControllerManager = initTopAddEditListControllerManager()
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
     }
-
+    
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
@@ -71,28 +53,26 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         return ExpandableTopViewController(top: top, height: 250, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.addEditList()
             controller.delegate = self
-            controller.currentListsCount = self!.lists.count
+            controller.currentListsCount = self?.models.count ?? {
+                print("Error: ListsTableViewController2.initTopAddEditListControllerManager: no valid self reference")
+                return 0
+            }()
             controller.view.clipsToBounds = true
             return controller
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        initLists()
-    }
-    
-    private func initLists() {
+    override func initModels() {
         Providers.listProvider.lists(successHandler{lists in
-            if self.lists != lists { // if current list is nil or the provider list is different
-                self.lists = lists
+            let models: [ExpandableTableViewModel] = lists.map{ExpandableTableViewListModel(list: $0)}
+            if self.models != models { // if current list is nil or the provider list is different
+                self.models = models
                 self.tableView.reloadData()
             }
         })
     }
-    
+
     private func initNavBarRightButtons(actions: [UIBarButtonSystemItem]) {
-        navigationItem.title = "Manage products"
         
         var buttons: [UIBarButtonItem] = []
         
@@ -115,239 +95,96 @@ class ListsTableViewController: UIViewController, UITableViewDataSource, UITable
         topBar.items?.first?.rightBarButtonItems = buttons
     }
     
-    func onSubmitTap(sender: UIBarButtonItem) {
+    override func onCancelTap(sender: UIBarButtonItem) {
+        super.onCancelTap(sender)
+        topAddEditListControllerManager?.expand(false)
+    }
+    
+    override func onSubmitTap(sender: UIBarButtonItem) {
         topAddEditListControllerManager?.controller?.submit()
     }
+
     
-    func onCancelTap(sender: UIBarButtonItem) {
-        topAddEditListControllerManager?.expand(false)
-        initNavBarRightButtons([.Add])
-    }
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.lists.count
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("listCell", forIndexPath: indexPath) as! ListTableViewCell
-    
-        let list = lists[indexPath.row]
-        cell.list = list
-        
-        return cell
-    }
-    
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 60
+    override func onSelectCellInEditMode(model: ExpandableTableViewModel) {
+        topAddEditListControllerManager?.controller?.listToEdit = (model as! ExpandableTableViewListModel).list
+        topAddEditListControllerManager?.expand(true)
     }
 
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            
-            let list = lists[indexPath.row]
-            
-            // update the table view in advance, so delete animation is quick. If something goes wrong we reload the content in onError and do default error handling
-            tableView.wrapUpdates {[weak self] in
-                self?.lists.remove(list)
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
-            }
-            Providers.listProvider.remove(list, remote: true, resultHandler(onSuccess: {
-                }, onError: {[weak self] result in
-                    self?.initLists()
-                    self?.defaultErrorHandler()(providerResult: result)
-                }
-            ))
-        }
-    }
-    
-    func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
+    override func onReorderedModels() {
+        let lists = (models as! [ExpandableTableViewListModel]).map{$0.list}
         
-        let list = lists[fromIndexPath.row]
-        lists.removeAtIndex(fromIndexPath.row)
-        lists.insert(list, atIndex: toIndexPath.row)
-        
-        let updatedLists = self.lists.mapEnumerate{index, list in list.copy(order: index)}
-        
-        Providers.listProvider.update(updatedLists, remote: true, successHandler{[weak self] in
-            self?.lists = lists
+        let updatedLists = lists.mapEnumerate{index, list in list.copy(order: index)}
+
+        Providers.listProvider.update(updatedLists, remote: true, successHandler{
+//            self?.models = models // REVIEW remove? this seem not be necessary...
         })
     }
     
-    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    
-    
+    override func initDetailController(cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
+        let listItemsController = UIStoryboard.todoItemsViewController()
+        listItemsController.view.frame = view.frame
+        addChildViewController(listItemsController)
+        listItemsController.expandDelegate = self
+        listItemsController.view.clipsToBounds = true
 
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let segueName = segue.identifier
-        if segueName == "showListItemsController" {
-            if let indexPath = self.tableView.indexPathForSelectedRow, listItemsController = segue.destinationViewController as? ViewController {
-                let list = lists[indexPath.row] // having this outside of the onViewWillAppear appears to have fixed an inexplicable bad access in the currentList assignement line
-                listItemsController.onViewWillAppear = { // FIXME crash here once when tapped on "edit"
-                    listItemsController.currentList = list
-                }
-            }
+        listItemsController.onViewWillAppear = { // FIXME crash here once when tapped on "edit"
+            listItemsController.setThemeColor(cell.backgroundColor!)
+            listItemsController.currentList = (model as! ExpandableTableViewListModel).list
+            listItemsController.onExpand(true)
         }
+
+        return listItemsController
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        let list = self.lists[indexPath.row]
-
-        if self.editing {
-            topAddEditListControllerManager?.controller?.listToEdit = list
-            topAddEditListControllerManager?.expand(true)
-            
-        } else {
-            if let cell = tableView.cellForRowAtIndexPath(indexPath) {
-
-                let listItemsController = UIStoryboard.todoItemsViewController()
-                listItemsController.view.frame = view.frame
-                addChildViewController(listItemsController)
-                listItemsController.expandDelegate = self
-                listItemsController.view.clipsToBounds = true
-                
-                listItemsController.onViewWillAppear = { // FIXME crash here once when tapped on "edit"
-                    listItemsController.setThemeColor(cell.backgroundColor!)
-                    listItemsController.currentList = list
-                    listItemsController.onExpand(true)
-                }
-
-                let f = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, cell.frame.width, cell.frame.height)
-                
-                expandCellAnimator.reset()
-                expandCellAnimator.collapsedFrame = f
-                expandCellAnimator.delegate = self
-                expandCellAnimator.fromView = tableView
-                expandCellAnimator.toView = listItemsController.view
-                expandCellAnimator.inView = view
-
-                expandCellAnimator.animateTransition(true, topOffsetY: 64)
-                
-            } else {
-                print("Warn: no cell for indexPath: \(indexPath)")
-            }
-        }
-    }
-
-    @IBAction func onAddTap(sender: UIBarButtonItem) {
+    override func onAddTap() {
         topAddEditListControllerManager?.expand(!(topAddEditListControllerManager?.expanded ?? true)) // toggle - if for some reason variable isn't set, set expanded false (!true)
-        initNavBarRightButtons([.Save])
     }
     
-    @IBAction func onEditTap(sender: UIBarButtonItem) {
-        self.setEditing(!self.editing, animated: true, tryCloseTopViewController: true)
+    override func closeTopViewController() {
+        topAddEditListControllerManager?.expand(false)
     }
-    
-    // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
-    func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
-        super.setEditing(editing, animated: animated)
-        
-        if editing {
-            initNavBarRightButtons([.Save, .Cancel])
-            
-        } else {
-            initNavBarRightButtons([.Add])
-            view.endEditing(true)
-        }
-        
-        if tryCloseTopViewController {
-            if !editing {
-                topAddEditListControllerManager?.expand(false)
-            }
-        }
-        
-        tableView.setEditing(editing, animated: animated)
-        
-        if editing {
-            editButton.title = "Done"
-        } else {
-            editButton.title = "Edit"
-        }
-    }
-    
     
     // MARK: - EditListViewController
-    
+    //sub?
     func onListAdded(list: List) {
         tableView.wrapUpdates {[weak self] in
             if let weakSelf = self {
-                self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.lists.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
-                self?.lists.append(list)
+                self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.models.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
+                self?.models.append(ExpandableTableViewListModel(list: list))
                 self?.topAddEditListControllerManager?.expand(false)
                 self?.initNavBarRightButtons([.Add])
             }
         }
     }
-    
-    
+
     func onListUpdated(list: List) {
-        lists.update(list)
+        models.update(ExpandableTableViewListModel(list: list))
         tableView.reloadData()
         topAddEditListControllerManager?.expand(false)
     }
-    
-    // MARK: - ExpandCellAnimatorDelegate
-    
-    func animationsForCellAnimator(isExpanding: Bool, frontView: UIView) {
-        let navBarFrame = topBar.frame
-        if isExpanding {
-            topBar.transform = CGAffineTransformMakeTranslation(0, -navBarFrame.height)
-        } else {
-            topBar.transform = CGAffineTransformMakeTranslation(0, 0)
-        }
-    }
-    
-    
-    func setExpanded(expanded: Bool) {
-        expandCellAnimator.animateTransition(false, topOffsetY: 64)
-    }
-    
-    func animationsComplete(wasExpanding: Bool, frontView: UIView) {
-    }
-    
-    func prepareAnimations(willExpand: Bool, frontView: UIView) {
-    }
-    
     
     // MARK: - Websocket
     
     func onWebsocketList(note: NSNotification) {
         if let info = note.userInfo as? Dictionary<String, WSNotification<List>> {
             if let notification = info[WSNotificationValue] {
-                
+
                 let list = notification.obj
-                
+
                 switch notification.verb {
                 case .Add:
                     Providers.listProvider.add(list, remote: false, successHandler {[weak self] savedList in
                         self?.onListAdded(savedList)
                     })
-                    
+
                 case .Update:
                     Providers.listProvider.update(list, remote: false, successHandler{[weak self] in
                         self?.onListUpdated(list)
                     })
-                    
+
                 case .Delete:
                     Providers.listProvider.remove(list, remote: false, successHandler{[weak self] in
-                        if let index = self?.lists.remove(list) {
-                            self?.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Top)
-                        } else {
-                            print("Warn: ViewController.onWebsocketList: Removed list item was not found in tableView")
-                        }
+                        self?.removeModel(ExpandableTableViewListModel(list: list))
                     })
                 }
             } else {
