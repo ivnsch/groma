@@ -17,8 +17,6 @@ protocol AddEditListControllerDelegate {
 
 class AddEditListController: UIViewController, UITableViewDataSource, UITableViewDelegate, FlatColorPickerControllerDelegate {
     
-    private var listProvider = ProviderFactory().listProvider
-    
     @IBOutlet weak var listNameInputField: UITextField!
     @IBOutlet weak var usersTableView: UITableView!
     @IBOutlet weak var addUserInputField: UITextField!
@@ -105,14 +103,14 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
                 if let listName = weakSelf.listNameInputField.text {
                     if let listToEdit = weakSelf.listToEdit {
                         let updatedList = listToEdit.copy(name: listName, users: weakSelf.sharedUsers, bgColor: weakSelf.colorButton.tintColor)
-                        weakSelf.listProvider.update([updatedList], remote: true, weakSelf.successHandler{
+                        Providers.listProvider.update([updatedList], remote: true, weakSelf.successHandler{
                             weakSelf.delegate?.onListUpdated(updatedList)
                         })
                     
                     } else {
                         if let currentListsCount = weakSelf.currentListsCount {
                             let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: weakSelf.sharedUsers, bgColor: weakSelf.colorButton.tintColor, order: currentListsCount)
-                            weakSelf.listProvider.add(listWithSharedUsers, remote: true, weakSelf.successHandler{list in
+                            Providers.listProvider.add(listWithSharedUsers, remote: true, weakSelf.successHandler{list in
                                 weakSelf.delegate?.onListAdded(list)
                             })
                         } else {

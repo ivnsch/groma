@@ -162,6 +162,29 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
+    func updateInventories(inventories: [Inventory], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        dbInventoryProvider.saveInventories(inventories, update: true) {[weak self] saved in
+            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
+            if remote {
+                self?.remoteProvider.updateInventories(inventories) {remoteResult in
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                }
+            }
+        }
+    }
+    
+    func removeInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        dbInventoryProvider.removeInventory(inventory.uuid) {[weak self] saved in
+            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
+            if remote {
+                self?.remoteProvider.removeInventory(inventory) {remoteResult in
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                }
+            }
+        }
+    }
+
+    
     func syncInventoriesWithInventoryItems(handler: (ProviderResult<[Any]> -> ())) {
         
         self.dbInventoryProvider.loadInventories {dbInventories in

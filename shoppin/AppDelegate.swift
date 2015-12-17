@@ -182,7 +182,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             weakSelf.listProvider.saveListItems(listItems, incrementQuantity: false) {saved in
             
-                let inventory1 = Inventory(uuid: "400", name: "My Home inventory")
+                let inventory1 = Inventory(uuid: "400", name: "My Home inventory", bgColor: UIColor.flatGreenColor(), order: 0)
                 weakSelf.inventoryProvider.saveInventory(inventory1) {saved in
             
                     func inventoryItem(quantityDelta quantityDelta: Int, product: Product, inventory: Inventory) -> InventoryItem {

@@ -72,7 +72,7 @@ class RealmInventoryProvider: RealmProvider {
 //    }
 
     
-    func loadInventory(sortBy: InventorySortBy, range: NSRange, handler: [InventoryItem] -> ()) {
+    func loadInventory(inventory: Inventory, sortBy: InventorySortBy, range: NSRange, handler: [InventoryItem] -> ()) {
         let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}
 //        let sortFieldStr: String = {
 //            switch sortBy {
@@ -81,11 +81,15 @@ class RealmInventoryProvider: RealmProvider {
 //            }
 //        }()
         // range also not possible because sorting is not psosible. If we can't sort first then range is incorrect.
-        self.load(mapper, /*range: range, sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), */handler: handler)
+        self.load(mapper, filter: "inventory.uuid = '\(inventory.uuid)'", /*range: range, sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), */handler: handler)
     }
     
     func saveInventory(inventory: Inventory, update: Bool = true, handler: Bool -> ()) {
         self.saveInventories([inventory], update: update, handler: handler)
+    }
+    
+    func removeInventory(uuid: String, update: Bool =  true, handler: Bool -> ()) {
+        self.remove("uuid = '\(uuid)'", handler: handler, objType: DBInventory.self)
     }
     
     func saveInventories(inventories: [Inventory], update: Bool = true, handler: Bool -> ()) {
@@ -97,7 +101,6 @@ class RealmInventoryProvider: RealmProvider {
         let dbObjs = items.map{InventoryItemMapper.dbWithInventoryItem($0)}
         self.saveObjs(dbObjs, update: update, handler: handler)
     }
-
     
     func saveInventoryItem(item: InventoryItem, handler: Bool -> ()) {
         saveInventoryItems([item], handler: handler)

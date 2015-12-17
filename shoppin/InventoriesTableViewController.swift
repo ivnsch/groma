@@ -8,108 +8,192 @@
 
 import UIKit
 
-class InventoriesTableViewController: UITableViewController {
+class ExpandableTableViewInventoryModel: ExpandableTableViewModel {
     
-    private let inventoryProvider = ProviderFactory().inventoryProvider
+    let inventory: Inventory
     
-    private var inventories: [Inventory]?
+    init (inventory: Inventory) {
+        self.inventory = inventory
+    }
+    
+    override var name: String {
+        return inventory.name
+    }
+    
+    override var bgColor: UIColor {
+        return inventory.bgColor
+    }
+    
+    override var users: [SharedUser] {
+        return inventory.users
+    }
+    
+    override func same(rhs: ExpandableTableViewModel) -> Bool {
+        return inventory.same((rhs as! ExpandableTableViewInventoryModel).inventory)
+    }
+}
+
+class InventoriesTableViewController: ExpandableItemsTableViewController, AddEditInventoryControllerDelegate {
+    
+    var topAddEditListControllerManager: ExpandableTopViewController<AddEditInventoryController>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.allowsSelectionDuringEditing = true
-    }
-    
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.inventories?.count ?? 0
-    }
-    
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("inventoryCell", forIndexPath: indexPath) as! InventoryTableViewCell
+        setNavTitle("Inventories")
         
-        if let inventories = self.inventories {
-            let inventory = inventories[indexPath.row]
-            cell.inventoryName.text = inventory.name
+        topAddEditListControllerManager = initTopAddEditListControllerManager()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsockeInventory:", name: WSNotificationName.List.rawValue, object: nil)
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    private func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditInventoryController> {
+        let top = CGRectGetHeight(topBar.frame)
+        return ExpandableTopViewController(top: top, height: 250, parentViewController: self, tableView: tableView) {[weak self] in
+            let controller = UIStoryboard.addEditInventory()
+            controller.delegate = self
+            controller.currentListsCount = self?.models.count ?? {
+                print("Error: ListsTableViewController2.initTopAddEditListControllerManager: no valid self reference")
+                return 0
+            }()
+            controller.view.clipsToBounds = true
+            return controller
         }
-        
-        return cell
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // in view will appear so when the modal to add/edit inventory is dismissed, the new data is loaded
-        self.inventoryProvider.inventories(successHandler{inventories in
-            self.inventories = inventories
-            self.tableView.reloadData()
+    override func initModels() {
+        Providers.inventoryProvider.inventories(successHandler{inventories in
+            let models: [ExpandableTableViewModel] = inventories.map{ExpandableTableViewInventoryModel(inventory: $0)}
+            if self.models != models { // if current list is nil or the provider list is different
+                self.models = models
+                self.tableView.reloadData()
+            }
         })
     }
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }
-    }
-    
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-    }
-    
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    
-    
-    
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        let segueName = segue.identifier
-        if segueName == "showInventoryItemsController" {
-//            if let indexPath = self.tableView.indexPathForSelectedRow, inventories = self.inventories, inventoryItemsController = segue.destinationViewController as? InventoryItemsViewController {
-//                inventoryItemsController.inventory = inventories[indexPath.row]
-//            }
-        }
-    }
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if self.editing {            
-            if let indexPath = self.tableView.indexPathForSelectedRow, inventories = self.inventories {
-                self.showAddOrEditListViewController(true, inventoryToEdit: inventories[indexPath.row])
+    private func initNavBarRightButtons(actions: [UIBarButtonSystemItem]) {
+        
+        var buttons: [UIBarButtonItem] = []
+        
+        for action in actions {
+            switch action {
+            case .Add:
+                let button = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "onAddTap:")
+                self.addButton = button
+                buttons.append(button)
+            case .Save:
+                let button = UIBarButtonItem(barButtonSystemItem: .Save, target: self, action: "onSubmitTap:")
+                buttons.append(button)
+            case .Cancel:
+                let button = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "onCancelTap:")
+                buttons.append(button)
+            default: break
             }
-            
-        } else {
-            self.performSegueWithIdentifier("showInventoryItemsController", sender: self)
+        }
+        
+        topBar.items?.first?.rightBarButtonItems = buttons
+    }
+    
+    override func onCancelTap(sender: UIBarButtonItem) {
+        super.onCancelTap(sender)
+        topAddEditListControllerManager?.expand(false)
+    }
+    
+    override func onSubmitTap(sender: UIBarButtonItem) {
+        topAddEditListControllerManager?.controller?.submit()
+    }
+    
+    
+    override func onSelectCellInEditMode(model: ExpandableTableViewModel) {
+        topAddEditListControllerManager?.controller?.listToEdit = (model as! ExpandableTableViewInventoryModel).inventory
+        topAddEditListControllerManager?.expand(true)
+    }
+    
+    override func onReorderedModels() {
+        let lists = (models as! [ExpandableTableViewInventoryModel]).map{$0.inventory}
+        
+        let updatedLists = lists.mapEnumerate{index, list in list.copy(order: index)}
+        
+        Providers.inventoryProvider.updateInventories(updatedLists, remote: true, successHandler{//change
+            //            self?.models = models // REVIEW remove? this seem not be necessary...
+        })
+    }
+    
+    override func initDetailController(cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
+        let listItemsController = UIStoryboard.inventoryItemsViewController()
+        listItemsController.view.frame = view.frame
+        addChildViewController(listItemsController)
+        listItemsController.expandDelegate = self
+        listItemsController.view.clipsToBounds = true
+        
+        listItemsController.onViewWillAppear = { // FIXME crash here once when tapped on "edit"
+            listItemsController.setThemeColor(cell.backgroundColor!)
+            listItemsController.inventory = (model as! ExpandableTableViewInventoryModel).inventory //change
+            listItemsController.onExpand(true)
+        }
+        
+        return listItemsController
+    }
+    
+    override func onAddTap() {
+        topAddEditListControllerManager?.expand(!(topAddEditListControllerManager?.expanded ?? true)) // toggle - if for some reason variable isn't set, set expanded false (!true)
+    }
+    
+    override func closeTopViewController() {
+        topAddEditListControllerManager?.expand(false)
+    }
+    
+    // MARK: - EditListViewController
+    //change
+    func onInventoryAdded(list: Inventory) {
+        tableView.wrapUpdates {[weak self] in
+            if let weakSelf = self {
+                self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.models.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
+                self?.models.append(ExpandableTableViewInventoryModel(inventory: list))
+                self?.topAddEditListControllerManager?.expand(false)
+                self?.initNavBarRightButtons([.Add])
+            }
         }
     }
     
-    private func showAddOrEditListViewController(isEdit: Bool, inventoryToEdit: Inventory? = nil) {
-//        let editInventoriesViewController = UIStoryboard.editInventoriesViewController()
-//        editInventoriesViewController.isEdit = isEdit
-//        if let inventoryToEdit = inventoryToEdit {
-//            editInventoriesViewController.prefill(inventoryToEdit)
-//        }
-//        self.presentViewController(editInventoriesViewController, animated: true, completion: nil)
+    func onInventoryUpdated(list: Inventory) {
+        models.update(ExpandableTableViewInventoryModel(inventory: list))
+        tableView.reloadData()
+        topAddEditListControllerManager?.expand(false)
     }
     
-    @IBAction func onAddTap(sender: UIBarButtonItem) {
-        self.showAddOrEditListViewController(false)
-    }
+    // MARK: - Websocket
     
-    @IBAction func onEditTap(sender: UIBarButtonItem) {
-        self.setEditing(!self.editing, animated: true)
+    func onWebsockeInventory(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<Inventory>> {
+            if let notification = info[WSNotificationValue] {
+                
+                let inventory = notification.obj
+                
+                switch notification.verb {
+                case .Add:
+                    Providers.inventoryProvider.addInventory(inventory, remote: false, successHandler {[weak self] in
+                        self?.onInventoryAdded(inventory)
+                    })
+                    
+                case .Update:
+                    Providers.inventoryProvider.updateInventory(inventory, remote: false, successHandler{[weak self] in
+                        self?.onInventoryUpdated(inventory)
+                    })
+                    
+                case .Delete:
+                    Providers.inventoryProvider.removeInventory(inventory, remote: false, successHandler{[weak self] in
+                        self?.removeModel(ExpandableTableViewInventoryModel(inventory: inventory))
+                    })
+                }
+            } else {
+                print("Error: ViewController.onWebsocketList: no value")
+            }
+        } else {
+            print("Error: ViewController.onWebsocketList: no userInfo")
+        }
     }
 }

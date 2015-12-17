@@ -18,7 +18,7 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
     private(set) var inventoryItems: [InventoryItem] = []
     @IBOutlet var tableViewFooter: LoadingFooter!
 
-    var sortBy: InventorySortBy?
+    var sortBy: InventorySortBy? = .Count
     
     var onViewWillAppear: VoidFunction? // to be able to ensure sortBy is not set before UI is ready
     

@@ -44,6 +44,24 @@ class RemoteInventoryProvider: RemoteProvider {
             handler(result)
         }
     }
+
+    
+    func updateInventories(inventories: [Inventory], handler: RemoteResult<NoOpSerializable> -> ()) {
+        let params = inventories.map{self.toRequestParams($0)}
+        // TODO this is no timplemented in the server
+        RemoteProvider.authenticatedRequest(.PUT, Urls.inventories, params) {result in
+            handler(result)
+        }
+    }
+
+    
+    func removeInventory(inventory: Inventory, handler: RemoteResult<NoOpSerializable> -> ()) {
+        let params = toRequestParams(inventory)
+        // TODO this is probably not implemented in the server        
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.inventory + "/\(inventory.uuid)", params) {result in
+            handler(result)
+        }
+    }
     
     func syncInventoriesWithInventoryItems(inventoriesSync: InventoriesSync, handler: RemoteResult<RemoteInventoriesWithInventoryItemsSyncResult> -> ()) {
         

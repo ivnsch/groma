@@ -13,8 +13,9 @@ struct WSInventoryParser {
     static func parseInventory(json: AnyObject) -> Inventory {
         let uuid = json.valueForKeyPath("uuid") as! String
         let name = json.valueForKeyPath("name") as! String
-        
-        return Inventory(uuid: uuid, name: name)
+        let color = UIColor.purpleColor() // TODO
+        let order = json.valueForKeyPath("order") as! Int
+        return Inventory(uuid: uuid, name: name, bgColor: color, order: order)
     }
 
     static func parseInventoryItemIncrement(json: AnyObject) -> InventoryItemIncrement {

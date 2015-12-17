@@ -99,6 +99,10 @@ extension UIStoryboard {
 //    }
     
     
+    class func inventoryItemsViewController() -> InventoryItemsViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("InventoryItemsViewController") as! InventoryItemsViewController
+    }
+    
     class func addEditInventory() -> AddEditInventoryController {
         return addEditInventoryStoryboard().instantiateViewControllerWithIdentifier("AddEditInventoryController") as! AddEditInventoryController
     }

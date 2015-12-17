@@ -12,17 +12,20 @@ class InventoryMapper {
     
     class func inventoryWithDB(dbInventory: DBInventory) -> Inventory {
         let users = dbInventory.users.toArray().map{SharedUserMapper.sharedUserWithDB($0)}
-        return Inventory(uuid: dbInventory.uuid, name: dbInventory.name, users: users, lastUpdate: dbInventory.lastUpdate, lastServerUpdate: dbInventory.lastServerUpdate) // lastupdate ONLY DB -> MODEL
+        return Inventory(uuid: dbInventory.uuid, name: dbInventory.name, users: users, bgColor: dbInventory.bgColor(), order: dbInventory.order, lastUpdate: dbInventory.lastUpdate, lastServerUpdate: dbInventory.lastServerUpdate) // lastupdate ONLY DB -> MODEL
     }
     
     class func inventoryWithRemote(remoteInventory: RemoteInventory) -> Inventory {
-        return Inventory(uuid: remoteInventory.uuid, name: remoteInventory.name, users: remoteInventory.users.map{SharedUserMapper.sharedUserWithRemote($0)})
+        // TODO bgColor
+        return Inventory(uuid: remoteInventory.uuid, name: remoteInventory.name, users: remoteInventory.users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: UIColor.purpleColor(), order: remoteInventory.order)
     }
     
     class func dbWithInventory(inventory: Inventory) -> DBInventory {
         let db = DBInventory()
         db.uuid = inventory.uuid
         db.name = inventory.name
+        db.setBgColor(inventory.bgColor)
+        db.order = inventory.order
         db.lastUpdate = inventory.lastUpdate
         if let lastServerUpdate = inventory.lastServerUpdate {
             db.lastServerUpdate = lastServerUpdate

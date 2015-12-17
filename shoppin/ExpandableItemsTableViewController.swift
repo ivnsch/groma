@@ -40,6 +40,8 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     @IBOutlet weak var addButton: UIBarButtonItem!
     private weak var editButton: UIBarButtonItem!
     
+    @IBOutlet weak var emptyView: UIView!
+
     private let listItemsProvider = ProviderFactory().listItemProvider
     
     private var lists: [List] = []
@@ -64,13 +66,20 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         tableView.backgroundColor = Theme.mainViewsBGColor
         
         // adding a new nav item, because code was written when topbar was a custom view, after adding nav controller and using it's item expanding list once makes navbar disappear, don't have time to investigate now
-        let navItem = UINavigationItem(title: "Test")
+        let navItem = UINavigationItem()
         topBar.items = [navItem]
         let editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "onEditTap:")
         topBar.items?.first?.leftBarButtonItems = [editButton]
         self.editButton = editButton
         
         initNavBarRightButtons([.Add])
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyViewTap:"))
+        emptyView.addGestureRecognizer(tapRecognizer)
+    }
+    
+    func setNavTitle(title: String) {
+        topBar.items?.first?.title = title
     }
     
     private func initTopAddEditListControllerManager() -> ExpandableTopViewController<UIViewController> {
@@ -107,6 +116,10 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         }
         
         topBar.items?.first?.rightBarButtonItems = buttons
+    }
+    
+    func onEmptyViewTap(sender: UITapGestureRecognizer) {
+        onAddTap()
     }
     
     func onSubmitTap(sender: UIBarButtonItem) {
@@ -270,7 +283,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
             topBar.transform = CGAffineTransformMakeTranslation(0, 0)
         }
     }
-    
     
     func setExpanded(expanded: Bool) {
         expandCellAnimator.animateTransition(false, topOffsetY: 64)

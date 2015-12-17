@@ -11,6 +11,7 @@ import Foundation
 final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
+    let order: Int
     let lastUpdate: NSDate
     let users: [RemoteSharedUser]
 
@@ -18,6 +19,7 @@ final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSeria
         let inventory: AnyObject = representation.valueForKeyPath("inventory")!
         self.uuid = inventory.valueForKeyPath("uuid") as! String
         self.name = inventory.valueForKeyPath("name") as! String
+        self.order = inventory.valueForKeyPath("order") as! Int
         self.lastUpdate = NSDate(timeIntervalSince1970: inventory.valueForKeyPath("lastUpdate") as! Double)
         let unserializedUsers: AnyObject = representation.valueForKeyPath("users")!
         self.users = RemoteSharedUser.collection(response: response, representation: unserializedUsers)
@@ -35,6 +37,6 @@ final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSeria
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name)}, lastUpdate: \(lastUpdate), users: \(users)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), lastUpdate: \(lastUpdate), users: \(users)}"
     }
 }

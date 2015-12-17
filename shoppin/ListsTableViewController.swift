@@ -40,6 +40,8 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setNavTitle("Lists")
+        
         topAddEditListControllerManager = initTopAddEditListControllerManager()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
     }

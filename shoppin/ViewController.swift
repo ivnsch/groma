@@ -187,7 +187,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private func updatePossibleList() {
         if let list = self.currentList {
-            self.navigationItem.title = list.name
+//            self.navigationItem.title = list.name
             self.initWithList(list)
         }
     }

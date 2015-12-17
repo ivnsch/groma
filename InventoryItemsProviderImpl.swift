@@ -26,7 +26,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
         
         // FIXME: sortBy and range don't work in db (see notes in implementation). For now we have to do this programmatically
-        self.dbInventoryProvider.loadInventory(sortBy, range: range) {[weak self] (var dbInventoryItems) in
+        self.dbInventoryProvider.loadInventory(inventory, sortBy: sortBy, range: range) {[weak self] (var dbInventoryItems) in
             
             dbInventoryItems = dbInventoryItems.sortBy(sortBy)
             dbInventoryItems = dbInventoryItems[range]

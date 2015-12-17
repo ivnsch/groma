@@ -9,8 +9,9 @@
 import UIKit
 import CMPopTipView
 import SwiftValidator
+import ChameleonFramework
 
-class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, AddEditInventoryControllerDelegate, AddEditInventoryItemControllerDelegate, InventoryItemsTableViewControllerDelegate, ExpandableTopViewControllerDelegate {
+class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, AddEditInventoryItemControllerDelegate, InventoryItemsTableViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate {
 
     @IBOutlet weak var sortByButton: UIButton!
     @IBOutlet weak var settingsView: UIView!
@@ -27,37 +28,42 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         (.Count, "Count"), (.Alphabetic, "Alphabetic")
     ]
     
-    
+    var onViewWillAppear: VoidFunction?
+
+    @IBOutlet weak var topBar: ListTopBarView!
+
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
 
     private var addEditInventoryControllerManager: ExpandableTopViewController<AddEditInventoryController>?
     private var addEditInventoryItemControllerManager: ExpandableTopViewController<AddEditInventoryItemController>?
 
     // Warn: Setting this before prepareForSegue for tableViewController has no effect
-    private var inventory: Inventory? {
+    var inventory: Inventory? {
         didSet {
             tableViewController?.inventory = inventory
             if let inventory = inventory {
-                navigationItem.title = inventory.name
+                topBar.title = inventory.name
             }
         }
     }
+    
+    var expandDelegate: Foo?
+
+    private var titleLabel: UILabel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let navSingleTap = UITapGestureRecognizer(target: self, action: "navSingleTap")
-        navSingleTap.numberOfTapsRequired = 1
-        navigationController?.navigationBar.subviews.first?.userInteractionEnabled = true
-        navigationController?.navigationBar.subviews.first?.addGestureRecognizer(navSingleTap)
-        
+
         if let tableView = tableViewController?.tableView {
-            addEditInventoryControllerManager = initAddEditInventoryControllerManager(tableView)
             addEditInventoryItemControllerManager = initAddEditInventoryItemsManager(tableView)
             
         } else {
             print("Error: InventoryItemsViewController.viewDidLoad no tableview in tableViewController")
         }
+
+        initTitleLabel()
+
+        topBar.delegate = self
 
         // TODO custom empty view, put this there
         let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyInventoryViewTap:"))
@@ -74,6 +80,53 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    func setThemeColor(color: UIColor) {
+        // TODO complete theme, like in list items?
+        topBar.backgroundColor = color
+//        view.backgroundColor = UIColor.whiteColor()
+        
+        let colorArray = NSArray(ofColorsWithColorScheme: ColorScheme.Complementary, with: color, flatScheme: true)
+        view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
+//        listItemsTableViewController.view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
+//        listItemsTableViewController.headerBGColor = colorArray[1] as? UIColor // as? to silence warning
+        
+        let compl = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
+        
+        // adjust nav controller for cart & stash (in this controller we use a custom view).
+        navigationController?.setColors(color, textColor: compl)
+        
+        titleLabel?.textColor = compl
+        
+//        expandButtonModel.bgColor = (colorArray[4] as! UIColor).lightenByPercentage(0.5)
+//        expandButtonModel.pathColor = UIColor(contrastingBlackOrWhiteColorOn: expandButtonModel.bgColor, isFlat: true)
+        
+        topBar.fgColor = compl
+        
+//        emptyListViewImg.tintColor = compl
+//        emptyListViewLabel1.textColor = compl
+//        emptyListViewLabel2.textColor = compl
+    }
+    
+    
+    private func initTitleLabel() {
+        let label = UILabel()
+        label.font = Fonts.regular
+        label.textColor = UIColor.whiteColor()
+        topBar.addSubview(label)
+        titleLabel = label
+    }
+
+    
+    func onExpand(expanding: Bool) {
+        if !expanding {
+            emptyInventoryView.hidden = true
+            topBar.setLeftButtonIds([])
+            topBar.setRightButtonIds([])
+        }
+        topBar.layoutIfNeeded() // FIXME weird effect and don't we need this in view controller
+        topBar.positionTitleLabelLeft(expanding, animated: true)
+    }
+    
     func onEmptyInventoryViewTap(sender: UITapGestureRecognizer) {
         // TODO
     }
@@ -84,21 +137,8 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         }
     }
     
-    private func initAddEditInventoryControllerManager(tableView: UITableView) -> ExpandableTopViewController<AddEditInventoryController> {
-        let top: CGFloat = navigationController!.navigationBar.frame.maxY
-        let manager: ExpandableTopViewController<AddEditInventoryController> = ExpandableTopViewController(top: top, height: 90, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
-            let controller = UIStoryboard.addEditInventory()
-            controller.delegate = self
-//            controller.view.clipsToBounds = true
-            return controller
-        }
-        manager.delegate = self
-        return manager
-    }
-    
-    
     private func initAddEditInventoryItemsManager(tableView: UITableView) -> ExpandableTopViewController<AddEditInventoryItemController> {
-        let top: CGFloat = navigationController!.navigationBar.frame.maxY
+        let top = CGRectGetHeight(topBar.frame)
         let manager: ExpandableTopViewController<AddEditInventoryItemController> = ExpandableTopViewController(top: top, height: 180, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.addEditInventoryItem()
             controller.delegate = self
@@ -108,20 +148,13 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         return manager
     }
     
-    func navSingleTap() {
-        addEditInventoryControllerManager?.controller?.inventoryToEdit = inventory
-        addEditInventoryItemControllerManager?.expand(false)
-        addEditInventoryControllerManager?.expand(!(addEditInventoryControllerManager?.expanded ?? true)) // if for some reason manager was not set, contract (!true)
-    }
-    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        Providers.inventoryProvider.firstInventory(successHandler {[weak self] inventory in
-            self?.navigationItem.title = inventory.name
-            self?.tableViewController?.sortBy = .Count
-            self?.inventory = inventory
-        })
+        navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        onViewWillAppear?()
+        onViewWillAppear = nil
     }
     
     private func createPicker() -> UIPickerView {
@@ -176,47 +209,19 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         }
     }
     
-    // MARK: - AddEditInventoryViewController
-    
-    func onInventoryUpdated(inventory: Inventory) {
-        tableViewController?.sortBy = .Count
-        self.inventory = inventory
-        addEditInventoryControllerManager?.expand(false)
+    @IBAction func onEditTap(sender: UIButton) {
+        toggleEditing()
     }
     
-    @IBAction func onEditTap(sender: UIButton) {
-        
+    private func toggleEditing() {
         if let tableViewController = tableViewController {
             tableViewController.setEditing(!tableViewController.editing, animated: true)
             editButton.title = tableViewController.editing ? "Done" : "Edit"
-            
+            if !tableViewController.editing {
+                topBar.setRightButtonIds([])
+            }
         } else {
             print("Warn: InventoryItemsViewController.onEditTap edit tap but no tableViewController")
-        }
-    }
-
-    // No add directly to inventory for now (or maybe ever). Otherwise user may get confused about how to use the app - it should be clear that items are added automatically when making cart as bought.
-//    @IBAction func onAddTap(sender: UIButton) {
-//        setAddEditInventoryItemControllerOpen(!addEditInventoryItemController.open)
-//    }
-    
-    // MARK: - BottonPanelViewDelegate
-    
-    func onSubmitAction(action: FLoatingButtonAction) {
-        handleFloatingViewAction(action)
-    }
-    
-    private func handleFloatingViewAction(action: FLoatingButtonAction) {
-        switch action {
-        case .Submit:
-            if addEditInventoryControllerManager?.expanded ?? false {
-                addEditInventoryControllerManager?.controller?.submit()
-            } else if addEditInventoryItemControllerManager?.expanded ?? false {
-                addEditInventoryItemControllerManager?.controller?.submit()
-            } else {
-                print("Warn: InventoryItemsViewController.handleFloatingViewAction: .Submit called but no top view controller is open")
-            }
-        default: break
         }
     }
     
@@ -251,6 +256,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         tableViewController?.clearAndLoadFirstPage()
         addEditInventoryItemControllerManager?.controller?.clear()
         addEditInventoryItemControllerManager?.expand(false)
+        topBar.setRightButtonIds([])
     }
     
     func onCancelTap() {
@@ -260,12 +266,44 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
+    // MARK: - ListTopBarViewDelegate
+    
+    func onTopBarBackButtonTap() {
+        // not used
+    }
+    
+    func onTopBarTitleTap() {
+        onExpand(false)
+        expandDelegate?.setExpanded(false)
+    }
+    
+    func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
+        switch buttonId {
+        case .Add:
+            print("onTopBarButtonTap TODO")
+        case .Submit:
+            addEditInventoryItemControllerManager?.controller?.submit()
+        case .ToggleOpen:
+            print("onTopBarButtonTap TODO")
+        case .Edit:
+            toggleEditing()
+        }
+    }
+    
+    func onCenterTitleAnimComplete(center: Bool) {
+        if center {
+            topBar.setLeftButtonIds([.Edit])
+//            topBar.setRightButtonIds([.ToggleOpen]) // TODO
+        }
+    }
+    
     // MARK: - InventoryItemsTableViewControllerDelegate
     
     func onInventoryItemSelected(inventoryItem: InventoryItem, indexPath: NSIndexPath) {
         if tableViewController?.editing ?? false {
             addEditInventoryItemControllerManager?.expand(true)
             addEditInventoryItemControllerManager?.controller?.editingInventoryItem = inventoryItem
+            topBar.setRightButtonIds([.Submit])
         }
     }
     

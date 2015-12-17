@@ -223,7 +223,6 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
             
             if let weakSelf = self {
                 
-                // WARN for now we assume user has always only one inventory. Note that general setup (database, server etc) supports multiple inventories though.
                 Providers.inventoryProvider.inventories(weakSelf.successHandler{inventories in
                     if let inventory = inventories.first { // TODO list associated inventory
                         onHasInventory(inventory)
@@ -231,7 +230,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
                     } else { // user has no inventories - create first one. Note if offline there can be inventories in server - there has to be a sync when user comes online/signs up
                         let mySharedUser = ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail") // TODO how do we handle shared users internally (database etc) when user is offline
                         
-                        let inventoryInput = Inventory(uuid: NSUUID().UUIDString, name: "Home", users: [mySharedUser])
+                        let inventoryInput = Inventory(uuid: NSUUID().UUIDString, name: "Home", users: [mySharedUser], bgColor: UIColor.flatBlueColor(), order: 0)
                         Providers.inventoryProvider.addInventory(inventoryInput, remote: true, weakSelf.successHandler{notused in
                             
                             // just a hack because we need "full" shared user to create inventory based on inventory input
@@ -239,7 +238,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
                             // so for now we create full shared user where these attributes are empty
                             let sharedUsers = inventoryInput.users.map{SharedUser(email: $0.email)}
                             
-                            onHasInventory(Inventory(uuid: inventoryInput.uuid, name: inventoryInput.name, users: sharedUsers))
+                            onHasInventory(Inventory(uuid: inventoryInput.uuid, name: inventoryInput.name, users: sharedUsers, bgColor: inventoryInput.bgColor, order: inventoryInput.order))
                         })
                     }
                 })
