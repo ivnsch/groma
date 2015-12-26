@@ -269,11 +269,13 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // TODO consumed, delta last month
     }
     
-    private func updateIncrementUI(originalItem: PlanItem, delta: Int, cell: PlanTableViewCell, row: Int) {
+    private func updateIncrementUI(originalItem: PlanItem, delta: Int, cell: PlanTableViewCell?, row: Int) {
         let incrementedItem = originalItem.incrementQuantityCopy(delta)
         planItems[row] = incrementedItem
-        cell.planItem = incrementedItem
-        cell.quantityLabel.text = "\(incrementedItem.quantity)"
+        if let cell = cell {
+            cell.planItem = incrementedItem
+            cell.quantityLabel.text = "\(incrementedItem.quantity)"
+        }
     }
     
     private func removeUI(row: Int) {

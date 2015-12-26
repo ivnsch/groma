@@ -29,6 +29,6 @@ struct ListItemInput {
         self.section = section
         self.note = note
         self.baseQuantity = baseQuantity
-        self.unit = unit
+        self.unit = unit        
     }
 }

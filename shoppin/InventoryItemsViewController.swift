@@ -11,7 +11,7 @@ import CMPopTipView
 import SwiftValidator
 import ChameleonFramework
 
-class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, AddEditInventoryItemControllerDelegate, InventoryItemsTableViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate {
+class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, AddEditInventoryItemControllerDelegate, InventoryItemsTableViewControllerDelegate, ExpandableTopViewControllerDelegate, AddEditListItemViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate {
 
     @IBOutlet weak var sortByButton: UIButton!
     @IBOutlet weak var settingsView: UIView!
@@ -34,8 +34,8 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
 
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
 
-    private var addEditInventoryControllerManager: ExpandableTopViewController<AddEditInventoryController>?
     private var addEditInventoryItemControllerManager: ExpandableTopViewController<AddEditInventoryItemController>?
+    private var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
 
     // Warn: Setting this before prepareForSegue for tableViewController has no effect
     var inventory: Inventory? {
@@ -116,6 +116,21 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         titleLabel = label
     }
 
+    private func initTopQuickAddControllerManager(tableView: UITableView) -> ExpandableTopViewController<QuickAddViewController> {
+        let top = CGRectGetHeight(topBar.frame)
+        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: 290, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
+            let controller = UIStoryboard.quickAddViewController()
+            controller.delegate = self
+            controller.productDelegate = self
+            controller.modus = .PlanItem
+            if let backgroundColor = self?.view.backgroundColor {
+                controller.addProductsOrGroupBgColor = UIColor.opaqueColorByApplyingTransparentColorOrBackground(backgroundColor.colorWithAlphaComponent(0.3), backgroundColor: UIColor.whiteColor())
+            }
+            return controller
+        }
+        manager.delegate = self
+        return manager
+    }
     
     func onExpand(expanding: Bool) {
         if !expanding {
@@ -125,6 +140,11 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         }
         topBar.layoutIfNeeded() // FIXME weird effect and don't we need this in view controller
         topBar.positionTitleLabelLeft(expanding, animated: true)
+    }
+
+    func onExpandableClose() {
+        topBar.setLeftButtonIds([.Edit])
+        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
     }
     
     func onEmptyInventoryViewTap(sender: UITapGestureRecognizer) {
@@ -197,6 +217,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         if segue.identifier == "embedInventoryItemsTableViewSegue" {
             tableViewController = segue.destinationViewController as? InventoryItemsTableViewController
             tableViewController?.delegate = self
+            topQuickAddControllerManager = initTopQuickAddControllerManager(tableViewController!.tableView)
         }
     }
     
@@ -225,6 +246,63 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         }
     }
     
+    // MARK: - AddEditListItemViewControllerDelegate
+    
+    func onValidationErrors(errors: [UITextField: ValidationError]) {
+        // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
+        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+    }
+    
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
+        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {
+        }
+    }
+    
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
+        // Not used - update is currently a different controller / delegate
+    }
+    
+    func productNameAutocompletions(text: String, handler: [String] -> ()) {
+        Providers.productProvider.productSuggestions(successHandler{suggestions in
+            let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
+            handler(names)
+        })
+    }
+    
+    func sectionNameAutocompletions(text: String, handler: [String] -> ()) {
+        Providers.sectionProvider.sectionSuggestions(successHandler{suggestions in
+            let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
+            handler(names)
+        })
+    }
+    
+    func planItem(productName: String, handler: PlanItem? -> ()) {
+        Providers.planProvider.planItem(productName, successHandler {planItemMaybe in
+            handler(planItemMaybe)
+        })
+    }
+    
+    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, successHandler: VoidFunction? = nil) {
+        
+        if let inventory = inventory {
+
+            if let price = priceText.floatValue, quantity = Int(quantityText) {
+                
+                let input = InventoryItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit)
+                
+                Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, self.successHandler{[weak self] (inventoryItemWithHistoryEntry: InventoryItemWithHistoryEntry) in
+                    // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end. TODO nicer solution
+                    self?.tableViewController?.clearAndLoadFirstPage()
+                    self?.toggleTopAddController()
+                })
+            }
+            
+        } else {
+            print("Error: InventoryItemsViewController.submitInputs: No inventory")
+        }
+    }
+    
+    
     // MARK: - AddEditInventoryItemControllerDelegate
     
     
@@ -241,13 +319,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         } else {
             
             print("Not supported: Adding directly to inventory")
-//                let input = InventoryItemInput(name: name, quantity: quantity, price: price, category: category)
-//                Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, successHandler{[weak self] addedInventoryWithHistoryEntry in
-//                    // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end. TODO nicer solution
-//                    self?.tableViewController?.clearAndLoadFirstPage()
-//                    self?.addEditInventoryItemController.clear()
-//                    self?.setAddEditInventoryItemControllerOpen(false)
-//                })
+
         }
     }
     
@@ -262,9 +334,6 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     func onCancelTap() {
     }
 
-    func onValidationErrors(errors: [UITextField : ValidationError]) {
-        presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
-    }
     
     // MARK: - ListTopBarViewDelegate
     
@@ -280,20 +349,58 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
         switch buttonId {
         case .Add:
-            print("onTopBarButtonTap TODO")
+            sendActionToTopController(.Add)
         case .Submit:
-            addEditInventoryItemControllerManager?.controller?.submit()
+            if topQuickAddControllerManager?.expanded ?? false {
+                sendActionToTopController(.Submit)
+            } else if addEditInventoryItemControllerManager?.expanded ?? false {
+                addEditInventoryItemControllerManager?.controller?.submit()
+            }
         case .ToggleOpen:
-            print("onTopBarButtonTap TODO")
+            toggleTopAddController()
         case .Edit:
             toggleEditing()
+        }
+    }
+    
+    private func toggleTopAddController() {
+        
+        // if any top controller is open, close it
+        if topQuickAddControllerManager?.expanded ?? false || addEditInventoryItemControllerManager?.expanded ?? false {
+            topQuickAddControllerManager?.expand(false)
+            addEditInventoryItemControllerManager?.expand(false)
+
+            topBar.setLeftButtonIds([.Edit])
+            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+            
+        } else { // if there's no top controller open, open the quick add controller
+            topQuickAddControllerManager?.expand(true)
+            
+            topBar.setLeftButtonIds([])
+            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+        }
+    }
+    
+    private func sendActionToTopController(action: FLoatingButtonAction) {
+        
+        if topQuickAddControllerManager?.expanded ?? false {
+            topQuickAddControllerManager?.controller?.handleFloatingButtonAction(action)
+        } else if addEditInventoryItemControllerManager?.expanded ?? false {
+            // here we do dispatching in place as it's relatively simple and don't want to contaminate to many view controllers with floating button code
+            // there should be a separate component to do all this but no time now. TODO improve
+            
+            switch action {
+            case .Submit:
+                addEditInventoryItemControllerManager?.controller?.submit()
+            case .Back, .Add, .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(addEditInventoryItemControllerManager?.controller) instance")
+            }
         }
     }
     
     func onCenterTitleAnimComplete(center: Bool) {
         if center {
             topBar.setLeftButtonIds([.Edit])
-//            topBar.setRightButtonIds([.ToggleOpen]) // TODO
+            topBar.setRightButtonIds([.ToggleOpen])
         }
     }
     
@@ -316,6 +423,68 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
         topControlTopConstraint.constant = view.frame.height
         self.view.layoutIfNeeded()
+    }
+    
+    // MARK: - QuickAddDelegate
+    
+    func onCloseQuickAddTap() {
+        topQuickAddControllerManager?.expand(false)
+    }
+    
+    func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
+        if let inventory = inventory {
+            let inventoryItems: [InventoryItemWithHistoryEntry] = group.items.map {item in
+                let inventoryItem = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: item.quantity, quantityDelta: item.quantity, product: item.product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO remove the offline dummy email? to add inventory shared user is not needed (the server uses the logged in user).
+                return inventoryItem
+            }
+            Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, successHandler{[weak self] result in
+                self?.tableViewController?.addOrIncrementUI(inventoryItems.map{$0.inventoryItem})
+            })
+        }
+    }
+    
+    
+    func onAddProduct(product: Product) {
+        if let inventory = inventory {
+            let inventoryItem = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: 1, quantityDelta: 1, product: product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO remove the offline dummy email? to add inventory shared user is not needed (the server uses the logged in user).
+            Providers.inventoryItemsProvider.addToInventory([inventoryItem], remote: true, successHandler{[weak self] result in
+                self?.tableViewController?.addOrIncrementUI(inventoryItem.inventoryItem)
+            })
+        }
+    }
+    
+    func onQuickListOpen() {
+        topBar.setBackVisible(false)
+        topBar.setLeftButtonModels([])
+        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+    }
+    
+    func onAddProductOpen() {
+        topBar.setBackVisible(false)
+        topBar.setLeftButtonModels([])
+        topBar.setRightButtonModels([
+            TopBarButtonModel(buttonId: .Submit),
+            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+        ])
+    }
+    
+    func onAddGroupOpen() {
+        topBar.setBackVisible(false)
+        topBar.setLeftButtonModels([])
+        topBar.setRightButtonModels([
+            TopBarButtonModel(buttonId: .Add),
+            TopBarButtonModel(buttonId: .Submit),
+            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+        ])
+    }
+    
+    func onAddGroupItemsOpen() {
+        topBar.setBackVisible(true)
+        topBar.setLeftButtonModels([])
+        topBar.setRightButtonModels([
+            TopBarButtonModel(buttonId: .Submit),
+            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+        ])
     }
     
     

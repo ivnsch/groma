@@ -59,33 +59,44 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    // Commented - this works (except see TODO) but we added new properties to product baseQuantity and unit, and this would have to be updated. But since it's is not used... for now disabled. For now it's not planned to add directly items to the inventory, but maybe this changes in the future.
-//    func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> Void) {
-//        
-//        Providers.productProvider.product(itemInput.name) {[weak self] productResult in
-//            
-//            // TODO consistent handling everywhere of optional results - return always either .Success & Option(None) or .NotFound & non-optional.
-//            if productResult.success || productResult.status == .NotFound {
-//
-//                let product = productResult.sucessResult ?? Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: itemInput.category, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit)
-//                
-//                // TODO! quantity delta I think should increment previous quantity delta not overwrite?
-//                let inventoryItemWithHistoryEntry = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: itemInput.quantity, quantityDelta: itemInput.quantity, product: product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
-//
-//                self?.addToInventory(inventory, items: [inventoryItemWithHistoryEntry]) {result in
-//                    if result.success {
-//                        handler(ProviderResult(status: .Success, sucessResult: inventoryItemWithHistoryEntry))
-//                    } else {
-//                        print("Error: InventoryItemsProviderImpl.addToInventory: couldn't add to inventory, result: \(result)")
-//                        handler(ProviderResult(status: .DatabaseUnknown))
-//                    }
-//                }
-//            } else {
-//                print("Error: InventoryItemsProviderImpl.addToInventory: Error fetching product, result: \(productResult)")
-//                handler(ProviderResult(status: .DatabaseUnknown))
-//            }
-//        }
-//    }
+    func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> Void) {
+        
+        func onHasProduct(product: Product) {
+            // TODO! quantity delta I think should increment previous quantity delta not overwrite?
+            let inventoryItemWithHistoryEntry = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: itemInput.quantity, quantityDelta: itemInput.quantity, product: product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
+            addToInventory([inventoryItemWithHistoryEntry], remote: true) {result in
+                if result.success {
+                    handler(ProviderResult(status: .Success, sucessResult: inventoryItemWithHistoryEntry))
+                } else {
+                    print("Error: InventoryItemsProviderImpl.addToInventory: couldn't add to inventory, result: \(result)")
+                    handler(ProviderResult(status: .DatabaseUnknown))
+                }
+            }
+        }
+        
+        Providers.productProvider.product(itemInput.name) {productResult in
+            // TODO consistent handling everywhere of optional results - return always either .Success & Option(None) or .NotFound & non-optional.
+            if productResult.success || productResult.status == .NotFound {
+                if let product = productResult.sucessResult {
+                    onHasProduct(product)
+                } else {
+                    Providers.productCategoryProvider.categoryWithName(itemInput.category) {result in
+                        if let category = result.sucessResult {
+                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: category, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit)
+                            onHasProduct(product)
+                        } else {
+                            let category = ProductCategory(uuid: NSUUID().UUIDString, name: itemInput.category, color: itemInput.categoryColor)
+                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: category, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit)
+                            onHasProduct(product)
+                        }
+                    }
+                }
+            } else {
+                print("Error: InventoryItemsProviderImpl.addToInventory: Error fetching product, result: \(productResult)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
     
     func addToInventory(items: [InventoryItemWithHistoryEntry], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         

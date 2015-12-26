@@ -181,23 +181,103 @@ class InventoryItemsTableViewController: UITableViewController, InventoryItemTab
         }
     }
 
+    // TODO review this method why pass delta separately? why need to pass inventory item from tableview instead of parameter inventory item?
     func updateIncrementUI(inventoryItem: InventoryItem, delta: Int) {
-        if let (index, item) = (inventoryItems.enumerate().filter{$0.element.same(inventoryItem)}.first), cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) {
-            if let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) as? InventoryItemTableViewCell {
-                updateIncrementUI(item, delta: delta, cell: cell, row: index)
-            } else {
-                print("Warn: InventoryItemsTableViewController.updateIncrementUI: Couldn't retrieve cell for index: \(index)")
-            }
+        if let (index, item, cellMaybe) = inventoryItemTableViewData(inventoryItem) {
+            updateIncrementUI(item, delta: delta, cell: cellMaybe, row: index)
         } else {
             print("Warn: InventoryItemsTableViewController.updateIncrementUI: Didn't find inventoryItem: \(inventoryItem)")
         }
     }
     
-    private func updateIncrementUI(inventoryItem: InventoryItem, delta: Int, cell: InventoryItemTableViewCell, row: Int) {
+    // Finds tableview related data of inventory item, if it's in tableview, otherwise returns nil
+    private func inventoryItemTableViewData(inventoryItem: InventoryItem) -> (index: Int, item: InventoryItem, cell: InventoryItemTableViewCell?)? { // note item -> the item currently in tableview TODO why do we need to return this if it's "same" as parameter inventoryItem
+        if let (index, item) = (inventoryItems.enumerate().filter{$0.element.same(inventoryItem)}.first) {
+            
+            if let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) {
+                if let cell = cell as? InventoryItemTableViewCell {
+                    return (index, item, cell)
+                    
+                } else {
+                    print("Error: InventoryItemsTableViewController.inventoryItemTableViewData: Cell cast failed: \(index)")
+                    return nil
+                }
+            } else { // cell is nil (not visible)
+                return (index, item, nil)
+            }
+
+        } else { // inventory item is not there
+            return nil
+        }
+    }
+    
+    private func findIndexPathForNewItem(inventoryItem: InventoryItem) -> NSIndexPath? {
+        
+        func findRow(isAfter: InventoryItem -> Bool) -> NSIndexPath {
+            let row: Int = {
+                if let firstBiggerItemTuple = (inventoryItems.enumerate().filter{isAfter($0.element)}).first {
+                    return firstBiggerItemTuple.index // insert in above the first biggest item
+                } else {
+                    return inventoryItems.count // no biggest item - our item is the biggest - return end of page (about page see warning in addOrUpdateIncrementUI)
+                }
+            }()
+            return NSIndexPath(forRow: row, inSection: 0)
+        }
+        
+        if let sortBy = sortBy {
+            switch sortBy {
+            case .Count:
+                return findRow({$0.quantity > inventoryItem.quantity})
+            case .Alphabetic:
+                return findRow({$0.product.name > inventoryItem.product.name})
+            }
+        } else {
+            print("Warn: InventoryItemsTableViewController.findIndexPathForNewItem: sortBy is not set")
+            return nil
+        }
+    }
+    
+    func addOrIncrementUI(inventoryItems: [InventoryItem]) {
+        for inventoryItem in inventoryItems {
+            addOrIncrementUI(inventoryItem)
+        }
+    }
+    
+    private func tryIncrementItem(inventoryItem: InventoryItem) -> Bool {
+        if let (index, item, cellMaybe) = inventoryItemTableViewData(inventoryItem) {
+            updateIncrementUI(item, delta: inventoryItem.quantity, cell: cellMaybe, row: index)
+            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0), atScrollPosition: .Top, animated: true)
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func addOrIncrementUI(inventoryItem: InventoryItem) {
+        if !tryIncrementItem(inventoryItem) {
+            // Warning: this adds the inventory item at the end of the current page - this may look a bit buggy and if user scrolls down the item may be "repeated", but for now don't have a better solution,
+            // the alternative which is loading all the pages until we are in the page where the position of the item is correct (according to current sorting criteria) is inefficient as well as difficult to implement
+            // a compromise is to choose a big enough page size where most users will have smaller inventories, so this can't happen
+            tableView.wrapUpdates {[weak self] in
+                if let weakSelf = self {
+                    if let indexPathToInsert = weakSelf.findIndexPathForNewItem(inventoryItem)  { // note: before append
+                        weakSelf.inventoryItems.insert(inventoryItem, atIndex: indexPathToInsert.row)
+                        weakSelf.tableView.insertRowsAtIndexPaths([indexPathToInsert], withRowAnimation: .Top)
+                    } else {
+                        print("Error: InventoryItemsTableViewController.addOrIncrementUI: No indexPathToInsert")
+                    }
+                }
+            }
+        }
+    }
+    
+    private func updateIncrementUI(inventoryItem: InventoryItem, delta: Int, cell: InventoryItemTableViewCell?, row: Int) {
         let incrementedItem = inventoryItem.incrementQuantityCopy(delta)
         inventoryItems[row] = incrementedItem
-        cell.inventoryItem = incrementedItem
-        cell.quantityLabel.text = "\(incrementedItem.quantity)"
+        if let cell = cell {
+            cell.inventoryItem = incrementedItem
+            cell.quantityLabel.text = "\(incrementedItem.quantity)"
+        }
     }
     
     func remove(inventoryItem: InventoryItem) {
