@@ -33,15 +33,15 @@ class ExpandableTableViewListModel: ExpandableTableViewModel {
     }
 }
 
-class ListsTableViewController: ExpandableItemsTableViewController, AddEditListControllerDelegate {
+class ListsTableViewController: ExpandableItemsTableViewController, AddEditListControllerDelegate, ExpandableTopViewControllerDelegate {
 
     var topAddEditListControllerManager: ExpandableTopViewController<AddEditListController>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setNavTitle("Lists")
-        
+        setNavTitle("Lists")        
+
         topAddEditListControllerManager = initTopAddEditListControllerManager()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
     }
@@ -52,7 +52,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     
     private func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditListController> {
         let top = CGRectGetHeight(topBar.frame)
-        return ExpandableTopViewController(top: top, height: 250, parentViewController: self, tableView: tableView) {[weak self] in
+        let expandableTopViewController: ExpandableTopViewController<AddEditListController> = ExpandableTopViewController(top: top, height: 250, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.addEditList()
             controller.delegate = self
             controller.currentListsCount = self?.models.count ?? {
@@ -62,6 +62,8 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             controller.view.clipsToBounds = true
             return controller
         }
+        expandableTopViewController.delegate = self
+        return expandableTopViewController
     }
     
     override func initModels() {
@@ -73,43 +75,19 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             }
         })
     }
-
-    private func initNavBarRightButtons(actions: [UIBarButtonSystemItem]) {
-        
-        var buttons: [UIBarButtonItem] = []
-        
-        for action in actions {
-            switch action {
-            case .Add:
-                let button = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "onAddTap:")
-                self.addButton = button
-                buttons.append(button)
-            case .Save:
-                let button = UIBarButtonItem(barButtonSystemItem: .Save, target: self, action: "onSubmitTap:")
-                buttons.append(button)
-            case .Cancel:
-                let button = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "onCancelTap:")
-                buttons.append(button)
-            default: break
-            }
-        }
-        
-        topBar.items?.first?.rightBarButtonItems = buttons
-    }
     
-    override func onCancelTap(sender: UIBarButtonItem) {
-        super.onCancelTap(sender)
-        topAddEditListControllerManager?.expand(false)
-    }
-    
-    override func onSubmitTap(sender: UIBarButtonItem) {
+    override func onSubmitTap() {
         topAddEditListControllerManager?.controller?.submit()
     }
-
     
     override func onSelectCellInEditMode(model: ExpandableTableViewModel) {
+        super.onSelectCellInEditMode(model)        
         topAddEditListControllerManager?.controller?.listToEdit = (model as! ExpandableTableViewListModel).list
         topAddEditListControllerManager?.expand(true)
+    }
+    
+    override func topControllerIsExpanded() -> Bool {
+        return topAddEditListControllerManager?.expanded ?? false
     }
 
     override func onReorderedModels() {
@@ -139,11 +117,10 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
 
     override func onAddTap() {
-        topAddEditListControllerManager?.expand(!(topAddEditListControllerManager?.expanded ?? true)) // toggle - if for some reason variable isn't set, set expanded false (!true)
-    }
-    
-    override func closeTopViewController() {
-        topAddEditListControllerManager?.expand(false)
+        super.onAddTap()
+        let expand = !(topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
+        topAddEditListControllerManager?.expand(expand)
+        setTopBarStateForAddTap(expand)
     }
     
     // MARK: - EditListViewController
@@ -154,7 +131,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                 self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.models.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
                 self?.models.append(ExpandableTableViewListModel(list: list))
                 self?.topAddEditListControllerManager?.expand(false)
-                self?.initNavBarRightButtons([.Add])
+                self?.setTopBarState(.NormalFromExpanded)
             }
         }
     }
@@ -165,6 +142,20 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         topAddEditListControllerManager?.expand(false)
     }
     
+    // MARK: - ExpandableTopViewControllerDelegate
+    
+    func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
+    }
+    
+    func onExpandableClose() {
+        setTopBarState(.NormalFromExpanded)
+    }
+    
+    // MARK:
+
+    override func onExpand(expanding: Bool) {
+    }
+
     // MARK: - Websocket
     
     func onWebsocketList(note: NSNotification) {

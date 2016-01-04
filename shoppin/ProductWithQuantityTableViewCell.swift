@@ -8,12 +8,12 @@
 
 import UIKit
 
-protocol InventoryItemTableViewCellDelegate {
-    func onIncrementItemTap(cell: InventoryItemTableViewCell)
-    func onDecrementItemTap(cell: InventoryItemTableViewCell)
+protocol ProductWithQuantityTableViewCellDelegate {
+    func onIncrementItemTap(cell: ProductWithQuantityTableViewCell)
+    func onDecrementItemTap(cell: ProductWithQuantityTableViewCell)
 }
 
-class InventoryItemTableViewCell: UITableViewCell {
+class ProductWithQuantityTableViewCell: UITableViewCell {
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var quantityLabel: UILabel!
@@ -23,9 +23,9 @@ class InventoryItemTableViewCell: UITableViewCell {
     private var isAnimatingProgress: Bool = false
     private var animationCancelled: Bool = false
     
-    var inventoryItem: InventoryItem?
+    var model: ProductWithQuantity?
     
-    var delegate: InventoryItemTableViewCellDelegate?
+    var delegate: ProductWithQuantityTableViewCellDelegate?
     var row: Int?
     
     @IBAction func onIncrementTap(sender: UIButton) {

@@ -10,7 +10,7 @@ import UIKit
 
 @objc protocol ExpandableTopViewControllerDelegate {
     func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView)
-    optional func onExpandableClose()
+    func onExpandableClose()
 }
 
 class ExpandableTopViewController<T: UIViewController>: NSObject {
@@ -147,6 +147,6 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
     
     func onOverlayTap(sender: UIButton) {
         expand(false)
-        delegate?.onExpandableClose?()
+        delegate?.onExpandableClose()
     }
 }

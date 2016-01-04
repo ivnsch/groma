@@ -15,9 +15,6 @@ class MoreViewController: UITableViewController {
         case 1:
             let controller = UIStoryboard.manageProductsViewController()
             navigationController?.pushViewController(controller, animated: true)
-        case 2:
-            let controller = UIStoryboard.manageGroupsController()
-            navigationController?.pushViewController(controller, animated: true)
         default: break
         }
     }

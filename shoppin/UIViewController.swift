@@ -15,7 +15,12 @@ extension UIViewController {
     func addChildViewControllerAndView(viewController: UIViewController) {
         self.addChildViewControllerAndView(viewController, viewIndex: self.view.subviews.count)
     }
-    
+
+    func addChildViewControllerAndViewFill(viewController: UIViewController) {
+        self.addChildViewControllerAndView(viewController, viewIndex: self.view.subviews.count)
+        viewController.view.fillSuperview()
+    }
+
     func addChildViewControllerAndView(viewController: UIViewController, viewIndex:Int) {
         self.addChildViewController(viewController)
         

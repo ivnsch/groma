@@ -29,15 +29,19 @@ protocol Foo { // TODO rename, put in other file
     func setExpanded(expanded: Bool)
 }
 
+enum TopBarState {
+    case Normal, NormalFromExpanded, EditTable, EditItem, Add
+}
 
-class ExpandableItemsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ExpandCellAnimatorDelegate, Foo {
+
+class ExpandableItemsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ExpandCellAnimatorDelegate, Foo, ListTopBarViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var topBar: UINavigationBar!
-    @IBOutlet weak var topBarConstraint: NSLayoutConstraint!
+    @IBOutlet weak var topBar: ListTopBarView!
+//    @IBOutlet weak var topBarConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var addButton: UIBarButtonItem!
+    private var titleLabel: UILabel?
+    
     private weak var editButton: UIBarButtonItem!
     
     @IBOutlet weak var emptyView: UIView!
@@ -59,31 +63,35 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         originalNavBarFrame = topBar.frame
         
         topBar.backgroundColor = Theme.navigationBarBackgroundColor
-        //        titleLabel.textColor = Theme.navigationBarTextColor
-        //        addButton.setTitleColor(Theme.navigationBarTextColor, forState: .Normal)
-        //        editButton.setTitleColor(Theme.navigationBarTextColor, forState: .Normal)
+        
         view.backgroundColor = Theme.mainViewsBGColor
         tableView.backgroundColor = Theme.mainViewsBGColor
         
-        // adding a new nav item, because code was written when topbar was a custom view, after adding nav controller and using it's item expanding list once makes navbar disappear, don't have time to investigate now
-        let navItem = UINavigationItem()
-        topBar.items = [navItem]
-        let editButton = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "onEditTap:")
-        topBar.items?.first?.leftBarButtonItems = [editButton]
-        self.editButton = editButton
+        topBar.delegate = self
         
-        initNavBarRightButtons([.Add])
+        initTopBar()
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyViewTap:"))
         emptyView.addGestureRecognizer(tapRecognizer)
     }
     
-    func setNavTitle(title: String) {
-        topBar.items?.first?.title = title
+    private func initTopBar() {
+        topBar.delegate = self
+        setTopBarState(.NormalFromExpanded)
     }
     
-    private func initTopAddEditListControllerManager() -> ExpandableTopViewController<UIViewController> {
-        fatalError("override")
+    private func initTitleLabel() {
+        let label = UILabel()
+        label.font = Fonts.regular
+        label.textColor = UIColor.whiteColor()
+        topBar.addSubview(label)
+        titleLabel = label
+    }
+    
+    
+    func setNavTitle(title: String) {
+        topBar.title = title
+        topBar.positionTitleLabelLeft(true, animated: false)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -94,41 +102,84 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     func initModels() {
         fatalError("override")
     }
+
+    func setTopBarStateForAddTap(expand: Bool) {
+        if expand {
+            setTopBarState(.Add)
+        } else {
+            setTopBarState(.NormalFromExpanded)
+        }
+    }
     
-    private func initNavBarRightButtons(actions: [UIBarButtonSystemItem]) {
+    func setTopBarState(topBarState: TopBarState) {
         
-        var buttons: [UIBarButtonItem] = []
-        
-        for action in actions {
-            switch action {
-            case .Add:
-                let button = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "onAddTap:")
-                self.addButton = button
-                buttons.append(button)
-            case .Save:
-                let button = UIBarButtonItem(barButtonSystemItem: .Save, target: self, action: "onSubmitTap:")
-                buttons.append(button)
-            case .Cancel:
-                let button = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "onCancelTap:")
-                buttons.append(button)
-            default: break
-            }
+        func leftEdit() {
+            topBar.setLeftButtonIds([.Edit])
         }
         
-        topBar.items?.first?.rightBarButtonItems = buttons
+        func rightSubmitAndClose() { // v x
+            topBar.setRightButtonModels([
+                TopBarButtonModel(buttonId: .Submit),
+                TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+            ])
+        }
+        
+        func rightClose() { // x
+            topBar.setRightButtonModels([
+                TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+            ])
+        }
+
+        func rightOpen() { // +
+            topBar.setRightButtonModels([
+                TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformIdentity)
+            ])
+        }
+        
+        // animated
+        func rightOpenFromClosed() { // x -> +
+            topBar.setRightButtonModels([
+                TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)
+            ])
+        }
+        
+        // animated
+        func rightSubmitAndCloseFromOpen() { // + -> v x
+            topBar.setRightButtonModels([
+                TopBarButtonModel(buttonId: .Submit),
+                TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformIdentity, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+            ])
+        }
+        
+        switch topBarState {
+        case .Normal:
+            leftEdit()
+            rightOpen()
+            
+        case .NormalFromExpanded:
+            leftEdit()
+            rightOpenFromClosed()
+            
+        case .EditTable:
+            leftEdit()
+            rightOpen()
+            
+        case .EditItem:
+            leftEdit()
+            rightSubmitAndCloseFromOpen()
+
+        case .Add:
+            leftEdit()
+            rightSubmitAndCloseFromOpen()
+        }
     }
     
     func onEmptyViewTap(sender: UITapGestureRecognizer) {
         onAddTap()
     }
-    
-    func onSubmitTap(sender: UIBarButtonItem) {
-        fatalError("override")
-    }
-    
-    func onCancelTap(sender: UIBarButtonItem) {
 
-        initNavBarRightButtons([.Add])
+    func onSubmitTap() {
+        fatalError("override")
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -197,7 +248,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     }
     
     func onSelectCellInEditMode(model: ExpandableTableViewModel) {
-        fatalError("override")
+        setTopBarState(.EditItem)
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -230,47 +281,32 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     }
     
     func onAddTap() {
-        fatalError("Override")
-    }
-    
-    @IBAction func onAddTap(sender: UIBarButtonItem) {
-        initNavBarRightButtons([.Save])
-        onAddTap()
     }
     
     @IBAction func onEditTap(sender: UIBarButtonItem) {
         self.setEditing(!self.editing, animated: true, tryCloseTopViewController: true)
     }
     
-    func closeTopViewController() {
-        fatalError("override")
+    func topControllerIsExpanded() -> Bool {
+        fatalError("Override")
     }
     
     // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
     func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
         super.setEditing(editing, animated: animated)
         
-        if editing {
-            initNavBarRightButtons([.Save, .Cancel])
-            
-        } else {
-            initNavBarRightButtons([.Add])
+        if !editing {
             view.endEditing(true)
         }
         
-        if tryCloseTopViewController {
-            if !editing {
-                closeTopViewController()
-            }
-        }
+//        if tryCloseTopViewController {
+//            if !editing && topControllerIsExpanded() {
+////                setTopBarState(.NormalFromExpanded)
+////                closeTopViewController()
+//            }
+//        }
         
         tableView.setEditing(editing, animated: animated)
-        
-        if editing {
-            editButton.title = "Done"
-        } else {
-            editButton.title = "Edit"
-        }
     }
     
     // MARK: - ExpandCellAnimatorDelegate
@@ -300,5 +336,37 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         } else {
             print("Warn: ViewController.onWebsocketList: Removed list item was not found in tableView")
         }
+    }
+    
+    // MARK: - ListTopBarViewDelegate
+    
+    func onTopBarBackButtonTap() {
+    }
+    
+    func onTopBarTitleTap() {
+    }
+    
+    func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
+        switch buttonId {
+        case .Submit:
+            onSubmitTap()
+        case .ToggleOpen:
+            onAddTap()
+        case .Edit:
+            let editing = !self.tableView.editing
+            self.setEditing(editing, animated: true, tryCloseTopViewController: true)
+        default:
+            print("Warn: ExpandableItemsTableViewController.onTopBarButtonTap: Not handled buttonId: \(buttonId)")
+            break;
+        }
+    }
+    
+    func onCenterTitleAnimComplete(center: Bool) {
+        if center {
+            setTopBarState(.Normal)
+        }
+    }
+    
+    func onExpand(expanding: Bool) {
     }
 }

@@ -45,6 +45,6 @@ final class RemoteGroupItemInput: ResponseObjectSerializable, ResponseCollection
     
     func toGroupItem() -> GroupItem {
         // TODO review lastUpdate: NSDate(), lastServerUpdate: nil, removed: false - didn't know what to pass here so used defaults
-        return GroupItem(uuid: uuid, quantity: quantity, product: product, lastUpdate: NSDate(), lastServerUpdate: nil, removed: false)
+        return GroupItem(uuid: uuid, quantity: quantity, product: product, group: group, lastUpdate: NSDate(), lastServerUpdate: nil, removed: false)
     }
 }

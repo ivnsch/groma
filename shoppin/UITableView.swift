@@ -40,6 +40,15 @@ extension UITableView {
             return self.contentInset.top
         }
     }
+
+    var bottomInset: CGFloat {
+        set {
+            self.contentInset = UIEdgeInsetsMake(0, 0, newValue, 0)
+        }
+        get {
+            return self.contentInset.bottom
+        }
+    }
     
     func absoluteRow(indexPath: NSIndexPath) -> Int {
         var absRow = indexPath.row

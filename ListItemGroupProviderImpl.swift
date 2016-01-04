@@ -78,7 +78,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func groupItems(group: ListItemGroup, handler: ProviderResult<[GroupItem]> -> Void) {
+    func groupItems(group: ListItemGroup, _ handler: ProviderResult<[GroupItem]> -> Void) {
         dbGroupsProvider.groupItems(group) {items in
             handler(ProviderResult(status: .Success, sucessResult: items))
         }
@@ -99,7 +99,67 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 }
                 
             } else {
+                print("Error: InventoryItemsProviderImpl.add: Error adding group item")
                 handler(ProviderResult(status: .DatabaseSavingError))
+            }
+        }
+    }
+
+    func add(items: [GroupItem], group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        dbGroupsProvider.add(items) {saved in
+            if saved {
+                handler(ProviderResult(status: .Success))
+                
+                if saved {
+                    // TODO!!
+//                    self?.remoteGroupsProvider.addGroupItem(item, group: group) {remoteResult in
+//                        if !remoteResult.success {
+//                            print("Error: adding group item in remote: \(item), result: \(remoteResult)")
+//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+//                        }
+//                    }
+                }
+                
+            } else {
+                handler(ProviderResult(status: .DatabaseSavingError))
+            }
+        }
+    }
+    
+    func add(itemInput: GroupItemInput, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<GroupItem> -> Void) {
+        
+        func onHasProduct(product: Product) {
+            let groupItem = GroupItem(uuid: NSUUID().UUIDString, quantity: 1, product: product, group: group)
+            add(groupItem, group: group, remote: remote) {result in
+                if result.success {
+                    handler(ProviderResult(status: .Success, sucessResult: groupItem))
+                } else {
+                    print("Error: InventoryItemsProviderImpl.addToInventory: couldn't add to inventory, result: \(result)")
+                    handler(ProviderResult(status: .DatabaseUnknown))
+                }
+            }
+        }
+        
+        Providers.productProvider.product(itemInput.name) {productResult in
+            // TODO consistent handling everywhere of optional results - return always either .Success & Option(None) or .NotFound & non-optional.
+            if productResult.success || productResult.status == .NotFound {
+                if let product = productResult.sucessResult {
+                    onHasProduct(product)
+                } else {
+                    Providers.productCategoryProvider.categoryWithName(itemInput.category) {result in
+                        if let category = result.sucessResult {
+                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: category, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit)
+                            onHasProduct(product)
+                        } else {
+                            let category = ProductCategory(uuid: NSUUID().UUIDString, name: itemInput.category, color: itemInput.categoryColor)
+                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: category, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit)
+                            onHasProduct(product)
+                        }
+                    }
+                }
+            } else {
+                print("Error: InventoryItemsProviderImpl.addToInventory: Error fetching product, result: \(productResult)")
+                handler(ProviderResult(status: .DatabaseUnknown))
             }
         }
     }

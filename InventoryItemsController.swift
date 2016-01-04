@@ -1,46 +1,49 @@
 //
-//  InventoryItemsViewController.swift
+//  GroupItemsController.swift
 //  shoppin
 //
-//  Created by ischuetz on 01/10/15.
-//  Copyright © 2015 ivanschuetz. All rights reserved.
+//  Created by ischuetz on 03/01/16.
+//  Copyright © 2016 ivanschuetz. All rights reserved.
 //
 
 import UIKit
-import CMPopTipView
-import SwiftValidator
 import ChameleonFramework
+import SwiftValidator
 
-class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, AddEditInventoryItemControllerDelegate, InventoryItemsTableViewControllerDelegate, ExpandableTopViewControllerDelegate, AddEditListItemViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate {
 
-    @IBOutlet weak var sortByButton: UIButton!
-    @IBOutlet weak var settingsView: UIView!
-    @IBOutlet weak var emptyInventoryView: UIView!
+class ProductWithQuantityInv: ProductWithQuantity {
+    let inventoryItem: InventoryItem
     
-    @IBOutlet weak var editButton: UIBarButtonItem!
-    @IBOutlet weak var addButton: UIBarButtonItem!
-
-    private var sortByPopup: CMPopTipView?
+    override var product: Product {
+        return inventoryItem.product
+    }
     
-    private var tableViewController: InventoryItemsTableViewController?
-
-    private let sortByOptions: [(value: InventorySortBy, key: String)] = [
-        (.Count, "Count"), (.Alphabetic, "Alphabetic")
-    ]
+    override var quantity: Int {
+        return inventoryItem.quantity
+    }
     
-    var onViewWillAppear: VoidFunction?
+    init(inventoryItem: InventoryItem) {
+        self.inventoryItem = inventoryItem
+    }
+    override func incrementQuantityCopy(delta: Int) -> ProductWithQuantity {
+        let incrementedItem = inventoryItem.incrementQuantityCopy(delta)
+        return ProductWithQuantityInv(inventoryItem: incrementedItem)
+    }
+}
 
+class InventoryItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, AddEditListItemViewControllerDelegate, ExpandableTopViewControllerDelegate, AddEditInventoryItemControllerDelegate {
+    
     @IBOutlet weak var topBar: ListTopBarView!
 
-    @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var containerView: UIView!
 
+    @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
+    
     private var addEditInventoryItemControllerManager: ExpandableTopViewController<AddEditInventoryItemController>?
     private var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
-
-    // Warn: Setting this before prepareForSegue for tableViewController has no effect
+    
     var inventory: Inventory? {
         didSet {
-            tableViewController?.inventory = inventory
             if let inventory = inventory {
                 topBar.title = inventory.name
             }
@@ -48,26 +51,25 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     }
     
     var expandDelegate: Foo?
-
+    
     private var titleLabel: UILabel?
 
+    var onViewWillAppear: VoidFunction?
+    
+    private var productsWithQuantityController: ProductsWithQuantityViewController!
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if let tableView = tableViewController?.tableView {
-            addEditInventoryItemControllerManager = initAddEditInventoryItemsManager(tableView)
-            
-        } else {
-            print("Error: InventoryItemsViewController.viewDidLoad no tableview in tableViewController")
-        }
-
+        
+        productsWithQuantityController = UIStoryboard.productsWithQuantityViewController()
+        addChildViewController(productsWithQuantityController)
+        productsWithQuantityController.delegate = self
+        
         initTitleLabel()
-
+        
         topBar.delegate = self
 
-        // TODO custom empty view, put this there
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyInventoryViewTap:"))
-        emptyInventoryView.addGestureRecognizer(tapRecognizer)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryItems:", name: WSNotificationName.InventoryItems.rawValue, object: nil)
@@ -80,15 +82,33 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    
+    override func viewDidLayoutSubviews() {
+        // add the embedded controller's view
+        if productsWithQuantityController.view.superview == nil {
+            containerView.addSubview(productsWithQuantityController.view)
+            productsWithQuantityController.view.fillSuperview()
+            
+            if let tableView = productsWithQuantityController?.tableView {
+                addEditInventoryItemControllerManager = initAddEditInventoryItemsManager(tableView)
+                topQuickAddControllerManager = initTopQuickAddControllerManager(tableView)
+                
+            } else {
+                print("Error: InventoryItemsViewController.viewDidLoad no tableview in tableViewController")
+            }
+            
+        }
+    }
+
     func setThemeColor(color: UIColor) {
         // TODO complete theme, like in list items?
         topBar.backgroundColor = color
-//        view.backgroundColor = UIColor.whiteColor()
+        //        view.backgroundColor = UIColor.whiteColor()
         
         let colorArray = NSArray(ofColorsWithColorScheme: ColorScheme.Complementary, with: color, flatScheme: true)
         view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
-//        listItemsTableViewController.view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
-//        listItemsTableViewController.headerBGColor = colorArray[1] as? UIColor // as? to silence warning
+        //        listItemsTableViewController.view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
+        //        listItemsTableViewController.headerBGColor = colorArray[1] as? UIColor // as? to silence warning
         
         let compl = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
         
@@ -97,14 +117,14 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         
         titleLabel?.textColor = compl
         
-//        expandButtonModel.bgColor = (colorArray[4] as! UIColor).lightenByPercentage(0.5)
-//        expandButtonModel.pathColor = UIColor(contrastingBlackOrWhiteColorOn: expandButtonModel.bgColor, isFlat: true)
+        //        expandButtonModel.bgColor = (colorArray[4] as! UIColor).lightenByPercentage(0.5)
+        //        expandButtonModel.pathColor = UIColor(contrastingBlackOrWhiteColorOn: expandButtonModel.bgColor, isFlat: true)
         
         topBar.fgColor = compl
         
-//        emptyListViewImg.tintColor = compl
-//        emptyListViewLabel1.textColor = compl
-//        emptyListViewLabel2.textColor = compl
+        //        emptyListViewImg.tintColor = compl
+        //        emptyListViewLabel1.textColor = compl
+        //        emptyListViewLabel2.textColor = compl
     }
     
     
@@ -115,7 +135,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         topBar.addSubview(label)
         titleLabel = label
     }
-
+    
     private func initTopQuickAddControllerManager(tableView: UITableView) -> ExpandableTopViewController<QuickAddViewController> {
         let top = CGRectGetHeight(topBar.frame)
         let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: 290, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
@@ -134,28 +154,23 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     
     func onExpand(expanding: Bool) {
         if !expanding {
-            emptyInventoryView.hidden = true
+            productsWithQuantityController?.emptyView.hidden = true
             topBar.setLeftButtonIds([])
             topBar.setRightButtonIds([])
         }
         topBar.layoutIfNeeded() // FIXME weird effect and don't we need this in view controller
         topBar.positionTitleLabelLeft(expanding, animated: true)
     }
-
+    
     func onExpandableClose() {
+        topBarOnCloseExpandable()
+    }
+    
+    private func topBarOnCloseExpandable() {
         topBar.setLeftButtonIds([.Edit])
         topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
     }
-    
-    func onEmptyInventoryViewTap(sender: UITapGestureRecognizer) {
-        // TODO
-    }
-    
-    private func updateEmptyInventoryView() {
-        if let inventoryItems = tableViewController?.inventoryItems {
-            emptyInventoryView.setHiddenAnimated(!inventoryItems.isEmpty)
-        }
-    }
+
     
     private func initAddEditInventoryItemsManager(tableView: UITableView) -> ExpandableTopViewController<AddEditInventoryItemController> {
         let top = CGRectGetHeight(topBar.frame)
@@ -176,73 +191,14 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         onViewWillAppear?()
         onViewWillAppear = nil
     }
-    
-    private func createPicker() -> UIPickerView {
-        let picker = UIPickerView(frame: CGRectMake(0, 0, 150, 100))
-        picker.delegate = self
-        picker.dataSource = self
-        return picker
-    }
-    
-    // MARK: - UIPicker
-    
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return sortByOptions.count
-    }
-    
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let sortByOption = sortByOptions[row]
-        sortBy(sortByOption.value)
-        sortByButton.setTitle(sortByOption.key, forState: .Normal)
-    }
-    
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
-        let label = view as? UILabel ?? UILabel()
-        label.font = Fonts.regularLight
-        label.text = sortByOptions[row].key
-        return label
-    }
-    
-    private func sortBy(sortBy: InventorySortBy) {
-        tableViewController?.sortBy = sortBy
-    }
-    
-    // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "embedInventoryItemsTableViewSegue" {
-            tableViewController = segue.destinationViewController as? InventoryItemsTableViewController
-            tableViewController?.delegate = self
-            topQuickAddControllerManager = initTopQuickAddControllerManager(tableViewController!.tableView)
-        }
-    }
-    
-    @IBAction func onSortByTap(sender: UIButton) {
-        if let popup = self.sortByPopup {
-            popup.dismissAnimated(true)
-        } else {
-            let popup = MyTipPopup(customView: createPicker())
-            popup.presentPointingAtView(sortByButton, inView: view, animated: true)
-        }
-    }
-    
-    @IBAction func onEditTap(sender: UIButton) {
-        toggleEditing()
-    }
     
     private func toggleEditing() {
-        if let tableViewController = tableViewController {
-            tableViewController.setEditing(!tableViewController.editing, animated: true)
-            editButton.title = tableViewController.editing ? "Done" : "Edit"
-            if !tableViewController.editing {
-                topBar.setRightButtonIds([])
-            }
+        if let productsWithQuantityController = productsWithQuantityController {
+            let editing = !productsWithQuantityController.editing // toggle
+            productsWithQuantityController.setEditing(editing, animated: true)
         } else {
-            print("Warn: InventoryItemsViewController.onEditTap edit tap but no tableViewController")
+            print("Warn: InventoryItemsViewController.toggleEditing edit tap but no tableViewController")
         }
     }
     
@@ -285,14 +241,16 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, successHandler: VoidFunction? = nil) {
         
         if let inventory = inventory {
-
+            
             if let price = priceText.floatValue, quantity = Int(quantityText) {
                 
                 let input = InventoryItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit)
                 
                 Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, self.successHandler{[weak self] (inventoryItemWithHistoryEntry: InventoryItemWithHistoryEntry) in
                     // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end. TODO nicer solution
-                    self?.tableViewController?.clearAndLoadFirstPage()
+                    
+                    self?.productsWithQuantityController?.clearAndLoadFirstPage()
+                    
                     self?.toggleTopAddController()
                 })
             }
@@ -314,26 +272,26 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
             let updatedInventoryItem = editingInventoryItem.copy(quantity: quantity, quantityDelta: quantity, product: updatedProduct)
             Providers.inventoryItemsProvider.updateInventoryItem(updatedInventoryItem, remote: true, successHandler {[weak self] in
                 self?.onInventoryItemUpdated()
-            })
+                })
             
         } else {
             
             print("Not supported: Adding directly to inventory")
-
+            
         }
     }
     
     func onInventoryItemUpdated() {
         // we have pagination so we don't know if the item is visible atm. For now simply cause a reload and start at first page. TODO nicer solution
-        tableViewController?.clearAndLoadFirstPage()
+        productsWithQuantityController?.clearAndLoadFirstPage()
         addEditInventoryItemControllerManager?.controller?.clear()
         addEditInventoryItemControllerManager?.expand(false)
-        topBar.setRightButtonIds([])
+        topBarOnCloseExpandable()
     }
     
     func onCancelTap() {
     }
-
+    
     
     // MARK: - ListTopBarViewDelegate
     
@@ -369,7 +327,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         if topQuickAddControllerManager?.expanded ?? false || addEditInventoryItemControllerManager?.expanded ?? false {
             topQuickAddControllerManager?.expand(false)
             addEditInventoryItemControllerManager?.expand(false)
-
+            
             topBar.setLeftButtonIds([.Edit])
             topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
             
@@ -404,20 +362,6 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         }
     }
     
-    // MARK: - InventoryItemsTableViewControllerDelegate
-    
-    func onInventoryItemSelected(inventoryItem: InventoryItem, indexPath: NSIndexPath) {
-        if tableViewController?.editing ?? false {
-            addEditInventoryItemControllerManager?.expand(true)
-            addEditInventoryItemControllerManager?.controller?.editingInventoryItem = inventoryItem
-            topBar.setRightButtonIds([.Submit])
-        }
-    }
-    
-    func onLoadedInventoryItems(inventoryItems: [InventoryItem]) {
-        updateEmptyInventoryView()
-    }
-    
     // MARK: - ExpandableTopViewControllerDelegate
     
     func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
@@ -438,7 +382,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
                 return inventoryItem
             }
             Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, successHandler{[weak self] result in
-                self?.tableViewController?.addOrIncrementUI(inventoryItems.map{$0.inventoryItem})
+                self?.productsWithQuantityController?.addOrIncrementUI(inventoryItems.map{ProductWithQuantityInv(inventoryItem: $0.inventoryItem)})
             })
         }
     }
@@ -448,7 +392,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         if let inventory = inventory {
             let inventoryItem = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: 1, quantityDelta: 1, product: product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO remove the offline dummy email? to add inventory shared user is not needed (the server uses the logged in user).
             Providers.inventoryItemsProvider.addToInventory([inventoryItem], remote: true, successHandler{[weak self] result in
-                self?.tableViewController?.addOrIncrementUI(inventoryItem.inventoryItem)
+                self?.productsWithQuantityController?.addOrIncrementUI(ProductWithQuantityInv(inventoryItem: inventoryItem.inventoryItem))
             })
         }
     }
@@ -488,13 +432,77 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
     }
     
     
+    
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "productsWithQuantityControllerSegue" {
+            productsWithQuantityController = segue.destinationViewController as? ProductsWithQuantityViewController
+            productsWithQuantityController?.delegate = self
+        }
+    }
+    
+    // MARK: - ProductsWithQuantityViewControllerDelegate
+    
+    func loadModels(page: NSRange, sortBy: InventorySortBy, onSuccess: [ProductWithQuantity] -> Void) {
+        if let inventory = inventory {
+            Providers.inventoryItemsProvider.inventoryItems(page, inventory: inventory, fetchMode: .Both, sortBy: sortBy, successHandler{inventoryItems in
+                let productsWithQuantity = inventoryItems.map{ProductWithQuantityInv(inventoryItem: $0)}
+                onSuccess(productsWithQuantity)
+                })
+        } else {
+            print("Error: InventoryItemsController.loadModels: no inventory")
+        }
+    }
+    
+    func onLoadedModels(models: [ProductWithQuantity]) {
+        // TODO is this necessary?
+    }
+    
+    func remove(model: ProductWithQuantity, onSuccess: VoidFunction, onError: ProviderResult<Any> -> Void) {
+        if let inventory = inventory {
+            Providers.inventoryItemsProvider.removeInventoryItem(model.product.uuid, inventoryUuid: inventory.uuid, remote: true, resultHandler(onSuccess: {
+                onSuccess()
+                }, onError: {result in
+                    onError(result)
+            }))
+        } else {
+            print("Error: InventoryItemsController.remove: no inventory")
+        }
+    }
+    
+    func increment(model: ProductWithQuantity, delta: Int, onSuccess: VoidFunction) {
+        Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, successHandler({result in
+            onSuccess()
+        }))
+    }
+    
+    func onModelSelected(model: ProductWithQuantity, indexPath: NSIndexPath) {
+        if productsWithQuantityController?.editing ?? false {
+            addEditInventoryItemControllerManager?.expand(true)
+            addEditInventoryItemControllerManager?.controller?.editingInventoryItem = (model as! ProductWithQuantityInv).inventoryItem
+            topBar.setRightButtonModels([
+                TopBarButtonModel(buttonId: .Submit),
+                TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+            ])
+        }
+    }
+    
+    func emptyViewData() -> (text: String, text2: String, imgName: String) {
+        return (text: "You inventory is empty", text2: "Mark cart items as \"bought\" or tap to add directly", imgName: "empty_shelf")
+    }
+    
+    func onEmptyViewTap() {
+        toggleTopAddController()
+    }
+    
     // MARK: - Websocket
     
     func onWebsocketInventory(note: NSNotification) {
         if let info = note.userInfo as? Dictionary<String, WSNotification<Inventory>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
-//                case .Add: // we only use 1 inventory currently
+                    //                case .Add: // we only use 1 inventory currently
                 case .Update:
                     // TODO review this carefully, if we update the inventory here but the provider saving fails currently nothing happens
                     // and changes the user do to this not saved inventory get lost
@@ -510,10 +518,10 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
                         print("Info: Received a websocket inventory update before inventory is loaded. Doing nothing.")
                     }
                     
-//                case .Delete: // we only use 1 inventory currently and it can't be deleted
-//                    removeProductUI(notification.obj)
+                    //                case .Delete: // we only use 1 inventory currently and it can't be deleted
+                    //                    removeProductUI(notification.obj)
                 default: print("Error: InventoryItemsViewController.onWebsocketInventory: not implemented: \(notification.verb)")
-
+                    
                 }
             } else {
                 print("Error: ViewController.onWebsocketInventory: no userInfo")
@@ -528,7 +536,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
                 case WSNotificationVerb.Add:
                     let incr = notification.obj
                     Providers.inventoryItemsProvider.incrementInventoryItem(incr, remote: false, successHandler{[weak self] inventoryItem in
-                        self?.tableViewController?.updateIncrementUI(inventoryItem, delta: incr.delta)
+                        self?.productsWithQuantityController?.updateIncrementUI(ProductWithQuantityInv(inventoryItem: inventoryItem), delta: incr.delta)
                     })
                 default: print("Error: ViewController.onWebsocketInventoryItems: Not handled: \(notification.verb)")
                 }
@@ -544,7 +552,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         if let info = note.userInfo as? Dictionary<String, WSNotification<Any>> {
             
             if let notification = info[WSNotificationValue] {
-
+                
                 switch notification.verb {
                 case .Update:
                     if let inventoryItem = notification.obj as? InventoryItem {
@@ -560,8 +568,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
                 case .Delete:
                     if let inventoryItemId = notification.obj as? InventoryItemId {
                         Providers.inventoryItemsProvider.removeInventoryItem(inventoryItemId.productUuid, inventoryUuid: inventoryItemId.inventoryUuid, remote: true, successHandler{[weak self] result in
-                            self?.tableViewController?.remove(inventoryItemId.inventoryUuid, inventoryItemProductUuid: inventoryItemId.productUuid)
-                            self?.updateEmptyInventoryView()
+                            self?.productsWithQuantityController?.remove(inventoryItemId.inventoryUuid, inventoryItemProductUuid: inventoryItemId.productUuid)
                         })
                     } else {
                         print("Error: InventoryItemsViewController.onWebsocketInventoryItem: not expected type in: \(notification.verb): \(notification.obj)")
@@ -583,7 +590,7 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
         
         // TODO!! (not only websocket related) InventoryItemWithHistoryEntry has only history item uuid, this is also sent like this to the server. Should we not send the item instead of only the uuid. At the very last this should be the case here with websocket since when we receive history item from another user/device we definitely don't have it yet so this uuid references nothing
         if let info = note.userInfo as? Dictionary<String, WSEmptyNotification> {
-        
+            
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Add:
@@ -613,4 +620,5 @@ class InventoryItemsViewController: UIViewController, UIPickerViewDataSource, UI
             print("Error: InventoryItemsViewController.onWebsocketProduct: no userInfo")
         }
     }
+
 }

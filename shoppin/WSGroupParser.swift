@@ -26,6 +26,6 @@ struct WSGroupParser {
         let groupObj = json.valueForKeyPath("group")!
         let group = parseGroup(groupObj)
         
-        return GroupItemWithGroup(groupItem: GroupItem(uuid: uuid, quantity: quantity, product: product), group: group)
+        return GroupItemWithGroup(groupItem: GroupItem(uuid: uuid, quantity: quantity, product: product, group: group), group: group)
     }
 }

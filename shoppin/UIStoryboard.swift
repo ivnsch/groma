@@ -28,9 +28,11 @@ extension UIStoryboard {
     private class func reorderSectionsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ReorderSectionTableViewController", bundle: NSBundle.mainBundle()) }
     private class func addEditListStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditList", bundle: NSBundle.mainBundle()) }
     private class func addEditInventoryStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditInventory", bundle: NSBundle.mainBundle()) }
+    private class func addEditGroupStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditGroupViewController", bundle: NSBundle.mainBundle()) }
     private class func addEditSharedUsersStoryboard() -> UIStoryboard { return UIStoryboard(name: "SharedUsersViewController", bundle: NSBundle.mainBundle()) }
     private class func addEditInventoryItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditInventoryItem", bundle: NSBundle.mainBundle()) }
     private class func scaleStoryboard() -> UIStoryboard { return UIStoryboard(name: "Scale", bundle: NSBundle.mainBundle()) }
+    private class func productsWithQuantityStoryboard() -> UIStoryboard { return UIStoryboard(name: "ProductsWithQuantity", bundle: NSBundle.mainBundle()) }
 
     
     // MARK: - List items
@@ -99,8 +101,8 @@ extension UIStoryboard {
 //    }
     
     
-    class func inventoryItemsViewController() -> InventoryItemsViewController {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("InventoryItemsViewController") as! InventoryItemsViewController
+    class func inventoryItemsViewController() -> InventoryItemsController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("InventoryItemsController") as! InventoryItemsController
     }
     
     class func addEditInventory() -> AddEditInventoryController {
@@ -162,21 +164,16 @@ extension UIStoryboard {
     
     // MARK: Manage groups
     
-    class func manageGroupsController() -> ManageGroupsViewController {
-        return manageGroupsStoryboard().instantiateViewControllerWithIdentifier("ManageGroupsViewController") as! ManageGroupsViewController
+    class func addEditGroup() -> AddEditGroupViewController {
+        return addEditGroupStoryboard().instantiateViewControllerWithIdentifier("AddEditGroupController") as! AddEditGroupViewController
     }
-    
-    class func manageGroupsAddEditController() -> ManageGroupsAddEditController {
-        return manageGroupsStoryboard().instantiateViewControllerWithIdentifier("ManageGroupsAddEditController") as! ManageGroupsAddEditController
-    }
-    
-    class func manageGroupsSelectItemsController() -> ManageGroupsSelectItemsController {
-        return manageGroupsStoryboard().instantiateViewControllerWithIdentifier("ManageGroupsSelectItemsController") as! ManageGroupsSelectItemsController
-    }
-    
     
     class func statsDetailsViewController() -> StatsDetailsViewController {
         return statsStoryboard().instantiateViewControllerWithIdentifier("StatsDetailsViewController") as! StatsDetailsViewController
+    }
+    
+    class func groupItemsController() -> GroupItemsController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("GroupItemsController") as! GroupItemsController
     }
     
     
@@ -207,5 +204,11 @@ extension UIStoryboard {
     
     class func scaleViewController() -> ScaleViewController {
         return scaleStoryboard().instantiateViewControllerWithIdentifier("ScaleViewController") as! ScaleViewController
+    }
+    
+    // MARK: ProductsWithQuantityViewController
+    
+    class func productsWithQuantityViewController() -> ProductsWithQuantityViewController {
+        return productsWithQuantityStoryboard().instantiateViewControllerWithIdentifier("ProductsWithQuantityViewController") as! ProductsWithQuantityViewController
     }
 }

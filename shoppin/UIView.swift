@@ -122,6 +122,13 @@ extension UIView {
         alignBottom(view)
     }
     
+    func addSubviewFill(view: UIView) {
+        addSubview(view)
+        fill(view)
+        layoutIfNeeded()
+//        view.fillSuperview()
+    }
+    
     /**
     Toggles a semi-transparent, blocking progress indicator overlay on this view
     */

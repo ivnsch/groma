@@ -11,7 +11,7 @@ import CMPopTipView
 
 class MyTipPopup: CMPopTipView {
 
-    init(customView: UIView, borderColor: UIColor? = UIColor(red: 1, green: 93/255, blue: 166/255, alpha: 1)) {
+    init(customView: UIView, borderColor: UIColor? = UIColor.flatGrayColor()) {
         super.init(customView: customView)
         self.borderColor = borderColor
         sharedInit()

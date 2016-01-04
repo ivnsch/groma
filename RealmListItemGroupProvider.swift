@@ -24,7 +24,7 @@ class RealmListItemGroupProvider: RealmProvider {
     
     func groupItems(group: ListItemGroup, handler: [GroupItem] -> Void) {
         let mapper = {GroupItemMapper.groupItemWith($0)}
-        self.load(mapper, filter: "uuid = '\(group.uuid)'", handler: handler)
+        self.load(mapper, filter: "group.uuid = '\(group.uuid)'", handler: handler)
     }
 
     // TODO remove
@@ -48,10 +48,19 @@ class RealmListItemGroupProvider: RealmProvider {
     }
     
     func add(groupItem: GroupItem, handler: Bool -> Void) {
-        update(groupItem, handler: handler)
+        addOrUpdate(groupItem, handler: handler)
     }
-
+    
+    func add(groupItems: [GroupItem], handler: Bool -> Void) {
+        let dbObjs = groupItems.map{GroupItemMapper.dbWith($0)}
+        saveObjs(dbObjs, update: true, handler: handler)
+    }
+    
     func update(groupItem: GroupItem, handler: Bool -> Void) {
+        addOrUpdate(groupItem, handler: handler)
+    }
+    
+    func addOrUpdate(groupItem: GroupItem, handler: Bool -> Void) {
         let dbObj = GroupItemMapper.dbWith(groupItem)
         saveObj(dbObj, update: true, handler: handler)
     }
