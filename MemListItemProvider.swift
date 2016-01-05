@@ -160,6 +160,18 @@ class MemListItemProvider {
         return true
     }
     
+    func listItemCount(status: ListItemStatus, list: List) -> Int? {
+        guard enabled else {return nil}
+        guard var listItems = listItems else {return nil}
+        
+        if let listItems = listItems[list] {
+            return listItems.filterStash().count
+        } else {
+            print("Info: MemListItemProvider.listItemCount: there are no listitems for list: \(list)")
+            return 0
+        }
+    }
+    
     // Sets list items to nil
     // With this access to memory cache will be disabled (guards - check for nil) until the next overwrite
     // If we didn't set to nil we would be able to e.g. add list items to a emptied memory cache in which case it will not match the database contents

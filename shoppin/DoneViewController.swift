@@ -108,7 +108,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
             }
             
             if cartEmpty {
-                Providers.listItemsProvider.listItemCount(.Stash, list: list, successHandler {[weak self] count in
+                Providers.listItemsProvider.listItemCount(.Stash, list: list, fetchMode: .Both, successHandler {[weak self] count in
                     self?.emptyCartStashLabel.text = "There are \(count) items in the stash"
                     self?.emptyCartStashLabel.hidden = count == 0
                     UIView.animateWithDuration(0.3) {[weak self] in

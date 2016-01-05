@@ -104,5 +104,9 @@ extension Array where Element: ListItem {
     func filterDone() -> Array<Element> {
         return self.filter{$0.status == .Done}
     }
+    
+    func filterStash() -> Array<Element> {
+        return self.filter{$0.status == .Stash}
+    }
 }
 

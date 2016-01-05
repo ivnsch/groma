@@ -20,7 +20,7 @@ class ListItemProviderImpl: ListItemProvider {
         let memListItemsMaybe = memProvider.listItems(list)
         if let memListItems = memListItemsMaybe {
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: memListItems))
-            if fetchMode == .MemOnly {
+            if fetchMode == .MemOnly || fetchMode == .First {
                 return
             }
         }
@@ -53,7 +53,7 @@ class ListItemProviderImpl: ListItemProvider {
                         // TODO this should OVERWRITE the items not just "save"
                         self?.dbProvider.saveListItems(listItemsWithRelations) {saved in
                             
-                            if fetchMode == .Both {
+                            if fetchMode == .Both || fetchMode == .First {
                                 handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItemsWithRelations.listItems))
                             }
                             self?.memProvider.overwrite(listItemsWithRelations.listItems)
@@ -520,10 +520,18 @@ class ListItemProviderImpl: ListItemProvider {
     
 
     
-    func listItemCount(status: ListItemStatus, list: List, _ handler: ProviderResult<Int> -> Void) {
-        dbProvider.listItemCount(status, list: list) {countMaybe in
-            if let count = countMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: count))
+    func listItemCount(status: ListItemStatus, list: List, fetchMode: ProviderFetchModus = .Both, _ handler: ProviderResult<Int> -> Void) {
+        let countMaybe = memProvider.listItemCount(.Stash, list: list)
+        if let count = countMaybe {
+            handler(ProviderResult(status: .Success, sucessResult: count))
+        }
+        dbProvider.listItemCount(status, list: list) {dbCountMaybe in
+            if let dbCount = dbCountMaybe {
+                // if for some reason the count in db is different than in memory return it again so the interface can update
+                // (only used for fetchmode .Both)
+                if fetchMode == .Both && (countMaybe.map{$0 != dbCount} ?? false) {
+                    handler(ProviderResult(status: .Success, sucessResult: dbCount))
+                }
             } else {
                 handler(ProviderResult(status: .DatabaseUnknown))
             }

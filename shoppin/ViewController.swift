@@ -211,7 +211,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         initFloatingViews()
         
-        updatePrices()
+        updatePrices(.First)
      
         // TODO custom empty view, put this there
         let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyListViewTap:"))
@@ -228,7 +228,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     func updateStashView(withDelay withDelay: Bool) {
         func f() {
             if let list = currentList {
-                Providers.listItemsProvider.listItemCount(ListItemStatus.Stash, list: list, successHandler {[weak self] count in
+                Providers.listItemsProvider.listItemCount(ListItemStatus.Stash, list: list, fetchMode: .MemOnly, successHandler {[weak self] count in
                     if count != self?.stashView.quantity { // don't animate if there's no change
                         self?.stashView.quantity = count
                         self?.pricesView.setExpandedHorizontal(count == 0)
