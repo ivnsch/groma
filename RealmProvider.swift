@@ -17,63 +17,69 @@ import RealmSwift
 class RealmProvider {
 
     func saveObj<T: DBSyncable>(obj: T, update: Bool = false, handler: Bool -> ()) {
-
-        let finished: (Bool) -> () = {success in
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
+            let resultMaybe = self?.saveObjSync(obj, update: update)
             dispatch_async(dispatch_get_main_queue(), {
-                handler(success)
-            })
-        }
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            
-            do {
-                obj.lastUpdate = NSDate()
-                let realm = try Realm()
-                realm.write {
-                    realm.add(obj, update: update)
+                if let result = resultMaybe {
+                    handler(result)
+                } else {
+                    print("Error: RealmProvider.saveObj: self is nil")
+                    handler(false)
                 }
-            } catch let error as NSError {
-                print("Error: creating Realm() in saveObj: \(error)")
-                finished(false)
-            } catch _ {
-                print("Error: creating Realm() in saveObj (unknown)")
-                finished(false)
-            }
-            
-            finished(true)
+            })
         })
+    }
+    
+    func saveObjSync<T: DBSyncable>(obj: T, update: Bool = false) -> Bool {
+        do {
+            obj.lastUpdate = NSDate()
+            let realm = try Realm()
+            realm.write {
+                realm.add(obj, update: update)
+            }
+        } catch let error as NSError {
+            print("Error: creating Realm() in saveObj: \(error)")
+            return false
+        } catch _ {
+            print("Error: creating Realm() in saveObj (unknown)")
+            return false
+        }
+        return true
     }
 
     /**
     * Batch save
     */
     func saveObjs<T: Object>(objs: [T], update: Bool = false, onSaved: ((Realm) -> ())? = nil, handler: Bool -> ()) {
-        
-        let finished: (Bool) -> () = {success in
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
+            let resultMaybe = self?.saveObjsSync(objs, update: update)
             dispatch_async(dispatch_get_main_queue(), {
-                handler(success)
-            })
-        }
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            
-            do {
-                let realm = try Realm()
-                realm.write {
-                    for obj in objs {
-                        realm.add(obj, update: update)
-                    }
+                if let result = resultMaybe {
+                    handler(result)
+                } else {
+                    print("Error: RealmProvider.saveObjs: self is nil")
+                    handler(false)
                 }
-            } catch let error as NSError {
-                print("Error: creating Realm() in saveObjs: \(error)")
-                finished(false)
-            } catch _ {
-                print("Error: creating Realm() in saveObjs (unknown)")
-                finished(false)
-            }
-            
-            finished(true)
+            })
         })
+    }
+    
+    func saveObjsSync<T: Object>(objs: [T], update: Bool = false) -> Bool {
+        do {
+            let realm = try Realm()
+            realm.write {
+                for obj in objs {
+                    realm.add(obj, update: update)
+                }
+            }
+        } catch let error as NSError {
+            print("Error: creating Realm() in saveObjs: \(error)")
+            return false
+        } catch _ {
+            print("Error: creating Realm() in saveObjs (unknown)")
+            return false
+        }
+        return true
     }
     
     /**

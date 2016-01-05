@@ -85,7 +85,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     func add(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        dbGroupsProvider.add(item) {[weak self] saved in
+        dbGroupsProvider.addOrIncrement(item) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
@@ -106,7 +106,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
 
     func add(items: [GroupItem], group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        dbGroupsProvider.add(items) {saved in
+        dbGroupsProvider.addOrIncrement(items) {saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
