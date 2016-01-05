@@ -42,7 +42,7 @@ final class GroupMonthYearAggregate: Equatable {
         // quantity can be negative, in which case we need quantity..0, or positive, in which case we need 0..quantity
         let dates: [NSDate] = min(self.timePeriod.quantity + 1, 0).stride(through: max(self.timePeriod.quantity, 0), by: 1).map {quantity in
             let offset = self.timePeriod.dateOffsetComponent(quantity)
-            return NSCalendar.currentCalendar().dateByAddingComponents(offset, toDate: self.referenceDate, options: .WrapComponents)!
+            return NSCalendar.currentCalendar().dateByAddingComponents(offset, toDate: self.referenceDate, options: .MatchStrictly)!
         }
         
         return dates.sort{$0 < $1}
