@@ -137,21 +137,6 @@ extension UIStoryboard {
         return addEditListItemStoryboard().instantiateViewControllerWithIdentifier("AddEditListItem") as! AddEditListItemViewController
     }
     
-    
-    // MARK: Quick add group
-    
-    class func quickAddGroupViewController() -> QuickAddGroupViewController {
-        return quickAddGroupStoryboard().instantiateViewControllerWithIdentifier("QuickAddGroupViewController") as! QuickAddGroupViewController
-    }
-    
-    class func quickAddGroupItemsViewController() -> QuickAddGroupItemsViewController {
-        return quickAddGroupStoryboard().instantiateViewControllerWithIdentifier("QuickAddGroupItemsViewController") as! QuickAddGroupItemsViewController
-    }
-
-    class func wuickAddGroupItemsTableViewController() -> QuickAddGroupItemsTableViewController {
-        return quickAddGroupItemStoryboard().instantiateViewControllerWithIdentifier("QuickAddGroupItemsTableViewController") as! QuickAddGroupItemsTableViewController
-    }
-    
     // MARK: Manage products
     
     class func manageProductsViewController() -> ManageProductsViewController {

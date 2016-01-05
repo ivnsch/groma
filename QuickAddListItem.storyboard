@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -58,35 +58,6 @@
                                     <segue destination="cN4-H5-trn" kind="embed" identifier="navController" id="M5Z-aO-UwY"/>
                                 </connections>
                             </containerView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5lx-2K-eME">
-                                <rect key="frame" x="570" y="0.0" width="0.0" height="40"/>
-                                <subviews>
-                                    <segmentedControl opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="a7q-1A-cbN">
-                                        <rect key="frame" x="5" y="6" width="0.0" height="29"/>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <segments>
-                                            <segment title="Product"/>
-                                            <segment title="Group"/>
-                                        </segments>
-                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="6"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="onProductOrGroupSegmentChanged:" destination="3Uk-Rq-zKd" eventType="valueChanged" id="3At-rV-W7B"/>
-                                        </connections>
-                                    </segmentedControl>
-                                </subviews>
-                                <color key="backgroundColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" id="2Ad-ly-05f"/>
-                                    <constraint firstAttribute="trailing" secondItem="a7q-1A-cbN" secondAttribute="trailing" priority="998" id="6j0-fi-EGo"/>
-                                    <constraint firstItem="a7q-1A-cbN" firstAttribute="leading" secondItem="5lx-2K-eME" secondAttribute="leading" priority="999" constant="5" id="SAc-n4-2JY"/>
-                                    <constraint firstItem="a7q-1A-cbN" firstAttribute="centerY" secondItem="5lx-2K-eME" secondAttribute="centerY" id="vr1-1l-jHS"/>
-                                </constraints>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dif-9Z-2lr" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="526" y="0.0" width="40" height="40"/>
                                 <constraints>
@@ -112,10 +83,9 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="H9s-Os-9qI" firstAttribute="leading" secondItem="dif-9Z-2lr" secondAttribute="trailing" constant="4" id="1tL-ec-QI5"/>
                             <constraint firstItem="H9s-Os-9qI" firstAttribute="trailing" secondItem="uPF-XL-vgJ" secondAttribute="trailingMargin" id="7tt-9U-vZt"/>
                             <constraint firstItem="dif-9Z-2lr" firstAttribute="leading" secondItem="s1F-jF-pKk" secondAttribute="trailing" constant="4" id="9iL-75-PDA"/>
-                            <constraint firstItem="5lx-2K-eME" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="BBe-CT-TId"/>
-                            <constraint firstItem="wh4-4g-FV0" firstAttribute="top" secondItem="5lx-2K-eME" secondAttribute="bottom" id="Md9-O4-SXl"/>
                             <constraint firstItem="dif-9Z-2lr" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="Sa4-KW-eNK"/>
                             <constraint firstItem="6Ye-nf-OHM" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="bEV-Rl-nvH"/>
                             <constraint firstItem="zcT-I6-trj" firstAttribute="top" secondItem="wh4-4g-FV0" secondAttribute="bottom" id="cmh-td-tpE"/>
@@ -123,9 +93,6 @@
                             <constraint firstItem="H9s-Os-9qI" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="gYK-ka-YZ1"/>
                             <constraint firstAttribute="trailing" secondItem="wh4-4g-FV0" secondAttribute="trailing" id="ght-OL-w3S"/>
                             <constraint firstItem="6Ye-nf-OHM" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" constant="14" id="hVr-Jp-2yK"/>
-                            <constraint firstItem="H9s-Os-9qI" firstAttribute="leading" secondItem="5lx-2K-eME" secondAttribute="trailing" id="lVs-CT-ofW"/>
-                            <constraint firstItem="5lx-2K-eME" firstAttribute="leading" secondItem="dif-9Z-2lr" secondAttribute="trailing" constant="4" id="meP-FC-JD8"/>
-                            <constraint firstItem="5lx-2K-eME" firstAttribute="leading" secondItem="s1F-jF-pKk" secondAttribute="trailing" constant="8" id="oaU-1S-wpH"/>
                             <constraint firstItem="s1F-jF-pKk" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="r6Y-TF-qQJ"/>
                             <constraint firstItem="wh4-4g-FV0" firstAttribute="top" secondItem="H9s-Os-9qI" secondAttribute="bottom" id="u81-wJ-tIv"/>
                             <constraint firstAttribute="trailing" secondItem="H9s-Os-9qI" secondAttribute="trailing" id="uOh-JP-CK8"/>
@@ -133,16 +100,12 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="oaU-1S-wpH"/>
                                 <exclude reference="7tt-9U-vZt"/>
                                 <exclude reference="gYK-ka-YZ1"/>
                             </mask>
                         </variation>
                     </view>
                     <connections>
-                        <outlet property="addProductOrGroupSegmentedControl" destination="a7q-1A-cbN" id="ha9-yX-SA9"/>
-                        <outlet property="addProductOrGroupSegmentedControlContainer" destination="5lx-2K-eME" id="oxb-Eg-P8f"/>
-                        <outlet property="addProductOrGroupSegmentedControlContainerWidthConstraint" destination="2Ad-ly-05f" id="MFl-G5-mc6"/>
                         <outlet property="currentQuickAddLabel" destination="6Ye-nf-OHM" id="C0X-sV-12y"/>
                         <outlet property="currentQuickAddLabelLeftConstraint" destination="hVr-Jp-2yK" id="0ak-Yr-ZRL"/>
                         <outlet property="showAddProductsOrGroupButton" destination="H9s-Os-9qI" id="gQT-CB-BuQ"/>

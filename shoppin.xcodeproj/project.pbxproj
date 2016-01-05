@@ -74,9 +74,6 @@
 		EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */; };
 		EB0F5F8C1B9A0A8000035175 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */; };
 		EB0F5F8D1B9A0A8000035175 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */; };
-		EB1219D51BD828E0004351E0 /* QuickAddGroup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1219D41BD828E0004351E0 /* QuickAddGroup.storyboard */; };
-		EB1219D71BD829BC004351E0 /* QuickAddGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1219D61BD829BC004351E0 /* QuickAddGroupViewController.swift */; };
-		EB1219D91BD82D11004351E0 /* QuickAddGroupItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1219D81BD82D11004351E0 /* QuickAddGroupItemsViewController.swift */; };
 		EB1219DB1BD8EB23004351E0 /* QuickAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */; };
 		EB135B941BED21490093DE70 /* ExpandFloatingButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB135B931BED21490093DE70 /* ExpandFloatingButtonModel.swift */; };
 		EB135B961BED5F130093DE70 /* ItemWithCellAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB135B951BED5F130093DE70 /* ItemWithCellAttributes.swift */; };
@@ -516,9 +513,6 @@
 		EBB2AB3B1B8B29CF007B8C59 /* InventoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */; };
 		EBB2AB3D1B8B3171007B8C59 /* InventoryItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB3C1B8B3171007B8C59 /* InventoryItemCell.swift */; };
 		EBB2AB411B8B434E007B8C59 /* InventoriesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBB2AB401B8B434E007B8C59 /* InventoriesViewController.xib */; };
-		EBB526681BEFB89A0002A286 /* QuickAddGroupItems.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBB526671BEFB89A0002A286 /* QuickAddGroupItems.storyboard */; };
-		EBB5266A1BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526691BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift */; };
-		EBB5266C1BEFBA850002A286 /* QuickAddProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5266B1BEFBA850002A286 /* QuickAddProductCell.swift */; };
 		EBB5266F1BEFD8A20002A286 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5266E1BEFD8A20002A286 /* HelpViewController.swift */; };
 		EBB526711BEFD8C10002A286 /* HelpProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526701BEFD8C10002A286 /* HelpProviderImpl.swift */; };
 		EBB526731BEFD8E90002A286 /* HelpItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB526721BEFD8E90002A286 /* HelpItem.swift */; };
@@ -829,9 +823,6 @@
 		EB0F5F851B962D2100035175 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EB0F5F871B98A10100035175 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_ListItem.swift; sourceTree = "<group>"; };
-		EB1219D41BD828E0004351E0 /* QuickAddGroup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = QuickAddGroup.storyboard; sourceTree = "<group>"; };
-		EB1219D61BD829BC004351E0 /* QuickAddGroupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddGroupViewController.swift; sourceTree = "<group>"; };
-		EB1219D81BD82D11004351E0 /* QuickAddGroupItemsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddGroupItemsViewController.swift; sourceTree = "<group>"; };
 		EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddViewController.swift; sourceTree = "<group>"; };
 		EB135B931BED21490093DE70 /* ExpandFloatingButtonModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandFloatingButtonModel.swift; sourceTree = "<group>"; };
 		EB135B951BED5F130093DE70 /* ItemWithCellAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemWithCellAttributes.swift; sourceTree = "<group>"; };
@@ -1077,9 +1068,6 @@
 		EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryCell.swift; sourceTree = "<group>"; };
 		EBB2AB3C1B8B3171007B8C59 /* InventoryItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemCell.swift; sourceTree = "<group>"; };
 		EBB2AB401B8B434E007B8C59 /* InventoriesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InventoriesViewController.xib; sourceTree = "<group>"; };
-		EBB526671BEFB89A0002A286 /* QuickAddGroupItems.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = QuickAddGroupItems.storyboard; sourceTree = "<group>"; };
-		EBB526691BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddGroupItemsTableViewController.swift; sourceTree = "<group>"; };
-		EBB5266B1BEFBA850002A286 /* QuickAddProductCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddProductCell.swift; sourceTree = "<group>"; };
 		EBB5266E1BEFD8A20002A286 /* HelpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		EBB526701BEFD8C10002A286 /* HelpProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpProviderImpl.swift; sourceTree = "<group>"; };
 		EBB526721BEFD8E90002A286 /* HelpItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpItem.swift; sourceTree = "<group>"; };
@@ -1359,19 +1347,6 @@
 				EB79AC291BF12FDF00685B30 /* Array_List.swift */,
 			);
 			name = extensions;
-			sourceTree = "<group>";
-		};
-		EB1219D31BD828C2004351E0 /* quickAddGroup */ = {
-			isa = PBXGroup;
-			children = (
-				EB1219D41BD828E0004351E0 /* QuickAddGroup.storyboard */,
-				EB1219D61BD829BC004351E0 /* QuickAddGroupViewController.swift */,
-				EB1219D81BD82D11004351E0 /* QuickAddGroupItemsViewController.swift */,
-				EBB5266B1BEFBA850002A286 /* QuickAddProductCell.swift */,
-				EBB526691BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift */,
-				EBB526671BEFB89A0002A286 /* QuickAddGroupItems.storyboard */,
-			);
-			name = quickAddGroup;
 			sourceTree = "<group>";
 		};
 		EB1B363C1BC1CFE6003519F2 /* libraryCouldNotLink */ = {
@@ -1848,7 +1823,6 @@
 			isa = PBXGroup;
 			children = (
 				EB85F4591BD54C4200E19E9B /* cell */,
-				EB1219D31BD828C2004351E0 /* quickAddGroup */,
 				EBA18C1F1BF5638D009291F2 /* QuickAddListItemViewController.swift */,
 				EB85F4521BD5393800E19E9B /* QuickAddListItem.storyboard */,
 				EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */,
@@ -2629,10 +2603,8 @@
 				EB85F47F1BD6EDBC00E19E9B /* AddEditListItem.storyboard in Resources */,
 				EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */,
 				EBFD15C81BA7FA6500E37342 /* ForgotPassword.storyboard in Resources */,
-				EBB526681BEFB89A0002A286 /* QuickAddGroupItems.storyboard in Resources */,
 				EB0C1B971B3DBD1300F24C85 /* Login.storyboard in Resources */,
 				EB85F4531BD5393800E19E9B /* QuickAddListItem.storyboard in Resources */,
-				EB1219D51BD828E0004351E0 /* QuickAddGroup.storyboard in Resources */,
 				EB1B36501BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */,
 				EBB5267F1BEFE39F0002A286 /* HelpHeaderView.xib in Resources */,
 				EB9032131BF2C4A000DA7454 /* AddEditInventoryItem.storyboard in Resources */,
@@ -2908,7 +2880,6 @@
 				EB0C1B8F1B3DA97000F24C85 /* UserProvider.swift in Sources */,
 				EB40A4691B5506FB000E9CAD /* DBSection.swift in Sources */,
 				EBD827FA1BE79A280072F9FA /* Fonts.swift in Sources */,
-				EBB5266C1BEFBA850002A286 /* QuickAddProductCell.swift in Sources */,
 				EBF162DE1A3C82380048E37C /* DefaultTableViewSection.swift in Sources */,
 				EBA5756D1BD00A2500A0A825 /* DBGroupItem.swift in Sources */,
 				EBEBA6B21BF14C36000E5653 /* ListSharedUserCell.swift in Sources */,
@@ -2918,7 +2889,6 @@
 				EBF608B51C0F5D0E00EDB33E /* RemotePlanItemsProvider.swift in Sources */,
 				EB40A4721B5508B6000E9CAD /* DBResult.swift in Sources */,
 				EBB526891BF016910002A286 /* ButtonMore.swift in Sources */,
-				EBB5266A1BEFB91C0002A286 /* QuickAddGroupItemsTableViewController.swift in Sources */,
 				EB40A47E1B5512D6000E9CAD /* DBSharedUser.swift in Sources */,
 				EBB9A7321B5EB0FC00E5487D /* DBInventory.swift in Sources */,
 				EB0A058D1BDFCD6B00D1E29D /* MoreViewController.swift in Sources */,
@@ -3048,7 +3018,6 @@
 				EB1219DB1BD8EB23004351E0 /* QuickAddViewController.swift in Sources */,
 				EB4D57A81B74B90600BC6171 /* ListSync.swift in Sources */,
 				EB7E8B611B2ADF620090409A /* Try.swift in Sources */,
-				EB1219D71BD829BC004351E0 /* QuickAddGroupViewController.swift in Sources */,
 				EB20FBF81A5971170058103B /* InventoryItem.swift in Sources */,
 				EBB9A7401B5EB21900E5487D /* InventoryProviderImpl.swift in Sources */,
 				EB3C9E2A1BEA47FF00886197 /* Theme.swift in Sources */,
@@ -3061,7 +3030,6 @@
 				EBB526771BEFE10B0002A286 /* HelpProvider.swift in Sources */,
 				EB7BFA7B1BDA5BE500F4C74A /* QuantityCell.swift in Sources */,
 				EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */,
-				EB1219D91BD82D11004351E0 /* QuickAddGroupItemsViewController.swift in Sources */,
 				EBA7AC8E1BFE90C000247A8C /* DBProductCategory.swift in Sources */,
 				EB87A4AB1C1A4F13008D2A42 /* GroupItemWithGroup.swift in Sources */,
 				EB792A281B95CCE10004BEEC /* RemoteSocialLoginResult.swift in Sources */,

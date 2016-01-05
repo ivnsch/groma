@@ -28,11 +28,9 @@ private enum AddProductOrGroupContent {
     case Product, Group
 }
 
-private typealias AddProductOrGroupSegment = (content: AddProductOrGroupContent, segmentText: String)
-
 
 // The container for quick add, manages top bar buttons and a navigation controller for content (quick add list, add products, add groups)
-class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickAddGroupViewControllerDelegate {
+class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
     
     @IBOutlet weak var showGroupsButton: ButtonMore!
     @IBOutlet weak var showProductsButton: ButtonMore!
@@ -41,15 +39,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     @IBOutlet weak var currentQuickAddLabelLeftConstraint: NSLayoutConstraint!
     
     var addProductsOrGroupBgColor: UIColor?
-    
-    @IBOutlet weak var addProductOrGroupSegmentedControl: UISegmentedControl!
-    @IBOutlet weak var addProductOrGroupSegmentedControlContainer: UIView!
-    private var addProductOrGroupSegments: [AddProductOrGroupSegment] = [
-        AddProductOrGroupSegment(content: .Product, segmentText: "Product"),
-        AddProductOrGroupSegment(content: .Group, segmentText: "Group"),
-    ]
-    
-    @IBOutlet weak var addProductOrGroupSegmentedControlContainerWidthConstraint: NSLayoutConstraint!
     
     var delegate: QuickAddDelegate?
     
@@ -73,10 +62,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        initAddProductOrGroupSegments()
-        
         showAddProductsOrGroupButton.backgroundColor = addProductsOrGroupBgColor
-        addProductOrGroupSegmentedControlContainer.backgroundColor = addProductsOrGroupBgColor
     }
     
     // MARK: - Navigation
@@ -110,27 +96,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     //        }
     //    }
     
-    //////////////////////////////////////////
-    // MARK: - Product or group segment
-    //////////////////////////////////////////
-    
-    // TODO put the add product or group / segment logic in separate entity
-    
-    private func initAddProductOrGroupSegments() {
-        for (index, segment) in addProductOrGroupSegments.enumerate() {
-            addProductOrGroupSegmentedControl.setTitle(segment.segmentText, forSegmentAtIndex: index)
-        }
-    }
-    
-    @IBAction func onProductOrGroupSegmentChanged(sender: UISegmentedControl) {
-        let content = addProductOrGroupSegments[sender.selectedSegmentIndex].content
-        switch content {
-        case .Product:
-            showAddProductController()
-        case .Group:
-            showAddGroupController()
-        }
-    }
     
     ///////////////////////////////////////////
     // TODO this section is ugly, look for better way + if possible put this logic somewhere else (done in a hurry)
@@ -143,7 +108,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
             navController?.popViewControllerAnimated(true)
             delegate?.onQuickListOpen()
             
-            setAddProductOrGroupSegmentedControlExpanded(false)
             return true
         }
         return false
@@ -152,68 +116,29 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     // returns: status changed: if it was not showing and was subsequently shown
     private func showAddProductController() -> Bool {
         
-        if !hideAddGroupController() // if group controller is showing, show product means only pop
-            && navController?.viewControllers.last as? AddEditListItemViewController == nil { // don't show if already showing
-                let controller = UIStoryboard.addEditListItemViewController()
-                controller.view.backgroundColor = addProductsOrGroupBgColor
-                controller.modus = modus
-                controller.delegate = productDelegate
-                navController?.pushViewController(controller, animated: true)
-                setAddProductOrGroupSegmentedControlExpanded(true)
-                delegate?.onAddProductOpen()
-                return true
-        }
-        return false
-    }
-    
-    private func hideAddProductOrGroupController() -> Bool {
-        if (navController?.viewControllers.last as? AddEditListItemViewController != nil) || (navController?.viewControllers.last as? QuickAddGroupViewController != nil) {
-            
-            navController?.popToRootViewControllerAnimated(true)
-            delegate?.onQuickListOpen()
-            
-            setAddProductOrGroupSegmentedControlExpanded(false)
-        
-            if (navController?.viewControllers.last as? AddEditListItemViewController != nil) {
-                showGroupsButton.selected = false
-                showProductsButton.selected = true
-            } else if (navController?.viewControllers.last as? QuickAddGroupViewController != nil) {
-                showGroupsButton.selected = true
-                showProductsButton.selected = false
-            }
-            
+        if navController?.viewControllers.last as? AddEditListItemViewController == nil { // don't show if already showing
+            let controller = UIStoryboard.addEditListItemViewController()
+            controller.view.backgroundColor = addProductsOrGroupBgColor
+            controller.modus = modus
+            controller.delegate = productDelegate
+            navController?.pushViewController(controller, animated: true)
+            delegate?.onAddProductOpen()
             return true
         }
         return false
     }
     
-    private func showAddGroupController() -> Bool {
-        // the group controller is always shown after product (it's in segment control, which is not visible until product is shown) so show group is always a push
-        //        if navController?.viewControllers.last as? AddEditListItemViewController == nil {
-        let controller = UIStoryboard.quickAddGroupViewController()
-        controller.view.backgroundColor = addProductsOrGroupBgColor
-        controller.delegate = self
-        navController?.pushViewController(controller, animated: true)
-        setAddProductOrGroupSegmentedControlExpanded(true)
-        delegate?.onAddGroupOpen()
-        //        }
-        return false
-    }
-    
-    // returns: status changed: if it was showing and was subsequently hidden
-    // FIXME "toRoot", etc. Lot of assumptions in this file
-    private func hideAddGroupController(toRoot: Bool = false) -> Bool {
-        if navController?.viewControllers.last as? QuickAddGroupViewController != nil {
-            if toRoot {
-                
-                navController?.popToRootViewControllerAnimated(true)
-                delegate?.onQuickListOpen()
-                
-                setAddProductOrGroupSegmentedControlExpanded(false)
-            } else {
-                navController?.popViewControllerAnimated(true)
-                delegate?.onAddProductOpen()
+    private func hideAddProductOrGroupController() -> Bool {
+        if (navController?.viewControllers.last as? AddEditListItemViewController != nil) {
+            
+            navController?.popToRootViewControllerAnimated(true)
+            delegate?.onQuickListOpen()
+        
+            if (navController?.viewControllers.last as? AddEditListItemViewController != nil) {
+                showGroupsButton.selected = false
+                showProductsButton.selected = true
             }
+            
             return true
         }
         return false
@@ -221,24 +146,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
     
     // if it's showing, hides it, otherwise shows it
     private func toggleAddProductController() {
-        if !hideAddProductController() && !hideAddGroupController(true) { // was not showing any of these (== didn't hide them)
+        if !hideAddProductController() { // was not showing
             showAddProductController() // show product (first segment)
-        }
-    }
-    
-    private func setAddProductOrGroupSegmentedControlExpanded(expanded: Bool) {
-        let expandedConstant: CGFloat = 136
-        let collapsedConstant: CGFloat = 10
-        
-        let constant: CGFloat = expanded ? expandedConstant : collapsedConstant
-        
-        if addProductOrGroupSegmentedControlContainerWidthConstraint.constant != constant { // FIXME this is cumbersome way to check if view is open currently
-            addProductOrGroupSegmentedControlContainerWidthConstraint.constant = constant
-            UIView.animateWithDuration(0.3) {[weak self] in
-                self?.addProductOrGroupSegmentedControlContainer.alpha = expanded ? 1 : 0
-                self?.addProductOrGroupSegmentedControl.alpha = expanded ? 1 : 0
-                self?.view.layoutIfNeeded()
-            }
         }
     }
     
@@ -247,7 +156,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         func onHasController(controller: QuickAddListItemViewController) {
             controller.itemType = .Group
             toggleItemTypeButtons(true)
-            setAddProductOrGroupSegmentedControlExpanded(false)
             
             showGroupsButton.selected = true
             showProductsButton.selected = false
@@ -275,7 +183,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         func onHasController(controller: QuickAddListItemViewController) {
             controller.itemType = .Product
             toggleItemTypeButtons(true)
-            setAddProductOrGroupSegmentedControlExpanded(false)
             
             showProductsButton.selected = true
             showGroupsButton.selected = false
@@ -358,38 +265,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
         delegate?.onCloseQuickAddTap()
     }
     
-    // MARK: - QuickAddGroupViewControllerDelegate
-    
-    // group was created in input view
-    func onGroupCreated(group: ListItemGroup) {
-        delegate?.onAddGroup(group) {[weak self] in
-            self?.navController?.popToRootViewControllerAnimated(true)
-            self?.delegate?.onQuickListOpen()
-        }
-    }
-    
-    func onGroupUpdated(group: ListItemGroup) {
-        // do nothing - no group update in quick add (yet?)
-        print("Warn: QuickAddViewController.onGroupUpdated called, this should not happen!")
-    }
-    
-    func onGroupItemsOpen() {
-        delegate?.onAddGroupItemsOpen()
-    }
-    
-    func onGroupItemsSubmit() {
-        delegate?.onAddGroupOpen()
-    }
-    
-    func onEmptyViewTap() {
-        if let addEditGroupController = navController?.viewControllers.last as? QuickAddGroupViewController {
-            addEditGroupController.showAddItemsController()
-            
-        } else {
-            print("Error: QuickAddViewController.onEmptyViewTap: Invalid state: if tap on empty view current controller should be AddEditListItemViewController (since this view is in this controller)")
-        }
-    }
-    
     
     // MARK: - Actions dispatch
     
@@ -409,31 +284,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, QuickA
                 delegate?.onQuickListOpen() // we are now back in quick list
             case .Add, .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
             }
-            
-            
-        } else if let quickAddGroupViewController = showingController as? QuickAddGroupViewController {
-            switch action {
-            case .Submit:
-                quickAddGroupViewController.submit()
-            case .Back:
-                navController?.popViewControllerAnimated(true)
-                delegate?.onAddProductOpen() // we are now back in product
-            case .Add:
-                quickAddGroupViewController.showAddItemsController()
-            case .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
-            }
-            
-            
-        } else if let quickAddGroupItemsViewController = showingController as? QuickAddGroupItemsViewController {
-            switch action {
-            case .Submit:
-                quickAddGroupItemsViewController.submit()
-            case .Back:
-                navController?.popViewControllerAnimated(true)
-                delegate?.onAddGroupOpen() // we are now back in group
-            case .Add, .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
-            }
         }
-        
     }
 }
