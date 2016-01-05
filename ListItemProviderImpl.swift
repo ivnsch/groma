@@ -329,8 +329,10 @@ class ListItemProviderImpl: ListItemProvider {
                         self?.remoteProvider.add(bgResult.listItem) {remoteResult in
                             if !remoteResult.success {
                                 print("Error: adding listItem in remote: \(bgResult.listItem), result: \(remoteResult)")
-                                DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                                self?.memProvider.invalidate()
+                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<ListItem>) in
+                                    self?.memProvider.invalidate()
+                                    handler(result)
+                                })
                             }
                         }
                         
