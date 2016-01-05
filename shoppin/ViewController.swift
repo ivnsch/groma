@@ -595,7 +595,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 doneViewController.onUIReady = {
                     self.listItemsTableViewController.clearPendingSwipeItemIfAny(true) {
                         doneViewController.list = self.currentList
-                        doneViewController.backgroundColor = self.view.backgroundColor
+                        doneViewController.backgroundColor = self.listItemsTableViewController.view.backgroundColor
                     }
                 }
             }
@@ -605,7 +605,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 listItemsTableViewController.clearPendingSwipeItemIfAny(true) {
                     stashViewController.onUIReady = {
                         stashViewController.list = self.currentList
-                        stashViewController.backgroundColor = self.view.backgroundColor
+                        stashViewController.backgroundColor = self.listItemsTableViewController.view.backgroundColor
                     }
                 }
             }
