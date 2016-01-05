@@ -85,7 +85,6 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
         blocked = true
         
         if let parentController = self.parentController, tableView = self.tableView {
-            let parentControllerView = parentController.view
             
             if expanded {
                 // create and add overlay
@@ -100,7 +99,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
                 let controller = controllerBuilder()  // note: for now we don't use the controller only view
                 let view = controller.view
                 self.initView(view, height: height)
-                parentControllerView.addSubview(view)
+                parentController.addChildViewControllerAndView(controller)
                 self.controller = controller
                 
                 // self.view.bringSubviewToFront(floatingViews) TODO!
@@ -134,7 +133,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
                 }) {[weak self] finished in
                     
                     if !expanded {
-                        self?.controller?.view.removeFromSuperview()
+                        self?.controller?.removeFromParentViewControllerWithView()
                         self?.overlay?.removeFromSuperview()
                     }
                     
