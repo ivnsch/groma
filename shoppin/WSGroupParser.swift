@@ -13,7 +13,8 @@ struct WSGroupParser {
     static func parseGroup(json: AnyObject) -> ListItemGroup {
         let uuid = json.valueForKeyPath("uuid") as! String
         let name = json.valueForKeyPath("name") as! String
-        return ListItemGroup(uuid: uuid, name: name)
+        let bgColor = UIColor.blackColor() // TODO
+        return ListItemGroup(uuid: uuid, name: name, bgColor: bgColor)
     }
     
     static func parseGroupItem(json: AnyObject) -> GroupItemWithGroup {

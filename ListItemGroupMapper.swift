@@ -18,6 +18,7 @@ class ListItemGroupMapper {
         for dbObj in dbListItems {
             dbListItemGroup.items.append(dbObj)
         }
+        dbListItemGroup.setBgColor(listItemGroup.bgColor)
         return dbListItemGroup
     }
     
@@ -25,7 +26,8 @@ class ListItemGroupMapper {
         return ListItemGroup(
             uuid: dbListItemGroup.uuid,
             name: dbListItemGroup.name,
-            items: dbListItemGroup.items.map{GroupItemMapper.groupItemWith($0)}
+            items: dbListItemGroup.items.map{GroupItemMapper.groupItemWith($0)},
+            bgColor: dbListItemGroup.bgColor()
         )
     }
 }

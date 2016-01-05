@@ -23,7 +23,7 @@ class ExpandableTableViewGroupModel: ExpandableTableViewModel {
     }
     
     override var bgColor: UIColor {
-        return UIColor.whiteColor()
+        return group.bgColor
     }
     
     override var users: [SharedUser] {

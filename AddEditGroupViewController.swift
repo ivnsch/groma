@@ -18,11 +18,11 @@ protocol AddEditGroupControllerDelegate {
 
 // TODO after final design either remove color code or reenable it
 
-class AddEditGroupViewController: UIViewController/*, FlatColorPickerControllerDelegate*/ {
+class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDelegate {
     
     @IBOutlet weak var groupNameInputField: UITextField!
     
-//    @IBOutlet weak var colorButton: UIButton!
+    @IBOutlet weak var colorButton: UIButton!
     
     private var listInputsValidator: Validator?
     
@@ -43,15 +43,15 @@ class AddEditGroupViewController: UIViewController/*, FlatColorPickerControllerD
             prefill(listToEdit)
         }
         
-//        if !listToEdit.isSet {
-//            colorButton.tintColor = RandomFlatColorWithShade(.Dark)
-//        }
+        if !listToEdit.isSet {
+            colorButton.tintColor = RandomFlatColorWithShade(.Dark)
+        }
     }
     
     private func prefill(list: ListItemGroup) {
         groupNameInputField.text = list.name
-//        colorButton.tintColor = list.bgColor
-//        colorButton.imageView?.tintColor = list.bgColor
+        colorButton.tintColor = list.bgColor
+        colorButton.imageView?.tintColor = list.bgColor
         
     }
     
@@ -88,19 +88,15 @@ class AddEditGroupViewController: UIViewController/*, FlatColorPickerControllerD
                 
                 if let listName = weakSelf.groupNameInputField.text {
                     if let listToEdit = weakSelf.listToEdit {
-//                        let updatedList = listToEdit.copy(name: listName, users: weakSelf.sharedUsers, bgColor: weakSelf.colorButton.tintColor)
                         let updatedList = listToEdit.copy(name: listName)
                         
                         Providers.listItemGroupsProvider.update(updatedList, remote: true, weakSelf.successHandler{//change
                             weakSelf.delegate?.onGroupUpdated(updatedList)
                         })
-//                        Providers.inventoryProvider.updateInventory(updatedList, remote: true, weakSelf.successHandler{//change
-//                            weakSelf.delegate?.onInventoryUpdated(updatedList)
-//                        })
-                        
+
                     } else {
 //                        if let currentListsCount = weakSelf.currentListsCount { // TODO order
-                            let inventoryWithSharedUsers = ListItemGroup(uuid: NSUUID().UUIDString, name: listName)
+                        let inventoryWithSharedUsers = ListItemGroup(uuid: NSUUID().UUIDString, name: listName, bgColor: weakSelf.colorButton.tintColor)
                             Providers.listItemGroupsProvider.add(inventoryWithSharedUsers, remote: true, weakSelf.successHandler{
                                 weakSelf.delegate?.onGroupAdded(inventoryWithSharedUsers)
                             })
@@ -145,38 +141,38 @@ class AddEditGroupViewController: UIViewController/*, FlatColorPickerControllerD
         return 1
     }
     
-//    @IBAction func onColorTap() {
-//        let picker = UIStoryboard.listColorPicker()
-//        self.view.layoutIfNeeded() // TODO is this necessary? don't think so check and remove
-//        
-//        if let parentViewController = parentViewController {
-//            
-//            let topBarHeight: CGFloat = 64
-//            
-//            picker.view.frame = CGRectMake(0, topBarHeight, parentViewController.view.frame.width, parentViewController.view.frame.height - topBarHeight)
-//            
-//            parentViewController.addChildViewControllerAndView(picker) // add to superview (lists controller) because it has to occupy full space (navbar - tab)
-//            picker.delegate = self
-//            showingColorPicker = picker
-//            
-//            let buttonPointInParent = parentViewController.view.convertPoint(CGPointMake(colorButton.center.x, colorButton.center.y - topBarHeight), fromView: view)
-//            let fractionX = buttonPointInParent.x / parentViewController.view.frame.width
-//            let fractionY = buttonPointInParent.y / (parentViewController.view.frame.height - topBarHeight)
-//            
-//            picker.view.layer.anchorPoint = CGPointMake(fractionX, fractionY)
-//            
-//            picker.view.frame = CGRectMake(0, topBarHeight, parentViewController.view.frame.width, parentViewController.view.frame.height - topBarHeight)
-//            
-//            picker.view.transform = CGAffineTransformMakeScale(0, 0)
-//            
-//            UIView.animateWithDuration(0.3) {
-//                picker.view.transform = CGAffineTransformMakeScale(1, 1)
-//            }
-//        } else {
-//            print("Warning: AddEditListController.onColorTap: no parentViewController")
-//        }
-//        
-//    }
+    @IBAction func onColorTap() {
+        let picker = UIStoryboard.listColorPicker()
+        self.view.layoutIfNeeded() // TODO is this necessary? don't think so check and remove
+        
+        if let parentViewController = parentViewController {
+            
+            let topBarHeight: CGFloat = 64
+            
+            picker.view.frame = CGRectMake(0, topBarHeight, parentViewController.view.frame.width, parentViewController.view.frame.height - topBarHeight)
+            
+            parentViewController.addChildViewControllerAndView(picker) // add to superview (lists controller) because it has to occupy full space (navbar - tab)
+            picker.delegate = self
+            showingColorPicker = picker
+            
+            let buttonPointInParent = parentViewController.view.convertPoint(CGPointMake(colorButton.center.x, colorButton.center.y - topBarHeight), fromView: view)
+            let fractionX = buttonPointInParent.x / parentViewController.view.frame.width
+            let fractionY = buttonPointInParent.y / (parentViewController.view.frame.height - topBarHeight)
+            
+            picker.view.layer.anchorPoint = CGPointMake(fractionX, fractionY)
+            
+            picker.view.frame = CGRectMake(0, topBarHeight, parentViewController.view.frame.width, parentViewController.view.frame.height - topBarHeight)
+            
+            picker.view.transform = CGAffineTransformMakeScale(0, 0)
+            
+            UIView.animateWithDuration(0.3) {
+                picker.view.transform = CGAffineTransformMakeScale(1, 1)
+            }
+        } else {
+            print("Warning: AddEditListController.onColorTap: no parentViewController")
+        }
+        
+    }
     
     @IBAction func onAddUsersTap() {
         UIView.animateWithDuration(0.3) {[weak self] in
@@ -191,41 +187,40 @@ class AddEditGroupViewController: UIViewController/*, FlatColorPickerControllerD
         
     }
     
-//    // MARK: - FlatColorPickerControllerDelegate
-//    
-//    func onColorPicked(color: UIColor) {
-//        dismissColorPicker(color)
-//    }
-//    
-//    func onDismiss() {
-//        //        dismissColorPicker(nil) // not used see FIXME in FlatColorPickerController.viewDidLoad
-//    }
-//    
-//    private func dismissColorPicker(selectedColor: UIColor?) {
-//        if let showingColorPicker = showingColorPicker {
-//            
-//            UIView.animateWithDuration(0.3, animations: {
-//                showingColorPicker.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
-//                
-//                }, completion: {finished in
-//                    self.showingColorPicker = nil
-//                    self.showingColorPicker?.removeFromParentViewControllerWithView()
-//                    
-//                    UIView.animateWithDuration(0.3) {
-//                        if let selectedColor = selectedColor {
-//                            self.colorButton.tintColor = selectedColor
-//                            self.colorButton.imageView?.tintColor = selectedColor
-//                        }
-//                    }
-//                    UIView.animateWithDuration(0.15) {
-//                        self.colorButton.transform = CGAffineTransformMakeScale(2, 2)
-//                        UIView.animateWithDuration(0.15) {
-//                            self.colorButton.transform = CGAffineTransformMakeScale(1, 1)
-//                        }
-//                    }
-//                }
-//            )
-//        }
-//    }
+    // MARK: - FlatColorPickerControllerDelegate
+    
+    func onColorPicked(color: UIColor) {
+        dismissColorPicker(color)
+    }
+    
+    func onDismiss() {
+        //        dismissColorPicker(nil) // not used see FIXME in FlatColorPickerController.viewDidLoad
+    }
+    
+    private func dismissColorPicker(selectedColor: UIColor?) {
+        if let showingColorPicker = showingColorPicker {
+            
+            UIView.animateWithDuration(0.3, animations: {
+                showingColorPicker.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
+                
+                }, completion: {finished in
+                    self.showingColorPicker = nil
+                    self.showingColorPicker?.removeFromParentViewControllerWithView()
+                    
+                    UIView.animateWithDuration(0.3) {
+                        if let selectedColor = selectedColor {
+                            self.colorButton.tintColor = selectedColor
+                            self.colorButton.imageView?.tintColor = selectedColor
+                        }
+                    }
+                    UIView.animateWithDuration(0.15) {
+                        self.colorButton.transform = CGAffineTransformMakeScale(2, 2)
+                        UIView.animateWithDuration(0.15) {
+                            self.colorButton.transform = CGAffineTransformMakeScale(1, 1)
+                        }
+                    }
+                }
+            )
+        }
+    }
 }
-

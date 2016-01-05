@@ -14,6 +14,15 @@ class DBListItemGroup: DBSyncable {
     dynamic var uuid: String = ""
     dynamic var name: String = ""
     let items = RealmSwift.List<DBGroupItem>()
+    dynamic var bgColorData: NSData = NSData()
+
+    func bgColor() -> UIColor {
+        return NSKeyedUnarchiver.unarchiveObjectWithData(bgColorData) as! UIColor
+    }
+    
+    func setBgColor(bgColor: UIColor) {
+        bgColorData = NSKeyedArchiver.archivedDataWithRootObject(bgColor)
+    }
     
     override static func primaryKey() -> String? {
         return "uuid"

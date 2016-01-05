@@ -168,7 +168,6 @@
         <!--Flat Color Picker Controller-->
         <scene sceneID="ANi-yy-L7h">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3Xe-Ys-2iJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="FlatColorPickerController" id="MxK-vg-EQw" customClass="FlatColorPickerController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="tsz-IX-tRC"/>
@@ -229,6 +228,7 @@
                         <outlet property="collectionView" destination="L6A-3y-Qs9" id="Y8G-X3-x7k"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3Xe-Ys-2iJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1015" y="348"/>
         </scene>
