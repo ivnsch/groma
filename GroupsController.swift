@@ -95,8 +95,8 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     override func onSelectCellInEditMode(model: ExpandableTableViewModel) {
         super.onSelectCellInEditMode(model)
-        topAddEditListControllerManager?.controller?.listToEdit = (model as! ExpandableTableViewGroupModel).group
         topAddEditListControllerManager?.expand(true)
+        topAddEditListControllerManager?.controller?.listToEdit = (model as! ExpandableTableViewGroupModel).group
     }
     
     override func topControllerIsExpanded() -> Bool {

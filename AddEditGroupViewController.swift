@@ -32,17 +32,19 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     
     var currentListsCount: Int? // to determine order. For now we set this field at view controller level, don't do an extra fetch in provider. Maybe it's better like this.
     
-    var listToEdit: ListItemGroup?
+    var listToEdit: ListItemGroup? {
+        didSet {
+            if let listToEdit = listToEdit {
+                prefill(listToEdit)
+            }
+        }
+    }
     
     private var showingColorPicker: FlatColorPickerController?
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if let listToEdit = listToEdit {
-            prefill(listToEdit)
-        }
-        
+
         if !listToEdit.isSet {
             colorButton.tintColor = RandomFlatColorWithShade(.Dark)
         }
@@ -88,7 +90,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
                 
                 if let listName = weakSelf.groupNameInputField.text {
                     if let listToEdit = weakSelf.listToEdit {
-                        let updatedList = listToEdit.copy(name: listName)
+                        let updatedList = listToEdit.copy(name: listName, bgColor: weakSelf.colorButton.tintColor)
                         
                         Providers.listItemGroupsProvider.update(updatedList, remote: true, weakSelf.successHandler{//change
                             weakSelf.delegate?.onGroupUpdated(updatedList)

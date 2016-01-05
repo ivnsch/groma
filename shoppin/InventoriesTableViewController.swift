@@ -81,8 +81,8 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     
     override func onSelectCellInEditMode(model: ExpandableTableViewModel) {
         super.onSelectCellInEditMode(model)
+        topAddEditListControllerManager?.expand(true)        
         topAddEditListControllerManager?.controller?.listToEdit = (model as! ExpandableTableViewInventoryModel).inventory
-        topAddEditListControllerManager?.expand(true)
     }
     
     override func topControllerIsExpanded() -> Bool {

@@ -35,7 +35,13 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
     
     var currentListsCount: Int? // to determine order. For now we set this field at view controller level, don't do an extra fetch in provider. Maybe it's better like this.
     
-    var listToEdit: Inventory? //change
+    var listToEdit: Inventory? {
+        didSet {
+            if let listToEdit = listToEdit {
+                prefill(listToEdit)
+            }
+        }
+    }
     
     var sharedUsers: [SharedUser] = [] {
         didSet {
@@ -50,11 +56,7 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
         super.viewWillAppear(animated)
         
         usersTableView.setEditing(true, animated: false)
-        
-        if let listToEdit = listToEdit {
-            prefill(listToEdit)
-        }
-        
+
         if !listToEdit.isSet {
             colorButton.tintColor = RandomFlatColorWithShade(.Dark)
         }
