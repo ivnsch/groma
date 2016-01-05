@@ -81,9 +81,10 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     override func onSelectCellInEditMode(model: ExpandableTableViewModel) {
-        super.onSelectCellInEditMode(model)        
-        topAddEditListControllerManager?.controller?.listToEdit = (model as! ExpandableTableViewListModel).list
+        super.onSelectCellInEditMode(model)
+        
         topAddEditListControllerManager?.expand(true)
+        topAddEditListControllerManager?.controller?.listToEdit = (model as! ExpandableTableViewListModel).list
     }
     
     override func topControllerIsExpanded() -> Bool {
