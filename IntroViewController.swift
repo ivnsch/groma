@@ -14,6 +14,10 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     @IBOutlet weak var swipeView: SwipeView!
     @IBOutlet weak var pageControl: UIPageControl!
     
+    @IBOutlet weak var skipButton: UIButton!
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var registerButton: UIButton!
+    
     private let pageCount = 4 // later replace with array of images
     
     private let pageModels: [(key: String, imageName: String)] = [
@@ -31,6 +35,14 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         self.navigationController?.navigationBarHidden = true
+        
+        initDatabase()
+    }
+    
+    private func setButtonsEnabled(enabled: Bool) {
+        skipButton.enabled = enabled
+        loginButton.enabled = enabled
+        registerButton.enabled = enabled
     }
     
     @IBAction func loginTapped(sender: UIButton) {
@@ -39,7 +51,24 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         self.navigationController?.pushViewController(loginController, animated: true)
     }
 
-    
+    private func initDatabase() {
+        Providers.inventoryProvider.inventories(successHandler{[weak self] inventories in
+            if let weakSelf = self {
+                if inventories.isEmpty {
+                    weakSelf.setButtonsEnabled(false)
+                    let inventory = Inventory(uuid: NSUUID().UUIDString, name: "Home", bgColor: UIColor.flatBlueColor(), order: 0)
+                    Providers.inventoryProvider.addInventory(inventory, remote: true, weakSelf.resultHandler(onSuccess: {
+                        weakSelf.setButtonsEnabled(true)
+                        }, onError: {result in
+                        // let the user start if there's an error (we don't expect any, but just in case!)
+                        // it would be very bad if user can't get past intro for whatever reason. Both adding default inventory and default products (TODO) are not critical for the app to be usable.
+                        weakSelf.setButtonsEnabled(true)
+                    }))
+                }
+            }
+        })
+    }
+
     @IBAction func registerTapped(sender: UIButton) {
         let registerController = UIStoryboard.registerViewController()
         registerController.delegate = self

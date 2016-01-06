@@ -15,6 +15,7 @@ class DBList: DBSyncable {
     dynamic var name: String = ""
     dynamic var bgColorData: NSData = NSData()
     dynamic var order: Int = 0
+    dynamic var inventory: DBInventory = DBInventory()
     
     let users = RealmSwift.List<DBSharedUser>()
 

@@ -17,6 +17,7 @@ class ListMapper {
         dbList.name = list.name
         dbList.setBgColor(list.bgColor)
         dbList.order = list.order
+        dbList.inventory = InventoryMapper.dbWithInventory(list.inventory)
         let dbSharedUsers = list.users.map{SharedUserMapper.dbWithSharedUser($0)}
         for dbObj in dbSharedUsers {
             dbList.users.append(dbObj)
@@ -33,6 +34,8 @@ class ListMapper {
         dbList.name = list.name
         dbList.setBgColor(RandomFlatColorWithShade(.Dark)) // for now no synchronisation of colors with remote
         dbList.order = list.order
+        let inventory = InventoryMapper.dbWithInventory(list.inventory)
+        dbList.inventory = inventory
         let dbSharedUsers = list.users.map{SharedUserMapper.dbWithSharedUser($0)}
         for dbObj in dbSharedUsers {
             dbList.users.append(dbObj)
@@ -43,10 +46,12 @@ class ListMapper {
     
     class func listWithDB(dbList: DBList) -> List {
         let users = dbList.users.toArray().map{SharedUserMapper.sharedUserWithDB($0)}
-        return List(uuid: dbList.uuid, name: dbList.name, users: users, bgColor: dbList.bgColor(), order: dbList.order)
+        let inventory = InventoryMapper.inventoryWithDB(dbList.inventory)
+        return List(uuid: dbList.uuid, name: dbList.name, users: users, bgColor: dbList.bgColor(), order: dbList.order, inventory: inventory)
     }
     
     class func ListWithRemote(remoteList: RemoteList) -> List {
-        return List(uuid: remoteList.uuid, name: remoteList.name, users: remoteList.users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: RandomFlatColorWithShade(.Dark) /* for now no synchronisation of colors with remote*/, order: remoteList.order)
+        let inventory = InventoryMapper.inventoryWithRemote(remoteList.inventory)
+        return List(uuid: remoteList.uuid, name: remoteList.name, users: remoteList.users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: RandomFlatColorWithShade(.Dark) /* for now no synchronisation of colors with remote*/, order: remoteList.order, inventory: inventory)
     }
 }

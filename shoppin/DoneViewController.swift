@@ -205,41 +205,18 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     private func addAllItemsToInventory() {
-        
-        let onHasInventory: (Inventory) -> () = {[weak self] inventory in
-            
-            let inventoryItems = self!.listItemsTableViewController.items.map{
-                InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.quantity, quantityDelta: $0.quantity, product: $0.product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
-            }
 
-            Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, self!.successHandler{result in
-                self?.sendAllItemToStash {
-                    self?.close()
-                }
-            })
-        }
-        
         listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
             
             if let weakSelf = self {
+
+                let inventoryItems = weakSelf.listItemsTableViewController.items.map{
+                    InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.quantity, quantityDelta: $0.quantity, product: $0.product, inventory: $0.list.inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
+                }
                 
-                Providers.inventoryProvider.inventories(weakSelf.successHandler{inventories in
-                    if let inventory = inventories.first { // TODO list associated inventory
-                        onHasInventory(inventory)
-                        
-                    } else { // user has no inventories - create first one. Note if offline there can be inventories in server - there has to be a sync when user comes online/signs up
-                        let mySharedUser = ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail") // TODO how do we handle shared users internally (database etc) when user is offline
-                        
-                        let inventoryInput = Inventory(uuid: NSUUID().UUIDString, name: "Home", users: [mySharedUser], bgColor: UIColor.flatBlueColor(), order: 0)
-                        Providers.inventoryProvider.addInventory(inventoryInput, remote: true, weakSelf.successHandler{notused in
-                            
-                            // just a hack because we need "full" shared user to create inventory based on inventory input
-                            // but full shared user is deprecated and will be removed soon, because client doesn't need anything besides email (and provider, in the future)
-                            // so for now we create full shared user where these attributes are empty
-                            let sharedUsers = inventoryInput.users.map{SharedUser(email: $0.email)}
-                            
-                            onHasInventory(Inventory(uuid: inventoryInput.uuid, name: inventoryInput.name, users: sharedUsers, bgColor: inventoryInput.bgColor, order: inventoryInput.order))
-                        })
+                Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, weakSelf.successHandler{result in
+                    weakSelf.sendAllItemToStash {
+                        weakSelf.close()
                     }
                 })
             }

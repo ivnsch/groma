@@ -45,7 +45,9 @@ class ListItemParser {
         let name = json.valueForKeyPath("name") as! String
         let order = json.valueForKeyPath("order") as! Int
         let bgColor = UIColor.blackColor() // TODO
-        return List(uuid: uuid, name: name, listItems: [], users: [], bgColor: bgColor, order: order)
+        let inventoryJson = json.valueForKeyPath("inventory")!
+        let inventory = WSInventoryParser.parseInventory(inventoryJson)
+        return List(uuid: uuid, name: name, listItems: [], users: [], bgColor: bgColor, order: order, inventory: inventory)
     }
 
     class func parseArray(jsonArray: [AnyObject]) -> [ListItem] {
@@ -75,7 +77,8 @@ class ListItemParser {
         let listName = json.valueForKeyPath("listName") as! String
         let listColor = UIColor.blackColor() // TODO
         let listOrder = 0 // TODO
-        let list = List(uuid: listUuid, name: listName, listItems: [], users: [], bgColor: listColor, order: listOrder)
+        let inventory = Inventory(uuid: "123", name: "123 TODO", users: [], bgColor: UIColor.blackColor(), order: 0) // TODO!!!
+        let list = List(uuid: listUuid, name: listName, listItems: [], users: [], bgColor: listColor, order: listOrder, inventory: inventory)
         
         let order = json.valueForKeyPath("order") as! Int
         let note = json.valueForKeyPath("note") as! String? // TODO is this correct way for optional here?

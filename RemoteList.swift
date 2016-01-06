@@ -14,7 +14,8 @@ final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializab
     let order: Int
     let users: [RemoteSharedUser]
     let lastUpdate: NSDate
-
+    let inventory: RemoteInventory
+    
     init?(response: NSHTTPURLResponse, representation: AnyObject) {
         
         let list: AnyObject = representation.valueForKeyPath("list")!
@@ -24,6 +25,8 @@ final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializab
         let unserializedUsers: AnyObject = representation.valueForKeyPath("users")!
         self.users = RemoteSharedUser.collection(response: response, representation: unserializedUsers)
         self.lastUpdate = NSDate(timeIntervalSince1970: list.valueForKeyPath("lastUpdate") as! Double)
+        let inventoryObj = list.valueForKeyPath("inventory")!
+        self.inventory = RemoteInventory(response: response, representation: inventoryObj)!
     }
     
     static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteList] {
@@ -38,6 +41,6 @@ final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializab
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), users: \(users), lastUpdate: \(lastUpdate)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), users: \(users), inventory: \(inventory), lastUpdate: \(lastUpdate)}"
     }
 }

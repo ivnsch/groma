@@ -9,13 +9,14 @@
 import UIKit
 import SwiftValidator
 import ChameleonFramework
+import CMPopTipView
 
 protocol AddEditListControllerDelegate {
     func onListAdded(list: List)
     func onListUpdated(list: List)
 }
 
-class AddEditListController: UIViewController, UITableViewDataSource, UITableViewDelegate, FlatColorPickerControllerDelegate {
+class AddEditListController: UIViewController, UITableViewDataSource, UITableViewDelegate, FlatColorPickerControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
     @IBOutlet weak var listNameInputField: UITextField!
     @IBOutlet weak var usersTableView: UITableView!
@@ -23,6 +24,21 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var userCountLabel: UILabel!
     
     @IBOutlet weak var colorButton: UIButton!
+
+    @IBOutlet weak var inventoriesButton: UIButton!
+    private var inventories: [Inventory] = [] {
+        didSet {
+            selectedInventory = inventories.first
+        }
+    }
+    private var selectedInventory: Inventory? {
+        didSet {
+            if let inventory = selectedInventory {
+                inventoriesButton.setTitle(inventory.name, forState: .Normal)
+            }
+        }
+    }
+    private var inventoriesPopup: CMPopTipView?
 
     private var listInputsValidator: Validator?
     private var userInputsValidator: Validator?
@@ -82,10 +98,57 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        loadInventories()
+        
         initValidator()
         
         listNameInputField.becomeFirstResponder()
     }
+    
+    // MARK: - Inventories picker
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return inventories.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+        let label = view as? UILabel ?? UILabel()
+        label.font = Fonts.regularLight
+        label.text = inventories[row].name
+        return label
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        selectedInventory = inventories[row]
+    }
+    
+    private func createPicker() -> UIPickerView {
+        let picker = UIPickerView(frame: CGRectMake(0, 0, 150, 100))
+        picker.delegate = self
+        picker.dataSource = self
+        return picker
+    }
+    
+    private func loadInventories() {
+        Providers.inventoryProvider.inventories(successHandler{[weak self] inventories in
+            self?.inventories = inventories
+        })
+    }
+    
+    @IBAction func onInventoryTap(sender: UIButton) {
+        if let popup = inventoriesPopup {
+            popup.dismissAnimated(true)
+        } else {
+            let popup = MyTipPopup(customView: createPicker())
+            popup.presentPointingAtView(inventoriesButton, inView: view, animated: true)
+        }
+    }
+
+    // MARK: -
     
     @IBAction func onDoneTap(sender: UIBarButtonItem) {
         submit()
@@ -102,25 +165,32 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
             
             if let weakSelf = self {
                 
-                if let listName = weakSelf.listNameInputField.text {
-                    if let listToEdit = weakSelf.listToEdit {
-                        let updatedList = listToEdit.copy(name: listName, users: weakSelf.sharedUsers, bgColor: weakSelf.colorButton.tintColor)
-                        Providers.listProvider.update([updatedList], remote: true, weakSelf.successHandler{
-                            weakSelf.delegate?.onListUpdated(updatedList)
-                        })
-                    
-                    } else {
-                        if let currentListsCount = weakSelf.currentListsCount {
-                            let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: weakSelf.sharedUsers, bgColor: weakSelf.colorButton.tintColor, order: currentListsCount)
-                            Providers.listProvider.add(listWithSharedUsers, remote: true, weakSelf.successHandler{list in
-                                weakSelf.delegate?.onListAdded(list)
+                if let inventory = weakSelf.selectedInventory {
+                
+                    if let listName = weakSelf.listNameInputField.text {
+                        if let listToEdit = weakSelf.listToEdit {
+                            let updatedList = listToEdit.copy(name: listName, users: weakSelf.sharedUsers, bgColor: weakSelf.colorButton.tintColor, inventory: inventory)
+                            Providers.listProvider.update([updatedList], remote: true, weakSelf.successHandler{
+                                weakSelf.delegate?.onListUpdated(updatedList)
                             })
+                        
                         } else {
-                            print("Error: no currentListsCount")
+                            if let currentListsCount = weakSelf.currentListsCount {
+                                let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: weakSelf.sharedUsers, bgColor: weakSelf.colorButton.tintColor, order: currentListsCount, inventory: inventory)
+                                Providers.listProvider.add(listWithSharedUsers, remote: true, weakSelf.successHandler{list in
+                                    weakSelf.delegate?.onListAdded(list)
+                                })
+                                
+                            } else {
+                                print("Error: no currentListsCount")
+                            }
                         }
+                    } else {
+                        print("Error: validation was not implemented correctly")
                     }
+                    
                 } else {
-                    print("Error: validation was not implemented correctly")
+                    print("Error: selectedInventory is nil - validation was not implemented correctly")
                 }
             }
         }
@@ -142,6 +212,8 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
                     field.clearValidationError()
                 }
             }
+            
+            if selectedInventory == nil {AlertPopup.show(message: "Please select an inventory", controller: self)}
             
             onValid()
         }

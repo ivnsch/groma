@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="wfF-r6-NmF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="wfF-r6-NmF">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeueLights.ttc">
@@ -88,7 +88,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="05r-p6-eT1"/>
                     <connections>
+                        <outlet property="loginButton" destination="lJm-Gk-QuM" id="9Dr-La-GRw"/>
                         <outlet property="pageControl" destination="mkE-ao-QPc" id="fb6-Vq-8Za"/>
+                        <outlet property="registerButton" destination="VOU-gm-XDH" id="bTR-fp-RH2"/>
+                        <outlet property="skipButton" destination="NJR-Pk-tTx" id="vOf-eA-cbw"/>
                         <outlet property="swipeView" destination="6ZS-ry-WaI" id="TgR-a1-308"/>
                     </connections>
                 </viewController>
