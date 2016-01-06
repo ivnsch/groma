@@ -22,6 +22,7 @@ struct Urls {
     
     // User
     static let register = host + "register"
+    static let isRegistered = host + "reg"
     static let forgotPassword = host + "forgot"
     static let login = host + "login"
     static let logout = host + "logout"

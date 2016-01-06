@@ -157,10 +157,10 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
         self.validateInputs(userInputsValidator) {[weak self] in
             if let weakSelf = self {
                 if let input = weakSelf.addUserInputField.text {
-                    // TODO do later a verification here if email exists in the server
-                    weakSelf.sharedUsers.append(SharedUser(email: input))
-                    weakSelf.addUserInputField.clear()
-                    
+                    SharedUserChecker.check(input, users: weakSelf.sharedUsers, controller: weakSelf, onSuccess: {
+                        weakSelf.sharedUsers.append(SharedUser(email: input))
+                        weakSelf.addUserInputField.clear()
+                    })
                 } else {
                     print("Error: validation was not implemented correctly")
                 }

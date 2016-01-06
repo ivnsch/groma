@@ -761,6 +761,7 @@
 		EBF608BD1C0F5DB400EDB33E /* RemotePlanItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608BC1C0F5DB400EDB33E /* RemotePlanItem.swift */; settings = {ASSET_TAGS = (); }; };
 		EBF608BE1C0F5DB400EDB33E /* RemotePlanItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608BC1C0F5DB400EDB33E /* RemotePlanItem.swift */; settings = {ASSET_TAGS = (); }; };
 		EBF608BF1C0F5DB400EDB33E /* RemotePlanItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608BC1C0F5DB400EDB33E /* RemotePlanItem.swift */; settings = {ASSET_TAGS = (); }; };
+		EBF7CE8B1C3C9E6E00F9DB8A /* SharedUserChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF7CE8A1C3C9E6E00F9DB8A /* SharedUserChecker.swift */; settings = {ASSET_TAGS = (); }; };
 		EBFD15C11BA7F59600E37342 /* AlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFD15C01BA7F59600E37342 /* AlertPopup.swift */; };
 		EBFD15C41BA7F99B00E37342 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFD15C31BA7F99B00E37342 /* ForgotPasswordViewController.swift */; };
 		EBFD15C81BA7FA6500E37342 /* ForgotPassword.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBFD15C71BA7FA6500E37342 /* ForgotPassword.storyboard */; };
@@ -1212,6 +1213,7 @@
 		EBF608B41C0F5D0D00EDB33E /* RemotePlanItemsProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemotePlanItemsProvider.swift; sourceTree = "<group>"; };
 		EBF608B81C0F5D9000EDB33E /* RemotePlanItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemotePlanItems.swift; sourceTree = "<group>"; };
 		EBF608BC1C0F5DB400EDB33E /* RemotePlanItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemotePlanItem.swift; sourceTree = "<group>"; };
+		EBF7CE8A1C3C9E6E00F9DB8A /* SharedUserChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUserChecker.swift; sourceTree = "<group>"; };
 		EBFD15C01BA7F59600E37342 /* AlertPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertPopup.swift; sourceTree = "<group>"; };
 		EBFD15C31BA7F99B00E37342 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		EBFD15C71BA7FA6500E37342 /* ForgotPassword.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ForgotPassword.storyboard; sourceTree = "<group>"; };
@@ -1726,6 +1728,7 @@
 				EBF162CC1A3C82380048E37C /* tableView */,
 				EBB5A0451B65393D00FB9C58 /* validatorHelpers */,
 				EB451C491B8649FC000DE208 /* popup */,
+				EBF7CE8A1C3C9E6E00F9DB8A /* SharedUserChecker.swift */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -2991,6 +2994,7 @@
 				EBA288D71BB9FCC3001A2B95 /* MemInventoryItemProvider.swift in Sources */,
 				EB5737B71BF2612300D52FB8 /* InventorySharedUserCell.swift in Sources */,
 				EB714AA61B66BBA800F91B94 /* DBSyncable.swift in Sources */,
+				EBF7CE8B1C3C9E6E00F9DB8A /* SharedUserChecker.swift in Sources */,
 				EBBC231E1BB575340002F6B1 /* UIColor.swift in Sources */,
 				EBD828031BE95CD80072F9FA /* Shapes.swift in Sources */,
 				EB7032871BEBF2B300779EBB /* SectionProviderImpl.swift in Sources */,

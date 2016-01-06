@@ -38,6 +38,12 @@ class RemoteUserProvider {
         }
     }
     
+    func isRegistered(email: String, handler: RemoteResult<NoOpSerializable> -> ()) {
+        RemoteProvider.authenticatedRequest(.POST, Urls.isRegistered + "/\(email)") {(result: RemoteResult<NoOpSerializable>) in
+            handler(result)
+        }
+    }
+    
     func forgotPassword(email: String, handler: RemoteResult<NoOpSerializable> -> ()) {
         let parameters = ["email": email, "foo": "foo"] // foo is a filler parameter bc of a bug in the server
         RemoteProvider.request(.POST, Urls.forgotPassword, parameters) {result in

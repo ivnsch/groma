@@ -24,6 +24,10 @@ extension Array {
         return nil
     }
     
+    func contains(function: (element: Element) -> Bool) -> Bool {
+        return findFirst(function) != nil
+    }
+    
     // src: http://stackoverflow.com/a/30593673/930450
     subscript (safe index: Int) -> Element? {
         return indices ~= index ? self[index] : nil

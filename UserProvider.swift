@@ -18,6 +18,8 @@ protocol UserProvider {
     
     func register(user: UserInput, _ handler: ProviderResult<Any> -> ())
     
+    func isRegistered(email: String, _ handler: ProviderResult<Any> -> ())
+    
     func logout(handler: ProviderResult<Any> -> ())
     
     func authenticateWithFacebook(token: String, _ handler: ProviderResult<Any> -> ())

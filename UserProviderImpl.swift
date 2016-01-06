@@ -42,6 +42,13 @@ class UserProviderImpl: UserProvider {
         }
     }
     
+    func isRegistered(email: String, _ handler: ProviderResult<Any> -> ()) {
+        remoteProvider.isRegistered(email) {result in
+            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status)
+            handler(ProviderResult(status: providerStatus))
+        }
+    }
+
     func logout(handler: ProviderResult<Any> -> ()) {
         self.remoteProvider.logout(remoteResultHandler(handler))
     }

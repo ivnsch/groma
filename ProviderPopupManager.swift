@@ -36,6 +36,7 @@ class ProviderPopupManager {
         }
     }
     
+    // TODO!! test this
     func showRemoteValidationPopup(status: ProviderStatusCode, error: RemoteInvalidParametersResult, controller: UIViewController) {
         
         if (currentStatus.map {$0 != status}) ?? true { // if there's no popup or if there's a popup with different status code
