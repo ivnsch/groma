@@ -61,10 +61,10 @@ func ==(lhs: AggregateGroup, rhs: AggregateGroup) -> Bool {
 
 protocol StatsProvider {
     
-    func aggregate(monthYear: MonthYear, groupBy: GroupByAttribute, _ handler: ProviderResult<[ProductAggregate]> -> ())
+    func aggregate(monthYear: MonthYear, groupBy: GroupByAttribute, inventory: Inventory, _ handler: ProviderResult<[ProductAggregate]> -> ())
 
-    func aggregate(timePeriod: TimePeriod, groupBy: GroupByAttribute, _ handler: ProviderResult<[ProductAggregate]> -> ())
+    func aggregate(timePeriod: TimePeriod, groupBy: GroupByAttribute, inventory: Inventory, _ handler: ProviderResult<[ProductAggregate]> -> ())
     
-    func history(timePeriod: TimePeriod, group: AggregateGroup, _ handler: ProviderResult<GroupMonthYearAggregate> -> ())
+    func history(timePeriod: TimePeriod, group: AggregateGroup, inventory: Inventory, _ handler: ProviderResult<GroupMonthYearAggregate> -> ())
     
 }

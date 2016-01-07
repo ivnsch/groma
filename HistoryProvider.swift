@@ -10,16 +10,16 @@ import Foundation
 
 protocol HistoryProvider {
     
-    func historyItems(range: NSRange, _ handler: ProviderResult<[HistoryItem]> -> ())
+    func historyItems(range: NSRange, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> ())
 
     /**
     * Get all history items with a date greater or equal than startDate, until today
     */
-    func historyItems(startDate: NSDate, _ handler: ProviderResult<[HistoryItem]> -> ())
+    func historyItems(startDate: NSDate, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> ())
 
-    func historyItems(monthYear: MonthYear, _ handler: ProviderResult<[HistoryItem]> -> Void)
+    func historyItems(monthYear: MonthYear, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> Void)
     
-    func historyItemsGroups(range: NSRange, _ handler: ProviderResult<[HistoryItemGroup]> -> ())
+    func historyItemsGroups(range: NSRange, inventory: Inventory, _ handler: ProviderResult<[HistoryItemGroup]> -> ())
 
     func syncHistoryItems(handler: (ProviderResult<[Any]> -> ()))
     

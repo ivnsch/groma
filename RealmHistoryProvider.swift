@@ -18,38 +18,43 @@ class RealmHistoryProvider: RealmProvider {
         self.saveObj(dbObj, update: false, handler: handler)
     }
     
-    func loadHistoryItems(range: NSRange? = nil, handler: [HistoryItem] -> ()) {
+    func loadHistoryItems(range: NSRange? = nil, inventory: Inventory, handler: [HistoryItem] -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
         self.load(mapper, sortDescriptor: historySortDescriptor, range: range, handler: handler)
     }
 
-    func loadHistoryItems(range: NSRange? = nil, startDate: NSDate, handler: [HistoryItem] -> ()) {
+    func loadHistoryItems(range: NSRange? = nil, startDate: NSDate, inventory: Inventory, handler: [HistoryItem] -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
-        self.load(mapper, predicate: NSPredicate(format: "addedDate >= %@", startDate), sortDescriptor: historySortDescriptor, range: range, handler: handler)
+        self.load(mapper, predicate: NSPredicate(format: "addedDate >= %@ AND inventory.uuid == %@", startDate, inventory.uuid), sortDescriptor: historySortDescriptor, range: range, handler: handler)
     }
 
-    func loadHistoryItems(productName: String, startDate: NSDate, handler: [HistoryItem] -> ()) {
+    func loadHistoryItems(productName: String, startDate: NSDate, inventory: Inventory, handler: [HistoryItem] -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)}
-        self.load(mapper, predicate: NSPredicate(format: "product.name == %@ AND addedDate >= %@", productName, startDate), sortDescriptor: historySortDescriptor, handler: handler)
+        self.load(mapper, predicate: NSPredicate(format: "product.name == %@ AND addedDate >= %@ AND inventory.uuid == %@", productName, startDate, inventory.uuid), sortDescriptor: historySortDescriptor, handler: handler)
+    }
+
+    func loadAllHistoryItems(handler: [HistoryItem] -> ()) {
+        let mapper = {HistoryItemMapper.historyItemWith($0)}
+        self.load(mapper, sortDescriptor: historySortDescriptor, handler: handler)
     }
     
-    func loadHistoryItems(monthYear: MonthYear, handler: [HistoryItem] -> Void) {
+    func loadHistoryItems(monthYear: MonthYear, inventory: Inventory, handler: [HistoryItem] -> Void) {
         if let startDate = NSDate.startOfMonth(monthYear.month, year: monthYear.year), endDate = NSDate.endOfMonth(monthYear.month, year: monthYear.year) {
-            loadHistoryItems(startDate, endDate: endDate, handler)
+            loadHistoryItems(startDate, endDate: endDate, inventory: inventory, handler)
         } else {
             print("Error: Invalid month year components to get start/end date: \(monthYear)")
             handler([])
         }
     }
     
-    func loadHistoryItems(startDate: NSDate, endDate: NSDate, _ handler: [HistoryItem] -> Void) {
+    func loadHistoryItems(startDate: NSDate, endDate: NSDate, inventory: Inventory, _ handler: [HistoryItem] -> Void) {
         let mapper = {HistoryItemMapper.historyItemWith($0)}
-        self.load(mapper, predicate: NSPredicate(format: "addedDate >= %@ AND addedDate <= %@", startDate, endDate), sortDescriptor: historySortDescriptor, handler: handler)
+        self.load(mapper, predicate: NSPredicate(format: "addedDate >= %@ AND addedDate <= %@ AND inventory.uuid == %@", startDate, endDate, inventory.uuid), sortDescriptor: historySortDescriptor, handler: handler)
     }
     
     // TODO change data model! one table with groups and the other with history items, 1:n (also in server)
     // this is very important as right now we fetch and iterate through ALL the history items, this is very inefficient
-    func loadHistoryItemsGroups(range: NSRange, _ handler: [HistoryItemGroup] -> ()) {
+    func loadHistoryItemsGroups(range: NSRange, inventory: Inventory, _ handler: [HistoryItemGroup] -> ()) {
 
         let finished: ([HistoryItemGroup]) -> () = {result in
             dispatch_async(dispatch_get_main_queue(), {
@@ -60,7 +65,7 @@ class RealmHistoryProvider: RealmProvider {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             do {
                 let realm = try Realm()
-                let results = realm.objects(DBHistoryItem).sorted("addedDate", ascending: false) // not using constant because weak self etc.
+                let results = realm.objects(DBHistoryItem).filter("inventory.uuid = '\(inventory.uuid)'").sorted("addedDate", ascending: false) // not using constant because weak self etc.
                 
                 // Group by date
                 var dateDictDB: OrderedDictionary<NSDate, [DBHistoryItem]> = OrderedDictionary()

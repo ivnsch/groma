@@ -13,41 +13,43 @@ class RealmPlanProvider: RealmProvider {
 
     let dbHistoryProvider = RealmHistoryProvider()
 
+    // NOTE: Disabled because we added now inventories to history fetch, since plan will not be in the release for now changes not implemented
     // TODO optimize - fetch first plan items, is it possible (and better) to fetch only history items for the fetched plan items?
     func planItems(startDate: NSDate, handler: [PlanItem] -> ()) {
 
-        dbHistoryProvider.loadHistoryItems(startDate: NSDate().startOfMonth) {[weak self] historyItems in
-            
-            if let weakSelf = self {
-                let productQuantities = weakSelf.productsTotalQuantities(historyItems)
-                // Use history to calculate how much has been already consumed of each product in current time period
-                let mapper: DBPlanItem -> PlanItem = {dbPlanItem in
-                    let usedQuantity = productQuantities[dbPlanItem.product.uuid] ?? 0
-                    return PlanItemMapper.planItemWith(dbPlanItem, usedQuantity: usedQuantity)
-                }
-                weakSelf.load(mapper, handler: handler)
-                
-            } else {
-                print("Error: RealmPlanProvider.planItems, self is nil")
-            }
-        }
+//        dbHistoryProvider.loadHistoryItems(startDate: NSDate().startOfMonth) {[weak self] historyItems in
+//            
+//            if let weakSelf = self {
+//                let productQuantities = weakSelf.productsTotalQuantities(historyItems)
+//                // Use history to calculate how much has been already consumed of each product in current time period
+//                let mapper: DBPlanItem -> PlanItem = {dbPlanItem in
+//                    let usedQuantity = productQuantities[dbPlanItem.product.uuid] ?? 0
+//                    return PlanItemMapper.planItemWith(dbPlanItem, usedQuantity: usedQuantity)
+//                }
+//                weakSelf.load(mapper, handler: handler)
+//                
+//            } else {
+//                print("Error: RealmPlanProvider.planItems, self is nil")
+//            }
+//        }
     }
 
+    // NOTE: Disabled because we added now inventories to history fetch, since plan will not be in the release for now changes not implemented
     // TODO optimize - fetch first plan item, if there's no plan item, there's no need to fetch the history
     func planItem(productName: String, startDate: NSDate, handler: PlanItem? -> ()) {
-        dbHistoryProvider.loadHistoryItems(productName, startDate: NSDate().startOfMonth) {[weak self] historyItems in
-            if let weakSelf = self {
-                // Use history to calculate how much has been already consumed product in current time period
-                let mapper: DBPlanItem -> PlanItem = {dbPlanItem in
-                    let usedQuantity = historyItems.totalQuantity
-                    return PlanItemMapper.planItemWith(dbPlanItem, usedQuantity: usedQuantity)
-                }
-                weakSelf.loadFirst(mapper, filter: "product.name == '\(productName)'", handler: handler)
-                
-            } else {
-                print("Error: RealmPlanProvider.planItems, self is nil")
-            }
-        }
+//        dbHistoryProvider.loadHistoryItems(productName, startDate: NSDate().startOfMonth) {[weak self] historyItems in
+//            if let weakSelf = self {
+//                // Use history to calculate how much has been already consumed product in current time period
+//                let mapper: DBPlanItem -> PlanItem = {dbPlanItem in
+//                    let usedQuantity = historyItems.totalQuantity
+//                    return PlanItemMapper.planItemWith(dbPlanItem, usedQuantity: usedQuantity)
+//                }
+//                weakSelf.loadFirst(mapper, filter: "product.name == '\(productName)'", handler: handler)
+//                
+//            } else {
+//                print("Error: RealmPlanProvider.planItems, self is nil")
+//            }
+//        }
     }
     
     /**

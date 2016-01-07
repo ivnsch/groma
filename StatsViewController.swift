@@ -57,8 +57,23 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     
     private var aggregate: GroupMonthYearAggregate?
     
+    @IBOutlet weak var inventoriesButton: UIButton!
+    private var inventoryPicker: InventoryPicker?
+    private var selectedInventory: Inventory? {
+        didSet {
+            if (selectedInventory.map{$0 != oldValue} ?? true) { // load only if it's not set (?? true) or if it's a different inventory
+                loadChart()
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        inventoryPicker = InventoryPicker(button: inventoriesButton, view: view) {[weak self] inventory in
+            self?.selectedInventory = inventory
+        }
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryWithHistoryAfterSave:", name: WSNotificationName.InventoryItemsWithHistoryAfterSave.rawValue, object: nil)
     }
     
@@ -68,7 +83,13 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        loadChart()
+        loadInventories()
+    }
+    
+    private func loadInventories() {
+        Providers.inventoryProvider.inventories(successHandler{[weak self] inventories in
+            self?.inventoryPicker?.inventories = inventories
+        })
     }
     
     private func loadChart() {
@@ -100,7 +121,7 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         return nil
     }
     
-    // MARK: - UIPicker
+    // MARK: - Time period picker
     
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
@@ -125,14 +146,18 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     // MARK: -
     
     private func updateChart(timePeriod: TimePeriod) {
-        Providers.statsProvider.history(timePeriod, group: AggregateGroup.All, successHandler{[weak self] aggregate in
-            if self?.aggregate?.timePeriod != aggregate.timePeriod || self?.aggregate?.monthYearAggregates ?? [] != aggregate.monthYearAggregates { // don't reload if there are no changes
-                self?.emptyStatsView.setHiddenAnimated(!aggregate.monthYearAggregates.isEmpty)
-                self?.aggregate = aggregate
-                self?.initChart(aggregate)
-                self?.initThisMonthSpendingsLabels(aggregate)
-            }
-        })
+        if let inventory = selectedInventory {
+            Providers.statsProvider.history(timePeriod, group: AggregateGroup.All, inventory: inventory, successHandler{[weak self] aggregate in
+                if self?.aggregate?.timePeriod != aggregate.timePeriod || self?.aggregate?.monthYearAggregates ?? [] != aggregate.monthYearAggregates { // don't reload if there are no changes
+                    self?.emptyStatsView.setHiddenAnimated(!aggregate.monthYearAggregates.isEmpty)
+                    self?.aggregate = aggregate
+                    self?.initChart(aggregate)
+                    self?.initThisMonthSpendingsLabels(aggregate)
+                }
+            })
+        } else {
+            print("Warn: StatsViewController.updateChart: Can't update chart because there's no selected inventory")
+        }
     }
     
     private func setTimePeriod(timePeriod: TimePeriodWithText) {
@@ -357,12 +382,15 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
 
     
     func onBarTap(aggr: MonthYearAggregate) {
-        let detailsController = UIStoryboard.statsDetailsViewController()
-        detailsController.onViewDidLoad = {
-            detailsController.aggr = aggr
+        if let inventory = selectedInventory {
+            let detailsController = UIStoryboard.statsDetailsViewController()
+            detailsController.onViewDidLoad = {
+                detailsController.initData = (aggr, inventory)
+            }
+            navigationController?.pushViewController(detailsController, animated: true)
+        } else {
+            print("Warn: StatsViewController.onBarTap: Can't show detail view because there's no selected inventory")
         }
-        navigationController?.pushViewController(detailsController, animated: true)
-        
     }
     
     // This is called when added items to inventory / history, which means the chart has to be updated

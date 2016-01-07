@@ -27,15 +27,29 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             self.tableView.reloadData()
         }
     }
-    
+
+    @IBOutlet weak var inventoriesButton: UIButton!
+    private var inventoryPicker: InventoryPicker?
+    private var selectedInventory: Inventory? {
+        didSet {
+            if (selectedInventory.map{$0 != oldValue} ?? true) { // load only if it's not set (?? true) or if it's a different inventory
+                loadHistory()
+            }
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.topInset = 64 // in my understanding this should be 64 which is the actual size of nav bar but it needs 44 for some reason
+        tableView.topInset = 64 + 40 // (top + menu bar)
         
         dateFormatter = NSDateFormatter()
         dateFormatter.dateStyle = .FullStyle
         dateFormatter.timeStyle = .ShortStyle
+        
+        inventoryPicker = InventoryPicker(button: inventoriesButton, view: view) {[weak self] inventory in
+            self?.selectedInventory = inventory
+        }
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketHistoryItem:", name: WSNotificationName.HistoryItem.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
@@ -48,7 +62,13 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        loadHistory()
+        loadInventories()
+    }
+    
+    private func loadInventories() {
+        Providers.inventoryProvider.inventories(successHandler{[weak self] inventories in
+            self?.inventoryPicker?.inventories = inventories
+        })
     }
     
     private func loadHistory() {
@@ -119,33 +139,39 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     private func loadPossibleNextPage() {
         
-        func setLoading(loading: Bool) {
-            self.loadingPage = loading
-            self.tableViewFooter.hidden = !loading
-        }
-
-        synced(self) {[weak self] in
-            let weakSelf = self!
+        if let inventory = selectedInventory {
             
-            if !weakSelf.paginator.reachedEnd {
+            func setLoading(loading: Bool) {
+                self.loadingPage = loading
+                self.tableViewFooter.hidden = !loading
+            }
+            
+            synced(self) {[weak self] in
+                let weakSelf = self!
                 
-                if (!weakSelf.loadingPage) {
-                    setLoading(true)
+                if !weakSelf.paginator.reachedEnd {
                     
-                    weakSelf.historyProvider.historyItemsGroups(weakSelf.paginator.currentPage, weakSelf.successHandler{historyItems in
-                        for historyItem in historyItems {
-                            weakSelf.sectionModels.append(SectionModel(obj: historyItem))
-                        }
+                    if (!weakSelf.loadingPage) {
+                        setLoading(true)
                         
-                        weakSelf.emptyHistoryView.setHiddenAnimated(weakSelf.sectionModels.count > 0)
-                        
-                        weakSelf.paginator.update(historyItems.count)
-                        
-                        weakSelf.tableView.reloadData()
-                        setLoading(false)
-                    })
+                        weakSelf.historyProvider.historyItemsGroups(weakSelf.paginator.currentPage, inventory: inventory, weakSelf.successHandler{historyItems in
+                            for historyItem in historyItems {
+                                weakSelf.sectionModels.append(SectionModel(obj: historyItem))
+                            }
+                            
+                            weakSelf.emptyHistoryView.setHiddenAnimated(weakSelf.sectionModels.count > 0)
+                            
+                            weakSelf.paginator.update(historyItems.count)
+                            
+                            weakSelf.tableView.reloadData()
+                            setLoading(false)
+                        })
+                    }
                 }
             }
+            
+        } else {
+            print("Warn: HistoryViewController.loadPossibleNextPage: Can't load page because there's no selected inventory")
         }
     }
 

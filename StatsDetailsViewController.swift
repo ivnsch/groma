@@ -10,10 +10,10 @@ import UIKit
 
 class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    var aggr: MonthYearAggregate? {
+    var initData: (aggr: MonthYearAggregate, inventory: Inventory)? {
         didSet {
-            if let aggr = aggr {
-                initAggregates(aggr.monthYear)
+            if let initData = initData {
+                initAggregates(initData.aggr.monthYear, inventory: initData.inventory)
                 initTitle()
             }
         }
@@ -29,8 +29,8 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     var onViewDidLoad: VoidFunction?
     
-    private func initAggregates(monthYear: MonthYear) {
-        Providers.statsProvider.aggregate(monthYear, groupBy: GroupByAttribute.Name, successHandler {[weak self] productAggregates in
+    private func initAggregates(monthYear: MonthYear, inventory: Inventory) {
+        Providers.statsProvider.aggregate(monthYear, groupBy: GroupByAttribute.Name, inventory: inventory, successHandler {[weak self] productAggregates in
             self?.productAggregates = productAggregates
         })
     }
@@ -38,7 +38,7 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     private func initTitle() {
         let inputDateFormatter = NSDateFormatter()
         inputDateFormatter.dateFormat = "MMM yy"
-        if let date = aggr?.monthYear.toDate() {
+        if let date = initData?.aggr.monthYear.toDate() {
             navigationItem.title = inputDateFormatter.stringFromDate(date)
         } else {
             print("Warn: StatsDetailsViewController: aggr not set or month year invalid")

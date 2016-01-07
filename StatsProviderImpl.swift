@@ -70,19 +70,19 @@ func ==(lhs: MonthYearAggregate, rhs: MonthYearAggregate) -> Bool {
 
 class StatsProviderImpl: StatsProvider {
 
-    func aggregate(monthYear: MonthYear, groupBy: GroupByAttribute, _ handler: ProviderResult<[ProductAggregate]> -> ()) {
-        RealmHistoryProvider().loadHistoryItems(monthYear) {historyItems in
+    func aggregate(monthYear: MonthYear, groupBy: GroupByAttribute, inventory: Inventory, _ handler: ProviderResult<[ProductAggregate]> -> ()) {
+        RealmHistoryProvider().loadHistoryItems(monthYear, inventory: inventory) {historyItems in
             let productAggregates = self.toProductAggregates(historyItems)
             handler(ProviderResult(status: .Success, sucessResult: productAggregates))
         }
     }
     
-    func aggregate(timePeriod: TimePeriod, groupBy: GroupByAttribute, _ handler: ProviderResult<[ProductAggregate]> -> ()) {
+    func aggregate(timePeriod: TimePeriod, groupBy: GroupByAttribute, inventory: Inventory, _ handler: ProviderResult<[ProductAggregate]> -> ()) {
         let dateComponents = timePeriod.dateOffsetComponent()
         
         if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: NSDate(), options: .WrapComponents) {
             
-            RealmHistoryProvider().loadHistoryItems(startDate: startDate) {historyItems in
+            RealmHistoryProvider().loadHistoryItems(startDate: startDate, inventory: inventory) {historyItems in
                 let productAggregates = self.toProductAggregates(historyItems)
                 handler(ProviderResult(status: .Success, sucessResult: productAggregates))
             }
@@ -93,13 +93,13 @@ class StatsProviderImpl: StatsProvider {
         }
     }
     
-    func history(timePeriod: TimePeriod, group: AggregateGroup, _ handler: ProviderResult<GroupMonthYearAggregate> -> ()) {
+    func history(timePeriod: TimePeriod, group: AggregateGroup, inventory: Inventory, _ handler: ProviderResult<GroupMonthYearAggregate> -> ()) {
         let dateComponents = timePeriod.dateOffsetComponent()
         
         let referenceDate = NSDate() // today
         if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: referenceDate, options: []) {
             
-            RealmHistoryProvider().loadHistoryItems(startDate: startDate) {historyItems in
+            RealmHistoryProvider().loadHistoryItems(startDate: startDate, inventory: inventory) {historyItems in
                 
                 var dict: OrderedDictionary<MonthYear, (price: Float, quantity: Int)> = OrderedDictionary()
                 

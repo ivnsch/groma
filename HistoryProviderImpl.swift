@@ -13,9 +13,9 @@ class HistoryProviderImpl: HistoryProvider {
     let dbProvider = RealmHistoryProvider()
     let remoteProvider = RemoteHistoryProvider()
 
-    func historyItems(range: NSRange, _ handler: ProviderResult<[HistoryItem]> -> ()) {
+    func historyItems(range: NSRange, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> ()) {
 
-        self.dbProvider.loadHistoryItems(range) {dbHistoryItems in
+        self.dbProvider.loadHistoryItems(range, inventory: inventory) {dbHistoryItems in
             handler(ProviderResult(status: .Success, sucessResult: dbHistoryItems))
             
             // no background update - the history is too long to be fetched each time, and paginated update is too complicated
@@ -23,20 +23,20 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
-    func historyItems(startDate: NSDate, _ handler: ProviderResult<[HistoryItem]> -> ()) {
-        self.dbProvider.loadHistoryItems(startDate: startDate) {dbHistoryItems in
+    func historyItems(startDate: NSDate, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> ()) {
+        self.dbProvider.loadHistoryItems(startDate: startDate, inventory: inventory) {dbHistoryItems in
             handler(ProviderResult(status: .Success, sucessResult: dbHistoryItems))
         }
     }
     
-    func historyItems(monthYear: MonthYear, _ handler: ProviderResult<[HistoryItem]> -> Void) {
-        dbProvider.loadHistoryItems(monthYear) {dbHistoryItems in
+    func historyItems(monthYear: MonthYear, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> Void) {
+        dbProvider.loadHistoryItems(monthYear, inventory: inventory) {dbHistoryItems in
             handler(ProviderResult(status: .Success, sucessResult: dbHistoryItems))
         }
     }
     
-    func historyItemsGroups(range: NSRange, _ handler: ProviderResult<[HistoryItemGroup]> -> ()) {
-        dbProvider.loadHistoryItemsGroups(range) {groups in
+    func historyItemsGroups(range: NSRange, inventory: Inventory, _ handler: ProviderResult<[HistoryItemGroup]> -> ()) {
+        dbProvider.loadHistoryItemsGroups(range, inventory: inventory) {groups in
             handler(ProviderResult(status: .Success, sucessResult: groups))
         }
     }
@@ -67,7 +67,7 @@ class HistoryProviderImpl: HistoryProvider {
     
     func syncHistoryItems(handler: (ProviderResult<[Any]> -> ())) {
         
-        self.dbProvider.loadHistoryItems {dbHistoryItems in
+        self.dbProvider.loadAllHistoryItems {dbHistoryItems in
             
             let historyItemsSync: HistoryItemsSync = SyncUtils.toHistoryItemsSync(dbHistoryItems)
             
