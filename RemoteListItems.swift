@@ -10,6 +10,7 @@ import Foundation
     
 final class RemoteListItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
 
+    let lists: RemoteListsWithDependencies
     let products: [RemoteProduct]
     let productsCategories: [RemoteProductCategory]
     let sections: [RemoteSection]
@@ -24,6 +25,9 @@ final class RemoteListItems: ResponseObjectSerializable, ResponseCollectionSeria
     }
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+        
+        let lists = representation.valueForKeyPath("lists")!
+        self.lists = RemoteListsWithDependencies(response: response, representation: lists)!
         
         let products = representation.valueForKeyPath("products") as! [AnyObject]
         self.products = RemoteProduct.collection(response: response, representation: products)
@@ -51,6 +55,6 @@ final class RemoteListItems: ResponseObjectSerializable, ResponseCollectionSeria
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) productsCategories: [\(self.productsCategories)], products: [\(self.products)], listItems: [\(self.listItems)}"
+        return "{\(self.dynamicType) lists: \(lists), productsCategories: [\(productsCategories)], products: [\(products)], listItems: [\(listItems)}"
     }
 }

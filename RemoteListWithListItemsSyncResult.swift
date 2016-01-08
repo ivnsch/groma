@@ -38,18 +38,18 @@ final class RemoteListItemsSyncResult: ResponseObjectSerializable, ResponseColle
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) listUuid: \(self.listUuid), listItems: \(self.listItems), couldNotUpdate: \(self.couldNotUpdate), couldNotDelete: \(self.couldNotDelete)}"
+        return "{\(self.dynamicType) listUuid: \(listUuid), listItems: \(listItems), couldNotUpdate: \(couldNotUpdate), couldNotDelete: \(couldNotDelete)}"
     }
 }
 
 
 final class RemoteListWithListItemsSyncResult: ResponseObjectSerializable, CustomDebugStringConvertible {
-    let lists: [RemoteList]
+    let lists: RemoteListsWithDependencies
     let couldNotUpdate: [String]
     let couldNotDelete: [String]
     let listItemsSyncResults: [RemoteListItemsSyncResult]
     
-    init(lists: [RemoteList], couldNotUpdate: [String], couldNotDelete: [String], listItemsSyncResults: [RemoteListItemsSyncResult]) {
+    init(lists: RemoteListsWithDependencies, couldNotUpdate: [String], couldNotDelete: [String], listItemsSyncResults: [RemoteListItemsSyncResult]) {
         self.lists = lists
         self.couldNotUpdate = couldNotUpdate
         self.couldNotDelete = couldNotDelete
@@ -57,8 +57,8 @@ final class RemoteListWithListItemsSyncResult: ResponseObjectSerializable, Custo
     }
     
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
-        let lists = representation.valueForKeyPath("lists") as! [AnyObject]
-        self.lists = RemoteList.collection(response: response, representation: lists)
+        let lists = representation.valueForKeyPath("lists")! // TODO!!! server
+        self.lists = RemoteListsWithDependencies(response: response, representation: lists)!
         
         self.couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as! [String]
         self.couldNotDelete = representation.valueForKeyPath("couldNotDelete") as! [String]
@@ -68,6 +68,6 @@ final class RemoteListWithListItemsSyncResult: ResponseObjectSerializable, Custo
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) lists: \(self.lists), couldNotUpdate: \(self.couldNotUpdate), couldNotDelete: \(self.couldNotDelete), listItemsSyncResults: \(self.listItemsSyncResults)}"
+        return "{\(self.dynamicType) lists: \(lists), couldNotUpdate: \(couldNotUpdate), couldNotDelete: \(couldNotDelete), listItemsSyncResults: \(listItemsSyncResults)}"
     }
 }

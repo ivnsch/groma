@@ -66,7 +66,8 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     
     override func initModels() {
         Providers.inventoryProvider.inventories(successHandler{inventories in
-            let models: [ExpandableTableViewModel] = inventories.map{ExpandableTableViewInventoryModel(inventory: $0)}
+            let authInventories = inventories.filter{InventoryAuthChecker.checkAccess($0, controller: self)}
+            let models: [ExpandableTableViewModel] = authInventories.map{ExpandableTableViewInventoryModel(inventory: $0)}
             if self.models != models { // if current list is nil or the provider list is different
                 self.models = models
                 self.tableView.reloadData()

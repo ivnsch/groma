@@ -40,7 +40,7 @@ class ListItemMapper {
     Parses the remote list items into model objects
     Note that the list items are sorted here by order field. The backend doesn't do this.
     */
-    class func listItemsWithRemote(remoteListItems: RemoteListItems, list: List) -> ListItemsWithRelations {
+    class func listItemsWithRemote(remoteListItems: RemoteListItems) -> ListItemsWithRelations {
 
         func toProductCategoryDict(remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
             var dict: [String: ProductCategory] = [:]
@@ -69,17 +69,6 @@ class ListItemMapper {
             return (dict, arr)
         }
         
-        func toListDict(remoteLists: [RemoteList]) -> ([String: List], [List]) {
-            var dict: [String: List] = [:]
-            var arr: [List] = []
-            for remoteList in remoteLists {
-                let list = ListMapper.ListWithRemote(remoteList)
-                dict[remoteList.uuid] = list
-                arr.append(list)
-            }
-            return (dict, arr)
-        }
-        
         func toSectionDict(remoteSections: [RemoteSection]) -> ([String: Section], [Section]) {
             var dict: [String: Section] = [:]
             var arr: [Section] = []
@@ -91,10 +80,13 @@ class ListItemMapper {
             return (dict, arr)
         }
 
-        let (productsCategoriesDict, productsCategories) = toProductCategoryDict(remoteListItems.productsCategories) // TODO review if productsCategories array is necessary if not remove
+        let lists = ListMapper.listsWithRemote(remoteListItems.lists)
+        let listDict = lists.toDictionary{($0.uuid, $0)}
+
+        let (productsCategoriesDict, _) = toProductCategoryDict(remoteListItems.productsCategories) // TODO review if productsCategories array is necessary if not remove
         let (productsDict, products) = toProductDict(remoteListItems.products, categories: productsCategoriesDict)
         let (sectionsDict, sections) = toSectionDict(remoteListItems.sections)
-        
+
         let remoteListItemsArr = remoteListItems.listItems
         
         let listItems = remoteListItemsArr.map {remoteListItem in
@@ -104,7 +96,7 @@ class ListItemMapper {
                 quantity: remoteListItem.quantity,
                 product: productsDict[remoteListItem.productUuid]!,
                 section: sectionsDict[remoteListItem.sectionUuid]!,
-                list: list,
+                list: listDict[remoteListItem.listUuid]!,
                 order: remoteListItem.order,
                 note: remoteListItem.note
             )

@@ -201,7 +201,14 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     @IBAction func onAddToInventoryTap(sender: UIBarButtonItem) {
-        addAllItemsToInventory()
+        if let list = list {
+            
+            if InventoryAuthChecker.checkAccess(list.inventory, controller: self) {
+                addAllItemsToInventory()
+            }
+        } else {
+            print("Warn: DoneViewController.onAddToInventoryTap: list is not set, can't add to inventory")
+        }
     }
     
     private func addAllItemsToInventory() {

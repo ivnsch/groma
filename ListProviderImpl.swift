@@ -24,7 +24,7 @@ class ListProviderImpl: ListProvider {
             self.remoteListProvider.lists {remoteResult in
                 
                 if let remoteLists = remoteResult.successResult {
-                    let lists: [List] = remoteLists.map{ListMapper.ListWithRemote($0)}.sortedByOrder()
+                    let lists: [List] = ListMapper.listsWithRemote(remoteLists)
                     
                     // if there's no cached list or there's a difference, overwrite the cached list
                     if dbLists != lists {

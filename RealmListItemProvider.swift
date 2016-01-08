@@ -473,39 +473,32 @@ class RealmListItemProvider: RealmProvider {
             // we don't delete the products because these are referenced also by inventory items and maybe also other things in the future
             
             // save inventories
-            var dbInventoriesDict: [String: DBList] = [:] // cache saved inventories for fast access when saving inventory items, which need the inventory
-            let remoteInventories = syncResult.lists
+            let lists = ListMapper.listsWithRemote(syncResult.lists)
+            let remoteInventories = lists
             for remoteInventory in remoteInventories {
                 let dbInventory = ListMapper.dbWithList(remoteInventory)
-                dbInventoriesDict[remoteInventory.uuid] = dbInventory
                 realm.add(dbInventory, update: true)
             }
             
             // save inventory items
             for listItemsSyncResult in syncResult.listItemsSyncResults {
                 
-                if let list = dbInventoriesDict[listItemsSyncResult.listUuid] {
-                    let listItemsWithRelations = ListItemMapper.listItemsWithRemote(listItemsSyncResult.listItems, list: ListMapper.listWithDB(list))
-                    
-                    for product in listItemsWithRelations.products {
-                        let dbProduct = ProductMapper.dbWithProduct(product)
-                        realm.add(dbProduct, update: true) // since we don't delete products (see comment above) we do update
-                    }
-                    
-                    for section in listItemsWithRelations.sections {
-                        let dbSection = SectionMapper.dbWithSection(section)
-                        realm.add(dbSection, update: true)
-                    }
-                    
-                    for listItem in listItemsWithRelations.listItems {
-                        let dbInventoryItem = ListItemMapper.dbWithListItem(listItem)
-                        realm.add(dbInventoryItem, update: true)
+                let listItemsWithRelations = ListItemMapper.listItemsWithRemote(listItemsSyncResult.listItems)
+                
+                for product in listItemsWithRelations.products {
+                    let dbProduct = ProductMapper.dbWithProduct(product)
+                    realm.add(dbProduct, update: true) // since we don't delete products (see comment above) we do update
+                }
+                
+                for section in listItemsWithRelations.sections {
+                    let dbSection = SectionMapper.dbWithSection(section)
+                    realm.add(dbSection, update: true)
+                }
+                
+                for listItem in listItemsWithRelations.listItems {
+                    let dbInventoryItem = ListItemMapper.dbWithListItem(listItem)
+                    realm.add(dbInventoryItem, update: true)
 
-                    }
-                } else {
-                    print("Error: Invalid response: Inventory item sync response: No inventory found for inventory item uuid")
-                    // TODO good unit test for this, also send to error monitoring
-                    // This should not happen, but if it does we just don't save these inventory items. The rest continues normally.
                 }
             }
             

@@ -37,8 +37,8 @@ class RemoteListItemProvider {
         }
     }
     
-    func lists(handler: RemoteResult<[RemoteList]> -> ()) {
-        RemoteProvider.authenticatedRequestArray(.GET, Urls.lists) {result in
+    func lists(handler: RemoteResult<RemoteListsWithDependencies> -> ()) {
+        RemoteProvider.authenticatedRequest(.GET, Urls.lists) {result in
             handler(result)
         }
     }
@@ -68,7 +68,7 @@ class RemoteListItemProvider {
         }
     }
     
-    func update(list: List, handler: RemoteResult<RemoteList> -> ()) {
+    func update(list: List, handler: RemoteResult<RemoteListsWithDependencies> -> ()) {
         let parameters = self.toRequestParams(list)
         RemoteProvider.authenticatedRequest(.PUT, Urls.list, parameters) {result in
             handler(result)
@@ -105,7 +105,7 @@ class RemoteListItemProvider {
         }
     }
     
-    func add(list: List, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func add(list: List, handler: RemoteResult<RemoteListsWithDependencies> -> ()) {
         let parameters = toRequestPrams(list)
         RemoteProvider.authenticatedRequest(.POST, Urls.list, parameters) {result in
             handler(result)
@@ -123,6 +123,7 @@ class RemoteListItemProvider {
         }
     }
     
+    // TODO!! implement new sync, note that now we also send the inventories (full object, see ListInput in sever)!
     func syncListItems(list: List, listItems: [ListItem], toRemove: [ListItem], handler: RemoteResult<RemoteSyncResult<RemoteListItems>> -> ()) {
         
         let listItemsParams = listItems.map{self.toRequestParams($0)}
@@ -270,11 +271,10 @@ class RemoteListItemProvider {
     
     func toRequestParams(list: List) -> [String: AnyObject] {
         let sharedUsers: [[String: AnyObject]] = list.users.map{self.toRequestParams($0)}
-        
         var listDict = self.toRequestParamsShort(list)
-        
         listDict["users"] = sharedUsers
-        
+        let inventoryDict = RemoteInventoryProvider().toRequestParams(list.inventory)
+        listDict["inventory"] = inventoryDict
         return listDict
     }
     

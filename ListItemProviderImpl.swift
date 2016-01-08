@@ -46,7 +46,7 @@ class ListItemProviderImpl: ListItemProvider {
             self?.remoteProvider.listItems(list: list) {[weak self] remoteResult in
                 
                 if let remoteListItems = remoteResult.successResult {
-                    let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems, list: list)
+                    let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems)
                     
                     // if there's no cached list or there's a difference, overwrite the cached list
                     if (dbListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
@@ -457,7 +457,7 @@ class ListItemProviderImpl: ListItemProvider {
                                     // for now overwrite all. In the future we should do a timestamp check here also for the case that user does an update while the sync service is being called
                                     // since we support background sync, this should not be neglected
                                     
-                                    let listItemsWithRelations = ListItemMapper.listItemsWithRemote(items, list: list)
+                                    let listItemsWithRelations = ListItemMapper.listItemsWithRemote(items)
                                     let serverListItems = listItemsWithRelations.listItems.map{ListItemMapper.dbWithListItem($0)}
                                     self.dbProvider.overwrite(serverListItems) {success in
                                         if success {

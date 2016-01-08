@@ -28,20 +28,23 @@ class ListMapper {
         return dbList
     }
 
-    class func dbWithList(list: RemoteList) -> DBList {
-        let dbList = DBList()
-        dbList.uuid = list.uuid
-        dbList.name = list.name
-        dbList.setBgColor(RandomFlatColorWithShade(.Dark)) // for now no synchronisation of colors with remote
-        dbList.order = list.order
-        let inventory = InventoryMapper.dbWithInventory(list.inventory)
-        dbList.inventory = inventory
-        let dbSharedUsers = list.users.map{SharedUserMapper.dbWithSharedUser($0)}
-        for dbObj in dbSharedUsers {
-            dbList.users.append(dbObj)
+    class func dbWithLists(remoteLists: RemoteListsWithDependencies) -> [DBList] {
+        let inventoriesDict = remoteLists.inventories.toDictionary{($0.uuid, InventoryMapper.dbWithInventory($0))}
+        
+        return remoteLists.lists.map {remoteList in
+            let dbList = DBList()
+            dbList.uuid = remoteList.uuid
+            dbList.name = remoteList.name
+            dbList.setBgColor(RandomFlatColorWithShade(.Dark)) // for now no synchronisation of colors with remote
+            dbList.order = remoteList.order
+            dbList.inventory = inventoriesDict[remoteList.inventoryUuid]!
+            let dbSharedUsers = remoteList.users.map{SharedUserMapper.dbWithSharedUser($0)}
+            for dbObj in dbSharedUsers {
+                dbList.users.append(dbObj)
+            }
+            dbList.lastServerUpdate = remoteList.lastUpdate
+            return dbList
         }
-        dbList.lastServerUpdate = list.lastUpdate
-        return dbList
     }
     
     class func listWithDB(dbList: DBList) -> List {
@@ -50,8 +53,20 @@ class ListMapper {
         return List(uuid: dbList.uuid, name: dbList.name, users: users, bgColor: dbList.bgColor(), order: dbList.order, inventory: inventory)
     }
     
-    class func ListWithRemote(remoteList: RemoteList) -> List {
-        let inventory = InventoryMapper.inventoryWithRemote(remoteList.inventory)
-        return List(uuid: remoteList.uuid, name: remoteList.name, users: remoteList.users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: RandomFlatColorWithShade(.Dark) /* for now no synchronisation of colors with remote*/, order: remoteList.order, inventory: inventory)
+    class func listsWithRemote(remoteLists: RemoteListsWithDependencies) -> [List] {
+
+        let inventoriesDict = remoteLists.inventories.toDictionary{($0.uuid, InventoryMapper.inventoryWithRemote($0))}
+        
+        let lists = remoteLists.lists.map {remoteList in
+            List(
+                uuid: remoteList.uuid,
+                name: remoteList.name,
+                users: remoteList.users.map{SharedUserMapper.sharedUserWithRemote($0)},
+                bgColor: RandomFlatColorWithShade(.Dark) /* for now no synchronisation of colors with remote*/,
+                order: remoteList.order,
+                inventory: inventoriesDict[remoteList.inventoryUuid]!)
+        }
+        
+        return lists.sortedByOrder()
     }
 }

@@ -403,6 +403,8 @@
 		EB7F59D81BA1E0DF00E07EBA /* Performance.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59D61BA1E0DF00E07EBA /* Performance.swift */; };
 		EB7F59D91BA1E0DF00E07EBA /* Performance.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59D61BA1E0DF00E07EBA /* Performance.swift */; };
 		EB80CE491C3DEB8A001DF159 /* InventoryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE481C3DEB8A001DF159 /* InventoryPicker.swift */; settings = {ASSET_TAGS = (); }; };
+		EB80CE4B1C3EA628001DF159 /* RemoteListsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE4A1C3EA628001DF159 /* RemoteListsWithDependencies.swift */; settings = {ASSET_TAGS = (); }; };
+		EB80CE4D1C3F5F10001DF159 /* InventoryAuthChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */; settings = {ASSET_TAGS = (); }; };
 		EB85F4531BD5393800E19E9B /* QuickAddListItem.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB85F4521BD5393800E19E9B /* QuickAddListItem.storyboard */; };
 		EB85F4631BD54E8D00E19E9B /* QuickAddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F4621BD54E8D00E19E9B /* QuickAddItem.swift */; };
 		EB85F4641BD54E8D00E19E9B /* QuickAddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F4621BD54E8D00E19E9B /* QuickAddItem.swift */; };
@@ -1001,6 +1003,8 @@
 		EB7F59D21BA1DBF600E07EBA /* Providers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Providers.swift; sourceTree = "<group>"; };
 		EB7F59D61BA1E0DF00E07EBA /* Performance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Performance.swift; sourceTree = "<group>"; };
 		EB80CE481C3DEB8A001DF159 /* InventoryPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryPicker.swift; sourceTree = "<group>"; };
+		EB80CE4A1C3EA628001DF159 /* RemoteListsWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListsWithDependencies.swift; sourceTree = "<group>"; };
+		EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryAuthChecker.swift; sourceTree = "<group>"; };
 		EB85F4521BD5393800E19E9B /* QuickAddListItem.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = QuickAddListItem.storyboard; sourceTree = "<group>"; };
 		EB85F4621BD54E8D00E19E9B /* QuickAddItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddItem.swift; sourceTree = "<group>"; };
 		EB85F4661BD54FA800E19E9B /* QuickAddProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddProduct.swift; sourceTree = "<group>"; };
@@ -1730,8 +1734,6 @@
 				EBF162CC1A3C82380048E37C /* tableView */,
 				EBB5A0451B65393D00FB9C58 /* validatorHelpers */,
 				EB451C491B8649FC000DE208 /* popup */,
-				EBF7CE8A1C3C9E6E00F9DB8A /* SharedUserChecker.swift */,
-				EB80CE481C3DEB8A001DF159 /* InventoryPicker.swift */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -1908,6 +1910,7 @@
 				EB9BE4241B2CB542005B401A /* RemoteList.swift */,
 				EB0C2A391B58330300AF6226 /* RemoteInventoryItem.swift */,
 				EB0C2A3D1B583BFE00AF6226 /* RemoteInventoryItemWithProduct.swift */,
+				EB80CE4A1C3EA628001DF159 /* RemoteListsWithDependencies.swift */,
 				EB9BE4211B2CB51F005B401A /* RemoteSection.swift */,
 				EB70C21A1B4D2ECE0060E529 /* RemoteSharedUser.swift */,
 				EBB9A7371B5EB14300E5487D /* RemoteInventory.swift */,
@@ -2145,6 +2148,9 @@
 				EBD827F91BE79A280072F9FA /* Fonts.swift */,
 				EB135B951BED5F130093DE70 /* ItemWithCellAttributes.swift */,
 				EBB526841BEFE6DD0002A286 /* SectionModel.swift */,
+				EBF7CE8A1C3C9E6E00F9DB8A /* SharedUserChecker.swift */,
+				EB80CE481C3DEB8A001DF159 /* InventoryPicker.swift */,
+				EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */,
 			);
 			name = util;
 			sourceTree = "<group>";
@@ -2872,6 +2878,7 @@
 				EB7F59D71BA1E0DF00E07EBA /* Performance.swift in Sources */,
 				EB7F59CF1BA1D40A00E07EBA /* Option.swift in Sources */,
 				EBDA75441BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift in Sources */,
+				EB80CE4D1C3F5F10001DF159 /* InventoryAuthChecker.swift in Sources */,
 				EB6F812D1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EBB5267D1BEFE21F0002A286 /* HelpCell.swift in Sources */,
 				EB7F59D31BA1DBF600E07EBA /* Providers.swift in Sources */,
@@ -2971,6 +2978,7 @@
 				EB135B941BED21490093DE70 /* ExpandFloatingButtonModel.swift in Sources */,
 				EBC9D2381BE3F2F50088E3CF /* TimerUtils.swift in Sources */,
 				EBBC23051BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */,
+				EB80CE4B1C3EA628001DF159 /* RemoteListsWithDependencies.swift in Sources */,
 				EB87A4A31C1A140A008D2A42 /* WSItemsSaver.swift in Sources */,
 				EBBC232B1BB600DF0002F6B1 /* ConfirmationPopup.swift in Sources */,
 				EB0C2A461B58405D00AF6226 /* RealmListItemProvider.swift in Sources */,
