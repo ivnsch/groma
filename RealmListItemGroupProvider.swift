@@ -42,7 +42,12 @@ class RealmListItemGroupProvider: RealmProvider {
         let dbObj = ListItemGroupMapper.dbWith(group)
         saveObj(dbObj, update: true, handler: handler)
     }
-
+    
+    func update(groups: [ListItemGroup], handler: Bool -> Void) {
+        let dbObjs = groups.map{ListItemGroupMapper.dbWith($0)}
+        saveObjs(dbObjs, update: true, handler: handler)
+    }
+    
     func remove(group: ListItemGroup, handler: Bool -> Void) {
         self.remove("uuid = '\(group.uuid)'", handler: handler, objType: DBListItemGroup.self)
     }

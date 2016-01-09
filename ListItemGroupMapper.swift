@@ -14,6 +14,7 @@ class ListItemGroupMapper {
         let dbListItemGroup = DBListItemGroup()
         dbListItemGroup.uuid = listItemGroup.uuid
         dbListItemGroup.name = listItemGroup.name
+        dbListItemGroup.order = listItemGroup.order
         let dbListItems = listItemGroup.items.map{GroupItemMapper.dbWith($0)}
         for dbObj in dbListItems {
             dbListItemGroup.items.append(dbObj)
@@ -27,7 +28,8 @@ class ListItemGroupMapper {
             uuid: dbListItemGroup.uuid,
             name: dbListItemGroup.name,
             items: dbListItemGroup.items.map{GroupItemMapper.groupItemWith($0)},
-            bgColor: dbListItemGroup.bgColor()
+            bgColor: dbListItemGroup.bgColor(),
+            order: dbListItemGroup.order
         )
     }
 }

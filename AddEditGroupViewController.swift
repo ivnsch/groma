@@ -91,25 +91,23 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
                 if let listName = weakSelf.groupNameInputField.text {
                     if let listToEdit = weakSelf.listToEdit {
                         let updatedList = listToEdit.copy(name: listName, bgColor: weakSelf.colorButton.tintColor)
-                        
                         Providers.listItemGroupsProvider.update(updatedList, remote: true, weakSelf.successHandler{//change
                             weakSelf.delegate?.onGroupUpdated(updatedList)
                         })
-
                     } else {
-//                        if let currentListsCount = weakSelf.currentListsCount { // TODO order
-                        let inventoryWithSharedUsers = ListItemGroup(uuid: NSUUID().UUIDString, name: listName, bgColor: weakSelf.colorButton.tintColor)
-                            Providers.listItemGroupsProvider.add(inventoryWithSharedUsers, remote: true, weakSelf.successHandler{
-                                weakSelf.delegate?.onGroupAdded(inventoryWithSharedUsers)
-                            })
+                        if let currentListsCount = weakSelf.currentListsCount {
+                        let inventoryWithSharedUsers = ListItemGroup(uuid: NSUUID().UUIDString, name: listName, bgColor: weakSelf.colorButton.tintColor, order: currentListsCount)
+                        Providers.listItemGroupsProvider.add(inventoryWithSharedUsers, remote: true, weakSelf.successHandler{
+                            weakSelf.delegate?.onGroupAdded(inventoryWithSharedUsers)
+                        })
                             
-//                        } else {
-//                            print("Error: no currentListsCount")
-//                        }
+                        } else {
+                            print("Error: no currentListsCount")
+                        }
                     }
-                } else {
-                    print("Error: validation was not implemented correctly")
                 }
+            } else {
+                print("Error: validation was not implemented correctly")
             }
         }
     }
@@ -122,7 +120,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
             for (field, _) in errors {
                 field.showValidationError()
             }
-            self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+            presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
             
         } else {
             if let lastErrors = validator?.lastErrors {

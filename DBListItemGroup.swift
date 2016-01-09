@@ -14,6 +14,7 @@ class DBListItemGroup: DBSyncable {
     dynamic var uuid: String = ""
     dynamic var name: String = ""
     let items = RealmSwift.List<DBGroupItem>()
+    dynamic var order: Int = 0    
     dynamic var bgColorData: NSData = NSData()
 
     func bgColor() -> UIColor {

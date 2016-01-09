@@ -49,13 +49,17 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     func update(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbGroupsProvider.update(group) {[weak self] saved in
+        update([group], remote: remote, handler)
+    }
+    
+    func update(groups: [ListItemGroup], remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        dbGroupsProvider.update(groups) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseSavingError))
             
             if saved && remote {
-                self?.remoteGroupsProvider.updateGroup(group) {remoteResult in
+                self?.remoteGroupsProvider.updateGroups(groups) {remoteResult in
                     if !remoteResult.success {
-                        print("Error: updating group in remote: \(group), result: \(remoteResult)")
+                        print("Error: updating groups in remote: \(groups), result: \(remoteResult)")
                         DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 }

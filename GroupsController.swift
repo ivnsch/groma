@@ -105,13 +105,13 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     override func onReorderedModels() {
         // TODO groups don't support reordering yet (also not in server)
-        //        let lists = (models as! [ExpandableTableViewInventoryModel]).map{$0.inventory}
-        //
-        //        let updatedLists = lists.mapEnumerate{index, list in list.copy(order: index)}
-        //
-        //        Providers.inventoryProvider.updateInventories(updatedLists, remote: true, successHandler{//change
-        //            //            self?.models = models // REVIEW remove? this seem not be necessary...
-        //            })
+        let groups = (models as! [ExpandableTableViewGroupModel]).map{$0.group}
+
+        let updatedGroups = groups.mapEnumerate{index, group in group.copy(order: index)}
+        
+        Providers.listItemGroupsProvider.update(updatedGroups, remote: true, successHandler{
+//            self.models = models // REVIEW remove? this seem not be necessary...
+        })
     }
     
     
