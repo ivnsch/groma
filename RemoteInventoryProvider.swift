@@ -154,7 +154,9 @@ class RemoteInventoryProvider: RemoteProvider {
         
         var inventoryDict: [String: AnyObject] = [
             "uuid": inventoryInput.uuid,
-            "name": inventoryInput.name
+            "name": inventoryInput.name,
+            "order": inventoryInput.order,
+            "color": inventoryInput.bgColor.hexStr
         ]
 
         if let lastServerUpdate = inventoryInput.lastServerUpdate {

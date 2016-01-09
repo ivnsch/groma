@@ -12,6 +12,7 @@ final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSeria
     let uuid: String
     let name: String
     let order: Int
+    let color: UIColor
     let lastUpdate: NSDate
     let users: [RemoteSharedUser]
 
@@ -20,6 +21,11 @@ final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSeria
         self.uuid = inventory.valueForKeyPath("uuid") as! String
         self.name = inventory.valueForKeyPath("name") as! String
         self.order = inventory.valueForKeyPath("order") as! Int
+        let colorStr = representation.valueForKeyPath("color") as! String
+        self.color = UIColor(hexString: colorStr) ?? {
+            print("Error: RemoteList.init: Invalid color hex: \(colorStr)")
+            return UIColor.blackColor()
+        }()
         self.lastUpdate = NSDate(timeIntervalSince1970: inventory.valueForKeyPath("lastUpdate") as! Double)
         let unserializedUsers: AnyObject = representation.valueForKeyPath("users")!
         self.users = RemoteSharedUser.collection(response: response, representation: unserializedUsers)
@@ -37,6 +43,6 @@ final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSeria
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), lastUpdate: \(lastUpdate), users: \(users)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), color: \(color.hexStr), lastUpdate: \(lastUpdate), users: \(users)}"
     }
 }
