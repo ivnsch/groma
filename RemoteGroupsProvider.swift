@@ -70,7 +70,8 @@ class RemoteGroupsProvider: RemoteProvider {
         let dict: [String: AnyObject] = [
             "uuid": group.uuid,
             "name": group.name,
-            "order": group.order
+            "order": group.order,
+            "color": group.bgColor.hexStr
         ]
         return dict
     }

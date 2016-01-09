@@ -15,6 +15,7 @@ class ListItemGroupMapper {
         dbListItemGroup.uuid = listItemGroup.uuid
         dbListItemGroup.name = listItemGroup.name
         dbListItemGroup.order = listItemGroup.order
+        dbListItemGroup.setBgColor(listItemGroup.bgColor)
         let dbListItems = listItemGroup.items.map{GroupItemMapper.dbWith($0)}
         for dbObj in dbListItems {
             dbListItemGroup.items.append(dbObj)
@@ -30,6 +31,16 @@ class ListItemGroupMapper {
             items: dbListItemGroup.items.map{GroupItemMapper.groupItemWith($0)},
             bgColor: dbListItemGroup.bgColor(),
             order: dbListItemGroup.order
+        )
+    }
+    
+    class func listItemGroupWithRemote(remoteGroup: RemoteGroup, items: [GroupItem]) -> ListItemGroup {
+        return ListItemGroup(
+            uuid: remoteGroup.uuid,
+            name: remoteGroup.name,
+            items: items,
+            bgColor: remoteGroup.color,
+            order: remoteGroup.order
         )
     }
 }
