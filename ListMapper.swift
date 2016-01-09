@@ -35,7 +35,7 @@ class ListMapper {
             let dbList = DBList()
             dbList.uuid = remoteList.uuid
             dbList.name = remoteList.name
-            dbList.setBgColor(RandomFlatColorWithShade(.Dark)) // for now no synchronisation of colors with remote
+            dbList.setBgColor(remoteList.color)
             dbList.order = remoteList.order
             dbList.inventory = inventoriesDict[remoteList.inventoryUuid]!
             let dbSharedUsers = remoteList.users.map{SharedUserMapper.dbWithSharedUser($0)}
@@ -62,7 +62,7 @@ class ListMapper {
                 uuid: remoteList.uuid,
                 name: remoteList.name,
                 users: remoteList.users.map{SharedUserMapper.sharedUserWithRemote($0)},
-                bgColor: RandomFlatColorWithShade(.Dark) /* for now no synchronisation of colors with remote*/,
+                bgColor: remoteList.color,
                 order: remoteList.order,
                 inventory: inventoriesDict[remoteList.inventoryUuid]!)
         }

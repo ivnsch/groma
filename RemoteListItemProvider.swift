@@ -265,7 +265,8 @@ class RemoteListItemProvider {
         return [
             "uuid": list.uuid,
             "name": list.name,
-            "order": list.order
+            "order": list.order,
+            "color": list.bgColor.hexStr
         ]
     }
     
