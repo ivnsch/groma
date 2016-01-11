@@ -108,10 +108,6 @@ extension UIStoryboard {
     class func addEditInventory() -> AddEditInventoryController {
         return addEditInventoryStoryboard().instantiateViewControllerWithIdentifier("AddEditInventoryController") as! AddEditInventoryController
     }
-
-    class func addEditInventoryItem() -> AddEditInventoryItemController {
-        return addEditInventoryItemStoryboard().instantiateViewControllerWithIdentifier("AddEditInventoryItemController") as! AddEditInventoryItemController
-    }
     
     // MARK: - History
     

@@ -31,7 +31,7 @@ class ProductWithQuantityInv: ProductWithQuantity {
     }
 }
 
-class InventoryItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, AddEditListItemViewControllerDelegate, ExpandableTopViewControllerDelegate, AddEditInventoryItemControllerDelegate {
+class InventoryItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, AddEditListItemViewControllerDelegate, ExpandableTopViewControllerDelegate {
     
     @IBOutlet weak var topBar: ListTopBarView!
 
@@ -39,7 +39,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
     
-    private var addEditInventoryItemControllerManager: ExpandableTopViewController<AddEditInventoryItemController>?
+    private var addEditInventoryItemControllerManager: ExpandableTopViewController<AddEditListItemViewController>?
     private var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
     
     var inventory: Inventory? {
@@ -58,7 +58,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     private var productsWithQuantityController: ProductsWithQuantityViewController!
 
-    
+    private var updatingInventoryItem: InventoryItem?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -170,13 +171,15 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         topBar.setLeftButtonIds([.Edit])
         topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
     }
-
     
-    private func initAddEditInventoryItemsManager(tableView: UITableView) -> ExpandableTopViewController<AddEditInventoryItemController> {
+    private func initAddEditInventoryItemsManager(tableView: UITableView) -> ExpandableTopViewController<AddEditListItemViewController> {
         let top = CGRectGetHeight(topBar.frame)
-        let manager: ExpandableTopViewController<AddEditInventoryItemController> = ExpandableTopViewController(top: top, height: 180, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
-            let controller = UIStoryboard.addEditInventoryItem()
+        let manager: ExpandableTopViewController<AddEditListItemViewController> =  ExpandableTopViewController(top: top, height: 180, animateTableViewInset: false, parentViewController: self, tableView: tableView) {
+            let controller = UIStoryboard.addEditListItemViewController()
             controller.delegate = self
+            controller.onViewDidLoad = {
+                controller.modus = .GroupItem
+            }
             return controller
         }
         manager.delegate = self
@@ -215,7 +218,20 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
-        // Not used - update is currently a different controller / delegate
+        
+        if let updatingInventoryItem = updatingInventoryItem {
+            if let price = priceText.floatValue, quantity = Int(quantityText) {
+                let updatedCategory = updatingInventoryItem.product.category.copy(name: category)
+                let updatedProduct = updatingInventoryItem.product.copy(name: name, price: price, category: updatedCategory)
+                // TODO! calculate quantity delta correctly?
+                let updatedInventoryItem = updatingInventoryItem.copy(quantity: quantity, quantityDelta: quantity, product: updatedProduct)
+                Providers.inventoryItemsProvider.updateInventoryItem(updatedInventoryItem, remote: true, successHandler {[weak self] in
+                    self?.onInventoryItemUpdated()
+                })
+            }
+        } else {
+            print("Warn: InventoryItemsController.onUpdateTap: No updatingGroupItem: \(updatingInventoryItem)")
+        }
     }
     
     func productNameAutocompletions(text: String, handler: [String] -> ()) {
@@ -261,37 +277,14 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     
-    // MARK: - AddEditInventoryItemControllerDelegate
-    
-    
-    func onSubmit(name: String, category: String, price: Float, quantity: Int, editingInventoryItem: InventoryItem?) {
-        if let editingInventoryItem = editingInventoryItem {
-            let updatedCategory = editingInventoryItem.product.category.copy(name: category)
-            let updatedProduct = editingInventoryItem.product.copy(name: name, price: price, category: updatedCategory)
-            // TODO! calculate quantity delta correctly?
-            let updatedInventoryItem = editingInventoryItem.copy(quantity: quantity, quantityDelta: quantity, product: updatedProduct)
-            Providers.inventoryItemsProvider.updateInventoryItem(updatedInventoryItem, remote: true, successHandler {[weak self] in
-                self?.onInventoryItemUpdated()
-                })
-            
-        } else {
-            
-            print("Not supported: Adding directly to inventory")
-            
-        }
-    }
-    
     func onInventoryItemUpdated() {
         // we have pagination so we don't know if the item is visible atm. For now simply cause a reload and start at first page. TODO nicer solution
         productsWithQuantityController?.clearAndLoadFirstPage()
-        addEditInventoryItemControllerManager?.controller?.clear()
+//        addEditInventoryItemControllerManager?.controller?.clear()
         addEditInventoryItemControllerManager?.expand(false)
         topBarOnCloseExpandable()
     }
-    
-    func onCancelTap() {
-    }
-    
+
     
     // MARK: - ListTopBarViewDelegate
     
@@ -312,7 +305,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             if topQuickAddControllerManager?.expanded ?? false {
                 sendActionToTopController(.Submit)
             } else if addEditInventoryItemControllerManager?.expanded ?? false {
-                addEditInventoryItemControllerManager?.controller?.submit()
+                addEditInventoryItemControllerManager?.controller?.submit(.Update)
             }
         case .ToggleOpen:
             toggleTopAddController()
@@ -339,19 +332,10 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
+    // TODO remove floating button things, we don't use floating button here
     private func sendActionToTopController(action: FLoatingButtonAction) {
-        
         if topQuickAddControllerManager?.expanded ?? false {
             topQuickAddControllerManager?.controller?.handleFloatingButtonAction(action)
-        } else if addEditInventoryItemControllerManager?.expanded ?? false {
-            // here we do dispatching in place as it's relatively simple and don't want to contaminate to many view controllers with floating button code
-            // there should be a separate component to do all this but no time now. TODO improve
-            
-            switch action {
-            case .Submit:
-                addEditInventoryItemControllerManager?.controller?.submit()
-            case .Back, .Add, .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(addEditInventoryItemControllerManager?.controller) instance")
-            }
         }
     }
     
@@ -478,9 +462,11 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onModelSelected(model: ProductWithQuantity, indexPath: NSIndexPath) {
-        if productsWithQuantityController?.editing ?? false {
+        if productsWithQuantityController.editing {
+            let inventoryItem = (model as! ProductWithQuantityInv).inventoryItem
+            updatingInventoryItem = inventoryItem
             addEditInventoryItemControllerManager?.expand(true)
-            addEditInventoryItemControllerManager?.controller?.editingInventoryItem = (model as! ProductWithQuantityInv).inventoryItem
+            addEditInventoryItemControllerManager?.controller?.updatingItem = AddEditItem(item: inventoryItem)
             topBar.setRightButtonModels([
                 TopBarButtonModel(buttonId: .Submit),
                 TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))

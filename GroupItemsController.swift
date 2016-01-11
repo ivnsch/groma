@@ -30,7 +30,7 @@ class ProductWithQuantityGroup: ProductWithQuantity {
     }
 }
 
-class GroupItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, AddEditListItemViewControllerDelegate, ExpandableTopViewControllerDelegate, AddEditInventoryItemControllerDelegate {
+class GroupItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, AddEditListItemViewControllerDelegate, ExpandableTopViewControllerDelegate {
 
     @IBOutlet weak var topBar: ListTopBarView!
     
@@ -227,7 +227,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
                 })
             }
         } else {
-            print("Warn: GroupItemsController.onModelSelected: No group: \(group) or updatingGroupItem: \(updatingGroupItem)")
+            print("Warn: GroupItemsController.onUpdateTap: No group: \(group) or updatingGroupItem: \(updatingGroupItem)")
         }
     }
     
@@ -271,27 +271,6 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         }
     }
     
-    
-    // MARK: - AddEditInventoryItemControllerDelegate
-    
-    
-    func onSubmit(name: String, category: String, price: Float, quantity: Int, editingInventoryItem: InventoryItem?) {
-        if let editingInventoryItem = editingInventoryItem {
-            let updatedCategory = editingInventoryItem.product.category.copy(name: category)
-            let updatedProduct = editingInventoryItem.product.copy(name: name, price: price, category: updatedCategory)
-            // TODO! calculate quantity delta correctly?
-            let updatedInventoryItem = editingInventoryItem.copy(quantity: quantity, quantityDelta: quantity, product: updatedProduct)
-            Providers.inventoryItemsProvider.updateInventoryItem(updatedInventoryItem, remote: true, successHandler {[weak self] in
-                self?.onInventoryItemUpdated()
-            })
-            
-        } else {
-            
-            print("Not supported: Adding directly to inventory")
-            
-        }
-    }
-    
     func onInventoryItemUpdated() {
         // we have pagination so we don't know if the item is visible atm. For now simply cause a reload and start at first page. TODO nicer solution
         productsWithQuantityController?.clearAndLoadFirstPage()
@@ -299,10 +278,6 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         topAddEditListItemControllerManager?.expand(false)
         topBarOnCloseExpandable()
     }
-    
-    func onCancelTap() {
-    }
-    
     
     // MARK: - ListTopBarViewDelegate
     
@@ -483,7 +458,6 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func onModelSelected(model: ProductWithQuantity, indexPath: NSIndexPath) {
         if productsWithQuantityController.editing {
-
             let groupItem = (model as! ProductWithQuantityGroup).groupItem
             updatingGroupItem = groupItem
             topAddEditListItemControllerManager?.expand(true)
@@ -493,15 +467,6 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
                 TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
             ])
         }
-
-//        if productsWithQuantityController?.editing ?? false {
-//            addEditInventoryItemControllerManager?.expand(true)
-//            addEditInventoryItemControllerManager?.controller?.editingInventoryItem = (model as! ProductWithQuantityInv).inventoryItem
-//            topBar.setRightButtonModels([
-//                TopBarButtonModel(buttonId: .Submit),
-//                TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
-//            ])
-//        }
     }
     
     func emptyViewData() -> (text: String, text2: String, imgName: String) {
