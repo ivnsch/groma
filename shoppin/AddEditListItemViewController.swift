@@ -33,6 +33,43 @@ enum AddEditListItemControllerModus {
     case ListItem, GroupItem, PlanItem
 }
 
+typealias AddEditItemInput2 = (name: String, price: Float, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
+
+struct AddEditItem {
+    let product: Product
+    let quantity: Int
+    let sectionName: String? // TODO are we currently overwriting category with section for listitems like we planned?
+    let note: String?
+    
+    init(product: Product, quantity: Int, sectionName: String, note: String?) {
+        self.product = product
+        self.quantity = quantity
+        self.sectionName = sectionName
+        self.note = note
+    }
+    
+    init(item: ListItem) {
+        self.product = item.product
+        self.quantity = item.quantity
+        self.sectionName = item.section.name
+        self.note = item.note
+    }
+    
+    init(item: GroupItem) {
+        self.product = item.product
+        self.quantity = item.quantity
+        self.sectionName = nil
+        self.note = nil
+    }
+    
+    init(item: InventoryItem) {
+        self.product = item.product
+        self.quantity = item.quantity
+        self.sectionName = nil
+        self.note = nil
+    }
+}
+
 class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, ScaleViewControllerDelegate, FlatColorPickerControllerDelegate {
 
     @IBOutlet weak var nameInput: UITextField!
@@ -63,10 +100,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         }
     }
     
-    var updatingListItem: ListItem? {    
+    var updatingItem: AddEditItem? {
         didSet {
-            if let updatingListItem = updatingListItem {
-                prefill(updatingListItem)
+            if let updatingItem = updatingItem {
+                prefill(updatingItem)
             } else {
                 print("Warn: AddEditListItemViewController.updatingListItem: Setting updatingListItem before outlets are set")
             }
@@ -132,14 +169,14 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         updatePlanLeftQuantity(0) // no quantity yet -> 0
     }
     
-    private func prefill(listItem: ListItem) {
-        nameInput.text = listItem.product.name
-        sectionInput.text = listItem.section.name
-        sectionColorButton.tintColor = listItem.product.category.color
-        sectionColorButton.imageView?.tintColor = listItem.product.category.color
-        quantityInput.text = String(listItem.quantity)
-        priceInput.text = listItem.product.price.toString(2)
-        noteInput.text = listItem.note
+    private func prefill(item: AddEditItem) {
+        nameInput.text = item.product.name
+        sectionInput.text = item.product.category.name
+        sectionColorButton.tintColor = item.product.category.color
+        sectionColorButton.imageView?.tintColor = item.product.category.color
+        quantityInput.text = String(item.quantity)
+        priceInput.text = item.product.price.toString(2)
+        noteInput.text = item.note
     }
 
     private func prefill(planItem: PlanItem) {

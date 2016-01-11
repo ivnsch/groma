@@ -455,7 +455,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             
             pricesView.setExpandedVertical(false)
             
-            topAddEditListItemControllerManager?.controller?.updatingListItem = updatingListItem
+            topAddEditListItemControllerManager?.controller?.updatingItem = AddEditItem(item: tableViewListItem.listItem)
             topAddEditListItemControllerManager?.controller?.delegate = self
             
         } else {

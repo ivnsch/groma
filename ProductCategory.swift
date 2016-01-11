@@ -6,9 +6,9 @@
 //  Copyright © 2015 ivanschuetz. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-class ProductCategory: Any {
+class ProductCategory {
     let uuid: String
     let name: String
     let color: UIColor
