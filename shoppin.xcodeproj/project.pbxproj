@@ -404,6 +404,10 @@
 		EB80CE491C3DEB8A001DF159 /* InventoryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE481C3DEB8A001DF159 /* InventoryPicker.swift */; settings = {ASSET_TAGS = (); }; };
 		EB80CE4B1C3EA628001DF159 /* RemoteListsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE4A1C3EA628001DF159 /* RemoteListsWithDependencies.swift */; settings = {ASSET_TAGS = (); }; };
 		EB80CE4D1C3F5F10001DF159 /* InventoryAuthChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */; settings = {ASSET_TAGS = (); }; };
+		EB80CE531C449E1E001DF159 /* TermsAndConditionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE521C449E1D001DF159 /* TermsAndConditionsController.swift */; settings = {ASSET_TAGS = (); }; };
+		EB80CE551C44AFFE001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; settings = {ASSET_TAGS = (); }; };
+		EB80CE561C44B000001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; settings = {ASSET_TAGS = (); }; };
+		EB80CE571C44B000001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; settings = {ASSET_TAGS = (); }; };
 		EB85F4531BD5393800E19E9B /* QuickAddListItem.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB85F4521BD5393800E19E9B /* QuickAddListItem.storyboard */; };
 		EB85F4631BD54E8D00E19E9B /* QuickAddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F4621BD54E8D00E19E9B /* QuickAddItem.swift */; };
 		EB85F4641BD54E8D00E19E9B /* QuickAddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F4621BD54E8D00E19E9B /* QuickAddItem.swift */; };
@@ -1001,6 +1005,8 @@
 		EB80CE481C3DEB8A001DF159 /* InventoryPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryPicker.swift; sourceTree = "<group>"; };
 		EB80CE4A1C3EA628001DF159 /* RemoteListsWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListsWithDependencies.swift; sourceTree = "<group>"; };
 		EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryAuthChecker.swift; sourceTree = "<group>"; };
+		EB80CE521C449E1D001DF159 /* TermsAndConditionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsController.swift; sourceTree = "<group>"; };
+		EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
 		EB85F4521BD5393800E19E9B /* QuickAddListItem.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = QuickAddListItem.storyboard; sourceTree = "<group>"; };
 		EB85F4621BD54E8D00E19E9B /* QuickAddItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddItem.swift; sourceTree = "<group>"; };
 		EB85F4661BD54FA800E19E9B /* QuickAddProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddProduct.swift; sourceTree = "<group>"; };
@@ -1318,6 +1324,7 @@
 			children = (
 				EB0C1B9B1B3DBF9600F24C85 /* RegisterViewController.swift */,
 				EB0C1B991B3DBF7F00F24C85 /* Register.storyboard */,
+				EB80CE521C449E1D001DF159 /* TermsAndConditionsController.swift */,
 			);
 			name = register;
 			sourceTree = "<group>";
@@ -1525,6 +1532,7 @@
 			isa = PBXGroup;
 			children = (
 				EB2F5D101A4ACC4400DBC4AF /* String.swift */,
+				EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */,
 				EB2F5D5D1A506F5100DBC4AF /* Array.swift */,
 				EB2F5D6E1A530FBC00DBC4AF /* Float.swift */,
 				EB3144451B643559005814F0 /* UITextField.swift */,
@@ -2986,6 +2994,7 @@
 				EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */,
 				EB7E83221B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
 				EBA288DB1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */,
+				EB80CE531C449E1E001DF159 /* TermsAndConditionsController.swift in Sources */,
 				EB20FC071A599AE20058103B /* ProductWithQuantityTableViewCell.swift in Sources */,
 				EBA575621BCECBDF00A0A825 /* QuantityView.swift in Sources */,
 				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
@@ -3001,6 +3010,7 @@
 				EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */,
 				EB1B36751BC4832D003519F2 /* PlanItemMapper.swift in Sources */,
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,
+				EB80CE551C44AFFE001DF159 /* NSMutableAttributedString.swift in Sources */,
 				EBF608B11C0CF26A00EDB33E /* UserIdentity.swift in Sources */,
 				EB1FC51C1BC694CC004E1114 /* OkNextButtonsView.swift in Sources */,
 				EB741A581C21FA5D00E1585D /* ExpandableItemsTableViewController.swift in Sources */,
@@ -3252,6 +3262,7 @@
 				EBF608B21C0CF26A00EDB33E /* UserIdentity.swift in Sources */,
 				EB7858761B7F6F69008AAD12 /* RemoteHistoryItems.swift in Sources */,
 				EB7E833B1B7B9021009DEEF4 /* RealmCheckoutProvider.swift in Sources */,
+				EB80CE561C44B000001DF159 /* NSMutableAttributedString.swift in Sources */,
 				EBDFE3BF1ACEF60100E48F95 /* HeaderCell.swift in Sources */,
 				EBD27CD31C171175005D8305 /* RemoteGroup.swift in Sources */,
 				EB714AAF1B67895500F91B94 /* RemoteProvider.swift in Sources */,
@@ -3416,6 +3427,7 @@
 				EBBC23171BB4840F0002F6B1 /* PrefillDatabase.swift in Sources */,
 				EB70C22D1B4D3DF50060E529 /* ListProviderImpl.swift in Sources */,
 				EB7E83241B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
+				EB80CE571C44B000001DF159 /* NSMutableAttributedString.swift in Sources */,
 				EB7F59C91BA1915A00E07EBA /* MemListItemProvider.swift in Sources */,
 				EB714AA81B66BBA800F91B94 /* DBSyncable.swift in Sources */,
 				EBA7AC901BFE90C900247A8C /* DBProductCategory.swift in Sources */,

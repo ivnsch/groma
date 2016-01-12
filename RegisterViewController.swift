@@ -22,12 +22,16 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     @IBOutlet weak var firstNameField: UITextField!
     @IBOutlet weak var lastNameField: UITextField!
     
+    @IBOutlet weak var termsButton: UIButton!
+    
     let userProvider = ProviderFactory().userProvider
     
     var delegate: RegisterDelegate?
 
     private var validator: Validator?
 
+    private var acceptedTerms: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -40,8 +44,12 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         fillTestInput()
         
         initValidator()
+        
+        let buttonTranslation = "I accept the %%terms and conditions%%" // TODO translations
+        let attributedText = buttonTranslation.underlineBetweenFirstSeparators("%%")
+        attributedText.setTextColor(UIColor.blackColor())
+        termsButton.setAttributedTitle(attributedText, forState: .Normal)
     }
-    
     
     private func googleLoginSetup() {
         // Google sign-in
@@ -57,6 +65,10 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     
     @IBAction func onShowPasswordChanged(sender: UISwitch) {
         passwordField.secureTextEntry = !sender.on
+    }
+
+    @IBAction func onAcceptTermsChanged(sender: UISwitch) {
+        acceptedTerms = sender.on
     }
     
     private func initValidator() {
@@ -88,17 +100,22 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
             
         } else {
             
-            if let email = emailField.text, password = passwordField.text, firstName = firstNameField.text, lastName = lastNameField.text {
-                
-                let user = UserInput(email: email, password: password, firstName: firstName, lastName: lastName)
-                
-                self.progressVisible()
-                self.userProvider.register(user, successHandler{[weak self] result in
-                    self?.onRegisterSuccess()
-                })
+            if !acceptedTerms {
+                AlertPopup.show(message: "Please accept the terms and conditions", controller: self)
                 
             } else {
-                print("Error: validation was not implemented correctly")
+                if let email = emailField.text, password = passwordField.text, firstName = firstNameField.text, lastName = lastNameField.text {
+                    
+                    let user = UserInput(email: email, password: password, firstName: firstName, lastName: lastName)
+                    
+                    self.progressVisible()
+                    self.userProvider.register(user, successHandler{[weak self] result in
+                        self?.onRegisterSuccess()
+                        })
+                    
+                } else {
+                    print("Error: validation was not implemented correctly")
+                }
             }
         }
     }
