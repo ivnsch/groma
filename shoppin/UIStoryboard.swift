@@ -138,10 +138,6 @@ extension UIStoryboard {
     class func manageProductsViewController() -> ManageProductsViewController {
         return manageProductsStoryboard().instantiateViewControllerWithIdentifier("ManageProductsController") as! ManageProductsViewController
     }
-
-    class func addEditProductController() -> AddEditProductController {
-        return manageProductsStoryboard().instantiateViewControllerWithIdentifier("AddEditProductController") as! AddEditProductController
-    }
     
     // MARK: Manage groups
     

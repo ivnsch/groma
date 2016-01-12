@@ -230,7 +230,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 })
             }
         } else {
-            print("Warn: InventoryItemsController.onUpdateTap: No updatingGroupItem: \(updatingInventoryItem)")
+            print("Warn: InventoryItemsController.onUpdateTap: No updatingGroupItem")
         }
     }
     

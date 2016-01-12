@@ -73,7 +73,7 @@ class RealmInventoryProvider: RealmProvider {
 
     
     func loadInventory(inventory: Inventory, sortBy: InventorySortBy, range: NSRange, handler: [InventoryItem] -> ()) {
-        let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}
+        let mapper = {InventoryItemMapper.inventoryItemWithDB($0)} // TODO!!! Crash once accessing color() of category (in ProductCategoryMapper.categoryWithDB). Category is set but no color data, don't know why!
 //        let sortFieldStr: String = {
 //            switch sortBy {
 //            case .Alphabetic: return "product.name" // Realm doesn't support this yet, see https://github.com/realm/realm-cocoa/issues/1277 so for now we do sorting in provider

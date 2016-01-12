@@ -21,4 +21,10 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
             }
         }
     }
+    
+    func categorySuggestions(handler: ProviderResult<[Suggestion]> -> ()) {
+        dbProductProvider.loadCategorySuggestions {dbSuggestions in
+            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSuggestions))
+        }
+    }
 }

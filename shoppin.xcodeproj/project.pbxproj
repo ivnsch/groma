@@ -182,7 +182,6 @@
 		EB40A48B1B553A19000E9CAD /* DBListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4891B553A19000E9CAD /* DBListItem.swift */; };
 		EB40A48C1B553A19000E9CAD /* DBListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4891B553A19000E9CAD /* DBListItem.swift */; };
 		EB4147B81BDFE9FB00549CE4 /* ManageProductsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4147B71BDFE9FB00549CE4 /* ManageProductsCell.swift */; };
-		EB4147BA1BE0091700549CE4 /* AddEditProductController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4147B91BE0091700549CE4 /* AddEditProductController.swift */; };
 		EB4147BC1BE0338800549CE4 /* ProductInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4147BB1BE0338800549CE4 /* ProductInput.swift */; };
 		EB4147BD1BE0338800549CE4 /* ProductInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4147BB1BE0338800549CE4 /* ProductInput.swift */; };
 		EB4147BE1BE0338800549CE4 /* ProductInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4147BB1BE0338800549CE4 /* ProductInput.swift */; };
@@ -899,7 +898,6 @@
 		EB40A4851B55159D000E9CAD /* DBList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBList.swift; sourceTree = "<group>"; };
 		EB40A4891B553A19000E9CAD /* DBListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBListItem.swift; sourceTree = "<group>"; };
 		EB4147B71BDFE9FB00549CE4 /* ManageProductsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageProductsCell.swift; sourceTree = "<group>"; };
-		EB4147B91BE0091700549CE4 /* AddEditProductController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditProductController.swift; sourceTree = "<group>"; };
 		EB4147BB1BE0338800549CE4 /* ProductInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductInput.swift; sourceTree = "<group>"; };
 		EB4147CC1BE2288E00549CE4 /* ManageGroupsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageGroupsCell.swift; sourceTree = "<group>"; };
 		EB451C341B85F3DA000DE208 /* StatsProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsProviderImpl.swift; sourceTree = "<group>"; };
@@ -1289,7 +1287,6 @@
 				EB0A058F1BDFCE8200D1E29D /* ManageProductsViewController.swift */,
 				EB0A05911BDFCE8D00D1E29D /* ManageProducts.storyboard */,
 				EB4147B71BDFE9FB00549CE4 /* ManageProductsCell.swift */,
-				EB4147B91BE0091700549CE4 /* AddEditProductController.swift */,
 			);
 			name = manageProducts;
 			sourceTree = "<group>";
@@ -2851,7 +2848,6 @@
 				EB20FBFC1A5972A30058103B /* InventoryProvider.swift in Sources */,
 				EB0C1B9C1B3DBF9600F24C85 /* RegisterViewController.swift in Sources */,
 				EBF1A1591B823A1100F34105 /* StatsViewController.swift in Sources */,
-				EB4147BA1BE0091700549CE4 /* AddEditProductController.swift in Sources */,
 				EB0A05901BDFCE8200D1E29D /* ManageProductsViewController.swift in Sources */,
 				EB1B36541BC31B16003519F2 /* HistoryItemGroupHeaderView.swift in Sources */,
 				EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */,

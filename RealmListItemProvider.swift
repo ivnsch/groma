@@ -120,25 +120,34 @@ class RealmListItemProvider: RealmProvider {
             
             Providers.productCategoryProvider.categoryWithName(productInput.category) {result in
                 
-                if result.success {
+                if result.status == .Success || result.status == .NotFound  {
                     
-                    let category: ProductCategory = {
+                    // Create a new category or update existing one
+                    let category: ProductCategory? = {
                         if let existingCategory = result.sucessResult {
                             return existingCategory.copy(name: productInput.category, color: productInput.categoryColor)
-                        } else {
+                        } else if result.status == .NotFound {
                             return ProductCategory(uuid: NSUUID().UUIDString, name: productInput.category, color: productInput.categoryColor)
+                        } else {
+                            print("Error: RealmListItemProvider.saveProductError, invalid state: status is .Success but there is not successResult")
+                            return nil
                         }
                     }()
                     
-                    let product = Product(uuid: uuid, name: productInput.name, price: productInput.price, category: category, baseQuantity: productInput.baseQuantity, unit: productInput.unit)
-                    
-                    self?.saveProducts([product]) {saved in
-                        if saved {
-                            handler(product)
-                        } else {
-                            print("Error: RealmListItemProvider.saveProductError, could not save product: \(product)")
-                            handler(nil)
+                    // Save product with new/updated category
+                    if let category = category {
+                        let product = Product(uuid: uuid, name: productInput.name, price: productInput.price, category: category, baseQuantity: productInput.baseQuantity, unit: productInput.unit)
+                        self?.saveProducts([product]) {saved in
+                            if saved {
+                                handler(product)
+                            } else {
+                                print("Error: RealmListItemProvider.saveProductError, could not save product: \(product)")
+                                handler(nil)
+                            }
                         }
+                    } else {
+                        print("Error: RealmListItemProvider.saveProduct, category is nill")
+                        handler(nil)
                     }
 
                 } else {

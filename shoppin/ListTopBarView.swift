@@ -127,6 +127,9 @@ class ListTopBarView: UIView {
         button.addTarget(self, action: "onTitleTap:", forControlEvents: .TouchUpInside)
     }
     
+    /**
+    * NOTE call this before setButtonModels! setButtonModels needs that the (possible) back button is initialised to calculate the offset of the buttons on the left side
+    */
     func setBackVisible(visible: Bool) {
         if visible {
             if backButton == nil { // don't add again if called multiple times with visible == true
@@ -234,8 +237,9 @@ class ListTopBarView: UIView {
             
             let viewsDictionary = viewsOrderedDictionary.toDictionary()
             
-            let hSpace = 10
-            var hConstraintStr: String = left ? "H:|-(\(hSpace))-" : "H:"
+            let hSpace: CGFloat = 10
+            let leadingHSpace = backButton == nil ? hSpace : hSpace + backButton!.frame.width + hSpace
+            var hConstraintStr: String = left ? "H:|-(\(leadingHSpace))-" : "H:"
             for (index, entry) in viewsOrderedDictionary.enumerate() {
                 var str = "\(hConstraintStr)[\(entry.0)]"
                 if index < viewsOrderedDictionary.count - 1 {

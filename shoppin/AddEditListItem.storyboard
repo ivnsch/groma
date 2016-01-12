@@ -217,6 +217,8 @@
                         <outlet property="priceLabel" destination="PSf-BM-K6D" id="p0c-me-GbG"/>
                         <outlet property="quantityInput" destination="vWS-vL-cob" id="Jgc-GC-VfN"/>
                         <outlet property="quantityLabel" destination="f4w-nF-ub6" id="CC8-g6-Opo"/>
+                        <outlet property="quantityMinusButton" destination="UO7-Lb-J5V" id="sL1-KI-g5k"/>
+                        <outlet property="quantityPlusButton" destination="dP0-Aq-TGf" id="Gte-1Y-VAH"/>
                         <outlet property="scaleButton" destination="C4Q-wd-uas" id="YP7-4C-39o"/>
                         <outlet property="sectionColorButton" destination="d3W-Q5-Nl0" id="VSE-Ye-2ms"/>
                         <outlet property="sectionInput" destination="i1w-xi-aFz" id="8ba-aL-isS"/>

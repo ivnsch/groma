@@ -14,6 +14,7 @@ class MoreViewController: UITableViewController {
         switch indexPath.row  {
         case 1:
             let controller = UIStoryboard.manageProductsViewController()
+            navigationController?.setNavigationBarHidden(true, animated: false)
             navigationController?.pushViewController(controller, animated: true)
         default: break
         }

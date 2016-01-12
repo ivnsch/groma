@@ -30,7 +30,7 @@ enum AddEditListItemViewControllerAction {
 // FIXME use instead a "fragment" (custom view) with the common inputs and use this in 2 separate view controllers
 // then we can also use different delegates, now the delegate is passed "note" parameter for group item as well where it doesn't exist, not nice
 enum AddEditListItemControllerModus {
-    case ListItem, GroupItem, PlanItem
+    case ListItem, GroupItem, PlanItem, Product
 }
 
 typealias AddEditItemInput2 = (name: String, price: Float, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
@@ -68,6 +68,13 @@ struct AddEditItem {
         self.sectionName = nil
         self.note = nil
     }
+    
+    init(item: Product) {
+        self.product = item
+        self.quantity = 0
+        self.sectionName = nil
+        self.note = nil
+    }
 }
 
 class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, ScaleViewControllerDelegate, FlatColorPickerControllerDelegate {
@@ -80,6 +87,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     @IBOutlet weak var priceInput: UITextField!
     @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var quantityInput: UITextField!
+    
+    @IBOutlet weak var quantityPlusButton: UIButton!
+    @IBOutlet weak var quantityMinusButton: UIButton!
     
     @IBOutlet weak var noteLabel: UILabel!
     @IBOutlet weak var noteInput: UITextField!
@@ -144,6 +154,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 case .PlanItem:
                     sectionLabel.text = categoryText // plan items don't have section, but we need a category for the new product (note for list and group items we save the section as category - user can change the category later using the product manager. This is for simple usability, mostly section == category otherwise interface may be a bit confusing)
                     sectionInput.placeholder = categoryPlaceHolderText
+                case .Product:
+                    sectionLabel.text = categoryText
+                    sectionInput.placeholder = categoryPlaceHolderText
+                    quantityLabel.hidden = true
+                    quantityInput.hidden = true
+                    quantityPlusButton.hidden = true
+                    quantityMinusButton.hidden = true
                 }
             } else {
                 print("Error: Trying to set modus before outlet is initialised")

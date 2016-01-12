@@ -9,10 +9,14 @@
 import UIKit
 import SwiftValidator
 
-class ManageProductsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, BottonPanelViewDelegate, AddEditProductControllerDelegate, UISearchBarDelegate {
+class ManageProductsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, AddEditListItemViewControllerDelegate, ListTopBarViewDelegate, ExpandableTopViewControllerDelegate {
+
+    @IBOutlet weak var topBar: ListTopBarView!
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var tableViewFooter: LoadingFooter!
+
+    @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
 
     @IBOutlet weak var searchBar: UISearchBar!
     private var editButton: UIBarButtonItem!
@@ -37,8 +41,10 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0, xRight: 20)
     private let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: CGFloat(-M_PI_4))
     
-    private var addEditProductControllerManager: ExpandableTopViewController<AddEditProductController>?
+    private var addEditProductControllerManager: ExpandableTopViewController<AddEditListItemViewController>?
 
+    private var updatingProduct: AddEditProductControllerEditingData?
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -50,12 +56,15 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        initNavBar([.Add])
+        initTopBar()
         
         tableView.allowsSelectionDuringEditing = true
         
         addEditProductControllerManager = initAddEditProductControllerManager()
 
+        topBar.delegate = self
+        topBar.backgroundColor = UIColor.groupTableViewBackgroundColor()
+        
         Providers.productProvider.products(successHandler {[weak self] products in
             self?.products = products
         })
@@ -67,45 +76,26 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    private func initAddEditProductControllerManager() -> ExpandableTopViewController<AddEditProductController> {
-        
-        let navbarHeight = navigationController!.navigationBar.frame.height
-        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-        let top = navbarHeight + statusBarHeight
-        return ExpandableTopViewController(top: top, height: 140, openInset: -CGRectGetHeight(self.searchBar.frame), parentViewController: self, tableView: tableView) {[weak self] in
-            let controller = UIStoryboard.addEditProductController()
-            controller.delegate = self
-            return controller
-        }
+    private func initTopBar() {
+        topBar.setBackVisible(true)
+        topBar.title = "Products"
+        topBar.positionTitleLabelLeft(true, animated: false)
+        topBar.setLeftButtonIds([.Edit])
+        topBar.setRightButtonIds([.ToggleOpen])
     }
     
-
-    // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
-    private func initNavBar(actions: [UIBarButtonSystemItem]) {
-        navigationItem.title = "Manage products"
-        
-        var buttons: [UIBarButtonItem] = []
-        
-        for action in actions {
-            switch action {
-            case .Add:
-                let button = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "onAddTap:")
-                self.addButton = button
-                buttons.append(button)
-            case .Edit:
-                let button = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "onEditTap:")
-                self.editButton = button
-                buttons.append(button)
-            case .Save:
-                let button = UIBarButtonItem(barButtonSystemItem: .Save, target: self, action: "onSubmitTap:")
-                buttons.append(button)
-            case .Cancel:
-                let button = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "onCancelTap:")
-                buttons.append(button)
-            default: break
+    private func initAddEditProductControllerManager() -> ExpandableTopViewController<AddEditListItemViewController> {
+        let top = CGRectGetHeight(topBar.frame)
+        let manager: ExpandableTopViewController<AddEditListItemViewController> =  ExpandableTopViewController(top: top, height: 180, animateTableViewInset: false, parentViewController: self, tableView: tableView) {
+            let controller = UIStoryboard.addEditListItemViewController()
+            controller.delegate = self
+            controller.onViewDidLoad = {
+                controller.modus = .Product
             }
+            return controller
         }
-        navigationItem.rightBarButtonItems = buttons
+        manager.delegate = self
+        return manager
     }
     
     // MARK: - Table view data source
@@ -185,58 +175,16 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
  
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        addEditProductControllerManager?.expand(true)
-        addEditProductControllerManager?.controller?.editingData = AddEditProductControllerEditingData(product: filteredProducts[indexPath.row].item, indexPath: indexPath)
-    }
-    
-    // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
-    func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
-        super.setEditing(editing, animated: animated)
-        
-        if editing == false {
-            view.endEditing(true)
+        if tableView.editing {
+            let inventoryItem = filteredProducts[indexPath.row].item
+            updatingProduct = AddEditProductControllerEditingData(product: inventoryItem, indexPath: indexPath)
+            addEditProductControllerManager?.expand(true)
+            addEditProductControllerManager?.controller?.updatingItem = AddEditItem(item: inventoryItem)
+            topBar.setRightButtonModels([
+                TopBarButtonModel(buttonId: .Submit),
+                TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+            ])
         }
-        
-        if tryCloseTopViewController {
-            if !editing {
-                addEditProductControllerManager?.expand(false)
-            }
-        }
-        
-        initNavBar([.Cancel, .Save]) // remove possible top controller specific action buttons (e.g. on list item update we have a submit button), and set appropiate alpha
-        
-        tableView.setEditing(editing, animated: animated)
-
-        if editing {
-            editButton.title = "Done"
-        } else {
-            editButton.title = "Edit"
-        }
-    }
-    
-    
-    func onEditTap(sender: UIBarButtonItem) {
-        self.setEditing(!self.editing, animated: true, tryCloseTopViewController: true)
-    }
-    
-    func onAddTap(sender: UIBarButtonItem) {
-        if addEditProductControllerManager?.expanded ?? false {
-            setAddEditProductControllerOpen(false)
-            initNavBar([.Add])
-            
-        } else {
-            clearSearch() // clear filter to avoid confusion, if we add an item it may be not in current filter and user will not see it appearing.
-            setAddEditProductControllerOpen(true)
-            initNavBar([.Cancel, .Save])
-        }
-    }
-    
-    func onSubmitTap(sender: UIBarButtonItem) {
-        addEditProductControllerManager?.controller?.submit()
-    }
-
-    func onCancelTap(sender: UIBarButtonItem) {
-        setAddEditProductControllerOpen(false)
     }
     
     private func clearSearch() {
@@ -244,43 +192,54 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         filteredProducts = ItemWithCellAttributes.toItemsWithCellAttributes(products)
     }
     
-    // MARK - BottonPanelViewDelegate
-    
-    func onSubmitAction(action: FLoatingButtonAction) {
-        switch action {
-        case .Toggle:
-            if addEditProductControllerManager?.expanded ?? false {
-                addEditProductControllerManager?.expand(false)
-                
-            } else {
-                clearSearch() // clear filter to avoid confusion, if we add an item it may be not in current filter and user will not see it appearing.
-                setAddEditProductControllerOpen(true)
-            }
-            
-            
-        case .Submit:
-            addEditProductControllerManager?.controller?.submit()
-            
-        case .Add, .Back, .Expand: break
-        }
-    }
-    
-    // MARK: - AddEditProductControllerDelegate
+    // MARK: - AddEditListItemViewControllerDelegate
     
     func onValidationErrors(errors: [UITextField: ValidationError]) {
-         presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+        // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
+        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onSubmit(name: String, category: String, categoryColor: UIColor, price: Float, baseQuantity: Float, unit: ProductUnit, editingData: AddEditProductControllerEditingData?) {
-        if let editingData = editingData {
-            updateProduct(editingData, name: name, category: category, categoryColor: categoryColor, price: price)
-        } else {
-            addProduct(name, category: category, categoryColor: categoryColor, price: price, baseQuantity: baseQuantity, unit: unit)
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
+        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {
         }
     }
     
-    func onCancelTap() {
-        setAddEditProductControllerOpen(false)
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
+        if let updatingProduct = updatingProduct {
+            if let price = priceText.floatValue { // Note quantity for product is ignored
+                updateProduct(updatingProduct, name: name, category: category, categoryColor: categoryColor, price: price)
+            }
+        } else {
+            print("Warn: InventoryItemsController.onUpdateTap: No updatingProduct")
+        }
+    }
+    
+    func productNameAutocompletions(text: String, handler: [String] -> ()) {
+        Providers.productProvider.productSuggestions(successHandler{suggestions in
+            let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
+            handler(names)
+        })
+    }
+    
+    func sectionNameAutocompletions(text: String, handler: [String] -> ()) {
+        Providers.sectionProvider.sectionSuggestions(successHandler{suggestions in
+            let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
+            handler(names)
+        })
+    }
+    
+    func planItem(productName: String, handler: PlanItem? -> ()) {
+        Providers.planProvider.planItem(productName, successHandler {planItemMaybe in
+            handler(planItemMaybe)
+        })
+    }
+    
+    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, successHandler: VoidFunction? = nil) {
+        if let price = priceText.floatValue {
+            addProduct(name, category: category, categoryColor: categoryColor, price: price, baseQuantity: baseQuantity, unit: unit)
+        } else {
+            print("Error: ManageProductsViewController.submitInputs: Invalid price: \(priceText)")
+        }
     }
 
     private func updateProduct(editingData: AddEditProductControllerEditingData, name: String, category: String, categoryColor: UIColor, price: Float) {
@@ -292,7 +251,6 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     private func addProduct(name: String, category: String, categoryColor: UIColor, price: Float, baseQuantity: Float, unit: ProductUnit) {
-        
         let product = ProductInput(name: name, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit)
         Providers.productProvider.add(product, successHandler {[weak self] product in
             self?.addProductUI(product)
@@ -324,17 +282,17 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         products.append(product)
         onUpdatedProducts()
         tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: filteredProducts.count - 1, inSection: 0), atScrollPosition: .Middle, animated: true)
-        addEditProductControllerManager?.expand(false)
+        setAddEditProductControllerOpen(false)
     }
 
     private func setAddEditProductControllerOpen(open: Bool) {
         addEditProductControllerManager?.expand(open)
-        
         if open {
-            initNavBar([.Save, .Cancel])
-            
+            topBar.setLeftButtonIds([.Edit])
+            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformIdentity, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
         } else {
-            initNavBar([.Add])
+            topBar.setLeftButtonIds([.Edit])
+            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
         }
     }
     
@@ -367,6 +325,68 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     
+    // MARK: - ListTopBarViewDelegate
+    
+    func onTopBarBackButtonTap() {
+        navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func onTopBarTitleTap() {
+    }
+    
+    func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
+        switch buttonId {
+        case .Submit:
+            if tableView.editing {
+                addEditProductControllerManager?.controller?.submit(.Update)
+            } else {
+                addEditProductControllerManager?.controller?.submit(.Add)
+            }
+        case .ToggleOpen:
+            toggleTopAddController()
+        case .Edit:
+            toggleEditing()
+        default: print("Error: ManageProductsViewController.onTopBarButtonTap: No handled action: \(buttonId)")
+        }
+    }
+    
+    private func toggleEditing() {
+        tableView.setEditing(!tableView.editing, animated: true)
+    }
+    
+    private func toggleTopAddController() {
+        
+        if addEditProductControllerManager?.expanded ?? false { // it's open - close
+            addEditProductControllerManager?.expand(false)
+            
+            topBar.setLeftButtonIds([.Edit])
+            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+            
+        } else { // it's closed - open
+            addEditProductControllerManager?.expand(true)
+            
+            topBar.setLeftButtonIds([])
+            topBar.setRightButtonModels([
+                TopBarButtonModel(buttonId: .Submit),
+                TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+            ])
+        }
+    }
+    
+    
+    // MARK: - ExpandableTopViewControllerDelegate
+    
+    func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
+        topControlTopConstraint.constant = view.frame.height
+        self.view.layoutIfNeeded()
+    }
+    
+    func onExpandableClose() {
+    }
+    
+    func onCenterTitleAnimComplete(center: Bool) {
+    }
+    
     // MARK: - Websocket
     
     func onWebsocketProduct(note: NSNotification) {
@@ -386,5 +406,14 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         } else {
             print("Error: ManageProductsViewController.onWebsocketProduct: no userInfo")
         }
+    }
+}
+
+private struct AddEditProductControllerEditingData {
+    let product: Product
+    let indexPath: NSIndexPath
+    init(product: Product, indexPath: NSIndexPath) {
+        self.product = product
+        self.indexPath = indexPath
     }
 }

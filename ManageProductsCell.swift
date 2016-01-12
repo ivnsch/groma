@@ -14,6 +14,11 @@ class ManageProductsCell: UITableViewCell {
     @IBOutlet weak var productCategoryLabel: UILabel!
     @IBOutlet weak var productPriceLabel: UILabel!
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        selectionStyle = .None
+    }
+    
     var product: ItemWithCellAttributes<Product>? {
         didSet {
             if let product = product {
