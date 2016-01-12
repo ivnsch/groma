@@ -63,8 +63,6 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadItems()
-        
         onViewDidLoad?()
     }
     
