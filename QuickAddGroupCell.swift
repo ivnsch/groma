@@ -17,8 +17,7 @@ class QuickAddGroupCell: UICollectionViewCell {
             if let item = item {
                 nameLabel.text = item.labelText
                 nameLabel.textColor = UIColor.whiteColor()
-//                contentView.backgroundColor = UIColor.grayColor().colorWithAlphaComponent(0.4)
-                  contentView.backgroundColor = UIColor.flatGrayColorDark()
+                contentView.backgroundColor = item.group.bgColor.colorWithAlphaComponent(0.5)
             }
         }
     }
