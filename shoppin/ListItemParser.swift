@@ -60,9 +60,13 @@ class ListItemParser {
     
     class func parse(json: AnyObject) -> ListItem {
         let uuid = json.valueForKeyPath("uuid") as! String
-        let statusInt = json.valueForKeyPath("status") as! Int
-        let status = ListItemStatus(rawValue: statusInt)!
-        let quantity = json.valueForKeyPath("quantity") as! Int
+        
+        let todoQuantity = json.valueForKeyPath("todoQuantity") as! Int
+        let todoOrder = json.valueForKeyPath("todoOrder") as! Int
+        let doneQuantity = json.valueForKeyPath("doneQuantity") as! Int
+        let doneOrder = json.valueForKeyPath("doneOrder") as! Int
+        let stashQuantity = json.valueForKeyPath("stashQuantity") as! Int
+        let stashOrder = json.valueForKeyPath("stashOrder") as! Int
         
         let productJson = json.valueForKeyPath("productInput")!
         let product = parseProduct(productJson)
@@ -80,10 +84,11 @@ class ListItemParser {
         let inventory = Inventory(uuid: "123", name: "123 TODO", users: [], bgColor: UIColor.blackColor(), order: 0) // TODO!!!
         let list = List(uuid: listUuid, name: listName, listItems: [], users: [], bgColor: listColor, order: listOrder, inventory: inventory)
         
-        let order = json.valueForKeyPath("order") as! Int
+//        let order = json.valueForKeyPath("order") as! Int
         let note = json.valueForKeyPath("note") as! String? // TODO is this correct way for optional here?
 //        let lastUpdate = NSDate(timeIntervalSince1970: json.valueForKeyPath("lastUpdate") as! Double)
         
-        return ListItem(uuid: uuid, status: status, quantity: quantity, product: product, section: section, list: list, order: order, note: note)
+        return ListItem(uuid: uuid, product: product, section: section, list: list, note: note, todoQuantity: todoQuantity, todoOrder: todoOrder, doneQuantity: doneQuantity, doneOrder: doneOrder, stashQuantity: stashQuantity, stashOrder: stashOrder
+        )
     }
 }

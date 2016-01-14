@@ -25,6 +25,7 @@ class MemListItemProvider {
         return listItems[list]
     }
     
+    // Adds or increments listitem. Note: in increment case this increments all the status fron listItem! (todo, done, stash)
     // returns nil only if memory cache is not enabled
     func addListItem(listItem: ListItem) -> ListItem? {
         guard enabled else {return nil}
@@ -41,9 +42,7 @@ class MemListItemProvider {
             var addedListItem: ListItem
             
             if let existingListItem = listItems[listItem.list]?.findFirstWithProductName(listItem.product.name) {
-                
-                let updatedListItem = listItem.copy(uuid: existingListItem.uuid, quantity: existingListItem.quantity + listItem.quantity, note: nil)
-                
+                let updatedListItem = existingListItem.increment(listItem)
                 listItems[listItem.list]?.update(updatedListItem)
                 addedListItem = updatedListItem
                 
@@ -56,7 +55,7 @@ class MemListItemProvider {
         }
     }
 
-    func addOrUpdateListItem(product: Product, sectionNameMaybe: String? = nil, quantity: Int, list: List, note: String? = nil) -> ListItem? {
+    func addOrUpdateListItem(product: Product, sectionNameMaybe: String? = nil, status: ListItemStatus, quantity: Int, list: List, note: String? = nil) -> ListItem? {
         guard enabled else {return nil}
         guard var listItems = listItems else {return nil}
         
@@ -70,7 +69,10 @@ class MemListItemProvider {
         if let existingListItem = listItems[list]!.findFirstWithProductName(product.name) {
 
             let updatedSection = existingListItem.section.copy(name: sectionNameMaybe)
-            let updatedListItem = existingListItem.copy(section: updatedSection, quantity: existingListItem.quantity + quantity, note: note)
+
+            // TODO don't we have to update product and list here also?
+            
+            let updatedListItem = existingListItem.copyIncrement(section: updatedSection, note: note, statusQuantity: ListItemStatusQuantity(status: status, quantity: quantity))
             
             self.listItems?[list]?.update(updatedListItem)
             
@@ -86,13 +88,13 @@ class MemListItemProvider {
             
             var listItemOrder = 0
             for existingListItem in listItems[list]! {
-                if existingListItem.section.uuid == section.uuid {
+                if existingListItem.section.uuid == section.uuid && existingListItem.hasStatus(status) { // count list items in my section (e.g. "vegetables") and status (e.g. "todo") to determine my order
                     listItemOrder++
                 }
             }
             
             // create the list item and save it
-            let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: quantity, product: product, section: section, list: list, order: listItemOrder)
+            let listItem = ListItem(uuid: NSUUID().UUIDString, product: product, section: section, list: list, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: quantity))
             
             self.listItems?[listItem.list]?.append(listItem)
             return listItem

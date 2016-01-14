@@ -50,7 +50,7 @@ struct AddEditItem {
     
     init(item: ListItem) {
         self.product = item.product
-        self.quantity = item.quantity
+        self.quantity = item.todoQuantity // only in todo screen we can update items. Note that we will update only the todo quantity, if the item is also in cart or stash this quantities are not updated
         self.sectionName = item.section.name
         self.note = item.note
     }

@@ -40,6 +40,8 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     var style: ListItemsTableViewControllerStyle = .Normal
     
+    var status: ListItemStatus = .Todo
+    
     private var swipedTableViewListItem: TableViewListItem? // Item marked for "undo". Item is not submitted until undo state is cleared
     
     var headerBGColor: UIColor?
@@ -122,15 +124,15 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         } else {
             let hasHeader = listItem.section.name != defaultSectionIdentifier
             self.sections.append(listItem.section)
-            let tableViewSection = ListItemsViewSection(section: listItem.section, tableViewListItems: [tableViewListItem], hasHeader: hasHeader)
+            let tableViewSection = ListItemsViewSection(section: listItem.section, tableViewListItems: [tableViewListItem], hasHeader: hasHeader, status: status)
             tableViewSection.delegate = self
             self.tableViewSections.append(tableViewSection)
         }
     }
 
-    func updateListItems(listItems: [ListItem], notifyRemote: Bool) {
+    func updateListItems(listItems: [ListItem], status: ListItemStatus, notifyRemote: Bool) {
         for listItem in listItems {
-            updateListItem(listItem, notifyRemote: notifyRemote)
+            updateListItem(listItem, status: status, notifyRemote: notifyRemote)
         }
     }
     
@@ -138,20 +140,21 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     Update or add list item
     When sure it's an "add" case use addListItem - this checks first if the item exists and is thus slower
     */
-    func updateListItem(listItem: ListItem, notifyRemote: Bool) {
-        updateOrAddListItem(listItem, increment: false, notifyRemote: notifyRemote) // update means overwrite - don't increment
+    func updateListItem(listItem: ListItem, status: ListItemStatus, notifyRemote: Bool) {
+        updateOrAddListItem(listItem, status: status, increment: false, notifyRemote: notifyRemote) // update means overwrite - don't increment
     }
     
     // TODO simpler way to update, maybe just always reinit the table... also refactor rest (build sections etc) it is way more complex than it should
     // right now prefer not to always reinit the table because this can change sorting
     // so first we should implement persistent sorting, then refactor this class
     // -parameter: increment if, in case it's an update, the quantities of the items should be added together. If false the quantity is just overwritten like the rest of fields
-    func updateOrAddListItem(listItem: ListItem, increment: Bool, scrollToSelection: Bool = false, notifyRemote: Bool) {
+    // -status: the updated status of list item (if the item has switched status (e.g. swipe from todo to done), this is the new status, otherwise it's just the current status of the item)
+    func updateOrAddListItem(listItem: ListItem, status: ListItemStatus, increment: Bool, scrollToSelection: Bool = false, notifyRemote: Bool) {
         if let indexPath = getIndexPath(listItem) {
             let oldItem = tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
 
-            if oldItem.listItem.status != listItem.status {
-                // the item is in this tableview but has now a diff status - delete (swipe) it from tableview. This is used by websockets
+            if !oldItem.listItem.hasStatus(status) {
+                // the item is in this tableview but has now a new status - delete (swipe) it from tableview. This is used by websockets
                 // when another user e.g. sends to item to cart we want to show the receiving users the item being "swiped" and then deleted
                 markOpen(true, indexPath: indexPath, notifyRemote: notifyRemote) {[weak self] in // swipe
                     self?.clearPendingSwipeItemIfAny(notifyRemote) // delete
@@ -208,7 +211,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     // loops through list items to generate tableview sections, returns also found sections so we don't have to loop 2x
-    private func buildTableViewSections(listItems:[ListItem]) -> (tableViewSections:[ListItemsViewSection], sections:[Section]) {
+    private func buildTableViewSections(listItems: [ListItem]) -> (tableViewSections:[ListItemsViewSection], sections:[Section]) {
         var tableViewSections:[ListItemsViewSection] = []
         var sections:[Section] = []
         
@@ -226,7 +229,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                     set[listItem.section] = 1 // dummy value... swift doesn't have Set
                     sections.append(listItem.section)
                     
-                    currentTableViewSection = ListItemsViewSection(section: listItem.section, tableViewListItems: [])
+                    currentTableViewSection = ListItemsViewSection(section: listItem.section, tableViewListItems: [], status: status)
                     currentTableViewSection.delegate = self
 
                     if self.style == .Gray {
@@ -515,7 +518,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             for (listItemIndex, tableViewListItem) in section.tableViewListItems.enumerate() {
 //                let absoluteRowIndex = listItemIndex + sectionRows
 //                tableViewListItem.listItem.order = absoluteRowIndex
-                tableViewListItem.listItem.order = listItemIndex
+                tableViewListItem.listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: listItemIndex))
             }
             sectionRows += section.numberOfRows()
         }

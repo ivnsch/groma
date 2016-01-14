@@ -65,8 +65,8 @@ extension Array where Element: ListItem {
         return dictionary
     }
     
-    func sectionCountDict() -> [Section: Int] {
-        return groupBySection().map {($0, $1.count)}
+    func sectionCountDict(status: ListItemStatus) -> [Section: Int] {
+        return filterStatus(status).groupBySection().map {($0, $1.count)}
     }
     
     var sectionCount: Int {
@@ -82,31 +82,27 @@ extension Array where Element: ListItem {
         return nil
     }
     
-    var totalPrice: Float {
+    func totalPrice(status: ListItemStatus) -> Float {
         return reduce(0) {price, listItem in
-            price + listItem.totalPrice
+            price + listItem.totalPrice(status)
         }
     }
 
     // Total price excluding stash
     var totalPriceTodoAndCart: Float {
-        return reduce(0) {price, listItem in
-            price + (listItem.status == .Stash ? 0 : listItem.totalPrice)
-        }
-    }
-
-    var totalPriceDone: Float {
-        return reduce(0) {price, listItem in
-            price + (listItem.status == .Done ? listItem.totalPrice : 0)
-        }
+        return totalPrice(.Todo) + totalPrice(.Done)
     }
     
     func filterDone() -> Array<Element> {
-        return self.filter{$0.status == .Done}
+        return self.filter{$0.doneQuantity > 0}
     }
     
     func filterStash() -> Array<Element> {
-        return self.filter{$0.status == .Stash}
+        return self.filter{$0.stashQuantity > 0}
+    }
+    
+    func filterStatus(status: ListItemStatus) -> Array<Element> {
+        return self.filter{$0.quantity(status) > 0}
     }
 }
 

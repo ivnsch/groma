@@ -255,7 +255,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private func udpateListItems(list: List, onFinish: VoidFunction? = nil) {
         Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{[weak self] listItems in
-            self?.listItemsTableViewController.setListItems(listItems.filter{$0.status == .Todo})
+            self?.listItemsTableViewController.setListItems(listItems.filter{$0.hasStatus(.Todo)})
             self?.updateEmptyView()
             onFinish?()
         })
@@ -405,13 +405,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //    }
     
     private func initTableViewController() {
-        self.listItemsTableViewController = UIStoryboard.listItemsTableViewController()
+        listItemsTableViewController = UIStoryboard.listItemsTableViewController()
         
-        self.addChildViewControllerAndView(self.listItemsTableViewController, viewIndex: 0)
+        addChildViewControllerAndView(listItemsTableViewController, viewIndex: 0)
         
-        self.listItemsTableViewController.scrollViewDelegate = self
-        self.listItemsTableViewController.listItemsTableViewDelegate = self
-        self.listItemsTableViewController.listItemsEditTableViewDelegate = self
+        listItemsTableViewController.status = .Todo
+        listItemsTableViewController.scrollViewDelegate = self
+        listItemsTableViewController.listItemsTableViewDelegate = self
+        listItemsTableViewController.listItemsEditTableViewDelegate = self
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
@@ -425,11 +426,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     // MARK: - ListItemsTableViewDelegate
     
     func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) {
-        tableViewListItem.listItem.status = .Done
+        tableViewListItem.listItem.switchStatusQuantityMutable(.Todo, targetStatus: .Done)
         
         if let list = self.currentList {
             
-            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Done, remote: notifyRemote) {[weak self] result in
+            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status1: .Todo, status: .Done, remote: notifyRemote) {[weak self] result in
                 if result.success {
                     self?.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
                     self?.updatePrices(.MemOnly)
@@ -466,7 +467,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 // Note that after item is submitted we fetch from provider and update the labels again, to "be sure" (this time without animation). There's no real reason for this, just in case.
                 // Note also callback onFinish - when there's another undo item it will be submitted automatically, which triggers a provider and price view update
                 // so we have to ensure our fake update comes after this possible update, otherwise it's overwritten.
-                let updatedPrice = (self?.pricesView.donePrice ?? 0) + tableViewListItem.listItem.totalPrice
+                let updatedPrice = (self?.pricesView.donePrice ?? 0) + tableViewListItem.listItem.totalPrice(.Todo)
                 self?.pricesView.setDonePrice(updatedPrice, animated: true)
             })
         }
@@ -521,7 +522,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             Providers.listItemsProvider.listItems(currentList, fetchMode: listItemsFetchMode, successHandler{listItems in
                 self.pricesView.setTotalPrice(listItems.totalPriceTodoAndCart, animated: false)
                 // The reason we exclude stash from total price is that when user is in the store they want to know what they will have to pay at the end (if they buy the complete list - this may not be necessarily the case though), which is todo + stash
-                self.pricesView.setDonePrice(listItems.totalPriceDone, animated: false)
+                self.pricesView.setDonePrice(listItems.totalPrice(.Done), animated: false)
             })
         }
     }
@@ -544,11 +545,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private func onListItemAddedToProvider(savedListItem: ListItem, notifyRemote: Bool = true) {
         // Our "add" can also be an update - if user adds an item with a name that already exists, it's an update (increment)
-        listItemsTableViewController.updateOrAddListItem(savedListItem, increment: true, scrollToSelection: true, notifyRemote: notifyRemote)
+        listItemsTableViewController.updateOrAddListItem(savedListItem, status: .Todo, increment: true, scrollToSelection: true, notifyRemote: notifyRemote)
         updatePrices(.MemOnly)
         updateEmptyView()
     }
     
+    // Note: concerning status - this only updates the .Todo related data (quantity, order). This means quantity and order of possible items in .Done or .Stash is not affected
     func updateItem(listItem: ListItem, listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
         if let currentList = self.currentList {
             
@@ -557,11 +559,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 let category = listItem.product.category.copy(name: listItemInput.category, color: listItemInput.categoryColor)
                 let product = Product(uuid: updatingListItem.product.uuid, name: listItemInput.name, price: listItemInput.price, category: category, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit) // possible product update
                 let section = Section(uuid: updatingListItem.section.uuid, name: listItemInput.section, order: listItem.section.order) // possible section update
-                
-                let listItem = ListItem(uuid: updatingListItem.uuid, status: updatingListItem.status, quantity: listItemInput.quantity, product: product, section: section, list: currentList, order: updatingListItem.order, note: listItemInput.note)
+                let listItem = ListItem(
+                    uuid: updatingListItem.uuid,
+                    product: product,
+                    section: section,
+                    list: currentList,
+                    note: listItemInput.note,
+                    statusOrder: ListItemStatusOrder(status: .Todo, order: updatingListItem.order(.Todo)),
+                    statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: listItemInput.quantity)
+                )
                 
                 Providers.listItemsProvider.update([listItem], remote: true, successHandler {
-                    self.listItemsTableViewController.updateListItem(listItem, notifyRemote: true)
+                    self.listItemsTableViewController.updateListItem(listItem, status: .Todo, notifyRemote: true)
                     self.updatePrices(.MemOnly)
                     
                     handler?()
@@ -901,7 +910,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case WSNotificationVerb.Update:
-                    listItemsTableViewController.updateListItems(notification.obj, notifyRemote: false)
+                    listItemsTableViewController.updateListItems(notification.obj, status: .Todo, notifyRemote: false)
                     updatePrices(.MemOnly)
                     
                 default: print("Error: ViewController.onWebsocketUpdateListItems: Not handled: \(notification.verb)")
@@ -925,7 +934,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     onListItemAddedToProvider(listItem, notifyRemote: false)
                     
                 case .Update:
-                    listItemsTableViewController.updateListItem(listItem, notifyRemote: false)
+                    listItemsTableViewController.updateListItem(listItem, status: .Todo, notifyRemote: false)
                     updatePrices(.MemOnly)
                     
                 case .Delete:

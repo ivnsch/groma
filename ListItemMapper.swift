@@ -14,16 +14,32 @@ class ListItemMapper {
         let product = ProductMapper.productWithDB(dbListItem.product)
         let section = SectionMapper.sectionWithDB(dbListItem.section)
         let list = ListMapper.listWithDB(dbListItem.list)
-        return ListItem(uuid: dbListItem.uuid, status: ListItemStatus(rawValue: dbListItem.status)!, quantity: dbListItem.quantity, product: product, section: section, list: list, order: dbListItem.order, note: dbListItem.note)
+        return ListItem(
+            uuid: dbListItem.uuid,
+            product: product,
+            section: section,
+            list: list,
+            note: dbListItem.note,
+            todoQuantity: dbListItem.todoQuantity,
+            todoOrder: dbListItem.todoOrder,
+            doneQuantity: dbListItem.doneQuantity,
+            doneOrder: dbListItem.doneOrder,
+            stashQuantity: dbListItem.stashQuantity,
+            stashOrder: dbListItem.stashOrder
+        )
     }
     
     class func dbWithListItem(listItem: ListItem) -> DBListItem {
         let dbListItem = DBListItem()
         dbListItem.uuid = listItem.uuid
-        dbListItem.quantity = listItem.quantity // TODO float
-        dbListItem.status = listItem.status.rawValue
-        dbListItem.order = listItem.order
         dbListItem.note = listItem.note ?? "" // TODO check if db obj can have optional if yes remove ??
+
+        dbListItem.todoQuantity = listItem.todoQuantity
+        dbListItem.todoOrder = listItem.todoOrder
+        dbListItem.doneQuantity = listItem.doneQuantity
+        dbListItem.doneOrder = listItem.doneOrder
+        dbListItem.stashQuantity = listItem.stashQuantity
+        dbListItem.stashOrder = listItem.stashOrder
         
         dbListItem.product = ProductMapper.dbWithProduct(listItem.product)
         dbListItem.section = SectionMapper.dbWithSection(listItem.section)
@@ -92,13 +108,16 @@ class ListItemMapper {
         let listItems = remoteListItemsArr.map {remoteListItem in
             ListItem(
                 uuid: remoteListItem.uuid,
-                status: ListItemStatus(rawValue: remoteListItem.status)!,
-                quantity: remoteListItem.quantity,
                 product: productsDict[remoteListItem.productUuid]!,
                 section: sectionsDict[remoteListItem.sectionUuid]!,
                 list: listDict[remoteListItem.listUuid]!,
-                order: remoteListItem.order,
-                note: remoteListItem.note
+                note: remoteListItem.note,
+                todoQuantity: remoteListItem.todoQuantity,
+                todoOrder: remoteListItem.todoOrder,
+                doneQuantity: remoteListItem.doneQuantity,
+                doneOrder: remoteListItem.doneOrder,
+                stashQuantity: remoteListItem.stashQuantity,
+                stashOrder: remoteListItem.stashOrder
             )
         }
         

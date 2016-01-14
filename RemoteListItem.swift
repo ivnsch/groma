@@ -11,24 +11,34 @@ import Foundation
 final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let uuid: String
-    var status: Int
-    let quantity: Int
     let productUuid: String
     var sectionUuid: String
     var listUuid: String
-    var order: Int
     let note: String?
+    
+    let todoQuantity: Int
+    let todoOrder: Int
+    let doneQuantity: Int
+    let doneOrder: Int
+    let stashQuantity: Int
+    let stashOrder: Int
+
     let lastUpdate: NSDate
     
     init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
-        self.status = representation.valueForKeyPath("status") as! Int
-        self.quantity = representation.valueForKeyPath("quantity") as! Int
         self.productUuid = representation.valueForKeyPath("productUuid") as! String
         self.sectionUuid = representation.valueForKeyPath("sectionUuid") as! String
         self.listUuid = representation.valueForKeyPath("listUuid") as! String
-        self.order = representation.valueForKeyPath("order") as! Int
         self.note = representation.valueForKeyPath("note") as! String? // TODO is this correct way for optional here?
+        
+        self.todoQuantity = representation.valueForKeyPath("todoQuantity") as! Int
+        self.todoOrder = representation.valueForKeyPath("todoOrder") as! Int
+        self.doneQuantity = representation.valueForKeyPath("doneQuantity") as! Int
+        self.doneOrder = representation.valueForKeyPath("doneOrder") as! Int
+        self.stashQuantity = representation.valueForKeyPath("stashQuantity") as! Int
+        self.stashOrder = representation.valueForKeyPath("stashOrder") as! Int
+        
         self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
     }
     
@@ -44,6 +54,6 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), status: \(status), quantity: \(quantity), order: \(order), note: \(note), productUuid: \(productUuid), sectionUuid: \(sectionUuid), listUuid: \(listUuid), listUpdate: \(lastUpdate)}"
+        return "{\(self.dynamicType) uuid: \(uuid), note: \(note), todoQuantity: \(todoQuantity), todoOrder: \(todoOrder), doneQuantity: \(doneQuantity), doneOrder: \(doneOrder), stashQuantity: \(stashQuantity), stashOrder: \(stashOrder), productUuid: \(productUuid), sectionUuid: \(sectionUuid), listUuid: \(listUuid), listUpdate: \(lastUpdate)}"
     }
 }

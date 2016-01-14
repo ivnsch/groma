@@ -69,7 +69,7 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     private func initWithList(list: List) {
         
         Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{[weak self] listItems in
-            let listItems = listItems.filter{$0.status == .Stash}
+            let listItems = listItems.filter{$0.hasStatus(.Stash)}
             self?.listItemsTableViewController.setListItems(listItems)
         })
         // FIXME note that list's listItems are not set, so we don't use this, maybe just remove this variable, or set it
@@ -95,6 +95,7 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
         
         listItemsTableViewController.listItemsTableViewDelegate = self
         
+        listItemsTableViewController.status = .Stash
         //TODO the tap recognizer to clearPendingSwipeItemIfAny should be in listItemsTableViewController instead of here and in ViewController- but it didn't work (quickly) there
         //        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "clearThings")
         //        self.listItemsTableViewController.view.addGestureRecognizer(gestureRecognizer)
@@ -106,7 +107,7 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
 
     func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) {
         if let list = list {
-            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Todo, remote: notifyRemote) {[weak self] result in
+            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status1: .Stash, status: .Todo, remote: notifyRemote) {[weak self] result in
                 if result.success {
                     self?.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
                 }
@@ -147,7 +148,7 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
         if let list = list {
             listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
                 if let weakSelf = self {
-                    Providers.listItemsProvider.switchStatus(weakSelf.listItemsTableViewController.items, list: list, status: .Todo, remote: true) {result in
+                    Providers.listItemsProvider.switchStatus(weakSelf.listItemsTableViewController.items, list: list, status1: .Stash, status: .Todo, remote: true) {result in
                         if result.success {
                             weakSelf.listItemsTableViewController.setListItems([])
                             weakSelf.close()
@@ -170,7 +171,7 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case WSNotificationVerb.Update:
-                    listItemsTableViewController.updateListItems(notification.obj, notifyRemote: false)
+                    listItemsTableViewController.updateListItems(notification.obj, status: .Stash, notifyRemote: false)
                     
                 default: print("Error: StashViewController.onWebsocketUpdateListItems: Not handled: \(notification.verb)")
                 }
@@ -190,10 +191,10 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
                 
                 switch notification.verb {
                 case .Add:
-                    listItemsTableViewController.updateOrAddListItem(listItem, increment: true, scrollToSelection: true, notifyRemote: false)
+                    listItemsTableViewController.updateOrAddListItem(listItem, status: .Stash, increment: true, scrollToSelection: true, notifyRemote: false)
                     
                 case .Update:
-                    listItemsTableViewController.updateListItem(listItem, notifyRemote: false)
+                    listItemsTableViewController.updateListItem(listItem, status: .Stash, notifyRemote: false)
                     
                 case .Delete:
                     listItemsTableViewController.removeListItem(listItem, animation: .Bottom)

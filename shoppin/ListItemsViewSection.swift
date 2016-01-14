@@ -33,6 +33,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
     var section: Section // as var to mutate order in-place (ListItemsTableViewController)
     
     var expanded: Bool = true
+    let status: ListItemStatus
     
     private let hasHeader: Bool
     
@@ -74,10 +75,11 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
     }
     
     
-    init(section:Section, tableViewListItems:[TableViewListItem], hasHeader:Bool = true) {
+    init(section: Section, tableViewListItems:[TableViewListItem], hasHeader: Bool = true, status: ListItemStatus) {
         self.section = section
         self.tableViewListItems = tableViewListItems
         self.hasHeader = hasHeader
+        self.status = status
     }
     
     func heightForHeader() -> Float {
@@ -128,7 +130,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
         let tableViewListItem = tableViewListItems[row]
         
         cell.nameLabel.text = tableViewListItem.listItem.product.name
-        cell.quantityLabel.text = String(tableViewListItem.listItem.quantity)
+        cell.quantityLabel.text = String(tableViewListItem.listItem.quantity(status))
         
         cell.labelColor = self.finalLabelFontColor
 //        cell.delegate = self

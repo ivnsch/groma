@@ -225,13 +225,16 @@ class RemoteListItemProvider {
     func toRequestParams(listItem: ListItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
             "uuid": listItem.uuid,
-            "status": listItem.status.rawValue,
-            "quantity": listItem.quantity,
+            "todoQuantity": listItem.todoQuantity,
+            "todoOrder": listItem.todoOrder,
+            "doneQuantity": listItem.doneQuantity,
+            "doneOrder": listItem.doneOrder,
+            "stashQuantity": listItem.stashQuantity,
+            "stashOrder": listItem.stashOrder,
             "productInput": toRequestParams(listItem.product),
             "listUuid": listItem.list.uuid,
             "listName": listItem.list.name,
             "sectionInput": toRequestParams(listItem.section),
-            "order": listItem.order
         ]
         
         if let lastServerUpdate = listItem.lastServerUpdate {

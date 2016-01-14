@@ -279,7 +279,7 @@ class RealmListItemProvider: RealmProvider {
                 // this means: use uuid of existing item, increment quantity, and for the rest copy fields of new item
                 listItems = listItems.map {listItem in
                     if let existingDBListItem = uuidToDBListItemDict[listItem.product.uuid] {
-                        return listItem.copy(uuid: existingDBListItem.uuid, quantity: listItem.quantity + existingDBListItem.quantity, note: nil)
+                        return listItem.increment(existingDBListItem.todoQuantity, doneQuantity: existingDBListItem.doneQuantity, stashQuantity: existingDBListItem.stashQuantity)
                     } else {
                         return listItem
                     }
@@ -308,14 +308,14 @@ class RealmListItemProvider: RealmProvider {
     }
     
     
-    func addListItem(product: Product, sectionNameMaybe: String?, quantity: Int, list: List, note noteMaybe: String? = nil, _ handler: ListItem? -> Void) {
+    func addListItem(status: ListItemStatus, product: Product, sectionNameMaybe: String?, quantity: Int, list: List, note noteMaybe: String? = nil, _ handler: ListItem? -> Void) {
         
         doInWriteTransaction({realm in
             return syncedRet(self) {
                 
                 // see if there's already a listitem for this product in the list - if yes only increment it
                 if let existingListItem = realm.objects(DBListItem).filter("product.name == '\(product.name)'").first {
-                    existingListItem.quantity += quantity
+                    existingListItem.increment(ListItemStatusQuantity(status: status, quantity: quantity))
                     
                     // possible updates (when user submits a new list item using add edit product controller)
                     if let sectionName = sectionNameMaybe {
@@ -351,7 +351,8 @@ class RealmListItemProvider: RealmProvider {
                     }
                     
                     // create the list item and save it
-                    let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: quantity, product: product, section: section, list: list, order: listItemOrder)
+                    let listItem = ListItem(uuid: NSUUID().UUIDString, product: product, section: section, list: list, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: quantity))
+                    
                     let dbListItem = ListItemMapper.dbWithListItem(listItem)
                     realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
                     return ListItemMapper.listItemWithDB(dbListItem)
@@ -459,7 +460,8 @@ class RealmListItemProvider: RealmProvider {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             do {
                 let realm = try Realm()
-                let count = realm.objects(DBListItem).filter("status = \(status.rawValue) AND list.uuid = '\(list.uuid)'").count
+                let listItems = realm.objects(DBListItem).filter("list.uuid = '\(list.uuid)'")
+                let count = listItems.filter{$0.hasStatus(status)}.count
                 finished(count)
             } catch _ {
                 print("Error: creating Realm() in load, returning empty results")

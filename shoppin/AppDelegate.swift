@@ -325,13 +325,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                    let bread = Section(uuid: "109", name: "Brot", order: 8)
                     
                     let listItems = [
-                        ListItem(uuid: "200", status: .Todo, quantity: 5, product: product1, section: section1, list: list1, order: 0),
-                        ListItem(uuid: "201", status: .Todo, quantity: 2, product: product2, section: section2, list: list1, order: 0),
-                        ListItem(uuid: "203", status: .Todo, quantity: 3, product: product3, section: section6, list: list1, order: 0),
-                        ListItem(uuid: "204", status: .Todo, quantity: 2, product: product4, section: section4, list: list1, order: 0),
-                        ListItem(uuid: "205", status: .Todo, quantity: 4, product: product5, section: section5, list: list1, order: 0),
-                        ListItem(uuid: "206", status: .Todo, quantity: 3, product: product6, section: section3, list: list1, order: 0),
-                        ListItem(uuid: "207", status: .Todo, quantity: 4, product: product7, section: section6, list: list1, order: 1)
+                        ListItem(uuid: "200", product: product1, section: section1, list: list1, todoQuantity: 5, todoOrder: 0),
+                        ListItem(uuid: "201", product: product2, section: section2, list: list1, todoQuantity: 2, todoOrder: 0),
+                        ListItem(uuid: "203", product: product3, section: section6, list: list1, todoQuantity: 3, todoOrder: 1),
+                        ListItem(uuid: "204", product: product4, section: section4, list: list1, todoQuantity: 3, todoOrder: 2),
+                        ListItem(uuid: "205", product: product5, section: section5, list: list1, todoQuantity: 4, todoOrder: 3),
+                        ListItem(uuid: "206", product: product6, section: section3, list: list1, todoQuantity: 3, todoOrder: 4),
+                        ListItem(uuid: "207", product: product7, section: section6, list: list1, todoQuantity: 4, todoOrder: 5)
                     ]
                     
                     weakSelf.listProvider.saveListItems(listItems, incrementQuantity: false) {saved in

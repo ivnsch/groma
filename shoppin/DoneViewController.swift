@@ -87,7 +87,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
         Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{[weak self] listItems in
             
             if let weakSelf = self {
-                let doneListItems = listItems.filter{$0.status == .Done}
+                let doneListItems = listItems.filter{$0.hasStatus(.Done)}
                 weakSelf.listItemsTableViewController.setListItems(doneListItems)
                 self?.updateEmptyView()
             }
@@ -132,13 +132,14 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     private func initTableViewController() {
-        self.listItemsTableViewController = UIStoryboard.listItemsTableViewController()
-        self.listItemsTableViewController.style = .Gray
+        listItemsTableViewController = UIStoryboard.listItemsTableViewController()
+        listItemsTableViewController.style = .Gray
 
-        self.addChildViewControllerAndView(self.listItemsTableViewController, viewIndex: 0)
+        addChildViewControllerAndView(listItemsTableViewController, viewIndex: 0)
 
-        self.listItemsTableViewController.listItemsTableViewDelegate = self
+        listItemsTableViewController.listItemsTableViewDelegate = self
         
+        listItemsTableViewController.status = .Done
         //TODO the tap recognizer to clearPendingSwipeItemIfAny should be in listItemsTableViewController instead of here and in ViewController- but it didn't work (quickly) there
 //        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "clearThings")
 //        self.listItemsTableViewController.view.addGestureRecognizer(gestureRecognizer)
@@ -150,7 +151,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
 
     func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) {
         if let list = self.list {
-            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status: .Todo, remote: notifyRemote) {[weak self] result in
+            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status1: .Done, status: .Todo, remote: notifyRemote) {[weak self] result in
                 if result.success {
                     self!.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
                     self?.updateEmptyView()
@@ -168,7 +169,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     
     private func sendAllItemToStash(onFinish: VoidFunction) {
         if let list = self.list {
-            Providers.listItemsProvider.switchStatus(self.listItemsTableViewController.items, list: list, status: .Stash, remote: true) {[weak self] result in
+            Providers.listItemsProvider.switchStatus(self.listItemsTableViewController.items, list: list, status1: .Done, status: .Stash, remote: true) {[weak self] result in
                 if result.success {
                     self?.listItemsTableViewController.setListItems([])
                     self?.updateEmptyView()
@@ -218,7 +219,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
             if let weakSelf = self {
 
                 let inventoryItems = weakSelf.listItemsTableViewController.items.map{
-                    InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.quantity, quantityDelta: $0.quantity, product: $0.product, inventory: $0.list.inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
+                    InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.doneQuantity, quantityDelta: $0.doneQuantity, product: $0.product, inventory: $0.list.inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
                 }
                 
                 Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, weakSelf.successHandler{result in
@@ -251,7 +252,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case WSNotificationVerb.Update:
-                    listItemsTableViewController.updateListItems(notification.obj, notifyRemote: false)
+                    listItemsTableViewController.updateListItems(notification.obj, status: .Done, notifyRemote: false)
                     
                 default: print("Error: DoneViewController.onWebsocketUpdateListItems: Not handled: \(notification.verb)")
                 }
@@ -271,10 +272,10 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
                 
                 switch notification.verb {
                 case .Add:
-                    listItemsTableViewController.updateOrAddListItem(listItem, increment: true, scrollToSelection: true, notifyRemote: false)
+                    listItemsTableViewController.updateOrAddListItem(listItem, status: .Done, increment: true, scrollToSelection: true, notifyRemote: false)
                     
                 case .Update:
-                    listItemsTableViewController.updateListItem(listItem, notifyRemote: false)
+                    listItemsTableViewController.updateListItem(listItem, status: .Done, notifyRemote: false)
                     
                 case .Delete:
                     listItemsTableViewController.removeListItem(listItem, animation: .Bottom)

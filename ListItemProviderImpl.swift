@@ -131,7 +131,8 @@ class ListItemProviderImpl: ListItemProvider {
                         }()
                     }()
                     
-                    let listItem = ListItem(uuid: NSUUID().UUIDString, status: .Todo, quantity: groupItem.quantity, product: groupItem.product, section: section, list: list, order: order)
+                    // Note: we add always to Todo list - it's not possible and it doesn't make sense to add group items to cart & stash
+                    let listItem = ListItem(uuid: NSUUID().UUIDString, product: groupItem.product, section: section, list: list, statusOrder: ListItemStatusOrder(status: .Todo, order: order), statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: groupItem.quantity))
                     listItems.append(listItem)
                 }
                 
@@ -225,6 +226,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
 
+    // Adds list item with todo status
     func addListItem(product: Product, sectionName: String, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
         
         typealias BGResult = (success: Bool, listItem: ListItem) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything)
@@ -234,7 +236,7 @@ class ListItemProviderImpl: ListItemProvider {
             if let weakSelf = self {
                 let bgResultMaybe: BGResult? = syncedRet(weakSelf) {
                     do {
-                        let memAddedListItemMaybe = weakSelf.memProvider.addOrUpdateListItem(product, sectionNameMaybe: sectionName, quantity: quantity, list: list, note: note)
+                        let memAddedListItemMaybe = weakSelf.memProvider.addOrUpdateListItem(product, sectionNameMaybe: sectionName, status: .Todo, quantity: quantity, list: list, note: note)
                         if let addedListItem = memAddedListItemMaybe {
                             dispatch_async(dispatch_get_main_queue(), {
                                 // return in advance so our client is quick - the database update continues in the background
@@ -249,7 +251,7 @@ class ListItemProviderImpl: ListItemProvider {
                             
                             // see if there's already a listitem for this product in the list - if yes only increment it
                             if let existingListItem = realm.objects(DBListItem).filter("product.name == '\(product.name)'").first {
-                                existingListItem.quantity += quantity
+                                existingListItem.increment(ListItemStatusQuantity(status: .Todo, quantity: quantity))
                                 
                                 // possible updates (when user submits a new list item using add edit product controller)
                                 //                if let sectionName = section.name {
@@ -292,7 +294,15 @@ class ListItemProviderImpl: ListItemProvider {
                                 
                                 // create the list item and save it
                                 // memcache uuid: if we created a new listitem in memcache use this uuid so our data is consistent mem/db
-                                let listItem = ListItem(uuid: memAddedListItemMaybe?.uuid ?? NSUUID().UUIDString, status: .Todo, quantity: quantity, product: product, section: section, list: list, order: listItemOrder)
+                                let listItem = ListItem(
+                                    uuid: memAddedListItemMaybe?.uuid ?? NSUUID().UUIDString,
+                                    product: product,
+                                    section: section,
+                                    list: list,
+                                    statusOrder: ListItemStatusOrder(status: .Todo, order: listItemOrder),
+                                    statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: quantity)
+                                )
+                                
                                 let dbListItem = ListItemMapper.dbWithListItem(listItem)
                                 realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
                                 let savedListItem = ListItemMapper.listItemWithDB(dbListItem)
@@ -350,23 +360,7 @@ class ListItemProviderImpl: ListItemProvider {
         addListItem(product, sectionName: section.name, quantity: quantity, list: list, note: note, order: orderMaybe, handler)
     }
 
-    func switchStatus(listItems: [ListItem], list: List, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        
-        // Helper to count how many list items each section has
-        // filtered by "done" in same pass for better performance
-        func sectionCountAndFilteredByDoneDict(listItems: [ListItem], status: ListItemStatus) -> [Section: Int] {
-            var dict = [Section: Int]()
-            for listItem in listItems {
-                if listItem.status == status {
-                    if dict[listItem.section] != nil {
-                        dict[listItem.section]!++
-                    } else {
-                        dict[listItem.section] = 1
-                    }
-                }
-            }
-            return dict
-        }
+    func switchStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         
         self.listItems(list, fetchMode: .MemOnly) {result in // TODO review .First suitable here
 
@@ -374,15 +368,15 @@ class ListItemProviderImpl: ListItemProvider {
             
                 // Update done and order field - by changing "done" we are moving list items from one tableview to another
                 // we append the items at the end of the section (order == section.count)
-                var sectionsDict = sectionCountAndFilteredByDoneDict(storedListItems, status: status)
+                var sectionsDict = storedListItems.sectionCountDict(status)
                 for listItem in listItems {
-                    listItem.status = status
+                    listItem.switchStatusQuantityMutable(status1, targetStatus: status)
                     if let sectionCount = sectionsDict[listItem.section] {
-                        listItem.order = sectionCount
+                        listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: sectionCount))
                         sectionsDict[listItem.section]!++ // we are adding an item to section - increment count for possible next item
                         
                     } else { // item's section is not in target list - set order 0 (first item in section) and add section to the dictionary
-                        listItem.order = 0
+                        listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: 0))
                         sectionsDict[listItem.section] = 1 // we are adding an item to section - items count is 1
                     }
                 }
