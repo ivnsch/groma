@@ -77,7 +77,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     override func initModels() {
         
-        Providers.listItemGroupsProvider.groups(NSRange(location: 0, length: 1000), successHandler{[weak self] groups in
+        Providers.listItemGroupsProvider.groups(NSRange(location: 0, length: 1000), sortBy: .Order, successHandler{[weak self] groups in
             if let weakSelf = self {
                 let models: [ExpandableTableViewModel] = groups.map{ExpandableTableViewGroupModel(group: $0)}
                 if weakSelf.models != models {

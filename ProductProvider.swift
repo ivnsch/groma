@@ -11,10 +11,8 @@ import Foundation
 // TODO move product-only method from list item provider here
 protocol ProductProvider {
 
-    // TODO remove only ranged
-    func products(handler: ProviderResult<[Product]> -> Void)
-
-    func products(range: NSRange, _ handler: ProviderResult<[Product]> -> Void)
+    // TODO don't use QuickAddItemSortBy here, map to a (new) product specific enum
+    func products(range: NSRange, sortBy: QuickAddItemSortBy, _ handler: ProviderResult<[Product]> -> Void)
     
     func product(name: String, handler: ProviderResult<Product> -> ())
     
@@ -28,9 +26,18 @@ protocol ProductProvider {
     // Upsert based on name
     func add(productInput: ProductInput, _ handler: ProviderResult<Product> -> ())
     
+    // Update product. Note: This invalidates the list item memory cache, in order to make listitems update stale product references.
     func update(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
+    // Updates product without invalidating list item memory cache (opposed to the normal update method). Since fav doesn't affect listitems. 
+    // WARN: This still does a full update of the product, there doesn't seem to be a way with Realm to update only the fav field (which is all we want to do in this method) and server currently also does a full update. So use only when you are sure that only the fav field changed!
+    func updateFav(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ())
+
+    func incrementFav(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ())
+
     func delete(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ())
+
+    func incrementFav(product: Product, _ handler: ProviderResult<Any> -> Void)
 
     func productSuggestions(handler: ProviderResult<[Suggestion]> -> ())
     

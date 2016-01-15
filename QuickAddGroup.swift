@@ -24,4 +24,12 @@ class QuickAddGroup: QuickAddItem {
     override func clearBoldRangeCopy() -> QuickAddGroup {
         return QuickAddGroup(group)
     }
+    
+    override func same(item: QuickAddItem) -> Bool {
+        if let groupItem = item as? QuickAddGroup {
+            return group.same(groupItem.group)
+        } else {
+            return false
+        }
+    }
 }

@@ -65,7 +65,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         topBar.delegate = self
         topBar.backgroundColor = UIColor.groupTableViewBackgroundColor()
         
-        Providers.productProvider.products(successHandler {[weak self] products in
+        Providers.productProvider.products(paginator.currentPage, sortBy: .Fav, successHandler {[weak self] products in
             self?.products = products
         })
         
@@ -311,7 +311,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
                 if (!weakSelf.loadingPage) {
                     setLoading(true)
                     
-                    Providers.productProvider.products(weakSelf.paginator.currentPage, weakSelf.successHandler{products in
+                    Providers.productProvider.products(weakSelf.paginator.currentPage, sortBy: .Fav, weakSelf.successHandler{products in
                         weakSelf.products.appendAll(products)
                         
                         weakSelf.paginator.update(products.count)

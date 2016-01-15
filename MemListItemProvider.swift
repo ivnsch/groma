@@ -180,6 +180,8 @@ class MemListItemProvider {
     func invalidate() {
         guard enabled else {return}
         
+        print("Info: MemListItemProvider.invalidate: Invalidated list items memory cache")
+        
         listItems = nil
     }
 }

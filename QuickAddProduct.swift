@@ -24,4 +24,12 @@ class QuickAddProduct: QuickAddItem {
     override func clearBoldRangeCopy() -> QuickAddProduct {
         return QuickAddProduct(product)
     }
+    
+    override func same(item: QuickAddItem) -> Bool {
+        if let productItem = item as? QuickAddProduct {
+            return product.same(productItem.product)
+        } else {
+            return false
+        }
+    }
 }

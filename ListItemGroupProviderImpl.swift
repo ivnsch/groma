@@ -21,8 +21,9 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func groups(range: NSRange, _ handler: ProviderResult<[ListItemGroup]> -> Void) {
-        dbGroupsProvider.groups(range) {groups in
+    // TODO don't use QuickAddItemSortBy here, map to a (new) group specific enum
+    func groups(range: NSRange, sortBy: GroupSortBy, _ handler: ProviderResult<[ListItemGroup]> -> Void) {
+        dbGroupsProvider.groups(range, sortBy: sortBy) {groups in
             handler(ProviderResult(status: .Success, sucessResult: groups))
         }
     }

@@ -10,7 +10,7 @@ import Foundation
 
 // TODO check if this makes sense, if not remove
 // maybe we can use directly Product and ListItemGroup in table view - so we don't have to call map?
-class QuickAddItem {
+class QuickAddItem: Identifiable {
 
     var boldRange: NSRange?
     var textSize: CGSize? = nil
@@ -23,8 +23,12 @@ class QuickAddItem {
     var labelText: String {
         fatalError("Override")
     }
-    
+
     func clearBoldRangeCopy() -> QuickAddItem {
         return QuickAddItem()
+    }
+    
+    func same(item: QuickAddItem) -> Bool {
+        fatalError("Override")
     }
 }

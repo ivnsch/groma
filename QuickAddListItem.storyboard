@@ -80,12 +80,30 @@
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Stp-m3-S0Z" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="442" y="0.0" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="40" id="50Q-VN-tvf"/>
+                                    <constraint firstAttribute="height" constant="40" id="S5H-Mq-sHB"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="hkT-El-sCJ"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="idT-1t-eKx"/>
+                                    <constraint firstAttribute="width" constant="40" id="nRI-DD-bXf"/>
+                                </constraints>
+                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <inset key="contentEdgeInsets" minX="13" minY="13" maxX="13" maxY="13"/>
+                                <state key="normal" image="dot"/>
+                                <connections>
+                                    <action selector="onSortByTap:" destination="3Uk-Rq-zKd" eventType="touchUpInside" id="BQQ-mY-hEK"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="H9s-Os-9qI" firstAttribute="leading" secondItem="dif-9Z-2lr" secondAttribute="trailing" constant="4" id="1tL-ec-QI5"/>
                             <constraint firstItem="H9s-Os-9qI" firstAttribute="trailing" secondItem="uPF-XL-vgJ" secondAttribute="trailingMargin" id="7tt-9U-vZt"/>
                             <constraint firstItem="dif-9Z-2lr" firstAttribute="leading" secondItem="s1F-jF-pKk" secondAttribute="trailing" constant="4" id="9iL-75-PDA"/>
+                            <constraint firstItem="s1F-jF-pKk" firstAttribute="leading" secondItem="Stp-m3-S0Z" secondAttribute="trailing" id="AC5-X4-Heb"/>
+                            <constraint firstItem="Stp-m3-S0Z" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="topMargin" id="OR9-yS-2so"/>
                             <constraint firstItem="dif-9Z-2lr" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="Sa4-KW-eNK"/>
                             <constraint firstItem="6Ye-nf-OHM" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="bEV-Rl-nvH"/>
                             <constraint firstItem="zcT-I6-trj" firstAttribute="top" secondItem="wh4-4g-FV0" secondAttribute="bottom" id="cmh-td-tpE"/>
@@ -111,6 +129,7 @@
                         <outlet property="showAddProductsOrGroupButton" destination="H9s-Os-9qI" id="gQT-CB-BuQ"/>
                         <outlet property="showGroupsButton" destination="dif-9Z-2lr" id="KYM-N8-79r"/>
                         <outlet property="showProductsButton" destination="s1F-jF-pKk" id="HS5-dV-G2W"/>
+                        <outlet property="sortByButton" destination="Stp-m3-S0Z" id="O3k-yv-bia"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D9M-cB-Ln6" userLabel="First Responder" sceneMemberID="firstResponder"/>

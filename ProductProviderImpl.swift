@@ -12,16 +12,11 @@ import Foundation
 class ProductProviderImpl: ProductProvider {
 
     let dbProvider = RealmListItemProvider()
+    let productDbProvider = RealmProductProvider()
 
-    // TODO delete - use only range
-    func products(handler: ProviderResult<[Product]> -> Void) {
-        dbProvider.loadProducts {products in
-            handler(ProviderResult(status: .Success, sucessResult: products))
-        }
-    }
-    
-    func products(range: NSRange, _ handler: ProviderResult<[Product]> -> Void) {
-        dbProvider.loadProducts(range) {products in
+    // TODO don't use QuickAddItemSortBy here, map to a (new) product specific enum
+    func products(range: NSRange, sortBy: QuickAddItemSortBy, _ handler: ProviderResult<[Product]> -> Void) {
+        dbProvider.loadProducts(range, sortBy: sortBy) {products in
             handler(ProviderResult(status: .Success, sucessResult: products))
         }
     }
@@ -84,6 +79,34 @@ class ProductProviderImpl: ProductProvider {
             if remote {
                 // TODO server
             }
+        }
+    }
+    
+    func incrementFav(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        productDbProvider.incrementFav(product, {saved in
+            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
+            
+            if remote {
+                // TODO server
+            }
+        })
+    }
+    
+    func updateFav(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        dbProvider.saveProducts([product], update: true) {saved in
+            if saved {
+                if remote {
+                    // TODO server
+                }
+            }
+            handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
+        }
+    }
+    
+    func incrementFav(product: Product, _ handler: ProviderResult<Any> -> Void) {
+        let incrementedProduct = product.copy(fav: product.fav + 1)
+        dbProvider.saveProducts([incrementedProduct], updateSuggestions: false) {saved in // we are only incrementing a(n existing) product, so update suggestions doesn't make sense
+            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
         }
     }
     

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class RealmProductProvider: RealmProvider {
 
@@ -24,5 +25,19 @@ class RealmProductProvider: RealmProvider {
             let suggestions = dbCategories.map{Suggestion(name: $0.name)}
             handler(suggestions)
         }
+    }
+    
+    func incrementFav(product: Product, _ handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            if let existingProduct = realm.objects(DBProduct).filter("uuid == '\(product.uuid)'").first {
+                existingProduct.fav++
+                realm.add(existingProduct, update: true)
+                return true
+            } else { // product not found
+                return false
+            }
+        }, finishHandler: {savedMaybe in
+            handler(savedMaybe ?? false)
+        })
     }
 }

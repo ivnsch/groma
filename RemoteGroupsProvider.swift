@@ -71,7 +71,8 @@ class RemoteGroupsProvider: RemoteProvider {
             "uuid": group.uuid,
             "name": group.name,
             "order": group.order,
-            "color": group.bgColor.hexStr
+            "color": group.bgColor.hexStr,
+            "fav": group.fav
         ]
         return dict
     }

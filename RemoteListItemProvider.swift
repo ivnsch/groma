@@ -252,7 +252,8 @@ class RemoteListItemProvider {
             "price": product.price,
             "baseQuantity": product.baseQuantity,
             "unit": product.unit.rawValue,
-            "category": toRequestParams(product.category)
+            "category": toRequestParams(product.category),
+            "fav": product.fav
         ]
     }
     

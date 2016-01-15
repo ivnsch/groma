@@ -9,6 +9,10 @@
 import Foundation
 import RealmSwift
 
+enum QuickAddItemSortBy {
+    case Alphabetic, Fav
+}
+
 class RealmListItemProvider: RealmProvider {
     
     // MARK: - Section
@@ -64,15 +68,16 @@ class RealmListItemProvider: RealmProvider {
         self.loadFirst(mapper, filter: "name = '\(name)'", handler: handler)
     }
     
-    // TODO remove, only ranged
-    func loadProducts(handler: [Product] -> ()) {
+    // TODO don't use QuickAddItemSortBy here, map to a (new) product specific enum
+    func loadProducts(range: NSRange, sortBy: QuickAddItemSortBy, handler: [Product] -> ()) {
+        let sortData: (key: String, ascending: Bool) = {
+            switch sortBy {
+            case .Alphabetic: return ("name", true)
+            case .Fav: return ("fav", false)
+            }
+        }()
         let mapper = {ProductMapper.productWithDB($0)}
-        self.load(mapper, handler: handler)
-    }
-    
-    func loadProducts(range: NSRange, handler: [Product] -> ()) {
-        let mapper = {ProductMapper.productWithDB($0)}
-        self.load(mapper, range: range, handler: handler)
+        self.load(mapper, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range, handler: handler)
     }
 
     func productsContainingText(text: String, handler: [Product] -> ()) {

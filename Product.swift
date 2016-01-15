@@ -37,32 +37,35 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
     let category: ProductCategory
     let baseQuantity: Float
     let unit: ProductUnit
+    var fav: Int
     
-    init(uuid: String, name: String, price: Float, category: ProductCategory, baseQuantity: Float, unit: ProductUnit) {
+    init(uuid: String, name: String, price: Float, category: ProductCategory, baseQuantity: Float, unit: ProductUnit, fav: Int = 0) {
         self.uuid = uuid
         self.name = name
         self.price = price
         self.category = category
         self.baseQuantity = baseQuantity
         self.unit = unit
+        self.fav = fav
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), price: \(price), category: \(category), baseQuantity: \(baseQuantity), unit: \(unit)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), price: \(price), category: \(category), baseQuantity: \(baseQuantity), unit: \(unit), fav: \(fav)}"
     }
 
     var hashValue: Int {
         return self.uuid.hashValue
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: ProductCategory? = nil, baseQuantity: Float? = nil, unit: ProductUnit? = nil) -> Product {
+    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: ProductCategory? = nil, baseQuantity: Float? = nil, unit: ProductUnit? = nil, fav: Int? = nil) -> Product {
         return Product(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             price: price ?? self.price,
             category: category ?? self.category,
             baseQuantity: baseQuantity ?? self.baseQuantity,
-            unit: unit ?? self.unit
+            unit: unit ?? self.unit,
+            fav: fav ?? self.fav
         )
     }
     

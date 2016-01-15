@@ -37,6 +37,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
     @IBOutlet weak var showAddProductsOrGroupButton: ButtonMore!
     @IBOutlet weak var currentQuickAddLabel: UILabel!
     @IBOutlet weak var currentQuickAddLabelLeftConstraint: NSLayoutConstraint!
+
+    @IBOutlet weak var sortByButton: ButtonMore!
     
     var addProductsOrGroupBgColor: UIColor?
     
@@ -53,6 +55,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
         return navController?.viewControllers.first as? QuickAddListItemViewController
     }
     
+    private var sortBy: QuickAddItemSortBy = .Fav {
+        didSet {
+            (navController?.viewControllers.last as? QuickAddListItemViewController)?.contentData = (itemType, sortBy)
+            updateSortByButton(sortBy)
+        }
+    }
+    
     var open: Bool = false
     
     private let toolButtonsHeight: CGFloat = 50 // for now hardcoded, since theres no toolbar-view yet (only buttons + constraits constants). TODO
@@ -63,6 +72,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
         super.viewDidLoad()
         
         showAddProductsOrGroupButton.backgroundColor = addProductsOrGroupBgColor
+        
+        updateSortByButton(sortBy)
     }
     
     // MARK: - Navigation
@@ -104,10 +115,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
     // returns: status changed: if it was showing and was subsequently hidden
     private func hideAddProductController() -> Bool {
         if navController?.viewControllers.last as? AddEditListItemViewController != nil {
-            
             navController?.popViewControllerAnimated(true)
             delegate?.onQuickListOpen()
-            
+            sortByButton.selected = true
             return true
         }
         return false
@@ -122,6 +132,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
             controller.modus = modus
             controller.delegate = productDelegate
             navController?.pushViewController(controller, animated: true)
+            sortByButton.selected = false
             delegate?.onAddProductOpen()
             return true
         }
@@ -149,16 +160,42 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
         if !hideAddProductController() { // was not showing
             showAddProductController() // show product (first segment)
         }
+
+    }
+    
+    @IBAction func onSortByTap(sender: UIButton) {
+        let toggled: QuickAddItemSortBy = {
+            switch sortBy {
+            case .Alphabetic: return .Fav
+            case .Fav: return .Alphabetic
+            }
+        }()
+        sortBy = toggled
+        
+        updateSortByButton(sortBy)
+    }
+    
+    private func updateSortByButton(sortBy: QuickAddItemSortBy) {
+        let imgName: String = {
+            switch sortBy {
+            case .Alphabetic: return "sort_alpha"
+            case .Fav:  return "sort_fav"
+            }
+        }()
+        sortByButton.setImage(UIImage(named: imgName), forState: .Normal)
+        sortByButton.selected = true
     }
     
     @IBAction func onShowGroupsTap(sender: UIButton) {
         
         func onHasController(controller: QuickAddListItemViewController) {
-            controller.itemType = .Group
+            controller.contentData = (.Group, .Fav)
             toggleItemTypeButtons(true)
             
             showGroupsButton.selected = true
             showProductsButton.selected = false
+            sortByButton.selected = true
+            
             updateQuickAddTop(.Group)
         }
         
@@ -181,11 +218,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
     @IBAction func onShowProductsTap(sender: UIButton) {
         
         func onHasController(controller: QuickAddListItemViewController) {
-            controller.itemType = .Product
+            controller.contentData = (.Product, .Fav)
             toggleItemTypeButtons(true)
             
             showProductsButton.selected = true
             showGroupsButton.selected = false
+            sortByButton.selected = true
+
             updateQuickAddTop(.Product)
         }
         

@@ -11,9 +11,17 @@ import RealmSwift
 
 class RealmListItemGroupProvider: RealmProvider {
     
-    func groups(range: NSRange, handler: [ListItemGroup] -> Void) {
+    // TODO don't use QuickAddItemSortBy here, map to a (new) group specific enum
+    func groups(range: NSRange, sortBy: GroupSortBy, handler: [ListItemGroup] -> Void) {
+        let sortFieldStr: String = {
+            switch sortBy {
+            case .Alphabetic: return "name"
+            case .Fav: return "fav"
+            case .Order: return "order"
+            }
+        }()
         let mapper = {ListItemGroupMapper.listItemGroupWith($0)}
-        self.load(mapper, range: range, handler: handler)
+        self.load(mapper, sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), range: range, handler: handler)
     }
     
     func groupsContainingText(text: String, handler: [ListItemGroup] -> Void) {

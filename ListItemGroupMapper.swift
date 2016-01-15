@@ -21,6 +21,7 @@ class ListItemGroupMapper {
             dbListItemGroup.items.append(dbObj)
         }
         dbListItemGroup.setBgColor(listItemGroup.bgColor)
+        dbListItemGroup.fav  = listItemGroup.fav
         return dbListItemGroup
     }
     
@@ -30,7 +31,8 @@ class ListItemGroupMapper {
             name: dbListItemGroup.name,
             items: dbListItemGroup.items.map{GroupItemMapper.groupItemWith($0)},
             bgColor: dbListItemGroup.bgColor(),
-            order: dbListItemGroup.order
+            order: dbListItemGroup.order,
+            fav: dbListItemGroup.fav
         )
     }
     
@@ -40,7 +42,8 @@ class ListItemGroupMapper {
             name: remoteGroup.name,
             items: items,
             bgColor: remoteGroup.color,
-            order: remoteGroup.order
+            order: remoteGroup.order,
+            fav: remoteGroup.fav
         )
     }
 }

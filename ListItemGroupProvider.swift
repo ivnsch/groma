@@ -8,13 +8,17 @@
 
 import Foundation
 
+enum GroupSortBy {
+    case Alphabetic, Fav, Order
+}
+
 protocol ListItemGroupProvider {
 
     // groups
     
     func groups(handler: ProviderResult<[ListItemGroup]> -> Void)
     
-    func groups(range: NSRange, _ handler: ProviderResult<[ListItemGroup]> -> Void)
+    func groups(range: NSRange, sortBy: GroupSortBy, _ handler: ProviderResult<[ListItemGroup]> -> Void)
 
     func groupsContainingText(text: String, _ handler: ProviderResult<[ListItemGroup]> -> Void)
     
@@ -25,7 +29,7 @@ protocol ListItemGroupProvider {
     func update(groups: [ListItemGroup], remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
     func remove(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
-
+    
     // group items
     
     func groupItems(group: ListItemGroup, _ handler: ProviderResult<[GroupItem]> -> Void)

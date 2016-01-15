@@ -501,13 +501,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private func getTableViewInset() -> CGFloat {
         return topBar.frame.height
     }
-
-    func loadItems(handler: Try<[String]> -> ()) {
-        Providers.productProvider.products(successHandler{products in
-            let names = products.map{$0.name}
-            handler(Try(names))
-        })
-    }
     
     func onListItemsChangedSection(tableViewListItems: [TableViewListItem]) {
         Providers.listItemsProvider.update(tableViewListItems.map{$0.listItem}, remote: true, successHandler{result in

@@ -33,13 +33,6 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
     @IBOutlet weak var collectionView: UICollectionView!
     
     var delegate: QuickAddListItemDelegate?
-    var itemType: QuickAddItemType = .Product { // for now product/group mutually exclusive (no mixed tableview)
-        didSet {
-            if itemType != oldValue {
-                loadItems()
-            }
-        }
-    }
     
     // TODO generic name maybe items or so
     var quickAddItems: [QuickAddItem] = [] {
@@ -56,9 +49,17 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
     
     var open: Bool = false
     
+    var contentData: (itemType: QuickAddItemType, sortBy: QuickAddItemSortBy) = (.Product, .Fav) {
+        didSet {
+            if contentData.itemType != oldValue.itemType || contentData.sortBy != oldValue.sortBy {
+                loadItems()
+            }
+        }
+    }
+    
     var onViewDidLoad: VoidFunction? // ensure called after outlets set
     
-    private let paginator = Paginator(pageSize: 20)
+    private let paginator = Paginator(pageSize: 100)
     private var loadingPage: Bool = false
     
     override func viewDidLoad() {
@@ -68,29 +69,40 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
+        clearAndLoadFirstPage()
+    }
+    
+    private func clearAndLoadFirstPage() {
         quickAddItems = []
         paginator.reset()
         loadPossibleNextPage()
     }
     
     func loadItems() {
-        switch itemType {
+        switch contentData.itemType {
         case .Product:
             loadProducts()
         case .Group:
             loadGroups()
         }
     }
+
+    private func toGroupSortBy(sortBy: QuickAddItemSortBy) -> GroupSortBy {
+        switch sortBy {
+        case .Alphabetic: return .Alphabetic
+        case .Fav: return .Fav
+        }
+    }
     
     private func loadGroups() {
-        Providers.listItemGroupsProvider.groups(successHandler{[weak self] groups in
+        
+        Providers.listItemGroupsProvider.groups(paginator.currentPage, sortBy: toGroupSortBy(contentData.sortBy), successHandler{[weak self] groups in
             self?.quickAddItems = groups.map{QuickAddGroup($0)}
         })
     }
     
     private func loadProducts() {
-        Providers.productProvider.products(successHandler{[weak self] products in
+        Providers.productProvider.products(paginator.currentPage, sortBy: contentData.sortBy, successHandler{[weak self] products in
             self?.quickAddItems = products.map{QuickAddProduct($0)}
         })
     }
@@ -103,7 +115,7 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
         if searchText.isEmpty {
             filteredQuickAddItems = quickAddItems.map{$0.clearBoldRangeCopy()}
         } else {
-            switch itemType {
+            switch contentData.itemType {
             case .Product:
                 Providers.productProvider.productsContainingText(searchText, successHandler{[weak self] products in
                     self?.quickAddItems = products.map{QuickAddProduct($0, boldRange: $0.name.range(searchText, caseInsensitive: true))}
@@ -167,11 +179,21 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
         let item = filteredQuickAddItems[indexPath.row]
+
+        // Comment for product and group items: Increment items immediately in memory, then do db update with the incremented items. We could do the increment in database (which is a bit more reliable), but this requires us to fetch first the item which makes the operation relatively slow. We also have to add list items at the same time and this operation should not slow others. And for favs reliability is not very important.
+        // TODO!!! review when testing server sync that - when adding many items quickly - the list item count in server is the same. In the simulator it's visible how the updateFav operation for some reason "cuts" the adding of items, that is if we tap a product 20 times very quickly normally it will continue adding until 20 after we stop tapping. But with updateFav, it just adds until we stop tapping. This operation touches only the product, which makes this weird, as the increment list items affects the listitem but shouldn't affect the product. But for some reason it seems to "cut" the pending listitem increments (?). So problem is, maybe when we tap 20 times - we send 20 request to the server, which processes it correctly and adds 20 items, but due to the "cut" we add less than 20 in the client. So when we do sync we suddenly see more items than what we thought we added.
+        // One possible solution for this is to store the favs in this class, and do a batch update / fav increment only when the user exists quick add.
         
         if let productItem = item as? QuickAddProduct {
+            productItem.product.fav++
+            Providers.productProvider.updateFav(productItem.product, remote: true, successHandler{})
+            // don't wait for db incrementFav - this operation is not critical
             delegate?.onAddProduct(productItem.product)
             
         } else if let groupItem = item as? QuickAddGroup {
+            groupItem.group.fav++
+            Providers.listItemGroupsProvider.update(groupItem.group, remote: true, successHandler{})
+            // don't wait for db incrementFav - this operation is not critical
             delegate?.onAddGroup(groupItem.group)
             
         } else {
@@ -213,14 +235,14 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
                 if (!weakSelf.loadingPage) {
                     setLoading(true)
                     
-                    switch weakSelf.itemType {
+                    switch weakSelf.contentData.itemType {
                     case .Product:
-                        Providers.productProvider.products(weakSelf.paginator.currentPage, weakSelf.successHandler{products in
+                        Providers.productProvider.products(weakSelf.paginator.currentPage, sortBy: weakSelf.contentData.sortBy, weakSelf.successHandler{products in
                             let quickAddItems = products.map{QuickAddProduct($0)}
                             onItemsLoaded(quickAddItems)
                         })
                     case .Group:
-                        Providers.listItemGroupsProvider.groups(weakSelf.paginator.currentPage, weakSelf.successHandler{groups in
+                        Providers.listItemGroupsProvider.groups(weakSelf.paginator.currentPage, sortBy: weakSelf.toGroupSortBy(weakSelf.contentData.sortBy), weakSelf.successHandler{groups in
                             let quickAddItems = groups.map{QuickAddGroup($0)}
                             onItemsLoaded(quickAddItems)
                         })

@@ -14,6 +14,7 @@ final class RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializa
     let lastUpdate: NSDate
     let order: Int
     let color: UIColor
+    let fav: Int
     
     init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
@@ -25,6 +26,7 @@ final class RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializa
             print("Error: RemoteList.init: Invalid color hex: \(colorStr)")
             return UIColor.blackColor()
         }()
+        self.fav = representation.valueForKeyPath("fav") as! Int
     }
     
     static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteGroup] {
@@ -39,6 +41,6 @@ final class RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializa
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), color: \(color.hexStr), lastUpdate: \(lastUpdate)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), color: \(color.hexStr), lastUpdate: \(lastUpdate), fav: \(fav)}"
     }
 }

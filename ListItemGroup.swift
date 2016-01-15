@@ -15,22 +15,25 @@ class ListItemGroup: Identifiable, Equatable {
     var items: [GroupItem]
     let bgColor: UIColor
     var order: Int
-
-    init(uuid: String, name: String, items: [GroupItem] = [], bgColor: UIColor, order: Int) {
+    var fav: Int
+    
+    init(uuid: String, name: String, items: [GroupItem] = [], bgColor: UIColor, order: Int, fav: Int = 0) {
         self.uuid = uuid
         self.name = name
         self.items = items
         self.bgColor = bgColor
         self.order = order
+        self.fav = fav
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, items: [GroupItem]? = nil, bgColor: UIColor? = nil, order: Int? = nil) -> ListItemGroup {
+    func copy(uuid uuid: String? = nil, name: String? = nil, items: [GroupItem]? = nil, bgColor: UIColor? = nil, order: Int? = nil, fav: Int? = nil) -> ListItemGroup {
         return ListItemGroup(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             items: items ?? self.items,
             bgColor: bgColor ?? self.bgColor,
-            order: order ?? self.order
+            order: order ?? self.order,
+            fav: fav ?? self.fav
         )
     }
     
@@ -40,7 +43,7 @@ class ListItemGroup: Identifiable, Equatable {
 }
 
 func ==(lhs: ListItemGroup, rhs: ListItemGroup) -> Bool {
-    return lhs.uuid == rhs.uuid && lhs.name == rhs.name && lhs.items == rhs.items && lhs.bgColor == rhs.bgColor && lhs.order == rhs.order
+    return lhs.uuid == rhs.uuid && lhs.name == rhs.name && lhs.items == rhs.items && lhs.bgColor == rhs.bgColor && lhs.order == rhs.order && lhs.fav == rhs.fav
 }
 
 extension ListItemGroup {

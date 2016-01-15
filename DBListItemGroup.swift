@@ -16,7 +16,8 @@ class DBListItemGroup: DBSyncable {
     let items = RealmSwift.List<DBGroupItem>()
     dynamic var order: Int = 0    
     dynamic var bgColorData: NSData = NSData()
-
+    dynamic var fav: Int = 0
+    
     func bgColor() -> UIColor {
         return NSKeyedUnarchiver.unarchiveObjectWithData(bgColorData) as! UIColor
     }
