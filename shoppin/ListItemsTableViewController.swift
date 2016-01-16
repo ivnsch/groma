@@ -525,24 +525,26 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     override func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
-        let srcSection = self.tableViewSections[sourceIndexPath.section]
-        let tableViewListItem = srcSection.tableViewListItems[sourceIndexPath.row]
-        srcSection.tableViewListItems.removeAtIndex(sourceIndexPath.row)
-        
-        let dstSection = self.tableViewSections[destinationIndexPath.section]
-        tableViewListItem.listItem.section = dstSection.section //not superclean to update model data in this controller, but for simplicity...
-        
-//        let absoluteRow = tableView.absoluteRow(destinationIndexPath)
-        dstSection.tableViewListItems.insert(tableViewListItem, atIndex: destinationIndexPath.row)
-
-        self.updateListItemsModelsOrder()
-        
-        // update only list items in modified section(s)
-        var modifiedListItems = srcSection.tableViewListItems
-        if dstSection != srcSection {
-            modifiedListItems += dstSection.tableViewListItems
+        if sourceIndexPath != destinationIndexPath {
+            let srcSection = self.tableViewSections[sourceIndexPath.section]
+            let tableViewListItem = srcSection.tableViewListItems[sourceIndexPath.row]
+            srcSection.tableViewListItems.removeAtIndex(sourceIndexPath.row)
+            
+            let dstSection = self.tableViewSections[destinationIndexPath.section]
+            tableViewListItem.listItem.section = dstSection.section //not superclean to update model data in this controller, but for simplicity...
+            
+            //        let absoluteRow = tableView.absoluteRow(destinationIndexPath)
+            dstSection.tableViewListItems.insert(tableViewListItem, atIndex: destinationIndexPath.row)
+            
+            self.updateListItemsModelsOrder()
+            
+            // update only list items in modified section(s)
+            var modifiedListItems = srcSection.tableViewListItems
+            if dstSection != srcSection {
+                modifiedListItems += dstSection.tableViewListItems
+            }
+            
+            self.listItemsEditTableViewDelegate?.onListItemsChangedSection(modifiedListItems)
         }
-        
-        self.listItemsEditTableViewDelegate?.onListItemsChangedSection(modifiedListItems)
     }
 }
