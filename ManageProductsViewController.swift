@@ -8,8 +8,9 @@
 
 import UIKit
 import SwiftValidator
+import CMPopTipView
 
-class ManageProductsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, AddEditListItemViewControllerDelegate, ListTopBarViewDelegate, ExpandableTopViewControllerDelegate {
+class ManageProductsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, AddEditListItemViewControllerDelegate, ListTopBarViewDelegate, ExpandableTopViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
 
     @IBOutlet weak var topBar: ListTopBarView!
 
@@ -37,6 +38,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
+    var sortBy: ProductSortBy = .Fav
+    @IBOutlet weak var sortByButton: UIButton!
+    private var sortByPopup: CMPopTipView?
+    private let sortByOptions: [(value: ProductSortBy, key: String)] = [
+        (.Fav, "Usage"), (.Alphabetic, "Alphabetic")
+    ]
+    
     private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0, xRight: 20)
     private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0, xRight: 20)
     private let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: CGFloat(-M_PI_4))
@@ -48,8 +56,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
+        clearAndLoadFirstPage()
+    }
+    
+    func clearAndLoadFirstPage() {
         products = []
         paginator.reset()
+        tableView.reloadData()
         loadPossibleNextPage()
     }
     
@@ -65,7 +78,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         topBar.delegate = self
         topBar.backgroundColor = UIColor.groupTableViewBackgroundColor()
         
-        Providers.productProvider.products(paginator.currentPage, sortBy: .Fav, successHandler {[weak self] products in
+        Providers.productProvider.products(paginator.currentPage, sortBy: sortBy, successHandler {[weak self] products in
             self?.products = products
         })
         
@@ -311,7 +324,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
                 if (!weakSelf.loadingPage) {
                     setLoading(true)
                     
-                    Providers.productProvider.products(weakSelf.paginator.currentPage, sortBy: .Fav, weakSelf.successHandler{products in
+                    Providers.productProvider.products(weakSelf.paginator.currentPage, sortBy: weakSelf.sortBy, weakSelf.successHandler{products in
                         weakSelf.products.appendAll(products)
                         
                         weakSelf.paginator.update(products.count)
@@ -406,6 +419,48 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         } else {
             print("Error: ManageProductsViewController.onWebsocketProduct: no userInfo")
         }
+    }
+    
+    
+    // MARK: - UIPicker
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return sortByOptions.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let sortByOption = sortByOptions[row]
+        sortBy = sortByOption.value
+        sortByButton.setTitle(sortByOption.key, forState: .Normal)
+        
+        clearAndLoadFirstPage()
+    }
+    
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+        let label = view as? UILabel ?? UILabel()
+        label.font = Fonts.regularLight
+        label.text = sortByOptions[row].key
+        return label
+    }
+    
+    @IBAction func onSortByTap(sender: UIButton) {
+        if let popup = self.sortByPopup {
+            popup.dismissAnimated(true)
+        } else {
+            let popup = MyTipPopup(customView: createPicker())
+            popup.presentPointingAtView(sortByButton, inView: view, animated: true)
+        }
+    }
+    
+    private func createPicker() -> UIPickerView {
+        let picker = UIPickerView(frame: CGRectMake(0, 0, 150, 100))
+        picker.delegate = self
+        picker.dataSource = self
+        return picker
     }
 }
 

@@ -68,8 +68,7 @@ class RealmListItemProvider: RealmProvider {
         self.loadFirst(mapper, filter: "name = '\(name)'", handler: handler)
     }
     
-    // TODO don't use QuickAddItemSortBy here, map to a (new) product specific enum
-    func loadProducts(range: NSRange, sortBy: QuickAddItemSortBy, handler: [Product] -> ()) {
+    func loadProducts(range: NSRange, sortBy: ProductSortBy, handler: [Product] -> ()) {
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
             case .Alphabetic: return ("name", true)

@@ -8,11 +8,14 @@
 
 import Foundation
 
+enum ProductSortBy {
+    case Alphabetic, Fav
+}
+
 // TODO move product-only method from list item provider here
 protocol ProductProvider {
 
-    // TODO don't use QuickAddItemSortBy here, map to a (new) product specific enum
-    func products(range: NSRange, sortBy: QuickAddItemSortBy, _ handler: ProviderResult<[Product]> -> Void)
+    func products(range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<[Product]> -> Void)
     
     func product(name: String, handler: ProviderResult<Product> -> ())
     

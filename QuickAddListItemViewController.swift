@@ -94,6 +94,13 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
         }
     }
     
+    private func toProductSortBy(sortBy: QuickAddItemSortBy) -> ProductSortBy {
+        switch sortBy {
+        case .Alphabetic: return .Alphabetic
+        case .Fav: return .Fav
+        }
+    }
+    
     private func loadGroups() {
         
         Providers.listItemGroupsProvider.groups(paginator.currentPage, sortBy: toGroupSortBy(contentData.sortBy), successHandler{[weak self] groups in
@@ -102,7 +109,7 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
     }
     
     private func loadProducts() {
-        Providers.productProvider.products(paginator.currentPage, sortBy: contentData.sortBy, successHandler{[weak self] products in
+        Providers.productProvider.products(paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), successHandler{[weak self] products in
             self?.quickAddItems = products.map{QuickAddProduct($0)}
         })
     }
@@ -237,7 +244,7 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
                     
                     switch weakSelf.contentData.itemType {
                     case .Product:
-                        Providers.productProvider.products(weakSelf.paginator.currentPage, sortBy: weakSelf.contentData.sortBy, weakSelf.successHandler{products in
+                        Providers.productProvider.products(weakSelf.paginator.currentPage, sortBy: weakSelf.toProductSortBy(weakSelf.contentData.sortBy), weakSelf.successHandler{products in
                             let quickAddItems = products.map{QuickAddProduct($0)}
                             onItemsLoaded(quickAddItems)
                         })

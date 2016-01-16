@@ -14,8 +14,7 @@ class ProductProviderImpl: ProductProvider {
     let dbProvider = RealmListItemProvider()
     let productDbProvider = RealmProductProvider()
 
-    // TODO don't use QuickAddItemSortBy here, map to a (new) product specific enum
-    func products(range: NSRange, sortBy: QuickAddItemSortBy, _ handler: ProviderResult<[Product]> -> Void) {
+    func products(range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<[Product]> -> Void) {
         dbProvider.loadProducts(range, sortBy: sortBy) {products in
             handler(ProviderResult(status: .Success, sucessResult: products))
         }

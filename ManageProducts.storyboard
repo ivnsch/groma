@@ -10,6 +10,8 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -33,15 +35,63 @@
                                     <constraint firstAttribute="height" constant="64" id="ajw-gS-YXz"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oip-Bv-T0W">
+                                <rect key="frame" x="0.0" y="64" width="600" height="40"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uaW-wg-NEG">
+                                        <rect key="frame" x="489" y="12" width="45" height="16"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tm6-P2-xyl">
+                                        <rect key="frame" x="550" y="6" width="36" height="28"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                        <state key="normal" title="Usage">
+                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onSortByTap:" destination="Mm3-oP-cdT" eventType="touchUpInside" id="MOY-vK-eno"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0gl-lE-Fmk">
+                                        <rect key="frame" x="0.0" y="40" width="600" height="0.0"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="0.40000000000000002" id="XlN-u0-iE7"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="Tm6-P2-xyl" secondAttribute="trailing" constant="14" id="6Gb-5n-utY"/>
+                                    <constraint firstItem="Tm6-P2-xyl" firstAttribute="leading" secondItem="uaW-wg-NEG" secondAttribute="trailing" constant="16" id="925-15-eAx"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="Cy9-Op-gfL"/>
+                                    <constraint firstItem="Tm6-P2-xyl" firstAttribute="centerY" secondItem="oip-Bv-T0W" secondAttribute="centerY" id="Dis-GD-wxq"/>
+                                    <constraint firstItem="Tm6-P2-xyl" firstAttribute="baseline" secondItem="uaW-wg-NEG" secondAttribute="baseline" id="FE7-3Q-r1a"/>
+                                    <constraint firstAttribute="trailing" secondItem="0gl-lE-Fmk" secondAttribute="trailing" id="FX2-I8-7zQ"/>
+                                    <constraint firstItem="0gl-lE-Fmk" firstAttribute="leading" secondItem="oip-Bv-T0W" secondAttribute="leading" id="ZoV-HJ-qNm"/>
+                                    <constraint firstItem="uaW-wg-NEG" firstAttribute="centerY" secondItem="oip-Bv-T0W" secondAttribute="centerY" id="c8h-BI-q6l"/>
+                                    <constraint firstItem="uaW-wg-NEG" firstAttribute="leading" secondItem="0gl-lE-Fmk" secondAttribute="trailing" id="nSD-7P-FTQ"/>
+                                    <constraint firstAttribute="height" constant="40" id="sdo-wz-Yl6"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="40" id="xbu-kY-mLQ"/>
+                                    <constraint firstAttribute="bottom" secondItem="0gl-lE-Fmk" secondAttribute="bottom" id="xvg-Mu-MvW"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="nSD-7P-FTQ"/>
+                                    </mask>
+                                </variation>
+                            </view>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="YRv-YV-FHW">
-                                <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="104" width="600" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="Mm3-oP-cdT" id="eeF-sP-AId"/>
                                 </connections>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OmL-Fh-5Jp">
-                                <rect key="frame" x="0.0" y="108" width="600" height="492"/>
+                                <rect key="frame" x="0.0" y="148" width="600" height="452"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="ubd-oF-jDC" customClass="LoadingFooter" customModule="shoppin" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="72" width="600" height="44"/>
@@ -132,24 +182,30 @@
                         <constraints>
                             <constraint firstItem="YRv-YV-FHW" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="H45-ve-tyE"/>
                             <constraint firstItem="BQl-iJ-bKK" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="K03-zL-NSh"/>
+                            <constraint firstItem="YRv-YV-FHW" firstAttribute="top" secondItem="oip-Bv-T0W" secondAttribute="bottom" id="VR9-G0-XfR"/>
+                            <constraint firstItem="oip-Bv-T0W" firstAttribute="top" secondItem="BQl-iJ-bKK" secondAttribute="bottom" id="ZTf-9p-v6m"/>
                             <constraint firstItem="BQl-iJ-bKK" firstAttribute="top" secondItem="NzI-sb-8VM" secondAttribute="top" id="fbA-Z3-VY3"/>
                             <constraint firstItem="609-Sf-sF9" firstAttribute="top" secondItem="OmL-Fh-5Jp" secondAttribute="bottom" id="hd0-uw-kdN"/>
+                            <constraint firstItem="oip-Bv-T0W" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="ipW-rC-LBG"/>
                             <constraint firstItem="OmL-Fh-5Jp" firstAttribute="top" secondItem="YRv-YV-FHW" secondAttribute="bottom" id="lHP-Wq-RS6"/>
                             <constraint firstAttribute="trailing" secondItem="OmL-Fh-5Jp" secondAttribute="trailing" id="mT4-Ox-0dR"/>
                             <constraint firstAttribute="trailing" secondItem="BQl-iJ-bKK" secondAttribute="trailing" id="pOb-wT-aLW"/>
+                            <constraint firstAttribute="trailing" secondItem="oip-Bv-T0W" secondAttribute="trailing" id="phG-X1-7Rc"/>
                             <constraint firstItem="YRv-YV-FHW" firstAttribute="top" secondItem="cpC-kT-urS" secondAttribute="bottom" id="r0h-wq-1Zj"/>
-                            <constraint firstItem="YRv-YV-FHW" firstAttribute="top" secondItem="BQl-iJ-bKK" secondAttribute="bottom" id="sqp-JZ-URD"/>
+                            <constraint firstItem="YRv-YV-FHW" firstAttribute="top" secondItem="BQl-iJ-bKK" secondAttribute="bottom" constant="60" id="sqp-JZ-URD"/>
                             <constraint firstItem="OmL-Fh-5Jp" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="vTI-qs-AUn"/>
                             <constraint firstAttribute="trailing" secondItem="YRv-YV-FHW" secondAttribute="trailing" id="xdj-aG-Wa9"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="r0h-wq-1Zj"/>
+                                <exclude reference="sqp-JZ-URD"/>
                             </mask>
                         </variation>
                     </view>
                     <connections>
                         <outlet property="searchBar" destination="YRv-YV-FHW" id="1OM-dG-Aq0"/>
+                        <outlet property="sortByButton" destination="Tm6-P2-xyl" id="8i2-tn-eHA"/>
                         <outlet property="tableView" destination="OmL-Fh-5Jp" id="DJQ-TI-TmF"/>
                         <outlet property="tableViewFooter" destination="ubd-oF-jDC" id="ddQ-V6-Dck"/>
                         <outlet property="topBar" destination="BQl-iJ-bKK" id="efR-C1-mfv"/>
