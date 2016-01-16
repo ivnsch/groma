@@ -139,7 +139,7 @@
         <!--Quick Add List Item View Controller-->
         <scene sceneID="scd-Js-Uye">
             <objects>
-                <viewController id="vbO-Z7-ODC" customClass="QuickAddListItemViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" id="vbO-Z7-ODC" customClass="QuickAddListItemViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LOW-cw-O8Y"/>
                         <viewControllerLayoutGuide type="bottom" id="Rsq-FX-9c2"/>
@@ -246,6 +246,9 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="cN4-H5-trn" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Rng-We-t3f">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

@@ -23,7 +23,7 @@
         <!--Auto Complete Data Source-->
         <scene sceneID="mqV-uX-op9">
             <objects>
-                <viewController storyboardIdentifier="AddEditListItem" id="CI5-0y-OAL" customClass="AddEditListItemViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddEditListItem" extendedLayoutIncludesOpaqueBars="YES" id="CI5-0y-OAL" customClass="AddEditListItemViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="vzl-Zh-ffj"/>
                         <viewControllerLayoutGuide type="bottom" id="su6-gv-v31"/>
