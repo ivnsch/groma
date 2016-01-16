@@ -130,6 +130,10 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
         // do nothing
     }
     
+    func onIncrementItem(model: TableViewListItem, delta: Int) {
+        // do nothing
+    }
+    
     // MARK: -
     
     func startSideMenuDrag() {

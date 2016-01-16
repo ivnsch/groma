@@ -13,6 +13,7 @@ protocol ListItemsTableViewDelegate {
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) // mark as undo
     func onListItemReset(tableViewListItem: TableViewListItem) // revert undo
     func onSectionHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection)
+    func onIncrementItem(model: TableViewListItem, delta: Int)
 }
 
 protocol ListItemsEditTableViewDelegate {
@@ -51,6 +52,23 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     var sectionsExpanded: Bool = true
+    
+    var cellMode: ListItemCellMode = .Note {
+        didSet {
+            // the section is only a "cell producer", it doesn't have access to the cells. So we have to set first the mode in the section (such that when the user scrolls the new cells are loaded with the correct mode, and in the visible cells, which we have access to, via the tableView, separately.
+            for section in tableViewSections {
+                section.cellMode = cellMode
+            }
+            if let cells = tableView.visibleCells as? [ListItemCell] {
+                for cell in cells {
+                    cell.mode = cellMode
+                }
+            } else {
+                print("Error: ListItemsTableViewController.cellMode: Couldn't cast to [ListItemCell]. Cells: \(tableView.visibleCells)")
+            }
+
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,6 +144,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             self.sections.append(listItem.section)
             let tableViewSection = ListItemsViewSection(section: listItem.section, tableViewListItems: [tableViewListItem], hasHeader: hasHeader, status: status)
             tableViewSection.delegate = self
+            tableViewSection.cellMode = cellMode
             self.tableViewSections.append(tableViewSection)
         }
     }
@@ -149,6 +168,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     // so first we should implement persistent sorting, then refactor this class
     // -parameter: increment if, in case it's an update, the quantities of the items should be added together. If false the quantity is just overwritten like the rest of fields
     // -status: the updated status of list item (if the item has switched status (e.g. swipe from todo to done), this is the new status, otherwise it's just the current status of the item)
+    // TODO increment seems not ot be used, what was this for? remove?
     func updateOrAddListItem(listItem: ListItem, status: ListItemStatus, increment: Bool, scrollToSelection: Bool = false, notifyRemote: Bool) {
         if let indexPath = getIndexPath(listItem) {
             let oldItem = tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
@@ -230,6 +250,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                     sections.append(listItem.section)
                     
                     currentTableViewSection = ListItemsViewSection(section: listItem.section, tableViewListItems: [], status: status)
+                    currentTableViewSection.cellMode = cellMode
                     currentTableViewSection.delegate = self
 
                     if self.style == .Gray {
@@ -373,6 +394,14 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         } else {
             print("Error: Invalid state in onNoteTap. There's no note. When there's no note there should be no button so we shouldn't be here.")
         }
+    }
+    
+    func onMinusTap(tableViewListItem: TableViewListItem) {
+        listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: -1)
+    }
+    
+    func onPlusTap(tableViewListItem: TableViewListItem) {
+        listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: 1)
     }
     
     func onHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {

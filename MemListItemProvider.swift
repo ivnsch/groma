@@ -174,6 +174,12 @@ class MemListItemProvider {
         }
     }
     
+    func increment(listItem: ListItem, quantity: ListItemStatusQuantity) -> Bool {
+        // increment only quantity - in mem cache we don't care about quantityDelta, this cache is only used by the UI, not to write objs to database or server
+        let incremented = listItem.increment(quantity)
+        return updateListItem(incremented)
+    }
+    
     // Sets list items to nil
     // With this access to memory cache will be disabled (guards - check for nil) until the next overwrite
     // If we didn't set to nil we would be able to e.g. add list items to a emptied memory cache in which case it will not match the database contents

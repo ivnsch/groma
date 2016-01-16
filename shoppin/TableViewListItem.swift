@@ -10,10 +10,10 @@ import UIKit
 
 class TableViewListItem {
    
-    let listItem:ListItem
-    var swiped:Bool = false
+    let listItem: ListItem
+    var swiped: Bool = false
     
-    init(listItem:ListItem) {
+    init(listItem: ListItem) {
         self.listItem = listItem
     }
 }

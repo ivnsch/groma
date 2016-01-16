@@ -474,6 +474,44 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
+    // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
+    func incrementTodoListItem(item: ListItem, delta: Int, handler: Bool -> ()) {
+        
+        //        synced(self)  {
+        
+        // load
+        let realm = try! Realm()
+        let results = realm.objects(DBListItem).filter("uuid == '\(item.uuid)'")
+//        results = results.filter(NSPredicate(format: DBInventoryItem.createFilter(item.product, item.inventory), argumentArray: []))
+        let objs: [DBListItem] = results.toArray(nil)
+        let dbInventoryItems = objs.map{ListItemMapper.listItemWithDB($0)}
+        let listItemMaybe = dbInventoryItems.first
+        
+        if let listItem = listItemMaybe {
+            // increment
+            let incrementedListitem = listItem.copy(note: nil, todoQuantity: listItem.todoQuantity + delta)
+            
+            // convert to db object
+            let dbIncrementedInventoryitem = ListItemMapper.dbWithListItem(incrementedListitem)
+            
+            // save
+            realm.write {
+                for obj in objs {
+                    obj.lastUpdate = NSDate()
+                    realm.add(dbIncrementedInventoryitem, update: true)
+                }
+            }
+            
+            handler(true)
+            
+            
+        } else {
+            print("Inventory item not found: \(item)")
+            handler(false)
+        }
+        //        }
+    }
+    
     func saveListsSyncResult(syncResult: RemoteListWithListItemsSyncResult, handler: Bool -> ()) {
         
         doInWriteTransaction({realm in

@@ -395,6 +395,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
         listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
         listItemsTableViewController.tableView.topOffset = -listItemsTableViewController.tableView.inset.top
+        
+        listItemsTableViewController.cellMode = editing ? .Increment : .Note
     }
     
     // TODO do we still need this? This was prob used by done view controller to update our list
@@ -484,7 +486,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             topEditSectionControllerManager?.expand(true)
         }
     }
-
+    
+    func onIncrementItem(tableViewListItem: TableViewListItem, delta: Int) {
+        Providers.listItemsProvider.increment(tableViewListItem.listItem, delta: delta, successHandler{[weak self] in
+            // TODO do this in  the provider, provider should return incremented item
+            let incremented: ListItem = tableViewListItem.listItem.increment(ListItemStatusQuantity(status: .Todo, quantity: delta))
+            self?.listItemsTableViewController.updateOrAddListItem(incremented, status: .Todo, increment: false, notifyRemote: false)
+        })
+    }
     
     // MARK: -
     

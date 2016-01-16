@@ -18,6 +18,8 @@ protocol ItemActionsDelegate {
     func undoSwipe(tableViewListItem: TableViewListItem)
     func onNoteTap(tableViewListItem: TableViewListItem)
     func onHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection)
+    func onMinusTap(tableViewListItem: TableViewListItem)
+    func onPlusTap(tableViewListItem: TableViewListItem)
 }
 
 class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
@@ -43,6 +45,8 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
     
     private let headerFont = Fonts.regular
 
+    var cellMode: ListItemCellMode = .Note
+    
     // this could be solved maybe with inheritance or sth like "style injection", for now this is ok
     private var finalLabelFontColor:UIColor {
         var color:UIColor
@@ -146,9 +150,18 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
         cell.onNoteTapFunc = {[weak self] in
             self?.delegate.onNoteTap(tableViewListItem)
         }
+        cell.onMinusTapFunc = {[weak self] in
+            self?.delegate.onMinusTap(tableViewListItem)
+        }
+        cell.onPlusTapFunc = {[weak self] in
+            self?.delegate.onPlusTap(tableViewListItem)
+        }
         
-        cell.noteButton.hidden = tableViewListItem.listItem.note?.isEmpty ?? true
-        
+        cell.mode = cellMode
+
+        let hasNote = tableViewListItem.listItem.note.map{!$0.isEmpty} ?? false
+        cell.noteButton.hidden = cellMode != .Note || !hasNote
+
         cell.setOpen(tableViewListItem.swiped)
         if tableViewListItem.swiped {
             cell.backgroundColor = UIColor.clearColor()
