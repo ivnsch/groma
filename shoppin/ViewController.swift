@@ -83,8 +83,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         topBar.delegate = self
         
-        floatingViews.userInteractionEnabled = false
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItems:", name: WSNotificationName.ListItems.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItem:", name: WSNotificationName.ListItem.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketSection:", name: WSNotificationName.Section.rawValue, object: nil)
