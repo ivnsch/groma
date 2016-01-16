@@ -94,7 +94,7 @@ class MemListItemProvider {
             }
             
             // create the list item and save it
-            let listItem = ListItem(uuid: NSUUID().UUIDString, product: product, section: section, list: list, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: quantity))
+            let listItem = ListItem(uuid: NSUUID().UUIDString, product: product, section: section, list: list, note: note, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: quantity))
             
             self.listItems?[listItem.list]?.append(listItem)
             return listItem

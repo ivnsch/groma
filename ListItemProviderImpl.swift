@@ -299,6 +299,7 @@ class ListItemProviderImpl: ListItemProvider {
                                     product: product,
                                     section: section,
                                     list: list,
+                                    note: note,
                                     statusOrder: ListItemStatusOrder(status: .Todo, order: listItemOrder),
                                     statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: quantity)
                                 )
