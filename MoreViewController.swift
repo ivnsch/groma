@@ -42,7 +42,6 @@ class MoreViewController: UITableViewController, MFMailComposeViewControllerDele
         }
     }
     
-    // src: http://stackoverflow.com/a/13499204/930450
     func share(sharingText: String?, sharingImage: UIImage?, sharingURL: NSURL?) {
         var sharingItems = [AnyObject]()
         if let text = sharingText {
@@ -54,8 +53,16 @@ class MoreViewController: UITableViewController, MFMailComposeViewControllerDele
         if let url = sharingURL {
             sharingItems.append(url)
         }
-        let activityViewController = UIActivityViewController(activityItems: sharingItems, applicationActivities: nil)
-        self.presentViewController(activityViewController, animated: true, completion: nil)
+        
+        view.defaultProgressVisible(true)
+        background({
+            let controller = UIActivityViewController(activityItems: sharingItems, applicationActivities: nil)
+//            controller.excludedActivityTypes = [UIActivityTypeAirDrop]
+            return controller
+        }) {[weak self] (controller: UIViewController) in
+            self?.view.defaultProgressVisible(false)
+            self?.presentViewController(controller, animated: true, completion: nil)
+        }
     }
     
     // MARK: - MFMailComposeViewControllerDelegate
