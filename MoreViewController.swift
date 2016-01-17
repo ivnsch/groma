@@ -32,12 +32,30 @@ class MoreViewController: UITableViewController, MFMailComposeViewControllerDele
                 AlertPopup.show(message: "Couldn't find an email account. If the problem persists, please send us an e-mail manually to the address: \(email)", controller: self)
             }
         case 7: // Share
-            let controller = UIStoryboard.shareAppViewController()
-            navigationController?.setNavigationBarHidden(true, animated: false)
-            navigationController?.pushViewController(controller, animated: true)
+            share("Message message", sharingImage: nil, sharingURL: NSURL(string: "https://developers.facebook.com"))
+            // Initially implemented this, which contains facebook sharing using its SDK. It seems with the default share we achieve the same functionality (Facebook seems to not allow to add title and description to links to the app store, which is what we want to link to, see https://developers.facebook.com/docs/sharing/ios - this would have been the only reason to use the SDK). Letting it commented just in case.
+//            let controller = UIStoryboard.shareAppViewController()
+//            navigationController?.setNavigationBarHidden(true, animated: false)
+//            navigationController?.pushViewController(controller, animated: true)
             
         default: break
         }
+    }
+    
+    // src: http://stackoverflow.com/a/13499204/930450
+    func share(sharingText: String?, sharingImage: UIImage?, sharingURL: NSURL?) {
+        var sharingItems = [AnyObject]()
+        if let text = sharingText {
+            sharingItems.append(text)
+        }
+        if let image = sharingImage {
+            sharingItems.append(image)
+        }
+        if let url = sharingURL {
+            sharingItems.append(url)
+        }
+        let activityViewController = UIActivityViewController(activityItems: sharingItems, applicationActivities: nil)
+        self.presentViewController(activityViewController, animated: true, completion: nil)
     }
     
     // MARK: - MFMailComposeViewControllerDelegate
