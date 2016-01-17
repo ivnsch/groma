@@ -35,6 +35,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     }
     
     func onRegisterFromLoginSuccess() {
+        navigationController?.popViewControllerAnimated(true)
         self.onLoginOrRegisterSuccess()
     }
     
@@ -67,14 +68,10 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     private func showLoginController() {
         let loginController = UIStoryboard.loginViewController()
         loginController.delegate = self
-        
-        let navigationController = UINavigationController()
-        navigationController.pushViewController(loginController, animated: false)
-        self.replaceController(navigationController)
+        self.replaceController(loginController)
     }
     
     private func replaceController(newController: UIViewController) {
-        
         // these loops could be replaced with first? but loop just feels better
         for view in self.view.subviews {
             view.removeFromSuperview()
@@ -82,11 +79,6 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
         for controller in self.childViewControllers {
             controller.removeFromParentViewController()
         }
-        self.addChildViewControllerAndView(newController)
-        newController.view.translatesAutoresizingMaskIntoConstraints = false
-        // for some reason matchSize constraint doesn't work properly here (gap at the bottom) so need + 50
-        view.addConstraints([
-            NSLayoutConstraint.matchWidth(view: newController.view, otherView: view)])
-        newController.view.heightConstraint(view.frame.height + 50)
+        self.addChildViewControllerAndViewFill(newController)
     }
 }
