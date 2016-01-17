@@ -89,6 +89,10 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
     private func initTopBar() {
         topBar.setBackVisible(true)
         topBar.title = "Products"
