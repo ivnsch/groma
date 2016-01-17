@@ -36,7 +36,12 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         super.viewWillAppear(true)
         self.navigationController?.navigationBarHidden = true
         
-        initDatabase()
+        if PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false {
+//            setButtonsEnabled(false) // for now don't disable anything as db is still small, and disable buttons in intro must be tested very carefully!
+            initDatabase {
+//                self?.setButtonsEnabled(true)
+            }
+        }
     }
     
     private func setButtonsEnabled(enabled: Bool) {
@@ -51,22 +56,61 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         self.navigationController?.pushViewController(loginController, animated: true)
     }
 
-    private func initDatabase() {
-        Providers.inventoryProvider.inventories(successHandler{[weak self] inventories in
-            if let weakSelf = self {
-                if inventories.isEmpty {
-                    weakSelf.setButtonsEnabled(false)
-                    let inventory = Inventory(uuid: NSUUID().UUIDString, name: "Home", bgColor: UIColor.flatBlueColor(), order: 0)
-                    Providers.inventoryProvider.addInventory(inventory, remote: true, weakSelf.resultHandler(onSuccess: {
-                        weakSelf.setButtonsEnabled(true)
-                        }, onError: {result in
-                        // let the user start if there's an error (we don't expect any, but just in case!)
-                        // it would be very bad if user can't get past intro for whatever reason. Both adding default inventory and default products (TODO) are not critical for the app to be usable.
-                        weakSelf.setButtonsEnabled(true)
-                    }))
+    private func initDatabase(onComplete: VoidFunction) {
+        
+        func prefillDatabase(onFinish: VoidFunction? = nil) {
+            background({
+                let p = NSHomeDirectory() + "/Documents/default.realm"
+                if let prefillPath = NSBundle.mainBundle().pathForResource("prefill", ofType: "realm") {
+                    print("Copying prefill database to: \(p)")
+                    do {
+                        try NSFileManager.defaultManager().copyItemAtPath(prefillPath, toPath: p)
+                        print("Copied prefill database")
+                        onFinish?()
+                        return true
+                        
+                    } catch let error as NSError {
+                        print("Error copying prefill database: \(error)")
+                        return false
+                    }
+                } else {
+                    print("Prefill database was not found")
+                    return false
                 }
+                }) {(success: Bool) in
+                    if !success {
+                        print("Error: IntroViewController.prefillDatabase: Not success prefilling database")
+                    }
+                    onFinish?() // don't return anything, if prefill fails we still start the app normally
             }
-        })
+        }
+        
+        func initDefaultInventory(onFinish: VoidFunction? = nil) {
+            Providers.inventoryProvider.inventories(successHandler{[weak self] inventories in
+                if let weakSelf = self {
+                    if inventories.isEmpty {
+                        let inventory = Inventory(uuid: NSUUID().UUIDString, name: "Home", bgColor: UIColor.flatBlueColor(), order: 0)
+                        Providers.inventoryProvider.addInventory(inventory, remote: true, weakSelf.resultHandler(onSuccess: {
+                            onFinish?()
+                            }, onError: {result in
+                                // let the user start if there's an error (we don't expect any, but just in case!)
+                                // it would be very bad if user can't get past intro for whatever reason. Both adding default inventory and default products (TODO) are not critical for the app to be usable.
+                                onFinish?()
+                        }))
+                    } else {
+                        onFinish?()
+                    }
+                }
+            })
+        }
+
+        prefillDatabase {
+            print("Info: saved prefill database")
+            initDefaultInventory {
+                print("Info: saved default inventory")
+                onComplete()
+            }
+        }
     }
 
     @IBAction func registerTapped(sender: UIButton) {

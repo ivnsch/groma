@@ -24,24 +24,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let listProvider = RealmListItemProvider() // arc
     private let inventoryProvider = RealmInventoryProvider() // arc
     
+    private var suggestionsPrefiller: SuggestionsPrefiller? // arc
+
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+
+        initIsFirstLaunch()
         
-        if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) {
-            PreferencesManager.savePreference(PreferencesManagerKey.hasLaunchedBefore, value: true)
-            self.firstLaunchSetup()
-        }
+        ifDebugActions()
         
-        let viewController: UIViewController = {
-            if PreferencesManager.loadPreference(PreferencesManagerKey.showIntro) ?? true {
-                return UIStoryboard.introNavController()
-            } else {
-                return UIStoryboard.mainTabController()
-            }
-        }()
-        
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        self.window?.rootViewController = viewController
-        self.window?.makeKeyAndVisible()
+        showFirstController()
 
         initReachability()
 
@@ -50,7 +41,53 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Facebook sign-in
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
+    
+    private func showFirstController() {
+        let viewController: UIViewController = {
+            // The intro is shown (even if user stops the app and comes back) until it's completed (log in / register success or skip)
+            if PreferencesManager.loadPreference(PreferencesManagerKey.showIntro) ?? true {
+                return UIStoryboard.introNavController()
+            } else {
+                return UIStoryboard.mainTabController()
+            }
+        }()
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        self.window?.rootViewController = viewController
+        self.window?.makeKeyAndVisible()
+    }
+    
+    private func initIsFirstLaunch() {
+        if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
+            PreferencesManager.savePreference(PreferencesManagerKey.hasLaunchedBefore, value: true)
+            PreferencesManager.savePreference(PreferencesManagerKey.isFirstLaunch, value: true)
+        } else { // after first launch
+            PreferencesManager.savePreference(PreferencesManagerKey.isFirstLaunch, value: false)
+        }
+    }
 
+    // Actions executed if app is in debug mode
+    private func ifDebugActions() {
+        #if DEBUG
+//            generatePrefillDatabase() // enable this only to generate prefilled database
+            if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
+                debugFirstLaunchSetup()
+            }
+            #else
+        #endif
+    }
+
+    /**
+    * Create database which we embed in the app in order to prefill the app's database
+    * TODO try to use test for this (PrefillDatabase - not working because sth with Realm). This should not be in of the app.
+    */
+    private func generatePrefillDatabase() {
+        print("Creating prefilled database")
+        self.suggestionsPrefiller = SuggestionsPrefiller()
+        self.suggestionsPrefiller?.prefill {
+            print("Finished creating prefilled database")
+        }
+    }
+    
     private func initGlobalAppearance() {
         UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: Fonts.superSmallLight], forState: .Normal)
         UINavigationBar.appearance().titleTextAttributes = [NSFontAttributeName: Fonts.regular, NSForegroundColorAttributeName: Theme.navigationBarTextColor]
@@ -78,42 +115,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return false
         }
     }
-    
-    private func firstLaunchSetup() {
-        #if DEBUG
-            debugFirstLaunchSetup()
-            #else
-        #endif
-        // TODO async and timing, ensure any other component that touches realm runs after prefill is finished. Prefill creates the realm file.
-        // since this is done the first time it may make sense to put it in the intro screen? this way also more controllable
-        prefillDatabase()
-    }
-    
-    private func prefillDatabase(onFinish: VoidFunction? = nil) {
 
-        let p = NSHomeDirectory() + "/Documents/default.realm"
-        if let prefillPath = NSBundle.mainBundle().pathForResource("prefill", ofType: "realm") {
-            print("Copying prefill database to: \(p)")
-            do {
-                try NSFileManager.defaultManager().copyItemAtPath(prefillPath, toPath: p)
-                print("Copied prefill database")
-                onFinish?()
-                
-            } catch let error as NSError {
-                print("Error copying prefill database: \(error)")
-                onFinish?()
-            }
-        } else {
-            print("Prefill database was not found")
-            onFinish?()
-        }
-    }
-    
-    
     // MARK: - Debug
     
     private func debugFirstLaunchSetup() {
-        self.addDummyData()
+//        self.addDummyData()
     }
     
     private func addDummyData() {

@@ -1043,6 +1043,7 @@
 		EB8D1D161C3994BE00ADF884 /* ProductsWithQuantity.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ProductsWithQuantity.storyboard; sourceTree = "<group>"; };
 		EB8EDD261C18A45700A92136 /* MyWebsocketDispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWebsocketDispatcher.swift; sourceTree = "<group>"; };
 		EB9207C81C4BD3F600332332 /* AsyncUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncUtils.swift; sourceTree = "<group>"; };
+		EB9207CD1C4C1F9200332332 /* prefill.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefill.realm; sourceTree = "<group>"; };
 		EB969FE01BE4371200F5BC35 /* ProductAggregateCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductAggregateCell.swift; sourceTree = "<group>"; };
 		EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemProvider.swift; sourceTree = "<group>"; };
 		EB9BE4181B2CB355005B401A /* RemoteListItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItems.swift; sourceTree = "<group>"; };
@@ -1138,7 +1139,6 @@
 		EBBC232A1BB600DE0002F6B1 /* ConfirmationPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmationPopup.swift; sourceTree = "<group>"; };
 		EBBC232C1BB607DA0002F6B1 /* ConfirmationPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmationPopup.swift; sourceTree = "<group>"; };
 		EBBC23301BB6C91A0002F6B1 /* TaggedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaggedView.swift; sourceTree = "<group>"; };
-		EBBC23321BB824020002F6B1 /* prefill.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefill.realm; sourceTree = "<group>"; };
 		EBBC9B771C00D7190046966B /* RealmProductProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProductProvider.swift; sourceTree = "<group>"; };
 		EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemWithHistory.swift; sourceTree = "<group>"; };
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
@@ -1408,7 +1408,7 @@
 		EB1DDE9C1A3334EC00D778DE = {
 			isa = PBXGroup;
 			children = (
-				EBBC23321BB824020002F6B1 /* prefill.realm */,
+				EB9207CD1C4C1F9200332332 /* prefill.realm */,
 				EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */,
 				EB1DDEA71A3334EC00D778DE /* shoppin */,
 				EB55675A1A8622E600CD3EC6 /* shoppin_ios */,

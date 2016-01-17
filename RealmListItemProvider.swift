@@ -200,22 +200,6 @@ class RealmListItemProvider: RealmProvider {
         self.load(mapper, handler: handler)
     }
     
-    /**
-    * Batch save of product suggestions, used to prefill database
-    */
-    func saveProductSuggestions(suggestions: [Suggestion], handler: Bool -> ()) {
-        let dbSuggestions = suggestions.map{ProductSuggestionMapper.dbWithSuggestion($0)}
-        self.saveObjs(dbSuggestions, update: true, handler: handler)
-    }
-
-    /**
-    * Batch save of section suggestions, used to prefill database
-    */
-    func saveSectionSuggestions(suggestions: [Suggestion], handler: Bool -> ()) {
-        let dbSuggestions = suggestions.map{SectionSuggestionMapper.dbWithSuggestion($0)}
-        self.saveObjs(dbSuggestions, update: true, handler: handler)
-    }
-    
     // MARK: - List
     
     func saveList(list: List, handler: Bool -> ()) {

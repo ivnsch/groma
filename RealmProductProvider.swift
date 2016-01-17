@@ -40,4 +40,29 @@ class RealmProductProvider: RealmProvider {
             handler(savedMaybe ?? false)
         })
     }
+    
+    func save(categories: [ProductCategory], products: [Product], _ handler: Bool -> Void) {
+        
+        let dbCategories = categories.map{ProductCategoryMapper.dbWithCategory($0)}
+        let dbProducts = products.map{ProductMapper.dbWithProduct($0)}
+        
+        doInWriteTransaction({realm in
+            for dbCategory in dbCategories {
+                print("saving cat: \(dbCategory.uuid)")
+                realm.add(dbCategory, update: false)
+            }
+            for dbProduct in dbProducts {
+                print("saving prod: \(dbProduct.uuid)")
+                realm.add(dbProduct, update: true) // update: true: apparently the product tries to save again its category and with update: false this results in a duplicate (category) uuid exception!
+            }
+            return true
+            
+            }, finishHandler: {(savedMaybe: Bool?) in
+                let saved: Bool = savedMaybe.map{$0} ?? false
+                if !saved {
+                    print("Error: RealmProductProvider.save: couldn't save")
+                }
+                handler(saved)
+        })
+    }
 }

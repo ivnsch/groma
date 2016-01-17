@@ -12,6 +12,7 @@ import Foundation
 enum PreferencesManagerKey: String {
     case listId = "listId"
     case hasLaunchedBefore = "hasLaunchedBefore"
+    case isFirstLaunch = "isFirstLaunch"
     case email = "email"
     case deviceId = "did"
     case showIntro = "showIntro"
