@@ -33,6 +33,7 @@ extension UIStoryboard {
     private class func addEditInventoryItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditInventoryItem", bundle: NSBundle.mainBundle()) }
     private class func scaleStoryboard() -> UIStoryboard { return UIStoryboard(name: "Scale", bundle: NSBundle.mainBundle()) }
     private class func productsWithQuantityStoryboard() -> UIStoryboard { return UIStoryboard(name: "ProductsWithQuantity", bundle: NSBundle.mainBundle()) }
+    private class func shareAppStoryboard() -> UIStoryboard { return UIStoryboard(name: "ShareApp", bundle: NSBundle.mainBundle()) }
 
     
     // MARK: - List items
@@ -188,4 +189,11 @@ extension UIStoryboard {
     class func productsWithQuantityViewController() -> ProductsWithQuantityViewController {
         return productsWithQuantityStoryboard().instantiateViewControllerWithIdentifier("ProductsWithQuantityViewController") as! ProductsWithQuantityViewController
     }
+    
+    // MARK: Share app
+    
+    class func shareAppViewController() -> ShareAppViewController {
+        return shareAppStoryboard().instantiateViewControllerWithIdentifier("ShareAppViewController") as! ShareAppViewController
+    }
+    
 }

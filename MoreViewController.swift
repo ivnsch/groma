@@ -31,6 +31,10 @@ class MoreViewController: UITableViewController, MFMailComposeViewControllerDele
             } else {
                 AlertPopup.show(message: "Couldn't find an email account. If the problem persists, please send us an e-mail manually to the address: \(email)", controller: self)
             }
+        case 7: // Share
+            let controller = UIStoryboard.shareAppViewController()
+            navigationController?.setNavigationBarHidden(true, animated: false)
+            navigationController?.pushViewController(controller, animated: true)
             
         default: break
         }

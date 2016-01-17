@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+        </mutableArray>
+    </customFonts>
+    <scenes>
+        <!--Share App View Controller-->
+        <scene sceneID="zoD-dh-h9Z">
+            <objects>
+                <viewController storyboardIdentifier="ShareAppViewController" id="mXs-f9-7lK" customClass="ShareAppViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vUs-rI-CER"/>
+                        <viewControllerLayoutGuide type="bottom" id="xjX-b5-vAH"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cbS-vQ-asw">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PW9-oj-ybu" customClass="FBSDKShareButton">
+                                <rect key="frame" x="285" y="161" width="30" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share Shoppin with your contacts!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nHw-Nj-W56">
+                                <rect key="frame" x="174" y="80" width="252" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="PW9-oj-ybu" firstAttribute="centerX" secondItem="cbS-vQ-asw" secondAttribute="centerX" id="GX7-X8-hnh"/>
+                            <constraint firstItem="nHw-Nj-W56" firstAttribute="centerX" secondItem="cbS-vQ-asw" secondAttribute="centerX" id="KXo-ry-Oje"/>
+                            <constraint firstItem="PW9-oj-ybu" firstAttribute="top" secondItem="nHw-Nj-W56" secondAttribute="bottom" constant="60" id="LLr-PB-FdI"/>
+                            <constraint firstItem="nHw-Nj-W56" firstAttribute="top" secondItem="vUs-rI-CER" secondAttribute="bottom" constant="60" id="kvu-SR-f7J"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="facebookButton" destination="PW9-oj-ybu" id="kTG-Uh-dSC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LxH-sS-Yz4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="418" y="401"/>
+        </scene>
+    </scenes>
+</document>
