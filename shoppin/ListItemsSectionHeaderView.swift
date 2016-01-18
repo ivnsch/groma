@@ -19,7 +19,7 @@ class ListItemsSectionHeaderView: UIView {
     var section: Section? {
         didSet {
             if let section = section {
-                nameLabel.text = section.name
+                nameLabel.text = NSLocalizedString(section.name, comment: "")
             }
         }
     }

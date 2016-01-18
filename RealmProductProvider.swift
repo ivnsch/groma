@@ -48,11 +48,11 @@ class RealmProductProvider: RealmProvider {
         
         doInWriteTransaction({realm in
             for dbCategory in dbCategories {
-                print("saving cat: \(dbCategory.uuid)")
+//                print("saving cat: \(dbCategory.uuid)")
                 realm.add(dbCategory, update: false)
             }
             for dbProduct in dbProducts {
-                print("saving prod: \(dbProduct.uuid)")
+//                print("saving prod: \(dbProduct.uuid)")
                 realm.add(dbProduct, update: true) // update: true: apparently the product tries to save again its category and with update: false this results in a duplicate (category) uuid exception!
             }
             return true

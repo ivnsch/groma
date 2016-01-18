@@ -23,6 +23,8 @@ class SuggestionsPrefiller {
 
         let (categories, products) = prefillProducts()
         
+//        printStringsForTranslations(categories, products: products)
+        
         dbProvider.save(categories, products: products) {[weak self] saved in
             print("Finished prefilling")
             self?.writeDBCopy(NSHomeDirectory() + "/Documents/prefill.realm")
@@ -153,7 +155,6 @@ class SuggestionsPrefiller {
             Product(uuid: uuid, name: "pf_93.water", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: "pf_93.water_1", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: "pf_93.club_mate", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.club_mate", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: "pf_93.cola_1", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: "pf_93.cola_1_5", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: "pf_93.cola_2", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
@@ -173,13 +174,11 @@ class SuggestionsPrefiller {
             Product(uuid: uuid, name: "pf_93.oil", price: 0, category: oilCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: "pf_93.oil_olives", price: 0, category: oilCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: "pf_93.oil_sunflower", price: 0, category: oilCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.oil_rape", price: 0, category: oilCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: "pf_93.oil_rapeseed", price: 0, category: oilCat, baseQuantity: 1, unit: .None),
             
             // hygienic
             Product(uuid: uuid, name: "pf_93.soap_body", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: "pf_93.soap_hands", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.soap_body_liquid", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.soap_hands_liquid", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: "pf_93.shampoo", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: "pf_93.toothpaste", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: "pf_93.deodorant", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
@@ -235,7 +234,6 @@ class SuggestionsPrefiller {
 
             Product(uuid: uuid, name: "pf_93.beans_kidney", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: "pf_93.beans_string", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.beans_string", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: "pf_93.corn", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
             
             Product(uuid: uuid, name: "pf_93.eggs", price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
@@ -272,5 +270,16 @@ class SuggestionsPrefiller {
         let categories = [fruitsCat, vegetablesCat, milkCat, meatCat, fishCat, pastaCat, drinksCat, cleaningCat, hygienicCat, spicesCat, breadCat]
         
         return (categories, products)
+    }
+    
+    func printStringsForTranslations(categories: [ProductCategory], products: [Product]) {
+        print("#####################################")
+        for category in categories {
+            print("\(category.name) = \"\";")
+        }
+        for product in products {
+            print("\(product.name) = \"\";")
+        }
+        print("#####################################")
     }
 }

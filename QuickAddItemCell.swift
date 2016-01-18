@@ -16,7 +16,7 @@ class QuickAddItemCell: UICollectionViewCell {
     var item: QuickAddProduct? {
         didSet {
             if let item = item {
-                nameLabel.text = item.labelText
+                nameLabel.text = NSLocalizedString(item.labelText, comment: "")
                 contentView.backgroundColor = item.product.category.color.colorWithAlphaComponent(0.5)
                 nameLabel.textColor = UIColor.darkTextColor()
             }

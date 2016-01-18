@@ -133,7 +133,8 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
         
         let tableViewListItem = tableViewListItems[row]
         
-        cell.nameLabel.text = tableViewListItem.listItem.product.name
+        
+        cell.nameLabel.text = NSLocalizedString(tableViewListItem.listItem.product.name, comment: "")
         cell.quantityLabel.text = String(tableViewListItem.listItem.quantity(status))
         
         cell.labelColor = self.finalLabelFontColor

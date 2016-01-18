@@ -128,7 +128,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         
         let model = self.models[indexPath.row]
         
-        cell.nameLabel.text = model.product.name
+        cell.nameLabel.text = NSLocalizedString(model.product.name, comment: "")
         cell.quantityLabel.text = String(model.quantity)
         
         cell.model = model

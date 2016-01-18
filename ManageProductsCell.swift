@@ -22,13 +22,14 @@ class ManageProductsCell: UITableViewCell {
     var product: ItemWithCellAttributes<Product>? {
         didSet {
             if let product = product {
+                let productNameTranslation = NSLocalizedString(product.item.name, comment: "")
                 if let boldRange = product.boldRange {
-                    productNameLabel.attributedText = product.item.name.makeAttributedBoldRegular(boldRange)
+                    productNameLabel.attributedText = productNameTranslation.makeAttributedBoldRegular(boldRange)
                 } else {
-                    productNameLabel.text = product.item.name
+                    productNameLabel.text = productNameTranslation
                 }
                 
-                productCategoryLabel.text = product.item.category.name
+                productCategoryLabel.text = NSLocalizedString(product.item.category.name, comment: "")
                 productPriceLabel.text = product.item.price.toLocalCurrencyString()
             }
         }

@@ -105,9 +105,9 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         }
 
         prefillDatabase {
-            print("Info: saved prefill database")
+            print("Info: Finished prefill database")
             initDefaultInventory {
-                print("Info: saved default inventory")
+                print("Info: Finished default inventory")
                 onComplete()
             }
         }

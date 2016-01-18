@@ -456,6 +456,9 @@
 		EB9207C91C4BD3F600332332 /* AsyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9207C81C4BD3F600332332 /* AsyncUtils.swift */; settings = {ASSET_TAGS = (); }; };
 		EB9207CA1C4BD3F600332332 /* AsyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9207C81C4BD3F600332332 /* AsyncUtils.swift */; settings = {ASSET_TAGS = (); }; };
 		EB9207CB1C4BD3F600332332 /* AsyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9207C81C4BD3F600332332 /* AsyncUtils.swift */; settings = {ASSET_TAGS = (); }; };
+		EB9207E81C4C4FC200332332 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EB9207EA1C4C4FC200332332 /* Localizable.strings */; };
+		EB9207EE1C4C522700332332 /* ForgotPassword.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB9207F01C4C522700332332 /* ForgotPassword.storyboard */; };
+		EB9207FF1C4C743400332332 /* prefill.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB9207FE1C4C733900332332 /* prefill.realm */; };
 		EB969FE11BE4371200F5BC35 /* ProductAggregateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB969FE01BE4371200F5BC35 /* ProductAggregateCell.swift */; };
 		EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
 		EB9BE4171B2C6556005B401A /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
@@ -774,7 +777,6 @@
 		EBF7CE8B1C3C9E6E00F9DB8A /* SharedUserChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF7CE8A1C3C9E6E00F9DB8A /* SharedUserChecker.swift */; settings = {ASSET_TAGS = (); }; };
 		EBFD15C11BA7F59600E37342 /* AlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFD15C01BA7F59600E37342 /* AlertPopup.swift */; };
 		EBFD15C41BA7F99B00E37342 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFD15C31BA7F99B00E37342 /* ForgotPasswordViewController.swift */; };
-		EBFD15C81BA7FA6500E37342 /* ForgotPassword.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBFD15C71BA7FA6500E37342 /* ForgotPassword.storyboard */; };
 		EBFDD6A51C0235000012523D /* MyWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFDD6A41C0235000012523D /* MyWebSocket.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
@@ -1043,7 +1045,15 @@
 		EB8D1D161C3994BE00ADF884 /* ProductsWithQuantity.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ProductsWithQuantity.storyboard; sourceTree = "<group>"; };
 		EB8EDD261C18A45700A92136 /* MyWebsocketDispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWebsocketDispatcher.swift; sourceTree = "<group>"; };
 		EB9207C81C4BD3F600332332 /* AsyncUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncUtils.swift; sourceTree = "<group>"; };
-		EB9207CD1C4C1F9200332332 /* prefill.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefill.realm; sourceTree = "<group>"; };
+		EB9207E91C4C4FC200332332 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EB9207EC1C4C500C00332332 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
+		EB9207ED1C4C500C00332332 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EB9207EF1C4C522700332332 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/ForgotPassword.storyboard; sourceTree = "<group>"; };
+		EB9207F41C4C525E00332332 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ForgotPassword.strings; sourceTree = "<group>"; };
+		EB9207F91C4C5FBC00332332 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
+		EB9207FA1C4C5FBD00332332 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/ForgotPassword.strings; sourceTree = "<group>"; };
+		EB9207FB1C4C5FBE00332332 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EB9207FE1C4C733900332332 /* prefill.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefill.realm; sourceTree = "<group>"; };
 		EB969FE01BE4371200F5BC35 /* ProductAggregateCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductAggregateCell.swift; sourceTree = "<group>"; };
 		EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemProvider.swift; sourceTree = "<group>"; };
 		EB9BE4181B2CB355005B401A /* RemoteListItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItems.swift; sourceTree = "<group>"; };
@@ -1233,7 +1243,6 @@
 		EBF7CE8A1C3C9E6E00F9DB8A /* SharedUserChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUserChecker.swift; sourceTree = "<group>"; };
 		EBFD15C01BA7F59600E37342 /* AlertPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertPopup.swift; sourceTree = "<group>"; };
 		EBFD15C31BA7F99B00E37342 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
-		EBFD15C71BA7FA6500E37342 /* ForgotPassword.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ForgotPassword.storyboard; sourceTree = "<group>"; };
 		EBFDD6A41C0235000012523D /* MyWebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWebSocket.swift; sourceTree = "<group>"; };
 		ED602ABB2DEEE49607500199 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		EF20317B4274E286EAD0FF2C /* Pods-shoppin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-shoppin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-shoppin/Pods-shoppin.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1408,7 +1417,7 @@
 		EB1DDE9C1A3334EC00D778DE = {
 			isa = PBXGroup;
 			children = (
-				EB9207CD1C4C1F9200332332 /* prefill.realm */,
+				EB9207FE1C4C733900332332 /* prefill.realm */,
 				EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */,
 				EB1DDEA71A3334EC00D778DE /* shoppin */,
 				EB55675A1A8622E600CD3EC6 /* shoppin_ios */,
@@ -1741,6 +1750,7 @@
 				EB22C7121C4B031E00285352 /* shareApp */,
 				EBB5266D1BEFD8820002A286 /* help */,
 				EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */,
+				EB9207EA1C4C4FC200332332 /* Localizable.strings */,
 			);
 			name = shoppin_ios;
 			sourceTree = "<group>";
@@ -2466,7 +2476,7 @@
 			isa = PBXGroup;
 			children = (
 				EBFD15C31BA7F99B00E37342 /* ForgotPasswordViewController.swift */,
-				EBFD15C71BA7FA6500E37342 /* ForgotPassword.storyboard */,
+				EB9207F01C4C522700332332 /* ForgotPassword.storyboard */,
 			);
 			name = forgotPassword;
 			sourceTree = "<group>";
@@ -2610,6 +2620,8 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
+				es,
 			);
 			mainGroup = EB1DDE9C1A3334EC00D778DE;
 			productRefGroup = EB1DDEA61A3334EC00D778DE /* Products */;
@@ -2628,6 +2640,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB9207FF1C4C743400332332 /* prefill.realm in Resources */,
 				EB7BFA7C1BDA5BE500F4C74A /* QuantityCell.xib in Resources */,
 				EBDF8D111BFB7E4200F6830A /* ListTopBarView.xib in Resources */,
 				EB70327D1BEB700900779EBB /* ListItemsSectionHeaderView.xib in Resources */,
@@ -2638,7 +2651,7 @@
 				EB1B365B1BC4637A003519F2 /* PlanTableViewCell_.xib in Resources */,
 				EB85F47F1BD6EDBC00E19E9B /* AddEditListItem.storyboard in Resources */,
 				EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */,
-				EBFD15C81BA7FA6500E37342 /* ForgotPassword.storyboard in Resources */,
+				EB9207EE1C4C522700332332 /* ForgotPassword.storyboard in Resources */,
 				EB0C1B971B3DBD1300F24C85 /* Login.storyboard in Resources */,
 				EB85F4531BD5393800E19E9B /* QuickAddListItem.storyboard in Resources */,
 				EB1B36501BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */,
@@ -2663,6 +2676,7 @@
 				EB0C1B9A1B3DBF7F00F24C85 /* Register.storyboard in Resources */,
 				EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */,
 				EB5737BB1BF27B1800D52FB8 /* SharedUsersViewController.storyboard in Resources */,
+				EB9207E81C4C4FC200332332 /* Localizable.strings in Resources */,
 				EBD558CD1BF3C11E0048F287 /* Scale.storyboard in Resources */,
 				EB22C7141C4B034400285352 /* ShareApp.storyboard in Resources */,
 			);
@@ -3582,6 +3596,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				EB1DDEB21A3334EC00D778DE /* Base */,
+				EB9207EC1C4C500C00332332 /* de */,
+				EB9207F91C4C5FBC00332332 /* es */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -3592,6 +3608,26 @@
 				EB1DDEB71A3334EC00D778DE /* Base */,
 			);
 			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		EB9207EA1C4C4FC200332332 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EB9207E91C4C4FC200332332 /* Base */,
+				EB9207ED1C4C500C00332332 /* de */,
+				EB9207FB1C4C5FBE00332332 /* es */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		EB9207F01C4C522700332332 /* ForgotPassword.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				EB9207EF1C4C522700332332 /* Base */,
+				EB9207F41C4C525E00332332 /* de */,
+				EB9207FA1C4C5FBD00332332 /* es */,
+			);
+			name = ForgotPassword.storyboard;
 			sourceTree = "<group>";
 		};
 		EB9F6CEC1A8610550038355B /* Main.storyboard */ = {
