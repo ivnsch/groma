@@ -207,7 +207,7 @@ class ListItemProviderImpl: ListItemProvider {
 
             if let section = result.sucessResult {
                 
-                Providers.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.category, categoryColor: listItemInput.categoryColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit) {result in
+                Providers.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.category, categoryColor: listItemInput.categoryColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand) {result in
             
                     if let product = result.sucessResult {
                     
@@ -250,7 +250,7 @@ class ListItemProviderImpl: ListItemProvider {
                             // theoretically the state in mem should match the state in db so this fetch should not be necessary, but for now let's be secure.
                             
                             // see if there's already a listitem for this product in the list - if yes only increment it
-                            if let existingListItem = realm.objects(DBListItem).filter("product.name == '\(product.name)'").first {
+                            if let existingListItem = realm.objects(DBListItem).filter(DBListItem.createFilter(list, product: product)).first {
                                 existingListItem.increment(ListItemStatusQuantity(status: .Todo, quantity: quantity))
                                 
                                 // possible updates (when user submits a new list item using add edit product controller)
@@ -271,7 +271,7 @@ class ListItemProviderImpl: ListItemProvider {
                             } else { // no list item for product in the list, create a new one
                                 
                                 // see if there's already a section for the new list item in the list, if not create a new one
-                                let listItemsInList = realm.objects(DBListItem).filter("list.uuid == '\(list.uuid)'")
+                                let listItemsInList = realm.objects(DBListItem).filter(DBListItem.createFilter(list))
                                 //                let sectionName = sectionNameMaybe ?? product.category
                                 let sectionName = sectionName ?? product.category.name
                                 let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs

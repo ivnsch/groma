@@ -137,6 +137,9 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
         cell.nameLabel.text = NSLocalizedString(listItem.product.name, comment: "")
         cell.quantityLabel.text = String("\(listItem.quantity(status)) \(listItem.product.unit.shortText)")
         
+        cell.centerVerticallyNameLabelConstraint.constant = listItem.product.brand.isEmpty ? 0 : 10
+        cell.brandLabel.text = listItem.product.brand
+        
         cell.labelColor = self.finalLabelFontColor
 //        cell.delegate = self
         cell.itemSwiped = {[weak self] in // use a closure to capture listitem

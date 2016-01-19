@@ -73,9 +73,10 @@ extension Array where Element: ListItem {
         return Set(map{$0.section}).count
     }
     
-    func findFirstWithProductName(productName: String) -> ListItem? {
+    func findFirstWithProductNameAndBrand(productName: String, brand: String) -> ListItem? {
+        
         for listItem in self {
-            if listItem.product.name == productName {
+            if listItem.product.name == productName && listItem.product.brand == brand {
                 return listItem
             }
         }

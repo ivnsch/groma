@@ -48,4 +48,13 @@ class DBListItem: DBSyncable {
         case .Stash: stashQuantity += quantity.quantity
         }
     }
+
+    static func createFilter(list: List) -> String {
+        return "list.uuid == '\(list.uuid)'"
+    }
+    
+    static func createFilter(list: List, product: Product) -> String {
+        let brand = product.brand ?? ""
+        return "\(createFilter(list)) && product.name == '\(product.name)' && product.brand == '\(brand)'"
+    }
 }

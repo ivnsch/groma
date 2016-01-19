@@ -23,6 +23,10 @@ class QuickAddItem: Identifiable {
     var labelText: String {
         fatalError("Override")
     }
+    
+    var label2Text: String? {
+        fatalError("Override")
+    }
 
     func clearBoldRangeCopy() -> QuickAddItem {
         return QuickAddItem()

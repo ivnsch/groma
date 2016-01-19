@@ -16,6 +16,7 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     let baseQuantity: Float
     let unit: Int
     let fav: Int
+    let brand: String
     
     init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
@@ -25,6 +26,7 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
         self.baseQuantity = representation.valueForKeyPath("baseQuantity") as! Float
         self.unit = representation.valueForKeyPath("unit") as! Int
         self.fav = representation.valueForKeyPath("fav") as! Int
+        self.brand = representation.valueForKeyPath("brand") as! String
     }
     
     static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteProduct] {
@@ -38,6 +40,6 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), price: \(price), categoryUuid: \(categoryUuid), baseQuantity: \(baseQuantity), unit: \(unit), fav: \(fav)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), price: \(price), categoryUuid: \(categoryUuid), baseQuantity: \(baseQuantity), unit: \(unit), fav: \(fav), brand: \(brand)}"
     }
 }

@@ -56,6 +56,19 @@ class RealmListItemProvider: RealmProvider {
         self.saveObjs(dbSections, update: true, handler: handler)
     }
     
+    // MARK: - Brand
+
+    func brands(handler: [String] -> Void) {
+        do {
+            let realm = try Realm()
+            let brands: [String] = Array(Set(realm.objects(DBProduct).map{$0.brand}))
+            handler(brands)
+        } catch let e {
+            print("Error: RealmListItemProvider.brands: Couldn't load brands, returning empty array. Error: \(e)")
+            handler([])
+        }
+    }
+    
     // MARK: - Product
     
     func loadProductWithUuid(uuid: String, handler: Product? -> ()) {
@@ -63,9 +76,10 @@ class RealmListItemProvider: RealmProvider {
         self.loadFirst(mapper, filter: "uuid = '\(uuid)'", handler: handler)
     }
     
-    func loadProductWithName(name: String, handler: Product? -> ()) {
+    // TODO rename method (uses now brand too)
+    func loadProductWithName(name: String, brand: String, handler: Product? -> ()) {
         let mapper = {ProductMapper.productWithDB($0)}
-        self.loadFirst(mapper, filter: "name = '\(name)'", handler: handler)
+        self.loadFirst(mapper, filter: "name = '\(name)' && brand = '\(brand)'", handler: handler)
     }
     
     func loadProducts(range: NSRange, sortBy: ProductSortBy, handler: [Product] -> ()) {
@@ -106,7 +120,7 @@ class RealmListItemProvider: RealmProvider {
     
     func saveProduct(productInput: ProductInput, updateSuggestions: Bool = true, update: Bool = true, handler: Product? -> ()) {
         
-        loadProductWithName(productInput.name) {[weak self] productMaybe in
+        loadProductWithName(productInput.name, brand: productInput.brand ?? "") {[weak self] productMaybe in
 
             if productMaybe.isSet && !update {
                 print("Product with name: \(productInput.name), already exists, no update")
@@ -140,7 +154,7 @@ class RealmListItemProvider: RealmProvider {
                     
                     // Save product with new/updated category
                     if let category = category {
-                        let product = Product(uuid: uuid, name: productInput.name, price: productInput.price, category: category, baseQuantity: productInput.baseQuantity, unit: productInput.unit)
+                        let product = Product(uuid: uuid, name: productInput.name, price: productInput.price, category: category, baseQuantity: productInput.baseQuantity, unit: productInput.unit, brand: productInput.brand)
                         self?.saveProducts([product]) {saved in
                             if saved {
                                 handler(product)

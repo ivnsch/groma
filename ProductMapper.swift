@@ -18,7 +18,8 @@ class ProductMapper {
             category: ProductCategoryMapper.categoryWithDB(dbProduct.category),
             baseQuantity: dbProduct.baseQuantity,
             unit: ProductUnit(rawValue: dbProduct.unit)!,
-            fav: dbProduct.fav
+            fav: dbProduct.fav,
+            brand: dbProduct.brand
         )
     }
     
@@ -31,6 +32,7 @@ class ProductMapper {
         dbProduct.baseQuantity = product.baseQuantity
         dbProduct.unit = product.unit.rawValue
         dbProduct.fav = product.fav
+        dbProduct.brand = product.brand ?? ""
         return dbProduct
     }
     
@@ -55,7 +57,8 @@ class ProductMapper {
             category: category,
             baseQuantity: remoteProduct.baseQuantity,
             unit: ProductUnit(rawValue: remoteProduct.unit)!,
-            fav: remoteProduct.fav
+            fav: remoteProduct.fav,
+            brand: remoteProduct.brand
         )
     }
     
@@ -68,6 +71,7 @@ class ProductMapper {
         dbProduct.baseQuantity = product.baseQuantity
         dbProduct.unit = product.unit
         dbProduct.fav = product.fav
+        dbProduct.brand = product.brand
         return dbProduct
     }
 }

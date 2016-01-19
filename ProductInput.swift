@@ -16,17 +16,19 @@ final class ProductInput: CustomDebugStringConvertible {
     let categoryColor: UIColor
     let baseQuantity: Float
     let unit: ProductUnit
+    let brand: String
     
-    init(name: String, price: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit) {
+    init(name: String, price: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String) {
         self.name = name
         self.price = price
         self.category = category
         self.categoryColor = categoryColor
         self.baseQuantity = baseQuantity
         self.unit = unit
+        self.brand = brand
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) name: \(name), price: \(price), category: \(category), categoryColor: \(categoryColor), baseQuantity: \(baseQuantity), unit: \(unit)}"
+        return "{\(self.dynamicType) name: \(name), price: \(price), category: \(category), categoryColor: \(categoryColor), baseQuantity: \(baseQuantity), unit: \(unit), brand: \(brand)}"
     }
 }

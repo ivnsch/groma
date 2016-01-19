@@ -41,7 +41,7 @@ class MemListItemProvider {
             // add case when a listitem with same product name already exist becomes an update: use uuid of existing item, and increment quantity - and of course use the rest of fields of new list item
             var addedListItem: ListItem
             
-            if let existingListItem = listItems[listItem.list]?.findFirstWithProductName(listItem.product.name) {
+            if let existingListItem = listItems[listItem.list]?.findFirstWithProductNameAndBrand(listItem.product.name, brand: listItem.product.brand) {
                 let updatedListItem = existingListItem.increment(listItem)
                 listItems[listItem.list]?.update(updatedListItem)
                 addedListItem = updatedListItem
@@ -66,7 +66,7 @@ class MemListItemProvider {
         
         // TODO optimise this, for each list item we are iterating through the whole list items list. We should put listitems in dictionary with uuid or product name, or something
         // add case when a listitem with same product name already exist becomes an update: use uuid of existing item, and increment quantity - and of course use the rest of fields of new list item
-        if let existingListItem = listItems[list]!.findFirstWithProductName(product.name) {
+        if let existingListItem = listItems[list]!.findFirstWithProductNameAndBrand(product.name, brand: product.brand) {
 
             let updatedSection = existingListItem.section.copy(name: sectionNameMaybe)
 

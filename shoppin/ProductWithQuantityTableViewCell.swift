@@ -16,9 +16,12 @@ protocol ProductWithQuantityTableViewCellDelegate {
 class ProductWithQuantityTableViewCell: UITableViewCell {
     
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var brandLabel: UILabel!
     @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var deleteProgressContainer: UIView!
     @IBOutlet weak var deleteProgressViewWidth: NSLayoutConstraint!
+
+    @IBOutlet weak var centerVerticallyNameLabelConstraint: NSLayoutConstraint!
 
     private var isAnimatingProgress: Bool = false
     private var animationCancelled: Bool = false

@@ -12,6 +12,7 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -90,11 +91,11 @@
                                     <outlet property="delegate" destination="Mm3-oP-cdT" id="eeF-sP-AId"/>
                                 </connections>
                             </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OmL-Fh-5Jp">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="64" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OmL-Fh-5Jp">
                                 <rect key="frame" x="0.0" y="148" width="600" height="452"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="ubd-oF-jDC" customClass="LoadingFooter" customModule="shoppin" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="72" width="600" height="44"/>
+                                    <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="0lz-8d-axl">
@@ -125,33 +126,43 @@
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="productCell" id="yjL-el-KcB" customClass="ManageProductsCell" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="28" width="600" height="64"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yjL-el-KcB" id="Kqx-Ig-KUx">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="63"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PWR-nr-FTi">
-                                                    <rect key="frame" x="552" y="1" width="40" height="21"/>
+                                                    <rect key="frame" x="552" y="4" width="40" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wRH-9P-Cgb">
-                                                    <rect key="frame" x="8" y="1" width="40" height="21"/>
+                                                    <rect key="frame" x="8" y="4" width="40" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AN1-gg-SBs">
-                                                    <rect key="frame" x="8" y="24" width="31" height="16"/>
+                                                    <rect key="frame" x="8" y="45" width="31" height="16"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                                     <color key="textColor" red="0.65783535420000006" green="0.66059565139999998" blue="0.66513256320000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HDP-Ig-OTR">
+                                                    <rect key="frame" x="8" y="27" width="31" height="16"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="AN1-gg-SBs" firstAttribute="top" secondItem="HDP-Ig-OTR" secondAttribute="bottom" constant="2" id="1Xy-K7-1nC"/>
+                                                <constraint firstItem="HDP-Ig-OTR" firstAttribute="top" secondItem="wRH-9P-Cgb" secondAttribute="bottom" constant="2" id="9hd-Z1-PSu"/>
                                                 <constraint firstItem="AN1-gg-SBs" firstAttribute="leading" secondItem="wRH-9P-Cgb" secondAttribute="leading" id="AZP-zS-1Aa"/>
+                                                <constraint firstItem="HDP-Ig-OTR" firstAttribute="leading" secondItem="wRH-9P-Cgb" secondAttribute="leading" id="Ku0-nR-yur"/>
+                                                <constraint firstItem="wRH-9P-Cgb" firstAttribute="top" secondItem="Kqx-Ig-KUx" secondAttribute="top" constant="4" id="LEI-09-1Fp"/>
                                                 <constraint firstItem="wRH-9P-Cgb" firstAttribute="centerY" secondItem="Kqx-Ig-KUx" secondAttribute="centerY" constant="-10" id="MHf-ax-l6B"/>
                                                 <constraint firstAttribute="trailing" secondItem="PWR-nr-FTi" secondAttribute="trailing" constant="8" id="QCv-7g-wf6"/>
                                                 <constraint firstItem="wRH-9P-Cgb" firstAttribute="centerY" secondItem="Kqx-Ig-KUx" secondAttribute="centerY" id="R6S-6g-AjV"/>
@@ -161,12 +172,16 @@
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
+                                                    <exclude reference="MHf-ax-l6B"/>
                                                     <exclude reference="R6S-6g-AjV"/>
+                                                    <exclude reference="dVD-h7-Pia"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="productBrandLabel" destination="HDP-Ig-OTR" id="rY4-rg-v1k"/>
                                             <outlet property="productCategoryLabel" destination="AN1-gg-SBs" id="x1q-37-FOH"/>
+                                            <outlet property="productCategoryLabelTopConstraint" destination="1Xy-K7-1nC" id="xNq-jQ-N9N"/>
                                             <outlet property="productNameLabel" destination="wRH-9P-Cgb" id="RPX-rG-vJ9"/>
                                             <outlet property="productPriceLabel" destination="PWR-nr-FTi" id="ps7-IC-I7K"/>
                                         </connections>

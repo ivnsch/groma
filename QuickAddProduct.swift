@@ -21,6 +21,10 @@ class QuickAddProduct: QuickAddItem {
         return product.name
     }
     
+    override var label2Text: String? {
+        return product.brand
+    }
+    
     override func clearBoldRangeCopy() -> QuickAddProduct {
         return QuickAddProduct(product)
     }

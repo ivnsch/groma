@@ -13,6 +13,7 @@ class ListItemCell: SwipeableCell {
     var labelColor:UIColor = UIColor.blackColor() {
         didSet {
             self.nameLabel?.textColor = self.labelColor
+//            self.brandLabel?.textColor = self.labelColor
             self.quantityLabel?.textColor = self.labelColor
         }
     }
@@ -25,6 +26,7 @@ class ListItemCell: SwipeableCell {
 //    }
     
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var brandLabel: UILabel!
     @IBOutlet weak var quantityLabel: UILabel!
     
 //    init(listItem: ListItem) {

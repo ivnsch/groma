@@ -56,6 +56,8 @@ class SwipeableCell: UITableViewCell {
 //    var delegate:SwipeableCellDelegate!
     @IBOutlet weak var noteButton: UIButton!
 
+    @IBOutlet weak var centerVerticallyNameLabelConstraint: NSLayoutConstraint!
+
     var mode: ListItemCellMode = .Note {
         didSet {
             if mode != oldValue {

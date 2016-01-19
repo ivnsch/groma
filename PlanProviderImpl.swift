@@ -151,10 +151,10 @@ class PlanProviderImpl: PlanProvider {
             } else { // if it doesn't exist, add it
                 
                 // check if product exists
-                Providers.productProvider.product(itemInput.name) {result in
+                Providers.productProvider.product(itemInput.name, brand: itemInput.brand ?? "") {result in
                     if let product = result.sucessResult { // products exists - update it and reference it
                         let mergedCategory = product.category.copy(name: itemInput.category, color: itemInput.categoryColor)
-                        let mergedProduct = Product(uuid: product.uuid, name: itemInput.name, price: itemInput.price, category: mergedCategory, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit)
+                        let mergedProduct = Product(uuid: product.uuid, name: itemInput.name, price: itemInput.price, category: mergedCategory, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit, brand: itemInput.brand)
                         onHasProduct(mergedProduct, isUpdate: true)
                     } else { // product doesn't exist - add it
                         
@@ -165,7 +165,7 @@ class PlanProviderImpl: PlanProvider {
                             let category: ProductCategory = result.sucessResult ?? ProductCategory(uuid: NSUUID().UUIDString, name: itemInput.category, color: itemInput.categoryColor)
 
                             // add the product
-                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: category, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit)
+                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: category, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit, brand: itemInput.brand)
                             Providers.productProvider.add(product, remote: true) {result in
                                 if result.success {
                                     onHasProduct(product, isUpdate: false)

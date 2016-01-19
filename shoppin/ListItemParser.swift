@@ -30,7 +30,8 @@ class ListItemParser {
         let baseQuantity = json.valueForKeyPath("baseQuantity") as! Float
         let unitInt = json.valueForKeyPath("unit") as! Int
         let unit = ProductUnit(rawValue: unitInt)!
-        return Product(uuid: uuid, name: name, price: price, category: category, baseQuantity: baseQuantity, unit: unit)
+        let brand = json.valueForKeyPath("brand") as! String
+        return Product(uuid: uuid, name: name, price: price, category: category, baseQuantity: baseQuantity, unit: unit, brand: brand)
     }
 
     class func parseSection(json: AnyObject) -> Section {

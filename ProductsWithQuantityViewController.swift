@@ -129,6 +129,10 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         let model = self.models[indexPath.row]
         
         cell.nameLabel.text = NSLocalizedString(model.product.name, comment: "")
+        
+        cell.centerVerticallyNameLabelConstraint.constant = model.product.brand.isEmpty ? 0 : 10
+        cell.brandLabel.text = model.product.brand
+        
         cell.quantityLabel.text = String(model.quantity)
         
         cell.model = model

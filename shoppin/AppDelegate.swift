@@ -82,7 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     */
     private func generatePrefillDatabase() {
         print("Creating prefilled database")
-        self.suggestionsPrefiller = SuggestionsPrefiller()
+//        self.suggestionsPrefiller = SuggestionsPrefiller()
         self.suggestionsPrefiller?.prefill {
             print("Finished creating prefilled database")
         }
@@ -119,7 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Debug
     
     private func debugFirstLaunchSetup() {
-//        self.addDummyData()
+        self.addDummyData()
     }
     
     private func addDummyData() {
@@ -136,26 +136,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let spicesCat = ProductCategory(uuid: "10", name: "Gewürze", color: UIColor.flatBrownColor())
         let breadCat = ProductCategory(uuid: "11", name: "Brot", color: UIColor.flatYellowColorDark())
         
-        let product1 = Product(uuid: "10", name: "Birnen", price: 3, category: fruitsCat, baseQuantity: 1, unit: .None)
-        let product2 = Product(uuid: "11", name: "Tomaten", price: 2, category: vegetablesCat, baseQuantity: 1, unit: .None)
-        let product3 = Product(uuid: "12", name: "Schwarzer Tee", price: 2, category: drinksCat, baseQuantity: 1, unit: .None)
-        let product4 = Product(uuid: "13", name: "Haenchen", price: 5, category: meatCat, baseQuantity: 1, unit: .None)
-        let product5 = Product(uuid: "14", name: "Spaguetti", price: 0.8, category: pastaCat, baseQuantity: 1, unit: .None)
-        let product6 = Product(uuid: "15", name: "Sahne", price: 1, category: milkCat, baseQuantity: 1, unit: .None)
-        let product7 = Product(uuid: "16", name: "Pfefferminz Tee", price: 1, category: drinksCat, baseQuantity: 1, unit: .None)
+        let product1 = Product(uuid: "10", name: "Birnen", price: 3, category: fruitsCat, baseQuantity: 1, unit: .None, brand: "")
+        let product2 = Product(uuid: "11", name: "Tomaten", price: 2, category: vegetablesCat, baseQuantity: 1, unit: .None, brand: "")
+        let product3 = Product(uuid: "12", name: "Schwarzer Tee", price: 2, category: drinksCat, baseQuantity: 1, unit: .None, brand: "")
+        let product4 = Product(uuid: "13", name: "Haenchen", price: 5, category: meatCat, baseQuantity: 1, unit: .None, brand: "")
+        let product5 = Product(uuid: "14", name: "Spaguetti", price: 0.8, category: pastaCat, baseQuantity: 1, unit: .None, brand: "")
+        let product6 = Product(uuid: "15", name: "Sahne", price: 1, category: milkCat, baseQuantity: 1, unit: .None, brand: "")
+        let product7 = Product(uuid: "16", name: "Pfefferminz Tee", price: 1, category: drinksCat, baseQuantity: 1, unit: .None, brand: "")
         
-        let product8 = Product(uuid: "17", name: "Kartoffeln", price: 1.2, category: vegetablesCat, baseQuantity: 1, unit: .None)
-        let product9 = Product(uuid: "18", name: "Thunfisch", price: 0.9, category: fishCat, baseQuantity: 1, unit: .None)
-        let product10 = Product(uuid: "19", name: "Zitronen", price: 1.3, category: fruitsCat, baseQuantity: 1, unit: .None)
-        let product11 = Product(uuid: "20", name: "Kidney bohnen", price: 1, category: vegetablesCat, baseQuantity: 1, unit: .None)
-        let product12 = Product(uuid: "21", name: "Klopapier", price: 3.4, category: cleaningCat, baseQuantity: 1, unit: .None)
-        let product13 = Product(uuid: "22", name: "Putzmittel boden", price: 5.1, category: hygienicCat, baseQuantity: 1, unit: .None)
-        let product14 = Product(uuid: "23", name: "Bier", price: 0.8, category: drinksCat, baseQuantity: 1, unit: .None)
-        let product15 = Product(uuid: "24", name: "Cola (1L)", price: 1.2, category: drinksCat, baseQuantity: 1, unit: .None)
-        let product16 = Product(uuid: "25", name: "Salz", price: 0.7, category: spicesCat, baseQuantity: 1, unit: .None)
-        let product17 = Product(uuid: "26", name: "Zucker", price: 0.9, category: spicesCat, baseQuantity: 1, unit: .None)
-        let product18 = Product(uuid: "27", name: "Seife", price: 0.8, category: hygienicCat, baseQuantity: 1, unit: .None)
-        let product19 = Product(uuid: "28", name: "Toastbrot", price: 0.7, category: breadCat, baseQuantity: 1, unit: .None)
+        let product8 = Product(uuid: "17", name: "Kartoffeln", price: 1.2, category: vegetablesCat, baseQuantity: 1, unit: .None, brand: "")
+        let product9 = Product(uuid: "18", name: "Thunfisch", price: 0.9, category: fishCat, baseQuantity: 1, unit: .None, brand: "")
+        let product10 = Product(uuid: "19", name: "Zitronen", price: 1.3, category: fruitsCat, baseQuantity: 1, unit: .None, brand: "")
+        let product11 = Product(uuid: "20", name: "Kidney bohnen", price: 1, category: vegetablesCat, baseQuantity: 1, unit: .None, brand: "")
+        let product12 = Product(uuid: "21", name: "Klopapier", price: 3.4, category: cleaningCat, baseQuantity: 1, unit: .None, brand: "")
+        let product13 = Product(uuid: "22", name: "Putzmittel boden", price: 5.1, category: hygienicCat, baseQuantity: 1, unit: .None, brand: "")
+        let product14 = Product(uuid: "23", name: "Bier", price: 0.8, category: drinksCat, baseQuantity: 1, unit: .None, brand: "")
+        let product15 = Product(uuid: "24", name: "Cola (1L)", price: 1.2, category: drinksCat, baseQuantity: 1, unit: .None, brand: "")
+        let product16 = Product(uuid: "25", name: "Salz", price: 0.7, category: spicesCat, baseQuantity: 1, unit: .None, brand: "")
+        let product17 = Product(uuid: "26", name: "Zucker", price: 0.9, category: spicesCat, baseQuantity: 1, unit: .None, brand: "")
+        let product18 = Product(uuid: "27", name: "Seife", price: 0.8, category: hygienicCat, baseQuantity: 1, unit: .None, brand: "")
+        let product19 = Product(uuid: "28", name: "Toastbrot", price: 0.7, category: breadCat, baseQuantity: 1, unit: .None, brand: "")
         
         
         let inventory1 = Inventory(uuid: "400", name: "My Home inventory", bgColor: UIColor.flatGreenColor(), order: 0)

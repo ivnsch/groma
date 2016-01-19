@@ -148,6 +148,11 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
 
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let product = filteredProducts[indexPath.row]
+        return product.item.brand.isEmpty ? 50 : 64
+    }
+    
     private func removeProductUI(product: Product) {
         if let indexPath = indexPathForProduct(product) {
             let wrappedProduct = ItemWithCellAttributes<Product>(item: product, boldRange: nil)
@@ -216,15 +221,15 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
-        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit) {
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String) {
+        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand) {
         }
     }
     
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String) {
         if let updatingProduct = updatingProduct {
             if let price = priceText.floatValue { // Note quantity for product is ignored
-                updateProduct(updatingProduct, name: name, category: category, categoryColor: categoryColor, price: price)
+                updateProduct(updatingProduct, name: name, category: category, categoryColor: categoryColor, price: price, brand: brand)
             }
         } else {
             print("Warn: InventoryItemsController.onUpdateTap: No updatingProduct")
@@ -251,24 +256,24 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         })
     }
     
-    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, successHandler: VoidFunction? = nil) {
+    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, successHandler: VoidFunction? = nil) {
         if let price = priceText.floatValue {
-            addProduct(name, category: category, categoryColor: categoryColor, price: price, baseQuantity: baseQuantity, unit: unit)
+            addProduct(name, category: category, categoryColor: categoryColor, price: price, baseQuantity: baseQuantity, unit: unit, brand: brand)
         } else {
             print("Error: ManageProductsViewController.submitInputs: Invalid price: \(priceText)")
         }
     }
 
-    private func updateProduct(editingData: AddEditProductControllerEditingData, name: String, category: String, categoryColor: UIColor, price: Float) {
+    private func updateProduct(editingData: AddEditProductControllerEditingData, name: String, category: String, categoryColor: UIColor, price: Float, brand: String?) {
         let updatedCategory = editingData.product.category.copy(name: category, color: categoryColor)
-        let updatedProduct = editingData.product.copy(name: name, price: price, category: updatedCategory)
+        let updatedProduct = editingData.product.copy(name: name, price: price, category: updatedCategory, brand: brand)
         Providers.productProvider.update(updatedProduct, remote: true, successHandler{[weak self] in
             self?.updateProductUI(updatedProduct, indexPath: editingData.indexPath)
         })
     }
     
-    private func addProduct(name: String, category: String, categoryColor: UIColor, price: Float, baseQuantity: Float, unit: ProductUnit) {
-        let product = ProductInput(name: name, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit)
+    private func addProduct(name: String, category: String, categoryColor: UIColor, price: Float, baseQuantity: Float, unit: ProductUnit, brand: String) {
+        let product = ProductInput(name: name, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand)
         Providers.productProvider.add(product, successHandler {[weak self] product in
             self?.addProductUI(product)
         })

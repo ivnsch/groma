@@ -13,6 +13,7 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -70,8 +71,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Eg-VM-sQM">
-                                                    <rect key="frame" x="5" y="11" width="40" height="21"/>
+                                                    <rect key="frame" x="5" y="1" width="40" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BUa-eS-yfp">
+                                                    <rect key="frame" x="5" y="24" width="31" height="16"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -115,7 +122,8 @@
                                                 </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="centerY" secondItem="0Eg-VM-sQM" secondAttribute="centerY" id="1vM-IJ-rPZ"/>
+                                                <constraint firstAttribute="centerY" secondItem="0Eg-VM-sQM" secondAttribute="centerY" constant="10" id="1vM-IJ-rPZ"/>
+                                                <constraint firstItem="sa5-bI-suW" firstAttribute="centerY" secondItem="Adh-8H-A6B" secondAttribute="centerY" id="432-Kp-V1W"/>
                                                 <constraint firstItem="sa5-bI-suW" firstAttribute="leading" secondItem="K7p-Hq-ZSp" secondAttribute="trailing" constant="20" id="9QI-Wx-qov"/>
                                                 <constraint firstItem="sa5-bI-suW" firstAttribute="centerY" secondItem="0Eg-VM-sQM" secondAttribute="centerY" id="AY2-rq-xWg"/>
                                                 <constraint firstAttribute="centerY" secondItem="esW-fo-yUS" secondAttribute="centerY" id="C8z-jm-0Yn"/>
@@ -124,18 +132,26 @@
                                                 <constraint firstItem="PSh-4D-BZZ" firstAttribute="top" secondItem="Adh-8H-A6B" secondAttribute="top" id="PcZ-wW-Mb4"/>
                                                 <constraint firstItem="0Eg-VM-sQM" firstAttribute="leading" secondItem="Adh-8H-A6B" secondAttribute="leading" constant="5" id="WVT-Nt-iNn"/>
                                                 <constraint firstAttribute="trailing" secondItem="sa5-bI-suW" secondAttribute="trailing" constant="12" id="XnU-gh-g3Z"/>
+                                                <constraint firstItem="BUa-eS-yfp" firstAttribute="centerY" secondItem="Adh-8H-A6B" secondAttribute="centerY" constant="10" id="b6y-6O-J9b"/>
                                                 <constraint firstItem="PSh-4D-BZZ" firstAttribute="leading" secondItem="Adh-8H-A6B" secondAttribute="leading" id="cGr-yX-iy4"/>
                                                 <constraint firstAttribute="trailing" secondItem="PSh-4D-BZZ" secondAttribute="trailing" id="jWU-vS-sB7"/>
                                                 <constraint firstItem="K7p-Hq-ZSp" firstAttribute="leading" secondItem="esW-fo-yUS" secondAttribute="trailing" constant="20" id="mjU-3u-t6R"/>
                                                 <constraint firstAttribute="trailing" secondItem="esW-fo-yUS" secondAttribute="trailing" constant="5" id="nu3-5V-ZMN"/>
+                                                <constraint firstItem="K7p-Hq-ZSp" firstAttribute="centerY" secondItem="Adh-8H-A6B" secondAttribute="centerY" id="uXI-kC-sJw"/>
+                                                <constraint firstItem="BUa-eS-yfp" firstAttribute="leading" secondItem="Adh-8H-A6B" secondAttribute="leading" constant="5" id="yOp-WK-DFb"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
+                                                    <exclude reference="Oww-Pz-v5B"/>
                                                     <exclude reference="nu3-5V-ZMN"/>
+                                                    <exclude reference="DaF-Vf-dCX"/>
+                                                    <exclude reference="AY2-rq-xWg"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="brandLabel" destination="BUa-eS-yfp" id="u7s-hE-tAu"/>
+                                            <outlet property="centerVerticallyNameLabelConstraint" destination="1vM-IJ-rPZ" id="8Xu-bP-Y2D"/>
                                             <outlet property="deleteProgressContainer" destination="PSh-4D-BZZ" id="jSJ-Kf-qDB"/>
                                             <outlet property="deleteProgressViewWidth" destination="W3l-Tp-QKv" id="t3l-x2-m1P"/>
                                             <outlet property="nameLabel" destination="0Eg-VM-sQM" id="RSn-fs-j7U"/>

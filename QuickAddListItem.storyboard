@@ -10,6 +10,7 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -151,7 +152,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="v4m-hJ-0qf">
                                 <rect key="frame" x="0.0" y="44" width="600" height="516"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="5" id="2Hc-oR-dUy">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="8" id="2Hc-oR-dUy">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -166,20 +167,31 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1GS-hs-GBX">
-                                                    <rect key="frame" x="10" y="17" width="31" height="16"/>
+                                                    <rect key="frame" x="10" y="11" width="31" height="16"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="sdfsdfsdfsf" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6FL-TB-RmW">
+                                                    <rect key="frame" x="6" y="25" width="38" height="13"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="11"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="1GS-hs-GBX" firstAttribute="centerY" secondItem="TIx-z1-9dZ" secondAttribute="centerY" id="gIP-ch-5Rt"/>
+                                            <constraint firstItem="6FL-TB-RmW" firstAttribute="centerX" secondItem="TIx-z1-9dZ" secondAttribute="centerX" id="T9G-Cj-y7F"/>
+                                            <constraint firstAttribute="trailing" secondItem="6FL-TB-RmW" secondAttribute="trailing" constant="6" id="XTG-3E-3CJ"/>
+                                            <constraint firstItem="6FL-TB-RmW" firstAttribute="leading" secondItem="TIx-z1-9dZ" secondAttribute="leading" constant="6" id="YKR-94-pup"/>
+                                            <constraint firstItem="1GS-hs-GBX" firstAttribute="centerY" secondItem="TIx-z1-9dZ" secondAttribute="centerY" constant="-6" id="gIP-ch-5Rt"/>
+                                            <constraint firstItem="6FL-TB-RmW" firstAttribute="centerY" secondItem="TIx-z1-9dZ" secondAttribute="centerY" constant="6" id="kgo-FE-5T6"/>
                                             <constraint firstItem="1GS-hs-GBX" firstAttribute="centerX" secondItem="TIx-z1-9dZ" secondAttribute="centerX" id="vmT-Gk-CKC"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="brandLabel" destination="6FL-TB-RmW" id="7pT-4h-0qT"/>
                                             <outlet property="nameLabel" destination="1GS-hs-GBX" id="Ehb-oh-jw7"/>
+                                            <outlet property="nameLabelVerticalCenterContraint" destination="gIP-ch-5Rt" id="j8u-MV-KqD"/>
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="groupCell" id="R4e-iU-Kye" customClass="QuickAddGroupCell" customModule="shoppin" customModuleProvider="target">

@@ -67,6 +67,7 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -200,7 +201,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="36b-Gq-dkK">
-                                                    <rect key="frame" x="6" y="11" width="40" height="21"/>
+                                                    <rect key="frame" x="6" y="2" width="40" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -256,6 +257,12 @@
                                                         <action selector="onNoteTap:" destination="6il-Q8-hVs" eventType="touchUpInside" id="bsl-eQ-naY"/>
                                                     </connections>
                                                 </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="09E-3U-UQg">
+                                                    <rect key="frame" x="6" y="24" width="31" height="16"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
@@ -264,9 +271,11 @@
                                                 <constraint firstItem="vbZ-3I-DYp" firstAttribute="leading" secondItem="FsV-Bz-0vE" secondAttribute="trailing" constant="6" id="JSK-BT-AYH"/>
                                                 <constraint firstAttribute="bottom" secondItem="vbZ-3I-DYp" secondAttribute="bottom" id="Qy1-nO-DHl"/>
                                                 <constraint firstItem="vbZ-3I-DYp" firstAttribute="centerY" secondItem="Wni-mU-J21" secondAttribute="centerY" id="Sfc-XH-xPn"/>
+                                                <constraint firstItem="09E-3U-UQg" firstAttribute="centerY" secondItem="Wni-mU-J21" secondAttribute="centerY" constant="10" id="WqI-JE-0tZ"/>
+                                                <constraint firstItem="09E-3U-UQg" firstAttribute="leading" secondItem="36b-Gq-dkK" secondAttribute="leading" id="egM-Om-vkb"/>
                                                 <constraint firstItem="vbZ-3I-DYp" firstAttribute="top" secondItem="Wni-mU-J21" secondAttribute="top" id="ewT-Pm-f6a"/>
                                                 <constraint firstItem="FsV-Bz-0vE" firstAttribute="leading" secondItem="oo8-8H-aAy" secondAttribute="trailing" constant="8" id="gRx-QB-dWf"/>
-                                                <constraint firstAttribute="centerY" secondItem="36b-Gq-dkK" secondAttribute="centerY" id="qfw-gc-1ZZ"/>
+                                                <constraint firstAttribute="centerY" secondItem="36b-Gq-dkK" secondAttribute="centerY" constant="10" id="qfw-gc-1ZZ"/>
                                                 <constraint firstItem="36b-Gq-dkK" firstAttribute="leading" secondItem="Wni-mU-J21" secondAttribute="leading" constant="6" id="vRy-2A-qnZ"/>
                                                 <constraint firstAttribute="centerY" secondItem="FsV-Bz-0vE" secondAttribute="centerY" id="xgN-Jw-gSr"/>
                                             </constraints>
@@ -284,7 +293,9 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="brandLabel" destination="09E-3U-UQg" id="PhJ-gd-gFr"/>
                                     <outlet property="button2" destination="Jx8-ie-aiQ" id="Sgu-IN-clG"/>
+                                    <outlet property="centerVerticallyNameLabelConstraint" destination="qfw-gc-1ZZ" id="yPW-y9-ma3"/>
                                     <outlet property="contentViewLeftConstraint" destination="2Vj-4y-VFa" id="Dxx-Nn-1it"/>
                                     <outlet property="contentViewRightConstraint" destination="VWU-7a-cLN" id="21s-ZE-M2D"/>
                                     <outlet property="myContentView" destination="Wni-mU-J21" id="5hZ-Tu-xta"/>

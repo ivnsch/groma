@@ -38,8 +38,9 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
     let baseQuantity: Float
     let unit: ProductUnit
     var fav: Int
+    let brand: String
     
-    init(uuid: String, name: String, price: Float, category: ProductCategory, baseQuantity: Float, unit: ProductUnit, fav: Int = 0) {
+    init(uuid: String, name: String, price: Float, category: ProductCategory, baseQuantity: Float, unit: ProductUnit, fav: Int = 0, brand: String = "") {
         self.uuid = uuid
         self.name = name
         self.price = price
@@ -47,17 +48,18 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
         self.baseQuantity = baseQuantity
         self.unit = unit
         self.fav = fav
+        self.brand = brand
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), price: \(price), category: \(category), baseQuantity: \(baseQuantity), unit: \(unit), fav: \(fav)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), price: \(price), category: \(category), baseQuantity: \(baseQuantity), unit: \(unit), fav: \(fav), brand: \(brand)}"
     }
 
     var hashValue: Int {
         return self.uuid.hashValue
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: ProductCategory? = nil, baseQuantity: Float? = nil, unit: ProductUnit? = nil, fav: Int? = nil) -> Product {
+    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: ProductCategory? = nil, baseQuantity: Float? = nil, unit: ProductUnit? = nil, fav: Int? = nil, brand: String? = nil) -> Product {
         return Product(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -65,7 +67,8 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
             category: category ?? self.category,
             baseQuantity: baseQuantity ?? self.baseQuantity,
             unit: unit ?? self.unit,
-            fav: fav ?? self.fav
+            fav: fav ?? self.fav,
+            brand: brand ?? self.brand
         )
     }
     

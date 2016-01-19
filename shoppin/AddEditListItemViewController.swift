@@ -14,8 +14,8 @@ protocol AddEditListItemViewControllerDelegate {
     
     func onValidationErrors(errors: [UITextField: ValidationError])
     
-    func onOkTap(name: String, price: String, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
-    func onUpdateTap(name: String, price: String, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit)
+    func onOkTap(name: String, price: String, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String)
+    func onUpdateTap(name: String, price: String, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String)
     
     func productNameAutocompletions(text: String, handler: [String] -> ())
     func sectionNameAutocompletions(text: String, handler: [String] -> ())
@@ -80,6 +80,7 @@ struct AddEditItem {
 class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, ScaleViewControllerDelegate, FlatColorPickerControllerDelegate, SimpleInputPopupControllerDelegate {
 
     @IBOutlet weak var nameInput: UITextField!
+    @IBOutlet weak var brandInput: MLPAutoCompleteTextField!
     @IBOutlet weak var sectionLabel: UILabel!
     @IBOutlet weak var sectionInput: MLPAutoCompleteTextField!
     @IBOutlet weak var sectionColorButton: UIButton!
@@ -194,6 +195,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     private func prefill(item: AddEditItem) {
         nameInput.text = item.product.name
+        brandInput.text = item.product.brand
         sectionInput.text = item.product.category.name
         sectionColorButton.tintColor = item.product.category.color
         sectionColorButton.imageView?.tintColor = item.product.category.color
@@ -204,6 +206,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
     private func prefill(planItem: PlanItem) {
         nameInput.text = planItem.product.name
+        brandInput.text = planItem.product.brand
         sectionInput.text = planItem.product.category.name
         sectionColorButton.tintColor = planItem.product.category.color
         sectionColorButton.imageView?.tintColor = planItem.product.category.color
@@ -250,9 +253,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 
                 switch action {
                 case .Add:
-                    delegate?.onOkTap(text, price: priceText, quantity: quantityText, category: category, categoryColor: sectionColorButton.tintColor, sectionName: category, note: noteInput, baseQuantity: baseQuantity, unit: unit)
+                    delegate?.onOkTap(text, price: priceText, quantity: quantityText, category: category, categoryColor: sectionColorButton.tintColor, sectionName: category, note: noteInput, baseQuantity: baseQuantity, unit: unit, brand: brandInput.text ?? "")
                 case .Update:
-                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, category: category, categoryColor: sectionColorButton.tintColor, sectionName: category, note: noteInput, baseQuantity: baseQuantity, unit: unit)
+                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, category: category, categoryColor: sectionColorButton.tintColor, sectionName: category, note: noteInput, baseQuantity: baseQuantity, unit: unit, brand: brandInput.text ?? "")
                 }
                 
             } else {
@@ -379,6 +382,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             delegate?.sectionNameAutocompletions(string) {completions in
                 handler(completions)
             }
+        case brandInput:
+            Providers.productProvider.brands(successHandler{brands in
+                handler(brands)
+            })
         case _:
             print("Error: Not handled text field in autoCompleteTextField")
             break

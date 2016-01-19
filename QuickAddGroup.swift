@@ -21,6 +21,10 @@ class QuickAddGroup: QuickAddItem {
         return group.name
     }
     
+    override var label2Text: String? {
+        return nil
+    }
+    
     override func clearBoldRangeCopy() -> QuickAddGroup {
         return QuickAddGroup(group)
     }
