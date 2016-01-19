@@ -132,10 +132,10 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
         cell.showsReorderControl = true
         
         let tableViewListItem = tableViewListItems[row]
+        let listItem = tableViewListItem.listItem
         
-        
-        cell.nameLabel.text = NSLocalizedString(tableViewListItem.listItem.product.name, comment: "")
-        cell.quantityLabel.text = String(tableViewListItem.listItem.quantity(status))
+        cell.nameLabel.text = NSLocalizedString(listItem.product.name, comment: "")
+        cell.quantityLabel.text = String("\(listItem.quantity(status)) \(listItem.product.unit.shortText)")
         
         cell.labelColor = self.finalLabelFontColor
 //        cell.delegate = self
