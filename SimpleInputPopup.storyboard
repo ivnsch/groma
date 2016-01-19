@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+        </mutableArray>
+    </customFonts>
+    <scenes>
+        <!--Simple Input Popup Controller-->
+        <scene sceneID="qBj-hY-WaM">
+            <objects>
+                <viewController storyboardIdentifier="SimpleInputPopupController" id="IQY-qD-eMe" customClass="SimpleInputPopupController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="EyU-87-QWG"/>
+                        <viewControllerLayoutGuide type="bottom" id="Srj-eF-WJ5"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nEu-cY-6d9">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="D1k-MQ-abI">
+                                <rect key="frame" x="14" y="117" width="572" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="fuI-fE-WX3"/>
+                                    <constraint firstAttribute="height" constant="100" id="vfp-OL-S0s"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="fuI-fE-WX3"/>
+                                    </mask>
+                                </variation>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add a note" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3z2-aO-RRp">
+                                <rect key="frame" x="260" y="80" width="81" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sZf-3j-0Yz">
+                                <rect key="frame" x="285" y="233" width="30" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Ok"/>
+                                <connections>
+                                    <action selector="onOkTap:" destination="IQY-qD-eMe" eventType="touchUpInside" id="tkO-3n-29e"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="D1k-MQ-abI" firstAttribute="centerX" secondItem="nEu-cY-6d9" secondAttribute="centerX" id="EDK-75-UVh"/>
+                            <constraint firstItem="D1k-MQ-abI" firstAttribute="leading" secondItem="nEu-cY-6d9" secondAttribute="leading" constant="14" id="I0K-gB-jXd"/>
+                            <constraint firstItem="3z2-aO-RRp" firstAttribute="centerX" secondItem="nEu-cY-6d9" secondAttribute="centerX" id="OdP-kc-KPh"/>
+                            <constraint firstItem="D1k-MQ-abI" firstAttribute="top" secondItem="3z2-aO-RRp" secondAttribute="bottom" constant="16" id="cTi-bt-rYH"/>
+                            <constraint firstItem="3z2-aO-RRp" firstAttribute="top" secondItem="EyU-87-QWG" secondAttribute="bottom" constant="60" id="dep-jh-jm0"/>
+                            <constraint firstItem="sZf-3j-0Yz" firstAttribute="centerX" secondItem="nEu-cY-6d9" secondAttribute="centerX" id="pqS-3J-g64"/>
+                            <constraint firstItem="sZf-3j-0Yz" firstAttribute="top" secondItem="D1k-MQ-abI" secondAttribute="bottom" constant="16" id="s9S-C0-BY3"/>
+                            <constraint firstAttribute="trailing" secondItem="D1k-MQ-abI" secondAttribute="trailing" constant="14" id="zKL-ZL-okK"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="textView" destination="D1k-MQ-abI" id="cy9-cq-P9h"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="s7R-74-hDv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="616" y="534"/>
+        </scene>
+    </scenes>
+</document>

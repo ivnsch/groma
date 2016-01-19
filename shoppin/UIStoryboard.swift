@@ -34,6 +34,7 @@ extension UIStoryboard {
     private class func scaleStoryboard() -> UIStoryboard { return UIStoryboard(name: "Scale", bundle: NSBundle.mainBundle()) }
     private class func productsWithQuantityStoryboard() -> UIStoryboard { return UIStoryboard(name: "ProductsWithQuantity", bundle: NSBundle.mainBundle()) }
     private class func shareAppStoryboard() -> UIStoryboard { return UIStoryboard(name: "ShareApp", bundle: NSBundle.mainBundle()) }
+    private class func simpleInputStoryboard() -> UIStoryboard { return UIStoryboard(name: "SimpleInputPopup", bundle: NSBundle.mainBundle()) }
 
     
     // MARK: - List items
@@ -196,4 +197,9 @@ extension UIStoryboard {
         return shareAppStoryboard().instantiateViewControllerWithIdentifier("ShareAppViewController") as! ShareAppViewController
     }
     
+    // MARK: Simple input
+    
+    class func simpleInputStoryboard() -> SimpleInputPopupController {
+        return simpleInputStoryboard().instantiateViewControllerWithIdentifier("SimpleInputPopupController") as! SimpleInputPopupController
+    }
 }

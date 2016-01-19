@@ -459,6 +459,8 @@
 		EB9207E81C4C4FC200332332 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EB9207EA1C4C4FC200332332 /* Localizable.strings */; };
 		EB9207EE1C4C522700332332 /* ForgotPassword.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB9207F01C4C522700332332 /* ForgotPassword.storyboard */; };
 		EB9207FF1C4C743400332332 /* prefill.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB9207FE1C4C733900332332 /* prefill.realm */; };
+		EB9208021C4DBC7700332332 /* SimpleInputPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB9208011C4DBC7700332332 /* SimpleInputPopup.storyboard */; settings = {ASSET_TAGS = (); }; };
+		EB9208041C4DBE4400332332 /* SimpleInputPopupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208031C4DBE4400332332 /* SimpleInputPopupController.swift */; settings = {ASSET_TAGS = (); }; };
 		EB969FE11BE4371200F5BC35 /* ProductAggregateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB969FE01BE4371200F5BC35 /* ProductAggregateCell.swift */; };
 		EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
 		EB9BE4171B2C6556005B401A /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
@@ -1054,6 +1056,8 @@
 		EB9207FA1C4C5FBD00332332 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/ForgotPassword.strings; sourceTree = "<group>"; };
 		EB9207FB1C4C5FBE00332332 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EB9207FE1C4C733900332332 /* prefill.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefill.realm; sourceTree = "<group>"; };
+		EB9208011C4DBC7700332332 /* SimpleInputPopup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SimpleInputPopup.storyboard; sourceTree = "<group>"; };
+		EB9208031C4DBE4400332332 /* SimpleInputPopupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleInputPopupController.swift; sourceTree = "<group>"; };
 		EB969FE01BE4371200F5BC35 /* ProductAggregateCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductAggregateCell.swift; sourceTree = "<group>"; };
 		EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemProvider.swift; sourceTree = "<group>"; };
 		EB9BE4181B2CB355005B401A /* RemoteListItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItems.swift; sourceTree = "<group>"; };
@@ -1672,6 +1676,7 @@
 		EB451C491B8649FC000DE208 /* popup */ = {
 			isa = PBXGroup;
 			children = (
+				EB9208001C4DBC5700332332 /* SimpleInputPopup */,
 				EB451C4A1B864A19000DE208 /* SingleSelectionPopup.swift */,
 				EBFD15C01BA7F59600E37342 /* AlertPopup.swift */,
 				EBBC232A1BB600DE0002F6B1 /* ConfirmationPopup.swift */,
@@ -1916,6 +1921,15 @@
 				EB8D1D121C396ED600ADF884 /* GroupItemsController.swift */,
 			);
 			name = items;
+			sourceTree = "<group>";
+		};
+		EB9208001C4DBC5700332332 /* SimpleInputPopup */ = {
+			isa = PBXGroup;
+			children = (
+				EB9208011C4DBC7700332332 /* SimpleInputPopup.storyboard */,
+				EB9208031C4DBE4400332332 /* SimpleInputPopupController.swift */,
+			);
+			name = SimpleInputPopup;
 			sourceTree = "<group>";
 		};
 		EB9BE4141B2C6525005B401A /* remote */ = {
@@ -2640,6 +2654,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB9208021C4DBC7700332332 /* SimpleInputPopup.storyboard in Resources */,
 				EB9207FF1C4C743400332332 /* prefill.realm in Resources */,
 				EB7BFA7C1BDA5BE500F4C74A /* QuantityCell.xib in Resources */,
 				EBDF8D111BFB7E4200F6830A /* ListTopBarView.xib in Resources */,
@@ -2867,6 +2882,7 @@
 				EB2F5D241A4C2B0600DBC4AF /* UIStoryboard.swift in Sources */,
 				EB6F81321B4717C2008680E0 /* KeychainKeys.swift in Sources */,
 				EB2F5D1D1A4B4CE300DBC4AF /* ListItemsTableViewController.swift in Sources */,
+				EB9208041C4DBE4400332332 /* SimpleInputPopupController.swift in Sources */,
 				EB0C1B881B3DA37100F24C85 /* LoginViewController.swift in Sources */,
 				EBDA75531BCD960900E34AC3 /* OkCancelButtonsView.swift in Sources */,
 				EB0C1BAD1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,

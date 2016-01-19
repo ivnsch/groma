@@ -77,7 +77,7 @@ struct AddEditItem {
     }
 }
 
-class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, ScaleViewControllerDelegate, FlatColorPickerControllerDelegate {
+class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, ScaleViewControllerDelegate, FlatColorPickerControllerDelegate, SimpleInputPopupControllerDelegate {
 
     @IBOutlet weak var nameInput: UITextField!
     @IBOutlet weak var sectionLabel: UILabel!
@@ -91,18 +91,24 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     @IBOutlet weak var quantityPlusButton: UIButton!
     @IBOutlet weak var quantityMinusButton: UIButton!
     
-    @IBOutlet weak var noteLabel: UILabel!
-    @IBOutlet weak var noteInput: UITextField!
-    
     @IBOutlet weak var planInfoButton: UIButton!
     
     @IBOutlet weak var scaleButton: UIButton!
     
+    @IBOutlet weak var noteButton: UIButton!
+    
     private var scaleInputs: ProductScaleData?
+    
+    private var noteInput: String? {
+        didSet {
+            noteButton.imageView?.tintColor = noteInput.map{$0.isEmpty} ?? true ? UIColor.flatGrayColor() : UIColor.flatBlackColor()
+        }
+    }
     
     var delegate: AddEditListItemViewControllerDelegate?
     
     private var showingColorPicker: FlatColorPickerController?
+    private var showingNoteInputPopup: SimpleInputPopupController?
 
     var planItem: PlanItem? {
         didSet {
@@ -133,12 +139,12 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     var modus: AddEditListItemControllerModus = .ListItem {
         didSet {
-            if let noteInput = noteInput {
-                noteInput.hidden = modus == .GroupItem
+            if let noteButton = noteButton {
+                noteButton.hidden = modus == .GroupItem
                 
                 let showNote = modus == .ListItem
-                noteInput.hidden = !showNote
-                noteLabel.hidden = !showNote
+                noteButton.hidden = !showNote
+//                noteLabel.hidden = !showNote
                 
                 let sectionText = "Section"
                 let categoryText = "Category"
@@ -193,7 +199,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         sectionColorButton.imageView?.tintColor = item.product.category.color
         quantityInput.text = String(item.quantity)
         priceInput.text = item.product.price.toString(2)
-        noteInput.text = item.note
+        noteInput = item.note
     }
 
     private func prefill(planItem: PlanItem) {
@@ -244,9 +250,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 
                 switch action {
                 case .Add:
-                    delegate?.onOkTap(text, price: priceText, quantity: quantityText, category: category, categoryColor: sectionColorButton.tintColor, sectionName: category, note: noteInput.text, baseQuantity: baseQuantity, unit: unit)
+                    delegate?.onOkTap(text, price: priceText, quantity: quantityText, category: category, categoryColor: sectionColorButton.tintColor, sectionName: category, note: noteInput, baseQuantity: baseQuantity, unit: unit)
                 case .Update:
-                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, category: category, categoryColor: sectionColorButton.tintColor, sectionName: category, note: noteInput.text, baseQuantity: baseQuantity, unit: unit)
+                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, category: category, categoryColor: sectionColorButton.tintColor, sectionName: category, note: noteInput, baseQuantity: baseQuantity, unit: unit)
                 }
                 
             } else {
@@ -304,6 +310,21 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     @IBAction func quantityEditingDidChange(sender: AnyObject) {
         onQuantityChanged()
+    }
+
+    @IBAction func onNoteButtonTap(sender: AnyObject) {
+        let controller = UIStoryboard.simpleInputStoryboard()
+        controller.onUIReady = {[weak self] in
+            if let weakSelf = self {
+                controller.textView.text = weakSelf.noteInput
+            }
+        }
+        showPopup(noteButton, controller: controller, topOffset: 10, width: 300, height: 300) {[weak self] in
+            if let weakSelf = self {
+                controller.delegate = weakSelf
+                weakSelf.showingNoteInputPopup = controller
+            }
+        }
     }
     
     func onQuantityChanged() {
@@ -507,38 +528,58 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     @IBAction func onSectionColorButtonTap(sender: UIButton) {
     
+        let picker = UIStoryboard.listColorPicker()
+        showPopup(sectionColorButton, controller: picker) {[weak self] in
+            if let weakSelf = self {
+                picker.delegate = weakSelf
+                weakSelf.showingColorPicker = picker
+            }
+        }
+    }
+    
+    private func showPopup(button: UIButton, controller: UIViewController, topOffset: CGFloat = 0, width: CGFloat? = nil, height: CGFloat? = nil, onWillShow: VoidFunction) {
+        
         if let windowView = UIApplication.sharedApplication().keyWindow { // add popup and overlay on top of everything
-
-            let picker = UIStoryboard.listColorPicker()
-
+            
             // TODO dynamic
             let topBarHeight: CGFloat = 64
             let tabBarHeight: CGFloat = 49
             
-            picker.view.frame = CGRectMake(0, topBarHeight, windowView.frame.width, windowView.frame.height - topBarHeight - tabBarHeight)
-         
-            windowView.addSubview(picker.view)
-            picker.delegate = self
-            showingColorPicker = picker
+            let x: CGFloat = {
+                if let width = width {
+                    return (windowView.frame.width - width) / 2
+                } else {
+                    return 0
+                }
+            }()
             
-            let buttonPointInParent = windowView.convertPoint(CGPointMake(sectionColorButton.center.x, sectionColorButton.center.y - topBarHeight), fromView: view)
-            let fractionX = buttonPointInParent.x / windowView.frame.width
-            let fractionY = buttonPointInParent.y / (windowView.frame.height - topBarHeight - tabBarHeight)
+            let w = width ?? windowView.frame.width
+            let h = height ?? (windowView.frame.height - topBarHeight - tabBarHeight)
+            controller.view.frame = CGRectMake(x, topBarHeight + topOffset, w, h)
             
-            picker.view.layer.anchorPoint = CGPointMake(fractionX, fractionY)
+            windowView.addSubview(controller.view)
             
-            picker.view.frame = CGRectMake(0, topBarHeight, windowView.frame.width, windowView.frame.height - topBarHeight - tabBarHeight)
-
-            picker.view.transform = CGAffineTransformMakeScale(0, 0)
-
+            let buttonPointInParent = windowView.convertPoint(CGPointMake(button.center.x, button.center.y - topBarHeight), fromView: view)
+            let fractionX = (buttonPointInParent.x - ((windowView.frame.width - w) / 2)) / w
+            let fractionY = buttonPointInParent.y / h
+            
+            controller.view.layer.anchorPoint = CGPointMake(fractionX, fractionY)
+            
+            controller.view.frame = CGRectMake(x, topBarHeight + topOffset, w, h)
+            
+            controller.view.transform = CGAffineTransformMakeScale(0, 0)
+            
+            onWillShow()
+            
             UIView.animateWithDuration(0.3) {
-                picker.view.transform = CGAffineTransformMakeScale(1, 1)
+                controller.view.transform = CGAffineTransformMakeScale(1, 1)
             }
             
         } else {
             print("Warn: AddEditListItemViewController.onSectionColorButtonTap: unexpected: no window")
         }
     }
+    
     
     // MARK: - FlatColorPickerControllerDelegate
     
@@ -553,27 +594,55 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     private func dismissColorPicker(selectedColor: UIColor?) {
         if let showingColorPicker = showingColorPicker {
             
-            UIView.animateWithDuration(0.3, animations: {
-                showingColorPicker.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
+            dismissPopup(showingColorPicker) {
+                self.showingColorPicker = nil
+                self.showingColorPicker?.removeFromParentViewControllerWithView()
                 
-                }, completion: {finished in
-                    self.showingColorPicker = nil
-                    self.showingColorPicker?.removeFromParentViewControllerWithView()
-                    
-                    UIView.animateWithDuration(0.3) {
-                        if let selectedColor = selectedColor {
-                            self.sectionColorButton.tintColor = selectedColor
-                            self.sectionColorButton.imageView?.tintColor = selectedColor
-                        }
+                UIView.animateWithDuration(0.3) {
+                    if let selectedColor = selectedColor {
+                        self.sectionColorButton.tintColor = selectedColor
+                        self.sectionColorButton.imageView?.tintColor = selectedColor
                     }
+                }
+                UIView.animateWithDuration(0.15) {
+                    self.sectionColorButton.transform = CGAffineTransformMakeScale(2, 2)
                     UIView.animateWithDuration(0.15) {
-                        self.sectionColorButton.transform = CGAffineTransformMakeScale(2, 2)
+                        self.sectionColorButton.transform = CGAffineTransformMakeScale(1, 1)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func dismissPopup(controller: UIViewController, onComplete: VoidFunction? = nil) {
+        UIView.animateWithDuration(0.3, animations: {
+            controller.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
+            }, completion: {finished in
+                controller.view.removeFromSuperview()
+                onComplete?()
+            }
+        )
+    }
+    
+    // MARK: - SimpleInputPopupControllerDelegate
+    
+    func onSubmitInput(text: String) {
+        noteInput = text
+        showingNoteInputPopup?.dismiss()
+    }
+    
+    func onDismissSimpleInputPopupController(cancelled: Bool) {
+        if let showingNoteInputPopup = showingNoteInputPopup {
+            dismissPopup(showingNoteInputPopup) {[weak self] in
+                if !cancelled {
+                    UIView.animateWithDuration(0.15) {
+                        self?.noteButton.transform = CGAffineTransformMakeScale(2, 2)
                         UIView.animateWithDuration(0.15) {
-                            self.sectionColorButton.transform = CGAffineTransformMakeScale(1, 1)
+                            self?.noteButton.transform = CGAffineTransformMakeScale(1, 1)
                         }
                     }
                 }
-            )
+            }
         }
     }
 }
