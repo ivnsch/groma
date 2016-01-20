@@ -58,7 +58,7 @@ class RealmBrandProvider: RealmProvider {
     func brandsContainingText(text: String, _ handler: [String] -> Void) {
         do {
             let realm = try Realm()
-            let brands = Array(Set(realm.objects(DBProduct).map{$0.brand}))
+            let brands = Array(Set(realm.objects(DBProduct).filter("brand CONTAINS[c] '\(text)'").map{$0.brand}))
             handler(brands)
         } catch let e {
             print("Error: RealmListItemProvider.brandsContainingText: Couldn't load brands, returning empty array. Error: \(e)")

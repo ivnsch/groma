@@ -44,7 +44,7 @@ class EditBrandController: UIViewController {
     func submit() {
         guard let validator = validator else {return}
         guard let brand = brand else {
-            print("Error: EditSectionViewController.submit: no section")
+            print("Error: EditBrandController.submit: no section")
             return
         }
         

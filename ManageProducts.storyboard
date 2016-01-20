@@ -18,6 +18,8 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -53,6 +55,9 @@
                                 <rect key="frame" x="265" y="290" width="70" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Categories"/>
+                                <connections>
+                                    <segue destination="0Hp-CK-Pgk" kind="show" id="gCX-bu-uIN"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -89,11 +94,11 @@
                                     <outlet property="delegate" destination="5Dv-Zd-cbX" id="4VV-q3-RzP"/>
                                 </connections>
                             </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="40" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Mmc-xt-Xvb">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Mmc-xt-Xvb">
                                 <rect key="frame" x="0.0" y="108" width="600" height="492"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="TzZ-c0-t58" customClass="LoadingFooter" customModule="shoppin" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="68" width="600" height="44"/>
+                                    <rect key="frame" x="0.0" y="78" width="600" height="44"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <subviews>
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="C8S-Fb-SKV">
@@ -124,13 +129,13 @@
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="brandCell" id="DNh-vp-rbY" customClass="ManageBrandsCell" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="600" height="40"/>
+                                        <rect key="frame" x="0.0" y="28" width="600" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DNh-vp-rbY" id="uOk-Ho-Zqd">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="39"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="49"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="abP-c3-Tb5">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="abP-c3-Tb5">
                                                     <rect key="frame" x="8" y="9" width="40" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -196,6 +201,136 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NdC-kV-exo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="452" y="887"/>
+        </scene>
+        <!--Manage Product Categories Controller-->
+        <scene sceneID="ubc-Xn-1vy">
+            <objects>
+                <viewController id="0Hp-CK-Pgk" customClass="ManageProductCategoriesController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2oY-4G-LHO"/>
+                        <viewControllerLayoutGuide type="bottom" id="qgi-1x-1B1"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nx8-Z1-Pp8">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="3NS-AQ-d0g">
+                                <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="5Dv-Zd-cbX" id="JIa-oC-FgT"/>
+                                </connections>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hOt-26-GQA">
+                                <rect key="frame" x="0.0" y="108" width="600" height="492"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <view key="tableFooterView" contentMode="scaleToFill" id="KuL-vb-HpD" customClass="LoadingFooter" customModule="shoppin" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="78" width="600" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <subviews>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="2P3-Dl-jGM">
+                                            <rect key="frame" x="8" y="12" width="20" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="20" id="0r1-KG-LeD"/>
+                                                <constraint firstAttribute="height" constant="20" id="pyP-H9-jmg"/>
+                                            </constraints>
+                                        </activityIndicatorView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Lv-hw-XhW">
+                                            <rect key="frame" x="36" y="12" width="59" height="21"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstItem="2P3-Dl-jGM" firstAttribute="centerY" secondItem="KuL-vb-HpD" secondAttribute="centerY" id="3X6-qq-6M8"/>
+                                        <constraint firstAttribute="height" constant="44" id="LWd-FM-fRR"/>
+                                        <constraint firstItem="2P3-Dl-jGM" firstAttribute="leading" secondItem="KuL-vb-HpD" secondAttribute="leading" constant="8" id="Lbw-Sp-y3W"/>
+                                        <constraint firstItem="8Lv-hw-XhW" firstAttribute="leading" secondItem="2P3-Dl-jGM" secondAttribute="trailing" constant="8" id="OC9-Na-8sb"/>
+                                        <constraint firstItem="8Lv-hw-XhW" firstAttribute="centerY" secondItem="2P3-Dl-jGM" secondAttribute="centerY" id="s0Z-dA-biE"/>
+                                    </constraints>
+                                    <connections>
+                                        <outlet property="activityIndicator" destination="2P3-Dl-jGM" id="UEI-GQ-7x8"/>
+                                    </connections>
+                                </view>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="categoryCell" id="bnR-JP-ElX" customClass="ManageProductCategoryCell" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="600" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bnR-JP-ElX" id="NrZ-87-8t4">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l6S-Yc-dle">
+                                                    <rect key="frame" x="8" y="9" width="40" height="21"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="l6S-Yc-dle" firstAttribute="centerY" secondItem="NrZ-87-8t4" secondAttribute="centerY" id="OvD-e7-vFb"/>
+                                                <constraint firstItem="l6S-Yc-dle" firstAttribute="top" secondItem="NrZ-87-8t4" secondAttribute="top" constant="4" id="Rci-Sf-pXT"/>
+                                                <constraint firstItem="l6S-Yc-dle" firstAttribute="centerY" secondItem="NrZ-87-8t4" secondAttribute="centerY" constant="-10" id="UXE-Ut-bLG"/>
+                                                <constraint firstItem="l6S-Yc-dle" firstAttribute="leading" secondItem="NrZ-87-8t4" secondAttribute="leading" constant="8" id="Uy5-Oy-YZI"/>
+                                                <constraint firstItem="l6S-Yc-dle" firstAttribute="centerY" secondItem="NrZ-87-8t4" secondAttribute="centerY" id="tFG-By-4rS"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="UXE-Ut-bLG"/>
+                                                    <exclude reference="OvD-e7-vFb"/>
+                                                    <exclude reference="Rci-Sf-pXT"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="categoryNameLabel" destination="l6S-Yc-dle" id="5Vi-M5-gjf"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="0Hp-CK-Pgk" id="b4m-hX-riN"/>
+                                    <outlet property="delegate" destination="0Hp-CK-Pgk" id="Rok-V3-ibq"/>
+                                </connections>
+                            </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="apJ-HL-qIX" customClass="ListTopBarView" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="BdL-tQ-kRr"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="64" id="H3E-ui-Voa"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="64" id="VHm-nd-FQj"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="64" id="jWs-QT-8qd"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="hOt-26-GQA" firstAttribute="top" secondItem="3NS-AQ-d0g" secondAttribute="bottom" id="0AA-ct-Pwi"/>
+                            <constraint firstItem="hOt-26-GQA" firstAttribute="leading" secondItem="nx8-Z1-Pp8" secondAttribute="leading" id="1zg-ss-oSA"/>
+                            <constraint firstItem="3NS-AQ-d0g" firstAttribute="top" secondItem="apJ-HL-qIX" secondAttribute="bottom" id="4Xz-Xv-hXp"/>
+                            <constraint firstItem="qgi-1x-1B1" firstAttribute="top" secondItem="hOt-26-GQA" secondAttribute="bottom" id="4fg-zQ-T0K"/>
+                            <constraint firstAttribute="trailing" secondItem="hOt-26-GQA" secondAttribute="trailing" id="5Qt-S4-yG3"/>
+                            <constraint firstItem="apJ-HL-qIX" firstAttribute="top" secondItem="nx8-Z1-Pp8" secondAttribute="top" id="6Sy-b8-xni"/>
+                            <constraint firstItem="3NS-AQ-d0g" firstAttribute="top" secondItem="apJ-HL-qIX" secondAttribute="bottom" id="95k-3c-mr1"/>
+                            <constraint firstAttribute="trailing" secondItem="apJ-HL-qIX" secondAttribute="trailing" id="ATh-tn-Sp0"/>
+                            <constraint firstItem="hOt-26-GQA" firstAttribute="top" secondItem="3NS-AQ-d0g" secondAttribute="bottom" id="fzY-XS-FXW"/>
+                            <constraint firstItem="3NS-AQ-d0g" firstAttribute="leading" secondItem="nx8-Z1-Pp8" secondAttribute="leading" id="hsT-Vh-kAf"/>
+                            <constraint firstItem="apJ-HL-qIX" firstAttribute="leading" secondItem="nx8-Z1-Pp8" secondAttribute="leading" id="lVg-yf-vEv"/>
+                            <constraint firstAttribute="trailing" secondItem="3NS-AQ-d0g" secondAttribute="trailing" id="zXF-Zu-a8v"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="searchBar" destination="3NS-AQ-d0g" id="UJQ-FG-eQh"/>
+                        <outlet property="tableView" destination="hOt-26-GQA" id="Ctw-V4-foq"/>
+                        <outlet property="tableViewFooter" destination="KuL-vb-HpD" id="jCh-JC-bEy"/>
+                        <outlet property="topBar" destination="apJ-HL-qIX" id="F0z-dx-WAF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5rH-Qu-h4y" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="457" y="1620"/>
         </scene>
         <!--Manage Products View Controller-->
         <scene sceneID="fpw-he-bCA">

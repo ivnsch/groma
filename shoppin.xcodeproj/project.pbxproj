@@ -500,6 +500,13 @@
 		EBA288DB1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA288DA1BB9FEE6001A2B95 /* Array_InventoryItem.swift */; };
 		EBA288DC1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA288DA1BB9FEE6001A2B95 /* Array_InventoryItem.swift */; };
 		EBA288DD1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA288DA1BB9FEE6001A2B95 /* Array_InventoryItem.swift */; };
+		EBA2C8C61C4F18AC00A970B8 /* ManageProductCategoriesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8C51C4F18AC00A970B8 /* ManageProductCategoriesController.swift */; settings = {ASSET_TAGS = (); }; };
+		EBA2C8C81C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8C71C4F199A00A970B8 /* RealmProductCategoryProvider.swift */; settings = {ASSET_TAGS = (); }; };
+		EBA2C8C91C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8C71C4F199A00A970B8 /* RealmProductCategoryProvider.swift */; settings = {ASSET_TAGS = (); }; };
+		EBA2C8CA1C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8C71C4F199A00A970B8 /* RealmProductCategoryProvider.swift */; settings = {ASSET_TAGS = (); }; };
+		EBA2C8CD1C4F207800A970B8 /* EditProductCategoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8CB1C4F207800A970B8 /* EditProductCategoryController.swift */; settings = {ASSET_TAGS = (); }; };
+		EBA2C8CE1C4F207800A970B8 /* EditProductCategoryController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBA2C8CC1C4F207800A970B8 /* EditProductCategoryController.xib */; settings = {ASSET_TAGS = (); }; };
+		EBA2C8D01C4F24C100A970B8 /* ManageProductCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8CF1C4F24C100A970B8 /* ManageProductCategoryCell.swift */; settings = {ASSET_TAGS = (); }; };
 		EBA575621BCECBDF00A0A825 /* QuantityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA575611BCECBDF00A0A825 /* QuantityView.swift */; };
 		EBA575651BCECC0000A0A825 /* QuantityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBA575641BCECC0000A0A825 /* QuantityView.xib */; };
 		EBA575671BCFFB2700A0A825 /* GroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA575661BCFFB2700A0A825 /* GroupItem.swift */; };
@@ -1099,6 +1106,11 @@
 		EBA18C251BF56E3B009291F2 /* CGSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGSize.swift; sourceTree = "<group>"; };
 		EBA288D61BB9FCC3001A2B95 /* MemInventoryItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemInventoryItemProvider.swift; sourceTree = "<group>"; };
 		EBA288DA1BB9FEE6001A2B95 /* Array_InventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_InventoryItem.swift; sourceTree = "<group>"; };
+		EBA2C8C51C4F18AC00A970B8 /* ManageProductCategoriesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageProductCategoriesController.swift; sourceTree = "<group>"; };
+		EBA2C8C71C4F199A00A970B8 /* RealmProductCategoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProductCategoryProvider.swift; sourceTree = "<group>"; };
+		EBA2C8CB1C4F207800A970B8 /* EditProductCategoryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProductCategoryController.swift; sourceTree = "<group>"; };
+		EBA2C8CC1C4F207800A970B8 /* EditProductCategoryController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditProductCategoryController.xib; sourceTree = "<group>"; };
+		EBA2C8CF1C4F24C100A970B8 /* ManageProductCategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageProductCategoryCell.swift; sourceTree = "<group>"; };
 		EBA575611BCECBDF00A0A825 /* QuantityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuantityView.swift; sourceTree = "<group>"; };
 		EBA575641BCECC0000A0A825 /* QuantityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuantityView.xib; sourceTree = "<group>"; };
 		EBA575661BCFFB2700A0A825 /* GroupItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupItem.swift; sourceTree = "<group>"; };
@@ -1343,6 +1355,10 @@
 				EB0A05911BDFCE8D00D1E29D /* ManageProducts.storyboard */,
 				EB4147B71BDFE9FB00549CE4 /* ManageProductsCell.swift */,
 				EB9208211C4EBCE000332332 /* ManageProductsSelectionController.swift */,
+				EBA2C8C51C4F18AC00A970B8 /* ManageProductCategoriesController.swift */,
+				EBA2C8CF1C4F24C100A970B8 /* ManageProductCategoryCell.swift */,
+				EBA2C8CB1C4F207800A970B8 /* EditProductCategoryController.swift */,
+				EBA2C8CC1C4F207800A970B8 /* EditProductCategoryController.xib */,
 				EB9208231C4EBD4900332332 /* ManageBrandsController.swift */,
 				EB9208251C4EC53D00332332 /* ManageBrandsCell.swift */,
 				EB92082B1C4ECE3D00332332 /* EditBrandController.swift */,
@@ -1669,6 +1685,7 @@
 				EB40A46D1B550804000E9CAD /* RealmProvider.swift */,
 				EB0C2A451B58405D00AF6226 /* RealmListItemProvider.swift */,
 				EBBC9B771C00D7190046966B /* RealmProductProvider.swift */,
+				EBA2C8C71C4F199A00A970B8 /* RealmProductCategoryProvider.swift */,
 				EB0C2A491B5840F700AF6226 /* RealmInventoryProvider.swift */,
 				EB7E83151B7B6676009DEEF4 /* RealmHistoryProvider.swift */,
 				EB7E83391B7B9021009DEEF4 /* RealmCheckoutProvider.swift */,
@@ -2705,6 +2722,7 @@
 				EB1FC51A1BC694AF004E1114 /* OkNextButtonsView.xib in Resources */,
 				EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */,
 				EB8D1D0D1C38363400ADF884 /* AddEditGroupViewController.storyboard in Resources */,
+				EBA2C8CE1C4F207800A970B8 /* EditProductCategoryController.xib in Resources */,
 				EB7032831BEBBC6400779EBB /* ReorderSectionTableViewController.storyboard in Resources */,
 				EBDA75571BCD966D00E34AC3 /* OkCancelButtonsView.xib in Resources */,
 				EBA575651BCECC0000A0A825 /* QuantityView.xib in Resources */,
@@ -2917,6 +2935,7 @@
 				EB9208041C4DBE4400332332 /* SimpleInputPopupController.swift in Sources */,
 				EB0C1B881B3DA37100F24C85 /* LoginViewController.swift in Sources */,
 				EBDA75531BCD960900E34AC3 /* OkCancelButtonsView.swift in Sources */,
+				EBA2C8C61C4F18AC00A970B8 /* ManageProductCategoriesController.swift in Sources */,
 				EB0C1BAD1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
 				EB451C391B85F3F0000DE208 /* StatsProvider.swift in Sources */,
 				EBB9A7301B5EB08C00E5487D /* Inventory.swift in Sources */,
@@ -2959,11 +2978,13 @@
 				EB40A4861B55159D000E9CAD /* DBList.swift in Sources */,
 				EB2F5D6D1A51C17200DBC4AF /* UIView.swift in Sources */,
 				EB8D1D091C37318500ADF884 /* GroupsController.swift in Sources */,
+				EBA2C8D01C4F24C100A970B8 /* ManageProductCategoryCell.swift in Sources */,
 				EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */,
 				EBA18C261BF56E3B009291F2 /* CGSize.swift in Sources */,
 				EB7F59D71BA1E0DF00E07EBA /* Performance.swift in Sources */,
 				EB7F59CF1BA1D40A00E07EBA /* Option.swift in Sources */,
 				EBDA75441BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift in Sources */,
+				EBA2C8C81C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */,
 				EB80CE4D1C3F5F10001DF159 /* InventoryAuthChecker.swift in Sources */,
 				EB6F812D1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EBB5267D1BEFE21F0002A286 /* HelpCell.swift in Sources */,
@@ -3202,6 +3223,7 @@
 				EB0C1BA91B3EC00700F24C85 /* ProviderResult.swift in Sources */,
 				EBB5267B1BEFE20E0002A286 /* HelpHeaderView.swift in Sources */,
 				EBE81DE31C1A08C900EA5644 /* WSUserParser.swift in Sources */,
+				EBA2C8CD1C4F207800A970B8 /* EditProductCategoryController.swift in Sources */,
 				EBBC9B781C00D7190046966B /* RealmProductProvider.swift in Sources */,
 				EB0CC08C1BD2BC93004A17B4 /* StashViewController.swift in Sources */,
 				EB1B36571BC44D9A003519F2 /* PlanViewController.swift in Sources */,
@@ -3359,6 +3381,7 @@
 				EB55675D1A86433700CD3EC6 /* Product.swift in Sources */,
 				EBF608B21C0CF26A00EDB33E /* UserIdentity.swift in Sources */,
 				EB7858761B7F6F69008AAD12 /* RemoteHistoryItems.swift in Sources */,
+				EBA2C8C91C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */,
 				EB7E833B1B7B9021009DEEF4 /* RealmCheckoutProvider.swift in Sources */,
 				EB80CE561C44B000001DF159 /* NSMutableAttributedString.swift in Sources */,
 				EBDFE3BF1ACEF60100E48F95 /* HeaderCell.swift in Sources */,
@@ -3561,6 +3584,7 @@
 				EBF3777B1B342B1E00EEB6DB /* Section.swift in Sources */,
 				EB7858771B7F6F69008AAD12 /* RemoteHistoryItems.swift in Sources */,
 				EB0C2A501B5841C600AF6226 /* DBInventoryItem.swift in Sources */,
+				EBA2C8CA1C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */,
 				EBF377651B342A8E00EEB6DB /* RemoteListItem.swift in Sources */,
 				EB70C2311B5021D50060E529 /* UserInput.swift in Sources */,
 				EBA7AC941BFE950300247A8C /* ProductCategory.swift in Sources */,

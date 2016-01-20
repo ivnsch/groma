@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ProductCategory {
+class ProductCategory: Equatable, Identifiable {
     let uuid: String
     let name: String
     let color: UIColor
@@ -35,7 +35,11 @@ class ProductCategory {
         )
     }
     
-    func same(rhs: Product) -> Bool {
+    func same(rhs: ProductCategory) -> Bool {
         return uuid == rhs.uuid
     }
+}
+
+func ==(lhs: ProductCategory, rhs: ProductCategory) -> Bool {
+    return lhs.uuid == rhs.uuid
 }

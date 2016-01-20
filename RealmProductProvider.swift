@@ -6,7 +6,7 @@
 //  Copyright © 2015 ivanschuetz. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import RealmSwift
 
 class RealmProductProvider: RealmProvider {
