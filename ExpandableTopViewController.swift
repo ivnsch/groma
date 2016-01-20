@@ -16,7 +16,7 @@ import UIKit
 class ExpandableTopViewController<T: UIViewController>: NSObject {
 
     private let top: CGFloat
-    private let height: CGFloat
+    var height: CGFloat // Note: this only takes effect the next time view is expanded
     private let animateTableViewInset: Bool
     private let openInset: CGFloat // extra table view inset while open (additionally to the view's height when expanded)
     private let closeInset: CGFloat // extra table view inset while closed (additionally to the view's height when expanded)

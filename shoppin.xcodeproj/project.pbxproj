@@ -507,6 +507,9 @@
 		EBA2C8CD1C4F207800A970B8 /* EditProductCategoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8CB1C4F207800A970B8 /* EditProductCategoryController.swift */; settings = {ASSET_TAGS = (); }; };
 		EBA2C8CE1C4F207800A970B8 /* EditProductCategoryController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBA2C8CC1C4F207800A970B8 /* EditProductCategoryController.xib */; settings = {ASSET_TAGS = (); }; };
 		EBA2C8D01C4F24C100A970B8 /* ManageProductCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8CF1C4F24C100A970B8 /* ManageProductCategoryCell.swift */; settings = {ASSET_TAGS = (); }; };
+		EBA2C8D21C502C3200A970B8 /* ConnectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8D11C502C3100A970B8 /* ConnectionProvider.swift */; settings = {ASSET_TAGS = (); }; };
+		EBA2C8D31C502C3200A970B8 /* ConnectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8D11C502C3100A970B8 /* ConnectionProvider.swift */; settings = {ASSET_TAGS = (); }; };
+		EBA2C8D41C502C3200A970B8 /* ConnectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8D11C502C3100A970B8 /* ConnectionProvider.swift */; settings = {ASSET_TAGS = (); }; };
 		EBA575621BCECBDF00A0A825 /* QuantityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA575611BCECBDF00A0A825 /* QuantityView.swift */; };
 		EBA575651BCECC0000A0A825 /* QuantityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBA575641BCECC0000A0A825 /* QuantityView.xib */; };
 		EBA575671BCFFB2700A0A825 /* GroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA575661BCFFB2700A0A825 /* GroupItem.swift */; };
@@ -1111,6 +1114,7 @@
 		EBA2C8CB1C4F207800A970B8 /* EditProductCategoryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProductCategoryController.swift; sourceTree = "<group>"; };
 		EBA2C8CC1C4F207800A970B8 /* EditProductCategoryController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditProductCategoryController.xib; sourceTree = "<group>"; };
 		EBA2C8CF1C4F24C100A970B8 /* ManageProductCategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageProductCategoryCell.swift; sourceTree = "<group>"; };
+		EBA2C8D11C502C3100A970B8 /* ConnectionProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectionProvider.swift; sourceTree = "<group>"; };
 		EBA575611BCECBDF00A0A825 /* QuantityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuantityView.swift; sourceTree = "<group>"; };
 		EBA575641BCECC0000A0A825 /* QuantityView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuantityView.xib; sourceTree = "<group>"; };
 		EBA575661BCFFB2700A0A825 /* GroupItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupItem.swift; sourceTree = "<group>"; };
@@ -2445,6 +2449,7 @@
 				EB0C1B8E1B3DA97000F24C85 /* UserProvider.swift */,
 				EBDA75411BCD5C8C00E34AC3 /* ListItemGroupProvider.swift */,
 				EBA7AC9D1BFEA87300247A8C /* ProductCategoryProvider.swift */,
+				EBA2C8D11C502C3100A970B8 /* ConnectionProvider.swift */,
 				EB0C1BA81B3EC00700F24C85 /* ProviderResult.swift */,
 				EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */,
 				EB70C2181B4D2C940060E529 /* ListProvider.swift */,
@@ -3123,6 +3128,7 @@
 				EB7032871BEBF2B300779EBB /* SectionProviderImpl.swift in Sources */,
 				EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */,
 				EB1B36751BC4832D003519F2 /* PlanItemMapper.swift in Sources */,
+				EBA2C8D21C502C3200A970B8 /* ConnectionProvider.swift in Sources */,
 				EBF162FF1A3DDE730048E37C /* ListItemMapper.swift in Sources */,
 				EB80CE551C44AFFE001DF159 /* NSMutableAttributedString.swift in Sources */,
 				EBF608B11C0CF26A00EDB33E /* UserIdentity.swift in Sources */,
@@ -3351,6 +3357,7 @@
 				EBF608B61C0F5D0E00EDB33E /* RemotePlanItemsProvider.swift in Sources */,
 				EBB9A73D1B5EB1C700E5487D /* InventoryItemsProvider.swift in Sources */,
 				EBA7AC931BFE950300247A8C /* ProductCategory.swift in Sources */,
+				EBA2C8D31C502C3200A970B8 /* ConnectionProvider.swift in Sources */,
 				EB1B36721BC48278003519F2 /* RealmPlanProvider.swift in Sources */,
 				EB7F59D41BA1DBF600E07EBA /* Providers.swift in Sources */,
 				EB1B36761BC4832D003519F2 /* PlanItemMapper.swift in Sources */,
@@ -3545,6 +3552,7 @@
 				EB87A4A51C1A140A008D2A42 /* WSItemsSaver.swift in Sources */,
 				EBBC9B7A1C00D7190046966B /* RealmProductProvider.swift in Sources */,
 				EB6F81661B4B1CDC008680E0 /* TestRequiresAuthentication.swift in Sources */,
+				EBA2C8D41C502C3200A970B8 /* ConnectionProvider.swift in Sources */,
 				EB70328D1BEBF31A00779EBB /* SectionProvider.swift in Sources */,
 				EB4D57AE1B7505DD00BC6171 /* SyncUtils.swift in Sources */,
 				EB0C1BAB1B3ED8D600F24C85 /* ProviderResult.swift in Sources */,

@@ -79,7 +79,7 @@ class RemoteProvider {
     * Calls onConnected if user has an internet connection. Otherwise calls elseHandler with corresponding status.
     */
     private class func onConnected<T: Any>(elseHandler: RemoteResult<T> -> (), onConnected: VoidFunction) {
-        if connected {
+        if ConnectionProvider.connected {
             onConnected()
         } else {
             elseHandler(RemoteResult(status: .NoConnection))
@@ -97,11 +97,5 @@ class RemoteProvider {
                 elseHandler(RemoteResult(status: .NotLoggedIn))
             }
         }
-    }
-    
-    private class var connected: Bool {
-        let reachability = Reachability.reachabilityForInternetConnection()
-        let internetStatus = reachability.currentReachabilityStatus()
-        return internetStatus != .NotReachable
     }
 }

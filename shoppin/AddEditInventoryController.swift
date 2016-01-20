@@ -22,9 +22,9 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var listNameInputField: UITextField!
     @IBOutlet weak var usersTableView: UITableView!
     @IBOutlet weak var addUserInputField: UITextField!
-    @IBOutlet weak var userCountLabel: UILabel!
-    
     @IBOutlet weak var colorButton: UIButton!
+    @IBOutlet weak var addUserButton: UIButton!
+    @IBOutlet weak var offlineOverlayButton: UIButton!
     
     private var listInputsValidator: Validator?
     private var userInputsValidator: Validator?
@@ -46,7 +46,6 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
     var sharedUsers: [SharedUser] = [] {
         didSet {
             usersTableView.reloadData()
-            userCountLabel.text = sharedUsers.count > 0 ? "\(sharedUsers.count)" : ""
         }
     }
     
@@ -61,6 +60,11 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
             colorButton.tintColor = RandomFlatColorWithShade(.Dark)
         }
     }
+
+//    override func viewDidAppear(animated: Bool) {
+//        super.viewDidAppear(animated)
+//        animateHeigth(ConnectionProvider.connectedAndLoggedIn ? 100 : 70)
+//    }
     
     private func prefill(list: Inventory) {
         listNameInputField.text = list.name
@@ -87,6 +91,10 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
         initValidator()
         
         listNameInputField.becomeFirstResponder()
+        
+        let connectedAndLoggedIn = ConnectionProvider.connectedAndLoggedIn
+        offlineOverlayButton.userInteractionEnabled = !connectedAndLoggedIn
+        offlineOverlayButton.hidden = connectedAndLoggedIn
     }
     
     @IBAction func onDoneTap(sender: UIBarButtonItem) {
@@ -154,17 +162,40 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
     }
     
     @IBAction func onAddUserTap(sender: UIButton) {
-        self.validateInputs(userInputsValidator) {[weak self] in
-            if let weakSelf = self {
-                if let input = weakSelf.addUserInputField.text {
-                    SharedUserChecker.check(input, users: weakSelf.sharedUsers, controller: weakSelf, onSuccess: {
-                        weakSelf.sharedUsers.append(SharedUser(email: input))
-                        weakSelf.addUserInputField.clear()
-                    })
-                } else {
-                    print("Error: validation was not implemented correctly")
+        if !ConnectionProvider.connectedAndLoggedIn {
+            AlertPopup.show(message: "You must be logged in to share your inventory", controller: self)
+            
+        } else {
+            self.validateInputs(userInputsValidator) {[weak self] in
+                
+                if let weakSelf = self {
+                    if let input = weakSelf.addUserInputField.text {
+                        SharedUserChecker.check(input, users: weakSelf.sharedUsers, controller: weakSelf, onSuccess: {
+                            weakSelf.addUserUI(SharedUser(email: input))
+                        })
+                    } else {
+                        print("Error: validation was not implemented correctly")
+                    }
                 }
             }
+        }
+    }
+    
+    private func addUserUI(user: SharedUser) {
+        sharedUsers.append(user)
+        addUserInputField.clear()
+
+        let viewWithoutTableViewHeight: CGFloat = 100
+        let tableViewCellHeight: CGFloat = 44
+        let viewMaxHeight: CGFloat = 260
+        let height = min(viewMaxHeight, viewWithoutTableViewHeight + (CGFloat(sharedUsers.count) * tableViewCellHeight)) // tableview height as content, but not higher than max
+        animateHeigth(height)
+    }
+    
+    private func animateHeigth(height: CGFloat) {
+        UIView.animateWithDuration(0.3) {[weak self] in
+            self?.view.frame = self!.view.frame.copy(height: height)
+            self?.view.layoutIfNeeded()
         }
     }
     
@@ -175,7 +206,6 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sharedUsers.count
     }
-    
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("userCell", forIndexPath: indexPath) as! ListSharedUserCell
@@ -238,13 +268,6 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
             print("Warning: AddEditListController.onColorTap: no parentViewController")
         }
         
-    }
-    
-    @IBAction func onAddUsersTap() {
-        UIView.animateWithDuration(0.3) {[weak self] in
-            self?.view.frame = self!.view.frame.copy(height: 260)
-            self?.view.layoutIfNeeded()
-        }
     }
     
     func clear() {

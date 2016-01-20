@@ -41,8 +41,9 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         super.viewDidLoad()
         
         setNavTitle("Inventories")
-        
+
         topAddEditListControllerManager = initTopAddEditListControllerManager()
+
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsockeInventory:", name: WSNotificationName.List.rawValue, object: nil)
     }
     
@@ -50,9 +51,14 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        topAddEditListControllerManager?.height = ConnectionProvider.connectedAndLoggedIn ? 100 : 70
+    }
+    
     private func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditInventoryController> {
         let top = CGRectGetHeight(topBar.frame)
-        return ExpandableTopViewController(top: top, height: 250, parentViewController: self, tableView: tableView) {[weak self] in
+        return ExpandableTopViewController(top: top, height: ConnectionProvider.connectedAndLoggedIn ? 100 : 70, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.addEditInventory()
             controller.delegate = self
             controller.currentListsCount = self?.models.count ?? {
