@@ -200,7 +200,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 }
                 
                 if scrollToSelection {
-                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Middle, animated: true)
+                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
                 }
             }
             
@@ -210,7 +210,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             
             if scrollToSelection {
                 if let indexPath = getIndexPath(listItem) { // lookup indexpath where new item was inserted (initTableViewContent puts the item where it belongs)
-                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Middle, animated: true)
+                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
                 }
             }
         }

@@ -226,7 +226,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         categories.update(category)
         onUpdatedCategories()
         
-        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Middle, animated: true)
+        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
         addEditCategoryControllerManager?.expand(false)
         topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
     }
@@ -234,7 +234,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     private func addCategoryUI(product: ProductCategory) {
         categories.append(product)
         onUpdatedCategories()
-        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: filteredCategories.count - 1, inSection: 0), atScrollPosition: .Middle, animated: true)
+        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: filteredCategories.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
         setAddEditProductControllerOpen(false)
     }
     

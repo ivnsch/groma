@@ -298,7 +298,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         products.update(product)
         onUpdatedProducts()
         
-        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Middle, animated: true)
+        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
         addEditProductControllerManager?.expand(false)
         topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
     }
@@ -306,7 +306,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     private func addProductUI(product: Product) {
         products.append(product)
         onUpdatedProducts()
-        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: filteredProducts.count - 1, inSection: 0), atScrollPosition: .Middle, animated: true)
+        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: filteredProducts.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
         setAddEditProductControllerOpen(false)
     }
 

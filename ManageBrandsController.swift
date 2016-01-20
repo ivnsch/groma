@@ -228,7 +228,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
         
         onUpdatedBrands()
         
-        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Middle, animated: true)
+        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
         addEditBrandControllerManager?.expand(false)
         topBar.setRightButtonIds([.Edit])
     }
@@ -236,7 +236,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     private func addBrandUI(brand: String) {
         brands.append(brand)
         onUpdatedBrands()
-        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: filteredBrands.count - 1, inSection: 0), atScrollPosition: .Middle, animated: true)
+        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: filteredBrands.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
         setAddEditBrandControllerOpen(false)
     }
     
