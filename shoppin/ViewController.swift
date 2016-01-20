@@ -453,7 +453,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             updatingSelectedCell = listItemsTableViewController.tableView.cellForRowAtIndexPath(indexPath)
 
             topAddEditListItemControllerManager?.expand(true)
-            
+            topBar.setRightButtonModels([
+                TopBarButtonModel(buttonId: .Submit),
+                TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+            ])
             pricesView.setExpandedVertical(false)
             
             topAddEditListItemControllerManager?.controller?.updatingItem = AddEditItem(item: tableViewListItem.listItem)
