@@ -151,8 +151,11 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
                 if self?.aggregate?.timePeriod != aggregate.timePeriod || self?.aggregate?.monthYearAggregates ?? [] != aggregate.monthYearAggregates { // don't reload if there are no changes
                     self?.emptyStatsView.setHiddenAnimated(!aggregate.monthYearAggregates.isEmpty)
                     self?.aggregate = aggregate
-                    self?.initChart(aggregate)
-                    self?.initThisMonthSpendingsLabels(aggregate)
+                    
+                    if !aggregate.monthYearAggregates.isEmpty {
+                        self?.initChart(aggregate)
+                        self?.initThisMonthSpendingsLabels(aggregate)
+                    }
                 }
             })
         } else {
@@ -238,7 +241,7 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         
         let xModel = ChartAxisModel(axisValues: xValues, axisTitleLabel: ChartAxisLabel(text: "", settings: labelSettings))
         let yModel = ChartAxisModel(axisValues: yValues, axisTitleLabel: ChartAxisLabel(text: "Spending", settings: labelSettings.defaultVertical()))
-        let chartFrame = CGRectMake(view.frame.origin.x, view.frame.origin.y + 50, view.frame.width - 10, 350)
+        let chartFrame = CGRectMake(view.frame.origin.x, view.frame.origin.y + 50, view.frame.width - 10, 300)
         let chartSettings = ChartSettings()
         chartSettings.top = 30
         chartSettings.trailing = 30
