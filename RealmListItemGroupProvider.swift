@@ -168,4 +168,47 @@ class RealmListItemGroupProvider: RealmProvider {
     func remove(groupItem: GroupItem, handler: Bool -> Void) {
         remove("uuid = '\(groupItem.uuid)'", handler: handler, objType: DBGroupItem.self)
     }
+    
+    // Copied from realm list item provider (which is copied from inventory item provider) refactor?
+    // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
+    func incrementGroupItem(item: GroupItem, delta: Int, handler: Bool -> ()) {
+        
+        //        synced(self)  {
+        
+        // load
+        let realm = try! Realm()
+        let results = realm.objects(DBGroupItem).filter("uuid == '\(item.uuid)'")
+        //        results = results.filter(NSPredicate(format: DBInventoryItem.createFilter(item.product, item.inventory), argumentArray: []))
+        let objs: [DBGroupItem] = results.toArray(nil)
+        let dbItems = objs.map{GroupItemMapper.groupItemWith($0)}
+        let groupItemMaybe = dbItems.first
+        
+        if let groupItem = groupItemMaybe {
+            // increment
+            let incrementedListitem = groupItem.copy(quantity: groupItem.quantity + delta)
+            
+            // convert to db object
+            let dbIncrementedInventoryitem = GroupItemMapper.dbWith(incrementedListitem)
+            
+            // save
+            realm.write {
+                for obj in objs {
+                    obj.lastUpdate = NSDate()
+                    realm.add(dbIncrementedInventoryitem, update: true)
+                }
+            }
+            
+            handler(true)
+            
+            
+        } else {
+            print("Inventory item not found: \(item)")
+            handler(false)
+        }
+        //        }
+    }
+    
+
+    
+    
 }

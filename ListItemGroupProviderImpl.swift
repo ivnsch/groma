@@ -208,4 +208,67 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
             }
         }
     }
+    
+    // Copied from ListItemProviderImpl (which is copied from inventory provider) refactor?
+    func increment(listItem: GroupItem, delta: Int, _ handler: ProviderResult<Any> -> ()) {
+        
+        // Get item from database with updated quantityDelta
+        // The reason we do this instead of using the item parameter, is that later doesn't always have valid quantityDelta
+        // -> When item is incremented we set back quantityDelta after the server's response, this is NOT communicated to the item in the view controller (so on next increment, the passed quantityDelta is invalid)
+        // Which is ok. because the UI must not have logic related with background server update
+        // Cleaner would be to create a lightweight InventoryItem version for the UI - without quantityDelta, etc. But this adds extra complexity
+        
+//        let memIncremented = memProvider.increment(listItem, quantity: ListItemStatusQuantity(status: .Todo, quantity: delta))
+//        if memIncremented {
+//            handler(ProviderResult(status: .Success))
+//        }
+        
+        dbGroupsProvider.incrementGroupItem(listItem, delta: delta) {saved in
+//            
+//            if !memIncremented { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
+                if saved {
+                    handler(ProviderResult(status: .Success))
+                } else {
+                    handler(ProviderResult(status: .DatabaseSavingError))
+                }
+//            }
+            
+            //            print("SAVED DB \(item)(+delta) in local db. now going to update remote")
+            
+            // TODO!! no server for gorup item increment yet
+//            self?.remoteGroupsProvider.incrementGroupItem(listItem, delta: delta) {remoteResult in
+//                
+//                if remoteResult.success {
+//                    
+//                    //                    //                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
+//                    //
+//                    //                    // Now that the item was updated in server, set back delta in local database
+//                    //                    // Note we subtract instead of set to 0, to handle possible parallel requests correctly
+//                    //                    self?.dbInventoryProvider.incrementInventoryItem(listItem, delta: -delta, onlyDelta: true) {saved in
+//                    //
+//                    //                        if saved {
+//                    //                            //                            self?.findInventoryItem(item) {result in
+//                    //                            //                                if let newitem = result.sucessResult {
+//                    //                            //                                    print("3. CONFIRM incremented item: \(item) + \(delta) == \(newitem)")
+//                    //                            //                                }
+//                    //                            //                            }
+//                    //
+//                    //                        } else {
+//                    //                            print("Error: couln't save remote list item")
+//                    //                        }
+//                    //
+//                    //                    }
+//                    
+//                } else {
+//                    print("Error incrementing item: \(listItem) in remote, result: \(remoteResult)")
+//                    DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
+//                        // if there's a not connection related server error, invalidate cache
+//                        self?.memProvider.invalidate()
+//                        handler(remoteResult)
+//                    }
+//                }
+//            }
+        }
+    }
+    
 }

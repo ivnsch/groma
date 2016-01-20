@@ -43,4 +43,7 @@ protocol ListItemGroupProvider {
     func update(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
     func remove(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    
+    func increment(listItem: GroupItem, delta: Int, _ handler: ProviderResult<Any> -> ())
+
 }

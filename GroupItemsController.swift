@@ -449,11 +449,9 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func increment(model: ProductWithQuantity, delta: Int, onSuccess: VoidFunction) {
-        // TODO no increment for group items yet!?
-        //        Providers.listItemGroupsProvider.
-        //        Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, successHandler({result in
-        //            onSuccess()
-        //        }))
+        Providers.listItemGroupsProvider.increment((model as! ProductWithQuantityGroup).groupItem, delta: delta, successHandler({result in
+            onSuccess()
+        }))
     }
     
     func onModelSelected(model: ProductWithQuantity, indexPath: NSIndexPath) {
