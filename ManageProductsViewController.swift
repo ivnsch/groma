@@ -69,6 +69,8 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationController?.setNavigationBarHidden(true, animated: false)
+
         initTopBar()
         
         tableView.allowsSelectionDuringEditing = true
@@ -298,6 +300,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Middle, animated: true)
         addEditProductControllerManager?.expand(false)
+        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
     }
     
     private func addProductUI(product: Product) {

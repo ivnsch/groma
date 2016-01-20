@@ -383,7 +383,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 handler(completions)
             }
         case brandInput:
-            Providers.productProvider.brands(successHandler{brands in
+            Providers.brandProvider.brands(successHandler{brands in
                 handler(brands)
             })
         case _:

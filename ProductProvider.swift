@@ -47,8 +47,6 @@ protocol ProductProvider {
     func loadProduct(name: String, brand: String, handler: ProviderResult<Product> -> ())
     
     func categoriesContaining(name: String, _ handler: ProviderResult<[String]> -> ())
-
-    func brands(handler: ProviderResult<[String]> -> ())
     
     /**
     Utility method to refactor common code in ListItemsProviderImpl and ListItemGroupProviderImpl when adding new list or group items

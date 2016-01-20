@@ -10,18 +10,18 @@
         </mutableArray>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditSectionViewController" customModule="shoppin" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EditBrandController" customModule="shoppin" customModuleProvider="target">
             <connections>
-                <outlet property="nameTextField" destination="ueK-br-rbi" id="m6c-yX-e7f"/>
+                <outlet property="nameTextField" destination="8Jt-TR-7QK" id="G02-KM-yai"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="59"/>
+            <rect key="frame" x="0.0" y="0.0" width="600" height="57"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Section name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ueK-br-rbi">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Brand name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="8Jt-TR-7QK">
                     <rect key="frame" x="14" y="14" width="572" height="30"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                     <textInputTraits key="textInputTraits"/>
@@ -29,12 +29,12 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="ueK-br-rbi" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="14" id="18X-0d-4uG"/>
-                <constraint firstAttribute="trailing" secondItem="ueK-br-rbi" secondAttribute="trailing" constant="14" id="Yr1-lQ-NqB"/>
-                <constraint firstItem="ueK-br-rbi" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="14" id="zOw-hZ-fS6"/>
+                <constraint firstItem="8Jt-TR-7QK" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="14" id="LaD-jn-NGo"/>
+                <constraint firstAttribute="trailing" secondItem="8Jt-TR-7QK" secondAttribute="trailing" constant="14" id="d7D-tQ-ryk"/>
+                <constraint firstItem="8Jt-TR-7QK" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="14" id="wub-jm-Zoq"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="497" y="222.5"/>
+            <point key="canvasLocation" x="454" y="195.5"/>
         </view>
     </objects>
 </document>

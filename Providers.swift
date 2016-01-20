@@ -34,4 +34,7 @@ struct Providers {
     static var listItemGroupsProvider: ListItemGroupProvider = ListItemGroupProviderImpl()
 
     static var helpProvider: HelpProvider = HelpProviderImpl()
+    
+    static var brandProvider: BrandProvider = BrandProviderImpl()
+
 }

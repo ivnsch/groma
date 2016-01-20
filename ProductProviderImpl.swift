@@ -12,6 +12,7 @@ import Foundation
 class ProductProviderImpl: ProductProvider {
 
     let dbProvider = RealmListItemProvider()
+    let dbBrandProvider = RealmBrandProvider()
     let productDbProvider = RealmProductProvider()
 
     func products(range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<[Product]> -> Void) {
@@ -143,13 +144,7 @@ class ProductProviderImpl: ProductProvider {
             handler(ProviderResult(status: .Success, sucessResult: dbCategories))
         }
     }
-    
-    func brands(handler: ProviderResult<[String]> -> ()) {
-        dbProvider.brands {brands in
-            handler(ProviderResult(status: .Success, sucessResult: brands))
-        }
-    }
-    
+
     func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, _ handler: ProviderResult<Product> -> Void) {
 
         // load product and update or create one

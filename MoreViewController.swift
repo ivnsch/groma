@@ -15,8 +15,7 @@ class MoreViewController: UITableViewController, MFMailComposeViewControllerDele
         switch indexPath.row  {
             
         case 1: // Manage product
-            let controller = UIStoryboard.manageProductsViewController()
-            navigationController?.setNavigationBarHidden(true, animated: false)
+            let controller = UIStoryboard.manageProductsSelectionController()
             navigationController?.pushViewController(controller, animated: true)
             
         case 6: // Feedback

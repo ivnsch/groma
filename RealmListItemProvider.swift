@@ -56,19 +56,6 @@ class RealmListItemProvider: RealmProvider {
         self.saveObjs(dbSections, update: true, handler: handler)
     }
     
-    // MARK: - Brand
-
-    func brands(handler: [String] -> Void) {
-        do {
-            let realm = try Realm()
-            let brands: [String] = Array(Set(realm.objects(DBProduct).map{$0.brand}))
-            handler(brands)
-        } catch let e {
-            print("Error: RealmListItemProvider.brands: Couldn't load brands, returning empty array. Error: \(e)")
-            handler([])
-        }
-    }
-    
     // MARK: - Product
     
     func loadProductWithUuid(uuid: String, handler: Product? -> ()) {
