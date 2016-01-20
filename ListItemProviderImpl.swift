@@ -86,7 +86,9 @@ class ListItemProviderImpl: ListItemProvider {
             if remote {
                 self?.remoteProvider.remove(listItem) {result in
                     if !result.success {
-                        print("Error: Removing listItem: \(listItem)")
+                        DefaultRemoteErrorHandler.handle(result, handler: {(result: ProviderResult<[Any]>) in
+                            print("Error: Removing listItem: \(listItem)")
+                        })
                     }
                 }
             }
@@ -168,9 +170,11 @@ class ListItemProviderImpl: ListItemProvider {
                     // TODO review that sending savedListItems is enough for possible update case (increment) to work correctly. Will the server always have correct uuids etc.
                     self?.remoteProvider.add(savedListItems) {remoteResult in
                         if !remoteResult.success {
-                            print("Error: adding listItem in remote: \(listItems), result: \(remoteResult)")
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                            self?.memProvider.invalidate()
+                            
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[ListItem]>) in
+                                print("Error: adding listItem in remote: \(listItems), result: \(remoteResult)")
+                                self?.memProvider.invalidate()
+                            })
                         }
                     }
                 }
@@ -339,8 +343,8 @@ class ListItemProviderImpl: ListItemProvider {
                         // add to server
                         self?.remoteProvider.add(bgResult.listItem) {remoteResult in
                             if !remoteResult.success {
-                                print("Error: adding listItem in remote: \(bgResult.listItem), result: \(remoteResult)")
                                 DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<ListItem>) in
+                                    print("Error: adding listItem in remote: \(bgResult.listItem), result: \(remoteResult)")
                                     self?.memProvider.invalidate()
                                     handler(result)
                                 })
@@ -411,8 +415,11 @@ class ListItemProviderImpl: ListItemProvider {
             if remote {
                 self?.remoteProvider.update(listItems) {result in
                     if !result.success {
-                        print("Error: Updating listItems: \(listItems), result: \(result)")
-                        DefaultRemoteErrorHandler.handle(result, handler: handler)
+                        DefaultRemoteErrorHandler.handle(result, handler: {(result: ProviderResult<Any>) in
+                            print("Error: Updating listItems: \(listItems), result: \(result)")
+                            self?.memProvider.invalidate()
+                            handler(result)
+                        })
                     }
                 }
             }
@@ -472,8 +479,8 @@ class ListItemProviderImpl: ListItemProvider {
 //                    }
                     
                 } else {
-                    print("Error incrementing item: \(listItem) in remote, result: \(remoteResult)")
                     DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
+                        print("Error incrementing item: \(listItem) in remote, result: \(remoteResult)")
                         // if there's a not connection related server error, invalidate cache
                         self?.memProvider.invalidate()
                         handler(remoteResult)

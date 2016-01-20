@@ -84,6 +84,7 @@ struct DefaultRemoteResultMapper {
         case .NoJson: return .ServerError
         case .ServerNotReachable: return .ServerNotReachable
         case .UnknownServerCommunicationError: return .UnknownServerCommunicationError
+        case .ActionNotFound: return .ServerError
         case .InternalServerError: return .ServerError
         case .BadRequest: return .ServerError
         case .UnsupportedMediaType: return .ServerError

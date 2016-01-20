@@ -136,9 +136,9 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                         
                         
                     } else {
-                        print("Error addToInventory: \(remoteResult.status)")
                         // (what do we do with server invalid data error? do we remove the record from the client's database? which kind of error do we show to the client!? in any case this has to be sent to error monitoring, very clearly and detailed
                         DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<Any>) in
+                            print("Error addToInventory: \(remoteResult.status)")
                             // if there's a not connection related server error, invalidate cache
                             self?.memProvider.invalidate()
                             handler(remoteResult)
@@ -245,8 +245,8 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     }
                     
                 } else {
-                    print("Error incrementing item: \(item) in remote, result: \(remoteResult)")
                     DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
+                        print("Error incrementing item: \(item) in remote, result: \(remoteResult)")
                         // if there's a not connection related server error, invalidate cache
                         self?.memProvider.invalidate()
                         handler(remoteResult)
@@ -292,8 +292,8 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             if remote {
                 self?.remoteInventoryItemsProvider.removeInventoryItem(productUuid, inventoryUuid: inventoryUuid) {remoteResult in
                     if !remoteResult.success {
-                        print("Error removing inventory item in server: productUuid: \(productUuid), inventoryUuid: \(inventoryUuid), result: \(remoteResult)")
                         DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
+                            print("Error removing inventory item in server: productUuid: \(productUuid), inventoryUuid: \(inventoryUuid), result: \(remoteResult)")
                             // if there's a not connection related server error, invalidate cache
                             self?.memProvider.invalidate()
                             handler(remoteResult)

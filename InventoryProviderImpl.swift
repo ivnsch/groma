@@ -37,8 +37,9 @@ class InventoryProviderImpl: InventoryProvider {
                     }
                     
                 } else {
-                    print("get remote inventories no success, status: \(remoteResult.status)")
-                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                    DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<[Any]>) in
+                        print("get remote inventories no success, result: \(remoteResult)")
+                    }
                 }
             }
         }
@@ -139,8 +140,9 @@ class InventoryProviderImpl: InventoryProvider {
                     // background TODO should we sync like now only when local DB save was success or also when it failed
                     self?.remoteProvider.addInventory(inventory) {remoteResult in
                         if !remoteResult.success {
-                            print("Error: addInventory background sync failed: \(remoteResult.status)") // TODO handle, when should we remove the item from local DB, when should we send a msg to error monitoring etc.
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                            DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
+                                print("Error: addInventory background sync failed: \(remoteResult)") // TODO handle, when should we remove the item from local DB, when should we send a msg to error monitoring etc.
+                            }
                         }
                     }
                 }

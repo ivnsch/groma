@@ -31,8 +31,8 @@ protocol UserProvider {
     
     func authenticateWithGoogle(token: String, _ handler: ProviderResult<Any> -> ())
     
-    func sync(handler: VoidFunction)
-    
+    func sync(handler: ProviderResult<Any> -> Void)
+
     func forgotPassword(email: String, _ handler: ProviderResult<Any> -> ())
     
     func removeAccount(handler: ProviderResult<Any> -> ())

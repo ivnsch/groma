@@ -128,8 +128,9 @@ class PlanProviderImpl: PlanProvider {
                     
                     self?.remoteProvider.addUpdatePlanItem(planItem) {remoteResult in
                         if !remoteResult.success {
-                            print("Error: addOrIncrementPlanItem: \(planItem), result: \(remoteResult)")
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                            DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<PlanItem>) in
+                                print("Error: addOrIncrementPlanItem: \(planItem), result: \(remoteResult)")
+                            }
                         }
                     }
                     

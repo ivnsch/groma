@@ -421,8 +421,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if userProvider.loggedIn {
                 print("User is logged in, start sync")
                 window?.defaultProgressVisible(true)
-                userProvider.sync {[weak self] in
+                userProvider.sync {[weak self] result in
                     print("Sync finished")
+                    if !result.success {
+                        print("Error: AppDelegate.checkForReachability: Sync didn't succeed: \(result)")
+                    }
                     self?.window?.defaultProgressVisible(false)
                 }
             }

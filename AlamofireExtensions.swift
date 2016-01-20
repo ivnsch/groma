@@ -30,6 +30,7 @@ enum RemoteStatusCode: Int {
     // HTTP
     case NotAuthenticated = 401
     case BadRequest = 400 // e.g. post request with wrong json
+    case ActionNotFound = 404
     case UnsupportedMediaType = 415
     case InternalServerError = 500
     
@@ -290,7 +291,6 @@ extension Alamofire.Request {
         let responseSerializer = ResponseSerializer<RemoteResult<T>, NSError> { request, responseMaybe, data, error in
             
 //            print("method: \(request?.HTTPMethod), response: \(responseMaybe)")
-            
             if let response = responseMaybe {
                 
                 let statusCode = response.statusCode
@@ -365,6 +365,11 @@ extension Alamofire.Request {
                 } else if statusCode == 400 {
                     print("Bad request")
                     return Result.Success(RemoteResult<T>(status: .BadRequest))
+                    
+                } else if statusCode == 404 {
+                    let str = request?.URL.map{$0} ?? ""
+                    print("Action not found: \(str)")
+                    return Result.Success(RemoteResult<T>(status: .ActionNotFound))
                     
                 } else if statusCode == 415 {
                     print("Unsupported media type")

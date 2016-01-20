@@ -40,8 +40,9 @@ class ListProviderImpl: ListProvider {
                     }
                     
                 } else {
-                    print("get remote lists no success, status: \(remoteResult.status)")
-                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                    DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<[List]>) in
+                        print("get remote lists no success, result: \(remoteResult)")
+                    }
                 }
             }
         }
@@ -79,8 +80,9 @@ class ListProviderImpl: ListProvider {
                 self.remoteListProvider.add(list, handler: {remoteResult in
                     
                     if !remoteResult.success {
-                        print("error adding the remote list: \(remoteResult.status)")
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<List>) in
+                            print("error adding the remote list: \(remoteResult)")
+                        }
                     }
                 })
             }
@@ -136,8 +138,9 @@ class ListProviderImpl: ListProvider {
                         }
                         
                     } else {
-                        print("Error: sync list with list items: \(remoteResult.status)")
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        print("Error: sync list with list items: \(remoteResult)")
+                        let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+                        handler(ProviderResult(status: providerStatus))
                     }
                 }
             }

@@ -18,9 +18,9 @@ class UserProviderImpl: UserProvider {
         self.remoteProvider.login(loginData) {[weak self] result in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
-                self?.sync {
+                self?.sync {result in
                     self?.connectWebsocketIfLoggedIn()
-                    handler(ProviderResult(status: providerStatus))
+                    handler(result)
                 }
             } else {
                 handler(ProviderResult(status: providerStatus))
@@ -32,9 +32,9 @@ class UserProviderImpl: UserProvider {
         self.remoteProvider.register(user) {[weak self] result in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
-                self?.sync {
+                self?.sync {result in
                     self?.connectWebsocketIfLoggedIn()
-                    handler(ProviderResult(status: providerStatus))
+                    handler(result)
                 }
             } else {
                 handler(ProviderResult(status: providerStatus))
@@ -53,29 +53,35 @@ class UserProviderImpl: UserProvider {
         self.remoteProvider.logout(remoteResultHandler(handler))
     }
     
-    func sync(handler: VoidFunction) {
+    func sync(handler: ProviderResult<Any> -> Void) {
 
         Providers.listProvider.syncListsWithListItems {result in
             if result.success {
+                
                 Providers.inventoryProvider.syncInventoriesWithInventoryItems {result in
                     if result.success {
+                        
                         Providers.historyProvider.syncHistoryItems {result in
-                            
-                            Providers.listItemsProvider.invalidateMemCache()
-                            Providers.inventoryItemsProvider.invalidateMemCache()
-                            
-                            handler()
+                            if result.success {
+                                Providers.listItemsProvider.invalidateMemCache()
+                                Providers.inventoryItemsProvider.invalidateMemCache()
+                                handler(ProviderResult(status: result.status))
+                                
+                            } else {
+                                print("Error: could not sync history (login/register): \(result.status)")
+                                handler(ProviderResult(status: result.status))
+                            }
                         }
                         
                     } else {
                         print("Error: could not sync inventories (login/register): \(result.status)")
-                        handler()
+                        handler(ProviderResult(status: result.status))
                     }
                 }
                 
             } else {
                 print("Error: could not sync lists (login/register): \(result.status)")
-                handler()
+                handler(ProviderResult(status: result.status))
             }
         }
     }
@@ -119,8 +125,8 @@ class UserProviderImpl: UserProvider {
         self.remoteProvider.authenticateWithFacebook(token) {[weak self] result in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
-                self?.sync {
-                    handler(ProviderResult(status: providerStatus))
+                self?.sync {result in
+                    handler(result)
                 }   
             } else {
                 handler(ProviderResult(status: providerStatus))
@@ -133,8 +139,8 @@ class UserProviderImpl: UserProvider {
         self.remoteProvider.authenticateWithGoogle(token) {[weak self] result in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
-                self?.sync {
-                    handler(ProviderResult(status: providerStatus))
+                self?.sync {result in
+                    handler(result)
                 }
             } else {
                 handler(ProviderResult(status: providerStatus))
