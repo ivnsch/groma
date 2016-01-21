@@ -200,10 +200,12 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         if searchText.isEmpty {
             filteredProducts = ItemWithCellAttributes.toItemsWithCellAttributes(products)
         } else {
-            Providers.productProvider.productsContainingText(searchText, successHandler{[weak self] products in
+            // TODO!!! range, check filter concept probably same problem as with quick add.
+            // TODO sortby recently added or something, so user sees last added products on top
+            Providers.productProvider.products(searchText, range: NSRange(location: 0, length: 10000), sortBy: .Fav, successHandler{[weak self] products in
                 if let weakSelf = self {
 
-                    let productWithCellAttributes = products.map{product in
+                    let productWithCellAttributes = products.products.map{product in
                         return ItemWithCellAttributes(item: product, boldRange: product.name.range(searchText, caseInsensitive: true))
                     }
                     weakSelf.filteredProducts = productWithCellAttributes

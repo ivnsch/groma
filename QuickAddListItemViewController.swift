@@ -34,13 +34,6 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
     
     var delegate: QuickAddListItemDelegate?
     
-    // TODO generic name maybe items or so
-    var quickAddItems: [QuickAddItem] = [] {
-        didSet {
-            filteredQuickAddItems = quickAddItems
-        }
-    }
-    
     private var filteredQuickAddItems: [QuickAddItem] = [] {
         didSet {
             collectionView.reloadData()
@@ -52,7 +45,16 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
     var contentData: (itemType: QuickAddItemType, sortBy: QuickAddItemSortBy) = (.Product, .Fav) {
         didSet {
             if contentData.itemType != oldValue.itemType || contentData.sortBy != oldValue.sortBy {
-                loadItems()
+                clearAndLoadFirstPage()
+                
+            }
+        }
+    }
+    
+    private var searchText: String = "" {
+        didSet {
+            if searchText != oldValue {
+                clearAndLoadFirstPage()
             }
         }
     }
@@ -73,18 +75,9 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
     }
     
     private func clearAndLoadFirstPage() {
-        quickAddItems = []
+        filteredQuickAddItems = []
         paginator.reset()
         loadPossibleNextPage()
-    }
-    
-    func loadItems() {
-        switch contentData.itemType {
-        case .Product:
-            loadProducts()
-        case .Group:
-            loadGroups()
-        }
     }
 
     private func toGroupSortBy(sortBy: QuickAddItemSortBy) -> GroupSortBy {
@@ -101,38 +94,8 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
         }
     }
     
-    private func loadGroups() {
-        
-        Providers.listItemGroupsProvider.groups(paginator.currentPage, sortBy: toGroupSortBy(contentData.sortBy), successHandler{[weak self] groups in
-            self?.quickAddItems = groups.map{QuickAddGroup($0)}
-        })
-    }
-    
-    private func loadProducts() {
-        Providers.productProvider.products(paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), successHandler{[weak self] products in
-            self?.quickAddItems = products.map{QuickAddProduct($0)}
-        })
-    }
-    
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        filter(searchText)
-    }
-    
-    private func filter(searchText: String) {
-        if searchText.isEmpty {
-            filteredQuickAddItems = quickAddItems.map{$0.clearBoldRangeCopy()}
-        } else {
-            switch contentData.itemType {
-            case .Product:
-                Providers.productProvider.productsContainingText(searchText, successHandler{[weak self] products in
-                    self?.quickAddItems = products.map{QuickAddProduct($0, boldRange: $0.name.range(searchText, caseInsensitive: true))}
-                })
-            case .Group:
-                Providers.listItemGroupsProvider.groupsContainingText(searchText, successHandler{[weak self] groups in
-                    self?.quickAddItems = groups.map{QuickAddGroup($0, boldRange: $0.name.range(searchText, caseInsensitive: true))}
-                })
-            }
-        }
+        self.searchText = searchText
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -178,7 +141,10 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
             return textSize
         } else {
             let label1TextSize = item.labelText.size(Fonts.verySmallLight)
-            let label2TextSize = item.label2Text?.size(Fonts.verySmallLight) ?? CGSizeZero
+            
+            // For now use same height for all items independently if they have 2nd label or not.
+//            let label2TextSize = item.label2Text?.size(Fonts.verySmallLight) ?? CGSizeZero
+            let label2TextSize = item.label2Text?.size(Fonts.verySmallLight) ?? "".size(Fonts.verySmallLight)
             
             let label2Size = min(label2TextSize.width, label1TextSize.width + 30) // allow label2 to be max. 30pt wider than label 1
             let cellWidth = max(label1TextSize.width, label2Size) + 6 // the cell has to be as wide as the widest label, and add some inset (6)
@@ -219,7 +185,7 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
     
     
     func scrollToBottom() {
-        collectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: quickAddItems.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
+        collectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: filteredQuickAddItems.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
     }
     
     override func setEditing(editing: Bool, animated: Bool) {
@@ -235,7 +201,7 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
         }
         
         func onItemsLoaded(items: [QuickAddItem]) {
-            quickAddItems.appendAll(items)
+            filteredQuickAddItems.appendAll(items)
             
             paginator.update(items.count)
             
@@ -248,22 +214,32 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
             
             if !weakSelf.paginator.reachedEnd {
                 
-                if (!weakSelf.loadingPage) {
-                    setLoading(true)
-                    
+//                if (!weakSelf.loadingPage) { // commented since when using searchbox we can't "drop" calls
+//                    setLoading(true)
+                
                     switch weakSelf.contentData.itemType {
                     case .Product:
-                        Providers.productProvider.products(weakSelf.paginator.currentPage, sortBy: weakSelf.toProductSortBy(weakSelf.contentData.sortBy), weakSelf.successHandler{products in
-                            let quickAddItems = products.map{QuickAddProduct($0)}
-                            onItemsLoaded(quickAddItems)
+                        Providers.productProvider.products(weakSelf.searchText, range: weakSelf.paginator.currentPage, sortBy: weakSelf.toProductSortBy(weakSelf.contentData.sortBy), weakSelf.successHandler{tuple in
+                            
+                            // ensure we use only results for the string we have currently in the searchbox - the reason this check exists is that concurrent requests can cause probles,
+                            // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.
+                            if tuple.substring == weakSelf.searchText {
+                                
+                                let quickAddItems = tuple.products.map{QuickAddProduct($0, boldRange: $0.name.range(weakSelf.searchText, caseInsensitive: true))}
+                                onItemsLoaded(quickAddItems)
+                            }
                         })
                     case .Group:
-                        Providers.listItemGroupsProvider.groups(weakSelf.paginator.currentPage, sortBy: weakSelf.toGroupSortBy(weakSelf.contentData.sortBy), weakSelf.successHandler{groups in
-                            let quickAddItems = groups.map{QuickAddGroup($0)}
-                            onItemsLoaded(quickAddItems)
+                        Providers.listItemGroupsProvider.groups(weakSelf.searchText, range: weakSelf.paginator.currentPage, sortBy: weakSelf.toGroupSortBy(weakSelf.contentData.sortBy), weakSelf.successHandler{tuple in
+                            
+                            if tuple.substring == weakSelf.searchText { // See comment about this above in products
+                                
+                                let quickAddItems = tuple.groups.map{QuickAddGroup($0, boldRange: $0.name.range(weakSelf.searchText, caseInsensitive: true))}
+                                onItemsLoaded(quickAddItems)
+                            }
                         })
                     }
-                }
+//                }
             }
         }
     }

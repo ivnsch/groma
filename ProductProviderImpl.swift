@@ -21,12 +21,12 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func productsContainingText(text: String,  _ handler: ProviderResult<[Product]> -> Void) {
-        dbProvider.productsContainingText(text) {products in
+    func products(text: String, range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<(substring: String?, products: [Product])> -> Void) {
+        dbProvider.products(text, range: range, sortBy: sortBy) {products in
             handler(ProviderResult(status: .Success, sucessResult: products))
         }
     }
-    
+
     func product(name: String, brand: String, handler: ProviderResult<Product> -> ()) {
         dbProvider.loadProductWithName(name, brand: brand) {dbProduct in
             if let dbProduct = dbProduct {

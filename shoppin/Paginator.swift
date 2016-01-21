@@ -14,6 +14,10 @@ class Paginator {
     
     var reachedEnd = false
     
+    var isFirstPage: Bool {
+        return currentIndex == 0
+    }
+    
     init(pageSize: Int) {
         self.pageSize = pageSize
     }

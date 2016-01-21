@@ -28,8 +28,8 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func groupsContainingText(text: String, _ handler: ProviderResult<[ListItemGroup]> -> Void) {
-        dbGroupsProvider.groupsContainingText(text) {groups in
+    func groups(text: String, range: NSRange, sortBy: GroupSortBy, _ handler: ProviderResult<(substring: String?, groups: [ListItemGroup])> -> Void) {
+        dbGroupsProvider.groups(text, range: range, sortBy: sortBy) {groups in
             handler(ProviderResult(status: .Success, sucessResult: groups))
         }
     }

@@ -20,7 +20,7 @@ protocol ListItemGroupProvider {
     
     func groups(range: NSRange, sortBy: GroupSortBy, _ handler: ProviderResult<[ListItemGroup]> -> Void)
 
-    func groupsContainingText(text: String, _ handler: ProviderResult<[ListItemGroup]> -> Void)
+    func groups(text: String, range: NSRange, sortBy: GroupSortBy, _ handler: ProviderResult<(substring: String?, groups: [ListItemGroup])> -> Void)
     
     func add(groups: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     

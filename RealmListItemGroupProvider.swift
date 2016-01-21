@@ -13,21 +13,24 @@ class RealmListItemGroupProvider: RealmProvider {
     
     // TODO don't use QuickAddItemSortBy here, map to a (new) group specific enum
     func groups(range: NSRange, sortBy: GroupSortBy, handler: [ListItemGroup] -> Void) {
-        let sortFieldStr: String = {
-            switch sortBy {
-            case .Alphabetic: return "name"
-            case .Fav: return "fav"
-            case .Order: return "order"
-            }
-        }()
-        let mapper = {ListItemGroupMapper.listItemGroupWith($0)}
-        self.load(mapper, sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), range: range, handler: handler)
+        groups(range: range, sortBy: sortBy) {tuples in
+            handler(tuples.groups)
+        }
     }
     
-    func groupsContainingText(text: String, handler: [ListItemGroup] -> Void) {
+    func groups(substring: String? = nil, range: NSRange? = nil, sortBy: GroupSortBy, handler: (substring: String?, groups: [ListItemGroup]) -> Void) {
+        let sortData: (key: String, ascending: Bool) = {
+            switch sortBy {
+            case .Alphabetic: return ("name", true)
+            case .Fav: return ("fav", false)
+            case .Order: return ("order", true)
+            }
+        }()
+        let filterMaybe = substring.map{"name CONTAINS[c] '\($0)'"}
         let mapper = {ListItemGroupMapper.listItemGroupWith($0)}
-        let filter = "name CONTAINS[c] '\(text)'"
-        self.load(mapper, filter: filter, handler: handler)
+        self.load(mapper, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range) {groups in
+            handler(substring: substring, groups: groups)
+        }
     }
     
     func groupItems(group: ListItemGroup, handler: [GroupItem] -> Void) {

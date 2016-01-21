@@ -15,8 +15,13 @@ class QuickAddGroupCell: UICollectionViewCell {
     var item: QuickAddGroup? {
         didSet {
             if let item = item {
-                nameLabel.text = item.labelText
-                nameLabel.textColor = UIColor.whiteColor()
+                if let boldRange = item.boldRange {
+                    nameLabel.attributedText = item.labelText.makeAttributed(boldRange, normalFont: Fonts.verySmallLight, font: Fonts.verySmallBold)
+                } else {
+                    nameLabel.text = item.labelText
+                }
+                nameLabel.textColor = UIColor.darkTextColor()
+                
                 contentView.backgroundColor = item.group.bgColor.colorWithAlphaComponent(0.5)
             }
         }

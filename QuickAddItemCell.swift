@@ -19,7 +19,12 @@ class QuickAddItemCell: UICollectionViewCell {
     var item: QuickAddProduct? {
         didSet {
             if let item = item {
-                nameLabel.text = NSLocalizedString(item.labelText, comment: "")
+                if let boldRange = item.boldRange {
+                    nameLabel.attributedText = item.labelText.makeAttributed(boldRange, normalFont: Fonts.verySmallLight, font: Fonts.verySmallBold)
+                } else {
+                    nameLabel.text = item.labelText
+                }
+
                 contentView.backgroundColor = item.product.category.color.colorWithAlphaComponent(0.5)
                 let color = UIColor.darkTextColor()
                 nameLabel.textColor = color

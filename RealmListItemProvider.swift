@@ -70,22 +70,25 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func loadProducts(range: NSRange, sortBy: ProductSortBy, handler: [Product] -> ()) {
+        products(range: range, sortBy: sortBy) {tuple in
+            handler(tuple.products)
+        }
+    }
+
+    func products(substring: String? = nil, range: NSRange? = nil, sortBy: ProductSortBy, handler: (substring: String?, products: [Product]) -> ()) {
         let sortData: (key: String, ascending: Bool) = {
             switch sortBy {
             case .Alphabetic: return ("name", true)
             case .Fav: return ("fav", false)
             }
         }()
+        let filterMaybe = substring.map{"name CONTAINS[c] '\($0)'"}
         let mapper = {ProductMapper.productWithDB($0)}
-        self.load(mapper, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range, handler: handler)
+        self.load(mapper, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range) {products in
+            handler(substring: substring, products: products)
+        }
     }
 
-    func productsContainingText(text: String, handler: [Product] -> ()) {
-        let mapper = {ProductMapper.productWithDB($0)}
-        let filter = "name CONTAINS[c] '\(text)'"
-        self.load(mapper, filter: filter, handler: handler)
-    }
-    
     func deleteProductAndDependencies(product: Product, handler: Bool -> Void) {
         
         doInWriteTransaction({realm in
