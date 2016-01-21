@@ -479,7 +479,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     func onListItemReset(tableViewListItem: TableViewListItem) {
         // since we do a "fake" update of done price label when item is marked as undo (provider is not updated yet), we have to set label back when undo is reverted
         // this is done by simply reloading the prices from the provider
-        updatePrices()
+        updatePrices(.MemOnly)
     }
     
     func onSectionHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
