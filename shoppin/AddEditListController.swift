@@ -21,7 +21,7 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var listNameInputField: UITextField!
     @IBOutlet weak var usersTableView: UITableView!
     @IBOutlet weak var addUserInputField: UITextField!
-    @IBOutlet weak var userCountLabel: UILabel!
+    @IBOutlet weak var offlineOverlayButton: UIButton!
     
     @IBOutlet weak var colorButton: UIButton!
 
@@ -33,9 +33,8 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     }
     private var selectedInventory: Inventory? {
         didSet {
-            if let inventory = selectedInventory {
-                inventoriesButton.setTitle(inventory.name, forState: .Normal)
-            }
+            let title = selectedInventory?.name ?? ""
+            inventoriesButton.setTitle(title, forState: .Normal)
         }
     }
     private var inventoriesPopup: CMPopTipView?
@@ -60,7 +59,6 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     var sharedUsers: [SharedUser] = [] {
         didSet {
             usersTableView.reloadData()
-            userCountLabel.text = sharedUsers.count > 0 ? "\(sharedUsers.count)" : ""
         }
     }
     
@@ -103,6 +101,10 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
         initValidator()
         
         listNameInputField.becomeFirstResponder()
+        
+        let connectedAndLoggedIn = ConnectionProvider.connectedAndLoggedIn
+        offlineOverlayButton.userInteractionEnabled = !connectedAndLoggedIn
+        offlineOverlayButton.hidden = connectedAndLoggedIn
     }
     
     // MARK: - Inventories picker
@@ -190,6 +192,7 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
                     }
                     
                 } else {
+                    AlertPopup.show(message: "Please select an inventory", controller: weakSelf)
                     print("Error: selectedInventory is nil - validation was not implemented correctly")
                 }
             }
@@ -212,9 +215,7 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
                     field.clearValidationError()
                 }
             }
-            
-            if selectedInventory == nil {AlertPopup.show(message: "Please select an inventory", controller: self)}
-            
+
             onValid()
         }
     }
@@ -224,17 +225,41 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     @IBAction func onAddUserTap(sender: UIButton) {
-        self.validateInputs(userInputsValidator) {[weak self] in
-            if let weakSelf = self {
-                if let input = weakSelf.addUserInputField.text {
-                    SharedUserChecker.check(input, users: weakSelf.sharedUsers, controller: weakSelf, onSuccess: {
-                        weakSelf.sharedUsers.append(SharedUser(email: input))
-                        weakSelf.addUserInputField.clear()
-                    })
-                } else {
-                    print("Error: validation was not implemented correctly")
+        if !ConnectionProvider.connectedAndLoggedIn {
+            AlertPopup.show(message: "You must be logged in to share your list", controller: self)
+            
+        } else {
+            self.validateInputs(userInputsValidator) {[weak self] in
+                
+                if let weakSelf = self {
+                    if let input = weakSelf.addUserInputField.text {
+                        SharedUserChecker.check(input, users: weakSelf.sharedUsers, controller: weakSelf, onSuccess: {
+                            weakSelf.addUserUI(SharedUser(email: input))
+                        })
+                    } else {
+                        print("Error: validation was not implemented correctly")
+                    }
                 }
             }
+        }
+    }
+
+    
+    private func addUserUI(user: SharedUser) {
+        sharedUsers.append(user)
+        addUserInputField.clear()
+        
+        let viewWithoutTableViewHeight: CGFloat = 140
+        let tableViewCellHeight: CGFloat = 44
+        let viewMaxHeight: CGFloat = 260
+        let height = min(viewMaxHeight, viewWithoutTableViewHeight + (CGFloat(sharedUsers.count) * tableViewCellHeight)) // tableview height as content, but not higher than max
+        animateHeigth(height)
+    }
+    
+    private func animateHeigth(height: CGFloat) {
+        UIView.animateWithDuration(0.3) {[weak self] in
+            self?.view.frame = self!.view.frame.copy(height: height)
+            self?.view.layoutIfNeeded()
         }
     }
     
@@ -308,13 +333,6 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
             print("Warning: AddEditListController.onColorTap: no parentViewController")
         }
         
-    }
-    
-    @IBAction func onAddUsersTap() {
-        UIView.animateWithDuration(0.3) {[weak self] in
-            self?.view.frame = self!.view.frame.copy(height: 260)
-            self?.view.layoutIfNeeded()
-        }
     }
     
     func clear() {
