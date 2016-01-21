@@ -242,11 +242,13 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 sectionModel.expanded = false
             }
         } else { // expand
-            tableView.wrapUpdates {[weak self] in
+            
+            tableView.wrapAnimationAndUpdates({[weak self] in
                 self?.tableView.insertRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
                 sectionModel.expanded = true
-            }
-            tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: sectionIndex), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+            }, onComplete: {[weak self] in
+                self?.tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: 0, inSection: sectionIndex), atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+            })
         }
     }
     

@@ -58,9 +58,20 @@ extension UITableView {
         return absRow
     }
     
-    func wrapUpdates(function: () -> ()) {
+    func wrapUpdates(function: VoidFunction) {
         self.beginUpdates()
         function()
         self.endUpdates()
+    }
+    
+    func wrapAnimationAndUpdates(function: VoidFunction, onComplete: VoidFunction) {
+        CATransaction.begin()
+        CATransaction.setCompletionBlock {
+            onComplete()
+        }
+        self.beginUpdates()
+        function()
+        self.endUpdates()
+        CATransaction.commit()
     }
 }
