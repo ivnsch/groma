@@ -20,35 +20,36 @@ class MemListItemProvider {
     
     func listItems(list: List) -> [ListItem]? {
         guard enabled else {return nil}
-        guard var listItems = listItems else {return nil}
-        
-        return listItems[list]
+        guard listItems != nil else {return nil}
+
+        return listItems![list]
     }
     
     // Adds or increments listitem. Note: in increment case this increments all the status fron listItem! (todo, done, stash)
     // returns nil only if memory cache is not enabled
     func addListItem(listItem: ListItem) -> ListItem? {
         guard enabled else {return nil}
-        guard var listItems = listItems else {return nil}
-        
+        guard listItems != nil else {return nil}
+
         return syncedRet(self) {
             // TODO more elegant way to write this?
-            if listItems[listItem.list] == nil {
-                listItems[listItem.list] = []
+            if self.listItems![listItem.list] == nil {
+                self.listItems![listItem.list] = []
             }
             
             // TODO optimise this, for each list item we are iterating through the whole list items list. We should put listitems in dictionary with uuid or product name, or something
             // add case when a listitem with same product name already exist becomes an update: use uuid of existing item, and increment quantity - and of course use the rest of fields of new list item
             var addedListItem: ListItem
             
-            if let existingListItem = listItems[listItem.list]?.findFirstWithProductNameAndBrand(listItem.product.name, brand: listItem.product.brand) {
+            if let existingListItem = self.listItems![listItem.list]?.findFirstWithProductNameAndBrand(listItem.product.name, brand: listItem.product.brand) {
                 let updatedListItem = existingListItem.increment(listItem)
-                listItems[listItem.list]?.update(updatedListItem)
+                self.listItems![listItem.list]?.update(updatedListItem)
                 addedListItem = updatedListItem
                 
             } else {
-                listItems[listItem.list]?.append(listItem)
+                self.listItems![listItem.list]?.append(listItem)
                 addedListItem = listItem
+
             }
             
             return addedListItem
@@ -57,16 +58,16 @@ class MemListItemProvider {
 
     func addOrUpdateListItem(product: Product, sectionNameMaybe: String? = nil, status: ListItemStatus, quantity: Int, list: List, note: String? = nil) -> ListItem? {
         guard enabled else {return nil}
-        guard var listItems = listItems else {return nil}
+        guard listItems != nil else {return nil}
         
         // TODO more elegant way to write this?
-        if listItems[list] == nil {
-            listItems[list] = []
+        if self.listItems?[list] == nil {
+            self.listItems?[list] = []
         }
         
         // TODO optimise this, for each list item we are iterating through the whole list items list. We should put listitems in dictionary with uuid or product name, or something
         // add case when a listitem with same product name already exist becomes an update: use uuid of existing item, and increment quantity - and of course use the rest of fields of new list item
-        if let existingListItem = listItems[list]!.findFirstWithProductNameAndBrand(product.name, brand: product.brand) {
+        if let existingListItem = self.listItems![list]!.findFirstWithProductNameAndBrand(product.name, brand: product.brand) {
 
             let updatedSection = existingListItem.section.copy(name: sectionNameMaybe)
 
@@ -81,13 +82,13 @@ class MemListItemProvider {
             
             // see if there's already a section for the new list item in the list, if not create a new one
             let sectionName = sectionNameMaybe ?? product.category.name
-            let section = (listItems[list]!.findFirst{$0.section.name == sectionName})?.section ?? {
-                let sectionCount = listItems[list]!.sectionCount
+            let section = (self.listItems![list]!.findFirst{$0.section.name == sectionName})?.section ?? {
+                let sectionCount = self.listItems![list]!.sectionCount
                 return Section(uuid: NSUUID().UUIDString, name: sectionName, order: sectionCount)
             }()
             
             var listItemOrder = 0
-            for existingListItem in listItems[list]! {
+            for existingListItem in self.listItems![list]! {
                 if existingListItem.section.uuid == section.uuid && existingListItem.hasStatus(status) { // count list items in my section (e.g. "vegetables") and status (e.g. "todo") to determine my order
                     listItemOrder++
                 }
@@ -97,6 +98,7 @@ class MemListItemProvider {
             let listItem = ListItem(uuid: NSUUID().UUIDString, product: product, section: section, list: list, note: note, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: quantity))
             
             self.listItems?[listItem.list]?.append(listItem)
+            
             return listItem
         }
     }
@@ -116,11 +118,11 @@ class MemListItemProvider {
     
     func removeListItem(listItem: ListItem) -> Bool {
         guard enabled else {return false}
-        guard var listItems = listItems else {return false}
+        guard listItems != nil else {return false}
         
         // TODO more elegant way to write this?
-        if listItems[listItem.list] != nil {
-            listItems[listItem.list]?.remove(listItem)
+        if self.listItems![listItem.list] != nil {
+            self.listItems![listItem.list]!.remove(listItem)
             return true
         } else {
             return false
@@ -129,11 +131,11 @@ class MemListItemProvider {
     
     func updateListItem(listItem: ListItem) -> Bool {
         guard enabled else {return false}
-        guard var listItems = listItems else {return false}
+        guard listItems != nil else {return false}
         
         // TODO more elegant way to write this?
-        if listItems[listItem.list] != nil {
-            self.listItems?[listItem.list]?.update(listItem)
+        if self.listItems![listItem.list] != nil {
+            self.listItems![listItem.list]?.update(listItem)
             return true
         } else {
             return false
@@ -164,10 +166,10 @@ class MemListItemProvider {
     
     func listItemCount(status: ListItemStatus, list: List) -> Int? {
         guard enabled else {return nil}
-        guard var listItems = listItems else {return nil}
+        guard listItems != nil else {return nil}
         
-        if let listItems = listItems[list] {
-            return listItems.filterStash().count
+        if let _ = self.listItems![list] {
+            return self.listItems![list]!.filterStash().count
         } else {
             print("Info: MemListItemProvider.listItemCount: there are no listitems for list: \(list)")
             return 0
