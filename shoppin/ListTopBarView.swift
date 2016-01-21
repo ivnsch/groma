@@ -49,6 +49,7 @@ struct TopBarButtonModel {
 class ListTopBarView: UIView {
 
     private var backButton: UIButton?
+    var backButtonText: String?
     private var leftButtons: [UIButton] = []
     private var rightButtons: [UIButton] = []
     private var titleLabel: UILabel = UILabel()
@@ -78,9 +79,13 @@ class ListTopBarView: UIView {
     private var titleLabelCentered = false
     private let titleLabelLeftConstant: Float = 14
     
+    private let topConstant: Float = 32
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         translatesAutoresizingMaskIntoConstraints = false
+        
+        backgroundColor = Theme.navigationBarBackgroundColor
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
@@ -90,11 +95,19 @@ class ListTopBarView: UIView {
 
         // FIXME for some reason this makes the label move the y center during the animation - it should stay constant. alignTop (quickfix) stays constant
 //      titleLabel.centerYInParent()
-        titleLabel.alignTop(self, constant: 20)
+        titleLabel.alignTop(self, constant: topConstant)
         
         layoutIfNeeded()
         
         addTitleButton()
+        
+        let hairline = UIImageView()
+        hairline.translatesAutoresizingMaskIntoConstraints = false
+        hairline.backgroundColor = UIColor.lightGrayColor()
+        addSubview(hairline)
+        hairline.fillSuperviewWidth()
+        hairline.heightConstraint(0.5)
+        hairline.alignBottom(self, constant: 0)
     }
     
     var title: String = "" {
@@ -140,15 +153,27 @@ class ListTopBarView: UIView {
                 backButton = button
                 addSubview(button)
                 
-                let viewDictionary = ["back": button]
+                let backLabel = UIButton()
+                backLabel.translatesAutoresizingMaskIntoConstraints = false
+                backLabel.setTitle(backButtonText ?? "", forState: .Normal)
+                backLabel.titleLabel?.font = Fonts.regularLight
+                backLabel.setTitleColor(fgColor, forState: .Normal)
+//                backButton = button
+                addSubview(backLabel)
                 
-                let hConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-(14)-[back]", options: [], metrics: nil, views: viewDictionary)
-                let vConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(14)-[back]-(14)-|", options: [], metrics: nil, views: viewDictionary)
+                
+                let viewDictionary = ["back": button, "backLabel": backLabel]
+                
+                let hConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-(6)-[back]-(4)-[backLabel]", options: [], metrics: nil, views: viewDictionary)
+                let vImgConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(\(topConstant))-[back]", options: [], metrics: nil, views: viewDictionary)
+                let vLabelConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(\(topConstant))-[backLabel]", options: [], metrics: nil, views: viewDictionary)
                 
                 addConstraints(hConstraints)
-                addConstraints(vConstraints)
-                
+                addConstraints(vImgConstraints)
+                addConstraints(vLabelConstraints)
+
                 button.addTarget(self, action: "onBackTap:", forControlEvents: .TouchUpInside)
+                backLabel.addTarget(self, action: "onBackTap:", forControlEvents: .TouchUpInside)
             }
 
         } else {
@@ -160,7 +185,7 @@ class ListTopBarView: UIView {
     }
 
     private func setButtonModels(models: [TopBarButtonModel], left: Bool) {
-        
+
         if left {
             for button in leftButtons {
                 button.removeFromSuperview()
@@ -252,7 +277,7 @@ class ListTopBarView: UIView {
             addConstraints(hConstraints)
             
             for vConstraintStr in viewsOrderedDictionary.keys {
-                let vConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(14)-[\(vConstraintStr)]-(14)-|", options: [], metrics: nil, views: viewsDictionary)
+                let vConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(\(topConstant))-[\(vConstraintStr)]", options: [], metrics: nil, views: viewsDictionary)
                 addConstraints(vConstraints)
             }
         }

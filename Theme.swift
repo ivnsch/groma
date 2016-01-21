@@ -19,7 +19,7 @@ struct Theme {
     static var navigationBarTextColor = UIColor.blackColor()
 //    static var navigationBarBackgroundColor = UIColor(gradientStyle: UIGradientStyle.TopToBottom, withFrame:CGRectMake(0, 0, 600, 64), andColors:[UIColor.flatNavyBlueColorDark(), UIColor.flatNavyBlueColor()])
 //    static var navigationBarBackgroundColor = UIColor.flatNavyBlueColor()
-    static var navigationBarBackgroundColor = UIColor.whiteColor()
+    static var navigationBarBackgroundColor = UIColor(hexString: "F8F8F8")
     static var tabBarBackgroundColor = UIColor.whiteColor()
     static var tabBarSelectedColor = UIColor.blackColor()
     static var mainViewsBGColor = lightGrey

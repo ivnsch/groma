@@ -62,8 +62,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         
         originalNavBarFrame = topBar.frame
         
-        topBar.backgroundColor = Theme.navigationBarBackgroundColor
-        
         view.backgroundColor = Theme.mainViewsBGColor
         tableView.backgroundColor = Theme.mainViewsBGColor
         

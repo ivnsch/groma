@@ -88,14 +88,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="bKR-AS-Uyf">
-                                <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="5Dv-Zd-cbX" id="4VV-q3-RzP"/>
                                 </connections>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Mmc-xt-Xvb">
-                                <rect key="frame" x="0.0" y="108" width="600" height="492"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="TzZ-c0-t58" customClass="LoadingFooter" customModule="shoppin" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="78" width="600" height="44"/>
@@ -167,23 +167,11 @@
                                     <outlet property="delegate" destination="5Dv-Zd-cbX" id="qZi-30-wl0"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="71C-fY-yqs" customClass="ListTopBarView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="64" id="3cp-uK-CFj"/>
-                                    <constraint firstAttribute="height" constant="64" id="9hM-ng-TtZ"/>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="64" id="txl-ih-ZyS"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="71C-fY-yqs" secondAttribute="trailing" id="Ubu-1b-waP"/>
-                            <constraint firstItem="71C-fY-yqs" firstAttribute="leading" secondItem="RXb-mY-BMp" secondAttribute="leading" id="VOB-LM-1cN"/>
+                            <constraint firstItem="bKR-AS-Uyf" firstAttribute="top" secondItem="8Z2-or-wnP" secondAttribute="bottom" id="IvX-Ad-5Vh"/>
                             <constraint firstItem="EDN-Ab-nWU" firstAttribute="top" secondItem="Mmc-xt-Xvb" secondAttribute="bottom" id="kC3-iB-E3i"/>
-                            <constraint firstItem="71C-fY-yqs" firstAttribute="top" secondItem="RXb-mY-BMp" secondAttribute="top" id="maB-AU-juO"/>
-                            <constraint firstItem="bKR-AS-Uyf" firstAttribute="top" secondItem="71C-fY-yqs" secondAttribute="bottom" id="pcH-z6-1yb"/>
                             <constraint firstItem="Mmc-xt-Xvb" firstAttribute="top" secondItem="bKR-AS-Uyf" secondAttribute="bottom" id="qnb-PI-4VQ"/>
                             <constraint firstAttribute="trailing" secondItem="Mmc-xt-Xvb" secondAttribute="trailing" id="rYH-AD-d8t"/>
                             <constraint firstAttribute="trailing" secondItem="bKR-AS-Uyf" secondAttribute="trailing" id="tHQ-g6-lsD"/>
@@ -195,7 +183,7 @@
                         <outlet property="searchBar" destination="bKR-AS-Uyf" id="VUt-64-cgJ"/>
                         <outlet property="tableView" destination="Mmc-xt-Xvb" id="YxO-tl-EZA"/>
                         <outlet property="tableViewFooter" destination="TzZ-c0-t58" id="JU7-0g-eGM"/>
-                        <outlet property="topBar" destination="71C-fY-yqs" id="PFR-sb-YG8"/>
+                        <outlet property="topControlTopConstraint" destination="IvX-Ad-5Vh" id="B5G-Pj-GSI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NdC-kV-exo" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -215,14 +203,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="3NS-AQ-d0g">
-                                <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="5Dv-Zd-cbX" id="JIa-oC-FgT"/>
                                 </connections>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="hOt-26-GQA">
-                                <rect key="frame" x="0.0" y="108" width="600" height="492"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="KuL-vb-HpD" customClass="LoadingFooter" customModule="shoppin" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="78" width="600" height="44"/>
@@ -262,8 +250,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l6S-Yc-dle">
-                                                    <rect key="frame" x="8" y="9" width="40" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l6S-Yc-dle">
+                                                    <rect key="frame" x="8" y="15" width="40" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -294,30 +282,16 @@
                                     <outlet property="delegate" destination="0Hp-CK-Pgk" id="Rok-V3-ibq"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="apJ-HL-qIX" customClass="ListTopBarView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="64" id="BdL-tQ-kRr"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="64" id="H3E-ui-Voa"/>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="64" id="VHm-nd-FQj"/>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="64" id="jWs-QT-8qd"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="hOt-26-GQA" firstAttribute="top" secondItem="3NS-AQ-d0g" secondAttribute="bottom" id="0AA-ct-Pwi"/>
                             <constraint firstItem="hOt-26-GQA" firstAttribute="leading" secondItem="nx8-Z1-Pp8" secondAttribute="leading" id="1zg-ss-oSA"/>
-                            <constraint firstItem="3NS-AQ-d0g" firstAttribute="top" secondItem="apJ-HL-qIX" secondAttribute="bottom" id="4Xz-Xv-hXp"/>
                             <constraint firstItem="qgi-1x-1B1" firstAttribute="top" secondItem="hOt-26-GQA" secondAttribute="bottom" id="4fg-zQ-T0K"/>
                             <constraint firstAttribute="trailing" secondItem="hOt-26-GQA" secondAttribute="trailing" id="5Qt-S4-yG3"/>
-                            <constraint firstItem="apJ-HL-qIX" firstAttribute="top" secondItem="nx8-Z1-Pp8" secondAttribute="top" id="6Sy-b8-xni"/>
-                            <constraint firstItem="3NS-AQ-d0g" firstAttribute="top" secondItem="apJ-HL-qIX" secondAttribute="bottom" id="95k-3c-mr1"/>
-                            <constraint firstAttribute="trailing" secondItem="apJ-HL-qIX" secondAttribute="trailing" id="ATh-tn-Sp0"/>
+                            <constraint firstItem="3NS-AQ-d0g" firstAttribute="top" secondItem="2oY-4G-LHO" secondAttribute="bottom" id="fHr-qd-rFe"/>
                             <constraint firstItem="hOt-26-GQA" firstAttribute="top" secondItem="3NS-AQ-d0g" secondAttribute="bottom" id="fzY-XS-FXW"/>
                             <constraint firstItem="3NS-AQ-d0g" firstAttribute="leading" secondItem="nx8-Z1-Pp8" secondAttribute="leading" id="hsT-Vh-kAf"/>
-                            <constraint firstItem="apJ-HL-qIX" firstAttribute="leading" secondItem="nx8-Z1-Pp8" secondAttribute="leading" id="lVg-yf-vEv"/>
                             <constraint firstAttribute="trailing" secondItem="3NS-AQ-d0g" secondAttribute="trailing" id="zXF-Zu-a8v"/>
                         </constraints>
                     </view>
@@ -325,7 +299,6 @@
                         <outlet property="searchBar" destination="3NS-AQ-d0g" id="UJQ-FG-eQh"/>
                         <outlet property="tableView" destination="hOt-26-GQA" id="Ctw-V4-foq"/>
                         <outlet property="tableViewFooter" destination="KuL-vb-HpD" id="jCh-JC-bEy"/>
-                        <outlet property="topBar" destination="apJ-HL-qIX" id="F0z-dx-WAF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5rH-Qu-h4y" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -344,16 +317,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BQl-iJ-bKK" customClass="ListTopBarView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="64" id="3HN-jk-RZo"/>
-                                    <constraint firstAttribute="height" constant="64" id="ajw-gS-YXz"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oip-Bv-T0W">
-                                <rect key="frame" x="0.0" y="64" width="600" height="40"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="40"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uaW-wg-NEG">
                                         <rect key="frame" x="489" y="12" width="45" height="16"/>
@@ -401,14 +366,14 @@
                                 </variation>
                             </view>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="YRv-YV-FHW">
-                                <rect key="frame" x="0.0" y="104" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="60" width="600" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="Mm3-oP-cdT" id="eeF-sP-AId"/>
                                 </connections>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="64" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OmL-Fh-5Jp">
-                                <rect key="frame" x="0.0" y="148" width="600" height="452"/>
+                                <rect key="frame" x="0.0" y="104" width="600" height="496"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="ubd-oF-jDC" customClass="LoadingFooter" customModule="shoppin" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="92" width="600" height="44"/>
@@ -512,25 +477,20 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="YRv-YV-FHW" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="H45-ve-tyE"/>
-                            <constraint firstItem="BQl-iJ-bKK" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="K03-zL-NSh"/>
                             <constraint firstItem="YRv-YV-FHW" firstAttribute="top" secondItem="oip-Bv-T0W" secondAttribute="bottom" id="VR9-G0-XfR"/>
-                            <constraint firstItem="oip-Bv-T0W" firstAttribute="top" secondItem="BQl-iJ-bKK" secondAttribute="bottom" id="ZTf-9p-v6m"/>
-                            <constraint firstItem="BQl-iJ-bKK" firstAttribute="top" secondItem="NzI-sb-8VM" secondAttribute="top" id="fbA-Z3-VY3"/>
                             <constraint firstItem="609-Sf-sF9" firstAttribute="top" secondItem="OmL-Fh-5Jp" secondAttribute="bottom" id="hd0-uw-kdN"/>
+                            <constraint firstItem="oip-Bv-T0W" firstAttribute="top" secondItem="cpC-kT-urS" secondAttribute="bottom" id="hrM-d6-Dht"/>
                             <constraint firstItem="oip-Bv-T0W" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="ipW-rC-LBG"/>
                             <constraint firstItem="OmL-Fh-5Jp" firstAttribute="top" secondItem="YRv-YV-FHW" secondAttribute="bottom" id="lHP-Wq-RS6"/>
                             <constraint firstAttribute="trailing" secondItem="OmL-Fh-5Jp" secondAttribute="trailing" id="mT4-Ox-0dR"/>
-                            <constraint firstAttribute="trailing" secondItem="BQl-iJ-bKK" secondAttribute="trailing" id="pOb-wT-aLW"/>
                             <constraint firstAttribute="trailing" secondItem="oip-Bv-T0W" secondAttribute="trailing" id="phG-X1-7Rc"/>
                             <constraint firstItem="YRv-YV-FHW" firstAttribute="top" secondItem="cpC-kT-urS" secondAttribute="bottom" id="r0h-wq-1Zj"/>
-                            <constraint firstItem="YRv-YV-FHW" firstAttribute="top" secondItem="BQl-iJ-bKK" secondAttribute="bottom" constant="60" id="sqp-JZ-URD"/>
                             <constraint firstItem="OmL-Fh-5Jp" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="vTI-qs-AUn"/>
                             <constraint firstAttribute="trailing" secondItem="YRv-YV-FHW" secondAttribute="trailing" id="xdj-aG-Wa9"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="r0h-wq-1Zj"/>
-                                <exclude reference="sqp-JZ-URD"/>
                             </mask>
                         </variation>
                     </view>
@@ -539,8 +499,7 @@
                         <outlet property="sortByButton" destination="Tm6-P2-xyl" id="8i2-tn-eHA"/>
                         <outlet property="tableView" destination="OmL-Fh-5Jp" id="DJQ-TI-TmF"/>
                         <outlet property="tableViewFooter" destination="ubd-oF-jDC" id="ddQ-V6-Dck"/>
-                        <outlet property="topBar" destination="BQl-iJ-bKK" id="efR-C1-mfv"/>
-                        <outlet property="topControlTopConstraint" destination="sqp-JZ-URD" id="Jse-bI-7Cb"/>
+                        <outlet property="topControlTopConstraint" destination="hrM-d6-Dht" id="kjw-0t-9oQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eKA-n5-vJ1" userLabel="First Responder" sceneMemberID="firstResponder"/>

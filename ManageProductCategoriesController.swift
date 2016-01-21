@@ -10,8 +10,6 @@ import UIKit
 import SwiftValidator
 
 class ManageProductCategoriesController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, EditProductCategoryControllerDelegate, ListTopBarViewDelegate, ExpandableTopViewControllerDelegate {
-
-    @IBOutlet weak var topBar: ListTopBarView!
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var tableViewFooter: LoadingFooter!
@@ -61,16 +59,11 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationController?.setNavigationBarHidden(true, animated: false)
-        
-        initTopBar()
-        
         tableView.allowsSelectionDuringEditing = true
         
         addEditCategoryControllerManager = initAddEditProductControllerManager()
         
-        topBar.delegate = self
-        topBar.backgroundColor = UIColor.groupTableViewBackgroundColor()
+        initNavBar([.Edit])
         
 //        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
     }
@@ -83,15 +76,38 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
-    private func initTopBar() {
-        topBar.setBackVisible(true)
-        topBar.title = "Categories"
-        topBar.positionTitleLabelLeft(true, animated: false)
-        topBar.setRightButtonIds([.Edit])
+    func onSubmitTap(sender: UIBarButtonItem) {
+        if tableView.editing {
+            addEditCategoryControllerManager?.controller?.submit()
+        }
+    }
+    
+    func onEditTap(sender: UIBarButtonItem) {
+        toggleEditing()
+    }
+    
+    // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
+    private func initNavBar(actions: [UIBarButtonSystemItem]) {
+        navigationItem.title = "Brands"
+        
+        var buttons: [UIBarButtonItem] = []
+        
+        for action in actions {
+            switch action {
+            case .Save:
+                let button = UIBarButtonItem(image: UIImage(named: "tb_done")!, style: .Plain, target: self, action: "onSubmitTap:")
+                buttons.append(button)
+            case .Edit:
+                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .Plain, target: self, action: "onEditTap:")
+                buttons.append(button)
+            default: break
+            }
+        }
+        navigationItem.rightBarButtonItems = buttons
     }
     
     private func initAddEditProductControllerManager() -> ExpandableTopViewController<EditProductCategoryController> {
-        let top = CGRectGetHeight(topBar.frame)
+        let top: CGFloat = 64
         let manager: ExpandableTopViewController<EditProductCategoryController> =  ExpandableTopViewController(top: top, height: 60, animateTableViewInset: false, parentViewController: self, tableView: tableView) {
             let controller = EditProductCategoryController()
             controller.delegate = self
@@ -189,7 +205,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
             updatingProduct = AddEditCategoryControllerEditingData(category: inventoryItem, indexPath: indexPath)
             addEditCategoryControllerManager?.expand(true)
             addEditCategoryControllerManager?.controller?.category = updatingProduct
-            topBar.setRightButtonIds([.Submit, .Edit])
+            initNavBar([.Edit, .Save])
         }
     }
     
@@ -228,7 +244,8 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
         addEditCategoryControllerManager?.expand(false)
-        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+        initNavBar([.Edit])
+        
     }
     
     private func addCategoryUI(product: ProductCategory) {
@@ -240,13 +257,6 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     
     private func setAddEditProductControllerOpen(open: Bool) {
         addEditCategoryControllerManager?.expand(open)
-        if open {
-            topBar.setLeftButtonIds([.Edit])
-            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformIdentity, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
-        } else {
-            topBar.setLeftButtonIds([.Edit])
-            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
-        }
     }
     
     private func loadPossibleNextPage() {
@@ -309,11 +319,11 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         
         if addEditCategoryControllerManager?.expanded ?? false { // it's open - close
             addEditCategoryControllerManager?.expand(false)
-            topBar.setRightButtonIds([.Edit])
+            initNavBar([.Edit])
             
         } else { // it's closed - open
             addEditCategoryControllerManager?.expand(true)
-            topBar.setRightButtonIds([.Edit])
+            initNavBar([.Edit])
         }
     }
     
@@ -326,7 +336,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     }
     
     func onExpandableClose() {
-        topBar.setRightButtonIds([.Edit])        
+        initNavBar([.Edit])
     }
     
     func onCenterTitleAnimComplete(center: Bool) {

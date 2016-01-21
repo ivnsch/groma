@@ -11,8 +11,6 @@ import SwiftValidator
 
 class ManageBrandsController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, EditBrandControllerDelegate, ListTopBarViewDelegate, ExpandableTopViewControllerDelegate {
     
-    @IBOutlet weak var topBar: ListTopBarView!
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var tableViewFooter: LoadingFooter!
     
@@ -60,17 +58,12 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationController?.setNavigationBarHidden(true, animated: false)
-
-        initTopBar()
         
         tableView.allowsSelectionDuringEditing = true
         
         addEditBrandControllerManager = initAddEditBrandControllerManager()
         
-        topBar.delegate = self
-        topBar.backgroundColor = UIColor.groupTableViewBackgroundColor()
+        initNavBar([.Edit])
         
         Providers.brandProvider.brands(successHandler {[weak self] brands in
             self?.brands = brands
@@ -87,15 +80,38 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
-    private func initTopBar() {
-        topBar.setBackVisible(true)
-        topBar.title = "Brands"
-        topBar.positionTitleLabelLeft(true, animated: false)
-        topBar.setRightButtonIds([.Edit])
+    func onSubmitTap(sender: UIBarButtonItem) {
+        if tableView.editing {
+            addEditBrandControllerManager?.controller?.submit()
+        }
+    }
+    
+    func onEditTap(sender: UIBarButtonItem) {
+        toggleEditing()
+    }
+    
+    // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
+    private func initNavBar(actions: [UIBarButtonSystemItem]) {
+        navigationItem.title = "Brands"
+        
+        var buttons: [UIBarButtonItem] = []
+        
+        for action in actions {
+            switch action {
+            case .Save:
+                let button = UIBarButtonItem(image: UIImage(named: "tb_done")!, style: .Plain, target: self, action: "onSubmitTap:")
+                buttons.append(button)
+            case .Edit:
+                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .Plain, target: self, action: "onEditTap:")
+                buttons.append(button)
+            default: break
+            }
+        }
+        navigationItem.rightBarButtonItems = buttons
     }
     
     private func initAddEditBrandControllerManager() -> ExpandableTopViewController<EditBrandController> {
-        let top = CGRectGetHeight(topBar.frame)
+        let top: CGFloat = 64
         let manager: ExpandableTopViewController<EditBrandController> =  ExpandableTopViewController(top: top, height: 60, parentViewController: self, tableView: tableView) {
             let controller = EditBrandController()
             controller.delegate = self
@@ -188,7 +204,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
             updatingBrand = AddEditBrandControllerEditingData(brand: inventoryItem, indexPath: indexPath)
             addEditBrandControllerManager?.expand(true)
             addEditBrandControllerManager?.controller?.brand = updatingBrand
-            topBar.setRightButtonIds([.Submit, .Edit])
+            initNavBar([.Edit, .Save])
         }
     }
     
@@ -230,7 +246,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
         
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
         addEditBrandControllerManager?.expand(false)
-        topBar.setRightButtonIds([.Edit])
+        initNavBar([.Edit])
     }
     
     private func addBrandUI(brand: String) {
@@ -304,11 +320,11 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
         
         if addEditBrandControllerManager?.expanded ?? false { // it's open - close
             addEditBrandControllerManager?.expand(false)
-            topBar.setRightButtonIds([.Edit])
-            
+            initNavBar([.Edit])
+
         } else { // it's closed - open
             addEditBrandControllerManager?.expand(true)
-            topBar.setRightButtonIds([.Edit])
+            initNavBar([.Edit])
         }
     }
     
@@ -319,7 +335,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func onExpandableClose() {
-        topBar.setRightButtonIds([.Edit])
+        initNavBar([.Edit])
     }
     
     func onCenterTitleAnimComplete(center: Bool) {
