@@ -183,9 +183,17 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
         }
     }
     
-    
     func scrollToBottom() {
         collectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: filteredQuickAddItems.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let currentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        
+        if (maximumOffset - currentOffset) <= 40 {
+            loadPossibleNextPage()
+        }
     }
     
     override func setEditing(editing: Bool, animated: Bool) {

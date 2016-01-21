@@ -31,7 +31,7 @@ class Paginator {
     }
     
     func update(resultCount: Int) {
-        if resultCount < pageSize {
+        if resultCount < pageSize || resultCount == 0 {
             reachedEnd = true
         } else {
             advance()
