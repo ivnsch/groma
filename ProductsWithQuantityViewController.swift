@@ -180,6 +180,15 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
     }
     
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let currentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        
+        if (maximumOffset - currentOffset) <= 40 {
+            loadPossibleNextPage()
+        }
+    }
+    
     private func updateEmptyView() {
         emptyView.setHiddenAnimated(!models.isEmpty)
     }
@@ -369,6 +378,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
         updateEmptyView()
     }
+    
     
     private func loadPossibleNextPage() {
         
