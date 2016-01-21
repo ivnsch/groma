@@ -92,7 +92,7 @@ class PricesView: UIView {
     
     // expanded: covers all width, contracted: space to see stash view
     func setExpandedHorizontal(expanded: Bool) {
-        open = expanded
+        open = !expanded
         widthConstraint.constant = widthConstant
         UIView.animateWithDuration(0.5) {[weak self] in
             self?.layoutIfNeeded()
@@ -100,7 +100,7 @@ class PricesView: UIView {
     }
     
     private var widthConstant: CGFloat {
-        return open ? 0 : openWidth
+        return open ? openWidth : 0
     }
     
     func setExpandedVertical(expanded: Bool) {
