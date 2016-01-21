@@ -312,7 +312,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[59], historyItemUuid: "659", addedDate: NSDate(), user: user)
             ]
             
-            self?.inventoryProvider.add(inventoryWithHistoryItems) {saved in
+            
+            // add more items
+//            let moreItems: [InventoryItemWithHistoryEntry] = (0...10000).map{i in
+//                let category = ProductCategory(uuid: "111\(i)", name: "111\(i)", color: UIColor.blackColor())
+//                let product = Product(uuid: "111\(i)", name: "111\(i)", price: 123, category: category, baseQuantity: 1, unit: .None)
+//                let inventoryItem = inventoryItem(quantityDelta: 7, product: product, inventory: inventory1)
+//                return InventoryItemWithHistoryEntry(inventoryItem: inventoryItem, historyItemUuid: "111\(i)", addedDate: NSDate(), user: user)
+//            }
+            
+            self?.inventoryProvider.add(inventoryWithHistoryItems/* + moreItems*/) {saved in
                 
                 let list1 = List(uuid: "1", name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0, inventory: inventory1)
                 self?.listProvider.saveList(list1) {[weak self] result in
