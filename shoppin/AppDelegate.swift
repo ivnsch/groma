@@ -16,8 +16,10 @@ import ChameleonFramework
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    private let debugAddDummyData = true
-    
+    private let debugAddDummyData = false
+    private let debugGeneratePrefillDatabases = false
+    private let debugForceShowIntro = false
+
     var window: UIWindow?
     
     private var reachability: Reachability!
@@ -52,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func firstController() -> UIViewController {
         // The intro is shown (even if user stops the app and comes back) until it's completed (log in / register success or skip)
-        if PreferencesManager.loadPreference(PreferencesManagerKey.showIntro) ?? true {
+        if (isDebug() && debugForceShowIntro) || PreferencesManager.loadPreference(PreferencesManagerKey.showIntro) ?? true {
             return UIStoryboard.introNavController()
         } else {
             return UIStoryboard.mainTabController()
@@ -98,10 +100,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Debug
     
+    private func isDebug() -> Bool {
+        #if DEBUG
+            return true
+            #else
+            return false
+        #endif
+    }
+    
     // Actions executed if app is in debug mode
     private func ifDebugLaunchActions() {
         #if DEBUG
-            // generatePrefillDatabase() // enable this only to generate prefilled database
+            if debugGeneratePrefillDatabases {
+                generatePrefillDatabase()
+            }
             if debugAddDummyData || !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
                 addDummyData()
             }
@@ -114,10 +126,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     * TODO try to use test for this (PrefillDatabase - not working because sth with Realm). This should not be in of the app.
     */
     private func generatePrefillDatabase() {
-        print("Creating prefilled database")
-        // self.suggestionsPrefiller = SuggestionsPrefiller()
+        print("Creating prefilled databases")
+        self.suggestionsPrefiller = SuggestionsPrefiller()
         self.suggestionsPrefiller?.prefill {
-            print("Finished creating prefilled database")
+            print("Finished creating prefilled databases")
         }
     }
     

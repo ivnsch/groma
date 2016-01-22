@@ -65,4 +65,37 @@ class RealmProductProvider: RealmProvider {
                 handler(saved)
         })
     }
+    
+    func removeAllCategories(handler: Bool -> Void) {
+        self.remove(nil, handler: {success in
+            if !success {
+                print("Error: RealmProductProvider.removeAllCategories: couldn't remove categories")
+            }
+            handler(success)
+        }, objType: DBProductCategory.self)
+    }
+
+    func removeAllProducts(handler: Bool -> Void) {
+        self.remove(nil, handler: {success in
+            if !success {
+                print("Error: RealmProductProvider.removeAllProducts: couldn't remove products")
+            }
+            handler(success)
+        }, objType: DBProduct.self)
+    }
+    
+    // Removes all products and categories
+    func removeAllProductsAndCategories(handler: Bool -> Void) {
+        removeAllProducts {[weak self] success in
+            if let weakSelf = self {
+                weakSelf.removeAllCategories {success in
+                    handler(success)
+                }
+            } else {
+                print("Error: RealmProductProvider.removeAllProductsAndCategories: weakSelf is nil")
+                handler(false)
+            }
+
+        }
+    }
 }

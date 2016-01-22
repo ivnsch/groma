@@ -251,6 +251,12 @@
 		EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162E81A3CA1F00048E37C /* ListItemProviderImpl.swift */; };
 		EB55677F1A8658AA00CD3EC6 /* InventoryItemsProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFD1A5972C70058103B /* InventoryItemsProviderImpl.swift */; };
 		EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F41A3CA4BA0048E37C /* ProviderFactory.swift */; };
+		EB5666CE1C52BCA90074D2B3 /* LangManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5666CD1C52BCA90074D2B3 /* LangManager.swift */; settings = {ASSET_TAGS = (); }; };
+		EB5666CF1C52BCA90074D2B3 /* LangManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5666CD1C52BCA90074D2B3 /* LangManager.swift */; settings = {ASSET_TAGS = (); }; };
+		EB5666D01C52BCA90074D2B3 /* LangManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5666CD1C52BCA90074D2B3 /* LangManager.swift */; settings = {ASSET_TAGS = (); }; };
+		EB5666DD1C52CAAE0074D2B3 /* prefillde.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB5666DA1C52CAA40074D2B3 /* prefillde.realm */; };
+		EB5666DE1C52CAAE0074D2B3 /* prefillen.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB5666DB1C52CAA40074D2B3 /* prefillen.realm */; };
+		EB5666DF1C52CAAE0074D2B3 /* prefilles.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB5666DC1C52CAA40074D2B3 /* prefilles.realm */; };
 		EB5737B31BF25DFB00D52FB8 /* AddEditInventoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5737B21BF25DFB00D52FB8 /* AddEditInventoryController.swift */; };
 		EB5737B51BF25E1100D52FB8 /* AddEditInventory.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB5737B41BF25E1100D52FB8 /* AddEditInventory.storyboard */; };
 		EB5737B71BF2612300D52FB8 /* InventorySharedUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5737B61BF2612300D52FB8 /* InventorySharedUserCell.swift */; };
@@ -458,7 +464,6 @@
 		EB9207CB1C4BD3F600332332 /* AsyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9207C81C4BD3F600332332 /* AsyncUtils.swift */; settings = {ASSET_TAGS = (); }; };
 		EB9207E81C4C4FC200332332 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EB9207EA1C4C4FC200332332 /* Localizable.strings */; };
 		EB9207EE1C4C522700332332 /* ForgotPassword.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB9207F01C4C522700332332 /* ForgotPassword.storyboard */; };
-		EB9207FF1C4C743400332332 /* prefill.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB9207FE1C4C733900332332 /* prefill.realm */; };
 		EB9208021C4DBC7700332332 /* SimpleInputPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB9208011C4DBC7700332332 /* SimpleInputPopup.storyboard */; settings = {ASSET_TAGS = (); }; };
 		EB9208041C4DBE4400332332 /* SimpleInputPopupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208031C4DBE4400332332 /* SimpleInputPopupController.swift */; settings = {ASSET_TAGS = (); }; };
 		EB9208221C4EBCE000332332 /* ManageProductsSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208211C4EBCE000332332 /* ManageProductsSelectionController.swift */; settings = {ASSET_TAGS = (); }; };
@@ -965,6 +970,11 @@
 		EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesManager.swift; sourceTree = "<group>"; };
 		EB5529E31BC6F2A800EDCEAF /* PlanItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanItemInput.swift; sourceTree = "<group>"; };
 		EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-osx-Bridging-Header.h"; sourceTree = "<group>"; };
+		EB5666C91C52B6F80074D2B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		EB5666CD1C52BCA90074D2B3 /* LangManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LangManager.swift; sourceTree = "<group>"; };
+		EB5666DA1C52CAA40074D2B3 /* prefillde.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillde.realm; sourceTree = "<group>"; };
+		EB5666DB1C52CAA40074D2B3 /* prefillen.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillen.realm; sourceTree = "<group>"; };
+		EB5666DC1C52CAA40074D2B3 /* prefilles.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefilles.realm; sourceTree = "<group>"; };
 		EB5737B21BF25DFB00D52FB8 /* AddEditInventoryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditInventoryController.swift; sourceTree = "<group>"; };
 		EB5737B41BF25E1100D52FB8 /* AddEditInventory.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddEditInventory.storyboard; sourceTree = "<group>"; };
 		EB5737B61BF2612300D52FB8 /* InventorySharedUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventorySharedUserCell.swift; sourceTree = "<group>"; };
@@ -1079,7 +1089,6 @@
 		EB9207F91C4C5FBC00332332 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
 		EB9207FA1C4C5FBD00332332 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/ForgotPassword.strings; sourceTree = "<group>"; };
 		EB9207FB1C4C5FBE00332332 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
-		EB9207FE1C4C733900332332 /* prefill.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefill.realm; sourceTree = "<group>"; };
 		EB9208011C4DBC7700332332 /* SimpleInputPopup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SimpleInputPopup.storyboard; sourceTree = "<group>"; };
 		EB9208031C4DBE4400332332 /* SimpleInputPopupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleInputPopupController.swift; sourceTree = "<group>"; };
 		EB9208211C4EBCE000332332 /* ManageProductsSelectionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageProductsSelectionController.swift; sourceTree = "<group>"; };
@@ -1468,7 +1477,9 @@
 		EB1DDE9C1A3334EC00D778DE = {
 			isa = PBXGroup;
 			children = (
-				EB9207FE1C4C733900332332 /* prefill.realm */,
+				EB5666DA1C52CAA40074D2B3 /* prefillde.realm */,
+				EB5666DB1C52CAA40074D2B3 /* prefillen.realm */,
+				EB5666DC1C52CAA40074D2B3 /* prefilles.realm */,
 				EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */,
 				EB1DDEA71A3334EC00D778DE /* shoppin */,
 				EB55675A1A8622E600CD3EC6 /* shoppin_ios */,
@@ -1861,6 +1872,7 @@
 				EB7F59D61BA1E0DF00E07EBA /* Performance.swift */,
 				EBC9D2371BE3F2F50088E3CF /* TimerUtils.swift */,
 				EB9207C81C4BD3F600332332 /* AsyncUtils.swift */,
+				EB5666CD1C52BCA90074D2B3 /* LangManager.swift */,
 			);
 			name = utils;
 			sourceTree = "<group>";
@@ -2706,8 +2718,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB5666DD1C52CAAE0074D2B3 /* prefillde.realm in Resources */,
+				EB5666DE1C52CAAE0074D2B3 /* prefillen.realm in Resources */,
+				EB5666DF1C52CAAE0074D2B3 /* prefilles.realm in Resources */,
 				EB9208021C4DBC7700332332 /* SimpleInputPopup.storyboard in Resources */,
-				EB9207FF1C4C743400332332 /* prefill.realm in Resources */,
 				EB92082E1C4ECE3D00332332 /* EditBrandController.xib in Resources */,
 				EB7BFA7C1BDA5BE500F4C74A /* QuantityCell.xib in Resources */,
 				EBDF8D111BFB7E4200F6830A /* ListTopBarView.xib in Resources */,
@@ -2929,6 +2943,7 @@
 				EB2F5D5A1A4F5C8100DBC4AF /* SwipeableCell.swift in Sources */,
 				EB1B364C1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */,
 				EB9208241C4EBD4900332332 /* ManageBrandsController.swift in Sources */,
+				EB5666CE1C52BCA90074D2B3 /* LangManager.swift in Sources */,
 				EB266A761C19DA3900488679 /* InventoryItemIncrement.swift in Sources */,
 				EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */,
 				EB70C2191B4D2C940060E529 /* ListProvider.swift in Sources */,
@@ -3386,6 +3401,7 @@
 				EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */,
 				EB451C3A1B85F3F0000DE208 /* StatsProvider.swift in Sources */,
 				EB55675D1A86433700CD3EC6 /* Product.swift in Sources */,
+				EB5666CF1C52BCA90074D2B3 /* LangManager.swift in Sources */,
 				EBF608B21C0CF26A00EDB33E /* UserIdentity.swift in Sources */,
 				EB7858761B7F6F69008AAD12 /* RemoteHistoryItems.swift in Sources */,
 				EBA2C8C91C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */,
@@ -3648,6 +3664,7 @@
 				EBF377801B342B4000EEB6DB /* Float.swift in Sources */,
 				EBBC22FF1BB4080E0002F6B1 /* Suggestion.swift in Sources */,
 				EB70C21D1B4D2ECE0060E529 /* RemoteSharedUser.swift in Sources */,
+				EB5666D01C52BCA90074D2B3 /* LangManager.swift in Sources */,
 				EB6F812F1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EBF3775B1B3423C200EEB6DB /* Try.swift in Sources */,
 				EB0C2A321B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */,
@@ -3708,6 +3725,7 @@
 				EB9207E91C4C4FC200332332 /* Base */,
 				EB9207ED1C4C500C00332332 /* de */,
 				EB9207FB1C4C5FBE00332332 /* es */,
+				EB5666C91C52B6F80074D2B3 /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

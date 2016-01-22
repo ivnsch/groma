@@ -30,11 +30,6 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     override func viewDidLoad() {
         super.viewDidLoad()
         pageControl.numberOfPages = pageCount
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(true)
-        self.navigationController?.navigationBarHidden = true
         
         if PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false {
 //            setButtonsEnabled(false) // for now don't disable anything as db is still small, and disable buttons in intro must be tested very carefully!
@@ -42,6 +37,11 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 //                self?.setButtonsEnabled(true)
             }
         }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        self.navigationController?.navigationBarHidden = true
     }
     
     private func setButtonsEnabled(enabled: Bool) {
@@ -61,12 +61,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         func prefillDatabase(onFinish: VoidFunction? = nil) {
             background({
                 let p = NSHomeDirectory() + "/Documents/default.realm"
-                if let prefillPath = NSBundle.mainBundle().pathForResource("prefill", ofType: "realm") {
-                    print("Copying prefill database to: \(p)")
+                let lang = LangManager().appLang
+                if let prefillPath = NSBundle.mainBundle().pathForResource("prefill\(lang)", ofType: "realm") {
+                    print("Copying prefill database for lang: \(lang) to: \(p)")
                     do {
+                        //TODO! replace or remove previous database (for app updates). Currently this fails if db already exists
                         try NSFileManager.defaultManager().copyItemAtPath(prefillPath, toPath: p)
                         print("Copied prefill database")
-                        onFinish?()
                         return true
                         
                     } catch let error as NSError {
@@ -105,9 +106,9 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         }
 
         prefillDatabase {
-            print("Info: Finished prefill database")
+            print("Info: Finished copying prefill database")
             initDefaultInventory {
-                print("Info: Finished default inventory")
+                print("Info: Finished adding default inventory")
                 onComplete()
             }
         }

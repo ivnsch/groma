@@ -175,7 +175,8 @@ class RealmProvider {
         self.load(mapper, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, range: rangeMaybe, handler: handler)
     }
     
-    func remove<T: Object>(pred: String, handler: Bool -> (), objType: T.Type) {
+    // WARN: passing nil as pred will remove ALL objects of objType
+    func remove<T: Object>(pred: String?, handler: Bool -> (), objType: T.Type) {
         
         let finished: (Bool) -> () = {success in
             dispatch_async(dispatch_get_main_queue(), {
@@ -186,7 +187,10 @@ class RealmProvider {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             do {
                 let realm = try Realm()
-                let results: Results<T> = realm.objects(T).filter(pred)
+                let results: Results<T> = realm.objects(T)
+                if let pred = pred {
+                    results.filter(pred)
+                }
                 realm.write {
                     realm.delete(results)
                 }

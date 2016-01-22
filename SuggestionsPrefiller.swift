@@ -21,24 +21,49 @@ class SuggestionsPrefiller {
     */
     func prefill(onFinished: VoidFunction? = nil) {
 
-        let (categories, products) = prefillProducts()
-        
-//        printStringsForTranslations(categories, products: products)
-        
-        dbProvider.save(categories, products: products) {[weak self] saved in
-            print("Finished prefilling")
-            self?.writeDBCopy(NSHomeDirectory() + "/Documents/prefill.realm")
-            onFinished?()
+        func prefill(lang: String, onFinished: VoidFunction) {
+            let (categories, products) = prefillProducts(lang)
+            //        printStringsForTranslations(categories, products: products)
+            dbProvider.save(categories, products: products) {[weak self] saved in
+
+                self?.writeDBCopy(NSHomeDirectory() + "/Documents/prefill\(lang).realm")
+                print("Finished prefilling lang: \(lang)")
+                
+                // After copy, clear the default db such that it's not included in the next languages
+                self?.dbProvider.removeAllProductsAndCategories {success in
+                    
+                    if !success { // Note this doesn't interrupt the operation
+                        print("Error: dbProvider.removeAllProductsAndCategories, not success clearing: \(lang)")
+                    }
+                    
+                    onFinished()
+                }
+            }
         }
+        
+        let langs = LangManager().availableLangs
+
+        func prefillRec(index: Int) {
+            guard index < langs.count else {
+                onFinished?()
+                return
+            }
+            
+            prefill(langs[index]) {
+                prefillRec(index + 1)
+            }
+        }
+        
+        prefillRec(0)
     }
     
     private func writeDBCopy(toPath: String) {
 
         if let fromPath = Realm.Configuration.defaultConfiguration.path {
-            print("Will write realm copy from path: \(fromPath), toPath: \(toPath)")
             do {
                 try Realm().writeCopyToPath(toPath)
-                
+                print("Copied realm from path: \(fromPath), toPath: \(toPath)")
+
             } catch let error as NSError {
                 print("Error copying realm: \(error)")
             } catch _ {
@@ -54,217 +79,229 @@ class SuggestionsPrefiller {
         return NSUUID().UUIDString
     }
     
+    func tr(key: String, _ lang: String) -> String {
+        let path = NSBundle.mainBundle().pathForResource(lang, ofType: "lproj")
+        let bundle = NSBundle(path: path!)
+        if let str = bundle?.localizedStringForKey(key, value: nil, table: nil) {
+            return str
+        } else {
+            print("Warn: SuggestionsPrefiller.tr: Didn't find translation for key: \(key), lang: \(lang)")
+            return ""
+        }
+    }
+    
+    
     // TODO!!! add brand to products! and unique key name + mark --- prices without mark will likely be annoying to users as they will have to edit the product (price) every time they decide to buy a different brand. Prefill would not have brands! User has to edit the prefilled products or add new ones with the brands.
     // we could add brand to name but this is going to cause space problems in the lists and looks bad
     
-    private func prefillProducts() -> (categories: [ProductCategory], products: [Product]) {
-        let fruitsCat = ProductCategory(uuid: uuid, name: "pf_93.fruits", color: UIColor.flatRedColor())
-        let frozenFruitsCat = ProductCategory(uuid: uuid, name: "pf_93.fruits_frozen", color: UIColor.flatBlueColor())
-        let vegetablesCat = ProductCategory(uuid: uuid, name: "pf_93.vegetables", color: UIColor.flatGreenColor())
-        let herbsCat = ProductCategory(uuid: uuid, name: "pf_93.herbs", color: UIColor.flatGreenColorDark())
-        let meatCat = ProductCategory(uuid: uuid, name: "pf_93.meat", color: UIColor.flatRedColorDark())
-        let petsCat = ProductCategory(uuid: uuid, name: "pf_93.pets", color: UIColor.flatGreenColorDark())
-        let bakeryCat = ProductCategory(uuid: uuid, name: "pf_93.bakery", color: UIColor.flatBrownColorDark())
-        let riceCat = ProductCategory(uuid: uuid, name: "pf_93.rice", color: UIColor.flatWhiteColor())
-        let nutsCat = ProductCategory(uuid: uuid, name: "pf_93.nuts", color: UIColor.flatBrownColorDark())
-        let oilCat = ProductCategory(uuid: uuid, name: "pf_93.oil", color: UIColor.flatYellowColor())
-        let clothesCat = ProductCategory(uuid: uuid, name: "pf_93.oil", color: UIColor.flatBlueColorDark())
-        let cleaningCat = ProductCategory(uuid: uuid, name: "pf_93.cleaning", color: UIColor.flatMagentaColor())
-
-        let milkCat = ProductCategory(uuid: uuid, name: "pf_93.milk", color: UIColor.flatYellowColor())
-
-        let fishCat = ProductCategory(uuid: uuid, name: "pf_93.fish", color: UIColor.flatBlueColorDark())
-        let pastaCat = ProductCategory(uuid: uuid, name: "pf_93.pasta", color: UIColor.flatWhiteColorDark())
-        let drinksCat = ProductCategory(uuid: uuid, name: "pf_93.drinks", color: UIColor.flatBlueColor().lightenByPercentage(0.5))
-        let hygienicCat = ProductCategory(uuid: uuid, name: "pf_93.hygienic", color: UIColor.flatGrayColor())
-        let spicesCat = ProductCategory(uuid: uuid, name: "pf_93.spices", color: UIColor.flatBrownColor())
-        let breadCat = ProductCategory(uuid: uuid, name: "pf_93.bread", color: UIColor.flatYellowColorDark())
+    private func prefillProducts(lang: String) -> (categories: [ProductCategory], products: [Product]) {
+        let fruitsCat = ProductCategory(uuid: uuid, name: tr("pr_fruits", lang), color: UIColor.flatRedColor())
+        let frozenFruitsCat = ProductCategory(uuid: uuid, name: tr("pr_fruits_frozen", lang), color: UIColor.flatBlueColor())
+        let vegetablesCat = ProductCategory(uuid: uuid, name: tr("pr_vegetables", lang), color: UIColor.flatGreenColor())
+        let herbsCat = ProductCategory(uuid: uuid, name: tr("pr_herbs", lang), color: UIColor.flatGreenColorDark())
+        let meatCat = ProductCategory(uuid: uuid, name: tr("pr_meat", lang), color: UIColor.flatRedColorDark())
+        let petsCat = ProductCategory(uuid: uuid, name: tr("pr_pets", lang), color: UIColor.flatGreenColorDark())
+        let bakeryCat = ProductCategory(uuid: uuid, name: tr("pr_bakery", lang), color: UIColor.flatBrownColorDark())
+        let riceCat = ProductCategory(uuid: uuid, name: tr("pr_rice", lang), color: UIColor.flatWhiteColor())
+        let nutsCat = ProductCategory(uuid: uuid, name: tr("pr_nuts", lang), color: UIColor.flatBrownColorDark())
+        let oilCat = ProductCategory(uuid: uuid, name: tr("pr_oil", lang), color: UIColor.flatYellowColor())
+        let clothesCat = ProductCategory(uuid: uuid, name: tr("pr_oil", lang), color: UIColor.flatBlueColorDark())
+        let cleaningCat = ProductCategory(uuid: uuid, name: tr("pr_cleaning", lang), color: UIColor.flatMagentaColor())
+        
+        let milkCat = ProductCategory(uuid: uuid, name: tr("pr_milk", lang), color: UIColor.flatYellowColor())
+        
+        let fishCat = ProductCategory(uuid: uuid, name: tr("pr_fish", lang), color: UIColor.flatBlueColorDark())
+        let pastaCat = ProductCategory(uuid: uuid, name: tr("pr_pasta", lang), color: UIColor.flatWhiteColorDark())
+        let drinksCat = ProductCategory(uuid: uuid, name: tr("pr_drinks", lang), color: UIColor.flatBlueColor().lightenByPercentage(0.5))
+        let hygienicCat = ProductCategory(uuid: uuid, name: tr("pr_hygienic", lang), color: UIColor.flatGrayColor())
+        let spicesCat = ProductCategory(uuid: uuid, name: tr("pr_spices", lang), color: UIColor.flatBrownColor())
+        let breadCat = ProductCategory(uuid: uuid, name: tr("pr_bread", lang), color: UIColor.flatYellowColorDark())
         
         let products = [
             // fruits
-            Product(uuid: uuid, name: "pf_93.peaches", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.bananas", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.apples", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.nectarines", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.cherries", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.kiwis", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.melons", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.watermelons", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.lemons", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.grapes", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.oranges", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.mandarines", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.strawberries", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.blueberries", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.cranberries", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_peaches", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_bananas", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_apples", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_nectarines", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cherries", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_kiwis", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_melons", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_watermelons", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_lemons", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_grapes", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_oranges", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_mandarines", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_strawberries", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_blueberries", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cranberries", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
             
             // frozen fruits
-            Product(uuid: uuid, name: "pf_93.strawberries_frozen", price: 0, category: frozenFruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.blueberries_frozen", price: 0, category: frozenFruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.cranberries_frozen", price: 0, category: frozenFruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_strawberries_frozen", lang), price: 0, category: frozenFruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_blueberries_frozen", lang), price: 0, category: frozenFruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cranberries_frozen", lang), price: 0, category: frozenFruitsCat, baseQuantity: 1, unit: .None),
             
             // vegetables
-            Product(uuid: uuid, name: "pf_93.onions", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.onions_red", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.potatoes", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.salad", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.tomatoes", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.paprika", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.olives", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.garlic", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.carrots", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.asparagus", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.dumplings", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.mashed_potatoes", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_onions", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_onions_red", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_potatoes", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_salad", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_tomatoes", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_paprika", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_olives", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_garlic", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_carrots", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_asparagus", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_dumplings", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_mashed_potatoes", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
             
             // herbs (fresh/dry)
-            Product(uuid: uuid, name: "pf_93.parsley", price: 0, category: herbsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.basil", price: 0, category: herbsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_parsley", lang), price: 0, category: herbsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_basil", lang), price: 0, category: herbsCat, baseQuantity: 1, unit: .None),
             
             // meat
-            Product(uuid: uuid, name: "pf_93.chicken", price: 0, category: meatCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.drum_sticks", price: 0, category: meatCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.chicken_wings", price: 0, category: meatCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.chops", price: 0, category: meatCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.beef_steak", price: 0, category: meatCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.beef", price: 0, category: meatCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.duck", price: 0, category: meatCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_chicken", lang), price: 0, category: meatCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_drum_sticks", lang), price: 0, category: meatCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_chicken_wings", lang), price: 0, category: meatCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_chops", lang), price: 0, category: meatCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_beef_steak", lang), price: 0, category: meatCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_beef", lang), price: 0, category: meatCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_duck", lang), price: 0, category: meatCat, baseQuantity: 1, unit: .None),
             
             // pets
-            Product(uuid: uuid, name: "pf_93.litter", price: 0, category: petsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_litter", lang), price: 0, category: petsCat, baseQuantity: 1, unit: .None),
             
             // spices
-            Product(uuid: uuid, name: "pf_93.pepper", price: 0, category: spicesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.salt", price: 0, category: spicesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.sugar", price: 0, category: spicesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.cinnamon", price: 0, category: spicesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_pepper", lang), price: 0, category: spicesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_salt", lang), price: 0, category: spicesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_sugar", lang), price: 0, category: spicesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cinnamon", lang), price: 0, category: spicesCat, baseQuantity: 1, unit: .None),
             
             // bakery
-            Product(uuid: uuid, name: "pf_93.flour", price: 0, category: bakeryCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_flour", lang), price: 0, category: bakeryCat, baseQuantity: 1, unit: .None),
             
             // pasta
-            Product(uuid: uuid, name: "pf_93.spaguetti", price: 0, category: pastaCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.noodles", price: 0, category: pastaCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.ravioli", price: 0, category: pastaCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_spaguetti", lang), price: 0, category: pastaCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_noodles", lang), price: 0, category: pastaCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_ravioli", lang), price: 0, category: pastaCat, baseQuantity: 1, unit: .None),
             
             // rice
-            Product(uuid: uuid, name: "pf_93.rice", price: 0, category: riceCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.rice_basmati", price: 0, category: riceCat, baseQuantity: 1, unit: .None),
-
+            Product(uuid: uuid, name: tr("pr_rice", lang), price: 0, category: riceCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_rice_basmati", lang), price: 0, category: riceCat, baseQuantity: 1, unit: .None),
+            
             // drinks
-            Product(uuid: uuid, name: "pf_93.water", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.water_1", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.club_mate", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.cola_1", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.cola_1_5", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.cola_2", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.fanta_1", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.fanta_1_5", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.fanta_2", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.sprite_1", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.sprite_1_5", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.sprite_2", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_water", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_water_1", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_club_mate", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cola_1", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cola_1_5", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cola_2", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_fanta_1", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_fanta_1_5", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_fanta_2", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_sprite_1", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_sprite_1_5", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_sprite_2", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
             
             // nuts
-            Product(uuid: uuid, name: "pf_93.nuts", price: 0, category: nutsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.pine_nuts", price: 0, category: nutsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.hazel_nuts", price: 0, category: nutsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_nuts", lang), price: 0, category: nutsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_pine_nuts", lang), price: 0, category: nutsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_hazel_nuts", lang), price: 0, category: nutsCat, baseQuantity: 1, unit: .None),
             
             // oil
-            Product(uuid: uuid, name: "pf_93.oil", price: 0, category: oilCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.oil_olives", price: 0, category: oilCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.oil_sunflower", price: 0, category: oilCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.oil_rapeseed", price: 0, category: oilCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_oil", lang), price: 0, category: oilCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_oil_olives", lang), price: 0, category: oilCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_oil_sunflower", lang), price: 0, category: oilCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_oil_rapeseed", lang), price: 0, category: oilCat, baseQuantity: 1, unit: .None),
             
             // hygienic
-            Product(uuid: uuid, name: "pf_93.soap_body", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.soap_hands", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.shampoo", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.toothpaste", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.deodorant", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.tooth_brush", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.listerine", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.dental_floss", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.cotton", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.cotton_buds", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.diapers", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.sanitary_towel", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.tampons", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_soap_body", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_soap_hands", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_shampoo", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_toothpaste", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_deodorant", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_tooth_brush", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_listerine", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_dental_floss", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cotton", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cotton_buds", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_diapers", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_sanitary_towel", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_tampons", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
             
             // clothes
-            Product(uuid: uuid, name: "pf_93.socks", price: 0, category: clothesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.tshirts", price: 0, category: clothesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.underwear", price: 0, category: clothesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.pants", price: 0, category: clothesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.shoes", price: 0, category: clothesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_socks", lang), price: 0, category: clothesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_tshirts", lang), price: 0, category: clothesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_underwear", lang), price: 0, category: clothesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_pants", lang), price: 0, category: clothesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_shoes", lang), price: 0, category: clothesCat, baseQuantity: 1, unit: .None),
             
             // cleaning
-            Product(uuid: uuid, name: "pf_93.cleaning_agent", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.cleaning_agent_toilet", price: 0, category: meatCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.cleaning_agent_windows", price: 0, category: meatCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.sponge", price: 0, category: pastaCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.sponge_wire", price: 0, category: milkCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.mop", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.brush", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.waste_bags_5", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.waste_bags_10", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.waste_bags_30", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.waste_bags_60", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cleaning_agent", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cleaning_agent_toilet", lang), price: 0, category: meatCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cleaning_agent_windows", lang), price: 0, category: meatCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_sponge", lang), price: 0, category: pastaCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_sponge_wire", lang), price: 0, category: milkCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_mop", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_brush", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_waste_bags_5", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_waste_bags_10", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_waste_bags_30", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_waste_bags_60", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
             
-            Product(uuid: uuid, name: "pf_93.salad_dressing", price: 0, category: meatCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.dip", price: 0, category: meatCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.pesto", price: 0, category: meatCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_salad_dressing", lang), price: 0, category: meatCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_dip", lang), price: 0, category: meatCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_pesto", lang), price: 0, category: meatCat, baseQuantity: 1, unit: .None),
             
-            Product(uuid: uuid, name: "pf_93.salmon", price: 0, category: pastaCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.trout", price: 0, category: milkCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.tuna", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.fish_sticks", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-
-            Product(uuid: uuid, name: "pf_93.fries", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.fries_oven", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_salmon", lang), price: 0, category: pastaCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_trout", lang), price: 0, category: milkCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_tuna", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_fish_sticks", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
             
-            Product(uuid: uuid, name: "pf_93.cake", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.pudding", price: 0, category: fishCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.curd", price: 0, category: fishCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_fries", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_fries_oven", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
             
-            Product(uuid: uuid, name: "pf_93.cheese", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.parmesan", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.cheddar", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.gouda", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
-
-            Product(uuid: uuid, name: "pf_93.beans_kidney", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.beans_string", price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.corn", price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cake", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_pudding", lang), price: 0, category: fishCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_curd", lang), price: 0, category: fishCat, baseQuantity: 1, unit: .None),
             
-            Product(uuid: uuid, name: "pf_93.eggs", price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
-
-            Product(uuid: uuid, name: "pf_93.marmelade", price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
-
-            Product(uuid: uuid, name: "pf_93.corn_flakes", price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.muesli", price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cheese", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_parmesan", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cheddar", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_gouda", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
             
-            Product(uuid: uuid, name: "pf_93.toast_bread", price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.bread", price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.baguette", price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_beans_kidney", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_beans_string", lang), price: 0, category: vegetablesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_corn", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
             
-            Product(uuid: uuid, name: "pf_93.bacon", price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.ham", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.mortadella", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-
-            Product(uuid: uuid, name: "pf_93.milk", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.cream", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.sour_cream", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.whipped_cream", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_eggs", lang), price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
             
-            Product(uuid: uuid, name: "pf_93.pizza", price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_marmelade", lang), price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
             
-            Product(uuid: uuid, name: "pf_93.paper", price: 0, category: spicesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.pens", price: 0, category: spicesCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.pencils", price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.notebooks", price: 0, category: breadCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.sharpeners", price: 0, category: breadCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.erasers", price: 0, category: breadCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: "pf_93.stapler", price: 0, category: breadCat, baseQuantity: 1, unit: .None)
+            Product(uuid: uuid, name: tr("pr_corn_flakes", lang), price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_muesli", lang), price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
+            
+            Product(uuid: uuid, name: tr("pr_toast_bread", lang), price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_bread", lang), price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_baguette", lang), price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
+            
+            Product(uuid: uuid, name: tr("pr_bacon", lang), price: 0, category: cleaningCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_ham", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_mortadella", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            
+            Product(uuid: uuid, name: tr("pr_milk", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_cream", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_sour_cream", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_whipped_cream", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            
+            Product(uuid: uuid, name: tr("pr_pizza", lang), price: 0, category: drinksCat, baseQuantity: 1, unit: .None),
+            
+            Product(uuid: uuid, name: tr("pr_paper", lang), price: 0, category: spicesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_pens", lang), price: 0, category: spicesCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_pencils", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_notebooks", lang), price: 0, category: breadCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_sharpeners", lang), price: 0, category: breadCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_erasers", lang), price: 0, category: breadCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_stapler", lang), price: 0, category: breadCat, baseQuantity: 1, unit: .None)
         ]
         
         let categories = [fruitsCat, vegetablesCat, milkCat, meatCat, fishCat, pastaCat, drinksCat, cleaningCat, hygienicCat, spicesCat, breadCat]
