@@ -8,12 +8,16 @@
 
 import UIKit
 
-class TableViewListItem {
+class TableViewListItem: CustomDebugStringConvertible {
    
     let listItem: ListItem
     var swiped: Bool = false
     
     init(listItem: ListItem) {
         self.listItem = listItem
+    }
+    
+    var debugDescription: String {
+        return "{\(self.dynamicType) \(listItem)}"
     }
 }

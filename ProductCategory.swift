@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ProductCategory: Equatable, Identifiable {
+class ProductCategory: Equatable, Identifiable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let color: UIColor
@@ -19,8 +19,16 @@ class ProductCategory: Equatable, Identifiable {
         self.color = color
     }
     
-    var debugDescription: String {
+    private var shortDescription: String {
+        return "{\(self.dynamicType) name: \(name)}"
+    }
+    
+    private var longDescription: String {
         return "{\(self.dynamicType) uuid: \(uuid), name: \(name), color: \(color)}"
+    }
+    
+    var debugDescription: String {
+        return shortDescription
     }
     
     var hashValue: Int {

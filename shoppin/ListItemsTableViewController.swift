@@ -163,6 +163,24 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         updateOrAddListItem(listItem, status: status, increment: false, notifyRemote: notifyRemote) // update means overwrite - don't increment
     }
     
+    private func findIndexInItems(listItem: ListItem) -> Int? {
+        for (index, item) in items.enumerate() {
+            if item.same(listItem) {
+                return index
+            }
+        }
+        return nil
+    }
+    
+    private func replaceItemAndRebuildTable(listItem: ListItem) {
+        if let index = findIndexInItems(listItem) {
+            items[index] = listItem
+            initTableViewContent()
+        } else {
+            print("Error: Invalid state: ListItemsTableViewController.updateOrAddListItem: listItem: \(listItem) not found in items, despite its indexPath was found in sections")
+        }
+    }
+    
     // TODO simpler way to update, maybe just always reinit the table... also refactor rest (build sections etc) it is way more complex than it should
     // right now prefer not to always reinit the table because this can change sorting
     // so first we should implement persistent sorting, then refactor this class
@@ -170,10 +188,13 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     // -status: the updated status of list item (if the item has switched status (e.g. swipe from todo to done), this is the new status, otherwise it's just the current status of the item)
     // TODO increment seems not ot be used, what was this for? remove?
     func updateOrAddListItem(listItem: ListItem, status: ListItemStatus, increment: Bool, scrollToSelection: Bool = false, notifyRemote: Bool) {
+        
         if let indexPath = getIndexPath(listItem) {
+        
             let oldItem = tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
-
+        
             if !oldItem.listItem.hasStatus(status) {
+        
                 // the item is in this tableview but has now a new status - delete (swipe) it from tableview. This is used by websockets
                 // when another user e.g. sends to item to cart we want to show the receiving users the item being "swiped" and then deleted
                 markOpen(true, indexPath: indexPath, notifyRemote: notifyRemote) {[weak self] in // swipe
@@ -181,22 +202,12 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 }
                 
             } else {
-                if (oldItem.listItem.section == listItem.section) {
-                    tableViewSections[indexPath.section].tableViewListItems[indexPath.row] = TableViewListItem(listItem: listItem)
-                    tableView.reloadData()
-                } else { // the item has a different (but present in tableview) section
-                    //update the list item before we reinit the table, to update the section...
-                    var itemIndexMaybe:Int?
-                    for (index, item) in items.enumerate() {
-                        if item.uuid == listItem.uuid {
-                            itemIndexMaybe = index
-                        }
-                    }
-                    if let itemIndex = itemIndexMaybe {
-                        items[itemIndex] = listItem
-                        
-                        initTableViewContent()
-                    }
+                if (oldItem.listItem.section == listItem.section) { // item is already in table view and also has same section
+                    replaceItemAndRebuildTable(listItem)
+
+                } else { // the item is already in table view but has a different section
+                    //update item and rebuild table, which organises sections
+                    replaceItemAndRebuildTable(listItem)
                 }
                 
                 if scrollToSelection {
@@ -204,15 +215,25 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 }
             }
             
-        } else { // indexpath for updated item not in the tableview, item is new or has a new section
-            items.append(listItem) // FIXME hacky...
-            initTableViewContent() // this will make the possible new section appear
+        } else { // indexpath for updated item not in the tableview -> item is new or has a new section
+            items.append(listItem) // insert item at end of the list
+            initTableViewContent() // rebuild table - this makes also possible new section appear
             
             if scrollToSelection {
                 if let indexPath = getIndexPath(listItem) { // lookup indexpath where new item was inserted (initTableViewContent puts the item where it belongs)
                     tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
                 }
             }
+        }
+    }
+    
+    // Returns a string representing current sections with listitems
+    private func debugTableViewListItems() -> String {
+        return tableViewSections.reduce("") {str, section in
+            let sectionListItemsStr = section.tableViewListItems.reduce("") {str, tableViewListItem in
+                return "\(str),\(tableViewListItem)"
+            }
+            return "(\(str),\(section.section.name)):[\(sectionListItemsStr)]"
         }
     }
     

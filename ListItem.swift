@@ -150,7 +150,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     private var shortDebugDescription: String {
-        return "[\(product.name)]"
+        return "[\(product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)"
     }
 
     private var longDebugDescription: String {

@@ -16,6 +16,8 @@ import ChameleonFramework
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    private let debugAddDummyData = true
+    
     var window: UIWindow?
     
     private var reachability: Reachability!
@@ -30,9 +32,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         initIsFirstLaunch()
         
-        ifDebugActions()
+        ifDebugLaunchActions()
         
-        showFirstController()
+        showController(firstController())
 
         initReachability()
 
@@ -42,18 +44,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
-    private func showFirstController() {
-        let viewController: UIViewController = {
-            // The intro is shown (even if user stops the app and comes back) until it's completed (log in / register success or skip)
-            if PreferencesManager.loadPreference(PreferencesManagerKey.showIntro) ?? true {
-                return UIStoryboard.introNavController()
-            } else {
-                return UIStoryboard.mainTabController()
-            }
-        }()
+    private func showController(controller: UIViewController) {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        self.window?.rootViewController = viewController
+        self.window?.rootViewController = controller
         self.window?.makeKeyAndVisible()
+    }
+    
+    private func firstController() -> UIViewController {
+        // The intro is shown (even if user stops the app and comes back) until it's completed (log in / register success or skip)
+        if PreferencesManager.loadPreference(PreferencesManagerKey.showIntro) ?? true {
+            return UIStoryboard.introNavController()
+        } else {
+            return UIStoryboard.mainTabController()
+        }
     }
     
     private func initIsFirstLaunch() {
@@ -62,29 +65,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             PreferencesManager.savePreference(PreferencesManagerKey.isFirstLaunch, value: true)
         } else { // after first launch
             PreferencesManager.savePreference(PreferencesManagerKey.isFirstLaunch, value: false)
-        }
-    }
-
-    // Actions executed if app is in debug mode
-    private func ifDebugActions() {
-        #if DEBUG
-//            generatePrefillDatabase() // enable this only to generate prefilled database
-            if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
-                debugFirstLaunchSetup()
-            }
-            #else
-        #endif
-    }
-
-    /**
-    * Create database which we embed in the app in order to prefill the app's database
-    * TODO try to use test for this (PrefillDatabase - not working because sth with Realm). This should not be in of the app.
-    */
-    private func generatePrefillDatabase() {
-        print("Creating prefilled database")
-//        self.suggestionsPrefiller = SuggestionsPrefiller()
-        self.suggestionsPrefiller?.prefill {
-            print("Finished creating prefilled database")
         }
     }
     
@@ -118,8 +98,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Debug
     
-    private func debugFirstLaunchSetup() {
-        self.addDummyData()
+    // Actions executed if app is in debug mode
+    private func ifDebugLaunchActions() {
+        #if DEBUG
+            // generatePrefillDatabase() // enable this only to generate prefilled database
+            if debugAddDummyData || !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
+                addDummyData()
+            }
+            #else
+        #endif
+    }
+    
+    /**
+    * Create database which we embed in the app in order to prefill the app's database
+    * TODO try to use test for this (PrefillDatabase - not working because sth with Realm). This should not be in of the app.
+    */
+    private func generatePrefillDatabase() {
+        print("Creating prefilled database")
+        // self.suggestionsPrefiller = SuggestionsPrefiller()
+        self.suggestionsPrefiller?.prefill {
+            print("Finished creating prefilled database")
+        }
     }
     
     private func addDummyData() {
