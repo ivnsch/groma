@@ -33,4 +33,5 @@ class Fonts {
     static var regularBold: UIFont = {UIFont(name: fontNameBold, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
     static var smallerBold: UIFont = {UIFont(name: fontNameBold, size: smallerSize) ?? UIFont.systemFontOfSize(smallerSize)}()
     static var verySmallBold: UIFont = {UIFont(name: fontNameBold, size: verySmallSize) ?? UIFont.systemFontOfSize(verySmallSize)}()
+    static var superSmallBold: UIFont = {UIFont(name: fontNameBold, size: superSmallSize) ?? UIFont.systemFontOfSize(superSmallSize)}()
 }
