@@ -61,9 +61,7 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     private var inventoryPicker: InventoryPicker?
     private var selectedInventory: Inventory? {
         didSet {
-            if (selectedInventory.map{$0 != oldValue} ?? true) { // load only if it's not set (?? true) or if it's a different inventory
-                loadChart()
-            }
+            loadChart()
         }
     }
     
@@ -237,7 +235,8 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
                 return []
             }
         }
-        let yValues = ChartAxisValuesGenerator.generateYAxisValuesWithChartPoints(chartPoints, minSegmentCount: 4, maxSegmentCount: 8, multiple: 2, axisValueGenerator: {EmptyAxisValue($0)}, addPaddingSegmentIfEdge: false)
+
+        let yValues: [ChartAxisValue] = ChartAxisValuesGenerator.generateYAxisValuesWithChartPoints(chartPoints, minSegmentCount: 4, maxSegmentCount: 8, multiple: 2, axisValueGenerator: {EmptyAxisValue($0)}, addPaddingSegmentIfEdge: false)
         
         let xModel = ChartAxisModel(axisValues: xValues, axisTitleLabel: ChartAxisLabel(text: "", settings: labelSettings))
         let yModel = ChartAxisModel(axisValues: yValues, axisTitleLabel: ChartAxisLabel(text: "Spending", settings: labelSettings.defaultVertical()))
@@ -343,41 +342,41 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
             
         }, displayDelay: 0.3) // show after bars animation
         
-        
-        // average layer
-        let avgChartPoint = ChartPoint(x: ChartAxisValueFloat(0), y: ChartAxisValueFloat(avg))
+        var layers: [ChartLayer] = [xAxis, barsLayer, labelsLayer]
 
-        let avgLayer = ChartPointsViewsLayer(xAxis: xAxis, yAxis: yAxis, innerFrame: innerFrame, chartPoints: [avgChartPoint], viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
-            let line = HandlingView(frame: CGRectMake(xAxis.p1.x, chartPointModel.screenLoc.y, 0, 1))
-            line.backgroundColor = UIColor.blueColor()
-            line.movedToSuperViewHandler = {[weak self] in
-                if let weakSelf = self {
-                    UIView.animateWithDuration(weakSelf.avgLineDuration) {
-                        let extra = barWidth / 2
-                        line.frame = CGRectMake(xAxis.p1.x - extra, chartPointModel.screenLoc.y, xAxis.length + extra * 2, 1)
+        if (chartPoints.contains{$0.y.scalar > 0}) { // don't show avg line if all the prices are 0, it looks weird
+            
+            // average layer
+            let avgChartPoint = ChartPoint(x: ChartAxisValueFloat(0), y: ChartAxisValueFloat(avg))
+
+            let avgLayer = ChartPointsViewsLayer(xAxis: xAxis, yAxis: yAxis, innerFrame: innerFrame, chartPoints: [avgChartPoint], viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
+                let line = HandlingView(frame: CGRectMake(xAxis.p1.x, chartPointModel.screenLoc.y, 0, 1))
+                line.backgroundColor = UIColor.blueColor()
+                line.movedToSuperViewHandler = {[weak self] in
+                    if let weakSelf = self {
+                        UIView.animateWithDuration(weakSelf.avgLineDuration) {
+                            let extra = barWidth / 2
+                            line.frame = CGRectMake(xAxis.p1.x - extra, chartPointModel.screenLoc.y, xAxis.length + extra * 2, 1)
+                        }
                     }
                 }
-            }
-            return line
-        }, displayDelay: avgLineDelay)
+                return line
+            }, displayDelay: avgLineDelay)
+            
+            averageLabel.alpha = 0
+            averageLabelLabel.alpha = 0
+            averageLabel.text = Float(avg).toLocalCurrencyString()
+            UIView.animateWithDuration(NSTimeInterval(avgLineDuration), delay: NSTimeInterval(avgLineDelay), options: UIViewAnimationOptions.CurveLinear, animations: {[weak self] in
+                self?.averageLabel.alpha = 1
+                self?.averageLabelLabel.alpha = 1
+                }, completion: nil)
+            
+            layers.append(avgLayer)
+        }
 
-        averageLabel.alpha = 0
-        averageLabelLabel.alpha = 0
-        averageLabel.text = Float(avg).toLocalCurrencyString()
-        UIView.animateWithDuration(NSTimeInterval(avgLineDuration), delay: NSTimeInterval(avgLineDelay), options: UIViewAnimationOptions.CurveLinear, animations: {[weak self] in
-            self?.averageLabel.alpha = 1
-            self?.averageLabelLabel.alpha = 1
-        }, completion: nil)
-
-        
         let chart = Chart(
             view: chartView,
-            layers: [
-                xAxis,
-                barsLayer,
-                labelsLayer,
-                avgLayer
-            ]
+            layers: layers
         )
         
         self.chart = chart
