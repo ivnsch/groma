@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-class DBListItem: DBSyncable {
+class DBListItem: DBSyncable, CustomDebugStringConvertible {
     
     dynamic var uuid: String = ""
     dynamic var section: DBSection = DBSection()
@@ -42,10 +42,25 @@ class DBListItem: DBSyncable {
     }
     
     func increment(quantity: ListItemStatusQuantity) {
+        
         switch quantity.status {
         case .Todo: todoQuantity += quantity.quantity
         case .Done: doneQuantity += quantity.quantity
         case .Stash: stashQuantity += quantity.quantity
+        }
+        
+        // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
+        if todoQuantity < 0 {
+            print("Error: ListItem.increment: New todo quantity: \(todoQuantity) for item: \(self)")
+            todoQuantity = 0
+        }
+        if doneQuantity < 0 {
+            print("Error: ListItem.increment: New done quantity: \(doneQuantity) for item: \(self)")
+            doneQuantity = 0
+        }
+        if stashQuantity < 0 {
+            print("Error: ListItem.increment: New stash quantity: \(stashQuantity) for item: \(self)")
+            stashQuantity = 0
         }
     }
 
@@ -56,5 +71,11 @@ class DBListItem: DBSyncable {
     static func createFilter(list: List, product: Product) -> String {
         let brand = product.brand ?? ""
         return "\(createFilter(list)) && product.name == '\(product.name)' && product.brand == '\(brand)'"
+    }
+    
+    // MARK: - CustomDebugStringConvertible
+    
+    override var debugDescription: String {
+        return "{\(self.dynamicType) uuid: \(uuid), \(product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)}"
     }
 }

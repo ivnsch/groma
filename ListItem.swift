@@ -184,19 +184,57 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
 
     func increment(todoQuantity: Int, doneQuantity: Int, stashQuantity: Int) -> ListItem {
+        
+        let newTodo = todoQuantity + todoQuantity
+        let newDone = doneQuantity + doneQuantity
+        let newStash = stashQuantity + stashQuantity
+        
+        // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
+        if newTodo < 0 {
+            print("Error: ListItem.increment: New todo quantity: \(newTodo) for item: \(self)")
+        }
+        if newDone < 0 {
+            print("Error: ListItem.increment: New done quantity: \(newDone) for item: \(self)")
+        }
+        if newStash < 0 {
+            print("Error: ListItem.increment: New stash quantity: \(newStash) for item: \(self)")
+        }
+        let checkedTodo = max(0, newTodo)
+        let checkedDone = max(0, newDone)
+        let checkedStash = max(0, newStash)
+
         return copy(
             note: note,
-            todoQuantity: todoQuantity + todoQuantity,
-            doneQuantity: doneQuantity + doneQuantity,
-            stashQuantity: stashQuantity + stashQuantity
+            todoQuantity: checkedTodo,
+            doneQuantity: checkedDone,
+            stashQuantity: checkedStash
         )
     }
     
     func increment(quantity: ListItemStatusQuantity) -> ListItem {
+        
+        let newTodo = todoQuantity + quantity.quantity
+        let newDone = doneQuantity + quantity.quantity
+        let newStash = stashQuantity + quantity.quantity
+        
+        // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
+        if newTodo < 0 {
+            print("Error: ListItem.increment(2): New todo quantity: \(newTodo) for item: \(self)")
+        }
+        if newDone < 0 {
+            print("Error: ListItem.increment(2): New done quantity: \(newDone) for item: \(self)")
+        }
+        if newStash < 0 {
+            print("Error: ListItem.increment(2): New stash quantity: \(newStash) for item: \(self)")
+        }
+        let checkedTodo = max(0, newTodo)
+        let checkedDone = max(0, newDone)
+        let checkedStash = max(0, newStash)
+        
         switch quantity.status {
-        case .Todo: return copy(note: note, todoQuantity: todoQuantity + quantity.quantity)
-        case .Done: return copy(note: note, doneQuantity: doneQuantity + quantity.quantity)
-        case .Stash: return copy(note: note, stashQuantity: stashQuantity + quantity.quantity)
+        case .Todo: return copy(note: note, todoQuantity: checkedTodo)
+        case .Done: return copy(note: note, doneQuantity: checkedDone)
+        case .Stash: return copy(note: note, stashQuantity: checkedStash)
         }
     }
     
@@ -258,7 +296,26 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     func switchStatusQuantity(status: ListItemStatus, targetStatus: ListItemStatus) -> ListItem {
         
         func updateFieldQuantity(fieldStatus: ListItemStatus, status: ListItemStatus, targetStatus: ListItemStatus) -> Int {
-            return status == fieldStatus ? 0 : (targetStatus == fieldStatus ? quantity(status) + quantity(targetStatus) : quantity(targetStatus))
+            
+            // had to be rewriten to add bounds check, see TODO below
+//            return status == fieldStatus ? 0 : (targetStatus == fieldStatus ? quantity(status) + quantity(targetStatus) : quantity(targetStatus))
+            if status == fieldStatus {
+                return 0
+                
+            } else {
+                if targetStatus == fieldStatus {
+                    // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
+                    let newQuantity = quantity(status) + quantity(targetStatus)
+                    if newQuantity < 0 {
+                        print("Error: ListItem.switchStatusQuantity: New done quantity: \(newQuantity), status: \(status), targetStatus: \(targetStatus) for item: \(self)")
+                    }
+                    let checkedQuantity = max(0, newQuantity)
+                    return checkedQuantity
+                    
+                } else {
+                    return quantity(targetStatus)
+                }
+            }
         }
         
         return copy(
@@ -282,7 +339,25 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         }
         
         func fieldQuantity(fieldStatus: ListItemStatus, status: ListItemStatus, targetStatus: ListItemStatus) -> Int {
-            return status == fieldStatus ? 0 : (targetStatus == fieldStatus ? capturedQuantity(status) + quantity(targetStatus) : quantity(fieldStatus))
+
+            // had to be rewriten to add bounds check, see TODO below
+//            return status == fieldStatus ? 0 : (targetStatus == fieldStatus ? capturedQuantity(status) + quantity(targetStatus) : quantity(fieldStatus))
+            if status == fieldStatus {
+                return 0
+            } else {
+                if targetStatus == fieldStatus {
+                    // Sometimes got -1 in .Todo (no server involved) TODO find out why and fix, these checks shouldn't be necessary
+                    let newQuantity = capturedQuantity(status) + quantity(targetStatus)
+                    if newQuantity < 0 {
+                        print("Error: ListItem.switchStatusQuantityMutable: New done quantity: \(newQuantity), fieldStatus: \(fieldStatus), status: \(status), targetStatus: \(targetStatus) for item: \(self)")
+                    }
+                    let checkedQuantity = max(0, newQuantity)
+                    return checkedQuantity
+                    
+                } else {
+                    return quantity(fieldStatus)
+                }
+            }
         }
 
         todoQuantity = fieldQuantity(.Todo, status: status, targetStatus: targetStatus)
