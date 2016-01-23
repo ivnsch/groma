@@ -69,6 +69,10 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -669,7 +673,51 @@
                     <view key="view" contentMode="scaleToFill" id="nyx-EU-a0C">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Groma" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zWW-Lj-F5Z">
+                                <rect key="frame" x="271" y="184" width="59" height="24"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="20"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ivan Schütz" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RDW-hy-ch1">
+                                <rect key="frame" x="267" y="334" width="66" height="16"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="190559 Berlin" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z7I-pg-kKQ">
+                                <rect key="frame" x="261" y="355" width="79" height="16"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Germany" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bd8-FA-EAN">
+                                <rect key="frame" x="274" y="376" width="52" height="16"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Bd8-FA-EAN" firstAttribute="top" secondItem="z7I-pg-kKQ" secondAttribute="bottom" constant="5" id="APn-NZ-Wh4"/>
+                            <constraint firstItem="RDW-hy-ch1" firstAttribute="top" secondItem="zWW-Lj-F5Z" secondAttribute="bottom" constant="126" id="ARC-sf-lUl"/>
+                            <constraint firstItem="zWW-Lj-F5Z" firstAttribute="top" secondItem="vCj-Rn-aKt" secondAttribute="bottom" constant="120" id="Et6-3m-Vjr"/>
+                            <constraint firstItem="zWW-Lj-F5Z" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" id="KuS-s3-Zhp"/>
+                            <constraint firstItem="zWW-Lj-F5Z" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" id="Od0-5j-hjI"/>
+                            <constraint firstItem="z7I-pg-kKQ" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" id="PM5-Xl-fqg"/>
+                            <constraint firstItem="Bd8-FA-EAN" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" id="Rqp-cH-bpe"/>
+                            <constraint firstItem="RDW-hy-ch1" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" id="UJp-Zc-5lt"/>
+                            <constraint firstItem="zWW-Lj-F5Z" firstAttribute="centerY" secondItem="nyx-EU-a0C" secondAttribute="centerY" id="vgd-WS-b2z"/>
+                            <constraint firstItem="z7I-pg-kKQ" firstAttribute="top" secondItem="RDW-hy-ch1" secondAttribute="bottom" constant="5" id="y1b-G2-Fug"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Od0-5j-hjI"/>
+                                <exclude reference="vgd-WS-b2z"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="About" id="3A0-vx-wCG"/>
                 </viewController>
