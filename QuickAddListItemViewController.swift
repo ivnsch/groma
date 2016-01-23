@@ -45,7 +45,7 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
     var contentData: (itemType: QuickAddItemType, sortBy: QuickAddItemSortBy) = (.Product, .Fav) {
         didSet {
             if contentData.itemType != oldValue.itemType || contentData.sortBy != oldValue.sortBy {
-                clearAndLoadFirstPage()
+                clearAndLoadFirstPage(false)
                 
             }
         }
@@ -54,7 +54,7 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
     private var searchText: String = "" {
         didSet {
             if searchText != oldValue {
-                clearAndLoadFirstPage()
+                clearAndLoadFirstPage(true)
             }
         }
     }
@@ -71,13 +71,13 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        clearAndLoadFirstPage()
+        clearAndLoadFirstPage(false)
     }
     
-    private func clearAndLoadFirstPage() {
+    private func clearAndLoadFirstPage(isSearchLoad: Bool) {
         filteredQuickAddItems = []
         paginator.reset()
-        loadPossibleNextPage()
+        loadPossibleNextPage(isSearchLoad)
     }
 
     private func toGroupSortBy(sortBy: QuickAddItemSortBy) -> GroupSortBy {
@@ -192,7 +192,7 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         
         if (maximumOffset - currentOffset) <= 40 {
-            loadPossibleNextPage()
+            loadPossibleNextPage(false)
         }
     }
     
@@ -201,7 +201,8 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
 //        collectionView.editing = editing // TODO! collection view doesn't know this - for what did we need editing with tableview here anyway?
     }
     
-    private func loadPossibleNextPage() {
+    // isSearchLoad: true if load is triggered from search box, false if pagination/first load
+    private func loadPossibleNextPage(isSearchLoad: Bool) {
         
         func setLoading(loading: Bool) {
             self.loadingPage = loading
@@ -217,37 +218,62 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
             setLoading(false)
         }
         
+        func loadProducts() {
+            let handler: ProviderResult<(substring: String?, products: [Product])> -> Void = resultHandler(onSuccess: {[weak self] tuple in
+                if let weakSelf = self {
+                    // ensure we use only results for the string we have currently in the searchbox - the reason this check exists is that concurrent requests can cause problems,
+                    // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.
+                    if tuple.substring == weakSelf.searchText {
+                        let quickAddItems = tuple.products.map{QuickAddProduct($0, boldRange: $0.name.range(weakSelf.searchText, caseInsensitive: true))}
+                        onItemsLoaded(quickAddItems)
+                    } else {
+                        setLoading(false)
+                    }
+                }
+            }, onError: {[weak self] result in
+                setLoading(false)
+                self?.defaultErrorHandler()(providerResult: result)
+            })
+            
+            Providers.productProvider.products(searchText, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), handler)
+        }
+
+        func loadGroups() {
+            let handler: ProviderResult<(substring: String?, groups: [ListItemGroup])> -> Void = resultHandler(onSuccess: {[weak self] tuple in
+                if let weakSelf = self {
+                    
+                    if tuple.substring == weakSelf.searchText { // See comment about this above in products
+                        let quickAddItems = tuple.groups.map{QuickAddGroup($0, boldRange: $0.name.range(weakSelf.searchText, caseInsensitive: true))}
+                        onItemsLoaded(quickAddItems)
+                    } else {
+                        setLoading(false)
+                    }
+                }
+            }, onError: {[weak self] result in
+                setLoading(false)
+                self?.defaultErrorHandler()(providerResult: result)
+            })
+            
+            Providers.listItemGroupsProvider.groups(searchText, range: paginator.currentPage, sortBy: toGroupSortBy(contentData.sortBy), handler)
+        }
+        
         synced(self) {[weak self] in
             let weakSelf = self!
             
-            if !weakSelf.paginator.reachedEnd {
+            if !weakSelf.paginator.reachedEnd || isSearchLoad { // if pagination, load only if we are not at the end, for search load always
                 
-//                if (!weakSelf.loadingPage) { // commented since when using searchbox we can't "drop" calls
-//                    setLoading(true)
+                if (!weakSelf.loadingPage) {
+                    if !isSearchLoad { // block on pagination to avoid loading multiple times on scroll. No blocking on search - here we have to process each key stroke
+                        setLoading(true)
+                    }
                 
                     switch weakSelf.contentData.itemType {
                     case .Product:
-                        Providers.productProvider.products(weakSelf.searchText, range: weakSelf.paginator.currentPage, sortBy: weakSelf.toProductSortBy(weakSelf.contentData.sortBy), weakSelf.successHandler{tuple in
-                            
-                            // ensure we use only results for the string we have currently in the searchbox - the reason this check exists is that concurrent requests can cause probles,
-                            // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.
-                            if tuple.substring == weakSelf.searchText {
-                                
-                                let quickAddItems = tuple.products.map{QuickAddProduct($0, boldRange: $0.name.range(weakSelf.searchText, caseInsensitive: true))}
-                                onItemsLoaded(quickAddItems)
-                            }
-                        })
+                        loadProducts()
                     case .Group:
-                        Providers.listItemGroupsProvider.groups(weakSelf.searchText, range: weakSelf.paginator.currentPage, sortBy: weakSelf.toGroupSortBy(weakSelf.contentData.sortBy), weakSelf.successHandler{tuple in
-                            
-                            if tuple.substring == weakSelf.searchText { // See comment about this above in products
-                                
-                                let quickAddItems = tuple.groups.map{QuickAddGroup($0, boldRange: $0.name.range(weakSelf.searchText, caseInsensitive: true))}
-                                onItemsLoaded(quickAddItems)
-                            }
-                        })
+                        loadGroups()
                     }
-//                }
+                }
             }
         }
     }
