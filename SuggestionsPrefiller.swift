@@ -116,7 +116,9 @@ class SuggestionsPrefiller {
         let hygienicCat = ProductCategory(uuid: uuid, name: tr("pr_hygienic", lang), color: UIColor.flatGrayColor())
         let spicesCat = ProductCategory(uuid: uuid, name: tr("pr_spices", lang), color: UIColor.flatBrownColor())
         let breadCat = ProductCategory(uuid: uuid, name: tr("pr_bread", lang), color: UIColor.flatYellowColorDark())
-        
+        let sweetsCat = ProductCategory(uuid: uuid, name: tr("pr_sweets", lang), color: UIColor.flatPinkColor())
+        let teaAndCoffeeCat = ProductCategory(uuid: uuid, name: tr("pr_tea_coffee", lang), color: UIColor.flatBlackColor())
+
         let products = [
             // fruits
             Product(uuid: uuid, name: tr("pr_peaches", lang), price: 0, category: fruitsCat, baseQuantity: 1, unit: .None),
@@ -212,6 +214,8 @@ class SuggestionsPrefiller {
             Product(uuid: uuid, name: tr("pr_oil_olives", lang), price: 0, category: oilCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: tr("pr_oil_sunflower", lang), price: 0, category: oilCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: tr("pr_oil_rapeseed", lang), price: 0, category: oilCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_oil_margarine", lang), price: 0, category: oilCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_oil_butter", lang), price: 0, category: oilCat, baseQuantity: 1, unit: .None),
             
             // hygienic
             Product(uuid: uuid, name: tr("pr_soap_body", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
@@ -227,7 +231,9 @@ class SuggestionsPrefiller {
             Product(uuid: uuid, name: tr("pr_diapers", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: tr("pr_sanitary_towel", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: tr("pr_tampons", lang), price: 0, category: hygienicCat, baseQuantity: 1, unit: .None),
-            
+            Product(uuid: uuid, name: tr("pr_razors", lang), price: 0, category: oilCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_shaving_cream", lang), price: 0, category: oilCat, baseQuantity: 1, unit: .None),
+
             // clothes
             Product(uuid: uuid, name: tr("pr_socks", lang), price: 0, category: clothesCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: tr("pr_tshirts", lang), price: 0, category: clothesCat, baseQuantity: 1, unit: .None),
@@ -301,7 +307,20 @@ class SuggestionsPrefiller {
             Product(uuid: uuid, name: tr("pr_notebooks", lang), price: 0, category: breadCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: tr("pr_sharpeners", lang), price: 0, category: breadCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: tr("pr_erasers", lang), price: 0, category: breadCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: tr("pr_stapler", lang), price: 0, category: breadCat, baseQuantity: 1, unit: .None)
+            Product(uuid: uuid, name: tr("pr_stapler", lang), price: 0, category: breadCat, baseQuantity: 1, unit: .None),
+
+            // tea & coffee
+            Product(uuid: uuid, name: tr("pr_green_tea", lang), price: 0, category: teaAndCoffeeCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_black_tea", lang), price: 0, category: teaAndCoffeeCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_coffee", lang), price: 0, category: teaAndCoffeeCat, baseQuantity: 1, unit: .None),
+            
+            // sweets
+            Product(uuid: uuid, name: tr("pr_chewing_gum", lang), price: 0, category: sweetsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_catamels", lang), price: 0, category: sweetsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_chocolates", lang), price: 0, category: sweetsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_ice_cream", lang), price: 0, category: sweetsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_mints", lang), price: 0, category: sweetsCat, baseQuantity: 1, unit: .None),
+            Product(uuid: uuid, name: tr("pr_marshmallows", lang), price: 0, category: sweetsCat, baseQuantity: 1, unit: .None)
         ]
         
         let categories = [fruitsCat, vegetablesCat, milkCat, meatCat, fishCat, pastaCat, drinksCat, cleaningCat, hygienicCat, spicesCat, breadCat]
