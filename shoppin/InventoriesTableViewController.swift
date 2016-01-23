@@ -106,6 +106,15 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         })
     }
     
+    override func onRemoveModel(model: ExpandableTableViewModel) {
+        Providers.inventoryProvider.removeInventory((model as! ExpandableTableViewInventoryModel).inventory, remote: true, resultHandler(onSuccess: {
+            }, onError: {[weak self] result in
+                self?.initModels()
+                self?.defaultErrorHandler()(providerResult: result)
+            }
+        ))
+    }
+    
     override func initDetailController(cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
         let listItemsController = UIStoryboard.inventoryItemsViewController()
         

@@ -39,8 +39,6 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     private var editButton: UIBarButtonItem!
     
-    @IBOutlet weak var emptyGroupsView: UIView!
-    
     var expandDelegate: Foo?
     
     private var topAddEditListControllerManager: ExpandableTopViewController<AddEditGroupViewController>?
@@ -114,6 +112,14 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         })
     }
     
+    override func onRemoveModel(model: ExpandableTableViewModel) {
+        Providers.listItemGroupsProvider.remove((model as! ExpandableTableViewGroupModel).group, remote: true, resultHandler(onSuccess: {
+            }, onError: {[weak self] result in
+                self?.initModels()
+                self?.defaultErrorHandler()(providerResult: result)
+            }
+        ))
+    }
     
     override func initDetailController(cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
         let listItemsController = UIStoryboard.groupItemsController()

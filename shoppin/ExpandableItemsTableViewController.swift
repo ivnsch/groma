@@ -48,7 +48,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
 
     private let listItemsProvider = ProviderFactory().listItemProvider
     
-    private var lists: [List] = []
     var models: [ExpandableTableViewModel] = []
     
     private let expandCellAnimator = ExpandCellAnimator()
@@ -208,20 +207,20 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             
-            let list = lists[indexPath.row]
+            let model = models[indexPath.row]
             
             // update the table view in advance, so delete animation is quick. If something goes wrong we reload the content in onError and do default error handling
             tableView.wrapUpdates {[weak self] in
-                self?.lists.remove(list)
+                self?.models.remove(model)
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
             }
-            Providers.listProvider.remove(list, remote: true, resultHandler(onSuccess: {
-                }, onError: {[weak self] result in
-                    self?.initModels()
-                    self?.defaultErrorHandler()(providerResult: result)
-                }
-            ))
+            
+            onRemoveModel(model)
         }
+    }
+    
+    func onRemoveModel(model: ExpandableTableViewModel) {
+        fatalError("override")
     }
     
     func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {

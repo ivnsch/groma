@@ -106,6 +106,15 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         })
     }
     
+    override func onRemoveModel(model: ExpandableTableViewModel) {
+        Providers.listProvider.remove((model as! ExpandableTableViewListModel).list, remote: true, resultHandler(onSuccess: {
+            }, onError: {[weak self] result in
+                self?.initModels()
+                self?.defaultErrorHandler()(providerResult: result)
+            }
+        ))
+    }
+    
     override func initDetailController(cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
         let listItemsController = UIStoryboard.todoItemsViewController()
         listItemsController.view.frame = view.frame
