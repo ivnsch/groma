@@ -584,16 +584,17 @@ class ListItemProviderImpl: ListItemProvider {
     
 
     
-    func listItemCount(status: ListItemStatus, list: List, fetchMode: ProviderFetchModus = .Both, _ handler: ProviderResult<Int> -> Void) {
+    func listItemCount(status: ListItemStatus, list: List, fetchMode: ProviderFetchModus = .First, _ handler: ProviderResult<Int> -> Void) {
         let countMaybe = memProvider.listItemCount(.Stash, list: list)
         if let count = countMaybe {
             handler(ProviderResult(status: .Success, sucessResult: count))
         }
+        
         dbProvider.listItemCount(status, list: list) {dbCountMaybe in
             if let dbCount = dbCountMaybe {
                 // if for some reason the count in db is different than in memory return it again so the interface can update
                 // (only used for fetchmode .Both)
-                if fetchMode == .Both && (countMaybe.map{$0 != dbCount} ?? false) {
+                if (countMaybe.map{$0 != dbCount} ?? true) {
                     handler(ProviderResult(status: .Success, sucessResult: dbCount))
                 }
             } else {

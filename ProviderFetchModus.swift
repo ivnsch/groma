@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO these fetch modes are a mess and are mostly used incorrectly - fix!
 enum ProviderFetchModus {
 
     case First // handler is invoked only on first successful result, either from local DB or remote - memory cache not considered here (backward compatibility)
