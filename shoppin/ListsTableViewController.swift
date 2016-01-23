@@ -72,12 +72,8 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     override func initModels() {
-        Providers.listProvider.lists(successHandler{lists in
-            let models: [ExpandableTableViewModel] = lists.map{ExpandableTableViewListModel(list: $0)}
-            if self.models != models { // if current list is nil or the provider list is different
-                self.models = models
-                self.tableView.reloadData()
-            }
+        Providers.listProvider.lists(successHandler{[weak self] lists in
+            self?.models = lists.map{ExpandableTableViewListModel(list: $0)}
         })
     }
     

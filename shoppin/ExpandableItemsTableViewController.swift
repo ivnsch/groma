@@ -48,7 +48,14 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
 
     private let listItemsProvider = ProviderFactory().listItemProvider
     
-    var models: [ExpandableTableViewModel] = []
+    var models: [ExpandableTableViewModel] = [] {
+        didSet {
+            emptyView.hidden = !models.isEmpty
+            if models != oldValue {
+                tableView.reloadData()
+            }
+        }
+    }
     
     private let expandCellAnimator = ExpandCellAnimator()
     

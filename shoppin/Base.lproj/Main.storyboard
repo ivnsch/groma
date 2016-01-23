@@ -786,20 +786,20 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="5Id-Il-3kf">
-                                        <rect key="frame" x="200" y="144" width="200" height="200"/>
+                                        <rect key="frame" x="250" y="194" width="100" height="100"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="200" id="HRA-vM-YOx"/>
-                                            <constraint firstAttribute="height" constant="200" id="ny6-WH-oZd"/>
+                                            <constraint firstAttribute="width" constant="100" id="HRA-vM-YOx"/>
+                                            <constraint firstAttribute="height" constant="100" id="ny6-WH-oZd"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no lists" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bRL-cw-Ukc">
-                                        <rect key="frame" x="238" y="356" width="125" height="21"/>
+                                        <rect key="frame" x="238" y="306" width="125" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to add a list" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7OH-1y-kro">
-                                        <rect key="frame" x="256" y="385" width="89" height="16"/>
+                                        <rect key="frame" x="256" y="335" width="89" height="16"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -1185,20 +1185,20 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="gqH-SQ-EQ8">
-                                        <rect key="frame" x="200" y="144" width="200" height="200"/>
+                                        <rect key="frame" x="250" y="194" width="100" height="100"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="200" id="SaJ-y4-6SC"/>
-                                            <constraint firstAttribute="height" constant="200" id="VKd-aI-vgR"/>
+                                            <constraint firstAttribute="width" constant="100" id="SaJ-y4-6SC"/>
+                                            <constraint firstAttribute="height" constant="100" id="VKd-aI-vgR"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no Inventories" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xQd-dS-i5E">
-                                        <rect key="frame" x="212" y="356" width="176" height="21"/>
+                                        <rect key="frame" x="212" y="306" width="176" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to add an inventory" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XuI-Ww-EUx">
-                                        <rect key="frame" x="234" y="385" width="132" height="16"/>
+                                        <rect key="frame" x="234" y="335" width="132" height="16"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -1413,20 +1413,20 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="Gj5-VG-8a9">
-                                        <rect key="frame" x="200" y="144" width="200" height="200"/>
+                                        <rect key="frame" x="250" y="194" width="100" height="100"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="200" id="qiR-Dt-ySO"/>
-                                            <constraint firstAttribute="height" constant="200" id="vqy-jv-6e9"/>
+                                            <constraint firstAttribute="width" constant="100" id="qiR-Dt-ySO"/>
+                                            <constraint firstAttribute="height" constant="100" id="vqy-jv-6e9"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no Groups" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jve-6C-5eI">
-                                        <rect key="frame" x="225" y="356" width="151" height="21"/>
+                                        <rect key="frame" x="225" y="306" width="151" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to add a group" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AW3-zP-xlQ">
-                                        <rect key="frame" x="247" y="385" width="107" height="16"/>
+                                        <rect key="frame" x="247" y="335" width="107" height="16"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
