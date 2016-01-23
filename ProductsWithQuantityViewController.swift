@@ -398,6 +398,12 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
                         setLoading(true)
                         
                         weakSelf.delegate?.loadModels(weakSelf.paginator.currentPage, sortBy: sortBy) {inventoryItems in
+                            
+                            // Make sure if handler called multiple times (e.g. db result is different than mem cache result, which causes handler to be called again with db result) the items cleared, otherwise we get duplicates
+                            if weakSelf.paginator.isFirstPage {
+                                weakSelf.models = []
+                            }
+                            
                             weakSelf.models.appendAll(inventoryItems)
                             weakSelf.paginator.update(inventoryItems.count)
                             weakSelf.tableView.reloadData()

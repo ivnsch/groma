@@ -17,6 +17,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     // TODO we are sorting 3x! Optimise this. Ponder if it makes sense to do the server objects sorting in the server (where it can be done at db level)
     func inventoryItems(range: NSRange, inventory: Inventory, fetchMode: ProviderFetchModus = .Both, sortBy: InventorySortBy = .Count, _ handler: ProviderResult<[InventoryItem]> -> ()) {
     
+        // TODO!!! use range also in mem cache otherwise comparison below doesn't work
         let memItemsMaybe = memProvider.inventoryItems(inventory)
         if let memItems = memItemsMaybe {
             handler(ProviderResult(status: .Success, sucessResult: memItems.sortBy(sortBy))) // TODO? cache the sorting? is it expensive to sort if already sorted?

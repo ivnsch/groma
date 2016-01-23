@@ -158,6 +158,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             productsWithQuantityController?.emptyView.hidden = true
             topBar.setLeftButtonIds([])
             topBar.setRightButtonIds([])
+            // Clear memory cache when we leave controller. This is not really necessary but just "in case". The memory cache is there to smooth things *inside* an inventory, Basically quick adding/incrementing.
+            Providers.inventoryItemsProvider.invalidateMemCache()
         }
         topBar.layoutIfNeeded() // FIXME weird effect and don't we need this in view controller
         topBar.positionTitleLabelLeft(expanding, animated: true)
@@ -430,10 +432,11 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func loadModels(page: NSRange, sortBy: InventorySortBy, onSuccess: [ProductWithQuantity] -> Void) {
         if let inventory = inventory {
-            Providers.inventoryItemsProvider.inventoryItems(page, inventory: inventory, fetchMode: .Both, sortBy: sortBy, successHandler{inventoryItems in
+            // .MemOnly fetch mode prevents following - when we add items to the inventory and switch to inventory very quickly, the db has not finished writing the items yet! and the load request reads the items from db before the write finishes so if we pass fetchMode .Both, first the mem cache returns the correct items but then the call - to the db - returns still the old items. So we pass mem cache which has the correct state, ignoring the db result.
+            Providers.inventoryItemsProvider.inventoryItems(page, inventory: inventory, fetchMode: .MemOnly, sortBy: sortBy, successHandler{inventoryItems in
                 let productsWithQuantity = inventoryItems.map{ProductWithQuantityInv(inventoryItem: $0)}
                 onSuccess(productsWithQuantity)
-                })
+            })
         } else {
             print("Error: InventoryItemsController.loadModels: no inventory")
         }
