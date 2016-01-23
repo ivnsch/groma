@@ -22,7 +22,7 @@ protocol ItemActionsDelegate {
     func onPlusTap(tableViewListItem: TableViewListItem)
 }
 
-class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
+class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListItemCellDelegate {
     
     var tableViewListItems: [TableViewListItem]
     
@@ -132,49 +132,8 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
         cell.showsReorderControl = true
         
         let tableViewListItem = tableViewListItems[row]
-        let listItem = tableViewListItem.listItem
         
-        cell.nameLabel.text = NSLocalizedString(listItem.product.name, comment: "")
-        cell.quantityLabel.text = String("\(listItem.quantity(status)) \(listItem.product.unit.shortText)")
-        
-        cell.centerVerticallyNameLabelConstraint.constant = listItem.product.brand.isEmpty ? 0 : 10
-        cell.brandLabel.text = listItem.product.brand
-        
-        cell.labelColor = self.finalLabelFontColor
-//        cell.delegate = self
-        cell.itemSwiped = {[weak self] in // use a closure to capture listitem
-            self?.delegate.endItemSwipe(tableViewListItem)
-        }
-        cell.startItemSwipe = {[weak self] in
-            self?.delegate.startItemSwipe(tableViewListItem)
-        }
-        cell.buttonTwoTap = {[weak self] in
-            self?.delegate.undoSwipe(tableViewListItem)
-        }
-        cell.onNoteTapFunc = {[weak self] in
-            self?.delegate.onNoteTap(tableViewListItem)
-        }
-        cell.onMinusTapFunc = {[weak self] in
-            self?.delegate.onMinusTap(tableViewListItem)
-        }
-        cell.onPlusTapFunc = {[weak self] in
-            self?.delegate.onPlusTap(tableViewListItem)
-        }
-        
-        cell.mode = cellMode
-
-        let hasNote = tableViewListItem.listItem.note.map{!$0.isEmpty} ?? false
-        cell.noteButton.hidden = cellMode != .Note || !hasNote
-
-        cell.setOpen(tableViewListItem.swiped)
-        if tableViewListItem.swiped {
-            cell.backgroundColor = UIColor.clearColor()
-        } else {
-            cell.backgroundColor = UIColor.whiteColor()
-        }
-        
-        
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
+        cell.setup(status, mode: cellMode, labelColor: finalLabelFontColor, tableViewListItem: tableViewListItem, delegate: self)
         
         return cell
     }
@@ -203,6 +162,32 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate {
     
     func onHeaderTap(header: ListItemsSectionHeaderView) {
         delegate?.onHeaderTap(header, section: self)
+    }
+    
+    // MARK: - 
+    
+    func onItemSwiped(listItem: TableViewListItem) {
+        delegate?.endItemSwipe(listItem)
+    }
+    
+    func onStartItemSwipe(listItem: TableViewListItem) {
+        delegate?.startItemSwipe(listItem)
+    }
+    
+    func onButtonTwoTap(listItem: TableViewListItem) {
+        delegate?.undoSwipe(listItem)
+    }
+    
+    func onNoteTap(listItem: TableViewListItem) {
+        delegate?.onNoteTap(listItem)
+    }
+    
+    func onMinusTap(listItem: TableViewListItem) {
+        delegate?.onMinusTap(listItem)
+    }
+    
+    func onPlusTap(listItem: TableViewListItem) {
+        delegate?.onPlusTap(listItem)
     }
 }
 

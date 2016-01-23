@@ -18,13 +18,13 @@ import UIKit
 
 
 //protocol SwipeableCellDelegate {
-//    func buttonOneActionForItemText()
-//    func buttonTwoActionForItemText()
-//    func buttonThreeActionForItemText()
+//    func onStartItemSwipe()
+//    func onItemSwiped()
+//    func onButtonTwoTap()
 //}
 
 enum ListItemCellMode {
-    case Increment, Note
+    case Increment, Note // TODO rename Increment -> Edit, Note -> Normal
 }
 
 class SwipeableCell: UITableViewCell {
@@ -39,51 +39,10 @@ class SwipeableCell: UITableViewCell {
     var panStartPoint:CGPoint!
     var startingLeftLayoutConstraint: CGFloat = 0
     
-    var startItemSwipe:(()->())?
-    var itemSwiped:(()->())?
-    var buttonTwoTap:(()->())?
-    
-    var onNoteTapFunc: VoidFunction?
-    var onPlusTapFunc: VoidFunction?
-    var onMinusTapFunc: VoidFunction?
-    
     @IBOutlet weak var contentViewRightConstraint:NSLayoutConstraint!
     @IBOutlet weak var contentViewLeftConstraint:NSLayoutConstraint!
 
-    @IBOutlet weak var plusMinusWidthConstraint: NSLayoutConstraint!
-    
-    @IBOutlet weak var plusMinusContainer: UIView!
-//    var delegate:SwipeableCellDelegate!
-    @IBOutlet weak var noteButton: UIButton!
-
-    @IBOutlet weak var centerVerticallyNameLabelConstraint: NSLayoutConstraint!
-
-    var mode: ListItemCellMode = .Note {
-        didSet {
-            if mode != oldValue {
-                let constant: CGFloat = {
-                    switch mode {
-                    case .Note: return 0
-                    case .Increment: return 65
-                    }
-                }()
-                plusMinusWidthConstraint.constant = constant
-                UIView.animateWithDuration(0.3) {[weak self] in
-                    if let weakSelf = self {
-                        weakSelf.layoutIfNeeded()
-                        switch weakSelf.mode {
-                        case .Note:
-                            weakSelf.noteButton.alpha = 1
-                            weakSelf.plusMinusContainer.alpha = 0
-                        case .Increment:
-                            weakSelf.noteButton.alpha = 0
-                            weakSelf.plusMinusContainer.alpha = 1
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    var delegate: SwipeableCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -93,16 +52,9 @@ class SwipeableCell: UITableViewCell {
         self.myContentView.addGestureRecognizer(self.panRecognizer)
         
         myContentView.translatesAutoresizingMaskIntoConstraints = false
-        
-        // block tapping the cell behind the +/- buttons, otherwise it's easy to open the edit listitem view by mistake
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: "onTapPlusMinusContainer:")
-        plusMinusContainer.addGestureRecognizer(tapRecognizer)
     }
     
-    func onTapPlusMinusContainer(recognizer: UITapGestureRecognizer) {
-        // do nothing
-    }
-    
+
     func buttonTotalWidth() -> CGFloat {
         return CGRectGetWidth(self.frame)
         //            - CGRectGetMinX(self.button2.frame)
@@ -145,11 +97,12 @@ class SwipeableCell: UITableViewCell {
             self.contentViewRightConstraint.constant = -self.buttonTotalWidth()
             
             
-            self.updateConstraintsIfNeeded(animated, alpha: 0, onCompletion: { (finished) -> Void in
-                self.startingLeftLayoutConstraint = self.contentViewLeftConstraint.constant
-
-                if notifyDelegateDidOpen {
-                    self.itemSwiped?()
+            self.updateConstraintsIfNeeded(animated, alpha: 0, onCompletion: {[weak self] (finished) -> Void in
+                if let weakSelf = self {
+                    weakSelf.startingLeftLayoutConstraint = weakSelf.contentViewLeftConstraint.constant
+                    if notifyDelegateDidOpen {
+                        weakSelf.onItemSwiped()
+                    }
                 }
             })
         })
@@ -184,7 +137,7 @@ class SwipeableCell: UITableViewCell {
             self.panStartPoint = recognizer.translationInView(self.myContentView)
             self.startingLeftLayoutConstraint = self.contentViewLeftConstraint.constant
             
-            self.startItemSwipe?()
+            onStartItemSwipe()
             
         case .Changed:
             if movingHorizontally {
@@ -291,21 +244,19 @@ class SwipeableCell: UITableViewCell {
     
     @IBAction func buttonClicked(sender: AnyObject) {
 //        self.delegate.buttonTwoActionForItemText()
-        self.buttonTwoTap?()
+        onButtonTwoTap()
         self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: false)
     }
     
-    @IBAction func onNoteTap(sender: UIButton) {
-        onNoteTapFunc?()
+    func onStartItemSwipe() {
+        // override
     }
     
-    // TODO when we tap on minus while the item is 0, the item is cleared - this was not intentional but turns to be the desired behaviour. Review why it's cleared
-    // TODO! related with above - review that due to the way we manage the quantity of the items (item is shown when todo/done/stash quantity > 0) we don't keep listitems in the database which are never shown and thus can't be deleted.
-    @IBAction func onMinusTap(sender: UIButton) {
-        onMinusTapFunc?()
+    func onItemSwiped() {
+        // override
     }
     
-    @IBAction func onPlusTap(sender: UIButton) {
-        onPlusTapFunc?()
+    func onButtonTwoTap() {
+        // override
     }
 }

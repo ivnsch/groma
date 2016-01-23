@@ -68,6 +68,7 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -207,7 +208,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FsV-Bz-0vE">
-                                                    <rect key="frame" x="554" y="11" width="40" height="21"/>
+                                                    <rect key="frame" x="554" y="2" width="40" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -263,13 +264,22 @@
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KcC-l7-99C">
+                                                    <rect key="frame" x="563" y="24" width="31" height="16"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                                    <color key="textColor" red="0.53725490200000003" green="0.64313725489999995" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
                                                 <constraint firstItem="oo8-8H-aAy" firstAttribute="centerY" secondItem="Wni-mU-J21" secondAttribute="centerY" id="Ee3-31-VYP"/>
                                                 <constraint firstAttribute="trailing" secondItem="vbZ-3I-DYp" secondAttribute="trailing" id="H4u-uf-JG5"/>
                                                 <constraint firstItem="vbZ-3I-DYp" firstAttribute="leading" secondItem="FsV-Bz-0vE" secondAttribute="trailing" constant="6" id="JSK-BT-AYH"/>
+                                                <constraint firstItem="KcC-l7-99C" firstAttribute="leading" secondItem="FsV-Bz-0vE" secondAttribute="leading" id="JUy-tk-TzN"/>
+                                                <constraint firstItem="KcC-l7-99C" firstAttribute="trailing" secondItem="FsV-Bz-0vE" secondAttribute="trailing" id="KBR-qV-byg"/>
                                                 <constraint firstAttribute="bottom" secondItem="vbZ-3I-DYp" secondAttribute="bottom" id="Qy1-nO-DHl"/>
+                                                <constraint firstItem="KcC-l7-99C" firstAttribute="centerY" secondItem="Wni-mU-J21" secondAttribute="centerY" constant="10" id="Sey-Il-8XO"/>
                                                 <constraint firstItem="vbZ-3I-DYp" firstAttribute="centerY" secondItem="Wni-mU-J21" secondAttribute="centerY" id="Sfc-XH-xPn"/>
                                                 <constraint firstItem="09E-3U-UQg" firstAttribute="centerY" secondItem="Wni-mU-J21" secondAttribute="centerY" constant="10" id="WqI-JE-0tZ"/>
                                                 <constraint firstItem="09E-3U-UQg" firstAttribute="leading" secondItem="36b-Gq-dkK" secondAttribute="leading" id="egM-Om-vkb"/>
@@ -277,8 +287,13 @@
                                                 <constraint firstItem="FsV-Bz-0vE" firstAttribute="leading" secondItem="oo8-8H-aAy" secondAttribute="trailing" constant="8" id="gRx-QB-dWf"/>
                                                 <constraint firstAttribute="centerY" secondItem="36b-Gq-dkK" secondAttribute="centerY" constant="10" id="qfw-gc-1ZZ"/>
                                                 <constraint firstItem="36b-Gq-dkK" firstAttribute="leading" secondItem="Wni-mU-J21" secondAttribute="leading" constant="6" id="vRy-2A-qnZ"/>
-                                                <constraint firstAttribute="centerY" secondItem="FsV-Bz-0vE" secondAttribute="centerY" id="xgN-Jw-gSr"/>
+                                                <constraint firstAttribute="centerY" secondItem="FsV-Bz-0vE" secondAttribute="centerY" constant="10" id="xgN-Jw-gSr"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="JUy-tk-TzN"/>
+                                                </mask>
+                                            </variation>
                                         </view>
                                     </subviews>
                                     <constraints>
@@ -303,7 +318,9 @@
                                     <outlet property="noteButton" destination="oo8-8H-aAy" id="FQ0-w0-BeB"/>
                                     <outlet property="plusMinusContainer" destination="vbZ-3I-DYp" id="VEd-fb-d7y"/>
                                     <outlet property="plusMinusWidthConstraint" destination="euW-cY-Yi9" id="Mty-yD-rRt"/>
+                                    <outlet property="priceLabel" destination="KcC-l7-99C" id="t7e-6w-5dc"/>
                                     <outlet property="quantityLabel" destination="FsV-Bz-0vE" id="sAC-9Z-nq9"/>
+                                    <outlet property="quantityLabelCenterVerticallyConstraint" destination="xgN-Jw-gSr" id="Qhd-g5-od3"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
