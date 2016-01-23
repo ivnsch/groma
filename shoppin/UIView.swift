@@ -89,9 +89,9 @@ extension UIView {
         }
     }
 
-    func fillSuperviewWidth() {
+    func fillSuperviewWidth(leftConstant: Float = 0, rightConstant: Float = 0) {
         if let superview = superview {
-            fillWidth(superview)
+            fillWidth(superview, leftConstant: leftConstant, rightConstant: rightConstant)
         } else {
             print("Warn: call fillSuperviewWidth but there's no superview")
         }
@@ -105,9 +105,9 @@ extension UIView {
         }
     }
     
-    func fillWidth(view: UIView) {
-        alignLeft(view)
-        alignRight(view)
+    func fillWidth(view: UIView, leftConstant: Float = 0, rightConstant: Float = 0) {
+        alignLeft(view, constant: leftConstant)
+        alignRight(view, constant: rightConstant)
     }
     
     func fillHeight(view: UIView) {

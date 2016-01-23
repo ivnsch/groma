@@ -268,7 +268,7 @@ class FloatingViews: UIView {
     
     private func buttonForAction(models models: [FloatingViewModel], action: FLoatingButtonAction) -> ButtonWithConstraints? {
         for button in buttons {
-            if models[button.tag].action == action {
+            if models[button.tag].action == action { // TODO!!! index out of range here when tap many times fast on edit in list items. Models is empty and tag is 0
                 return button
             }
         }

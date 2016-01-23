@@ -136,7 +136,8 @@ class ListTopBarView: UIView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         addSubview(button)
-        button.fillSuperview()
+        button.fillSuperviewHeight()
+        button.fillSuperviewWidth(70, rightConstant: -70)
         button.addTarget(self, action: "onTitleTap:", forControlEvents: .TouchUpInside)
     }
     
@@ -158,9 +159,7 @@ class ListTopBarView: UIView {
                 backLabel.setTitle(backButtonText ?? "", forState: .Normal)
                 backLabel.titleLabel?.font = Fonts.regularLight
                 backLabel.setTitleColor(fgColor, forState: .Normal)
-//                backButton = button
                 addSubview(backLabel)
-                
                 
                 let viewDictionary = ["back": button, "backLabel": backLabel]
                 
@@ -201,22 +200,31 @@ class ListTopBarView: UIView {
         
         if !models.isEmpty {
 
-            var modelsWithButtons: [(model: TopBarButtonModel, button: UIButton)] = []
+            var modelsWithButtons: [(model: TopBarButtonModel, button: UIButton, inner: UIButton)] = []
             
             func createButton(model: TopBarButtonModel, imgName: String) -> UIButton {
                 let button = UIButton()
                 button.translatesAutoresizingMaskIntoConstraints = false
-                button.tag = model.buttonId.rawValue
                 button.imageView?.tintColor = fgColor
+                
                 button.setImage(UIImage(named: imgName), forState: .Normal)
                 if left {
                     leftButtons.append(button)
                 } else {
                     rightButtons.append(button)
                 }
-                modelsWithButtons.append((model: model, button: button))
-                //            viewsOrderedDictionary[model.buttonId.name] = button
-                button.addTarget(self, action: "onActionButtonTap:", forControlEvents: .TouchUpInside)
+                button.userInteractionEnabled = false
+                
+                let tapView = UIButton()
+                tapView.translatesAutoresizingMaskIntoConstraints = false
+                tapView.tag = model.buttonId.rawValue
+                tapView.addSubview(button)
+
+                button.alignTop(tapView, constant: topConstant)
+                button.centerXInParent()
+
+                modelsWithButtons.append((model: model, button: tapView, inner: button))
+                tapView.addTarget(self, action: "onActionButtonTap:", forControlEvents: .TouchUpInside)
                 return button
             }
             
@@ -240,11 +248,11 @@ class ListTopBarView: UIView {
             for modelWithButton in modelsWithButtons {
                 addSubview(modelWithButton.button)
                 if let initTransform = modelWithButton.model.initTransform {
-                    modelWithButton.button.transform = initTransform
+                    modelWithButton.inner.transform = initTransform
                 }
                 if let endTransform = modelWithButton.model.endTransform {
                     UIView.animateWithDuration(0.3) {
-                        modelWithButton.button.transform = endTransform
+                        modelWithButton.inner.transform = endTransform
                     }
                 }
 
@@ -258,6 +266,7 @@ class ListTopBarView: UIView {
 //                }
                 
                 viewsOrderedDictionary[modelWithButton.model.buttonId.name] = modelWithButton.button
+                
             }
             
             let viewsDictionary = viewsOrderedDictionary.toDictionary()
@@ -277,7 +286,7 @@ class ListTopBarView: UIView {
             addConstraints(hConstraints)
             
             for vConstraintStr in viewsOrderedDictionary.keys {
-                let vConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(\(topConstant))-[\(vConstraintStr)]", options: [], metrics: nil, views: viewsDictionary)
+                let vConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|[\(vConstraintStr)]|", options: [], metrics: nil, views: viewsDictionary)
                 addConstraints(vConstraints)
             }
         }
