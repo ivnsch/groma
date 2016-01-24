@@ -109,7 +109,6 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         let(tableViewSections, sections) = buildTableViewSections(items)
         self.tableViewSections = tableViewSections
         self.sections = sections
-        sectionsExpanded = true
         
         if let headerBGColor = headerBGColor {
             for section in tableViewSections {
@@ -273,6 +272,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                     currentTableViewSection = ListItemsViewSection(section: listItem.section, tableViewListItems: [], status: status)
                     currentTableViewSection.cellMode = cellMode
                     currentTableViewSection.delegate = self
+                    currentTableViewSection.expanded = sectionsExpanded
 
                     if self.style == .Gray {
                         currentTableViewSection.style = .Gray
@@ -442,7 +442,29 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
         sectionsExpanded = expanded
     }
-    
+
+  
+    // This updates all the sections at once opposed to method below, but the animation is not as smooth
+//    func setAllSectionsExpanded(expanded: Bool, animated: Bool, onComplete: VoidFunction? = nil) {
+//        func getSectionIndexPaths(section: ListItemsViewSection, sectionIndex: Int) -> [NSIndexPath] {
+//            return (0..<section.tableViewListItems.count).map {return NSIndexPath(forRow: $0, inSection: sectionIndex)}
+//        }
+//        tableView.wrapUpdates {[weak self] in
+//            if let weakSelf = self {
+//                for (index, section) in weakSelf.tableViewSections.enumerate() {
+//                    let sectionIndexPaths = getSectionIndexPaths(section, sectionIndex: index)
+//                    if expanded {
+//                        weakSelf.tableView.insertRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
+//                    } else {
+//                        weakSelf.tableView.deleteRowsAtIndexPaths(sectionIndexPaths, withRowAnimation: .Top)
+//                    }
+//                }
+//                weakSelf.sectionsExpanded = expanded
+//            }
+//        }
+//        onComplete?()
+//    }
+//    
     private func setSectionExpanded(expanded: Bool, sectionIndex: Int, section: ListItemsViewSection, animated: Bool, onComplete: VoidFunction? = nil) {
         
         let sectionIndexPaths: [NSIndexPath] = (0..<section.tableViewListItems.count).map {

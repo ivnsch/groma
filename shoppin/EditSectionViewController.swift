@@ -21,7 +21,11 @@ class EditSectionViewController: UIViewController {
     
     private var validator: Validator?
 
-    var section: Section?
+    var section: Section? {
+        didSet {
+            nameTextField.text = section?.name
+        }
+    }
     
     var delegate: EditSectionViewControllerDelegate?
     

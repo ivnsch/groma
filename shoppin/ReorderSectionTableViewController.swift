@@ -54,9 +54,11 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
     
     override func viewDidAppear(animated: Bool) {
         setEdit(true, animated: false)
+        // cell starts small to blend with the collapsed original tableview and grows to normal size
         setCellHeight(50, animated: true)
     }
     
+    // Animate cell height
     func setCellHeight(height: CGFloat, animated: Bool) {
         cellHeight = height
         tableView.beginUpdates()
@@ -128,5 +130,15 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let section = sections[indexPath.row]
         delegate?.onSectionSelected(section)
+    }
+    
+    // Updates a section based on identity (uuid). Note that this isn't usable for order update, as updating order requires to update the order field of sections below
+    func updateSection(section: Section) {
+        for i in 0..<sections.count {
+            if sections[i].same(section) {
+                sections[i] = section
+            }
+        }
+        tableView.reloadData()
     }
 }

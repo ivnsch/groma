@@ -123,11 +123,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     private func initEditSectionControllerManager() -> ExpandableTopViewController<EditSectionViewController> {
         let top = CGRectGetHeight(topBar.frame) + CGRectGetHeight(pricesView.frame)
-        return ExpandableTopViewController(top: top, height: 60, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
+        let manager: ExpandableTopViewController<EditSectionViewController> = ExpandableTopViewController(top: top, height: 60, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
             let controller = EditSectionViewController()
             controller.delegate = self
             return controller
         }
+        manager.delegate = self
+        return manager
     }
     
     private func initTitleLabel() {
@@ -338,9 +340,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         clearPossibleUndo()
         
         // if any top controller is open, close it
-        if topQuickAddControllerManager?.expanded ?? false || topAddEditListItemControllerManager?.expanded ?? false {
+        if topQuickAddControllerManager?.expanded ?? false || topAddEditListItemControllerManager?.expanded ?? false || topEditSectionControllerManager?.expanded ?? false {
             topQuickAddControllerManager?.expand(false)
             topAddEditListItemControllerManager?.expand(false)
+            topEditSectionControllerManager?.expand(false)
             
             pricesView.setExpandedVertical(true)
 
@@ -485,11 +488,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onSectionHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
-        if editing {
-            topEditSectionControllerManager?.tableView = listItemsTableViewController.tableView
-            topEditSectionControllerManager?.controller?.section = section.section
-            topEditSectionControllerManager?.expand(true)
-        }
+        onSectionSelected(section.section)
     }
     
     func onIncrementItem(tableViewListItem: TableViewListItem, delta: Int) {
@@ -501,6 +500,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     // MARK: -
+    
+    // for tap on normal sections and edit mode sections (2 different tableviews)
+    private func onSectionSelectedShared(section: Section) {
+        if editing {
+            topEditSectionControllerManager?.tableView = sectionsTableViewController?.tableView ?? listItemsTableViewController.tableView
+            topEditSectionControllerManager?.expand(true)
+            topEditSectionControllerManager?.controller?.section = section
+            topBar.setRightButtonModels([
+                TopBarButtonModel(buttonId: .Submit),
+                TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+            ])
+        }
+    }
     
 //    func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
 //        return UIBarPosition.TopAttached
@@ -742,7 +754,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let tableView: UITableView = sectionsTableViewController?.tableView ?? listItemsTableViewController.tableView
         topEditSectionControllerManager?.tableView = tableView
         topEditSectionControllerManager?.expand(false)
+        
+        if let controller = sectionsTableViewController {
+            controller.updateSection(section)
+        }
         listItemsTableViewController.updateSection(section)
+        
+        // because updateSection/reloadData listItemsTableViewController sets back expanded to true, set correct state. If sectionsTableViewController is not visible it means it's expanded.
+//        listItemsTableViewController.sectionsExpanded = sectionsTableViewController == nil
     }
     
     private func sendActionToTopController(action: FLoatingButtonAction) {
@@ -826,8 +845,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func onSectionsUpdated() {
         if let list = currentList {
-            self.udpateListItems(list) {
-                self.listItemsTableViewController.setAllSectionsExpanded(false, animated: false) // set back background tableview to to closed state (update re-adds everything - expanded). This is necessary for consistency tableview rows/models
+            udpateListItems(list) {
             }
         } else {
             print("Error: ViewController.onSectionOrderUpdated: Invalid state, reordering sections and no list")
@@ -835,13 +853,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onSectionSelected(section: Section) {
-        if let sectionsTableViewController = sectionsTableViewController {
-            topEditSectionControllerManager?.tableView = sectionsTableViewController.tableView
-            topEditSectionControllerManager?.expand(true)
-            topEditSectionControllerManager?.controller?.section = section
-        } else {
-            print("Error: ViewController.onSectionSelected: Invalid state: onSectionSelected called but there's no sectionsTableViewController")
-        }
+        onSectionSelectedShared(section)
     }
     
     // MARK: - CartViewControllerDelegate
