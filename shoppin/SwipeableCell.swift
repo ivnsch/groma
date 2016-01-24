@@ -73,17 +73,18 @@ class SwipeableCell: UITableViewCell {
         if self.startingLeftLayoutConstraint == 0 && self.contentViewLeftConstraint.constant == 0 {
             return
         }
-        
-//        backgroundColor = UIColor.whiteColor() // resetConstraintContstantsToZero is used to set back cell when tap on it while "undo" so reset color also here... (TODO colors in 1 place now we are setting white/clear in 3 different places)
 
-        self.updateConstraintsIfNeeded(animated, onCompletion: { (finished) -> Void in
-            
-            self.contentViewLeftConstraint.constant = 0
-            self.contentViewRightConstraint.constant = 0
-            
-            self.updateConstraintsIfNeeded(animated, alpha: 1, onCompletion: { (finished) -> Void in
-                self.startingLeftLayoutConstraint = self.contentViewLeftConstraint.constant
-            })
+        self.updateConstraintsIfNeeded(animated, onCompletion: {[weak self] finished in
+            if let weakSelf = self {
+                weakSelf.contentViewLeftConstraint.constant = 0
+                weakSelf.contentViewRightConstraint.constant = 0
+                
+                weakSelf.updateConstraintsIfNeeded(animated, alpha: 1, onCompletion: {finished in
+                    weakSelf.startingLeftLayoutConstraint = weakSelf.contentViewLeftConstraint.constant
+                    
+                    weakSelf.backgroundColor = UIColor.whiteColor() // resetConstraintContstantsToZero is used to set back cell when tap on it while "undo" so reset color also here... (TODO colors in 1 place now we are setting white/clear in 3 different places)
+                })
+            }
         })
     }
     
