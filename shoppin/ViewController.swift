@@ -277,8 +277,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String) {
         if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand) {
-            self.updateItem(self.updatingListItem!, listItemInput: listItemInput) {[weak self] in
-            self?.setEditing(false, animated: true, tryCloseTopViewController: true)
+            
+            // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
+            listItemsTableViewController.cellMode = .Note
+            updateItem(updatingListItem!, listItemInput: listItemInput) {[weak self] in
+                self?.setEditing(false, animated: true, tryCloseTopViewController: true)
             }
         }
     }

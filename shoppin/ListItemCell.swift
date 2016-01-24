@@ -38,26 +38,7 @@ class ListItemCell: SwipeableCell {
     private(set) var status: ListItemStatus?
     var mode: ListItemCellMode = .Note {
         didSet {
-            
-            func showPlusMinusLocal(delay: NSTimeInterval) {
-                showPlusMinus(mode, animDelay: delay)
-            }
-            
-            func showPriceLocal(delay: NSTimeInterval) {
-                // hide price in normal mode and show in edit mode
-                if let tableViewListItem = tableViewListItem, status = status {
-                    showPrice(tableViewListItem, status: status, mode: mode, animated: true, animDelay: delay)
-                }
-            }
-            
-            // 0.1 or 0.3 don't have any particular logic it just looks good imo
-            if mode == .Note {
-                showPlusMinusLocal(0.1)
-                showPriceLocal(0)
-            } else {
-                showPlusMinusLocal(0)
-                showPriceLocal(0.3)
-            }
+            updateModeItemsVisibility(true)
         }
     }
     private(set) var labelColor: UIColor = UIColor.blackColor() {
@@ -78,8 +59,7 @@ class ListItemCell: SwipeableCell {
                 centerVerticallyNameLabelConstraint.constant = listItem.product.brand.isEmpty ? 0 : 10
                 brandLabel.text = listItem.product.brand
                 
-                let hasNote = listItem.note.map{!$0.isEmpty} ?? false
-                noteButton.hidden = mode != .Note || !hasNote
+                updateModeItemsVisibility(false)
                 
                 setOpen(tableViewListItem.swiped)
                 if tableViewListItem.swiped {
@@ -87,13 +67,10 @@ class ListItemCell: SwipeableCell {
                 } else {
                     backgroundColor = UIColor.whiteColor()
                 }
-                
-                showPrice(tableViewListItem, status: status, mode: mode, animated: false, animDelay: 0)
             }
         }
     }
 
-    
     func setup(status: ListItemStatus, mode: ListItemCellMode, labelColor: UIColor, tableViewListItem: TableViewListItem, delegate: ListItemCellDelegate) {
         self.status = status
         self.mode = mode
@@ -104,7 +81,13 @@ class ListItemCell: SwipeableCell {
         self.delegate = delegate
     }
     
-    private func showPlusMinus(mode: ListItemCellMode, animDelay: NSTimeInterval) {
+    private func updateModeItemsVisibility(animated: Bool) {
+        if let tableViewListItem = tableViewListItem, status = status {
+            updateModeItemsVisibility(mode, status: status, tableViewListItem: tableViewListItem, animated: true)
+        }
+    }
+    
+    private func updateModeItemsVisibility(mode: ListItemCellMode, status: ListItemStatus, tableViewListItem: TableViewListItem, animated: Bool) {
         let constant: CGFloat = {
             switch mode {
             case .Note: return 0
@@ -112,22 +95,41 @@ class ListItemCell: SwipeableCell {
             }
         }()
         
-        delay(animDelay) {[weak self] in
-            self?.plusMinusWidthConstraint.constant = constant
-            UIView.animateWithDuration(0.2) {
-                if let weakSelf = self {
-                    weakSelf.layoutIfNeeded()
-                    switch weakSelf.mode {
-                    case .Note:
-                        weakSelf.noteButton.alpha = 1
-                        weakSelf.plusMinusContainer.alpha = 0
-                    case .Increment:
-                        weakSelf.noteButton.alpha = 0
-                        weakSelf.plusMinusContainer.alpha = 1
-                    }
-                }
+        let hasNote = tableViewListItem.listItem.note.map{!$0.isEmpty} ?? false
+        let showNote = hasNote && mode == .Note
+        
+        let (itemsDelay, priceDelay): (NSTimeInterval, NSTimeInterval) = {
+            if animated {
+                return mode == .Note ? (0.1, 0) : (0, 0.3) // for price a different delay to make it animate after/before the other elements (looks better imo)
+            } else {
+                return (0, 0)
+            }
+        }()
+
+        func update() {
+            layoutIfNeeded()
+            switch mode {
+            case .Note:
+                noteButton.alpha = showNote ? 1 : 0
+                plusMinusContainer.alpha = 0
+            case .Increment:
+                noteButton.alpha = 0
+                plusMinusContainer.alpha = 1
             }
         }
+        
+        if animated {
+            delay(itemsDelay) {[weak self] in
+                self?.plusMinusWidthConstraint.constant = constant
+                UIView.animateWithDuration(0.2) {
+                    update()
+                }
+            }
+        } else {
+            update()
+        }
+        
+        showPrice(tableViewListItem, status: status, mode: mode, animated: animated, animDelay: priceDelay)
     }
     
     private func showPrice(tableViewListItem: TableViewListItem, status: ListItemStatus, mode: ListItemCellMode, animated: Bool, animDelay: NSTimeInterval) {
@@ -162,6 +164,9 @@ class ListItemCell: SwipeableCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        quantityLabelCenterVerticallyConstraint.constant = 0
+        priceLabel.alpha = 0
         
         selectionStyle = UITableViewCellSelectionStyle.None
 

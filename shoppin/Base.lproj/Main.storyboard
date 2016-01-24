@@ -250,13 +250,14 @@
                                                         </mask>
                                                     </variation>
                                                 </view>
-                                                <button hidden="YES" opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oo8-8H-aAy">
+                                                <button opaque="NO" alpha="0.0" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oo8-8H-aAy">
                                                     <rect key="frame" x="521" y="9" width="25" height="25"/>
                                                     <rect key="contentStretch" x="0.0" y="0.0" width="0.40000000000000002" height="1"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="25" id="4Js-a0-5bz"/>
                                                         <constraint firstAttribute="width" constant="25" id="boO-nQ-dwu"/>
                                                     </constraints>
+                                                    <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                     <state key="normal" image="speechbubble"/>
                                                     <connections>
                                                         <action selector="onNoteTap:" destination="6il-Q8-hVs" eventType="touchUpInside" id="bsl-eQ-naY"/>
@@ -1234,6 +1235,7 @@
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="gqH-SQ-EQ8">
                                         <rect key="frame" x="250" y="194" width="100" height="100"/>
+                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="SaJ-y4-6SC"/>
                                             <constraint firstAttribute="height" constant="100" id="VKd-aI-vgR"/>
@@ -1651,6 +1653,7 @@
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="fLS-kD-P95">
                                         <rect key="frame" x="270" y="174" width="60" height="60"/>
+                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="qfF-kD-5b6"/>
                                             <constraint firstAttribute="height" constant="60" id="v4C-31-6cA"/>
