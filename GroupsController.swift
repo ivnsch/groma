@@ -58,7 +58,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     
     private func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditGroupViewController> {
         let top = CGRectGetHeight(topBar.frame)
-        let expandableTopViewController: ExpandableTopViewController<AddEditGroupViewController> = ExpandableTopViewController(top: top, height: 100, parentViewController: self, tableView: tableView) {[weak self] in
+        let expandableTopViewController: ExpandableTopViewController<AddEditGroupViewController> = ExpandableTopViewController(top: top, height: 60, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.addEditGroup()
             controller.delegate = self
             controller.currentListsCount = self?.models.count ?? {

@@ -23,7 +23,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Group name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zZx-UT-Fld">
-                                <rect key="frame" x="14" y="20" width="533" height="30"/>
+                                <rect key="frame" x="14" y="34" width="533" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="oGC-xN-853"/>
                                 </constraints>
@@ -31,7 +31,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZQt-Ty-yNV" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="561" y="23" width="25" height="25"/>
+                                <rect key="frame" x="561" y="37" width="25" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="1kP-RX-lNg"/>
                                     <constraint firstAttribute="width" constant="25" id="8pJ-ik-CWi"/>
@@ -48,7 +48,7 @@
                         <constraints>
                             <constraint firstItem="zZx-UT-Fld" firstAttribute="leading" secondItem="Vtl-Cm-eDA" secondAttribute="leading" constant="14" id="IFg-vB-JEq"/>
                             <constraint firstItem="ZQt-Ty-yNV" firstAttribute="leading" secondItem="zZx-UT-Fld" secondAttribute="trailing" constant="14" id="ORr-At-fE2"/>
-                            <constraint firstItem="zZx-UT-Fld" firstAttribute="top" secondItem="9W3-iS-Zr9" secondAttribute="bottom" id="PRE-v7-cq8"/>
+                            <constraint firstItem="zZx-UT-Fld" firstAttribute="top" secondItem="9W3-iS-Zr9" secondAttribute="bottom" constant="14" id="PRE-v7-cq8"/>
                             <constraint firstItem="ZQt-Ty-yNV" firstAttribute="centerY" secondItem="zZx-UT-Fld" secondAttribute="centerY" id="dUq-d9-Yf5"/>
                             <constraint firstItem="ZQt-Ty-yNV" firstAttribute="centerY" secondItem="zZx-UT-Fld" secondAttribute="centerY" id="kqt-p5-iN6"/>
                             <constraint firstAttribute="trailing" secondItem="ZQt-Ty-yNV" secondAttribute="trailing" constant="14" id="ljy-7g-XBO"/>
