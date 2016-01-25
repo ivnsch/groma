@@ -76,7 +76,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         setEditing(false, animated: false, tryCloseTopViewController: false)
         
         initTitleLabel()
-        
+
+        initFloatingViews()
+
         topQuickAddControllerManager = initTopQuickAddControllerManager()
         topAddEditListItemControllerManager = initAddEditListItemControllerManager()
         topEditSectionControllerManager = initEditSectionControllerManager()
@@ -210,8 +212,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         onViewWillAppear = nil
         
         updateStashView(withDelay: true)
-        
-        initFloatingViews()
         
         updatePrices(.First)
      
