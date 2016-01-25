@@ -51,6 +51,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     var models: [ExpandableTableViewModel] = [] {
         didSet {
             emptyView.hidden = !models.isEmpty
+            tableView.hidden = !emptyView.hidden
             if models != oldValue {
                 tableView.reloadData()
             }
