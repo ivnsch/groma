@@ -473,13 +473,14 @@
                                     <outlet property="widthConstraint" destination="rQC-nu-lkT" id="yDs-1e-dvG"/>
                                 </connections>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xg1-Fv-W18" customClass="FloatingViews" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="540" y="540" width="60" height="60"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VE1-1T-3hF" customClass="ExpandCollapseButton" customModule="shoppin">
+                                <rect key="frame" x="550" y="550" width="40" height="40"/>
+                                <color key="backgroundColor" red="0.61052091549999998" green="0.73144471069999994" blue="0.91775058180000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="60" id="A9q-PW-CoY"/>
-                                    <constraint firstAttribute="height" constant="60" id="tdf-pE-TsP"/>
+                                    <constraint firstAttribute="width" constant="40" id="Fol-Rb-oXr"/>
+                                    <constraint firstAttribute="height" constant="40" id="val-K9-the"/>
                                 </constraints>
-                            </view>
+                            </button>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5PG-Em-S6N">
                                 <rect key="frame" x="0.0" y="114" width="600" height="486"/>
                                 <subviews>
@@ -515,21 +516,21 @@
                             </view>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="Xg1-Fv-W18" secondAttribute="trailing" id="1gB-6b-v3H"/>
                             <constraint firstItem="5PG-Em-S6N" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="21I-co-sYO"/>
                             <constraint firstItem="5PG-Em-S6N" firstAttribute="top" secondItem="wdp-hj-bbA" secondAttribute="bottom" id="42d-ru-8ef"/>
                             <constraint firstItem="wdp-hj-bbA" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="AQR-S1-FCJ"/>
                             <constraint firstAttribute="trailing" secondItem="5PG-Em-S6N" secondAttribute="trailing" id="Byg-bZ-mse"/>
-                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Xg1-Fv-W18" secondAttribute="bottom" id="Dfi-Dk-ydQ"/>
+                            <constraint firstItem="VE1-1T-3hF" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="D4E-ht-XSH"/>
                             <constraint firstItem="5PG-Em-S6N" firstAttribute="top" secondItem="Mf8-a8-xj0" secondAttribute="bottom" id="Dh8-cT-eOF"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="5PG-Em-S6N" secondAttribute="bottom" id="EML-sM-Spm"/>
+                            <constraint firstItem="VE1-1T-3hF" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="G9z-Dx-CzP"/>
                             <constraint firstAttribute="trailing" secondItem="ecb-Lc-6L8" secondAttribute="trailing" constant="80" id="I8w-Yl-hUM"/>
                             <constraint firstItem="5PG-Em-S6N" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="TEh-5Y-i29"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="VE1-1T-3hF" secondAttribute="bottom" constant="10" id="TwV-Cd-U3t"/>
                             <constraint firstItem="ecb-Lc-6L8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="V7X-1O-AWz"/>
-                            <constraint firstItem="Xg1-Fv-W18" firstAttribute="top" secondItem="5PG-Em-S6N" secondAttribute="bottom" id="e1h-8t-cMZ"/>
                             <constraint firstItem="ecb-Lc-6L8" firstAttribute="top" secondItem="Mf8-a8-xj0" secondAttribute="bottom" priority="999" id="e2g-5h-KpD"/>
-                            <constraint firstItem="Xg1-Fv-W18" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ecO-tR-bn6"/>
                             <constraint firstItem="wdp-hj-bbA" firstAttribute="top" secondItem="Mf8-a8-xj0" secondAttribute="bottom" priority="999" id="ftH-wy-Bgv"/>
+                            <constraint firstAttribute="trailing" secondItem="VE1-1T-3hF" secondAttribute="trailing" constant="10" id="isQ-FS-YQd"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="5PG-Em-S6N" secondAttribute="bottom" id="jfL-cz-4fj"/>
                             <constraint firstItem="Mf8-a8-xj0" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="obo-jI-JBh"/>
                             <constraint firstItem="Mf8-a8-xj0" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="r2T-Mu-HGj"/>
@@ -543,9 +544,9 @@
                                 <exclude reference="42d-ru-8ef"/>
                                 <exclude reference="Dh8-cT-eOF"/>
                                 <exclude reference="TEh-5Y-i29"/>
+                                <exclude reference="D4E-ht-XSH"/>
+                                <exclude reference="G9z-Dx-CzP"/>
                                 <exclude reference="EML-sM-Spm"/>
-                                <exclude reference="e1h-8t-cMZ"/>
-                                <exclude reference="ecO-tR-bn6"/>
                             </mask>
                         </variation>
                     </view>
@@ -555,7 +556,7 @@
                         <outlet property="emptyListViewImg" destination="4SH-aZ-z07" id="xNT-FD-rkX"/>
                         <outlet property="emptyListViewLabel1" destination="Dny-Vg-Zzw" id="2Oi-VU-5gF"/>
                         <outlet property="emptyListViewLabel2" destination="pQ3-yB-b2g" id="fRv-bq-ZSX"/>
-                        <outlet property="floatingViews" destination="Xg1-Fv-W18" id="v6A-Gn-q5e"/>
+                        <outlet property="expandCollapseButton" destination="VE1-1T-3hF" id="lCs-ww-Ruj"/>
                         <outlet property="pricesView" destination="wdp-hj-bbA" id="64l-Vh-k1d"/>
                         <outlet property="pricesViewWidthConstraint" destination="rQC-nu-lkT" id="Ybw-Nn-c8C"/>
                         <outlet property="stashView" destination="ecb-Lc-6L8" id="Wj9-eR-Tta"/>

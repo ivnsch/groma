@@ -11,7 +11,7 @@ import CoreData
 import SwiftValidator
 import ChameleonFramework
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemViewControllerDelegate, QuickAddDelegate, BottonPanelViewDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemViewControllerDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate, ExpandCollapseButtonDelegate
 //    , UIBarPositioningDelegate
 {
     
@@ -27,8 +27,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     private var currentTopController: UIViewController?
     
-    @IBOutlet weak var floatingViews: FloatingViews!
-
+    @IBOutlet weak var expandCollapseButton: ExpandCollapseButton!
+    
     @IBOutlet weak var pricesView: PricesView!
     
     @IBOutlet weak var stashView: StashView!
@@ -49,8 +49,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private var titleLabel: UILabel?
     
     var expandDelegate: Foo?
-    
-    private let expandButtonModel: ExpandFloatingButtonModel = ExpandFloatingButtonModel()
     
     var currentList: List? {
         didSet {
@@ -77,7 +75,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         initTitleLabel()
 
-        initFloatingViews()
+        expandCollapseButton.delegate = self
 
         topQuickAddControllerManager = initTopQuickAddControllerManager()
         topAddEditListItemControllerManager = initAddEditListItemControllerManager()
@@ -170,9 +168,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
         titleLabel?.textColor = compl
         
-        expandButtonModel.bgColor = (colorArray[4] as! UIColor).lightenByPercentage(0.5)
-        expandButtonModel.pathColor = UIColor(contrastingBlackOrWhiteColorOn: expandButtonModel.bgColor, isFlat: true)
-
+        expandCollapseButton.backgroundColor = (colorArray[4] as! UIColor).lightenByPercentage(0.5)
+        expandCollapseButton.strokeColor = UIColor(contrastingBlackOrWhiteColorOn: expandCollapseButton.backgroundColor, isFlat: true)
+        
 //        stashView.bgColor = colorArray[3] as? UIColor
 //        if let bgColor = stashView.bgColor {
 //            stashView.setTextColor(UIColor(contrastingBlackOrWhiteColorOn: bgColor, isFlat: true))
@@ -194,11 +192,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //            self.navigationItem.title = list.name
             self.initWithList(list)
         }
-    }
-
-    private func initFloatingViews() {
-        floatingViews.setActions(Array<FLoatingButtonAction>())
-        floatingViews.delegate = self
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -352,7 +345,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
             topBar.setLeftButtonIds([.Edit])
             topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
-            floatingViews.setActions(Array<FLoatingButtonAction>())  // reset floating actions
             
         } else { // if there's no top controller open, open the quick add controller
             topQuickAddControllerManager?.expand(true)
@@ -361,7 +353,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
             topBar.setLeftButtonIds([])
             topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
-            floatingViews.setActions(Array<FLoatingButtonAction>())
         }
     }
     
@@ -382,13 +373,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             topAddEditListItemControllerManager?.expand(false)
             pricesView.setExpandedVertical(true)
         }
-        if editing {
-            floatingViews.setActions([expandButtonModel.collapsedAction])
-        } else {
+        
+        expandCollapseButton.setHiddenAnimated(!editing)
+        
+        if !editing {
             topBar.setRightButtonIds([.ToggleOpen])
-            floatingViews.setActions(Array<FLoatingButtonAction>())
         }
-
         listItemsTableViewController.setEditing(editing, animated: animated)
 
         let navbarHeight = topBar.frame.height
@@ -736,20 +726,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //        }
 //    }
     
-    // MARK: - BottonPanelViewDelegate
-    
-    func onSubmitAction(action: FLoatingButtonAction) {
-        handleFloatingViewAction(action)
-    }
-    
-    private func handleFloatingViewAction(action: FLoatingButtonAction) {
-        switch action {
-        case .Expand: // expand / collapse sections in edit mode
-            toggleReorderSections()
-        default: break
-        }
-    }
-    
     // MARK: - EditSectionViewControllerDelegate
     
     func onSectionUpdated(section: Section) {
@@ -805,7 +781,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     self.listItemsTableViewController.setAllSectionsExpanded(!self.listItemsTableViewController.sectionsExpanded, animated: true)
                     self.lockToggleSectionsTableView = false
                     
-                    self.floatingViews.setActions([self.expandButtonModel.collapsedAction])
+                    self.expandCollapseButton.setExpanded(false)
                 }
             } else {
                 
@@ -813,7 +789,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     let sectionsTableViewController = UIStoryboard.reorderSectionTableViewController()
                     
                     sectionsTableViewController.cellBgColor = self.listItemsTableViewController.headerBGColor
-                    sectionsTableViewController.selectedCellBgColor = self.expandButtonModel.bgColor
+                    sectionsTableViewController.selectedCellBgColor = self.expandCollapseButton.backgroundColor
                     sectionsTableViewController.textColor = UIColor(contrastingBlackOrWhiteColorOn: self.listItemsTableViewController.headerBGColor, isFlat: true)
                     sectionsTableViewController.sections = self.listItemsTableViewController.sections
                     sectionsTableViewController.delegate = self
@@ -838,7 +814,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     self.addChildViewControllerAndView(sectionsTableViewController, viewIndex: 1)
                     self.sectionsTableViewController = sectionsTableViewController
                     
-                    self.floatingViews.setActions([self.expandButtonModel.expandedAction])
+                    self.expandCollapseButton.setExpanded(true)
                 })
             }
         }
@@ -922,6 +898,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
+    // MARK: - ExpandCollapseButtonDelegate
+    
+    func onExpandButton(expanded: Bool) {
+        toggleReorderSections()
+    }
     
     // MARK: - Websocket
     
