@@ -17,9 +17,15 @@ class ManageBrandsCell: UITableViewCell {
         selectionStyle = .None
     }
     
-    var brand: String? {
+    var item: ItemWithCellAttributes<String>? {
         didSet {
-            brandNameLabel.text = brand
+            if let item = item {
+                if let boldRange = item.boldRange {
+                    brandNameLabel.attributedText = item.item.makeAttributed(boldRange, normalFont: Fonts.regularLight, font: Fonts.regularBold)
+                } else {
+                    brandNameLabel.text = item.item
+                }
+            }
         }
     }
 }

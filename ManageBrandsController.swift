@@ -22,11 +22,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     private let paginator = Paginator(pageSize: 100)
     private var loadingPage: Bool = false
     
-    private var brands: [String] = [] {
-        didSet {
-            filteredBrands = ItemWithCellAttributes.toItemsWithCellAttributes(brands)
-        }
-    }
+    private var searchText: String = ""
     
     private var filteredBrands: [ItemWithCellAttributes<String>] = [] {
         didSet {
@@ -50,7 +46,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func clearAndLoadFirstPage() {
-        brands = []
+        filteredBrands = []
         paginator.reset()
         tableView.reloadData()
         loadPossibleNextPage()
@@ -65,10 +61,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
         
         initNavBar([.Edit])
         
-        Providers.brandProvider.brands(successHandler {[weak self] brands in
-            self?.brands = brands
-        })
-        
+        loadPossibleNextPage()
 //        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
     }
     
@@ -133,13 +126,10 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("brandCell", forIndexPath: indexPath) as! ManageBrandsCell
-        
-        let brand = brands[indexPath.row]
-        
-        cell.brand = brand
+        let brand = filteredBrands[indexPath.row]
+        cell.item = brand
         return cell
     }
-    
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
@@ -166,7 +156,6 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     private func removeBrandUI(brand: ItemWithCellAttributes<String>, indexPath: NSIndexPath) {
         tableView.wrapUpdates {[weak self] in
             self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            self?.brands.remove(brand.item)
             self?.filteredBrands.remove(brand)
         }
     }
@@ -176,20 +165,8 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     private func filter(searchText: String) {
-        
-        if searchText.isEmpty {
-            filteredBrands = ItemWithCellAttributes.toItemsWithCellAttributes(brands)
-            
-        } else {
-            Providers.brandProvider.brandsContainingText(searchText, successHandler{[weak self] brands in
-                if let weakSelf = self {
-                    let brandWithCellAttributes: [ItemWithCellAttributes] = brands.map {brand in
-                        return ItemWithCellAttributes(item: brand, boldRange: brand.range(brand, caseInsensitive: true))
-                    }
-                    weakSelf.filteredBrands = brandWithCellAttributes
-                }
-            })
-        }
+        self.searchText = searchText
+        clearAndLoadFirstPage()
     }
     
     private func onUpdatedBrands() {
@@ -210,7 +187,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     
     private func clearSearch() {
         searchBar.text = ""
-        filteredBrands = ItemWithCellAttributes.toItemsWithCellAttributes(brands)
+        filteredBrands = []
     }
     
     // MARK: - EditBrandControllerDelegate
@@ -224,7 +201,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     private func indexPathForBrand(brand: String) -> NSIndexPath? {
-        let indexMaybe = brands.enumerate().filter{$0.element == brand}.first?.index
+        let indexMaybe = filteredBrands.enumerate().filter{$0.element.item == brand}.first?.index
         return indexMaybe.map{NSIndexPath(forRow: $0, inSection: 0)}
     }
     
@@ -239,21 +216,17 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     private func updateBrandUI(brand: String, indexPath: NSIndexPath) {
         // for now we will not do "content based" update like everywhere else in the app for these cases - content based it's a bit better than indexpath based, since maybe while we have the edit controller open we update the list (e.g remove an item on another device -> websocket notificaton) which makes index path invalid. We can't do this here because we use only strings.
 //        brands.update(brand)
-        guard indexPath.row < brands.count else {return}
-        brands[indexPath.row] = brand
+        guard indexPath.row < filteredBrands.count else {return}
         
+        let itemWithCellAttributes = ItemWithCellAttributes(item: brand, boldRange: brand.range(brand, caseInsensitive: true))
+        
+        filteredBrands[indexPath.row] = itemWithCellAttributes
+
         onUpdatedBrands()
         
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
         addEditBrandControllerManager?.expand(false)
         initNavBar([.Edit])
-    }
-    
-    private func addBrandUI(brand: String) {
-        brands.append(brand)
-        onUpdatedBrands()
-        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: filteredBrands.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
-        setAddEditBrandControllerOpen(false)
     }
     
     private func setAddEditBrandControllerOpen(open: Bool) {
@@ -274,9 +247,14 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
                 
                 if (!weakSelf.loadingPage) {
                     setLoading(true)
-                    
-                    Providers.brandProvider.brands(weakSelf.paginator.currentPage, weakSelf.successHandler{brands in
-                        weakSelf.brands.appendAll(brands)
+
+                    Providers.brandProvider.brandsContainingText(weakSelf.searchText, range: weakSelf.paginator.currentPage, weakSelf.successHandler{brands in
+                        
+                        let brandsWithCellAttributes: [ItemWithCellAttributes] = brands.map {brand in
+                            ItemWithCellAttributes(item: brand, boldRange: brand.range(weakSelf.searchText, caseInsensitive: true))
+                        }
+                        
+                        weakSelf.filteredBrands.appendAll(brandsWithCellAttributes)
                         
                         weakSelf.paginator.update(brands.count)
                         

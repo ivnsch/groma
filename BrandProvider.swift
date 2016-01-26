@@ -18,5 +18,5 @@ protocol BrandProvider {
     
     func removeBrand(name: String, _ handler: ProviderResult<Any> -> Void)
     
-    func brandsContainingText(text: String, _ handler: ProviderResult<[String]> -> Void)
+    func brandsContainingText(text: String, range: NSRange, _ handler: ProviderResult<[String]> -> Void)
 }

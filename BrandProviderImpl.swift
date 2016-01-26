@@ -46,8 +46,8 @@ class BrandProviderImpl: BrandProvider {
         }
     }
     
-    func brandsContainingText(text: String, _ handler: ProviderResult<[String]> -> Void) {
-        dbProvider.brandsContainingText(text) {brands in
+    func brandsContainingText(text: String, range: NSRange, _ handler: ProviderResult<[String]> -> Void) {
+        dbProvider.brandsContainingText(text, range: range) {brands in
             handler(ProviderResult(status: .Success, sucessResult: brands))
         }
     }
