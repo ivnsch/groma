@@ -56,17 +56,19 @@ class RealmBrandProvider: RealmProvider {
     }
     
     func brandsContainingText(text: String, range: NSRange, _ handler: [String] -> Void) {
-        do {
-            let realm = try Realm()
-
-            // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
-//            .sorted("brand", ascending: true)
-            let brands = Array(Set(realm.objects(DBProduct).filter("brand CONTAINS[c] '\(text)'").map{$0.brand}))[range].filter{!$0.isEmpty}.sort()
-            handler(brands)
-        } catch let e {
-            print("Error: RealmListItemProvider.brandsContainingText: Couldn't load brands, returning empty array. Error: \(e)")
-            handler([])
+        background({
+            do {
+                let realm = try Realm()
+                // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
+                // .sorted("brand", ascending: true)
+                let brands = Array(Set(realm.objects(DBProduct).filter("brand CONTAINS[c] '\(text)'").map{$0.brand}))[range].filter{!$0.isEmpty}.sort()
+                return brands
+            } catch let e {
+                print("Error: RealmListItemProvider.brandsContainingText: Couldn't load brands, returning empty array. Error: \(e)")
+                return []
+            }
+        }) {(result: [String]) in
+            handler(result)
         }
-        
     }
 }
