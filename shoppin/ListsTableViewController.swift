@@ -64,7 +64,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                 print("Error: ListsTableViewController2.initTopAddEditListControllerManager: no valid self reference")
                 return 0
             }()
-            controller.view.clipsToBounds = true
+            controller.view.clipsToBounds = false
             return controller
         }
         expandableTopViewController.delegate = self

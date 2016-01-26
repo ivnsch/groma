@@ -101,10 +101,10 @@
                                 </connections>
                             </tableView>
                             <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qCG-S0-5T7">
-                                <rect key="frame" x="0.0" y="66" width="600" height="25"/>
+                                <rect key="frame" x="0.0" y="72" width="600" height="35"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="25" id="Ny4-Kj-hx4"/>
+                                    <constraint firstAttribute="height" constant="35" id="Ny4-Kj-hx4"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
                                 <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -122,7 +122,7 @@
                             <constraint firstItem="U0X-Ol-BRf" firstAttribute="leading" secondItem="h5W-ku-HnU" secondAttribute="leading" constant="14" id="QqD-VV-Pvp"/>
                             <constraint firstItem="Qpe-T7-N2v" firstAttribute="top" secondItem="lhc-D5-OK6" secondAttribute="bottom" id="V6a-Yo-AoO"/>
                             <constraint firstItem="U0X-Ol-BRf" firstAttribute="top" secondItem="958-Da-VLu" secondAttribute="bottom" constant="14" id="Xjj-ab-3Ib"/>
-                            <constraint firstItem="qCG-S0-5T7" firstAttribute="top" secondItem="958-Da-VLu" secondAttribute="bottom" constant="8" id="ZcA-7w-QCA"/>
+                            <constraint firstItem="qCG-S0-5T7" firstAttribute="top" secondItem="958-Da-VLu" secondAttribute="bottom" constant="14" id="ZcA-7w-QCA"/>
                             <constraint firstItem="lhc-D5-OK6" firstAttribute="top" secondItem="U0X-Ol-BRf" secondAttribute="bottom" priority="999" constant="14" id="bXo-jj-urv"/>
                             <constraint firstAttribute="trailing" secondItem="F6P-Xg-vy1" secondAttribute="trailing" constant="14" id="cJG-26-ZON"/>
                             <constraint firstItem="F6P-Xg-vy1" firstAttribute="leading" secondItem="958-Da-VLu" secondAttribute="trailing" constant="14" id="ccS-Di-Dkj"/>
