@@ -21,7 +21,7 @@ class ManageProductCategoryCell: UITableViewCell {
         didSet {
             if let category = category {
                 categoryNameLabel.text = category.name
-                contentView.backgroundColor = category.color.colorWithAlphaComponent(0.5)
+                backgroundColor = category.color.colorWithAlphaComponent(0.5)
             }
         }
     }
