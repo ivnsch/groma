@@ -196,7 +196,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     private func prefill(item: AddEditItem) {
         nameInput.text = item.product.name
         brandInput.text = item.product.brand
-        sectionInput.text = item.product.category.name
+        sectionInput.text = item.sectionName ?? item.product.category.name
         sectionColorButton.tintColor = item.product.category.color
         sectionColorButton.imageView?.tintColor = item.product.category.color
         quantityInput.text = String(item.quantity)
@@ -245,17 +245,19 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             }
             
             // TODO new input field for section,
-            if let text = nameInput.text, priceText = priceInput.text, quantityText = quantityInput.text, category = sectionInput.text {
+            if let text = nameInput.text, priceText = priceInput.text, quantityText = quantityInput.text, sectionText = sectionInput.text {
                 
                 let baseQuantity = scaleInputs?.baseQuantity ?? 1
                 let unit = scaleInputs?.unit ?? .None
                 // the price from scaleInputs is inserted in price field, so we have it already
                 
+                // Explanation category/section name: for list items, the section "overrides" the category. For prefill: If there's a section, we show it, otherwise fallback to category. For save: If the product doesn't have a category yet (the product is new) the section input is saved both as section and category. If it already has a category, the section input is saved only as section (this is done in controller/provider). BUT!! ->
+                // at least with the current design, only "overriding" the category may be a bit confusing to the users, when they update the section in add/edit listitem, they will assume this also changes the category, i.e. will appear now unter e.g. stats under this new section. But the category is not updated, so in stats the new section has no effect. The user has to go to the products screen (or inventory, groups where we have also no sections, only category) and update the category there. And this is confusing. Maybe with a design that makes the difference clear we can do it. For now, the provider just saves what we pass as category as category, meaning the section input overwrites always the category. So the section is basically, equivalent with category.
                 switch action {
                 case .Add:
-                    delegate?.onOkTap(text, price: priceText, quantity: quantityText, category: category, categoryColor: sectionColorButton.tintColor, sectionName: category, note: noteInput, baseQuantity: baseQuantity, unit: unit, brand: brandInput.text ?? "")
+                    delegate?.onOkTap(text, price: priceText, quantity: quantityText, category: sectionText, categoryColor: sectionColorButton.tintColor, sectionName: sectionText, note: noteInput, baseQuantity: baseQuantity, unit: unit, brand: brandInput.text ?? "")
                 case .Update:
-                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, category: category, categoryColor: sectionColorButton.tintColor, sectionName: category, note: noteInput, baseQuantity: baseQuantity, unit: unit, brand: brandInput.text ?? "")
+                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, category: sectionText, categoryColor: sectionColorButton.tintColor, sectionName: sectionText, note: noteInput, baseQuantity: baseQuantity, unit: unit, brand: brandInput.text ?? "")
                 }
                 
             } else {
