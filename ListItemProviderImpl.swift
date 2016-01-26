@@ -588,6 +588,9 @@ class ListItemProviderImpl: ListItemProvider {
         let countMaybe = memProvider.listItemCount(.Stash, list: list)
         if let count = countMaybe {
             handler(ProviderResult(status: .Success, sucessResult: count))
+            if fetchMode == .MemOnly {
+                return
+            }
         }
         
         dbProvider.listItemCount(status, list: list) {dbCountMaybe in
