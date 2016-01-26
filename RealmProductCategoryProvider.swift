@@ -27,6 +27,28 @@ class RealmProductCategoryProvider: RealmProvider {
     }
     
     func removeCategory(category: ProductCategory, _ handler: Bool -> Void) {
-        remove("uuid = '\(category.uuid)'", handler: handler, objType: DBProductCategory.self)
+        background({
+            do {
+                let realm = try Realm()
+                realm.write {
+                    let dbProducts = realm.objects(DBProduct).filter("category.uuid = '\(category.uuid)'")
+                    // delete first dependencies of products (realm requires this order, otherwise db is inconsistent. There's no cascade delete yet also).
+                    for dbProduct in dbProducts {
+                        RealmListItemProvider().deleteProductDependenciesSync(realm, productUuid: dbProduct.uuid)
+                    }
+                    // delete products
+                    realm.delete(dbProducts)
+                    // delete cateogories
+                    let categoryResults = realm.objects(DBProductCategory).filter("uuid = '\(category.uuid)'")
+                    realm.delete(categoryResults)
+                }
+                return true
+            } catch _ {
+                print("Error: RealmProductCategoryProvider.removeCategory: creating Realm() in remove")
+                return false
+            }
+        }) {(result: Bool) in
+            handler(result)
+        }
     }
 }

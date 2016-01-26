@@ -90,23 +90,42 @@ class RealmListItemProvider: RealmProvider {
     }
 
     func deleteProductAndDependencies(product: Product, handler: Bool -> Void) {
-        
-        doInWriteTransaction({realm in
-            let productResult = realm.objects(DBProduct).filter("uuid = '\(product.uuid)'")
-            realm.delete(productResult)
-            let inventoryResult = realm.objects(DBInventoryItem).filter("product.uuid = '\(product.uuid)'")
-            realm.delete(inventoryResult)
-            let historyResult = realm.objects(DBHistoryItem).filter("product.uuid = '\(product.uuid)'")
-            realm.delete(historyResult)
-            let planResult = realm.objects(DBPlanItem).filter("product.uuid = '\(product.uuid)'")
-            realm.delete(planResult)
-            
-            return true
-            
-            }, finishHandler: {success in
-                handler(success ?? false)
+        doInWriteTransaction({[weak self] realm in
+            if let weakSelf = self {
+                return weakSelf.deleteProductAndDependenciesSync(realm, productUuid: product.uuid)
+            } else {
+                print("WARN: RealmListItemProvider.deleteProductAndDependencies: self is nil")
+                return false
+            }
+        }, finishHandler: {success in
+            handler(success ?? false)
         })
     }
+    
+    // Note: This is expected to be called from inside a transaction and in a background operation
+    func deleteProductAndDependenciesSync(realm: Realm, productUuid: String) -> Bool {
+        if deleteProductAndDependenciesSync(realm, productUuid: productUuid) {
+            let productResult = realm.objects(DBProduct).filter("uuid = '\(productUuid)'")
+            realm.delete(productResult)
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    // Note: This is expected to be called from inside a transaction and in a background operation
+    func deleteProductDependenciesSync(realm: Realm, productUuid: String) -> Bool {
+        let listItemResult = realm.objects(DBListItem).filter("product.uuid = '\(productUuid)'")
+        realm.delete(listItemResult)
+        let inventoryResult = realm.objects(DBInventoryItem).filter("product.uuid = '\(productUuid)'")
+        realm.delete(inventoryResult)
+        let historyResult = realm.objects(DBHistoryItem).filter("product.uuid = '\(productUuid)'")
+        realm.delete(historyResult)
+        let planResult = realm.objects(DBPlanItem).filter("product.uuid = '\(productUuid)'")
+        realm.delete(planResult)
+        return true
+    }
+    
     
     func saveProduct(productInput: ProductInput, updateSuggestions: Bool = true, update: Bool = true, handler: Product? -> ()) {
         
