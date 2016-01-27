@@ -346,6 +346,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             topBar.setLeftButtonIds([.Edit])
             topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
             
+            if editing {
+                // if we are in edit mode, show the reorder sections button again (we hide it when we open the top controller)
+                expandCollapseButton.setHiddenAnimated(false)
+            }
+            
         } else { // if there's no top controller open, open the quick add controller
             topQuickAddControllerManager?.expand(true)
             
@@ -353,6 +358,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
             topBar.setLeftButtonIds([])
             topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+            
+            // in case we are in reorder sections mode, come back to normal. This mode doesn't make sense while adding list items as we can't see the list items.
+            setReorderSections(false)
+            // don't show the reorder sections button during quick add is open because it stand in the way
+            expandCollapseButton.setHiddenAnimated(true)
         }
     }
     
@@ -377,8 +387,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         expandCollapseButton.setHiddenAnimated(!editing)
         
         if !editing {
+            // in case we are in reorder sections mode, come back to normal. This is an edit specific mode.
+            setReorderSections(false)
+            expandCollapseButton.setHiddenAnimated(true)
+            
             topBar.setRightButtonIds([.ToggleOpen])
         }
+        
         listItemsTableViewController.setEditing(editing, animated: animated)
 
         let navbarHeight = topBar.frame.height
@@ -764,26 +779,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private var sectionsTableViewController: ReorderSectionTableViewController?
     private var lockToggleSectionsTableView: Bool = false // prevent condition in which user presses toggle too quickly many times and sectionsTableViewController doesn't go away
     
-    
     // Toggles between expanded and collapsed section mode. For this a second tableview with only sections is added or removed from foreground. Animates floating button.
     private func toggleReorderSections() {
-        
+        setReorderSections(sectionsTableViewController == nil)
+    }
+    
+    private func setReorderSections(reorderSections: Bool) {
+
         if !lockToggleSectionsTableView {
             lockToggleSectionsTableView = true
             
-            if let sectionsTableViewController = sectionsTableViewController { // expand - remove sections table view
-                
-                sectionsTableViewController.setCellHeight(30, animated: true)
-                sectionsTableViewController.setEdit(false, animated: true) {
-                    sectionsTableViewController.removeFromParentViewController()
-                    sectionsTableViewController.view.removeFromSuperview()
-                    self.sectionsTableViewController = nil
-                    self.listItemsTableViewController.setAllSectionsExpanded(!self.listItemsTableViewController.sectionsExpanded, animated: true)
-                    self.lockToggleSectionsTableView = false
-                    
-                    self.expandCollapseButton.setExpanded(false)
-                }
-            } else {
+            if reorderSections { // show reorder sections table view
                 
                 listItemsTableViewController.setAllSectionsExpanded(!listItemsTableViewController.sectionsExpanded, animated: true, onComplete: { // collapse - add sections table view
                     let sectionsTableViewController = UIStoryboard.reorderSectionTableViewController()
@@ -816,6 +822,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     
                     self.expandCollapseButton.setExpanded(true)
                 })
+                
+            } else { // show normal table view
+                
+                if let sectionsTableViewController = sectionsTableViewController { // expand while in collapsed state (sections tableview is set) - remove sections table view
+                    
+                    sectionsTableViewController.setCellHeight(30, animated: true)
+                    sectionsTableViewController.setEdit(false, animated: true) {
+                        sectionsTableViewController.removeFromParentViewController()
+                        sectionsTableViewController.view.removeFromSuperview()
+                        self.sectionsTableViewController = nil
+                        self.listItemsTableViewController.setAllSectionsExpanded(!self.listItemsTableViewController.sectionsExpanded, animated: true)
+                        self.lockToggleSectionsTableView = false
+                        
+                        self.expandCollapseButton.setExpanded(false)
+                    }
+                } else {
+                    // we are already in normal state (sections tableview is not set) - do nothing
+                    lockToggleSectionsTableView = false
+                }
             }
         }
     }
