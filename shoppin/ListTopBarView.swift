@@ -79,7 +79,10 @@ class ListTopBarView: UIView {
     private var titleLabelCentered = false
     private let titleLabelLeftConstant: Float = 14
     
+    private let startTopConstant: Float = 20
     private let topConstant: Float = 32
+    
+    private var titleLabelTopConstraint: NSLayoutConstraint?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -94,8 +97,8 @@ class ListTopBarView: UIView {
         titleLabelLeftConstraint = titleLabel.alignLeft(self, constant: titleLabelLeftConstant)
 
         // FIXME for some reason this makes the label move the y center during the animation - it should stay constant. alignTop (quickfix) stays constant
-//      titleLabel.centerYInParent()
-        titleLabel.alignTop(self, constant: topConstant)
+//        titleLabel.centerYInParent()
+        titleLabelTopConstraint = titleLabel.alignTop(self, constant: startTopConstant)
         
         layoutIfNeeded()
         
@@ -120,6 +123,7 @@ class ListTopBarView: UIView {
     // parameter: center => center, !center => left
     func positionTitleLabelLeft(center: Bool, animated: Bool) {
         titleLabelLeftConstraint?.constant = center ? self.center.x - titleLabel.frame.width / 2 : CGFloat(titleLabelLeftConstant)
+        titleLabelTopConstraint?.constant = center ? CGFloat(topConstant) : CGFloat(startTopConstant)
         if animated {
             UIView.animateWithDuration(0.3, animations: {[weak self] in
                 self?.layoutIfNeeded()
