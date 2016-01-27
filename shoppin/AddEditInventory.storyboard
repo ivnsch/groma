@@ -33,7 +33,7 @@
                                     <constraint firstAttribute="height" constant="30" id="94c-mD-itq"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F6P-Xg-vy1" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="561" y="31" width="25" height="25"/>
