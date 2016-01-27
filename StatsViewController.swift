@@ -246,7 +246,7 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         chartSettings.trailing = 30
         chartSettings.leading = 20
         chartSettings.labelsToAxisSpacingY = 0
-        chartSettings.axisStrokeWidth = 0.4
+        chartSettings.axisStrokeWidth = 0
         
         let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: chartSettings, chartFrame: chartFrame, xModel: xModel, yModel: yModel)
         let (xAxis, yAxis, innerFrame) = (coordsSpace.xAxis, coordsSpace.yAxis, coordsSpace.chartInnerFrame)
