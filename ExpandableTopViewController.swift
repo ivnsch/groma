@@ -88,7 +88,8 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
             
             if expanded {
                 // create and add overlay
-                let overlayTop = openInset + height
+//                let overlayTop = openInset + height
+                let overlayTop = 64 + openInset // 64 -> below nav bar
                 let overlay = createOverlay()
                 overlay.frame = CGRectMake(tableView.frame.origin.x, overlayTop, tableView.frame.width, tableView.frame.height)
                 parentController.view.insertSubview(overlay, aboveSubview: tableView)
