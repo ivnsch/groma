@@ -169,19 +169,43 @@ class ListItemProviderImpl: ListItemProvider {
                     // we can do special handling though, like show an error message when server fails and remove the list which was just added, and/or retry server. Or use a flag "synched = false" which tells us that these items should not be removed on sync, similar to items which were added offline. Etc.
                     // TODO review that sending savedListItems is enough for possible update case (increment) to work correctly. Will the server always have correct uuids etc.
                     self?.remoteProvider.add(savedListItems) {remoteResult in
-                        if !remoteResult.success {
+                        
+                        if let remoteListItems = remoteResult.successResult {
                             
+                            self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+                                if !success {
+                                    // TODO! the timestamp is stored in server (remote was success) say "3"
+                                    // but it couldn't be saved in the items. Items, have e.g. no timestamp yet or "1"
+                                    // this means: when we try to sync the items the next time it will not work as 1 < 3, and they'll be overwritten.
+                                    // this overwrite is a loss of data only when after the update we updated more data locally.
+                                    // since we don't have currently timestamp check for "little sync" (?), the next time we do a little update the timestamp may work and problem is solved
+                                    // so problem is only: possible new local updates (most probably offline) to item are reverted on "big sync".
+                                    // how do we handle this? possibilities:
+                                    // 1. retry - still need to decide what we do if retry fails
+                                    // 2. delete local items 
+                                    // 3. update items with a "special mark" that will make item skip timestamp check on server, problem is updates of other users/devices may be overwritten.
+                                    // 4. ignore
+                                    // more possibilities?
+                                    // for now we chose ignore - doesn't look like a super critical issue. Some *possible* updates *may* be reverted, and only if the timestamp update fails which is unlikely so this should almost never happen. And if it happens user just loses some data in big sync, not critical.
+                                    // But TODO! we have to send this error message to hockey, it's important to know if it happens.
+                                    print("Error: ListItemProviderImpl.add: Error updating last update timestamps")
+                                }
+                            }
+                            
+                        } else {
                             DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[ListItem]>) in
-                                print("Error: adding listItem in remote: \(listItems), result: \(remoteResult)")
                                 self?.memProvider.invalidate()
+                                print("Error: ListItemProviderImpl.add: adding listItem in remote: \(listItems), result: \(remoteResult)")
+                                handler(result)
                             })
                         }
                     }
                 }
 
             } else {
-                handler(ProviderResult(status: .DatabaseUnknown))
                 self?.memProvider.invalidate()
+                print("Error: ListItemProviderImpl.add: saving listItem to db: \(listItems)")
+                handler(ProviderResult(status: .DatabaseUnknown))
             }
 
         }

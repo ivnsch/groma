@@ -37,35 +37,15 @@ class RemoteProvider {
         }
     }
     
-    class func authenticatedRequest<T: ResponseObjectSerializable>(method: Alamofire.Method, _ url: String, _ params: [[String: AnyObject]], handler: RemoteResult<T> -> ()) {
-
+    class func authenticatedRequestArray<T: ResponseObjectSerializable>(method: Alamofire.Method, _ url: String, _ params: [[String: AnyObject]], handler: RemoteResult<[T]> -> Void) {
         onConnectedAndLoggedIn(handler) {
-            
-            // Alamofire's short version currently doesn't support array parameter, so we need this
-            
-            let request = NSMutableURLRequest(URL: NSURL(string: Urls.listItems)!)
-            request.HTTPMethod = "PUT"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            
-            let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-            
-            let maybeToken = valet?.stringForKey(KeychainKeys.token)
-            
-            if let token = maybeToken {
-                request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
-            } // TODO if there's no token return status code to direct to login controller or something
-            
-            if let deviceId: String = PreferencesManager.loadPreference(PreferencesManagerKey.deviceId) {
-                request.setValue(deviceId, forHTTPHeaderField: "did")
-            }
-            
+            let request = buildRequest(method, url: url)
             do {
+                // Alamofire's short version currently doesn't support array parameter, so we need this
                 request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
-                
-                Alamofire.request(request).responseMyObject {(request, _, result: RemoteResult<T>) in
+                Alamofire.request(request).responseMyArray {(request, _, result: RemoteResult<[T]>) in
                     handler(result)
                 }
-                
             } catch _ as NSError {
                 handler(RemoteResult(status: .ClientParamsParsingError))
             } catch _ {
@@ -73,6 +53,43 @@ class RemoteProvider {
                 handler(RemoteResult(status: .Unknown))
             }
         }
+    }
+    
+    class func authenticatedRequest<T: ResponseObjectSerializable>(method: Alamofire.Method, _ url: String, _ params: [[String: AnyObject]], handler: RemoteResult<T> -> Void) {
+        onConnectedAndLoggedIn(handler) {
+            let request = buildRequest(method, url: url)
+            do {
+                // Alamofire's short version currently doesn't support array parameter, so we need this
+                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
+                Alamofire.request(request).responseMyObject {(request, _, result: RemoteResult<T>) in
+                    handler(result)
+                }
+            } catch _ as NSError {
+                handler(RemoteResult(status: .ClientParamsParsingError))
+            } catch _ {
+                print("RemoteProvider.authenticatedRequest: Not handled error, returning .Unknown")
+                handler(RemoteResult(status: .Unknown))
+            }
+        }
+    }
+    
+    private class func buildRequest(method: Alamofire.Method, url: String) -> NSMutableURLRequest {
+        let request = NSMutableURLRequest(URL: NSURL(string: Urls.listItems)!)
+        request.HTTPMethod = method.rawValue
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+        
+        let maybeToken = valet?.stringForKey(KeychainKeys.token)
+        
+        if let token = maybeToken {
+            request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
+        } // TODO if there's no token return status code to direct to login controller or something
+        
+        if let deviceId: String = PreferencesManager.loadPreference(PreferencesManagerKey.deviceId) {
+            request.setValue(deviceId, forHTTPHeaderField: "did")
+        }
+        return request
     }
 
     /**

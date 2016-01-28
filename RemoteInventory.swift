@@ -46,3 +46,9 @@ final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSeria
         return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), color: \(color.hexStr), lastUpdate: \(lastUpdate), users: \(users)}"
     }
 }
+
+extension RemoteInventory {
+    var timestampUpdateDict: [String: AnyObject] {
+        return ["uuid": uuid, "lastupdate": lastUpdate]
+    }
+}

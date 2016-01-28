@@ -1868,6 +1868,57 @@
 			name = editSection;
 			sourceTree = "<group>";
 		};
+		EB6E3D161C59FDB200D65DD5 /* remote */ = {
+			isa = PBXGroup;
+			children = (
+				EB6E3D181C59FE8500D65DD5 /* aggr */,
+				EB7858741B7F6F69008AAD12 /* RemoteHistoryItems.swift */,
+				EBF608B81C0F5D9000EDB33E /* RemotePlanItems.swift */,
+				EBF608BC1C0F5DB400EDB33E /* RemotePlanItem.swift */,
+				EB7858781B7F7083008AAD12 /* RemoteHistoryItem.swift */,
+				EB9BE41B1B2CB42B005B401A /* RemoteListItem.swift */,
+				EB6F812C1B46E2C4008680E0 /* RemoteLoginResult.swift */,
+				EB202B961B54109A001699E7 /* RemoteRegisterResult.swift */,
+				EB9BE41E1B2CB513005B401A /* RemoteProduct.swift */,
+				EBA7AC951BFE95AF00247A8C /* RemoteProductCategory.swift */,
+				EB9BE4241B2CB542005B401A /* RemoteList.swift */,
+				EB0C2A391B58330300AF6226 /* RemoteInventoryItem.swift */,
+				EB9BE4211B2CB51F005B401A /* RemoteSection.swift */,
+				EB70C21A1B4D2ECE0060E529 /* RemoteSharedUser.swift */,
+				EBB9A7371B5EB14300E5487D /* RemoteInventory.swift */,
+				EBD27CD11C171175005D8305 /* RemoteGroup.swift */,
+				EB714ABE1B681AF700F91B94 /* RemoteSyncResult.swift */,
+				EB7858801B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift */,
+				EB792A271B95CCE10004BEEC /* RemoteSocialLoginResult.swift */,
+				EB266A751C19DA3500488679 /* InventoryItemIncrement.swift */,
+				EB87A4A61C1A499F008D2A42 /* RemoteGroupItemInput.swift */,
+				EB87A4AA1C1A4F13008D2A42 /* GroupItemWithGroup.swift */,
+			);
+			name = remote;
+			sourceTree = "<group>";
+		};
+		EB6E3D171C59FE4900D65DD5 /* etc */ = {
+			isa = PBXGroup;
+			children = (
+				EBF162F41A3CA4BA0048E37C /* ProviderFactory.swift */,
+				EB0C1BA81B3EC00700F24C85 /* ProviderResult.swift */,
+				EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */,
+			);
+			name = etc;
+			sourceTree = "<group>";
+		};
+		EB6E3D181C59FE8500D65DD5 /* aggr */ = {
+			isa = PBXGroup;
+			children = (
+				EB0C2A3D1B583BFE00AF6226 /* RemoteInventoryItemWithProduct.swift */,
+				EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */,
+				EB4D57AF1B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift */,
+				EB80CE4A1C3EA628001DF159 /* RemoteListsWithDependencies.swift */,
+				EB9BE4181B2CB355005B401A /* RemoteListItems.swift */,
+			);
+			name = aggr;
+			sourceTree = "<group>";
+		};
 		EB6F81301B471793008680E0 /* utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -2008,35 +2059,9 @@
 				EB7E832D1B7B74EF009DEEF4 /* RemoteHistoryProvider.swift */,
 				EBF608B41C0F5D0D00EDB33E /* RemotePlanItemsProvider.swift */,
 				EBD27CCD1C1710F8005D8305 /* RemoteGroupsProvider.swift */,
-				EBF377961B38A9C900EEB6DB /* AlamofireExtensions.swift */,
-				EBF3779A1B38AA5900EEB6DB /* Urls.swift */,
-				EB9BE4181B2CB355005B401A /* RemoteListItems.swift */,
-				EB7858741B7F6F69008AAD12 /* RemoteHistoryItems.swift */,
-				EBF608B81C0F5D9000EDB33E /* RemotePlanItems.swift */,
-				EBF608BC1C0F5DB400EDB33E /* RemotePlanItem.swift */,
-				EB7858781B7F7083008AAD12 /* RemoteHistoryItem.swift */,
-				EB9BE41B1B2CB42B005B401A /* RemoteListItem.swift */,
-				EB6F812C1B46E2C4008680E0 /* RemoteLoginResult.swift */,
-				EB202B961B54109A001699E7 /* RemoteRegisterResult.swift */,
-				EB9BE41E1B2CB513005B401A /* RemoteProduct.swift */,
-				EBA7AC951BFE95AF00247A8C /* RemoteProductCategory.swift */,
-				EB9BE4241B2CB542005B401A /* RemoteList.swift */,
-				EB0C2A391B58330300AF6226 /* RemoteInventoryItem.swift */,
-				EB0C2A3D1B583BFE00AF6226 /* RemoteInventoryItemWithProduct.swift */,
-				EB80CE4A1C3EA628001DF159 /* RemoteListsWithDependencies.swift */,
-				EB9BE4211B2CB51F005B401A /* RemoteSection.swift */,
-				EB70C21A1B4D2ECE0060E529 /* RemoteSharedUser.swift */,
-				EBB9A7371B5EB14300E5487D /* RemoteInventory.swift */,
-				EBD27CD11C171175005D8305 /* RemoteGroup.swift */,
-				EB714ABE1B681AF700F91B94 /* RemoteSyncResult.swift */,
-				EB4D57AF1B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift */,
-				EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */,
-				EB7858801B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift */,
-				EB792A271B95CCE10004BEEC /* RemoteSocialLoginResult.swift */,
 				EB85F46E1BD5600A00E19E9B /* ProductProvider.swift */,
-				EB266A751C19DA3500488679 /* InventoryItemIncrement.swift */,
-				EB87A4A61C1A499F008D2A42 /* RemoteGroupItemInput.swift */,
-				EB87A4AA1C1A4F13008D2A42 /* GroupItemWithGroup.swift */,
+				EBF3779A1B38AA5900EEB6DB /* Urls.swift */,
+				EBF377961B38A9C900EEB6DB /* AlamofireExtensions.swift */,
 			);
 			name = remote;
 			sourceTree = "<group>";
@@ -2421,6 +2446,7 @@
 				EB40A4671B5506CC000E9CAD /* realm */,
 				EB451C441B8634FD000DE208 /* internal */,
 				EB0F5F891B9A0A5500035175 /* extensions */,
+				EB6E3D161C59FDB200D65DD5 /* remote */,
 				EBF162EA1A3CA2470048E37C /* Product.swift */,
 				EBA7AC911BFE950300247A8C /* ProductCategory.swift */,
 				EBF162EC1A3CA24E0048E37C /* ListItem.swift */,
@@ -2460,7 +2486,7 @@
 				EBF162F31A3CA4620048E37C /* mock */,
 				EB40A46C1B5507E2000E9CAD /* realm */,
 				EB9BE4141B2C6525005B401A /* remote */,
-				EBF162F41A3CA4BA0048E37C /* ProviderFactory.swift */,
+				EB6E3D171C59FE4900D65DD5 /* etc */,
 				EBF162F91A3CA54F0048E37C /* ListItemProvider.swift */,
 				EB20FBFB1A5972A30058103B /* InventoryProvider.swift */,
 				EBB9A73B1B5EB1C700E5487D /* InventoryItemsProvider.swift */,
@@ -2468,8 +2494,6 @@
 				EBDA75411BCD5C8C00E34AC3 /* ListItemGroupProvider.swift */,
 				EBA7AC9D1BFEA87300247A8C /* ProductCategoryProvider.swift */,
 				EBA2C8D11C502C3100A970B8 /* ConnectionProvider.swift */,
-				EB0C1BA81B3EC00700F24C85 /* ProviderResult.swift */,
-				EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */,
 				EB70C2181B4D2C940060E529 /* ListProvider.swift */,
 				EB7E831D1B7B7069009DEEF4 /* HistoryProvider.swift */,
 				EB451C381B85F3F0000DE208 /* StatsProvider.swift */,

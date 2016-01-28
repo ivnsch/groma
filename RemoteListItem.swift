@@ -57,3 +57,9 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
         return "{\(self.dynamicType) uuid: \(uuid), note: \(note), todoQuantity: \(todoQuantity), todoOrder: \(todoOrder), doneQuantity: \(doneQuantity), doneOrder: \(doneOrder), stashQuantity: \(stashQuantity), stashOrder: \(stashOrder), productUuid: \(productUuid), sectionUuid: \(sectionUuid), listUuid: \(listUuid), listUpdate: \(lastUpdate)}"
     }
 }
+
+extension RemoteListItem {
+    var timestampUpdateDict: [String: AnyObject] {
+        return ["uuid": uuid, "lastupdate": lastUpdate]
+    }
+}

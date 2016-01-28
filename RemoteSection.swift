@@ -12,11 +12,13 @@ final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSeriali
     let uuid: String
     let name: String
     let order: Int
-    
+    let lastUpdate: NSDate
+
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
         self.order = representation.valueForKeyPath("order") as! Int
+        self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
     }
     
     static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteSection] {
@@ -31,6 +33,12 @@ final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSeriali
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), order: \(self.order)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), time: \(order), lastUpdate: \(lastUpdate)}"
+    }
+}
+
+extension RemoteSection {
+    var timestampUpdateDict: [String: AnyObject] {
+        return ["uuid": uuid, "lastupdate": lastUpdate]
     }
 }

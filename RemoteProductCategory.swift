@@ -12,6 +12,7 @@ final class RemoteProductCategory: ResponseObjectSerializable, ResponseCollectio
     let uuid: String
     let name: String
     var color: UIColor
+    let lastUpdate: NSDate
     
     init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
@@ -21,6 +22,7 @@ final class RemoteProductCategory: ResponseObjectSerializable, ResponseCollectio
             print("Error: RemoteProductCategory.init: Invalid color hex: \(colorStr)")
             return UIColor.blackColor()
         }()
+        self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)        
     }
     
     static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteProductCategory] {
@@ -35,6 +37,12 @@ final class RemoteProductCategory: ResponseObjectSerializable, ResponseCollectio
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), color: \(color)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), color: \(color), listUpdate: \(lastUpdate)}"
+    }
+}
+
+extension RemoteProductCategory {
+    var timestampUpdateDict: [String: AnyObject] {
+        return ["uuid": uuid, "lastupdate": lastUpdate]
     }
 }

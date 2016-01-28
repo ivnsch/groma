@@ -17,7 +17,8 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     let unit: Int
     let fav: Int
     let brand: String
-    
+    let lastUpdate: NSDate
+
     init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
@@ -27,6 +28,7 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
         self.unit = representation.valueForKeyPath("unit") as! Int
         self.fav = representation.valueForKeyPath("fav") as! Int
         self.brand = representation.valueForKeyPath("brand") as! String
+        self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
     }
     
     static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteProduct] {
@@ -40,6 +42,12 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), price: \(price), categoryUuid: \(categoryUuid), baseQuantity: \(baseQuantity), unit: \(unit), fav: \(fav), brand: \(brand)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), price: \(price), categoryUuid: \(categoryUuid), baseQuantity: \(baseQuantity), unit: \(unit), fav: \(fav), brand: \(brand), listUpdate: \(lastUpdate)}"
+    }
+}
+
+extension RemoteProduct {
+    var timestampUpdateDict: [String: AnyObject] {
+        return ["uuid": uuid, "lastupdate": lastUpdate]
     }
 }

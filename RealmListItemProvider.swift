@@ -519,6 +519,8 @@ class RealmListItemProvider: RealmProvider {
         //        }
     }
     
+    // MARK: - Sync
+    
     func saveListsSyncResult(syncResult: RemoteListWithListItemsSyncResult, handler: Bool -> ()) {
         
         doInWriteTransaction({realm in
@@ -567,5 +569,44 @@ class RealmListItemProvider: RealmProvider {
             }, finishHandler: {success in
                 handler(success ?? false)
         })
+    }
+    
+    func updateLastSyncTimeStamp(listItems: RemoteListItems, handler: Bool -> Void) {
+        doInWriteTransaction({[weak self]realm in
+            for listItem in listItems.listItems {
+                realm.create(DBListItem.self, value: listItem.timestampUpdateDict, update: true)
+            }
+            for product in listItems.products {
+                realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
+            }
+            for productCategory in listItems.productsCategories {
+                realm.create(DBProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
+            }
+            for section in listItems.sections {
+                realm.create(DBSection.self, value: section.timestampUpdateDict, update: true)
+            }
+            self?.updateLastSyncTimeStampSync(realm, lists: listItems.lists)
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func updateLastSyncTimeStamp(lists: RemoteListsWithDependencies, handler: Bool -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            self?.updateLastSyncTimeStampSync(realm, lists: lists)
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    private func updateLastSyncTimeStampSync(realm: Realm, lists: RemoteListsWithDependencies) {
+        for list in lists.lists {
+            realm.create(DBList.self, value: list.timestampUpdateDict, update: true)
+        }
+        for inventory in lists.inventories {
+            realm.create(DBInventory.self, value: inventory.timestampUpdateDict, update: true)
+        }
     }
 }
