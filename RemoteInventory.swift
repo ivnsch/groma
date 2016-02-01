@@ -21,7 +21,7 @@ final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSeria
         self.uuid = inventory.valueForKeyPath("uuid") as! String
         self.name = inventory.valueForKeyPath("name") as! String
         self.order = inventory.valueForKeyPath("order") as! Int
-        let colorStr = representation.valueForKeyPath("color") as! String
+        let colorStr = inventory.valueForKeyPath("color") as! String // TODO !!!! crash here sometimes
         self.color = UIColor(hexString: colorStr) ?? {
             print("Error: RemoteList.init: Invalid color hex: \(colorStr)")
             return UIColor.blackColor()

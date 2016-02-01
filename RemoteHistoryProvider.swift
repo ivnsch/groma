@@ -17,43 +17,6 @@ class RemoteHistoryProvider {
         }
     }
     
-    func syncHistoryItems(historyItemsSync: HistoryItemsSync, handler: RemoteResult<RemoteSyncResult<RemoteHistoryItems>> -> ()) {
-        
-        let inventoriesSyncDicts: [[String: AnyObject]] = historyItemsSync.historyItems.map {historyItem in
-            
-            let sharedUserDict: [String: AnyObject] = self.toRequestParams(historyItem.user)
-            
-            // TODO refactor with product dict in other places, put all the parameters dictionaries outside the providers
-            let productDict = RemoteListItemProvider().toRequestParams(historyItem.product)
-            
-            var dict: [String: AnyObject] = [
-                "uuid": historyItem.uuid,
-                "inventoryUuid": historyItem.inventory.uuid,
-                "product": productDict,
-                "quantity": historyItem.quantity,
-                "addedDate": NSNumber(double: historyItem.addedDate.timeIntervalSince1970).longValue,
-                "user": sharedUserDict
-            ]
-            
-            if let lastServerUpdate = historyItem.lastServerUpdate {
-                dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
-            }
-            
-            return dict
-        }
-        
-        let toRemoveDicts = historyItemsSync.toRemove.map{self.toRequestParamsToRemove($0)}
-        
-        let dictionary: [String: AnyObject] = [
-            "historyItems": inventoriesSyncDicts,
-            "toRemove": toRemoveDicts
-        ]
-        
-        AlamofireHelper.authenticatedRequest(.POST, Urls.historyItemsSync, dictionary).responseMyObject { (request, _, result: RemoteResult<RemoteSyncResult<RemoteHistoryItems>>) in
-            handler(result)
-        }
-    }
-    
     func removeHistoryItem(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
         RemoteProvider.authenticatedRequest(.DELETE, Urls.historyItems + "/\(uuid)") {result in
             handler(result)

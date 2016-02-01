@@ -30,4 +30,37 @@ class DBList: DBSyncable {
     override static func primaryKey() -> String? {
         return "uuid"
     }
+    
+    static func fromDict(dict: [String: AnyObject], inventory: DBInventory) -> DBList {
+        let item = DBList()
+        let listDict = dict["list"] as! [String: AnyObject]
+        item.uuid = listDict["uuid"]! as! String
+        item.name = listDict["name"]! as! String
+        let colorStr = listDict["color"]! as! String
+        let color = UIColor(hexString: colorStr)
+        item.setBgColor(color)
+        item.order = listDict["order"]! as! Int
+        item.inventory = inventory
+        
+        let usersDict = dict["users"] as! [[String: AnyObject]]
+        let users = usersDict.map{DBSharedUser.fromDict($0)}
+        for user in users {
+            item.users.append(user)
+        }
+        
+        item.setSyncableFieldswithRemoteDict(listDict)
+        return item
+    }
+    
+    func toDict() -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["uuid"] = uuid
+        dict["name"] = name
+        dict["color"] = bgColor().hexStr
+        dict["order"] = order
+        dict["inventoy"] = inventory.toDict() // TODO correct field name in server (and in other places in client)
+        dict["users"] = users.map{$0.toDict()}
+        setSyncableFieldsInDict(dict)
+        return dict
+    }
 }

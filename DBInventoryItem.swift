@@ -39,4 +39,29 @@ class DBInventoryItem: DBSyncable {
     static func createFilter(productUuid: String, _ inventoryUuid: String) -> String {
         return "product.uuid = '\(productUuid)' AND inventory.uuid = '\(inventoryUuid)'"
     }
+    
+    static func fromDict(dict: [String: AnyObject], product: DBProduct, inventory: DBInventory) -> DBInventoryItem {
+        let item = DBInventoryItem()
+        item.quantity = dict["quantity"]! as! Int
+        
+        let a = product.uuid
+        let b = inventory.uuid
+        
+        // Note: we don't set quantity delta here because when we gets objs from server it means they are synced, which means there's no quantity delta.
+        item.product = product
+        item.inventory = inventory
+        item.setSyncableFieldswithRemoteDict(dict)
+        return item
+    }
+    
+    func toDict() -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["quantity"] = quantity
+        dict["quantityDelta"] = quantityDelta
+        dict["product"] = product.toDict()
+//        dict["inventory"] = inventory.toDict()
+        dict["inventoryUuid"] = inventory.uuid
+        setSyncableFieldsInDict(dict)
+        return dict
+    }
 }

@@ -17,8 +17,10 @@ struct Urls {
     static let sectionWithUnique = host + "sectionWithUnique"
     static let sections = host + "sections"
 
-
     static let removeAll = host + "debug_clearAll"
+
+    // Global
+    static let sync = host + "sync"
     
     // User
     static let register = host + "register"
@@ -67,4 +69,5 @@ struct Urls {
     static let group = host + "group"
     static let groupItems = host + "groupItems"
     static let groupItem = host + "groupItem"
+
 }

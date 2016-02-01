@@ -78,4 +78,43 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
     override var debugDescription: String {
         return "{\(self.dynamicType) uuid: \(uuid), \(product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)}"
     }
+    
+    static func fromDict(dict: [String: AnyObject], section: DBSection, product: DBProduct, list: DBList) -> DBListItem {
+        let item = DBListItem()
+        item.uuid = dict["uuid"]! as! String
+        item.section = section
+        item.product = product
+        item.list = list
+        item.note = dict["note"]! as! String
+        item.todoQuantity = dict["todoQuantity"]! as! Int
+        item.todoOrder = dict["todoOrder"]! as! Int
+        item.doneQuantity = dict["doneQuantity"]! as! Int
+        item.doneOrder = dict["doneOrder"]! as! Int
+        item.stashQuantity = dict["stashQuantity"]! as! Int
+        item.stashOrder = dict["stashOrder"]! as! Int
+        item.setSyncableFieldswithRemoteDict(dict)
+        return item
+    }
+    
+    func toDict() -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["uuid"] = uuid
+        dict["sectionInput"] = section.toDict()
+        dict["productInput"] = product.toDict()
+        
+        // TODO fix sync input models
+//        dict["list"] = list.toDict()
+        dict["listUuid"] = list.uuid
+        dict["listName"] = list.name
+        
+        dict["note"] = note
+        dict["todoQuantity"] = todoQuantity
+        dict["todoOrder"] = todoOrder
+        dict["doneQuantity"] = doneQuantity
+        dict["doneOrder"] = doneOrder
+        dict["stashQuantity"] = stashQuantity
+        dict["stashOrder"] = stashOrder
+        setSyncableFieldsInDict(dict)
+        return dict
+    }
 }

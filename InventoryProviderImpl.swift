@@ -60,52 +60,6 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    func syncInventories(handler: (ProviderResult<Any>) -> ()) {
-        
-        self.dbInventoryProvider.loadInventories {dbInventories in
-
-            // TODO send only items that are new or updated, currently sending everything
-            // new -> doesn't have lastServerUpdate, updated -> lastUpdate > lastServerUpdate
-            var inventories: [Inventory] = []
-            var toRemove: [Inventory] = []
-            for inventory in dbInventories {
-                if inventory.removed {
-                    toRemove.append(inventory)
-                } else {
-                    // Send only "dirty" items
-                    // Note assumption - lastUpdate can't be smaller than lastServerUpdate, so with != we mean >
-                    // when we receive sync result we reset lastUpdate of all items to lastServerUpdate, from there on lastUpdate can become only bigger
-                    // and when the items are not synced yet, lastServerUpdate is nil so != will also be true
-                    // Note also that the server can handle not-dirty items, we filter them just to reduce the payload
-                    if inventory.lastUpdate != inventory.lastServerUpdate {
-                        inventories.append(inventory)
-                    }
-                }
-            }
-            
-            self.remoteProvider.syncInventories(inventories, toRemove: toRemove) {remoteResult in
-                
-                if let syncResult = remoteResult.successResult {
-                    
-                    // for now overwrite all. In the future we should do a timestamp check here also for the case that user does an update while the sync service is being called
-                    // since we support background sync, this should not be neglected
-                    let serverInventory = syncResult.items.map{InventoryMapper.dbWithInventory($0)}
-                    self.dbInventoryProvider.overwrite(serverInventory) {success in
-                        if success {
-                            handler(ProviderResult(status: .Success))
-                        } else {
-                            handler(ProviderResult(status: .DatabaseSavingError))
-                        }
-                        return
-                    }
-                    
-                } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                }
-            }
-        }
-    }
-    
 //    func addInventoryWithItems(inventory: Inventory, items: [InventoryItem], _ handler: ProviderResult<Any> -> ()) {
 //        
 //        self.dbInventoryProvider.saveInventory(inventory) {saved in

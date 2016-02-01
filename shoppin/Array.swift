@@ -58,6 +58,33 @@ extension Array {
         return arr
     }
 
+    func split(belongs: Element -> Bool) -> (belongs: [Element], notBelongs: [Element]) {
+        var belongsArr: [Element] = []
+        var notBelongsArr: [Element] = []
+        for element in self {
+            if belongs(element) {
+                belongsArr.append(element)
+            } else {
+                notBelongsArr.append(element)
+            }
+        }
+        return (belongsArr, notBelongsArr)
+    }
+    
+    func splitMap<U>(belongs: Element -> Bool, mapper: Element -> U) -> (belongs: [U], notBelongs: [U]) {
+        var belongsArr: [U] = []
+        var notBelongsArr: [U] = []
+        for element in self {
+            if belongs(element) {
+                belongsArr.append(mapper(element))
+            } else {
+                notBelongsArr.append(mapper(element))
+            }
+        }
+        return (belongsArr, notBelongsArr)
+    }
+    
+    
     // More performant variant of array.enumerate().map{index, element}. We call it like this: array.mapEnumerate{index, Element in return Foo}
     func mapEnumerate<T>(f: (Int, Element) -> T) -> [T] {
         var arr: [T] = []

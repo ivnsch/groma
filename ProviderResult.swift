@@ -107,6 +107,7 @@ struct DefaultRemoteErrorHandler {
             return
         case _:
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+            print("Error: DefaultRemoteErrorHandler.handle: \(remoteResult)")
             handler(ProviderResult(status: providerStatus, error: remoteResult.error)) // TODO when remote fails somehow trigger a revert of local updates
         }
     }

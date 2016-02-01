@@ -86,7 +86,7 @@ class ListItemParser {
         let list = List(uuid: listUuid, name: listName, listItems: [], users: [], bgColor: listColor, order: listOrder, inventory: inventory)
         
 //        let order = json.valueForKeyPath("order") as! Int
-        let note = json.valueForKeyPath("note") as! String? // TODO is this correct way for optional here?
+        let note = json.valueForKeyPath("note") as! String
 //        let lastUpdate = NSDate(timeIntervalSince1970: json.valueForKeyPath("lastUpdate") as! Double)
         
         return ListItem(uuid: uuid, product: product, section: section, list: list, note: note, todoQuantity: todoQuantity, todoOrder: todoOrder, doneQuantity: doneQuantity, doneOrder: doneOrder, stashQuantity: stashQuantity, stashOrder: stashOrder

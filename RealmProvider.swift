@@ -250,6 +250,25 @@ class RealmProvider {
         }
     }
     
+    func withRealm<T>(f: Realm -> T?, resultHandler: T? -> Void) {
+        background({
+            do {
+                let realm = try Realm()
+                return f(realm)
+                
+            } catch let error as NSError {
+                print("Error: RealmProvider.withRealm: creating Realm() in doInWriteTransaction: \(error)")
+                return nil
+            } catch _ {
+                print("Error: RealmProvider.withRealm: creating Realm() in doInWriteTransaction (unknown)")
+                return nil
+            }
+            }) { (result: T?) in
+                resultHandler(result)
+        }
+    }
+    
+    
     // resetLastUpdateToServer = true should be always used when this method is called for sync
     func overwrite<T: DBSyncable>(newObjects: [T], resetLastUpdateToServer: Bool = true, handler: Bool -> ()) {
         

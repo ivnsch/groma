@@ -133,22 +133,6 @@ class RemoteListItemProvider {
             handler(result)
         }
     }
-    
-    // TODO!! implement new sync, note that now we also send the inventories (full object, see ListInput in sever)!
-    func syncListItems(list: List, listItems: [ListItem], toRemove: [ListItem], handler: RemoteResult<RemoteSyncResult<RemoteListItems>> -> ()) {
-        
-        let listItemsParams = listItems.map{self.toRequestParams($0)}
-        let toRemoveParams = toRemove.map{self.toRequestParamsToRemove($0)}
-        
-        let dictionary: [String: AnyObject] = [
-            "list": self.toRequestParamsShort(list),
-            "listItems": listItemsParams,
-            "toRemove": toRemoveParams
-        ]
-        RemoteProvider.authenticatedRequest(.POST, Urls.listItemsSync, dictionary) {result in
-            handler(result)
-        }
-    }
 
     func syncListsWithListItems(listsSync: ListsSync, handler: RemoteResult<RemoteListWithListItemsSyncResult> -> ()) {
         
@@ -206,12 +190,23 @@ class RemoteListItemProvider {
     //////////////////
     
     func toRequestPrams(list: List) -> [String: AnyObject] {
-        return [
+        
+        let inventoryDict = RemoteInventoryProvider().toRequestParams(list.inventory)
+
+        var dict: [String: AnyObject] = [
             "uuid": list.uuid,
             "name": list.name,
             "order": list.order,
-            "users": list.users.map{self.toRequestParams($0)}
+            "color": list.bgColor.hexStr,
+            "users": list.users.map{self.toRequestParams($0)},
+            "inventory": inventoryDict
         ]
+        
+        if let lastServerUpdate = list.lastServerUpdate {
+            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        }
+        
+        return dict
     }
     
     func toRequestParams(sharedUser: SharedUser) -> [String: AnyObject] {
@@ -236,6 +231,7 @@ class RemoteListItemProvider {
     func toRequestParams(listItem: ListItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = [
             "uuid": listItem.uuid,
+            "note": listItem.note ?? "",
             "todoQuantity": listItem.todoQuantity,
             "todoOrder": listItem.todoOrder,
             "doneQuantity": listItem.doneQuantity,

@@ -514,64 +514,6 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func syncListItems(list: List, handler: (ProviderResult<Any>) -> ()) {
-        
-        memProvider.invalidate()
-        
-        self.dbProvider.loadListItems(list) {dbListItems in
-        
-            let (toAddOrUpdate, toRemove) = SyncUtils.toSyncListItems(dbListItems)
-            
-            self.remoteProvider.syncListItems(list, listItems: toAddOrUpdate, toRemove: toRemove) {remoteResult in
-                
-                // save first the products, then the sections, then the listitems
-                // note that sync will overwrite the listitems but it will not remove products or sections
-                // products particularly is a bit complex since they are referenced also by inventory items, so they should be removed only when they are not referenced from anywhere
-                // a possible approach to solve this could be regular cleanup operations, this can be serverside or in the client, or both
-                // serverside we would do the cleanups (cronjob?), and make client's sync such that *everything* is synced and overwritten, paying attention not to recreate products etc. which were removed in the server by the cronjob. TODO think about this. For now letting some garbage in the client's db is not critical, our app doesn't handle a lot of data generally
-                // in the server this is more important, since a little garbage from each client sums up. But for now also ignored.
-                
-                if let syncResult = remoteResult.successResult, items = syncResult.items.first {
-                    // Note: next line: flatMap filters out possible optionals (in normal case no optionals are expected)
-                    let products: [Product] = items.products.flatMap{ProductMapper.productWithRemote($0, categoriesDict: items.productsCategoriesDict)}
-                    self.dbProvider.saveProducts(products) {productSaved in
-                        if productSaved {
-                            
-                            self.dbProvider.saveSections(items.sections.map{SectionMapper.SectionWithRemote($0)}) {sectionsSaved in
-                                if sectionsSaved {
-                                    
-                                    // for now overwrite all. In the future we should do a timestamp check here also for the case that user does an update while the sync service is being called
-                                    // since we support background sync, this should not be neglected
-                                    
-                                    let listItemsWithRelations = ListItemMapper.listItemsWithRemote(items)
-                                    let serverListItems = listItemsWithRelations.listItems.map{ListItemMapper.dbWithListItem($0)}
-                                    self.dbProvider.overwrite(serverListItems) {success in
-                                        if success {
-                                            handler(ProviderResult(status: .Success))
-                                        } else {
-                                            handler(ProviderResult(status: .DatabaseSavingError))
-                                        }
-                                        return
-                                    }
-                                    
-                                } else {
-                                    print("Error: database: couldn't save section")
-                                    handler(ProviderResult(status: .DatabaseSavingError))
-                                }
-                            }
-                        } else {
-                            print("Error: database: couldn't save section")
-                            handler(ProviderResult(status: .DatabaseSavingError))
-                        }
-                    }
-                    
-                } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                }
-            }
-        }
-    }
-    
     func invalidateMemCache() {
         memProvider.invalidate()
     }

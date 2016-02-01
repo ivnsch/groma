@@ -40,7 +40,16 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
     var fav: Int
     let brand: String
     
-    init(uuid: String, name: String, price: Float, category: ProductCategory, baseQuantity: Float, unit: ProductUnit, fav: Int = 0, brand: String = "") {
+    //////////////////////////////////////////////
+    // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
+    // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
+    // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
+    let lastUpdate: NSDate
+    let lastServerUpdate: NSDate?
+    let removed: Bool
+    //////////////////////////////////////////////
+    
+    init(uuid: String, name: String, price: Float, category: ProductCategory, baseQuantity: Float, unit: ProductUnit, fav: Int = 0, brand: String = "", lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.name = name
         self.price = price
@@ -49,17 +58,21 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
         self.unit = unit
         self.fav = fav
         self.brand = brand
+        
+        self.lastUpdate = lastUpdate
+        self.lastServerUpdate = lastServerUpdate
+        self.removed = removed
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), price: \(price), category: \(category), baseQuantity: \(baseQuantity), unit: \(unit), fav: \(fav), brand: \(brand)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), price: \(price), category: \(category), baseQuantity: \(baseQuantity), unit: \(unit), fav: \(fav), brand: \(brand), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
     }
 
     var hashValue: Int {
         return self.uuid.hashValue
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: ProductCategory? = nil, baseQuantity: Float? = nil, unit: ProductUnit? = nil, fav: Int? = nil, brand: String? = nil) -> Product {
+    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: ProductCategory? = nil, baseQuantity: Float? = nil, unit: ProductUnit? = nil, fav: Int? = nil, brand: String? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> Product {
         return Product(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -68,7 +81,10 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
             baseQuantity: baseQuantity ?? self.baseQuantity,
             unit: unit ?? self.unit,
             fav: fav ?? self.fav,
-            brand: brand ?? self.brand
+            brand: brand ?? self.brand,
+            lastUpdate: lastUpdate ?? self.lastUpdate,
+            lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
+            removed: removed ?? self.removed
         )
     }
     

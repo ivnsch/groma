@@ -19,4 +19,25 @@ class DBGroupItem: DBSyncable {
     override static func primaryKey() -> String? {
         return "uuid"
     }
+    
+    static func fromDict(dict: [String: AnyObject], product: DBProduct, group: DBListItemGroup) -> DBGroupItem {
+        let item = DBGroupItem()
+        item.uuid = dict["uuid"]! as! String
+        item.quantity = dict["uuid"]! as! Int
+        item.product = product
+        item.group = group
+        item.product = product
+        item.setSyncableFieldswithRemoteDict(dict)
+        return item
+    }
+    
+    func toDict() -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["uuid"] = uuid
+        dict["quantity"] = quantity
+        dict["product"] = product.toDict()
+        dict["group"] = group.toDict()
+        setSyncableFieldsInDict(dict)
+        return dict
+    }
 }

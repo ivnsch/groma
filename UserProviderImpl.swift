@@ -54,35 +54,8 @@ class UserProviderImpl: UserProvider {
     }
     
     func sync(handler: ProviderResult<Any> -> Void) {
-
-        Providers.listProvider.syncListsWithListItems {result in
-            if result.success {
-                
-                Providers.inventoryProvider.syncInventoriesWithInventoryItems {result in
-                    if result.success {
-                        
-                        Providers.historyProvider.syncHistoryItems {result in
-                            if result.success {
-                                Providers.listItemsProvider.invalidateMemCache()
-                                Providers.inventoryItemsProvider.invalidateMemCache()
-                                handler(ProviderResult(status: result.status))
-                                
-                            } else {
-                                print("Error: could not sync history (login/register): \(result.status)")
-                                handler(ProviderResult(status: result.status))
-                            }
-                        }
-                        
-                    } else {
-                        print("Error: could not sync inventories (login/register): \(result.status)")
-                        handler(ProviderResult(status: result.status))
-                    }
-                }
-                
-            } else {
-                print("Error: could not sync lists (login/register): \(result.status)")
-                handler(ProviderResult(status: result.status))
-            }
+        Providers.globalProvider.sync {result in
+            handler(result)
         }
     }
 

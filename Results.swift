@@ -56,6 +56,20 @@ extension Results {
         return nil
     }
     
+    func splitMap<U>(belongs: T -> Bool, mapper: T -> U) -> (belongs: [U], notBelongs: [U]) {
+        var belongsArr: [U] = []
+        var notBelongsArr: [U] = []
+        for element in self {
+            if belongs(element) {
+                belongsArr.append(mapper(element))
+            } else {
+                notBelongsArr.append(mapper(element))
+            }
+        }
+        return (belongsArr, notBelongsArr)
+    }
+    
+    
 }
 
 extension RealmSwift.List {

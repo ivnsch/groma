@@ -111,7 +111,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                     self.progressVisible()
                     self.userProvider.register(user, successHandler{[weak self] result in
                         self?.onRegisterSuccess()
-                        })
+                    })
                     
                 } else {
                     print("Error: validation was not implemented correctly")

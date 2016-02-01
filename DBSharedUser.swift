@@ -18,4 +18,18 @@ class DBSharedUser: Object {
     override static func primaryKey() -> String? {
         return "email"
     }
+    
+    static func fromDict(dict: [String: AnyObject]) -> DBSharedUser {
+        let user = DBSharedUser()
+        user.email = dict["email"] as! String
+        return user
+    }
+    
+    func toDict() -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["email"] = email
+        dict["foo"] = "" // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
+//        setSyncableFieldsInDict(dict) // no syncable obj itself, just a part of other objects
+        return dict
+    }
 }

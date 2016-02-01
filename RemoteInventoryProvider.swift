@@ -16,21 +16,6 @@ class RemoteInventoryProvider: RemoteProvider {
         }
     }
     
-    func syncInventories(inventories: [Inventory], toRemove: [Inventory], handler: RemoteResult<RemoteSyncResult<RemoteInventory>> -> ()) {
-        
-        let inventoriesParams = inventories.map{self.toRequestParams($0)}
-        let toRemoveParams = toRemove.map{self.toRequestParamsToRemove($0)}
-        
-        let dictionary: [String: AnyObject] = [
-            "inventories": inventoriesParams,
-            "toRemove": toRemoveParams
-        ]
-        
-        RemoteProvider.authenticatedRequest(.POST, Urls.inventorySync, dictionary) {result in
-            handler(result)
-        }
-    }
-    
     func addInventory(inventory: Inventory, handler: RemoteResult<NoOpSerializable> -> ()) {
         let params = self.toRequestParams(inventory)
         RemoteProvider.authenticatedRequest(.POST, Urls.inventory, params) {result in

@@ -29,4 +29,35 @@ class DBInventory: DBSyncable {
     override static func primaryKey() -> String? {
         return "uuid"
     }
+    
+    static func fromDict(dict: [String: AnyObject]) -> DBInventory {
+        let item = DBInventory()
+        let inventoryDict = dict["inventory"] as! [String: AnyObject]
+        item.uuid = inventoryDict["uuid"]! as! String
+        item.name = inventoryDict["name"]! as! String
+        let colorStr = inventoryDict["color"]! as! String
+        let color = UIColor(hexString: colorStr)
+        item.setBgColor(color)
+        item.order = inventoryDict["order"]! as! Int
+        
+        let usersDict = dict["users"] as! [[String: AnyObject]]
+        let users = usersDict.map{DBSharedUser.fromDict($0)}
+        for user in users {
+            item.users.append(user)
+        }
+        
+        item.setSyncableFieldswithRemoteDict(inventoryDict)
+        return item
+    }
+    
+    func toDict() -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["uuid"] = uuid
+        dict["name"] = name
+        dict["color"] = bgColor().hexStr
+        dict["order"] = order
+        dict["users"] = users.map{$0.toDict()}
+        setSyncableFieldsInDict(dict)
+        return dict
+    }
 }

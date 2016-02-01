@@ -20,8 +20,6 @@ protocol HistoryProvider {
     func historyItems(monthYear: MonthYear, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> Void)
     
     func historyItemsGroups(range: NSRange, inventory: Inventory, _ handler: ProviderResult<[HistoryItemGroup]> -> ())
-
-    func syncHistoryItems(handler: (ProviderResult<[Any]> -> ()))
     
     func removeHistoryItem(historyItem: HistoryItem, _ handler: ProviderResult<Any> -> ())
 

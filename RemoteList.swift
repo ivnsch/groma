@@ -27,7 +27,7 @@ final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializab
         self.users = RemoteSharedUser.collection(response: response, representation: unserializedUsers)
         self.lastUpdate = NSDate(timeIntervalSince1970: list.valueForKeyPath("lastUpdate") as! Double)
         self.inventoryUuid = list.valueForKeyPath("inventoryUuid") as! String
-        let colorStr = representation.valueForKeyPath("color") as! String
+        let colorStr = list.valueForKeyPath("color") as! String
         self.color = UIColor(hexString: colorStr) ?? {
             print("Error: RemoteList.init: Invalid color hex: \(colorStr)")
             return UIColor.blackColor()

@@ -45,8 +45,6 @@ protocol ListItemProvider {
     TODO cleaner implementation, maybe split in smaller methods. The method should not lead to inconsistent result when used in wrong context (see explanation above)
     */
     func switchStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> ())
-
-    func syncListItems(list: List, handler: (ProviderResult<Any>) -> ())
     
     func invalidateMemCache()
     

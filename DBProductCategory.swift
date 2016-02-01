@@ -29,4 +29,24 @@ class DBProductCategory: DBSyncable {
     func setColor(color: UIColor) {
         colorData = NSKeyedArchiver.archivedDataWithRootObject(color)
     }
+    
+    static func fromDict(dict: [String: AnyObject]) -> DBProductCategory {
+        let item = DBProductCategory()
+        item.uuid = dict["uuid"]! as! String
+        item.name = dict["name"]! as! String
+        let colorStr = dict["color"]! as! String
+        let color = UIColor(hexString: colorStr)
+        item.setColor(color)
+        item.setSyncableFieldswithRemoteDict(dict)
+        return item
+    }
+    
+    func toDict() -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["uuid"] = uuid
+        dict["name"] = name
+        dict["color"] = color().hexStr
+        setSyncableFieldsInDict(dict)
+        return dict
+    }
 }

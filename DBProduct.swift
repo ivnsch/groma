@@ -27,4 +27,32 @@ class DBProduct: DBSyncable {
     override class func indexedProperties() -> [String] {
         return ["name"]
     }
+    
+    static func fromDict(dict: [String: AnyObject], category: DBProductCategory) -> DBProduct {
+        let item = DBProduct()
+        item.uuid = dict["uuid"]! as! String
+        item.name = dict["name"]! as! String
+        item.price = dict["price"]! as! Float
+        item.category = category
+        item.baseQuantity = dict["baseQuantity"]! as! Float
+        item.unit = dict["unit"]! as! Int
+        item.fav = dict["fav"]! as! Int
+        item.brand = dict["brand"]! as! String
+        item.setSyncableFieldswithRemoteDict(dict)        
+        return item
+    }
+    
+    func toDict() -> [String: AnyObject] {
+        var dict = [String: AnyObject]()
+        dict["uuid"] = uuid
+        dict["name"] = name
+        dict["price"] = price
+        dict["category"] = category.toDict()
+        dict["baseQuantity"] = baseQuantity
+        dict["unit"] = unit
+        dict["fav"] = fav
+        dict["brand"] = brand
+        setSyncableFieldsInDict(dict)
+        return dict
+    }
 }
