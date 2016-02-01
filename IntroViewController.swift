@@ -22,9 +22,10 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     private let pageModels: [(key: String, imageName: String)] = [
         ("Manage your shopping lists comfortably", "intro_groceries"),
-        ("Manage your inventory, get reminders to buy low stock items", "intro_inventory"),
-        ("Analyse your shopping behaviour and get tips to save money", "intro_stats"),
-        ("Share with others in real time", "intro_share")
+        ("Manage your inventory, find easily your low stock items", "intro_inventory"),
+        ("Analyse your shopping behaviour and expenses", "intro_stats"),
+        ("Share lists and inventories with other users in real time", "intro_share"),
+        ("Browse the shopping history of your household", "")
     ]
     
     override func viewDidLoad() {
