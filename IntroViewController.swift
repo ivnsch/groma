@@ -18,14 +18,14 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var registerButton: UIButton!
     
-    private let pageCount = 4 // later replace with array of images
+    private let pageCount = 5 // later replace with array of images
     
     private let pageModels: [(key: String, imageName: String)] = [
-        ("Manage your shopping lists comfortably", "intro_groceries"),
-        ("Manage your inventory, find easily your low stock items", "intro_inventory"),
-        ("Analyse your shopping behaviour and expenses", "intro_stats"),
-        ("Share lists and inventories with other users in real time", "intro_share"),
-        ("Browse the shopping history of your household", "")
+        ("Manage shopping lists comfortably", "empty_shelf"),
+        ("Connect lists with inventories to keep track of your items", "empty_shelf"),
+        ("Share with other users in real time", "empty_shelf"),
+        ("Analyse your shopping behaviour and expenses", "empty_shelf"),
+        ("Browse your shopping history", "empty_shelf")
     ]
     
     override func viewDidLoad() {

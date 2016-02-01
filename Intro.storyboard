@@ -54,9 +54,9 @@
                                     <action selector="registerTapped:" destination="k9Y-sO-uBl" eventType="touchUpInside" id="MEU-x5-Uhc"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6ZS-ry-WaI" customClass="SwipeView">
+                            <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="6ZS-ry-WaI" customClass="SwipeView">
                                 <rect key="frame" x="45" y="90" width="510" height="327"/>
-                                <color key="backgroundColor" red="0.84914397509999995" green="1" blue="0.91019363200000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="327" id="LQ2-9g-9jp"/>
                                 </constraints>

@@ -16,5 +16,7 @@ class IntroPageView: UIView {
         super.awakeFromNib()
         
         label.font = Fonts.smallLight
+        
+        imageView.contentMode = .Center
     }
 }
