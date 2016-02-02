@@ -187,9 +187,9 @@ class RealmProvider {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             do {
                 let realm = try Realm()
-                let results: Results<T> = realm.objects(T)
+                var results: Results<T> = realm.objects(T)
                 if let pred = pred {
-                    results.filter(pred)
+                    results = results.filter(pred)
                 }
                 realm.write {
                     realm.delete(results)

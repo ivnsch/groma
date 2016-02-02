@@ -205,7 +205,7 @@ class RealmListItemGroupProvider: RealmProvider {
             
             
         } else {
-            print("Inventory item not found: \(item)")
+            print("Info: RealmListItemGroupProvider.incrementGroupItem: Group item not found: \(item)")
             handler(false)
         }
         //        }

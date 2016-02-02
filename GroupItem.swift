@@ -38,8 +38,17 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
         return self.uuid == gropItem.uuid
     }
     
-    var debugDescription: String {
+    var shortDebugDescription: String {
+        return "{\(self.dynamicType) product: \(self.product.name), quantity: \(self.quantity)}"
+    }
+    
+    var completeDebugDescription: String {
         return "{\(self.dynamicType) uuid: \(self.uuid), quantity: \(self.quantity), product: \(self.product), group: \(self.group), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
+    }
+    
+    var debugDescription: String {
+        return shortDebugDescription
+//        return completeDebugDescription
     }
     
     func copy(uuid uuid: String? = nil, quantity: Int? = nil, product: Product? = nil, order: Int? = nil) -> GroupItem {

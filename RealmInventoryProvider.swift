@@ -147,7 +147,7 @@ class RealmInventoryProvider: RealmProvider {
                 
                 
             } else {
-                print("Inventory item not found: \(item)")
+                print("Info: RealmInventoryProvider.incrementInventoryItem: Inventory item not found: \(item)")
                 handler(false)
             }
 //        }
