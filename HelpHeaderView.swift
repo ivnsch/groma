@@ -24,7 +24,7 @@ class HelpHeaderView: UIView {
         didSet {
             if let sectionModel = sectionModel {
                 if let boldRange = sectionModel.boldRange {
-                    helpTitleLabel.attributedText = sectionModel.obj.title.makeAttributed(boldRange, normalFont: Fonts.regularLight, font: Fonts.regularBold)
+                    helpTitleLabel.attributedText = sectionModel.obj.title.makeAttributed(boldRange, normalFont: Fonts.smallerLight, font: Fonts.smallerBold)
                 } else {
                     helpTitleLabel.text = sectionModel.obj.title
                 }
