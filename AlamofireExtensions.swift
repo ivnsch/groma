@@ -386,7 +386,16 @@ extension Alamofire.Request {
                 
             } else { // So far this happened when the server was not reachable. This will be executed but the error is handled in the completionHandler block (Alamofire passes us a .Failure in this case). We return here .ResponseIsNil only as result of the serialization.
                 print("Error: response == nil")
-                return Result.Success(RemoteResult<T>(status: .ResponseIsNil))
+                if let error = error {
+                    print("Error calling remote service, error: \(error)")
+                    if error.code == -1004 {  // iOS returns -1004 both when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
+                            return Result.Success(RemoteResult<T>(status: .ServerNotReachable))
+                    } else {
+                        return Result.Success(RemoteResult<T>(status: .UnknownServerCommunicationError))
+                    }
+                } else {
+                    return Result.Success(RemoteResult<T>(status: .ResponseIsNil))
+                }
             }
         }
 
@@ -397,9 +406,9 @@ extension Alamofire.Request {
             let remoteResult: RemoteResult<T> = {
                 switch response.result {
                     
+                // TODO check if this error handling is still really necessary, after the alamo fire update, we had to put it in the parsing (above) so probably this is now never used.
                 case .Success(let remoteResult):
                     return remoteResult
-                    
                 case .Failure(let error):
                     print("Error calling remote service, error: \(error)")
                     if error.code == -1004 {  // iOS returns -1004 both when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
