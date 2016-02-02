@@ -429,71 +429,19 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     private var overlay: UIView?
     
     @IBAction func onScaleTap(button: UIButton) {
-
-        if let windowView = UIApplication.sharedApplication().keyWindow { // add popup and overlay on top of everything
-            
-            let scaleController = UIStoryboard.scaleViewController()
-            
-            let overlay = UIButton(frame: CGRectMake(0, 0, 400, 700))
-            overlay.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.3)
-            self.overlay = overlay
-            overlay.addTarget(self, action: "onOverlayTap:", forControlEvents: .TouchUpInside)
-            
-            let w: CGFloat = 280
-            let h: CGFloat = 300
-            let top: CGFloat = 200
-            scaleController.view.frame = CGRectMake((view.frame.width - w) / 2, top, w, h)
-            
-            overlay.alpha = 0
-            windowView.addSubview(overlay)
-            windowView.addSubview(scaleController.view)
-            
-            scaleController.delegate = self
-            showingScaleController = scaleController
-
-            let prefillScaleInputs = ProductScaleData(
-                price: priceInput.text?.floatValue ?? 0, // current price input
-                baseQuantity: scaleInputs?.baseQuantity ?? 1, // if no scale input has been done yet - default quantity is 1
-                unit: scaleInputs?.unit ?? .None // if no scale input has been done yet - default unit is 1
-            )
-            scaleController.prefill(prefillScaleInputs)
-            
-            // set anchor point such that popup start at button's center
-            let buttonCenterInPopup = scaleController.view.convertPoint(CGPointMake(scaleButton.center.x, scaleButton.center.y), fromView: view)
-            let fractionX = buttonCenterInPopup.x / w
-            let fractionY = buttonCenterInPopup.y / h
-            scaleController.view.layer.anchorPoint = CGPointMake(fractionX, fractionY)
-            
-            scaleController.view.frame = CGRectMake((view.frame.width - w) / 2, top, w, h)
-            scaleController.view.transform = CGAffineTransformMakeScale(0, 0)
-            
-            UIView.animateWithDuration(0.3) {
-                scaleController.view.transform = CGAffineTransformMakeScale(1, 1)
-                overlay.alpha = 1
+        let scaleController = UIStoryboard.scaleViewController()
+        showPopup(scaleButton, controller: scaleController, topOffset: 10, width: 300, height: 300) {[weak self] in
+            if let weakSelf = self {
+                scaleController.delegate = self
+                weakSelf.showingScaleController = scaleController
+                
+                let prefillScaleInputs = ProductScaleData(
+                    price: weakSelf.priceInput.text?.floatValue ?? 0, // current price input
+                    baseQuantity: weakSelf.scaleInputs?.baseQuantity ?? 1, // if no scale input has been done yet - default quantity is 1
+                    unit: weakSelf.scaleInputs?.unit ?? .None // if no scale input has been done yet - default unit is 1
+                )
+                scaleController.prefill(prefillScaleInputs)
             }
-            
-        } else {
-            print("Warn: AddEditListItemViewController.onScaleTap: unexpected: no window")
-        }
-    }
-    
-    func onOverlayTap(sender: UIButton) {
-        dismissScaleControllerIfShowing()
-    }
-    
-    private func dismissScaleControllerIfShowing() {
-        if let showingScaleController = showingScaleController {
-            UIView.animateWithDuration(0.3, animations: {[weak self] in
-                showingScaleController.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
-                self?.overlay?.alpha = 0
-                }, completion: {finished in
-                    self.showingScaleController = nil
-                    self.showingScaleController?.view.removeFromSuperview()
-                    
-                    self.overlay?.removeFromSuperview()
-                    self.overlay = nil
-                }
-            )
         }
     }
     
@@ -504,8 +452,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     func onScaleViewControllerSubmit(scaleInputs: ProductScaleData) {
-        
-        dismissScaleControllerIfShowing()
+
+        showingScaleController?.dismiss()
 
         self.scaleInputs = scaleInputs
 
@@ -539,6 +487,21 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             delay(2) {[weak self] in
                 self?.priceLabel.text = priceText
                 self?.quantityLabel.text = quantityText
+            }
+        }
+    }
+    
+    func onDismissScaleViewController(cancelled: Bool) {
+        if let showingScaleController = showingScaleController {
+            dismissPopup(showingScaleController) {[weak self] in
+                if !cancelled {
+                    UIView.animateWithDuration(0.15) {
+                        self?.scaleButton.transform = CGAffineTransformMakeScale(2, 2)
+                        UIView.animateWithDuration(0.15) {
+                            self?.scaleButton.transform = CGAffineTransformMakeScale(1, 1)
+                        }
+                    }
+                }
             }
         }
     }

@@ -26,6 +26,7 @@ struct ProductScaleData {
 protocol ScaleViewControllerDelegate {
     func onScaleViewControllerValidationErrors(errors: [UITextField: ValidationError])
     func onScaleViewControllerSubmit(inputs: ProductScaleData)
+    func onDismissScaleViewController(cancelled: Bool)    
 }
 
 
@@ -41,6 +42,11 @@ class ScaleViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     
     private static let defaultUnit: ScaleUnitWithText = (.None, "None")
     
+    var overlay: UIView!
+    var animatedBG = false
+
+    var onUIReady: VoidFunction?
+
     private let scaleUnits: [ScaleUnitWithText] = [
         defaultUnit,
         (.Gram, "Gram"),
@@ -78,8 +84,58 @@ class ScaleViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let overlay = UIView()
+        overlay.backgroundColor = UIColor.blackColor()
+        overlay.alpha = 0
+        
+        self.overlay = overlay
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: "onTapBG:")
+        overlay.addGestureRecognizer(tapRecognizer)
+        
         initValidator()
         selectedScaleUnit = ScaleViewController.defaultUnit
+        onUIReady?()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if !animatedBG { // ensure fade-in animation is not shown again if e.g. user comes back from receiving a call
+            animatedBG = true
+            
+            
+            view.superview?.insertSubview(overlay, belowSubview: view)
+            overlay.translatesAutoresizingMaskIntoConstraints = false
+            overlay.fillSuperview()
+            animateOverlayAlpha(true)
+        }
+    }
+    
+    private func animateOverlayAlpha(show: Bool, onComplete: VoidFunction? = nil) {
+        UIView.animateWithDuration(0.3) {[weak self] in
+            self?.overlay?.alpha = show ? 0.3 : 0
+            onComplete?()
+        }
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        overlay.removeFromSuperview()
+    }
+    
+    func dismiss() {
+        animateOverlayAlpha(false) {[weak self] in
+            self?.overlay.removeFromSuperview()
+        }
+        delegate?.onDismissScaleViewController(false)
+        // see TODO below
+    }
+    
+    // TODO popup should contain logic to animate back... not the parent controller
+    func onTapBG(recognizer: UITapGestureRecognizer) {
+        delegate?.onDismissScaleViewController(true)
     }
     
     private func createPicker() -> UIPickerView {
