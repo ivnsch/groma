@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>HockeySDK-HockeySDKResources.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>KLCPopup.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -137,22 +142,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>02EA92F44AAEAE015ED9BEC64CEBB8A4</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>054976843AF8614B353A04C448805B60</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0C89C6D6854D822B696DA7EAC0DD9716</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>1258ED6969E559A9AE0DD7762B16CDC6</key>
+		<key>128CADED8A937EC614DA13E3EFE172A0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -162,12 +157,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3139E7FD668C4D3B4FEF4B67B43CA04B</key>
+		<key>204B922492E358BC4A2E41476EB7DE24</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>3AECCC066251457FA5B508D599900008</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3C014F737BF0E4D82F49D1E8DBB98C79</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3C3E32BAD1A722DF9D89CC2AFF0ABFE8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4C60BB6B65E444F21E59B4375CEEFEB4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -188,6 +198,16 @@
 			<true/>
 		</dict>
 		<key>7D82B791DF5C3545069FDFF7C79D38DD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7E04C1D334B518767C078689235D2459</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>82E43D31D45A66851C983BE34CD5421E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -217,17 +237,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AAEB40C2E046A32C57050D85F6FD3218</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>AE418539A3230C78AC380A101515F66F</key>
+		<key>AE0820049F58CD7E609AEAC09B1ED59F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>AE4F696CC357FA27AC16FF75A72C8C40</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C54AFF0661B91141C98100E5179D8D59</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -242,22 +262,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E4EBEFB7ABC114A335426DB2698952D3</key>
+		<key>E7FA222E8CC3DAD0FD272EA70F298B4F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E71037C2A21B2BFD87E46AB45774396D</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>EE997344CB191727728EF05AD6A940C0</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>EF266E236136E6489AB0E844295FC6DF</key>
+		<key>F42CC3CC560474BE9A96E7A0552C58F9</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -11,6 +11,7 @@ import CoreData
 import FBSDKCoreKit
 import Reachability
 import ChameleonFramework
+import HockeySDK
 
 @objc
 @UIApplicationMain
@@ -43,7 +44,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         initGlobalAppearance()
         
         // Facebook sign-in
-        return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        let initFb = FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        initHockey()
+        
+        return initFb
+    }
+    
+    private func initHockey() {
+        BITHockeyManager.sharedHockeyManager().configureWithIdentifier("589348069297465892087104a6337407")
+        // Do some additional configuration if needed here
+        BITHockeyManager.sharedHockeyManager().startManager()
+        BITHockeyManager.sharedHockeyManager().authenticator.authenticateInstallation()
     }
     
     private func showController(controller: UIViewController) {

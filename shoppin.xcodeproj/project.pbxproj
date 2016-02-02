@@ -2708,6 +2708,7 @@
 				EB1DDEA31A3334EC00D778DE /* Resources */,
 				272492BC443343C8B2A40466 /* Copy Pods Resources */,
 				5AB8A0B5103E644D2D3F1FB3 /* Embed Pods Frameworks */,
+				EB6E3D541C60129600D65DD5 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -3038,6 +3039,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-shoppin_osx/Pods-shoppin_osx-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		EB6E3D541C60129600D65DD5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "FILE=\"${SRCROOT}/HockeySDK-iOS/BuildAgent\"\nif [ -f \"$FILE\" ]; then\n\"$FILE\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 

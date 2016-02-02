@@ -24,6 +24,7 @@ target 'shoppin' do
     pod 'KLCPopup', '~> 1.0'
     pod 'ChameleonFramework/Swift'
     pod 'Starscream'
+    pod 'HockeySDK', '~> 3.8.5'
     shared
 end
 
