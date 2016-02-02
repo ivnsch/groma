@@ -12,8 +12,8 @@ class BrandProviderImpl: BrandProvider {
     
     private let dbProvider = RealmBrandProvider()
     
-    func brands(handler: ProviderResult<[String]> -> ()) {
-        dbProvider.brands {brands in
+    func brandsContainingText(text: String, _ handler: ProviderResult<[String]> -> ()) {
+        dbProvider.brandsContainingText(text) {brands in
             handler(ProviderResult(status: .Success, sucessResult: brands))
         }
     }

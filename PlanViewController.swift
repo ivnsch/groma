@@ -499,9 +499,8 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func sectionNameAutocompletions(text: String, handler: [String] -> ()) {
-        Providers.sectionProvider.sectionSuggestions(successHandler{suggestions in
-            let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
-            handler(names)
+        Providers.sectionProvider.sectionSuggestionsContainingText(text, successHandler{suggestions in
+            handler(suggestions)
         })
     }
 

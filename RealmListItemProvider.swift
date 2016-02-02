@@ -218,9 +218,22 @@ class RealmListItemProvider: RealmProvider {
         self.load(mapper, handler: handler)
     }
 
-    func loadSectionSuggestions(handler: [Suggestion] -> ()) {
-        let mapper = {SectionSuggestionMapper.suggestionWithDB($0)}
-        self.load(mapper, handler: handler)
+    // Gets suggestions both from section and category names
+    func sectionSuggestionsContainingText(text: String, handler: [String] -> Void) {
+        withRealm({ realm in
+            let sectionNames: [String] = realm.objects(DBSection).filter("name CONTAINS[c] '\(text)'").map{$0.name}
+            let categoryNames: [String] = realm.objects(DBProductCategory).filter("name CONTAINS[c] '\(text)'").map{$0.name}
+            let allNames: [String] = (sectionNames + categoryNames).distinct()
+            return allNames
+            
+            }) { (allNamesMaybe: [String]?) -> Void in
+                if let allNames = allNamesMaybe {
+                    handler(allNames)
+                } else {
+                    print("Error: RealmListItemProvider.loadSectionSuggestions: Couldn't load section suggestions")
+                    handler([])
+                }
+        }
     }
     
     // MARK: - List

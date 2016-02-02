@@ -66,8 +66,8 @@ class SectionProviderImpl: SectionProvider {
         }
     }
     
-    func sectionSuggestions(handler: ProviderResult<[Suggestion]> -> ()) {
-        dbProvider.loadSectionSuggestions {dbSuggestions in
+    func sectionSuggestionsContainingText(text: String, _ handler: ProviderResult<[String]> -> ()) {
+        dbProvider.sectionSuggestionsContainingText(text) {dbSuggestions in
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSuggestions))
         }
     }

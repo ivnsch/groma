@@ -19,8 +19,8 @@ protocol SectionProvider {
 
     func remove(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
-    // TODO! return sections only for searched text, more efficient than fetching everything and let autocomplete library filter
-    func sectionSuggestions(handler: ProviderResult<[Suggestion]> -> ())
+    // Gets suggestions both from section and category names
+    func sectionSuggestionsContainingText(text: String, _ handler: ProviderResult<[String]> -> ())
     
     func sections(names: [String], handler: ProviderResult<[Section]> -> ())
     

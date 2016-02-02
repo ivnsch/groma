@@ -10,7 +10,7 @@ import Foundation
 
 protocol BrandProvider {
 
-    func brands(handler: ProviderResult<[String]> -> ())
+    func brandsContainingText(text: String, _ handler: ProviderResult<[String]> -> ())
     
     func brands(range: NSRange, _ handler: ProviderResult<[String]> -> Void)
     

@@ -188,6 +188,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         
         initValidator()
         
+        initAutocompletionTextFields()
+        
         setInputsDefaultValues()
         
         updatePlanLeftQuantity(0) // no quantity yet -> 0
@@ -202,6 +204,12 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         quantityInput.text = String(item.quantity)
         priceInput.text = item.product.price.toString(2)
         noteInput = item.note
+    }
+    
+    private func initAutocompletionTextFields() {
+        for textField in [brandInput, sectionInput] {
+            textField.defaultAutocompleteStyle()
+        }
     }
 
     private func prefill(planItem: PlanItem) {
@@ -385,7 +393,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 handler(completions)
             }
         case brandInput:
-            Providers.brandProvider.brands(successHandler{brands in
+            Providers.brandProvider.brandsContainingText(string, successHandler{brands in
                 handler(brands)
             })
         case _:

@@ -16,6 +16,8 @@ protocol ProductCategoryProvider {
     
     func categories(range: NSRange, _ handler: ProviderResult<[ProductCategory]> -> Void)
     
+    func categorySuggestions(handler: ProviderResult<[Suggestion]> -> ())
+
     func update(category: ProductCategory, _ handler: ProviderResult<Any> -> Void)
     
     func remove(category: ProductCategory, _ handler: ProviderResult<Any> -> Void)

@@ -117,8 +117,18 @@ extension Array {
             return Array(self[range.location..<end])
         }
     }
+    
+
 }
 
+extension Array where Element: Hashable {
+
+    // src: http://stackoverflow.com/a/27624444/930450 (modified to be an extension)
+    func distinct() -> [Element] {
+        var seen: [Element: Bool] = [:]
+        return self.filter { seen.updateValue(true, forKey: $0) == nil }
+    }
+}
 
 extension Array where Element: Identifiable {
     

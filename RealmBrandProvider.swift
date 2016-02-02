@@ -13,15 +13,9 @@ class RealmBrandProvider: RealmProvider {
     
     // Note we don't use loading methods in superclass since these require mapper and brands currently are only strings. Maybe later we can implement methods that don't require mappers.
     
-    func brands(handler: [String] -> Void) {
-        do {
-            let realm = try Realm()
-            let brands = Array(Set(realm.objects(DBProduct).map{$0.brand})).filter{!$0.isEmpty}
-            handler(brands)
-        } catch let e {
-            print("Error: RealmListItemProvider.brands: Couldn't load brands, returning empty array. Error: \(e)")
-            handler([])
-        }
+    func brandsContainingText(text: String, handler: [String] -> Void) {
+        // this is for now an "infinite" range. This method is ussed for autosuggestions, we assume use will not have more than 10000 brands. If yes it's not critical for autosuggestions.
+        brandsContainingText(text, range: NSRange(location: 0, length: 10000), handler)
     }
     
     func brands(range: NSRange, handler: [String] -> Void) {
