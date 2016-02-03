@@ -115,7 +115,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
     // returns: status changed: if it was showing and was subsequently hidden
     private func hideAddProductController() -> Bool {
         if navController?.viewControllers.last as? AddEditListItemViewController != nil {
-            navController?.popViewControllerAnimated(true)
+            navController?.popViewControllerAnimated(false)
             delegate?.onQuickListOpen()
             sortByButton.selected = true
             return true
@@ -131,7 +131,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
             controller.view.backgroundColor = addProductsOrGroupBgColor
             controller.modus = modus
             controller.delegate = productDelegate
-            navController?.pushViewController(controller, animated: true)
+            navController?.pushViewController(controller, animated: false)
             sortByButton.selected = false
             delegate?.onAddProductOpen()
             return true
@@ -142,7 +142,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
     private func hideAddProductOrGroupController() -> Bool {
         if (navController?.viewControllers.last as? AddEditListItemViewController != nil) {
             
-            navController?.popToRootViewControllerAnimated(true)
+            navController?.popToRootViewControllerAnimated(false)
             delegate?.onQuickListOpen()
         
             if (navController?.viewControllers.last as? AddEditListItemViewController != nil) {
@@ -204,7 +204,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
             onHasController(quickAddListItemViewController)
         } else {
 
-            navController?.popToRootViewControllerAnimated(true) // assumption: QuickAddListItemViewController is root
+            navController?.popToRootViewControllerAnimated(false) // assumption: QuickAddListItemViewController is root
             delegate?.onQuickListOpen()
             
             if let quickAddListItemViewController = quickAddListItemViewController {
@@ -233,7 +233,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
             onHasController(quickAddListItemViewController)
         } else {
             
-            navController?.popToRootViewControllerAnimated(true) // assumption: QuickAddListItemViewController is root
+            navController?.popToRootViewControllerAnimated(false) // assumption: QuickAddListItemViewController is root
             delegate?.onQuickListOpen()
             
             if let quickAddListItemViewController = quickAddListItemViewController {
@@ -258,30 +258,40 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
         case Product, Group, AddNew
     }
     private func updateQuickAddTop(topState: QuickAddTopState) {
-        currentQuickAddLabelLeftConstraint.constant = 200
-        UIView.animateWithDuration(0.15, animations: {[weak self] in
-            self?.currentQuickAddLabel.alpha = 0
-            self?.view.layoutIfNeeded()
-            
-        }, completion: {[weak self] finished in
-            
-            if topState != .AddNew {
-                
-                self?.currentQuickAddLabelLeftConstraint.constant = -150
-                self?.view.layoutIfNeeded()
-                self?.currentQuickAddLabelLeftConstraint.constant = 14
-                if topState == .Product {
-                    self?.currentQuickAddLabel.text = "Items"
-                } else {
-                    self?.currentQuickAddLabel.text = "Groups"
-                }
-                
-                UIView.animateWithDuration(0.15) {
-                    self?.view.layoutIfNeeded()
-                    self?.currentQuickAddLabel.alpha = 1
-                }
+        let title: String = {
+            switch topState {
+                case .Product: return "Products"
+                case .Group: return "Groups"
+                case .AddNew: return "New item"
             }
-        })
+        }()
+        currentQuickAddLabel.text = title
+
+        // TODO remove this (with related contraint variable) or modify when final transition is decided
+//        currentQuickAddLabelLeftConstraint.constant = 200
+//        UIView.animateWithDuration(0.15, animations: {[weak self] in
+//            self?.currentQuickAddLabel.alpha = 0
+//            self?.view.layoutIfNeeded()
+//            
+//            }, completion: {[weak self] finished in
+//                
+//                if topState != .AddNew {
+//                    
+//                    self?.currentQuickAddLabelLeftConstraint.constant = -150
+//                    self?.view.layoutIfNeeded()
+//                    self?.currentQuickAddLabelLeftConstraint.constant = 14
+//                    if topState == .Product {
+//                        self?.currentQuickAddLabel.text = "Items"
+//                    } else {
+//                        self?.currentQuickAddLabel.text = "Groups"
+//                    }
+//                    
+//                    UIView.animateWithDuration(0.15) {
+//                        self?.view.layoutIfNeeded()
+//                        self?.currentQuickAddLabel.alpha = 1
+//                    }
+//                }
+//        })
     }
     
     //////////////////////////////////////////
@@ -319,7 +329,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
             case .Submit:
                 addEditListItemViewController.submit(AddEditListItemViewControllerAction.Add)
             case .Back:
-                navController?.popViewControllerAnimated(true)
+                navController?.popViewControllerAnimated(false)
                 delegate?.onQuickListOpen() // we are now back in quick list
             case .Add, .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
             }
