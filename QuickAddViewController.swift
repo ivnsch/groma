@@ -74,6 +74,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
         showAddProductsOrGroupButton.backgroundColor = addProductsOrGroupBgColor
         
         updateSortByButton(sortBy)
+
+        updateQuickAddTop(.Product)
     }
     
     // MARK: - Navigation
@@ -145,10 +147,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
             navController?.popToRootViewControllerAnimated(false)
             delegate?.onQuickListOpen()
         
-            if (navController?.viewControllers.last as? AddEditListItemViewController != nil) {
-                showGroupsButton.selected = false
-                showProductsButton.selected = true
-            }
+//            if (navController?.viewControllers.last as? AddEditListItemViewController != nil) {
+//                showGroupsButton.selected = false
+//                showProductsButton.selected = true
+//            }
             
             return true
         }
@@ -192,10 +194,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
             controller.contentData = (.Group, .Fav)
             toggleItemTypeButtons(true)
             
-            showGroupsButton.selected = true
-            showProductsButton.selected = false
-            sortByButton.selected = true
-            
             updateQuickAddTop(.Group)
         }
         
@@ -220,10 +218,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
         func onHasController(controller: QuickAddListItemViewController) {
             controller.contentData = (.Product, .Fav)
             toggleItemTypeButtons(true)
-            
-            showProductsButton.selected = true
-            showGroupsButton.selected = false
-            sortByButton.selected = true
 
             updateQuickAddTop(.Product)
         }
@@ -246,8 +240,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
     
     @IBAction func onAddProductsOrGroupsTap(sender: UIButton) {
         
-        showProductsButton.selected = false
-        showGroupsButton.selected = false
         updateQuickAddTop(.AddNew)
         
         toggleAddProductController()
@@ -267,6 +259,11 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
         }()
         currentQuickAddLabel.text = title
 
+        showProductsButton.selected = topState == .Product
+        showGroupsButton.selected =  topState == .Group
+        sortByButton.selected = topState == .Product || topState == .Group
+
+        
         // TODO remove this (with related contraint variable) or modify when final transition is decided
 //        currentQuickAddLabelLeftConstraint.constant = 200
 //        UIView.animateWithDuration(0.15, animations: {[weak self] in
