@@ -103,7 +103,11 @@ struct DefaultRemoteErrorHandler {
     */
     static func handle<T, U>(remoteResult: RemoteResult<T>, handler: ProviderResult<U> -> ()) {
         switch remoteResult.status {
-        case .NoConnection, .NotLoggedIn, .NotAuthenticated:
+        case .NoConnection, .NotLoggedIn, .NotAuthenticated
+            // WARN: enable this only for testing (when using the moch user provider). In normal use, server not reachable should be shown. But:
+            // TODO!!!! check priorities are correct during normal use: this error should appear ONLY when there's a connection AND user is logged in
+            ,.ServerNotReachable
+            :
             return
         case _:
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)

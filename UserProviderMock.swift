@@ -1,0 +1,99 @@
+//
+//  UserProviderMock.swift
+//  shoppin
+//
+//  Created by ischuetz on 03/02/16.
+//  Copyright © 2016 ivanschuetz. All rights reserved.
+//
+
+import UIKit
+
+// Emulates login etc. so we can test without internet or server
+class UserProviderMock: UserProvider {
+    
+    var loggedIn: Bool {
+        return isLoggedIn
+    }
+    private var isLoggedIn = false
+    
+    private let requestDelay: Double = 2
+    
+    private var email: String?
+    
+    func login(loginData: LoginData, _ handler: ProviderResult<Any> -> ()) {
+        delay(requestDelay) {[weak self] in
+            self?.isLoggedIn = true
+            self?.email = loginData.email
+            handler(ProviderResult(status: .Success))
+        }
+    }
+    
+    func register(user: UserInput, _ handler: ProviderResult<Any> -> ()) {
+        delay(requestDelay) {[weak self] in
+            self?.isLoggedIn = true
+            self?.email = user.email
+            handler(ProviderResult(status: .Success))
+        }
+    }
+    
+    func isRegistered(email: String, _ handler: ProviderResult<Any> -> ()) {
+        delay(requestDelay) {
+            handler(ProviderResult(status: .Success, sucessResult: true))
+        }
+    }
+    
+    func logout(handler: ProviderResult<Any> -> ()) {
+        isLoggedIn = false
+        handler(ProviderResult(status: .Success))
+    }
+    
+    func sync(handler: ProviderResult<Any> -> Void) {
+        Providers.globalProvider.sync {result in
+            handler(result)
+        }
+    }
+    
+    func connectWebsocketIfLoggedIn() {
+    }
+    
+    func disconnectWebsocket() {
+    }
+    
+    func forgotPassword(email: String, _ handler: ProviderResult<Any> -> ()) {
+        delay(requestDelay) {
+            handler(ProviderResult(status: .Success, sucessResult: true))
+        }
+    }
+    
+    func removeAccount(handler: ProviderResult<Any> -> ()) {
+        delay(requestDelay) {[weak self] in
+            self?.isLoggedIn = false
+            handler(ProviderResult(status: .Success, sucessResult: true))
+        }
+    }
+    
+
+    var mySharedUser: SharedUser? {
+        if let email = email {
+            return SharedUser(email: email)
+        } else {
+            return nil
+        }
+    }
+    
+    
+    // MARK: - Social login
+    
+    func authenticateWithFacebook(token: String, _ handler: ProviderResult<Any> -> ()) {
+        delay(requestDelay) {
+            handler(ProviderResult(status: .Success, sucessResult: true))
+        }
+    }
+    
+    
+    func authenticateWithGoogle(token: String, _ handler: ProviderResult<Any> -> ()) {
+        delay(requestDelay) {
+            handler(ProviderResult(status: .Success, sucessResult: true))
+        }
+    }
+}
