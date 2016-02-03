@@ -226,13 +226,10 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         // TODO content based not index based update. Index path can become invalid e.g. if in the meantime we get a websocket update that changes the list.
         guard indexPath.row < filteredCategories.count else {return}
         
-        let itemWithCellAttributes = ItemWithCellAttributes(item: category, boldRange: category.name.range(category.name, caseInsensitive: true))
+        let itemWithCellAttributes = ItemWithCellAttributes(item: category, boldRange: category.name.range(searchText, caseInsensitive: true))
         
         filteredCategories[indexPath.row] = itemWithCellAttributes
         
-        onUpdatedCategories()
-        
-        // TODO!!!! crash here (I think) when trying to edit a category (tap on submit) while categories were filtered. Was showing 3 filtered categories from a total of 10+. error msg about insex path row 0 in section 0
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
         addEditCategoryControllerManager?.expand(false)
         initNavBar([.Edit])
