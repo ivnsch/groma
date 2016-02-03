@@ -12,7 +12,6 @@ class ListItemGroup: Identifiable, Equatable {
 
     let uuid: String
     let name: String
-    var items: [GroupItem]
     let bgColor: UIColor
     var order: Int
     var fav: Int
@@ -26,10 +25,9 @@ class ListItemGroup: Identifiable, Equatable {
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid: String, name: String, items: [GroupItem] = [], bgColor: UIColor, order: Int, fav: Int = 0, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, name: String, bgColor: UIColor, order: Int, fav: Int = 0, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.name = name
-        self.items = items
         self.bgColor = bgColor
         self.order = order
         self.fav = fav
@@ -38,11 +36,10 @@ class ListItemGroup: Identifiable, Equatable {
         self.removed = removed
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, items: [GroupItem]? = nil, bgColor: UIColor? = nil, order: Int? = nil, fav: Int? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> ListItemGroup {
+    func copy(uuid uuid: String? = nil, name: String? = nil, bgColor: UIColor? = nil, order: Int? = nil, fav: Int? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> ListItemGroup {
         return ListItemGroup(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
-            items: items ?? self.items,
             bgColor: bgColor ?? self.bgColor,
             order: order ?? self.order,
             fav: fav ?? self.fav,
@@ -57,25 +54,10 @@ class ListItemGroup: Identifiable, Equatable {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), items: \(items), bgColor: \(bgColor.hexStr), order: \(order), fav: \(fav), removed: \(removed), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), bgColor: \(bgColor.hexStr), order: \(order), fav: \(fav), removed: \(removed), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
     }
 }
 
 func ==(lhs: ListItemGroup, rhs: ListItemGroup) -> Bool {
-    return lhs.uuid == rhs.uuid && lhs.name == rhs.name && lhs.items == rhs.items && lhs.bgColor == rhs.bgColor && lhs.order == rhs.order && lhs.fav == rhs.fav
-}
-
-extension ListItemGroup {
-    
-    var totalPrice: Float {
-        return items.reduce(0.0) {sum, item in
-            sum + item.product.price
-        }
-    }
-
-    var totalQuantity: Int {
-        return items.reduce(0) {sum, item in
-            sum + item.quantity
-        }
-    }
+    return lhs.uuid == rhs.uuid && lhs.name == rhs.name && lhs.bgColor == rhs.bgColor && lhs.order == rhs.order && lhs.fav == rhs.fav
 }

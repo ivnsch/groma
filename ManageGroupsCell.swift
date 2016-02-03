@@ -8,6 +8,7 @@
 
 import UIKit
 
+// TODO! old code, remove
 class ManageGroupsCell: UITableViewCell {
 
     @IBOutlet weak var groupNameLabel: UILabel!
@@ -22,8 +23,8 @@ class ManageGroupsCell: UITableViewCell {
                 } else {
                     groupNameLabel.text = group.item.name
                 }
-                groupItemCountLabel.text = "\(group.item.totalQuantity) items"
-                groupPriceLabel.text = group.item.totalPrice.toLocalCurrencyString()
+//                groupItemCountLabel.text = "\(group.item.totalQuantity) items"
+//                groupPriceLabel.text = group.item.totalPrice.toLocalCurrencyString()
             }
         }
     }

@@ -54,6 +54,8 @@ protocol ListItemProvider {
     * Converts group items in list items and adds them to list
     */
     func add(groupItems: [GroupItem], list: List, _ handler: ProviderResult<[ListItem]> -> ())
+
+    func addGroupItems(group: ListItemGroup, list: List, _ handler: ProviderResult<[ListItem]> -> ())
     
     /**
     Gets list items count with a certain status in a certain list

@@ -660,7 +660,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
             // TODO save "group list item" don't desintegrate group immediatly
             
-            Providers.listItemsProvider.add(group.items, list: list, successHandler {[weak self] addedListItems in
+            Providers.listItemsProvider.addGroupItems(group, list: list, successHandler{[weak self] addedListItems in
                 if let list = self?.currentList {
                     self?.initWithList(list) // refresh list items
                 } else {

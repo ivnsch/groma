@@ -361,11 +361,9 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
-        if let selfGroup = self.group {
-            Providers.listItemGroupsProvider.add(group.items, group: selfGroup, remote: true, successHandler{[weak self] result in
-                self?.productsWithQuantityController?.addOrIncrementUI(group.items.map{ProductWithQuantityGroup(groupItem: $0)})
-            })
-        }
+        Providers.listItemGroupsProvider.addGroupItems(group, remote: true, successHandler{[weak self] groupItems in
+            self?.productsWithQuantityController?.addOrIncrementUI(groupItems.map{ProductWithQuantityGroup(groupItem: $0)})
+        })
     }
     
     func onAddProduct(product: Product) {

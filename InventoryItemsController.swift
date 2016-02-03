@@ -362,16 +362,19 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
         if let inventory = inventory {
-            let inventoryItems: [InventoryItemWithHistoryEntry] = group.items.map {item in
-                let inventoryItem = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: item.quantity, quantityDelta: item.quantity, product: item.product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO remove the offline dummy email? to add inventory shared user is not needed (the server uses the logged in user).
-                return inventoryItem
-            }
-            Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, successHandler{[weak self] result in
-                self?.productsWithQuantityController?.addOrIncrementUI(inventoryItems.map{ProductWithQuantityInv(inventoryItem: $0.inventoryItem)})
+            Providers.listItemGroupsProvider.groupItems(group, successHandler {[weak self] groupItems in
+                if let weakSelf = self {
+                    let inventoryItems: [InventoryItemWithHistoryEntry] = groupItems.map {item in
+                        let inventoryItem = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: item.quantity, quantityDelta: item.quantity, product: item.product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO remove the offline dummy email? to add inventory shared user is not needed (the server uses the logged in user).
+                        return inventoryItem
+                    }
+                    Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, weakSelf.successHandler{[weak self] result in
+                        self?.productsWithQuantityController?.addOrIncrementUI(inventoryItems.map{ProductWithQuantityInv(inventoryItem: $0.inventoryItem)})
+                    })
+                }
             })
         }
     }
-    
     
     func onAddProduct(product: Product) {
         if let inventory = inventory {

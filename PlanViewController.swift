@@ -409,10 +409,10 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
         if let inventory = currentInventory {
-            Providers.planProvider.addGroupItems(group.items, inventory: inventory, successHandler{[weak self] planItems in
-                self?.onGroupsAdded()
-                // TODO!! show popover with "group added etc"
-            })
+//            Providers.planProvider.addGroupItems(group.items, inventory: inventory, successHandler{[weak self] planItems in
+//                self?.onGroupsAdded()
+//                // TODO!! show popover with "group added etc"
+//            })
         }
     }
     

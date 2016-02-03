@@ -50,6 +50,25 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
+    func addGroupItems(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<[GroupItem]> -> ()) {
+        groupItems(group) {[weak self] result in
+            if let groupItems = result.sucessResult {
+                self?.add(groupItems, group: group, remote: remote) {result in
+                    // return fetched group items to the caller
+                    if result.success {
+                        handler(ProviderResult(status: .Success, sucessResult: groupItems))
+                    } else {
+                        print("Error: ListItemGroupProviderImpl.addGroupItems: Couldn't save group items for group: \(group)")
+                        handler(ProviderResult(status: result.status))
+                    }
+                }
+            } else {
+                print("Error: ListItemGroupProviderImpl.addGroupItems: Can't get group items for group: \(group)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+
     func update(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         update([group], remote: remote, handler)
     }

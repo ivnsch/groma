@@ -149,6 +149,17 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
+    func addGroupItems(group: ListItemGroup, list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
+        Providers.listItemGroupsProvider.groupItems(group) {[weak self] result in
+            if let groupItems = result.sucessResult {
+                self?.add(groupItems, list: list, handler)
+            } else {
+                print("Error: ListItemProviderImpl.addGroupItems: Can't get group items for group: \(group)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+    
     func add(listItems: [ListItem], remote: Bool = true, _ handler: ProviderResult<[ListItem]> -> ()) {
 
         let addedListItemsMaybe = memProvider.addListItems(listItems)
