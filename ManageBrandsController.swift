@@ -60,8 +60,6 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
         addEditBrandControllerManager = initAddEditBrandControllerManager()
         
         initNavBar([.Edit])
-        
-        loadPossibleNextPage()
 //        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
     }
     

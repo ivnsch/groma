@@ -28,6 +28,12 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: categories))
         }
     }
+    
+    func categoriesContainingText(text: String, range: NSRange, _ handler: ProviderResult<(text: String?, categories: [ProductCategory])> -> Void) {
+        dbCategoryProvider.categoriesContainingText(text, range: range) {categories in
+            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: categories))
+        }
+    }
 
     func categorySuggestions(handler: ProviderResult<[Suggestion]> -> ()) {
         dbProductProvider.loadCategorySuggestions {dbSuggestions in

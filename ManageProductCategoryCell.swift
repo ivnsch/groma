@@ -17,11 +17,15 @@ class ManageProductCategoryCell: UITableViewCell {
         selectionStyle = .None
     }
     
-    var category: ProductCategory? {
+    var item: ItemWithCellAttributes<ProductCategory>? {
         didSet {
-            if let category = category {
-                categoryNameLabel.text = category.name
-                backgroundColor = category.color.colorWithAlphaComponent(0.5)
+            if let item = item {
+                if let boldRange = item.boldRange {
+                    categoryNameLabel.attributedText = item.item.name.makeAttributed(boldRange, normalFont: Fonts.regularLight, font: Fonts.regularBold)
+                } else {
+                    categoryNameLabel.text = item.item.name
+                }
+                backgroundColor = item.item.color.colorWithAlphaComponent(0.5)
             }
         }
     }

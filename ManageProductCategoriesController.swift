@@ -23,18 +23,14 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     private let paginator = Paginator(pageSize: 20)
     private var loadingPage: Bool = false
     
-    private var categories: [ProductCategory] = [] {
-        didSet {
-            filteredCategories = ItemWithCellAttributes.toItemsWithCellAttributes(categories)
-        }
-    }
-    
     private var filteredCategories: [ItemWithCellAttributes<ProductCategory>] = [] {
         didSet {
             tableView.reloadData()
         }
     }
     
+    private var searchText: String = ""
+
     private let toggleButtonInactiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 0.05, rotation: 0, xRight: 20)
     private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0, xRight: 20)
     private let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: CGFloat(-M_PI_4))
@@ -46,14 +42,14 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        clearAndLoadFirstPage()
+        clearAndLoadFirstPage(false)
     }
     
-    func clearAndLoadFirstPage() {
-        categories = []
+    func clearAndLoadFirstPage(isSearchLoad: Bool) {
+        filteredCategories = []
         paginator.reset()
         tableView.reloadData()
-        loadPossibleNextPage()
+        loadPossibleNextPage(isSearchLoad)
     }
     
     override func viewDidLoad() {
@@ -130,9 +126,9 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("categoryCell", forIndexPath: indexPath) as! ManageProductCategoryCell
         
-        let product = filteredCategories[indexPath.row]
+        let item = filteredCategories[indexPath.row]
         
-        cell.category = product.item
+        cell.item = item
         
         return cell
     }
@@ -168,7 +164,6 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     private func removeCategoryUI(category: ItemWithCellAttributes<ProductCategory>, indexPath: NSIndexPath) {
         tableView.wrapUpdates {[weak self] in
             self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            self?.categories.remove(category.item)
             self?.filteredCategories.remove(category)
         }
     }
@@ -178,19 +173,8 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     }
     
     private func filter(searchText: String) {
-        if searchText.isEmpty {
-            filteredCategories = ItemWithCellAttributes.toItemsWithCellAttributes(categories)
-        } else {
-            Providers.productCategoryProvider.categoriesContainingText(searchText, successHandler{[weak self] categories in
-                if let weakSelf = self {
-                    
-                    let productWithCellAttributes = categories.map{product in
-                        return ItemWithCellAttributes(item: product, boldRange: product.name.range(searchText, caseInsensitive: true))
-                    }
-                    weakSelf.filteredCategories = productWithCellAttributes
-                }
-            })
-        }
+        self.searchText = searchText
+        clearAndLoadFirstPage(true)
     }
     
     private func onUpdatedCategories() {
@@ -211,7 +195,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     
     private func clearSearch() {
         searchBar.text = ""
-        filteredCategories = ItemWithCellAttributes.toItemsWithCellAttributes(categories)
+        filteredCategories = []
     }
     
     // MARK: - EditProductCategoryControllerDelegate
@@ -226,7 +210,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     }
     
     private func indexPathForCategory(category: ProductCategory) -> NSIndexPath? {
-        let indexMaybe = categories.enumerate().filter{$0.element.same(category)}.first?.index
+        let indexMaybe = filteredCategories.enumerate().filter{$0.element.item.same(category)}.first?.index
         return indexMaybe.map{NSIndexPath(forRow: $0, inSection: 0)}
     }
     
@@ -239,17 +223,24 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     }
     
     private func updateCategoryUI(category: ProductCategory, indexPath: NSIndexPath) {
-        categories.update(category)
+        // TODO content based not index based update. Index path can become invalid e.g. if in the meantime we get a websocket update that changes the list.
+        guard indexPath.row < filteredCategories.count else {return}
+        
+        let itemWithCellAttributes = ItemWithCellAttributes(item: category, boldRange: category.name.range(category.name, caseInsensitive: true))
+        
+        filteredCategories[indexPath.row] = itemWithCellAttributes
+        
         onUpdatedCategories()
         
+        // TODO!!!! crash here (I think) when trying to edit a category (tap on submit) while categories were filtered. Was showing 3 filtered categories from a total of 10+. error msg about insex path row 0 in section 0
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
         addEditCategoryControllerManager?.expand(false)
         initNavBar([.Edit])
-        
     }
     
-    private func addCategoryUI(product: ProductCategory) {
-        categories.append(product)
+    private func addCategoryUI(category: ProductCategory) {
+        let wrappedCategory = ItemWithCellAttributes<ProductCategory>(item: category, boldRange: nil)
+        filteredCategories.append(wrappedCategory)
         onUpdatedCategories()
         tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: filteredCategories.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
         setAddEditProductControllerOpen(false)
@@ -259,7 +250,16 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         addEditCategoryControllerManager?.expand(open)
     }
     
-    private func loadPossibleNextPage() {
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let currentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        
+        if (maximumOffset - currentOffset) <= 40 {
+            loadPossibleNextPage(false)
+        }
+    }
+    
+    private func loadPossibleNextPage(isSearchLoad: Bool) {
         
         func setLoading(loading: Bool) {
             self.loadingPage = loading
@@ -269,18 +269,37 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         synced(self) {[weak self] in
             let weakSelf = self!
             
-            if !weakSelf.paginator.reachedEnd {
+            if !weakSelf.paginator.reachedEnd || isSearchLoad { // if pagination, load only if we are not at the end, for search load always
                 
                 if (!weakSelf.loadingPage) {
-                    setLoading(true)
+                    if !isSearchLoad { // block on pagination to avoid loading multiple times on scroll. No blocking on search - here we have to process each key stroke
+                        setLoading(true)
+                    }
                 
-                    Providers.productCategoryProvider.categories(weakSelf.paginator.currentPage, weakSelf.successHandler{categories in
-                        weakSelf.categories.appendAll(categories)
+                    Providers.productCategoryProvider.categoriesContainingText(weakSelf.searchText, range: weakSelf.paginator.currentPage, weakSelf.successHandler{tuple in
                         
-                        weakSelf.paginator.update(categories.count)
+                        // ensure we use only results for the string we have currently in the searchbox - the reason this check exists is that concurrent requests can cause problems,
+                        // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.
                         
-                        weakSelf.tableView.reloadData()
-                        setLoading(false)
+                        print("current search in the box: \(weakSelf.searchText), result text: \(tuple.text). results: \(tuple.categories)")
+                        
+                        
+                        if tuple.text == weakSelf.searchText {
+
+                            let categoriesWithCellAttributes = tuple.categories.map {category in
+                                ItemWithCellAttributes(item: category, boldRange: category.name.range(weakSelf.searchText, caseInsensitive: true))
+                            }
+                            weakSelf.filteredCategories.appendAll(categoriesWithCellAttributes)
+                            
+                            weakSelf.paginator.update(tuple.categories.count)
+                            
+                            weakSelf.tableView.reloadData()
+                            
+                            setLoading(false)
+                            
+                        } else {
+                            setLoading(false)
+                        }
                     })
                 }
             }

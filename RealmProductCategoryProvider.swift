@@ -21,6 +21,13 @@ class RealmProductCategoryProvider: RealmProvider {
         load(mapper, filter: "name CONTAINS[c] '\(text)'", handler: handler)
     }
     
+    func categoriesContainingText(text: String, range: NSRange, _ handler: (text: String?, categories: [ProductCategory]) -> Void) {
+        let mapper = {ProductCategoryMapper.categoryWithDB($0)}
+        load(mapper, filter: "name CONTAINS[c] '\(text)'", range: range) {categories in
+            handler(text: text, categories: categories)
+        }
+    }
+    
     func updateCategory(category: ProductCategory, _ handler: Bool -> Void) {
         let dbCategory = ProductCategoryMapper.dbWithCategory(category)
         saveObj(dbCategory, update: true, handler: handler)

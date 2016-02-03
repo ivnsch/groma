@@ -15,6 +15,8 @@ protocol ProductCategoryProvider {
     func categoriesContainingText(text: String,  _ handler: ProviderResult<[ProductCategory]> -> Void)
     
     func categories(range: NSRange, _ handler: ProviderResult<[ProductCategory]> -> Void)
+
+    func categoriesContainingText(text: String, range: NSRange, _ handler: ProviderResult<(text: String?, categories: [ProductCategory])> -> Void)
     
     func categorySuggestions(handler: ProviderResult<[Suggestion]> -> ())
 
