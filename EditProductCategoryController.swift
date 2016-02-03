@@ -41,6 +41,7 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
     
     private func initValidator() {
         let validator = Validator()
+        // TODO!!!! crash here (also had this issue with the top edit section controller why??) maybe the fact we add first the view and then child controller, in expandable controller (no idea!)
         validator.registerField(nameTextField, rules: [MinLengthRule(length: 1, message: "validation_product_category_name_not_empty")])
         self.validator = validator
     }
