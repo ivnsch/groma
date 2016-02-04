@@ -125,7 +125,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     
     private func initAddEditProductControllerManager() -> ExpandableTopViewController<AddEditListItemViewController> {
         let top: CGFloat = 64
-        let manager: ExpandableTopViewController<AddEditListItemViewController> =  ExpandableTopViewController(top: top, height: 180, animateTableViewInset: false, parentViewController: self, tableView: tableView) {
+        let manager: ExpandableTopViewController<AddEditListItemViewController> = ExpandableTopViewController(top: top, height: 240, animateTableViewInset: false, parentViewController: self, tableView: tableView) {
             let controller = UIStoryboard.addEditListItemViewController()
             controller.delegate = self
             controller.onViewDidLoad = {

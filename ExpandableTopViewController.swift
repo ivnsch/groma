@@ -91,7 +91,8 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
 //                let overlayTop = openInset + height
                 let overlayTop = 64 + openInset // 64 -> below nav bar
                 let overlay = createOverlay()
-                overlay.frame = CGRectMake(tableView.frame.origin.x, overlayTop, tableView.frame.width, tableView.frame.height)
+                // FIXME!!! no force unwrap for tableview parent - use ?
+                overlay.frame = CGRectMake(tableView.frame.origin.x, overlayTop, tableView.frame.width, tableView.superview!.frame.height)
                 parentController.view.insertSubview(overlay, aboveSubview: tableView)
                 self.overlay = overlay
                 

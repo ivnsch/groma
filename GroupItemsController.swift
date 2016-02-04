@@ -173,7 +173,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     private func initAddEditGroupItemsControllerManager(tableView: UITableView) -> ExpandableTopViewController<AddEditListItemViewController> {
         let top = CGRectGetHeight(topBar.frame)
-        let manager: ExpandableTopViewController<AddEditListItemViewController> =  ExpandableTopViewController(top: top, height: 180, animateTableViewInset: false, parentViewController: self, tableView: tableView) {
+        let manager: ExpandableTopViewController<AddEditListItemViewController> =  ExpandableTopViewController(top: top, height: 240, animateTableViewInset: false, parentViewController: self, tableView: tableView) {
             let controller = UIStoryboard.addEditListItemViewController()
             controller.delegate = self
             controller.onViewDidLoad = {
