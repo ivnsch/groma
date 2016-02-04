@@ -259,11 +259,11 @@ class SuggestionsPrefiller {
             Product(uuid: uuid, name: tr("pr_dental_floss", lang), price: 1, category: hygienicCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: tr("pr_cotton", lang), price: 1, category: hygienicCat, baseQuantity: 1, unit: .None),
             Product(uuid: uuid, name: tr("pr_cotton_buds", lang), price: 1, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: tr("pr_diapers", lang), price: 1, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: tr("pr_sanitary_towel", lang), price: 1, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: tr("pr_tampons", lang), price: 1, category: hygienicCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: tr("pr_razors", lang), price: 1, category: oilCat, baseQuantity: 1, unit: .None),
-            Product(uuid: uuid, name: tr("pr_shaving_cream", lang), price: 1, category: oilCat, baseQuantity: 1, unit: .None),
+//            Product(uuid: uuid, name: tr("pr_diapers", lang), price: 1, category: hygienicCat, baseQuantity: 1, unit: .None),
+//            Product(uuid: uuid, name: tr("pr_sanitary_towel", lang), price: 1, category: hygienicCat, baseQuantity: 1, unit: .None),
+//            Product(uuid: uuid, name: tr("pr_tampons", lang), price: 1, category: hygienicCat, baseQuantity: 1, unit: .None),
+//            Product(uuid: uuid, name: tr("pr_razors", lang), price: 1, category: hygienicCat, baseQuantity: 1, unit: .None),
+//            Product(uuid: uuid, name: tr("pr_shaving_cream", lang), price: 1, category: hygienicCat, baseQuantity: 1, unit: .None),
 
             // clothes
             Product(uuid: uuid, name: tr("pr_socks", lang), price: 1, category: clothesCat, baseQuantity: 1, unit: .None),
