@@ -73,6 +73,7 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -1151,7 +1152,7 @@
         <!--Settings-->
         <scene sceneID="5gN-1x-iyi">
             <objects>
-                <viewController id="TSQ-MW-ySX" sceneMemberID="viewController">
+                <viewController id="TSQ-MW-ySX" customClass="SettingsViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="VOB-7c-032"/>
                         <viewControllerLayoutGuide type="bottom" id="FaQ-bD-j9h"/>
@@ -1159,7 +1160,21 @@
                     <view key="view" contentMode="scaleToFill" id="cNM-zT-Jyc">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTH-bS-K1Q">
+                                <rect key="frame" x="14" y="84" width="84" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Clear all data"/>
+                                <connections>
+                                    <action selector="onClearAllDataTap:" destination="TSQ-MW-ySX" eventType="touchUpInside" id="svI-VU-3Lc"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="FTH-bS-K1Q" firstAttribute="top" secondItem="VOB-7c-032" secondAttribute="bottom" constant="20" id="e1Y-eF-fhk"/>
+                            <constraint firstItem="FTH-bS-K1Q" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="qlq-5x-xlh"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="1iM-IL-890"/>
                 </viewController>

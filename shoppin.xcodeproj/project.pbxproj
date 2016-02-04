@@ -590,6 +590,7 @@
 		EBA9E5E41C62977300A85610 /* UserProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E31C62977300A85610 /* UserProviderMock.swift */; settings = {ASSET_TAGS = (); }; };
 		EBA9E5E51C62977300A85610 /* UserProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E31C62977300A85610 /* UserProviderMock.swift */; settings = {ASSET_TAGS = (); }; };
 		EBA9E5E61C62977300A85610 /* UserProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E31C62977300A85610 /* UserProviderMock.swift */; settings = {ASSET_TAGS = (); }; };
+		EBA9E5EA1C6380ED00A85610 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E91C6380ED00A85610 /* SettingsViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		EBAEB22F1BDBDB2F00FCDA5C /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB22E1BDBDB2F00FCDA5C /* CGPoint.swift */; };
 		EBAEB23C1BDC262400FCDA5C /* FloatingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB23B1BDC262400FCDA5C /* FloatingViews.swift */; };
 		EBAEB23E1BDC263800FCDA5C /* FloatingViews.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBAEB23D1BDC263800FCDA5C /* FloatingViews.xib */; };
@@ -1196,6 +1197,7 @@
 		EBA8FAD01B8F1D46008CB746 /* UserDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDetailsViewController.swift; sourceTree = "<group>"; };
 		EBA8FAD11B8F1D46008CB746 /* UserDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserDetailsViewController.xib; sourceTree = "<group>"; };
 		EBA9E5E31C62977300A85610 /* UserProviderMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProviderMock.swift; sourceTree = "<group>"; };
+		EBA9E5E91C6380ED00A85610 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		EBAEB22E1BDBDB2F00FCDA5C /* CGPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
 		EBAEB23B1BDC262400FCDA5C /* FloatingViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingViews.swift; sourceTree = "<group>"; };
 		EBAEB23D1BDC263800FCDA5C /* FloatingViews.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FloatingViews.xib; sourceTree = "<group>"; };
@@ -1866,6 +1868,7 @@
 				EB55675B1A86231D00CD3EC6 /* common */,
 				EB4C36561B4C115E00C387C5 /* libraryCandidates */,
 				EBDCA12D1B88D4FF000020BF /* charts */,
+				EBA9E5E81C6380D200A85610 /* settings */,
 				EBBC23241BB5D5820002F6B1 /* popup */,
 				EBD828011BE95CC80072F9FA /* utils */,
 				EB0A058B1BDFCD4100D1E29D /* more */,
@@ -2220,6 +2223,14 @@
 				EBA575641BCECC0000A0A825 /* QuantityView.xib */,
 			);
 			name = quantityView;
+			sourceTree = "<group>";
+		};
+		EBA9E5E81C6380D200A85610 /* settings */ = {
+			isa = PBXGroup;
+			children = (
+				EBA9E5E91C6380ED00A85610 /* SettingsViewController.swift */,
+			);
+			name = settings;
 			sourceTree = "<group>";
 		};
 		EBAEB23A1BDC25FE00FCDA5C /* floatingViews */ = {
@@ -3127,6 +3138,7 @@
 				EBA2C8D01C4F24C100A970B8 /* ManageProductCategoryCell.swift in Sources */,
 				EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */,
 				EBA18C261BF56E3B009291F2 /* CGSize.swift in Sources */,
+				EBA9E5EA1C6380ED00A85610 /* SettingsViewController.swift in Sources */,
 				EB7F59D71BA1E0DF00E07EBA /* Performance.swift in Sources */,
 				EB7F59CF1BA1D40A00E07EBA /* Option.swift in Sources */,
 				EBDA75441BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift in Sources */,

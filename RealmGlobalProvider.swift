@@ -87,7 +87,7 @@ class RealmGlobalProvider: RealmProvider {
             return (objArray, objDict)
         }
         
-        doInWriteTransaction({realm in
+        doInWriteTransaction({[weak self] realm in
 
             let (productCategoriesArr, productCategoriesDict): ([DBProductCategory], [String: DBProductCategory]) = toTuple(syncResult.productCategories, mapper: {DBProductCategory.fromDict($0)}, idExtractor: {$0.uuid})
             
@@ -120,20 +120,7 @@ class RealmGlobalProvider: RealmProvider {
             
             let (historyItemsArr, historyItemsDict): ([DBHistoryItem], [String: DBHistoryItem]) = toTuple(syncResult.history, mapper: {DBHistoryItem.fromDict($0, inventory: inventoriesDict[$0["inventoryUuid"]! as! String]!, product: productsDict[$0["productUuid"] as! String]!)}, idExtractor: {$0.uuid})
             
-            
-            let realm = try! Realm()
-            
-            realm.delete(realm.objects(DBProductCategory))
-            realm.delete(realm.objects(DBProduct))
-            realm.delete(realm.objects(DBSection))
-            realm.delete(realm.objects(DBSharedUser))
-            realm.delete(realm.objects(DBInventory))
-            realm.delete(realm.objects(DBInventoryItem))
-            realm.delete(realm.objects(DBList))
-            realm.delete(realm.objects(DBListItem))
-            realm.delete(realm.objects(DBListItemGroup))
-            realm.delete(realm.objects(DBGroupItem))
-            realm.delete(realm.objects(DBHistoryItem))
+            self?.clearAllDataSync(realm)
             
             func saveObjs(objs: [Object]) {
                 for obj in objs {
@@ -159,6 +146,38 @@ class RealmGlobalProvider: RealmProvider {
 
                 } else {
                     print("Error: RealmGlobalProvider.saveSyncResult: no success result")
+                    handler(false)
+                }
+        }
+    }
+    
+    private func clearAllDataSync(realm: Realm) {
+        realm.delete(realm.objects(DBProductCategory))
+        realm.delete(realm.objects(DBProduct))
+        realm.delete(realm.objects(DBSection))
+        realm.delete(realm.objects(DBSharedUser))
+        realm.delete(realm.objects(DBInventory))
+        realm.delete(realm.objects(DBInventoryItem))
+        realm.delete(realm.objects(DBList))
+        realm.delete(realm.objects(DBListItem))
+        realm.delete(realm.objects(DBListItemGroup))
+        realm.delete(realm.objects(DBGroupItem))
+        realm.delete(realm.objects(DBHistoryItem))
+    }
+    
+    func clearAllData(handler: Bool -> Void) {
+        
+        doInWriteTransaction({[weak self] realm in
+            
+            self?.clearAllDataSync(realm)
+            return true
+            
+            }) {(successMaybe: Bool?) in
+                if let success = successMaybe {
+                    handler(success)
+                    
+                } else {
+                    print("Error: RealmGlobalProvider.clearAllData: no success result")
                     handler(false)
                 }
         }

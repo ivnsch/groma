@@ -12,4 +12,6 @@ import Foundation
 protocol GlobalProvider {
 
     func sync(handler: ProviderResult<Any> -> Void)
+    
+    func clearAllData(handler: ProviderResult<Any> -> Void)
 }
