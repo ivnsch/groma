@@ -285,6 +285,7 @@ class RealmListItemProvider: RealmProvider {
     /**
     Batch add/update of list items
     When used for add: incrementQuantity should be true, update: false. After clearing db (e.g. sync) also false (since there's nothing to increment)
+    NOTE: Assumes all listItems belong to the same list (only the list of first list item is used for filtering)
     */
     func saveListItems(var listItems: [ListItem], updateSuggestions: Bool = true, incrementQuantity: Bool, handler: [ListItem]? -> ()) {
         doInWriteTransaction({[weak self] realm in
@@ -294,7 +295,8 @@ class RealmListItemProvider: RealmProvider {
             if incrementQuantity {
                 // get all existing list items with product names using IN query
                 let productNamesStr: String = listItems.map{"'\($0.product.name)'"}.joinWithSeparator(",")
-                let existingListItems = realm.objects(DBListItem).filter("product.name IN {\(productNamesStr)}") // TODO get only listitems in the list!
+                let listUuid = listItems.first?.list.uuid ?? ""
+                let existingListItems = realm.objects(DBListItem).filter("product.name IN {\(productNamesStr)} AND list.uuid = '\(listUuid)'")
                 
                 let uuidToDBListItemDict: [String: DBListItem] = existingListItems.toDictionary{
                     ($0.product.uuid, $0)
