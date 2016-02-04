@@ -116,6 +116,7 @@ class RealmHistoryProvider: RealmProvider {
         )
     }
 
+    // Overwrites all the history items
     func saveHistoryItems(historyItemsWithRelations: HistoryItemsWithRelations, handler: Bool -> ()) {
         
         self.doInWriteTransaction({[weak self] realm in
@@ -166,4 +167,35 @@ class RealmHistoryProvider: RealmProvider {
         remove("uuid = '\(uuid)'", handler: handler, objType: DBHistoryItem.self)
     }
     
+    func removeAllHistoryItems(handler: Bool -> ()) {
+        self.doInWriteTransaction({realm in
+            realm.delete(realm.objects(DBHistoryItem))
+            return true
+            }, finishHandler: {(successMaybe: Bool?) in
+                if let success = successMaybe {
+                    handler(success)
+                } else {
+                    print("Error: RealmHistoryProvider.removeAllHistoryItems: success in nil")
+                    handler(false)
+                }
+            }
+        )
+    }
+    
+    func addHistoryItems(historyItems: [HistoryItem], handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            let dbHistoryItems: [DBHistoryItem] = historyItems.map{HistoryItemMapper.dbWithHistoryItem($0)}
+            for dbHistoryItem in dbHistoryItems {
+                realm.add(dbHistoryItem, update: true)
+            }
+            return true
+            }) {(successMaybe: Bool?) in
+                if let success = successMaybe {
+                    handler(success)
+                } else {
+                    print("Error: RealmHistoryProvider.addHistoryItems: success in nil")
+                    handler(false)
+                }
+        }
+    }
 }

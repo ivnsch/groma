@@ -60,8 +60,22 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
+    func removeAllHistoryItems(handler: ProviderResult<Any> -> Void) {
+        dbProvider.removeAllHistoryItems {success in
+            handler(ProviderResult(status: success ? .Success : .DatabaseUnknown))
+            
+            // TODO!!!! server
+        }
+    }
+    
     // TODO after implement groups in separate table
     func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, _ handler: ProviderResult<Any> -> ()) {
         print("TODO: remove history item group")
+    }
+    
+    func addHistoryItems(historyItems: [HistoryItem], _ handler: ProviderResult<Any> -> Void) {
+        dbProvider.addHistoryItems(historyItems) {success in
+            handler(ProviderResult(status: success ? .Success : .DatabaseUnknown))
+        }
     }
 }

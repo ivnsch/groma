@@ -32,10 +32,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         super.viewDidLoad()
         pageControl.numberOfPages = pageCount
         
-        if PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false {
-//            setButtonsEnabled(false) // for now don't disable anything as db is still small, and disable buttons in intro must be tested very carefully!
-            initDatabase {
-//                self?.setButtonsEnabled(true)
+        let initActions =  PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false
+//        let initActions = true
+        
+        if initActions {
+            setButtonsEnabled(false)
+            initDatabase {[weak self] in
+                self?.setButtonsEnabled(true)
             }
         }
     }
@@ -66,7 +69,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                 if let prefillPath = NSBundle.mainBundle().pathForResource("prefill\(lang)", ofType: "realm") {
                     print("Copying prefill database for lang: \(lang) to: \(p)")
                     do {
-                        //TODO! replace or remove previous database (for app updates). Currently this fails if db already exists
+//                        try NSFileManager.defaultManager().removeItemAtPath(p)
                         try NSFileManager.defaultManager().copyItemAtPath(prefillPath, toPath: p)
                         print("Copied prefill database")
                         return true

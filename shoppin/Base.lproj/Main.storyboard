@@ -74,6 +74,9 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -1169,12 +1172,58 @@
                                     <action selector="onClearAllDataTap:" destination="TSQ-MW-ySX" eventType="touchUpInside" id="svI-VU-3Lc"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="adW-N0-j5a">
+                                <rect key="frame" x="0.0" y="194" width="600" height="200"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Developer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CwH-GM-s9p">
+                                        <rect key="frame" x="14" y="14" width="74" height="21"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VNJ-mv-0y2">
+                                        <rect key="frame" x="14" y="55" width="315" height="30"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                        <state key="normal" title="Add dummy history items (to test history &amp; chart)"/>
+                                        <connections>
+                                            <action selector="onAddDummyHistoryTap:" destination="TSQ-MW-ySX" eventType="touchUpInside" id="PRd-lM-K89"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="VNJ-mv-0y2" firstAttribute="leading" secondItem="adW-N0-j5a" secondAttribute="leading" constant="14" id="3i0-To-bbS"/>
+                                    <constraint firstAttribute="height" constant="200" id="BZc-ub-poI"/>
+                                    <constraint firstItem="CwH-GM-s9p" firstAttribute="top" secondItem="adW-N0-j5a" secondAttribute="top" constant="14" id="NmP-Iy-9eL"/>
+                                    <constraint firstItem="CwH-GM-s9p" firstAttribute="leading" secondItem="adW-N0-j5a" secondAttribute="leading" constant="14" id="Urf-dJ-F9z"/>
+                                    <constraint firstItem="VNJ-mv-0y2" firstAttribute="top" secondItem="CwH-GM-s9p" secondAttribute="bottom" constant="20" id="ui2-sU-5UM"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Yo-HG-bia">
+                                <rect key="frame" x="14" y="134" width="81" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Clear history"/>
+                                <connections>
+                                    <action selector="onClearHistoryTap:" destination="TSQ-MW-ySX" eventType="touchUpInside" id="94B-f7-P9B"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="5Yo-HG-bia" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="5jD-rY-HXz"/>
+                            <constraint firstItem="5Yo-HG-bia" firstAttribute="top" secondItem="FTH-bS-K1Q" secondAttribute="bottom" constant="20" id="Dvv-HE-XDi"/>
+                            <constraint firstAttribute="trailing" secondItem="adW-N0-j5a" secondAttribute="trailing" id="VE1-JY-ivz"/>
                             <constraint firstItem="FTH-bS-K1Q" firstAttribute="top" secondItem="VOB-7c-032" secondAttribute="bottom" constant="20" id="e1Y-eF-fhk"/>
+                            <constraint firstItem="adW-N0-j5a" firstAttribute="top" secondItem="FTH-bS-K1Q" secondAttribute="bottom" constant="30" id="eih-Va-2sB"/>
+                            <constraint firstItem="adW-N0-j5a" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" id="pof-HP-Xqt"/>
                             <constraint firstItem="FTH-bS-K1Q" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="qlq-5x-xlh"/>
+                            <constraint firstItem="adW-N0-j5a" firstAttribute="top" secondItem="5Yo-HG-bia" secondAttribute="bottom" constant="30" id="rg6-Uf-STE"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="eih-Va-2sB"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="1iM-IL-890"/>
                 </viewController>

@@ -52,6 +52,15 @@ extension NSDate: Comparable {
         formatter.locale = NSLocale.currentLocale()
         return formatter.stringFromDate(NSDate())
     }
+    
+    static func inMonths(months: Int) -> NSDate {
+        let today = NSDate()
+        return NSCalendar.currentCalendar().dateByAddingUnit(
+            .Month,
+            value: months,
+            toDate: today,
+            options: NSCalendarOptions(rawValue: 0))!
+    }
 }
 
 public func <(a: NSDate, b: NSDate) -> Bool {

@@ -26,4 +26,9 @@ protocol HistoryProvider {
     func removeHistoryItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, _ handler: ProviderResult<Any> -> ())
+    
+    func removeAllHistoryItems(handler: ProviderResult<Any> -> Void)
+    
+    // NOTE: only for debug purpose! Normally history items can be added only via inventory
+    func addHistoryItems(historyItems: [HistoryItem], _ handler: ProviderResult<Any> -> Void)
 }
