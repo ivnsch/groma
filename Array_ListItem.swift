@@ -13,17 +13,20 @@ extension Array where Element: ListItem {
     /**
     Sorts increasingly by section and list item order
     */
-    func sortedByOrder() -> [ListItem] {
-        let bySection = self.sort {($0.section.order <= $1.section.order)}.groupBySectionOrdered()
+    func sortedByOrder(status: ListItemStatus) -> [ListItem] {
         
-        var listItemsFlat: [ListItem] = []
-        for section in bySection {
-            for listItem in section.1 {
-                listItemsFlat.append(listItem)
+        // src (sort by multiple criteria) http://stackoverflow.com/a/27596550/930450
+        
+        let result = self.filter{$0.hasStatus(status)}.sort {
+            switch ($0.section.order(status), $1.section.order(status)) {
+            case let (lhs,rhs) where lhs == rhs:
+                return $0.order(status) < $1.order(status)
+            case let (lhs, rhs):
+                return lhs < rhs
             }
         }
         
-        return listItemsFlat
+        return result
     }
     
     /**
@@ -69,8 +72,17 @@ extension Array where Element: ListItem {
         return filterStatus(status).groupBySection().map {($0, $1.count)}
     }
     
-    var sectionCount: Int {
-        return Set(map{$0.section}).count
+    func sectionCount(status: ListItemStatus) -> Int {
+        
+        let sectionsOfItemsWithStatus: [Section] = collect({
+            if $0.hasStatus(status) {
+                return $0.section
+            } else {
+                return nil
+            }
+        })
+        
+        return Set(sectionsOfItemsWithStatus).count
     }
     
     func findFirstWithProductNameAndBrand(productName: String, brand: String) -> ListItem? {

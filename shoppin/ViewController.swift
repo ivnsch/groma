@@ -249,7 +249,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func udpateListItems(list: List, onFinish: VoidFunction? = nil) {
-        Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{[weak self] listItems in
+        Providers.listItemsProvider.listItems(list, sortOrderByStatus: .Todo, fetchMode: .MemOnly, successHandler{[weak self] listItems in
             self?.listItemsTableViewController.setListItems(listItems.filter{$0.hasStatus(.Todo)})
             self?.updateEmptyView()
             onFinish?()
@@ -543,7 +543,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     */
     func updatePrices(listItemsFetchMode: ProviderFetchModus = .Both) {
         if let currentList = self.currentList {
-            Providers.listItemsProvider.listItems(currentList, fetchMode: listItemsFetchMode, successHandler{listItems in
+            Providers.listItemsProvider.listItems(currentList, sortOrderByStatus: .Todo, fetchMode: listItemsFetchMode, successHandler{listItems in
                 self.pricesView.setTotalPrice(listItems.totalPriceTodoAndCart, animated: false)
                 // The reason we exclude stash from total price is that when user is in the store they want to know what they will have to pay at the end (if they buy the complete list - this may not be necessarily the case though), which is todo + stash
                 self.pricesView.setDonePrice(listItems.totalPrice(.Done), animated: false)
@@ -554,8 +554,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private func addItem(listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
 
         if let currentList = self.currentList {
-            
-            Providers.listItemsProvider.add(listItemInput, list: currentList, order: nil, possibleNewSectionOrder: listItemsTableViewController.sections.count, successHandler {[weak self] savedListItem in
+            Providers.listItemsProvider.add(listItemInput, list: currentList, order: nil, possibleNewSectionOrder: ListItemStatusOrder(status: .Todo, order: listItemsTableViewController.sections.count), successHandler {[weak self] savedListItem in
                 self?.onListItemAddedToProvider(savedListItem)
                 handler?()
             })
@@ -574,15 +573,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         updateEmptyView()
     }
     
+    // Note: don't use this to reorder sections, this doesn't update section order
     // Note: concerning status - this only updates the .Todo related data (quantity, order). This means quantity and order of possible items in .Done or .Stash is not affected
-    func updateItem(listItem: ListItem, listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
+    private func updateItem(listItem: ListItem, listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
         if let currentList = self.currentList {
             
             if let updatingListItem = self.updatingListItem {
                 
                 let category = listItem.product.category.copy(name: listItemInput.category, color: listItemInput.categoryColor)
                 let product = Product(uuid: updatingListItem.product.uuid, name: listItemInput.name, price: listItemInput.price, category: category, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand) // possible product update
-                let section = Section(uuid: updatingListItem.section.uuid, name: listItemInput.section, order: listItem.section.order) // possible section update
+                let section = updatingListItem.section.copy(name: listItemInput.section)
                 let listItem = ListItem(
                     uuid: updatingListItem.uuid,
                     product: product,

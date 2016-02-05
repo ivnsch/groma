@@ -127,7 +127,9 @@ class RemoteListItemProvider {
         let parameters: [String: AnyObject] = [
             "uuid": section.uuid,
             "name": section.name,
-            "order": section.order
+            "todoOrder": section.todoOrder,
+            "doneOrder": section.doneOrder,
+            "stashOrder": section.stashOrder
         ]
         RemoteProvider.authenticatedRequest(.POST, Urls.section, parameters) {result in
             handler(result)
@@ -224,7 +226,9 @@ class RemoteListItemProvider {
         return [
             "uuid": section.uuid,
             "name": section.name,
-            "order": section.order
+            "todoOrder": section.todoOrder,
+            "doneOrder": section.doneOrder,
+            "stashOrder": section.stashOrder
         ]
     }
     

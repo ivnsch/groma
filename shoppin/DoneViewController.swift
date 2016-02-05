@@ -84,7 +84,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     
     private func initWithList(list: List) {
         
-        Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{[weak self] listItems in
+        Providers.listItemsProvider.listItems(list, sortOrderByStatus: .Done, fetchMode: .MemOnly, successHandler{[weak self] listItems in
             
             if let weakSelf = self {
                 let doneListItems = listItems.filter{$0.hasStatus(.Done)}

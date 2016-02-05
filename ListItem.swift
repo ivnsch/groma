@@ -13,7 +13,7 @@ enum ListItemStatus: Int {
 }
 
 typealias ListItemStatusQuantity = (status: ListItemStatus, quantity: Int)
-typealias ListItemStatusOrder = (status: ListItemStatus, order: Int)
+typealias ListItemStatusOrder = (status: ListItemStatus, order: Int) // TODO rename as this is used now for sections too
 
 final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let uuid: String
@@ -145,14 +145,19 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     var debugDescription: String {
-        return shortDebugDescription
-        //        return longDebugDescription
+//        return shortDebugDescription
+//        return longDebugDescription
+        return quantityDebugDescription
     }
     
     private var shortDebugDescription: String {
         return "[\(product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)"
     }
-
+    
+    private var quantityDebugDescription: String {
+        return "\(uuid), \(product.name), todoQuantity: \(todoQuantity), doneQuantity: \(doneQuantity), stashQuantity: \(stashQuantity)"
+    }
+    
     private var longDebugDescription: String {
         return "{\(self.dynamicType) uuid: \(uuid), note: \(note), productUuid: \(product), sectionUuid: \(section), listUuid: \(list), todoQuantity: \(todoQuantity), todoOrder: \(todoOrder), doneQuantity: \(doneQuantity), doneOrder: \(doneOrder), stashQuantity: \(stashQuantity), stashOrder: \(stashOrder), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
     }

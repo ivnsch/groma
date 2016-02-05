@@ -83,8 +83,8 @@ class MemListItemProvider {
             // see if there's already a section for the new list item in the list, if not create a new one
             let sectionName = prototype.targetSectionName
             let section = (self.listItems![list]!.findFirst{$0.section.name == sectionName})?.section ?? {
-                let sectionCount = self.listItems![list]!.sectionCount
-                return Section(uuid: NSUUID().UUIDString, name: sectionName, order: sectionCount)
+                let sectionCount = self.listItems![list]!.sectionCount(status)
+                return Section(uuid: NSUUID().UUIDString, name: sectionName, order: ListItemStatusOrder(status: status, order: sectionCount))
             }()
             
             var listItemOrder = 0
@@ -175,6 +175,7 @@ class MemListItemProvider {
                 return false
             }
         }
+        
         return true
     }
     

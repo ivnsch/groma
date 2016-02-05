@@ -15,7 +15,7 @@ class ListItemProviderImpl: ListItemProvider {
     let remoteProvider = RemoteListItemProvider()
     let memProvider = MemListItemProvider(enabled: true)
 
-    func listItems(list: List, fetchMode: ProviderFetchModus = .Both, _ handler: ProviderResult<[ListItem]> -> ()) {
+    func listItems(list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus = .Both, _ handler: ProviderResult<[ListItem]> -> ()) {
 
         let memListItemsMaybe = memProvider.listItems(list)
         if let memListItems = memListItemsMaybe {
@@ -26,13 +26,13 @@ class ListItemProviderImpl: ListItemProvider {
         }
 
         self.dbProvider.loadListItems(list, handler: {[weak self] (var dbListItems) in
-
+            
             // reorder items by position
             // TODO ? a possible optimization is to save the list to local db sorted instead of having order field, see http://stackoverflow.com/questions/25023826/reordering-realm-io-data-in-tableview-with-swift
             // the server still needs (internally at least) the order column
             // TODO another optimization is to do the server items sorting in the server
-            
-            dbListItems = dbListItems.sortedByOrder() // order is relative to section (0...n) so there will be repeated numbers.
+    
+            dbListItems = dbListItems.sortedByOrder(sortOrderByStatus) // order is relative to section (0...n) so there will be repeated numbers.
             
             // we assume the database result is always == mem result, so if returned from mem already no need to return from db
             // TODO there's no need to load the items from db before doing the remote call (confirm this), since we assume memory == database it would be enough to compare 
@@ -46,7 +46,7 @@ class ListItemProviderImpl: ListItemProvider {
             self?.remoteProvider.listItems(list: list) {[weak self] remoteResult in
                 
                 if let remoteListItems = remoteResult.successResult {
-                    let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems)
+                    let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: sortOrderByStatus)
                     
                     // if there's no cached list or there's a difference, overwrite the cached list
                     if (dbListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
@@ -199,9 +199,10 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: Int?, _ handler: ProviderResult<ListItem> -> Void) {
+    // Note: status assumed to be .Todo as we can add list item input only to .Todo
+    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<ListItem> -> Void) {
 
-        Providers.sectionProvider.mergeOrCreateSection(listItemInput.section, possibleNewOrder: possibleNewSectionOrder, list: list) {[weak self] result in
+        Providers.sectionProvider.mergeOrCreateSection(listItemInput.section, status: .Todo, possibleNewOrder: possibleNewSectionOrder, list: list) {[weak self] result in
 
             if let section = result.sucessResult {
                 
@@ -252,6 +253,7 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
+    // Adds list items to .Todo
     func add(prototypes: [ListItemPrototype], list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<[ListItem]> -> Void) {
         
         typealias BGResult = (success: Bool, listItems: [ListItem]) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything)
@@ -282,12 +284,15 @@ class ListItemProviderImpl: ListItemProvider {
                             // Quick access for mem cache items - for some things we need to check if list items were added in the mem cache
                             let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(DBProduct.nameBrandKey($0.product.name, brand: $0.product.brand), $0)}
                             
+                            // Holds count of new items per section, which is incremented while we loop through prototypes
+                            // we need this to determine the order of the items in the sections - which is the last index in existing items + new items count so far in section
+                            var sectionCountNewItemsDict: [String: Int] = [:]
+                            
                             var savedListItems: [ListItem] = []
                             
                             for prototype in prototypes {
-                                
-                                
                                 if let existingListItem = existingListItemsDict[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)] {
+                                    
                                     existingListItem.increment(ListItemStatusQuantity(status: .Todo, quantity: prototype.quantity))
                                     
                                     // possible updates (when user submits a new list item using add edit product controller)
@@ -303,6 +308,7 @@ class ListItemProviderImpl: ListItemProvider {
                                     realm.add(existingListItem, update: true)
                                     
                                     let savedListItem = ListItemMapper.listItemWithDB(existingListItem)
+                                    
                                     savedListItems.append(savedListItem)
                                     
                                     
@@ -314,20 +320,40 @@ class ListItemProviderImpl: ListItemProvider {
                                     let section = existingListItems.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
                                         return SectionMapper.sectionWithDB(item.section)
                                         } ?? { // section not existent create a new one
-                                            let sectionCount = Set(existingListItems.map{$0.section}).count
+                                            
+                                            // determine current section count in status
+                                            let sectionsOfItemsWithStatus: [DBSection] = existingListItems.collect({
+                                                if $0.hasStatus(.Todo) {
+                                                    return $0.section
+                                                } else {
+                                                    return nil
+                                                }
+                                            })
+                                            let sectionCount = Set(sectionsOfItemsWithStatus).count
                                             
                                             // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
-                                            return memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, order: sectionCount)
+                                            return memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, order: ListItemStatusOrder(status: .Todo, order: sectionCount))
                                         }()
                                     
-                                    
-                                    // calculate list item order, which is at the end of it's section (==count of listitems in section). Note that currently we are doing this iteration even if we just created the section, where order is always 0. This if for clarity - can be optimised later (TODO)
-                                    var listItemOrder = 0
-                                    for existingListItem in existingListItems {
-                                        if existingListItem.section.uuid == section.uuid {
-                                            listItemOrder++
+                                    // determine list item order and init/update the map with list items count / section as side effect (which is used to determine the order of the next item)
+                                    let listItemOrder: Int = {
+                                        if let sectionCount = sectionCountNewItemsDict[section.uuid] { // if already initialised (existing items count) increment 1 (for new item we are adding)
+                                            let order = sectionCount + 1
+                                            sectionCountNewItemsDict[section.uuid] = order
+                                            return order
+                                            
+                                        } else { // init to existing count
+                                            var existingCountInSection = 0
+                                            // Note that currently we are doing this iteration even if we just created the section, where order is always 0. Not a big issue in our case but can be optimised (TODO?)
+                                            for existingListItem in existingListItems {
+                                                if existingListItem.section.uuid == section.uuid && existingListItem.hasStatus(.Todo) {
+                                                    existingCountInSection++
+                                                }
+                                            }
+                                            sectionCountNewItemsDict[section.uuid] = existingCountInSection
+                                            return existingCountInSection
                                         }
-                                    }
+                                    }()
                                     
                                     let uuid = memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.uuid ?? NSUUID().UUIDString
                                     
@@ -342,7 +368,7 @@ class ListItemProviderImpl: ListItemProvider {
                                         statusOrder: ListItemStatusOrder(status: .Todo, order: listItemOrder),
                                         statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: prototype.quantity)
                                     )
-                                    
+
                                     let dbListItem = ListItemMapper.dbWithListItem(listItem)
                                     realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
                                     
@@ -405,7 +431,7 @@ class ListItemProviderImpl: ListItemProvider {
 
     func switchStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         
-        self.listItems(list, fetchMode: .MemOnly) {result in // TODO review .First suitable here
+        self.listItems(list, sortOrderByStatus: status, fetchMode: .MemOnly) {result in // TODO review .First suitable here
 
             if let storedListItems = result.sucessResult {
             

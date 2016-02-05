@@ -68,7 +68,7 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     
     private func initWithList(list: List) {
         
-        Providers.listItemsProvider.listItems(list, fetchMode: .MemOnly, successHandler{[weak self] listItems in
+        Providers.listItemsProvider.listItems(list, sortOrderByStatus: .Stash, fetchMode: .MemOnly, successHandler{[weak self] listItems in
             let listItems = listItems.filter{$0.hasStatus(.Stash)}
             self?.listItemsTableViewController.setListItems(listItems)
         })

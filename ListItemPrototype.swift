@@ -9,7 +9,7 @@
 import Foundation
 
 // Represents an item that will be added to a list - it can come from e.g. quick add product or quick add group
-class ListItemPrototype: Equatable, Identifiable {
+class ListItemPrototype: Equatable, Identifiable, CustomDebugStringConvertible {
     let product: Product
     let quantity: Int
     let targetSectionName: String
@@ -27,6 +27,11 @@ class ListItemPrototype: Equatable, Identifiable {
     func incrementQuantityCopy(delta: Int) -> ProductWithQuantity {
         fatalError("override")
     }
+    
+    var debugDescription: String {
+        return "\(product.name), \(quantity), \(targetSectionName)"
+    }
+    
 }
 func ==(lhs: ListItemPrototype, rhs: ListItemPrototype) -> Bool {
     return lhs.product == rhs.product && lhs.quantity == rhs.quantity

@@ -70,6 +70,17 @@ extension Results {
         return (belongsArr, notBelongsArr)
     }
     
+    // Filter + map
+    // parameter f, mapping and filtering function if returns nil -> filter out
+    func collect<U>(f: T -> U?) -> [U] {
+        var arr: [U] = []
+        for e in self {
+            if let e = f(e) {
+                arr.append(e)
+            }
+        }
+        return arr
+    }
     
 }
 

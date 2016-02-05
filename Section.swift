@@ -11,7 +11,11 @@ import Foundation
 final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
-    let order: Int
+//    let order: Int
+    
+    let todoOrder: Int
+    let doneOrder: Int
+    let stashOrder: Int
     
     // TODO! list reference - a section belongs to a list
     
@@ -24,13 +28,28 @@ final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid:  String, name: String, order: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, name: String, todoOrder: Int, doneOrder: Int, stashOrder: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.name = name
-        self.order = order
+        
+        self.todoOrder = todoOrder
+        self.doneOrder = doneOrder
+        self.stashOrder = stashOrder
+        
         self.lastUpdate = lastUpdate
         self.lastServerUpdate = lastServerUpdate
         self.removed = removed
+    }
+    
+    convenience init(uuid: String, name: String, order: ListItemStatusOrder, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+        let (todoOrder, doneOrder, stashOrder): (Int, Int, Int) = {
+            switch(order.status) {
+            case .Todo: return (order.order, 0, 0)
+            case .Done: return (0, order.order, 0)
+            case .Stash: return (0, 0, order.order)
+            }
+        }()
+        self.init(uuid: uuid, name: name, todoOrder: todoOrder, doneOrder: doneOrder, stashOrder: stashOrder, lastUpdate: lastUpdate, lastServerUpdate: lastServerUpdate, removed: removed)
     }
     
     var hashValue: Int {
@@ -38,14 +57,18 @@ final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), name: \(self.name), order: \(self.order), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}}"
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, order: Int? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> Section {
+    func copy(uuid uuid: String? = nil, name: String? = nil, todoOrder: Int? = nil, doneOrder: Int? = nil, stashOrder: Int? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> Section {
         return Section(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
-            order: order ?? self.order,
+            
+            todoOrder: todoOrder ?? self.todoOrder,
+            doneOrder: doneOrder ?? self.doneOrder,
+            stashOrder: stashOrder ?? self.stashOrder,
+            
             lastUpdate: lastUpdate ?? self.lastUpdate,
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
             removed: removed ?? self.removed
@@ -54,6 +77,14 @@ final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
     
     func same(section: Section) -> Bool {
         return section.uuid == self.uuid
+    }
+    
+    func order(status: ListItemStatus) -> Int {
+        switch status {
+        case .Todo: return todoOrder
+        case .Done: return doneOrder
+        case .Stash: return stashOrder
+        }
     }
 }
 

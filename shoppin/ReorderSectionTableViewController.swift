@@ -107,6 +107,7 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
     }
     */
 
+    // Note: status of itels in this list assumed to be .Todo! It's not possible to reorder sections in the other status
     func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
         
         let section = sections[fromIndexPath.row]
@@ -115,7 +116,7 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
         sections.insert(section, atIndex: toIndexPath.row)
         
         sections = sections.enumerate().map{index, section in
-            section.copy(order: index)
+            section.copy(todoOrder: index)
         }
 
         Providers.sectionProvider.update(sections, remote: true, successHandler{[weak self] in

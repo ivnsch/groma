@@ -17,7 +17,7 @@ import HockeySDK
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    private let debugAddDummyData = false
+    private let debugAddDummyData = true
     private let debugGeneratePrefillDatabases = false
     private let debugForceShowIntro = false
 
@@ -163,7 +163,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 guard let weakSelf = self else {return}
                 
-                let section1 = Section(uuid: uuid, name: "Obst", order: 0)
+                let section1 = Section(uuid: uuid, name: "Obst", order: ListItemStatusOrder(status: .Todo, order: 0))
                 let listItems = [
                     ListItem(uuid: uuid, product: product1, section: section1, list: list1, todoQuantity: 5, todoOrder: 0)
                 ]
@@ -384,12 +384,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     
                     guard let weakSelf = self else {return}
                     
-                    let section1 = Section(uuid: uuid, name: "Obst", order: 0)
-                    let section2 = Section(uuid: uuid, name: "Gemuese", order: 1)
-                    let section3 = Section(uuid: uuid, name: "Milchprodukte", order: 2)
-                    let section4 = Section(uuid: uuid, name: "Fleisch", order: 3)
-                    let section5 = Section(uuid: uuid, name: "Pasta", order: 4)
-                    let section6 = Section(uuid: uuid, name: "Getraenke", order: 5)
+                    let section1 = Section(uuid: uuid, name: "Obst", order: ListItemStatusOrder(status: .Todo, order: 0))
+                    let section2 = Section(uuid: uuid, name: "Gemuese", order: ListItemStatusOrder(status: .Todo, order: 1))
+                    let section3 = Section(uuid: uuid, name: "Milchprodukte", order: ListItemStatusOrder(status: .Todo, order: 2))
+                    let section4 = Section(uuid: uuid, name: "Fleisch", order: ListItemStatusOrder(status: .Todo, order: 3))
+                    let section5 = Section(uuid: uuid, name: "Pasta", order: ListItemStatusOrder(status: .Todo, order: 4))
+                    let section6 = Section(uuid: uuid, name: "Getraenke", order: ListItemStatusOrder(status: .Todo, order: 5))
 //                    let cleaning = Section(uuid: uuid, name: "Putzmittel", order: 6)
 //                    let hygienic = Section(uuid: uuid, name: "Hygiene", order: 7)
 //                    let spices = Section(uuid: uuid, name: "Gewürze", order: 8)

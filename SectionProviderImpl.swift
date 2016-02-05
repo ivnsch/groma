@@ -78,7 +78,7 @@ class SectionProviderImpl: SectionProvider {
         }
     }
     
-    func mergeOrCreateSection(sectionName: String, possibleNewOrder: Int?, list: List, _ handler: ProviderResult<Section> -> Void) {
+    func mergeOrCreateSection(sectionName: String, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, _ handler: ProviderResult<Section> -> Void) {
         
         // load section or create one (there's no more section data in the input besides of the name, so there's nothing to update).
         // There is no name update since here we have only name so either the name is in db or it's not, if it's not insert a new section
@@ -98,12 +98,12 @@ class SectionProviderImpl: SectionProvider {
                         
                     } else { // no order known in advance - fetch listItems to count how many sections, order at the end
                         
-                        Providers.listItemsProvider.listItems(list, fetchMode: ProviderFetchModus.First) {result in
+                        Providers.listItemsProvider.listItems(list, sortOrderByStatus: .Stash, fetchMode: ProviderFetchModus.First) {result in
                             
                             if let listItems = result.sucessResult {
-                                let order = listItems.sectionCount
+                                let order = listItems.sectionCount(status)
                                 
-                                let section = Section(uuid: NSUUID().UUIDString, name: sectionName, order: order)
+                                let section = Section(uuid: NSUUID().UUIDString, name: sectionName, order: ListItemStatusOrder(status: status, order: order))
                                 handler(ProviderResult(status: .Success, sucessResult: section))
                                 
                             } else {

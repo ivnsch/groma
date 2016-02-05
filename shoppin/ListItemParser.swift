@@ -37,8 +37,10 @@ class ListItemParser {
     class func parseSection(json: AnyObject) -> Section {
         let uuid = json.valueForKeyPath("uuid") as! String
         let name = json.valueForKeyPath("name") as! String
-        let order = json.valueForKeyPath("order") as! Int
-        return Section(uuid: uuid, name: name, order: order)
+        let todoOrder = json.valueForKeyPath("todoOrder") as! Int
+        let doneOrder = json.valueForKeyPath("doneOrder") as! Int
+        let stashOrder = json.valueForKeyPath("stashOrder") as! Int
+        return Section(uuid: uuid, name: name, todoOrder: todoOrder, doneOrder: doneOrder, stashOrder: stashOrder)
     }
 
     class func parseList(json: AnyObject) -> List {

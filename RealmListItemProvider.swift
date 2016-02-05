@@ -364,8 +364,8 @@ class RealmListItemProvider: RealmProvider {
                         return SectionMapper.sectionWithDB(item.section)
                         } ?? {
                             let sectionCount = Set(listItemsInList.map{$0.section}).count
-                            return Section(uuid: NSUUID().UUIDString, name: sectionName, order: sectionCount)
-                            }()
+                            return Section(uuid: NSUUID().UUIDString, name: sectionName, order: ListItemStatusOrder(status: status, order: sectionCount))
+                        }()
                     
                     
                     // calculate list item order, which is at the end of it's section (==count of listitems in section). Note that currently we are doing this iteration even if we just created the section, where order is always 0. This if for clarity - can be optimised later (TODO)
@@ -560,7 +560,7 @@ class RealmListItemProvider: RealmProvider {
             // save inventory items
             for listItemsSyncResult in syncResult.listItemsSyncResults {
                 
-                let listItemsWithRelations = ListItemMapper.listItemsWithRemote(listItemsSyncResult.listItems)
+                let listItemsWithRelations = ListItemMapper.listItemsWithRemote(listItemsSyncResult.listItems, sortOrderByStatus: nil)
                 
                 for product in listItemsWithRelations.products {
                     let dbProduct = ProductMapper.dbWithProduct(product)
