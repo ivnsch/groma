@@ -38,6 +38,7 @@ extension Results {
     }
     
     // Copied from Array extension - we need this for results also
+    // mapFunc: maps element to a tuple key: value
     func toDictionary<K: Hashable, V>(mapFunc: T -> (K, V)) -> [K: V] {
         var dict = [K: V]()
         for e in self {

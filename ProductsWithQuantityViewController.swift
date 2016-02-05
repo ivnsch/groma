@@ -9,24 +9,6 @@
 import UIKit
 import CMPopTipView
 
-class ProductWithQuantity: Equatable, Identifiable {
-    var product: Product {
-        fatalError("override")
-    }
-    var quantity: Int {
-        fatalError("override")
-    }
-    func same(rhs: ProductWithQuantity) -> Bool {
-        return product.same(rhs.product)
-    }
-    func incrementQuantityCopy(delta: Int) -> ProductWithQuantity {
-        fatalError("override")
-    }
-}
-func ==(lhs: ProductWithQuantity, rhs: ProductWithQuantity) -> Bool {
-    return lhs.product == rhs.product && lhs.quantity == rhs.quantity
-}
-
 protocol ProductsWithQuantityViewControllerDelegate {
     func loadModels(page: NSRange, sortBy: InventorySortBy, onSuccess: [ProductWithQuantity] -> Void)
     func remove(model: ProductWithQuantity, onSuccess: VoidFunction, onError: ProviderResult<Any> -> Void)

@@ -55,4 +55,10 @@ class DBProduct: DBSyncable {
         setSyncableFieldsInDict(dict)
         return dict
     }
+    
+    // This function doesn't really have to here but don't have a better place yet
+    // A key that can be used e.g. in dictionaries
+    static func nameBrandKey(name: String, brand: String) -> String {
+        return name + "-.9#]A-" + brand // insert some random text in between to prevent possible cases where name or brand text matches what would be a combination, e.g. a product is called "soapMyBrand" has empty brand and other product is called "soap" and has a brand "MyBrand" these are different but simple text concatenation would result in the same key.
+    }
 }

@@ -30,6 +30,8 @@ protocol ListItemProvider {
     
     func addListItem(product: Product, sectionName: String, quantity: Int, list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<ListItem> -> Void)
     
+    func add(prototypes: [ListItemPrototype], list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<[ListItem]> -> Void)
+
     func update(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     func update(listItems: [ListItem], remote: Bool, _ handler: ProviderResult<Any> -> ())

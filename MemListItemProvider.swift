@@ -56,7 +56,7 @@ class MemListItemProvider {
         }
     }
 
-    func addOrUpdateListItem(product: Product, sectionNameMaybe: String? = nil, status: ListItemStatus, quantity: Int, list: List, note: String? = nil) -> ListItem? {
+    func addOrUpdateListItem(prototype: ListItemPrototype, status: ListItemStatus, list: List, note: String? = nil) -> ListItem? {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
         
@@ -67,13 +67,13 @@ class MemListItemProvider {
         
         // TODO optimise this, for each list item we are iterating through the whole list items list. We should put listitems in dictionary with uuid or product name, or something
         // add case when a listitem with same product name already exist becomes an update: use uuid of existing item, and increment quantity - and of course use the rest of fields of new list item
-        if let existingListItem = self.listItems![list]!.findFirstWithProductNameAndBrand(product.name, brand: product.brand) {
-
-            let updatedSection = existingListItem.section.copy(name: sectionNameMaybe)
-
+        if let existingListItem = self.listItems![list]!.findFirstWithProductNameAndBrand(prototype.product.name, brand: prototype.product.brand) {
+            
+            let updatedSection = existingListItem.section.copy(name: prototype.targetSectionName) // TODO!!!! I think this is related with the bug with unwanted section update? for now letting like this since it's same functionality as before
+            
             // TODO don't we have to update product and list here also?
             
-            let updatedListItem = existingListItem.copyIncrement(section: updatedSection, note: note, statusQuantity: ListItemStatusQuantity(status: status, quantity: quantity))
+            let updatedListItem = existingListItem.copyIncrement(section: updatedSection, note: note, statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.quantity))
             
             self.listItems?[list]?.update(updatedListItem)
             
@@ -81,7 +81,7 @@ class MemListItemProvider {
         } else {
             
             // see if there's already a section for the new list item in the list, if not create a new one
-            let sectionName = sectionNameMaybe ?? product.category.name
+            let sectionName = prototype.targetSectionName
             let section = (self.listItems![list]!.findFirst{$0.section.name == sectionName})?.section ?? {
                 let sectionCount = self.listItems![list]!.sectionCount
                 return Section(uuid: NSUUID().UUIDString, name: sectionName, order: sectionCount)
@@ -95,12 +95,36 @@ class MemListItemProvider {
             }
             
             // create the list item and save it
-            let listItem = ListItem(uuid: NSUUID().UUIDString, product: product, section: section, list: list, note: note, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: quantity))
+            let listItem = ListItem(uuid: NSUUID().UUIDString, product: prototype.product, section: section, list: list, note: note, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.quantity))
             
             self.listItems?[listItem.list]?.append(listItem)
             
             return listItem
         }
+    }
+
+    func addOrUpdateListItems(prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String? = nil) -> [ListItem]? {
+        guard enabled else {return nil}
+        guard listItems != nil else {return nil}
+        
+        var addedListItems: [ListItem] = []
+        for prototype in prototypes {
+            if let addedListItem = addOrUpdateListItem(prototype, status: status, list: list, note: note) {
+                addedListItems.append(addedListItem)
+            } else {
+                print("Error: MemListItemProvider.addOrUpdateListItem: Invalid state: addedListItem is nil. This should not happen as nil is only returned when mem provider is disabled.")
+            }
+        }
+        return addedListItems
+    }
+
+    
+    func addOrUpdateListItem(product: Product, sectionNameMaybe: String? = nil, status: ListItemStatus, quantity: Int, list: List, note: String? = nil) -> ListItem? {
+        guard enabled else {return nil}
+        guard listItems != nil else {return nil}
+        
+        let prototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionNameMaybe ?? product.category.name)
+        return addOrUpdateListItem(prototype, status: status, list: list, note: note)
     }
     
     // returns nil only if memory cache is not enabled

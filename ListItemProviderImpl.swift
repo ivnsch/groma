@@ -104,49 +104,8 @@ class ListItemProviderImpl: ListItemProvider {
     }
 
     func add(groupItems: [GroupItem], list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
-        
-        listItems(list, fetchMode: .MemOnly) {[weak self] result in // get listitems - we need this to determine the order of the new items
-            
-            if let currentListItems = result.sucessResult {
-                
-                // TODO! check if count is really being incremented (maybe tuple immutable?)
-                var currentSectionNameToSectionAndContainedListItemsCount = currentListItems.groupBySection().map{($0.name, (section: $0, count: $1.count))}
-                
-                var listItems: [ListItem] = []
-                var sectionCount = currentSectionNameToSectionAndContainedListItemsCount.count // neeeded to set order field in possible new sections
-                
-                for groupItem in groupItems {
-                    // append new listitem at the end of section
-                    let count = currentSectionNameToSectionAndContainedListItemsCount[groupItem.product.category.name]?.count ?? 0
-                    let order = count // order is the same as index: if no elements -> order 0, if 1 elements -> order 0, 1, etc.
-                    currentSectionNameToSectionAndContainedListItemsCount[groupItem.product.category.name]?.count = count + 1 // we inserted an item, increment (or insert, if section doesn't exist yet) count
-                    
-                    // create a section if there's is no section in the list yet with same name as category
-                    let section: Section = {
-                        currentSectionNameToSectionAndContainedListItemsCount[groupItem.product.category.name]?.section ?? {
-
-                            // we are appending a new section to the existing sections in the list, increment section count so next new section has correct order
-                            sectionCount++
-                            
-                            // section order -> append at the end -> section count (currentSectionNameToSectionAndContainedListItemsCount.count is section count)
-                            return Section(uuid: NSUUID().UUIDString, name: groupItem.product.category.name, order: currentSectionNameToSectionAndContainedListItemsCount.count)
-                        }()
-                    }()
-                    
-                    // Note: we add always to Todo list - it's not possible and it doesn't make sense to add group items to cart & stash
-                    let listItem = ListItem(uuid: NSUUID().UUIDString, product: groupItem.product, section: section, list: list, statusOrder: ListItemStatusOrder(status: .Todo, order: order), statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: groupItem.quantity))
-                    listItems.append(listItem)
-                }
-                
-                self?.add(listItems) {result in
-                    handler(result)
-                }
-                
-            } else {
-                print("Error: Can't add groups: Could not get listitems.")
-                handler(ProviderResult(status: .DatabaseUnknown))
-            }
-        }
+        let listItemPrototypes: [ListItemPrototype] = groupItems.map{ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name)}
+        self.add(listItemPrototypes, list: list, handler)
     }
     
     func addGroupItems(group: ListItemGroup, list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
@@ -267,19 +226,46 @@ class ListItemProviderImpl: ListItemProvider {
 
     // Adds list item with todo status
     func addListItem(product: Product, sectionName: String, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
+        let listItemPrototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionName)
+        self.add(listItemPrototype, list: list, handler)
+    }
+    
+    private func addSync(prototype: ListItemPrototype) {
+    
+    }
+    
+    func add(prototype: ListItemPrototype, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
         
-        typealias BGResult = (success: Bool, listItem: ListItem) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything)
+        add([prototype], list: list, note: note, order: orderMaybe) {result in
+            if let addedListItems = result.sucessResult {
+                
+                if let addedListItem = addedListItems.first {
+                    handler(ProviderResult(status: .Success, sucessResult: addedListItem))
+                } else {
+                    print("Error: ListItemProviderImpl.add:prototype: Invalid state: add returned success result but it's empty. Status (should be success): \(result.status)")
+                    handler(ProviderResult(status: .Unknown))
+                }
+            } else {
+                print("Error: ListItemProviderImpl.add:prototype: Add didn't return success result, status: \(result.status)")
+                handler(ProviderResult(status: .Unknown))
+            }
+        }
+    }
+    
+    func add(prototypes: [ListItemPrototype], list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<[ListItem]> -> Void) {
+        
+        typealias BGResult = (success: Bool, listItems: [ListItem]) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything)
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
             
             if let weakSelf = self {
                 let bgResultMaybe: BGResult? = syncedRet(weakSelf) {
                     do {
-                        let memAddedListItemMaybe = weakSelf.memProvider.addOrUpdateListItem(product, sectionNameMaybe: sectionName, status: .Todo, quantity: quantity, list: list, note: note)
-                        if let addedListItem = memAddedListItemMaybe {
+                        let memAddedListItemsMaybe = weakSelf.memProvider.addOrUpdateListItems(prototypes, status: .Todo, list: list, note: note)
+                        if let addedListItems = memAddedListItemsMaybe {
                             dispatch_async(dispatch_get_main_queue(), {
                                 // return in advance so our client is quick - the database update continues in the background
-                                handler(ProviderResult(status: .Success, sucessResult: addedListItem))
+                                handler(ProviderResult(status: .Success, sucessResult: addedListItems))
                             })
                         }
                         
@@ -289,72 +275,89 @@ class ListItemProviderImpl: ListItemProvider {
                             // theoretically the state in mem should match the state in db so this fetch should not be necessary, but for now let's be secure.
                             
                             // see if there's already a listitem for this product in the list - if yes only increment it
-                            if let existingListItem = realm.objects(DBListItem).filter(DBListItem.createFilter(list, product: product)).first {
-                                existingListItem.increment(ListItemStatusQuantity(status: .Todo, quantity: quantity))
-                                
-                                // possible updates (when user submits a new list item using add edit product controller)
-                                //                if let sectionName = section.name {
-                                existingListItem.section.name = sectionName
-                                //                }
-                                if let note = note {
-                                    existingListItem.note = note
-                                }
-                                
-                                // let incrementedListItem = existingListItem.copy(quantity: existingListItem.quantity + 1)
-                                // TODO!! update sectionnaeme, note (for case where this is from add product with inputs)
-                                realm.add(existingListItem, update: true)
-                                let savedListItem = ListItemMapper.listItemWithDB(existingListItem)
-                                
-                                return (success: true, listItem: savedListItem)
-                                
-                            } else { // no list item for product in the list, create a new one
-                                
-                                // see if there's already a section for the new list item in the list, if not create a new one
-                                let listItemsInList = realm.objects(DBListItem).filter(DBListItem.createFilter(list))
-                                //                let sectionName = sectionNameMaybe ?? product.category
-                                let sectionName = sectionName ?? product.category.name
-                                let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
-                                    return SectionMapper.sectionWithDB(item.section)
-                                    } ?? { // section not existent create a new one
-                                        let sectionCount = Set(listItemsInList.map{$0.section}).count
-                                        
-                                        // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
-                                        return memAddedListItemMaybe?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, order: sectionCount)
-                                    }()
+                            
+                            let existingListItems = realm.objects(DBListItem).filter(DBListItem.createFilter(list))
+                            let existingListItemsDict: [String: DBListItem] = existingListItems.toDictionary{(DBProduct.nameBrandKey($0.product.name, brand: $0.product.brand), $0)}
+                            
+                            // Quick access for mem cache items - for some things we need to check if list items were added in the mem cache
+                            let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(DBProduct.nameBrandKey($0.product.name, brand: $0.product.brand), $0)}
+                            
+                            var savedListItems: [ListItem] = []
+                            
+                            for prototype in prototypes {
                                 
                                 
-                                // calculate list item order, which is at the end of it's section (==count of listitems in section). Note that currently we are doing this iteration even if we just created the section, where order is always 0. This if for clarity - can be optimised later (TODO)
-                                var listItemOrder = 0
-                                for existingListItem in listItemsInList {
-                                    if existingListItem.section.uuid == section.uuid {
-                                        listItemOrder++
+                                if let existingListItem = existingListItemsDict[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)] {
+                                    existingListItem.increment(ListItemStatusQuantity(status: .Todo, quantity: prototype.quantity))
+                                    
+                                    // possible updates (when user submits a new list item using add edit product controller)
+                                    //                if let sectionName = section.name {
+                                    existingListItem.section.name = prototype.targetSectionName
+                                    //                }
+                                    if let note = note {
+                                        existingListItem.note = note
                                     }
+                                    
+                                    // let incrementedListItem = existingListItem.copy(quantity: existingListItem.quantity + 1)
+                                    // TODO!! update sectionnaeme, note (for case where this is from add product with inputs)
+                                    realm.add(existingListItem, update: true)
+                                    
+                                    let savedListItem = ListItemMapper.listItemWithDB(existingListItem)
+                                    savedListItems.append(savedListItem)
+                                    
+                                    
+                                } else { // item doesn't exist
+                                    
+//                                    // see if there's already a section for the new list item in the list, if not create a new one
+//                                    let listItemsInList = realm.objects(DBListItem).filter(DBListItem.createFilter(list))
+                                    let sectionName = prototype.targetSectionName
+                                    let section = existingListItems.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
+                                        return SectionMapper.sectionWithDB(item.section)
+                                        } ?? { // section not existent create a new one
+                                            let sectionCount = Set(existingListItems.map{$0.section}).count
+                                            
+                                            // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
+                                            return memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, order: sectionCount)
+                                        }()
+                                    
+                                    
+                                    // calculate list item order, which is at the end of it's section (==count of listitems in section). Note that currently we are doing this iteration even if we just created the section, where order is always 0. This if for clarity - can be optimised later (TODO)
+                                    var listItemOrder = 0
+                                    for existingListItem in existingListItems {
+                                        if existingListItem.section.uuid == section.uuid {
+                                            listItemOrder++
+                                        }
+                                    }
+                                    
+                                    let uuid = memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.uuid ?? NSUUID().UUIDString
+                                    
+                                    // create the list item and save it
+                                    // memcache uuid: if we created a new listitem in memcache use this uuid so our data is consistent mem/db
+                                    let listItem = ListItem(
+                                        uuid: uuid,
+                                        product: prototype.product,
+                                        section: section,
+                                        list: list,
+                                        note: note,
+                                        statusOrder: ListItemStatusOrder(status: .Todo, order: listItemOrder),
+                                        statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: prototype.quantity)
+                                    )
+                                    
+                                    let dbListItem = ListItemMapper.dbWithListItem(listItem)
+                                    realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
+                                    
+                                    let savedListItem = ListItemMapper.listItemWithDB(dbListItem)
+                                    savedListItems.append(savedListItem)
                                 }
-                                
-                                // create the list item and save it
-                                // memcache uuid: if we created a new listitem in memcache use this uuid so our data is consistent mem/db
-                                let listItem = ListItem(
-                                    uuid: memAddedListItemMaybe?.uuid ?? NSUUID().UUIDString,
-                                    product: product,
-                                    section: section,
-                                    list: list,
-                                    note: note,
-                                    statusOrder: ListItemStatusOrder(status: .Todo, order: listItemOrder),
-                                    statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: quantity)
-                                )
-                                
-                                let dbListItem = ListItemMapper.dbWithListItem(listItem)
-                                realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
-                                let savedListItem = ListItemMapper.listItemWithDB(dbListItem)
-                                
-                                return (success: true, listItem: savedListItem)
                             }
+                            
+                            return (success: true, listItems: savedListItems)
                         })
                     }
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), {
-
+                    
                     if let bgResult = bgResultMaybe { // bg ran successfully
                         
                         if self?.memProvider.enabled ?? false {
@@ -362,24 +365,24 @@ class ListItemProviderImpl: ListItemProvider {
                             
                         } else {
                             // mem provider is not enabled - controller is waiting for result - return it
-                            handler(ProviderResult(status: .Success, sucessResult: bgResult.listItem))
+                            handler(ProviderResult(status: .Success, sucessResult: bgResult.listItems))
                         }
                         
-//                        if let addedListItem = bgResult.listItem { // bg returned a list item
-//                            handler(ProviderResult(status: .Success, sucessResult: bgResult.addedListItem))
-//
-//                        
-//                        } else {
-//                            // bg was successful but didn't return a list item, this happens when the item was returned from the memory cache
-//                            // in this case we do nothing - the client already has the added object
-//                        }
+                        //                        if let addedListItem = bgResult.listItem { // bg returned a list item
+                        //                            handler(ProviderResult(status: .Success, sucessResult: bgResult.addedListItem))
+                        //
+                        //
+                        //                        } else {
+                        //                            // bg was successful but didn't return a list item, this happens when the item was returned from the memory cache
+                        //                            // in this case we do nothing - the client already has the added object
+                        //                        }
                         
                         
                         // add to server
-                        self?.remoteProvider.add(bgResult.listItem) {remoteResult in
+                        self?.remoteProvider.add(bgResult.listItems) {remoteResult in
                             if !remoteResult.success {
-                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<ListItem>) in
-                                    print("Error: adding listItem in remote: \(bgResult.listItem), result: \(remoteResult)")
+                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[ListItem]>) in
+                                    print("Error: adding listItems in remote: \(bgResult.listItems), result: \(remoteResult)")
                                     self?.memProvider.invalidate()
                                     handler(result)
                                 })
