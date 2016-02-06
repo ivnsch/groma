@@ -12,6 +12,7 @@ import FBSDKCoreKit
 import Reachability
 import ChameleonFramework
 import HockeySDK
+import QorumLogs
 
 @objc
 @UIApplicationMain
@@ -20,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private let debugAddDummyData = true
     private let debugGeneratePrefillDatabases = false
     private let debugForceShowIntro = false
-
+    
     var window: UIWindow?
     
     private var reachability: Reachability!
@@ -48,7 +49,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         initHockey()
         
+        configLog()
+        
         return initFb
+    }
+    
+    private func configLog() {
+        QorumLogs.enabled = true
+        QorumLogs.minimumLogLevelShown = 1
+        QorumOnlineLogs.minimumLogLevelShown = 4
+     
+        QorumLogs.KZLinkedConsoleSupportEnabled = true
+
+//        QorumLogs.test()
     }
     
     private func initHockey() {

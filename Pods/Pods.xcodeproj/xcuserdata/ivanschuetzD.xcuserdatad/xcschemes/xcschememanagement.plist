@@ -119,6 +119,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>QorumLogs.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Starscream.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -147,7 +152,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>128CADED8A937EC614DA13E3EFE172A0</key>
+		<key>11944C1404A029FB7C9A7EE21B8E279F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1415B37437A64593A0D2E00C6721755C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -157,7 +167,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>204B922492E358BC4A2E41476EB7DE24</key>
+		<key>29F542C94B8276276567FFB0E74821D8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2EC7CD9C3271358A56730DB1F69913BA</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2F6FE21F66D7DB08A3F40092C43B5CEA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -172,12 +192,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3C3E32BAD1A722DF9D89CC2AFF0ABFE8</key>
+		<key>4FADA6D9C1F16523C7E226D85B201DB6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4C60BB6B65E444F21E59B4375CEEFEB4</key>
+		<key>62A56B65AF0FDF8D4CDAABBCB1313F4D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -202,16 +222,6 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7E04C1D334B518767C078689235D2459</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>82E43D31D45A66851C983BE34CD5421E</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>8AA9D1663E4B55695BA312C07E929EE1</key>
 		<dict>
 			<key>primary</key>
@@ -222,7 +232,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>920A9B88DAF5BBE83BC1923111744236</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>976BEA4DB31BDB87CB7094002B2321EE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>9883DF06E8D2D66F932D42F0FCA1F6E9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9EB1505102BCFCA00A22C9DC85850352</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -237,17 +262,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>AE0820049F58CD7E609AEAC09B1ED59F</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>AE4F696CC357FA27AC16FF75A72C8C40</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C54AFF0661B91141C98100E5179D8D59</key>
+		<key>C35781FD056428B51593092CDB348A43</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -258,16 +278,6 @@
 			<true/>
 		</dict>
 		<key>E487DEB74F133059A75CF777CABC0115</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>E7FA222E8CC3DAD0FD272EA70F298B4F</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F42CC3CC560474BE9A96E7A0552C58F9</key>
 		<dict>
 			<key>primary</key>
 			<true/>

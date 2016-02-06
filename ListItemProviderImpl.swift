@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import QorumLogs
 
 class ListItemProviderImpl: ListItemProvider {
 
@@ -256,6 +257,8 @@ class ListItemProviderImpl: ListItemProvider {
     // Adds list items to .Todo
     func add(prototypes: [ListItemPrototype], list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<[ListItem]> -> Void) {
         
+        QL1("add prototypes: \(prototypes)")
+        
         typealias BGResult = (success: Bool, listItems: [ListItem]) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything)
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
@@ -309,6 +312,8 @@ class ListItemProviderImpl: ListItemProvider {
                                     
                                     let savedListItem = ListItemMapper.listItemWithDB(existingListItem)
                                     
+                                    QL1("item exists, affter incrementent: \(savedListItem)")
+
                                     savedListItems.append(savedListItem)
                                     
                                     
@@ -369,6 +374,8 @@ class ListItemProviderImpl: ListItemProvider {
                                         statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: prototype.quantity)
                                     )
 
+                                    QL1("item doesn't exist, created: \(listItem)")
+                                    
                                     let dbListItem = ListItemMapper.dbWithListItem(listItem)
                                     realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
                                     

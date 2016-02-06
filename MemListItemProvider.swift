@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 class MemListItemProvider {
 
@@ -75,6 +76,8 @@ class MemListItemProvider {
             
             let updatedListItem = existingListItem.copyIncrement(section: updatedSection, note: note, statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.quantity))
             
+            QL1("Item exists, updated it: \(updatedListItem)")
+
             self.listItems?[list]?.update(updatedListItem)
             
             return updatedListItem
@@ -97,6 +100,8 @@ class MemListItemProvider {
             // create the list item and save it
             let listItem = ListItem(uuid: NSUUID().UUIDString, product: prototype.product, section: section, list: list, note: note, statusOrder: ListItemStatusOrder(status: status, order: listItemOrder), statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.quantity))
             
+            QL1("Item didn't exist, created one: \(listItem)")
+            
             self.listItems?[listItem.list]?.append(listItem)
             
             return listItem
@@ -107,6 +112,8 @@ class MemListItemProvider {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
         
+        QL1("Called with prototypes: \(prototypes)")
+
         var addedListItems: [ListItem] = []
         for prototype in prototypes {
             if let addedListItem = addOrUpdateListItem(prototype, status: status, list: list, note: note) {
@@ -115,6 +122,9 @@ class MemListItemProvider {
                 print("Error: MemListItemProvider.addOrUpdateListItem: Invalid state: addedListItem is nil. This should not happen as nil is only returned when mem provider is disabled.")
             }
         }
+        
+        QL1("List mem cache after update: \(listItems?[list])")
+
         return addedListItems
     }
 

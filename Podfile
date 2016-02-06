@@ -25,6 +25,7 @@ target 'shoppin' do
     pod 'ChameleonFramework/Swift'
     pod 'Starscream'
     pod 'HockeySDK', '~> 3.8.5'
+    pod 'QorumLogs'
     shared
 end
 
