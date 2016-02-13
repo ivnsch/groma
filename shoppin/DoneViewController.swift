@@ -126,8 +126,8 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     private func close() {
-        listItemsTableViewController.clearPendingSwipeItemIfAny(true) {
-            navigationController?.popViewControllerAnimated(true)
+        listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
+            self?.navigationController?.popViewControllerAnimated(true)
         }
     }
     

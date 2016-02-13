@@ -82,8 +82,8 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     private func close() {
-        listItemsTableViewController.clearPendingSwipeItemIfAny(true) {
-            presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
+            self?.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
         }
     }
     

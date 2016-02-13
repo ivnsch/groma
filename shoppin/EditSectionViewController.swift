@@ -67,8 +67,8 @@ class EditSectionViewController: UIViewController {
             
             if let name = nameTextField.text {
                 let updatedSection = section.copy(name: name)
-                Providers.sectionProvider.update([updatedSection], remote: true, successHandler {
-                    delegate?.onSectionUpdated(updatedSection)
+                Providers.sectionProvider.update([updatedSection], remote: true, successHandler {[weak self] in
+                    self?.delegate?.onSectionUpdated(updatedSection)
                 })
 
             } else {
