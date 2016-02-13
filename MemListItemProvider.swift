@@ -206,7 +206,7 @@ class MemListItemProvider {
         if let _ = self.listItems![list] {
             return self.listItems![list]!.filterStash().count
         } else {
-            print("Info: MemListItemProvider.listItemCount: there are no listitems for list: \(list)")
+            QL1("Info: MemListItemProvider.listItemCount: there are no listitems for list: \(list)")
             return 0
         }
     }
@@ -223,7 +223,7 @@ class MemListItemProvider {
     func invalidate() {
         guard enabled else {return}
         
-        print("Info: MemListItemProvider.invalidate: Invalidated list items memory cache")
+        QL1("Info: MemListItemProvider.invalidate: Invalidated list items memory cache")
         
         listItems = nil
     }
