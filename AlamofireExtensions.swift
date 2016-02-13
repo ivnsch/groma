@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import Valet
+import QorumLogs
 
 // Representation of status code related with remote responses
 // Can represent a HTTP status code sent by the server, a status flag in the JSON response, or a client-side error related with the processing of the remote response
@@ -66,7 +67,7 @@ extension Request {
 }
 
 
-final class RemoteValidationError {
+final class RemoteValidationError: CustomDebugStringConvertible {
     let msg: String
     let args: [String]
 
@@ -74,9 +75,13 @@ final class RemoteValidationError {
         msg = json.valueForKeyPath("message") as! String
         args = json.valueForKeyPath("args") as! [String]
     }
+    
+    var debugDescription: String {
+        return "[msg: \(msg), args: \(args)]"
+    }
 }
 
-final class RemotePathValidationError {
+final class RemotePathValidationError: CustomDebugStringConvertible {
     let path: String
     let validationErrors: [RemoteValidationError]
     
@@ -95,9 +100,15 @@ final class RemotePathValidationError {
         }
         self.validationErrors = validationErrors
     }
+    
+    var debugDescription: String {
+        return "[path: \(path), errors: \(validationErrors)]"
+    }
 }
 
-final class RemoteInvalidParametersResult {
+final class RemoteInvalidParametersResult
+//: CustomDebugStringConvertible for some reason this causes a compiler error in other classes so for now commented, no time to investigate
+{
     let pathErrors: [RemotePathValidationError]
 
     init?(json: AnyObject) {
@@ -112,6 +123,10 @@ final class RemoteInvalidParametersResult {
             }
         }
         self.pathErrors = pathErrors
+    }
+    
+    var debugDescription: String {
+        return "[pathErrors: \(pathErrors)]"
     }
 }
 
@@ -169,7 +184,15 @@ public class RemoteResult<T>: CustomDebugStringConvertible {
 struct AlamofireHelper {
     
     static func authenticatedRequest(method: Alamofire.Method, _ url: String, _ parameters: [String: AnyObject]? = nil) -> Request {
-     
+
+//        QL1("method: \(method), url: \(url), parameters: \(parameters)")
+//        if let pars = parameters {
+//            let dataExample: NSData = NSKeyedArchiver.archivedDataWithRootObject(pars)
+//            let mb = Float(dataExample.length) / Float(1024) / Float(1024)
+//            QL1("size: \(mb)")
+//            QL1("size dict: \(pars.count)")
+//        }
+        
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
         
         let maybeToken = valet?.stringForKey(KeychainKeys.token)
@@ -316,7 +339,7 @@ extension Alamofire.Request {
                                             return Result.Success(remoteResult)
                                             
                                         } else {
-                                            print("Error parsing result object")
+                                            QL4("Error parsing result object")
                                             return Result.Success(RemoteResult<T>(status: .ParsingError))
                                         }
                                         
@@ -327,20 +350,21 @@ extension Alamofire.Request {
                                     if let data: AnyObject = dataObj.valueForKeyPath("data") {
                                         
                                         if let invalidParametersObj = RemoteInvalidParametersResult(json: data) {
+                                            QL4("Invalid parameters: \(invalidParametersObj.debugDescription)")
                                             return Result.Success(RemoteResult<T>(status: .InvalidParameters, error: invalidParametersObj))
                                             
                                         } else {
-                                            print("Error parsing result object in invalid parameters response")
+                                            QL4("Error parsing result object in invalid parameters response")
                                             return Result.Success(RemoteResult<T>(status: .ParsingError))
                                         }
                                         
                                     } else { // the result has no data
-                                        print("Error: AlamofireHelper.responseHandler: unexpected format in invalid parameters response")
+                                        QL4("Error: AlamofireHelper.responseHandler: unexpected format in invalid parameters response")
                                         return Result.Success(RemoteResult<T>(status: .ParsingError))
                                     }
                                     
                                 } else {
-                                    print("Error: AlamofireHelper.responseHandler forgot to handle a status in nested if: \(status)")
+                                    QL4("Error: AlamofireHelper.responseHandler forgot to handle a status in nested if: \(status)")
                                     return Result.Success(RemoteResult<T>(status: .Unknown))
                                 }
                                 
@@ -349,45 +373,45 @@ extension Alamofire.Request {
                             }
                             
                         } else {
-                            print("Error: response: status flag not recognized: \(statusInt)")
+                            QL4("Error: response: status flag not recognized: \(statusInt)")
                             return Result.Success(RemoteResult<T>(status: .NotRecognizedStatusFlag))
                         }
                         
                     case .Failure(let error):
-                        print("Error serializing response: \(response), request: \(request), data: \(data), serializationError: \(error)")
+                        QL4("Error serializing response: \(response), request: \(request), data: \(data), serializationError: \(error)")
                         return Result.Success(RemoteResult<T>(status: .ParsingError))
                     }
                     
                 } else if statusCode == 401 {
-                    print("Unauthorized")
+                    QL4("Unauthorized")
                     return Result.Success(RemoteResult<T>(status: .NotAuthenticated))
                     
                 } else if statusCode == 400 {
-                    print("Bad request")
+                    QL4("Bad request")
                     return Result.Success(RemoteResult<T>(status: .BadRequest))
                     
                 } else if statusCode == 404 {
                     let str = request?.URL.map{$0} ?? ""
-                    print("Action not found: \(str)")
+                    QL4("Action not found: \(str)")
                     return Result.Success(RemoteResult<T>(status: .ActionNotFound))
                     
                 } else if statusCode == 415 {
-                    print("Unsupported media type")
+                    QL4("Unsupported media type")
                     return Result.Success(RemoteResult<T>(status: .UnsupportedMediaType))
                     
                 } else if statusCode == 500 {
-                    print("Internal server error: \(response)")
+                    QL4("Internal server error: \(response)")
                     return Result.Success(RemoteResult<T>(status: .InternalServerError))
                     
                 } else {
-                    print("Error: Not handled status code: \(statusCode)")
+                    QL4("Error: Not handled status code: \(statusCode)")
                     return Result.Success(RemoteResult<T>(status: .NotHandledHTTPStatusCode))
                 }
                 
             } else { // So far this happened when the server was not reachable. This will be executed but the error is handled in the completionHandler block (Alamofire passes us a .Failure in this case). We return here .ResponseIsNil only as result of the serialization.
-                print("Error: response == nil")
+                QL4("Error: response == nil")
                 if let error = error {
-                    print("Error calling remote service, error: \(error)")
+                    QL4("Error calling remote service, error: \(error)")
                     if error.code == -1004 {  // iOS returns -1004 both when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
                             return Result.Success(RemoteResult<T>(status: .ServerNotReachable))
                     } else {
@@ -410,7 +434,7 @@ extension Alamofire.Request {
                 case .Success(let remoteResult):
                     return remoteResult
                 case .Failure(let error):
-                    print("Error calling remote service, error: \(error)")
+                    QL4("Error calling remote service, error: \(error)")
                     if error.code == -1004 {  // iOS returns -1004 both when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
                         return RemoteResult<T>(status: .ServerNotReachable)
                     } else {
