@@ -77,15 +77,15 @@
 		EB1219DB1BD8EB23004351E0 /* QuickAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */; };
 		EB135B941BED21490093DE70 /* ExpandFloatingButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB135B931BED21490093DE70 /* ExpandFloatingButtonModel.swift */; };
 		EB135B961BED5F130093DE70 /* ItemWithCellAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB135B951BED5F130093DE70 /* ItemWithCellAttributes.swift */; };
-		EB136F2C1C18BFE500B60C9C /* WSGroupParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F2B1C18BFE500B60C9C /* WSGroupParser.swift */; settings = {ASSET_TAGS = (); }; };
-		EB136F2D1C18BFE500B60C9C /* WSGroupParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F2B1C18BFE500B60C9C /* WSGroupParser.swift */; settings = {ASSET_TAGS = (); }; };
-		EB136F2E1C18BFE500B60C9C /* WSGroupParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F2B1C18BFE500B60C9C /* WSGroupParser.swift */; settings = {ASSET_TAGS = (); }; };
-		EB136F301C18C23A00B60C9C /* WSPlanItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F2F1C18C23A00B60C9C /* WSPlanItemParser.swift */; settings = {ASSET_TAGS = (); }; };
-		EB136F311C18C23A00B60C9C /* WSPlanItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F2F1C18C23A00B60C9C /* WSPlanItemParser.swift */; settings = {ASSET_TAGS = (); }; };
-		EB136F321C18C23A00B60C9C /* WSPlanItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F2F1C18C23A00B60C9C /* WSPlanItemParser.swift */; settings = {ASSET_TAGS = (); }; };
-		EB136F341C18C37D00B60C9C /* WSInventoryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F331C18C37D00B60C9C /* WSInventoryParser.swift */; settings = {ASSET_TAGS = (); }; };
-		EB136F351C18C37D00B60C9C /* WSInventoryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F331C18C37D00B60C9C /* WSInventoryParser.swift */; settings = {ASSET_TAGS = (); }; };
-		EB136F361C18C37D00B60C9C /* WSInventoryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F331C18C37D00B60C9C /* WSInventoryParser.swift */; settings = {ASSET_TAGS = (); }; };
+		EB136F2C1C18BFE500B60C9C /* WSGroupParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F2B1C18BFE500B60C9C /* WSGroupParser.swift */; };
+		EB136F2D1C18BFE500B60C9C /* WSGroupParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F2B1C18BFE500B60C9C /* WSGroupParser.swift */; };
+		EB136F2E1C18BFE500B60C9C /* WSGroupParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F2B1C18BFE500B60C9C /* WSGroupParser.swift */; };
+		EB136F301C18C23A00B60C9C /* WSPlanItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F2F1C18C23A00B60C9C /* WSPlanItemParser.swift */; };
+		EB136F311C18C23A00B60C9C /* WSPlanItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F2F1C18C23A00B60C9C /* WSPlanItemParser.swift */; };
+		EB136F321C18C23A00B60C9C /* WSPlanItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F2F1C18C23A00B60C9C /* WSPlanItemParser.swift */; };
+		EB136F341C18C37D00B60C9C /* WSInventoryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F331C18C37D00B60C9C /* WSInventoryParser.swift */; };
+		EB136F351C18C37D00B60C9C /* WSInventoryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F331C18C37D00B60C9C /* WSInventoryParser.swift */; };
+		EB136F361C18C37D00B60C9C /* WSInventoryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F331C18C37D00B60C9C /* WSInventoryParser.swift */; };
 		EB1B36451BC1D001003519F2 /* MLPAutoCompleteTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1B363F1BC1D001003519F2 /* MLPAutoCompleteTextField.m */; };
 		EB1B36461BC1D001003519F2 /* NSString+Levenshtein.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1B36441BC1D001003519F2 /* NSString+Levenshtein.m */; };
 		EB1B364C1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1B364B1BC2CC79003519F2 /* HistoryItemGroup.swift */; };
@@ -133,14 +133,14 @@
 		EB20FBFC1A5972A30058103B /* InventoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFB1A5972A30058103B /* InventoryProvider.swift */; };
 		EB20FBFE1A5972C70058103B /* InventoryItemsProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFD1A5972C70058103B /* InventoryItemsProviderImpl.swift */; };
 		EB20FC071A599AE20058103B /* ProductWithQuantityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FC061A599AE20058103B /* ProductWithQuantityTableViewCell.swift */; };
-		EB22C7111C4B02EE00285352 /* ShareAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB22C7101C4B02EE00285352 /* ShareAppViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		EB22C7141C4B034400285352 /* ShareApp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB22C7131C4B034400285352 /* ShareApp.storyboard */; settings = {ASSET_TAGS = (); }; };
+		EB22C7111C4B02EE00285352 /* ShareAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB22C7101C4B02EE00285352 /* ShareAppViewController.swift */; };
+		EB22C7141C4B034400285352 /* ShareApp.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB22C7131C4B034400285352 /* ShareApp.storyboard */; };
 		EB22C7181C4B129300285352 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22C7171C4B129300285352 /* FBSDKShareKit.framework */; };
 		EB2433EA1BC5A04D00986897 /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2433E91BC5A04D00986897 /* AddItemView.swift */; };
 		EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB2433EC1BC5A46800986897 /* AddItemView.xib */; };
-		EB266A761C19DA3900488679 /* InventoryItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB266A751C19DA3500488679 /* InventoryItemIncrement.swift */; settings = {ASSET_TAGS = (); }; };
-		EB266A771C19DA3C00488679 /* InventoryItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB266A751C19DA3500488679 /* InventoryItemIncrement.swift */; settings = {ASSET_TAGS = (); }; };
-		EB266A781C19DA3C00488679 /* InventoryItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB266A751C19DA3500488679 /* InventoryItemIncrement.swift */; settings = {ASSET_TAGS = (); }; };
+		EB266A761C19DA3900488679 /* InventoryItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB266A751C19DA3500488679 /* InventoryItemIncrement.swift */; };
+		EB266A771C19DA3C00488679 /* InventoryItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB266A751C19DA3500488679 /* InventoryItemIncrement.swift */; };
+		EB266A781C19DA3C00488679 /* InventoryItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB266A751C19DA3500488679 /* InventoryItemIncrement.swift */; };
 		EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */; };
 		EB28C1181A58623E00E1C8BC /* PlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */; };
 		EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D101A4ACC4400DBC4AF /* String.swift */; };
@@ -251,9 +251,9 @@
 		EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162E81A3CA1F00048E37C /* ListItemProviderImpl.swift */; };
 		EB55677F1A8658AA00CD3EC6 /* InventoryItemsProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB20FBFD1A5972C70058103B /* InventoryItemsProviderImpl.swift */; };
 		EB5567831A8658BD00CD3EC6 /* ProviderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF162F41A3CA4BA0048E37C /* ProviderFactory.swift */; };
-		EB5666CE1C52BCA90074D2B3 /* LangManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5666CD1C52BCA90074D2B3 /* LangManager.swift */; settings = {ASSET_TAGS = (); }; };
-		EB5666CF1C52BCA90074D2B3 /* LangManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5666CD1C52BCA90074D2B3 /* LangManager.swift */; settings = {ASSET_TAGS = (); }; };
-		EB5666D01C52BCA90074D2B3 /* LangManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5666CD1C52BCA90074D2B3 /* LangManager.swift */; settings = {ASSET_TAGS = (); }; };
+		EB5666CE1C52BCA90074D2B3 /* LangManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5666CD1C52BCA90074D2B3 /* LangManager.swift */; };
+		EB5666CF1C52BCA90074D2B3 /* LangManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5666CD1C52BCA90074D2B3 /* LangManager.swift */; };
+		EB5666D01C52BCA90074D2B3 /* LangManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5666CD1C52BCA90074D2B3 /* LangManager.swift */; };
 		EB5737B31BF25DFB00D52FB8 /* AddEditInventoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5737B21BF25DFB00D52FB8 /* AddEditInventoryController.swift */; };
 		EB5737B51BF25E1100D52FB8 /* AddEditInventory.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB5737B41BF25E1100D52FB8 /* AddEditInventory.storyboard */; };
 		EB5737B71BF2612300D52FB8 /* InventorySharedUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5737B61BF2612300D52FB8 /* InventorySharedUserCell.swift */; };
@@ -266,44 +266,44 @@
 		EB6D93A41B1B788200ED8999 /* AutosuggestionsTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB6D93A21B1B788200ED8999 /* AutosuggestionsTableViewController.xib */; };
 		EB6D93A61B1BAFB400ED8999 /* HandlingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6D93A51B1BAFB400ED8999 /* HandlingTextField.swift */; };
 		EB6D93A81B1C8CE500ED8999 /* HandlingTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6D93A71B1C8CE500ED8999 /* HandlingTableView.swift */; };
-		EB6E3D131C56D0ED00D65DD5 /* PathButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D121C56D0ED00D65DD5 /* PathButton.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D151C56D3D600D65DD5 /* ExpandCollapseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D141C56D3D600D65DD5 /* ExpandCollapseButton.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D1F1C5A342200D65DD5 /* RemoteGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D1E1C5A342200D65DD5 /* RemoteGlobalProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D201C5A342200D65DD5 /* RemoteGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D1E1C5A342200D65DD5 /* RemoteGlobalProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D211C5A342200D65DD5 /* RemoteGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D1E1C5A342200D65DD5 /* RemoteGlobalProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D231C5A346100D65DD5 /* RemoteGlobalSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D221C5A346100D65DD5 /* RemoteGlobalSyncResult.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D241C5A346100D65DD5 /* RemoteGlobalSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D221C5A346100D65DD5 /* RemoteGlobalSyncResult.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D251C5A346100D65DD5 /* RemoteGlobalSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D221C5A346100D65DD5 /* RemoteGlobalSyncResult.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D281C5A4E9F00D65DD5 /* RemoteListWithListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D271C5A4E9F00D65DD5 /* RemoteListWithListItems.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D291C5A4E9F00D65DD5 /* RemoteListWithListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D271C5A4E9F00D65DD5 /* RemoteListWithListItems.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D2A1C5A4E9F00D65DD5 /* RemoteListWithListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D271C5A4E9F00D65DD5 /* RemoteListWithListItems.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D2D1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D2C1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D2E1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D2C1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D2F1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D2C1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D311C5A519600D65DD5 /* RemoteInventoryWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D301C5A519600D65DD5 /* RemoteInventoryWithItems.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D321C5A519600D65DD5 /* RemoteInventoryWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D301C5A519600D65DD5 /* RemoteInventoryWithItems.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D331C5A519600D65DD5 /* RemoteInventoryWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D301C5A519600D65DD5 /* RemoteInventoryWithItems.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D351C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D341C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D361C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D341C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D371C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D341C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D391C5A591800D65DD5 /* RemoteGroupWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D381C5A591800D65DD5 /* RemoteGroupWithItems.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D3A1C5A591800D65DD5 /* RemoteGroupWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D381C5A591800D65DD5 /* RemoteGroupWithItems.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D3B1C5A591800D65DD5 /* RemoteGroupWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D381C5A591800D65DD5 /* RemoteGroupWithItems.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D3D1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D3C1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D3E1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D3C1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D3F1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D3C1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D411C5A5B0400D65DD5 /* RemoteGroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D401C5A5B0400D65DD5 /* RemoteGroupItem.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D421C5A5B0400D65DD5 /* RemoteGroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D401C5A5B0400D65DD5 /* RemoteGroupItem.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D431C5A5B0400D65DD5 /* RemoteGroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D401C5A5B0400D65DD5 /* RemoteGroupItem.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D451C5A980C00D65DD5 /* GlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D441C5A980C00D65DD5 /* GlobalProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D461C5A980C00D65DD5 /* GlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D441C5A980C00D65DD5 /* GlobalProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D471C5A980C00D65DD5 /* GlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D441C5A980C00D65DD5 /* GlobalProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D491C5A986C00D65DD5 /* GlobalProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D481C5A986C00D65DD5 /* GlobalProviderImpl.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D4A1C5A986C00D65DD5 /* GlobalProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D481C5A986C00D65DD5 /* GlobalProviderImpl.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D4B1C5A986C00D65DD5 /* GlobalProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D481C5A986C00D65DD5 /* GlobalProviderImpl.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D511C5A9ADE00D65DD5 /* RealmGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D501C5A9ADE00D65DD5 /* RealmGlobalProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D521C5A9ADE00D65DD5 /* RealmGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D501C5A9ADE00D65DD5 /* RealmGlobalProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6E3D531C5A9ADE00D65DD5 /* RealmGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D501C5A9ADE00D65DD5 /* RealmGlobalProvider.swift */; settings = {ASSET_TAGS = (); }; };
+		EB6E3D131C56D0ED00D65DD5 /* PathButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D121C56D0ED00D65DD5 /* PathButton.swift */; };
+		EB6E3D151C56D3D600D65DD5 /* ExpandCollapseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D141C56D3D600D65DD5 /* ExpandCollapseButton.swift */; };
+		EB6E3D1F1C5A342200D65DD5 /* RemoteGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D1E1C5A342200D65DD5 /* RemoteGlobalProvider.swift */; };
+		EB6E3D201C5A342200D65DD5 /* RemoteGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D1E1C5A342200D65DD5 /* RemoteGlobalProvider.swift */; };
+		EB6E3D211C5A342200D65DD5 /* RemoteGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D1E1C5A342200D65DD5 /* RemoteGlobalProvider.swift */; };
+		EB6E3D231C5A346100D65DD5 /* RemoteGlobalSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D221C5A346100D65DD5 /* RemoteGlobalSyncResult.swift */; };
+		EB6E3D241C5A346100D65DD5 /* RemoteGlobalSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D221C5A346100D65DD5 /* RemoteGlobalSyncResult.swift */; };
+		EB6E3D251C5A346100D65DD5 /* RemoteGlobalSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D221C5A346100D65DD5 /* RemoteGlobalSyncResult.swift */; };
+		EB6E3D281C5A4E9F00D65DD5 /* RemoteListWithListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D271C5A4E9F00D65DD5 /* RemoteListWithListItems.swift */; };
+		EB6E3D291C5A4E9F00D65DD5 /* RemoteListWithListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D271C5A4E9F00D65DD5 /* RemoteListWithListItems.swift */; };
+		EB6E3D2A1C5A4E9F00D65DD5 /* RemoteListWithListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D271C5A4E9F00D65DD5 /* RemoteListWithListItems.swift */; };
+		EB6E3D2D1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D2C1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift */; };
+		EB6E3D2E1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D2C1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift */; };
+		EB6E3D2F1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D2C1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift */; };
+		EB6E3D311C5A519600D65DD5 /* RemoteInventoryWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D301C5A519600D65DD5 /* RemoteInventoryWithItems.swift */; };
+		EB6E3D321C5A519600D65DD5 /* RemoteInventoryWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D301C5A519600D65DD5 /* RemoteInventoryWithItems.swift */; };
+		EB6E3D331C5A519600D65DD5 /* RemoteInventoryWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D301C5A519600D65DD5 /* RemoteInventoryWithItems.swift */; };
+		EB6E3D351C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D341C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift */; };
+		EB6E3D361C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D341C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift */; };
+		EB6E3D371C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D341C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift */; };
+		EB6E3D391C5A591800D65DD5 /* RemoteGroupWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D381C5A591800D65DD5 /* RemoteGroupWithItems.swift */; };
+		EB6E3D3A1C5A591800D65DD5 /* RemoteGroupWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D381C5A591800D65DD5 /* RemoteGroupWithItems.swift */; };
+		EB6E3D3B1C5A591800D65DD5 /* RemoteGroupWithItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D381C5A591800D65DD5 /* RemoteGroupWithItems.swift */; };
+		EB6E3D3D1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D3C1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift */; };
+		EB6E3D3E1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D3C1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift */; };
+		EB6E3D3F1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D3C1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift */; };
+		EB6E3D411C5A5B0400D65DD5 /* RemoteGroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D401C5A5B0400D65DD5 /* RemoteGroupItem.swift */; };
+		EB6E3D421C5A5B0400D65DD5 /* RemoteGroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D401C5A5B0400D65DD5 /* RemoteGroupItem.swift */; };
+		EB6E3D431C5A5B0400D65DD5 /* RemoteGroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D401C5A5B0400D65DD5 /* RemoteGroupItem.swift */; };
+		EB6E3D451C5A980C00D65DD5 /* GlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D441C5A980C00D65DD5 /* GlobalProvider.swift */; };
+		EB6E3D461C5A980C00D65DD5 /* GlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D441C5A980C00D65DD5 /* GlobalProvider.swift */; };
+		EB6E3D471C5A980C00D65DD5 /* GlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D441C5A980C00D65DD5 /* GlobalProvider.swift */; };
+		EB6E3D491C5A986C00D65DD5 /* GlobalProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D481C5A986C00D65DD5 /* GlobalProviderImpl.swift */; };
+		EB6E3D4A1C5A986C00D65DD5 /* GlobalProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D481C5A986C00D65DD5 /* GlobalProviderImpl.swift */; };
+		EB6E3D4B1C5A986C00D65DD5 /* GlobalProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D481C5A986C00D65DD5 /* GlobalProviderImpl.swift */; };
+		EB6E3D511C5A9ADE00D65DD5 /* RealmGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D501C5A9ADE00D65DD5 /* RealmGlobalProvider.swift */; };
+		EB6E3D521C5A9ADE00D65DD5 /* RealmGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D501C5A9ADE00D65DD5 /* RealmGlobalProvider.swift */; };
+		EB6E3D531C5A9ADE00D65DD5 /* RealmGlobalProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6E3D501C5A9ADE00D65DD5 /* RealmGlobalProvider.swift */; };
 		EB6F812D1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F812C1B46E2C4008680E0 /* RemoteLoginResult.swift */; };
 		EB6F812E1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F812C1B46E2C4008680E0 /* RemoteLoginResult.swift */; };
 		EB6F812F1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F812C1B46E2C4008680E0 /* RemoteLoginResult.swift */; };
@@ -311,9 +311,9 @@
 		EB6F81331B4717C2008680E0 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81311B4717C2008680E0 /* KeychainKeys.swift */; };
 		EB6F81341B4717C2008680E0 /* KeychainKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81311B4717C2008680E0 /* KeychainKeys.swift */; };
 		EB6F81661B4B1CDC008680E0 /* TestRequiresAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F81631B4B1CDC008680E0 /* TestRequiresAuthentication.swift */; };
-		EB6F8DE11C1B29B300C05466 /* InventoryItemId.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F8DE01C1B29B300C05466 /* InventoryItemId.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6F8DE21C1B29B300C05466 /* InventoryItemId.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F8DE01C1B29B300C05466 /* InventoryItemId.swift */; settings = {ASSET_TAGS = (); }; };
-		EB6F8DE31C1B29B300C05466 /* InventoryItemId.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F8DE01C1B29B300C05466 /* InventoryItemId.swift */; settings = {ASSET_TAGS = (); }; };
+		EB6F8DE11C1B29B300C05466 /* InventoryItemId.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F8DE01C1B29B300C05466 /* InventoryItemId.swift */; };
+		EB6F8DE21C1B29B300C05466 /* InventoryItemId.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F8DE01C1B29B300C05466 /* InventoryItemId.swift */; };
+		EB6F8DE31C1B29B300C05466 /* InventoryItemId.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB6F8DE01C1B29B300C05466 /* InventoryItemId.swift */; };
 		EB70327B1BEB6FFA00779EBB /* ListItemsSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70327A1BEB6FFA00779EBB /* ListItemsSectionHeaderView.swift */; };
 		EB70327D1BEB700900779EBB /* ListItemsSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB70327C1BEB700900779EBB /* ListItemsSectionHeaderView.xib */; };
 		EB7032801BEBBBB100779EBB /* ReorderSectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB70327E1BEBBBB100779EBB /* ReorderSectionTableViewController.swift */; };
@@ -355,9 +355,9 @@
 		EB714ABF1B681AF700F91B94 /* RemoteSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB714ABE1B681AF700F91B94 /* RemoteSyncResult.swift */; };
 		EB714AC01B681AF700F91B94 /* RemoteSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB714ABE1B681AF700F91B94 /* RemoteSyncResult.swift */; };
 		EB714AC11B681AF700F91B94 /* RemoteSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB714ABE1B681AF700F91B94 /* RemoteSyncResult.swift */; };
-		EB741A581C21FA5D00E1585D /* ExpandableItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB741A571C21FA5D00E1585D /* ExpandableItemsTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		EB741A5A1C21FBFD00E1585D /* ExpandableItemsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB741A591C21FBFD00E1585D /* ExpandableItemsTableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
-		EB741A5C1C22185900E1585D /* ListsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB741A5B1C22185900E1585D /* ListsTableViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		EB741A581C21FA5D00E1585D /* ExpandableItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB741A571C21FA5D00E1585D /* ExpandableItemsTableViewController.swift */; };
+		EB741A5A1C21FBFD00E1585D /* ExpandableItemsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB741A591C21FBFD00E1585D /* ExpandableItemsTableViewCell.swift */; };
+		EB741A5C1C22185900E1585D /* ListsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB741A5B1C22185900E1585D /* ListsTableViewController.swift */; };
 		EB7524531BF582FA00A97A10 /* QuickAddItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7524521BF582FA00A97A10 /* QuickAddItemCell.swift */; };
 		EB7524551BF5830600A97A10 /* QuickAddGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7524541BF5830600A97A10 /* QuickAddGroupCell.swift */; };
 		EB76A7A11BEE6F1600486F30 /* MLPAutoCompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB76A7A01BEE6F1500486F30 /* MLPAutoCompleteTextField.swift */; };
@@ -396,6 +396,8 @@
 		EB7BFA7E1BDAF96A00F4C74A /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7BFA7D1BDAF96A00F4C74A /* Int.swift */; };
 		EB7BFA7F1BDAF96A00F4C74A /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7BFA7D1BDAF96A00F4C74A /* Int.swift */; };
 		EB7BFA801BDAF96A00F4C74A /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7BFA7D1BDAF96A00F4C74A /* Int.swift */; };
+		EB7DA2E11C6FCD9F007F1E43 /* SizeLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DA2E01C6FCD9F007F1E43 /* SizeLimits.swift */; };
+		EB7DA2E31C6FCF65007F1E43 /* SizeLimitChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DA2E21C6FCF65007F1E43 /* SizeLimitChecker.swift */; };
 		EB7E82EF1B79F1FB009DEEF4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E82EE1B79F1FB009DEEF4 /* LoginViewController.swift */; };
 		EB7E82F31B79F97B009DEEF4 /* NSStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E82F21B79F97B009DEEF4 /* NSStoryboard.swift */; };
 		EB7E82F51B7A141E009DEEF4 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E82F41B7A141E009DEEF4 /* RegisterViewController.swift */; };
@@ -445,13 +447,13 @@
 		EB7F59D71BA1E0DF00E07EBA /* Performance.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59D61BA1E0DF00E07EBA /* Performance.swift */; };
 		EB7F59D81BA1E0DF00E07EBA /* Performance.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59D61BA1E0DF00E07EBA /* Performance.swift */; };
 		EB7F59D91BA1E0DF00E07EBA /* Performance.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7F59D61BA1E0DF00E07EBA /* Performance.swift */; };
-		EB80CE491C3DEB8A001DF159 /* InventoryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE481C3DEB8A001DF159 /* InventoryPicker.swift */; settings = {ASSET_TAGS = (); }; };
-		EB80CE4B1C3EA628001DF159 /* RemoteListsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE4A1C3EA628001DF159 /* RemoteListsWithDependencies.swift */; settings = {ASSET_TAGS = (); }; };
-		EB80CE4D1C3F5F10001DF159 /* InventoryAuthChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */; settings = {ASSET_TAGS = (); }; };
-		EB80CE531C449E1E001DF159 /* TermsAndConditionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE521C449E1D001DF159 /* TermsAndConditionsController.swift */; settings = {ASSET_TAGS = (); }; };
-		EB80CE551C44AFFE001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; settings = {ASSET_TAGS = (); }; };
-		EB80CE561C44B000001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; settings = {ASSET_TAGS = (); }; };
-		EB80CE571C44B000001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; settings = {ASSET_TAGS = (); }; };
+		EB80CE491C3DEB8A001DF159 /* InventoryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE481C3DEB8A001DF159 /* InventoryPicker.swift */; };
+		EB80CE4B1C3EA628001DF159 /* RemoteListsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE4A1C3EA628001DF159 /* RemoteListsWithDependencies.swift */; };
+		EB80CE4D1C3F5F10001DF159 /* InventoryAuthChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */; };
+		EB80CE531C449E1E001DF159 /* TermsAndConditionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE521C449E1D001DF159 /* TermsAndConditionsController.swift */; };
+		EB80CE551C44AFFE001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; };
+		EB80CE561C44B000001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; };
+		EB80CE571C44B000001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; };
 		EB85F4531BD5393800E19E9B /* QuickAddListItem.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB85F4521BD5393800E19E9B /* QuickAddListItem.storyboard */; };
 		EB85F4631BD54E8D00E19E9B /* QuickAddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F4621BD54E8D00E19E9B /* QuickAddItem.swift */; };
 		EB85F4641BD54E8D00E19E9B /* QuickAddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F4621BD54E8D00E19E9B /* QuickAddItem.swift */; };
@@ -470,15 +472,15 @@
 		EB85F4751BD5605000E19E9B /* ProductProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F4721BD5605000E19E9B /* ProductProviderImpl.swift */; };
 		EB85F47C1BD6ED8F00E19E9B /* AddEditListItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F47B1BD6ED8F00E19E9B /* AddEditListItemViewController.swift */; };
 		EB85F47F1BD6EDBC00E19E9B /* AddEditListItem.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB85F47E1BD6EDBC00E19E9B /* AddEditListItem.storyboard */; };
-		EB87A4A31C1A140A008D2A42 /* WSItemsSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4A21C1A140A008D2A42 /* WSItemsSaver.swift */; settings = {ASSET_TAGS = (); }; };
-		EB87A4A41C1A140A008D2A42 /* WSItemsSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4A21C1A140A008D2A42 /* WSItemsSaver.swift */; settings = {ASSET_TAGS = (); }; };
-		EB87A4A51C1A140A008D2A42 /* WSItemsSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4A21C1A140A008D2A42 /* WSItemsSaver.swift */; settings = {ASSET_TAGS = (); }; };
-		EB87A4A71C1A49A0008D2A42 /* RemoteGroupItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4A61C1A499F008D2A42 /* RemoteGroupItemInput.swift */; settings = {ASSET_TAGS = (); }; };
-		EB87A4A81C1A49A3008D2A42 /* RemoteGroupItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4A61C1A499F008D2A42 /* RemoteGroupItemInput.swift */; settings = {ASSET_TAGS = (); }; };
-		EB87A4A91C1A49A4008D2A42 /* RemoteGroupItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4A61C1A499F008D2A42 /* RemoteGroupItemInput.swift */; settings = {ASSET_TAGS = (); }; };
-		EB87A4AB1C1A4F13008D2A42 /* GroupItemWithGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4AA1C1A4F13008D2A42 /* GroupItemWithGroup.swift */; settings = {ASSET_TAGS = (); }; };
-		EB87A4AC1C1A4F13008D2A42 /* GroupItemWithGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4AA1C1A4F13008D2A42 /* GroupItemWithGroup.swift */; settings = {ASSET_TAGS = (); }; };
-		EB87A4AD1C1A4F13008D2A42 /* GroupItemWithGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4AA1C1A4F13008D2A42 /* GroupItemWithGroup.swift */; settings = {ASSET_TAGS = (); }; };
+		EB87A4A31C1A140A008D2A42 /* WSItemsSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4A21C1A140A008D2A42 /* WSItemsSaver.swift */; };
+		EB87A4A41C1A140A008D2A42 /* WSItemsSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4A21C1A140A008D2A42 /* WSItemsSaver.swift */; };
+		EB87A4A51C1A140A008D2A42 /* WSItemsSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4A21C1A140A008D2A42 /* WSItemsSaver.swift */; };
+		EB87A4A71C1A49A0008D2A42 /* RemoteGroupItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4A61C1A499F008D2A42 /* RemoteGroupItemInput.swift */; };
+		EB87A4A81C1A49A3008D2A42 /* RemoteGroupItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4A61C1A499F008D2A42 /* RemoteGroupItemInput.swift */; };
+		EB87A4A91C1A49A4008D2A42 /* RemoteGroupItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4A61C1A499F008D2A42 /* RemoteGroupItemInput.swift */; };
+		EB87A4AB1C1A4F13008D2A42 /* GroupItemWithGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4AA1C1A4F13008D2A42 /* GroupItemWithGroup.swift */; };
+		EB87A4AC1C1A4F13008D2A42 /* GroupItemWithGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4AA1C1A4F13008D2A42 /* GroupItemWithGroup.swift */; };
+		EB87A4AD1C1A4F13008D2A42 /* GroupItemWithGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB87A4AA1C1A4F13008D2A42 /* GroupItemWithGroup.swift */; };
 		EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D3041AD41E2D00B6E0D0 /* ListsViewController.swift */; };
 		EB89D3071AD41E2D00B6E0D0 /* ListsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB89D3051AD41E2D00B6E0D0 /* ListsViewController.xib */; };
 		EB89D33C1AD44BD400B6E0D0 /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */; };
@@ -486,35 +488,35 @@
 		EB89D3471AD4536300B6E0D0 /* AddListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D3441AD4536300B6E0D0 /* AddListController.swift */; };
 		EB89D3491AD4536300B6E0D0 /* AddListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB89D3451AD4536300B6E0D0 /* AddListController.xib */; };
 		EB89D34D1AD5235600B6E0D0 /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB89D34C1AD5235600B6E0D0 /* ListCell.swift */; };
-		EB8D1D091C37318500ADF884 /* GroupsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8D1D081C37318500ADF884 /* GroupsController.swift */; settings = {ASSET_TAGS = (); }; };
-		EB8D1D0B1C37543600ADF884 /* AddEditGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8D1D0A1C37543600ADF884 /* AddEditGroupViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		EB8D1D0D1C38363400ADF884 /* AddEditGroupViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB8D1D0C1C38363400ADF884 /* AddEditGroupViewController.storyboard */; settings = {ASSET_TAGS = (); }; };
-		EB8D1D111C389D6E00ADF884 /* ProductsWithQuantityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8D1D101C389D6E00ADF884 /* ProductsWithQuantityViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		EB8D1D131C396ED600ADF884 /* GroupItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8D1D121C396ED600ADF884 /* GroupItemsController.swift */; settings = {ASSET_TAGS = (); }; };
-		EB8D1D151C396F8300ADF884 /* InventoryItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8D1D141C396F8300ADF884 /* InventoryItemsController.swift */; settings = {ASSET_TAGS = (); }; };
-		EB8D1D171C3994BE00ADF884 /* ProductsWithQuantity.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB8D1D161C3994BE00ADF884 /* ProductsWithQuantity.storyboard */; settings = {ASSET_TAGS = (); }; };
-		EB8EDD271C18A45700A92136 /* MyWebsocketDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EDD261C18A45700A92136 /* MyWebsocketDispatcher.swift */; settings = {ASSET_TAGS = (); }; };
-		EB9207C91C4BD3F600332332 /* AsyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9207C81C4BD3F600332332 /* AsyncUtils.swift */; settings = {ASSET_TAGS = (); }; };
-		EB9207CA1C4BD3F600332332 /* AsyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9207C81C4BD3F600332332 /* AsyncUtils.swift */; settings = {ASSET_TAGS = (); }; };
-		EB9207CB1C4BD3F600332332 /* AsyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9207C81C4BD3F600332332 /* AsyncUtils.swift */; settings = {ASSET_TAGS = (); }; };
+		EB8D1D091C37318500ADF884 /* GroupsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8D1D081C37318500ADF884 /* GroupsController.swift */; };
+		EB8D1D0B1C37543600ADF884 /* AddEditGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8D1D0A1C37543600ADF884 /* AddEditGroupViewController.swift */; };
+		EB8D1D0D1C38363400ADF884 /* AddEditGroupViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB8D1D0C1C38363400ADF884 /* AddEditGroupViewController.storyboard */; };
+		EB8D1D111C389D6E00ADF884 /* ProductsWithQuantityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8D1D101C389D6E00ADF884 /* ProductsWithQuantityViewController.swift */; };
+		EB8D1D131C396ED600ADF884 /* GroupItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8D1D121C396ED600ADF884 /* GroupItemsController.swift */; };
+		EB8D1D151C396F8300ADF884 /* InventoryItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8D1D141C396F8300ADF884 /* InventoryItemsController.swift */; };
+		EB8D1D171C3994BE00ADF884 /* ProductsWithQuantity.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB8D1D161C3994BE00ADF884 /* ProductsWithQuantity.storyboard */; };
+		EB8EDD271C18A45700A92136 /* MyWebsocketDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8EDD261C18A45700A92136 /* MyWebsocketDispatcher.swift */; };
+		EB9207C91C4BD3F600332332 /* AsyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9207C81C4BD3F600332332 /* AsyncUtils.swift */; };
+		EB9207CA1C4BD3F600332332 /* AsyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9207C81C4BD3F600332332 /* AsyncUtils.swift */; };
+		EB9207CB1C4BD3F600332332 /* AsyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9207C81C4BD3F600332332 /* AsyncUtils.swift */; };
 		EB9207E81C4C4FC200332332 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EB9207EA1C4C4FC200332332 /* Localizable.strings */; };
 		EB9207EE1C4C522700332332 /* ForgotPassword.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB9207F01C4C522700332332 /* ForgotPassword.storyboard */; };
-		EB9208021C4DBC7700332332 /* SimpleInputPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB9208011C4DBC7700332332 /* SimpleInputPopup.storyboard */; settings = {ASSET_TAGS = (); }; };
-		EB9208041C4DBE4400332332 /* SimpleInputPopupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208031C4DBE4400332332 /* SimpleInputPopupController.swift */; settings = {ASSET_TAGS = (); }; };
-		EB9208221C4EBCE000332332 /* ManageProductsSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208211C4EBCE000332332 /* ManageProductsSelectionController.swift */; settings = {ASSET_TAGS = (); }; };
-		EB9208241C4EBD4900332332 /* ManageBrandsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208231C4EBD4900332332 /* ManageBrandsController.swift */; settings = {ASSET_TAGS = (); }; };
-		EB9208261C4EC53D00332332 /* ManageBrandsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208251C4EC53D00332332 /* ManageBrandsCell.swift */; settings = {ASSET_TAGS = (); }; };
-		EB92082D1C4ECE3D00332332 /* EditBrandController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB92082B1C4ECE3D00332332 /* EditBrandController.swift */; settings = {ASSET_TAGS = (); }; };
-		EB92082E1C4ECE3D00332332 /* EditBrandController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB92082C1C4ECE3D00332332 /* EditBrandController.xib */; settings = {ASSET_TAGS = (); }; };
-		EB9208301C4EE9AF00332332 /* BrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB92082F1C4EE9AF00332332 /* BrandProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EB9208311C4EE9AF00332332 /* BrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB92082F1C4EE9AF00332332 /* BrandProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EB9208321C4EE9AF00332332 /* BrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB92082F1C4EE9AF00332332 /* BrandProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EB9208341C4EEA2400332332 /* BrandProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208331C4EEA2400332332 /* BrandProviderImpl.swift */; settings = {ASSET_TAGS = (); }; };
-		EB9208351C4EEA2400332332 /* BrandProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208331C4EEA2400332332 /* BrandProviderImpl.swift */; settings = {ASSET_TAGS = (); }; };
-		EB9208361C4EEA2400332332 /* BrandProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208331C4EEA2400332332 /* BrandProviderImpl.swift */; settings = {ASSET_TAGS = (); }; };
-		EB9208381C4EEA5E00332332 /* RealmBrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208371C4EEA5E00332332 /* RealmBrandProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EB9208391C4EEA5E00332332 /* RealmBrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208371C4EEA5E00332332 /* RealmBrandProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EB92083A1C4EEA5E00332332 /* RealmBrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208371C4EEA5E00332332 /* RealmBrandProvider.swift */; settings = {ASSET_TAGS = (); }; };
+		EB9208021C4DBC7700332332 /* SimpleInputPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB9208011C4DBC7700332332 /* SimpleInputPopup.storyboard */; };
+		EB9208041C4DBE4400332332 /* SimpleInputPopupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208031C4DBE4400332332 /* SimpleInputPopupController.swift */; };
+		EB9208221C4EBCE000332332 /* ManageProductsSelectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208211C4EBCE000332332 /* ManageProductsSelectionController.swift */; };
+		EB9208241C4EBD4900332332 /* ManageBrandsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208231C4EBD4900332332 /* ManageBrandsController.swift */; };
+		EB9208261C4EC53D00332332 /* ManageBrandsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208251C4EC53D00332332 /* ManageBrandsCell.swift */; };
+		EB92082D1C4ECE3D00332332 /* EditBrandController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB92082B1C4ECE3D00332332 /* EditBrandController.swift */; };
+		EB92082E1C4ECE3D00332332 /* EditBrandController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB92082C1C4ECE3D00332332 /* EditBrandController.xib */; };
+		EB9208301C4EE9AF00332332 /* BrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB92082F1C4EE9AF00332332 /* BrandProvider.swift */; };
+		EB9208311C4EE9AF00332332 /* BrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB92082F1C4EE9AF00332332 /* BrandProvider.swift */; };
+		EB9208321C4EE9AF00332332 /* BrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB92082F1C4EE9AF00332332 /* BrandProvider.swift */; };
+		EB9208341C4EEA2400332332 /* BrandProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208331C4EEA2400332332 /* BrandProviderImpl.swift */; };
+		EB9208351C4EEA2400332332 /* BrandProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208331C4EEA2400332332 /* BrandProviderImpl.swift */; };
+		EB9208361C4EEA2400332332 /* BrandProviderImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208331C4EEA2400332332 /* BrandProviderImpl.swift */; };
+		EB9208381C4EEA5E00332332 /* RealmBrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208371C4EEA5E00332332 /* RealmBrandProvider.swift */; };
+		EB9208391C4EEA5E00332332 /* RealmBrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208371C4EEA5E00332332 /* RealmBrandProvider.swift */; };
+		EB92083A1C4EEA5E00332332 /* RealmBrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208371C4EEA5E00332332 /* RealmBrandProvider.swift */; };
 		EB969FE11BE4371200F5BC35 /* ProductAggregateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB969FE01BE4371200F5BC35 /* ProductAggregateCell.swift */; };
 		EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
 		EB9BE4171B2C6556005B401A /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
@@ -540,16 +542,16 @@
 		EBA288DB1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA288DA1BB9FEE6001A2B95 /* Array_InventoryItem.swift */; };
 		EBA288DC1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA288DA1BB9FEE6001A2B95 /* Array_InventoryItem.swift */; };
 		EBA288DD1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA288DA1BB9FEE6001A2B95 /* Array_InventoryItem.swift */; };
-		EBA2C8C61C4F18AC00A970B8 /* ManageProductCategoriesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8C51C4F18AC00A970B8 /* ManageProductCategoriesController.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA2C8C81C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8C71C4F199A00A970B8 /* RealmProductCategoryProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA2C8C91C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8C71C4F199A00A970B8 /* RealmProductCategoryProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA2C8CA1C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8C71C4F199A00A970B8 /* RealmProductCategoryProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA2C8CD1C4F207800A970B8 /* EditProductCategoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8CB1C4F207800A970B8 /* EditProductCategoryController.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA2C8CE1C4F207800A970B8 /* EditProductCategoryController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBA2C8CC1C4F207800A970B8 /* EditProductCategoryController.xib */; settings = {ASSET_TAGS = (); }; };
-		EBA2C8D01C4F24C100A970B8 /* ManageProductCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8CF1C4F24C100A970B8 /* ManageProductCategoryCell.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA2C8D21C502C3200A970B8 /* ConnectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8D11C502C3100A970B8 /* ConnectionProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA2C8D31C502C3200A970B8 /* ConnectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8D11C502C3100A970B8 /* ConnectionProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA2C8D41C502C3200A970B8 /* ConnectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8D11C502C3100A970B8 /* ConnectionProvider.swift */; settings = {ASSET_TAGS = (); }; };
+		EBA2C8C61C4F18AC00A970B8 /* ManageProductCategoriesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8C51C4F18AC00A970B8 /* ManageProductCategoriesController.swift */; };
+		EBA2C8C81C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8C71C4F199A00A970B8 /* RealmProductCategoryProvider.swift */; };
+		EBA2C8C91C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8C71C4F199A00A970B8 /* RealmProductCategoryProvider.swift */; };
+		EBA2C8CA1C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8C71C4F199A00A970B8 /* RealmProductCategoryProvider.swift */; };
+		EBA2C8CD1C4F207800A970B8 /* EditProductCategoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8CB1C4F207800A970B8 /* EditProductCategoryController.swift */; };
+		EBA2C8CE1C4F207800A970B8 /* EditProductCategoryController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBA2C8CC1C4F207800A970B8 /* EditProductCategoryController.xib */; };
+		EBA2C8D01C4F24C100A970B8 /* ManageProductCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8CF1C4F24C100A970B8 /* ManageProductCategoryCell.swift */; };
+		EBA2C8D21C502C3200A970B8 /* ConnectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8D11C502C3100A970B8 /* ConnectionProvider.swift */; };
+		EBA2C8D31C502C3200A970B8 /* ConnectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8D11C502C3100A970B8 /* ConnectionProvider.swift */; };
+		EBA2C8D41C502C3200A970B8 /* ConnectionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C8D11C502C3100A970B8 /* ConnectionProvider.swift */; };
 		EBA575621BCECBDF00A0A825 /* QuantityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA575611BCECBDF00A0A825 /* QuantityView.swift */; };
 		EBA575651BCECC0000A0A825 /* QuantityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBA575641BCECC0000A0A825 /* QuantityView.xib */; };
 		EBA575671BCFFB2700A0A825 /* GroupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA575661BCFFB2700A0A825 /* GroupItem.swift */; };
@@ -584,17 +586,17 @@
 		EBA8FACF1B8F1BEB008CB746 /* UserDetails.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBA8FACE1B8F1BEB008CB746 /* UserDetails.storyboard */; };
 		EBA8FAD21B8F1D46008CB746 /* UserDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA8FAD01B8F1D46008CB746 /* UserDetailsViewController.swift */; };
 		EBA8FAD31B8F1D46008CB746 /* UserDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBA8FAD11B8F1D46008CB746 /* UserDetailsViewController.xib */; };
-		EBA9E5E41C62977300A85610 /* UserProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E31C62977300A85610 /* UserProviderMock.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA9E5E51C62977300A85610 /* UserProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E31C62977300A85610 /* UserProviderMock.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA9E5E61C62977300A85610 /* UserProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E31C62977300A85610 /* UserProviderMock.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA9E5EA1C6380ED00A85610 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E91C6380ED00A85610 /* SettingsViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		EBA9E5E41C62977300A85610 /* UserProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E31C62977300A85610 /* UserProviderMock.swift */; };
+		EBA9E5E51C62977300A85610 /* UserProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E31C62977300A85610 /* UserProviderMock.swift */; };
+		EBA9E5E61C62977300A85610 /* UserProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E31C62977300A85610 /* UserProviderMock.swift */; };
+		EBA9E5EA1C6380ED00A85610 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E91C6380ED00A85610 /* SettingsViewController.swift */; };
 		EBA9E6001C63C1D000A85610 /* prefillde.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBA9E5FD1C63C1C700A85610 /* prefillde.realm */; };
 		EBA9E6011C63C1D000A85610 /* prefillen.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBA9E5FE1C63C1C700A85610 /* prefillen.realm */; };
 		EBA9E6021C63C1D000A85610 /* prefilles.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBA9E5FF1C63C1C700A85610 /* prefilles.realm */; };
-		EBA9E6041C64AD7C00A85610 /* ProductWithQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6031C64AD7C00A85610 /* ProductWithQuantity.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA9E6061C64AFCE00A85610 /* ListItemPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA9E6071C64AFCE00A85610 /* ListItemPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */; settings = {ASSET_TAGS = (); }; };
-		EBA9E6081C64AFCE00A85610 /* ListItemPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */; settings = {ASSET_TAGS = (); }; };
+		EBA9E6041C64AD7C00A85610 /* ProductWithQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6031C64AD7C00A85610 /* ProductWithQuantity.swift */; };
+		EBA9E6061C64AFCE00A85610 /* ListItemPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */; };
+		EBA9E6071C64AFCE00A85610 /* ListItemPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */; };
+		EBA9E6081C64AFCE00A85610 /* ListItemPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */; };
 		EBAEB22F1BDBDB2F00FCDA5C /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB22E1BDBDB2F00FCDA5C /* CGPoint.swift */; };
 		EBAEB23C1BDC262400FCDA5C /* FloatingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB23B1BDC262400FCDA5C /* FloatingViews.swift */; };
 		EBAEB23E1BDC263800FCDA5C /* FloatingViews.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBAEB23D1BDC263800FCDA5C /* FloatingViews.xib */; };
@@ -695,12 +697,12 @@
 		EBCE418B1B5D10BA00583551 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */; };
 		EBD236AE1B8B9DC600B88969 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD236AD1B8B9DC600B88969 /* HistoryViewController.swift */; };
 		EBD236B01B8B9E7200B88969 /* HistoryItemCellOSX.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD236AF1B8B9E7200B88969 /* HistoryItemCellOSX.swift */; };
-		EBD27CCE1C1710F8005D8305 /* RemoteGroupsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD27CCD1C1710F8005D8305 /* RemoteGroupsProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EBD27CCF1C1710F8005D8305 /* RemoteGroupsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD27CCD1C1710F8005D8305 /* RemoteGroupsProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EBD27CD01C1710F8005D8305 /* RemoteGroupsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD27CCD1C1710F8005D8305 /* RemoteGroupsProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EBD27CD21C171175005D8305 /* RemoteGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD27CD11C171175005D8305 /* RemoteGroup.swift */; settings = {ASSET_TAGS = (); }; };
-		EBD27CD31C171175005D8305 /* RemoteGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD27CD11C171175005D8305 /* RemoteGroup.swift */; settings = {ASSET_TAGS = (); }; };
-		EBD27CD41C171175005D8305 /* RemoteGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD27CD11C171175005D8305 /* RemoteGroup.swift */; settings = {ASSET_TAGS = (); }; };
+		EBD27CCE1C1710F8005D8305 /* RemoteGroupsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD27CCD1C1710F8005D8305 /* RemoteGroupsProvider.swift */; };
+		EBD27CCF1C1710F8005D8305 /* RemoteGroupsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD27CCD1C1710F8005D8305 /* RemoteGroupsProvider.swift */; };
+		EBD27CD01C1710F8005D8305 /* RemoteGroupsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD27CCD1C1710F8005D8305 /* RemoteGroupsProvider.swift */; };
+		EBD27CD21C171175005D8305 /* RemoteGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD27CD11C171175005D8305 /* RemoteGroup.swift */; };
+		EBD27CD31C171175005D8305 /* RemoteGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD27CD11C171175005D8305 /* RemoteGroup.swift */; };
+		EBD27CD41C171175005D8305 /* RemoteGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD27CD11C171175005D8305 /* RemoteGroup.swift */; };
 		EBD558C61BF366350048F287 /* InventoryItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD558C51BF366350048F287 /* InventoryItemInput.swift */; };
 		EBD558C71BF366350048F287 /* InventoryItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD558C51BF366350048F287 /* InventoryItemInput.swift */; };
 		EBD558C81BF366350048F287 /* InventoryItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD558C51BF366350048F287 /* InventoryItemInput.swift */; };
@@ -750,7 +752,7 @@
 		EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C31AD11EA100E48F95 /* NSView.swift */; };
 		EBDFE3C61AD11F6700E48F95 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */; };
 		EBE366371BCBC346009543AF /* BlurBubbleTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE366361BCBC346009543AF /* BlurBubbleTransition.swift */; };
-		EBE81DE31C1A08C900EA5644 /* WSUserParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE81DE21C1A08C900EA5644 /* WSUserParser.swift */; settings = {ASSET_TAGS = (); }; };
+		EBE81DE31C1A08C900EA5644 /* WSUserParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE81DE21C1A08C900EA5644 /* WSUserParser.swift */; };
 		EBEBA6B21BF14C36000E5653 /* ListSharedUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEBA6B01BF14C36000E5653 /* ListSharedUserCell.swift */; };
 		EBEBA6B51BF14EFF000E5653 /* AddEditList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBEBA6B41BF14EFF000E5653 /* AddEditList.storyboard */; };
 		EBEBA6B71BF16492000E5653 /* FlatColorPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEBA6B61BF16492000E5653 /* FlatColorPickerController.swift */; };
@@ -836,25 +838,25 @@
 		EBF5D7D81B8FB01B00A235C5 /* Synced.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7D61B8FB01B00A235C5 /* Synced.swift */; };
 		EBF5D7D91B8FB01B00A235C5 /* Synced.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7D61B8FB01B00A235C5 /* Synced.swift */; };
 		EBF5D7DB1B8FB30000A235C5 /* LoadingFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF5D7DA1B8FB30000A235C5 /* LoadingFooter.swift */; };
-		EBF608AD1C0B913C00EDB33E /* ListItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608AC1C0B913C00EDB33E /* ListItemParser.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608AE1C0B913C00EDB33E /* ListItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608AC1C0B913C00EDB33E /* ListItemParser.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608AF1C0B913C00EDB33E /* ListItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608AC1C0B913C00EDB33E /* ListItemParser.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608B11C0CF26A00EDB33E /* UserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B01C0CF26900EDB33E /* UserIdentity.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608B21C0CF26A00EDB33E /* UserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B01C0CF26900EDB33E /* UserIdentity.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608B31C0CF26A00EDB33E /* UserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B01C0CF26900EDB33E /* UserIdentity.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608B51C0F5D0E00EDB33E /* RemotePlanItemsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B41C0F5D0D00EDB33E /* RemotePlanItemsProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608B61C0F5D0E00EDB33E /* RemotePlanItemsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B41C0F5D0D00EDB33E /* RemotePlanItemsProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608B71C0F5D0E00EDB33E /* RemotePlanItemsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B41C0F5D0D00EDB33E /* RemotePlanItemsProvider.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608B91C0F5D9000EDB33E /* RemotePlanItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B81C0F5D9000EDB33E /* RemotePlanItems.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608BA1C0F5D9000EDB33E /* RemotePlanItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B81C0F5D9000EDB33E /* RemotePlanItems.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608BB1C0F5D9000EDB33E /* RemotePlanItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B81C0F5D9000EDB33E /* RemotePlanItems.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608BD1C0F5DB400EDB33E /* RemotePlanItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608BC1C0F5DB400EDB33E /* RemotePlanItem.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608BE1C0F5DB400EDB33E /* RemotePlanItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608BC1C0F5DB400EDB33E /* RemotePlanItem.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF608BF1C0F5DB400EDB33E /* RemotePlanItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608BC1C0F5DB400EDB33E /* RemotePlanItem.swift */; settings = {ASSET_TAGS = (); }; };
-		EBF7CE8B1C3C9E6E00F9DB8A /* SharedUserChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF7CE8A1C3C9E6E00F9DB8A /* SharedUserChecker.swift */; settings = {ASSET_TAGS = (); }; };
+		EBF608AD1C0B913C00EDB33E /* ListItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608AC1C0B913C00EDB33E /* ListItemParser.swift */; };
+		EBF608AE1C0B913C00EDB33E /* ListItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608AC1C0B913C00EDB33E /* ListItemParser.swift */; };
+		EBF608AF1C0B913C00EDB33E /* ListItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608AC1C0B913C00EDB33E /* ListItemParser.swift */; };
+		EBF608B11C0CF26A00EDB33E /* UserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B01C0CF26900EDB33E /* UserIdentity.swift */; };
+		EBF608B21C0CF26A00EDB33E /* UserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B01C0CF26900EDB33E /* UserIdentity.swift */; };
+		EBF608B31C0CF26A00EDB33E /* UserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B01C0CF26900EDB33E /* UserIdentity.swift */; };
+		EBF608B51C0F5D0E00EDB33E /* RemotePlanItemsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B41C0F5D0D00EDB33E /* RemotePlanItemsProvider.swift */; };
+		EBF608B61C0F5D0E00EDB33E /* RemotePlanItemsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B41C0F5D0D00EDB33E /* RemotePlanItemsProvider.swift */; };
+		EBF608B71C0F5D0E00EDB33E /* RemotePlanItemsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B41C0F5D0D00EDB33E /* RemotePlanItemsProvider.swift */; };
+		EBF608B91C0F5D9000EDB33E /* RemotePlanItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B81C0F5D9000EDB33E /* RemotePlanItems.swift */; };
+		EBF608BA1C0F5D9000EDB33E /* RemotePlanItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B81C0F5D9000EDB33E /* RemotePlanItems.swift */; };
+		EBF608BB1C0F5D9000EDB33E /* RemotePlanItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608B81C0F5D9000EDB33E /* RemotePlanItems.swift */; };
+		EBF608BD1C0F5DB400EDB33E /* RemotePlanItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608BC1C0F5DB400EDB33E /* RemotePlanItem.swift */; };
+		EBF608BE1C0F5DB400EDB33E /* RemotePlanItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608BC1C0F5DB400EDB33E /* RemotePlanItem.swift */; };
+		EBF608BF1C0F5DB400EDB33E /* RemotePlanItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF608BC1C0F5DB400EDB33E /* RemotePlanItem.swift */; };
+		EBF7CE8B1C3C9E6E00F9DB8A /* SharedUserChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF7CE8A1C3C9E6E00F9DB8A /* SharedUserChecker.swift */; };
 		EBFD15C11BA7F59600E37342 /* AlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFD15C01BA7F59600E37342 /* AlertPopup.swift */; };
 		EBFD15C41BA7F99B00E37342 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFD15C31BA7F99B00E37342 /* ForgotPasswordViewController.swift */; };
-		EBFDD6A51C0235000012523D /* MyWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFDD6A41C0235000012523D /* MyWebSocket.swift */; settings = {ASSET_TAGS = (); }; };
+		EBFDD6A51C0235000012523D /* MyWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFDD6A41C0235000012523D /* MyWebSocket.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1087,6 +1089,8 @@
 		EB7BFA791BDA5BE500F4C74A /* QuantityCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuantityCell.swift; sourceTree = "<group>"; };
 		EB7BFA7A1BDA5BE500F4C74A /* QuantityCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QuantityCell.xib; sourceTree = "<group>"; };
 		EB7BFA7D1BDAF96A00F4C74A /* Int.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
+		EB7DA2E01C6FCD9F007F1E43 /* SizeLimits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SizeLimits.swift; sourceTree = "<group>"; };
+		EB7DA2E21C6FCF65007F1E43 /* SizeLimitChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SizeLimitChecker.swift; sourceTree = "<group>"; };
 		EB7E82EE1B79F1FB009DEEF4 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		EB7E82F21B79F97B009DEEF4 /* NSStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSStoryboard.swift; sourceTree = "<group>"; };
 		EB7E82F41B7A141E009DEEF4 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
@@ -1719,6 +1723,7 @@
 		EB2F5D7C1A55817100DBC4AF /* common */ = {
 			isa = PBXGroup;
 			children = (
+				EB7DA2E41C6FCF75007F1E43 /* sizeLimit */,
 				EB2F5D0F1A4ACC2500DBC4AF /* extensions */,
 				EBB5A0441B65391200FB9C58 /* validatorHelpers */,
 				EB2F5D7E1A559C8800DBC4AF /* Constants.swift */,
@@ -2046,6 +2051,15 @@
 				EB7BFA7A1BDA5BE500F4C74A /* QuantityCell.xib */,
 			);
 			name = cellQuantity;
+			sourceTree = "<group>";
+		};
+		EB7DA2E41C6FCF75007F1E43 /* sizeLimit */ = {
+			isa = PBXGroup;
+			children = (
+				EB7DA2E01C6FCD9F007F1E43 /* SizeLimits.swift */,
+				EB7DA2E21C6FCF65007F1E43 /* SizeLimitChecker.swift */,
+			);
+			name = sizeLimit;
 			sourceTree = "<group>";
 		};
 		EB7E82EB1B79F1B7009DEEF4 /* user */ = {
@@ -3246,6 +3260,7 @@
 				EB0C1BA51B3DF5FB00F24C85 /* UserDetailsViewController.swift in Sources */,
 				EB6E3D2D1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift in Sources */,
 				EB714ABF1B681AF700F91B94 /* RemoteSyncResult.swift in Sources */,
+				EB7DA2E31C6FCF65007F1E43 /* SizeLimitChecker.swift in Sources */,
 				EB80CE491C3DEB8A001DF159 /* InventoryPicker.swift in Sources */,
 				EB451C411B861544000DE208 /* OrderedDictionary.swift in Sources */,
 				EBDA754E1BCD621C00E34AC3 /* ListItemGroupMapper.swift in Sources */,
@@ -3284,6 +3299,7 @@
 				EB80CE531C449E1E001DF159 /* TermsAndConditionsController.swift in Sources */,
 				EB20FC071A599AE20058103B /* ProductWithQuantityTableViewCell.swift in Sources */,
 				EBA575621BCECBDF00A0A825 /* QuantityView.swift in Sources */,
+				EB7DA2E11C6FCD9F007F1E43 /* SizeLimits.swift in Sources */,
 				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
 				EB70C21F1B4D302D0060E529 /* SharedUser.swift in Sources */,
 				EBFD15C11BA7F59600E37342 /* AlertPopup.swift in Sources */,

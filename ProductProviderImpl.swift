@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 // TODO move product-only method from list item provider here
 class ProductProviderImpl: ProductProvider {
@@ -179,6 +180,18 @@ class ProductProviderImpl: ProductProvider {
                     }
 
                 }
+            }
+        }
+    }
+    
+    
+    func countProducts(handler: ProviderResult<Int> -> Void) {
+        dbProvider.countProducts {countMaybe in
+            if let count = countMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: count))
+            } else {
+                QL4("No count")
+                handler(ProviderResult(status: .DatabaseUnknown))
             }
         }
     }

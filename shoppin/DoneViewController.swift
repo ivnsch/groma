@@ -217,22 +217,34 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     private func addAllItemsToInventory() {
-
-        listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
-            
-            if let weakSelf = self {
-
-                let inventoryItems = weakSelf.listItemsTableViewController.items.map{
-                    InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.doneQuantity, quantityDelta: $0.doneQuantity, product: $0.product, inventory: $0.list.inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
-                }
-                
-                Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, weakSelf.successHandler{result in
-                    weakSelf.sendAllItemToStash {
-                        weakSelf.close()
+        
+        func onSizeLimitOk() {
+            listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
+                if let weakSelf = self {
+                    let inventoryItems = weakSelf.listItemsTableViewController.items.map{
+                        InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.doneQuantity, quantityDelta: $0.doneQuantity, product: $0.product, inventory: $0.list.inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
                     }
-                })
+                    Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, weakSelf.successHandler{result in
+                        weakSelf.sendAllItemToStash {
+                            weakSelf.close()
+                        }
+                    })
+                }
             }
         }
+        
+        if let list = list {
+            Providers.inventoryItemsProvider.countInventoryItems(list.inventory, successHandler {[weak self] count in
+                if let weakSelf = self {
+                    SizeLimitChecker.checkInventoryItemsSizeLimit(count, controller: weakSelf) {
+                        onSizeLimitOk()
+                    }
+                }
+            })
+        } else {
+            print("Warn: DoneViewController.addAllItemsToInventory: list is not set, can't add to inventory")
+        }
+
     }
     
     @IBAction func onEmptyCartTap() {

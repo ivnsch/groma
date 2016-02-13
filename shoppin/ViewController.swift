@@ -899,7 +899,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
         switch buttonId {
         case .Add:
-            sendActionToTopController(.Add)
+            SizeLimitChecker.checkListItemsSizeLimit(listItemsTableViewController.items.count, controller: self) {[weak self] in
+                if let weakSelf = self {
+                    weakSelf.sendActionToTopController(.Add)
+                }
+            }
         case .Submit:
             if topEditSectionControllerManager?.expanded ?? false {
                 topEditSectionControllerManager?.controller?.submit()

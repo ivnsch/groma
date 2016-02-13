@@ -301,7 +301,18 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
         switch buttonId {
         case .Add:
-            sendActionToTopController(.Add)
+            if let inventory = inventory {
+                Providers.inventoryItemsProvider.countInventoryItems(inventory, successHandler {[weak self] count in
+                    if let weakSelf = self {
+                        SizeLimitChecker.checkInventoryItemsSizeLimit(weakSelf.productsWithQuantityController.models.count, controller: weakSelf) {
+                            self?.sendActionToTopController(.Add)
+                        }
+                    }
+                })
+            } else {
+                print("InventoryItemsController.onTopBarButtonTap: No inventory")
+            }
+
         case .Submit:
             if topQuickAddControllerManager?.expanded ?? false {
                 sendActionToTopController(.Submit)

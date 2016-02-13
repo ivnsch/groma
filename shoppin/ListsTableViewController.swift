@@ -129,9 +129,13 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
 
     override func onAddTap() {
         super.onAddTap()
-        let expand = !(topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
-        topAddEditListControllerManager?.expand(expand)
-        setTopBarStateForAddTap(expand)
+        SizeLimitChecker.checkListItemsSizeLimit(models.count, controller: self) {[weak self] in
+            if let weakSelf = self {
+                let expand = !(weakSelf.topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
+                weakSelf.topAddEditListControllerManager?.expand(expand)
+                weakSelf.setTopBarStateForAddTap(expand)
+            }
+        }
     }
     
     // MARK: - EditListViewController

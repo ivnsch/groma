@@ -21,6 +21,8 @@ protocol ProductProvider {
 
     func products(text: String, range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<(substring: String?, products: [Product])> -> Void)
     
+    func countProducts(handler: ProviderResult<Int> -> Void)
+
     // Note: this does not check name uniqueness! If need to add a new product use add(productInput), this checks name uniqueness
     // TODO remove this method? Does add(productInput) covers all add use cases?
     func add(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ())

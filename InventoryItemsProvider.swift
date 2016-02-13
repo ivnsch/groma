@@ -15,6 +15,8 @@ enum InventorySortBy {
 protocol InventoryItemsProvider {
     
     func inventoryItems(range: NSRange, inventory: Inventory, fetchMode: ProviderFetchModus, sortBy: InventorySortBy, _ handler: ProviderResult<[InventoryItem]> -> ())
+
+    func countInventoryItems(inventory: Inventory, _ handler: ProviderResult<Int> -> Void)
     
     func addToInventory(items: [InventoryItemWithHistoryEntry], remote: Bool, _ handler: ProviderResult<Any> -> ())
 

@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import QorumLogs
 
 class RealmInventoryProvider: RealmProvider {
    
@@ -176,6 +177,19 @@ class RealmInventoryProvider: RealmProvider {
     func loadAllInventoryItems(handler: [InventoryItem] -> ()) {
         let mapper = {InventoryItemMapper.inventoryItemWithDB($0)}
         self.load(mapper, handler: handler)
+    }
+
+    func countInventoryItems(inventory: Inventory, handler: Int? -> Void) {
+        withRealm({realm in
+            realm.objects(DBInventoryItem).filter("inventory.uuid = '\(inventory.uuid)'").count
+            }) { (countMaybe: Int?) -> Void in
+                if let count = countMaybe {
+                    handler(count)
+                } else {
+                    QL4("No count")
+                    handler(nil)
+            }
+        }
     }
     
     func saveInventoriesSyncResult(syncResult: RemoteInventoriesWithInventoryItemsSyncResult, handler: Bool -> ()) {

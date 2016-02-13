@@ -294,8 +294,15 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     
     private func addProduct(name: String, category: String, categoryColor: UIColor, price: Float, baseQuantity: Float, unit: ProductUnit, brand: String) {
         let product = ProductInput(name: name, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand)
-        Providers.productProvider.add(product, successHandler {[weak self] product in
-            self?.addProductUI(product)
+        
+        Providers.productProvider.countProducts(successHandler {[weak self] count in
+            if let weakSelf = self {
+                SizeLimitChecker.checkInventoryItemsSizeLimit(count, controller: weakSelf) {
+                    Providers.productProvider.add(product, weakSelf.successHandler {product in
+                        weakSelf.addProductUI(product)
+                    })
+                }
+            }
         })
     }
     

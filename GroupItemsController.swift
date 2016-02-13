@@ -292,7 +292,11 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
         switch buttonId {
         case .Add:
-            sendActionToTopController(.Add)
+            SizeLimitChecker.checkGroupItemsSizeLimit(productsWithQuantityController.models.count, controller: self) {[weak self] in
+                if let weakSelf = self {
+                    weakSelf.sendActionToTopController(.Add)
+                }
+            }
         case .Submit:
             if topQuickAddControllerManager?.expanded ?? false {
                 sendActionToTopController(.Submit)

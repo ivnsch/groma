@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 class InventoryItemsProviderImpl: InventoryItemsProvider {
    
@@ -56,6 +57,17 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                 } else {
                     DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                 }
+            }
+        }
+    }
+    
+    func countInventoryItems(inventory: Inventory, _ handler: ProviderResult<Int> -> Void) {
+        dbInventoryProvider.countInventoryItems(inventory) {countMaybe in
+            if let count = countMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: count))
+            } else {
+                QL4("No count")
+                handler(ProviderResult(status: .DatabaseUnknown))
             }
         }
     }

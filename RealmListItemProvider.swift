@@ -88,6 +88,19 @@ class RealmListItemProvider: RealmProvider {
             handler(substring: substring, products: products)
         }
     }
+    
+    func countProducts(handler: Int? -> Void) {
+        withRealm({realm in
+            realm.objects(DBProduct).count
+            }) { (countMaybe: Int?) -> Void in
+                if let count = countMaybe {
+                    handler(count)
+                } else {
+                    QL4("No count")
+                    handler(nil)
+                }
+        }
+    }
 
     func deleteProductAndDependencies(product: Product, handler: Bool -> Void) {
         doInWriteTransaction({[weak self] realm in
