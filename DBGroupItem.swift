@@ -23,7 +23,7 @@ class DBGroupItem: DBSyncable {
     static func fromDict(dict: [String: AnyObject], product: DBProduct, group: DBListItemGroup) -> DBGroupItem {
         let item = DBGroupItem()
         item.uuid = dict["uuid"]! as! String
-        item.quantity = dict["uuid"]! as! Int
+        item.quantity = dict["quantity"]! as! Int
         item.product = product
         item.group = group
         item.product = product
