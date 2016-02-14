@@ -392,7 +392,7 @@ extension Alamofire.Request {
                     
                 } else if statusCode == 404 {
                     let str = request?.URL.map{$0} ?? ""
-                    QL4("Action not found: \(str)")
+                    QL4("Action not found: \(request?.HTTPMethod) \(str)")
                     return Result.Success(RemoteResult<T>(status: .ActionNotFound))
                     
                 } else if statusCode == 415 {
