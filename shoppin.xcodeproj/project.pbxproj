@@ -398,6 +398,10 @@
 		EB7BFA801BDAF96A00F4C74A /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7BFA7D1BDAF96A00F4C74A /* Int.swift */; };
 		EB7DA2E11C6FCD9F007F1E43 /* SizeLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DA2E01C6FCD9F007F1E43 /* SizeLimits.swift */; };
 		EB7DA2E31C6FCF65007F1E43 /* SizeLimitChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DA2E21C6FCF65007F1E43 /* SizeLimitChecker.swift */; };
+		EB7DA2E71C6FF646007F1E43 /* ValidationRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DA2E61C6FF646007F1E43 /* ValidationRules.swift */; };
+		EB7DA2E81C6FF646007F1E43 /* ValidationRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DA2E61C6FF646007F1E43 /* ValidationRules.swift */; };
+		EB7DA2E91C6FF646007F1E43 /* ValidationRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DA2E61C6FF646007F1E43 /* ValidationRules.swift */; };
+		EB7DA2EB1C70C28E007F1E43 /* UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7DA2EA1C70C28E007F1E43 /* UITextView.swift */; };
 		EB7E82EF1B79F1FB009DEEF4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E82EE1B79F1FB009DEEF4 /* LoginViewController.swift */; };
 		EB7E82F31B79F97B009DEEF4 /* NSStoryboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E82F21B79F97B009DEEF4 /* NSStoryboard.swift */; };
 		EB7E82F51B7A141E009DEEF4 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7E82F41B7A141E009DEEF4 /* RegisterViewController.swift */; };
@@ -1091,6 +1095,8 @@
 		EB7BFA7D1BDAF96A00F4C74A /* Int.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
 		EB7DA2E01C6FCD9F007F1E43 /* SizeLimits.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SizeLimits.swift; sourceTree = "<group>"; };
 		EB7DA2E21C6FCF65007F1E43 /* SizeLimitChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SizeLimitChecker.swift; sourceTree = "<group>"; };
+		EB7DA2E61C6FF646007F1E43 /* ValidationRules.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationRules.swift; sourceTree = "<group>"; };
+		EB7DA2EA1C70C28E007F1E43 /* UITextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextView.swift; sourceTree = "<group>"; };
 		EB7E82EE1B79F1FB009DEEF4 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		EB7E82F21B79F97B009DEEF4 /* NSStoryboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSStoryboard.swift; sourceTree = "<group>"; };
 		EB7E82F41B7A141E009DEEF4 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
@@ -1698,6 +1704,7 @@
 				EB2F5D5D1A506F5100DBC4AF /* Array.swift */,
 				EB2F5D6E1A530FBC00DBC4AF /* Float.swift */,
 				EB3144451B643559005814F0 /* UITextField.swift */,
+				EB7DA2EA1C70C28E007F1E43 /* UITextView.swift */,
 				EBDCA1301B8A124B000020BF /* NSDate.swift */,
 				EB7F59CA1BA1970200E07EBA /* Dictionary.swift */,
 				EB7F59CE1BA1D40A00E07EBA /* Option.swift */,
@@ -1723,6 +1730,7 @@
 		EB2F5D7C1A55817100DBC4AF /* common */ = {
 			isa = PBXGroup;
 			children = (
+				EB7DA2E51C6FF626007F1E43 /* validationRules */,
 				EB7DA2E41C6FCF75007F1E43 /* sizeLimit */,
 				EB2F5D0F1A4ACC2500DBC4AF /* extensions */,
 				EBB5A0441B65391200FB9C58 /* validatorHelpers */,
@@ -2060,6 +2068,14 @@
 				EB7DA2E21C6FCF65007F1E43 /* SizeLimitChecker.swift */,
 			);
 			name = sizeLimit;
+			sourceTree = "<group>";
+		};
+		EB7DA2E51C6FF626007F1E43 /* validationRules */ = {
+			isa = PBXGroup;
+			children = (
+				EB7DA2E61C6FF646007F1E43 /* ValidationRules.swift */,
+			);
+			name = validationRules;
 			sourceTree = "<group>";
 		};
 		EB7E82EB1B79F1B7009DEEF4 /* user */ = {
@@ -3214,6 +3230,7 @@
 				EB7E832E1B7B74EF009DEEF4 /* RemoteHistoryProvider.swift in Sources */,
 				EB2F5D771A557AB000DBC4AF /* List.swift in Sources */,
 				EBFD15C41BA7F99B00E37342 /* ForgotPasswordViewController.swift in Sources */,
+				EB7DA2E71C6FF646007F1E43 /* ValidationRules.swift in Sources */,
 				EBDA75421BCD5C8C00E34AC3 /* ListItemGroupProvider.swift in Sources */,
 				EBAEB22F1BDBDB2F00FCDA5C /* CGPoint.swift in Sources */,
 				EB9208381C4EEA5E00332332 /* RealmBrandProvider.swift in Sources */,
@@ -3287,6 +3304,7 @@
 				EB7BFA7E1BDAF96A00F4C74A /* Int.swift in Sources */,
 				EB7524531BF582FA00A97A10 /* QuickAddItemCell.swift in Sources */,
 				EB6E3D411C5A5B0400D65DD5 /* RemoteGroupItem.swift in Sources */,
+				EB7DA2EB1C70C28E007F1E43 /* UITextView.swift in Sources */,
 				EB8D1D111C389D6E00ADF884 /* ProductsWithQuantityViewController.swift in Sources */,
 				EB8D1D131C396ED600ADF884 /* GroupItemsController.swift in Sources */,
 				EB7E833A1B7B9021009DEEF4 /* RealmCheckoutProvider.swift in Sources */,
@@ -3501,6 +3519,7 @@
 				EB4FD45C1AC701410000F952 /* ListItemInput.swift in Sources */,
 				EB1B36621BC47D88003519F2 /* PlanProvider.swift in Sources */,
 				EB9F6CE91A8610550038355B /* ViewController.swift in Sources */,
+				EB7DA2E81C6FF646007F1E43 /* ValidationRules.swift in Sources */,
 				EBA8FAD21B8F1D46008CB746 /* UserDetailsViewController.swift in Sources */,
 				EBB9A7331B5EB0FC00E5487D /* DBInventory.swift in Sources */,
 				EB0C1BAA1B3ED8D500F24C85 /* ProviderResult.swift in Sources */,
@@ -3756,6 +3775,7 @@
 				EBD558C81BF366350048F287 /* InventoryItemInput.swift in Sources */,
 				EB136F361C18C37D00B60C9C /* WSInventoryParser.swift in Sources */,
 				EB6E3D2A1C5A4E9F00D65DD5 /* RemoteListWithListItems.swift in Sources */,
+				EB7DA2E91C6FF646007F1E43 /* ValidationRules.swift in Sources */,
 				EBF377791B342B1100EEB6DB /* Product.swift in Sources */,
 				EB4D57B21B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */,
 				EB6E3D2F1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift in Sources */,

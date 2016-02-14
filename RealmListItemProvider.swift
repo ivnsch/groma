@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import QorumLogs
 
 enum QuickAddItemSortBy {
     case Alphabetic, Fav
