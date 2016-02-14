@@ -74,7 +74,7 @@ class RemoteProvider {
     }
     
     private class func buildRequest(method: Alamofire.Method, url: String) -> NSMutableURLRequest {
-        let request = NSMutableURLRequest(URL: NSURL(string: Urls.listItems)!)
+        let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         request.HTTPMethod = method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
