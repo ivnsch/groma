@@ -582,23 +582,42 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 
                 let category = listItem.product.category.copy(name: listItemInput.category, color: listItemInput.categoryColor)
                 let product = Product(uuid: updatingListItem.product.uuid, name: listItemInput.name, price: listItemInput.price, category: category, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand) // possible product update
-                let section = updatingListItem.section.copy(name: listItemInput.section)
-                let listItem = ListItem(
-                    uuid: updatingListItem.uuid,
-                    product: product,
-                    section: section,
-                    list: currentList,
-                    note: listItemInput.note,
-                    statusOrder: ListItemStatusOrder(status: .Todo, order: updatingListItem.order(.Todo)),
-                    statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: listItemInput.quantity)
-                )
-                
-                Providers.listItemsProvider.update([listItem], remote: true, successHandler {
-                    self.listItemsTableViewController.updateListItem(listItem, status: .Todo, notifyRemote: true)
-                    self.updatePrices(.MemOnly)
+
+                func onHasSection(section: Section) {
+                    let listItem = ListItem(
+                        uuid: updatingListItem.uuid,
+                        product: product,
+                        section: section,
+                        list: currentList,
+                        note: listItemInput.note,
+                        statusOrder: ListItemStatusOrder(status: .Todo, order: updatingListItem.order(.Todo)),
+                        statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: listItemInput.quantity)
+                    )
                     
-                    handler?()
-                })
+                    Providers.listItemsProvider.update([listItem], remote: true, successHandler {[weak self] in
+                        self?.listItemsTableViewController.updateListItem(listItem, status: .Todo, notifyRemote: true)
+                        self?.updatePrices(.MemOnly)
+                        handler?()
+                    })
+                }
+                
+                if listItem.section.name != listItemInput.section { // if user changed the section we have to see if a section with new name exists already (explanation below)
+                    
+                    Providers.sectionProvider.loadSection(listItemInput.section, list: listItem.list, handler: successHandler{sectionMaybe in
+                        // if a section with name exists already, use existing section, otherwise create a new one
+                        // Note we don't update here the section of the editing list item, this would mean that we change the section name for existing section, e.g. we change section of "tomatoes" from "vegatables" to "fruits", if we just update the section this means all the items which are in "vegetables" will be now in "fruits" and this is not what we want.
+                        let section: Section = {
+                            if let section = sectionMaybe {
+                                return section
+                            } else {
+                                return updatingListItem.section.copy(uuid: NSUUID().UUIDString, name: listItemInput.section)
+                            }
+                        }()
+                        onHasSection(section)
+                    })
+                } else { // if the user hasn't entered a different section name, there's no need to load the section from db, just use the existing one
+                    onHasSection(listItem.section)
+                }
                 
             } else {
                 print("Error: Invalid state: trying to update list item without updatingListItem")

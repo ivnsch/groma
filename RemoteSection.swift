@@ -11,6 +11,7 @@ import Foundation
 final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
+    var listUuid: String    
     let lastUpdate: NSDate
     
     let todoOrder: Int
@@ -20,6 +21,7 @@ final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSeriali
     @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
+        self.listUuid = representation.valueForKeyPath("listUuid") as! String        
         self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
         
         self.todoOrder = representation.valueForKeyPath("todoOrder") as! Int
@@ -39,7 +41,7 @@ final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSeriali
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder), lastUpdate: \(lastUpdate)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), listUuid: \(listUuid), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder), lastUpdate: \(lastUpdate)}"
     }
 }
 

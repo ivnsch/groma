@@ -337,7 +337,7 @@ class ListItemProviderImpl: ListItemProvider {
                                             let sectionCount = Set(sectionsOfItemsWithStatus).count
                                             
                                             // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
-                                            return memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, order: ListItemStatusOrder(status: .Todo, order: sectionCount))
+                                            return memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, list: list, order: ListItemStatusOrder(status: .Todo, order: sectionCount))
                                         }()
                                     
                                     // determine list item order and init/update the map with list items count / section as side effect (which is used to determine the order of the next item)

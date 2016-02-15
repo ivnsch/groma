@@ -87,7 +87,7 @@ class MemListItemProvider {
             let sectionName = prototype.targetSectionName
             let section = (self.listItems![list]!.findFirst{$0.section.name == sectionName})?.section ?? {
                 let sectionCount = self.listItems![list]!.sectionCount(status)
-                return Section(uuid: NSUUID().UUIDString, name: sectionName, order: ListItemStatusOrder(status: status, order: sectionCount))
+                return Section(uuid: NSUUID().UUIDString, name: sectionName, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
             }()
             
             var listItemOrder = 0

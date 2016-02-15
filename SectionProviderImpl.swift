@@ -12,14 +12,9 @@ class SectionProviderImpl: SectionProvider {
     
     let dbProvider = RealmListItemProvider()
     
-    // TODO! use list
-    func loadSection(name: String, list: List, handler: ProviderResult<Section> -> ()) {
-        dbProvider.loadSection(name) {dbSectionMaybe in
-            if let dbSection = dbSectionMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: dbSection))
-            } else {
-                handler(ProviderResult(status: .NotFound))
-            }
+    func loadSection(name: String, list: List, handler: ProviderResult<Section?> -> ()) {
+        dbProvider.loadSection(name, list: list) {dbSectionMaybe in
+            handler(ProviderResult(status: .Success, sucessResult: dbSectionMaybe))
             
             //            // TODO is this necessary here?
             //            self.remoteProvider.section(name, list: list) {remoteResult in
@@ -72,8 +67,8 @@ class SectionProviderImpl: SectionProvider {
         }
     }
 
-    func sections(names: [String], handler: ProviderResult<[Section]> -> ()) {
-        self.dbProvider.loadSections(names) {dbSections in
+    func sections(names: [String], list: List, handler: ProviderResult<[Section]> -> ()) {
+        self.dbProvider.loadSections(names, list: list) {dbSections in
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSections))
         }
     }
@@ -84,16 +79,16 @@ class SectionProviderImpl: SectionProvider {
         // There is no name update since here we have only name so either the name is in db or it's not, if it's not insert a new section
         loadSection(sectionName, list: list) {result in
             
+            // TODO!!!! check if the optional section from db works otherwise return to using .Success / .NotFound with non optional
             // load product and update or create one
             // if we find a product with the name we update it - this is for the case the user changes the price for an existing product while adding an item
-            if let existingSection = result.sucessResult {
-                handler(ProviderResult(status: .Success, sucessResult: existingSection))
-                
-            } else {
-                if result.status == .NotFound { // new section
+            if let existingSectionMaybe = result.sucessResult {
+                if let existingSection = existingSectionMaybe {
+                    handler(ProviderResult(status: .Success, sucessResult: existingSection))
                     
+                } else {
                     if let order = possibleNewOrder {
-                        let section = Section(uuid: NSUUID().UUIDString, name: sectionName, order: order)
+                        let section = Section(uuid: NSUUID().UUIDString, name: sectionName, list: list, order: order)
                         handler(ProviderResult(status: .Success, sucessResult: section))
                         
                     } else { // no order known in advance - fetch listItems to count how many sections, order at the end
@@ -103,7 +98,7 @@ class SectionProviderImpl: SectionProvider {
                             if let listItems = result.sucessResult {
                                 let order = listItems.sectionCount(status)
                                 
-                                let section = Section(uuid: NSUUID().UUIDString, name: sectionName, order: ListItemStatusOrder(status: status, order: order))
+                                let section = Section(uuid: NSUUID().UUIDString, name: sectionName, list: list, order: ListItemStatusOrder(status: status, order: order))
                                 handler(ProviderResult(status: .Success, sucessResult: section))
                                 
                             } else {
@@ -112,10 +107,11 @@ class SectionProviderImpl: SectionProvider {
                             }
                         }
                     }
-                } else {
-                    print("Error: loading section: \(result.status)")
-                    handler(ProviderResult(status: .DatabaseUnknown))
                 }
+                
+            } else {
+                print("Error: loading section: \(result.status)")
+                handler(ProviderResult(status: .DatabaseUnknown))
             }
         }
     }

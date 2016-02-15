@@ -98,8 +98,7 @@ class RealmGlobalProvider: RealmProvider {
                 
             }
             let (productsArr, productsDict): ([DBProduct], [String: DBProduct]) = toTuple(syncResult.products, mapper: {DBProduct.fromDict($0, category: productCategoriesDict[$0["categoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
-            
-            let (sectionsArr, sectionsDict): ([DBSection], [String: DBSection]) = toTuple(syncResult.sections, mapper: {DBSection.fromDict($0)}, idExtractor: {$0.uuid})
+
             
             let (inventoriesArr, inventoriesDict): ([DBInventory], [String: DBInventory]) = toTuple(syncResult.inventories, mapper: {DBInventory.fromDict($0)}, idExtractor: {$0.uuid})
             
@@ -112,6 +111,9 @@ class RealmGlobalProvider: RealmProvider {
             
             
             let (listsArr, listsDict): ([DBList], [String: DBList]) = toTuple(syncResult.lists, mapper: {DBList.fromDict($0, inventory: inventoriesDict[$0["list"]!["inventoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+            
+            let (sectionsArr, sectionsDict): ([DBSection], [String: DBSection]) = toTuple(syncResult.sections, mapper: {DBSection.fromDict($0, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+            
             let (listItemsArr, listItemsDict): ([DBListItem], [String: DBListItem]) = toTuple(syncResult.listsItems, mapper: {DBListItem.fromDict($0, section: sectionsDict[$0["sectionUuid"]! as! String]!, product: productsDict[$0["productUuid"]! as! String]!, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
             
             //        // TODO!!!! set BOTH group in groups items and group items in group Realm needs both set to save correctly ............ this is needed also for lists and inventories probably

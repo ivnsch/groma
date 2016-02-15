@@ -10,8 +10,7 @@ import Foundation
 
 protocol SectionProvider {
 
-    // TODO! use list
-    func loadSection(name: String, list: List, handler: ProviderResult<Section> -> ())
+    func loadSection(name: String, list: List, handler: ProviderResult<Section?> -> ())
     
     func add(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
@@ -22,7 +21,7 @@ protocol SectionProvider {
     // Gets suggestions both from section and category names
     func sectionSuggestionsContainingText(text: String, _ handler: ProviderResult<[String]> -> ())
     
-    func sections(names: [String], handler: ProviderResult<[Section]> -> ())
+    func sections(names: [String], list: List, handler: ProviderResult<[Section]> -> ())
     
     /**
     Utility method to refactor common code in ListItemsProviderImpl and ListItemGroupProviderImpl when adding new list or group items

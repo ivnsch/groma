@@ -15,6 +15,7 @@ class DBSection: DBSyncable {
     dynamic var name: String = ""
 //    let listItems = RealmSwift.List<String>()
     
+    dynamic var list: DBList = DBList()
     dynamic var todoOrder: Int = 0
     dynamic var doneOrder: Int = 0
     dynamic var stashOrder: Int = 0
@@ -27,10 +28,11 @@ class DBSection: DBSyncable {
         return ["name"]
     }
     
-    static func fromDict(dict: [String: AnyObject]) -> DBSection {
+    static func fromDict(dict: [String: AnyObject], list: DBList) -> DBSection {
         let item = DBSection()
         item.uuid = dict["uuid"]! as! String
         item.name = dict["name"]! as! String
+        item.list = list
         item.todoOrder = dict["todoOrder"]! as! Int
         item.doneOrder = dict["doneOrder"]! as! Int
         item.stashOrder = dict["stashOrder"]! as! Int
@@ -42,6 +44,7 @@ class DBSection: DBSyncable {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid
         dict["name"] = name
+        dict["list"] = list.toDict()        
         dict["todoOrder"] = todoOrder
         dict["doneOrder"] = doneOrder
         dict["stashOrder"] = stashOrder

@@ -23,16 +23,16 @@ class RealmListItemProvider: RealmProvider {
         self.loadFirst(mapper, filter: "uuid = '\(uuid)'", handler: handler)
     }
     
-    func loadSection(name: String, handler: Section? -> ()) {
-        loadSections([name]) {sections in
+    func loadSection(name: String, list: List, handler: Section? -> ()) {
+        loadSections([name], list: list) {sections in
             handler(sections.first)
         }
     }
     
-    func loadSections(names: [String], handler: [Section] -> ()) {
+    func loadSections(names: [String], list: List, handler: [Section] -> ()) {
         let mapper = {SectionMapper.sectionWithDB($0)}
         let sectionsNamesStr: String = names.map{"'\($0)'"}.joinWithSeparator(",")
-        self.load(mapper, filter: "name IN {\(sectionsNamesStr)}", handler: handler)
+        self.load(mapper, filter: "name IN {\(sectionsNamesStr)} && list.uuid = '\(list.uuid)'", handler: handler)
     }
     
     func saveSection(section: Section, handler: Bool -> ()) {
@@ -301,7 +301,7 @@ class RealmListItemProvider: RealmProvider {
     When used for add: incrementQuantity should be true, update: false. After clearing db (e.g. sync) also false (since there's nothing to increment)
     NOTE: Assumes all listItems belong to the same list (only the list of first list item is used for filtering)
     */
-    func saveListItems(var listItems: [ListItem], updateSuggestions: Bool = true, incrementQuantity: Bool, handler: [ListItem]? -> ()) {
+    func saveListItems(var listItems: [ListItem], updateSuggestions: Bool = true, incrementQuantity: Bool, updateSection: Bool = true, handler: [ListItem]? -> ()) {
         doInWriteTransaction({[weak self] realm in
            
             // if we want to increment if item with same product name exists
@@ -378,7 +378,7 @@ class RealmListItemProvider: RealmProvider {
                         return SectionMapper.sectionWithDB(item.section)
                         } ?? {
                             let sectionCount = Set(listItemsInList.map{$0.section}).count
-                            return Section(uuid: NSUUID().UUIDString, name: sectionName, order: ListItemStatusOrder(status: status, order: sectionCount))
+                            return Section(uuid: NSUUID().UUIDString, name: sectionName, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
                         }()
                     
                     
@@ -473,7 +473,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func updateListItems(listItems: [ListItem], handler: Bool -> ()) {
-        saveListItems(listItems, incrementQuantity: false) {updatedListItemsMaybe in
+        saveListItems(listItems, incrementQuantity: false, updateSection: false) {updatedListItemsMaybe in
             if let updatedListItems = updatedListItemsMaybe {
                 if listItems.count == updatedListItems.count {
                     handler(true)

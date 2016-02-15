@@ -124,9 +124,13 @@ class RemoteListItemProvider {
     }
 
     func add(section: Section, handler: RemoteResult<RemoteSection> -> ()) {
+
+        let listDict = toRequestParams(section.list)
+
         let parameters: [String: AnyObject] = [
             "uuid": section.uuid,
             "name": section.name,
+            "list": listDict,
             "todoOrder": section.todoOrder,
             "doneOrder": section.doneOrder,
             "stashOrder": section.stashOrder

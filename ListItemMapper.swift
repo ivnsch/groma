@@ -85,13 +85,17 @@ class ListItemMapper {
             return (dict, arr)
         }
         
-        func toSectionDict(remoteSections: [RemoteSection]) -> ([String: Section], [Section]) {
+        func toSectionDict(remoteSections: [RemoteSection], lists: [String: List]) -> ([String: Section], [Section]) {
             var dict: [String: Section] = [:]
             var arr: [Section] = []
             for remoteSection in remoteSections {
-                let section = SectionMapper.SectionWithRemote(remoteSection)
-                dict[remoteSection.uuid] = section
-                arr.append(section)
+                if let list = lists[remoteSection.listUuid] {
+                    let section = SectionMapper.SectionWithRemote(remoteSection, list: list)
+                    dict[remoteSection.uuid] = section
+                    arr.append(section)
+                } else {
+                    print("Error: ListItemMapper.listItemsWithRemote: Got section with list uuid: \(remoteSection.listUuid) which is not in the list dict: \(lists)")
+                }
             }
             return (dict, arr)
         }
@@ -101,7 +105,7 @@ class ListItemMapper {
 
         let (productsCategoriesDict, _) = toProductCategoryDict(remoteListItems.productsCategories) // TODO review if productsCategories array is necessary if not remove
         let (productsDict, products) = toProductDict(remoteListItems.products, categories: productsCategoriesDict)
-        let (sectionsDict, sections) = toSectionDict(remoteListItems.sections)
+        let (sectionsDict, sections) = toSectionDict(remoteListItems.sections, lists: listDict)
 
         let remoteListItemsArr = remoteListItems.listItems
         
