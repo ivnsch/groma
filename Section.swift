@@ -92,5 +92,5 @@ final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
 }
 
 func ==(lhs: Section, rhs: Section) -> Bool {
-    return lhs.uuid == rhs.uuid
+    return lhs.uuid == rhs.uuid && lhs.name == rhs.name && lhs.list.uuid == rhs.list.uuid
 }

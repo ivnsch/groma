@@ -259,6 +259,17 @@ class ListItemProviderImpl: ListItemProvider {
         
         QL1("add prototypes: \(prototypes)")
         
+        func getOrderForNewSection(existingListItems: Results<DBListItem>) -> Int {
+            let sectionsOfItemsWithStatus: [DBSection] = existingListItems.collect({
+                if $0.hasStatus(.Todo) {
+                    return $0.section
+                } else {
+                    return nil
+                }
+            })
+            return Set(sectionsOfItemsWithStatus).count
+        }
+        
         typealias BGResult = (success: Bool, listItems: [ListItem]) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything)
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
@@ -293,21 +304,30 @@ class ListItemProviderImpl: ListItemProvider {
                             
                             var savedListItems: [ListItem] = []
                             
+                            let dbList = ListMapper.dbWithList(list)
+                            
                             for prototype in prototypes {
-                                if let existingListItem = existingListItemsDict[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)] {
+                                if var existingListItem = existingListItemsDict[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)] {
                                     
                                     existingListItem.increment(ListItemStatusQuantity(status: .Todo, quantity: prototype.quantity))
                                     
-                                    // possible updates (when user submits a new list item using add edit product controller)
-                                    //                if let sectionName = section.name {
-                                    existingListItem.section.name = prototype.targetSectionName
-                                    //                }
+                                    // load section with given name or create a new one if it doesn't exist
+                                    let section: DBSection = {
+                                        realm.objects(DBSection).filter(DBSection.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first ?? {
+                                            let sectionOrder = orderMaybe ?? getOrderForNewSection(existingListItems)
+                                            return DBSection(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, list: dbList, todoOrder: sectionOrder, doneOrder: 0, stashOrder: 0)
+                                        }()
+                                    }()
+
+                                    // for some reason it crashes in this line (yes here not when saving) with reason: 'Can't set primary key property 'uuid' to existing value '03F949BB-AE2A-427A-B49B-D53FA290977D'.' (this is the uuid of the list), no idea why, so doing a copy.
+//                                    existingListItem.section = section
+                                    existingListItem = existingListItem.copy(section: section)
+                                    
                                     if let note = note {
                                         existingListItem.note = note
                                     }
                                     
                                     // let incrementedListItem = existingListItem.copy(quantity: existingListItem.quantity + 1)
-                                    // TODO!! update sectionnaeme, note (for case where this is from add product with inputs)
                                     realm.add(existingListItem, update: true)
                                     
                                     let savedListItem = ListItemMapper.listItemWithDB(existingListItem)
@@ -326,15 +346,7 @@ class ListItemProviderImpl: ListItemProvider {
                                         return SectionMapper.sectionWithDB(item.section)
                                         } ?? { // section not existent create a new one
                                             
-                                            // determine current section count in status
-                                            let sectionsOfItemsWithStatus: [DBSection] = existingListItems.collect({
-                                                if $0.hasStatus(.Todo) {
-                                                    return $0.section
-                                                } else {
-                                                    return nil
-                                                }
-                                            })
-                                            let sectionCount = Set(sectionsOfItemsWithStatus).count
+                                            let sectionCount = getOrderForNewSection(existingListItems)
                                             
                                             // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
                                             return memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, list: list, order: ListItemStatusOrder(status: .Todo, order: sectionCount))

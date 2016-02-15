@@ -28,6 +28,25 @@ class DBSection: DBSyncable {
         return ["name"]
     }
     
+    convenience init(uuid: String, name: String, list: DBList, todoOrder: Int, doneOrder: Int, stashOrder: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+        
+        self.init()
+        
+        self.uuid = uuid
+        self.name = name
+        self.list = list
+        
+        self.todoOrder = todoOrder
+        self.doneOrder = doneOrder
+        self.stashOrder = stashOrder
+        
+        self.lastUpdate = lastUpdate
+        if let lastServerUpdate = lastServerUpdate {
+            self.lastServerUpdate = lastServerUpdate
+        }
+        self.removed = removed
+    }
+    
     static func fromDict(dict: [String: AnyObject], list: DBList) -> DBSection {
         let item = DBSection()
         item.uuid = dict["uuid"]! as! String
@@ -51,4 +70,9 @@ class DBSection: DBSyncable {
         setSyncableFieldsInDict(dict)
         return dict
     }
+    
+    static func createFilter(name: String, listUuid: String) -> String {
+        return "name == '\(name)' && list.uuid = '\(listUuid)'"
+    }
+    
 }

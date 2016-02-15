@@ -28,6 +28,30 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
         return "uuid"
     }
     
+    convenience init(uuid: String, product: DBProduct, section: DBSection, list: DBList, note: String, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+        
+        self.init()
+        
+        self.uuid = uuid
+        self.product = product
+        self.section = section
+        self.list = list
+        self.note = note
+        
+        self.todoQuantity = todoQuantity
+        self.todoOrder = todoOrder
+        self.doneQuantity = doneQuantity
+        self.doneOrder = doneOrder
+        self.stashQuantity = stashQuantity
+        self.stashOrder = stashOrder
+        
+        self.lastUpdate = lastUpdate
+        if let lastServerUpdate = lastServerUpdate {
+            self.lastServerUpdate = lastServerUpdate
+        }
+        self.removed = removed
+    }
+    
     // Quantity of listitem in a specific status
     private func quantityForStatus(status: ListItemStatus) -> Int {
         switch status {
@@ -63,7 +87,30 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
             stashQuantity = 0
         }
     }
-
+    
+    func copy(uuid uuid: String? = nil, product: DBProduct? = nil, section: DBSection? = nil, list: DBList? = nil, note: String? = nil, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> DBListItem {
+        return DBListItem(
+            uuid: uuid ?? self.uuid,
+            product: product ?? self.product,
+            section: section ?? self.section,
+            list: list ?? self.list,
+            note: note ?? self.note,
+            
+            todoQuantity: todoQuantity ?? self.todoQuantity,
+            todoOrder: todoOrder ?? self.todoOrder,
+            doneQuantity: doneQuantity ?? self.doneQuantity,
+            doneOrder: doneOrder ?? self.doneOrder,
+            stashQuantity: stashQuantity ?? self.stashQuantity,
+            stashOrder: stashOrder ?? self.stashOrder,
+            
+            lastUpdate: self.lastUpdate,
+            lastServerUpdate: self.lastServerUpdate,
+            removed: self.removed
+        )
+    }
+    
+    // MARK: - Filters
+    
     static func createFilter(list: List) -> String {
         return "list.uuid == '\(list.uuid)'"
     }

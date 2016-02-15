@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 protocol ListItemsTableViewDelegate {
     func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) // submit item marked as undo
@@ -201,16 +202,25 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 }
                 
             } else {
+                
+                var finalIndexPath: NSIndexPath?
+                
                 if (oldItem.listItem.section == listItem.section) { // item is already in table view and also has same section
                     replaceItemAndRebuildTable(listItem)
-
+                    finalIndexPath = indexPath // item is in the same place as before
+                    
                 } else { // the item is already in table view but has a different section
                     //update item and rebuild table, which organises sections
                     replaceItemAndRebuildTable(listItem)
+                    finalIndexPath = getIndexPath(listItem) // since the item changed section the index path is now different, get it again
                 }
                 
                 if scrollToSelection {
-                    tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+                    if let finalIndexPath = finalIndexPath {
+                        tableView.scrollToRowAtIndexPath(finalIndexPath, atScrollPosition: .Top, animated: true)
+                    } else {
+                        QL4("Invalid state: Index path should be set. Initial index path: \(indexPath). ListItem: \(listItem)")
+                    }
                 }
             }
             
