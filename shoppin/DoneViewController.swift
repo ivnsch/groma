@@ -222,7 +222,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
             listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
                 if let weakSelf = self {
                     let inventoryItems = weakSelf.listItemsTableViewController.items.map{
-                        InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.doneQuantity, quantityDelta: $0.doneQuantity, product: $0.product, inventory: $0.list.inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
+                        InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.doneQuantity, quantityDelta: $0.doneQuantity, product: $0.product, inventory: $0.list.inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: ""))
                     }
                     Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, weakSelf.successHandler{result in
                         weakSelf.sendAllItemToStash {

@@ -76,7 +76,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         
         func onHasProduct(product: Product) {
             // TODO! quantity delta I think should increment previous quantity delta not overwrite?
-            let inventoryItemWithHistoryEntry = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: itemInput.quantity, quantityDelta: itemInput.quantity, product: product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO how do we handle shared users internally (database etc) when user is offline
+            let inventoryItemWithHistoryEntry = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: itemInput.quantity, quantityDelta: itemInput.quantity, product: product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: ""))
             addToInventory([inventoryItemWithHistoryEntry], remote: true) {result in
                 if result.success {
                     handler(ProviderResult(status: .Success, sucessResult: inventoryItemWithHistoryEntry))

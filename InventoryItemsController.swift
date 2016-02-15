@@ -376,7 +376,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             Providers.listItemGroupsProvider.groupItems(group, successHandler {[weak self] groupItems in
                 if let weakSelf = self {
                     let inventoryItems: [InventoryItemWithHistoryEntry] = groupItems.map {item in
-                        let inventoryItem = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: item.quantity, quantityDelta: item.quantity, product: item.product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO remove the offline dummy email? to add inventory shared user is not needed (the server uses the logged in user).
+                        let inventoryItem = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: item.quantity, quantityDelta: item.quantity, product: item.product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: ""))
                         return inventoryItem
                     }
                     Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, weakSelf.successHandler{[weak self] result in
@@ -389,7 +389,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func onAddProduct(product: Product) {
         if let inventory = inventory {
-            let inventoryItem = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: 1, quantityDelta: 1, product: product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "unknown@e.mail")) // TODO remove the offline dummy email? to add inventory shared user is not needed (the server uses the logged in user).
+            let inventoryItem = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: 1, quantityDelta: 1, product: product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: ""))
             Providers.inventoryItemsProvider.addToInventory([inventoryItem], remote: true, successHandler{[weak self] result in
                 self?.productsWithQuantityController?.addOrIncrementUI(ProductWithQuantityInv(inventoryItem: inventoryItem.inventoryItem))
             })

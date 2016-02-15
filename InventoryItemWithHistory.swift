@@ -17,7 +17,9 @@ class InventoryItemWithHistoryEntry: Equatable {
     let inventoryItem: InventoryItem
     let historyItemUuid: String
     let addedDate: NSDate
-    let user: SharedUser // the user that added the item. This is normally the current logged in user. We don't want to make assumptions though about it, maybe at some point we could allow a user to add inventory items "in name of" other of the shared users, or something like that.
+    
+    // the user that added the item. When the user has never logged in, this user is "empty" (empty email). The user is set by the server during sync the first time the user logs in, or registers. This will be in the sync response, so after sync it's also set in the client. The reason we set this in the server is that history is long and the server has to iterate through the input objects anyway, while in the client we would need to iterate only for this or an additional db query between login and sync, which would make sync even slower.
+    let user: SharedUser
     
     init(inventoryItem: InventoryItem, historyItemUuid: String, addedDate: NSDate, user: SharedUser) {
         self.inventoryItem = inventoryItem
