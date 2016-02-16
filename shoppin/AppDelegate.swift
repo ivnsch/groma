@@ -51,6 +51,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         configLog()
         
+        checkPing()
+        
         return initFb
     }
     
@@ -467,9 +469,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        checkPing()
     }
 
+    private func checkPing() {
+        if let lastTokeUpdateDate: NSDate = PreferencesManager.loadPreference(PreferencesManagerKey.lastTokenUpdate) {
+            
+            // Refresh the token, max 1 time in <days>
+            // If we find a method to guarantee (background service?) that we refresh the token each x days, we can set this to a bigger value. Consult server for more details.
+            let days = 1
+            let passedDays = lastTokeUpdateDate.daysUntil(NSDate())
+            if passedDays >= days {
+                QL2("\(passedDays) days passed since last token refresh. Ping")
+                userProvider.ping()
+            } else {
+                QL1("There is a token last update date, but \(days) days not passed yet. Passed days: \(passedDays)")
+            }
+        } else {
+            QL1("No token last update date stored yet")
+        }
+    }
+    
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         Providers.userProvider.connectWebsocketIfLoggedIn()

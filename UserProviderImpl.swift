@@ -79,6 +79,11 @@ class UserProviderImpl: UserProvider {
         }
     }
     
+    func ping() {
+        remoteProvider.ping{result in
+        }
+    }
+    
     var loggedIn: Bool {
         return remoteProvider.hasToken()
     }

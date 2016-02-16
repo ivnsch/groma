@@ -27,6 +27,13 @@ extension NSDate: Comparable {
         return days.length
     }
     
+    // Note: this returns days according to exact hours passed not "formal" days, for example if we have Jan 1 and Jan 2 but only 20 hours difference, this returns 0
+    func daysUntil(date: NSDate) -> Int {
+        let components = NSCalendar.currentCalendar().components(.Day, fromDate: self, toDate: date, options: NSCalendarOptions(rawValue: 0))
+        return components.day
+    }
+
+    
     static func startOfMonth(month: Int, year: Int) -> NSDate? {
         let gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
         let components = NSDateComponents()

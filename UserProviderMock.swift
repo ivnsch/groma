@@ -36,6 +36,9 @@ class UserProviderMock: UserProvider {
         }
     }
     
+    func ping() {
+    }
+    
     func isRegistered(email: String, _ handler: ProviderResult<Any> -> ()) {
         delay(requestDelay) {
             handler(ProviderResult(status: .Success, sucessResult: true))

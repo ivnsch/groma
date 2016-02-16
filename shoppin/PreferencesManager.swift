@@ -16,6 +16,7 @@ enum PreferencesManagerKey: String {
     case email = "email"
     case deviceId = "did"
     case showIntro = "showIntro"
+    case lastTokenUpdate = "lastTokenUpdate"
 }
 
 class PreferencesManager {

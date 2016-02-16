@@ -38,4 +38,7 @@ protocol UserProvider {
     func connectWebsocketIfLoggedIn()
     
     func disconnectWebsocket()
+    
+    // Updates token
+    func ping()
 }

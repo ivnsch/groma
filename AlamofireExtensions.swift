@@ -201,6 +201,7 @@ struct AlamofireHelper {
         mutableURLRequest.HTTPMethod = method.rawValue
         
         if let token = maybeToken {
+//            QL1("Setting the token header: \(token)")
             mutableURLRequest.setValue(token, forHTTPHeaderField: "X-Auth-Token")
         } // TODO if there's no token return status code to direct to login controller or something
         
@@ -228,6 +229,7 @@ struct AlamofireHelper {
         let maybeToken = valet?.stringForKey(KeychainKeys.token)
         
         if let token = maybeToken {
+//            QL1("Setting the token header: \(token)")
             request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
         } // TODO if there's no token return status code to direct to login controller or something
         

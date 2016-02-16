@@ -8,6 +8,7 @@
 
 import Foundation
 import Valet
+import QorumLogs
 
 class RemoteUserProvider {
     
@@ -21,6 +22,8 @@ class RemoteUserProvider {
         RemoteProvider.request(.POST, Urls.login, parameters) {[weak self] (result: RemoteResult<RemoteLoginResult>) in
             if let successResult = result.successResult {
                 self?.storeUserData(successResult.token, email: loginData.email)
+            } else {
+                QL4("No token. Result: \(result)")
             }
             handler(result)
         }
@@ -33,6 +36,22 @@ class RemoteUserProvider {
         RemoteProvider.request(.POST, Urls.register, parameters) {[weak self] (result: RemoteResult<RemoteRegisterResult>) in
             if let successResult = result.successResult {
                 self?.storeUserData(successResult.token, email: user.email)
+            } else {
+                QL4("No token. Result: \(result)")
+            }
+            handler(result)
+        }
+    }
+    
+    func ping(handler: RemoteResult<RemotePingResult> -> ()) {
+        RemoteProvider.authenticatedRequest(.GET, Urls.ping) {[weak self] (result: RemoteResult<RemotePingResult>) in
+            if result.success {
+                if let successResult = result.successResult {
+                    self?.storeToken(successResult.token) // update (replace) the token
+                } else {
+                    QL4("No token. Result: \(result)")
+                }
+                handler(result)
             }
             handler(result)
         }
@@ -62,26 +81,37 @@ class RemoteUserProvider {
     
     func hasToken() -> Bool {
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        return valet?.containsObjectForKey(KeychainKeys.token) ?? {
-            print("Error: No valet instance available, can't check if token exists")
+        if let valet = valet {
+            return valet.containsObjectForKey(KeychainKeys.token)
+        } else {
+            QL4("Valet not set, returning false")
             return false
-        }()
+        }
     }
     
     private func storeToken(token: String) {
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        valet?.setString(token, forKey: KeychainKeys.token) ?? {
-            print("Error: No valet instance available, can't store token")
-            return false
-        }()
+        if let valet = valet {
+            if valet.setString(token, forKey: KeychainKeys.token) {
+                QL1("Stored token: \(token)")
+                PreferencesManager.savePreference(PreferencesManagerKey.lastTokenUpdate, value: NSDate())
+            } else {
+                QL4("Couldn't store token")
+            }
+        } else {
+            QL4("Valet not set, couldn't store token")
+        }
     }
     
     private func removeToken() {
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        valet?.removeObjectForKey(KeychainKeys.token) ?? {
-            print("Error: No valet instance available, can't remove token")
-            return false
-        }()
+        if let valet = valet {
+            if !valet.removeObjectForKey(KeychainKeys.token) {
+                QL4("Remove token returned false")
+            }
+        } else {
+            QL4("Valet not set")
+        }
     }
     
     // For now store the user's email as simple preference, we need it to be added automatically to list shared users. This may change in the future
