@@ -25,7 +25,7 @@ target 'shoppin' do
     pod 'ChameleonFramework/Swift'
     pod 'Starscream'
     pod 'HockeySDK', '~> 3.8.5'
-    pod 'QorumLogs'
+    pod 'QorumLogs', :git => 'https://github.com/i-schuetz/QorumLogs', :branch => 'only_show_array_files'
     shared
 end
 

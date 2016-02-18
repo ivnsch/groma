@@ -63,6 +63,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
      
         QorumLogs.KZLinkedConsoleSupportEnabled = true
 
+//        QorumLogs.onlyShowTheseFiles(MyWebSocket.self, MyWebsocketDispatcher.self)
+
 //        QorumLogs.test()
     }
     
