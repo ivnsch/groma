@@ -17,7 +17,10 @@ extension Array where Element: ListItem {
         
         // src (sort by multiple criteria) http://stackoverflow.com/a/27596550/930450
         
-        let result = self.filter{$0.hasStatus(status)}.sort {
+        let result = sort {
+            // for now disabled as this is e.g. overwrites the list item memory cache so we get no items in the cart or stash
+            // TODO review this method, sorting in general - this is not fully defined yet
+//        let result = self.filter{$0.hasStatus(status)}.sort {
             switch ($0.section.order(status), $1.section.order(status)) {
             case let (lhs,rhs) where lhs == rhs:
                 return $0.order(status) < $1.order(status)
