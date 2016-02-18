@@ -67,6 +67,7 @@ class DBSection: DBSyncable {
         dict["todoOrder"] = todoOrder
         dict["doneOrder"] = doneOrder
         dict["stashOrder"] = stashOrder
+        dict["listInput"] = list.toDict()
         setSyncableFieldsInDict(dict)
         return dict
     }

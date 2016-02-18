@@ -58,7 +58,7 @@ class DBList: DBSyncable {
         dict["name"] = name
         dict["color"] = bgColor().hexStr
         dict["order"] = order
-        dict["inventoy"] = inventory.toDict() // TODO correct field name in server (and in other places in client)
+        dict["inventory"] = inventory.toDict()
         dict["users"] = users.map{$0.toDict()}
         setSyncableFieldsInDict(dict)
         return dict

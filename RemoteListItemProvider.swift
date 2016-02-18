@@ -227,12 +227,16 @@ class RemoteListItemProvider {
     }
 
     func toRequestParams(section: Section) -> [String: AnyObject] {
+        
+        let listDict = toRequestParams(section.list)
+
         return [
             "uuid": section.uuid,
             "name": section.name,
             "todoOrder": section.todoOrder,
             "doneOrder": section.doneOrder,
-            "stashOrder": section.stashOrder
+            "stashOrder": section.stashOrder,
+            "listInput": listDict
         ]
     }
     
@@ -264,6 +268,7 @@ class RemoteListItemProvider {
         return [
             "uuid": product.uuid,
             "name": product.name,
+            "brand": product.brand,
             "price": product.price,
             "baseQuantity": product.baseQuantity,
             "unit": product.unit.rawValue,
