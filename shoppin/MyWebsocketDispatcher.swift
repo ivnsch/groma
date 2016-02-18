@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 
 enum WSNotificationName: String {
@@ -61,23 +62,23 @@ struct MyWebsocketDispatcher {
                 let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions())
                 if let dict =  json as? Dictionary<String, AnyObject>  {
                     if let verb = dict["verb"] as? String, category = dict["category"] as? String, topic = dict["topic"] as? String, data = dict["message"] {
-                        print("Websocket: Verb: \(verb), category: \(category), topic: \(topic), data: \(data)")
+                        QL1("Websocket: Verb: \(verb), category: \(category), topic: \(topic), data: \(data)")
                         processCategory(category, verb: verb, topic: topic, data: data)
                     }
                 }
                 
             } catch let e as NSError {
-                print("Error: MyWebSocket.websocketDidReceiveMessage: deserializing json: \(e)")
+                QL4("Error: MyWebSocket.websocketDidReceiveMessage: deserializing json: \(e)")
             }
             
         } else {
-            print("Error: MyWebSocket.websocketDidReceiveMessage: couldn't get data from text: \(text)")
+            QL4("Error: MyWebSocket.websocketDidReceiveMessage: couldn't get data from text: \(text)")
         }
     }
     
     
     private static func processCategory(category: String, verb verbStr: String, topic: String, data: AnyObject) {
-        guard let verb = WSNotificationVerb.init(rawValue: verbStr) else {print("Error: MyWebsocketDispatcher: Verb not supported: \(verbStr). Can't process. Category: \(category), topic: \(topic)"); return}
+        guard let verb = WSNotificationVerb.init(rawValue: verbStr) else {QL4("Error: MyWebsocketDispatcher: Verb not supported: \(verbStr). Can't process. Category: \(category), topic: \(topic)"); return}
         
         switch category {
             case "product":
@@ -105,7 +106,7 @@ struct MyWebsocketDispatcher {
             case "history":
                 processHistoryItem(verb, topic, data)
         default:
-            print("MyWebsocketDispatcher.processCategory not handled: \(category)")
+            QL4("MyWebsocketDispatcher.processCategory not handled: \(category)")
         }
     }
     
@@ -129,7 +130,7 @@ struct MyWebsocketDispatcher {
             postNotification(.ListItems, verb, listItems)
             
         default:
-            print("MyWebsocketDispatcher.processListItems not handled: \(verb)")
+            QL4("MyWebsocketDispatcher.processListItems not handled: \(verb)")
         }
     }
     
@@ -173,7 +174,7 @@ struct MyWebsocketDispatcher {
         case WSNotificationVerb.Delete:
             let groupItemWithGroup = WSGroupParser.parseGroupItem(data)
             postNotification(.GroupItem, verb, groupItemWithGroup)
-        default: print("MyWebsocketDispatcher.processGroupItem not handled: \(verb)")
+        default: QL4("MyWebsocketDispatcher.processGroupItem not handled: \(verb)")
         }
     }
     
@@ -268,7 +269,7 @@ struct MyWebsocketDispatcher {
             let group = WSInventoryParser.parseInventoryItemIncrement(data)
             postNotification(.InventoryItems, verb, group)
             
-        default: print("MyWebsocketDispatcher.processListItems not handled: \(verb)")
+        default: QL4("MyWebsocketDispatcher.processListItems not handled: \(verb)")
         }
     }
     
@@ -279,7 +280,7 @@ struct MyWebsocketDispatcher {
             let historyItemUuid = data
             postNotification(.HistoryItem, verb, historyItemUuid)
             
-        default: print("MyWebsocketDispatcher.processListItems not handled: \(verb)")
+        default: QL4("MyWebsocketDispatcher.processListItems not handled: \(verb)")
         }
     }
 }

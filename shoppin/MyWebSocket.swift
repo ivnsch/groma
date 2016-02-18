@@ -8,6 +8,7 @@
 
 import Starscream
 import Valet
+import QorumLogs
 
 class MyWebSocket: WebSocketDelegate {
     
@@ -35,19 +36,19 @@ class MyWebSocket: WebSocketDelegate {
             let data = try NSJSONSerialization.dataWithJSONObject(dict, options: NSJSONWritingOptions())
             if let str = NSString(data: data, encoding: NSUTF8StringEncoding) as? String {
                 
-                print("Websocket: Sending string: \(str)")
+                QL1("Websocket: Sending string: \(str)")
                 socket?.writeString(str)
                 
             } else {
-                print("Error: MyWebSocket.disconnect: invalid serialization result: dict: \(dict), data: \(data)")
+                QL4("Invalid serialization result: dict: \(dict), data: \(data)")
             }
         } catch let e as NSError {
-            print("Error: MyWebSocket.disconnect: serializing json: \(e)")
+            QL4("Error serializing json: \(e)")
         }
     }
     
     func websocketDidConnect(socket: WebSocket) {
-        print("Websocket: Connected")
+        QL2("Websocket: Connected")
         
         let deviceId = NSUUID().UUIDString
 
@@ -76,18 +77,18 @@ class MyWebSocket: WebSocketDelegate {
                                 self?.subscribedInventories = inventoriesUuids
                                 
                             } else {
-                                print("Error: MyWebSocket.websocketDidConnect: invalid serialization result: dict: \(dict), data: \(data)")
+                                QL4("Invalid serialization result: dict: \(dict), data: \(data)")
                             }
                         } catch let e as NSError {
-                            print("Error: MyWebSocket.websocketDidConnect: serializing json: \(e)")
+                            QL4("Error serializing json: \(e)")
                         }
                         
                     } else {
-                        print("Error: MyWebSocket.websocketDidConnect: couldn't retrieve inventories: \(inventoriesResult)")
+                        QL4("Couldn't retrieve inventories: \(inventoriesResult)")
                     }
                 }
             } else {
-                print("Error: MyWebSocket.websocketDidConnect: couldn't retrieve lists: \(listsResult)")
+                QL4("Couldn't retrieve lists: \(listsResult)")
             }
         }
     }
@@ -95,17 +96,17 @@ class MyWebSocket: WebSocketDelegate {
     func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
         if let error = error {
             if error.code == 401 {
-                print("Not authorized")
+                QL4("Not authorized")
             } else {
-                print("Unknown websocket connection error: \(error)")
+                QL4("Unknown websocket connection error: \(error)")
             }
         } else {
-            print("Websocket: Disconnected")
+            QL2("Websocket: Disconnected")
         }
     }
     
     func websocketDidReceiveMessage(socket: WebSocket, text: String) {
-        print("Websocket: Received text: \(text)")
+        QL1("Websocket: Received text: \(text)")
 
         if let data = (text as NSString).dataUsingEncoding(NSUTF8StringEncoding) {
             
@@ -114,7 +115,7 @@ class MyWebSocket: WebSocketDelegate {
                 if let dict =  json as? Dictionary<String, AnyObject>  {
                     
                     if let verb = dict["verb"] as? String, category = dict["category"] as? String, topic = dict["topic"] as? String, data = dict["message"] {
-                        print("Websocket: Verb: \(verb), category: \(category), topic: \(topic), data: \(data)")
+                        QL1("Websocket: Verb: \(verb), category: \(category), topic: \(topic), data: \(data)")
                         
                         switch category {
                         case "listitem":
@@ -123,7 +124,7 @@ class MyWebSocket: WebSocketDelegate {
                                 let listItem = ListItemParser.parse(data)
                                 NSNotificationCenter.defaultCenter().postNotificationName("listItems", object: nil, userInfo: ["value": [listItem]])
 
-                            default: print("Not handled verb: \(verb)")
+                            default: QL4("Not handled verb: \(verb)")
                             }
                             
 
@@ -134,11 +135,11 @@ class MyWebSocket: WebSocketDelegate {
                                 let listItems = ListItemParser.parseArray(dataarr)
                                 NSNotificationCenter.defaultCenter().postNotificationName("listItems", object: nil, userInfo: ["value": listItems])
                                 
-                            default: print("Not handled verb: \(verb)")
+                            default: QL4("Not handled verb: \(verb)")
                             }
                         
                         
-                        default: print("Not handled category: \(category)")
+                        default: QL4("Not handled category: \(category)")
                         }
                         
                         
@@ -151,25 +152,25 @@ class MyWebSocket: WebSocketDelegate {
                                 PreferencesManager.clearPreference(key: PreferencesManagerKey.deviceId)
                             }
                         } else {
-                            print("not handled websocket format: \(dict)")
+                            QL4("Not handled websocket format: \(dict)")
                         }
                     }
 
                 } else {
-                    print("Warn: Websocket: Returned json could not be converted to dictionary: \(json)")
+                    QL4("Returned json could not be converted to dictionary: \(json)")
                 }
                 
                 
                 
             } catch let e as NSError {
-                print("Error: MyWebSocket.websocketDidReceiveMessage: deserializing json: \(e)")
+                QL4("Error deserializing json: \(e)")
             }
         } else {
-            print("Error: MyWebSocket.websocketDidReceiveMessage: couldn't get data from text: \(text)")
+            QL4("Couldn't get data from text: \(text)")
         }
     }
     
     func websocketDidReceiveData(socket: WebSocket, data: NSData) {
-        print("Websocket: Received data: \(data.length)")
+        QL1("Websocket: Received data: \(data.length)")
     }
 }
