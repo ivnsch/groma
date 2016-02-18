@@ -333,7 +333,7 @@ class RealmListItemProvider: RealmProvider {
                 realm.add(dbListItem, update: true)
                 
                 if updateSuggestions {
-                    self?.saveProductSuggestionHelper(realm, product: listItem.product)
+                    self?.saveProductSuggestionHelper(realm, product: listItem.product) // TODO still needed?
                     
                     let sectionSuggestion = SectionSuggestionMapper.dbWithSection(listItem.section)
                     realm.add(sectionSuggestion, update: true)
