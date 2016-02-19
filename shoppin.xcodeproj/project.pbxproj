@@ -13,6 +13,9 @@
 		EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB0587DB1BBED86B00080626 /* IntroPageView.xib */; };
 		EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DD1BBED9C800080626 /* IntroPageView.swift */; };
 		EB0587E01BBEDAA600080626 /* NSBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0587DF1BBEDAA600080626 /* NSBundle.swift */; };
+		EB05FEC81C7786150023DBF8 /* prefillde.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB05FEC51C7785FB0023DBF8 /* prefillde.realm */; };
+		EB05FEC91C7786150023DBF8 /* prefillen.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB05FEC61C7785FB0023DBF8 /* prefillen.realm */; };
+		EB05FECA1C7786150023DBF8 /* prefilles.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB05FEC71C7785FB0023DBF8 /* prefilles.realm */; };
 		EB0870CB1BC050A300169E29 /* MyTipPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0870CA1BC050A300169E29 /* MyTipPopup.swift */; };
 		EB0A058D1BDFCD6B00D1E29D /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0A058C1BDFCD6B00D1E29D /* MoreViewController.swift */; };
 		EB0A05901BDFCE8200D1E29D /* ManageProductsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0A058F1BDFCE8200D1E29D /* ManageProductsViewController.swift */; };
@@ -594,9 +597,6 @@
 		EBA9E5E51C62977300A85610 /* UserProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E31C62977300A85610 /* UserProviderMock.swift */; };
 		EBA9E5E61C62977300A85610 /* UserProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E31C62977300A85610 /* UserProviderMock.swift */; };
 		EBA9E5EA1C6380ED00A85610 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E5E91C6380ED00A85610 /* SettingsViewController.swift */; };
-		EBA9E6001C63C1D000A85610 /* prefillde.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBA9E5FD1C63C1C700A85610 /* prefillde.realm */; };
-		EBA9E6011C63C1D000A85610 /* prefillen.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBA9E5FE1C63C1C700A85610 /* prefillen.realm */; };
-		EBA9E6021C63C1D000A85610 /* prefilles.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBA9E5FF1C63C1C700A85610 /* prefilles.realm */; };
 		EBA9E6041C64AD7C00A85610 /* ProductWithQuantity.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6031C64AD7C00A85610 /* ProductWithQuantity.swift */; };
 		EBA9E6061C64AFCE00A85610 /* ListItemPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */; };
 		EBA9E6071C64AFCE00A85610 /* ListItemPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */; };
@@ -889,6 +889,9 @@
 		EB0587DB1BBED86B00080626 /* IntroPageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IntroPageView.xib; sourceTree = "<group>"; };
 		EB0587DD1BBED9C800080626 /* IntroPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntroPageView.swift; sourceTree = "<group>"; };
 		EB0587DF1BBEDAA600080626 /* NSBundle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSBundle.swift; sourceTree = "<group>"; };
+		EB05FEC51C7785FB0023DBF8 /* prefillde.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillde.realm; sourceTree = "<group>"; };
+		EB05FEC61C7785FB0023DBF8 /* prefillen.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillen.realm; sourceTree = "<group>"; };
+		EB05FEC71C7785FB0023DBF8 /* prefilles.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefilles.realm; sourceTree = "<group>"; };
 		EB0870CA1BC050A300169E29 /* MyTipPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTipPopup.swift; sourceTree = "<group>"; };
 		EB0A058C1BDFCD6B00D1E29D /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		EB0A058F1BDFCE8200D1E29D /* ManageProductsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageProductsViewController.swift; sourceTree = "<group>"; };
@@ -1212,9 +1215,6 @@
 		EBA8FAD11B8F1D46008CB746 /* UserDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserDetailsViewController.xib; sourceTree = "<group>"; };
 		EBA9E5E31C62977300A85610 /* UserProviderMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProviderMock.swift; sourceTree = "<group>"; };
 		EBA9E5E91C6380ED00A85610 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		EBA9E5FD1C63C1C700A85610 /* prefillde.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillde.realm; sourceTree = "<group>"; };
-		EBA9E5FE1C63C1C700A85610 /* prefillen.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillen.realm; sourceTree = "<group>"; };
-		EBA9E5FF1C63C1C700A85610 /* prefilles.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefilles.realm; sourceTree = "<group>"; };
 		EBA9E6031C64AD7C00A85610 /* ProductWithQuantity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWithQuantity.swift; sourceTree = "<group>"; };
 		EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemPrototype.swift; sourceTree = "<group>"; };
 		EBAEB22E1BDBDB2F00FCDA5C /* CGPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
@@ -1555,9 +1555,9 @@
 		EB1DDE9C1A3334EC00D778DE = {
 			isa = PBXGroup;
 			children = (
-				EBA9E5FD1C63C1C700A85610 /* prefillde.realm */,
-				EBA9E5FE1C63C1C700A85610 /* prefillen.realm */,
-				EBA9E5FF1C63C1C700A85610 /* prefilles.realm */,
+				EB05FEC51C7785FB0023DBF8 /* prefillde.realm */,
+				EB05FEC61C7785FB0023DBF8 /* prefillen.realm */,
+				EB05FEC71C7785FB0023DBF8 /* prefilles.realm */,
 				EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */,
 				EB1DDEA71A3334EC00D778DE /* shoppin */,
 				EB55675A1A8622E600CD3EC6 /* shoppin_ios */,
@@ -2884,9 +2884,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBA9E6001C63C1D000A85610 /* prefillde.realm in Resources */,
-				EBA9E6011C63C1D000A85610 /* prefillen.realm in Resources */,
-				EBA9E6021C63C1D000A85610 /* prefilles.realm in Resources */,
+				EB05FEC81C7786150023DBF8 /* prefillde.realm in Resources */,
+				EB05FEC91C7786150023DBF8 /* prefillen.realm in Resources */,
+				EB05FECA1C7786150023DBF8 /* prefilles.realm in Resources */,
 				EB9208021C4DBC7700332332 /* SimpleInputPopup.storyboard in Resources */,
 				EB92082E1C4ECE3D00332332 /* EditBrandController.xib in Resources */,
 				EB7BFA7C1BDA5BE500F4C74A /* QuantityCell.xib in Resources */,
@@ -4097,7 +4097,7 @@
 				OTHER_SWIFT_FLAGS = "-DDEBUG $(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.schuetz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "525e736e-b25b-4cb2-a200-123cb3f197d7";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -4125,7 +4125,7 @@
 				OTHER_SWIFT_FLAGS = "-DRELEASE $(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.schuetz.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "525e736e-b25b-4cb2-a200-123cb3f197d7";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = bridging_header_ios.h;
 				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
