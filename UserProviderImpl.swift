@@ -50,6 +50,8 @@ class UserProviderImpl: UserProvider {
     }
 
     func logout(handler: ProviderResult<Any> -> ()) {
+        // TODO ensure the socket always really disconnects (client or server side), to prevent possible zombies sockets in server. It should, but maybe connection error or sth.
+        webSocket?.disconnect()
         self.remoteProvider.logout(remoteResultHandler(handler))
     }
     
