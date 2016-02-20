@@ -108,66 +108,17 @@ class MyWebSocket: WebSocketDelegate {
     func websocketDidReceiveMessage(socket: WebSocket, text: String) {
         QL1("Websocket: Received text: \(text)")
 
-        if let data = (text as NSString).dataUsingEncoding(NSUTF8StringEncoding) {
-            
-            do {
-                let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions())
-                if let dict =  json as? Dictionary<String, AnyObject>  {
-                    
-                    if let verb = dict["verb"] as? String, category = dict["category"] as? String, topic = dict["topic"] as? String, data = dict["message"] {
-                        QL1("Websocket: Verb: \(verb), category: \(category), topic: \(topic), data: \(data)")
-                        
-                        switch category {
-                        case "listitem":
-                            switch verb {
-                            case "update":
-                                let listItem = ListItemParser.parse(data)
-                                NSNotificationCenter.defaultCenter().postNotificationName("listItems", object: nil, userInfo: ["value": [listItem]])
-
-                            default: QL4("Not handled verb: \(verb)")
-                            }
-                            
-
-                        case "listitems":
-                            switch verb {
-                            case "update":
-                                let dataarr = data as! [AnyObject]
-                                let listItems = ListItemParser.parseArray(dataarr)
-                                NSNotificationCenter.defaultCenter().postNotificationName("listItems", object: nil, userInfo: ["value": listItems])
-                                
-                            default: QL4("Not handled verb: \(verb)")
-                            }
-                        
-                        
-                        default: QL4("Not handled category: \(category)")
-                        }
-                        
-                        
-                    } else {
-//                        print("not handled websocket format: \(dict)")
-                        
-                        if let msg = dict["msg"] as? String {
-                            if msg == "unsubscribed" {
-                                socket.disconnect()
-                                PreferencesManager.clearPreference(key: PreferencesManagerKey.deviceId)
-                            }
-                        } else {
-                            QL4("Not handled websocket format: \(dict)")
-                        }
-                    }
-
-                } else {
-                    QL4("Returned json could not be converted to dictionary: \(json)")
-                }
-                
-                
-                
-            } catch let e as NSError {
-                QL4("Error deserializing json: \(e)")
-            }
-        } else {
-            QL4("Couldn't get data from text: \(text)")
-        }
+        MyWebsocketDispatcher.process(text)
+        
+        // TODO unsubscribe ack - do we need this, if yes implement (this snippet is from old code when parsing was done in this class)
+//        if let msg = dict["msg"] as? String {
+//            if msg == "unsubscribed" {
+//                socket.disconnect()
+//                PreferencesManager.clearPreference(key: PreferencesManagerKey.deviceId)
+//            }
+//        } else {
+//            QL4("Not handled websocket format: \(dict)")
+//        }
     }
     
     func websocketDidReceiveData(socket: WebSocket, data: NSData) {
