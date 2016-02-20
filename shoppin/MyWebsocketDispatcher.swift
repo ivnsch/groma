@@ -195,13 +195,13 @@ struct MyWebsocketDispatcher {
     private static func processList(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
-            let group = WSGroupParser.parseGroup(data)
+            let group = ListItemParser.parseList(data)
             postNotification(.List, verb, group)
         case WSNotificationVerb.Update:
-            let group = WSGroupParser.parseGroup(data)
+            let group = ListItemParser.parseList(data)
             postNotification(.List, verb, group)
         case WSNotificationVerb.Delete:
-            let group = WSGroupParser.parseGroup(data)
+            let group = ListItemParser.parseList(data)
             postNotification(.List, verb, group)
         }
     }
