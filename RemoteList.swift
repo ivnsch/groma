@@ -17,14 +17,14 @@ final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializab
     let lastUpdate: NSDate
     let inventoryUuid: String
     
-    init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(representation: AnyObject) {
         
         let list: AnyObject = representation.valueForKeyPath("list")!
         self.uuid = list.valueForKeyPath("uuid") as! String
         self.name = list.valueForKeyPath("name") as! String
         self.order = list.valueForKeyPath("order") as! Int
         let unserializedUsers: AnyObject = representation.valueForKeyPath("users")!
-        self.users = RemoteSharedUser.collection(response: response, representation: unserializedUsers)
+        self.users = RemoteSharedUser.collection(unserializedUsers)
         self.lastUpdate = NSDate(timeIntervalSince1970: list.valueForKeyPath("lastUpdate") as! Double)
         self.inventoryUuid = list.valueForKeyPath("inventoryUuid") as! String
         let colorStr = list.valueForKeyPath("color") as! String
@@ -34,10 +34,10 @@ final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializab
         }()
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteList] {
+    static func collection(representation: AnyObject) -> [RemoteList] {
         var lists = [RemoteList]()
         for obj in representation as! [AnyObject] {
-            if let list = RemoteList(response: response, representation: obj) {
+            if let list = RemoteList(representation: obj) {
                 lists.append(list)
             }
             

@@ -21,7 +21,7 @@ class RemoteSyncResult: ResponseObjectSerializable, CustomDebugStringConvertible
     let groupsItems: [[String: AnyObject]]
     let history: [[String: AnyObject]]
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         self.productCategories = representation.valueForKeyPath("productCategories") as! [[String: AnyObject]]
         self.products = representation.valueForKeyPath("products") as! [[String: AnyObject]]
         self.inventories = representation.valueForKeyPath("inventories") as! [[String: AnyObject]]

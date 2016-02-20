@@ -24,29 +24,29 @@ final class RemoteListItems: ResponseObjectSerializable, ResponseCollectionSeria
         return dict
     }
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         
         let lists = representation.valueForKeyPath("lists")!
-        self.lists = RemoteListsWithDependencies(response: response, representation: lists)!
+        self.lists = RemoteListsWithDependencies(representation: lists)!
         
         let products = representation.valueForKeyPath("products") as! [AnyObject]
-        self.products = RemoteProduct.collection(response: response, representation: products)
+        self.products = RemoteProduct.collection(products)
 
         let productsCategories = representation.valueForKeyPath("productsCategories") as! [AnyObject]
-        self.productsCategories = RemoteProductCategory.collection(response: response, representation: productsCategories)
+        self.productsCategories = RemoteProductCategory.collection(productsCategories)
         
         let sections = representation.valueForKeyPath("sections") as! [AnyObject]
-        self.sections = RemoteSection.collection(response: response, representation: sections)
+        self.sections = RemoteSection.collection(sections)
         
         let listItems = representation.valueForKeyPath("listItems") as! [AnyObject]
-        self.listItems = RemoteListItem.collection(response: response, representation: listItems)
+        self.listItems = RemoteListItem.collection(listItems)
     }
     
     // Only for compatibility purpose with sync result, which always sends result as an array. With RemoteListItems we get always 1 element array
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteListItems] {
+    static func collection(representation: AnyObject) -> [RemoteListItems] {
         var listItems = [RemoteListItems]()
         for obj in representation as! [AnyObject] {
-            if let listItem = RemoteListItems(response: response, representation: obj) {
+            if let listItem = RemoteListItems(representation: obj) {
                 listItems.append(listItem)
             }
             

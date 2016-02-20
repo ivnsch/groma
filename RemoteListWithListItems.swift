@@ -13,19 +13,19 @@ final class RemoteListWithListItems: ResponseObjectSerializable, ResponseCollect
     let list: RemoteList
     let listItems: RemoteListItemsWithDependenciesNoList
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         
         let list = representation.valueForKeyPath("list")!
-        self.list = RemoteList(response: response, representation: list)!
+        self.list = RemoteList(representation: list)!
         
         let listItems = representation.valueForKeyPath("listItems") as! [AnyObject]
-        self.listItems = RemoteListItemsWithDependenciesNoList(response: response, representation: listItems)!
+        self.listItems = RemoteListItemsWithDependenciesNoList(representation: listItems)!
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteListWithListItems] {
+    static func collection(representation: AnyObject) -> [RemoteListWithListItems] {
         var listItems = [RemoteListWithListItems]()
         for obj in representation as! [AnyObject] {
-            if let listItem = RemoteListWithListItems(response: response, representation: obj) {
+            if let listItem = RemoteListWithListItems(representation: obj) {
                 listItems.append(listItem)
             }
             

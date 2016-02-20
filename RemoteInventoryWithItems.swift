@@ -13,19 +13,19 @@ final class RemoteInventoryWithItems: ResponseObjectSerializable, ResponseCollec
     let inventory: RemoteInventory
     let inventoryItems: RemoteInventoryItemsWithDependenciesNoInventory
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         
         let inventory = representation.valueForKeyPath("inventory")!
-        self.inventory = RemoteInventory(response: response, representation: inventory)!
+        self.inventory = RemoteInventory(representation: inventory)!
         
         let items = representation.valueForKeyPath("items") as! [AnyObject]
-        self.inventoryItems = RemoteInventoryItemsWithDependenciesNoInventory(response: response, representation: items)!
+        self.inventoryItems = RemoteInventoryItemsWithDependenciesNoInventory(representation: items)!
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventoryWithItems] {
+    static func collection(representation: AnyObject) -> [RemoteInventoryWithItems] {
         var listItems = [RemoteInventoryWithItems]()
         for obj in representation as! [AnyObject] {
-            if let listItem = RemoteInventoryWithItems(response: response, representation: obj) {
+            if let listItem = RemoteInventoryWithItems(representation: obj) {
                 listItems.append(listItem)
             }
             

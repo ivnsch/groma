@@ -19,7 +19,7 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     let brand: String
     let lastUpdate: NSDate
 
-    init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
         self.price = representation.valueForKeyPath("price") as! Float
@@ -31,10 +31,10 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
         self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteProduct] {
+    static func collection(representation: AnyObject) -> [RemoteProduct] {
         var products = [RemoteProduct]()
         for obj in representation as! [AnyObject] {
-            if let product = RemoteProduct(response: response, representation: obj) {
+            if let product = RemoteProduct(representation: obj) {
                 products.append(product)
             }
         }

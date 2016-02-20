@@ -12,7 +12,7 @@ class RemoteLoginResult: ResponseObjectSerializable, CustomDebugStringConvertibl
    
     let token: String
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         self.token = representation.valueForKeyPath("token") as! String
     }
     

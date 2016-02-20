@@ -17,7 +17,7 @@ final class RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSer
     let userUuid: String
     let addedDate: NSDate
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.inventoryUuid = representation.valueForKeyPath("inventoryUuid") as! String
         self.productUuid = representation.valueForKeyPath("productUuid") as! String
@@ -26,10 +26,10 @@ final class RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSer
         self.addedDate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("addedDate") as! Double)
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteHistoryItem] {
+    static func collection(representation: AnyObject) -> [RemoteHistoryItem] {
         var listItems = [RemoteHistoryItem]()
         for obj in representation as! [AnyObject] {
-            if let listItem = RemoteHistoryItem(response: response, representation: obj) {
+            if let listItem = RemoteHistoryItem(representation: obj) {
                 listItems.append(listItem)
             }
         }

@@ -23,19 +23,19 @@ final class RemoteListItemsWithDependenciesNoList: ResponseObjectSerializable, C
         return dict
     }
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         
         let products = representation.valueForKeyPath("products") as! [AnyObject]
-        self.products = RemoteProduct.collection(response: response, representation: products)
+        self.products = RemoteProduct.collection(products)
         
         let productsCategories = representation.valueForKeyPath("productsCategories") as! [AnyObject]
-        self.productsCategories = RemoteProductCategory.collection(response: response, representation: productsCategories)
+        self.productsCategories = RemoteProductCategory.collection(productsCategories)
         
         let sections = representation.valueForKeyPath("sections") as! [AnyObject]
-        self.sections = RemoteSection.collection(response: response, representation: sections)
+        self.sections = RemoteSection.collection(sections)
         
         let listItems = representation.valueForKeyPath("items") as! [AnyObject]
-        self.listItems = RemoteListItem.collection(response: response, representation: listItems)
+        self.listItems = RemoteListItem.collection(listItems)
     }
     
     var debugDescription: String {

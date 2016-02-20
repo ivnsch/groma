@@ -15,12 +15,12 @@ final class RemoteListsWithDependencies: ResponseObjectSerializable, CustomDebug
     
     // TODO After porting to Swift 2.0 catch exception in these initializers and show msg to client accordingly, or don't use force unwrap
     // if server for some reason doesn't send a field the app currently crashes
-    init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(representation: AnyObject) {
         let inventories = representation.valueForKeyPath("inventories")!
-        self.inventories = RemoteInventory.collection(response: response, representation: inventories)
+        self.inventories = RemoteInventory.collection(inventories)
         
         let lists: AnyObject = representation.valueForKeyPath("lists")!
-        self.lists = RemoteList.collection(response: response, representation: lists)
+        self.lists = RemoteList.collection(lists)
     }
     
     var debugDescription: String {

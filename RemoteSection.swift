@@ -18,7 +18,7 @@ final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSeriali
     let doneOrder: Int
     let stashOrder: Int
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
         self.listUuid = representation.valueForKeyPath("listUuid") as! String        
@@ -29,10 +29,10 @@ final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSeriali
         self.stashOrder = representation.valueForKeyPath("stashOrder") as! Int
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteSection] {
+    static func collection(representation: AnyObject) -> [RemoteSection] {
         var sections = [RemoteSection]()
         for obj in representation as! [AnyObject] {
-            if let section = RemoteSection(response: response, representation: obj) {
+            if let section = RemoteSection(representation: obj) {
                 sections.append(section)
             }
             

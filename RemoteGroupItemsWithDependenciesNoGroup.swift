@@ -14,22 +14,22 @@ final class RemoteGroupItemsWithDependenciesNoGroup: ResponseObjectSerializable,
     let productsCategories: [RemoteProductCategory]
     let groupItems: [RemoteGroupItem]
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         
         let products = representation.valueForKeyPath("products") as! [AnyObject]
-        self.products = RemoteProduct.collection(response: response, representation: products)
+        self.products = RemoteProduct.collection(products)
         
         let productsCategories = representation.valueForKeyPath("productsCategories") as! [AnyObject]
-        self.productsCategories = RemoteProductCategory.collection(response: response, representation: productsCategories)
+        self.productsCategories = RemoteProductCategory.collection(productsCategories)
         
         let groupItems = representation.valueForKeyPath("items") as! [AnyObject]
-        self.groupItems = RemoteGroupItem.collection(response: response, representation: groupItems)
+        self.groupItems = RemoteGroupItem.collection(groupItems)
     }
     
     static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventoryWithItems] {
         var listItems = [RemoteInventoryWithItems]()
         for obj in representation as! [AnyObject] {
-            if let listItem = RemoteInventoryWithItems(response: response, representation: obj) {
+            if let listItem = RemoteInventoryWithItems(representation: obj) {
                 listItems.append(listItem)
             }
             

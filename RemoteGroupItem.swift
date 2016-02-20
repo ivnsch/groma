@@ -16,7 +16,7 @@ final class RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSeria
     let groupUuid: String
     let lastUpdate: NSDate
     
-    init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.quantity = representation.valueForKeyPath("quantity") as! Int
         self.productUuid = representation.valueForKeyPath("productUuid") as! String
@@ -24,10 +24,10 @@ final class RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSeria
         self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteGroupItem] {
+    static func collection(representation: AnyObject) -> [RemoteGroupItem] {
         var listItems = [RemoteGroupItem]()
         for obj in representation as! [AnyObject] {
-            if let listItem = RemoteGroupItem(response: response, representation: obj) {
+            if let listItem = RemoteGroupItem(representation: obj) {
                 listItems.append(listItem)
             }
             

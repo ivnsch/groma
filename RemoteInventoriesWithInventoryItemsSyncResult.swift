@@ -21,20 +21,20 @@ final class RemoteInventoryItemsSyncResult: ResponseObjectSerializable, Response
         self.couldNotDelete = couldNotDelete
     }
     
-    init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(representation: AnyObject) {
         self.inventoryUuid = representation.valueForKeyPath("inventoryUuid") as! String
         
         let inventoryItems = representation.valueForKeyPath("inventoryItems") as! [AnyObject]
-        self.inventoryItems = RemoteInventoryItemWithProduct.collection(response: response, representation: inventoryItems)
+        self.inventoryItems = RemoteInventoryItemWithProduct.collection(inventoryItems)
         
 //        self.couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as! [String]
         self.couldNotDelete = representation.valueForKeyPath("couldNotDelete") as! [String]
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventoryItemsSyncResult] {
+    static func collection(representation: AnyObject) -> [RemoteInventoryItemsSyncResult] {
         var inventoryItemsSyncResult = [RemoteInventoryItemsSyncResult]()
         for obj in representation as! [AnyObject] {
-            if let inventoryItem = RemoteInventoryItemsSyncResult(response: response, representation: obj) {
+            if let inventoryItem = RemoteInventoryItemsSyncResult(representation: obj) {
                 inventoryItemsSyncResult.append(inventoryItem)
             }
             
@@ -61,15 +61,15 @@ final class RemoteInventoriesWithInventoryItemsSyncResult: ResponseObjectSeriali
         self.inventoryItemsSyncResults = inventoryItemsSyncResults
     }
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         let inventories = representation.valueForKeyPath("inventories") as! [AnyObject]
-        self.inventories = RemoteInventory.collection(response: response, representation: inventories)
+        self.inventories = RemoteInventory.collection(inventories)
         
         self.couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as! [String]
         self.couldNotDelete = representation.valueForKeyPath("couldNotDelete") as! [String]
         
         let inventoryItemsSyncResults = representation.valueForKeyPath("inventoryItems") as! [AnyObject]
-        self.inventoryItemsSyncResults = RemoteInventoryItemsSyncResult.collection(response: response, representation: inventoryItemsSyncResults)
+        self.inventoryItemsSyncResults = RemoteInventoryItemsSyncResult.collection(inventoryItemsSyncResults)
     }
     
     var debugDescription: String {

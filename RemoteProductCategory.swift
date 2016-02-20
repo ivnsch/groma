@@ -14,7 +14,7 @@ final class RemoteProductCategory: ResponseObjectSerializable, ResponseCollectio
     var color: UIColor
     let lastUpdate: NSDate
     
-    init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
         let colorStr = representation.valueForKeyPath("color") as! String
@@ -25,10 +25,10 @@ final class RemoteProductCategory: ResponseObjectSerializable, ResponseCollectio
         self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)        
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteProductCategory] {
+    static func collection(representation: AnyObject) -> [RemoteProductCategory] {
         var products = [RemoteProductCategory]()
         for obj in representation as! [AnyObject] {
-            if let product = RemoteProductCategory(response: response, representation: obj) {
+            if let product = RemoteProductCategory(representation: obj) {
                 products.append(product)
             }
             

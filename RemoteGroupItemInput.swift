@@ -16,7 +16,7 @@ final class RemoteGroupItemInput: ResponseObjectSerializable, ResponseCollection
     let product: Product
     let group: ListItemGroup
     
-    required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    required init?(representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.quantity = representation.valueForKeyPath("quantity") as! Int
         
@@ -28,10 +28,10 @@ final class RemoteGroupItemInput: ResponseObjectSerializable, ResponseCollection
     }
     
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteGroupItemInput] {
+    static func collection(representation: AnyObject) -> [RemoteGroupItemInput] {
         var items = [RemoteGroupItemInput]()
         for obj in representation as! [AnyObject] {
-            if let item = RemoteGroupItemInput(response: response, representation: obj) {
+            if let item = RemoteGroupItemInput(representation: obj) {
                 items.append(item)
             }
             

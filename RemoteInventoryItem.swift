@@ -12,15 +12,15 @@ final class RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionS
     let quantity: Int
     let productUuid: String // TODO remove this? or store product and inventory here not in RemoteInventoryItemWithProduct
     
-    init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(representation: AnyObject) {
         self.quantity = representation.valueForKeyPath("quantity") as! Int
         self.productUuid = representation.valueForKeyPath("productUuid") as! String
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventoryItem] {
+    static func collection(representation: AnyObject) -> [RemoteInventoryItem] {
         var items = [RemoteInventoryItem]()
         for obj in representation as! [AnyObject] {
-            if let item = RemoteInventoryItem(response: response, representation: obj) {
+            if let item = RemoteInventoryItem(representation: obj) {
                 items.append(item)
             }
         }

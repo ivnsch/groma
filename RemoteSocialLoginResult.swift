@@ -14,7 +14,7 @@ class RemoteSocialLoginResult: ResponseObjectSerializable, CustomDebugStringConv
     let firstName: String
     let lastName: String
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         self.token = representation.valueForKeyPath("token") as! String
         self.email = representation.valueForKeyPath("email") as! String
         self.firstName = representation.valueForKeyPath("firstName") as! String

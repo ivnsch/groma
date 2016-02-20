@@ -16,20 +16,20 @@ final class RemoteListItemsSyncResult: ResponseObjectSerializable, ResponseColle
     let couldNotDelete: [String]
     
     
-    init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(representation: AnyObject) {
         self.listUuid = representation.valueForKeyPath("listUuid") as! String
         
         let listItems = representation.valueForKeyPath("listItems")!
-        self.listItems = RemoteListItems(response: response, representation: listItems)!
+        self.listItems = RemoteListItems(representation: listItems)!
         
         self.couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as! [String]
         self.couldNotDelete = representation.valueForKeyPath("couldNotDelete") as! [String]
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteListItemsSyncResult] {
+    static func collection(representation: AnyObject) -> [RemoteListItemsSyncResult] {
         var listItemsSyncResult = [RemoteListItemsSyncResult]()
         for obj in representation as! [AnyObject] {
-            if let listItem = RemoteListItemsSyncResult(response: response, representation: obj) {
+            if let listItem = RemoteListItemsSyncResult(representation: obj) {
                 listItemsSyncResult.append(listItem)
             }
             
@@ -56,15 +56,15 @@ final class RemoteListWithListItemsSyncResult: ResponseObjectSerializable, Custo
         self.listItemsSyncResults = listItemsSyncResults
     }
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         let lists = representation.valueForKeyPath("lists")! // TODO!!! server
-        self.lists = RemoteListsWithDependencies(response: response, representation: lists)!
+        self.lists = RemoteListsWithDependencies(representation: lists)!
         
         self.couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as! [String]
         self.couldNotDelete = representation.valueForKeyPath("couldNotDelete") as! [String]
         
         let listItemsSyncResults = representation.valueForKeyPath("listItems") as! [AnyObject]
-        self.listItemsSyncResults = RemoteListItemsSyncResult.collection(response: response, representation: listItemsSyncResults)
+        self.listItemsSyncResults = RemoteListItemsSyncResult.collection(listItemsSyncResults)
     }
     
     var debugDescription: String {

@@ -16,19 +16,19 @@ class RemoteGlobalSyncResult: ResponseObjectSerializable, CustomDebugStringConve
     let history: [RemoteHistoryItems]
     let groups: [RemoteGroupWithItems]
 
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         
         let lists = representation.valueForKeyPath("lists") as! [AnyObject]
-        self.lists = RemoteListWithListItems.collection(response: response, representation: lists)
+        self.lists = RemoteListWithListItems.collection(lists)
 
         let inventories = representation.valueForKeyPath("inventories") as! [AnyObject]
-        self.inventories = RemoteInventoryWithItems.collection(response: response, representation: inventories)
+        self.inventories = RemoteInventoryWithItems.collection(inventories)
         
         let history = representation.valueForKeyPath("history") as! [AnyObject]
-        self.history = RemoteHistoryItems.collection(response: response, representation: history)
+        self.history = RemoteHistoryItems.collection(history)
         
         let groups = representation.valueForKeyPath("groups") as! [AnyObject]
-        self.groups = RemoteGroupWithItems.collection(response: response, representation: groups)
+        self.groups = RemoteGroupWithItems.collection(groups)
     }
     
     var debugDescription: String {

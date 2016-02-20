@@ -18,23 +18,23 @@ final class RemoteInventoryItemWithProduct: ResponseObjectSerializable, Response
     
     // TODO After porting to Swift 2.0 catch exception in these initializers and show msg to client accordingly, or don't use force unwrap
     // if server for some reason doesn't send a field the app currently crashes
-    init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(representation: AnyObject) {
         let inventoryItem: AnyObject = representation.valueForKeyPath("inventoryItem")!
-        self.inventoryItem = RemoteInventoryItem(response: response, representation: inventoryItem)!
+        self.inventoryItem = RemoteInventoryItem(representation: inventoryItem)!
 
         let productCategory: AnyObject = representation.valueForKeyPath("productCategory")!
-        self.productCategory = RemoteProductCategory(response: response, representation: productCategory)!
+        self.productCategory = RemoteProductCategory(representation: productCategory)!
         
         let product: AnyObject = representation.valueForKeyPath("product")!
-        self.product = RemoteProduct(response: response, representation: product)!
+        self.product = RemoteProduct(representation: product)!
         
         self.lastUpdate = NSDate(timeIntervalSince1970: inventoryItem.valueForKeyPath("lastUpdate") as! Double)
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventoryItemWithProduct] {
+    static func collection(representation: AnyObject) -> [RemoteInventoryItemWithProduct] {
         var items = [RemoteInventoryItemWithProduct]()
         for obj in representation as! [AnyObject] {
-            if let item = RemoteInventoryItemWithProduct(response: response, representation: obj) {
+            if let item = RemoteInventoryItemWithProduct(representation: obj) {
                 items.append(item)
             }
         }

@@ -25,7 +25,7 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
 
     let lastUpdate: NSDate
     
-    init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.productUuid = representation.valueForKeyPath("productUuid") as! String
         self.sectionUuid = representation.valueForKeyPath("sectionUuid") as! String
@@ -42,10 +42,10 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
         self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteListItem] {
+    static func collection(representation: AnyObject) -> [RemoteListItem] {
         var listItems = [RemoteListItem]()
         for obj in representation as! [AnyObject] {
-            if let listItem = RemoteListItem(response: response, representation: obj) {
+            if let listItem = RemoteListItem(representation: obj) {
                 listItems.append(listItem)
             }
             

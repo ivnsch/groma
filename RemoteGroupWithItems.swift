@@ -13,19 +13,19 @@ final class RemoteGroupWithItems: ResponseObjectSerializable, ResponseCollection
     let group: RemoteGroup
     let groupItems: RemoteGroupItemsWithDependenciesNoGroup
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         
         let group = representation.valueForKeyPath("group")!
-        self.group = RemoteGroup(response: response, representation: group)!
+        self.group = RemoteGroup(representation: group)!
         
         let items = representation.valueForKeyPath("items") as! [AnyObject]
-        self.groupItems = RemoteGroupItemsWithDependenciesNoGroup(response: response, representation: items)!
+        self.groupItems = RemoteGroupItemsWithDependenciesNoGroup(representation: items)!
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteGroupWithItems] {
+    static func collection(representation: AnyObject) -> [RemoteGroupWithItems] {
         var items = [RemoteGroupWithItems]()
         for obj in representation as! [AnyObject] {
-            if let item = RemoteGroupWithItems(response: response, representation: obj) {
+            if let item = RemoteGroupWithItems(representation: obj) {
                 items.append(item)
             }
             

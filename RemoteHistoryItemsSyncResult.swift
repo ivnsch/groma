@@ -20,10 +20,10 @@ class RemoteHistoryItemsSyncResult: ResponseObjectSerializable, CustomDebugStrin
         self.couldNotDelete = couldNotDelete
     }
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         
         let historyItems = representation.valueForKeyPath("historyItems") as! [AnyObject]
-        self.historyItems = RemoteHistoryItems(response: response, representation: historyItems)!
+        self.historyItems = RemoteHistoryItems(representation: historyItems)!
         
         self.couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as! [String]
         self.couldNotDelete = representation.valueForKeyPath("couldNotDelete") as! [String]

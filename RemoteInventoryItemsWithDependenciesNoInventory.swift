@@ -14,16 +14,16 @@ class RemoteInventoryItemsWithDependenciesNoInventory: ResponseObjectSerializabl
     let productsCategories: [RemoteProductCategory]
     let inventoryItems: [RemoteInventoryItem]
     
-    @objc required init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    @objc required init?(representation: AnyObject) {
         
         let products = representation.valueForKeyPath("products") as! [AnyObject]
-        self.products = RemoteProduct.collection(response: response, representation: products)
+        self.products = RemoteProduct.collection(products)
         
         let productsCategories = representation.valueForKeyPath("productsCategories") as! [AnyObject]
-        self.productsCategories = RemoteProductCategory.collection(response: response, representation: productsCategories)
+        self.productsCategories = RemoteProductCategory.collection(productsCategories)
         
         let inventoryItems = representation.valueForKeyPath("items") as! [AnyObject]
-        self.inventoryItems = RemoteInventoryItem.collection(response: response, representation: inventoryItems)
+        self.inventoryItems = RemoteInventoryItem.collection(inventoryItems)
     }
     
     var debugDescription: String {

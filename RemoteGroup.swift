@@ -16,7 +16,7 @@ final class RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializa
     let color: UIColor
     let fav: Int
     
-    init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.name = representation.valueForKeyPath("name") as! String
         self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
@@ -29,10 +29,10 @@ final class RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializa
         self.fav = representation.valueForKeyPath("fav") as! Int
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteGroup] {
+    static func collection(representation: AnyObject) -> [RemoteGroup] {
         var items = [RemoteGroup]()
         for obj in representation as! [AnyObject] {
-            if let item = RemoteGroup(response: response, representation: obj) {
+            if let item = RemoteGroup(representation: obj) {
                 items.append(item)
             }
             

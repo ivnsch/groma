@@ -15,17 +15,17 @@ final class RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSeri
     let firstName: String
     let lastName: String
     
-    init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(representation: AnyObject) {
         self.uuid = representation.valueForKeyPath("uuid") as! String
         self.email = representation.valueForKeyPath("email") as! String
         self.firstName = representation.valueForKeyPath("firstName") as! String
         self.lastName = representation.valueForKeyPath("lastName") as! String
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteSharedUser] {
+    static func collection(representation: AnyObject) -> [RemoteSharedUser] {
         var listItems = [RemoteSharedUser]()
         for obj in representation as! [AnyObject] {
-            if let listItem = RemoteSharedUser(response: response, representation: obj) {
+            if let listItem = RemoteSharedUser(representation: obj) {
                 listItems.append(listItem)
             }
             

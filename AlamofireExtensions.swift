@@ -134,12 +134,12 @@ final class RemoteInvalidParametersResult
 // json
 
 public protocol ResponseObjectSerializable {
-    init?(response: NSHTTPURLResponse, representation: AnyObject)
+    init?(representation: AnyObject)
 }
 
 // dummy object to be able to use responseMyObject when there's no returned data
 public class NoOpSerializable: ResponseObjectSerializable {
-    @objc required public init?(response: NSHTTPURLResponse, representation: AnyObject) {}
+    @objc required public init?(representation: AnyObject) {}
 }
 
 
@@ -285,7 +285,7 @@ extension Alamofire.Request {
         let dataParser: (AnyObject, NSHTTPURLResponse) -> ([T]?) = {data, response in
             var objs = [T]()
             for obj in data as! [AnyObject] {
-                if let obj = T(response: response, representation: obj) {
+                if let obj = T(representation: obj) {
                     objs.append(obj)
                     
                 } else {
@@ -303,7 +303,7 @@ extension Alamofire.Request {
     public func responseMyObject<T: ResponseObjectSerializable>(completionHandler: (NSURLRequest?, Response<RemoteResult<T>, NSError>?, RemoteResult<T>) -> Void) -> Self {
         
         let dataParser: (AnyObject, NSHTTPURLResponse) -> (T?) = {data, response in
-            return T(response: response, representation: data)
+            return T(representation: data)
         }
         
         return self.responseHandler(dataParser, completionHandler: completionHandler)
@@ -451,5 +451,5 @@ extension Alamofire.Request {
 }
 
 public protocol ResponseCollectionSerializable {
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [Self]
+    static func collection(representation: AnyObject) -> [Self]
 }

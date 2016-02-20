@@ -15,19 +15,19 @@ final class RemotePlanItems: ResponseObjectSerializable, CustomDebugStringConver
     let productsCategories: [RemoteProductCategory]
     let products: [RemoteProduct]
     
-    init?(response: NSHTTPURLResponse, representation: AnyObject) {
+    init?(representation: AnyObject) {
         
         let historyItems = representation.valueForKeyPath("planItems") as! [AnyObject]
-        self.planItems = RemoteHistoryItem.collection(response: response, representation: historyItems)
+        self.planItems = RemoteHistoryItem.collection(historyItems)
         
         let inventories = representation.valueForKeyPath("inventory") as! [AnyObject]
-        self.inventory = RemoteInventory(response: response, representation: inventories)!
+        self.inventory = RemoteInventory(representation: inventories)!
         
         let productsCategories = representation.valueForKeyPath("productsCategories") as! [AnyObject]
-        self.productsCategories = RemoteProductCategory.collection(response: response, representation: productsCategories)
+        self.productsCategories = RemoteProductCategory.collection(productsCategories)
         
         let products = representation.valueForKeyPath("products") as! [AnyObject]
-        self.products = RemoteProduct.collection(response: response, representation: products)
+        self.products = RemoteProduct.collection(products)
     }
     
     var debugDescription: String {
