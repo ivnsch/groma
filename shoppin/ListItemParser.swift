@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO!!!! failable initialisers maybe just use directly the remote classes in dispatcher and delete these websocket specific parser classes
 class ListItemParser {
 
     class func parseProductCategory(json: AnyObject) -> ProductCategory {
@@ -49,13 +50,9 @@ class ListItemParser {
     }
 
     class func parseList(json: AnyObject) -> List {
-        let uuid = json.valueForKeyPath("uuid") as! String
-        let name = json.valueForKeyPath("name") as! String
-        let order = json.valueForKeyPath("order") as! Int
-        let bgColor = UIColor.blackColor() // TODO
-        let inventoryJson = json.valueForKeyPath("inventory")!
-        let inventory = WSInventoryParser.parseInventory(inventoryJson)
-        return List(uuid: uuid, name: name, listItems: [], users: [], bgColor: bgColor, order: order, inventory: inventory)
+        let lists = RemoteListsWithDependencies(representation: json)!
+        let parsed = ListMapper.listsWithRemote(lists)
+        return parsed.first!
     }
 
     class func parseArray(jsonArray: [AnyObject]) -> [ListItem] {
