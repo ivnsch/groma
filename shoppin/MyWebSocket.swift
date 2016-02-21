@@ -95,9 +95,14 @@ class MyWebSocket: WebSocketDelegate {
     
     func websocketDidDisconnect(socket: WebSocket, error: NSError?) {
         if let error = error {
-            if error.code == 401 {
-                QL4("Not authorized")
-            } else {
+            switch error.code {
+            case 401:
+                QL2("Not authorized, removing login token \(error)")
+                Providers.userProvider.removeLoginToken()
+            case 1000:
+                QL4("Connection closed by server, TODO handling \(error)") // happens for example when server is restarted
+                // TODO!!!! logout user? Try to connect again after a delay? In any case user should not be logged in without socket connection.
+            default:
                 QL4("Unknown websocket connection error: \(error)")
             }
         } else {
