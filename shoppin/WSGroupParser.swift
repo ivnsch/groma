@@ -11,11 +11,8 @@ import Foundation
 struct WSGroupParser {
     
     static func parseGroup(json: AnyObject) -> ListItemGroup {
-        let uuid = json.valueForKeyPath("uuid") as! String
-        let name = json.valueForKeyPath("name") as! String
-        let bgColor = UIColor.blackColor() // TODO
-        let order = json.valueForKeyPath("order") as! Int
-        return ListItemGroup(uuid: uuid, name: name, bgColor: bgColor, order: order)
+        let remoteGroup = RemoteGroup(representation: json)!
+        return ListItemGroupMapper.listItemGroupWithRemote(remoteGroup)
     }
     
     static func parseGroupItem(json: AnyObject) -> GroupItemWithGroup {
