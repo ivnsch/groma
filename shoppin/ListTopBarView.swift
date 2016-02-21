@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 protocol ListTopBarViewDelegate {
     func onTopBarButtonTap(buttonId: ListTopBarViewButtonId)
@@ -222,6 +223,7 @@ class ListTopBarView: UIView {
                 let tapView = UIButton()
                 tapView.translatesAutoresizingMaskIntoConstraints = false
                 tapView.tag = model.buttonId.rawValue
+//                QL1("model.buttonId: \(model.buttonId), tag: \(tapView.tag)")
                 tapView.addSubview(button)
 
                 button.alignTop(tapView, constant: topConstant)
