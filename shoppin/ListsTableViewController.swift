@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 class ExpandableTableViewListModel: ExpandableTableViewModel {
     
@@ -174,32 +175,47 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     // MARK: - Websocket
     
     func onWebsocketList(note: NSNotification) {
+        
         if let info = note.userInfo as? Dictionary<String, WSNotification<List>> {
             if let notification = info[WSNotificationValue] {
-
                 let list = notification.obj
-
                 switch notification.verb {
                 case .Add:
                     Providers.listProvider.add(list, remote: false, successHandler {[weak self] savedList in
                         self?.onListAdded(savedList)
                     })
-
                 case .Update:
                     Providers.listProvider.update(list, remote: false, successHandler{[weak self] in
                         self?.onListUpdated(list)
                     })
-
-                case .Delete:
-                    Providers.listProvider.remove(list, remote: false, successHandler{[weak self] in
-                        self?.removeModel(ExpandableTableViewListModel(list: list))
-                    })
+                default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {
-                print("Error: ViewController.onWebsocketList: no value")
+                QL4("No value")
             }
+            
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                let listUuid = notification.obj
+                switch notification.verb {
+                case .Delete:
+                    Providers.listProvider.remove(listUuid, remote: false, successHandler{[weak self] in
+                        if let weakSelf = self {
+                            if let model = ((weakSelf.models as! [ExpandableTableViewListModel]).filter{$0.list.uuid == listUuid}).first {
+                                self?.removeModel(model)
+                            } else {
+                                QL3("Received notification to remove list but it wasn't in table view. Uuid: \(listUuid)")
+                            }
+                        }
+                    })
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+            
         } else {
-            print("Error: ViewController.onWebsocketList: no userInfo")
+            QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
         }
     }
 }

@@ -97,13 +97,29 @@ class ListItemProviderImpl: ListItemProvider {
     }
 
     
-    func remove(list: List, _ handler: ProviderResult<Any> -> ()) {
+    func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        remove(list.uuid, remote: remote, handler)
+    }
+    
+    func remove(listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         memProvider.invalidate()
-        self.dbProvider.remove(list) {removed in
+        self.dbProvider.remove(listUuid) {[weak self] removed in
             handler(ProviderResult(status: removed ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
+            
+            if remote {
+                if removed {
+                    self?.remoteProvider.remove(listUuid) {remoteResult in
+                        if !remoteResult.success {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[Any]>) in
+                                QL4(remoteResult)
+                            })
+                        }
+                    }
+                }
+            }
         }
     }
-
+    
     func add(groupItems: [GroupItem], list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
         let listItemPrototypes: [ListItemPrototype] = groupItems.map{ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name)}
         self.add(listItemPrototypes, list: list, handler)

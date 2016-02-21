@@ -273,9 +273,13 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func remove(list: List, handler: Bool -> ()) {
-        self.remove("uuid = '\(list.uuid)'", handler: handler, objType: DBList.self)
+        remove(list.uuid, handler: handler)
     }
-    
+
+    func remove(listUuid: String, handler: Bool -> ()) {
+        self.remove("uuid = '\(listUuid)'", handler: handler, objType: DBList.self)
+    }
+
     // TODO update list
     
     // MARK: - ListItem

@@ -12,7 +12,7 @@ protocol ListItemProvider {
   
     func remove(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
-    func remove(list: List, _ handler: ProviderResult<Any> -> ())
+    func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     func add(listItem: ListItem, remote: Bool, _ handler: ProviderResult<ListItem> -> ())
 

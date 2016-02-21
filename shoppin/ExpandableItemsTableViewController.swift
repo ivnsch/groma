@@ -336,10 +336,17 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     }
     
     func removeModel(model: ExpandableTableViewModel) {
-        if let index = models.remove(model) {
-            tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Top)
-        } else {
-            print("Warn: ViewController.onWebsocketList: Removed list item was not found in tableView")
+        
+        func remove() {
+            if let index = models.remove(model) {
+                tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Top)
+            } else {
+                print("Warn: ViewController.onWebsocketList: Removed list item was not found in tableView")
+            }
+        }
+        
+        tableView.wrapUpdates {
+            remove()
         }
     }
     

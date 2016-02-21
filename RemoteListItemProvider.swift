@@ -62,8 +62,8 @@ class RemoteListItemProvider {
     }
     
     
-    func remove(list: List, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.list + "/\(list.uuid)", toRequestPrams(list)) {result in
+    func remove(listUuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.list + "/\(listUuid)") {result in
             handler(result)
         }
     }
@@ -71,6 +71,13 @@ class RemoteListItemProvider {
     func update(list: List, handler: RemoteResult<RemoteListsWithDependencies> -> ()) {
         let parameters = self.toRequestParams(list)
         RemoteProvider.authenticatedRequest(.PUT, Urls.list, parameters) {result in
+            handler(result)
+        }
+    }
+    
+    func update(lists: [List], handler: RemoteResult<RemoteListsWithDependencies> -> ()) {
+        let parameters = lists.map{self.toRequestParams($0)}
+        RemoteProvider.authenticatedRequest(.PUT, Urls.lists, parameters) {result in
             handler(result)
         }
     }

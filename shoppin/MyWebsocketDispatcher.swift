@@ -67,7 +67,7 @@ struct MyWebsocketDispatcher {
                     }
                 }
                 
-            } catch let e as NSError {
+            } catch let e as NSError { 
                 QL4("Error: MyWebSocket.websocketDidReceiveMessage: deserializing json: \(e)")
             }
             
@@ -110,11 +110,11 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    static func postNotification<T: AnyObject>(notificationName: WSNotificationName, _ verb: WSNotificationVerb, _ obj: T) {
+    static func postNotification<T: Any>(notificationName: WSNotificationName, _ verb: WSNotificationVerb, _ obj: T) {
         NSNotificationCenter.defaultCenter().postNotificationName(notificationName.rawValue, object: nil, userInfo: ["value": WSNotification(verb, obj)])
     }
     
-    static func postNotification<T: AnyObject>(notificationName: WSNotificationName, _ verb: WSNotificationVerb, _ obj: [T]) {
+    static func postNotification<T: Any>(notificationName: WSNotificationName, _ verb: WSNotificationVerb, _ obj: [T]) {
         NSNotificationCenter.defaultCenter().postNotificationName(notificationName.rawValue, object: nil, userInfo: ["value": WSNotification(verb, obj)])
     }
     
@@ -195,14 +195,14 @@ struct MyWebsocketDispatcher {
     private static func processList(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
-            let group = ListItemParser.parseList(data)
-            postNotification(.List, verb, group)
+            let list = ListItemParser.parseList(data)
+            postNotification(.List, verb, list)
         case WSNotificationVerb.Update:
-            let group = ListItemParser.parseList(data)
-            postNotification(.List, verb, group)
+            let list = ListItemParser.parseList(data)
+            postNotification(.List, verb, list)
         case WSNotificationVerb.Delete:
-            let group = ListItemParser.parseList(data)
-            postNotification(.List, verb, group)
+            let listUuid: String = data as! String
+            postNotification(.List, verb, listUuid)
         }
     }
     

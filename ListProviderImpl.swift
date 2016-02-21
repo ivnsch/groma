@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 class ListProviderImpl: ListProvider {
    
@@ -80,7 +81,7 @@ class ListProviderImpl: ListProvider {
                 self.remoteListProvider.add(list, handler: {remoteResult in
                     
                     if !remoteResult.success {
-                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<List>) in
+                        DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<List>) in
                             print("error adding the remote list: \(remoteResult)")
                         }
                     }
@@ -94,29 +95,52 @@ class ListProviderImpl: ListProvider {
     }
     
     func update(lists: [List], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbProvider.saveLists(lists, update: true) {updated in
+        dbProvider.saveLists(lists, update: true) {[weak self] updated in
             handler(ProviderResult(status: updated ? .Success : .DatabaseSavingError))
-        }
-        if remote {
-            // TODO!! remote
+            if updated {
+                if remote {
+                    self?.remoteListProvider.update(lists) {remoteResult in
+                        if !remoteResult.success {
+                            DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<Any>) in
+                                QL4(remoteResult)
+                            }
+                        }
+                    }
+                }
+            } else {
+                QL4("DB update didn't succeed")
+            }
         }
     }
     
     func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        remove(list.uuid, remote: remote, handler)
+    }
+
+    func remove(listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
         // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
         
-        self.dbProvider.remove(list, handler: {removed in
+        self.dbProvider.remove(listUuid, handler: {[weak self] removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseSavingError))
-          
-            if remote {
-                // TODO!! remote
+            if removed {
+                if remote {
+                    self?.remoteListProvider.remove(listUuid) {remoteResult in
+                        if !remoteResult.success {
+                            DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<Any>) in
+                                QL4(remoteResult)
+                            }
+                        }
+                    }
+                }
+            } else {
+                QL4("DB remove didn't succeed")
             }
         })
     }
-
+    
     func syncListsWithListItems(handler: (ProviderResult<[Any]> -> ())) {
         
         self.dbProvider.loadLists {dbLists in

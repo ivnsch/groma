@@ -24,5 +24,7 @@ protocol ListProvider {
     
     func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
+    func remove(listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    
     func syncListsWithListItems(handler: (ProviderResult<[Any]> -> ()))
 }
