@@ -167,6 +167,13 @@ class RealmHistoryProvider: RealmProvider {
         remove("uuid = '\(uuid)'", handler: handler, objType: DBHistoryItem.self)
     }
     
+    // Expected to be executed in do/catch and write block
+    func removeHistoryItemsForInventory(realm: Realm, inventoryUuid: String) -> Bool {
+        let dbHistoryItems = realm.objects(DBHistoryItem).filter("inventory.uuid = '\(inventoryUuid)'")
+        realm.delete(dbHistoryItems)
+        return true
+    }
+    
     func removeAllHistoryItems(handler: Bool -> ()) {
         self.doInWriteTransaction({realm in
             realm.delete(realm.objects(DBHistoryItem))

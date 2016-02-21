@@ -90,7 +90,25 @@ class RealmInventoryProvider: RealmProvider {
     }
     
     func removeInventory(uuid: String, update: Bool =  true, handler: Bool -> ()) {
-        self.remove("uuid = '\(uuid)'", handler: handler, objType: DBInventory.self)
+        background({
+            do {
+                let realm = try Realm()
+                realm.write {
+                    RealmListItemProvider().removeListSync(realm, listUuid: uuid)
+                    
+                    RealmHistoryProvider().removeHistoryItemsForInventory(realm, inventoryUuid: uuid)
+                    
+                    let inventoryResults = realm.objects(DBInventory).filter("uuid = '\(uuid)'")
+                    realm.delete(inventoryResults)
+                }
+                return true
+            } catch let e {
+                QL4("Error creating Realm() in remove: \(e)")
+                return false
+            }
+            }) {(result: Bool) in
+                handler(result)
+        }
     }
     
     func saveInventories(inventories: [Inventory], update: Bool = true, handler: Bool -> ()) {

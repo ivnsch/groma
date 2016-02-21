@@ -237,14 +237,14 @@ struct MyWebsocketDispatcher {
     private static func processInventory(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
-            let group = WSInventoryParser.parseInventory(data)
-            postNotification(.Inventory, verb, group)
+            let inventory = WSInventoryParser.parseInventory(data)
+            postNotification(.Inventory, verb, inventory)
         case WSNotificationVerb.Update:
-            let group = WSInventoryParser.parseInventory(data)
-            postNotification(.Inventory, verb, group)
+            let inventory = WSInventoryParser.parseInventory(data)
+            postNotification(.Inventory, verb, inventory)
         case WSNotificationVerb.Delete:
-            let group = WSInventoryParser.parseInventory(data)
-            postNotification(.Inventory, verb, group)
+            let uuid = data as! String
+            postNotification(.Inventory, verb, uuid)
         }
     }
     

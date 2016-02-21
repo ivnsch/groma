@@ -276,8 +276,33 @@ class RealmListItemProvider: RealmProvider {
         remove(list.uuid, handler: handler)
     }
 
-    func remove(listUuid: String, handler: Bool -> ()) {
-        self.remove("uuid = '\(listUuid)'", handler: handler, objType: DBList.self)
+    func remove(listUuid: String, handler: Bool -> Void) {
+        background({[weak self] in
+            do {
+                let realm = try Realm()
+                var success = false
+                realm.write {
+                    success = self?.removeListSync(realm, listUuid: listUuid) ?? false
+                }
+                return success
+            } catch _ {
+                QL4("Error creating Realm() in remove")
+                return false
+            }
+            }) {(result: Bool) in
+                handler(result)
+        }
+    }
+
+    // Expected to be executed in do/catch and write block
+    func removeListSync(realm: Realm, listUuid: String) -> Bool {
+        let dbListItems = realm.objects(DBListItem).filter("list.uuid = '\(listUuid)'")
+        // delete listItems
+        realm.delete(dbListItems)
+        // delete list
+        let listResults = realm.objects(DBList).filter("uuid = '\(listUuid)'")
+        realm.delete(listResults)
+        return true
     }
 
     // TODO update list

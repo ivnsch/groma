@@ -25,7 +25,9 @@ protocol InventoryProvider {
     func updateInventories(inventories: [Inventory], remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     func removeInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ())
-    
+
+    func removeInventory(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
+
     func syncInventoriesWithInventoryItems(handler: (ProviderResult<[Any]> -> ()))
 
 }

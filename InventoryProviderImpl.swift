@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 class InventoryProviderImpl: InventoryProvider {
    
@@ -130,16 +131,23 @@ class InventoryProviderImpl: InventoryProvider {
     }
     
     func removeInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbInventoryProvider.removeInventory(inventory.uuid) {[weak self] saved in
-            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
-            if remote {
-                self?.remoteProvider.removeInventory(inventory) {remoteResult in
-                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+        removeInventory(inventory.uuid, remote: remote, handler)
+    }
+
+    func removeInventory(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        dbInventoryProvider.removeInventory(uuid) {[weak self] removed in
+            handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
+            if removed {
+                if remote {
+                    self?.remoteProvider.removeInventory(uuid) {remoteResult in
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                    }
                 }
+            } else {
+                QL4("DB remove didn't succeed")
             }
         }
     }
-
     
     func syncInventoriesWithInventoryItems(handler: (ProviderResult<[Any]> -> ())) {
         

@@ -123,6 +123,7 @@ class ListProviderImpl: ListProvider {
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
         // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
         
+        // TODO when removing and item doesn't exist shouldn't we return an error (currently at least local db returns success)?
         self.dbProvider.remove(listUuid, handler: {[weak self] removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseSavingError))
             if removed {

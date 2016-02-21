@@ -38,12 +38,13 @@ class RemoteInventoryProvider: RemoteProvider {
             handler(result)
         }
     }
-
     
     func removeInventory(inventory: Inventory, handler: RemoteResult<NoOpSerializable> -> ()) {
-        let params = toRequestParams(inventory)
-        // TODO this is probably not implemented in the server        
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.inventory + "/\(inventory.uuid)", params) {result in
+        removeInventory(inventory.uuid, handler: handler)
+    }
+
+    func removeInventory(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.inventory + "/\(uuid)") {result in
             handler(result)
         }
     }

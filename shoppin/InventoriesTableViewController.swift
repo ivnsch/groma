@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 class ExpandableTableViewInventoryModel: ExpandableTableViewModel {
     
@@ -44,7 +45,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
 
         topAddEditListControllerManager = initTopAddEditListControllerManager()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsockeInventory:", name: WSNotificationName.List.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsockeInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
     }
     
     deinit {
@@ -156,8 +157,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
                 self?.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.models.count, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Top)
                 self?.models.append(ExpandableTableViewInventoryModel(inventory: list))
                 self?.topAddEditListControllerManager?.expand(false)
-//                self?.initNavBarRightButtons([.Add])
-                self?.topBar.setRightButtonIds([.Add])
+                self?.setTopBarState(.NormalFromExpanded)
             }
         }
     }
@@ -173,30 +173,44 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     func onWebsockeInventory(note: NSNotification) {
         if let info = note.userInfo as? Dictionary<String, WSNotification<Inventory>> {
             if let notification = info[WSNotificationValue] {
-                
                 let inventory = notification.obj
-                
                 switch notification.verb {
                 case .Add:
                     Providers.inventoryProvider.addInventory(inventory, remote: false, successHandler {[weak self] in
                         self?.onInventoryAdded(inventory)
                     })
-                    
                 case .Update:
                     Providers.inventoryProvider.updateInventory(inventory, remote: false, successHandler{[weak self] in
                         self?.onInventoryUpdated(inventory)
                     })
-                    
-                case .Delete:
-                    Providers.inventoryProvider.removeInventory(inventory, remote: false, successHandler{[weak self] in
-                        self?.removeModel(ExpandableTableViewInventoryModel(inventory: inventory))
-                    })
+                default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {
-                print("Error: ViewController.onWebsocketList: no value")
+                QL4("No value")
             }
+            
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                let inventoryUuid = notification.obj
+                switch notification.verb {
+                case .Delete:
+                    Providers.inventoryProvider.removeInventory(inventoryUuid, remote: false, successHandler{[weak self] in
+                        if let weakSelf = self {
+                            if let model = ((weakSelf.models as! [ExpandableTableViewInventoryModel]).filter{$0.inventory.uuid == inventoryUuid}).first {
+                                self?.removeModel(model)
+                            } else {
+                                QL3("Received notification to remove list but it wasn't in table view. Uuid: \(inventoryUuid)")
+                            }
+                        }
+                    })
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+            
         } else {
-            print("Error: ViewController.onWebsocketList: no userInfo")
+            QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
         }
     }
 }
