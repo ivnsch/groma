@@ -10,8 +10,17 @@ import Foundation
 
 protocol UserProvider {
    
-    var loggedIn: Bool {get}
-   
+    /**
+    * If there's a login token stored (a token is saved on login, register and ping response).
+    * Can be used as an approximation of "is logged in". We try to avoid token expiration via ping, but it can happen that it is expired. On unauthorized response the token is removed. So after the first call with an expired/invalid token, hasLoginToken returns false. The token is also removed on logout.
+    */
+    var hasLoginToken: Bool {get}
+    
+    func removeLoginToken()
+    
+    // Updates token
+    func ping()
+    
     /**
     * User data which is stored after successful login or register (credentials or social media)
     * This is never removed, only overwritten in case another user logs in or register
@@ -38,7 +47,4 @@ protocol UserProvider {
     func connectWebsocketIfLoggedIn()
     
     func disconnectWebsocket()
-    
-    // Updates token
-    func ping()
 }

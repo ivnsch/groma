@@ -18,6 +18,6 @@ class ConnectionProvider {
     }
     
     static var connectedAndLoggedIn: Bool {
-        return ConnectionProvider.connected && Providers.userProvider.loggedIn
+        return ConnectionProvider.connected && Providers.userProvider.hasLoginToken
     }
 }

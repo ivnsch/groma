@@ -519,8 +519,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if remoteHostStatus != .NotReachable { // wifi / wwan
             print("Device went online")
             
-            if userProvider.loggedIn {
-                print("User is logged in, start sync")
+            if userProvider.hasLoginToken {
+                print("User has login token, start sync")
                 window?.defaultProgressVisible(true)
                 Providers.globalProvider.sync {[weak self] result in
                     print("Sync finished")

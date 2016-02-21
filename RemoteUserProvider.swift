@@ -103,7 +103,8 @@ class RemoteUserProvider {
         }
     }
     
-    private func removeToken() {
+    func removeToken() {
+        QL1("Removing login token")
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
         if let valet = valet {
             if !valet.removeObjectForKey(KeychainKeys.token) {

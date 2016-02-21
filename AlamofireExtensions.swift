@@ -386,6 +386,7 @@ extension Alamofire.Request {
                     
                 } else if statusCode == 401 {
                     QL4("Unauthorized")
+                    Providers.userProvider.removeLoginToken()
                     return Result.Success(RemoteResult<T>(status: .NotAuthenticated))
                     
                 } else if statusCode == 400 {

@@ -81,12 +81,16 @@ class UserProviderImpl: UserProvider {
         }
     }
     
+    func removeLoginToken() {
+        remoteProvider.removeToken()
+    }
+    
     func ping() {
         remoteProvider.ping{result in
         }
     }
     
-    var loggedIn: Bool {
+    var hasLoginToken: Bool {
         return remoteProvider.hasToken()
     }
     

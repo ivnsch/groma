@@ -11,9 +11,10 @@ import UIKit
 // Emulates login etc. so we can test without internet or server
 class UserProviderMock: UserProvider {
     
-    var loggedIn: Bool {
+    var hasLoginToken: Bool {
         return isLoggedIn
     }
+    
     private var isLoggedIn = false
     
     private let requestDelay: Double = 2
@@ -34,6 +35,10 @@ class UserProviderMock: UserProvider {
             self?.email = user.email
             handler(ProviderResult(status: .Success))
         }
+    }
+    
+    func removeLoginToken() {
+        isLoggedIn = false
     }
     
     func ping() {
