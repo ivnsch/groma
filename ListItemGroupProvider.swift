@@ -29,6 +29,8 @@ protocol ListItemGroupProvider {
     func update(groups: [ListItemGroup], remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
     func remove(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+
+    func removeGroup(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
     // group items
     

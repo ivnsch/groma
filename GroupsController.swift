@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftValidator
-
+import QorumLogs
 
 class ExpandableTableViewGroupModel: ExpandableTableViewModel {
     
@@ -205,11 +205,8 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     func onWebsocketGroup(note: NSNotification) {
         if let info = note.userInfo as? Dictionary<String, WSNotification<ListItemGroup>> {
             if let notification = info[WSNotificationValue] {
-                
                 let group = notification.obj
-                
                 switch notification.verb {
-                    
                 case .Add:
                     Providers.listItemGroupsProvider.add(group, remote: false, successHandler {[weak self] in
                         self?.onGroupAdded(group)
@@ -218,17 +215,37 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
                     Providers.listItemGroupsProvider.update(group, remote: false, successHandler{[weak self] in
                         self?.onGroupUpdated(group)
                     })
-                    
-                case .Delete:
-                    Providers.listItemGroupsProvider.remove(group, remote: false, successHandler{[weak self] in
-                        self?.removeModel(ExpandableTableViewGroupModel(group: group))
-                    })
+                default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {
-                print("Error: ManageGroupsViewController.onWebsocketProduct: no value")
+                QL4("No value")
             }
+            
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                
+                let groupUuid = notification.obj
+                
+                switch notification.verb {
+                case .Delete:
+                    Providers.listItemGroupsProvider.removeGroup(groupUuid, remote: false, successHandler{[weak self] in
+                        if let weakSelf = self {
+                            if let model = ((weakSelf.models as! [ExpandableTableViewGroupModel]).filter{$0.group.uuid == groupUuid}).first {
+                                self?.removeModel(model)
+                            } else {
+                                QL3("Received notification to remove group but it wasn't in table view. Uuid: \(groupUuid)")
+                            }
+                        }
+                    })
+                    
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+            
         } else {
-            print("Error: ManageGroupsViewController.onWebsocketProduct: no userInfo")
+            QL4("No userInfo")
         }
     }
 }

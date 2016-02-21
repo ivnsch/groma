@@ -60,7 +60,11 @@ class RealmListItemGroupProvider: RealmProvider {
     }
     
     func remove(group: ListItemGroup, handler: Bool -> Void) {
-        self.remove("uuid = '\(group.uuid)'", handler: handler, objType: DBListItemGroup.self)
+        removeGroup(group.uuid, handler: handler)
+    }
+
+    func removeGroup(uuid: String, handler: Bool -> Void) {
+        self.remove("uuid = '\(uuid)'", handler: handler, objType: DBListItemGroup.self)
     }
     
     func add(groupItem: GroupItem, handler: Bool -> Void) {

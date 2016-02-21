@@ -157,8 +157,8 @@ struct MyWebsocketDispatcher {
             let group = WSGroupParser.parseGroup(data)
             postNotification(.Group, verb, group)
         case WSNotificationVerb.Delete:
-            let group = WSGroupParser.parseGroup(data)
-            postNotification(.Group, verb, group)
+            let uuid = data as! String
+            postNotification(.Group, verb, uuid)
         }
     }
     
@@ -201,7 +201,7 @@ struct MyWebsocketDispatcher {
             let list = ListItemParser.parseList(data)
             postNotification(.List, verb, list)
         case WSNotificationVerb.Delete:
-            let listUuid: String = data as! String
+            let listUuid = data as! String
             postNotification(.List, verb, listUuid)
         }
     }

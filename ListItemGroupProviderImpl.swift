@@ -70,7 +70,19 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
 
     func update(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        update([group], remote: remote, handler)
+        dbGroupsProvider.update(group) {[weak self] saved in
+            handler(ProviderResult(status: saved ? .Success : .DatabaseSavingError))
+            
+            if saved && remote {
+                self?.remoteGroupsProvider.updateGroup(group) {remoteResult in
+                    if !remoteResult.success {
+                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
+                            print("Error: updating group in remote: \(group), result: \(remoteResult)")
+                        }
+                    }
+                }
+            }
+        }
     }
     
     func update(groups: [ListItemGroup], remote: Bool, _ handler: ProviderResult<Any> -> Void) {
@@ -90,21 +102,25 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     func remove(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        dbGroupsProvider.remove(group) {[weak self] saved in
+        removeGroup(group.uuid, remote: remote, handler)
+    }
+
+    func removeGroup(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        dbGroupsProvider.removeGroup(uuid) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             
             if saved && remote {
-                self?.remoteGroupsProvider.removeGroup(group) {remoteResult in
+                self?.remoteGroupsProvider.removeGroup(uuid) {remoteResult in
                     if !remoteResult.success {
                         DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-                            print("Error: removing group in remote: \(group), result: \(remoteResult)")
+                            print("Error: removing group in remote: \(uuid), result: \(remoteResult)")
                         }
                     }
                 }
             }
         }
     }
-    
+
     func groupItems(group: ListItemGroup, _ handler: ProviderResult<[GroupItem]> -> Void) {
         dbGroupsProvider.groupItems(group) {items in
             handler(ProviderResult(status: .Success, sucessResult: items))
