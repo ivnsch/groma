@@ -7,30 +7,38 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteGroupItemsWithDependenciesNoGroup: ResponseObjectSerializable, CustomDebugStringConvertible {
+struct RemoteGroupItemsWithDependenciesNoGroup: ResponseObjectSerializable, CustomDebugStringConvertible {
     
     let products: [RemoteProduct]
     let productsCategories: [RemoteProductCategory]
     let groupItems: [RemoteGroupItem]
     
-    @objc required init?(representation: AnyObject) {
+    init?(representation: AnyObject) {
+        guard
+            let productsObj = representation.valueForKeyPath("products") as? [AnyObject],
+            let products = RemoteProduct.collection(productsObj),
+            let productsCategoriesObj = representation.valueForKeyPath("productsCategories") as? [AnyObject],
+            let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
+            let groupItemsObj = representation.valueForKeyPath("items") as? [AnyObject],
+            let groupItems = RemoteGroupItem.collection(groupItemsObj)
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        let products = representation.valueForKeyPath("products") as! [AnyObject]
-        self.products = RemoteProduct.collection(products)
-        
-        let productsCategories = representation.valueForKeyPath("productsCategories") as! [AnyObject]
-        self.productsCategories = RemoteProductCategory.collection(productsCategories)
-        
-        let groupItems = representation.valueForKeyPath("items") as! [AnyObject]
-        self.groupItems = RemoteGroupItem.collection(groupItems)
+        self.products = products
+        self.productsCategories = productsCategories
+        self.groupItems = groupItems
     }
     
-    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventoryWithItems] {
+    static func collection(response response: NSHTTPURLResponse, representation: AnyObject) -> [RemoteInventoryWithItems]? {
         var listItems = [RemoteInventoryWithItems]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteInventoryWithItems(representation: obj) {
                 listItems.append(listItem)
+            } else {
+                return nil
             }
             
         }

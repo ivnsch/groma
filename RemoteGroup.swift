@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let lastUpdate: NSDate
@@ -17,23 +17,34 @@ final class RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializa
     let fav: Int
     
     init?(representation: AnyObject) {
-        self.uuid = representation.valueForKeyPath("uuid") as! String
-        self.name = representation.valueForKeyPath("name") as! String
-        self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
-        self.order = representation.valueForKeyPath("order") as! Int
-        let colorStr = representation.valueForKeyPath("color") as! String
-        self.color = UIColor(hexString: colorStr) ?? {
-            print("Error: RemoteList.init: Invalid color hex: \(colorStr)")
-            return UIColor.blackColor()
-        }()
-        self.fav = representation.valueForKeyPath("fav") as! Int
+        guard
+            let uuid = representation.valueForKeyPath("uuid") as? String,
+            let name = representation.valueForKeyPath("name") as? String,
+            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
+            let order = representation.valueForKeyPath("order") as? Int,
+            let color = ((representation.valueForKeyPath("color") as? String).map{colorStr in
+                UIColor(hexString: colorStr)
+            }),
+            let fav = representation.valueForKeyPath("fav") as? Int
+            else {
+                print("Invalid json: \(representation)")
+                return nil}
+        
+        self.uuid = uuid
+        self.name = name
+        self.lastUpdate = lastUpdate
+        self.order = order
+        self.color = color
+        self.fav = fav
     }
     
-    static func collection(representation: AnyObject) -> [RemoteGroup] {
+    static func collection(representation: AnyObject) -> [RemoteGroup]? {
         var items = [RemoteGroup]()
         for obj in representation as! [AnyObject] {
             if let item = RemoteGroup(representation: obj) {
                 items.append(item)
+            } else {
+                return nil
             }
             
         }

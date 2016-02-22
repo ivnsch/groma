@@ -7,13 +7,20 @@
 //
 
 import Foundation
+import QorumLogs
 
-class RemoteRegisterResult: ResponseObjectSerializable, CustomDebugStringConvertible {
+struct RemoteRegisterResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     
     let token: String
     
-    @objc required init?(representation: AnyObject) {
-        self.token = representation.valueForKeyPath("token") as! String
+    init?(representation: AnyObject) {
+        guard
+            let token = representation.valueForKeyPath("token") as? String
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
+        
+        self.token = token
     }
     
     var debugDescription: String {

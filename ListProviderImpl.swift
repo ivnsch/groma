@@ -41,9 +41,7 @@ class ListProviderImpl: ListProvider {
                     }
                     
                 } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<[List]>) in
-                        print("get remote lists no success, result: \(remoteResult)")
-                    }
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                 }
             }
         }
@@ -81,9 +79,7 @@ class ListProviderImpl: ListProvider {
                 self.remoteListProvider.add(list, handler: {remoteResult in
                     
                     if !remoteResult.success {
-                        DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<List>) in
-                            print("error adding the remote list: \(remoteResult)")
-                        }
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 })
             }

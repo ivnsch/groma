@@ -452,5 +452,5 @@ extension Alamofire.Request {
 }
 
 public protocol ResponseCollectionSerializable {
-    static func collection(representation: AnyObject) -> [Self]
+    static func collection(representation: AnyObject) -> [Self]?
 }

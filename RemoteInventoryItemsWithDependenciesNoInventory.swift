@@ -7,23 +7,29 @@
 //
 
 import Foundation
+import QorumLogs
 
-class RemoteInventoryItemsWithDependenciesNoInventory: ResponseObjectSerializable, CustomDebugStringConvertible {
+struct RemoteInventoryItemsWithDependenciesNoInventory: ResponseObjectSerializable, CustomDebugStringConvertible {
     
     let products: [RemoteProduct]
     let productsCategories: [RemoteProductCategory]
     let inventoryItems: [RemoteInventoryItem]
     
-    @objc required init?(representation: AnyObject) {
+    init?(representation: AnyObject) {
+        guard
+            let productsObj = representation.valueForKeyPath("products") as? [AnyObject],
+            let products = RemoteProduct.collection(productsObj),
+            let productsCategoriesObj = representation.valueForKeyPath("productsCategories") as? [AnyObject],
+            let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
+            let inventoryItemsObj = representation.valueForKeyPath("items") as? [AnyObject],
+            let inventoryItems = RemoteInventoryItem.collection(inventoryItemsObj)
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        let products = representation.valueForKeyPath("products") as! [AnyObject]
-        self.products = RemoteProduct.collection(products)
-        
-        let productsCategories = representation.valueForKeyPath("productsCategories") as! [AnyObject]
-        self.productsCategories = RemoteProductCategory.collection(productsCategories)
-        
-        let inventoryItems = representation.valueForKeyPath("items") as! [AnyObject]
-        self.inventoryItems = RemoteInventoryItem.collection(inventoryItems)
+        self.products = products
+        self.productsCategories = productsCategories
+        self.inventoryItems = inventoryItems
     }
     
     var debugDescription: String {

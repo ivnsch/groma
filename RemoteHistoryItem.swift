@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let uuid: String
     let inventoryUuid: String
@@ -17,26 +17,40 @@ final class RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSer
     let userUuid: String
     let addedDate: NSDate
     
-    @objc required init?(representation: AnyObject) {
-        self.uuid = representation.valueForKeyPath("uuid") as! String
-        self.inventoryUuid = representation.valueForKeyPath("inventoryUuid") as! String
-        self.productUuid = representation.valueForKeyPath("productUuid") as! String
-        self.quantity = representation.valueForKeyPath("quantity") as! Int
-        self.userUuid = representation.valueForKeyPath("userUuid") as! String
-        self.addedDate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("addedDate") as! Double)
+    init?(representation: AnyObject) {
+        
+        guard
+            let uuid = representation.valueForKeyPath("uuid") as? String,
+            let inventoryUuid = representation.valueForKeyPath("inventoryUuid") as? String,
+            let productUuid = representation.valueForKeyPath("productUuid") as? String,
+            let quantity = representation.valueForKeyPath("quantity") as? Int,
+            let userUuid = representation.valueForKeyPath("userUuid") as? String,
+            let addedDate = ((representation.valueForKeyPath("addedDate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            else {
+                print("Invalid json: \(representation)")
+                return nil}
+        
+        self.uuid = uuid
+        self.inventoryUuid = inventoryUuid
+        self.productUuid = productUuid
+        self.quantity = quantity
+        self.userUuid = userUuid
+        self.addedDate = addedDate
     }
     
-    static func collection(representation: AnyObject) -> [RemoteHistoryItem] {
+    static func collection(representation: AnyObject) -> [RemoteHistoryItem]? {
         var listItems = [RemoteHistoryItem]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteHistoryItem(representation: obj) {
                 listItems.append(listItem)
+            } else {
+                return nil
             }
         }
         return listItems
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), inventoryUuid: \(self.inventoryUuid), productUuid: \(self.productUuid), quantity: \(self.quantity), userUuid: \(self.userUuid), addedDate: \(self.addedDate)}"
+        return "{\(self.dynamicType) uuid: \(uuid), inventoryUuid: \(inventoryUuid), productUuid: \(productUuid), quantity: \(quantity), userUuid: \(userUuid), addedDate: \(addedDate)}"
     }
 }

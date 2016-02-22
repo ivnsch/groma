@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteHistoryItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteHistoryItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let historyItems: [RemoteHistoryItem]
     let inventories: [RemoteInventory]
@@ -17,30 +18,37 @@ final class RemoteHistoryItems: ResponseObjectSerializable, ResponseCollectionSe
     let users: [RemoteSharedUser]
     
     init?(representation: AnyObject) {
+        guard
+            let historyItemsObj = representation.valueForKeyPath("historyItems") as? [AnyObject],
+            let historyItems = RemoteHistoryItem.collection(historyItemsObj),
+            let inventoriesObj = representation.valueForKeyPath("inventories") as? [AnyObject],
+            let inventories = RemoteInventory.collection(inventoriesObj),
+            let productsCategoriesObj = representation.valueForKeyPath("productsCategories") as? [AnyObject],
+            let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
+            let productsObj = representation.valueForKeyPath("products") as? [AnyObject],
+            let products = RemoteProduct.collection(productsObj),
+            let usersObj = representation.valueForKeyPath("users") as? [AnyObject],
+            let users = RemoteSharedUser.collection(usersObj)
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        let historyItems = representation.valueForKeyPath("historyItems") as! [AnyObject]
-        self.historyItems = RemoteHistoryItem.collection(historyItems)
-        
-        let inventories = representation.valueForKeyPath("inventories") as! [AnyObject]
-        self.inventories = RemoteInventory.collection(inventories)
-        
-        let productsCategories = representation.valueForKeyPath("productsCategories") as! [AnyObject]
-        self.productsCategories = RemoteProductCategory.collection(productsCategories)
-
-        let products = representation.valueForKeyPath("products") as! [AnyObject]
-        self.products = RemoteProduct.collection(products)
-        
-        let users = representation.valueForKeyPath("users") as! [AnyObject]
-        self.users = RemoteSharedUser.collection(users)
+        self.historyItems = historyItems
+        self.inventories = inventories
+        self.productsCategories = productsCategories
+        self.products = products
+        self.users = users
     }
     
     // Make it conform because of type declaration in RemoteSyncResult (TODO better way?)
     // Only for compatibility purpose with sync result, which always sends result as an array. With RemoteListItems we get always 1 element array
-    static func collection(representation: AnyObject) -> [RemoteHistoryItems] {
+    static func collection(representation: AnyObject) -> [RemoteHistoryItems]? {
         var listItems = [RemoteHistoryItems]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteHistoryItems(representation: obj) {
                 listItems.append(listItem)
+            } else {
+                return nil
             }
             
         }
@@ -49,6 +57,6 @@ final class RemoteHistoryItems: ResponseObjectSerializable, ResponseCollectionSe
     
     
     var debugDescription: String {
-        return "{\(self.dynamicType) historyItems: [\(self.historyItems)], inventories: [\(self.inventories)], productsCategories: [\(self.productsCategories)], products: [\(self.products)], users: [\(self.users)]}"
+        return "{\(self.dynamicType) historyItems: [\(historyItems)], inventories: [\(inventories)], productsCategories: [\(productsCategories)], products: [\(products)], users: [\(users)]}"
     }
 }

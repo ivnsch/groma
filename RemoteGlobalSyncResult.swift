@@ -8,27 +8,33 @@
 
 import Foundation
 import Alamofire
+import QorumLogs
 
-class RemoteGlobalSyncResult: ResponseObjectSerializable, CustomDebugStringConvertible {
+struct RemoteGlobalSyncResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     
     let lists: [RemoteListWithListItems]
     let inventories: [RemoteInventoryWithItems]
     let history: [RemoteHistoryItems]
     let groups: [RemoteGroupWithItems]
 
-    @objc required init?(representation: AnyObject) {
+    init?(representation: AnyObject) {
+        guard
+            let listsObj = representation.valueForKeyPath("lists") as? [AnyObject],
+            let lists = RemoteListWithListItems.collection(listsObj),
+            let inventoriesObj = representation.valueForKeyPath("inventories") as? [AnyObject],
+            let inventories = RemoteInventoryWithItems.collection(inventoriesObj),
+            let historyObj = representation.valueForKeyPath("history") as? [AnyObject],
+            let history = RemoteHistoryItems.collection(historyObj),
+            let groupsObj = representation.valueForKeyPath("groups") as? [AnyObject],
+            let groups = RemoteGroupWithItems.collection(groupsObj)
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        let lists = representation.valueForKeyPath("lists") as! [AnyObject]
-        self.lists = RemoteListWithListItems.collection(lists)
-
-        let inventories = representation.valueForKeyPath("inventories") as! [AnyObject]
-        self.inventories = RemoteInventoryWithItems.collection(inventories)
-        
-        let history = representation.valueForKeyPath("history") as! [AnyObject]
-        self.history = RemoteHistoryItems.collection(history)
-        
-        let groups = representation.valueForKeyPath("groups") as! [AnyObject]
-        self.groups = RemoteGroupWithItems.collection(groups)
+        self.lists = lists
+        self.inventories = inventories
+        self.history = history
+        self.groups = groups
     }
     
     var debugDescription: String {

@@ -8,22 +8,32 @@
 
 import Foundation
 
-final class RemotePlanItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemotePlanItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let inventoryUuid: String
     let productUuid: String
     let quantity: Int
     
-    @objc required init?(representation: AnyObject) {
-        self.inventoryUuid = representation.valueForKeyPath("inventoryUuid") as! String
-        self.productUuid = representation.valueForKeyPath("productUuid") as! String
-        self.quantity = representation.valueForKeyPath("quantity") as! Int
+    init?(representation: AnyObject) {
+        guard
+            let inventoryUuid = representation.valueForKeyPath("inventoryUuid") as? String,
+            let productUuid = representation.valueForKeyPath("productUuid") as? String,
+            let quantity = representation.valueForKeyPath("quantity") as? Int
+            else {
+                print("Invalid json: \(representation)")
+                return nil}
+        
+        self.inventoryUuid = inventoryUuid
+        self.productUuid = productUuid
+        self.quantity = quantity
     }
     
-    static func collection(representation: AnyObject) -> [RemotePlanItem] {
+    static func collection(representation: AnyObject) -> [RemotePlanItem]? {
         var listItems = [RemotePlanItem]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemotePlanItem(representation: obj) {
                 listItems.append(listItem)
+            } else {
+                return nil
             }
         }
         return listItems

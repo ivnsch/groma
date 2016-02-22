@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let order: Int
@@ -18,27 +19,38 @@ final class RemoteList: ResponseObjectSerializable, ResponseCollectionSerializab
     let inventoryUuid: String
     
     init?(representation: AnyObject) {
+        guard
+            let list: AnyObject = representation.valueForKeyPath("list"),
+            let uuid = list.valueForKeyPath("uuid") as? String,
+            let name = list.valueForKeyPath("name") as? String,
+            let order = list.valueForKeyPath("order") as? Int,
+            let unserializedUsers: AnyObject = representation.valueForKeyPath("users"),
+            let users = RemoteSharedUser.collection(unserializedUsers),
+            let lastUpdate = ((list.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
+            let inventoryUuid = list.valueForKeyPath("inventoryUuid") as? String,
+            let color = ((list.valueForKeyPath("color") as? String).map{colorStr in
+                UIColor(hexString: colorStr)
+            })
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        let list: AnyObject = representation.valueForKeyPath("list")!
-        self.uuid = list.valueForKeyPath("uuid") as! String
-        self.name = list.valueForKeyPath("name") as! String
-        self.order = list.valueForKeyPath("order") as! Int
-        let unserializedUsers: AnyObject = representation.valueForKeyPath("users")!
-        self.users = RemoteSharedUser.collection(unserializedUsers)
-        self.lastUpdate = NSDate(timeIntervalSince1970: list.valueForKeyPath("lastUpdate") as! Double)
-        self.inventoryUuid = list.valueForKeyPath("inventoryUuid") as! String
-        let colorStr = list.valueForKeyPath("color") as! String
-        self.color = UIColor(hexString: colorStr) ?? {
-            print("Error: RemoteList.init: Invalid color hex: \(colorStr)")
-            return UIColor.blackColor()
-        }()
+        self.uuid = uuid
+        self.name = name
+        self.order = order
+        self.users = users
+        self.lastUpdate = lastUpdate
+        self.inventoryUuid = inventoryUuid
+        self.color = color
     }
     
-    static func collection(representation: AnyObject) -> [RemoteList] {
+    static func collection(representation: AnyObject) -> [RemoteList]? {
         var lists = [RemoteList]()
         for obj in representation as! [AnyObject] {
             if let list = RemoteList(representation: obj) {
                 lists.append(list)
+            } else {
+                return nil
             }
             
         }

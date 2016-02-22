@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteListItemsWithDependenciesNoList: ResponseObjectSerializable, CustomDebugStringConvertible {
+struct RemoteListItemsWithDependenciesNoList: ResponseObjectSerializable, CustomDebugStringConvertible {
     
     let products: [RemoteProduct]
     let productsCategories: [RemoteProductCategory]
@@ -23,19 +24,24 @@ final class RemoteListItemsWithDependenciesNoList: ResponseObjectSerializable, C
         return dict
     }
     
-    @objc required init?(representation: AnyObject) {
+    init?(representation: AnyObject) {
+        guard
+            let productsObj = representation.valueForKeyPath("products") as? [AnyObject],
+            let products = RemoteProduct.collection(productsObj),
+            let productsCategoriesObj = representation.valueForKeyPath("productsCategories") as? [AnyObject],
+            let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
+            let sectionsObj = representation.valueForKeyPath("sections") as? [AnyObject],
+            let sections = RemoteSection.collection(sectionsObj),
+            let listItemsObj = representation.valueForKeyPath("items") as? [AnyObject],
+            let listItems = RemoteListItem.collection(listItemsObj)
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        let products = representation.valueForKeyPath("products") as! [AnyObject]
-        self.products = RemoteProduct.collection(products)
-        
-        let productsCategories = representation.valueForKeyPath("productsCategories") as! [AnyObject]
-        self.productsCategories = RemoteProductCategory.collection(productsCategories)
-        
-        let sections = representation.valueForKeyPath("sections") as! [AnyObject]
-        self.sections = RemoteSection.collection(sections)
-        
-        let listItems = representation.valueForKeyPath("items") as! [AnyObject]
-        self.listItems = RemoteListItem.collection(listItems)
+        self.products = products
+        self.productsCategories = productsCategories
+        self.sections = sections
+        self.listItems = listItems
     }
     
     var debugDescription: String {

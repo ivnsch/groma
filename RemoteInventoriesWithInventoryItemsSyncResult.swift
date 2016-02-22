@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteInventoryItemsSyncResult: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteInventoryItemsSyncResult: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let inventoryUuid: String
     let inventoryItems: [RemoteInventoryItemWithProduct]
 //    let couldNotUpdate: [String]
@@ -22,20 +23,28 @@ final class RemoteInventoryItemsSyncResult: ResponseObjectSerializable, Response
     }
     
     init?(representation: AnyObject) {
-        self.inventoryUuid = representation.valueForKeyPath("inventoryUuid") as! String
+        guard
+            let inventoryUuid = representation.valueForKeyPath("inventoryUuid") as? String,
+            let inventoryItemsObj = representation.valueForKeyPath("inventoryItems") as? [AnyObject],
+            let inventoryItems = RemoteInventoryItemWithProduct.collection(inventoryItemsObj),
+            let couldNotDelete = representation.valueForKeyPath("couldNotDelete") as? [String]
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        let inventoryItems = representation.valueForKeyPath("inventoryItems") as! [AnyObject]
-        self.inventoryItems = RemoteInventoryItemWithProduct.collection(inventoryItems)
-        
+        self.inventoryUuid = inventoryUuid
+        self.inventoryItems = inventoryItems
 //        self.couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as! [String]
-        self.couldNotDelete = representation.valueForKeyPath("couldNotDelete") as! [String]
+        self.couldNotDelete = couldNotDelete
     }
     
-    static func collection(representation: AnyObject) -> [RemoteInventoryItemsSyncResult] {
+    static func collection(representation: AnyObject) -> [RemoteInventoryItemsSyncResult]? {
         var inventoryItemsSyncResult = [RemoteInventoryItemsSyncResult]()
         for obj in representation as! [AnyObject] {
             if let inventoryItem = RemoteInventoryItemsSyncResult(representation: obj) {
                 inventoryItemsSyncResult.append(inventoryItem)
+            } else {
+                return nil
             }
             
         }
@@ -48,7 +57,7 @@ final class RemoteInventoryItemsSyncResult: ResponseObjectSerializable, Response
 }
 
 
-final class RemoteInventoriesWithInventoryItemsSyncResult: ResponseObjectSerializable, CustomDebugStringConvertible {
+struct RemoteInventoriesWithInventoryItemsSyncResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     let inventories: [RemoteInventory]
     let couldNotUpdate: [String]
     let couldNotDelete: [String]
@@ -61,18 +70,25 @@ final class RemoteInventoriesWithInventoryItemsSyncResult: ResponseObjectSeriali
         self.inventoryItemsSyncResults = inventoryItemsSyncResults
     }
     
-    @objc required init?(representation: AnyObject) {
-        let inventories = representation.valueForKeyPath("inventories") as! [AnyObject]
-        self.inventories = RemoteInventory.collection(inventories)
+    init?(representation: AnyObject) {
+        guard
+            let inventoriesObj = representation.valueForKeyPath("inventories") as? [AnyObject],
+            let inventories = RemoteInventory.collection(inventoriesObj),
+            let couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as? [String],
+            let couldNotDelete = representation.valueForKeyPath("couldNotDelete") as? [String],
+            let inventoryItemsSyncResultsObj = representation.valueForKeyPath("inventoryItems") as? [AnyObject],
+            let inventoryItemsSyncResults = RemoteInventoryItemsSyncResult.collection(inventoryItemsSyncResultsObj)
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        self.couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as! [String]
-        self.couldNotDelete = representation.valueForKeyPath("couldNotDelete") as! [String]
-        
-        let inventoryItemsSyncResults = representation.valueForKeyPath("inventoryItems") as! [AnyObject]
-        self.inventoryItemsSyncResults = RemoteInventoryItemsSyncResult.collection(inventoryItemsSyncResults)
+        self.inventories = inventories
+        self.couldNotUpdate = couldNotUpdate
+        self.couldNotDelete = couldNotDelete
+        self.inventoryItemsSyncResults = inventoryItemsSyncResults
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) inventories: \(self.inventories), couldNotUpdate: \(self.couldNotUpdate), couldNotDelete: \(self.couldNotDelete), inventoryItemsSyncResults: \(self.inventoryItemsSyncResults)}"
+        return "{\(self.dynamicType) inventories: \(inventories), couldNotUpdate: \(couldNotUpdate), couldNotDelete: \(couldNotDelete), inventoryItemsSyncResults: \(inventoryItemsSyncResults)}"
     }
 }

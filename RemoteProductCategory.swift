@@ -7,29 +7,39 @@
 //
 
 import UIKit
+import QorumLogs
 
-final class RemoteProductCategory: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteProductCategory: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     var color: UIColor
     let lastUpdate: NSDate
     
     init?(representation: AnyObject) {
-        self.uuid = representation.valueForKeyPath("uuid") as! String
-        self.name = representation.valueForKeyPath("name") as! String
-        let colorStr = representation.valueForKeyPath("color") as! String
-        self.color = UIColor(hexString: colorStr) ?? {
-            print("Error: RemoteProductCategory.init: Invalid color hex: \(colorStr)")
-            return UIColor.blackColor()
-        }()
-        self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)        
+        guard
+            let uuid = representation.valueForKeyPath("uuid") as? String,
+            let name = representation.valueForKeyPath("name") as? String,
+            let color = ((representation.valueForKeyPath("color") as? String).map{colorStr in
+                UIColor(hexString: colorStr)
+            }),
+            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
+        
+        self.uuid = uuid
+        self.name = name
+        self.color = color
+        self.lastUpdate = lastUpdate
     }
-    
-    static func collection(representation: AnyObject) -> [RemoteProductCategory] {
+
+    static func collection(representation: AnyObject) -> [RemoteProductCategory]? {
         var products = [RemoteProductCategory]()
         for obj in representation as! [AnyObject] {
             if let product = RemoteProductCategory(representation: obj) {
                 products.append(product)
+            } else {
+                return nil
             }
             
         }

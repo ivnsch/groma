@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RemoteHistoryItemsSyncResult: ResponseObjectSerializable, CustomDebugStringConvertible {
+struct RemoteHistoryItemsSyncResult: ResponseObjectSerializable, CustomDebugStringConvertible {
 
     let historyItems: RemoteHistoryItems
     let couldNotUpdate: [String]
@@ -20,16 +20,22 @@ class RemoteHistoryItemsSyncResult: ResponseObjectSerializable, CustomDebugStrin
         self.couldNotDelete = couldNotDelete
     }
     
-    @objc required init?(representation: AnyObject) {
+    init?(representation: AnyObject) {
+        guard
+            let historyItemsObj = representation.valueForKeyPath("historyItems") as? [AnyObject],
+            let historyItems = RemoteHistoryItems(representation: historyItemsObj),
+            let couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as? [String],
+            let couldNotDelete = representation.valueForKeyPath("couldNotDelete") as? [String]
+            else {
+                print("Invalid json: \(representation)")
+                return nil}
         
-        let historyItems = representation.valueForKeyPath("historyItems") as! [AnyObject]
-        self.historyItems = RemoteHistoryItems(representation: historyItems)!
-        
-        self.couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as! [String]
-        self.couldNotDelete = representation.valueForKeyPath("couldNotDelete") as! [String]
+        self.historyItems = historyItems
+        self.couldNotUpdate = couldNotUpdate
+        self.couldNotDelete = couldNotDelete
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) inventoryItems: \(self.historyItems), couldNotUpdate: \(self.couldNotUpdate), couldNotDelete: \(self.couldNotDelete)}"
+        return "{\(self.dynamicType) inventoryItems: \(historyItems), couldNotUpdate: \(couldNotUpdate), couldNotDelete: \(couldNotDelete)}"
     }
 }

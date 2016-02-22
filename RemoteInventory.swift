@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let order: Int
@@ -17,25 +18,36 @@ final class RemoteInventory: ResponseObjectSerializable, ResponseCollectionSeria
     let users: [RemoteSharedUser]
 
     init?(representation: AnyObject) {
-        let inventory: AnyObject = representation.valueForKeyPath("inventory")!
-        self.uuid = inventory.valueForKeyPath("uuid") as! String
-        self.name = inventory.valueForKeyPath("name") as! String
-        self.order = inventory.valueForKeyPath("order") as! Int
-        let colorStr = inventory.valueForKeyPath("color") as! String // TODO !!!! crash here sometimes
-        self.color = UIColor(hexString: colorStr) ?? {
-            print("Error: RemoteList.init: Invalid color hex: \(colorStr)")
-            return UIColor.blackColor()
-        }()
-        self.lastUpdate = NSDate(timeIntervalSince1970: inventory.valueForKeyPath("lastUpdate") as! Double)
-        let unserializedUsers: AnyObject = representation.valueForKeyPath("users")!
-        self.users = RemoteSharedUser.collection(unserializedUsers)
+        guard
+            let inventory: AnyObject = representation.valueForKeyPath("inventory")!,
+            let uuid = inventory.valueForKeyPath("uuid") as? String,
+            let name = inventory.valueForKeyPath("name") as? String,
+            let order = inventory.valueForKeyPath("order") as? Int,
+            let color = ((inventory.valueForKeyPath("color") as? String).map{colorStr in
+                UIColor(hexString: colorStr)
+            }),
+            let lastUpdate = ((inventory.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
+            let unserializedUsers = representation.valueForKeyPath("users"),
+            let users = RemoteSharedUser.collection(unserializedUsers)
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
+        
+        self.uuid = uuid
+        self.name = name
+        self.order = order
+        self.color = color
+        self.lastUpdate = lastUpdate
+        self.users = users
     }
-    
-    static func collection(representation: AnyObject) -> [RemoteInventory] {
+
+    static func collection(representation: AnyObject) -> [RemoteInventory]? {
         var sections = [RemoteInventory]()
         for obj in representation as! [AnyObject] {
             if let section = RemoteInventory(representation: obj) {
                 sections.append(section)
+            } else {
+                return nil
             }
             
         }

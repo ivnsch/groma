@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let uuid: String
     let productUuid: String
@@ -26,27 +27,46 @@ final class RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerial
     let lastUpdate: NSDate
     
     init?(representation: AnyObject) {
-        self.uuid = representation.valueForKeyPath("uuid") as! String
-        self.productUuid = representation.valueForKeyPath("productUuid") as! String
-        self.sectionUuid = representation.valueForKeyPath("sectionUuid") as! String
-        self.listUuid = representation.valueForKeyPath("listUuid") as! String
-        self.note = representation.valueForKeyPath("note") as! String? // TODO is this correct way for optional here?
+        guard
+            let uuid = representation.valueForKeyPath("uuid") as? String,
+            let productUuid = representation.valueForKeyPath("productUuid") as? String,
+            let sectionUuid = representation.valueForKeyPath("sectionUuid") as? String,
+            let listUuid = representation.valueForKeyPath("listUuid") as? String,
+            let note = representation.valueForKeyPath("note") as? String?, // TODO is this correct way for optional here?
+            let todoQuantity = representation.valueForKeyPath("todoQuantity") as? Int,
+            let todoOrder = representation.valueForKeyPath("todoOrder") as? Int,
+            let doneQuantity = representation.valueForKeyPath("doneQuantity") as? Int,
+            let doneOrder = representation.valueForKeyPath("doneOrder") as? Int,
+            let stashQuantity = representation.valueForKeyPath("stashQuantity") as? Int,
+            let stashOrder = representation.valueForKeyPath("stashOrder") as? Int,
+            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        self.todoQuantity = representation.valueForKeyPath("todoQuantity") as! Int
-        self.todoOrder = representation.valueForKeyPath("todoOrder") as! Int
-        self.doneQuantity = representation.valueForKeyPath("doneQuantity") as! Int
-        self.doneOrder = representation.valueForKeyPath("doneOrder") as! Int
-        self.stashQuantity = representation.valueForKeyPath("stashQuantity") as! Int
-        self.stashOrder = representation.valueForKeyPath("stashOrder") as! Int
+        self.uuid = uuid
+        self.productUuid = productUuid
+        self.sectionUuid = sectionUuid
+        self.listUuid = listUuid
+        self.note = note
         
-        self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
+        self.todoQuantity = todoQuantity
+        self.todoOrder = todoOrder
+        self.doneQuantity = doneQuantity
+        self.doneOrder = doneOrder
+        self.stashQuantity = stashQuantity
+        self.stashOrder = stashOrder
+        
+        self.lastUpdate = lastUpdate
     }
     
-    static func collection(representation: AnyObject) -> [RemoteListItem] {
+    static func collection(representation: AnyObject) -> [RemoteListItem]? {
         var listItems = [RemoteListItem]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteListItem(representation: obj) {
                 listItems.append(listItem)
+            } else {
+                return nil
             }
             
         }

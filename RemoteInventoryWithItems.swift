@@ -7,26 +7,34 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteInventoryWithItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteInventoryWithItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let inventory: RemoteInventory
     let inventoryItems: RemoteInventoryItemsWithDependenciesNoInventory
     
-    @objc required init?(representation: AnyObject) {
+    init?(representation: AnyObject) {
+        guard
+            let inventoryObj = representation.valueForKeyPath("inventory"),
+            let inventory = RemoteInventory(representation: inventoryObj),
+            let itemsObj = representation.valueForKeyPath("items") as? [AnyObject],
+            let inventoryItems = RemoteInventoryItemsWithDependenciesNoInventory(representation: itemsObj)
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        let inventory = representation.valueForKeyPath("inventory")!
-        self.inventory = RemoteInventory(representation: inventory)!
-        
-        let items = representation.valueForKeyPath("items") as! [AnyObject]
-        self.inventoryItems = RemoteInventoryItemsWithDependenciesNoInventory(representation: items)!
+        self.inventory = inventory
+        self.inventoryItems = inventoryItems
     }
     
-    static func collection(representation: AnyObject) -> [RemoteInventoryWithItems] {
+    static func collection(representation: AnyObject) -> [RemoteInventoryWithItems]? {
         var listItems = [RemoteInventoryWithItems]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteInventoryWithItems(representation: obj) {
                 listItems.append(listItem)
+            } else {
+                return nil
             }
             
         }

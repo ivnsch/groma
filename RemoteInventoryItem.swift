@@ -7,27 +7,37 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let quantity: Int
     let productUuid: String // TODO remove this? or store product and inventory here not in RemoteInventoryItemWithProduct
     
     init?(representation: AnyObject) {
-        self.quantity = representation.valueForKeyPath("quantity") as! Int
-        self.productUuid = representation.valueForKeyPath("productUuid") as! String
+        guard
+            let quantity = representation.valueForKeyPath("quantity") as? Int,
+            let productUuid = representation.valueForKeyPath("productUuid") as? String
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
+        
+        self.quantity = quantity
+        self.productUuid = productUuid
     }
     
-    static func collection(representation: AnyObject) -> [RemoteInventoryItem] {
+    static func collection(representation: AnyObject) -> [RemoteInventoryItem]? {
         var items = [RemoteInventoryItem]()
         for obj in representation as! [AnyObject] {
             if let item = RemoteInventoryItem(representation: obj) {
                 items.append(item)
+            } else {
+                return nil
             }
         }
         return items
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) quantity: \(self.quantity), productUuid: \(self.productUuid)}"
+        return "{\(self.dynamicType) quantity: \(quantity), productUuid: \(productUuid)}"
     }
 }

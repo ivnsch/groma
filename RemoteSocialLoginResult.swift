@@ -7,21 +7,31 @@
 //
 
 import Foundation
+import QorumLogs
 
-class RemoteSocialLoginResult: ResponseObjectSerializable, CustomDebugStringConvertible {
+struct RemoteSocialLoginResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     let token: String
     let email: String
     let firstName: String
     let lastName: String
     
-    @objc required init?(representation: AnyObject) {
-        self.token = representation.valueForKeyPath("token") as! String
-        self.email = representation.valueForKeyPath("email") as! String
-        self.firstName = representation.valueForKeyPath("firstName") as! String
-        self.lastName = representation.valueForKeyPath("lastName") as! String
+    init?(representation: AnyObject) {
+        guard
+            let token = representation.valueForKeyPath("token") as? String,
+            let email = representation.valueForKeyPath("email") as? String,
+            let firstName = representation.valueForKeyPath("firstName") as? String,
+            let lastName = representation.valueForKeyPath("lastName") as? String
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
+        
+        self.token = token
+        self.email = email
+        self.firstName = firstName
+        self.lastName = lastName
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) email: \(self.email), firstName: \(self.firstName)}, lastName: \(self.lastName)}"
+        return "{\(self.dynamicType) email: \(email), firstName: \(firstName)}, lastName: \(lastName)}"
     }
 }

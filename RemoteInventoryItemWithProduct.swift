@@ -7,9 +7,10 @@
 //
 
 import Foundation
+import QorumLogs
 
 // TODO review this, seems sync sends us redundant objects? This should not be the case - it should be like in list items response
-final class RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let inventoryItem: RemoteInventoryItem
     let product: RemoteProduct
     let productCategory: RemoteProductCategory
@@ -19,23 +20,31 @@ final class RemoteInventoryItemWithProduct: ResponseObjectSerializable, Response
     // TODO After porting to Swift 2.0 catch exception in these initializers and show msg to client accordingly, or don't use force unwrap
     // if server for some reason doesn't send a field the app currently crashes
     init?(representation: AnyObject) {
-        let inventoryItem: AnyObject = representation.valueForKeyPath("inventoryItem")!
-        self.inventoryItem = RemoteInventoryItem(representation: inventoryItem)!
-
-        let productCategory: AnyObject = representation.valueForKeyPath("productCategory")!
-        self.productCategory = RemoteProductCategory(representation: productCategory)!
+        guard
+            let inventoryItemObj = representation.valueForKeyPath("inventoryItem"),
+            let inventoryItem = RemoteInventoryItem(representation: inventoryItemObj),
+            let productCategoryObj = representation.valueForKeyPath("productCategory"),
+            let productCategory = RemoteProductCategory(representation: productCategoryObj),
+            let productObj = representation.valueForKeyPath("product"),
+            let product = RemoteProduct(representation: productObj),
+            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        let product: AnyObject = representation.valueForKeyPath("product")!
-        self.product = RemoteProduct(representation: product)!
-        
-        self.lastUpdate = NSDate(timeIntervalSince1970: inventoryItem.valueForKeyPath("lastUpdate") as! Double)
+        self.inventoryItem = inventoryItem
+        self.productCategory = productCategory
+        self.product = product
+        self.lastUpdate = lastUpdate
     }
     
-    static func collection(representation: AnyObject) -> [RemoteInventoryItemWithProduct] {
+    static func collection(representation: AnyObject) -> [RemoteInventoryItemWithProduct]? {
         var items = [RemoteInventoryItemWithProduct]()
         for obj in representation as! [AnyObject] {
             if let item = RemoteInventoryItemWithProduct(representation: obj) {
                 items.append(item)
+            } else {
+                return nil
             }
         }
         return items

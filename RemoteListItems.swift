@@ -7,8 +7,9 @@
 //
 
 import Foundation
-    
-final class RemoteListItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+import QorumLogs
+
+struct RemoteListItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
 
     let lists: RemoteListsWithDependencies
     let products: [RemoteProduct]
@@ -24,30 +25,37 @@ final class RemoteListItems: ResponseObjectSerializable, ResponseCollectionSeria
         return dict
     }
     
-    @objc required init?(representation: AnyObject) {
+    init?(representation: AnyObject) {
+        guard
+            let listsObj = representation.valueForKeyPath("lists"),
+            let lists = RemoteListsWithDependencies(representation: listsObj),
+            let productsObj = representation.valueForKeyPath("products") as? [AnyObject],
+            let products = RemoteProduct.collection(productsObj),
+            let productsCategoriesObj = representation.valueForKeyPath("productsCategories") as? [AnyObject],
+            let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
+            let sectionsObj = representation.valueForKeyPath("sections") as? [AnyObject],
+            let sections = RemoteSection.collection(sectionsObj),
+            let listItemsObj = representation.valueForKeyPath("listItems") as? [AnyObject],
+            let listItems = RemoteListItem.collection(listItemsObj)
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        let lists = representation.valueForKeyPath("lists")!
-        self.lists = RemoteListsWithDependencies(representation: lists)!
-        
-        let products = representation.valueForKeyPath("products") as! [AnyObject]
-        self.products = RemoteProduct.collection(products)
-
-        let productsCategories = representation.valueForKeyPath("productsCategories") as! [AnyObject]
-        self.productsCategories = RemoteProductCategory.collection(productsCategories)
-        
-        let sections = representation.valueForKeyPath("sections") as! [AnyObject]
-        self.sections = RemoteSection.collection(sections)
-        
-        let listItems = representation.valueForKeyPath("listItems") as! [AnyObject]
-        self.listItems = RemoteListItem.collection(listItems)
+        self.lists = lists
+        self.products = products
+        self.productsCategories = productsCategories
+        self.sections = sections
+        self.listItems = listItems
     }
     
     // Only for compatibility purpose with sync result, which always sends result as an array. With RemoteListItems we get always 1 element array
-    static func collection(representation: AnyObject) -> [RemoteListItems] {
+    static func collection(representation: AnyObject) -> [RemoteListItems]? {
         var listItems = [RemoteListItems]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteListItems(representation: obj) {
                 listItems.append(listItem)
+            } else {
+                return nil
             }
             
         }

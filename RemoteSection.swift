@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     var listUuid: String    
@@ -18,22 +19,36 @@ final class RemoteSection: ResponseObjectSerializable, ResponseCollectionSeriali
     let doneOrder: Int
     let stashOrder: Int
     
-    @objc required init?(representation: AnyObject) {
-        self.uuid = representation.valueForKeyPath("uuid") as! String
-        self.name = representation.valueForKeyPath("name") as! String
-        self.listUuid = representation.valueForKeyPath("listUuid") as! String        
-        self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
+    init?(representation: AnyObject) {
+        guard
+        let uuid = representation.valueForKeyPath("uuid") as? String,
+        let name = representation.valueForKeyPath("name") as? String,
+        let listUuid = representation.valueForKeyPath("listUuid") as? String,
+        let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
+        let todoOrder = representation.valueForKeyPath("todoOrder") as? Int,
+        let doneOrder = representation.valueForKeyPath("doneOrder") as? Int,
+        let stashOrder = representation.valueForKeyPath("stashOrder") as? Int
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        self.todoOrder = representation.valueForKeyPath("todoOrder") as! Int
-        self.doneOrder = representation.valueForKeyPath("doneOrder") as! Int
-        self.stashOrder = representation.valueForKeyPath("stashOrder") as! Int
+        self.uuid = uuid
+        self.name = name
+        self.listUuid = listUuid
+        self.lastUpdate = lastUpdate
+        
+        self.todoOrder = todoOrder
+        self.doneOrder = doneOrder
+        self.stashOrder = stashOrder
     }
     
-    static func collection(representation: AnyObject) -> [RemoteSection] {
+    static func collection(representation: AnyObject) -> [RemoteSection]? {
         var sections = [RemoteSection]()
         for obj in representation as! [AnyObject] {
             if let section = RemoteSection(representation: obj) {
                 sections.append(section)
+            } else {
+                return nil
             }
             
         }

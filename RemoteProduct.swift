@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let price: Float
@@ -20,22 +21,38 @@ final class RemoteProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     let lastUpdate: NSDate
 
     init?(representation: AnyObject) {
-        self.uuid = representation.valueForKeyPath("uuid") as! String
-        self.name = representation.valueForKeyPath("name") as! String
-        self.price = representation.valueForKeyPath("price") as! Float
-        self.categoryUuid = representation.valueForKeyPath("categoryUuid") as! String
-        self.baseQuantity = representation.valueForKeyPath("baseQuantity") as! Float
-        self.unit = representation.valueForKeyPath("unit") as! Int
-        self.fav = representation.valueForKeyPath("fav") as! Int
-        self.brand = representation.valueForKeyPath("brand") as! String
-        self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
+        guard
+            let uuid = representation.valueForKeyPath("uuid") as? String,
+            let name = representation.valueForKeyPath("name") as? String,
+            let price = representation.valueForKeyPath("price") as? Float,
+            let categoryUuid = representation.valueForKeyPath("categoryUuid") as? String,
+            let baseQuantity = representation.valueForKeyPath("baseQuantity") as? Float,
+            let unit = representation.valueForKeyPath("unit") as? Int,
+            let fav = representation.valueForKeyPath("fav") as? Int,
+            let brand = representation.valueForKeyPath("brand") as? String,
+            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
+        
+        self.uuid = uuid
+        self.name = name
+        self.price = price
+        self.categoryUuid = categoryUuid
+        self.baseQuantity = baseQuantity
+        self.unit = unit
+        self.fav = fav
+        self.brand = brand
+        self.lastUpdate = lastUpdate
     }
     
-    static func collection(representation: AnyObject) -> [RemoteProduct] {
+    static func collection(representation: AnyObject) -> [RemoteProduct]? {
         var products = [RemoteProduct]()
         for obj in representation as! [AnyObject] {
             if let product = RemoteProduct(representation: obj) {
                 products.append(product)
+            } else {
+                return nil
             }
         }
         return products

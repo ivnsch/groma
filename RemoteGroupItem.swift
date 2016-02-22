@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let uuid: String
     let quantity: Int
@@ -17,18 +18,30 @@ final class RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSeria
     let lastUpdate: NSDate
     
     init?(representation: AnyObject) {
-        self.uuid = representation.valueForKeyPath("uuid") as! String
-        self.quantity = representation.valueForKeyPath("quantity") as! Int
-        self.productUuid = representation.valueForKeyPath("productUuid") as! String
-        self.groupUuid = representation.valueForKeyPath("groupUuid") as! String
-        self.lastUpdate = NSDate(timeIntervalSince1970: representation.valueForKeyPath("lastUpdate") as! Double)
+        guard
+            let uuid = representation.valueForKeyPath("uuid") as? String,
+            let quantity = representation.valueForKeyPath("quantity") as? Int,
+            let productUuid = representation.valueForKeyPath("productUuid") as? String,
+            let groupUuid = representation.valueForKeyPath("groupUuid") as? String,
+            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
+        
+        self.uuid = uuid
+        self.quantity = quantity
+        self.productUuid = productUuid
+        self.groupUuid = groupUuid
+        self.lastUpdate = lastUpdate
     }
     
-    static func collection(representation: AnyObject) -> [RemoteGroupItem] {
+    static func collection(representation: AnyObject) -> [RemoteGroupItem]? {
         var listItems = [RemoteGroupItem]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteGroupItem(representation: obj) {
                 listItems.append(listItem)
+            } else {
+                return nil
             }
             
         }

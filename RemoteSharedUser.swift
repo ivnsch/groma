@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let uuid: String
     var email: String
@@ -16,17 +17,28 @@ final class RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSeri
     let lastName: String
     
     init?(representation: AnyObject) {
-        self.uuid = representation.valueForKeyPath("uuid") as! String
-        self.email = representation.valueForKeyPath("email") as! String
-        self.firstName = representation.valueForKeyPath("firstName") as! String
-        self.lastName = representation.valueForKeyPath("lastName") as! String
+        guard
+            let uuid = representation.valueForKeyPath("uuid") as? String,
+            let email = representation.valueForKeyPath("email") as? String,
+            let firstName = representation.valueForKeyPath("firstName") as? String,
+            let lastName = representation.valueForKeyPath("lastName") as? String
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
+        
+        self.uuid = uuid
+        self.email = email
+        self.firstName = firstName
+        self.lastName = lastName
     }
     
-    static func collection(representation: AnyObject) -> [RemoteSharedUser] {
+    static func collection(representation: AnyObject) -> [RemoteSharedUser]? {
         var listItems = [RemoteSharedUser]()
         for obj in representation as! [AnyObject] {
             if let listItem = RemoteSharedUser(representation: obj) {
                 listItems.append(listItem)
+            } else {
+                return nil
             }
             
         }
@@ -34,6 +46,6 @@ final class RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSeri
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), email: \(self.email), firstName: \(self.firstName), lastName: \(self.lastName)}"
+        return "{\(self.dynamicType) uuid: \(uuid), email: \(email), firstName: \(firstName), lastName: \(lastName)}"
     }
 }

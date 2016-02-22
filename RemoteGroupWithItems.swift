@@ -7,26 +7,34 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteGroupWithItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
+struct RemoteGroupWithItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let group: RemoteGroup
     let groupItems: RemoteGroupItemsWithDependenciesNoGroup
     
-    @objc required init?(representation: AnyObject) {
+    init?(representation: AnyObject) {
+        guard
+            let groupObj = representation.valueForKeyPath("group"),
+            let group = RemoteGroup(representation: groupObj),
+            let itemsObj = representation.valueForKeyPath("items") as? [AnyObject],
+            let groupItems = RemoteGroupItemsWithDependenciesNoGroup(representation: itemsObj)
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        let group = representation.valueForKeyPath("group")!
-        self.group = RemoteGroup(representation: group)!
-        
-        let items = representation.valueForKeyPath("items") as! [AnyObject]
-        self.groupItems = RemoteGroupItemsWithDependenciesNoGroup(representation: items)!
+        self.group = group
+        self.groupItems = groupItems
     }
     
-    static func collection(representation: AnyObject) -> [RemoteGroupWithItems] {
+    static func collection(representation: AnyObject) -> [RemoteGroupWithItems]? {
         var items = [RemoteGroupWithItems]()
         for obj in representation as! [AnyObject] {
             if let item = RemoteGroupWithItems(representation: obj) {
                 items.append(item)
+            } else {
+                return nil
             }
             
         }

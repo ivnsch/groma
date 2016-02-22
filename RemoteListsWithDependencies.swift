@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemoteListsWithDependencies: ResponseObjectSerializable, CustomDebugStringConvertible {
+struct RemoteListsWithDependencies: ResponseObjectSerializable, CustomDebugStringConvertible {
 
     let inventories: [RemoteInventory]
     let lists: [RemoteList]
@@ -16,11 +17,17 @@ final class RemoteListsWithDependencies: ResponseObjectSerializable, CustomDebug
     // TODO After porting to Swift 2.0 catch exception in these initializers and show msg to client accordingly, or don't use force unwrap
     // if server for some reason doesn't send a field the app currently crashes
     init?(representation: AnyObject) {
-        let inventories = representation.valueForKeyPath("inventories")!
-        self.inventories = RemoteInventory.collection(inventories)
+        guard
+        let inventoriesObj = representation.valueForKeyPath("inventories"),
+        let inventories = RemoteInventory.collection(inventoriesObj),
+        let listsObj = representation.valueForKeyPath("lists"),
+        let lists = RemoteList.collection(listsObj)
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        let lists: AnyObject = representation.valueForKeyPath("lists")!
-        self.lists = RemoteList.collection(lists)
+        self.inventories = inventories
+        self.lists = lists
     }
     
     var debugDescription: String {

@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import QorumLogs
 
-final class RemotePlanItems: ResponseObjectSerializable, CustomDebugStringConvertible {
+struct RemotePlanItems: ResponseObjectSerializable, CustomDebugStringConvertible {
     
     let planItems: [RemoteHistoryItem]
     let inventory: RemoteInventory
@@ -16,18 +17,23 @@ final class RemotePlanItems: ResponseObjectSerializable, CustomDebugStringConver
     let products: [RemoteProduct]
     
     init?(representation: AnyObject) {
+        guard
+            let planItemsObj = representation.valueForKeyPath("planItems") as? [AnyObject],
+            let planItems = RemoteHistoryItem.collection(planItemsObj),
+            let inventoriesObj = representation.valueForKeyPath("inventory") as? [AnyObject],
+            let inventory = RemoteInventory(representation: inventoriesObj),
+            let productsCategoriesObj = representation.valueForKeyPath("productsCategories") as? [AnyObject],
+            let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
+            let productsObj = representation.valueForKeyPath("products") as? [AnyObject],
+            let products = RemoteProduct.collection(productsObj)
+            else {
+                QL4("Invalid json: \(representation)")
+                return nil}
         
-        let historyItems = representation.valueForKeyPath("planItems") as! [AnyObject]
-        self.planItems = RemoteHistoryItem.collection(historyItems)
-        
-        let inventories = representation.valueForKeyPath("inventory") as! [AnyObject]
-        self.inventory = RemoteInventory(representation: inventories)!
-        
-        let productsCategories = representation.valueForKeyPath("productsCategories") as! [AnyObject]
-        self.productsCategories = RemoteProductCategory.collection(productsCategories)
-        
-        let products = representation.valueForKeyPath("products") as! [AnyObject]
-        self.products = RemoteProduct.collection(products)
+        self.planItems = planItems
+        self.inventory = inventory
+        self.productsCategories = productsCategories
+        self.products = products
     }
     
     var debugDescription: String {
