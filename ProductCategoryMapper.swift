@@ -39,6 +39,7 @@ class ProductCategoryMapper {
         dbCategory.uuid = category.uuid
         dbCategory.name = category.name
         dbCategory.setColor(category.color)
+        dbCategory.dirty = false
         return dbCategory
     }
 }

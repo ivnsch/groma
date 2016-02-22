@@ -27,7 +27,9 @@ class InventoryProviderImpl: InventoryProvider {
                     // if there's no cached list or there's a difference, overwrite the cached list
                     if dbInventories != inventories {
                         
-                        self.dbInventoryProvider.saveInventories(inventories, update: true) {saved in
+                        // the lists come fresh from the server so we have to set the dirty flag to false
+                        let inventoriesNoDirty: [DBInventory] = inventories.map{InventoryMapper.dbWithInventory($0, dirty: false)}
+                        self.dbInventoryProvider.saveInventories(inventoriesNoDirty, update: true) {saved in
                             if saved {
                                 handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: inventories))
                                 

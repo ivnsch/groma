@@ -30,7 +30,9 @@ class ListProviderImpl: ListProvider {
                     // if there's no cached list or there's a difference, overwrite the cached list
                     if dbLists != lists {
                         
-                        self.dbProvider.saveLists(lists, update: true) {saved in
+                        // the lists come fresh from the server so we have to set the dirty flag to false
+                        let listsNoDirty: [DBList] = lists.map{ListMapper.dbWithList($0, dirty: false)}
+                        self.dbProvider.saveLists(listsNoDirty, update: true) {saved in
                             if saved {
                                 handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: lists))
                                 

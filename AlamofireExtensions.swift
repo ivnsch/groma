@@ -186,6 +186,7 @@ struct AlamofireHelper {
     static func authenticatedRequest(method: Alamofire.Method, _ url: String, _ parameters: [String: AnyObject]? = nil) -> Request {
 
 //        QL1("method: \(method), url: \(url), parameters: \(parameters)")
+        
 //        if let pars = parameters {
 //            let dataExample: NSData = NSKeyedArchiver.archivedDataWithRootObject(pars)
 //            let mb = Float(dataExample.length) / Float(1024) / Float(1024)
@@ -218,6 +219,8 @@ struct AlamofireHelper {
     }
     
     static func authenticatedRequest(method: Alamofire.Method, _ url: String, _ parameters: [[String: AnyObject]]) -> Request {
+        
+//        QL1("method: \(method), url: \(url), parameters: \(parameters)")
         
         // this is handled differently because the parameters are an array and default request in alamofire doesn't support this (the difference is the request.HTTPBody line)
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)

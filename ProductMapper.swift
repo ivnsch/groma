@@ -72,6 +72,7 @@ class ProductMapper {
         dbProduct.unit = product.unit
         dbProduct.fav = product.fav
         dbProduct.brand = product.brand
+        dbProduct.dirty = false
         return dbProduct
     }
 }

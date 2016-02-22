@@ -11,7 +11,7 @@ import ChameleonFramework
 
 class ListMapper {
     
-    class func dbWithList(list: List) -> DBList {
+    class func dbWithList(list: List, dirty: Bool = true) -> DBList {
         let dbList = DBList()
         dbList.uuid = list.uuid
         dbList.name = list.name
@@ -25,6 +25,7 @@ class ListMapper {
         if let lastServerUpdate = list.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
             dbList.lastServerUpdate = lastServerUpdate
         }
+        dbList.dirty = dirty
         return dbList
     }
 
@@ -39,6 +40,7 @@ class ListMapper {
             dbList.order = remoteList.order
             dbList.inventory = inventoriesDict[remoteList.inventoryUuid]!
             let dbSharedUsers = remoteList.users.map{SharedUserMapper.dbWithSharedUser($0)}
+            dbList.dirty = false
             for dbObj in dbSharedUsers {
                 dbList.users.append(dbObj)
             }

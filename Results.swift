@@ -84,6 +84,14 @@ extension Results {
     
 }
 
+// doesn't compile... TODO why? use this if it's possible
+//extension Results where T: DBSyncable {
+//    
+//    func dirty(dirty: Bool = true) -> String {
+//        return self.filter("dirty == \(dirty)")
+//    }
+//}
+
 extension RealmSwift.List {
     
     func toArray() -> [T] {

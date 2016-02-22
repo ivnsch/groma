@@ -22,6 +22,7 @@ class DBSharedUser: Object {
     static func fromDict(dict: [String: AnyObject]) -> DBSharedUser {
         let user = DBSharedUser()
         user.email = dict["email"] as! String
+//        user.setSyncableFieldswithRemoteDict(dict) // for now disabled as backend doesn't have specific last update of shared user, TODO think about this, maybe send the one of user?
         return user
     }
     

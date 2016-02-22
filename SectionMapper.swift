@@ -43,6 +43,7 @@ class SectionMapper {
         dbSection.todoOrder = section.todoOrder
         dbSection.doneOrder = section.doneOrder
         dbSection.stashOrder = section.stashOrder
+        dbSection.dirty = false
         return dbSection
     }
 }

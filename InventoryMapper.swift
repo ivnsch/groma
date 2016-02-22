@@ -19,7 +19,7 @@ class InventoryMapper {
         return Inventory(uuid: remoteInventory.uuid, name: remoteInventory.name, users: remoteInventory.users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: remoteInventory.color, order: remoteInventory.order)
     }
     
-    class func dbWithInventory(inventory: Inventory) -> DBInventory {
+    class func dbWithInventory(inventory: Inventory, dirty: Bool = true) -> DBInventory {
         let db = DBInventory()
         db.uuid = inventory.uuid
         db.name = inventory.name
@@ -34,6 +34,7 @@ class InventoryMapper {
         for dbObj in dbSharedUsers {
             db.users.append(dbObj)
         }
+        db.dirty = dirty
         return db
     }
     
@@ -48,6 +49,7 @@ class InventoryMapper {
         for dbObj in dbSharedUsers {
             db.users.append(dbObj)
         }
+        db.dirty = false
         return db
     }
 }

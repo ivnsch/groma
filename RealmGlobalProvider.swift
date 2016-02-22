@@ -16,16 +16,16 @@ class RealmGlobalProvider: RealmProvider {
         
         withRealm({realm in
 
-            let productCategories = realm.objects(DBProductCategory)
-            let products = realm.objects(DBProduct)
-            let lists = realm.objects(DBList)
-            let sections = realm.objects(DBSection)
-            let listsItems = realm.objects(DBListItem)
-            let inventories = realm.objects(DBInventory)
-            let inventoryItems = realm.objects(DBInventoryItem)
-            let groups = realm.objects(DBListItemGroup)
-            let groupItems = realm.objects(DBGroupItem)
-            let history = realm.objects(DBHistoryItem)
+            let productCategories = realm.objects(DBProductCategory).filter(DBSyncable.dirtyFilter())
+            let products = realm.objects(DBProduct).filter(DBSyncable.dirtyFilter())
+            let lists = realm.objects(DBList).filter(DBSyncable.dirtyFilter())
+            let sections = realm.objects(DBSection).filter(DBSyncable.dirtyFilter())
+            let listsItems = realm.objects(DBListItem).filter(DBSyncable.dirtyFilter())
+            let inventories = realm.objects(DBInventory).filter(DBSyncable.dirtyFilter())
+            let inventoryItems = realm.objects(DBInventoryItem).filter(DBSyncable.dirtyFilter())
+            let groups = realm.objects(DBListItemGroup).filter(DBSyncable.dirtyFilter())
+            let groupItems = realm.objects(DBGroupItem).filter(DBSyncable.dirtyFilter())
+            let history = realm.objects(DBHistoryItem).filter(DBSyncable.dirtyFilter())
 
             let (categoriesToRemove, categoriesToSync) = productCategories.splitMap({$0.removed}, mapper: {$0.toDict()})
             let (productsToRemove, productsToSync) = products.splitMap({$0.removed}, mapper: {$0.toDict()})
@@ -76,7 +76,7 @@ class RealmGlobalProvider: RealmProvider {
     
     func saveSyncResult(syncResult: RemoteSyncResult, handler: Bool -> Void) {
 
-        func toTuple<T>(dictArray: [[String: AnyObject]], mapper: [String: AnyObject] -> T, idExtractor: T -> String) -> ([T], [String: T]) {
+        func toTuple<T: DBSyncable>(dictArray: [[String: AnyObject]], mapper: [String: AnyObject] -> T, idExtractor: T -> String) -> ([T], [String: T]) {
             var objArray = [T]()
             var objDict = [String: T]()
             for dict in dictArray {
