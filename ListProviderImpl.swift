@@ -15,35 +15,37 @@ class ListProviderImpl: ListProvider {
     let dbProvider = RealmListItemProvider()
     
     // Note: programmatic sorting 2x. But users normally have only a few lists so it's ok
-    func lists(handler: ProviderResult<[List]> -> ()) {
+    func lists(remote: Bool = true, _ handler: ProviderResult<[List]> -> ()) {
         self.dbProvider.loadLists{(var dbLists) in
             
             dbLists = dbLists.sortedByOrder()
             
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbLists))
             
-            self.remoteListProvider.lists {remoteResult in
-                
-                if let remoteLists = remoteResult.successResult {
-                    let lists: [List] = ListMapper.listsWithRemote(remoteLists)
+            if remote {
+                self.remoteListProvider.lists {remoteResult in
                     
-                    // if there's no cached list or there's a difference, overwrite the cached list
-                    if dbLists != lists {
+                    if let remoteLists = remoteResult.successResult {
+                        let lists: [List] = ListMapper.listsWithRemote(remoteLists)
                         
-                        // the lists come fresh from the server so we have to set the dirty flag to false
-                        let listsNoDirty: [DBList] = lists.map{ListMapper.dbWithList($0, dirty: false)}
-                        self.dbProvider.saveLists(listsNoDirty, update: true) {saved in
-                            if saved {
-                                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: lists))
-                                
-                            } else {
-                                print("Error updating lists - dbListsMaybe is nil")
+                        // if there's no cached list or there's a difference, overwrite the cached list
+                        if dbLists != lists {
+                            
+                            // the lists come fresh from the server so we have to set the dirty flag to false
+                            let listsNoDirty: [DBList] = lists.map{ListMapper.dbWithList($0, dirty: false)}
+                            self.dbProvider.saveLists(listsNoDirty, update: true) {saved in
+                                if saved {
+                                    handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: lists))
+                                    
+                                } else {
+                                    print("Error updating lists - dbListsMaybe is nil")
+                                }
                             }
                         }
+                        
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
-                    
-                } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                 }
             }
         }

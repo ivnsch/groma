@@ -15,33 +15,35 @@ class InventoryProviderImpl: InventoryProvider {
     private let remoteInventoryItemsProvider = RemoteInventoryItemsProvider()
     private let dbInventoryProvider = RealmInventoryProvider()
 
-    func inventories(handler: ProviderResult<[Inventory]> -> ()) {
+    func inventories(remote: Bool = true, _ handler: ProviderResult<[Inventory]> -> ()) {
         self.dbInventoryProvider.loadInventories {dbInventories in
             handler(ProviderResult(status: .Success, sucessResult: dbInventories))
             
-            self.remoteProvider.inventories {remoteResult in
-                
-                if let remoteInventories = remoteResult.successResult {
-                    let inventories: [Inventory] = remoteInventories.map{InventoryMapper.inventoryWithRemote($0)}
+            if remote {
+                self.remoteProvider.inventories {remoteResult in
                     
-                    // if there's no cached list or there's a difference, overwrite the cached list
-                    if dbInventories != inventories {
+                    if let remoteInventories = remoteResult.successResult {
+                        let inventories: [Inventory] = remoteInventories.map{InventoryMapper.inventoryWithRemote($0)}
                         
-                        // the lists come fresh from the server so we have to set the dirty flag to false
-                        let inventoriesNoDirty: [DBInventory] = inventories.map{InventoryMapper.dbWithInventory($0, dirty: false)}
-                        self.dbInventoryProvider.saveInventories(inventoriesNoDirty, update: true) {saved in
-                            if saved {
-                                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: inventories))
-                                
-                            } else {
-                                print("Error updating inventories - dbListsMaybe is nil")
+                        // if there's no cached list or there's a difference, overwrite the cached list
+                        if dbInventories != inventories {
+                            
+                            // the lists come fresh from the server so we have to set the dirty flag to false
+                            let inventoriesNoDirty: [DBInventory] = inventories.map{InventoryMapper.dbWithInventory($0, dirty: false)}
+                            self.dbInventoryProvider.saveInventories(inventoriesNoDirty, update: true) {saved in
+                                if saved {
+                                    handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: inventories))
+                                    
+                                } else {
+                                    print("Error updating inventories - dbListsMaybe is nil")
+                                }
                             }
                         }
-                    }
-                    
-                } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<[Any]>) in
-                        print("get remote inventories no success, result: \(remoteResult)")
+                        
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<[Any]>) in
+                            print("get remote inventories no success, result: \(remoteResult)")
+                        }
                     }
                 }
             }

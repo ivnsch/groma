@@ -33,7 +33,7 @@ class SettingsViewController: UIViewController {
 
         let user = SharedUser(email: "dummy@user.test")
         
-        Providers.inventoryProvider.inventories(successHandler{[weak self] inventories in
+        Providers.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
             
             if let weakSelf = self {
                 

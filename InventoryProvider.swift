@@ -10,7 +10,7 @@ import Foundation
 
 protocol InventoryProvider {
     
-    func inventories(handler: ProviderResult<[Inventory]> -> ())
+    func inventories(remote: Bool, _ handler: ProviderResult<[Inventory]> -> ())
     
     /**
     Our app pricipially supports multiple inventories, but for now we will make it behave like there's only one

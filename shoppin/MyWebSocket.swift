@@ -52,11 +52,11 @@ class MyWebSocket: WebSocketDelegate {
         
         let deviceId = NSUUID().UUIDString
 
-        Providers.listProvider.lists {listsResult in
+        Providers.listProvider.lists(false) {listsResult in
             
             if let lists = listsResult.sucessResult {
                 
-                Providers.inventoryProvider.inventories {[weak self] inventoriesResult in
+                Providers.inventoryProvider.inventories(false) {[weak self] inventoriesResult in
                     
                     if let inventories = inventoriesResult.sucessResult {
                         

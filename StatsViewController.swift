@@ -85,7 +85,7 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     }
     
     private func loadInventories() {
-        Providers.inventoryProvider.inventories(successHandler{[weak self] inventories in
+        Providers.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
             self?.inventoryPicker?.inventories = inventories
         })
     }

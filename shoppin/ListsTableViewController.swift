@@ -73,7 +73,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     }
     
     override func initModels() {
-        Providers.listProvider.lists(successHandler{[weak self] lists in
+        Providers.listProvider.lists(true, successHandler{[weak self] lists in
             self?.models = lists.map{ExpandableTableViewListModel(list: $0)}
         })
     }

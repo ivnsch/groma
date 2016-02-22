@@ -91,7 +91,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         }
         
         func initDefaultInventory(onFinish: VoidFunction? = nil) {
-            Providers.inventoryProvider.inventories(successHandler{[weak self] inventories in
+            Providers.inventoryProvider.inventories(false, successHandler{[weak self] inventories in
                 if let weakSelf = self {
                     if inventories.isEmpty {
                         let inventory = Inventory(uuid: NSUUID().UUIDString, name: "Home", bgColor: UIColor.flatBlueColor(), order: 0)

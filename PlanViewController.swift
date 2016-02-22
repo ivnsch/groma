@@ -106,7 +106,7 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        Providers.inventoryProvider.inventories(successHandler {[weak self] inventories in
+        Providers.inventoryProvider.inventories(true, successHandler {[weak self] inventories in
             if let inventory = inventories.first {
                 self?.currentInventory = inventory
                 
