@@ -96,7 +96,7 @@ class RemoteUserProvider {
                 QL1("Stored token: \(token)")
                 PreferencesManager.savePreference(PreferencesManagerKey.lastTokenUpdate, value: NSDate())
             } else {
-                QL4("Couldn't store token")
+                QL4("Couldn't store token. Can access key chain: \(valet.canAccessKeychain())")
             }
         } else {
             QL4("Valet not set, couldn't store token")
