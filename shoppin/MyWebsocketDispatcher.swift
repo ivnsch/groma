@@ -165,16 +165,15 @@ struct MyWebsocketDispatcher {
     private static func processGroupItem(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
 //        // for now not implemented as we don't add single group items, user always has to confirm on the group. Also, we don't have group here which is required by the provider
-//        case WSNotificationVerb.Add:
-//            let groupItemWithGroup = WSGroupParser.parseGroupItem(data)
-//            postNotification(.GroupItem, verb, groupItemWithGroup)
+        case WSNotificationVerb.Add:
+            let groupItemWithGroup = WSGroupParser.parseGroupItem(data)
+            postNotification(.GroupItem, verb, groupItemWithGroup)
         case WSNotificationVerb.Update:
             let groupItemWithGroup = WSGroupParser.parseGroupItem(data)
             postNotification(.GroupItem, verb, groupItemWithGroup)
         case WSNotificationVerb.Delete:
-            let groupItemWithGroup = WSGroupParser.parseGroupItem(data)
-            postNotification(.GroupItem, verb, groupItemWithGroup)
-        default: QL4("MyWebsocketDispatcher.processGroupItem not handled: \(verb)")
+            let uuid = data as! String
+            postNotification(.GroupItem, verb, uuid)
         }
     }
     

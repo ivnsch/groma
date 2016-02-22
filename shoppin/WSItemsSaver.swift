@@ -182,7 +182,7 @@ class WSItemsSaver {
                     }
                 }
             case .Delete:
-                Providers.listItemGroupsProvider.remove(groupItemWithGroup.groupItem, group: groupItemWithGroup.group, remote: false) {result in
+                Providers.listItemGroupsProvider.remove(groupItemWithGroup.groupItem, remote: false) {result in
                     if !result.success {
                         print("Error WSItemsSaver.onWebsocketGroupItems: Couldn't delete item")
                     }

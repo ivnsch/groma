@@ -8,6 +8,7 @@
 
 import UIKit
 import CMPopTipView
+import QorumLogs
 
 protocol ProductsWithQuantityViewControllerDelegate {
     func loadModels(page: NSRange, sortBy: InventorySortBy, onSuccess: [ProductWithQuantity] -> Void)
@@ -148,20 +149,41 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         if editingStyle == .Delete {
             
             // update the table view in advance, so delete animation is quick. If something goes wrong we reload the content in onError and do default error handling
-            let planItem = models[indexPath.row]
-            tableView.wrapUpdates {[weak self] in
-                self?.models.remove(planItem)
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
-                self?.updateEmptyView()
+            if let item = removeItemUI(indexPath) {
+                removeItemUI(indexPath)
+                
+                delegate?.remove(item, onSuccess: {}, onError: {[weak self] result in
+                    self?.clearAndLoadFirstPage()
+                    self?.defaultErrorHandler()(providerResult: result)
+                })
+            } else {
+                QL4("Invalid state! no item: \(indexPath)")
             }
-            
-            delegate?.remove(planItem, onSuccess: {}, onError: {[weak self] result in
-                self?.clearAndLoadFirstPage()
-                self?.defaultErrorHandler()(providerResult: result)
-            })
         }
     }
     
+    func indexPathOfItem(model: ProductWithQuantity) -> NSIndexPath? {
+        for i in 0..<models.count {
+            if models[i].same(model) {
+                return NSIndexPath(forRow: i, inSection: 0)
+            }
+        }
+        return nil
+    }
+    
+    // The optional handling is not necessary for this class, but we write it like this for subclasses that remove item externally (e.g. websocket)
+    func removeItemUI(indexPath: NSIndexPath) -> ProductWithQuantity? {
+        let itemMaybe = models[safe: indexPath.row]
+        if let item = itemMaybe {
+            tableView.wrapUpdates {[weak self] in
+                self?.models.remove(item)
+                self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
+                self?.updateEmptyView()
+            }
+        }
+        return itemMaybe
+    }
+
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height

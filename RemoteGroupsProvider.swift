@@ -67,8 +67,12 @@ class RemoteGroupsProvider: RemoteProvider {
         }
     }
     
-    func removeGroupItem(groupItem: GroupItem, group: ListItemGroup, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.groupItem + "/\(groupItem.uuid)", toRequestParams(groupItem, group: group)) {result in
+    func removeGroupItem(groupItem: GroupItem, handler: RemoteResult<NoOpSerializable> -> ()) {
+        removeGroupItem(groupItem.uuid, handler: handler)
+    }
+    
+    func removeGroupItem(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.groupItem + "/\(uuid)") {result in
             handler(result)
         }
     }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 // Status codes relevant to the user
 enum ProviderStatusCode: Int {
@@ -101,7 +102,7 @@ struct DefaultRemoteErrorHandler {
     * Invoques handler if there's an error different than no connection or not logged in.
     * With this we can use the app offline or without account - the error handler, which triggers the error alert is not called on connection error.
     */
-    static func handle<T, U>(remoteResult: RemoteResult<T>, handler: ProviderResult<U> -> ()) {
+    static func handle<T, U>(remoteResult: RemoteResult<T>, errorMsg: String? = nil, handler: ProviderResult<U> -> ()) {
         switch remoteResult.status {
         case .NoConnection, .NotLoggedIn, .NotAuthenticated
             // WARN: enable this only for testing (when using the moch user provider). In normal use, server not reachable should be shown. But:
@@ -111,7 +112,8 @@ struct DefaultRemoteErrorHandler {
             return
         case _:
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-            print("Error: DefaultRemoteErrorHandler.handle: \(remoteResult)")
+            let errorText = errorMsg.map{"\($0)::"} ?? ""
+            QL4("\(errorText)\(remoteResult)")
             handler(ProviderResult(status: providerStatus, error: remoteResult.error)) // TODO when remote fails somehow trigger a revert of local updates
         }
     }

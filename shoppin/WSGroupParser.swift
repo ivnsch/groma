@@ -15,16 +15,8 @@ struct WSGroupParser {
         return ListItemGroupMapper.listItemGroupWithRemote(remoteGroup)
     }
     
-    static func parseGroupItem(json: AnyObject) -> GroupItemWithGroup {
-        let uuid = json.valueForKeyPath("uuid") as! String
-        let quantity = json.valueForKeyPath("quantity") as! Int
-        
-        let productObj = json.valueForKeyPath("product")!
-        let product = ListItemParser.parseProduct(productObj)
-        
-        let groupObj = json.valueForKeyPath("group")!
-        let group = parseGroup(groupObj)
-        
-        return GroupItemWithGroup(groupItem: GroupItem(uuid: uuid, quantity: quantity, product: product, group: group), group: group)
+    static func parseGroupItem(json: AnyObject) -> GroupItem {
+        let remoteGroupItem = RemoteGroupItemsWithDependencies(representation: json)!
+        return GroupItemMapper.groupItemsWithRemote(remoteGroupItem).groupItems.first!
     }
 }

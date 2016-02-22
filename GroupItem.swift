@@ -72,3 +72,6 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
 func ==(lhs: GroupItem, rhs: GroupItem) -> Bool {
     return lhs.uuid == rhs.uuid
 }
+
+// convenience (redundant) holder to avoid having to iterate through group items to find unique products and groups
+typealias GroupItemsWithRelations = (groupItems: [GroupItem], products: [Product], groups: [ListItemGroup])

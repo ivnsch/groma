@@ -16,6 +16,9 @@
 		EB05FEC81C7786150023DBF8 /* prefillde.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB05FEC51C7785FB0023DBF8 /* prefillde.realm */; };
 		EB05FEC91C7786150023DBF8 /* prefillen.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB05FEC61C7785FB0023DBF8 /* prefillen.realm */; };
 		EB05FECA1C7786150023DBF8 /* prefilles.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB05FEC71C7785FB0023DBF8 /* prefilles.realm */; };
+		EB05FECC1C7B57980023DBF8 /* RemoteGroupItemsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FECB1C7B57940023DBF8 /* RemoteGroupItemsWithDependencies.swift */; };
+		EB05FECD1C7B57990023DBF8 /* RemoteGroupItemsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FECB1C7B57940023DBF8 /* RemoteGroupItemsWithDependencies.swift */; };
+		EB05FECE1C7B57990023DBF8 /* RemoteGroupItemsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB05FECB1C7B57940023DBF8 /* RemoteGroupItemsWithDependencies.swift */; };
 		EB0870CB1BC050A300169E29 /* MyTipPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0870CA1BC050A300169E29 /* MyTipPopup.swift */; };
 		EB0A058D1BDFCD6B00D1E29D /* MoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0A058C1BDFCD6B00D1E29D /* MoreViewController.swift */; };
 		EB0A05901BDFCE8200D1E29D /* ManageProductsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0A058F1BDFCE8200D1E29D /* ManageProductsViewController.swift */; };
@@ -892,6 +895,7 @@
 		EB05FEC51C7785FB0023DBF8 /* prefillde.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillde.realm; sourceTree = "<group>"; };
 		EB05FEC61C7785FB0023DBF8 /* prefillen.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillen.realm; sourceTree = "<group>"; };
 		EB05FEC71C7785FB0023DBF8 /* prefilles.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefilles.realm; sourceTree = "<group>"; };
+		EB05FECB1C7B57940023DBF8 /* RemoteGroupItemsWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteGroupItemsWithDependencies.swift; sourceTree = "<group>"; };
 		EB0870CA1BC050A300169E29 /* MyTipPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTipPopup.swift; sourceTree = "<group>"; };
 		EB0A058C1BDFCD6B00D1E29D /* MoreViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreViewController.swift; sourceTree = "<group>"; };
 		EB0A058F1BDFCE8200D1E29D /* ManageProductsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManageProductsViewController.swift; sourceTree = "<group>"; };
@@ -2020,6 +2024,7 @@
 				EB6E3D341C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift */,
 				EB6E3D381C5A591800D65DD5 /* RemoteGroupWithItems.swift */,
 				EB6E3D3C1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift */,
+				EB05FECB1C7B57940023DBF8 /* RemoteGroupItemsWithDependencies.swift */,
 			);
 			name = sync;
 			sourceTree = "<group>";
@@ -3254,6 +3259,7 @@
 				EB451C4B1B864A19000DE208 /* SingleSelectionPopup.swift in Sources */,
 				EB4C4F631BC9358A00DCA048 /* Array_HistoryItem.swift in Sources */,
 				EB6E3D451C5A980C00D65DD5 /* GlobalProvider.swift in Sources */,
+				EB05FECC1C7B57980023DBF8 /* RemoteGroupItemsWithDependencies.swift in Sources */,
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
 				EB4147BC1BE0338800549CE4 /* ProductInput.swift in Sources */,
 				EB451C461B863516000DE208 /* MonthYear.swift in Sources */,
@@ -3676,6 +3682,7 @@
 				EBD827FD1BE8237C0072F9FA /* NSRange.swift in Sources */,
 				EBA7AC9B1BFE962E00247A8C /* ProductCategoryMapper.swift in Sources */,
 				EB7BFA7F1BDAF96A00F4C74A /* Int.swift in Sources */,
+				EB05FECD1C7B57990023DBF8 /* RemoteGroupItemsWithDependencies.swift in Sources */,
 				EB7E83171B7B6676009DEEF4 /* RealmHistoryProvider.swift in Sources */,
 				EB451C421B861544000DE208 /* OrderedDictionary.swift in Sources */,
 				EB70C2201B4D302D0060E529 /* SharedUser.swift in Sources */,
@@ -3804,6 +3811,7 @@
 				EB70C22D1B4D3DF50060E529 /* ListProviderImpl.swift in Sources */,
 				EBA9E5E61C62977300A85610 /* UserProviderMock.swift in Sources */,
 				EB7E83241B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
+				EB05FECE1C7B57990023DBF8 /* RemoteGroupItemsWithDependencies.swift in Sources */,
 				EB80CE571C44B000001DF159 /* NSMutableAttributedString.swift in Sources */,
 				EB7F59C91BA1915A00E07EBA /* MemListItemProvider.swift in Sources */,
 				EB714AA81B66BBA800F91B94 /* DBSyncable.swift in Sources */,

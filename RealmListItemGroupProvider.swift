@@ -173,7 +173,11 @@ class RealmListItemGroupProvider: RealmProvider {
     }
     
     func remove(groupItem: GroupItem, handler: Bool -> Void) {
-        remove("uuid = '\(groupItem.uuid)'", handler: handler, objType: DBGroupItem.self)
+        removeGroupItem(groupItem.uuid, handler: handler)
+    }
+
+    func removeGroupItem(uuid: String, handler: Bool -> Void) {
+        remove("uuid = '\(uuid)'", handler: handler, objType: DBGroupItem.self)
     }
     
     // Copied from realm list item provider (which is copied from inventory item provider) refactor?

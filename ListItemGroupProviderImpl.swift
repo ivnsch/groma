@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 class ListItemGroupProviderImpl: ListItemGroupProvider {
 
@@ -229,18 +230,24 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func remove(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        dbGroupsProvider.remove(item) {[weak self] saved in
+    func remove(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        removeGroupItem(item.uuid, remote: remote, handler)
+    }
+    
+    func removeGroupItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        dbGroupsProvider.removeGroupItem(uuid) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
-                if saved {
-                    self?.remoteGroupsProvider.removeGroupItem(item, group: group) {remoteResult in
-                        if !remoteResult.success {
-                            DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-                                print("Error: removeGroupItem in remote: \(item), result: \(remoteResult)")
+                if remote {
+                    if saved {
+                        self?.remoteGroupsProvider.removeGroupItem(uuid) {remoteResult in
+                            if !remoteResult.success {
+                                DefaultRemoteErrorHandler.handle(remoteResult, errorMsg: "removeGroupItem\(uuid)", handler: handler)
                             }
                         }
+                    } else {
+                        QL4("Couldn't remove group item")
                     }
                 }
                 
