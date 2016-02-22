@@ -103,6 +103,8 @@ struct DefaultRemoteErrorHandler {
     * With this we can use the app offline or without account - the error handler, which triggers the error alert is not called on connection error.
     */
     static func handle<T, U>(remoteResult: RemoteResult<T>, errorMsg: String? = nil, handler: ProviderResult<U> -> ()) {
+        guard remoteResult.status != .Success else {return} // if it's a success response, there's nothing to do here. Handler will not be called.
+        
         switch remoteResult.status {
         case .NoConnection, .NotLoggedIn, .NotAuthenticated
             // WARN: enable this only for testing (when using the moch user provider). In normal use, server not reachable should be shown. But:
