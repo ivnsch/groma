@@ -257,7 +257,12 @@ struct MyWebsocketDispatcher {
         case WSNotificationVerb.Delete:
             let uuid = data as! String
             postNotification(.Inventory, verb, uuid)
-        default: QL4("Not handled verb: \(verb)")
+        case WSNotificationVerb.Invite:
+            if let remoteInventoryInvitation = RemoteInventoryInvitation(representation: data) {
+                postNotification(.Inventory, verb, remoteInventoryInvitation)
+            } else {
+                QL4("Couldn't parse data: \(data)")
+            }
         }
     }
     

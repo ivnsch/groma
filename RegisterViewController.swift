@@ -112,7 +112,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                     self.progressVisible()
                     Providers.userProvider.register(user, successHandler{[weak self] syncResult in
                         if let weakSelf = self {
-                            ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: weakSelf)
+                            InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
                         }
                         self?.onRegisterSuccess()
                     })
@@ -146,7 +146,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                     //                handler(result)
                     if let weakSelf = self {
                         if let syncResult = result.sucessResult {
-                            ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: weakSelf)
+                            InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
                         } else {
                             QL4("Invalid state: result doesn't have sync result")
                         }
@@ -175,7 +175,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                 self?.onRegisterSuccess()
                 
                 if let weakSelf = self {
-                    ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: weakSelf)
+                    InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
                 }
 
                 }, onError: defaultErrorHandler([.SocialLoginCancelled])))

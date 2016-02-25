@@ -28,7 +28,7 @@ class GlobalProviderImpl: GlobalProvider {
                                 Providers.listItemsProvider.invalidateMemCache()
                                 Providers.inventoryItemsProvider.invalidateMemCache()
                                 if let remoteSyncResult = remoteResult.successResult {
-                                    let syncResult = SyncResult(listInvites: remoteSyncResult.listInvitations)
+                                    let syncResult = SyncResult(listInvites: remoteSyncResult.listInvitations, inventoryInvites: remoteSyncResult.inventoryInvitations)
                                     handler(ProviderResult(status: .Success, sucessResult: syncResult))
                                 } else {
                                     QL4("Invalid state, remote result should have a successResult")

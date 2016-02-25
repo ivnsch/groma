@@ -12,8 +12,10 @@ import Foundation
 struct SyncResult {
 
     let listInvites: [RemoteListInvitation]
+    let inventoryInvites: [RemoteInventoryInvitation]
     
-    init(listInvites: [RemoteListInvitation]) {
+    init(listInvites: [RemoteListInvitation], inventoryInvites: [RemoteInventoryInvitation]) {
         self.listInvites = listInvites
+        self.inventoryInvites = inventoryInvites
     }
 }

@@ -94,7 +94,7 @@ class UserProviderMock: UserProvider {
     
     func authenticateWithFacebook(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
         delay(requestDelay) {
-            let syncResult = SyncResult(listInvites: [])
+            let syncResult = SyncResult(listInvites: [], inventoryInvites: [])
             handler(ProviderResult(status: .Success, sucessResult: syncResult))
         }
     }
@@ -102,7 +102,7 @@ class UserProviderMock: UserProvider {
     
     func authenticateWithGoogle(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
         delay(requestDelay) {
-            let syncResult = SyncResult(listInvites: [])
+            let syncResult = SyncResult(listInvites: [], inventoryInvites: [])
             handler(ProviderResult(status: .Success, sucessResult: syncResult))
         }
     }

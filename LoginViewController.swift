@@ -92,7 +92,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                 self.progressVisible()
                 Providers.userProvider.login(loginData, successHandler{[weak self] syncResult in
                     if let weakSelf = self {
-                        ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: weakSelf)
+                        InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
                     }
                     self?.onLoginSuccess()
                 })
@@ -138,7 +138,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         if (error == nil) {
             Providers.userProvider.authenticateWithGoogle(user.authentication.accessToken, resultHandler(onSuccess: {[weak self] syncResult in
                 if let weakSelf = self {
-                    ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: weakSelf)
+                    InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
                 }
                 self?.onLoginSuccess()
                 
@@ -176,7 +176,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                     //                handler(result)
                     if let weakSelf = self {
                         if let syncResult = providerResult.sucessResult {
-                            ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: weakSelf)
+                            InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
                         } else {
                             QL4("Invalid state: result doesn't have sync result")
                         }

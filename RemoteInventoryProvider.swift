@@ -49,6 +49,20 @@ class RemoteInventoryProvider: RemoteProvider {
         }
     }
     
+    func acceptInvitation(invitation: RemoteInventoryInvitation, handler: RemoteResult<NoOpSerializable> -> Void) {
+        let parameters = toRequestParams(invitation, accept: true)
+        RemoteProvider.authenticatedRequest(.POST, Urls.inventoryInvitation, parameters) {result in
+            handler(result)
+        }
+    }
+    
+    func rejectInvitation(invitation: RemoteInventoryInvitation, handler: RemoteResult<NoOpSerializable> -> Void) {
+        let parameters = toRequestParams(invitation, accept: false)
+        RemoteProvider.authenticatedRequest(.POST, Urls.inventoryInvitation, parameters) {result in
+            handler(result)
+        }
+    }
+    
     func syncInventoriesWithInventoryItems(inventoriesSync: InventoriesSync, handler: RemoteResult<RemoteInventoriesWithInventoryItemsSyncResult> -> ()) {
         
         let inventoriesSyncDicts: [[String: AnyObject]] = inventoriesSync.inventoriesSyncs.map {inventorySync in
@@ -152,5 +166,12 @@ class RemoteInventoryProvider: RemoteProvider {
         inventoryDict["users"] = sharedUsers
         
         return inventoryDict
+    }
+    
+    func toRequestParams(invitation: RemoteInventoryInvitation, accept: Bool) -> [String: AnyObject] {
+        return [
+            "uuid": invitation.inventory.uuid,
+            "accept": accept
+        ]
     }
 }

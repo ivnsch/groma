@@ -180,5 +180,17 @@ class InventoryProviderImpl: InventoryProvider {
             }
         }
     }
-
+    
+    
+    func acceptInvitation(invitation: RemoteInventoryInvitation, _ handler: ProviderResult<Any> -> Void) {
+        remoteProvider.acceptInvitation(invitation) {remoteResult in
+            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+        }
+    }
+    
+    func rejectInvitation(invitation: RemoteInventoryInvitation, _ handler: ProviderResult<Any> -> Void) {
+        remoteProvider.rejectInvitation(invitation) {remoteResult in
+            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+        }
+    }
 }

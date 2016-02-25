@@ -499,6 +499,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Providers.userProvider.connectWebsocketIfLoggedIn()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
     }
 
     func applicationWillTerminate(application: UIApplication) {
@@ -534,7 +535,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
                     if let syncResult = result.sucessResult {
                         if let controller = self?.window?.rootViewController {
-                            ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: controller)
+                            InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: controller)
                         } else {
                             QL4("Couldn't show popup, either window: \(self?.window) or root controller: \(self?.window?.rootViewController) is nil)")
                         }
@@ -559,6 +560,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 case .Invite:
                     if let controller = window?.rootViewController {
                         ListInvitationsHandler.handleInvitation(invitation, controller: controller)
+                    } else {
+                        QL4("Couldn't show popup, either window: \(window) or root controller: \(window?.rootViewController) is nil)")
+                    }
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+            
+        } else {
+            QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
+        }
+    }
+    
+    func onWebsocketInventory(note: NSNotification) {
+        
+        if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteInventoryInvitation>> {
+            if let notification = info[WSNotificationValue] {
+                let invitation = notification.obj
+                switch notification.verb {
+                case .Invite:
+                    if let controller = window?.rootViewController {
+                        InventoryInvitationsHandler.handleInvitation(invitation, controller: controller)
                     } else {
                         QL4("Couldn't show popup, either window: \(window) or root controller: \(window?.rootViewController) is nil)")
                     }
