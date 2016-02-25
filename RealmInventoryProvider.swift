@@ -302,4 +302,28 @@ class RealmInventoryProvider: RealmProvider {
             }
         )
     }
+    
+    func updateLastSyncTimeStamp(items: RemoteInventoryItemsWithHistoryAndDependencies, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            for listItem in items.inventoryItems {
+                realm.create(DBInventoryItem.self, value: listItem.timestampUpdateDict, update: true)
+            }
+            for product in items.products {
+                realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
+            }
+            for productCategory in items.productsCategories {
+                realm.create(DBProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
+            }
+            for inventory in items.inventories {
+                realm.create(DBInventory.self, value: inventory.timestampUpdateDict, update: true)
+            }
+            for historyItem in items.historyItems {
+                realm.create(DBHistoryItem.self, value: historyItem.timestampUpdateDict, update: true)
+            }
+            // TODO shared users? - probably not as we can't edit shared users so there's nothing to sync
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
 }

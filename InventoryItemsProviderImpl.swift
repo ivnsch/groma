@@ -131,7 +131,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             if remote {
                 self?.remoteInventoryItemsProvider.addToInventory(items) {remoteResult in
                     
-                    if let _ = remoteResult.successResult {
+                    if let remoteInventoryItems = remoteResult.successResult {
                         
                         print("DEBUG: add remote inventory items success")
                         
@@ -147,15 +147,15 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                         //                }
                         
                         
-                        
+                        self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
+                        }
                     } else {
-                        // (what do we do with server invalid data error? do we remove the record from the client's database? which kind of error do we show to the client!? in any case this has to be sent to error monitoring, very clearly and detailed
-                        DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<Any>) in
-                            print("Error addToInventory: \(remoteResult.status)")
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                            QL4("Error addToInventory: \(remoteResult.status)")
                             // if there's a not connection related server error, invalidate cache
                             self?.memProvider.invalidate()
-                            handler(remoteResult)
-                        }
+                            handler(result)
+                        })
                     }
                 }
             }
@@ -236,34 +236,37 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             
             self?.remoteInventoryItemsProvider.incrementInventoryItem(item, delta: delta) {remoteResult in
                 
-                if remoteResult.success {
+                
+                if let remoteInventoryItems = remoteResult.successResult {
                     
-//                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
+                    //                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
                     
-                    // Now that the item was updated in server, set back delta in local database
-                    // Note we subtract instead of set to 0, to handle possible parallel requests correctly
-                    self?.dbInventoryProvider.incrementInventoryItem(item, delta: -delta, onlyDelta: true) {saved in
-                        
-                        if saved {
-//                            self?.findInventoryItem(item) {result in
-//                                if let newitem = result.sucessResult {
-//                                    print("3. CONFIRM incremented item: \(item) + \(delta) == \(newitem)")
-//                                }
-//                            }
+                    self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
+                    
+                        // Now that the item was updated in server, set back delta in local database
+                        // Note we subtract instead of set to 0, to handle possible parallel requests correctly
+                        self?.dbInventoryProvider.incrementInventoryItem(item, delta: -delta, onlyDelta: true) {saved in
                             
-                        } else {
-                            print("Error: couln't save remote inventory item")
+                            if saved {
+                                //                            self?.findInventoryItem(item) {result in
+                                //                                if let newitem = result.sucessResult {
+                                //                                    print("3. CONFIRM incremented item: \(item) + \(delta) == \(newitem)")
+                                //                                }
+                                //                            }
+                                
+                            } else {
+                                print("Error: couln't save remote inventory item")
+                            }
                         }
-                        
                     }
                     
                 } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-                        print("Error incrementing item: \(item) in remote, result: \(remoteResult)")
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                        QL4("Error incrementing item: \(item) in remote, result: \(result)")
                         // if there's a not connection related server error, invalidate cache
                         self?.memProvider.invalidate()
-                        handler(remoteResult)
-                    }
+                        handler(result)
+                    })
                 }
             }
         }
@@ -280,7 +283,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
             
             if remote {
-                // TODO server
+                // TODO!!!! server
             }
         }
     }

@@ -782,6 +782,9 @@
 		EBED0CE31C7FB8E200A1EEC4 /* InventoryInvitationsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBED0CE21C7FB8E200A1EEC4 /* InventoryInvitationsHandler.swift */; };
 		EBED0CE41C7FB8E200A1EEC4 /* InventoryInvitationsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBED0CE21C7FB8E200A1EEC4 /* InventoryInvitationsHandler.swift */; };
 		EBED0CE51C7FB8E200A1EEC4 /* InventoryInvitationsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBED0CE21C7FB8E200A1EEC4 /* InventoryInvitationsHandler.swift */; };
+		EBED0CE71C7FC02200A1EEC4 /* RemoteInventoryItemsWithHistoryAndDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBED0CE61C7FC02200A1EEC4 /* RemoteInventoryItemsWithHistoryAndDependencies.swift */; };
+		EBED0CE81C7FC02200A1EEC4 /* RemoteInventoryItemsWithHistoryAndDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBED0CE61C7FC02200A1EEC4 /* RemoteInventoryItemsWithHistoryAndDependencies.swift */; };
+		EBED0CE91C7FC02200A1EEC4 /* RemoteInventoryItemsWithHistoryAndDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBED0CE61C7FC02200A1EEC4 /* RemoteInventoryItemsWithHistoryAndDependencies.swift */; };
 		EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6A1A49C94F00FC3B29 /* Section.swift */; };
 		EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */; };
 		EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */; };
@@ -1357,6 +1360,7 @@
 		EBEBA6B41BF14EFF000E5653 /* AddEditList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddEditList.storyboard; sourceTree = "<group>"; };
 		EBEBA6B61BF16492000E5653 /* FlatColorPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlatColorPickerController.swift; sourceTree = "<group>"; };
 		EBED0CE21C7FB8E200A1EEC4 /* InventoryInvitationsHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryInvitationsHandler.swift; sourceTree = "<group>"; };
+		EBED0CE61C7FC02200A1EEC4 /* RemoteInventoryItemsWithHistoryAndDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryItemsWithHistoryAndDependencies.swift; sourceTree = "<group>"; };
 		EBEEDD6A1A49C94F00FC3B29 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionMapper.swift; sourceTree = "<group>"; };
 		EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchScreen-568h@2x.png"; sourceTree = "<group>"; };
@@ -2035,6 +2039,7 @@
 			children = (
 				EB6E3D2B1C5A4EFE00D65DD5 /* sync */,
 				EB0C2A3D1B583BFE00AF6226 /* RemoteInventoryItemWithProduct.swift */,
+				EBED0CE61C7FC02200A1EEC4 /* RemoteInventoryItemsWithHistoryAndDependencies.swift */,
 				EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */,
 				EB4D57AF1B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift */,
 				EB80CE4A1C3EA628001DF159 /* RemoteListsWithDependencies.swift */,
@@ -3225,6 +3230,7 @@
 				EB40A4861B55159D000E9CAD /* DBList.swift in Sources */,
 				EB2F5D6D1A51C17200DBC4AF /* UIView.swift in Sources */,
 				EB8D1D091C37318500ADF884 /* GroupsController.swift in Sources */,
+				EBED0CE71C7FC02200A1EEC4 /* RemoteInventoryItemsWithHistoryAndDependencies.swift in Sources */,
 				EBA2C8D01C4F24C100A970B8 /* ManageProductCategoryCell.swift in Sources */,
 				EB2F5D691A50C38B00DBC4AF /* FrozenEffect.swift in Sources */,
 				EBA18C261BF56E3B009291F2 /* CGSize.swift in Sources */,
@@ -3675,6 +3681,7 @@
 				EB451C3A1B85F3F0000DE208 /* StatsProvider.swift in Sources */,
 				EB55675D1A86433700CD3EC6 /* Product.swift in Sources */,
 				EB5666CF1C52BCA90074D2B3 /* LangManager.swift in Sources */,
+				EBED0CE81C7FC02200A1EEC4 /* RemoteInventoryItemsWithHistoryAndDependencies.swift in Sources */,
 				EBF608B21C0CF26A00EDB33E /* UserIdentity.swift in Sources */,
 				EB7858761B7F6F69008AAD12 /* RemoteHistoryItems.swift in Sources */,
 				EBA2C8C91C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */,
@@ -3833,6 +3840,7 @@
 				EB85F4711BD5600A00E19E9B /* ProductProvider.swift in Sources */,
 				EB451C371B85F3DA000DE208 /* StatsProviderImpl.swift in Sources */,
 				EB7E83181B7B6676009DEEF4 /* RealmHistoryProvider.swift in Sources */,
+				EBED0CE91C7FC02200A1EEC4 /* RemoteInventoryItemsWithHistoryAndDependencies.swift in Sources */,
 				EB202B991B54109A001699E7 /* RemoteRegisterResult.swift in Sources */,
 				EBF377721B342AE700EEB6DB /* ListMapper.swift in Sources */,
 				EBF3777F1B342B3A00EEB6DB /* Array.swift in Sources */,

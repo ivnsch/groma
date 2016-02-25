@@ -9,6 +9,7 @@
 import Foundation
 import QorumLogs
 
+// TODO! server should not send uuid
 struct RemoteSharedUser: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let uuid: String

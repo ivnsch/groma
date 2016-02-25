@@ -18,7 +18,7 @@ class RemoteInventoryItemsProvider: Any {
     }
 
     // Adds inventoryItems to remote, IMPORTANT: All items are assumed to have the same inventory TODO maybe implement server service such that we don't have to put inventory uuid in url, and just use the inventory for each inventory item for the insert
-    func addToInventory(inventoryItems: [InventoryItemWithHistoryEntry], handler: RemoteResult<NoOpSerializable> -> ()) {
+    func addToInventory(inventoryItems: [InventoryItemWithHistoryEntry], handler: RemoteResult<RemoteInventoryItemsWithHistoryAndDependencies> -> ()) {
         let parameters = inventoryItems.map{[weak self] in self!.toDictionary($0)}
         if let inventoryUuid = inventoryItems.first?.inventoryItem.inventory.uuid {
             RemoteProvider.authenticatedRequest(.POST, Urls.inventoryItems + "/\(inventoryUuid)", parameters) {result in
@@ -40,7 +40,7 @@ class RemoteInventoryItemsProvider: Any {
         }
     }
     
-    func incrementInventoryItem(inventoryItem: InventoryItem, delta: Int, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func incrementInventoryItem(inventoryItem: InventoryItem, delta: Int, handler: RemoteResult<RemoteInventoryItemsWithHistoryAndDependencies> -> ()) {
         let params: [String: AnyObject] = [
             "delta": delta,
             "productUuid": inventoryItem.product.uuid,

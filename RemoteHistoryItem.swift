@@ -16,7 +16,8 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
     let quantity: Int
     let userUuid: String
     let addedDate: NSDate
-    
+    let lastUpdate: NSDate
+
     init?(representation: AnyObject) {
         
         guard
@@ -25,7 +26,8 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
             let productUuid = representation.valueForKeyPath("productUuid") as? String,
             let quantity = representation.valueForKeyPath("quantity") as? Int,
             let userUuid = representation.valueForKeyPath("userUuid") as? String,
-            let addedDate = ((representation.valueForKeyPath("addedDate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            let addedDate = ((representation.valueForKeyPath("addedDate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
+            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
             else {
                 print("Invalid json: \(representation)")
                 return nil}
@@ -36,6 +38,7 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
         self.quantity = quantity
         self.userUuid = userUuid
         self.addedDate = addedDate
+        self.lastUpdate = lastUpdate
     }
     
     static func collection(representation: AnyObject) -> [RemoteHistoryItem]? {
@@ -51,6 +54,12 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), inventoryUuid: \(inventoryUuid), productUuid: \(productUuid), quantity: \(quantity), userUuid: \(userUuid), addedDate: \(addedDate)}"
+        return "{\(self.dynamicType) uuid: \(uuid), inventoryUuid: \(inventoryUuid), productUuid: \(productUuid), quantity: \(quantity), userUuid: \(userUuid), addedDate: \(addedDate), lastUpdate: \(lastUpdate)}"
+    }
+}
+
+extension RemoteHistoryItem {
+    var timestampUpdateDict: [String: AnyObject] {
+        return ["uuid": uuid, "lastupdate": lastUpdate]
     }
 }
