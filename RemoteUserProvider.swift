@@ -23,7 +23,9 @@ class RemoteUserProvider {
             if let successResult = result.successResult {
                 self?.storeUserData(successResult.token, email: loginData.email)
             } else {
-                QL4("No token. Result: \(result)")
+                if result.status != .InvalidCredentials {
+                    QL4("No token. Result: \(result)")
+                }
             }
             handler(result)
         }
