@@ -21,7 +21,7 @@ class UserProviderMock: UserProvider {
     
     private var email: String?
     
-    func login(loginData: LoginData, _ handler: ProviderResult<Any> -> ()) {
+    func login(loginData: LoginData, _ handler: ProviderResult<SyncResult> -> ()) {
         delay(requestDelay) {[weak self] in
             self?.isLoggedIn = true
             self?.email = loginData.email
@@ -29,7 +29,7 @@ class UserProviderMock: UserProvider {
         }
     }
     
-    func register(user: UserInput, _ handler: ProviderResult<Any> -> ()) {
+    func register(user: UserInput, _ handler: ProviderResult<SyncResult> -> ()) {
         delay(requestDelay) {[weak self] in
             self?.isLoggedIn = true
             self?.email = user.email
@@ -55,7 +55,7 @@ class UserProviderMock: UserProvider {
         handler(ProviderResult(status: .Success))
     }
     
-    func sync(handler: ProviderResult<Any> -> Void) {
+    func sync(handler: ProviderResult<SyncResult> -> Void) {
         Providers.globalProvider.sync {result in
             handler(result)
         }
@@ -92,16 +92,18 @@ class UserProviderMock: UserProvider {
     
     // MARK: - Social login
     
-    func authenticateWithFacebook(token: String, _ handler: ProviderResult<Any> -> ()) {
+    func authenticateWithFacebook(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
         delay(requestDelay) {
-            handler(ProviderResult(status: .Success, sucessResult: true))
+            let syncResult = SyncResult(listInvites: [])
+            handler(ProviderResult(status: .Success, sucessResult: syncResult))
         }
     }
     
     
-    func authenticateWithGoogle(token: String, _ handler: ProviderResult<Any> -> ()) {
+    func authenticateWithGoogle(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
         delay(requestDelay) {
-            handler(ProviderResult(status: .Success, sucessResult: true))
+            let syncResult = SyncResult(listInvites: [])
+            handler(ProviderResult(status: .Success, sucessResult: syncResult))
         }
     }
 }

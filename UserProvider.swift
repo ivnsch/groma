@@ -28,17 +28,17 @@ protocol UserProvider {
     */
     var mySharedUser: SharedUser? {get}
 
-    func login(loginData: LoginData, _ handler: ProviderResult<Any> -> ())
+    func login(loginData: LoginData, _ handler: ProviderResult<SyncResult> -> ())
     
-    func register(user: UserInput, _ handler: ProviderResult<Any> -> ())
+    func register(user: UserInput, _ handler: ProviderResult<SyncResult> -> ())
     
     func isRegistered(email: String, _ handler: ProviderResult<Any> -> ())
     
     func logout(handler: ProviderResult<Any> -> ())
     
-    func authenticateWithFacebook(token: String, _ handler: ProviderResult<Any> -> ())
+    func authenticateWithFacebook(token: String, _ handler: ProviderResult<SyncResult> -> ())
     
-    func authenticateWithGoogle(token: String, _ handler: ProviderResult<Any> -> ())
+    func authenticateWithGoogle(token: String, _ handler: ProviderResult<SyncResult> -> ())
 
     func forgotPassword(email: String, _ handler: ProviderResult<Any> -> ())
     

@@ -10,6 +10,7 @@ import UIKit
 import SwiftValidator
 import FBSDKCoreKit
 import FBSDKLoginKit
+import QorumLogs
 
 protocol LoginDelegate {
     func onLoginSuccess()
@@ -89,7 +90,10 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                 let loginData = LoginData(email: email, password: password)
                 
                 self.progressVisible()
-                Providers.userProvider.login(loginData, successHandler{[weak self] in
+                Providers.userProvider.login(loginData, successHandler{[weak self] syncResult in
+                    if let weakSelf = self {
+                        ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: weakSelf)
+                    }
                     self?.onLoginSuccess()
                 })
                 
@@ -132,7 +136,10 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
         if (error == nil) {
-            Providers.userProvider.authenticateWithGoogle(user.authentication.accessToken, resultHandler(onSuccess: {[weak self] in
+            Providers.userProvider.authenticateWithGoogle(user.authentication.accessToken, resultHandler(onSuccess: {[weak self] syncResult in
+                if let weakSelf = self {
+                    ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: weakSelf)
+                }
                 self?.onLoginSuccess()
                 
             }, onError: defaultErrorHandler([.SocialLoginCancelled])))
@@ -167,6 +174,13 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                     self?.defaultErrorHandler()(providerResult: ProviderResult(status: .SocialAlreadyExists))
                 } else {
                     //                handler(result)
+                    if let weakSelf = self {
+                        if let syncResult = providerResult.sucessResult {
+                            ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: weakSelf)
+                        } else {
+                            QL4("Invalid state: result doesn't have sync result")
+                        }
+                    }
                     self?.onLoginSuccess()
                 }
                 self?.progressVisible(false)

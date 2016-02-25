@@ -20,28 +20,20 @@ struct RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, C
     
     init?(representation: AnyObject) {
         guard
-            let list: AnyObject = representation.valueForKeyPath("list"),
-            let uuid = list.valueForKeyPath("uuid") as? String,
-            let name = list.valueForKeyPath("name") as? String,
-            let order = list.valueForKeyPath("order") as? Int,
+            let list = RemoteListNoUsers(representation: representation), // TODO list should be a field of this class don't copy the propertis like below. Maybe use computed properties
             let unserializedUsers: AnyObject = representation.valueForKeyPath("users"),
-            let users = RemoteSharedUser.collection(unserializedUsers),
-            let lastUpdate = ((list.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
-            let inventoryUuid = list.valueForKeyPath("inventoryUuid") as? String,
-            let color = ((list.valueForKeyPath("color") as? String).map{colorStr in
-                UIColor(hexString: colorStr)
-            })
+            let users = RemoteSharedUser.collection(unserializedUsers)
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
         
-        self.uuid = uuid
-        self.name = name
-        self.order = order
+        self.uuid = list.uuid
+        self.name = list.name
+        self.order = list.order
         self.users = users
-        self.lastUpdate = lastUpdate
-        self.inventoryUuid = inventoryUuid
-        self.color = color
+        self.lastUpdate = list.lastUpdate
+        self.inventoryUuid = list.inventoryUuid
+        self.color = list.color
     }
     
     static func collection(representation: AnyObject) -> [RemoteList]? {

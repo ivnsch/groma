@@ -10,6 +10,7 @@ import UIKit
 import SwiftValidator
 import FBSDKCoreKit
 import FBSDKLoginKit
+import QorumLogs
 
 protocol RegisterDelegate {
     func onRegisterSuccess()
@@ -109,7 +110,10 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                     let user = UserInput(email: email, password: password, firstName: firstName, lastName: lastName)
                     
                     self.progressVisible()
-                    self.userProvider.register(user, successHandler{[weak self] result in
+                    Providers.userProvider.register(user, successHandler{[weak self] syncResult in
+                        if let weakSelf = self {
+                            ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: weakSelf)
+                        }
                         self?.onRegisterSuccess()
                     })
                     
@@ -134,12 +138,20 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         } else {
             print("Facebook login success, calling our server...")
             let tokenString = result.token.tokenString
-            Providers.userProvider.authenticateWithFacebook(tokenString) {[weak self] providerResult in
+            Providers.userProvider.authenticateWithFacebook(tokenString) {[weak self] result in
                 // map already exists status to "social aleready exists", to show a different error message
-                if providerResult.status == .AlreadyExists {
+                if result.status == .AlreadyExists {
                     self?.defaultErrorHandler()(providerResult: ProviderResult(status: .SocialAlreadyExists))
                 } else {
                     //                handler(result)
+                    if let weakSelf = self {
+                        if let syncResult = result.sucessResult {
+                            ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: weakSelf)
+                        } else {
+                            QL4("Invalid state: result doesn't have sync result")
+                        }
+                    }
+                    
                     self?.onRegisterSuccess()
                 }
                 self?.progressVisible(false)
@@ -159,9 +171,13 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
         if (error == nil) {
-            userProvider.authenticateWithGoogle(user.authentication.accessToken, resultHandler(onSuccess: {[weak self] in
+            userProvider.authenticateWithGoogle(user.authentication.accessToken, resultHandler(onSuccess: {[weak self] syncResult in
                 self?.onRegisterSuccess()
                 
+                if let weakSelf = self {
+                    ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: weakSelf)
+                }
+
                 }, onError: defaultErrorHandler([.SocialLoginCancelled])))
             
         } else {

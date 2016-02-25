@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import QorumLogs
 
 class GlobalProviderImpl: GlobalProvider {
 
     let dbProvider = RealmGlobalProvider()
     let remoteProvider = RemoteGlobalProvider()
     
-    func sync(handler: ProviderResult<Any> -> Void) {
+    func sync(handler: ProviderResult<SyncResult> -> Void) {
         
         dbProvider.loadGlobalSync{[weak self] syncDict in
             if let syncDict = syncDict {
@@ -26,15 +27,22 @@ class GlobalProviderImpl: GlobalProvider {
                             if saved {
                                 Providers.listItemsProvider.invalidateMemCache()
                                 Providers.inventoryItemsProvider.invalidateMemCache()
-                                handler(ProviderResult(status: .Success))
+                                if let remoteSyncResult = remoteResult.successResult {
+                                    let syncResult = SyncResult(listInvites: remoteSyncResult.listInvitations)
+                                    handler(ProviderResult(status: .Success, sucessResult: syncResult))
+                                } else {
+                                    QL4("Invalid state, remote result should have a successResult")
+                                    handler(ProviderResult(status: .Unknown))
+                                }
+                                
                             } else {
-                                print("Error: GlobalProviderImpl.sync: saving sync result to database")
+                                QL4("Coudln't save sync result to database")
                                 handler(ProviderResult(status: .Unknown))
                             }
                         }
                         
                     } else {
-                        print("Warn: GlobalProviderImpl.sync: remote error, result: \(remoteResult)") // show err msg in any case (also not logged in etc) as in sync we are expected to be
+                        QL3("Remote error, result: \(remoteResult)") // show err msg in any case (also not logged in etc) as in sync we are expected to be
 //                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
 //                            print("Error: GlobalProviderImpl.sync: remote error, result: \(result)")
                             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
@@ -43,7 +51,7 @@ class GlobalProviderImpl: GlobalProvider {
                     }
                 }
             } else {
-                print("Error: GlobalProviderImpl.sync: Couldn't load sync dictionary")
+                QL4("Couldn't load sync dictionary")
             }
         }
     }

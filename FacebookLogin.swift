@@ -16,7 +16,7 @@ import FBSDKLoginKit
 */
 class FacebookLogin {
     
-    static func login(handler: ProviderResult<Any> -> ()) {
+    static func login(handler: ProviderResult<SyncResult> -> ()) {
         let login = FBSDKLoginManager()
         login.logInWithReadPermissions(["public_profile"]) {result, error in
             if let error = error {

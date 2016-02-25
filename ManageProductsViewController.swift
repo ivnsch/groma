@@ -9,6 +9,7 @@
 import UIKit
 import SwiftValidator
 import CMPopTipView
+import QorumLogs
 
 class ManageProductsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, AddEditListItemViewControllerDelegate, ExpandableTopViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
 
@@ -398,12 +399,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
                     updateProductUI(notification.obj)
                 case .Delete:
                     removeProductUI(notification.obj)
+                default: QL4("Not handled verb: \(notification.verb)")
                 }
             } else {
-                print("Error: ManageProductsViewController.onWebsocketProduct: no value")
+                QL4("Error: ManageProductsViewController.onWebsocketProduct: no value")
             }
         } else {
-            print("Error: ManageProductsViewController.onWebsocketProduct: no userInfo")
+            QL4("Error: ManageProductsViewController.onWebsocketProduct: no userInfo")
         }
     }
     

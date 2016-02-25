@@ -21,6 +21,7 @@ struct RemoteSyncResult: ResponseObjectSerializable, CustomDebugStringConvertibl
     let groups: [[String: AnyObject]]
     let groupsItems: [[String: AnyObject]]
     let history: [[String: AnyObject]]
+    let listInvitations: [RemoteListInvitation]
     
     init?(representation: AnyObject) {
         guard
@@ -33,7 +34,9 @@ struct RemoteSyncResult: ResponseObjectSerializable, CustomDebugStringConvertibl
             let listsItems = representation.valueForKeyPath("listsItems") as? [[String: AnyObject]],
             let groups = representation.valueForKeyPath("groups") as? [[String: AnyObject]],
             let groupsItems = representation.valueForKeyPath("groupsItems") as? [[String: AnyObject]],
-            let history = representation.valueForKeyPath("history") as? [[String: AnyObject]]
+            let history = representation.valueForKeyPath("history") as? [[String: AnyObject]],
+            let listInvitationsObj = representation.valueForKeyPath("listInvitations"),
+            let listInvitations = RemoteListInvitation.collection(listInvitationsObj)
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -48,6 +51,7 @@ struct RemoteSyncResult: ResponseObjectSerializable, CustomDebugStringConvertibl
         self.groups = groups
         self.groupsItems = groupsItems
         self.history = history
+        self.listInvitations = listInvitations
     }
     
     var debugDescription: String {

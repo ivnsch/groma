@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 class WSItemsSaver {
 
@@ -82,6 +83,7 @@ class WSItemsSaver {
                         print("Error WSItemsSaver.onWebsocketListItem: Couldn't delete item")
                     }
                 }
+            default: QL4("Not handled verb: \(notification.verb)")
             }
         }
     }
@@ -108,6 +110,7 @@ class WSItemsSaver {
                         print("Error WSItemsSaver.onWebsocketList: Couldn't delete item")
                     }
                 }
+            default: QL4("Not handled verb: \(notification.verb)")
             }
         }
     }
@@ -134,6 +137,7 @@ class WSItemsSaver {
                         print("Error WSItemsSaver.onWebsocketListItem: Couldn't delete item")
                     }
                 }
+            default: QL4("Not handled verb: \(notification.verb)")
             }
         }
     }
@@ -160,6 +164,7 @@ class WSItemsSaver {
                         print("Error WSItemsSaver.onWebsocketGroup: Couldn't delete item")
                     }
                 }
+            default: QL4("Not handled verb: \(notification.verb)")
             }
         }
     }
@@ -215,6 +220,7 @@ class WSItemsSaver {
                         print("Error WSItemsSaver.onWebsocketSection: Couldn't delete item")
                     }
                 }
+            default: QL4("Not handled verb: \(notification.verb)")                
             }
         }
     }

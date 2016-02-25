@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import SwiftValidator
 import ChameleonFramework
+import QorumLogs
 
 class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemViewControllerDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate, ExpandCollapseButtonDelegate
 //    , UIBarPositioningDelegate
@@ -988,6 +989,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 case .Delete:
                     listItemsTableViewController.removeListItem(listItem, animation: .Bottom)
                     updatePrices(.MemOnly)
+                    
+                default: QL4("Not handled verb: \(notification.verb)")
                 }
             } else {
                 print("Error: ViewController.onWebsocketUpdateListItem: no value")

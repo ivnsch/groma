@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 protocol CartViewControllerDelegate {
     func onEmptyCartTap()
@@ -295,6 +296,8 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
                     
                 case .Delete:
                     listItemsTableViewController.removeListItem(listItem, animation: .Bottom)
+                    
+                default: QL4("Not handled verb: \(notification.verb)")
                 }
             } else {
                 print("Error: DoneViewController.onWebsocketUpdateListItem: no value")

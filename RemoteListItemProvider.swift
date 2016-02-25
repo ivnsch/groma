@@ -190,6 +190,19 @@ class RemoteListItemProvider {
         }
     }
     
+    func acceptInvitation(invitation: RemoteListInvitation, handler: RemoteResult<NoOpSerializable> -> Void) {
+        let parameters = toRequestParams(invitation, accept: true)
+        RemoteProvider.authenticatedRequest(.POST, Urls.listInvitation, parameters) {result in
+            handler(result)
+        }
+    }
+
+    func rejectInvitation(invitation: RemoteListInvitation, handler: RemoteResult<NoOpSerializable> -> Void) {
+        let parameters = toRequestParams(invitation, accept: false)
+        RemoteProvider.authenticatedRequest(.POST, Urls.listInvitation, parameters) {result in
+            handler(result)
+        }
+    }
     
 //    // for unit tests
 //    func removeAll(handler: Try<Bool> -> ()) {
@@ -201,6 +214,14 @@ class RemoteListItemProvider {
 //    }
     
     //////////////////
+    
+    
+    func toRequestParams(invitation: RemoteListInvitation, accept: Bool) -> [String: AnyObject] {
+        return [
+            "uuid": invitation.list.uuid,
+            "accept": accept
+        ]
+    }
     
     func toRequestPrams(list: List) -> [String: AnyObject] {
         

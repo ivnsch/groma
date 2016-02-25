@@ -11,7 +11,7 @@ import Foundation
 // Cross-provider services
 protocol GlobalProvider {
 
-    func sync(handler: ProviderResult<Any> -> Void)
+    func sync(handler: ProviderResult<SyncResult> -> Void)
     
     func clearAllData(handler: ProviderResult<Any> -> Void)
 }

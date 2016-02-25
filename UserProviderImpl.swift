@@ -14,7 +14,7 @@ class UserProviderImpl: UserProvider {
 
     private var webSocket: MyWebSocket? // arc
     
-    func login(loginData: LoginData, _ handler: ProviderResult<Any> -> ()) {
+    func login(loginData: LoginData, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.login(loginData) {[weak self] result in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
@@ -28,7 +28,7 @@ class UserProviderImpl: UserProvider {
         }
     }
     
-    func register(user: UserInput, _ handler: ProviderResult<Any> -> ()) {
+    func register(user: UserInput, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.register(user) {[weak self] result in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
@@ -55,7 +55,7 @@ class UserProviderImpl: UserProvider {
         self.remoteProvider.logout(remoteResultHandler(handler))
     }
     
-    func sync(handler: ProviderResult<Any> -> Void) {
+    func sync(handler: ProviderResult<SyncResult> -> Void) {
         Providers.globalProvider.sync {result in
             handler(result)
         }
@@ -105,7 +105,7 @@ class UserProviderImpl: UserProvider {
     
     // MARK: - Social login
     
-    func authenticateWithFacebook(token: String, _ handler: ProviderResult<Any> -> ()) {
+    func authenticateWithFacebook(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.authenticateWithFacebook(token) {[weak self] result in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
@@ -119,7 +119,7 @@ class UserProviderImpl: UserProvider {
     }
 
     
-    func authenticateWithGoogle(token: String, _ handler: ProviderResult<Any> -> ()) {
+    func authenticateWithGoogle(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.authenticateWithGoogle(token) {[weak self] result in
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {

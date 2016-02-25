@@ -171,4 +171,16 @@ class ListProviderImpl: ListProvider {
             }
         }
     }
+    
+    func acceptInvitation(invitation: RemoteListInvitation, _ handler: ProviderResult<Any> -> Void) {
+        remoteListProvider.acceptInvitation(invitation) {remoteResult in
+            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+        }
+    }
+    
+    func rejectInvitation(invitation: RemoteListInvitation, _ handler: ProviderResult<Any> -> Void) {
+        remoteListProvider.rejectInvitation(invitation) {remoteResult in
+            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+        }
+    }
 }

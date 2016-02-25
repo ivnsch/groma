@@ -92,6 +92,16 @@
 		EB136F341C18C37D00B60C9C /* WSInventoryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F331C18C37D00B60C9C /* WSInventoryParser.swift */; };
 		EB136F351C18C37D00B60C9C /* WSInventoryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F331C18C37D00B60C9C /* WSInventoryParser.swift */; };
 		EB136F361C18C37D00B60C9C /* WSInventoryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB136F331C18C37D00B60C9C /* WSInventoryParser.swift */; };
+		EB1748C51C7E4C750067FD16 /* RemoteListNoUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1748C41C7E4C750067FD16 /* RemoteListNoUsers.swift */; };
+		EB1748CC1C7E54860067FD16 /* RemoteListInvitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1748CB1C7E54860067FD16 /* RemoteListInvitation.swift */; };
+		EB1748CD1C7E54860067FD16 /* RemoteListInvitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1748CB1C7E54860067FD16 /* RemoteListInvitation.swift */; };
+		EB1748CE1C7E54860067FD16 /* RemoteListInvitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1748CB1C7E54860067FD16 /* RemoteListInvitation.swift */; };
+		EB1748D01C7E79230067FD16 /* SyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1748CF1C7E79230067FD16 /* SyncResult.swift */; };
+		EB1748D11C7E79230067FD16 /* SyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1748CF1C7E79230067FD16 /* SyncResult.swift */; };
+		EB1748D21C7E79230067FD16 /* SyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1748CF1C7E79230067FD16 /* SyncResult.swift */; };
+		EB1748D41C7E7AE20067FD16 /* ListInvitationsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1748D31C7E7AE20067FD16 /* ListInvitationsHandler.swift */; };
+		EB1748D51C7E7AE20067FD16 /* ListInvitationsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1748D31C7E7AE20067FD16 /* ListInvitationsHandler.swift */; };
+		EB1748D61C7E7AE20067FD16 /* ListInvitationsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1748D31C7E7AE20067FD16 /* ListInvitationsHandler.swift */; };
 		EB1B36451BC1D001003519F2 /* MLPAutoCompleteTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1B363F1BC1D001003519F2 /* MLPAutoCompleteTextField.m */; };
 		EB1B36461BC1D001003519F2 /* NSString+Levenshtein.m in Sources */ = {isa = PBXBuildFile; fileRef = EB1B36441BC1D001003519F2 /* NSString+Levenshtein.m */; };
 		EB1B364C1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1B364B1BC2CC79003519F2 /* HistoryItemGroup.swift */; };
@@ -935,6 +945,10 @@
 		EB136F2B1C18BFE500B60C9C /* WSGroupParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSGroupParser.swift; sourceTree = "<group>"; };
 		EB136F2F1C18C23A00B60C9C /* WSPlanItemParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSPlanItemParser.swift; sourceTree = "<group>"; };
 		EB136F331C18C37D00B60C9C /* WSInventoryParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSInventoryParser.swift; sourceTree = "<group>"; };
+		EB1748C41C7E4C750067FD16 /* RemoteListNoUsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListNoUsers.swift; sourceTree = "<group>"; };
+		EB1748CB1C7E54860067FD16 /* RemoteListInvitation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListInvitation.swift; sourceTree = "<group>"; };
+		EB1748CF1C7E79230067FD16 /* SyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncResult.swift; sourceTree = "<group>"; };
+		EB1748D31C7E7AE20067FD16 /* ListInvitationsHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ListInvitationsHandler.swift; path = shoppin/ListInvitationsHandler.swift; sourceTree = "<group>"; };
 		EB1B363E1BC1D001003519F2 /* MLPAutoCompleteTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLPAutoCompleteTextField.h; sourceTree = "<group>"; };
 		EB1B363F1BC1D001003519F2 /* MLPAutoCompleteTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLPAutoCompleteTextField.m; sourceTree = "<group>"; };
 		EB1B36401BC1D001003519F2 /* MLPAutoCompleteTextFieldDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLPAutoCompleteTextFieldDataSource.h; sourceTree = "<group>"; };
@@ -1522,6 +1536,14 @@
 			name = extensions;
 			sourceTree = "<group>";
 		};
+		EB1748D71C7E7AF70067FD16 /* invitation */ = {
+			isa = PBXGroup;
+			children = (
+				EB1748D31C7E7AE20067FD16 /* ListInvitationsHandler.swift */,
+			);
+			name = invitation;
+			sourceTree = "<group>";
+		};
 		EB1B363C1BC1CFE6003519F2 /* libraryCouldNotLink */ = {
 			isa = PBXGroup;
 			children = (
@@ -1910,6 +1932,7 @@
 		EB55675B1A86231D00CD3EC6 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				EB1748D71C7E7AF70067FD16 /* invitation */,
 				EB8D1D181C39F2F800ADF884 /* productWithQuantity */,
 				EB741A5D1C224B8F00E1585D /* expandableItemsTableView */,
 				EBDA09F61BF8DBBD0039E1E8 /* topView */,
@@ -1965,6 +1988,8 @@
 				EB9BE41E1B2CB513005B401A /* RemoteProduct.swift */,
 				EBA7AC951BFE95AF00247A8C /* RemoteProductCategory.swift */,
 				EB9BE4241B2CB542005B401A /* RemoteList.swift */,
+				EB1748CB1C7E54860067FD16 /* RemoteListInvitation.swift */,
+				EB1748C41C7E4C750067FD16 /* RemoteListNoUsers.swift */,
 				EB0C2A391B58330300AF6226 /* RemoteInventoryItem.swift */,
 				EB6E3D401C5A5B0400D65DD5 /* RemoteGroupItem.swift */,
 				EB9BE4211B2CB51F005B401A /* RemoteSection.swift */,
@@ -2609,6 +2634,7 @@
 				EB6F8DE01C1B29B300C05466 /* InventoryItemId.swift */,
 				EBA9E6031C64AD7C00A85610 /* ProductWithQuantity.swift */,
 				EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */,
+				EB1748CF1C7E79230067FD16 /* SyncResult.swift */,
 			);
 			name = model;
 			path = ..;
@@ -3261,6 +3287,7 @@
 				EB6E3D451C5A980C00D65DD5 /* GlobalProvider.swift in Sources */,
 				EB05FECC1C7B57980023DBF8 /* RemoteGroupItemsWithDependencies.swift in Sources */,
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
+				EB1748C51C7E4C750067FD16 /* RemoteListNoUsers.swift in Sources */,
 				EB4147BC1BE0338800549CE4 /* ProductInput.swift in Sources */,
 				EB451C461B863516000DE208 /* MonthYear.swift in Sources */,
 				EBA7AC9E1BFEA87300247A8C /* ProductCategoryProvider.swift in Sources */,
@@ -3332,6 +3359,7 @@
 				EB7DA2E11C6FCD9F007F1E43 /* SizeLimits.swift in Sources */,
 				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
 				EB70C21F1B4D302D0060E529 /* SharedUser.swift in Sources */,
+				EB1748CC1C7E54860067FD16 /* RemoteListInvitation.swift in Sources */,
 				EBFD15C11BA7F59600E37342 /* AlertPopup.swift in Sources */,
 				EBA288D71BB9FCC3001A2B95 /* MemInventoryItemProvider.swift in Sources */,
 				EB5737B71BF2612300D52FB8 /* InventorySharedUserCell.swift in Sources */,
@@ -3382,6 +3410,7 @@
 				EB7BFA7B1BDA5BE500F4C74A /* QuantityCell.swift in Sources */,
 				EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */,
 				EB9208221C4EBCE000332332 /* ManageProductsSelectionController.swift in Sources */,
+				EB1748D01C7E79230067FD16 /* SyncResult.swift in Sources */,
 				EBA7AC8E1BFE90C000247A8C /* DBProductCategory.swift in Sources */,
 				EB87A4AB1C1A4F13008D2A42 /* GroupItemWithGroup.swift in Sources */,
 				EB792A281B95CCE10004BEEC /* RemoteSocialLoginResult.swift in Sources */,
@@ -3427,6 +3456,7 @@
 				EB4D57B01B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */,
 				EB7524551BF5830600A97A10 /* QuickAddGroupCell.swift in Sources */,
 				EBB526811BEFE5490002A286 /* Double.swift in Sources */,
+				EB1748D41C7E7AE20067FD16 /* ListInvitationsHandler.swift in Sources */,
 				EB40A47A1B551176000E9CAD /* DBProduct.swift in Sources */,
 				EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */,
 				EB7858751B7F6F69008AAD12 /* RemoteHistoryItems.swift in Sources */,
@@ -3538,6 +3568,7 @@
 				EB5567751A864B8100CD3EC6 /* InventoryProvider.swift in Sources */,
 				EB7F59C31BA1049100E07EBA /* Identifiable.swift in Sources */,
 				EB5567611A86437B00CD3EC6 /* SectionMapper.swift in Sources */,
+				EB1748D11C7E79230067FD16 /* SyncResult.swift in Sources */,
 				EBB526781BEFE10B0002A286 /* HelpProvider.swift in Sources */,
 				EB9208351C4EEA2400332332 /* BrandProviderImpl.swift in Sources */,
 				EBDFE3A71ACE829400E48F95 /* CellManager.swift in Sources */,
@@ -3570,6 +3601,7 @@
 				EB0C2A3F1B583BFE00AF6226 /* RemoteInventoryItemWithProduct.swift in Sources */,
 				EB89D3061AD41E2D00B6E0D0 /* ListsViewController.swift in Sources */,
 				EBDA754F1BCD621C00E34AC3 /* ListItemGroupMapper.swift in Sources */,
+				EB1748CD1C7E54860067FD16 /* RemoteListInvitation.swift in Sources */,
 				EB70328C1BEBF31A00779EBB /* SectionProvider.swift in Sources */,
 				EB70C21C1B4D2ECE0060E529 /* RemoteSharedUser.swift in Sources */,
 				EB4FD45E1AC715FF0000F952 /* Array.swift in Sources */,
@@ -3676,6 +3708,7 @@
 				EB0C2A341B57BE6100AF6226 /* NSWindowController.swift in Sources */,
 				EBA9E6071C64AFCE00A85610 /* ListItemPrototype.swift in Sources */,
 				EB451C471B863516000DE208 /* MonthYear.swift in Sources */,
+				EB1748D51C7E7AE20067FD16 /* ListInvitationsHandler.swift in Sources */,
 				EBDA75471BCD5CF800E34AC3 /* RealmListItemGroupProvider.swift in Sources */,
 				EB4D57B11B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */,
 				EB6F81331B4717C2008680E0 /* KeychainKeys.swift in Sources */,
@@ -3759,6 +3792,7 @@
 				EBF608B71C0F5D0E00EDB33E /* RemotePlanItemsProvider.swift in Sources */,
 				EB0F5F8D1B9A0A8000035175 /* Array_ListItem.swift in Sources */,
 				EB714AA41B6669AA00F91B94 /* ProviderFetchModus.swift in Sources */,
+				EB1748D21C7E79230067FD16 /* SyncResult.swift in Sources */,
 				EB6F8DE31C1B29B300C05466 /* InventoryItemId.swift in Sources */,
 				EBF3775F1B342A4E00EEB6DB /* ListItemProviderMock.swift in Sources */,
 				EB40A4781B550C0C000E9CAD /* Results.swift in Sources */,
@@ -3796,6 +3830,7 @@
 				EB6E3D2F1C5A4F4400D65DD5 /* RemoteListItemsWithDependenciesNoList.swift in Sources */,
 				EB78587F1B7FD81A008AAD12 /* HistoryItemsSync.swift in Sources */,
 				EB6E3D471C5A980C00D65DD5 /* GlobalProvider.swift in Sources */,
+				EB1748CE1C7E54860067FD16 /* RemoteListInvitation.swift in Sources */,
 				EB6E3D4B1C5A986C00D65DD5 /* GlobalProviderImpl.swift in Sources */,
 				EBDCA1331B8A124B000020BF /* NSDate.swift in Sources */,
 				EB87A4AD1C1A4F13008D2A42 /* GroupItemWithGroup.swift in Sources */,
@@ -3855,6 +3890,7 @@
 				EB85F4751BD5605000E19E9B /* ProductProviderImpl.swift in Sources */,
 				EB1B366B1BC47E32003519F2 /* PlanItem.swift in Sources */,
 				EBA5756F1BD00A2500A0A825 /* DBGroupItem.swift in Sources */,
+				EB1748D61C7E7AE20067FD16 /* ListInvitationsHandler.swift in Sources */,
 				EBBC23151BB483E90002F6B1 /* SuggestionsPrefiller.swift in Sources */,
 				EB451C481B863516000DE208 /* MonthYear.swift in Sources */,
 				EBF3778F1B35808900EEB6DB /* TestListItems.swift in Sources */,

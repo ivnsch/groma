@@ -463,6 +463,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
         Providers.userProvider.disconnectWebsocket()
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
@@ -495,6 +497,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         Providers.userProvider.connectWebsocketIfLoggedIn()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
     }
 
     func applicationWillTerminate(application: UIApplication) {
@@ -527,9 +531,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     if !result.success {
                         print("Error: AppDelegate.checkForReachability: Sync didn't succeed: \(result)")
                     }
+
+                    if let syncResult = result.sucessResult {
+                        if let controller = self?.window?.rootViewController {
+                            ListInvitationsHandler.handleInvitations(syncResult.listInvites, controller: controller)
+                        } else {
+                            QL4("Couldn't show popup, either window: \(self?.window) or root controller: \(self?.window?.rootViewController) is nil)")
+                        }
+                    } else {
+                        QL4("Invalid state: result doesn't have sync result")
+                    }
+
                     self?.window?.defaultProgressVisible(false)
                 }
             }
+        }
+    }
+    
+    // MARK: - Websocket
+    
+    func onWebsocketList(note: NSNotification) {
+        
+        if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteListInvitation>> {
+            if let notification = info[WSNotificationValue] {
+                let invitation = notification.obj
+                switch notification.verb {
+                case .Invite:
+                    if let controller = window?.rootViewController {
+                        ListInvitationsHandler.handleInvitation(invitation, controller: controller)
+                    } else {
+                        QL4("Couldn't show popup, either window: \(window) or root controller: \(window?.rootViewController) is nil)")
+                    }
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+            
+        } else {
+            QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
         }
     }
 }

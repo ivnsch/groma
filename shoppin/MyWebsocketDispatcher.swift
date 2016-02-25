@@ -33,6 +33,7 @@ enum WSNotificationVerb: String {
     case Add = "add"
     case Update = "update"
     case Delete = "delete"
+    case Invite = "invite"
 }
 
 final class WSNotification<T>: AnyObject {
@@ -145,6 +146,7 @@ struct MyWebsocketDispatcher {
             case WSNotificationVerb.Delete:
                 let product = ListItemParser.parseProduct(data)
                 postNotification(.Product, verb, product)
+            default: QL4("Not handled verb: \(verb)")
         }
     }
     
@@ -159,6 +161,7 @@ struct MyWebsocketDispatcher {
         case WSNotificationVerb.Delete:
             let uuid = data as! String
             postNotification(.Group, verb, uuid)
+        default: QL4("Not handled verb: \(verb)")
         }
     }
     
@@ -174,6 +177,7 @@ struct MyWebsocketDispatcher {
         case WSNotificationVerb.Delete:
             let uuid = data as! String
             postNotification(.GroupItem, verb, uuid)
+        default: QL4("Not handled verb: \(verb)")
         }
     }
     
@@ -188,6 +192,7 @@ struct MyWebsocketDispatcher {
         case WSNotificationVerb.Delete:
             let items = WSPlanItemParser.parsePlanItem(data)
             postNotification(.PlanItem, verb, items)
+        default: QL4("Not handled verb: \(verb)")
         }
     }
     
@@ -202,6 +207,12 @@ struct MyWebsocketDispatcher {
         case WSNotificationVerb.Delete:
             let listUuid = data as! String
             postNotification(.List, verb, listUuid)
+        case WSNotificationVerb.Invite:
+            if let remoteListInvitation = RemoteListInvitation(representation: data) {
+                postNotification(.List, verb, remoteListInvitation)
+            } else {
+                QL4("Couldn't parse data: \(data)")
+            }
         }
     }
     
@@ -216,6 +227,7 @@ struct MyWebsocketDispatcher {
         case WSNotificationVerb.Delete:
             let group = ListItemParser.parse(data)
             postNotification(.ListItem, verb, group)
+        default: QL4("Not handled verb: \(verb)")
         }
     }
     
@@ -230,6 +242,7 @@ struct MyWebsocketDispatcher {
         case WSNotificationVerb.Delete:
             let group = ListItemParser.parseSection(data)
             postNotification(.Section, verb, group)
+        default: QL4("Not handled verb: \(verb)")
         }
     }
     
@@ -244,6 +257,7 @@ struct MyWebsocketDispatcher {
         case WSNotificationVerb.Delete:
             let uuid = data as! String
             postNotification(.Inventory, verb, uuid)
+        default: QL4("Not handled verb: \(verb)")
         }
     }
     
@@ -259,6 +273,7 @@ struct MyWebsocketDispatcher {
         case WSNotificationVerb.Delete:
             let group = WSInventoryParser.parseInventoryItemId(data)
             postNotification(.InventoryItem, verb, group)
+        default: QL4("Not handled verb: \(verb)")
         }
     }
     

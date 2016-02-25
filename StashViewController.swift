@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 // content copied from done view controller (except stash item status) - commented code probably outdated. TODO cleanup
 class StashViewController: UIViewController, ListItemsTableViewDelegate {
@@ -202,6 +203,8 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
                     
                 case .Delete:
                     listItemsTableViewController.removeListItem(listItem, animation: .Bottom)
+                    
+                default: QL4("Not handled verb: \(notification.verb)")                    
                 }
             } else {
                 print("Error: StashViewController.onWebsocketUpdateListItem: no value")
