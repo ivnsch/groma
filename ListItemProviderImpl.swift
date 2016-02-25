@@ -441,15 +441,17 @@ class ListItemProviderImpl: ListItemProvider {
                         
                         // add to server
                         self?.remoteProvider.add(bgResult.listItems) {remoteResult in
-                            if !remoteResult.success {
+                            if let remoteListItems = remoteResult.successResult {
+                                self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+                                }
+                            } else {
                                 DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[ListItem]>) in
-                                    print("Error: adding listItems in remote: \(bgResult.listItems), result: \(remoteResult)")
+                                    QL4("Remote call no success: \(remoteResult)")
                                     self?.memProvider.invalidate()
                                     handler(result)
                                 })
                             }
                         }
-                        
                         
                     } else { // there was a database error
                         handler(ProviderResult(status: .DatabaseUnknown))
@@ -512,10 +514,13 @@ class ListItemProviderImpl: ListItemProvider {
             }
             
             if remote {
-                self?.remoteProvider.update(listItems) {result in
-                    if !result.success {
-                        DefaultRemoteErrorHandler.handle(result, handler: {(result: ProviderResult<Any>) in
-                            print("Error: Updating listItems: \(listItems), result: \(result)")
+                self?.remoteProvider.update(listItems) {remoteResult in
+                    if let remoteListItems = remoteResult.successResult {
+                        self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                            QL4("Remote call no success: \(remoteResult) items: \(listItems)")
                             self?.memProvider.invalidate()
                             handler(result)
                         })
@@ -556,34 +561,35 @@ class ListItemProviderImpl: ListItemProvider {
             
             self?.remoteProvider.incrementListItem(listItem, delta: delta) {remoteResult in
                 
-                if remoteResult.success {
+                if let remoteListItems = remoteResult.successResult {
                     
-//                    //                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
-//                    
-//                    // Now that the item was updated in server, set back delta in local database
-//                    // Note we subtract instead of set to 0, to handle possible parallel requests correctly
-//                    self?.dbInventoryProvider.incrementInventoryItem(listItem, delta: -delta, onlyDelta: true) {saved in
-//                        
-//                        if saved {
-//                            //                            self?.findInventoryItem(item) {result in
-//                            //                                if let newitem = result.sucessResult {
-//                            //                                    print("3. CONFIRM incremented item: \(item) + \(delta) == \(newitem)")
-//                            //                                }
-//                            //                            }
-//                            
-//                        } else {
-//                            print("Error: couln't save remote list item")
-//                        }
-//                        
-//                    }
+                    //                    //                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
+                    //
+                    //                    // Now that the item was updated in server, set back delta in local database
+                    //                    // Note we subtract instead of set to 0, to handle possible parallel requests correctly
+                    //                    self?.dbInventoryProvider.incrementInventoryItem(listItem, delta: -delta, onlyDelta: true) {saved in
+                    //
+                    //                        if saved {
+                    //                            //                            self?.findInventoryItem(item) {result in
+                    //                            //                                if let newitem = result.sucessResult {
+                    //                            //                                    print("3. CONFIRM incremented item: \(item) + \(delta) == \(newitem)")
+                    //                            //                                }
+                    //                            //                            }
+                    //                            
+                    //                        } else {
+                    //                            print("Error: couln't save remote list item")
+                    //                        }
+                    //                        
+                    //                    }
                     
-                } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-                        print("Error incrementing item: \(listItem) in remote, result: \(remoteResult)")
-                        // if there's a not connection related server error, invalidate cache
-                        self?.memProvider.invalidate()
-                        handler(remoteResult)
+                    self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
                     }
+                } else {
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                        QL4("Remote call no success: \(remoteResult) item: \(listItem)")
+                        self?.memProvider.invalidate()
+                        handler(result)
+                    })
                 }
             }
         }

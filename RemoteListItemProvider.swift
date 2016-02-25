@@ -104,14 +104,14 @@ class RemoteListItemProvider {
 //    }
     
     // TODO use update
-    func update(listItems: [ListItem], handler: RemoteResult<NoOpSerializable> -> ()) {
+    func update(listItems: [ListItem], handler: RemoteResult<RemoteListItems> -> ()) {
         let parameters = listItems.map{self.toRequestParams($0)}
         RemoteProvider.authenticatedRequest(.PUT, Urls.listItem, parameters) {result in
             handler(result)
         }
     }
     
-    func incrementListItem(listItem: ListItem, delta: Int, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func incrementListItem(listItem: ListItem, delta: Int, handler: RemoteResult<RemoteListItems> -> ()) {
         // TODO!!! for now we use update, increment for list items not implemented in backend yet. See if it's really worth to implement (compare behaviour with inventory items where it's implemented)
 //        let params: [String: AnyObject] = [
 //            "delta": delta,
