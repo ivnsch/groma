@@ -569,8 +569,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 QL4("No value")
             }
             
-        } else {
-            QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
         }
     }
     
@@ -592,8 +590,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 QL4("No value")
             }
             
-        } else {
-            QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
         }
     }
 }
