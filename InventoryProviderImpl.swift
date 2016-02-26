@@ -98,10 +98,15 @@ class InventoryProviderImpl: InventoryProvider {
                 if remote {
                     // background TODO should we sync like now only when local DB save was success or also when it failed
                     self?.remoteProvider.addInventory(inventory) {remoteResult in
-                        if !remoteResult.success {
-                            DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-                                print("Error: addInventory background sync failed: \(remoteResult)") // TODO handle, when should we remove the item from local DB, when should we send a msg to error monitoring etc.
+                        
+                        if let remoteInventory = remoteResult.successResult {
+                            self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventory) {success in
+                                if !success {
+                                    QL4("Error storing last update timestamp")
+                                }
                             }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler) // TODO handle, when should we remove the item from local DB, when should we send a msg to error monitoring etc.
                         }
                     }
                 }
@@ -117,7 +122,15 @@ class InventoryProviderImpl: InventoryProvider {
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             if remote {
                 self?.remoteProvider.updateInventory(inventory) {remoteResult in
-                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                    if let remoteInventory = remoteResult.successResult {
+                        self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventory) {success in
+                            if !success {
+                                QL4("Error storing last update timestamp")
+                            }
+                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                    }
                 }
             }
         }
@@ -129,6 +142,7 @@ class InventoryProviderImpl: InventoryProvider {
             if remote {
                 self?.remoteProvider.updateInventories(inventories) {remoteResult in
                     DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                    // TODO!!!! server, and then timestamp update
                 }
             }
         }
@@ -153,6 +167,7 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
+    // TODO is this still needed?
     func syncInventoriesWithInventoryItems(handler: (ProviderResult<[Any]> -> ())) {
         
         self.dbInventoryProvider.loadInventories {dbInventories in

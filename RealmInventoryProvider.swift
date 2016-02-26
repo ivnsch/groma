@@ -304,7 +304,7 @@ class RealmInventoryProvider: RealmProvider {
     }
     
     func updateLastSyncTimeStamp(items: RemoteInventoryItemsWithHistoryAndDependencies, handler: Bool -> Void) {
-        doInWriteTransaction({realm in
+        doInWriteTransaction({[weak self] realm in
             for listItem in items.inventoryItems {
                 realm.create(DBInventoryItem.self, value: listItem.timestampUpdateDict, update: true)
             }
@@ -315,7 +315,7 @@ class RealmInventoryProvider: RealmProvider {
                 realm.create(DBProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
             }
             for inventory in items.inventories {
-                realm.create(DBInventory.self, value: inventory.timestampUpdateDict, update: true)
+                self?.updateLastSyncTimeStampSync(realm, inventory: inventory)
             }
             for historyItem in items.historyItems {
                 realm.create(DBHistoryItem.self, value: historyItem.timestampUpdateDict, update: true)
@@ -325,5 +325,19 @@ class RealmInventoryProvider: RealmProvider {
             }, finishHandler: {success in
                 handler(success ?? false)
         })
+    }
+    
+    
+    func updateLastSyncTimeStamp(inventory: RemoteInventory, handler: Bool -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            self?.updateLastSyncTimeStampSync(realm, inventory: inventory)
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    private func updateLastSyncTimeStampSync(realm: Realm, inventory: RemoteInventory) {
+        realm.create(DBInventory.self, value: inventory.timestampUpdateDict, update: true)
     }
 }
