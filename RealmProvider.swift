@@ -280,8 +280,9 @@ class RealmProvider {
             realm.delete(results)
             for obj in newObjects {
                 if resetLastUpdateToServer {
-                    obj.lastUpdate = obj.lastServerUpdate
-
+                    obj.lastUpdate = obj.lastServerUpdate // TODO remove lastUpdate (and rename resetLastUpdateToServer accordingly, maybe resetDirty)? we now have dirty
+                    obj.dirty = false
+                    
                 } else {
                     obj.lastUpdate = NSDate()
                 }
