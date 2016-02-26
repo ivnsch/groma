@@ -14,8 +14,6 @@ struct RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseColle
     let inventoryItem: RemoteInventoryItem
     let product: RemoteProduct
     let productCategory: RemoteProductCategory
-    let lastUpdate: NSDate
-    
     
     // TODO After porting to Swift 2.0 catch exception in these initializers and show msg to client accordingly, or don't use force unwrap
     // if server for some reason doesn't send a field the app currently crashes
@@ -26,8 +24,7 @@ struct RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseColle
             let productCategoryObj = representation.valueForKeyPath("productCategory"),
             let productCategory = RemoteProductCategory(representation: productCategoryObj),
             let productObj = representation.valueForKeyPath("product"),
-            let product = RemoteProduct(representation: productObj),
-            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            let product = RemoteProduct(representation: productObj)
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -35,7 +32,6 @@ struct RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseColle
         self.inventoryItem = inventoryItem
         self.productCategory = productCategory
         self.product = product
-        self.lastUpdate = lastUpdate
     }
     
     static func collection(representation: AnyObject) -> [RemoteInventoryItemWithProduct]? {
@@ -51,6 +47,6 @@ struct RemoteInventoryItemWithProduct: ResponseObjectSerializable, ResponseColle
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) inventoryItem: \(inventoryItem), productCategory: \(productCategory), product: \(product), lastUpdate: \(lastUpdate)}"
+        return "{\(self.dynamicType) inventoryItem: \(inventoryItem), productCategory: \(productCategory), product: \(product)}"
     }
 }

@@ -42,14 +42,11 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                 
                 if let remoteInventoryItems = remoteResult.successResult {
                     let inventoryItems: [InventoryItem] = remoteInventoryItems.map{InventoryItemMapper.inventoryItemWithRemote($0, inventory: inventory)}.sortBy(sortBy)
+                    let inventoryItemsInRange = inventoryItems[range]
                     
-                    // if there's no cached list or there's a difference, overwrite the cached list
-                    if (dbInventoryItems != inventoryItems) {
-                        self?.dbInventoryProvider.saveInventoryItems(inventoryItems) {saved in
-                            if fetchMode == .Both {
-                                handler(ProviderResult(status: .Success, sucessResult: inventoryItems))
-                            }
-                            
+                    if (dbInventoryItems != inventoryItemsInRange) {
+                        self?.dbInventoryProvider.overwrite(inventoryItems, inventoryUuid: inventory.uuid) {saved in // if items in range are not equal overwritte with all the items
+                            handler(ProviderResult(status: .Success, sucessResult: inventoryItemsInRange))
                             self?.memProvider.overwrite(inventoryItems)
                         }
                     }

@@ -129,6 +129,11 @@ class RealmInventoryProvider: RealmProvider {
         let dbObjs = items.map{InventoryItemMapper.dbWithInventoryItem($0)}
         self.saveObjs(dbObjs, update: update, handler: handler)
     }
+
+    func overwrite(items: [InventoryItem], inventoryUuid: String, handler: Bool -> Void) {
+        let dbObjs = items.map{InventoryItemMapper.dbWithInventoryItem($0)}
+        self.overwrite(dbObjs, deleteFilter: "inventory.uuid = '\(inventoryUuid)'", resetLastUpdateToServer: true, handler: handler)
+    }
     
     func saveInventoryItem(item: InventoryItem, handler: Bool -> ()) {
         saveInventoryItems([item], handler: handler)
