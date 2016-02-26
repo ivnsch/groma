@@ -270,7 +270,7 @@ class RealmProvider {
     }
     
     
-    // resetLastUpdateToServer = true should be always used when this method is called for sync
+    // resetLastUpdateToServer = true should be always used when this method is called for sync. TODO no resetLastUpdateToServer default = true, it's better to pass it explicitly
     func overwrite<T: DBSyncable>(newObjects: [T], resetLastUpdateToServer: Bool = true, handler: Bool -> ()) {
         
         self.doInWriteTransaction({realm in
@@ -287,7 +287,7 @@ class RealmProvider {
                     obj.lastUpdate = NSDate()
                 }
                 
-                realm.add(obj, update: false)
+                realm.add(obj, update: true) // update: true just in case some dependencies have repeated data (e.g. a shared user), if false the second shared user with same unique causes an exception
             }
             return true
             
