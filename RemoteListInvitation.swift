@@ -16,7 +16,8 @@ struct RemoteListInvitation: ResponseObjectSerializable, ResponseCollectionSeria
     init?(representation: AnyObject) {
         guard
             let sender = representation.valueForKeyPath("sender") as? String,
-            let list = RemoteListNoUsers(representation: representation)
+            let itemObj = representation.valueForKeyPath("item") as? String,
+            let list = RemoteListNoUsers(representation: itemObj)
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}

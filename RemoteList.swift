@@ -20,8 +20,9 @@ struct RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, C
     
     init?(representation: AnyObject) {
         guard
-            let list = RemoteListNoUsers(representation: representation), // TODO list should be a field of this class don't copy the propertis like below. Maybe use computed properties
-            let unserializedUsers: AnyObject = representation.valueForKeyPath("users"),
+            let listObj = representation.valueForKeyPath("list"),
+            let list = RemoteListNoUsers(representation: listObj), // TODO list should be a field of this class don't copy the propertis like below. Maybe use computed properties
+            let unserializedUsers = representation.valueForKeyPath("users"),
             let users = RemoteSharedUser.collection(unserializedUsers)
             else {
                 QL4("Invalid json: \(representation)")

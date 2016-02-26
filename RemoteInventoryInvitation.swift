@@ -16,7 +16,8 @@ struct RemoteInventoryInvitation: ResponseObjectSerializable, ResponseCollection
     init?(representation: AnyObject) {
         guard
             let sender = representation.valueForKeyPath("sender") as? String,
-            let inventory = RemoteInventory(representation: representation)
+            let itemObj = representation.valueForKeyPath("item") as? String,
+            let inventory = RemoteInventory(representation: itemObj)
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
