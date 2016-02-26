@@ -65,6 +65,6 @@ struct RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable
 
 extension RemoteProduct {
     var timestampUpdateDict: [String: AnyObject] {
-        return ["uuid": uuid, "lastupdate": lastUpdate]
+        return ["uuid": uuid, "lastupdate": lastUpdate, "dirty": false]
     }
 }

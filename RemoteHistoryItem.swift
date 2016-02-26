@@ -60,6 +60,6 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
 
 extension RemoteHistoryItem {
     var timestampUpdateDict: [String: AnyObject] {
-        return ["uuid": uuid, "lastupdate": lastUpdate]
+        return ["uuid": uuid, "lastupdate": lastUpdate, "dirty": false]
     }
 }

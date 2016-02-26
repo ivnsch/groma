@@ -50,6 +50,6 @@ struct RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionSerial
 
 extension RemoteInventoryItem {
     var timestampUpdateDict: [String: AnyObject] {
-        return ["productUuid": productUuid, "inventoryUuid": inventoryUuid, "lastupdate": lastUpdate]
+        return ["productUuid": productUuid, "inventoryUuid": inventoryUuid, "lastupdate": lastUpdate, "dirty": false]
     }
 }
