@@ -26,6 +26,7 @@ enum RemoteStatusCode: Int {
     case AlreadyExists = 4
     case NotFound = 5
     case InvalidCredentials = 6
+    case SizeLimit = 7
     case Unknown = 100 // Note that, like above cases this also is sent as status by the server - don't change raw value
  
     // HTTP
@@ -150,32 +151,39 @@ public class RemoteResult<T>: CustomDebugStringConvertible {
     // Callers can assume that if successResult != nil, status == .Success. If the reponse's status is != .Success no data will be parsed and subsequently successResult not set.
     let successResult: T?
     
-    let error: RemoteInvalidParametersResult?
+    let error: RemoteInvalidParametersResult? // TODO more generic error field, maybe together with errorObj
+    
+    let errorObj: Any? // TODO type safe error object, see also TODO of error above
     
     var success: Bool {
         return self.status == .Success
     }
     
     convenience init(status: RemoteStatusCode, sucessResult: T) {
-        self.init(status: status, sucessResult: sucessResult, error: nil)
+        self.init(status: status, sucessResult: sucessResult, error: nil, errorObj: nil)
     }
     
     convenience init(status: RemoteStatusCode, error: RemoteInvalidParametersResult?) {
-        self.init(status: status, sucessResult: nil, error: error)
+        self.init(status: status, sucessResult: nil, error: error, errorObj: nil)
+    }
+    
+    convenience init(status: RemoteStatusCode, errorObj: Any?) {
+        self.init(status: status, sucessResult: nil, error: nil, errorObj: errorObj)
     }
     
     convenience init(status: RemoteStatusCode) {
-        self.init(status: status, sucessResult: nil, error: nil)
+        self.init(status: status, sucessResult: nil, error: nil, errorObj: nil)
     }
     
-    private init(status: RemoteStatusCode, sucessResult: T?, error: RemoteInvalidParametersResult?) {
+    private init(status: RemoteStatusCode, sucessResult: T?, error: RemoteInvalidParametersResult?, errorObj: Any?) {
         self.status = status
         self.successResult = sucessResult
         self.error = error
+        self.errorObj = errorObj
     }
     
     public var debugDescription: String {
-        return "{\(self.dynamicType) status: \(status), model: \(successResult), error: \(error)}"
+        return "{\(self.dynamicType) status: \(status), model: \(successResult), error: \(error), errorObj: \(error)}"
     }
 }
 
@@ -334,7 +342,7 @@ extension Alamofire.Request {
 
                         let statusInt = dataObj.valueForKeyPath("status") as! Int
                         if let status = RemoteStatusCode(rawValue: statusInt) {
-                            if status == .Success || status == .InvalidParameters {
+                            if status == .Success || status == .InvalidParameters || status == .SizeLimit {
                                 
                                 if status == .Success {
                                     if let data: AnyObject = dataObj.valueForKeyPath("data") {
@@ -368,8 +376,23 @@ extension Alamofire.Request {
                                         return Result.Success(RemoteResult<T>(status: .ParsingError))
                                     }
                                     
+                                } else if status == .SizeLimit {
+                                    if let error: AnyObject = dataObj.valueForKeyPath("error") { // TODO more generic implementation of error obj parsing? Maybe with other status too
+                                        if let maxSize = error as? Int {
+                                            return Result.Success(RemoteResult<T>(status: .SizeLimit, errorObj: maxSize))
+                                            
+                                        } else {
+                                            QL4("Error parsing error object in size limit response")
+                                            return Result.Success(RemoteResult<T>(status: .ParsingError))
+                                        }
+                                        
+                                    } else { // the result has no data
+                                        QL4("SizeLimit: unexpected format in invalid parameters response")
+                                        return Result.Success(RemoteResult<T>(status: .ParsingError))
+                                    }
+                                    
                                 } else {
-                                    QL4("Error: AlamofireHelper.responseHandler forgot to handle a status in nested if: \(status)")
+                                    QL4("Forgot to handle a status in nested if: \(status)")
                                     return Result.Success(RemoteResult<T>(status: .Unknown))
                                 }
                                 

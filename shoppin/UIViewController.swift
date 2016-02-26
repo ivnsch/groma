@@ -113,7 +113,14 @@ extension UIViewController {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     
     private func showProviderErrorAlert<T>(providerResult: ProviderResult<T>) {
-        ProviderPopupManager.instance.showStatusPopup(providerResult.status, controller: self)
+        switch providerResult.status {
+        case .SizeLimit:
+            let size = providerResult.errorObj.map{$0}
+            let sizeStr = size.map{"(\($0))"} ?? ""
+            AlertPopup.show(title: title, message: "size_limit_exceeded \(sizeStr)", controller: self)
+  
+        default: ProviderPopupManager.instance.showStatusPopup(providerResult.status, controller: self)
+        }
     }
     
     private func showRemoteValidationErrorAlert(status: ProviderStatusCode, error: RemoteInvalidParametersResult) {

@@ -17,6 +17,7 @@ enum ProviderStatusCode: Int {
     case AlreadyExists = 4
     case NotFound = 5
     case InvalidCredentials = 6
+    case SizeLimit = 7
     case ServerError = 101 // Generic server error - invalid json, etc.
     case ServerNotReachable = 102 // This is currently both server is down and no internet connection (detected when doing the request, opposed to .NoConnection).
     case UnknownServerCommunicationError = 103
@@ -38,32 +39,38 @@ enum ProviderStatusCode: Int {
 public class ProviderResult<T>: CustomDebugStringConvertible {
     let status: ProviderStatusCode
     let sucessResult: T?
-    let error: RemoteInvalidParametersResult? // if we have more errors later, make this more generic - don't couple with remote (map it) and also not with validation
+    let error: RemoteInvalidParametersResult? // TODO if we have more errors later, make this more generic - don't couple with remote (map it) and also not with validation
+    let errorObj: Any? // TODO type safe error object, see also TODO of error above
     
     var success: Bool {
         return self.status == .Success
     }
     
     convenience init(status: ProviderStatusCode, sucessResult: T) {
-        self.init(status: status, sucessResult: sucessResult, error: nil)
+        self.init(status: status, sucessResult: sucessResult, error: nil, errorObj: nil)
     }
     
     convenience init(status: ProviderStatusCode, error: RemoteInvalidParametersResult?) {
-        self.init(status: status, sucessResult: nil, error: error)
+        self.init(status: status, sucessResult: nil, error: error, errorObj: nil)
+    }
+    
+    convenience init(status: ProviderStatusCode, errorObj: Any?) {
+        self.init(status: status, sucessResult: nil, error: nil, errorObj: errorObj)
     }
     
     convenience init(status: ProviderStatusCode) {
-        self.init(status: status, sucessResult: nil, error: nil)
+        self.init(status: status, sucessResult: nil, error: nil, errorObj: nil)
     }
     
-    private init(status: ProviderStatusCode, sucessResult: T?, error: RemoteInvalidParametersResult?) {
+    private init(status: ProviderStatusCode, sucessResult: T?, error: RemoteInvalidParametersResult?, errorObj: Any?) {
         self.status = status
         self.sucessResult = sucessResult
         self.error = error
+        self.errorObj = errorObj
     }
     
     public var debugDescription: String {
-        return "{\(self.dynamicType) status: \(status), model: \(sucessResult), error: \(error)}"
+        return "{\(self.dynamicType) status: \(status), model: \(sucessResult), error: \(error), errorObj: \(error)}"
     }
 }
 
@@ -77,6 +84,7 @@ struct DefaultRemoteResultMapper {
         case .NotFound: return .NotFound
         case .ParsingError: return .ServerError
         case .InvalidCredentials: return .InvalidCredentials
+        case .SizeLimit: return .SizeLimit
         case .Success: return .Success
         case .Unknown: return .ServerError
         case .NotHandledHTTPStatusCode: return .ServerError
@@ -116,7 +124,7 @@ struct DefaultRemoteErrorHandler {
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
             let errorText = errorMsg.map{"\($0)::"} ?? ""
             QL4("\(errorText)\(remoteResult)")
-            handler(ProviderResult(status: providerStatus, error: remoteResult.error)) // TODO when remote fails somehow trigger a revert of local updates
+            handler(ProviderResult(status: providerStatus, sucessResult: nil, error: remoteResult.error, errorObj: remoteResult.errorObj)) // TODO when remote fails somehow trigger a revert of local updates
         }
     }
 }
