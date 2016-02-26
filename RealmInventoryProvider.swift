@@ -17,7 +17,7 @@ class RealmInventoryProvider: RealmProvider {
     
     func loadInventories(handler: [Inventory] -> ()) {
         let mapper = {InventoryMapper.inventoryWithDB($0)}
-        self.load(mapper, handler: handler)
+        self.load(mapper, sortDescriptor: NSSortDescriptor(key: "order", ascending: true), handler: handler)
     }
 
     func findInventoryItem(item: InventoryItem, handler: InventoryItem? -> ()) {
@@ -118,6 +118,11 @@ class RealmInventoryProvider: RealmProvider {
     
     func saveInventories(inventories: [DBInventory], update: Bool = true, handler: Bool -> ()) {
         self.saveObjs(inventories, update: update, handler: handler)
+    }
+    
+    func overwrite(inventories: [Inventory], handler: Bool -> Void) {
+        let dbInventories = inventories.map{InventoryMapper.dbWithInventory($0)}
+        self.overwrite(dbInventories, resetLastUpdateToServer: true, handler: handler)
     }
     
     func saveInventoryItems(items: [InventoryItem], update: Bool =  true, handler: Bool -> ()) {

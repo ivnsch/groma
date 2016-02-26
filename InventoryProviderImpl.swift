@@ -24,26 +24,22 @@ class InventoryProviderImpl: InventoryProvider {
                     
                     if let remoteInventories = remoteResult.successResult {
                         let inventories: [Inventory] = remoteInventories.map{InventoryMapper.inventoryWithRemote($0)}
+                        let sortedInventories = inventories.sortedByOrder()
                         
-                        // if there's no cached list or there's a difference, overwrite the cached list
-                        if dbInventories != inventories {
+                        if dbInventories != sortedInventories {
                             
-                            // the lists come fresh from the server so we have to set the dirty flag to false
-                            let inventoriesNoDirty: [DBInventory] = inventories.map{InventoryMapper.dbWithInventory($0, dirty: false)}
-                            self.dbInventoryProvider.saveInventories(inventoriesNoDirty, update: true) {saved in
+                            self.dbInventoryProvider.overwrite(sortedInventories) {saved in
                                 if saved {
-                                    handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: inventories))
+                                    handler(ProviderResult(status: .Success, sucessResult: sortedInventories))
                                     
                                 } else {
-                                    print("Error updating inventories - dbListsMaybe is nil")
+                                    QL4("Error updating inventories - dbListsMaybe is nil")
                                 }
                             }
                         }
                         
                     } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<[Any]>) in
-                            print("get remote inventories no success, result: \(remoteResult)")
-                        }
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 }
             }

@@ -64,5 +64,5 @@ class Inventory: Equatable, Identifiable, Hashable {
 }
 
 func ==(lhs: Inventory, rhs: Inventory) -> Bool {
-    return lhs.uuid == rhs.uuid
+    return lhs.uuid == rhs.uuid && lhs.name == rhs.name && lhs.users == rhs.users && lhs.bgColor.hexStr == rhs.bgColor.hexStr && lhs.order == rhs.order
 }
