@@ -266,6 +266,11 @@ class RealmListItemProvider: RealmProvider {
         self.saveObjs(lists, update: update, handler: handler)
     }
     
+    func overwriteLists(lists: [List], handler: Bool -> ()) {
+        let dbLists = lists.map{ListMapper.dbWithList($0)}
+        self.overwrite(dbLists, resetLastUpdateToServer: true, handler: handler)
+    }
+    
     func loadList(uuid: String, handler: List? -> ()) {
         let mapper = {ListMapper.listWithDB($0)}
         self.loadFirst(mapper, filter: "uuid = '\(uuid)'", handler: handler)

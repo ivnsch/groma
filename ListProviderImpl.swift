@@ -28,12 +28,10 @@ class ListProviderImpl: ListProvider {
                     if let remoteLists = remoteResult.successResult {
                         let lists: [List] = ListMapper.listsWithRemote(remoteLists)
                         
-                        // if there's no cached list or there's a difference, overwrite the cached list
+                        // if there are no local lists or there's a difference, overwrite the local lists
                         if dbLists != lists {
                             
-                            // the lists come fresh from the server so we have to set the dirty flag to false
-                            let listsNoDirty: [DBList] = lists.map{ListMapper.dbWithList($0, dirty: false)}
-                            self.dbProvider.saveLists(listsNoDirty, update: true) {saved in
+                            self.dbProvider.overwriteLists(lists) {saved in
                                 if saved {
                                     handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: lists))
                                     
