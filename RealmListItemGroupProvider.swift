@@ -185,6 +185,11 @@ class RealmListItemGroupProvider: RealmProvider {
         remove("uuid = '\(uuid)'", handler: handler, objType: DBGroupItem.self)
     }
     
+    func overwrite(items: [GroupItem], groupUuid: String, handler: Bool -> Void) {
+        let dbObjs = items.map{GroupItemMapper.dbWith($0)}
+        self.overwrite(dbObjs, deleteFilter: "group.uuid = '\(groupUuid)'", resetLastUpdateToServer: true, handler: handler)
+    }
+    
     // Copied from realm list item provider (which is copied from inventory item provider) refactor?
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
     func incrementGroupItem(item: GroupItem, delta: Int, handler: Bool -> ()) {

@@ -155,8 +155,31 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
 
     func groupItems(group: ListItemGroup, _ handler: ProviderResult<[GroupItem]> -> Void) {
-        dbGroupsProvider.groupItems(group) {items in
-            handler(ProviderResult(status: .Success, sucessResult: items))
+        dbGroupsProvider.groupItems(group) {[weak self] dbItems in
+            handler(ProviderResult(status: .Success, sucessResult: dbItems))
+            
+            self?.remoteGroupsProvider.groupsItems(group) {remoteResult in
+                
+                if let remoteItems = remoteResult.successResult {
+                    
+                    let items: GroupItemsWithRelations = GroupItemMapper.groupItemsWithRemote(remoteItems)
+                    
+                    if dbItems != items.groupItems {
+                        
+                        self?.dbGroupsProvider.overwrite(items.groupItems, groupUuid: group.uuid) {saved in
+                            if saved {
+                                handler(ProviderResult(status: .Success, sucessResult: items.groupItems))
+                                
+                            } else {
+                                print("Error overwriting group items - couldn't save")
+                            }
+                        }
+                    }
+                    
+                } else {
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                }
+            }
         }
     }
     

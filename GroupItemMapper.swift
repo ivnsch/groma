@@ -87,13 +87,9 @@ class GroupItemMapper {
             return GroupItemMapper.groupItemWithRemote(remoteListItem, product: product, group: group)
         }
         
-        //        let maybeSortedItems: [ListItem] = {
-        //            if let sortOrderByStatus = sortOrderByStatus {
-        //                return listItems.sortedByOrder(sortOrderByStatus)
-        //            } else {
-        //                return listItems
-        //            }
-        //        }()
+        // TODO
+//        let sortedGroupItems: [GroupItem] = groupItems.sortedByOrder()
+        
         return (
             groupItems,
             products,

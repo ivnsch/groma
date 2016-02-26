@@ -47,8 +47,8 @@ class RemoteGroupsProvider: RemoteProvider {
         }
     }
     
-    func groupsItems(group: ListItemGroup, handler: RemoteResult<[RemoteInventory]> -> ()) {
-        RemoteProvider.authenticatedRequestArray(.GET, Urls.groupItems) {result in
+    func groupsItems(group: ListItemGroup, handler: RemoteResult<RemoteGroupItemsWithDependencies> -> ()) {
+        RemoteProvider.authenticatedRequest(.GET, Urls.groupItems, ["groupUuid": group.uuid]) {result in
             handler(result)
         }
     }

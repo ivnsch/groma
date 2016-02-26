@@ -36,7 +36,7 @@ class ListProviderImpl: ListProvider {
                                     handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: lists))
                                     
                                 } else {
-                                    print("Error updating lists - dbListsMaybe is nil")
+                                    print("Error overwriting lists - couldn't save")
                                 }
                             }
                         }
