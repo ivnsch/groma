@@ -119,6 +119,7 @@ struct DefaultRemoteErrorHandler {
             // TODO!!!! check priorities are correct during normal use: this error should appear ONLY when there's a connection AND user is logged in
             ,.ServerNotReachable
             :
+            QL1("Remote result status: \(remoteResult.status)")
             return
         case _:
             let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
