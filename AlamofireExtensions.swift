@@ -326,6 +326,18 @@ extension Alamofire.Request {
 
         let responseSerializer = ResponseSerializer<RemoteResult<T>, NSError> { request, responseMaybe, data, error in
             
+            func logRequesstError(msg: String) {
+                let requestStr: String = {
+                    if let request = request {
+                        let methodStr = request.HTTPMethod ?? "<Undefined HTTP method>"
+                        return "Called: \(methodStr), url: \(request.URL)"
+                    } else {
+                        return "Undefined request"
+                    }
+                }()
+                QL4("\(requestStr): \(msg)")
+            }
+            
 //            print("method: \(request?.HTTPMethod), response: \(responseMaybe)")
             if let response = responseMaybe {
                 
@@ -352,7 +364,7 @@ extension Alamofire.Request {
                                             return Result.Success(remoteResult)
                                             
                                         } else {
-                                            QL4("Error parsing result object")
+                                            logRequesstError("Error parsing result object")
                                             return Result.Success(RemoteResult<T>(status: .ParsingError))
                                         }
                                         
@@ -363,16 +375,16 @@ extension Alamofire.Request {
                                     if let data: AnyObject = dataObj.valueForKeyPath("data") {
                                         
                                         if let invalidParametersObj = RemoteInvalidParametersResult(json: data) {
-                                            QL4("Invalid parameters: \(invalidParametersObj.debugDescription)")
+                                            logRequesstError("Invalid parameters: \(invalidParametersObj.debugDescription)")
                                             return Result.Success(RemoteResult<T>(status: .InvalidParameters, error: invalidParametersObj))
                                             
                                         } else {
-                                            QL4("Error parsing result object in invalid parameters response")
+                                            logRequesstError("Error parsing result object in invalid parameters response")
                                             return Result.Success(RemoteResult<T>(status: .ParsingError))
                                         }
                                         
                                     } else { // the result has no data
-                                        QL4("Error: AlamofireHelper.responseHandler: unexpected format in invalid parameters response")
+                                        logRequesstError("Unexpected format in invalid parameters response")
                                         return Result.Success(RemoteResult<T>(status: .ParsingError))
                                     }
                                     
@@ -382,17 +394,17 @@ extension Alamofire.Request {
                                             return Result.Success(RemoteResult<T>(status: .SizeLimit, errorObj: maxSize))
                                             
                                         } else {
-                                            QL4("Error parsing error object in size limit response")
+                                            logRequesstError("Error parsing error object in size limit response")
                                             return Result.Success(RemoteResult<T>(status: .ParsingError))
                                         }
                                         
                                     } else { // the result has no data
-                                        QL4("SizeLimit: unexpected format in invalid parameters response")
+                                        logRequesstError("SizeLimit: unexpected format in invalid parameters response")
                                         return Result.Success(RemoteResult<T>(status: .ParsingError))
                                     }
                                     
                                 } else {
-                                    QL4("Forgot to handle a status in nested if: \(status)")
+                                    logRequesstError("Forgot to handle a status in nested if: \(status)")
                                     return Result.Success(RemoteResult<T>(status: .Unknown))
                                 }
                                 
@@ -401,46 +413,46 @@ extension Alamofire.Request {
                             }
                             
                         } else {
-                            QL4("Error: response: status flag not recognized: \(statusInt)")
+                            logRequesstError("Error: response: status flag not recognized: \(statusInt)")
                             return Result.Success(RemoteResult<T>(status: .NotRecognizedStatusFlag))
                         }
                         
                     case .Failure(let error):
-                        QL4("Error serializing response: \(response), request: \(request), data: \(data), serializationError: \(error)")
+                        logRequesstError("Error serializing response: \(response), request: \(request), data: \(data), serializationError: \(error)")
                         return Result.Success(RemoteResult<T>(status: .ParsingError))
                     }
                     
                 } else if statusCode == 401 {
-                    QL4("Unauthorized")
+                    logRequesstError("Unauthorized")
                     Providers.userProvider.removeLoginToken()
                     return Result.Success(RemoteResult<T>(status: .NotAuthenticated))
                     
                 } else if statusCode == 400 {
-                    QL4("Bad request")
+                    logRequesstError("Bad request")
                     return Result.Success(RemoteResult<T>(status: .BadRequest))
                     
                 } else if statusCode == 404 {
                     let str = request?.URL.map{$0} ?? ""
-                    QL4("Action not found: \(request?.HTTPMethod) \(str)")
+                    logRequesstError("Action not found: \(request?.HTTPMethod) \(str)")
                     return Result.Success(RemoteResult<T>(status: .ActionNotFound))
                     
                 } else if statusCode == 415 {
-                    QL4("Unsupported media type")
+                    logRequesstError("Unsupported media type")
                     return Result.Success(RemoteResult<T>(status: .UnsupportedMediaType))
                     
                 } else if statusCode == 500 {
-                    QL4("Internal server error: \(response)")
+                    logRequesstError("Internal server error: \(response)")
                     return Result.Success(RemoteResult<T>(status: .InternalServerError))
                     
                 } else {
-                    QL4("Error: Not handled status code: \(statusCode)")
+                    logRequesstError("Error: Not handled status code: \(statusCode)")
                     return Result.Success(RemoteResult<T>(status: .NotHandledHTTPStatusCode))
                 }
                 
             } else { // So far this happened when the server was not reachable. This will be executed but the error is handled in the completionHandler block (Alamofire passes us a .Failure in this case). We return here .ResponseIsNil only as result of the serialization.
-                QL4("Error: response == nil")
+                logRequesstError("Error: response == nil")
                 if let error = error {
-                    QL4("Error calling remote service, error: \(error)")
+                    logRequesstError("Error calling remote service, error: \(error)")
                     if error.code == -1004 {  // iOS returns -1004 both when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
                             return Result.Success(RemoteResult<T>(status: .ServerNotReachable))
                     } else {
