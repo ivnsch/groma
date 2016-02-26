@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import QorumLogs
 
 // TODO maybe remove the mapping toArray later if we want to stick with realm, as this can increase performance
 // this would mean the provider is more coupled with realm but that's ok in this case
@@ -23,7 +24,7 @@ class RealmProvider {
                 if let result = resultMaybe {
                     handler(result)
                 } else {
-                    print("Error: RealmProvider.saveObj: self is nil")
+                    QL4("self is nil")
                     handler(false)
                 }
             })
@@ -38,10 +39,10 @@ class RealmProvider {
                 realm.add(obj, update: update)
             }
         } catch let error as NSError {
-            print("Error: creating Realm() in saveObj: \(error)")
+            QL4("Error creating Realm: \(error)")
             return false
         } catch _ {
-            print("Error: creating Realm() in saveObj (unknown)")
+            QL4("Error creating Realm: (unknown)")
             return false
         }
         return true
@@ -57,7 +58,7 @@ class RealmProvider {
                 if let result = resultMaybe {
                     handler(result)
                 } else {
-                    print("Error: RealmProvider.saveObjs: self is nil")
+                    QL4("self is nil")
                     handler(false)
                 }
             })
@@ -73,10 +74,10 @@ class RealmProvider {
                 }
             }
         } catch let error as NSError {
-            print("Error: creating Realm() in saveObjs: \(error)")
+            QL4("Error creating Realm: \(error)")
             return false
         } catch _ {
-            print("Error: creating Realm() in saveObjs (unknown)")
+            QL4("Error creating Realm: (unknown)")
             return false
         }
         return true
@@ -104,17 +105,17 @@ class RealmProvider {
                     }
                 }
             } catch let error as NSError {
-                print("Error: creating Realm() in saveObjs: \(error)")
+                QL4("Error creating Realm: \(error)")
                 finished(false)
             } catch _ {
-                print("Error: creating Realm() in saveObjs (unknown)")
+                QL4("Error creating Realm: (unknown)")
                 finished(false)
             }
 
             finished(true)
         })
     }
-    
+
     func loadFirst<T: Object, U>(mapper: T -> U, filter filterMaybe: String? = nil, handler: U? -> ()) {
         self.load(mapper, filter: filterMaybe, handler: {results in
             handler(results.first)
@@ -138,7 +139,7 @@ class RealmProvider {
                 finished(models)
                 
             } catch _ {
-                print("Error: creating Realm() in load, returning empty results")
+                QL4("Error: creating Realm, returning empty results")
                 finished([]) // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
             }
         })
@@ -198,7 +199,7 @@ class RealmProvider {
                 finished(true)
 
             } catch _ {
-                print("Error: creating Realm() in remove")
+                QL4("Error creating Realm")
                 finished(false)
             }
         })
@@ -222,10 +223,10 @@ class RealmProvider {
                 finished(obj)
                 
             } catch let error as NSError {
-                print("Error: creating Realm() in doInWriteTransaction: \(error)")
+                QL4("Error creating Realm: \(error)")
                 finished(nil)
             } catch _ {
-                print("Error: creating Realm() in doInWriteTransaction (unknown)")
+                QL4("Error creating Realm: (unknown)")
                 finished(nil)
             }
         })
@@ -242,10 +243,10 @@ class RealmProvider {
             return obj
             
         } catch let error as NSError {
-            print("Error: creating Realm() in doInWriteTransaction: \(error)")
+            QL4("Error creating Realm: \(error)")
             return nil
         } catch _ {
-            print("Error: creating Realm() in doInWriteTransaction (unknown)")
+            QL4("Error creating Realm: (unknown)")
             return nil
         }
     }
@@ -257,10 +258,10 @@ class RealmProvider {
                 return f(realm)
                 
             } catch let error as NSError {
-                print("Error: RealmProvider.withRealm: creating Realm() in doInWriteTransaction: \(error)")
+                QL4("Error creating Realm: \(error)")
                 return nil
             } catch _ {
-                print("Error: RealmProvider.withRealm: creating Realm() in doInWriteTransaction (unknown)")
+                QL4("Error creating Realm: (unknown)")
                 return nil
             }
             }) { (result: T?) in
