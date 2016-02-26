@@ -41,8 +41,11 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
 
             if saved && remote {
                 self?.remoteGroupsProvider.addGroup(group) {remoteResult in
-                    if !remoteResult.success {
-                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
+                    if let remoteGroup = remoteResult.successResult {
+                        self?.dbGroupsProvider.updateLastSyncTimeStamp(remoteGroup) {success in
+                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<RemoteGroup>) in
                             print("Error: adding group in remote: \(group), result: \(remoteResult)")
                         }
                     }
@@ -76,8 +79,11 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
             
             if saved && remote {
                 self?.remoteGroupsProvider.updateGroup(group) {remoteResult in
-                    if !remoteResult.success {
-                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
+                    if let remoteGroup = remoteResult.successResult {
+                        self?.dbGroupsProvider.updateLastSyncTimeStamp(remoteGroup) {success in
+                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<RemoteGroup>) in
                             print("Error: updating group in remote: \(group), result: \(remoteResult)")
                         }
                     }
@@ -92,8 +98,11 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
             
             if saved && remote {
                 self?.remoteGroupsProvider.updateGroups(groups) {remoteResult in
-                    if !remoteResult.success {
-                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
+                    if let remoteGroups = remoteResult.successResult {
+                        self?.dbGroupsProvider.updateLastSyncTimeStamp(remoteGroups) {success in
+                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<RemoteGroup>) in
                             print("Error: updating groups in remote: \(groups), result: \(remoteResult)")
                         }
                     }

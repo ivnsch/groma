@@ -221,7 +221,7 @@ class RealmListItemGroupProvider: RealmProvider {
     
     
     func updateLastSyncTimeStamp(items: RemoteGroupItemsWithDependencies, handler: Bool -> Void) {
-        doInWriteTransaction({realm in
+        doInWriteTransaction({[weak self] realm in
             for listItem in items.groupItems {
                 realm.create(DBGroupItem.self, value: listItem.timestampUpdateDict, update: true)
             }
@@ -231,12 +231,36 @@ class RealmListItemGroupProvider: RealmProvider {
             for productCategory in items.productsCategories {
                 realm.create(DBProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
             }
-            for section in items.groups {
-                realm.create(DBListItemGroup.self, value: section.timestampUpdateDict, update: true)
+            for group in items.groups {
+                self?.updateLastSyncTimeStampSync(realm, group: group)
             }
             return true
             }, finishHandler: {success in
                 handler(success ?? false)
         })
+    }
+
+    func updateLastSyncTimeStamp(group: RemoteGroup, handler: Bool -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            self?.updateLastSyncTimeStampSync(realm, group: group)
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func updateLastSyncTimeStamp(groups: [RemoteGroup], handler: Bool -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            for group in groups {
+                self?.updateLastSyncTimeStampSync(realm, group: group)
+            }
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    private func updateLastSyncTimeStampSync(realm: Realm, group: RemoteGroup) {
+        realm.create(DBListItemGroup.self, value: group.timestampUpdateDict, update: true)
     }
 }
