@@ -219,7 +219,24 @@ class RealmListItemGroupProvider: RealmProvider {
         //        }
     }
     
-
     
-    
+    func updateLastSyncTimeStamp(items: RemoteGroupItemsWithDependencies, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            for listItem in items.groupItems {
+                realm.create(DBGroupItem.self, value: listItem.timestampUpdateDict, update: true)
+            }
+            for product in items.products {
+                realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
+            }
+            for productCategory in items.productsCategories {
+                realm.create(DBProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
+            }
+            for section in items.groups {
+                realm.create(DBListItemGroup.self, value: section.timestampUpdateDict, update: true)
+            }
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
 }

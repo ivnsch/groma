@@ -55,3 +55,9 @@ struct RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializable, 
         return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), color: \(color.hexStr), lastUpdate: \(lastUpdate), fav: \(fav)}"
     }
 }
+
+extension RemoteGroup {
+    var timestampUpdateDict: [String: AnyObject] {
+        return ["uuid": uuid, "lastupdate": lastUpdate]
+    }
+}

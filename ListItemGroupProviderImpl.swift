@@ -135,9 +135,12 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 
                 if saved {
                     self?.remoteGroupsProvider.addGroupItem(item, group: group) {remoteResult in
-                        if !remoteResult.success {
+                        if let remoteListItems = remoteResult.successResult {
+                            self?.dbGroupsProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+                            }
+                        } else {
                             DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-                                print("Error: adding group item in remote: \(item), result: \(remoteResult)")
+                                QL4("Error adding group item in remote: \(item), result: \(remoteResult)")
                             }
                         }
                     }
@@ -216,9 +219,12 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                 
                 if saved {
                     self?.remoteGroupsProvider.updateGroupItem(item, group: group) {remoteResult in
-                        if !remoteResult.success {
+                        if let remoteListItems = remoteResult.successResult {
+                            self?.dbGroupsProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+                            }
+                        } else {
                             DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-                                print("Error: updating group item in remote: \(item), result: \(remoteResult)")
+                                QL4("Error updating group item in remote: \(item), result: \(remoteResult)")
                             }
                         }
                     }

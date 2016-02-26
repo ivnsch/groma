@@ -53,14 +53,14 @@ class RemoteGroupsProvider: RemoteProvider {
         }
     }
     
-    func addGroupItem(groupItem: GroupItem, group: ListItemGroup, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func addGroupItem(groupItem: GroupItem, group: ListItemGroup, handler: RemoteResult<RemoteGroupItemsWithDependencies> -> ()) {
         let params = toRequestParams(groupItem, group: group)
         RemoteProvider.authenticatedRequest(.POST, Urls.groupItem, params) {result in
             handler(result)
         }
     }
     
-    func updateGroupItem(groupItem: GroupItem, group: ListItemGroup, handler: RemoteResult<NoOpSerializable> -> ()) {
+    func updateGroupItem(groupItem: GroupItem, group: ListItemGroup, handler: RemoteResult<RemoteGroupItemsWithDependencies> -> ()) {
         let params = toRequestParams(groupItem, group: group)
         RemoteProvider.authenticatedRequest(.PUT, Urls.groupItem, params) {result in
             handler(result)
