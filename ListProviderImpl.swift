@@ -71,7 +71,7 @@ class ListProviderImpl: ListProvider {
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
         // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
-        dbProvider.saveList(list, handler: {saved in
+        dbProvider.saveList(list, handler: {[weak self] saved in
             
             if saved {
                 handler(ProviderResult(status: .Success, sucessResult: list))
@@ -80,9 +80,14 @@ class ListProviderImpl: ListProvider {
             }
             
             if remote {
-                self.remoteListProvider.add(list, handler: {remoteResult in
-                    
-                    if !remoteResult.success {
+                self?.remoteListProvider.add(list, handler: {remoteResult in
+                    if let remoteLists = remoteResult.successResult {
+                        self?.dbProvider.updateLastSyncTimeStamp(remoteLists) {success in
+                            if !success {
+                                QL4("Error storing last update timestamp")
+                            }
+                        }
+                    } else {
                         DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 })
@@ -100,7 +105,13 @@ class ListProviderImpl: ListProvider {
             if updated {
                 if remote {
                     self?.remoteListProvider.update(lists) {remoteResult in
-                        if !remoteResult.success {
+                        if let remoteLists = remoteResult.successResult {
+                            self?.dbProvider.updateLastSyncTimeStamp(remoteLists) {success in
+                                if !success {
+                                    QL4("Error storing last update timestamp")
+                                }
+                            }
+                        } else {
                             DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<Any>) in
                                 QL4(remoteResult)
                             }
@@ -142,6 +153,7 @@ class ListProviderImpl: ListProvider {
         })
     }
     
+    // TODO do we still need this?
     func syncListsWithListItems(handler: (ProviderResult<[Any]> -> ())) {
         
         self.dbProvider.loadLists {dbLists in
