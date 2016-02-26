@@ -484,6 +484,7 @@ class RealmListItemProvider: RealmProvider {
         self.remove("uuid = '\(listItem.uuid)'", handler: handler, objType: DBListItem.self)
     }
     
+    // TODO remove this method? Or if it's still needed, pass only list items, all the dependencies are in list items already
     // TODO do we really need ListItemsWithRelations here, maybe convenience holder made sense only for coredata?
     func saveListItems(listItemsWithRelations: ListItemsWithRelations, handler: Bool -> ()) {
         
@@ -524,6 +525,11 @@ class RealmListItemProvider: RealmProvider {
                 handler(false)
             }
         }
+    }
+    
+    func overwrite(listItems: [ListItem], listUuid: String, handler: Bool -> ()) {
+        let dbListItems = listItems.map{ListItemMapper.dbWithListItem($0)}
+        self.overwrite(dbListItems, deleteFilter: "list.uuid = '\(listUuid)'", resetLastUpdateToServer: true, handler: handler)
     }
     
     /**

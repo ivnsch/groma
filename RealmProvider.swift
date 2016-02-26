@@ -271,12 +271,16 @@ class RealmProvider {
     
     
     // resetLastUpdateToServer = true should be always used when this method is called for sync. TODO no resetLastUpdateToServer default = true, it's better to pass it explicitly
-    func overwrite<T: DBSyncable>(newObjects: [T], resetLastUpdateToServer: Bool = true, handler: Bool -> ()) {
+    func overwrite<T: DBSyncable>(newObjects: [T], deleteFilter deleteFilterMaybe: String? = nil, resetLastUpdateToServer: Bool = true, handler: Bool -> ()) {
         
         self.doInWriteTransaction({realm in
             
-            let results: Results<T> = realm.objects(T)
+            var results: Results<T> = realm.objects(T)
 
+            if let filter = deleteFilterMaybe {
+                results = results.filter(filter)
+            }
+            
             realm.delete(results)
             for obj in newObjects {
                 if resetLastUpdateToServer {

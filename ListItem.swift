@@ -378,7 +378,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
 
 // TODO implement equality correctly, also in other model classes. Now we have Identifiable for this.
 func ==(lhs: ListItem, rhs: ListItem) -> Bool {
-    return lhs.uuid == rhs.uuid
+    return lhs.uuid == rhs.uuid && lhs.product == rhs.product && lhs.section == rhs.section && lhs.list == rhs.list && lhs.note == rhs.note && lhs.todoQuantity == rhs.todoQuantity && lhs.todoOrder == rhs.todoOrder && lhs.doneQuantity == rhs.doneQuantity && lhs.doneOrder == rhs.doneOrder && lhs.stashQuantity == rhs.stashQuantity && lhs.stashOrder == rhs.stashOrder
 }
 
 // convenience (redundant) holder to avoid having to iterate through listitems to find unique products, sections, list
