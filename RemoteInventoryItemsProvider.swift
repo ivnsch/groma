@@ -53,16 +53,17 @@ class RemoteInventoryItemsProvider: Any {
     
     // TODO remote inventory from inventory items, at least for sending - we want to add all the items to one inventory....... for receiving this also wastes payload, they also have the same inventory also
     private func toDictionary(inventoryItem: InventoryItemWithHistoryEntry) -> [String: AnyObject] {
+        
+        let productDict = RemoteListItemProvider().toRequestParams(inventoryItem.inventoryItem.product)
+        let inventoryDict = RemoteInventoryProvider().toRequestParams(inventoryItem.inventoryItem.inventory)
+        
+        // TODO correct this structure in the server, product 2x
         return [
-            "product": [
-                "uuid": inventoryItem.inventoryItem.product.uuid,
-                "name": inventoryItem.inventoryItem.product.name,
-                "price": inventoryItem.inventoryItem.product.price
-            ],
+            "product": productDict,
             "inventoryItem": [
                 "quantity": inventoryItem.inventoryItem.quantityDelta,
-                "inventoryUuid": inventoryItem.inventoryItem.inventory.uuid,
-                "productUuid": inventoryItem.inventoryItem.product.uuid
+                "inventory": inventoryDict,
+                "product": productDict
             ],
             "historyItemUuid": inventoryItem.historyItemUuid,
             "addedDate": NSNumber(double: inventoryItem.addedDate.timeIntervalSince1970).longValue,
