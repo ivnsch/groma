@@ -59,5 +59,5 @@ class ListItemGroup: Identifiable, Equatable {
 }
 
 func ==(lhs: ListItemGroup, rhs: ListItemGroup) -> Bool {
-    return lhs.uuid == rhs.uuid && lhs.name == rhs.name && lhs.bgColor == rhs.bgColor && lhs.order == rhs.order && lhs.fav == rhs.fav
+    return lhs.uuid == rhs.uuid && lhs.name == rhs.name && lhs.bgColor.hexStr == rhs.bgColor.hexStr && lhs.order == rhs.order && lhs.fav == rhs.fav
 }

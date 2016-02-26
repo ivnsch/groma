@@ -59,6 +59,11 @@ class RealmListItemGroupProvider: RealmProvider {
         saveObjs(dbObjs, update: true, handler: handler)
     }
     
+    func overwrite(groups: [ListItemGroup], handler: Bool -> ()) {
+        let dbGroups = groups.map{ListItemGroupMapper.dbWith($0)}
+        self.overwrite(dbGroups, resetLastUpdateToServer: true, handler: handler)
+    }
+    
     func remove(group: ListItemGroup, handler: Bool -> Void) {
         removeGroup(group.uuid, handler: handler)
     }

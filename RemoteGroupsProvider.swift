@@ -10,7 +10,7 @@ import Foundation
 
 class RemoteGroupsProvider: RemoteProvider {
     
-    func groups(handler: RemoteResult<[RemoteInventory]> -> ()) {
+    func groups(handler: RemoteResult<[RemoteGroup]> -> ()) {
         RemoteProvider.authenticatedRequestArray(.GET, Urls.groups) {result in
             handler(result)
         }
