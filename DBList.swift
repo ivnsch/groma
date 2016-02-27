@@ -13,18 +13,18 @@ class DBList: DBSyncable {
     
     dynamic var uuid: String = ""
     dynamic var name: String = ""
-    dynamic var bgColorData: NSData = NSData()
+    dynamic var bgColorHex: String = "000000"
     dynamic var order: Int = 0
     dynamic var inventory: DBInventory = DBInventory()
     
     let users = RealmSwift.List<DBSharedUser>()
 
     func bgColor() -> UIColor {
-        return NSKeyedUnarchiver.unarchiveObjectWithData(bgColorData) as! UIColor
+        return UIColor(hexString: bgColorHex)
     }
     
     func setBgColor(bgColor: UIColor) {
-        bgColorData = NSKeyedArchiver.archivedDataWithRootObject(bgColor)
+        bgColorHex = bgColor.hexStr
     }
     
     override static func primaryKey() -> String? {
@@ -56,7 +56,7 @@ class DBList: DBSyncable {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid
         dict["name"] = name
-        dict["color"] = bgColor().hexStr
+        dict["color"] = bgColorHex
         dict["order"] = order
         dict["inventory"] = inventory.toDict()
         dict["users"] = users.map{$0.toDict()}

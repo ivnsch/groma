@@ -41,7 +41,7 @@ class InventoryItemMapper {
         db.quantity = item.inventoryItem.quantity
         db.product = product
         db.inventory = inventory
-        db.lastServerUpdate = item.lastUpdate
+        db.lastServerUpdate = item.inventoryItem.lastUpdate
         db.dirty = false
         return db
     }

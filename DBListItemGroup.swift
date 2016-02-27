@@ -14,15 +14,15 @@ class DBListItemGroup: DBSyncable {
     dynamic var uuid: String = ""
     dynamic var name: String = ""
     dynamic var order: Int = 0
-    dynamic var bgColorData: NSData = NSData()
+    dynamic var bgColorHex: String = "000000"
     dynamic var fav: Int = 0
     
     func bgColor() -> UIColor {
-        return NSKeyedUnarchiver.unarchiveObjectWithData(bgColorData) as! UIColor
+        return UIColor(hexString: bgColorHex)
     }
     
     func setBgColor(bgColor: UIColor) {
-        bgColorData = NSKeyedArchiver.archivedDataWithRootObject(bgColor)
+        bgColorHex = bgColor.hexStr
     }
     
     override static func primaryKey() -> String? {
@@ -49,7 +49,7 @@ class DBListItemGroup: DBSyncable {
         dict["name"] = name
         // TODO!!!! items? we don't need this here correct?
         dict["order"] = order
-        dict["color"] = bgColor().hexStr
+        dict["color"] = bgColorHex
         dict["fav"] = fav
         setSyncableFieldsInDict(dict)
         return dict

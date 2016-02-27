@@ -12,7 +12,7 @@ class DBProductCategory: DBSyncable {
     
     dynamic var uuid: String = ""
     dynamic var name: String = ""
-    dynamic var colorData: NSData = NSData()
+    dynamic var bgColorHex: String = "000000"
 
     override static func primaryKey() -> String? {
         return "uuid"
@@ -23,11 +23,11 @@ class DBProductCategory: DBSyncable {
     }
     
     func color() -> UIColor {
-        return NSKeyedUnarchiver.unarchiveObjectWithData(colorData) as! UIColor
+        return UIColor(hexString: bgColorHex)
     }
     
-    func setColor(color: UIColor) {
-        colorData = NSKeyedArchiver.archivedDataWithRootObject(color)
+    func setColor(bgColor: UIColor) {
+        bgColorHex = bgColor.hexStr
     }
     
     static func fromDict(dict: [String: AnyObject]) -> DBProductCategory {
@@ -45,7 +45,7 @@ class DBProductCategory: DBSyncable {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid
         dict["name"] = name
-        dict["color"] = color().hexStr
+        dict["color"] = bgColorHex
         setSyncableFieldsInDict(dict)
         return dict
     }
