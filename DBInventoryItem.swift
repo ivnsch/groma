@@ -13,20 +13,40 @@ class DBInventoryItem: DBSyncable {
     
     dynamic var quantity: Int = 0
     dynamic var quantityDelta: Int = 0
-    dynamic var product: DBProduct = DBProduct()
-    dynamic var inventory: DBInventory = DBInventory()
+    dynamic var productOpt: DBProduct? = DBProduct()
+    dynamic var inventoryOpt: DBInventory? = DBInventory()
     
-    dynamic lazy var compoundKey: String = self.compoundKeyValue()
+    dynamic lazy var compoundKey: String? = self.compoundKeyValue()
 
-    private func compoundKeyValue() -> String {
-        return "\(product.uuid)-\(inventory.uuid)"
+    private func compoundKeyValue() -> String? {
+        let productUuid = productOpt?.uuid ?? ""
+        let inventoryUuid = inventoryOpt?.uuid ?? ""
+        return "\(productUuid)-\(inventoryUuid)"
     }
 
     override static func primaryKey() -> String {
         return "compoundKey"
     }
     
-    // MARK: - Query utilities
+    var product: DBProduct {
+        get {
+            return productOpt ?? DBProduct()
+        }
+        set(newProduct) {
+            productOpt = newProduct
+        }
+    }
+    
+    var inventory: DBInventory {
+        get {
+            return inventoryOpt ?? DBInventory()
+        }
+        set(newInventory) {
+            inventoryOpt = newInventory
+        }
+    }
+    
+    // MARK: - Filters
 
     static func createFilter(item: InventoryItem) -> String {
         return createFilter(item.product.uuid, item.inventory.uuid)
@@ -37,16 +57,22 @@ class DBInventoryItem: DBSyncable {
     }
     
     static func createFilter(productUuid: String, _ inventoryUuid: String) -> String {
-        return "product.uuid = '\(productUuid)' AND inventory.uuid = '\(inventoryUuid)'"
+        return "productOpt.uuid = '\(productUuid)' AND inventoryOpt.uuid = '\(inventoryUuid)'"
     }
+
+    static func createFilter(inventoryUuid: String) -> String {
+        return "inventoryOpt.uuid = '\(inventoryUuid)'"
+    }
+    
+    static func createFilterWithProduct(productUuid: String) -> String {
+        return "productOpt.uuid == '\(productUuid)'"
+    }
+    
+    // MARK: -
     
     static func fromDict(dict: [String: AnyObject], product: DBProduct, inventory: DBInventory) -> DBInventoryItem {
         let item = DBInventoryItem()
         item.quantity = dict["quantity"]! as! Int
-        
-        let a = product.uuid
-        let b = inventory.uuid
-        
         // Note: we don't set quantity delta here because when we gets objs from server it means they are synced, which means there's no quantity delta.
         item.product = product
         item.inventory = inventory
@@ -63,5 +89,9 @@ class DBInventoryItem: DBSyncable {
         dict["inventoryUuid"] = inventory.uuid
         setSyncableFieldsInDict(dict)
         return dict
+    }
+    
+    override static func ignoredProperties() -> [String] {
+        return ["product", "inventory"]
     }
 }

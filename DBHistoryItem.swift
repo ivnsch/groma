@@ -11,15 +11,71 @@ import Foundation
 class DBHistoryItem: DBSyncable {
 
     dynamic var uuid: String = ""
-    dynamic var inventory: DBInventory = DBInventory()
-    dynamic var product: DBProduct = DBProduct()
+    dynamic var inventoryOpt: DBInventory? = DBInventory()
+    dynamic var productOpt: DBProduct? = DBProduct()
     dynamic var addedDate: NSDate = NSDate()
     dynamic var quantity: Int = 0
-    dynamic var user: DBSharedUser = DBSharedUser()
+    dynamic var userOpt: DBSharedUser? = DBSharedUser()
     
     override static func primaryKey() -> String? {
         return "uuid"
     }
+    
+    var product: DBProduct {
+        get {
+            return productOpt ?? DBProduct()
+        }
+        set(newProduct) {
+            productOpt = newProduct
+        }
+    }
+    
+    var inventory: DBInventory {
+        get {
+            return inventoryOpt ?? DBInventory()
+        }
+        set(newInventory) {
+            inventoryOpt = newInventory
+        }
+    }
+    
+    var user: DBSharedUser {
+        get {
+            return userOpt ?? DBSharedUser()
+        }
+        set(newUser) {
+            userOpt = newUser
+        }
+    }
+    
+    // MARK: - Filters
+    
+    static func createFilter(uuid: String) -> String {
+        return "uuid == '\(uuid)'"
+    }
+    
+    static func createFilterWithProduct(productUuid: String) -> String {
+        return "productOpt.uuid == '\(productUuid)'"
+    }
+    
+    static func createFilterWithInventory(inventoryUuid: String) -> String {
+        return "inventoryOpt.uuid == '\(inventoryUuid)'"
+    }
+    
+    static func createPredicate(addedDate: NSDate, inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "addedDate >= %@ AND inventoryOpt.uuid == %@", addedDate, inventoryUuid)
+    }
+    
+    static func createPredicate(productName: String, addedDate: NSDate, inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.name == %@ AND addedDate >= %@ AND inventoryOpt.uuid == %@", productName, addedDate, inventoryUuid)
+    }
+    
+    static func createPredicate(startAddedDate: NSDate, endAddedDate: NSDate, inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "addedDate >= %@ AND addedDate <= %@ AND inventoryOpt.uuid == %@", startAddedDate, endAddedDate, inventoryUuid)
+    }
+    
+    // MARK: -
+
     
     static func fromDict(dict: [String: AnyObject], inventory: DBInventory, product: DBProduct) -> DBHistoryItem {
         let item = DBHistoryItem()
@@ -46,5 +102,9 @@ class DBHistoryItem: DBSyncable {
         dict["user"] = user.toDict()
         setSyncableFieldsInDict(dict)
         return dict
+    }
+    
+    override static func ignoredProperties() -> [String] {
+        return ["product", "inventory", "user"]
     }
 }

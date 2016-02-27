@@ -282,7 +282,7 @@ class ListItemProviderImpl: ListItemProvider {
                     return nil
                 }
             })
-            return Set(sectionsOfItemsWithStatus).count
+            return sectionsOfItemsWithStatus.distinctUsingEquatable().count
         }
         
         typealias BGResult = (success: Bool, listItems: [ListItem]) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything)
@@ -307,7 +307,7 @@ class ListItemProviderImpl: ListItemProvider {
                             
                             // see if there's already a listitem for this product in the list - if yes only increment it
                             
-                            let existingListItems = realm.objects(DBListItem).filter(DBListItem.createFilter(list))
+                            let existingListItems = realm.objects(DBListItem).filter(DBListItem.createFilterList(list.uuid))
                             let existingListItemsDict: [String: DBListItem] = existingListItems.toDictionary{(DBProduct.nameBrandKey($0.product.name, brand: $0.product.brand), $0)}
                             
                             // Quick access for mem cache items - for some things we need to check if list items were added in the mem cache

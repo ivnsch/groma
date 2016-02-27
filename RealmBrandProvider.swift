@@ -34,7 +34,7 @@ class RealmBrandProvider: RealmProvider {
     
     func updateBrand(oldName: String, newName: String, _ handler: Bool -> Void) {
         doInWriteTransaction({realm in
-            let dbProducts = realm.objects(DBProduct).filter("brand == '\(oldName)'")
+            let dbProducts = realm.objects(DBProduct).filter(DBProduct.createFilterBrand(oldName))
             for dbProduct in dbProducts {
                 dbProduct.brand = newName
                 realm.add(dbProduct, update: true)
@@ -55,7 +55,7 @@ class RealmBrandProvider: RealmProvider {
                 let realm = try Realm()
                 // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
                 // .sorted("brand", ascending: true)
-                let brands = Array(Set(realm.objects(DBProduct).filter("brand CONTAINS[c] '\(text)'").map{$0.brand}))[range].filter{!$0.isEmpty}.sort()
+                let brands = Array(Set(realm.objects(DBProduct).filter(DBProduct.createFilterBrandContains(text)).map{$0.brand}))[range].filter{!$0.isEmpty}.sort()
                 return brands
             } catch let e {
                 print("Error: RealmListItemProvider.brandsContainingText: Couldn't load brands, returning empty array. Error: \(e)")

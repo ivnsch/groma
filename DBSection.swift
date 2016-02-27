@@ -15,10 +15,19 @@ class DBSection: DBSyncable {
     dynamic var name: String = ""
 //    let listItems = RealmSwift.List<String>()
     
-    dynamic var list: DBList = DBList()
+    dynamic var listOpt: DBList? = DBList()
     dynamic var todoOrder: Int = 0
     dynamic var doneOrder: Int = 0
     dynamic var stashOrder: Int = 0
+    
+    var list: DBList {
+        get {
+            return listOpt ?? DBList()
+        }
+        set(newList) {
+            listOpt = newList
+        }
+    }
     
     override static func primaryKey() -> String? {
         return "uuid"
@@ -47,6 +56,27 @@ class DBSection: DBSyncable {
         self.removed = removed
     }
     
+    // MARK: - Filters
+    
+    static func createFilter(uuid: String) -> String {
+        return "uuid == '\(uuid)'"
+    }
+    
+    static func createFilter(name: String, listUuid: String) -> String {
+        return "name == '\(name)' AND listOpt.uuid = '\(listUuid)'"
+    }
+    
+    static func createFilterWithNames(names: [String], listUuid: String) -> String {
+        let sectionsNamesStr: String = names.map{"'\($0)'"}.joinWithSeparator(",")
+        return "name IN {\(sectionsNamesStr)} AND listOpt.uuid = '\(listUuid)'"
+    }
+    
+    static func createFilterNameContains(text: String) -> String {
+        return "name CONTAINS[c] '\(text)'"
+    }
+    
+    // MARK: -
+    
     static func fromDict(dict: [String: AnyObject], list: DBList) -> DBSection {
         let item = DBSection()
         item.uuid = dict["uuid"]! as! String
@@ -71,9 +101,8 @@ class DBSection: DBSyncable {
         setSyncableFieldsInDict(dict)
         return dict
     }
-    
-    static func createFilter(name: String, listUuid: String) -> String {
-        return "name == '\(name)' && list.uuid = '\(listUuid)'"
+
+    override static func ignoredProperties() -> [String] {
+        return ["list"]
     }
-    
 }

@@ -82,6 +82,26 @@ extension Results {
         return arr
     }
     
+//    func distinctSet() -> Set<T> {
+//        var set = Set<T>()
+//        for element in self {
+//            set.insert(element)
+//        }
+//        return set
+//    }
+    
+    func distinctArray() -> [T] {
+//        var set = Set<T>()
+        var array = [T]()
+        for element in self {
+//            if !set.contains(element) {
+            if !array.contains(element) {
+//                set.insert(element)
+                array.append(element)
+            }
+        }
+        return array
+    }
 }
 
 // doesn't compile... TODO why? use this if it's possible

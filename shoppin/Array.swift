@@ -117,7 +117,6 @@ extension Array {
             return Array(self[range.location..<end])
         }
     }
-    
 
 }
 
@@ -172,5 +171,31 @@ extension Array where Element: Equatable {
             return index
         }
         return nil
+    }
+    
+    // Less performant than distinct() in Array[Hashable] so wherever possible try to make the elements hashable and use distinct()
+    func distinctUsingEquatable() -> Array<Element> {
+        var array = [Element]()
+        for element in self {
+            if !self.contains(element) {
+                array.append(element)
+            }
+        }
+        return array
+    }
+}
+
+
+extension Array where Element: NSObject {
+    
+    // Less performant than distinct() in Array[Hashable] so wherever possible try to make the elements hashable and use distinct()
+    func distinctUsingEquatable() -> Array<Element> {
+        var array = [Element]()
+        for element in self {
+            if !self.contains(element) {
+                array.append(element)
+            }
+        }
+        return array
     }
 }

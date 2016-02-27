@@ -15,7 +15,7 @@ class RealmProductProvider: RealmProvider {
     
     func categoryWithName(name: String, handler: ProductCategory? -> ()) {
         let mapper = {ProductCategoryMapper.categoryWithDB($0)}
-        self.loadFirst(mapper, filter: "name = '\(name)'", handler: handler)
+        self.loadFirst(mapper, filter: DBProductCategory.createFilterName(name), handler: handler)
     }
     
     func loadCategorySuggestions(handler: [Suggestion] -> ()) {
@@ -29,7 +29,7 @@ class RealmProductProvider: RealmProvider {
     
     func incrementFav(product: Product, _ handler: Bool -> Void) {
         doInWriteTransaction({realm in
-            if let existingProduct = realm.objects(DBProduct).filter("uuid == '\(product.uuid)'").first {
+            if let existingProduct = realm.objects(DBProduct).filter(DBProduct.createFilter(product.uuid)).first {
                 existingProduct.fav++
                 realm.add(existingProduct, update: true)
                 return true

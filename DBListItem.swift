@@ -12,9 +12,9 @@ import RealmSwift
 class DBListItem: DBSyncable, CustomDebugStringConvertible {
     
     dynamic var uuid: String = ""
-    dynamic var section: DBSection = DBSection()
-    dynamic var product: DBProduct = DBProduct()
-    dynamic var list: DBList = DBList()
+    dynamic var sectionOpt: DBSection? = DBSection()
+    dynamic var productOpt: DBProduct? = DBProduct()
+    dynamic var listOpt: DBList? = DBList()
     dynamic var note: String = "" // TODO review if we can use optionals in realm, if not check if in newer version
     
     dynamic var todoQuantity: Int = 0
@@ -23,6 +23,33 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
     dynamic var doneOrder: Int = 0
     dynamic var stashQuantity: Int = 0
     dynamic var stashOrder: Int = 0
+    
+    var list: DBList {
+        get {
+            return listOpt ?? DBList()
+        }
+        set(newList) {
+            listOpt = newList
+        }
+    }
+    
+    var section: DBSection {
+        get {
+            return sectionOpt ?? DBSection()
+        }
+        set(newSection) {
+            sectionOpt = newSection
+        }
+    }
+    
+    var product: DBProduct {
+        get {
+            return productOpt ?? DBProduct()
+        }
+        set(newProduct) {
+            productOpt = newProduct
+        }
+    }
     
     override static func primaryKey() -> String? {
         return "uuid"
@@ -111,13 +138,33 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
     
     // MARK: - Filters
     
-    static func createFilter(list: List) -> String {
-        return "list.uuid == '\(list.uuid)'"
+    static func createFilter(uuid: String) -> String {
+        return "uuid == '\(uuid)'"
+    }
+    
+    static func createFilterList(listUuid: String) -> String {
+        return "listOpt.uuid == '\(listUuid)'"
     }
     
     static func createFilter(list: List, product: Product) -> String {
         let brand = product.brand ?? ""
-        return "\(createFilter(list)) && product.name == '\(product.name)' && product.brand == '\(brand)'"
+        return "\(createFilterList(list.uuid)) AND productOpt.name == '\(product.name)' AND productOpt.brand == '\(brand)'"
+    }
+    
+    static func createFilterWithProduct(productUuid: String) -> String {
+        return "productOpt.uuid == '\(productUuid)'"
+    }
+    
+    static func createFilterWithProductName(productName: String) -> String {
+        return "productOpt.name == '\(productName)'"
+    }
+    
+    // Finds list items that have the same product names as listItems and are in the same list
+    // WARN: Assumes all the list items belong to the same list (list uuid of first list item is used)
+    static func createFilter(listItems: [ListItem]) -> String {
+        let productNamesStr: String = listItems.map{"'\($0.product.name)'"}.joinWithSeparator(",")
+        let listUuid = listItems.first?.list.uuid ?? ""
+        return "productOpt.name IN {\(productNamesStr)} AND listOpt.uuid = '\(listUuid)'"
     }
     
     // MARK: - CustomDebugStringConvertible
@@ -163,5 +210,9 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
         dict["stashOrder"] = stashOrder
         setSyncableFieldsInDict(dict)
         return dict
+    }
+    
+    override static func ignoredProperties() -> [String] {
+        return ["list", "section", "product"]
     }
 }

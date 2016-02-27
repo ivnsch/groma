@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import QorumLogs
 
 class RealmListItemGroupProvider: RealmProvider {
     
@@ -26,7 +27,7 @@ class RealmListItemGroupProvider: RealmProvider {
             case .Order: return ("order", true)
             }
         }()
-        let filterMaybe = substring.map{"name CONTAINS[c] '\($0)'"}
+        let filterMaybe = substring.map{DBListItemGroup.createFilterNameContains($0)}
         let mapper = {ListItemGroupMapper.listItemGroupWith($0)}
         self.load(mapper, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range) {groups in
             handler(substring: substring, groups: groups)
@@ -35,7 +36,7 @@ class RealmListItemGroupProvider: RealmProvider {
     
     func groupItems(group: ListItemGroup, handler: [GroupItem] -> Void) {
         let mapper = {GroupItemMapper.groupItemWith($0)}
-        self.load(mapper, filter: "group.uuid = '\(group.uuid)'", handler: handler)
+        self.load(mapper, filter: DBGroupItem.createFilterGroup(group.uuid), handler: handler)
     }
 
     // TODO remove
@@ -69,7 +70,7 @@ class RealmListItemGroupProvider: RealmProvider {
     }
 
     func removeGroup(uuid: String, handler: Bool -> Void) {
-        self.remove("uuid = '\(uuid)'", handler: handler, objType: DBListItemGroup.self)
+        self.remove(DBListItemGroup.createFilter(uuid), handler: handler, objType: DBListItemGroup.self)
     }
     
     func add(groupItem: GroupItem, handler: Bool -> Void) {
@@ -83,9 +84,8 @@ class RealmListItemGroupProvider: RealmProvider {
                 // load items
                 let realm = try Realm()
                 let mapper = {GroupItemMapper.groupItemWith($0)}
-                let groupItemsUuidsStr: String = groupItems.map{"'\($0.uuid)'"}.joinWithSeparator(",")
-                
-                let items = loadSync(realm, mapper: mapper, filter: "uuid IN {\(groupItemsUuidsStr)}")
+
+                let items = loadSync(realm, mapper: mapper, filter: DBGroupItem.createFilterGroupItemsUuids(groupItems))
                 // decide if add/increment
                 let dict: [String: GroupItem] = items.toDictionary{($0.uuid, $0)}
                 let newOrIncrementedGroupItems: [DBGroupItem] = groupItems.map {groupItem in
@@ -133,7 +133,7 @@ class RealmListItemGroupProvider: RealmProvider {
             do {
                 let realm = try Realm()
                 let mapper = {GroupItemMapper.groupItemWith($0)}
-                if let item = loadSync(realm, mapper: mapper, filter: "product.name = '\(groupItem.product.name)' && group.uuid = '\(groupItem.group.uuid)'").first {
+                if let item = loadSync(realm, mapper: mapper, filter: DBGroupItem.createFilterGroupAndProductName(groupItem.group.uuid, productName: groupItem.product.name)).first {
                     let incremented = item.incrementQuantityCopy(groupItem.quantity)
                     let dbItem = GroupItemMapper.dbWith(incremented)
                     saveObjSync(dbItem, update: true)
@@ -182,51 +182,56 @@ class RealmListItemGroupProvider: RealmProvider {
     }
 
     func removeGroupItem(uuid: String, handler: Bool -> Void) {
-        remove("uuid = '\(uuid)'", handler: handler, objType: DBGroupItem.self)
+        remove(DBGroupItem.createFilter(uuid), handler: handler, objType: DBGroupItem.self)
     }
     
     func overwrite(items: [GroupItem], groupUuid: String, handler: Bool -> Void) {
         let dbObjs = items.map{GroupItemMapper.dbWith($0)}
-        self.overwrite(dbObjs, deleteFilter: "group.uuid = '\(groupUuid)'", resetLastUpdateToServer: true, handler: handler)
+        self.overwrite(dbObjs, deleteFilter: DBGroupItem.createFilterGroup(groupUuid), resetLastUpdateToServer: true, handler: handler)
     }
     
     // Copied from realm list item provider (which is copied from inventory item provider) refactor?
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
     func incrementGroupItem(item: GroupItem, delta: Int, handler: Bool -> ()) {
         
+        do {
         //        synced(self)  {
-        
-        // load
-        let realm = try! Realm()
-        let results = realm.objects(DBGroupItem).filter("uuid == '\(item.uuid)'")
-        //        results = results.filter(NSPredicate(format: DBInventoryItem.createFilter(item.product, item.inventory), argumentArray: []))
-        let objs: [DBGroupItem] = results.toArray(nil)
-        let dbItems = objs.map{GroupItemMapper.groupItemWith($0)}
-        let groupItemMaybe = dbItems.first
-        
-        if let groupItem = groupItemMaybe {
-            // increment
-            let incrementedListitem = groupItem.copy(quantity: groupItem.quantity + delta)
+            // load
+            let realm = try Realm()
+            let results = realm.objects(DBGroupItem).filter(DBGroupItem.createFilter(item.uuid))
+            //        results = results.filter(NSPredicate(format: DBInventoryItem.createFilter(item.product, item.inventory), argumentArray: []))
+            let objs: [DBGroupItem] = results.toArray(nil)
+            let dbItems = objs.map{GroupItemMapper.groupItemWith($0)}
+            let groupItemMaybe = dbItems.first
             
-            // convert to db object
-            let dbIncrementedInventoryitem = GroupItemMapper.dbWith(incrementedListitem)
-            
-            // save
-            realm.write {
-                for obj in objs {
-                    obj.lastUpdate = NSDate()
-                    realm.add(dbIncrementedInventoryitem, update: true)
+            if let groupItem = groupItemMaybe {
+                // increment
+                let incrementedListitem = groupItem.copy(quantity: groupItem.quantity + delta)
+                
+                // convert to db object
+                let dbIncrementedInventoryitem = GroupItemMapper.dbWith(incrementedListitem)
+                
+                // save
+                try realm.write {
+                    for obj in objs {
+                        obj.lastUpdate = NSDate()
+                        realm.add(dbIncrementedInventoryitem, update: true)
+                    }
                 }
+                
+                handler(true)
+                
+            } else {
+                print("Info: RealmListItemGroupProvider.incrementGroupItem: Group item not found: \(item)")
+                handler(false)
             }
+            //        }
             
-            handler(true)
             
-            
-        } else {
-            print("Info: RealmListItemGroupProvider.incrementGroupItem: Group item not found: \(item)")
+        } catch let e {
+            QL4("Realm error: \(e)")
             handler(false)
         }
-        //        }
     }
     
     

@@ -15,7 +15,16 @@ class DBList: DBSyncable {
     dynamic var name: String = ""
     dynamic var bgColorHex: String = "000000"
     dynamic var order: Int = 0
-    dynamic var inventory: DBInventory = DBInventory()
+    dynamic var inventoryOpt: DBInventory? = DBInventory()
+    
+    var inventory: DBInventory {
+        get {
+            return inventoryOpt ?? DBInventory()
+        }
+        set(newInventory) {
+            inventoryOpt = newInventory
+        }
+    }
     
     let users = RealmSwift.List<DBSharedUser>()
 
@@ -30,6 +39,14 @@ class DBList: DBSyncable {
     override static func primaryKey() -> String? {
         return "uuid"
     }
+        
+    // MARK: - Filters
+    
+    static func createFilter(uuid: String) -> String {
+        return "uuid == '\(uuid)'"
+    }
+
+    // MARK: -
     
     static func fromDict(dict: [String: AnyObject], inventory: DBInventory) -> DBList {
         let item = DBList()
@@ -62,5 +79,9 @@ class DBList: DBSyncable {
         dict["users"] = users.map{$0.toDict()}
         setSyncableFieldsInDict(dict)
         return dict
+    }
+    
+    override static func ignoredProperties() -> [String] {
+        return ["inventory"]
     }
 }

@@ -9,6 +9,7 @@
 import Foundation
 import RealmSwift
 
+// TODO! move filter strings to db classes like everywhere else (and add "Opt" at the end to linked optionals) - skipping this for now since we don't use plan. Otherwise maybe remove plan code entirely.
 class RealmPlanProvider: RealmProvider {
 
     let dbHistoryProvider = RealmHistoryProvider()
@@ -79,9 +80,9 @@ class RealmPlanProvider: RealmProvider {
                     let productNamesStr: String = productNames.map{"'\($0)'"}.joinWithSeparator(",")
 
                     // get all possible already existing plan items in a dictionary
-                    let existingPlanItemsSet = Set(realm.objects(DBPlanItem).filter("product.name IN {\(productNamesStr)}"))
+                    let existingPlanItems = realm.objects(DBPlanItem).filter("product.name IN {\(productNamesStr)}").distinctArray()
                     let existingPlanItemsDict: [String: DBPlanItem] = productNames.toDictionary {productName in
-                        (productName, existingPlanItemsSet.filter{$0.product.name == productName}.first)
+                        (productName, existingPlanItems.filter{$0.product.name == productName}.first)
                     }
                     
                     // the items that we will write to the database both new as to be updated
@@ -145,9 +146,9 @@ class RealmPlanProvider: RealmProvider {
                     let productNamesStr: String = productNames.map{"'\($0)'"}.joinWithSeparator(",")
                     
                     // get all possible already existing plan items in a dictionary
-                    let existingPlanItemsSet = Set(realm.objects(DBPlanItem).filter("product.name IN {\(productNamesStr)}"))
+                    let existingPlanItems = realm.objects(DBPlanItem).filter("product.name IN {\(productNamesStr)}").distinctArray()
                     let existingPlanItemsDict: [String: DBPlanItem] = productNames.toDictionary {productName in
-                        (productName, existingPlanItemsSet.filter{$0.product.name == productName}.first)
+                        (productName, existingPlanItems.filter{$0.product.name == productName}.first)
                     }
                     
                     // the items that we will write to the database both new as to be updated
@@ -211,9 +212,9 @@ class RealmPlanProvider: RealmProvider {
                     let productNamesStr: String = productNames.map{"'\($0)'"}.joinWithSeparator(",")
                     
                     // get all possible already existing plan items in a dictionary
-                    let existingPlanItemsSet = Set(realm.objects(DBPlanItem).filter("product.name IN {\(productNamesStr)}"))
+                    let existingPlanItems = realm.objects(DBPlanItem).filter("product.name IN {\(productNamesStr)}").distinctArray()
                     let existingPlanItemsDict: [String: DBPlanItem] = productNames.toDictionary {productName in
-                        (productName, existingPlanItemsSet.filter{$0.product.name == productName}.first)
+                        (productName, existingPlanItems.filter{$0.product.name == productName}.first)
                     }
                     
                     // the items that we will write to the database both new as to be updated

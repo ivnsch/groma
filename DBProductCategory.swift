@@ -30,6 +30,21 @@ class DBProductCategory: DBSyncable {
         bgColorHex = bgColor.hexStr
     }
     
+    // MARK: - Filters
+    
+    static func createFilter(uuid: String) -> String {
+        return "uuid == '\(uuid)'"
+    }
+    
+    static func createFilterName(name: String) -> String {
+        return "name = '\(name)'"
+    }
+    
+    static func createFilterNameContains(text: String) -> String {
+        return "name CONTAINS[c] '\(text)'"
+    }
+    
+    // MARK: -
     static func fromDict(dict: [String: AnyObject]) -> DBProductCategory {
         let item = DBProductCategory()
         item.uuid = dict["uuid"]! as! String

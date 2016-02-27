@@ -20,7 +20,7 @@ class RealmListItemProvider: RealmProvider {
     
     func loadSectionWithUuid(uuid: String, handler: Section? -> ()) {
         let mapper = {SectionMapper.sectionWithDB($0)}
-        self.loadFirst(mapper, filter: "uuid = '\(uuid)'", handler: handler)
+        self.loadFirst(mapper, filter: DBSection.createFilter(uuid), handler: handler)
     }
     
     func loadSection(name: String, list: List, handler: Section? -> ()) {
@@ -31,8 +31,7 @@ class RealmListItemProvider: RealmProvider {
     
     func loadSections(names: [String], list: List, handler: [Section] -> ()) {
         let mapper = {SectionMapper.sectionWithDB($0)}
-        let sectionsNamesStr: String = names.map{"'\($0)'"}.joinWithSeparator(",")
-        self.load(mapper, filter: "name IN {\(sectionsNamesStr)} && list.uuid = '\(list.uuid)'", handler: handler)
+        self.load(mapper, filter: DBSection.createFilterWithNames(names, listUuid: list.uuid), handler: handler)
     }
     
     func saveSection(section: Section, handler: Bool -> ()) {
@@ -49,7 +48,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func remove(section: Section, handler: Bool -> ()) {
-        self.remove("uuid = '\(section.uuid)'", handler: handler, objType: DBSection.self)
+        self.remove(DBSection.createFilter(section.uuid), handler: handler, objType: DBSection.self)
     }
 
     func update(sections: [Section], handler: Bool -> ()) {
@@ -61,13 +60,13 @@ class RealmListItemProvider: RealmProvider {
     
     func loadProductWithUuid(uuid: String, handler: Product? -> ()) {
         let mapper = {ProductMapper.productWithDB($0)}
-        self.loadFirst(mapper, filter: "uuid = '\(uuid)'", handler: handler)
+        self.loadFirst(mapper, filter: DBProduct.createFilter(uuid), handler: handler)
     }
     
     // TODO rename method (uses now brand too)
     func loadProductWithName(name: String, brand: String, handler: Product? -> ()) {
         let mapper = {ProductMapper.productWithDB($0)}
-        self.loadFirst(mapper, filter: "name = '\(name)' && brand = '\(brand)'", handler: handler)
+        self.loadFirst(mapper, filter: DBProduct.createFilterNameBrand(name, brand: brand), handler: handler)
     }
     
     func loadProducts(range: NSRange, sortBy: ProductSortBy, handler: [Product] -> ()) {
@@ -83,7 +82,8 @@ class RealmListItemProvider: RealmProvider {
             case .Fav: return ("fav", false)
             }
         }()
-        let filterMaybe = substring.map{"name CONTAINS[c] '\($0)'"}
+        
+        let filterMaybe = substring.map{DBProduct.createFilterNameContains($0)}
         let mapper = {ProductMapper.productWithDB($0)}
         self.load(mapper, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range) {products in
             handler(substring: substring, products: products)
@@ -119,7 +119,7 @@ class RealmListItemProvider: RealmProvider {
     // Note: This is expected to be called from inside a transaction and in a background operation
     func deleteProductAndDependenciesSync(realm: Realm, productUuid: String) -> Bool {
         if deleteProductAndDependenciesSync(realm, productUuid: productUuid) {
-            let productResult = realm.objects(DBProduct).filter("uuid = '\(productUuid)'")
+            let productResult = realm.objects(DBProduct).filter(DBProduct.createFilter(productUuid))
             realm.delete(productResult)
             return true
         } else {
@@ -129,13 +129,13 @@ class RealmListItemProvider: RealmProvider {
     
     // Note: This is expected to be called from inside a transaction and in a background operation
     func deleteProductDependenciesSync(realm: Realm, productUuid: String) -> Bool {
-        let listItemResult = realm.objects(DBListItem).filter("product.uuid = '\(productUuid)'")
+        let listItemResult = realm.objects(DBListItem).filter(DBListItem.createFilterWithProduct(productUuid))
         realm.delete(listItemResult)
-        let inventoryResult = realm.objects(DBInventoryItem).filter("product.uuid = '\(productUuid)'")
+        let inventoryResult = realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilterWithProduct(productUuid))
         realm.delete(inventoryResult)
-        let historyResult = realm.objects(DBHistoryItem).filter("product.uuid = '\(productUuid)'")
+        let historyResult = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilterWithProduct(productUuid))
         realm.delete(historyResult)
-        let planResult = realm.objects(DBPlanItem).filter("product.uuid = '\(productUuid)'")
+        let planResult = realm.objects(DBPlanItem).filter(DBPlanItem.createFilterWithProduct(productUuid))
         realm.delete(planResult)
         return true
     }
@@ -219,7 +219,7 @@ class RealmListItemProvider: RealmProvider {
     
     func categoriesContaining(text: String, handler: [String] -> Void) {
         let mapper: DBProduct -> String = {$0.category.name}
-        self.load(mapper, filter: "category CONTAINS[c] '\(text)'") {categories in
+        self.load(mapper, filter: DBProduct.createFilterCategoryNameContains(text)) {categories in
             let distinctCategories = NSOrderedSet(array: categories).array as! [String] // TODO re-check: Realm can't distinct yet https://github.com/realm/realm-cocoa/issues/1103
             handler(distinctCategories)
         }
@@ -235,8 +235,8 @@ class RealmListItemProvider: RealmProvider {
     // Gets suggestions both from section and category names
     func sectionSuggestionsContainingText(text: String, handler: [String] -> Void) {
         withRealm({ realm in
-            let sectionNames: [String] = realm.objects(DBSection).filter("name CONTAINS[c] '\(text)'").map{$0.name}
-            let categoryNames: [String] = realm.objects(DBProductCategory).filter("name CONTAINS[c] '\(text)'").map{$0.name}
+            let sectionNames: [String] = realm.objects(DBSection).filter(DBSection.createFilterNameContains(text)).map{$0.name}
+            let categoryNames: [String] = realm.objects(DBProductCategory).filter(DBProductCategory.createFilterNameContains(text)).map{$0.name}
             let allNames: [String] = (sectionNames + categoryNames).distinct()
             return allNames
             
@@ -273,7 +273,7 @@ class RealmListItemProvider: RealmProvider {
     
     func loadList(uuid: String, handler: List? -> ()) {
         let mapper = {ListMapper.listWithDB($0)}
-        self.loadFirst(mapper, filter: "uuid = '\(uuid)'", handler: handler)
+        self.loadFirst(mapper, filter: DBList.createFilter(uuid), handler: handler)
     }
     
     func loadLists(handler: [List] -> ()) {
@@ -290,12 +290,12 @@ class RealmListItemProvider: RealmProvider {
             do {
                 let realm = try Realm()
                 var success = false
-                realm.write {
+                try realm.write {
                     success = self?.removeListSync(realm, listUuid: listUuid) ?? false
                 }
                 return success
-            } catch _ {
-                QL4("Error creating Realm() in remove")
+            } catch let e {
+                QL4("Realm error: \(e)")
                 return false
             }
             }) {(result: Bool) in
@@ -305,11 +305,11 @@ class RealmListItemProvider: RealmProvider {
 
     // Expected to be executed in do/catch and write block
     func removeListSync(realm: Realm, listUuid: String) -> Bool {
-        let dbListItems = realm.objects(DBListItem).filter("list.uuid = '\(listUuid)'")
+        let dbListItems = realm.objects(DBListItem).filter(DBListItem.createFilterList(listUuid))
         // delete listItems
         realm.delete(dbListItems)
         // delete list
-        let listResults = realm.objects(DBList).filter("uuid = '\(listUuid)'")
+        let listResults = realm.objects(DBList).filter(DBList.createFilter(listUuid))
         realm.delete(listResults)
         return true
     }
@@ -346,9 +346,8 @@ class RealmListItemProvider: RealmProvider {
             // Note that we always want this except when saveListItems is called after having cleared the database, e.g. (currently) on server sync, or when doing an update
             if incrementQuantity {
                 // get all existing list items with product names using IN query
-                let productNamesStr: String = listItems.map{"'\($0.product.name)'"}.joinWithSeparator(",")
-                let listUuid = listItems.first?.list.uuid ?? ""
-                let existingListItems = realm.objects(DBListItem).filter("product.name IN {\(productNamesStr)} AND list.uuid = '\(listUuid)'")
+                // Note we don't query brand here because we use the result just as a look up dictionary (by uuid) and name+brand query is a subset of name query, so all the products we need will be contained in this query.
+                let existingListItems = realm.objects(DBListItem).filter(DBListItem.createFilter(listItems))
                 
                 let uuidToDBListItemDict: [String: DBListItem] = existingListItems.toDictionary{
                     ($0.product.uuid, $0)
@@ -392,7 +391,7 @@ class RealmListItemProvider: RealmProvider {
             return syncedRet(self) {
                 
                 // see if there's already a listitem for this product in the list - if yes only increment it
-                if let existingListItem = realm.objects(DBListItem).filter("product.name == '\(product.name)'").first {
+                if let existingListItem = realm.objects(DBListItem).filter(DBListItem.createFilterWithProductName(product.name)).first {
                     existingListItem.increment(ListItemStatusQuantity(status: status, quantity: quantity))
                     
                     // possible updates (when user submits a new list item using add edit product controller)
@@ -410,7 +409,7 @@ class RealmListItemProvider: RealmProvider {
                 } else { // no list item for product in the list, create a new one
                     
                     // see if there's already a section for the new list item in the list, if not create a new one
-                    let listItemsInList = realm.objects(DBListItem).filter("list.uuid == '\(list.uuid)'")
+                    let listItemsInList = realm.objects(DBListItem).filter(DBListItem.createFilterList(list.uuid))
                     let sectionName = sectionNameMaybe ?? product.category.name
                     let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
                         return SectionMapper.sectionWithDB(item.section)
@@ -471,7 +470,7 @@ class RealmListItemProvider: RealmProvider {
     
     func loadListItems(list: List, handler: [ListItem] -> ()) {
         let mapper = {ListItemMapper.listItemWithDB($0)}
-        self.load(mapper, filter: "list.uuid = '\(list.uuid)'", handler: handler)
+        self.load(mapper, filter: DBListItem.createFilterList(list.uuid), handler: handler)
     }
     
     // hm...
@@ -481,7 +480,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func remove(listItem: ListItem, handler: Bool -> ()) {
-        self.remove("uuid = '\(listItem.uuid)'", handler: handler, objType: DBListItem.self)
+        self.remove(DBListItem.createFilter(listItem.uuid), handler: handler, objType: DBListItem.self)
     }
     
     // TODO remove this method? Or if it's still needed, pass only list items, all the dependencies are in list items already
@@ -529,7 +528,7 @@ class RealmListItemProvider: RealmProvider {
     
     func overwrite(listItems: [ListItem], listUuid: String, handler: Bool -> ()) {
         let dbListItems = listItems.map{ListItemMapper.dbWithListItem($0)}
-        self.overwrite(dbListItems, deleteFilter: "list.uuid = '\(listUuid)'", resetLastUpdateToServer: true, handler: handler)
+        self.overwrite(dbListItems, deleteFilter: DBListItem.createFilterList(listUuid), resetLastUpdateToServer: true, handler: handler)
     }
     
     /**
@@ -544,7 +543,7 @@ class RealmListItemProvider: RealmProvider {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             do {
                 let realm = try Realm()
-                let listItems = realm.objects(DBListItem).filter("list.uuid = '\(list.uuid)'")
+                let listItems = realm.objects(DBListItem).filter(DBListItem.createFilterList(list.uuid))
                 let count = listItems.filter{$0.hasStatus(status)}.count
                 finished(count)
             } catch _ {
@@ -557,39 +556,46 @@ class RealmListItemProvider: RealmProvider {
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
     func incrementTodoListItem(item: ListItem, delta: Int, handler: Bool -> ()) {
         
-        //        synced(self)  {
-        
-        // load
-        let realm = try! Realm()
-        let results = realm.objects(DBListItem).filter("uuid == '\(item.uuid)'")
-//        results = results.filter(NSPredicate(format: DBInventoryItem.createFilter(item.product, item.inventory), argumentArray: []))
-        let objs: [DBListItem] = results.toArray(nil)
-        let dbInventoryItems = objs.map{ListItemMapper.listItemWithDB($0)}
-        let listItemMaybe = dbInventoryItems.first
-        
-        if let listItem = listItemMaybe {
-            // increment
-            let incrementedListitem = listItem.copy(note: nil, todoQuantity: listItem.todoQuantity + delta)
+        do {
+            //        synced(self)  {
             
-            // convert to db object
-            let dbIncrementedInventoryitem = ListItemMapper.dbWithListItem(incrementedListitem)
+            // load
+            let realm = try Realm()
+            let results = realm.objects(DBListItem).filter(DBListItem.createFilter(item.uuid))
+            //        results = results.filter(NSPredicate(format: DBInventoryItem.createFilter(item.product, item.inventory), argumentArray: []))
+            let objs: [DBListItem] = results.toArray(nil)
+            let dbInventoryItems = objs.map{ListItemMapper.listItemWithDB($0)}
+            let listItemMaybe = dbInventoryItems.first
             
-            // save
-            realm.write {
-                for obj in objs {
-                    obj.lastUpdate = NSDate()
-                    realm.add(dbIncrementedInventoryitem, update: true)
+            if let listItem = listItemMaybe {
+                // increment
+                let incrementedListitem = listItem.copy(note: nil, todoQuantity: listItem.todoQuantity + delta)
+                
+                // convert to db object
+                let dbIncrementedInventoryitem = ListItemMapper.dbWithListItem(incrementedListitem)
+                
+                // save
+                try realm.write {
+                    for obj in objs {
+                        obj.lastUpdate = NSDate()
+                        realm.add(dbIncrementedInventoryitem, update: true)
+                    }
                 }
+                
+                handler(true)
+                
+                
+            } else {
+                print("Info: RealmListItemProvider.incrementTodoListItem: List item not found: \(item)")
+                handler(false)
             }
+            //        }
             
-            handler(true)
-            
-            
-        } else {
-            print("Info: RealmListItemProvider.incrementTodoListItem: List item not found: \(item)")
+        } catch let e {
+            QL4("Realm error: \(e)")
             handler(false)
         }
-        //        }
+
     }
     
     // MARK: - Sync

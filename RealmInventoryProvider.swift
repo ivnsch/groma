@@ -82,7 +82,7 @@ class RealmInventoryProvider: RealmProvider {
 //            }
 //        }()
         // range also not possible because sorting is not psosible. If we can't sort first then range is incorrect.
-        self.load(mapper, filter: "inventory.uuid = '\(inventory.uuid)'", /*range: range, sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), */handler: handler)
+        self.load(mapper, filter: DBInventoryItem.createFilter(inventory.uuid), /*range: range, sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), */handler: handler)
     }
     
     func saveInventory(inventory: Inventory, update: Bool = true, handler: Bool -> ()) {
@@ -93,17 +93,17 @@ class RealmInventoryProvider: RealmProvider {
         background({
             do {
                 let realm = try Realm()
-                realm.write {
+                try realm.write {
                     RealmListItemProvider().removeListSync(realm, listUuid: uuid)
                     
                     RealmHistoryProvider().removeHistoryItemsForInventory(realm, inventoryUuid: uuid)
                     
-                    let inventoryResults = realm.objects(DBInventory).filter("uuid = '\(uuid)'")
+                    let inventoryResults = realm.objects(DBInventory).filter(DBInventory.createFilter(uuid))
                     realm.delete(inventoryResults)
                 }
                 return true
             } catch let e {
-                QL4("Error creating Realm() in remove: \(e)")
+                QL4("Realm error: \(e)")
                 return false
             }
             }) {(result: Bool) in
@@ -132,7 +132,7 @@ class RealmInventoryProvider: RealmProvider {
 
     func overwrite(items: [InventoryItem], inventoryUuid: String, handler: Bool -> Void) {
         let dbObjs = items.map{InventoryItemMapper.dbWithInventoryItem($0)}
-        self.overwrite(dbObjs, deleteFilter: "inventory.uuid = '\(inventoryUuid)'", resetLastUpdateToServer: true, handler: handler)
+        self.overwrite(dbObjs, deleteFilter: DBInventoryItem.createFilter(inventoryUuid), resetLastUpdateToServer: true, handler: handler)
     }
     
     func saveInventoryItem(item: InventoryItem, handler: Bool -> ()) {
@@ -144,8 +144,9 @@ class RealmInventoryProvider: RealmProvider {
     // param onlyDelta: if we want to update only quantityDelta field (opposed to updating both quantity and quantityDelta)
     func incrementInventoryItem(item: InventoryItem, delta: Int, onlyDelta: Bool = false, handler: Bool -> ()) {
 
-//        synced(self)  {
-        
+        do {
+            //        synced(self)  {
+            
             // load
             let realm = try! Realm()
             var results = realm.objects(DBInventoryItem)
@@ -169,7 +170,7 @@ class RealmInventoryProvider: RealmProvider {
                 
                 
                 // save
-                realm.write {
+                try realm.write {
                     for obj in objs {
                         obj.lastUpdate = NSDate()
                         realm.add(dbIncrementedInventoryitem, update: true)
@@ -183,7 +184,12 @@ class RealmInventoryProvider: RealmProvider {
                 print("Info: RealmInventoryProvider.incrementInventoryItem: Inventory item not found: \(item)")
                 handler(false)
             }
-//        }
+            //        }
+            
+        } catch let e {
+            QL4("Realm error: \(e)")
+            handler(false)
+        }
     }
     
     
@@ -213,7 +219,7 @@ class RealmInventoryProvider: RealmProvider {
 
     func countInventoryItems(inventory: Inventory, handler: Int? -> Void) {
         withRealm({realm in
-            realm.objects(DBInventoryItem).filter("inventory.uuid = '\(inventory.uuid)'").count
+            realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilter(inventory.uuid)).count
             }) { (countMaybe: Int?) -> Void in
                 if let count = countMaybe {
                     handler(count)

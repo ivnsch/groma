@@ -35,14 +35,14 @@ class RealmProvider {
         do {
             obj.lastUpdate = NSDate()
             let realm = try Realm()
-            realm.write {
+            try realm.write {
                 realm.add(obj, update: update)
             }
         } catch let error as NSError {
-            QL4("Error creating Realm: \(error)")
+            QL4("Realm error: \(error)")
             return false
-        } catch _ {
-            QL4("Error creating Realm: (unknown)")
+        } catch let error {
+            QL4("Realm error: \(error)")
             return false
         }
         return true
@@ -68,16 +68,16 @@ class RealmProvider {
     func saveObjsSync<T: Object>(objs: [T], update: Bool = false) -> Bool {
         do {
             let realm = try Realm()
-            realm.write {
+            try realm.write {
                 for obj in objs {
                     realm.add(obj, update: update)
                 }
             }
         } catch let error as NSError {
-            QL4("Error creating Realm: \(error)")
+            QL4("Realm error: \(error)")
             return false
-        } catch _ {
-            QL4("Error creating Realm: (unknown)")
+        } catch let error {
+            QL4("Realm error: \(error)")
             return false
         }
         return true
@@ -98,17 +98,17 @@ class RealmProvider {
 
             do {
                 let realm = try Realm()
-                realm.write {
+                try realm.write {
                     for obj in objs {
                         obj.lastUpdate = NSDate()
                         realm.add(obj, update: update)
                     }
                 }
             } catch let error as NSError {
-                QL4("Error creating Realm: \(error)")
+                QL4("Realm error: \(error)")
                 finished(false)
-            } catch _ {
-                QL4("Error creating Realm: (unknown)")
+            } catch let error {
+                QL4("Realm error: \(error)")
                 finished(false)
             }
 
@@ -192,14 +192,14 @@ class RealmProvider {
                 if let pred = pred {
                     results = results.filter(pred)
                 }
-                realm.write {
+                try realm.write {
                     realm.delete(results)
                 }
 
                 finished(true)
 
-            } catch _ {
-                QL4("Error creating Realm")
+            } catch let error {
+                QL4("Realm error: \(error)")
                 finished(false)
             }
         })
@@ -217,16 +217,16 @@ class RealmProvider {
             do {
                 let realm = try Realm()
                 var obj: T?
-                realm.write {
+                try realm.write {
                     obj = f(realm)
                 }
                 finished(obj)
                 
             } catch let error as NSError {
-                QL4("Error creating Realm: \(error)")
+                QL4("Realm error: \(error)")
                 finished(nil)
-            } catch _ {
-                QL4("Error creating Realm: (unknown)")
+            } catch let error {
+                QL4("Realm error: \(error)")
                 finished(nil)
             }
         })
@@ -237,16 +237,16 @@ class RealmProvider {
             let realm = try Realm()
 
             var obj: T?
-            realm.write {
+            try realm.write {
                 obj = f(realm)
             }
             return obj
             
         } catch let error as NSError {
-            QL4("Error creating Realm: \(error)")
+            QL4("Realm error: \(error)")
             return nil
-        } catch _ {
-            QL4("Error creating Realm: (unknown)")
+        } catch let error {
+            QL4("Realm error: \(error)")
             return nil
         }
     }
@@ -258,10 +258,10 @@ class RealmProvider {
                 return f(realm)
                 
             } catch let error as NSError {
-                QL4("Error creating Realm: \(error)")
+                QL4("Realm error: \(error)")
                 return nil
-            } catch _ {
-                QL4("Error creating Realm: (unknown)")
+            } catch let error {
+                QL4("Realm error: \(error)")
                 return nil
             }
             }) { (result: T?) in

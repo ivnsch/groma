@@ -30,6 +30,14 @@ class DBInventory: DBSyncable {
         return "uuid"
     }
     
+    // MARK: - Filters
+    
+    static func createFilter(uuid: String) -> String {
+        return "uuid == '\(uuid)'"
+    }
+    
+    // MARK: -
+    
     static func fromDict(dict: [String: AnyObject]) -> DBInventory {
         let item = DBInventory()
         let inventoryDict = dict["inventory"] as! [String: AnyObject]

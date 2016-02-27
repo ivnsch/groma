@@ -33,11 +33,11 @@ PODS:
   - Nimble (2.0.0-rc.2)
   - QorumLogs (0.5)
   - Reachability (3.2)
-  - Realm (0.94.1):
-    - Realm/Headers (= 0.94.1)
-  - Realm/Headers (0.94.1)
-  - RealmSwift (0.94.1):
-    - Realm (= 0.94.1)
+  - Realm (0.98.3):
+    - Realm/Headers (= 0.98.3)
+  - Realm/Headers (0.98.3)
+  - RealmSwift (0.98.3):
+    - Realm (= 0.98.3)
   - Starscream (1.0.2)
   - SwiftCharts (0.3)
   - SwiftValidator (2.1.1)
@@ -54,8 +54,7 @@ DEPENDENCIES:
   - Nimble (from `https://github.com/Quick/Nimble.git`, branch `swift-2.0`)
   - QorumLogs (from `https://github.com/i-schuetz/QorumLogs`, branch `only_show_array_files`)
   - Reachability (~> 3.2)
-  - Realm (from `https://github.com/realm/realm-cocoa.git`, branch `swift-2.0`)
-  - RealmSwift (from `https://github.com/realm/realm-cocoa.git`, branch `swift-2.0`)
+  - RealmSwift
   - Starscream
   - SwiftCharts (from `https://github.com/i-schuetz/SwiftCharts.git`)
   - SwiftValidator (from `https://github.com/i-schuetz/SwiftValidator`, branch `swift2.0_remove_delegate_callback`)
@@ -69,12 +68,6 @@ EXTERNAL SOURCES:
   QorumLogs:
     :branch: only_show_array_files
     :git: https://github.com/i-schuetz/QorumLogs
-  Realm:
-    :branch: swift-2.0
-    :git: https://github.com/realm/realm-cocoa.git
-  RealmSwift:
-    :branch: swift-2.0
-    :git: https://github.com/realm/realm-cocoa.git
   SwiftCharts:
     :git: https://github.com/i-schuetz/SwiftCharts.git
   SwiftValidator:
@@ -88,12 +81,6 @@ CHECKOUT OPTIONS:
   QorumLogs:
     :commit: 883bc6ef5e8d002e878bbc693bd087f37070d760
     :git: https://github.com/i-schuetz/QorumLogs
-  Realm:
-    :commit: 2e76fca59d9dfe0edf00cbc01f2cef85033426eb
-    :git: https://github.com/realm/realm-cocoa.git
-  RealmSwift:
-    :commit: 2e76fca59d9dfe0edf00cbc01f2cef85033426eb
-    :git: https://github.com/realm/realm-cocoa.git
   SwiftCharts:
     :commit: 4b05d8b0bf259277bcc068b3da770849b08bdc9d
     :git: https://github.com/i-schuetz/SwiftCharts.git
@@ -117,8 +104,8 @@ SPEC CHECKSUMS:
   Nimble: e3cf5e73a491daf21c2bc88783dbfc55ce8b8e02
   QorumLogs: 6de76e5299e8ec5de6ff2404594727006cc5b43a
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  Realm: aa8ba4c47efeecd83b2fb1c882e5f33e8c5676ca
-  RealmSwift: 1cfcf6f9bd4de8674797d000de346d9588ca2028
+  Realm: c6a7d00221a2d5177810a674aebd40c5e0b70b0f
+  RealmSwift: d6ecad6e4c2a645d6ac956c2c7e9efb375f39c31
   Starscream: 40e2c4c1c770d811f24116b8b7dbeb4542c56767
   SwiftCharts: c66a449d58f9c811c467f865a47b1b6136b49499
   SwiftValidator: 79936ea870f1dba8a0824763375375bb209fe30d

@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import QorumLogs
 
 class RealmProductCategoryProvider: RealmProvider {
     
@@ -18,12 +19,12 @@ class RealmProductCategoryProvider: RealmProvider {
     
     func categoriesContainingText(text: String, _ handler: [ProductCategory] -> Void) {
         let mapper = {ProductCategoryMapper.categoryWithDB($0)}
-        load(mapper, filter: "name CONTAINS[c] '\(text)'", handler: handler)
+        load(mapper, filter: DBProductCategory.createFilterNameContains(text), handler: handler)
     }
     
     func categoriesContainingText(text: String, range: NSRange, _ handler: (text: String?, categories: [ProductCategory]) -> Void) {
         let mapper = {ProductCategoryMapper.categoryWithDB($0)}
-        load(mapper, filter: "name CONTAINS[c] '\(text)'", range: range) {categories in
+        load(mapper, filter: DBProductCategory.createFilterNameContains(text), range: range) {categories in
             handler(text: text, categories: categories)
         }
     }
@@ -37,8 +38,8 @@ class RealmProductCategoryProvider: RealmProvider {
         background({
             do {
                 let realm = try Realm()
-                realm.write {
-                    let dbProducts = realm.objects(DBProduct).filter("category.uuid = '\(category.uuid)'")
+                try realm.write {
+                    let dbProducts = realm.objects(DBProduct).filter(DBProduct.createFilterCategory(category.uuid))
                     // delete first dependencies of products (realm requires this order, otherwise db is inconsistent. There's no cascade delete yet also).
                     for dbProduct in dbProducts {
                         RealmListItemProvider().deleteProductDependenciesSync(realm, productUuid: dbProduct.uuid)
@@ -46,12 +47,12 @@ class RealmProductCategoryProvider: RealmProvider {
                     // delete products
                     realm.delete(dbProducts)
                     // delete cateogories
-                    let categoryResults = realm.objects(DBProductCategory).filter("uuid = '\(category.uuid)'")
+                    let categoryResults = realm.objects(DBProductCategory).filter(DBProductCategory.createFilter(category.uuid))
                     realm.delete(categoryResults)
                 }
                 return true
-            } catch _ {
-                print("Error: RealmProductCategoryProvider.removeCategory: creating Realm() in remove")
+            } catch let error {
+                QL4("Realm error: \(error)")
                 return false
             }
         }) {(result: Bool) in
