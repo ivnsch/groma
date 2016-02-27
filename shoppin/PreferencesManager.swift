@@ -13,10 +13,13 @@ enum PreferencesManagerKey: String {
     case listId = "listId"
     case hasLaunchedBefore = "hasLaunchedBefore"
     case isFirstLaunch = "isFirstLaunch"
+    case firstLaunchDate = "firstLaunchDate"
     case email = "email"
     case deviceId = "did"
     case showIntro = "showIntro"
     case lastTokenUpdate = "lastTokenUpdate"
+    case dontShowAppRatingDialogAgain = "dontShowAppRatingDialogAgain"
+    case lastAppRatingDialogDate = "lastAppRatingDialogDate"
 }
 
 class PreferencesManager {

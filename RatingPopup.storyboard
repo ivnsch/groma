@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+        </mutableArray>
+    </customFonts>
+    <scenes>
+        <!--Rating Popup Controller-->
+        <scene sceneID="byH-Nn-30P">
+            <objects>
+                <viewController storyboardIdentifier="RatingPopupController" id="vuG-3z-3tB" customClass="RatingPopupController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="h8u-yA-m81"/>
+                        <viewControllerLayoutGuide type="bottom" id="COY-HI-VFh"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="PXx-zm-DZD">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="How is your experience so far?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BIE-3S-2o1">
+                                <rect key="frame" x="187" y="121" width="226" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please take a moment to rate Groma" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="reF-VZ-j8O">
+                                <rect key="frame" x="165" y="60" width="271" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L6S-gz-GjG">
+                                <rect key="frame" x="266" y="182" width="68" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Awesome!"/>
+                                <connections>
+                                    <action selector="onGoodTap:" destination="vuG-3z-3tB" eventType="touchUpInside" id="vm7-tI-ZWe"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jDQ-n8-QoH">
+                                <rect key="frame" x="280" y="252" width="40" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Well..."/>
+                                <connections>
+                                    <segue destination="TqB-ML-rOk" kind="presentation" modalTransitionStyle="crossDissolve" id="yl1-KR-6hf"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ngr-PE-3LE">
+                                <rect key="frame" x="237" y="392" width="126" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Don't ask me again"/>
+                                <connections>
+                                    <action selector="onNeverAskAgainTap:" destination="vuG-3z-3tB" eventType="touchUpInside" id="hK1-GO-K84"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oe2-BW-0Lo">
+                                <rect key="frame" x="260" y="322" width="81" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Ask me later"/>
+                                <connections>
+                                    <action selector="onAskLaterTap:" destination="vuG-3z-3tB" eventType="touchUpInside" id="zNv-5i-Agq"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ngr-PE-3LE" firstAttribute="top" secondItem="oe2-BW-0Lo" secondAttribute="bottom" constant="40" id="3kB-dv-M69"/>
+                            <constraint firstItem="jDQ-n8-QoH" firstAttribute="centerX" secondItem="PXx-zm-DZD" secondAttribute="centerX" id="8fz-rs-HPG"/>
+                            <constraint firstItem="jDQ-n8-QoH" firstAttribute="top" secondItem="L6S-gz-GjG" secondAttribute="bottom" constant="40" id="E7G-KW-kFW"/>
+                            <constraint firstItem="reF-VZ-j8O" firstAttribute="centerX" secondItem="PXx-zm-DZD" secondAttribute="centerX" id="Hd4-lz-X49"/>
+                            <constraint firstItem="oe2-BW-0Lo" firstAttribute="centerX" secondItem="PXx-zm-DZD" secondAttribute="centerX" id="L3J-xt-LRN"/>
+                            <constraint firstItem="BIE-3S-2o1" firstAttribute="top" secondItem="reF-VZ-j8O" secondAttribute="bottom" constant="40" id="Ou0-sB-t6n"/>
+                            <constraint firstItem="oe2-BW-0Lo" firstAttribute="top" secondItem="jDQ-n8-QoH" secondAttribute="bottom" constant="40" id="UT0-80-rYz"/>
+                            <constraint firstItem="L6S-gz-GjG" firstAttribute="top" secondItem="BIE-3S-2o1" secondAttribute="bottom" constant="40" id="ZBb-t5-uAO"/>
+                            <constraint firstItem="BIE-3S-2o1" firstAttribute="centerX" secondItem="PXx-zm-DZD" secondAttribute="centerX" id="iGd-AM-PIN"/>
+                            <constraint firstItem="L6S-gz-GjG" firstAttribute="centerX" secondItem="PXx-zm-DZD" secondAttribute="centerX" id="iNW-YM-ktN"/>
+                            <constraint firstItem="ngr-PE-3LE" firstAttribute="centerX" secondItem="PXx-zm-DZD" secondAttribute="centerX" id="oNh-0J-fxO"/>
+                            <constraint firstItem="reF-VZ-j8O" firstAttribute="top" secondItem="h8u-yA-m81" secondAttribute="bottom" constant="40" id="szt-iB-03F"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="68j-Le-vGk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="582" y="456"/>
+        </scene>
+        <!--Rating Provide Feedback Controller-->
+        <scene sceneID="bWd-eL-pyO">
+            <objects>
+                <viewController storyboardIdentifier="RatingProvideFeedbackController" id="TqB-ML-rOk" customClass="RatingProvideFeedbackController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="TLx-MX-E25"/>
+                        <viewControllerLayoutGuide type="bottom" id="YH1-n0-h6r"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kS2-Gq-yEf">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please tell us what we can do better!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bgN-7A-NoY">
+                                <rect key="frame" x="166" y="240" width="269" height="21"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8qK-Fn-yar">
+                                <rect key="frame" x="244" y="285" width="113" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Provide feedback"/>
+                                <connections>
+                                    <action selector="onProvideFeedbackTap:" destination="TqB-ML-rOk" eventType="touchUpInside" id="g2Y-cu-HE3"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sm6-xJ-oAD">
+                                <rect key="frame" x="278" y="335" width="45" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="onCancelTap:" destination="TqB-ML-rOk" eventType="touchUpInside" id="q3R-iL-BIm"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="8qK-Fn-yar" firstAttribute="centerX" secondItem="kS2-Gq-yEf" secondAttribute="centerX" id="5zL-Ff-Gse"/>
+                            <constraint firstItem="sm6-xJ-oAD" firstAttribute="centerY" secondItem="kS2-Gq-yEf" secondAttribute="centerY" constant="50" id="Csm-n8-M1M"/>
+                            <constraint firstItem="sm6-xJ-oAD" firstAttribute="centerX" secondItem="kS2-Gq-yEf" secondAttribute="centerX" id="G9J-ph-1Is"/>
+                            <constraint firstItem="8qK-Fn-yar" firstAttribute="centerY" secondItem="kS2-Gq-yEf" secondAttribute="centerY" id="T7r-G1-uxM"/>
+                            <constraint firstItem="bgN-7A-NoY" firstAttribute="centerY" secondItem="kS2-Gq-yEf" secondAttribute="centerY" constant="-50" id="dNg-Fg-nwH"/>
+                            <constraint firstItem="bgN-7A-NoY" firstAttribute="centerX" secondItem="kS2-Gq-yEf" secondAttribute="centerX" id="m56-L1-jiu"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FbK-ow-IZx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1288" y="456"/>
+        </scene>
+    </scenes>
+</document>

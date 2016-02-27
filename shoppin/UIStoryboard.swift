@@ -35,7 +35,7 @@ extension UIStoryboard {
     private class func productsWithQuantityStoryboard() -> UIStoryboard { return UIStoryboard(name: "ProductsWithQuantity", bundle: NSBundle.mainBundle()) }
     private class func shareAppStoryboard() -> UIStoryboard { return UIStoryboard(name: "ShareApp", bundle: NSBundle.mainBundle()) }
     private class func simpleInputStoryboard() -> UIStoryboard { return UIStoryboard(name: "SimpleInputPopup", bundle: NSBundle.mainBundle()) }
-
+    private class func ratingPopupStoryboard() -> UIStoryboard { return UIStoryboard(name: "RatingPopup", bundle: NSBundle.mainBundle()) }
     
     // MARK: - List items
     
@@ -205,5 +205,16 @@ extension UIStoryboard {
     
     class func simpleInputStoryboard() -> SimpleInputPopupController {
         return simpleInputStoryboard().instantiateViewControllerWithIdentifier("SimpleInputPopupController") as! SimpleInputPopupController
+    }
+    
+    // MARK: Rating popup
+    
+    class func ratingPopupController() -> RatingPopupController {
+        return ratingPopupStoryboard().instantiateViewControllerWithIdentifier("RatingPopupController") as! RatingPopupController
+    }
+    
+    
+    class func ratingProvideFeedbackController() -> RatingProvideFeedbackController {
+        return ratingPopupStoryboard().instantiateViewControllerWithIdentifier("RatingProvideFeedbackController") as! RatingProvideFeedbackController
     }
 }

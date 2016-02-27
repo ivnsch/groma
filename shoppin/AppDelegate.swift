@@ -16,7 +16,7 @@ import QorumLogs
 
 @objc
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
 
     private let debugAddDummyData = false
     private let debugGeneratePrefillDatabases = false
@@ -32,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private var suggestionsPrefiller: SuggestionsPrefiller? // arc
 
+    private var ratingPopup: RatingPopup? // arc
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
         initIsFirstLaunch()
@@ -53,7 +55,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         checkPing()
         
+        checkRatePopup()
+        
         return initFb
+    }
+    
+    private func checkRatePopup() {
+        if let controller = window?.rootViewController {
+            ratingPopup = RatingPopup()
+            ratingPopup?.delegate = self
+            ratingPopup?.checkShow(controller)
+        } else {
+            QL4("Couldn't show rating popup, either window: \(window) or root controller: \(window?.rootViewController) is nil)")
+        }
     }
     
     private func configLog() {
@@ -92,8 +106,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func initIsFirstLaunch() {
         if !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
+            QL2("Initialising first app launch preferences")
             PreferencesManager.savePreference(PreferencesManagerKey.hasLaunchedBefore, value: true)
             PreferencesManager.savePreference(PreferencesManagerKey.isFirstLaunch, value: true)
+            PreferencesManager.savePreference(PreferencesManagerKey.firstLaunchDate, value: NSDate())
         } else { // after first launch
             PreferencesManager.savePreference(PreferencesManagerKey.isFirstLaunch, value: false)
         }
@@ -547,6 +563,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
+    }
+    
+    // MARK: - RatingPopupDelegate
+    
+    func onDismissRatingPopup() {
+        ratingPopup = nil
     }
     
     // MARK: - Websocket

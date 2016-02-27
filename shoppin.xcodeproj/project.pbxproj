@@ -794,6 +794,11 @@
 		EBED0D051C821EA300A1EEC4 /* prefillde.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBED0D021C821E5F00A1EEC4 /* prefillde.realm */; };
 		EBED0D061C821EA300A1EEC4 /* prefillen.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBED0D031C821E5F00A1EEC4 /* prefillen.realm */; };
 		EBED0D071C821EA300A1EEC4 /* prefilles.realm in Resources */ = {isa = PBXBuildFile; fileRef = EBED0D041C821E5F00A1EEC4 /* prefilles.realm */; };
+		EBED0D091C82213600A1EEC4 /* RatingPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBED0D081C82213600A1EEC4 /* RatingPopup.swift */; };
+		EBED0D0E1C82225B00A1EEC4 /* RatingPopup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBED0D0D1C82225B00A1EEC4 /* RatingPopup.storyboard */; };
+		EBED0D101C82229900A1EEC4 /* RatingPopupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBED0D0F1C82229900A1EEC4 /* RatingPopupController.swift */; };
+		EBED0D121C824EC300A1EEC4 /* RatingProvideFeedbackController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBED0D111C824EC300A1EEC4 /* RatingProvideFeedbackController.swift */; };
+		EBED0D141C824FE200A1EEC4 /* EmailHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBED0D131C824FE200A1EEC4 /* EmailHelper.swift */; };
 		EBEEDD6B1A49C94F00FC3B29 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6A1A49C94F00FC3B29 /* Section.swift */; };
 		EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */; };
 		EBF1628F1A3499620048E37C /* LaunchScreen-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */; };
@@ -1373,6 +1378,11 @@
 		EBED0D021C821E5F00A1EEC4 /* prefillde.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillde.realm; sourceTree = "<group>"; };
 		EBED0D031C821E5F00A1EEC4 /* prefillen.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillen.realm; sourceTree = "<group>"; };
 		EBED0D041C821E5F00A1EEC4 /* prefilles.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefilles.realm; sourceTree = "<group>"; };
+		EBED0D081C82213600A1EEC4 /* RatingPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingPopup.swift; sourceTree = "<group>"; };
+		EBED0D0D1C82225B00A1EEC4 /* RatingPopup.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = RatingPopup.storyboard; sourceTree = "<group>"; };
+		EBED0D0F1C82229900A1EEC4 /* RatingPopupController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingPopupController.swift; sourceTree = "<group>"; };
+		EBED0D111C824EC300A1EEC4 /* RatingProvideFeedbackController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingProvideFeedbackController.swift; sourceTree = "<group>"; };
+		EBED0D131C824FE200A1EEC4 /* EmailHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailHelper.swift; sourceTree = "<group>"; };
 		EBEEDD6A1A49C94F00FC3B29 /* Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		EBEEDD6C1A49C9B100FC3B29 /* SectionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionMapper.swift; sourceTree = "<group>"; };
 		EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchScreen-568h@2x.png"; sourceTree = "<group>"; };
@@ -2426,6 +2436,7 @@
 		EBBC23241BB5D5820002F6B1 /* popup */ = {
 			isa = PBXGroup;
 			children = (
+				EBED0D0A1C82221600A1EEC4 /* rating */,
 				EBBC23221BB5D57C0002F6B1 /* ProviderPopupManager.swift */,
 				EB0870CA1BC050A300169E29 /* MyTipPopup.swift */,
 			);
@@ -2485,6 +2496,7 @@
 				EBF7CE8A1C3C9E6E00F9DB8A /* SharedUserChecker.swift */,
 				EB80CE481C3DEB8A001DF159 /* InventoryPicker.swift */,
 				EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */,
+				EBED0D131C824FE200A1EEC4 /* EmailHelper.swift */,
 			);
 			name = util;
 			sourceTree = "<group>";
@@ -2562,6 +2574,17 @@
 				EBDFE3C11AD00E8200E48F95 /* DialogUtils.swift */,
 			);
 			name = utils;
+			sourceTree = "<group>";
+		};
+		EBED0D0A1C82221600A1EEC4 /* rating */ = {
+			isa = PBXGroup;
+			children = (
+				EBED0D081C82213600A1EEC4 /* RatingPopup.swift */,
+				EBED0D0D1C82225B00A1EEC4 /* RatingPopup.storyboard */,
+				EBED0D0F1C82229900A1EEC4 /* RatingPopupController.swift */,
+				EBED0D111C824EC300A1EEC4 /* RatingProvideFeedbackController.swift */,
+			);
+			name = rating;
 			sourceTree = "<group>";
 		};
 		EBEEDD631A49A7B500FC3B29 /* view */ = {
@@ -2972,6 +2995,7 @@
 				EBB5267F1BEFE39F0002A286 /* HelpHeaderView.xib in Resources */,
 				EB1FC51A1BC694AF004E1114 /* OkNextButtonsView.xib in Resources */,
 				EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */,
+				EBED0D0E1C82225B00A1EEC4 /* RatingPopup.storyboard in Resources */,
 				EB8D1D0D1C38363400ADF884 /* AddEditGroupViewController.storyboard in Resources */,
 				EBA2C8CE1C4F207800A970B8 /* EditProductCategoryController.xib in Resources */,
 				EB7032831BEBBC6400779EBB /* ReorderSectionTableViewController.storyboard in Resources */,
@@ -3337,6 +3361,7 @@
 				EBF162ED1A3CA24E0048E37C /* ListItem.swift in Sources */,
 				EB79AC2A1BF12FE000685B30 /* Array_List.swift in Sources */,
 				EB9207C91C4BD3F600332332 /* AsyncUtils.swift in Sources */,
+				EBED0D141C824FE200A1EEC4 /* EmailHelper.swift in Sources */,
 				EBBC230D1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */,
 				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
 				EB9BE41F1B2CB513005B401A /* RemoteProduct.swift in Sources */,
@@ -3376,6 +3401,7 @@
 				EBBC232B1BB600DF0002F6B1 /* ConfirmationPopup.swift in Sources */,
 				EB0C2A461B58405D00AF6226 /* RealmListItemProvider.swift in Sources */,
 				EB89D33C1AD44BD400B6E0D0 /* Selectable.swift in Sources */,
+				EBED0D091C82213600A1EEC4 /* RatingPopup.swift in Sources */,
 				EB85F46B1BD54FD300E19E9B /* QuickAddGroup.swift in Sources */,
 				EBDA75401BCD5C2100E34AC3 /* ListItemGroup.swift in Sources */,
 				EB6E3D281C5A4E9F00D65DD5 /* RemoteListWithListItems.swift in Sources */,
@@ -3393,6 +3419,7 @@
 				EB6A207D1ACC079000B9BCB2 /* UITableView.swift in Sources */,
 				EB7E83221B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
 				EBA288DB1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */,
+				EBED0D101C82229900A1EEC4 /* RatingPopupController.swift in Sources */,
 				EB80CE531C449E1E001DF159 /* TermsAndConditionsController.swift in Sources */,
 				EB20FC071A599AE20058103B /* ProductWithQuantityTableViewCell.swift in Sources */,
 				EBA575621BCECBDF00A0A825 /* QuantityView.swift in Sources */,
@@ -3439,6 +3466,7 @@
 				EB7E8B611B2ADF620090409A /* Try.swift in Sources */,
 				EB20FBF81A5971170058103B /* InventoryItem.swift in Sources */,
 				EBB9A7401B5EB21900E5487D /* InventoryProviderImpl.swift in Sources */,
+				EBED0D121C824EC300A1EEC4 /* RatingProvideFeedbackController.swift in Sources */,
 				EB3C9E2A1BEA47FF00886197 /* Theme.swift in Sources */,
 				EBA9E6041C64AD7C00A85610 /* ProductWithQuantity.swift in Sources */,
 				EB7F59CB1BA1970200E07EBA /* Dictionary.swift in Sources */,

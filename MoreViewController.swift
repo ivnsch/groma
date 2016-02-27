@@ -7,10 +7,11 @@
 //
 
 import UIKit
-import MessageUI
 
-class MoreViewController: UITableViewController, MFMailComposeViewControllerDelegate {
+class MoreViewController: UITableViewController {
    
+    private var emailHelper: EmailHelper?
+
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch indexPath.row  {
             
@@ -19,17 +20,9 @@ class MoreViewController: UITableViewController, MFMailComposeViewControllerDele
             navigationController?.pushViewController(controller, animated: true)
             
         case 6: // Feedback
-            let email = "foo@bar.com"
-            if MFMailComposeViewController.canSendMail() {
-                let mail = MFMailComposeViewController()
-                mail.mailComposeDelegate = self
-                mail.setToRecipients([email])
-                mail.setSubject("Feedback")
-//                mail.setMessageBody("", isHTML: true)
-                presentViewController(mail, animated: true, completion: nil)
-            } else {
-                AlertPopup.show(message: "Couldn't find an email account. If the problem persists, please send us an e-mail manually to the address: \(email)", controller: self)
-            }
+            emailHelper = EmailHelper(controller: self)
+            emailHelper?.showEmail()
+  
         case 7: // Share
             share("Message message", sharingImage: nil, sharingURL: NSURL(string: "https://developers.facebook.com"))
             // Initially implemented this, which contains facebook sharing using its SDK. It seems with the default share we achieve the same functionality (Facebook seems to not allow to add title and description to links to the app store, which is what we want to link to, see https://developers.facebook.com/docs/sharing/ios - this would have been the only reason to use the SDK). Letting it commented just in case.
@@ -62,23 +55,5 @@ class MoreViewController: UITableViewController, MFMailComposeViewControllerDele
             self?.view.defaultProgressVisible(false)
             self?.presentViewController(controller, animated: true, completion: nil)
         }
-    }
-    
-    // MARK: - MFMailComposeViewControllerDelegate
-    
-    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-        switch result.rawValue {
-        case MFMailComposeResultCancelled.rawValue:
-            print("Mail cancelled")
-        case MFMailComposeResultSaved.rawValue:
-            print("Mail saved")
-        case MFMailComposeResultSent.rawValue:
-            print("Mail sent")
-        case MFMailComposeResultFailed.rawValue:
-            print("Mail sent failure: \(error?.localizedDescription)")
-        default:
-            break
-        }
-        controller.dismissViewControllerAnimated(true, completion: nil)
     }
 }
