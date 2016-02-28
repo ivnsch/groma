@@ -16,6 +16,11 @@ struct RequestErrorToMsgMapper {
             case .AlreadyExists: return "error_already_exists"
             case .NotFound: return "error_not_found"
             case .InvalidCredentials: return "error_invalid_credentials"
+            
+            // TODO!! probably we should show the same error here as invalid credentials? to not give too much information to the users - what if it's a 3d person trying to find out if the user has a facebook profile with a certain email?. "Authentication error: Apparently you have signed in already with a different provider. Please use this provider to sign in or delete the associated account. Contact support if you need help."
+            // --> Solution: Probably the best is to avoid that this error appears at all, by using the providerKey(maybe + providerId to guarantee uniqueness) to identify users instead of the email. This would also require that we use the user's name instead of the email in the app's labels like shared users or history items.
+            case .RegisteredWithOtherProvider: return "error_registered_another_provider"
+            
             case .SizeLimit: return "size_limit_exceeded"
             case .ServerError: return "error_server_generic"
             case .ServerNotReachable: return "error_server_not_reachable"

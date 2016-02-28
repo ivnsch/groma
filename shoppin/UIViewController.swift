@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 extension UIViewController {
 
@@ -70,13 +71,13 @@ extension UIViewController {
         self.progressVisible(false)
     }
     
-    // Result handlar for result with payload
+    // Result handler for result with payload
     func resultHandler<T>(onSuccess onSuccess: (T) -> Void, onError: ((ProviderResult<T>) -> Void)? = nil)(providerResult: ProviderResult<T>) {
         if providerResult.success {
             if let successResult = providerResult.sucessResult {
                 onSuccess(successResult)
             } else {
-                print("Error: Invalid state: handler expects result with payload, result is success but has no payload")
+                QL4("Invalid state: handler expects result with payload, result is success but has no payload. Result: \(providerResult)")
                 showProviderErrorAlert(ProviderResult<Any>(status: ProviderStatusCode.Unknown))
             }
             
@@ -103,11 +104,12 @@ extension UIViewController {
                 if let error = providerResult.error {
                     showRemoteValidationErrorAlert(providerResult.status, error: error)
                 } else {
-                    print("UIViewController.defaultErrorHandler: Invalid state: Has invalid credentials status but no error obj: \(providerResult)")
+                    print("UIViewController.defaultErrorHandler: Invalid state: Has invalid params status but no error obj: \(providerResult)")
                 }
             } else {
                 showProviderErrorAlert(providerResult)
             }
+            progressVisible(false)
         }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////

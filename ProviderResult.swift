@@ -18,6 +18,7 @@ enum ProviderStatusCode: Int {
     case NotFound = 5
     case InvalidCredentials = 6
     case SizeLimit = 7
+    case RegisteredWithOtherProvider = 8
     case ServerError = 101 // Generic server error - invalid json, etc.
     case ServerNotReachable = 102 // This is currently both server is down and no internet connection (detected when doing the request, opposed to .NoConnection).
     case UnknownServerCommunicationError = 103
@@ -46,7 +47,7 @@ public class ProviderResult<T>: CustomDebugStringConvertible {
         return self.status == .Success
     }
     
-    convenience init(status: ProviderStatusCode, sucessResult: T) {
+    convenience init(status: ProviderStatusCode, sucessResult: T?) {
         self.init(status: status, sucessResult: sucessResult, error: nil, errorObj: nil)
     }
     
@@ -84,6 +85,7 @@ struct DefaultRemoteResultMapper {
         case .NotFound: return .NotFound
         case .ParsingError: return .ServerError
         case .InvalidCredentials: return .InvalidCredentials
+        case .RegisteredWithOtherProvider: return .RegisteredWithOtherProvider
         case .SizeLimit: return .SizeLimit
         case .Success: return .Success
         case .Unknown: return .ServerError

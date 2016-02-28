@@ -42,12 +42,8 @@ class GlobalProviderImpl: GlobalProvider {
                         }
                         
                     } else {
-                        QL3("Remote error, result: \(remoteResult)") // show err msg in any case (also not logged in etc) as in sync we are expected to be
-//                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-//                            print("Error: GlobalProviderImpl.sync: remote error, result: \(result)")
-                            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                            handler(ProviderResult(status: providerStatus))
-//                        })
+                        QL3("Remote error doing sync, result: \(remoteResult)") // show err msg in any case (also not logged in etc) as in sync we are expected to be
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
                     }
                 }
             } else {

@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 class UserProviderImpl: UserProvider {
    
@@ -16,28 +18,26 @@ class UserProviderImpl: UserProvider {
     
     func login(loginData: LoginData, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.login(loginData) {[weak self] result in
-            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
                 self?.sync {result in
                     self?.connectWebsocketIfLoggedIn()
                     handler(result)
                 }
             } else {
-                handler(ProviderResult(status: providerStatus))
+                DefaultRemoteErrorHandler.handle(result, handler: handler)
             }
         }
     }
     
     func register(user: UserInput, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.register(user) {[weak self] result in
-            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
                 self?.sync {result in
                     self?.connectWebsocketIfLoggedIn()
                     handler(result)
                 }
             } else {
-                handler(ProviderResult(status: providerStatus))
+                DefaultRemoteErrorHandler.handle(result, handler: handler)
             }
         }
     }
@@ -52,7 +52,12 @@ class UserProviderImpl: UserProvider {
     func logout(handler: ProviderResult<Any> -> ()) {
         // TODO ensure the socket always really disconnects (client or server side), to prevent possible zombies sockets in server. It should, but maybe connection error or sth.
         webSocket?.disconnect()
-        self.remoteProvider.logout(remoteResultHandler(handler))
+        remoteProvider.logout(remoteResultHandler(handler))
+        
+        // Sign out of social providers in case we are logged in with them
+        // Note: If we add osx support later we must move these calls to iOS-only part. The idea is to not have any iOS specific code in the providers.
+        FBSDKLoginManager().logOut()
+        GIDSignIn.sharedInstance().signOut()
     }
     
     func sync(handler: ProviderResult<SyncResult> -> Void) {
@@ -107,13 +112,12 @@ class UserProviderImpl: UserProvider {
     
     func authenticateWithFacebook(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.authenticateWithFacebook(token) {[weak self] result in
-            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
                 self?.sync {result in
                     handler(result)
                 }   
             } else {
-                handler(ProviderResult(status: providerStatus))
+                DefaultRemoteErrorHandler.handle(result, handler: handler)
             }
         }
     }
@@ -121,13 +125,12 @@ class UserProviderImpl: UserProvider {
     
     func authenticateWithGoogle(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.authenticateWithGoogle(token) {[weak self] result in
-            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status) // status here should be always success
             if result.success {
                 self?.sync {result in
                     handler(result)
                 }
             } else {
-                handler(ProviderResult(status: providerStatus))
+                DefaultRemoteErrorHandler.handle(result, handler: handler)
             }
         }
     }

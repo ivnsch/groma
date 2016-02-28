@@ -149,7 +149,6 @@ extension UIView {
                 self.addSubview(view)
             }
         } else {
-                            self.backgroundColor = UIColor.whiteColor()
             self.viewWithTag(ViewTags.GlobalActivityIndicator)?.removeFromSuperview()
         }
     }

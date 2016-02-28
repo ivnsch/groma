@@ -132,21 +132,38 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         delegate?.onLoginSuccess() ?? print("Warn: no login delegate")
     }
     
+    // TODO refactor, same code as in LoginController
+    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
+        if let error = error {
+            QL4("Facebook login error: \(error)")
+            defaultErrorHandler()(providerResult: ProviderResult(status: .SocialLoginError))
+            progressVisible(false)
+            FBSDKLoginManager().logOut() // toggle "logout" label on button
+        } else if result.isCancelled {
+            QL1("Facebook login cancelled")
+            progressVisible(false)
+            FBSDKLoginManager().logOut() // toggle "logout" label on button
+        } else {
+            QL1("Facebook login success, calling our server...")
+            progressVisible()
+            let tokenString = result.token.tokenString
+            Providers.userProvider.authenticateWithFacebook(tokenString, socialSignInResultHandler())
+        }
+    }
+    
+    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
+        FBSDKLoginManager().logOut()
+    }
+    
     // MARK: GIDSignInDelegate
     
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
         if (error == nil) {
-            Providers.userProvider.authenticateWithGoogle(user.authentication.accessToken, resultHandler(onSuccess: {[weak self] syncResult in
-                if let weakSelf = self {
-                    InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
-                }
-                self?.onLoginSuccess()
-                
-            }, onError: defaultErrorHandler([.SocialLoginCancelled])))
-
-            
+            QL1("Google login success, calling our server...")
+            progressVisible()
+            Providers.userProvider.authenticateWithGoogle(user.authentication.accessToken, socialSignInResultHandler())
         } else {
-            print("\(error.localizedDescription)")
+            QL4("Google login error: \(error.localizedDescription)")
         }
     }
     
@@ -154,41 +171,36 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         // Perform any operations when the user disconnects from app here.
     }
     
-    // TODO refactor, same code as in RegisterViewController
-    func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
-        if let error = error {
-            print("Error: Facebook login: error: \(error)")
-            defaultErrorHandler()(providerResult: ProviderResult(status: .SocialLoginError))
-            progressVisible(false)
-            FBSDKLoginManager().logOut() // toggle "logout" label on button
-        } else if result.isCancelled {
-            print("Facebook login cancelled")
-            progressVisible(false)
-            FBSDKLoginManager().logOut() // toggle "logout" label on button
-        } else {
-            print("Facebook login success, calling our server...")
-            let tokenString = result.token.tokenString
-            Providers.userProvider.authenticateWithFacebook(tokenString) {[weak self] providerResult in
-                // map already exists status to "social aleready exists", to show a different error message
-                if providerResult.status == .AlreadyExists {
-                    self?.defaultErrorHandler()(providerResult: ProviderResult(status: .SocialAlreadyExists))
-                } else {
-                    //                handler(result)
-                    if let weakSelf = self {
-                        if let syncResult = providerResult.sucessResult {
-                            InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
-                        } else {
-                            QL4("Invalid state: result doesn't have sync result")
-                        }
-                    }
-                    self?.onLoginSuccess()
-                }
-                self?.progressVisible(false)
-            }
-        }
+    func signIn(signIn: GIDSignIn!, presentViewController viewController: UIViewController!) {
+        
     }
     
-    func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
-        FBSDKLoginManager().logOut()
+    func signIn(signIn: GIDSignIn!, dismissViewController viewController: UIViewController!) {
+        
+    }
+    
+    func signInWillDispatch(signIn: GIDSignIn!, error: NSError!) {
+        
+    }
+    
+    // Common FB/Google handling for social login/register result of our own server
+    private func socialSignInResultHandler()(providerResult: ProviderResult<SyncResult>) {
+        resultHandler(
+            onSuccess: {[weak self] syncResult in
+                QL1("Login success")
+                self?.onRegisterSuccess()
+                self?.progressVisible(false)
+                
+                if let weakSelf = self {
+                    InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
+                }
+            }, onError: {[weak self] providerResult in
+                QL1("Login error: \(providerResult)")
+                self?.progressVisible(false)
+                self?.defaultErrorHandler()(providerResult: providerResult)
+                if let weakSelf = self {
+                    Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared, buttons text resetted etc. Note this is also triggered by sync error (which is called directly after login)
+                }
+            })(providerResult: providerResult)
     }
 }

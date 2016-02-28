@@ -27,6 +27,7 @@ enum RemoteStatusCode: Int {
     case NotFound = 5
     case InvalidCredentials = 6
     case SizeLimit = 7
+    case RegisteredWithOtherProvider = 8
     case Unknown = 100 // Note that, like above cases this also is sent as status by the server - don't change raw value
  
     // HTTP
@@ -159,7 +160,7 @@ public class RemoteResult<T>: CustomDebugStringConvertible {
         return self.status == .Success
     }
     
-    convenience init(status: RemoteStatusCode, sucessResult: T) {
+    convenience init(status: RemoteStatusCode, sucessResult: T?) {
         self.init(status: status, sucessResult: sucessResult, error: nil, errorObj: nil)
     }
     
@@ -183,7 +184,8 @@ public class RemoteResult<T>: CustomDebugStringConvertible {
     }
     
     public var debugDescription: String {
-        return "{\(self.dynamicType) status: \(status), model: \(successResult), error: \(error), errorObj: \(error)}"
+        let errorText = error.map{$0.debugDescription} ?? ""
+        return "{\(self.dynamicType) status: \(status), model: \(successResult), error: \(errorText), errorObj: \(error)}"
     }
 }
 
