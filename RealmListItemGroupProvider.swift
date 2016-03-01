@@ -60,17 +60,31 @@ class RealmListItemGroupProvider: RealmProvider {
         saveObjs(dbObjs, update: true, handler: handler)
     }
     
-    func overwrite(groups: [ListItemGroup], handler: Bool -> ()) {
+    func overwrite(groups: [ListItemGroup], clearTombstones: Bool, handler: Bool -> ()) {
         let dbGroups = groups.map{ListItemGroupMapper.dbWith($0)}
-        self.overwrite(dbGroups, resetLastUpdateToServer: true, handler: handler)
+        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBListItemGroup)} : nil
+        self.overwrite(dbGroups, resetLastUpdateToServer: true, additionalActions: additionalActions, handler: handler)
     }
     
-    func remove(group: ListItemGroup, handler: Bool -> Void) {
-        removeGroup(group.uuid, handler: handler)
+    func remove(group: ListItemGroup, markForSync: Bool, handler: Bool -> Void) {
+        removeGroup(group.uuid, markForSync: markForSync, handler: handler)
     }
 
-    func removeGroup(uuid: String, handler: Bool -> Void) {
-        self.remove(DBListItemGroup.createFilter(uuid), handler: handler, objType: DBListItemGroup.self)
+    func removeGroup(uuid: String, markForSync: Bool, handler: Bool -> Void) {
+        // Needs custom handling because we need the lastUpdate server timestamp and for this we have to retrieve the item from db
+        self.doInWriteTransaction({realm in
+            if let itemToRemove = realm.objects(DBListItemGroup).filter(DBListItemGroup.createFilter(uuid)).first {
+                realm.delete(itemToRemove)
+                if markForSync {
+                    let toRemove = DBRemoveListItemGroup(uuid: uuid, lastServerUpdate: itemToRemove.lastServerUpdate)
+                    realm.add(toRemove, update: true)
+                }
+            }
+            return true
+            
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
     }
     
     func add(groupItem: GroupItem, handler: Bool -> Void) {
@@ -177,17 +191,31 @@ class RealmListItemGroupProvider: RealmProvider {
         saveObj(dbObj, update: true, handler: handler)
     }
     
-    func remove(groupItem: GroupItem, handler: Bool -> Void) {
-        removeGroupItem(groupItem.uuid, handler: handler)
+    func remove(groupItem: GroupItem, markForSync: Bool, handler: Bool -> Void) {
+        removeGroupItem(groupItem.uuid, markForSync: markForSync, handler: handler)
     }
 
-    func removeGroupItem(uuid: String, handler: Bool -> Void) {
-        remove(DBGroupItem.createFilter(uuid), handler: handler, objType: DBGroupItem.self)
+    func removeGroupItem(uuid: String, markForSync: Bool, handler: Bool -> Void) {
+        // Needs custom handling because we need the lastUpdate server timestamp and for this we have to retrieve the item from db
+        self.doInWriteTransaction({realm in
+            if let itemToRemove = realm.objects(DBGroupItem).filter(DBGroupItem.createFilter(uuid)).first {
+                realm.delete(itemToRemove)
+                if markForSync {
+                    let toRemove = DBRemoveGroupItem(itemToRemove)
+                    realm.add(toRemove, update: true)
+                }
+            }
+            return true
+            
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
     }
     
-    func overwrite(items: [GroupItem], groupUuid: String, handler: Bool -> Void) {
+    func overwrite(items: [GroupItem], groupUuid: String, clearTombstones: Bool, handler: Bool -> Void) {
         let dbObjs = items.map{GroupItemMapper.dbWith($0)}
-        self.overwrite(dbObjs, deleteFilter: DBGroupItem.createFilterGroup(groupUuid), resetLastUpdateToServer: true, handler: handler)
+        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteForFilter(DBRemoveGroupItem.self, DBRemoveGroupItem.createFilterWithGroup(groupUuid))} : nil
+        self.overwrite(dbObjs, deleteFilter: DBGroupItem.createFilterGroup(groupUuid), resetLastUpdateToServer: true, additionalActions: additionalActions, handler: handler)
     }
     
     // Copied from realm list item provider (which is copied from inventory item provider) refactor?
@@ -232,6 +260,33 @@ class RealmListItemGroupProvider: RealmProvider {
             QL4("Realm error: \(e)")
             handler(false)
         }
+    }
+    
+    func clearGroupTombstone(uuid: String, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            realm.deleteForFilter(DBRemoveListItemGroup.self, DBRemoveListItemGroup.createFilter(uuid))
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func clearGroupItemTombstone(uuid: String, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            realm.deleteForFilter(DBRemoveGroupItem.self, DBRemoveGroupItem.createFilter(uuid))
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func clearGroupItemTombstonesForGroup(groupUuid: String, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            realm.deleteForFilter(DBRemoveGroupItem.self, DBRemoveGroupItem.createFilterWithGroup(groupUuid))
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
     }
     
     

@@ -99,6 +99,10 @@ class UserProviderImpl: UserProvider {
         return remoteProvider.hasToken()
     }
     
+    var hasSignedInOnce: Bool {
+        return mySharedUser != nil
+    }
+    
     var mySharedUser: SharedUser? {
         if let email: String = PreferencesManager.loadPreference(PreferencesManagerKey.email) {
             return SharedUser(email: email)

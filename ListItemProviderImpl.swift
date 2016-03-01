@@ -50,7 +50,7 @@ class ListItemProviderImpl: ListItemProvider {
                     let listItemsWithRelations: ListItemsWithRelations = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: sortOrderByStatus)
                     
                     if (dbListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
-                        self?.dbProvider.overwrite(listItemsWithRelations.listItems, listUuid: list.uuid) {saved in
+                        self?.dbProvider.overwrite(listItemsWithRelations.listItems, listUuid: list.uuid, clearTombstones: true) {saved in
                             
                             if dbListItems.isEmpty // this is quick fix to - generally we want to avoid to reset the memory cache or return items to the handler once the list is loaded the first time (after opening), because switch to "done" and "stash" is very quick and it has to be consitent - things should not get lost. User will see background update result the next time the list is opened. But: The very first time user starts app on a device there may be items in the server already and in this case we want the bg update to be handled immediately - because of this we have this empty check. TODO review this it's not very clean.
                                 || (fetchMode == .Both || fetchMode == .First) {
@@ -74,7 +74,7 @@ class ListItemProviderImpl: ListItemProvider {
             handler(ProviderResult(status: ProviderStatusCode.Success))
         }
         
-        self.dbProvider.remove(listItem, handler: {[weak self] removed in
+        self.dbProvider.remove(listItem, markForSync: true, handler: {[weak self] removed in
             if removed {
                 if !memUpdated {
                     handler(ProviderResult(status: .Success))
@@ -85,7 +85,13 @@ class ListItemProviderImpl: ListItemProvider {
             }
             if remote {
                 self?.remoteProvider.remove(listItem) {result in
-                    if !result.success {
+                    if result.success {
+                        self?.dbProvider.clearListItemTombstone(listItem.uuid) {removeTombstoneSuccess in
+                            if !removeTombstoneSuccess {
+                                QL4("Couldn't delete tombstone for: \(listItem)")
+                            }
+                        }
+                    } else {
                         DefaultRemoteErrorHandler.handle(result, handler: {(result: ProviderResult<[Any]>) in
                             print("Error: Removing listItem: \(listItem)")
                         })
@@ -102,13 +108,19 @@ class ListItemProviderImpl: ListItemProvider {
     
     func remove(listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         memProvider.invalidate()
-        self.dbProvider.remove(listUuid) {[weak self] removed in
+        self.dbProvider.remove(listUuid, markForSync: true) {[weak self] removed in
             handler(ProviderResult(status: removed ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
             
             if remote {
                 if removed {
                     self?.remoteProvider.remove(listUuid) {remoteResult in
-                        if !remoteResult.success {
+                        if remoteResult.success {
+                            self?.dbProvider.clearListTombstone(listUuid) {removeTombstoneSuccess in
+                                if !removeTombstoneSuccess {
+                                    QL4("Couldn't delete tombstone for list: \(listUuid)")
+                                }
+                            }
+                        } else {
                             DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[Any]>) in
                                 QL4(remoteResult)
                             })

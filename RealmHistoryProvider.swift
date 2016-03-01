@@ -168,15 +168,25 @@ class RealmHistoryProvider: RealmProvider {
     }
     
     // Expected to be executed in do/catch and write block
-    func removeHistoryItemsForInventory(realm: Realm, inventoryUuid: String) -> Bool {
+    func removeHistoryItemsForInventory(realm: Realm, inventoryUuid: String, markForSync: Bool) -> Bool {
         let dbHistoryItems = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilterWithInventory(inventoryUuid))
         realm.delete(dbHistoryItems)
+        if markForSync {
+            let toRemove = dbHistoryItems.map{DBRemoveHistoryItem($0)}
+            saveObjsSyncInt(realm, objs: toRemove, update: true)
+        }
         return true
     }
     
-    func removeAllHistoryItems(handler: Bool -> ()) {
-        self.doInWriteTransaction({realm in
-            realm.delete(realm.objects(DBHistoryItem))
+    // TODO!! optimise this, instead of adding everything to the tombstone table and send on sync maybe just store somewhere a flag and send it on sync, which instructs the server to delete all the history.
+    func removeAllHistoryItems(markForSync: Bool, handler: Bool -> ()) {
+        self.doInWriteTransaction({[weak self] realm in
+            let dbHistoryItems = realm.objects(DBHistoryItem)
+            realm.delete(dbHistoryItems)
+            if markForSync {
+                let toRemove = dbHistoryItems.map{DBRemoveHistoryItem($0)}
+                self?.saveObjsSyncInt(realm, objs: toRemove, update: true)
+            }
             return true
             }, finishHandler: {(successMaybe: Bool?) in
                 if let success = successMaybe {
@@ -204,5 +214,14 @@ class RealmHistoryProvider: RealmProvider {
                     handler(false)
                 }
         }
+    }
+    
+    func clearHistoryItemTombstone(uuid: String, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            realm.deleteForFilter(DBRemoveHistoryItem.self, DBRemoveHistoryItem.createFilter(uuid))
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
     }
 }

@@ -27,16 +27,27 @@ class RealmGlobalProvider: RealmProvider {
             let groupItems = realm.objects(DBGroupItem).filter(DBSyncable.dirtyFilter())
             let history = realm.objects(DBHistoryItem).filter(DBSyncable.dirtyFilter())
 
-            let (categoriesToRemove, categoriesToSync) = productCategories.splitMap({$0.removed}, mapper: {$0.toDict()})
-            let (productsToRemove, productsToSync) = products.splitMap({$0.removed}, mapper: {$0.toDict()})
-            let (listsToRemove, listsToSync) = lists.splitMap({$0.removed}, mapper: {$0.toDict()})
-            let (sectionsToRemove, sectionsToSync) = sections.splitMap({$0.removed}, mapper: {$0.toDict()})
-            let (listItemsToRemove, listItemsToSync) = listsItems.splitMap({$0.removed}, mapper: {$0.toDict()})
-            let (inventoriesToRemove, inventoriesToSync) = inventories.splitMap({$0.removed}, mapper: {$0.toDict()})
-            let (inventoryItemsToRemove, inventoryItemsToSync) = inventoryItems.splitMap({$0.removed}, mapper: {$0.toDict()})
-            let (groupsToRemove, groupsToSync) = groups.splitMap({$0.removed}, mapper: {$0.toDict()})
-            let (groupItemsToRemove, groupItemsToSync) = groupItems.splitMap({$0.removed}, mapper: {$0.toDict()})
-            let (historyToRemove, historyToSync) = history.splitMap({$0.removed}, mapper: {$0.toDict()})
+            let categoriesToSync = productCategories.map{$0.toDict()}
+            let productsToSync = products.map{$0.toDict()}
+            let listsToSync = lists.map{$0.toDict()}
+            let sectionsToSync = sections.map{$0.toDict()}
+            let listItemsToSync = listsItems.map{$0.toDict()}
+            let inventoriesToSync = inventories.map{$0.toDict()}
+            let inventoryItemsToSync = inventoryItems.map{$0.toDict()}
+            let groupsToSync = groups.map{$0.toDict()}
+            let groupItemsToSync = groupItems.map{$0.toDict()}
+            let historyToSync = history.map{$0.toDict()}
+            
+            let categoriesToRemove = realm.objects(DBRemoveProductCategory).map{$0.toDict()}
+            let productsToRemove = realm.objects(DBProductToRemove).map{$0.toDict()}
+            let listsToRemove = realm.objects(DBRemoveList).map{$0.toDict()}
+            let sectionsToRemove = realm.objects(DBSectionToRemove).map{$0.toDict()}
+            let listItemsToRemove = realm.objects(DBRemoveListItem).map{$0.toDict()}
+            let inventoriesToRemove = realm.objects(DBRemoveInventory).map{$0.toDict()}
+            let inventoryItemsToRemove = realm.objects(DBRemoveInventoryItem).map{$0.toDict()}
+            let groupsToRemove = realm.objects(DBRemoveListItemGroup).map{$0.toDict()}
+            let groupItemsToRemove = realm.objects(DBRemoveGroupItem).map{$0.toDict()}
+            let historyToRemove = realm.objects(DBRemoveHistoryItem).map{$0.toDict()}
             
             let categoriesDict = ["categories": categoriesToSync, "toRemove": categoriesToRemove]
             let productsDict = ["products": productsToSync, "toRemove": productsToRemove]
@@ -89,6 +100,10 @@ class RealmGlobalProvider: RealmProvider {
         
         doInWriteTransaction({[weak self] realm in
 
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // TODO!!!! write this code with proper optional handling and error logging
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            
             let (productCategoriesArr, productCategoriesDict): ([DBProductCategory], [String: DBProductCategory]) = toTuple(syncResult.productCategories, mapper: {DBProductCategory.fromDict($0)}, idExtractor: {$0.uuid})
             
             let m: [String: AnyObject] -> DBProduct = {(dict: [String: AnyObject]) in
@@ -121,6 +136,9 @@ class RealmGlobalProvider: RealmProvider {
             let (groupItemsArr, groupItemsDict): ([DBGroupItem], [String: DBGroupItem]) = toTuple(syncResult.groupsItems, mapper: {DBGroupItem.fromDict($0, product: productsDict[$0["productUuid"]! as! String]!, group: groupsDict[$0["groupUuid"]! as! String]!)}, idExtractor: {$0.uuid})
             
             let (historyItemsArr, historyItemsDict): ([DBHistoryItem], [String: DBHistoryItem]) = toTuple(syncResult.history, mapper: {DBHistoryItem.fromDict($0, inventory: inventoriesDict[$0["inventoryUuid"]! as! String]!, product: productsDict[$0["productUuid"] as! String]!)}, idExtractor: {$0.uuid})
+            
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
             self?.clearAllDataSync(realm)
             
@@ -165,6 +183,19 @@ class RealmGlobalProvider: RealmProvider {
         realm.delete(realm.objects(DBListItemGroup))
         realm.delete(realm.objects(DBGroupItem))
         realm.delete(realm.objects(DBHistoryItem))
+        
+        // tombstones
+        realm.delete(realm.objects(DBRemoveProductCategory))
+        realm.delete(realm.objects(DBProductToRemove))
+        realm.delete(realm.objects(DBSectionToRemove))
+        realm.delete(realm.objects(DBRemoveSharedUser))
+        realm.delete(realm.objects(DBRemoveInventory))
+        realm.delete(realm.objects(DBRemoveInventoryItem))
+        realm.delete(realm.objects(DBRemoveList))
+        realm.delete(realm.objects(DBRemoveListItem))
+        realm.delete(realm.objects(DBRemoveListItemGroup))
+        realm.delete(realm.objects(DBRemoveGroupItem))
+        realm.delete(realm.objects(DBRemoveHistoryItem))
     }
     
     func clearAllData(handler: Bool -> Void) {

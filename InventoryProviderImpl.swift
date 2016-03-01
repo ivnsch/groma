@@ -28,7 +28,7 @@ class InventoryProviderImpl: InventoryProvider {
                         
                         if dbInventories != sortedInventories {
                             
-                            self.dbInventoryProvider.overwrite(sortedInventories) {saved in
+                            self.dbInventoryProvider.overwrite(sortedInventories, clearTombstones: true) {saved in
                                 if saved {
                                     handler(ProviderResult(status: .Success, sucessResult: sortedInventories))
                                     
@@ -149,12 +149,20 @@ class InventoryProviderImpl: InventoryProvider {
     }
 
     func removeInventory(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbInventoryProvider.removeInventory(uuid) {[weak self] removed in
+        dbInventoryProvider.removeInventory(uuid, markForSync: true) {[weak self] removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
             if removed {
                 if remote {
                     self?.remoteProvider.removeInventory(uuid) {remoteResult in
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        if remoteResult.success {
+                            self?.dbInventoryProvider.clearInventoryTombstone(uuid) {removeTombstoneSuccess in
+                                if !removeTombstoneSuccess {
+                                    QL4("Couldn't delete tombstone for inventory: \(uuid)")
+                                }
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        }
                     }
                 }
             } else {

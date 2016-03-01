@@ -31,7 +31,7 @@ class ListProviderImpl: ListProvider {
                         // if there are no local lists or there's a difference, overwrite the local lists
                         if dbLists != lists {
                             
-                            self.dbProvider.overwriteLists(lists) {saved in
+                            self.dbProvider.overwriteLists(lists, clearTombstones: true) {saved in
                                 if saved {
                                     handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: lists))
                                     
@@ -133,12 +133,18 @@ class ListProviderImpl: ListProvider {
         // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
         
         // TODO when removing and item doesn't exist shouldn't we return an error (currently at least local db returns success)?
-        self.dbProvider.remove(listUuid, handler: {[weak self] removed in
+        self.dbProvider.remove(listUuid, markForSync: true, handler: {[weak self] removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseSavingError))
             if removed {
                 if remote {
                     self?.remoteListProvider.remove(listUuid) {remoteResult in
-                        if !remoteResult.success {
+                        if remoteResult.success {
+                            self?.dbProvider.clearListTombstone(listUuid) {removeTombstoneSuccess in
+                                if !removeTombstoneSuccess {
+                                    QL4("Couldn't delete tombstone for list: \(listUuid)")
+                                }
+                            }
+                        } else {
                             DefaultRemoteErrorHandler.handle(remoteResult) {(remoteResult: ProviderResult<Any>) in
                                 QL4(remoteResult)
                             }

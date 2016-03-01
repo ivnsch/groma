@@ -21,6 +21,11 @@ protocol UserProvider {
     // Updates token
     func ping()
     
+    // If the user has logged in or registered with this device at least once
+    // This is a flag used for example to know if user uses the app in offline modus. Note that it's not very accurate - user may have logged in once but then logout and keep using the app forever in offline modus, this case hasSignedInOnce still returns true. We don't know if the user is offline only shortly or forever so this is all we have.
+    // Currently this is the same as mySharedUser != nil but maybe we change the specification of mySharedUser later, so it's better to have a separate variable.
+    var hasSignedInOnce: Bool {get}
+    
     /**
     * User data which is stored after successful login or register (credentials or social media)
     * This is never removed, only overwritten in case another user logs in or register

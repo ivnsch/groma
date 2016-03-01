@@ -34,7 +34,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                     let sortedGroups = groups.sortedByOrder()
                     
                     if dbGroups != sortedGroups {
-                        self?.dbGroupsProvider.overwrite(groups) {saved in
+                        self?.dbGroupsProvider.overwrite(groups, clearTombstones: true) {saved in
                             if saved {
                                 handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: sortedGroups))
                                 
@@ -139,12 +139,18 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
 
     func removeGroup(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        dbGroupsProvider.removeGroup(uuid) {[weak self] saved in
+        dbGroupsProvider.removeGroup(uuid, markForSync: true) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             
             if saved && remote {
                 self?.remoteGroupsProvider.removeGroup(uuid) {remoteResult in
-                    if !remoteResult.success {
+                    if remoteResult.success {
+                        self?.dbGroupsProvider.clearGroupTombstone(uuid) {removeTombstoneSuccess in
+                            if !removeTombstoneSuccess {
+                                QL4("Couldn't delete tombstone for group: \(uuid)")
+                            }
+                        }
+                    } else {
                         DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
                             print("Error: removing group in remote: \(uuid), result: \(remoteResult)")
                         }
@@ -166,7 +172,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                     
                     if dbItems != items.groupItems {
                         
-                        self?.dbGroupsProvider.overwrite(items.groupItems, groupUuid: group.uuid) {saved in
+                        self?.dbGroupsProvider.overwrite(items.groupItems, groupUuid: group.uuid, clearTombstones: true) {saved in
                             if saved {
                                 handler(ProviderResult(status: .Success, sucessResult: items.groupItems))
                                 
@@ -296,14 +302,20 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     func removeGroupItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        dbGroupsProvider.removeGroupItem(uuid) {[weak self] saved in
+        dbGroupsProvider.removeGroupItem(uuid, markForSync: true) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
                 if remote {
                     if saved {
                         self?.remoteGroupsProvider.removeGroupItem(uuid) {remoteResult in
-                            if !remoteResult.success {
+                            if remoteResult.success {
+                                self?.dbGroupsProvider.clearGroupItemTombstone(uuid) {removeTombstoneSuccess in
+                                    if !removeTombstoneSuccess {
+                                        QL4("Couldn't delete tombstone for group item: \(uuid)")
+                                    }
+                                }
+                            } else {
                                 DefaultRemoteErrorHandler.handle(remoteResult, errorMsg: "removeGroupItem\(uuid)", handler: handler)
                             }
                         }

@@ -21,6 +21,10 @@ class UserProviderMock: UserProvider {
     
     private var email: String?
     
+    var hasSignedInOnce: Bool {
+        return hasLoginToken
+    }
+    
     func login(loginData: LoginData, _ handler: ProviderResult<SyncResult> -> ()) {
         delay(requestDelay) {[weak self] in
             self?.isLoggedIn = true

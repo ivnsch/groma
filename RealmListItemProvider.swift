@@ -47,8 +47,14 @@ class RealmListItemProvider: RealmProvider {
         self.saveObjs(dbSections, update: true, handler: handler)
     }
     
-    func remove(section: Section, handler: Bool -> ()) {
-        self.remove(DBSection.createFilter(section.uuid), handler: handler, objType: DBSection.self)
+    func remove(section: Section, markForSync: Bool, handler: Bool -> ()) {
+        
+        let additionalActions: (Realm -> Void)? = markForSync ? {realm in
+            let toRemove = DBSectionToRemove(section)
+            realm.add(toRemove, update: true)
+        } : nil
+        
+        self.remove(DBSection.createFilter(section.uuid), handler: handler, objType: DBSection.self, additionalActions: additionalActions)
     }
 
     func update(sections: [Section], handler: Bool -> ()) {
@@ -102,7 +108,7 @@ class RealmListItemProvider: RealmProvider {
                 }
         }
     }
-
+    
     func deleteProductAndDependencies(product: Product, handler: Bool -> Void) {
         doInWriteTransaction({[weak self] realm in
             if let weakSelf = self {
@@ -127,19 +133,38 @@ class RealmListItemProvider: RealmProvider {
         }
     }
     
+    
     // Note: This is expected to be called from inside a transaction and in a background operation
-    func deleteProductDependenciesSync(realm: Realm, productUuid: String) -> Bool {
+    func deleteProductDependenciesSync(realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
         let listItemResult = realm.objects(DBListItem).filter(DBListItem.createFilterWithProduct(productUuid))
         realm.delete(listItemResult)
+        if markForSync {
+            let toRemoveListItems = listItemResult.map{DBRemoveListItem($0)}
+            saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
+        }
+        
         let inventoryResult = realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilterWithProduct(productUuid))
         realm.delete(inventoryResult)
+        if markForSync {
+            let toRemoteInventoryItems = inventoryResult.map{DBRemoveInventoryItem($0)}
+            saveObjsSyncInt(realm, objs: toRemoteInventoryItems, update: true)
+        }
+
         let historyResult = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilterWithProduct(productUuid))
         realm.delete(historyResult)
+        if markForSync {
+            let toRemoteHistoryItems = historyResult.map{DBRemoveHistoryItem($0)}
+            saveObjsSyncInt(realm, objs: toRemoteHistoryItems, update: true)
+        }
+
         let planResult = realm.objects(DBPlanItem).filter(DBPlanItem.createFilterWithProduct(productUuid))
         realm.delete(planResult)
+        if markForSync {
+            // TODO plan items either complete or remove this table entirely
+        }
+        
         return true
     }
-    
     
     func saveProduct(productInput: ProductInput, updateSuggestions: Bool = true, update: Bool = true, handler: Product? -> ()) {
         
@@ -266,9 +291,11 @@ class RealmListItemProvider: RealmProvider {
         self.saveObjs(lists, update: update, handler: handler)
     }
     
-    func overwriteLists(lists: [List], handler: Bool -> ()) {
+    func overwriteLists(lists: [List], clearTombstones: Bool, handler: Bool -> ()) {
         let dbLists = lists.map{ListMapper.dbWithList($0)}
-        self.overwrite(dbLists, resetLastUpdateToServer: true, handler: handler)
+        // additional actions: delete tombstones. This flag is passed when we overwrite lists using the server's lists. Since we just got the fresh lists from the server, tombstones may refer to: 1. is not in the server anymore - so we don't need the tombstone - can delete tombstone, 2. it is in the server (can happen if for some reason we are downloading without having uploaded the most recent state first, e.g. when we deleted the list the server was being restarted, so the request failed -> added tombstone, now we call get lists on view will appear -> the list is in the server response but there's a tombstone. The ideal solution here would be filter out the tombstoned element from the downloaded list? and trigger the request to delete tombstones again, or something like that (the idea is the user doesn't see this list again as it was deleted), but we don't have time for this now so we will just clear the tombstone, basically undoing the delete. This may not sound obvious - we could also let the tombstone there, in which case the user would see the list and it would be removed in the next sync but this is even worser UX than just reverting the delete, as user doesn't know that login/connect change will remove it again, user may even decide to re-use the list and add items to it and this will get lost in next login/connect.
+        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBRemoveList)} : nil
+        self.overwrite(dbLists, resetLastUpdateToServer: true, additionalActions: additionalActions, handler: handler)
     }
     
     func loadList(uuid: String, handler: List? -> ()) {
@@ -281,17 +308,17 @@ class RealmListItemProvider: RealmProvider {
         self.load(mapper, handler: handler)
     }
     
-    func remove(list: List, handler: Bool -> ()) {
-        remove(list.uuid, handler: handler)
+    func remove(list: List, markForSync: Bool, handler: Bool -> ()) {
+        remove(list.uuid, markForSync: markForSync, handler: handler)
     }
 
-    func remove(listUuid: String, handler: Bool -> Void) {
+    func remove(listUuid: String, markForSync: Bool, handler: Bool -> Void) {
         background({[weak self] in
             do {
                 let realm = try Realm()
                 var success = false
                 try realm.write {
-                    success = self?.removeListSync(realm, listUuid: listUuid) ?? false
+                    success = self?.removeListSync(realm, listUuid: listUuid, markForSync: markForSync) ?? false
                 }
                 return success
             } catch let e {
@@ -304,13 +331,19 @@ class RealmListItemProvider: RealmProvider {
     }
 
     // Expected to be executed in do/catch and write block
-    func removeListSync(realm: Realm, listUuid: String) -> Bool {
-        let dbListItems = realm.objects(DBListItem).filter(DBListItem.createFilterList(listUuid))
+    func removeListSync(realm: Realm, listUuid: String, markForSync: Bool) -> Bool {
         // delete listItems
+        let dbListItems = realm.objects(DBListItem).filter(DBListItem.createFilterList(listUuid))
         realm.delete(dbListItems)
+        // NOTE: it's not necessary to mark list items deletes for sync as syncing the list delete will also delete the list items.
+        
         // delete list
         let listResults = realm.objects(DBList).filter(DBList.createFilter(listUuid))
         realm.delete(listResults)
+        if markForSync {
+            let toRemoveListItems = dbListItems.map{DBRemoveListItem($0)}
+            saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
+        }
         return true
     }
 
@@ -479,8 +512,14 @@ class RealmListItemProvider: RealmProvider {
         self.load(mapper, handler: handler)
     }
     
-    func remove(listItem: ListItem, handler: Bool -> ()) {
-        self.remove(DBListItem.createFilter(listItem.uuid), handler: handler, objType: DBListItem.self)
+    func remove(listItem: ListItem, markForSync: Bool, handler: Bool -> ()) {
+        
+        let additionalActions: (Realm -> Void)? = markForSync ? {realm in
+            let toRemoveListItem = DBRemoveListItem(listItem)
+            realm.add(toRemoveListItem, update: true)
+        } : nil
+
+        self.remove(DBListItem.createFilter(listItem.uuid), handler: handler, objType: DBListItem.self, additionalActions: additionalActions)
     }
     
     // TODO remove this method? Or if it's still needed, pass only list items, all the dependencies are in list items already
@@ -526,9 +565,10 @@ class RealmListItemProvider: RealmProvider {
         }
     }
     
-    func overwrite(listItems: [ListItem], listUuid: String, handler: Bool -> ()) {
+    func overwrite(listItems: [ListItem], listUuid: String, clearTombstones: Bool, handler: Bool -> ()) {
         let dbListItems = listItems.map{ListItemMapper.dbWithListItem($0)}
-        self.overwrite(dbListItems, deleteFilter: DBListItem.createFilterList(listUuid), resetLastUpdateToServer: true, handler: handler)
+        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteForFilter(DBRemoveListItem.self, DBRemoveListItem.createFilterForList(listUuid))} : nil
+        self.overwrite(dbListItems, deleteFilter: DBListItem.createFilterList(listUuid), resetLastUpdateToServer: true, additionalActions: additionalActions, handler: handler)
     }
     
     /**
@@ -598,8 +638,35 @@ class RealmListItemProvider: RealmProvider {
 
     }
     
-    // MARK: - Sync
+    func clearListTombstone(uuid: String, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            realm.deleteForFilter(DBRemoveList.self, DBRemoveList.createFilter(uuid))
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
     
+    func clearListItemTombstone(uuid: String, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            realm.deleteForFilter(DBRemoveListItem.self, DBRemoveListItem.createFilter(uuid))
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func clearListItemTombstonesForList(listUuid: String, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            realm.deleteForFilter(DBRemoveListItem.self, DBRemoveListItem.createFilterForList(listUuid))
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    // MARK: - Sync
+    // TODO! is this method still necessary? we have global sync now
     func saveListsSyncResult(syncResult: RemoteListWithListItemsSyncResult, handler: Bool -> ()) {
         
         doInWriteTransaction({realm in
@@ -607,7 +674,7 @@ class RealmListItemProvider: RealmProvider {
             let inventories = realm.objects(DBList)
             let inventoryItems = realm.objects(DBListItem)
             let sections = realm.objects(DBSection)
-            
+
             realm.delete(inventories)
             realm.delete(inventoryItems)
             realm.delete(sections)

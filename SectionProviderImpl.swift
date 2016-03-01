@@ -43,7 +43,7 @@ class SectionProviderImpl: SectionProvider {
     
     func remove(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         Providers.listItemsProvider.invalidateMemCache()
-        self.dbProvider.remove(section) {removed in
+        self.dbProvider.remove(section, markForSync: true) {removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
             if removed && remote {
                 // TODO!! server

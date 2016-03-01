@@ -45,7 +45,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     let inventoryItemsInRange = inventoryItems[range]
                     
                     if (dbInventoryItems != inventoryItemsInRange) {
-                        self?.dbInventoryProvider.overwrite(inventoryItems, inventoryUuid: inventory.uuid) {saved in // if items in range are not equal overwritte with all the items
+                        self?.dbInventoryProvider.overwrite(inventoryItems, inventoryUuid: inventory.uuid, clearTombstones: true) {saved in // if items in range are not equal overwritte with all the items
                             handler(ProviderResult(status: .Success, sucessResult: inventoryItemsInRange))
                             self?.memProvider.overwrite(inventoryItems)
                         }
@@ -292,7 +292,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             handler(ProviderResult(status: .Success))
         }
         
-        dbInventoryProvider.removeInventoryItem(productUuid, inventoryUuid: inventoryUuid) {[weak self] removed in
+        dbInventoryProvider.removeInventoryItem(productUuid, inventoryUuid: inventoryUuid, markForSync: true) {[weak self] removed in
             if removed {
                 if !memUpdated {
                     handler(ProviderResult(status: .Success))
@@ -304,7 +304,13 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             
             if remote {
                 self?.remoteInventoryItemsProvider.removeInventoryItem(productUuid, inventoryUuid: inventoryUuid) {remoteResult in
-                    if !remoteResult.success {
+                    if remoteResult.success {
+                        self?.dbInventoryProvider.clearInventoryItemTombstone(productUuid, inventoryUuid: inventoryUuid) {removeTombstoneSuccess in
+                            if !removeTombstoneSuccess {
+                                QL4("Couldn't delete tombstone for inventory item: \(productUuid)::\(inventoryUuid)")
+                            }
+                        }
+                    } else {
                         DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
                             print("Error removing inventory item in server: productUuid: \(productUuid), inventoryUuid: \(inventoryUuid), result: \(remoteResult)")
                             // if there's a not connection related server error, invalidate cache

@@ -89,17 +89,21 @@ class RealmInventoryProvider: RealmProvider {
         self.saveInventories([inventory], update: update, handler: handler)
     }
     
-    func removeInventory(uuid: String, update: Bool =  true, handler: Bool -> ()) {
-        background({
+    func removeInventory(uuid: String, update: Bool =  true, markForSync: Bool, handler: Bool -> ()) {
+        background({[weak self] in
             do {
                 let realm = try Realm()
                 try realm.write {
-                    RealmListItemProvider().removeListSync(realm, listUuid: uuid)
+                    RealmListItemProvider().removeListSync(realm, listUuid: uuid, markForSync: markForSync)
                     
-                    RealmHistoryProvider().removeHistoryItemsForInventory(realm, inventoryUuid: uuid)
+                    RealmHistoryProvider().removeHistoryItemsForInventory(realm, inventoryUuid: uuid, markForSync: markForSync)
                     
                     let inventoryResults = realm.objects(DBInventory).filter(DBInventory.createFilter(uuid))
                     realm.delete(inventoryResults)
+                    if markForSync {
+                        let toRemove = inventoryResults.map{DBRemoveInventory($0)}
+                        self?.saveObjsSyncInt(realm, objs: toRemove, update: true)
+                    }
                 }
                 return true
             } catch let e {
@@ -120,9 +124,10 @@ class RealmInventoryProvider: RealmProvider {
         self.saveObjs(inventories, update: update, handler: handler)
     }
     
-    func overwrite(inventories: [Inventory], handler: Bool -> Void) {
+    func overwrite(inventories: [Inventory], clearTombstones: Bool, handler: Bool -> Void) {
         let dbInventories = inventories.map{InventoryMapper.dbWithInventory($0)}
-        self.overwrite(dbInventories, resetLastUpdateToServer: true, handler: handler)
+        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBRemoveInventory)} : nil
+        self.overwrite(dbInventories, resetLastUpdateToServer: true, additionalActions: additionalActions, handler: handler)
     }
     
     func saveInventoryItems(items: [InventoryItem], update: Bool =  true, handler: Bool -> ()) {
@@ -130,9 +135,12 @@ class RealmInventoryProvider: RealmProvider {
         self.saveObjs(dbObjs, update: update, handler: handler)
     }
 
-    func overwrite(items: [InventoryItem], inventoryUuid: String, handler: Bool -> Void) {
+    func overwrite(items: [InventoryItem], inventoryUuid: String, clearTombstones: Bool, handler: Bool -> Void) {
         let dbObjs = items.map{InventoryItemMapper.dbWithInventoryItem($0)}
-        self.overwrite(dbObjs, deleteFilter: DBInventoryItem.createFilter(inventoryUuid), resetLastUpdateToServer: true, handler: handler)
+        
+        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteForFilter(DBRemoveInventoryItem.self, DBRemoveInventoryItem.createFilterForInventory(inventoryUuid))} : nil
+
+        self.overwrite(dbObjs, deleteFilter: DBInventoryItem.createFilter(inventoryUuid), resetLastUpdateToServer: true, additionalActions: additionalActions, handler: handler)
     }
     
     func saveInventoryItem(item: InventoryItem, handler: Bool -> ()) {
@@ -201,14 +209,32 @@ class RealmInventoryProvider: RealmProvider {
         saveInventoryItems([incrementedInventoryItem], handler: handler)
     }
     
-    func removeInventoryItem(inventoryItem: InventoryItem, handler: Bool -> ()) {
+    func removeInventoryItem(inventoryItem: InventoryItem, markForSync: Bool, handler: Bool -> ()) {
         let filter = DBInventoryItem.createFilter(inventoryItem)
-        self.remove(filter, handler: handler, objType: DBInventoryItem.self)
+        
+        let additionalActions: (Realm -> Void)? = markForSync ? {realm in
+            let toRemoveInventoryItem = DBRemoveInventoryItem(inventoryItem)
+            realm.add(toRemoveInventoryItem, update: true)
+        } : nil
+        
+        self.remove(filter, handler: handler, objType: DBInventoryItem.self, additionalActions: additionalActions)
     }
     
-    func removeInventoryItem(productUuid: String, inventoryUuid: String, handler: Bool -> ()) {
-        let filter = DBInventoryItem.createFilter(productUuid, inventoryUuid)
-        self.remove(filter, handler: handler, objType: DBInventoryItem.self)
+    func removeInventoryItem(productUuid: String, inventoryUuid: String, markForSync: Bool, handler: Bool -> ()) {
+        // Needs custom handling because DBRemoveInventoryItem needs the lastUpdate server timestamp and for this we have to retrieve the item from db
+        self.doInWriteTransaction({realm in
+            if let itemToRemove = realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilter(productUuid, inventoryUuid)).first {
+                realm.delete(itemToRemove)
+                if markForSync {
+                    let toRemoveInventoryItem = DBRemoveInventoryItem(productUuid: productUuid, inventoryUuid: inventoryUuid, lastServerUpdate: itemToRemove.lastServerUpdate)
+                    realm.add(toRemoveInventoryItem, update: true)
+                }
+            }
+            return true
+            
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
     }
     
     // hm...
@@ -317,6 +343,24 @@ class RealmInventoryProvider: RealmProvider {
                 handler(success ?? false)
             }
         )
+    }
+    
+    func clearInventoryTombstone(uuid: String, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            realm.deleteForFilter(DBRemoveInventory.self, DBRemoveInventory.createFilter(uuid))
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func clearInventoryItemTombstone(productUuid: String, inventoryUuid: String, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            realm.deleteForFilter(DBRemoveInventoryItem.self, DBRemoveInventoryItem.createFilter(productUuid, inventoryUuid: inventoryUuid))
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
     }
     
     func updateLastSyncTimeStamp(items: RemoteInventoryItemsWithHistoryAndDependencies, handler: Bool -> Void) {

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 class HistoryProviderImpl: HistoryProvider {
 
@@ -50,8 +51,16 @@ class HistoryProviderImpl: HistoryProvider {
             if success {
                 if remote {
                     self?.remoteProvider.removeHistoryItem(uuid) {result in
-                        let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status)
-                        handler(ProviderResult(status: providerStatus))
+                        if result.success {
+                            self?.dbProvider.clearHistoryItemTombstone(uuid) {removeTombstoneSuccess in
+                                if !removeTombstoneSuccess {
+                                    QL4("Couldn't delete tombstone for history item: \(uuid)")
+                                }
+                            }
+                        } else {
+                            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status)
+                            handler(ProviderResult(status: providerStatus))
+                        }
                     }
                 }
             } else {
@@ -61,7 +70,7 @@ class HistoryProviderImpl: HistoryProvider {
     }
     
     func removeAllHistoryItems(handler: ProviderResult<Any> -> Void) {
-        dbProvider.removeAllHistoryItems {success in
+        dbProvider.removeAllHistoryItems(true) {success in
             handler(ProviderResult(status: success ? .Success : .DatabaseUnknown))
             
             // TODO!!!! server

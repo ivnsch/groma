@@ -54,7 +54,7 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
     }
     
     func remove(category: ProductCategory, _ handler: ProviderResult<Any> -> Void) {
-        dbCategoryProvider.removeCategory(category) {success in
+        dbCategoryProvider.removeCategory(category, markForSync: true) {success in
             handler(ProviderResult(status: success ? .Success : .Unknown))
         }
     }

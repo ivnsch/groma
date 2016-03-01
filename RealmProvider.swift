@@ -69,9 +69,7 @@ class RealmProvider {
         do {
             let realm = try Realm()
             try realm.write {
-                for obj in objs {
-                    realm.add(obj, update: update)
-                }
+                saveObjsSyncInt(realm, objs: objs, update: update)
             }
         } catch let error as NSError {
             QL4("Realm error: \(error)")
@@ -81,6 +79,14 @@ class RealmProvider {
             return false
         }
         return true
+    }
+    
+    // expected to be called in transaction and do catch block
+    // Suffix "Int" like "internal" to differentiate from "Sync" that contains also creation of Realm / error handling
+    func saveObjsSyncInt<T: Object>(realm: Realm, objs: [T], update: Bool = false) {
+        for obj in objs {
+            realm.add(obj, update: update)
+        }
     }
     
     /**
@@ -177,7 +183,8 @@ class RealmProvider {
     }
     
     // WARN: passing nil as pred will remove ALL objects of objType
-    func remove<T: Object>(pred: String?, handler: Bool -> (), objType: T.Type) {
+    // additionalActions: optional actions to be executed after delete in the same transaction
+    func remove<T: Object>(pred: String?, handler: Bool -> (), objType: T.Type, additionalActions: (Realm -> Void)? = nil) {
         
         let finished: (Bool) -> () = {success in
             dispatch_async(dispatch_get_main_queue(), {
@@ -194,8 +201,9 @@ class RealmProvider {
                 }
                 try realm.write {
                     realm.delete(results)
+                    additionalActions?(realm)
                 }
-
+                
                 finished(true)
 
             } catch let error {
@@ -271,7 +279,8 @@ class RealmProvider {
     
     
     // resetLastUpdateToServer = true should be always used when this method is called for sync. TODO no resetLastUpdateToServer default = true, it's better to pass it explicitly
-    func overwrite<T: DBSyncable>(newObjects: [T], deleteFilter deleteFilterMaybe: String? = nil, resetLastUpdateToServer: Bool = true, handler: Bool -> ()) {
+    // additionalActions: optional additional actions to be executed in the transaction
+    func overwrite<T: DBSyncable>(newObjects: [T], deleteFilter deleteFilterMaybe: String? = nil, resetLastUpdateToServer: Bool = true, additionalActions: (Realm -> Void)? = nil, handler: Bool -> ()) {
         
         self.doInWriteTransaction({realm in
             
@@ -293,6 +302,9 @@ class RealmProvider {
                 
                 realm.add(obj, update: true) // update: true just in case some dependencies have repeated data (e.g. a shared user), if false the second shared user with same unique causes an exception
             }
+            
+            additionalActions?(realm)
+            
             return true
             
         }, finishHandler: {saved in

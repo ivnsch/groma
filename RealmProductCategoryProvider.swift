@@ -34,21 +34,32 @@ class RealmProductCategoryProvider: RealmProvider {
         saveObj(dbCategory, update: true, handler: handler)
     }
     
-    func removeCategory(category: ProductCategory, _ handler: Bool -> Void) {
-        background({
+    func removeCategory(category: ProductCategory, markForSync: Bool, _ handler: Bool -> Void) {
+        background({[weak self] in
             do {
                 let realm = try Realm()
                 try realm.write {
-                    let dbProducts = realm.objects(DBProduct).filter(DBProduct.createFilterCategory(category.uuid))
+                    let dbProducts: Results<DBProduct> = realm.objects(DBProduct).filter(DBProduct.createFilterCategory(category.uuid))
                     // delete first dependencies of products (realm requires this order, otherwise db is inconsistent. There's no cascade delete yet also).
                     for dbProduct in dbProducts {
-                        RealmListItemProvider().deleteProductDependenciesSync(realm, productUuid: dbProduct.uuid)
+                        RealmListItemProvider().deleteProductDependenciesSync(realm, productUuid: dbProduct.uuid, markForSync: markForSync)
                     }
+                    
                     // delete products
                     realm.delete(dbProducts)
+                    if markForSync {
+                        let toRemoveProducts = dbProducts.map{DBProductToRemove($0)}
+                        self?.saveObjsSyncInt(realm, objs: toRemoveProducts, update: true)
+                    }
+                    
                     // delete cateogories
-                    let categoryResults = realm.objects(DBProductCategory).filter(DBProductCategory.createFilter(category.uuid))
-                    realm.delete(categoryResults)
+                    let dbCategories = realm.objects(DBProductCategory).filter(DBProductCategory.createFilter(category.uuid))
+                    realm.delete(dbCategories)
+                    if markForSync {
+                        let toRemoveCategories = dbCategories.map{DBRemoveProductCategory($0)}
+                        self?.saveObjsSyncInt(realm, objs: toRemoveCategories, update: true)
+                    }
+                    
                 }
                 return true
             } catch let error {
