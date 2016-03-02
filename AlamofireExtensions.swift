@@ -328,7 +328,8 @@ extension Alamofire.Request {
 
         let responseSerializer = ResponseSerializer<RemoteResult<T>, NSError> { request, responseMaybe, data, error in
             
-            func logRequesstError(msg: String) {
+            // By default error is logged as error both in Qorum and server. We can also decide to output Qorum only as a warning and not report to server.
+            func logRequesstWarningOrError(msg: String, isWarning: Bool, reportToServer: Bool) {
                 let requestStr: String = {
                     if let request = request {
                         let methodStr = request.HTTPMethod ?? "<Undefined HTTP method>"
@@ -337,7 +338,26 @@ extension Alamofire.Request {
                         return "Undefined request"
                     }
                 }()
-                QL4("\(requestStr): \(msg)")
+                
+                let fullStr = "\(requestStr): \(msg)"
+                if isWarning {
+                    QL3(fullStr)
+                } else {
+                    QL4(fullStr)
+                }
+                
+                if reportToServer {
+                    let errorReport = ErrorReport(title: ErrorReportTitle.request, body: fullStr)
+                    Providers.errorProvider.reportError(errorReport)
+                }
+            }
+
+            func logRequesstError(msg: String) {
+                logRequesstWarningOrError(msg, isWarning: false, reportToServer: true)
+            }
+            
+            func logRequesstWarning(msg: String) {
+                logRequesstWarningOrError(msg, isWarning: true, reportToServer: false)
             }
             
 //            print("method: \(request?.HTTPMethod), response: \(responseMaybe)")
@@ -425,7 +445,7 @@ extension Alamofire.Request {
                     }
                     
                 } else if statusCode == 401 {
-                    logRequesstError("Unauthorized")
+                    logRequesstWarning("Unauthorized")
                     Providers.userProvider.removeLoginToken()
                     return Result.Success(RemoteResult<T>(status: .NotAuthenticated))
                     

@@ -39,5 +39,6 @@ struct Providers {
     static var brandProvider: BrandProvider = BrandProviderImpl()
     
     static var globalProvider: GlobalProvider = GlobalProviderImpl()
-
+    
+    static var errorProvider: ErrorProvider = ErrorProviderImpl()
 }

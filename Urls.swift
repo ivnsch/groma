@@ -81,4 +81,6 @@ struct Urls {
     static let productCategories = host + "productCategories"
     static let productCategory = host + "productCategory"
     
+    // Error report
+    static let error = host + "errorRep"
 }
