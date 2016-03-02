@@ -72,5 +72,8 @@ struct Urls {
     static let group = host + "group"
     static let groupItems = host + "groupItems"
     static let groupItem = host + "groupItem"
-
+    
+    // Product
+    static let products = host + "products"
+    static let product = host + "product"
 }

@@ -109,10 +109,10 @@ class RealmListItemProvider: RealmProvider {
         }
     }
     
-    func deleteProductAndDependencies(product: Product, handler: Bool -> Void) {
+    func deleteProductAndDependencies(product: Product, markForSync: Bool, handler: Bool -> Void) {
         doInWriteTransaction({[weak self] realm in
             if let weakSelf = self {
-                return weakSelf.deleteProductAndDependenciesSync(realm, productUuid: product.uuid)
+                return weakSelf.deleteProductAndDependenciesSync(realm, productUuid: product.uuid, markForSync: markForSync)
             } else {
                 print("WARN: RealmListItemProvider.deleteProductAndDependencies: self is nil")
                 return false
@@ -121,13 +121,20 @@ class RealmListItemProvider: RealmProvider {
             handler(success ?? false)
         })
     }
-    
+
     // Note: This is expected to be called from inside a transaction and in a background operation
-    func deleteProductAndDependenciesSync(realm: Realm, productUuid: String) -> Bool {
-        if deleteProductAndDependenciesSync(realm, productUuid: productUuid) {
-            let productResult = realm.objects(DBProduct).filter(DBProduct.createFilter(productUuid))
-            realm.delete(productResult)
-            return true
+    func deleteProductAndDependenciesSync(realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
+        if deleteProductDependenciesSync(realm, productUuid: productUuid, markForSync: markForSync) {
+            if let productResult = realm.objects(DBProduct).filter(DBProduct.createFilter(productUuid)).first {
+                realm.delete(productResult)
+                if markForSync {
+                    let toRemove = DBProductToRemove(productResult)
+                    realm.add(toRemove, update: true)
+                }
+                return true
+            } else {
+                return false
+            }
         } else {
             return false
         }
@@ -665,6 +672,15 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
+    func clearProductTombstone(uuid: String, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            realm.deleteForFilter(DBProductToRemove.self, DBProductToRemove.createFilter(uuid))
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
     // MARK: - Sync
     // TODO! is this method still necessary? we have global sync now
     func saveListsSyncResult(syncResult: RemoteListWithListItemsSyncResult, handler: Bool -> ()) {
@@ -754,5 +770,20 @@ class RealmListItemProvider: RealmProvider {
         for inventory in lists.inventories {
             realm.create(DBInventory.self, value: inventory.timestampUpdateDict, update: true)
         }
+    }
+    
+    
+    func updateLastSyncTimeStamp(product: RemoteProduct, handler: Bool -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            self?.updateLastSyncTimeStampSync(realm, product: product)
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    // FIXME repeated method with RealmListItemGroupProvider
+    func updateLastSyncTimeStampSync(realm: Realm, product: RemoteProduct) {
+        realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
     }
 }

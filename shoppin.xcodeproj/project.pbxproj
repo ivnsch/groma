@@ -219,6 +219,9 @@
 		EB4A38831C85FD26000714F9 /* prefillde.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB4A38801C85FD10000714F9 /* prefillde.realm */; };
 		EB4A38841C85FD26000714F9 /* prefillen.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB4A38811C85FD10000714F9 /* prefillen.realm */; };
 		EB4A38851C85FD26000714F9 /* prefilles.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB4A38821C85FD10000714F9 /* prefilles.realm */; };
+		EB4A38871C864D30000714F9 /* RemoteProductProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38861C864D30000714F9 /* RemoteProductProvider.swift */; };
+		EB4A38881C864D30000714F9 /* RemoteProductProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38861C864D30000714F9 /* RemoteProductProvider.swift */; };
+		EB4A38891C864D30000714F9 /* RemoteProductProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38861C864D30000714F9 /* RemoteProductProvider.swift */; };
 		EB4C36551B4BD5A700C387C5 /* TestSharedLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */; };
 		EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */; };
 		EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */; };
@@ -1092,6 +1095,7 @@
 		EB4A38801C85FD10000714F9 /* prefillde.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillde.realm; sourceTree = "<group>"; };
 		EB4A38811C85FD10000714F9 /* prefillen.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillen.realm; sourceTree = "<group>"; };
 		EB4A38821C85FD10000714F9 /* prefilles.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefilles.realm; sourceTree = "<group>"; };
+		EB4A38861C864D30000714F9 /* RemoteProductProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProductProvider.swift; sourceTree = "<group>"; };
 		EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSharedLists.swift; sourceTree = "<group>"; };
 		EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableChoiceModal.swift; sourceTree = "<group>"; };
 		EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditablePlainTableViewController.swift; sourceTree = "<group>"; };
@@ -2325,6 +2329,7 @@
 				EBF608B41C0F5D0D00EDB33E /* RemotePlanItemsProvider.swift */,
 				EBD27CCD1C1710F8005D8305 /* RemoteGroupsProvider.swift */,
 				EB6E3D1E1C5A342200D65DD5 /* RemoteGlobalProvider.swift */,
+				EB4A38861C864D30000714F9 /* RemoteProductProvider.swift */,
 				EB6E3D1D1C5A33AF00D65DD5 /* etc */,
 			);
 			name = remote;
@@ -3329,6 +3334,7 @@
 				EBB9A7481B5EB46C00E5487D /* InventoryMapper.swift in Sources */,
 				EBF162EB1A3CA2470048E37C /* Product.swift in Sources */,
 				EB1B365D1BC4653C003519F2 /* PlanTableViewCell.swift in Sources */,
+				EB4A38871C864D30000714F9 /* RemoteProductProvider.swift in Sources */,
 				EBF299831B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */,
 				EB40A4761B550C0C000E9CAD /* Results.swift in Sources */,
 				EB1B36461BC1D001003519F2 /* NSString+Levenshtein.m in Sources */,
@@ -3914,6 +3920,7 @@
 				EBA7AC971BFE95AF00247A8C /* RemoteProductCategory.swift in Sources */,
 				EB40A48B1B553A19000E9CAD /* DBListItem.swift in Sources */,
 				EBA288D81BB9FCC3001A2B95 /* MemInventoryItemProvider.swift in Sources */,
+				EB4A38881C864D30000714F9 /* RemoteProductProvider.swift in Sources */,
 				EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3952,6 +3959,7 @@
 				EBC9D23A1BE3F2FB0088E3CF /* TimerUtils.swift in Sources */,
 				EBA288DD1BB9FEE6001A2B95 /* Array_InventoryItem.swift in Sources */,
 				EBF377911B38A80100EEB6DB /* TestUsers.swift in Sources */,
+				EB4A38891C864D30000714F9 /* RemoteProductProvider.swift in Sources */,
 				EBF3776B1B342AB500EEB6DB /* ListItemProvider.swift in Sources */,
 				EBC6ADEF1B7E839900BD0ABC /* TestHistory.swift in Sources */,
 				EB7E833C1B7B9021009DEEF4 /* RealmCheckoutProvider.swift in Sources */,

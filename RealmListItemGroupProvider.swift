@@ -296,7 +296,7 @@ class RealmListItemGroupProvider: RealmProvider {
                 realm.create(DBGroupItem.self, value: listItem.timestampUpdateDict, update: true)
             }
             for product in items.products {
-                realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
+                self?.updateLastSyncTimeStampSync(realm, product: product)
             }
             for productCategory in items.productsCategories {
                 realm.create(DBProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
@@ -332,5 +332,9 @@ class RealmListItemGroupProvider: RealmProvider {
     
     private func updateLastSyncTimeStampSync(realm: Realm, group: RemoteGroup) {
         realm.create(DBListItemGroup.self, value: group.timestampUpdateDict, update: true)
+    }
+    
+    private func updateLastSyncTimeStampSync(realm: Realm, product: RemoteProduct) {
+        realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
     }
 }

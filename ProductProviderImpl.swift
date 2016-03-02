@@ -12,13 +12,15 @@ import QorumLogs
 // TODO move product-only method from list item provider here
 class ProductProviderImpl: ProductProvider {
 
-    let dbProvider = RealmListItemProvider()
-    let dbBrandProvider = RealmBrandProvider()
-    let productDbProvider = RealmProductProvider()
-
+    private let dbProvider = RealmListItemProvider()
+    private let dbBrandProvider = RealmBrandProvider()
+    private let productDbProvider = RealmProductProvider()
+    private let remoteProvider = RemoteProductProvider()
+    
     func products(range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<[Product]> -> Void) {
         dbProvider.loadProducts(range, sortBy: sortBy) {products in
             handler(ProviderResult(status: .Success, sucessResult: products))
+            // For products no background sync, this is a very long list and not justified as this screen is not used frequently. Also when there are new products mostly this is because new list/inventory/group items were added, and we get these new products already as a dependency in the respective background updates of these items.
         }
     }
     
@@ -39,21 +41,42 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func add(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbProvider.saveProducts([product], update: true) {saved in
+        dbProvider.saveProducts([product], update: true) {[weak self] saved in
             handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
             
             if saved {
                 if remote {
-                    // TODO server
+                    self?.remoteProvider.addProduct(product) {remoteResult in
+                        if let remoteProduct = remoteResult.successResult {
+                            self?.dbProvider.updateLastSyncTimeStamp(remoteProduct) {success in
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Product>) in
+                                QL4("Remote call no success: \(remoteResult)")
+                            })
+                        }
+                    }
                 }
             }
         }
     }
 
     func add(productInput: ProductInput, _ handler: ProviderResult<Product> -> ()) {
-        dbProvider.saveProduct(productInput, update: true) {productMaybe in
+        dbProvider.saveProduct(productInput, update: true) {[weak self] productMaybe in
             if let product = productMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: product))
+                
+                self?.remoteProvider.addProduct(product) {remoteResult in
+                    if let remoteProduct = remoteResult.successResult {
+                        self?.dbProvider.updateLastSyncTimeStamp(remoteProduct) {success in
+                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Product>) in
+                            QL4("Remote call no success: \(remoteResult)")
+                        })
+                    }
+                }
+                
             } else {
                 handler(ProviderResult(status: .DatabaseUnknown))
             }
@@ -61,12 +84,21 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func update(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbProvider.saveProducts([product], update: true) {saved in
+        dbProvider.saveProducts([product], update: true) {[weak self] saved in
             if saved {
                 Providers.listItemsProvider.invalidateMemCache() // reflect product updates in possible referencing list items
                 
                 if remote {
-                    // TODO server
+                    self?.remoteProvider.updateProduct(product) {remoteResult in
+                        if let remoteProduct = remoteResult.successResult {
+                            self?.dbProvider.updateLastSyncTimeStamp(remoteProduct) {success in
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Product>) in
+                                QL4("Remote call no success: \(remoteResult)")
+                            })
+                        }
+                    }
                 }
             }
             handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
@@ -74,40 +106,88 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func delete(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbProvider.deleteProductAndDependencies(product) {saved in
+        dbProvider.deleteProductAndDependencies(product, markForSync: true) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             
             if remote {
-                // TODO server
+                self?.remoteProvider.deleteProduct(product.uuid) {remoteResult in
+                    if remoteResult.success {
+                        self?.dbProvider.clearProductTombstone(product.uuid) {removeTombstoneSuccess in
+                            if !removeTombstoneSuccess {
+                                QL4("Couldn't delete tombstone for product: \(product.uuid)")
+                            }
+                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
+                            print("Error: removing product in remote: \(product.uuid), result: \(remoteResult)")
+                        }
+                    }
+                }
             }
         }
     }
     
     func incrementFav(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        productDbProvider.incrementFav(product, {saved in
+        productDbProvider.incrementFav(product, {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             
             if remote {
-                // TODO server
+                // TODO!! separate service with only uuid (not even delta - server increments always 1)
+                self?.remoteProvider.updateProduct(product) {remoteResult in
+                    if let remoteProduct = remoteResult.successResult {
+                        self?.dbProvider.updateLastSyncTimeStamp(remoteProduct) {success in
+                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Product>) in
+                            QL4("Remote call no success: \(remoteResult)")
+                        })
+                    }
+                }
             }
         })
     }
     
+    // TODO why do we have incrementFav and updateFav?
     func updateFav(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbProvider.saveProducts([product], update: true) {saved in
+        dbProvider.saveProducts([product], update: true) {[weak self] saved in
             if saved {
                 if remote {
-                    // TODO server
+                    // TODO!! separate service with only uuid (not even delta - server increments always 1)
+                    self?.remoteProvider.updateProduct(product) {remoteResult in
+                        if let remoteProduct = remoteResult.successResult {
+                            self?.dbProvider.updateLastSyncTimeStamp(remoteProduct) {success in
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Product>) in
+                                QL4("Remote call no success: \(remoteResult)")
+                            })
+                        }
+                    }
                 }
             }
             handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
         }
     }
     
+    // TODO why do we have incrementFav, updateFav and another incrementFav?
     func incrementFav(product: Product, _ handler: ProviderResult<Any> -> Void) {
         let incrementedProduct = product.copy(fav: product.fav + 1)
-        dbProvider.saveProducts([incrementedProduct], updateSuggestions: false) {saved in // we are only incrementing a(n existing) product, so update suggestions doesn't make sense
+        dbProvider.saveProducts([incrementedProduct], updateSuggestions: false) {[weak self] saved in // we are only incrementing a(n existing) product, so update suggestions doesn't make sense
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
+            if saved {
+                // TODO!! separate service with only uuid (not even delta - server increments always 1)
+                self?.remoteProvider.updateProduct(product) {remoteResult in
+                    if let remoteProduct = remoteResult.successResult {
+                        self?.dbProvider.updateLastSyncTimeStamp(remoteProduct) {success in
+                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Product>) in
+                            QL4("Remote call no success: \(remoteResult)")
+                        })
+                    }
+                }
+            }
+            
         }
     }
     
