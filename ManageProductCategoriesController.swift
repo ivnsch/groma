@@ -144,7 +144,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
             ConfirmationPopup.show(message: "Warning: This will remove all the list, group, inventory, history and stats items that reference this category", controller: self, onOk: {[weak self] in
                 if let weakSelf = self {
                     let category = weakSelf.filteredCategories[indexPath.row]
-                    Providers.productCategoryProvider.remove(category.item, weakSelf.successHandler{
+                    Providers.productCategoryProvider.remove(category.item, remote: true, weakSelf.successHandler{
                         weakSelf.removeCategoryUI(category, indexPath: indexPath)
                     })
                 }

@@ -222,6 +222,9 @@
 		EB4A38871C864D30000714F9 /* RemoteProductProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38861C864D30000714F9 /* RemoteProductProvider.swift */; };
 		EB4A38881C864D30000714F9 /* RemoteProductProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38861C864D30000714F9 /* RemoteProductProvider.swift */; };
 		EB4A38891C864D30000714F9 /* RemoteProductProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38861C864D30000714F9 /* RemoteProductProvider.swift */; };
+		EB4A388B1C8670E1000714F9 /* RemoteProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A388A1C8670E1000714F9 /* RemoteProductCategoryProvider.swift */; };
+		EB4A388C1C8670E1000714F9 /* RemoteProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A388A1C8670E1000714F9 /* RemoteProductCategoryProvider.swift */; };
+		EB4A388D1C8670E1000714F9 /* RemoteProductCategoryProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A388A1C8670E1000714F9 /* RemoteProductCategoryProvider.swift */; };
 		EB4C36551B4BD5A700C387C5 /* TestSharedLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */; };
 		EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */; };
 		EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */; };
@@ -1096,6 +1099,7 @@
 		EB4A38811C85FD10000714F9 /* prefillen.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillen.realm; sourceTree = "<group>"; };
 		EB4A38821C85FD10000714F9 /* prefilles.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefilles.realm; sourceTree = "<group>"; };
 		EB4A38861C864D30000714F9 /* RemoteProductProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProductProvider.swift; sourceTree = "<group>"; };
+		EB4A388A1C8670E1000714F9 /* RemoteProductCategoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProductCategoryProvider.swift; sourceTree = "<group>"; };
 		EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSharedLists.swift; sourceTree = "<group>"; };
 		EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableChoiceModal.swift; sourceTree = "<group>"; };
 		EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditablePlainTableViewController.swift; sourceTree = "<group>"; };
@@ -2330,6 +2334,7 @@
 				EBD27CCD1C1710F8005D8305 /* RemoteGroupsProvider.swift */,
 				EB6E3D1E1C5A342200D65DD5 /* RemoteGlobalProvider.swift */,
 				EB4A38861C864D30000714F9 /* RemoteProductProvider.swift */,
+				EB4A388A1C8670E1000714F9 /* RemoteProductCategoryProvider.swift */,
 				EB6E3D1D1C5A33AF00D65DD5 /* etc */,
 			);
 			name = remote;
@@ -3594,6 +3599,7 @@
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
 				EBD27CCE1C1710F8005D8305 /* RemoteGroupsProvider.swift in Sources */,
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,
+				EB4A388B1C8670E1000714F9 /* RemoteProductCategoryProvider.swift in Sources */,
 				EB92082D1C4ECE3D00332332 /* EditBrandController.swift in Sources */,
 				EB6E3D231C5A346100D65DD5 /* RemoteGlobalSyncResult.swift in Sources */,
 				EB7233E31C84B713002B9903 /* DBRemoveProductCategory.swift in Sources */,
@@ -3800,6 +3806,7 @@
 				EB6E3D321C5A519600D65DD5 /* RemoteInventoryWithItems.swift in Sources */,
 				EBBC22EE1BB2F48A0002F6B1 /* PhAuthenticationToken.m in Sources */,
 				EB6F812E1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
+				EB4A388C1C8670E1000714F9 /* RemoteProductCategoryProvider.swift in Sources */,
 				EBB9A7391B5EB14300E5487D /* RemoteInventory.swift in Sources */,
 				EB5567621A86437E00CD3EC6 /* ListMapper.swift in Sources */,
 				EB7032881BEBF2B300779EBB /* SectionProviderImpl.swift in Sources */,
@@ -4031,6 +4038,7 @@
 				EBB526791BEFE10B0002A286 /* HelpProvider.swift in Sources */,
 				EBBC23171BB4840F0002F6B1 /* PrefillDatabase.swift in Sources */,
 				EB70C22D1B4D3DF50060E529 /* ListProviderImpl.swift in Sources */,
+				EB4A388D1C8670E1000714F9 /* RemoteProductCategoryProvider.swift in Sources */,
 				EBA9E5E61C62977300A85610 /* UserProviderMock.swift in Sources */,
 				EB7E83241B7B7162009DEEF4 /* HistoryItem.swift in Sources */,
 				EB05FECE1C7B57990023DBF8 /* RemoteGroupItemsWithDependencies.swift in Sources */,

@@ -70,4 +70,26 @@ class RealmProductCategoryProvider: RealmProvider {
             handler(result)
         }
     }
+    
+    func updateLastSyncTimeStamp(category: RemoteProductCategory, handler: Bool -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            self?.updateLastSyncTimeStampSync(realm, category: category)
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func updateLastSyncTimeStampSync(realm: Realm, category: RemoteProductCategory) {
+        realm.create(DBProductCategory.self, value: category.timestampUpdateDict, update: true)
+    }
+    
+    func clearCategoryTombstone(uuid: String, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            realm.deleteForFilter(DBRemoveProductCategory.self, DBRemoveProductCategory.createFilter(uuid))
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
 }

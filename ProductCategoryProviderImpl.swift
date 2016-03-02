@@ -7,11 +7,13 @@
 //
 
 import Foundation
+import QorumLogs
 
 class ProductCategoryProviderImpl: ProductCategoryProvider {
 
     private let dbProductProvider = RealmProductProvider()
     private let dbCategoryProvider = RealmProductCategoryProvider()
+    private let remoteCategoryProvider = RemoteProductCategoryProvider()
 
     func categoryWithName(name: String, _ handler: ProviderResult<ProductCategory> -> Void) {
         dbProductProvider.categoryWithName(name) {categoryMaybe in
@@ -44,18 +46,46 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
     func categories(range: NSRange, _ handler: ProviderResult<[ProductCategory]> -> Void) {
         dbCategoryProvider.categories(range) {categories in
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: categories))
+            // For categories no background sync, not justified as this screen is not used frequently, also when there are new categories it's always because new list/inventory/group items were added, and we get these new categories already as a dependency in the respective background updates of these items (+ we have websocket - background sync is a "just in case" operation)
         }
     }
     
-    func update(category: ProductCategory, _ handler: ProviderResult<Any> -> Void) {
-        dbCategoryProvider.updateCategory(category) {success in
+    func update(category: ProductCategory, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        dbCategoryProvider.updateCategory(category) {[weak self] success in
            handler(ProviderResult(status: success ? .Success : .Unknown))
+            
+            if remote {
+                self?.remoteCategoryProvider.updateCategory(category) {remoteResult in
+                    if let remoteCategory = remoteResult.successResult {
+                        self?.dbCategoryProvider.updateLastSyncTimeStamp(remoteCategory) {success in
+                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<ProductCategory>) in
+                            QL4("Remote call no success: \(remoteResult)")
+                        })
+                    }
+                }
+            }
         }
     }
     
-    func remove(category: ProductCategory, _ handler: ProviderResult<Any> -> Void) {
-        dbCategoryProvider.removeCategory(category, markForSync: true) {success in
+    func remove(category: ProductCategory, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        dbCategoryProvider.removeCategory(category, markForSync: true) {[weak self] success in
             handler(ProviderResult(status: success ? .Success : .Unknown))
+            
+            if remote {
+                self?.remoteCategoryProvider.removeCategory(category.uuid) {remoteResult in
+                    if remoteResult.success {
+                        self?.dbCategoryProvider.clearCategoryTombstone(category.uuid) {removeTombstoneSuccess in
+                            if !removeTombstoneSuccess {
+                                QL4("Couldn't delete tombstone for product category: \(category.uuid)")
+                            }
+                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, errorMsg: "removeGroupItem\(category.uuid)", handler: handler)
+                    }
+                }
+            }
         }
     }
 }

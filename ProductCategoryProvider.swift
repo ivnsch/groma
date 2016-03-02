@@ -20,7 +20,7 @@ protocol ProductCategoryProvider {
     
     func categorySuggestions(handler: ProviderResult<[Suggestion]> -> ())
 
-    func update(category: ProductCategory, _ handler: ProviderResult<Any> -> Void)
+    func update(category: ProductCategory, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
-    func remove(category: ProductCategory, _ handler: ProviderResult<Any> -> Void)
+    func remove(category: ProductCategory, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 }

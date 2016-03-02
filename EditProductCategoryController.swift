@@ -71,7 +71,7 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
                 let updatedCategory = category.category.copy(name: updatedName, color: color)
                 let updated = AddEditCategoryControllerEditingData(category: updatedCategory, indexPath: category.indexPath)
 
-                Providers.productCategoryProvider.update(updated.category, successHandler {[weak self] in
+                Providers.productCategoryProvider.update(updated.category, remote: true, successHandler {[weak self] in
                     self?.delegate?.onCategoryUpdated(updated)
                 })
                 

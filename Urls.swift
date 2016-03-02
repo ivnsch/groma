@@ -76,4 +76,9 @@ struct Urls {
     // Product
     static let products = host + "products"
     static let product = host + "product"
+    
+    // Product category
+    static let productCategories = host + "productCategories"
+    static let productCategory = host + "productCategory"
+    
 }
