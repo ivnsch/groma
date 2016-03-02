@@ -77,6 +77,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryItem:", name: WSNotificationName.InventoryItem.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryWithHistoryAfterSave:", name: WSNotificationName.InventoryItemsWithHistoryAfterSave.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
     }
     
     deinit {
@@ -622,5 +623,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             print("Error: InventoryItemsViewController.onWebsocketProduct: no userInfo")
         }
     }
-
+    
+    func onIncomingGlobalSyncFinished(note: NSNotification) {
+        // TODO notification - note has the sender name
+        productsWithQuantityController.clearAndLoadFirstPage()
+    }
 }

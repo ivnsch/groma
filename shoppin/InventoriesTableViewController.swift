@@ -46,6 +46,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         topAddEditListControllerManager = initTopAddEditListControllerManager()
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsockeInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
     }
     
     deinit {
@@ -212,5 +213,10 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         } else {
             QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
         }
+    }
+    
+    func onIncomingGlobalSyncFinished(note: NSNotification) {
+        // TODO notification - note has the sender name
+        initModels()
     }
 }

@@ -81,6 +81,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         })
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
     }
     
     deinit {
@@ -409,6 +410,10 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
+    func onIncomingGlobalSyncFinished(note: NSNotification) {
+        // TODO notification - note has the sender name
+        clearAndLoadFirstPage()
+    }
     
     // MARK: - UIPicker
     

@@ -10,6 +10,7 @@ import Foundation
 import Valet
 import Alamofire
 import Reachability
+import QorumLogs
 
 class RemoteProvider {
 
@@ -49,7 +50,7 @@ class RemoteProvider {
             } catch _ as NSError {
                 handler(RemoteResult(status: .ClientParamsParsingError))
             } catch _ {
-                print("RemoteProvider.authenticatedRequest: Not handled error, returning .Unknown")
+                QL4("Not handled error, returning .Unknown")
                 handler(RemoteResult(status: .Unknown))
             }
         }
@@ -67,7 +68,7 @@ class RemoteProvider {
             } catch _ as NSError {
                 handler(RemoteResult(status: .ClientParamsParsingError))
             } catch _ {
-                print("RemoteProvider.authenticatedRequest: Not handled error, returning .Unknown")
+                QL4("Not handled error, returning .Unknown")
                 handler(RemoteResult(status: .Unknown))
             }
         }
@@ -97,8 +98,10 @@ class RemoteProvider {
     */
     private class func onConnected<T: Any>(elseHandler: RemoteResult<T> -> (), onConnected: VoidFunction) {
         if ConnectionProvider.connected {
+            QL1("Is connected")
             onConnected()
         } else {
+            QL1("Is not connected")
             elseHandler(RemoteResult(status: .NoConnection))
         }
     }
@@ -109,8 +112,10 @@ class RemoteProvider {
     private class func onConnectedAndLoggedIn<T: Any>(elseHandler: RemoteResult<T> -> (), onConnectedAndLoggedIn: VoidFunction) {
         onConnected(elseHandler) {
             if Providers.userProvider.hasLoginToken {
+                QL1("Is logged in")
                 onConnectedAndLoggedIn()
             } else {
+                QL1("Is not logged in")
                 elseHandler(RemoteResult(status: .NotLoggedIn))
             }
         }

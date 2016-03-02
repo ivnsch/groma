@@ -45,6 +45,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
 
         topAddEditListControllerManager = initTopAddEditListControllerManager()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
     }
     
     deinit {
@@ -217,5 +218,10 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         } else {
             QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
         }
+    }
+    
+    func onIncomingGlobalSyncFinished(note: NSNotification) {
+        // TODO notification - note has the sender name
+        initModels()
     }
 }

@@ -57,6 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
         
         checkRatePopup()
         
+        initWebsocket()
+        
         return initFb
     }
     
@@ -80,6 +82,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
 //        QorumLogs.onlyShowTheseFiles(MyWebSocket.self, MyWebsocketDispatcher.self)
 
 //        QorumLogs.test()
+    }
+    
+    private func initWebsocket() {
+        Providers.userProvider.connectWebsocketIfLoggedIn()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketSharedSync:", name: WSNotificationName.SyncShared.rawValue, object: nil)
     }
     
     private func initHockey() {
@@ -478,9 +488,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-        Providers.userProvider.disconnectWebsocket()
-        
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
@@ -512,15 +520,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
     
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        Providers.userProvider.connectWebsocketIfLoggedIn()
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
+
     }
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
+        Providers.userProvider.disconnectWebsocket()
+        
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     
@@ -537,16 +545,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
         let networkReachability = notification.object as! Reachability
         let remoteHostStatus = networkReachability.currentReachabilityStatus()
 
+        QL1("Changed connectivity status: \(remoteHostStatus.rawValue)")
+
         if remoteHostStatus != .NotReachable { // wifi / wwan
-            print("Device went online")
+            QL2("Connected")
             
             if userProvider.hasLoginToken {
-                print("User has login token, start sync")
+                QL2("User has login token, start sync")
                 window?.defaultProgressVisible(true)
                 Providers.globalProvider.sync {[weak self] result in
-                    print("Sync finished")
+                    QL2("Sync finished")
                     if !result.success {
-                        print("Error: AppDelegate.checkForReachability: Sync didn't succeed: \(result)")
+                        QL4("Error: AppDelegate.checkForReachability: Sync didn't succeed: \(result)")
                     }
 
                     if let syncResult = result.sucessResult {
@@ -603,6 +613,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
                 case .Invite:
                     if let controller = window?.rootViewController {
                         InventoryInvitationsHandler.handleInvitation(invitation, controller: controller)
+                    } else {
+                        QL4("Couldn't show popup, either window: \(window) or root controller: \(window?.rootViewController) is nil)")
+                    }
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+            
+        }
+    }
+    
+    // Process this here in AppDelegate because it's global and we have a controller, which we need to show possible invitations and maybe a progress indicator
+    func onWebsocketSharedSync(note: NSNotification) {
+        
+        if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                let sender = notification.obj
+                switch notification.verb {
+                case .Sync:
+                    if let controller = window?.rootViewController {
+                        controller.progressVisible()
+                        QL2("Shared items sync request by \(sender)")
+                        // text to user "Incoming sync request from x" or "Processing sync request from x" or "Sync request triggered by x" or "Sync request by x" or "x Sync request"
+                        
+                        Providers.globalProvider.sync(controller.successHandler{invitations in
+                            QL3("Are we really expecting invitations here? (not sure if this should be a warning): \(invitations)")
+                            InvitationsHandler.handleInvitations(invitations.listInvites, inventoryInvitations: invitations.inventoryInvites, controller: controller)
+                            
+                            // Broadcast such that controllers can e.g. reload items.
+                            NSNotificationCenter.defaultCenter().postNotificationName(WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil, userInfo: info)
+                        })
+                        
                     } else {
                         QL4("Couldn't show popup, either window: \(window) or root controller: \(window?.rootViewController) is nil)")
                     }

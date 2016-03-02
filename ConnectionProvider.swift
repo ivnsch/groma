@@ -8,12 +8,14 @@
 
 import Foundation
 import Reachability
+import QorumLogs
 
 class ConnectionProvider {
 
     static var connected: Bool {
         let reachability = Reachability.reachabilityForInternetConnection()
         let internetStatus = reachability.currentReachabilityStatus()
+        QL1("internetStatus: \(internetStatus)")
         return internetStatus != .NotReachable
     }
     

@@ -24,9 +24,13 @@ enum WSNotificationName: String {
     case InventoryItemsWithHistory = "WSInventoryItemsWithHistory"
     case HistoryItem = "WSHistoryItem"
     case PlanItem = "WSPlanItem"
+    case SyncShared = "WSSyncShared"
     
     // In some cases we need to receive the notification only after items have been persisted
     case InventoryItemsWithHistoryAfterSave = "WSInventoryItemsWithHistoryAfterSave"
+    
+    // When a sync triggered by a websocket message (which is sent when another user or device did sync) is finished
+    case IncomingGlobalSyncFinished = "WSIncomingGlobalSyncFinished"
 }
 
 enum WSNotificationVerb: String {
@@ -34,6 +38,7 @@ enum WSNotificationVerb: String {
     case Update = "update"
     case Delete = "delete"
     case Invite = "invite"
+    case Sync = "sync"
 }
 
 final class WSNotification<T>: AnyObject {
@@ -106,6 +111,8 @@ struct MyWebsocketDispatcher {
                 processInventoryItems(verb, topic, data)
             case "history":
                 processHistoryItem(verb, topic, data)
+            case "shared":
+                processShared(verb, topic, data)
         default:
             QL4("MyWebsocketDispatcher.processCategory not handled: \(category)")
         }
@@ -213,6 +220,7 @@ struct MyWebsocketDispatcher {
             } else {
                 QL4("Couldn't parse data: \(data)")
             }
+        default: QL4("Not handled verb: \(verb)")
         }
     }
     
@@ -263,6 +271,7 @@ struct MyWebsocketDispatcher {
             } else {
                 QL4("Couldn't parse data: \(data)")
             }
+        default: QL4("Not handled verb: \(verb)")
         }
     }
     
@@ -292,7 +301,6 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    
     private static func processHistoryItem(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Delete:
@@ -300,6 +308,20 @@ struct MyWebsocketDispatcher {
             postNotification(.HistoryItem, verb, historyItemUuid)
             
         default: QL4("MyWebsocketDispatcher.processListItems not handled: \(verb)")
+        }
+    }
+    
+    private static func processShared(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+        switch verb {
+        case WSNotificationVerb.Sync:
+            if let sender = data.valueForKeyPath("sender") as? String {
+                
+                postNotification(.SyncShared, verb, sender)
+            } else {
+                QL4("No sender. Data: \(data)")
+            }
+            
+        default: QL4("Not handled verb: \(verb)")
         }
     }
 }

@@ -62,6 +62,7 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         initNavBar([.Edit])
         
 //        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
     }
     
     deinit {
@@ -379,6 +380,11 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
 //            print("Error: ManageProductsViewController.onWebsocketProduct: no userInfo")
 //        }
 //    }
+    
+    func onIncomingGlobalSyncFinished(note: NSNotification) {
+        // TODO notification - note has the sender name
+        clearAndLoadFirstPage(true) // TODO parameter "isSearchLoad" bad naming - describe better what the flag is for, also in other controllers where this is used
+    }
 }
 
 struct AddEditCategoryControllerEditingData {

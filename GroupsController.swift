@@ -50,6 +50,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         
         topAddEditListControllerManager = initTopAddEditListControllerManager()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketGroup:", name: WSNotificationName.Group.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)    
     }
     
     deinit {
@@ -247,5 +248,10 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         } else {
             QL4("No userInfo")
         }
+    }
+    
+    func onIncomingGlobalSyncFinished(note: NSNotification) {
+        // TODO notification - note has the sender name
+        initModels()
     }
 }

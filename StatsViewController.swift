@@ -73,6 +73,8 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         }
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryWithHistoryAfterSave:", name: WSNotificationName.InventoryItemsWithHistoryAfterSave.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
+        
     }
     
     deinit {
@@ -407,6 +409,11 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
                 }
             }
         }
+    }
+    
+    func onIncomingGlobalSyncFinished(note: NSNotification) {
+        // TODO notification - note has the sender name
+        loadChart()
     }
 }
 

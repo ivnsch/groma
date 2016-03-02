@@ -18,14 +18,24 @@ class MyWebSocket: WebSocketDelegate {
     private var subscribedInventories: [String] = []
     
     init() {
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        let maybeToken = valet?.stringForKey(KeychainKeys.token)
-        if let token = maybeToken {
-            socket = WebSocket(url: NSURL(string: "ws://\(Urls.hostIPPort)/ws")!)
-            socket?.delegate = self
-            socket?.headers["X-Auth-Token"] = token
-            socket?.headers["Content-Type"] = "application/json"
-            socket?.connect()
+        if ConnectionProvider.connected {
+            
+            let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
+            let maybeToken = valet?.stringForKey(KeychainKeys.token)
+            
+            if let token = maybeToken {
+                socket = WebSocket(url: NSURL(string: "ws://\(Urls.hostIPPort)/ws")!)
+                socket?.delegate = self
+                socket?.headers["X-Auth-Token"] = token
+                socket?.headers["Content-Type"] = "application/json"
+                socket?.connect()
+                
+            } else {
+                QL1("No login token - can't initialise websocket ")
+            }
+
+        } else {
+            QL1("No internet connection - can't initialise websocket ")
         }
     }
     
