@@ -58,6 +58,7 @@ class UserProviderImpl: UserProvider {
         // Note: If we add osx support later we must move these calls to iOS-only part. The idea is to not have any iOS specific code in the providers.
         FBSDKLoginManager().logOut()
         GIDSignIn.sharedInstance().signOut()
+        GIDSignIn.sharedInstance().disconnect()
     }
     
     func sync(handler: ProviderResult<SyncResult> -> Void) {

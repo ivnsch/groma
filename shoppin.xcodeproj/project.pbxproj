@@ -237,6 +237,9 @@
 		EB4A389F1C86FC96000714F9 /* ErrorProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A389E1C86FC96000714F9 /* ErrorProvider.swift */; };
 		EB4A38A01C86FC96000714F9 /* ErrorProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A389E1C86FC96000714F9 /* ErrorProvider.swift */; };
 		EB4A38A11C86FC96000714F9 /* ErrorProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A389E1C86FC96000714F9 /* ErrorProvider.swift */; };
+		EB4A38A41C87B96C000714F9 /* GoogleSignInHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38A31C87B96C000714F9 /* GoogleSignInHelper.swift */; };
+		EB4A38A51C87B96C000714F9 /* GoogleSignInHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38A31C87B96C000714F9 /* GoogleSignInHelper.swift */; };
+		EB4A38A61C87B96C000714F9 /* GoogleSignInHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4A38A31C87B96C000714F9 /* GoogleSignInHelper.swift */; };
 		EB4C36551B4BD5A700C387C5 /* TestSharedLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */; };
 		EB4C36591B4C11A500C387C5 /* EditableChoiceModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */; };
 		EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */; };
@@ -1116,6 +1119,7 @@
 		EB4A38961C86FBE8000714F9 /* RemoteErrorReporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteErrorReporter.swift; sourceTree = "<group>"; };
 		EB4A389A1C86FC87000714F9 /* ErrorProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorProviderImpl.swift; sourceTree = "<group>"; };
 		EB4A389E1C86FC96000714F9 /* ErrorProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorProvider.swift; sourceTree = "<group>"; };
+		EB4A38A31C87B96C000714F9 /* GoogleSignInHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleSignInHelper.swift; sourceTree = "<group>"; };
 		EB4C36541B4BD5A700C387C5 /* TestSharedLists.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSharedLists.swift; sourceTree = "<group>"; };
 		EB4C36581B4C11A500C387C5 /* EditableChoiceModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditableChoiceModal.swift; sourceTree = "<group>"; };
 		EB4C365A1B4C120E00C387C5 /* EditablePlainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditablePlainTableViewController.swift; sourceTree = "<group>"; };
@@ -1969,6 +1973,14 @@
 			name = popup;
 			sourceTree = "<group>";
 		};
+		EB4A38A21C87B937000714F9 /* social */ = {
+			isa = PBXGroup;
+			children = (
+				EB4A38A31C87B96C000714F9 /* GoogleSignInHelper.swift */,
+			);
+			name = social;
+			sourceTree = "<group>";
+		};
 		EB4C36561B4C115E00C387C5 /* libraryCandidates */ = {
 			isa = PBXGroup;
 			children = (
@@ -2049,6 +2061,7 @@
 		EB55675B1A86231D00CD3EC6 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				EB4A38A21C87B937000714F9 /* social */,
 				EB1748D71C7E7AF70067FD16 /* invitation */,
 				EB8D1D181C39F2F800ADF884 /* productWithQuantity */,
 				EB741A5D1C224B8F00E1585D /* expandableItemsTableView */,
@@ -3458,6 +3471,7 @@
 				EB451C461B863516000DE208 /* MonthYear.swift in Sources */,
 				EBA7AC9E1BFEA87300247A8C /* ProductCategoryProvider.swift in Sources */,
 				EBA575711BD031B400A0A825 /* GroupItemInput.swift in Sources */,
+				EB4A38A41C87B96C000714F9 /* GoogleSignInHelper.swift in Sources */,
 				EB3144461B643559005814F0 /* UITextField.swift in Sources */,
 				EB7233BB1C84B5CE002B9903 /* DBSectionToRemove.swift in Sources */,
 				EB4A389F1C86FC96000714F9 /* ErrorProvider.swift in Sources */,
@@ -3854,6 +3868,7 @@
 				EB7E8B621B2ADF9A0090409A /* Try.swift in Sources */,
 				EBBC230A1BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */,
 				EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */,
+				EB4A38A51C87B96C000714F9 /* GoogleSignInHelper.swift in Sources */,
 				EB451C3A1B85F3F0000DE208 /* StatsProvider.swift in Sources */,
 				EB55675D1A86433700CD3EC6 /* Product.swift in Sources */,
 				EB5666CF1C52BCA90074D2B3 /* LangManager.swift in Sources */,
@@ -4196,6 +4211,7 @@
 				EB85F46D1BD54FD300E19E9B /* QuickAddGroup.swift in Sources */,
 				EB7BFA801BDAF96A00F4C74A /* Int.swift in Sources */,
 				EBA7AC981BFE95AF00247A8C /* RemoteProductCategory.swift in Sources */,
+				EB4A38A61C87B96C000714F9 /* GoogleSignInHelper.swift in Sources */,
 				EB7233C91C84B6B6002B9903 /* DBRemoveList.swift in Sources */,
 				EBBC230F1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */,
 				EB9207CB1C4BD3F600332332 /* AsyncUtils.swift in Sources */,

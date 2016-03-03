@@ -25,6 +25,8 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     
     @IBOutlet weak var termsButton: UIButton!
     
+    @IBOutlet weak var fbButton: FBSDKLoginButton!
+    
     let userProvider = ProviderFactory().userProvider
     
     var delegate: RegisterDelegate?
@@ -40,28 +42,18 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         
         passwordField.secureTextEntry = true
 
-        googleLoginSetup()
+        GoogleSignInHelper.configure(uiDelegate: self, delegate: self)
 
         fillTestInput()
         
         initValidator()
         
+        fbButton.readPermissions = ["public_profile"]
+
         let buttonTranslation = "I accept the %%terms and conditions%%" // TODO translations
         let attributedText = buttonTranslation.underlineBetweenFirstSeparators("%%")
         attributedText.setTextColor(UIColor.blackColor())
         termsButton.setAttributedTitle(attributedText, forState: .Normal)
-    }
-    
-    private func googleLoginSetup() {
-        // Google sign-in
-        var configureError: NSError?
-        GGLContext.sharedInstance().configureWithError(&configureError)
-        assert(configureError == nil, "Error configuring Google services: \(configureError)")
-        GIDSignIn.sharedInstance().delegate = self
-        
-        GIDSignIn.sharedInstance().uiDelegate = self
-        // Uncomment to automatically sign in the user.
-        //GIDSignIn.sharedInstance().signInSilently()
     }
     
     @IBAction func onShowPasswordChanged(sender: UISwitch) {
@@ -164,16 +156,15 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     }
     
     func signIn(signIn: GIDSignIn!, presentViewController viewController: UIViewController!) {
-        
+        presentViewController(viewController, animated: true, completion: nil)
     }
     
     func signIn(signIn: GIDSignIn!, dismissViewController viewController: UIViewController!) {
-        
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func signInWillDispatch(signIn: GIDSignIn!, error: NSError!) {
-
-    }
+    //    func signInWillDispatch(signIn: GIDSignIn!, error: NSError!) {
+    //    }
     
     // Common FB/Google handling for social login/register result of our own server
     private func socialSignInResultHandler()(providerResult: ProviderResult<SyncResult>) {

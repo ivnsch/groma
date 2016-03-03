@@ -39,7 +39,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
 
         passwordField.secureTextEntry = true
         
-        googleLoginSetup()
+        GoogleSignInHelper.configure(uiDelegate: self, delegate: self)
         
         self.navigationController?.navigationBarHidden = false
         
@@ -48,19 +48,6 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         self.initValidator()
         
         fbButton.readPermissions = ["public_profile"]
-    }
-
-    
-    private func googleLoginSetup() {
-        // Google sign-in
-        var configureError: NSError?
-        GGLContext.sharedInstance().configureWithError(&configureError)
-        assert(configureError == nil, "Error configuring Google services: \(configureError)")
-        GIDSignIn.sharedInstance().delegate = self
-        
-        GIDSignIn.sharedInstance().uiDelegate = self
-        // Uncomment to automatically sign in the user.
-        //GIDSignIn.sharedInstance().signInSilently()
     }
 
     private func initValidator() {
@@ -172,16 +159,15 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     }
     
     func signIn(signIn: GIDSignIn!, presentViewController viewController: UIViewController!) {
-        
+        presentViewController(viewController, animated: true, completion: nil)
     }
     
     func signIn(signIn: GIDSignIn!, dismissViewController viewController: UIViewController!) {
-        
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func signInWillDispatch(signIn: GIDSignIn!, error: NSError!) {
-        
-    }
+//    func signInWillDispatch(signIn: GIDSignIn!, error: NSError!) {
+//    }
     
     // Common FB/Google handling for social login/register result of our own server
     private func socialSignInResultHandler()(providerResult: ProviderResult<SyncResult>) {

@@ -161,6 +161,7 @@
                     </view>
                     <connections>
                         <outlet property="emailField" destination="n3k-3q-0Hq" id="1wd-rX-t83"/>
+                        <outlet property="fbButton" destination="LMD-Gz-aMB" id="OUX-K3-Ekt"/>
                         <outlet property="firstNameField" destination="YFC-c4-S2N" id="PzX-xs-Qyn"/>
                         <outlet property="lastNameField" destination="j5w-8b-ths" id="Zfh-cb-Lqt"/>
                         <outlet property="passwordField" destination="qQD-85-qkI" id="uDG-f3-4Bl"/>
