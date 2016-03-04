@@ -10,7 +10,7 @@ import Foundation
 import QorumLogs
 
 struct RemoteInventoryInvitation: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
-    let sender: String
+    let sender: String // TODO send shared user obj not simply email
     let inventory: RemoteInventory
     
     init?(representation: AnyObject) {

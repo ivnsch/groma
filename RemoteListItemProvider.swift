@@ -217,9 +217,13 @@ class RemoteListItemProvider {
     
     
     func toRequestParams(invitation: RemoteListInvitation, accept: Bool) -> [String: AnyObject] {
+        
+        let sharedUser = SharedUser(email: invitation.sender) // TODO as commented in the invitation objs, these should contain shared user not only email (this means the server has to send us the shared user)
+        
         return [
             "uuid": invitation.list.uuid,
-            "accept": accept
+            "accept": accept,
+            "sender": toRequestParams(sharedUser)
         ]
     }
     

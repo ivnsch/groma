@@ -10,7 +10,7 @@ import Foundation
 import QorumLogs
 
 struct RemoteListInvitation: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
-    let sender: String
+    let sender: String // TODO send shared user obj not simply email
     let list: RemoteListNoUsers
     
     init?(representation: AnyObject) {
