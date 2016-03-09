@@ -8,8 +8,8 @@
 
 import Foundation
 
-func delay(time: Double, f: VoidFunction) {
-    let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time * Double(NSEC_PER_SEC)))
+func delay(seconds: Double, f: VoidFunction) {
+    let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(seconds * Double(NSEC_PER_SEC)))
     dispatch_after(delay, dispatch_get_main_queue()) {
         f()
     }

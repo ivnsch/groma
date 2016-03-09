@@ -66,6 +66,7 @@ extension UIViewController {
             onSuccess()
             
         } else {
+            // TODO!!!! check these warnings - is the defaultErrorHandler called when there's an error and onError is nil? Important to remove possible progress indicator
             onError?(providerResult) ?? self.defaultErrorHandler()(providerResult: providerResult)
         }
         self.progressVisible(false)
@@ -82,6 +83,7 @@ extension UIViewController {
             }
             
         } else {
+            // TODO!!!! check these warnings - is the defaultErrorHandler called when there's an error and onError is nil? Important to remove possible progress indicator
             onError?(providerResult) ?? defaultErrorHandler()(providerResult: providerResult)
         }
         

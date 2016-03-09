@@ -301,6 +301,7 @@ class RemoteListItemProvider {
             "uuid": product.uuid,
             "name": product.name,
             "brand": product.brand,
+            "store": "", // TODO!!!!
             "price": product.price,
             "baseQuantity": product.baseQuantity,
             "unit": product.unit.rawValue,

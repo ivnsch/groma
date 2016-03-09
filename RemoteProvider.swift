@@ -112,10 +112,10 @@ class RemoteProvider {
     private class func onConnectedAndLoggedIn<T: Any>(elseHandler: RemoteResult<T> -> (), onConnectedAndLoggedIn: VoidFunction) {
         onConnected(elseHandler) {
             if Providers.userProvider.hasLoginToken {
-                QL1("Is logged in")
+                QL1("Has login token")
                 onConnectedAndLoggedIn()
             } else {
-                QL1("Is not logged in")
+                QL1("Has no login token")
                 elseHandler(RemoteResult(status: .NotLoggedIn))
             }
         }

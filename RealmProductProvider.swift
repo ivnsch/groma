@@ -105,4 +105,9 @@ class RealmProductProvider: RealmProvider {
     
     ///////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////
+    
+    func overwriteProducts(dbProducts: [DBProduct], clearTombstones: Bool, handler: Bool -> Void) {
+        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBProductToRemove)} : nil
+        self.overwrite(dbProducts, resetLastUpdateToServer: true, additionalActions: additionalActions, handler: handler)
+    }
 }

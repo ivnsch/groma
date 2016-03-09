@@ -55,12 +55,12 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        topAddEditListControllerManager?.height = ConnectionProvider.connectedAndLoggedIn ? 100 : 70
+        topAddEditListControllerManager?.height = ConnectionProvider.connectedAndLoggedIn ? 140 : 110
     }
     
     private func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditInventoryController> {
         let top = CGRectGetHeight(topBar.frame)
-        return ExpandableTopViewController(top: top, height: ConnectionProvider.connectedAndLoggedIn ? 100 : 70, parentViewController: self, tableView: tableView) {[weak self] in
+        return ExpandableTopViewController(top: top, height: ConnectionProvider.connectedAndLoggedIn ? 140 : 110, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.addEditInventory()
             controller.delegate = self
             controller.currentListsCount = self?.models.count ?? {

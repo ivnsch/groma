@@ -7,15 +7,34 @@
 //
 
 import UIKit
+import QorumLogs
+
+protocol SharedUserCellDelegate {
+    func onPullProductsTap(user: SharedUser, cell: ListSharedUserCell)
+}
+
+class SharedUserCellModel {
+    let user: SharedUser
+    var acceptedInvitation: Bool // for now we assume that users passed in edit mode have accepted the invitation.
+    init(user: SharedUser, acceptedInvitation: Bool = false) {
+        self.user = user
+        self.acceptedInvitation = acceptedInvitation
+    }
+}
 
 class ListSharedUserCell: UITableViewCell {
 
     @IBOutlet weak var qemailLabel: UILabel!
     
-    var sharedUser: SharedUser? {
+    @IBOutlet weak var pullProductsButton: UIButton!
+    
+    var delegate: SharedUserCellDelegate?
+    
+    var cellModel: SharedUserCellModel? {
         didSet {
-            if let sharedUser = sharedUser {
-                qemailLabel.text = sharedUser.email
+            if let cellModel = cellModel {
+                qemailLabel.text = cellModel.user.email
+                pullProductsButton.hidden = !cellModel.acceptedInvitation
             }
         }
     }
@@ -23,5 +42,15 @@ class ListSharedUserCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         selectionStyle = .None
+        
+//        contentView.backgroundColor = UICOlor
+    }
+    
+    @IBAction func onPullProductsTap(sender: UIBarButtonItem) {
+        if let sharedUser = cellModel?.user {
+            delegate?.onPullProductsTap(sharedUser, cell: self)
+        } else {
+            QL4("Illegal state: cell has no shared user")
+        }
     }
 }

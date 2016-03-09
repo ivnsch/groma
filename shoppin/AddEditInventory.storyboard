@@ -12,6 +12,7 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -53,7 +54,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="User e-mail" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="U0X-Ol-BRf">
-                                <rect key="frame" x="14" y="72" width="533" height="30"/>
+                                <rect key="frame" x="14" y="106" width="533" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="gsS-aM-IJs"/>
                                 </constraints>
@@ -66,7 +67,7 @@
                                 </userDefinedRuntimeAttributes>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rNk-y4-oIF">
-                                <rect key="frame" x="561" y="75" width="25" height="25"/>
+                                <rect key="frame" x="561" y="109" width="25" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="Ttk-l6-9Jp"/>
                                     <constraint firstAttribute="width" constant="25" id="iWc-6A-gQg"/>
@@ -78,7 +79,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lhc-D5-OK6">
-                                <rect key="frame" x="0.0" y="116" width="600" height="484"/>
+                                <rect key="frame" x="0.0" y="144" width="600" height="456"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="userCell" rowHeight="30" id="1lI-Zm-YGY" customClass="ListSharedUserCell" customModule="shoppin" customModuleProvider="target">
@@ -94,13 +95,24 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q0z-hr-UCl">
+                                                    <rect key="frame" x="507" y="-1" width="85" height="30"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                                    <state key="normal" title="Pull products"/>
+                                                    <connections>
+                                                        <action selector="onPullProductsTap:" destination="1lI-Zm-YGY" eventType="touchUpInside" id="Rk5-ue-pJ4"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="ksI-Bs-cv6" firstAttribute="leading" secondItem="yOb-br-NXe" secondAttribute="leading" constant="14" id="2PA-UP-osg"/>
                                                 <constraint firstItem="ksI-Bs-cv6" firstAttribute="centerY" secondItem="yOb-br-NXe" secondAttribute="centerY" id="6zO-WW-A6C"/>
+                                                <constraint firstAttribute="trailing" secondItem="Q0z-hr-UCl" secondAttribute="trailing" constant="8" id="79c-Kd-LN6"/>
+                                                <constraint firstItem="Q0z-hr-UCl" firstAttribute="centerY" secondItem="yOb-br-NXe" secondAttribute="centerY" id="9QP-UQ-0nJ"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="pullProductsButton" destination="Q0z-hr-UCl" id="58B-7x-a5Z"/>
                                             <outlet property="qemailLabel" destination="ksI-Bs-cv6" id="UZT-F7-bKM"/>
                                         </connections>
                                     </tableViewCell>
@@ -111,7 +123,7 @@
                                 </connections>
                             </tableView>
                             <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qCG-S0-5T7">
-                                <rect key="frame" x="0.0" y="72" width="600" height="35"/>
+                                <rect key="frame" x="0.0" y="106" width="600" height="35"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="Ny4-Kj-hx4"/>
@@ -131,9 +143,9 @@
                             <constraint firstItem="958-Da-VLu" firstAttribute="top" secondItem="PmJ-d3-xse" secondAttribute="bottom" constant="8" id="Ljv-XS-PaJ"/>
                             <constraint firstItem="U0X-Ol-BRf" firstAttribute="leading" secondItem="h5W-ku-HnU" secondAttribute="leading" constant="14" id="QqD-VV-Pvp"/>
                             <constraint firstItem="Qpe-T7-N2v" firstAttribute="top" secondItem="lhc-D5-OK6" secondAttribute="bottom" id="V6a-Yo-AoO"/>
-                            <constraint firstItem="U0X-Ol-BRf" firstAttribute="top" secondItem="958-Da-VLu" secondAttribute="bottom" constant="14" id="Xjj-ab-3Ib"/>
-                            <constraint firstItem="qCG-S0-5T7" firstAttribute="top" secondItem="958-Da-VLu" secondAttribute="bottom" constant="14" id="ZcA-7w-QCA"/>
-                            <constraint firstItem="lhc-D5-OK6" firstAttribute="top" secondItem="U0X-Ol-BRf" secondAttribute="bottom" priority="999" constant="14" id="bXo-jj-urv"/>
+                            <constraint firstItem="U0X-Ol-BRf" firstAttribute="top" secondItem="958-Da-VLu" secondAttribute="bottom" constant="48" id="Xjj-ab-3Ib"/>
+                            <constraint firstItem="qCG-S0-5T7" firstAttribute="top" secondItem="958-Da-VLu" secondAttribute="bottom" constant="48" id="ZcA-7w-QCA"/>
+                            <constraint firstItem="lhc-D5-OK6" firstAttribute="top" secondItem="U0X-Ol-BRf" secondAttribute="bottom" priority="999" constant="8" id="bXo-jj-urv"/>
                             <constraint firstAttribute="trailing" secondItem="F6P-Xg-vy1" secondAttribute="trailing" constant="14" id="cJG-26-ZON"/>
                             <constraint firstItem="F6P-Xg-vy1" firstAttribute="leading" secondItem="958-Da-VLu" secondAttribute="trailing" constant="14" id="ccS-Di-Dkj"/>
                             <constraint firstItem="F6P-Xg-vy1" firstAttribute="centerX" secondItem="h5W-ku-HnU" secondAttribute="centerX" constant="-30" id="dnz-Eb-a5f"/>

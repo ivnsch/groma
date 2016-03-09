@@ -75,4 +75,26 @@ class ProductMapper {
         dbProduct.dirty = false
         return dbProduct
     }
+    
+    class func listItemsWithRemote(remoteListItems: RemoteProductsWithDependencies) -> [Product] {
+        
+        let productsCategoriesDict: [String: RemoteProductCategory] = remoteListItems.categories.toDictionary{($0.uuid, $0)}
+        
+        let products = remoteListItems.products.map {remoteProduct in
+            productWithRemote(remoteProduct, category: productsCategoriesDict[remoteProduct.categoryUuid]!)
+        }
+        
+        return products
+    }
+    
+    class func dbListItemsWithRemote(remoteListItems: RemoteProductsWithDependencies) -> [DBProduct] {
+        
+        let productsCategoriesDict: [String: RemoteProductCategory] = remoteListItems.categories.toDictionary{($0.uuid, $0)}
+        
+        let products = remoteListItems.products.map {remoteProduct in
+            dbProductWithRemote(remoteProduct, category: productsCategoriesDict[remoteProduct.categoryUuid]!)
+        }
+        
+        return products
+    }
 }

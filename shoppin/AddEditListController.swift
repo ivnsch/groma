@@ -10,13 +10,15 @@ import UIKit
 import SwiftValidator
 import ChameleonFramework
 import CMPopTipView
+import QorumLogs
 
 protocol AddEditListControllerDelegate {
     func onListAdded(list: List)
     func onListUpdated(list: List)
 }
 
-class AddEditListController: UIViewController, UITableViewDataSource, UITableViewDelegate, FlatColorPickerControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+
+class AddEditListController: UIViewController, UITableViewDataSource, UITableViewDelegate, FlatColorPickerControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, SharedUserCellDelegate {
     
     @IBOutlet weak var listNameInputField: UITextField!
     @IBOutlet weak var usersTableView: UITableView!
@@ -26,6 +28,7 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var colorButton: UIButton!
 
     @IBOutlet weak var inventoriesButton: UIButton!
+    
     private var inventories: [Inventory] = [] {
         didSet {
             selectedInventory = inventories.first
@@ -56,9 +59,14 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    var sharedUsers: [SharedUser] = [] {
+    var isEdit: Bool {
+        return listToEdit != nil
+    }
+    
+    private var userCellModels: [SharedUserCellModel] = [] {
         didSet {
             usersTableView.reloadData()
+            self.adjustUsersTableViewHeightForContent()
         }
     }
     
@@ -69,17 +77,16 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
         
         usersTableView.setEditing(true, animated: false)
         
-        if !listToEdit.isSet {
+        if !listToEdit.isSet { // add modus
             colorButton.tintColor = RandomFlatColorWithShade(.Dark)
         }
     }
     
     private func prefill(list: List) {
         listNameInputField.text = list.name
-        sharedUsers = list.users
+        userCellModels = list.users.map{SharedUserCellModel(user: $0, acceptedInvitation: true)} // for now we assume that users passed in edit mode have accepted the invitation. TODO!!!! check: do the shared users for editing list come from the server? Or do we store them independently of server. In latest case we have to improve logic here. We must not show "pull products" for users that have not accepted the invitation. Either we don't show the users that haven't accepted at all or we show them with a "pending" status (without "pull products" button). Latest requires some work, if we show this we also should allow e.g. to remove the pending invitation, in which case we need a new service in the server also.
         colorButton.tintColor = list.bgColor
         colorButton.imageView?.tintColor = list.bgColor
-        
     }
     
     private func initValidator() {
@@ -171,14 +178,14 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
                 
                     if let listName = weakSelf.listNameInputField.text {
                         if let listToEdit = weakSelf.listToEdit {
-                            let updatedList = listToEdit.copy(name: listName, users: weakSelf.sharedUsers, bgColor: weakSelf.colorButton.tintColor, inventory: inventory)
+                            let updatedList = listToEdit.copy(name: listName, users: weakSelf.userCellModels.map{$0.user}, bgColor: weakSelf.colorButton.tintColor, inventory: inventory)
                             Providers.listProvider.update([updatedList], remote: true, weakSelf.successHandler{
                                 weakSelf.delegate?.onListUpdated(updatedList)
                             })
                         
                         } else {
                             if let currentListsCount = weakSelf.currentListsCount {
-                                let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: weakSelf.sharedUsers, bgColor: weakSelf.colorButton.tintColor, order: currentListsCount, inventory: inventory)
+                                let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: weakSelf.userCellModels.map{$0.user}, bgColor: weakSelf.colorButton.tintColor, order: currentListsCount, inventory: inventory)
                                 Providers.listProvider.add(listWithSharedUsers, remote: true, weakSelf.successHandler{list in
                                     weakSelf.delegate?.onListAdded(list)
                                 })
@@ -233,9 +240,9 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
                 
                 if let weakSelf = self {
                     if let input = weakSelf.addUserInputField.text {
-                        SharedUserChecker.check(input, users: weakSelf.sharedUsers, controller: weakSelf, onSuccess: {
+//                        SharedUserChecker.check(input, users: weakSelf.sharedUsers.map{$0.user}, controller: weakSelf, onSuccess: {
                             weakSelf.addUserUI(SharedUser(email: input))
-                        })
+//                        })
                     } else {
                         print("Error: validation was not implemented correctly")
                     }
@@ -246,13 +253,16 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
 
     
     private func addUserUI(user: SharedUser) {
-        sharedUsers.append(user)
+        userCellModels.append(SharedUserCellModel(user: user))
         addUserInputField.clear()
-        
-        let viewWithoutTableViewHeight: CGFloat = 140
+        adjustUsersTableViewHeightForContent()
+    }
+    
+    private func adjustUsersTableViewHeightForContent() {
+        let viewWithoutTableViewHeight: CGFloat = 120
         let tableViewCellHeight: CGFloat = 44
         let viewMaxHeight: CGFloat = 260
-        let height = min(viewMaxHeight, viewWithoutTableViewHeight + (CGFloat(sharedUsers.count) * tableViewCellHeight)) // tableview height as content, but not higher than max
+        let height = min(viewMaxHeight, viewWithoutTableViewHeight + (CGFloat(userCellModels.count) * tableViewCellHeight)) // tableview height as content, but not higher than max
         animateHeigth(height)
     }
     
@@ -268,14 +278,16 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sharedUsers.count
+        return userCellModels.count
     }
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("userCell", forIndexPath: indexPath) as! ListSharedUserCell
-        let sharedUser = sharedUsers[indexPath.row]
-        cell.sharedUser = sharedUser
+        let cellModel = userCellModels[indexPath.row]
+        cell.cellModel = cellModel
+        cell.delegate = self
+        
         return cell
     }
     
@@ -287,7 +299,7 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
         if editingStyle == .Delete {
             self.usersTableView.wrapUpdates {[weak self] in
                 if let weakSelf = self {
-                    weakSelf.sharedUsers.removeAtIndex(indexPath.row)
+                    weakSelf.userCellModels.removeAtIndex(indexPath.row)
                     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
                 }
             }
@@ -338,7 +350,7 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     func clear() {
         listNameInputField.clear()
         addUserInputField.clear()
-        sharedUsers = []
+        userCellModels = []
         listToEdit = nil
         
     }
@@ -377,6 +389,17 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
                     }
                 }
             )
+        }
+    }
+    
+    // MARK: - SharedUserCellDelegate
+    
+    func onPullProductsTap(user: SharedUser, cell: ListSharedUserCell) {
+        progressVisible(true)
+        if let list = listToEdit {
+            Providers.pullProvider.pullListProducs(list.uuid, srcUser: user, successHandler{[weak self] listItems in
+                self?.progressVisible(false)
+            })
         }
     }
 }

@@ -41,4 +41,6 @@ struct Providers {
     static var globalProvider: GlobalProvider = GlobalProviderImpl()
     
     static var errorProvider: ErrorProvider = ErrorProviderImpl()
+    
+    static var pullProvider: PullProvider = PullProviderImpl()
 }

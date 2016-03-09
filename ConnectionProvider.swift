@@ -15,7 +15,7 @@ class ConnectionProvider {
     static var connected: Bool {
         let reachability = Reachability.reachabilityForInternetConnection()
         let internetStatus = reachability.currentReachabilityStatus()
-        QL1("internetStatus: \(internetStatus)")
+        QL1("internetStatus: \(internetStatus.rawValue)")
         return internetStatus != .NotReachable
     }
     

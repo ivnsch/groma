@@ -113,7 +113,7 @@ struct DefaultRemoteErrorHandler {
     * With this we can use the app offline or without account - the error handler, which triggers the error alert is not called on connection error.
     */
     static func handle<T, U>(remoteResult: RemoteResult<T>, errorMsg: String? = nil, handler: ProviderResult<U> -> ()) {
-        guard remoteResult.status != .Success else {return} // if it's a success response, there's nothing to do here. Handler will not be called.
+//        guard remoteResult.status != .Success else {return} // if it's a success response, there's nothing to do here. Handler will not be called.
         
         switch remoteResult.status {
         case .NoConnection, .NotLoggedIn, .NotAuthenticated
@@ -124,10 +124,26 @@ struct DefaultRemoteErrorHandler {
             QL1("Remote result status: \(remoteResult.status)")
             return
         case _:
-            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-            let errorText = errorMsg.map{"\($0)::"} ?? ""
-            QL4("\(errorText)\(remoteResult)")
-            handler(ProviderResult(status: providerStatus, sucessResult: nil, error: remoteResult.error, errorObj: remoteResult.errorObj)) // TODO when remote fails somehow trigger a revert of local updates
+            handleError(remoteResult, errorMsg: errorMsg, handler: handler)
         }
     }
+    
+    /**
+    * Handles error for service that is remote-only (opposed to background sync). The user is most likely seeing a progress indicator and waiting for the response.
+    * The difference in this case is that we don't ignore errors - unauthorized etc. is handled like a normal error, i.e. the handler is called, such that the user can get feedback and e.g. the progress indicator hidden.
+    * Examples for calls where this should be used: login, register, pull
+    */
+    static func handleRemoteOnlyCall<T, U>(remoteResult: RemoteResult<T>, errorMsg: String? = nil, handler: ProviderResult<U> -> ()) {
+        handleError(remoteResult, errorMsg: errorMsg, handler: handler)
+    }
+    
+    private static func handleError<T, U>(remoteResult: RemoteResult<T>, errorMsg: String? = nil, handler: ProviderResult<U> -> ()) {
+//        guard remoteResult.status != .Success else {return} // if it's a success response, there's nothing to do here. Handler will not be called.
+        
+        let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+        let errorText = errorMsg.map{"\($0)::"} ?? ""
+        QL4("\(errorText)\(remoteResult)")
+        handler(ProviderResult(status: providerStatus, sucessResult: nil, error: remoteResult.error, errorObj: remoteResult.errorObj)) // TODO when remote fails somehow trigger a revert of local updates
+    }
+    
 }

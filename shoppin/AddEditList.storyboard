@@ -14,6 +14,7 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -88,13 +89,24 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2bX-Bo-Mp2">
+                                                    <rect key="frame" x="507" y="-1" width="85" height="30"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                                    <state key="normal" title="Pull products"/>
+                                                    <connections>
+                                                        <action selector="onPullProductsTap:" destination="0U2-lP-y6d" eventType="touchUpInside" id="Ezs-vh-KEI"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="OZQ-ih-T9i" firstAttribute="centerY" secondItem="jEJ-M1-G1Q" secondAttribute="centerY" id="Dfq-Yx-85A"/>
                                                 <constraint firstItem="OZQ-ih-T9i" firstAttribute="leading" secondItem="jEJ-M1-G1Q" secondAttribute="leading" constant="14" id="Ngj-Fr-cH3"/>
+                                                <constraint firstItem="2bX-Bo-Mp2" firstAttribute="centerY" secondItem="jEJ-M1-G1Q" secondAttribute="centerY" id="q3R-cD-ZJP"/>
+                                                <constraint firstAttribute="trailing" secondItem="2bX-Bo-Mp2" secondAttribute="trailing" constant="8" id="tDM-Dd-HUH"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="pullProductsButton" destination="2bX-Bo-Mp2" id="YJK-dI-ybb"/>
                                             <outlet property="qemailLabel" destination="OZQ-ih-T9i" id="Qzl-nx-wFN"/>
                                         </connections>
                                     </tableViewCell>
