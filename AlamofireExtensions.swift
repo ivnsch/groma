@@ -330,6 +330,9 @@ extension Alamofire.Request {
             
             // By default error is logged as error both in Qorum and server. We can also decide to output Qorum only as a warning and not report to server.
             func logRequesstWarningOrError(msg: String, isWarning: Bool, reportToServer: Bool) {
+
+                guard (request?.URL.map{$0.absoluteString != Urls.error}) ?? true else {return} // don't try to report error if an error report failed, to prevent infinite loop
+
                 let requestStr: String = {
                     if let request = request {
                         let methodStr = request.HTTPMethod ?? "<Undefined HTTP method>"
@@ -358,6 +361,10 @@ extension Alamofire.Request {
             
             func logRequesstWarning(msg: String) {
                 logRequesstWarningOrError(msg, isWarning: true, reportToServer: false)
+            }
+            
+            func logRequesstErrorNoServer(msg: String) {
+                logRequesstWarningOrError(msg, isWarning: false, reportToServer: false)
             }
             
 //            print("method: \(request?.HTTPMethod), response: \(responseMaybe)")
@@ -472,12 +479,14 @@ extension Alamofire.Request {
                 }
                 
             } else { // So far this happened when the server was not reachable. This will be executed but the error is handled in the completionHandler block (Alamofire passes us a .Failure in this case). We return here .ResponseIsNil only as result of the serialization.
-                logRequesstError("Error: response == nil")
+                logRequesstErrorNoServer("Error: response == nil")
+                
                 if let error = error {
-                    logRequesstError("Error calling remote service, error: \(error)")
                     if error.code == -1004 {  // iOS returns -1004 both when server is down/url not reachable and when client doesn't have an internet connection. Needs maybe internet connection check to differentiate.
+                        logRequesstErrorNoServer("Error calling remote service, error: \(error)")
                             return Result.Success(RemoteResult<T>(status: .ServerNotReachable))
                     } else {
+                        logRequesstError("Error calling remote service, error: \(error)")
                         return Result.Success(RemoteResult<T>(status: .UnknownServerCommunicationError))
                     }
                 } else {
