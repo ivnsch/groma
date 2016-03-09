@@ -217,16 +217,16 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String) {
-        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand) {
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
         }
     }
     
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String) {
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
         if let group = group, groupItem = updatingGroupItem {
             if let price = priceText.floatValue, quantity = Int(quantityText) {
                 let updatedCategory = groupItem.product.category.copy(name: category, color: categoryColor)
-                let updatedProduct = groupItem.product.copy(name: name, price: price, category: updatedCategory, baseQuantity: baseQuantity, unit: unit, brand: brand)
+                let updatedProduct = groupItem.product.copy(name: name, price: price, category: updatedCategory, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
                 let updatedGroupItem = groupItem.copy(quantity: quantity, product: updatedProduct)
                 Providers.listItemGroupsProvider.update(updatedGroupItem, group: group, remote: true, successHandler{[weak self] in
                     self?.onGroupItemUpdated(true)
@@ -256,13 +256,13 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         })
     }
     
-    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, successHandler: VoidFunction? = nil) {
+    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, successHandler: VoidFunction? = nil) {
         
         if let group = group {
             
             if let price = priceText.floatValue, quantity = Int(quantityText) {
                 
-                let input = GroupItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand)
+                let input = GroupItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
                 
                 Providers.listItemGroupsProvider.add(input, group: group, remote: true, self.successHandler{[weak self] groupItem in
                     self?.onGroupItemAdded(true)

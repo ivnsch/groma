@@ -69,10 +69,10 @@ class RealmListItemProvider: RealmProvider {
         self.loadFirst(mapper, filter: DBProduct.createFilter(uuid), handler: handler)
     }
     
-    // TODO rename method (uses now brand too)
-    func loadProductWithName(name: String, brand: String, handler: Product? -> ()) {
+    // TODO rename method (uses now brand and store too)
+    func loadProductWithName(name: String, brand: String, store: String, handler: Product? -> ()) {
         let mapper = {ProductMapper.productWithDB($0)}
-        self.loadFirst(mapper, filter: DBProduct.createFilterNameBrand(name, brand: brand), handler: handler)
+        self.loadFirst(mapper, filter: DBProduct.createFilterNameBrand(name, brand: brand, store: store), handler: handler)
     }
     
     func loadProducts(range: NSRange, sortBy: ProductSortBy, handler: [Product] -> ()) {
@@ -175,7 +175,7 @@ class RealmListItemProvider: RealmProvider {
     
     func saveProduct(productInput: ProductInput, updateSuggestions: Bool = true, update: Bool = true, handler: Product? -> ()) {
         
-        loadProductWithName(productInput.name, brand: productInput.brand ?? "") {[weak self] productMaybe in
+        loadProductWithName(productInput.name, brand: productInput.brand, store: productInput.store) {[weak self] productMaybe in
 
             if productMaybe.isSet && !update {
                 print("Product with name: \(productInput.name), already exists, no update")

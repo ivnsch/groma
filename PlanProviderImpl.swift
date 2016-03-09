@@ -152,7 +152,7 @@ class PlanProviderImpl: PlanProvider {
             } else { // if it doesn't exist, add it
                 
                 // check if product exists
-                Providers.productProvider.product(itemInput.name, brand: itemInput.brand ?? "") {result in
+                Providers.productProvider.product(itemInput.name, brand: itemInput.brand, store: itemInput.store) {result in
                     if let product = result.sucessResult { // products exists - update it and reference it
                         let mergedCategory = product.category.copy(name: itemInput.category, color: itemInput.categoryColor)
                         let mergedProduct = Product(uuid: product.uuid, name: itemInput.name, price: itemInput.price, category: mergedCategory, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit, brand: itemInput.brand)

@@ -249,7 +249,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
             }
         }
         
-        Providers.productProvider.product(itemInput.name, brand: itemInput.brand ?? "") {productResult in
+        Providers.productProvider.product(itemInput.name, brand: itemInput.brand, store: itemInput.store) {productResult in
             // TODO consistent handling everywhere of optional results - return always either .Success & Option(None) or .NotFound & non-optional.
             if productResult.success || productResult.status == .NotFound {
                 if let product = productResult.sucessResult {

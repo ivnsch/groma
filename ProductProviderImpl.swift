@@ -30,8 +30,8 @@ class ProductProviderImpl: ProductProvider {
         }
     }
 
-    func product(name: String, brand: String, handler: ProviderResult<Product> -> ()) {
-        dbProvider.loadProductWithName(name, brand: brand) {dbProduct in
+    func product(name: String, brand: String, store: String, handler: ProviderResult<Product> -> ()) {
+        dbProvider.loadProductWithName(name, brand: brand, store: store) {dbProduct in
             if let dbProduct = dbProduct {
                 handler(ProviderResult(status: .Success, sucessResult: dbProduct))
             } else {
@@ -198,14 +198,14 @@ class ProductProviderImpl: ProductProvider {
     }
     
     
-    func loadProduct(name: String, brand: String, handler: ProviderResult<Product> -> ()) {
-        dbProvider.loadProductWithName(name, brand: brand) {dbProductMaybe in
+    func loadProduct(name: String, brand: String, store: String, handler: ProviderResult<Product> -> ()) {
+        dbProvider.loadProductWithName(name, brand: brand, store: store) {dbProductMaybe in
             if let dbProduct = dbProductMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: dbProduct))
             } else {
                 handler(ProviderResult(status: .NotFound))
             }
-            
+
             //            // TODO is this necessary here?
             //            self.remoteProvider.product(name, list: list) {remoteResult in
             //
@@ -226,11 +226,11 @@ class ProductProviderImpl: ProductProvider {
         }
     }
 
-    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, _ handler: ProviderResult<Product> -> Void) {
+    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, _ handler: ProviderResult<Product> -> Void) {
 
         // load product and update or create one
         // if we find a product with the name we update it - this is for the case the user changes the price etc for an existing product while adding an item
-        loadProduct(productName, brand: brand ?? "") {result in
+        loadProduct(productName, brand: brand, store: store) {result in
             if let existingProduct = result.sucessResult {
                 let updatedCateogry = existingProduct.category.copy(name: category, color: categoryColor)
                 let updatedProduct = existingProduct.copy(name: productName, price: productPrice, category: updatedCateogry, baseQuantity: baseQuantity, unit: unit)

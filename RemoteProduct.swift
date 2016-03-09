@@ -18,6 +18,7 @@ struct RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable
     let unit: Int
     let fav: Int
     let brand: String
+    let store: String
     let lastUpdate: NSDate
 
     init?(representation: AnyObject) {
@@ -30,6 +31,7 @@ struct RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable
             let unit = representation.valueForKeyPath("unit") as? Int,
             let fav = representation.valueForKeyPath("fav") as? Int,
             let brand = representation.valueForKeyPath("brand") as? String,
+            let store = representation.valueForKeyPath("store") as? String,
             let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
             else {
                 QL4("Invalid json: \(representation)")
@@ -43,6 +45,7 @@ struct RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable
         self.unit = unit
         self.fav = fav
         self.brand = brand
+        self.store = store
         self.lastUpdate = lastUpdate
     }
     
@@ -59,7 +62,7 @@ struct RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), price: \(price), categoryUuid: \(categoryUuid), baseQuantity: \(baseQuantity), unit: \(unit), fav: \(fav), brand: \(brand), listUpdate: \(lastUpdate)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), price: \(price), categoryUuid: \(categoryUuid), baseQuantity: \(baseQuantity), unit: \(unit), fav: \(fav), brand: \(brand), store: \(store), listUpdate: \(lastUpdate)}"
     }
 }
 

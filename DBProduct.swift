@@ -19,6 +19,7 @@ class DBProduct: DBSyncable {
     dynamic var unit: Int = 0
     dynamic var fav: Int = 0
     dynamic var brand: String = ""
+    dynamic var store: String = ""
     
     var category: DBProductCategory {
         get {
@@ -47,8 +48,12 @@ class DBProduct: DBSyncable {
         return "brand == '\(brand)'"
     }
     
-    static func createFilterNameBrand(name: String, brand: String) -> String {
-        return "\(createFilterName(name)) AND \(createFilterBrand(brand))"
+    static func createFilterStore(store: String) -> String {
+        return "store == '\(store)'"
+    }
+    
+    static func createFilterNameBrand(name: String, brand: String, store: String) -> String {
+        return "\(createFilterName(name)) AND \(createFilterBrand(brand)) AND \(createFilterStore(store))"
     }
     
     static func createFilterName(name: String) -> String {
@@ -83,6 +88,7 @@ class DBProduct: DBSyncable {
         item.unit = dict["unit"]! as! Int
         item.fav = dict["fav"]! as! Int
         item.brand = dict["brand"]! as! String
+        item.store = dict["store"]! as! String
         item.setSyncableFieldswithRemoteDict(dict)        
         return item
     }
@@ -97,6 +103,7 @@ class DBProduct: DBSyncable {
         dict["unit"] = unit
         dict["fav"] = fav
         dict["brand"] = brand
+        dict["store"] = store
         setSyncableFieldsInDict(dict)
         return dict
     }

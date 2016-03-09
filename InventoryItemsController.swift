@@ -215,17 +215,17 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String) {
-        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand) {
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
         }
     }
     
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String) {
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
         
         if let updatingInventoryItem = updatingInventoryItem {
             if let price = priceText.floatValue, quantity = Int(quantityText) {
                 let updatedCategory = updatingInventoryItem.product.category.copy(name: category)
-                let updatedProduct = updatingInventoryItem.product.copy(name: name, price: price, category: updatedCategory, brand: brand)
+                let updatedProduct = updatingInventoryItem.product.copy(name: name, price: price, category: updatedCategory, brand: brand, store: store)
                 // TODO! calculate quantity delta correctly?
                 let updatedInventoryItem = updatingInventoryItem.copy(quantity: quantity, quantityDelta: quantity, product: updatedProduct)
                 Providers.inventoryItemsProvider.updateInventoryItem(updatedInventoryItem, remote: true, successHandler {[weak self] in
@@ -256,13 +256,13 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         })
     }
     
-    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, successHandler: VoidFunction? = nil) {
+    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, successHandler: VoidFunction? = nil) {
         
         if let inventory = inventory {
             
             if let price = priceText.floatValue, quantity = Int(quantityText) {
                 
-                let input = InventoryItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand)
+                let input = InventoryItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
                 
                 Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, self.successHandler{[weak self] (inventoryItemWithHistoryEntry: InventoryItemWithHistoryEntry) in
                     // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end. TODO nicer solution

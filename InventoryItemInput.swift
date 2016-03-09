@@ -17,8 +17,9 @@ struct InventoryItemInput {
     let baseQuantity: Float
     let unit: ProductUnit
     let brand: String
+    let store: String
     
-    init(name: String, quantity: Int, price: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String) {
+    init(name: String, quantity: Int, price: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
         self.name = name
         self.quantity = quantity
         self.price = price
@@ -27,5 +28,6 @@ struct InventoryItemInput {
         self.baseQuantity = baseQuantity
         self.unit = unit
         self.brand = brand
+        self.store = store
     }
 }

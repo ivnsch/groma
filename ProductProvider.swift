@@ -17,7 +17,7 @@ protocol ProductProvider {
 
     func products(range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<[Product]> -> Void)
     
-    func product(name: String, brand: String, handler: ProviderResult<Product> -> ())
+    func product(name: String, brand: String, store: String, handler: ProviderResult<Product> -> ())
 
     func products(text: String, range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<(substring: String?, products: [Product])> -> Void)
     
@@ -45,7 +45,7 @@ protocol ProductProvider {
 
     func productSuggestions(handler: ProviderResult<[Suggestion]> -> ())
     
-    func loadProduct(name: String, brand: String, handler: ProviderResult<Product> -> ())
+    func loadProduct(name: String, brand: String, store: String, handler: ProviderResult<Product> -> ())
     
     func categoriesContaining(name: String, _ handler: ProviderResult<[String]> -> ())
     
@@ -54,5 +54,5 @@ protocol ProductProvider {
     Tries to load using unique (name), if existent overrides fields with corresponding input, if not existent creates a new one
     TODO use results like everywhere else, maybe put in a different specific utility class this is rather provider-internal
     */
-    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, _ handler: ProviderResult<Product> -> Void)
+    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, _ handler: ProviderResult<Product> -> Void)
 }

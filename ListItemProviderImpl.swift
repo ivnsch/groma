@@ -234,7 +234,7 @@ class ListItemProviderImpl: ListItemProvider {
 
             if let section = result.sucessResult {
                 
-                Providers.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.category, categoryColor: listItemInput.categoryColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand) {result in
+                Providers.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.category, categoryColor: listItemInput.categoryColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, store: listItemInput.store) {result in
             
                     if let product = result.sucessResult {
                     

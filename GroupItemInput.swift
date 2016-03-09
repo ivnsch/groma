@@ -17,8 +17,9 @@ struct GroupItemInput: Equatable, Hashable {
     let baseQuantity: Float
     let unit: ProductUnit
     let brand: String
+    let store: String
     
-    init(name: String, quantity: Int, price: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String) {
+    init(name: String, quantity: Int, price: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
         self.name = name
         self.quantity = quantity
         self.price = price
@@ -27,13 +28,14 @@ struct GroupItemInput: Equatable, Hashable {
         self.baseQuantity = baseQuantity
         self.unit = unit
         self.brand = brand
+        self.store = store
     }
     
     var hashValue: Int {
         return name.hashValue
     }
     
-    func copy(name name: String? = nil, quantity: Int? = nil, price: Float? = nil, category: String? = nil, categoryColor: UIColor? = nil, baseQuantity: Float? = nil, unit: ProductUnit? = nil, brand: String? = nil) -> GroupItemInput {
+    func copy(name name: String? = nil, quantity: Int? = nil, price: Float? = nil, category: String? = nil, categoryColor: UIColor? = nil, baseQuantity: Float? = nil, unit: ProductUnit? = nil, brand: String? = nil, store: String? = nil) -> GroupItemInput {
         return GroupItemInput(
             name: name ?? self.name,
             quantity: quantity ?? self.quantity,
@@ -42,11 +44,12 @@ struct GroupItemInput: Equatable, Hashable {
             categoryColor: categoryColor ?? self.categoryColor,
             baseQuantity: baseQuantity ?? self.baseQuantity,
             unit: unit ?? self.unit,
-            brand: brand ?? self.brand
+            brand: brand ?? self.brand,
+            store: store ?? self.store
         )
     }
 }
 
 func ==(lhs: GroupItemInput, rhs: GroupItemInput) -> Bool {
-    return lhs.name == rhs.name && lhs.quantity == rhs.quantity && lhs.price == rhs.price && lhs.category == rhs.category && lhs.categoryColor == rhs.categoryColor && lhs.baseQuantity == rhs.baseQuantity && lhs.unit == rhs.unit && lhs.brand == rhs.brand
+    return lhs.name == rhs.name && lhs.quantity == rhs.quantity && lhs.price == rhs.price && lhs.category == rhs.category && lhs.categoryColor == rhs.categoryColor && lhs.baseQuantity == rhs.baseQuantity && lhs.unit == rhs.unit && lhs.brand == rhs.brand && lhs.store == rhs.store
 }

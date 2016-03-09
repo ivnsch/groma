@@ -19,7 +19,8 @@ class ProductMapper {
             baseQuantity: dbProduct.baseQuantity,
             unit: ProductUnit(rawValue: dbProduct.unit)!,
             fav: dbProduct.fav,
-            brand: dbProduct.brand
+            brand: dbProduct.brand,
+            store: dbProduct.store
         )
     }
     
@@ -32,7 +33,8 @@ class ProductMapper {
         dbProduct.baseQuantity = product.baseQuantity
         dbProduct.unit = product.unit.rawValue
         dbProduct.fav = product.fav
-        dbProduct.brand = product.brand ?? ""
+        dbProduct.brand = product.brand
+        dbProduct.store = product.store
         return dbProduct
     }
     
@@ -58,7 +60,8 @@ class ProductMapper {
             baseQuantity: remoteProduct.baseQuantity,
             unit: ProductUnit(rawValue: remoteProduct.unit)!,
             fav: remoteProduct.fav,
-            brand: remoteProduct.brand
+            brand: remoteProduct.brand,
+            store: remoteProduct.store
         )
     }
     
@@ -72,6 +75,7 @@ class ProductMapper {
         dbProduct.unit = product.unit
         dbProduct.fav = product.fav
         dbProduct.brand = product.brand
+        dbProduct.store = product.store
         dbProduct.dirty = false
         return dbProduct
     }

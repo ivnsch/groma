@@ -265,13 +265,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String) {
-        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand) {
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
         }
     }
 
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String) {
-        if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand) {
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+        if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
             
             // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
             listItemsTableViewController.cellMode = .Note
@@ -300,9 +300,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         })
     }
     
-    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, successHandler: VoidFunction? = nil) {
+    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, successHandler: VoidFunction? = nil) {
         if !name.isEmpty {
-            if let listItemInput = processListItemInputs(name, priceText: priceText, quantityText: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand) {
+            if let listItemInput = processListItemInputs(name, priceText: priceText, quantityText: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
                 addItem(listItemInput, successHandler: successHandler)
                 // self.view.endEditing(true)
             }
@@ -311,7 +311,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     // MARK:
     
-    private func processListItemInputs(name: String, priceText: String, quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String) -> ListItemInput? {
+    private func processListItemInputs(name: String, priceText: String, quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) -> ListItemInput? {
         //TODO?
         //        if !price {
         //            price = 0
@@ -324,7 +324,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             let quantity = Int(quantityText) ?? 1
             let sectionName = sectionName ?? defaultSectionIdentifier
             
-            return ListItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, section: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand)
+            return ListItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, section: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
             
         } else {
             print("TODO validation in processListItemInputs")

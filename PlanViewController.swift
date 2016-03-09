@@ -464,12 +464,12 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - AddEditListItemViewControllerDelegate
 
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String) {
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
 
         if !name.isEmpty {
             
             if let price = priceText.floatValue, quantity = Int(quantityText), inventory = currentInventory {
-                let planItemInput = PlanItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand)
+                let planItemInput = PlanItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
                 
                 Providers.planProvider.addPlanItems([planItemInput], inventory: inventory, self.successHandler{[weak self] planItems in
                     self?.initPlanItems() // TODO update only added?
@@ -484,9 +484,9 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
     }
     
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String) {
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
         if let updatingPlanItem = updatingPlanItem, price = priceText.floatValue, quantity = Int(quantityText), inventory = currentInventory {
-            updatePlanItem(updatingPlanItem, inventory: inventory, name: name, price: price, quantity: quantity, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand)
+            updatePlanItem(updatingPlanItem, inventory: inventory, name: name, price: price, quantity: quantity, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
         } else {
             print("Error: AddEditPlanItemController.updatePlanItem: validation not implemented correctly or currentInventory not set")
         }
@@ -510,9 +510,9 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func onCancelTap() {
     }
     
-    private func updatePlanItem(planItem: PlanItem, inventory: Inventory, name: String, price: Float, quantity: Int, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String) {
+    private func updatePlanItem(planItem: PlanItem, inventory: Inventory, name: String, price: Float, quantity: Int, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
         let updatedCategory = planItem.product.category.copy(name: category, color: categoryColor)
-        let updatedProduct = planItem.product.copy(name: name, price: price, category: updatedCategory, baseQuantity: baseQuantity, unit: unit, brand: brand)
+        let updatedProduct = planItem.product.copy(name: name, price: price, category: updatedCategory, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
         let quantityDelta = quantity - planItem.quantity // TODO! this is not most likely not correct, needs to include also planItem.quantityDelta?
         let updatedPlanItem = planItem.copy(product: updatedProduct, quantity: quantity, quantityDelta: quantityDelta)
         
