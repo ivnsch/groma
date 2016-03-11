@@ -16,6 +16,7 @@ class HistoryItem: Equatable, Identifiable {
     let quantity: Int
     let inventory: Inventory
     let user: SharedUser // The user who added the item. This is rather "User" because there's sharing for history items doesn't make sense, but user has information (like pw) which is irrelevant for this
+    let paidPrice: Float // product price at the moment of buying the item (per unit)
     //////////////////////////////////////////////
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
     // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
@@ -25,13 +26,18 @@ class HistoryItem: Equatable, Identifiable {
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid: String, inventory: Inventory, product: Product, addedDate: NSDate, quantity: Int, user: SharedUser, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    var totalPaidPrice: Float {
+        return paidPrice * Float(quantity)
+    }
+    
+    init(uuid: String, inventory: Inventory, product: Product, addedDate: NSDate, quantity: Int, user: SharedUser, paidPrice: Float, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.inventory = inventory
         self.product = product
         self.addedDate = addedDate
         self.quantity = quantity
         self.user = user
+        self.paidPrice = paidPrice
         self.lastUpdate = lastUpdate
         self.lastServerUpdate = lastServerUpdate
         self.removed = removed

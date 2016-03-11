@@ -107,11 +107,10 @@ class StatsProviderImpl: StatsProvider {
                     
                     let components = NSCalendar.currentCalendar().components([.Month, .Year], fromDate: historyItem.addedDate)
                     let key = MonthYear(month: components.month, year: components.year)
-                    let product = historyItem.product
                     if let aggr = dict[key] {
-                        dict[key] = (price: aggr.price + (Float(historyItem.quantity) * product.price), quantity: aggr.quantity + historyItem.quantity)
+                        dict[key] = (price: aggr.price + historyItem.totalPaidPrice, quantity: aggr.quantity + historyItem.quantity)
                     } else {
-                        dict[key] = (price: Float(historyItem.quantity) * product.price, quantity: historyItem.quantity)
+                        dict[key] = (price: historyItem.totalPaidPrice, quantity: historyItem.quantity)
                     }
                 }
                 
@@ -136,13 +135,13 @@ class StatsProviderImpl: StatsProvider {
         var totalPrice: Float = 0
         for historyItem in historyItems {
             let product = historyItem.product
-            let quantityPrice = Float(historyItem.quantity) * product.price
+            let itemTotalPaidPrice = historyItem.totalPaidPrice
             if let aggr = dict[product] {
-                dict[product] = (price: aggr.price + quantityPrice, quantity: aggr.quantity + historyItem.quantity)
+                dict[product] = (price: aggr.price + itemTotalPaidPrice, quantity: aggr.quantity + historyItem.quantity)
             } else {
-                dict[product] = (price: quantityPrice, quantity: historyItem.quantity)
+                dict[product] = (price: itemTotalPaidPrice, quantity: historyItem.quantity)
             }
-            totalPrice += quantityPrice
+            totalPrice += itemTotalPaidPrice
         }
         
         let productAggregates: [ProductAggregate] = dict.map {key, value in

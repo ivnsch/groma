@@ -17,7 +17,8 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
     let userUuid: String
     let addedDate: NSDate
     let lastUpdate: NSDate
-
+    let paidPrice: Float
+    
     init?(representation: AnyObject) {
         
         guard
@@ -27,7 +28,8 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
             let quantity = representation.valueForKeyPath("quantity") as? Int,
             let userUuid = representation.valueForKeyPath("userUuid") as? String,
             let addedDate = ((representation.valueForKeyPath("addedDate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
-            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
+            let paidPrice = representation.valueForKeyPath("paidPrice") as? Float
             else {
                 print("Invalid json: \(representation)")
                 return nil}
@@ -39,6 +41,7 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
         self.userUuid = userUuid
         self.addedDate = addedDate
         self.lastUpdate = lastUpdate
+        self.paidPrice = paidPrice
     }
     
     static func collection(representation: AnyObject) -> [RemoteHistoryItem]? {
@@ -54,7 +57,7 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), inventoryUuid: \(inventoryUuid), productUuid: \(productUuid), quantity: \(quantity), userUuid: \(userUuid), addedDate: \(addedDate), lastUpdate: \(lastUpdate)}"
+        return "{\(self.dynamicType) uuid: \(uuid), inventoryUuid: \(inventoryUuid), productUuid: \(productUuid), quantity: \(quantity), userUuid: \(userUuid), addedDate: \(addedDate), lastUpdate: \(lastUpdate), paidPrice: \(paidPrice)}"
     }
 }
 

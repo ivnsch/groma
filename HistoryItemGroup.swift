@@ -15,7 +15,7 @@ class HistoryItemGroup {
     var historyItems: [HistoryItem]
 
     lazy var totalPrice: Float = {
-        self.historyItems.reduce(0) {sum, e in sum + (Float(e.quantity) * e.product.price)}
+        self.historyItems.reduce(0) {sum, e in sum + (Float(e.totalPaidPrice))}
     }()
 
     init(date: NSDate, user: SharedUser, historyItems: [HistoryItem]) {

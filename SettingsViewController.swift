@@ -54,7 +54,7 @@ class SettingsViewController: UIViewController {
                             let monthHistoryItems: [HistoryItem] = (2..<Int.random(2, max: 50)).map {_ in
                                 let randomIndex = Int.random(products.count)
                                 let product = products[randomIndex]
-                                return HistoryItem(uuid: NSUUID().UUIDString, inventory: inventory, product: product, addedDate: date, quantity: Int.random(10), user: user)
+                                return HistoryItem(uuid: NSUUID().UUIDString, inventory: inventory, product: product, addedDate: date, quantity: Int.random(10), user: user, paidPrice: product.price)
                             }
                             return monthHistoryItems
                         }

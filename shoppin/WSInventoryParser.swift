@@ -36,12 +36,12 @@ struct WSInventoryParser {
         let inventoryItem = parseInventoryItem(inventoryItemObj)
         
         let historyItemUuid = json.valueForKeyPath("historyItemUuid") as! String
+        let paidPrice = json.valueForKeyPath("paidPrice") as! Float
         let addedDate = NSDate(timeIntervalSince1970: json.valueForKeyPath("addedDate") as! Double)
-        
         let userObj = json.valueForKeyPath("user")!
         let user = WSUserParser.parseSharedUser(userObj)
 
-        return InventoryItemWithHistoryEntry(inventoryItem: inventoryItem, historyItemUuid: historyItemUuid, addedDate: addedDate, user: user)
+        return InventoryItemWithHistoryEntry(inventoryItem: inventoryItem, historyItemUuid: historyItemUuid, paidPrice: paidPrice, addedDate: addedDate, user: user)
     }
     
     static func parseInventoryItem(json: AnyObject) -> InventoryItem {

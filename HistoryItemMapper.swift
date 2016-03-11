@@ -46,6 +46,7 @@ class HistoryItemMapper {
             addedDate: dbHistoryItem.addedDate,
             quantity: dbHistoryItem.quantity,
             user: SharedUserMapper.sharedUserWithDB(dbHistoryItem.user),
+            paidPrice: dbHistoryItem.paidPrice,
             lastUpdate: dbHistoryItem.lastUpdate,
             lastServerUpdate: dbHistoryItem.lastServerUpdate
         )
@@ -117,7 +118,8 @@ class HistoryItemMapper {
                 product: productsDict[remoteListItem.productUuid]!,
                 addedDate: remoteListItem.addedDate,
                 quantity: remoteListItem.quantity,
-                user: usersDict[remoteListItem.userUuid]!
+                user: usersDict[remoteListItem.userUuid]!,
+                paidPrice: remoteListItem.paidPrice
             )
         }
         

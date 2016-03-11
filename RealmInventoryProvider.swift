@@ -245,7 +245,13 @@ class RealmInventoryProvider: RealmProvider {
     
     // Helper function for common code
     private func addOrIncrementInventoryItemWithProduct(realm: Realm, product: Product, inventory: Inventory, quantity: Int) -> InventoryItemWithHistoryEntry {
-        let inventoryItemWithHistoryEntry = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(uuid: NSUUID().UUIDString, quantity: quantity, quantityDelta: quantity, product: product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: ""))
+        let inventoryItemWithHistoryEntry = InventoryItemWithHistoryEntry(
+            inventoryItem: InventoryItem(uuid: NSUUID().UUIDString, quantity: quantity, quantityDelta: quantity, product: product, inventory: inventory),
+            historyItemUuid: NSUUID().UUIDString,
+            paidPrice: product.price,
+            addedDate: NSDate(),
+            user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "")
+        )
         
         // add/increment item and add history entry
         addSync(realm, inventoryItemsWithHistory: [inventoryItemWithHistoryEntry])

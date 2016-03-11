@@ -66,6 +66,7 @@ class RemoteInventoryItemsProvider: Any {
                 "product": productDict
             ],
             "historyItemUuid": inventoryItem.historyItemUuid,
+            "paidPrice": inventoryItem.paidPrice,
             "addedDate": NSNumber(double: inventoryItem.addedDate.timeIntervalSince1970).longValue,
             "user": self.toRequestParams(inventoryItem.user)
         ]
