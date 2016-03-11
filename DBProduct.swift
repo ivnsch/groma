@@ -38,6 +38,64 @@ class DBProduct: DBSyncable {
         return ["name"]
     }
     
+    convenience init(uuid: String, name: String, price: Float, category: DBProductCategory, baseQuantity: Float, unit: Int, fav: Int = 0, brand: String = "", store: String = "", lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+        
+        self.init()
+        
+        self.uuid = uuid
+        self.name = name
+        self.price = price
+        self.category = category
+        self.baseQuantity = baseQuantity
+        self.unit = unit
+        self.fav = fav
+        self.brand = brand
+        self.store = store
+        
+        self.lastUpdate = lastUpdate
+        if let lastServerUpdate = lastServerUpdate {
+            self.lastServerUpdate = lastServerUpdate
+        }
+        self.removed = removed
+    }
+    
+    convenience init(prototype: ProductPrototype, category: DBProductCategory) {
+        self.init(
+            uuid: NSUUID().UUIDString,
+            name: prototype.name,
+            price: prototype.price,
+            category: category,
+            baseQuantity: prototype.baseQuantity,
+            unit: prototype.unit.rawValue,
+            fav: 0,
+            brand: prototype.brand,
+            store: prototype.store
+        )
+    }
+    
+    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: DBProductCategory? = nil, baseQuantity: Float? = nil, unit: Int? = nil, fav: Int? = nil, brand: String? = nil, store: String? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> DBProduct {
+        return DBProduct(
+            uuid: uuid ?? self.uuid,
+            name: name ?? self.name,
+            price: price ?? self.price,
+            category: category ?? self.category,
+            baseQuantity: baseQuantity ?? self.baseQuantity,
+            unit: unit ?? self.unit,
+            fav: fav ?? self.fav,
+            brand: brand ?? self.brand,
+            store: store ?? self.store,
+            lastUpdate: lastUpdate ?? self.lastUpdate,
+            lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
+            removed: removed ?? self.removed
+        )
+    }
+    
+    // Overwrites fields with corresponding fields of prototype.
+    // NOTE: Does not update category fields.
+    func update(prototype: ProductPrototype) -> DBProduct {
+        return copy(name: prototype.name, price: prototype.price, baseQuantity: prototype.baseQuantity, unit: prototype.unit.rawValue, brand: prototype.brand, store: prototype.store)
+    }
+    
     // MARK: - Filters
     
     static func createFilter(uuid: String) -> String {
@@ -50,6 +108,10 @@ class DBProduct: DBSyncable {
     
     static func createFilterStore(store: String) -> String {
         return "store == '\(store)'"
+    }
+    
+    static func createFilterUnique(prototype: ProductPrototype) -> String {
+        return createFilterNameBrand(prototype.name, brand: prototype.brand, store: prototype.store)
     }
     
     static func createFilterNameBrand(name: String, brand: String, store: String) -> String {

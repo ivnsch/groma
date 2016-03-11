@@ -147,7 +147,8 @@ class RealmListItemGroupProvider: RealmProvider {
             do {
                 let realm = try Realm()
                 let mapper = {GroupItemMapper.groupItemWith($0)}
-                if let item = loadSync(realm, mapper: mapper, filter: DBGroupItem.createFilterGroupAndProductName(groupItem.group.uuid, productName: groupItem.product.name)).first {
+                // TODO!! why looking here for unique instead of uuid? when add group item with product we should be able to find the product using only the uuid?
+                if let item = loadSync(realm, mapper: mapper, filter: DBGroupItem.createFilterGroupAndProductName(groupItem.group.uuid, productName: groupItem.product.name, productBrand: groupItem.product.brand, productStore: groupItem.product.store)).first {
                     let incremented = item.incrementQuantityCopy(groupItem.quantity)
                     let dbItem = GroupItemMapper.dbWith(incremented)
                     saveObjSync(dbItem, update: true)

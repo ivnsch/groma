@@ -376,11 +376,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         if let inventory = inventory {
             Providers.listItemGroupsProvider.groupItems(group, successHandler {[weak self] groupItems in
                 if let weakSelf = self {
-                    let inventoryItems: [InventoryItemWithHistoryEntry] = groupItems.map {item in
-                        let inventoryItem = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: item.quantity, quantityDelta: item.quantity, product: item.product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: ""))
-                        return inventoryItem
-                    }
-                    Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, weakSelf.successHandler{[weak self] result in
+                    let inventoryItemsInput = groupItems.map{ProductWithQuantityInput(product: $0.product, quantity: $0.quantity)}
+                    Providers.inventoryItemsProvider.addToInventory(inventory, itemInputs: inventoryItemsInput, remote: true, weakSelf.successHandler{[weak self] inventoryItems in
                         self?.productsWithQuantityController?.addOrIncrementUI(inventoryItems.map{ProductWithQuantityInv(inventoryItem: $0.inventoryItem)})
                     })
                 }
@@ -390,9 +387,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func onAddProduct(product: Product) {
         if let inventory = inventory {
-            let inventoryItem = InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: 1, quantityDelta: 1, product: product, inventory: inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: ""))
-            Providers.inventoryItemsProvider.addToInventory([inventoryItem], remote: true, successHandler{[weak self] result in
-                self?.productsWithQuantityController?.addOrIncrementUI(ProductWithQuantityInv(inventoryItem: inventoryItem.inventoryItem))
+            let productInput = ProductWithQuantityInput(product: product, quantity: 1)
+            Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: productInput, remote: true, successHandler{[weak self] addedIem in
+                self?.productsWithQuantityController?.addOrIncrementUI(ProductWithQuantityInv(inventoryItem: addedIem.inventoryItem))
             })
         }
     }

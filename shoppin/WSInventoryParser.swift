@@ -45,7 +45,8 @@ struct WSInventoryParser {
     }
     
     static func parseInventoryItem(json: AnyObject) -> InventoryItem {
-        let quantity = json.valueForKeyPath("uuid") as! Int
+        let uuid = json.valueForKeyPath("uuid") as! String
+        let quantity = json.valueForKeyPath("quantity") as! Int
         
         let productObj = json.valueForKeyPath("productInput")!
         let product = ListItemParser.parseProduct(productObj)
@@ -53,7 +54,7 @@ struct WSInventoryParser {
         let inventoryObj = json.valueForKeyPath("inventoryInput")!
         let inventory = parseInventory(inventoryObj)
         
-        return InventoryItem(quantity: quantity, quantityDelta: 0, product: product, inventory: inventory) // TODO review quantity delta, since it comes from server it can be assumed it's 0 - right?
+        return InventoryItem(uuid: uuid, quantity: quantity, quantityDelta: 0, product: product, inventory: inventory) // TODO review quantity delta, since it comes from server it can be assumed it's 0 - right?
     }
     
     static func parseInventoryItemId(json: AnyObject) -> InventoryItemId {

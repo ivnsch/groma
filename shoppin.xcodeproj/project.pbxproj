@@ -549,6 +549,9 @@
 		EB80CE551C44AFFE001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; };
 		EB80CE561C44B000001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; };
 		EB80CE571C44B000001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; };
+		EB85CEDD1C91E423008E3BA0 /* ProductWithQuantityInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85CEDC1C91E423008E3BA0 /* ProductWithQuantityInput.swift */; };
+		EB85CEDE1C91E423008E3BA0 /* ProductWithQuantityInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85CEDC1C91E423008E3BA0 /* ProductWithQuantityInput.swift */; };
+		EB85CEDF1C91E423008E3BA0 /* ProductWithQuantityInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85CEDC1C91E423008E3BA0 /* ProductWithQuantityInput.swift */; };
 		EB85F4531BD5393800E19E9B /* QuickAddListItem.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB85F4521BD5393800E19E9B /* QuickAddListItem.storyboard */; };
 		EB85F4631BD54E8D00E19E9B /* QuickAddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F4621BD54E8D00E19E9B /* QuickAddItem.swift */; };
 		EB85F4641BD54E8D00E19E9B /* QuickAddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85F4621BD54E8D00E19E9B /* QuickAddItem.swift */; };
@@ -1266,6 +1269,7 @@
 		EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryAuthChecker.swift; sourceTree = "<group>"; };
 		EB80CE521C449E1D001DF159 /* TermsAndConditionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsController.swift; sourceTree = "<group>"; };
 		EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
+		EB85CEDC1C91E423008E3BA0 /* ProductWithQuantityInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWithQuantityInput.swift; sourceTree = "<group>"; };
 		EB85F4521BD5393800E19E9B /* QuickAddListItem.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = QuickAddListItem.storyboard; sourceTree = "<group>"; };
 		EB85F4621BD54E8D00E19E9B /* QuickAddItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddItem.swift; sourceTree = "<group>"; };
 		EB85F4661BD54FA800E19E9B /* QuickAddProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddProduct.swift; sourceTree = "<group>"; };
@@ -2034,6 +2038,7 @@
 			children = (
 				EB4FD45A1AC701410000F952 /* ListItemInput.swift */,
 				EBD558C51BF366350048F287 /* InventoryItemInput.swift */,
+				EB85CEDC1C91E423008E3BA0 /* ProductWithQuantityInput.swift */,
 				EB4147BB1BE0338800549CE4 /* ProductInput.swift */,
 				EBA575701BD031B400A0A825 /* GroupItemInput.swift */,
 				EB70C22E1B5021D40060E529 /* UserInput.swift */,
@@ -3472,6 +3477,7 @@
 				EB9208381C4EEA5E00332332 /* RealmBrandProvider.swift in Sources */,
 				EB87A4A71C1A49A0008D2A42 /* RemoteGroupItemInput.swift in Sources */,
 				EBF377931B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
+				EB85CEDD1C91E423008E3BA0 /* ProductWithQuantityInput.swift in Sources */,
 				EBB526851BEFE6DD0002A286 /* SectionModel.swift in Sources */,
 				EB78587D1B7FD81A008AAD12 /* HistoryItemsSync.swift in Sources */,
 				EB7BFA751BD99CB600F4C74A /* Addable.swift in Sources */,
@@ -3918,6 +3924,7 @@
 				EBB9A7351B5EB11600E5487D /* Inventory.swift in Sources */,
 				EB40A4871B55159D000E9CAD /* DBList.swift in Sources */,
 				EB87A4AC1C1A4F13008D2A42 /* GroupItemWithGroup.swift in Sources */,
+				EB85CEDE1C91E423008E3BA0 /* ProductWithQuantityInput.swift in Sources */,
 				EB4FD44B1AC6B77C0000F952 /* Float.swift in Sources */,
 				EB4FD44E1AC6BE390000F952 /* NSTableView.swift in Sources */,
 				EB451C361B85F3DA000DE208 /* StatsProviderImpl.swift in Sources */,
@@ -4063,6 +4070,7 @@
 				EB40A47C1B551176000E9CAD /* DBProduct.swift in Sources */,
 				EB4C36551B4BD5A700C387C5 /* TestSharedLists.swift in Sources */,
 				EB714AB01B67895500F91B94 /* RemoteProvider.swift in Sources */,
+				EB85CEDF1C91E423008E3BA0 /* ProductWithQuantityInput.swift in Sources */,
 				EB451C431B861544000DE208 /* OrderedDictionary.swift in Sources */,
 				EB1B36771BC4832D003519F2 /* PlanItemMapper.swift in Sources */,
 				EB70C22B1B4D3DD50060E529 /* ListProvider.swift in Sources */,

@@ -10,22 +10,15 @@ import Foundation
 import RealmSwift
 
 class DBInventoryItem: DBSyncable {
-    
+
+    dynamic var uuid: String = ""
     dynamic var quantity: Int = 0
     dynamic var quantityDelta: Int = 0
     dynamic var productOpt: DBProduct? = DBProduct()
     dynamic var inventoryOpt: DBInventory? = DBInventory()
-    
-    dynamic lazy var compoundKey: String? = self.compoundKeyValue()
 
-    private func compoundKeyValue() -> String? {
-        let productUuid = productOpt?.uuid ?? ""
-        let inventoryUuid = inventoryOpt?.uuid ?? ""
-        return "\(productUuid)-\(inventoryUuid)"
-    }
-
-    override static func primaryKey() -> String {
-        return "compoundKey"
+    override static func primaryKey() -> String? {
+        return "uuid"
     }
     
     var product: DBProduct {
@@ -48,19 +41,27 @@ class DBInventoryItem: DBSyncable {
     
     // MARK: - Filters
 
+    static func createFilterUuid(uuid: String) -> String {
+        return "uuid = '\(uuid)'"
+    }
+    
     static func createFilter(item: InventoryItem) -> String {
         return createFilter(item.product.uuid, item.inventory.uuid)
     }
     
     static func createFilter(product: Product, _ inventory: Inventory) -> String {
-        return createFilter(product.uuid, inventory.uuid)
+        return createFilter(ProductUnique(name: product.name, brand: product.brand, store: product.store), inventoryUuid: inventory.uuid)
+    }
+
+    static func createFilter(productUnique: ProductUnique, inventoryUuid: String) -> String {
+        return "\(createFilterInventory(inventoryUuid)) AND productOpt.name = '\(productUnique.name)' AND productOpt.brand = '\(productUnique.brand)' AND productOpt.store = '\(productUnique.store)'"
     }
     
     static func createFilter(productUuid: String, _ inventoryUuid: String) -> String {
         return "productOpt.uuid = '\(productUuid)' AND inventoryOpt.uuid = '\(inventoryUuid)'"
     }
-
-    static func createFilter(inventoryUuid: String) -> String {
+    
+    static func createFilterInventory(inventoryUuid: String) -> String {
         return "inventoryOpt.uuid = '\(inventoryUuid)'"
     }
     
@@ -72,6 +73,7 @@ class DBInventoryItem: DBSyncable {
     
     static func fromDict(dict: [String: AnyObject], product: DBProduct, inventory: DBInventory) -> DBInventoryItem {
         let item = DBInventoryItem()
+        item.uuid = dict["uuid"]! as! String
         item.quantity = dict["quantity"]! as! Int
         // Note: we don't set quantity delta here because when we gets objs from server it means they are synced, which means there's no quantity delta.
         item.product = product
@@ -82,6 +84,7 @@ class DBInventoryItem: DBSyncable {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
+        dict["uuid"] = uuid
         dict["quantity"] = quantity
         dict["quantityDelta"] = quantityDelta
         dict["product"] = product.toDict()

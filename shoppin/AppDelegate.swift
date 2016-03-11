@@ -262,7 +262,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
         inventoryProvider.saveInventory(inventory1) {[weak self] saved in
             
             func inventoryItem(quantityDelta quantityDelta: Int, product: Product, inventory: Inventory) -> InventoryItem {
-                return InventoryItem(quantity: quantityDelta, quantityDelta: quantityDelta, product: product, inventory: inventory)
+                return InventoryItem(uuid: uuid, quantity: quantityDelta, quantityDelta: quantityDelta, product: product, inventory: inventory)
             }
             
             let inventoryItems = [

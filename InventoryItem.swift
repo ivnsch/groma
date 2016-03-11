@@ -9,6 +9,7 @@
 import Foundation
 
 class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
+    let uuid: String
     let quantity: Int // TODO?
     let product: Product
     let inventory: Inventory
@@ -29,7 +30,8 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(quantity: Int = 0, quantityDelta: Int = 0, product: Product, inventory: Inventory, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, quantity: Int = 0, quantityDelta: Int = 0, product: Product, inventory: Inventory, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+        self.uuid = uuid
         self.quantity = quantity
         self.product = product
         self.inventory = inventory
@@ -40,11 +42,11 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
 
     var shortDebugDescription: String {
-        return "{\(self.dynamicType) product: \(self.product.name), quantity: \(self.quantity), quantityDelta: \(self.quantityDelta), quantity: \(self.quantity)}"
+        return "{\(self.dynamicType) uuid: \(uuid), product: \(product.name), quantity: \(quantity), quantityDelta: \(quantityDelta), quantity: \(quantity)}"
     }
 
     var completeDebugDescription: String {
-        return "{\(self.dynamicType) product: \(self.product), quantity: \(self.quantity), quantityDelta: \(self.quantityDelta), inventory: \(self.inventory), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
+        return "{\(self.dynamicType) product: \(product), quantity: \(quantity), quantityDelta: \(quantityDelta), inventory: \(inventory), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
     }
     
     var debugDescription: String {
@@ -55,8 +57,9 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
         return product.uuid == inventoryItem.product.uuid && inventory.uuid == inventoryItem.inventory.uuid
     }
     
-    func copy(quantity quantity: Int? = nil, quantityDelta: Int? = nil, product: Product? = nil, inventory: Inventory? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> InventoryItem {
+    func copy(uuid uuid: String? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, product: Product? = nil, inventory: Inventory? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> InventoryItem {
         return InventoryItem(
+            uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,
             quantityDelta: quantityDelta ?? self.quantityDelta,
             product: product ?? self.product,
@@ -73,5 +76,5 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
 }
 
 func ==(lhs: InventoryItem, rhs: InventoryItem) -> Bool {
-    return lhs.product.uuid == rhs.product.uuid && lhs.inventory.uuid == rhs.inventory.uuid && lhs.quantity == rhs.quantity
+    return lhs.uuid == rhs.uuid && lhs.product.uuid == rhs.product.uuid && lhs.inventory.uuid == rhs.inventory.uuid && lhs.quantity == rhs.quantity
 }

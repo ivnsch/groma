@@ -219,13 +219,11 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     
     private func addAllItemsToInventory() {
         
-        func onSizeLimitOk() {
+        func onSizeLimitOk(list: List) {
             listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
                 if let weakSelf = self {
-                    let inventoryItems = weakSelf.listItemsTableViewController.items.map{
-                        InventoryItemWithHistoryEntry(inventoryItem: InventoryItem(quantity: $0.doneQuantity, quantityDelta: $0.doneQuantity, product: $0.product, inventory: $0.list.inventory), historyItemUuid: NSUUID().UUIDString, addedDate: NSDate(), user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: ""))
-                    }
-                    Providers.inventoryItemsProvider.addToInventory(inventoryItems, remote: true, weakSelf.successHandler{result in
+                    let inventoryItemsInput = weakSelf.listItemsTableViewController.items.map{ProductWithQuantityInput(product: $0.product, quantity: $0.doneQuantity)}
+                    Providers.inventoryItemsProvider.addToInventory(list.inventory, itemInputs: inventoryItemsInput, remote: true, weakSelf.successHandler{result in
                         weakSelf.sendAllItemToStash {
                             weakSelf.close()
                         }
@@ -238,7 +236,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
             Providers.inventoryItemsProvider.countInventoryItems(list.inventory, successHandler {[weak self] count in
                 if let weakSelf = self {
                     SizeLimitChecker.checkInventoryItemsSizeLimit(count, controller: weakSelf) {
-                        onSizeLimitOk()
+                        onSizeLimitOk(list)
                     }
                 }
             })
