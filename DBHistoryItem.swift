@@ -100,6 +100,7 @@ class DBHistoryItem: DBSyncable {
         dict["productInput"] = product.toDict()
         dict["addedDate"] = NSNumber(double: addedDate.timeIntervalSince1970).longValue
         dict["quantity"] = quantity
+        dict["paidPrice"] = paidPrice
         dict["user"] = user.toDict()
         setSyncableFieldsInDict(dict)
         return dict
