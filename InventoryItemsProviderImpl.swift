@@ -276,12 +276,12 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             
             self?.remoteInventoryItemsProvider.incrementInventoryItem(item, delta: delta) {remoteResult in
                 
-                
-                if let remoteInventoryItems = remoteResult.successResult {
+                if let serverLastUpdateTimestamp = remoteResult.successResult {
                     
                     //                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
                     
-                    self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
+                    let updateTimeStampDict = RemoteInventoryItem.createTimestampUpdateDict(uuid: item.uuid, lastUpdate: serverLastUpdateTimestamp)
+                    self?.dbInventoryProvider.updateInventoryItemLastUpdate(updateTimeStampDict) {success in
                     
                         // Now that the item was updated in server, set back delta in local database
                         // Note we subtract instead of set to 0, to handle possible parallel requests correctly

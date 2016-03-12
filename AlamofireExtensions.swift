@@ -321,7 +321,15 @@ extension Alamofire.Request {
         
         return self.responseHandler(dataParser, completionHandler: completionHandler)
     }
-    
+
+    public func responseMyTimestamp(completionHandler: (NSURLRequest?, Response<RemoteResult<NSDate>, NSError>?, RemoteResult<NSDate>) -> Void) -> Self {
+        
+        let dataParser: (AnyObject, NSHTTPURLResponse) -> (NSDate?) = {data, response in
+            return ((data as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+        }
+        
+        return self.responseHandler(dataParser, completionHandler: completionHandler)
+    }
     
     // Common method to parse json object and array
     private func responseHandler<T>(dataParser: (AnyObject, NSHTTPURLResponse) -> (T?), completionHandler: (NSURLRequest?, Response<RemoteResult<T>, NSError>?, RemoteResult<T>) -> Void) -> Self {
@@ -438,6 +446,7 @@ extension Alamofire.Request {
                                 }
                                 
                             } else { // status != success
+                                logRequesstWarning("Returned not success status: \(status)")
                                 return Result.Success(RemoteResult<T>(status: status))
                             }
                             

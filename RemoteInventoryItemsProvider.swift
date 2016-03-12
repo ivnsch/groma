@@ -40,13 +40,12 @@ class RemoteInventoryItemsProvider: Any {
         }
     }
     
-    func incrementInventoryItem(inventoryItem: InventoryItem, delta: Int, handler: RemoteResult<RemoteInventoryItemsWithHistoryAndDependencies> -> ()) {
+    func incrementInventoryItem(inventoryItem: InventoryItem, delta: Int, handler: RemoteResult<NSDate> -> ()) {
         let params: [String: AnyObject] = [
             "delta": delta,
-            "productUuid": inventoryItem.product.uuid,
-            "inventoryUuid": inventoryItem.inventory.uuid
+            "uuid": inventoryItem.uuid
         ]
-        RemoteProvider.authenticatedRequest(.POST, Urls.incrementInventoryItem, params) {result in
+        RemoteProvider.authenticatedRequestTimestamp(.POST, Urls.incrementInventoryItem, params) {result in
             handler(result)
         }
     }

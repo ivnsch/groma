@@ -53,6 +53,10 @@ struct RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionSerial
 
 extension RemoteInventoryItem {
     var timestampUpdateDict: [String: AnyObject] {
+        return RemoteInventoryItem.createTimestampUpdateDict(uuid: uuid, lastUpdate: lastUpdate)
+    }
+    
+    static func createTimestampUpdateDict(uuid uuid: String, lastUpdate: NSDate) -> [String: AnyObject] {
         return ["uuid": uuid, "lastupdate": lastUpdate, "dirty": false]
     }
 }

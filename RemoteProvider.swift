@@ -38,6 +38,14 @@ class RemoteProvider {
         }
     }
     
+    class func authenticatedRequestTimestamp(method: Alamofire.Method, _ url: String, _ params: [String: AnyObject]? = nil, handler: RemoteResult<NSDate> -> ()) {
+        onConnectedAndLoggedIn(handler) {
+            AlamofireHelper.authenticatedRequest(method, url, params).responseMyTimestamp {(request, _, result: RemoteResult<NSDate>) in
+                handler(result)
+            }
+        }
+    }
+    
     class func authenticatedRequestArray<T: ResponseObjectSerializable>(method: Alamofire.Method, _ url: String, _ params: [[String: AnyObject]], handler: RemoteResult<[T]> -> Void) {
         onConnectedAndLoggedIn(handler) {
             let request = buildRequest(method, url: url)

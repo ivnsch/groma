@@ -444,11 +444,24 @@ class RealmInventoryProvider: RealmProvider {
                 handler(success ?? false)
         })
     }
+
+    func updateInventoryItemLastUpdate(updateDict: [String: AnyObject], handler: Bool -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            self?.updateInventoryItemLastUpdate(realm, updateDict: updateDict)
+            return true
+        }, finishHandler: {success in
+            handler(success ?? false)
+        })
+    }
+    
+    func updateInventoryItemLastUpdate(realm: Realm, updateDict: [String: AnyObject]) {
+        realm.create(DBInventoryItem.self, value: updateDict, update: true)
+    }
     
     func updateLastSyncTimeStamp(items: RemoteInventoryItemsWithHistoryAndDependencies, handler: Bool -> Void) {
         doInWriteTransaction({[weak self] realm in
             for listItem in items.inventoryItems {
-                realm.create(DBInventoryItem.self, value: listItem.timestampUpdateDict, update: true)
+                self?.updateInventoryItemLastUpdate(realm, updateDict: listItem.timestampUpdateDict)
             }
             for product in items.products {
                 realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
