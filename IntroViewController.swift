@@ -8,6 +8,7 @@
 
 import UIKit
 import SwipeView
+import QorumLogs
 
 class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, SwipeViewDataSource, SwipeViewDelegate {
 
@@ -34,6 +35,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         
         let initActions =  PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false
 //        let initActions = true
+        
+        QL1("Will init database: \(initActions)")
         
         if initActions {
             setButtonsEnabled(false)
@@ -67,24 +70,24 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
                 let p = NSHomeDirectory() + "/Documents/default.realm"
                 let lang = LangManager().appLang
                 if let prefillPath = NSBundle.mainBundle().pathForResource("prefill\(lang)", ofType: "realm") {
-                    print("Copying prefill database for lang: \(lang) to: \(p)")
+                    QL2("Copying prefill database for lang: \(lang) to: \(p)")
                     do {
 //                        try NSFileManager.defaultManager().removeItemAtPath(p)
                         try NSFileManager.defaultManager().copyItemAtPath(prefillPath, toPath: p)
-                        print("Copied prefill database")
+                        QL1("Copied prefill database")
                         return true
                         
                     } catch let error as NSError {
-                        print("Error copying prefill database: \(error)")
+                        QL4("Error copying prefill database: \(error)")
                         return false
                     }
                 } else {
-                    print("Prefill database was not found")
+                    QL4("Prefill database was not found")
                     return false
                 }
                 }) {(success: Bool) in
                     if !success {
-                        print("Error: IntroViewController.prefillDatabase: Not success prefilling database")
+                        QL4("Not success prefilling database")
                     }
                     onFinish?() // don't return anything, if prefill fails we still start the app normally
             }
@@ -110,9 +113,9 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         }
 
         prefillDatabase {
-            print("Info: Finished copying prefill database")
+            QL2("Finished copying prefill database")
             initDefaultInventory {
-                print("Info: Finished adding default inventory")
+                QL2("Finished adding default inventory")
                 onComplete()
             }
         }
