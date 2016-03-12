@@ -250,7 +250,7 @@ struct AlamofireHelper {
             request.setValue(deviceId, forHTTPHeaderField: "did")
         }
         
-        // TODO review, force try parameter serialization. For now like this because there's no known reason why this would fail, and simplifies code significantly
+        // TODO!!!! review, force try parameter serialization. For now like this because there's no known reason why this would fail, and simplifies code significantly
         request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(parameters, options: [])
         return Alamofire.request(request)
     }
