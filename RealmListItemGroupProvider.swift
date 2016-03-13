@@ -289,7 +289,18 @@ class RealmListItemGroupProvider: RealmProvider {
                 handler(success ?? false)
         })
     }
+    func updateGroupItemLastUpdate(updateDict: [String: AnyObject], handler: Bool -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            self?.updateGroupItemLastUpdate(realm, updateDict: updateDict)
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
     
+    func updateGroupItemLastUpdate(realm: Realm, updateDict: [String: AnyObject]) {
+        realm.create(DBGroupItem.self, value: updateDict, update: true)
+    }
     
     func updateLastSyncTimeStamp(items: RemoteGroupItemsWithDependencies, handler: Bool -> Void) {
         doInWriteTransaction({[weak self] realm in

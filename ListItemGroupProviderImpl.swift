@@ -344,7 +344,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
 //            handler(ProviderResult(status: .Success))
 //        }
         
-        dbGroupsProvider.incrementGroupItem(listItem, delta: delta) {saved in
+        dbGroupsProvider.incrementGroupItem(listItem, delta: delta) {[weak self] saved in
 //            
 //            if !memIncremented { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
                 if saved {
@@ -357,38 +357,40 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
             //            print("SAVED DB \(item)(+delta) in local db. now going to update remote")
             
             // TODO!! no server for gorup item increment yet
-//            self?.remoteGroupsProvider.incrementGroupItem(listItem, delta: delta) {remoteResult in
-//                
-//                if remoteResult.success {
-//                    
+            self?.remoteGroupsProvider.incrementGroupItem(listItem, delta: delta) {remoteResult in
+
+                if let serverLastUpdateTimestamp = remoteResult.successResult {
+
+                    
 //                    //                    //                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
-//                    //
-//                    //                    // Now that the item was updated in server, set back delta in local database
-//                    //                    // Note we subtract instead of set to 0, to handle possible parallel requests correctly
-//                    //                    self?.dbInventoryProvider.incrementInventoryItem(listItem, delta: -delta, onlyDelta: true) {saved in
-//                    //
-//                    //                        if saved {
-//                    //                            //                            self?.findInventoryItem(item) {result in
-//                    //                            //                                if let newitem = result.sucessResult {
-//                    //                            //                                    print("3. CONFIRM incremented item: \(item) + \(delta) == \(newitem)")
-//                    //                            //                                }
-//                    //                            //                            }
-//                    //
-//                    //                        } else {
-//                    //                            print("Error: couln't save remote list item")
-//                    //                        }
-//                    //
-//                    //                    }
-//                    
-//                } else {
-//                    print("Error incrementing item: \(listItem) in remote, result: \(remoteResult)")
-//                    DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-//                        // if there's a not connection related server error, invalidate cache
-//                        self?.memProvider.invalidate()
-//                        handler(remoteResult)
-//                    }
-//                }
-//            }
+                    //
+                    //                        // Now that the item was updated in server, set back delta in local database
+                    //                        // Note we subtract instead of set to 0, to handle possible parallel requests correctly
+                    //                        self?.dbInventoryProvider.incrementInventoryItem(item, delta: -delta, onlyDelta: true) {saved in
+                    //
+                    //                            if saved {
+                    //                                //                            self?.findInventoryItem(item) {result in
+                    //                                //                                if let newitem = result.sucessResult {
+                    //                                //                                    print("3. CONFIRM incremented item: \(item) + \(delta) == \(newitem)")
+                    //                                //                                }
+                    //                                //                            }
+                    //                                
+                    //                            } else {
+                    //                                print("Error: couln't save remote inventory item")
+                    //                            }
+                    //                        }
+                    
+                    let updateTimeStampDict = RemoteGroupItem.createTimestampUpdateDict(uuid: listItem.uuid, lastUpdate: serverLastUpdateTimestamp)
+                    self?.dbGroupsProvider.updateGroupItemLastUpdate(updateTimeStampDict) {success in
+                    }
+                } else {
+                    print("Error incrementing item: \(listItem) in remote, result: \(remoteResult)")
+                    DefaultRemoteErrorHandler.handle(remoteResult)  {(result: ProviderResult<Any>) in
+                        QL4("Error incrementing item: \(listItem) in remote, result: \(result)")
+                        handler(result)
+                    }
+                }
+            }
         }
     }
     

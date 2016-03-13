@@ -67,6 +67,16 @@ class RemoteGroupsProvider: RemoteProvider {
         }
     }
     
+    func incrementGroupItem(groupItem: GroupItem, delta: Int, handler: RemoteResult<NSDate> -> ()) {
+        let params: [String: AnyObject] = [
+            "delta": delta,
+            "uuid": groupItem.uuid
+        ]
+        RemoteProvider.authenticatedRequestTimestamp(.POST, Urls.incrementGroupItem, params) {result in
+            handler(result)
+        }
+    }
+    
     func removeGroupItem(groupItem: GroupItem, handler: RemoteResult<NoOpSerializable> -> ()) {
         removeGroupItem(groupItem.uuid, handler: handler)
     }
