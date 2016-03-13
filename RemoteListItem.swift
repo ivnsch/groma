@@ -82,4 +82,8 @@ extension RemoteListItem {
     var timestampUpdateDict: [String: AnyObject] {
         return ["uuid": uuid, "lastupdate": lastUpdate, "dirty": false]
     }
+    
+    static func createTimestampUpdateDict(uuid uuid: String, lastUpdate: NSDate) -> [String: AnyObject] {
+        return ["uuid": uuid, "lastupdate": lastUpdate, "dirty": false]
+    }
 }

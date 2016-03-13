@@ -572,7 +572,8 @@ class ListItemProviderImpl: ListItemProvider {
             
             self?.remoteProvider.incrementListItem(listItem, delta: delta) {remoteResult in
                 
-                if let remoteListItems = remoteResult.successResult {
+                if let serverLastUpdateTimestamp = remoteResult.successResult {
+                    
                     
                     //                    //                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
                     //
@@ -592,8 +593,8 @@ class ListItemProviderImpl: ListItemProvider {
                     //                        }
                     //                        
                     //                    }
-                    
-                    self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+                    let updateTimeStampDict = RemoteListItem.createTimestampUpdateDict(uuid: listItem.uuid, lastUpdate: serverLastUpdateTimestamp)
+                    self?.dbProvider.updateListItemLastSyncTimeStamp(updateTimeStampDict) {success in
                     }
                 } else {
                     DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in

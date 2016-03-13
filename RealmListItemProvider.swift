@@ -733,10 +733,23 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
+    func updateListItemLastSyncTimeStamp(updateDict: [String: AnyObject], handler: Bool -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            self?.updateListItemLastSyncTimeStamp(realm, updateDict: updateDict)
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func updateListItemLastSyncTimeStamp(realm: Realm, updateDict: [String: AnyObject]) {
+        realm.create(DBListItem.self, value: updateDict, update: true)
+    }
+    
     func updateLastSyncTimeStamp(listItems: RemoteListItems, handler: Bool -> Void) {
         doInWriteTransaction({[weak self]realm in
             for listItem in listItems.listItems {
-                realm.create(DBListItem.self, value: listItem.timestampUpdateDict, update: true)
+                self?.updateListItemLastSyncTimeStamp(realm, updateDict: listItem.timestampUpdateDict)
             }
             for product in listItems.products {
                 realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
