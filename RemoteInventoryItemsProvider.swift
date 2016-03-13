@@ -33,6 +33,7 @@ class RemoteInventoryItemsProvider: Any {
         removeInventoryItem(inventoryItem.product.uuid, inventoryUuid: inventoryItem.inventory.uuid, handler: handler)
     }
 
+    // TODO!!! user uuid (also in the server)
     func removeInventoryItem(productUuid: String, inventoryUuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
         let parameters = ["productUuid": productUuid, "inventoryUuid": inventoryUuid]
         RemoteProvider.authenticatedRequest(.DELETE, Urls.inventoryItem, parameters) {result in
@@ -60,6 +61,7 @@ class RemoteInventoryItemsProvider: Any {
         return [
             "product": productDict,
             "inventoryItem": [
+                "uuid": inventoryItem.inventoryItem.uuid,
                 "quantity": inventoryItem.inventoryItem.quantityDelta,
                 "inventory": inventoryDict,
                 "product": productDict

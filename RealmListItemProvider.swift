@@ -741,6 +741,17 @@ class RealmListItemProvider: RealmProvider {
                 handler(success ?? false)
         })
     }
+
+    func updateListItemsLastSyncTimeStamps(updateDicts: [[String: AnyObject]], handler: Bool -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            for updateDict in updateDicts {
+                self?.updateListItemLastSyncTimeStamp(realm, updateDict: updateDict)
+            }
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
     
     func updateListItemLastSyncTimeStamp(realm: Realm, updateDict: [String: AnyObject]) {
         realm.create(DBListItem.self, value: updateDict, update: true)

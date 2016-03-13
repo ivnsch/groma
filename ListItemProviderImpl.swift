@@ -499,7 +499,30 @@ class ListItemProviderImpl: ListItemProvider {
                 }
                 
                 // persist changes
-                self.update(listItems, remote: remote, handler)
+                self.updateLocal(listItems, handler: handler, onFinishLocal: {[weak self] in
+                    
+                    if remote {
+                        
+                        self?.remoteProvider.updateStatus(listItems) {remoteResult in
+                            
+                            if let serverLastUpdateTimestamp = remoteResult.successResult {
+
+                                // The batch update returns 1 timestamp for all the items. We generate here the timestamp update dicts for all the items with this timestamp.
+                                let updateTimestampDicts = listItems.map{listItem in
+                                    RemoteListItem.createTimestampUpdateDict(uuid: listItem.uuid, lastUpdate: serverLastUpdateTimestamp)
+                                }
+                                self?.dbProvider.updateListItemsLastSyncTimeStamps(updateTimestampDicts) {success in
+                                }
+                            } else {
+                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                                    QL4("Remote call no success: \(remoteResult) items: \(listItems)")
+                                    self?.memProvider.invalidate()
+                                    handler(result)
+                                })
+                            }
+                        }
+                    }
+                })
                 
             } else {
                 print("Error: didn't get listItems in updateBatchDone: \(result.status)")
@@ -507,13 +530,16 @@ class ListItemProviderImpl: ListItemProvider {
             }
         }
     }
-    
-    func update(listItems: [ListItem], remote: Bool = true, _ handler: ProviderResult<Any> -> ()) {
+
+    // Helper for common code of status switch update and full update - the only difference of these method is the remote call, switch uses an optimised service.
+    // The local call is in both cases a full update.
+    // The local call could principially also be optimised for switch but don't see it's worth it, as we still have to update 6 fields so I assume just saving the whole object has about the same performance.
+    private func updateLocal(listItems: [ListItem], remote: Bool = true, handler: ProviderResult<Any> -> Void, onFinishLocal: VoidFunction) {
         let memUpdated = memProvider.updateListItems(listItems)
         if memUpdated {
             handler(ProviderResult(status: .Success))
         }
-
+        
         self.dbProvider.updateListItems(listItems, handler: {[weak self] saved in
             if saved {
                 if !memUpdated {
@@ -523,7 +549,14 @@ class ListItemProviderImpl: ListItemProvider {
                 handler(ProviderResult(status: .DatabaseUnknown))
                 self?.memProvider.invalidate()
             }
-            
+          
+            onFinishLocal()
+        })
+    }
+    
+    func update(listItems: [ListItem], remote: Bool = true, _ handler: ProviderResult<Any> -> ()) {
+        
+        self.updateLocal(listItems, handler: handler, onFinishLocal: {[weak self] in
             if remote {
                 self?.remoteProvider.update(listItems) {remoteResult in
                     if let remoteListItems = remoteResult.successResult {

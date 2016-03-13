@@ -103,6 +103,14 @@ class RemoteListItemProvider {
 //        }
 //    }
     
+    func updateStatus(listItems: [ListItem], handler: RemoteResult<NSDate> -> ()) {
+        let parameters = listItems.map{self.toRequestParamsForStatusUpdate($0)}
+        RemoteProvider.authenticatedRequestArrayParamsTimestamp(.PUT, Urls.updateListItemsStatus, parameters) {result in
+            handler(result)
+        }
+    }
+    
+    
     // TODO use update
     func update(listItems: [ListItem], handler: RemoteResult<RemoteListItems> -> ()) {
         let parameters = listItems.map{self.toRequestParams($0)}
@@ -292,6 +300,18 @@ class RemoteListItemProvider {
         
         return dict
 
+    }
+
+    func toRequestParamsForStatusUpdate(listItem: ListItem) -> [String: AnyObject] {
+        return [
+            "uuid": listItem.uuid,
+            "t": listItem.todoQuantity,
+            "d": listItem.doneQuantity,
+            "s": listItem.stashQuantity,
+            "to": listItem.todoOrder,
+            "do": listItem.doneOrder,
+            "so": listItem.stashOrder
+        ]
     }
     
     func toRequestParams(product: Product) -> [String: AnyObject] {

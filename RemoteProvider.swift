@@ -14,6 +14,9 @@ import QorumLogs
 
 class RemoteProvider {
 
+    /**
+     * Not authenticated request with parameter dictionary, object response.
+     */
     class func request<T: ResponseObjectSerializable>(method: Alamofire.Method, _ url: String, _ params: [String: AnyObject]? = nil, handler: RemoteResult<T> -> ()) {
         onConnected(handler) {
             Alamofire.request(method, url, parameters: params, encoding: .JSON).responseMyObject {(request, _, result: RemoteResult<T>) in
@@ -22,6 +25,9 @@ class RemoteProvider {
         }
     }
     
+    /**
+     * Authenticated request with parameter dictionary, object response
+     */
     class func authenticatedRequest<T: ResponseObjectSerializable>(method: Alamofire.Method, _ url: String, _ params: [String: AnyObject]? = nil, handler: RemoteResult<T> -> ()) {
         onConnectedAndLoggedIn(handler) {
             AlamofireHelper.authenticatedRequest(method, url, params).responseMyObject {(request, _, result: RemoteResult<T>) in
@@ -29,7 +35,10 @@ class RemoteProvider {
             }
         }
     }
-    
+
+    /**
+     * Authenticated request with parameter dictionary, object array response
+     */
     class func authenticatedRequestArray<T: ResponseObjectSerializable>(method: Alamofire.Method, _ url: String, _ params: [String: AnyObject]? = nil, handler: RemoteResult<[T]> -> ()) {
         onConnectedAndLoggedIn(handler) {
             AlamofireHelper.authenticatedRequest(method, url, params).responseMyArray {(request, _, result: RemoteResult<[T]>) in
@@ -38,6 +47,9 @@ class RemoteProvider {
         }
     }
     
+    /**
+     * Authenticated request with parameter dictionary, timestamp response
+     */
     class func authenticatedRequestTimestamp(method: Alamofire.Method, _ url: String, _ params: [String: AnyObject]? = nil, handler: RemoteResult<NSDate> -> ()) {
         onConnectedAndLoggedIn(handler) {
             AlamofireHelper.authenticatedRequest(method, url, params).responseMyTimestamp {(request, _, result: RemoteResult<NSDate>) in
@@ -45,7 +57,31 @@ class RemoteProvider {
             }
         }
     }
+
+    /**
+     * Authenticated request with parameter array, timestamp response
+     */
+    class func authenticatedRequestArrayParamsTimestamp(method: Alamofire.Method, _ url: String, _ params: [[String: AnyObject]], handler: RemoteResult<NSDate> -> Void) {
+        onConnectedAndLoggedIn(handler) {
+            let request = buildRequest(method, url: url)
+            do {
+                // Alamofire's short version currently doesn't support array parameter, so we need this
+                request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
+                Alamofire.request(request).responseMyTimestamp {(request, _, result: RemoteResult<NSDate>) in
+                    handler(result)
+                }
+            } catch _ as NSError {
+                handler(RemoteResult(status: .ClientParamsParsingError))
+            } catch _ {
+                QL4("Not handled error, returning .Unknown")
+                handler(RemoteResult(status: .Unknown))
+            }
+        }
+    }
     
+    /**
+     * Authenticated request with parameter array, object array response
+     */
     class func authenticatedRequestArray<T: ResponseObjectSerializable>(method: Alamofire.Method, _ url: String, _ params: [[String: AnyObject]], handler: RemoteResult<[T]> -> Void) {
         onConnectedAndLoggedIn(handler) {
             let request = buildRequest(method, url: url)
@@ -64,6 +100,9 @@ class RemoteProvider {
         }
     }
     
+    /**
+     * Authenticated request with parameter array, object response
+     */
     class func authenticatedRequest<T: ResponseObjectSerializable>(method: Alamofire.Method, _ url: String, _ params: [[String: AnyObject]], handler: RemoteResult<T> -> Void) {
         onConnectedAndLoggedIn(handler) {
             let request = buildRequest(method, url: url)
@@ -82,7 +121,16 @@ class RemoteProvider {
         }
     }
     
+    /**
+    * Creates a request with passed method an url, with headers: json content type, auth token if existent, did if existent.
+    * TODO! refactor with the request builders in AlamofireHelper - we should have only 1 method at least setting the headers.
+    */
     private class func buildRequest(method: Alamofire.Method, url: String) -> NSMutableURLRequest {
+        
+        if QorumLogs.minimumLogLevelShown == 1 {
+            QL1("\(method) \(url), parameters: TODO refactor this") // see todo in method signature
+        }
+        
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         request.HTTPMethod = method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

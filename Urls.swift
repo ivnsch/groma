@@ -45,6 +45,7 @@ struct Urls {
     static let listItem = host + "listItem"
     static let section = host + "section"
     static let list = host + "list"
+    static let updateListItemsStatus = host + "listItems/ups"
     static let incrementListItem = host + "listItem/incr"
     static let listItemsSync = host + "listItem/sync"
     static let pullListProducts = host + "pullListProducts"
