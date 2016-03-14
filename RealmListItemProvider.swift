@@ -16,348 +16,6 @@ enum QuickAddItemSortBy {
 
 class RealmListItemProvider: RealmProvider {
     
-    // MARK: - Section
-    
-    func loadSectionWithUuid(uuid: String, handler: Section? -> ()) {
-        let mapper = {SectionMapper.sectionWithDB($0)}
-        self.loadFirst(mapper, filter: DBSection.createFilter(uuid), handler: handler)
-    }
-    
-    func loadSection(name: String, list: List, handler: Section? -> ()) {
-        loadSections([name], list: list) {sections in
-            handler(sections.first)
-        }
-    }
-    
-    func loadSections(names: [String], list: List, handler: [Section] -> ()) {
-        let mapper = {SectionMapper.sectionWithDB($0)}
-        self.load(mapper, filter: DBSection.createFilterWithNames(names, listUuid: list.uuid), handler: handler)
-    }
-    
-    func saveSection(section: Section, handler: Bool -> ()) {
-        let dbSection = DBSection()
-        dbSection.uuid = section.uuid
-        dbSection.name = section.name
-        
-        self.saveObj(dbSection, handler: handler)
-    }
-    
-    func saveSections(sections: [Section], handler: Bool -> ()) {
-        let dbSections = sections.map{SectionMapper.dbWithSection($0)}
-        self.saveObjs(dbSections, update: true, handler: handler)
-    }
-    
-    func remove(section: Section, markForSync: Bool, handler: Bool -> ()) {
-        
-        let additionalActions: (Realm -> Void)? = markForSync ? {realm in
-            let toRemove = DBSectionToRemove(section)
-            realm.add(toRemove, update: true)
-        } : nil
-        
-        self.remove(DBSection.createFilter(section.uuid), handler: handler, objType: DBSection.self, additionalActions: additionalActions)
-    }
-
-    func update(sections: [Section], handler: Bool -> ()) {
-        let dbSections = sections.map{SectionMapper.dbWithSection($0)}
-        self.saveObjs(dbSections, update: true, handler: handler)
-    }
-    
-    // MARK: - Product
-    
-    func loadProductWithUuid(uuid: String, handler: Product? -> ()) {
-        let mapper = {ProductMapper.productWithDB($0)}
-        self.loadFirst(mapper, filter: DBProduct.createFilter(uuid), handler: handler)
-    }
-    
-    // TODO rename method (uses now brand and store too)
-    func loadProductWithName(name: String, brand: String, store: String, handler: Product? -> ()) {
-        let mapper = {ProductMapper.productWithDB($0)}
-        self.loadFirst(mapper, filter: DBProduct.createFilterNameBrand(name, brand: brand, store: store), handler: handler)
-    }
-    
-    func loadProducts(range: NSRange, sortBy: ProductSortBy, handler: [Product] -> ()) {
-        products(range: range, sortBy: sortBy) {tuple in
-            handler(tuple.products)
-        }
-    }
-
-    func products(substring: String? = nil, range: NSRange? = nil, sortBy: ProductSortBy, handler: (substring: String?, products: [Product]) -> ()) {
-        let sortData: (key: String, ascending: Bool) = {
-            switch sortBy {
-            case .Alphabetic: return ("name", true)
-            case .Fav: return ("fav", false)
-            }
-        }()
-        
-        let filterMaybe = substring.map{DBProduct.createFilterNameContains($0)}
-        let mapper = {ProductMapper.productWithDB($0)}
-        self.load(mapper, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range) {products in
-            handler(substring: substring, products: products)
-        }
-    }
-    
-    func countProducts(handler: Int? -> Void) {
-        withRealm({realm in
-            realm.objects(DBProduct).count
-            }) { (countMaybe: Int?) -> Void in
-                if let count = countMaybe {
-                    handler(count)
-                } else {
-                    QL4("No count")
-                    handler(nil)
-                }
-        }
-    }
-    
-    func deleteProductAndDependencies(product: Product, markForSync: Bool, handler: Bool -> Void) {
-        doInWriteTransaction({[weak self] realm in
-            if let weakSelf = self {
-                return weakSelf.deleteProductAndDependenciesSync(realm, productUuid: product.uuid, markForSync: markForSync)
-            } else {
-                print("WARN: RealmListItemProvider.deleteProductAndDependencies: self is nil")
-                return false
-            }
-        }, finishHandler: {success in
-            handler(success ?? false)
-        })
-    }
-
-    // Note: This is expected to be called from inside a transaction and in a background operation
-    func deleteProductAndDependenciesSync(realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
-        if deleteProductDependenciesSync(realm, productUuid: productUuid, markForSync: markForSync) {
-            if let productResult = realm.objects(DBProduct).filter(DBProduct.createFilter(productUuid)).first {
-                realm.delete(productResult)
-                if markForSync {
-                    let toRemove = DBProductToRemove(productResult)
-                    realm.add(toRemove, update: true)
-                }
-                return true
-            } else {
-                return false
-            }
-        } else {
-            return false
-        }
-    }
-    
-    
-    // Note: This is expected to be called from inside a transaction and in a background operation
-    func deleteProductDependenciesSync(realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
-        let listItemResult = realm.objects(DBListItem).filter(DBListItem.createFilterWithProduct(productUuid))
-        realm.delete(listItemResult)
-        if markForSync {
-            let toRemoveListItems = listItemResult.map{DBRemoveListItem($0)}
-            saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
-        }
-        
-        let inventoryResult = realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilterWithProduct(productUuid))
-        realm.delete(inventoryResult)
-        if markForSync {
-            let toRemoteInventoryItems = inventoryResult.map{DBRemoveInventoryItem($0)}
-            saveObjsSyncInt(realm, objs: toRemoteInventoryItems, update: true)
-        }
-
-        let historyResult = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilterWithProduct(productUuid))
-        realm.delete(historyResult)
-        if markForSync {
-            let toRemoteHistoryItems = historyResult.map{DBRemoveHistoryItem($0)}
-            saveObjsSyncInt(realm, objs: toRemoteHistoryItems, update: true)
-        }
-
-        let planResult = realm.objects(DBPlanItem).filter(DBPlanItem.createFilterWithProduct(productUuid))
-        realm.delete(planResult)
-        if markForSync {
-            // TODO plan items either complete or remove this table entirely
-        }
-        
-        return true
-    }
-    
-    func saveProduct(productInput: ProductInput, updateSuggestions: Bool = true, update: Bool = true, handler: Product? -> ()) {
-        
-        loadProductWithName(productInput.name, brand: productInput.brand, store: productInput.store) {[weak self] productMaybe in
-
-            if productMaybe.isSet && !update {
-                print("Product with name: \(productInput.name), already exists, no update")
-                handler(nil)
-                return
-            }
-            
-            let uuid: String = {
-                if let existingProduct = productMaybe { // since realm doesn't support unique besides primary key yet, we have to fetch first possibly existing product
-                    return existingProduct.uuid
-                } else {
-                    return NSUUID().UUIDString
-                }
-            }()
-            
-            Providers.productCategoryProvider.categoryWithName(productInput.category) {result in
-                
-                if result.status == .Success || result.status == .NotFound  {
-                    
-                    // Create a new category or update existing one
-                    let category: ProductCategory? = {
-                        if let existingCategory = result.sucessResult {
-                            return existingCategory.copy(name: productInput.category, color: productInput.categoryColor)
-                        } else if result.status == .NotFound {
-                            return ProductCategory(uuid: NSUUID().UUIDString, name: productInput.category, color: productInput.categoryColor)
-                        } else {
-                            print("Error: RealmListItemProvider.saveProductError, invalid state: status is .Success but there is not successResult")
-                            return nil
-                        }
-                    }()
-                    
-                    // Save product with new/updated category
-                    if let category = category {
-                        let product = Product(uuid: uuid, name: productInput.name, price: productInput.price, category: category, baseQuantity: productInput.baseQuantity, unit: productInput.unit, brand: productInput.brand)
-                        self?.saveProducts([product]) {saved in
-                            if saved {
-                                handler(product)
-                            } else {
-                                print("Error: RealmListItemProvider.saveProductError, could not save product: \(product)")
-                                handler(nil)
-                            }
-                        }
-                    } else {
-                        print("Error: RealmListItemProvider.saveProduct, category is nill")
-                        handler(nil)
-                    }
-
-                } else {
-                    print("Error: RealmListItemProvider.saveProduct, couldn't fetch category: \(result)")
-                    handler(nil)
-                }
-            }
-        }
-    }
-
-    func saveProducts(products: [Product], updateSuggestions: Bool = true, update: Bool = true, handler: Bool -> ()) {
-        
-        for product in products { // product marked as var to be able to update uuid
-            
-            doInWriteTransaction({[weak self] realm in
-                let dbProduct = ProductMapper.dbWithProduct(product)
-                realm.add(dbProduct, update: update)
-                if updateSuggestions {
-                    self?.saveProductSuggestionHelper(realm, product: product)
-                }
-                return true
-                
-                }, finishHandler: {success in
-                    handler(success ?? false)
-            })
-        }
-    }
-    
-    func categoriesContaining(text: String, handler: [String] -> Void) {
-        let mapper: DBProduct -> String = {$0.category.name}
-        self.load(mapper, filter: DBProduct.createFilterCategoryNameContains(text)) {categories in
-            let distinctCategories = NSOrderedSet(array: categories).array as! [String] // TODO re-check: Realm can't distinct yet https://github.com/realm/realm-cocoa/issues/1103
-            handler(distinctCategories)
-        }
-    }
-    
-    // MARK: - Suggestion
-
-    func loadProductSuggestions(handler: [Suggestion] -> ()) {
-        let mapper = {ProductSuggestionMapper.suggestionWithDB($0)}
-        self.load(mapper, handler: handler)
-    }
-
-    // Gets suggestions both from section and category names
-    func sectionSuggestionsContainingText(text: String, handler: [String] -> Void) {
-        withRealm({ realm in
-            let sectionNames: [String] = realm.objects(DBSection).filter(DBSection.createFilterNameContains(text)).map{$0.name}
-            let categoryNames: [String] = realm.objects(DBProductCategory).filter(DBProductCategory.createFilterNameContains(text)).map{$0.name}
-            let allNames: [String] = (sectionNames + categoryNames).distinct()
-            return allNames
-            
-            }) { (allNamesMaybe: [String]?) -> Void in
-                if let allNames = allNamesMaybe {
-                    handler(allNames)
-                } else {
-                    print("Error: RealmListItemProvider.loadSectionSuggestions: Couldn't load section suggestions")
-                    handler([])
-                }
-        }
-    }
-    
-    // MARK: - List
-    
-    func saveList(list: List, handler: Bool -> ()) {
-        let dbList = ListMapper.dbWithList(list)
-        self.saveObj(dbList, update: true, handler: handler)
-    }
-    
-    func saveLists(lists: [List], update: Bool = false, handler: Bool -> ()) {
-        let dbLists = lists.map{ListMapper.dbWithList($0)}
-        saveLists(dbLists, update: update, handler: handler)
-    }
-    
-    func saveLists(lists: [DBList], update: Bool = false, handler: Bool -> ()) {
-        self.saveObjs(lists, update: update, handler: handler)
-    }
-    
-    func overwriteLists(lists: [List], clearTombstones: Bool, handler: Bool -> ()) {
-        let dbLists = lists.map{ListMapper.dbWithList($0)}
-        // additional actions: delete tombstones. This flag is passed when we overwrite lists using the server's lists. Since we just got the fresh lists from the server, tombstones may refer to: 1. is not in the server anymore - so we don't need the tombstone - can delete tombstone, 2. it is in the server (can happen if for some reason we are downloading without having uploaded the most recent state first, e.g. when we deleted the list the server was being restarted, so the request failed -> added tombstone, now we call get lists on view will appear -> the list is in the server response but there's a tombstone. The ideal solution here would be filter out the tombstoned element from the downloaded list? and trigger the request to delete tombstones again, or something like that (the idea is the user doesn't see this list again as it was deleted), but we don't have time for this now so we will just clear the tombstone, basically undoing the delete. This may not sound obvious - we could also let the tombstone there, in which case the user would see the list and it would be removed in the next sync but this is even worser UX than just reverting the delete, as user doesn't know that login/connect change will remove it again, user may even decide to re-use the list and add items to it and this will get lost in next login/connect.
-        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBRemoveList)} : nil
-        self.overwrite(dbLists, resetLastUpdateToServer: true, additionalActions: additionalActions, handler: handler)
-    }
-    
-    func loadList(uuid: String, handler: List? -> ()) {
-        let mapper = {ListMapper.listWithDB($0)}
-        self.loadFirst(mapper, filter: DBList.createFilter(uuid), handler: handler)
-    }
-    
-    func loadLists(handler: [List] -> ()) {
-        let mapper = {ListMapper.listWithDB($0)}
-        self.load(mapper, handler: handler)
-    }
-    
-    func remove(list: List, markForSync: Bool, handler: Bool -> ()) {
-        remove(list.uuid, markForSync: markForSync, handler: handler)
-    }
-
-    func remove(listUuid: String, markForSync: Bool, handler: Bool -> Void) {
-        background({[weak self] in
-            do {
-                let realm = try Realm()
-                var success = false
-                try realm.write {
-                    success = self?.removeListSync(realm, listUuid: listUuid, markForSync: markForSync) ?? false
-                }
-                return success
-            } catch let e {
-                QL4("Realm error: \(e)")
-                return false
-            }
-            }) {(result: Bool) in
-                handler(result)
-        }
-    }
-
-    // Expected to be executed in do/catch and write block
-    func removeListSync(realm: Realm, listUuid: String, markForSync: Bool) -> Bool {
-        // delete listItems
-        let dbListItems = realm.objects(DBListItem).filter(DBListItem.createFilterList(listUuid))
-        realm.delete(dbListItems)
-        // NOTE: it's not necessary to mark list items deletes for sync as syncing the list delete will also delete the list items.
-        
-        // delete list
-        let listResults = realm.objects(DBList).filter(DBList.createFilter(listUuid))
-        realm.delete(listResults)
-        if markForSync {
-            let toRemoveListItems = dbListItems.map{DBRemoveListItem($0)}
-            saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
-        }
-        return true
-    }
-
-    // TODO update list
-    
-    // MARK: - ListItem
-    
     func saveListItem(listItem: ListItem, updateSuggestions: Bool = true, incrementQuantity: Bool, handler: ListItem -> ()) {
         saveListItems([listItem], incrementQuantity: incrementQuantity) {listItemsMaybe in
             if let listItems = listItemsMaybe {
@@ -380,7 +38,7 @@ class RealmListItemProvider: RealmProvider {
     NOTE: Assumes all listItems belong to the same list (only the list of first list item is used for filtering)
     */
     func saveListItems(var listItems: [ListItem], updateSuggestions: Bool = true, incrementQuantity: Bool, updateSection: Bool = true, handler: [ListItem]? -> ()) {
-        doInWriteTransaction({[weak self] realm in
+        doInWriteTransaction({realm in
            
             // if we want to increment if item with same product name exists
             // Note that we always want this except when saveListItems is called after having cleared the database, e.g. (currently) on server sync, or when doing an update
@@ -410,7 +68,7 @@ class RealmListItemProvider: RealmProvider {
                 realm.add(dbListItem, update: true)
                 
                 if updateSuggestions {
-                    self?.saveProductSuggestionHelper(realm, product: listItem.product) // TODO still needed?
+                    DBProviders.productProvider.saveProductSuggestionHelper(realm, product: listItem.product) // TODO still needed?
                     
                     let sectionSuggestion = SectionSuggestionMapper.dbWithSection(listItem.section)
                     realm.add(sectionSuggestion, update: true)
@@ -480,33 +138,6 @@ class RealmListItemProvider: RealmProvider {
         })
     }
 
-    
-//    /**
-//    Helper to save a list item with optional saving of product and section autosuggestion
-//    Expected to be executed inside a transaction
-//    */
-//    private func saveListItemHelper(realm: Realm, listItem: ListItem, updateSuggestions: Bool = true) {
-//        let dbListItem = ListItemMapper.dbWithListItem(listItem)
-//        realm.add(dbListItem, update: true)
-//        
-//        if updateSuggestions {
-//            saveProductSuggestionHelper(realm, product: listItem.product)
-//            
-//            let sectionSuggestion = SectionSuggestionMapper.dbWithSection(listItem.section)
-//            realm.add(sectionSuggestion, update: true)
-//        }
-//    }
-
-    /**
-    Helper to save suggestion corresponding to a product
-    Expected to be executed in a write block
-    */
-    private func saveProductSuggestionHelper(realm: Realm, product: Product) {
-        // TODO update suggestions - right now only insert - product is updated based on uuid, but with autosuggestion, since no ids old names keep there
-        // so we need to either do a query for the product/old name, and delete the autosuggestion with this name or use ids
-        let suggestion = ProductSuggestionMapper.dbWithProduct(product)
-        realm.add(suggestion, update: true)
-    }
     
     func loadListItems(list: List, handler: [ListItem] -> ()) {
         let mapper = {ListItemMapper.listItemWithDB($0)}
@@ -642,18 +273,10 @@ class RealmListItemProvider: RealmProvider {
             QL4("Realm error: \(e)")
             handler(false)
         }
+    }
+    
+    // MARK: - Sync
 
-    }
-    
-    func clearListTombstone(uuid: String, handler: Bool -> Void) {
-        doInWriteTransaction({realm in
-            realm.deleteForFilter(DBRemoveList.self, DBRemoveList.createFilter(uuid))
-            return true
-            }, finishHandler: {success in
-                handler(success ?? false)
-        })
-    }
-    
     func clearListItemTombstone(uuid: String, handler: Bool -> Void) {
         doInWriteTransaction({realm in
             realm.deleteForFilter(DBRemoveListItem.self, DBRemoveListItem.createFilter(uuid))
@@ -672,16 +295,6 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
-    func clearProductTombstone(uuid: String, handler: Bool -> Void) {
-        doInWriteTransaction({realm in
-            realm.deleteForFilter(DBProductToRemove.self, DBProductToRemove.createFilter(uuid))
-            return true
-            }, finishHandler: {success in
-                handler(success ?? false)
-        })
-    }
-    
-    // MARK: - Sync
     // TODO! is this method still necessary? we have global sync now
     func saveListsSyncResult(syncResult: RemoteListWithListItemsSyncResult, handler: Bool -> ()) {
         
@@ -771,31 +384,13 @@ class RealmListItemProvider: RealmProvider {
             for section in listItems.sections {
                 realm.create(DBSection.self, value: section.timestampUpdateDict, update: true)
             }
-            self?.updateLastSyncTimeStampSync(realm, lists: listItems.lists)
+            DBProviders.listProvider.updateLastSyncTimeStampSync(realm, lists: listItems.lists)
             return true
             }, finishHandler: {success in
                 handler(success ?? false)
         })
     }
-    
-    func updateLastSyncTimeStamp(lists: RemoteListsWithDependencies, handler: Bool -> Void) {
-        doInWriteTransaction({[weak self] realm in
-            self?.updateLastSyncTimeStampSync(realm, lists: lists)
-            return true
-            }, finishHandler: {success in
-                handler(success ?? false)
-        })
-    }
-    
-    private func updateLastSyncTimeStampSync(realm: Realm, lists: RemoteListsWithDependencies) {
-        for list in lists.lists {
-            realm.create(DBList.self, value: list.timestampUpdateDict, update: true)
-        }
-        for inventory in lists.inventories {
-            realm.create(DBInventory.self, value: inventory.timestampUpdateDict, update: true)
-        }
-    }
-    
+
     
     func updateLastSyncTimeStamp(product: RemoteProduct, handler: Bool -> Void) {
         doInWriteTransaction({[weak self] realm in

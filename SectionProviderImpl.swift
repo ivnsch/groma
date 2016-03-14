@@ -13,7 +13,7 @@ class SectionProviderImpl: SectionProvider {
     let dbProvider = RealmListItemProvider()
     
     func loadSection(name: String, list: List, handler: ProviderResult<Section?> -> ()) {
-        dbProvider.loadSection(name, list: list) {dbSectionMaybe in
+        DBProviders.sectionProvider.loadSection(name, list: list) {dbSectionMaybe in
             handler(ProviderResult(status: .Success, sucessResult: dbSectionMaybe))
             
             //            // TODO is this necessary here?
@@ -33,7 +33,7 @@ class SectionProviderImpl: SectionProvider {
 
     func add(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         Providers.listItemsProvider.invalidateMemCache()
-        self.dbProvider.saveSection(section) {saved in
+        DBProviders.sectionProvider.saveSection(section) {saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             if saved && remote {
                 // TODO!! server
@@ -43,7 +43,7 @@ class SectionProviderImpl: SectionProvider {
     
     func remove(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         Providers.listItemsProvider.invalidateMemCache()
-        self.dbProvider.remove(section, markForSync: true) {removed in
+        DBProviders.sectionProvider.remove(section, markForSync: true) {removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
             if removed && remote {
                 // TODO!! server
@@ -53,7 +53,7 @@ class SectionProviderImpl: SectionProvider {
     
     func update(sections: [Section], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         Providers.listItemsProvider.invalidateMemCache()
-        self.dbProvider.update(sections) {updated in
+        DBProviders.sectionProvider.update(sections) {updated in
             handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
             if updated && remote {
                 // TODO!! server
@@ -62,13 +62,13 @@ class SectionProviderImpl: SectionProvider {
     }
     
     func sectionSuggestionsContainingText(text: String, _ handler: ProviderResult<[String]> -> ()) {
-        dbProvider.sectionSuggestionsContainingText(text) {dbSuggestions in
+        DBProviders.sectionProvider.sectionSuggestionsContainingText(text) {dbSuggestions in
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSuggestions))
         }
     }
 
     func sections(names: [String], list: List, handler: ProviderResult<[Section]> -> ()) {
-        self.dbProvider.loadSections(names, list: list) {dbSections in
+        DBProviders.sectionProvider.loadSections(names, list: list) {dbSections in
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSections))
         }
     }

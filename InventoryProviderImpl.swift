@@ -176,7 +176,7 @@ class InventoryProviderImpl: InventoryProvider {
         
         self.dbInventoryProvider.loadInventories {dbInventories in
             
-            self.dbInventoryProvider.loadAllInventoryItems {dbInventoryItems in
+            DBProviders.inventoryItemProvider.loadAllInventoryItems {dbInventoryItems in
 
                 let inventoriesSync = SyncUtils.toInventoriesSync(dbInventories, dbInventoryItems: dbInventoryItems)
 

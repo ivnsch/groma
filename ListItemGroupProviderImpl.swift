@@ -161,7 +161,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
 
     func groupItems(group: ListItemGroup, _ handler: ProviderResult<[GroupItem]> -> Void) {
-        dbGroupsProvider.groupItems(group) {[weak self] dbItems in
+        DBProviders.groupItemProvider.groupItems(group) {[weak self] dbItems in
             handler(ProviderResult(status: .Success, sucessResult: dbItems))
             
             self?.remoteGroupsProvider.groupsItems(group) {remoteResult in
@@ -172,7 +172,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                     
                     if dbItems != items.groupItems {
                         
-                        self?.dbGroupsProvider.overwrite(items.groupItems, groupUuid: group.uuid, clearTombstones: true) {saved in
+                        DBProviders.groupItemProvider.overwrite(items.groupItems, groupUuid: group.uuid, clearTombstones: true) {saved in
                             if saved {
                                 handler(ProviderResult(status: .Success, sucessResult: items.groupItems))
                                 
@@ -190,14 +190,14 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     func add(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        dbGroupsProvider.addOrIncrement(item) {[weak self] saved in
+        DBProviders.groupItemProvider.addOrIncrement(item) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
                 if saved {
                     self?.remoteGroupsProvider.addGroupItem(item, group: group) {remoteResult in
                         if let remoteListItems = remoteResult.successResult {
-                            self?.dbGroupsProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+                            DBProviders.groupItemProvider.updateLastSyncTimeStamp(remoteListItems) {success in
                             }
                         } else {
                             DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
@@ -215,7 +215,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
 
     func add(items: [GroupItem], group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        dbGroupsProvider.addOrIncrement(items) {saved in
+        DBProviders.groupItemProvider.addOrIncrement(items) {saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
@@ -274,14 +274,14 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     func update(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbGroupsProvider.update(item) {[weak self] saved in
+        DBProviders.groupItemProvider.update(item) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
                 if saved {
                     self?.remoteGroupsProvider.updateGroupItem(item, group: group) {remoteResult in
                         if let remoteListItems = remoteResult.successResult {
-                            self?.dbGroupsProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+                            DBProviders.groupItemProvider.updateLastSyncTimeStamp(remoteListItems) {success in
                             }
                         } else {
                             DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
@@ -302,7 +302,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     func removeGroupItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        dbGroupsProvider.removeGroupItem(uuid, markForSync: true) {[weak self] saved in
+        DBProviders.groupItemProvider.removeGroupItem(uuid, markForSync: true) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
@@ -310,7 +310,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                     if saved {
                         self?.remoteGroupsProvider.removeGroupItem(uuid) {remoteResult in
                             if remoteResult.success {
-                                self?.dbGroupsProvider.clearGroupItemTombstone(uuid) {removeTombstoneSuccess in
+                                DBProviders.groupItemProvider.clearGroupItemTombstone(uuid) {removeTombstoneSuccess in
                                     if !removeTombstoneSuccess {
                                         QL4("Couldn't delete tombstone for group item: \(uuid)")
                                     }
@@ -344,7 +344,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
 //            handler(ProviderResult(status: .Success))
 //        }
         
-        dbGroupsProvider.incrementGroupItem(listItem, delta: delta) {[weak self] saved in
+        DBProviders.groupItemProvider.incrementGroupItem(listItem, delta: delta) {[weak self] saved in
 //            
 //            if !memIncremented { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
                 if saved {
@@ -381,7 +381,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                     //                        }
                     
                     let updateTimeStampDict = RemoteGroupItem.createTimestampUpdateDict(uuid: listItem.uuid, lastUpdate: serverLastUpdateTimestamp)
-                    self?.dbGroupsProvider.updateGroupItemLastUpdate(updateTimeStampDict) {success in
+                    DBProviders.groupItemProvider.updateGroupItemLastUpdate(updateTimeStampDict) {success in
                     }
                 } else {
                     print("Error incrementing item: \(listItem) in remote, result: \(remoteResult)")

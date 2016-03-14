@@ -216,6 +216,8 @@ class RealmHistoryProvider: RealmProvider {
         }
     }
     
+    // MARK: - Sync
+
     func clearHistoryItemTombstone(uuid: String, handler: Bool -> Void) {
         doInWriteTransaction({realm in
             realm.deleteForFilter(DBRemoveHistoryItem.self, DBRemoveHistoryItem.createFilter(uuid))

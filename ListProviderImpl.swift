@@ -12,11 +12,11 @@ import QorumLogs
 class ListProviderImpl: ListProvider {
    
     let remoteListProvider = RemoteListItemProvider()
-    let dbProvider = RealmListItemProvider()
+//    let dbProvider = RealmListItemProvider()
     
     // Note: programmatic sorting 2x. But users normally have only a few lists so it's ok
     func lists(remote: Bool = true, _ handler: ProviderResult<[List]> -> ()) {
-        self.dbProvider.loadLists{(var dbLists) in
+        DBProviders.listProvider.loadLists{(var dbLists) in
             
             dbLists = dbLists.sortedByOrder()
             
@@ -31,7 +31,7 @@ class ListProviderImpl: ListProvider {
                         // if there are no local lists or there's a difference, overwrite the local lists
                         if dbLists != lists {
                             
-                            self.dbProvider.overwriteLists(lists, clearTombstones: true) {saved in
+                            DBProviders.listProvider.overwriteLists(lists, clearTombstones: true) {saved in
                                 if saved {
                                     handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: lists))
                                     
@@ -52,7 +52,7 @@ class ListProviderImpl: ListProvider {
     // TODO is this used? Also what id, is it uuid?
     func list(listId: String, _ handler: ProviderResult<List> -> ()) {
         // return the saved object, to get object with generated id
-        self.dbProvider.loadList(listId) {dbListMaybe in
+        DBProviders.listProvider.loadList(listId) {dbListMaybe in
             if let dbList = dbListMaybe {
                 handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbList))
                 
@@ -69,7 +69,7 @@ class ListProviderImpl: ListProvider {
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
         // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
-        dbProvider.saveList(list, handler: {[weak self] saved in
+        DBProviders.listProvider.saveList(list, handler: {[weak self] saved in
             
             if saved {
                 handler(ProviderResult(status: .Success, sucessResult: list))
@@ -80,7 +80,7 @@ class ListProviderImpl: ListProvider {
             if remote {
                 self?.remoteListProvider.add(list, handler: {remoteResult in
                     if let remoteLists = remoteResult.successResult {
-                        self?.dbProvider.updateLastSyncTimeStamp(remoteLists) {success in
+                        DBProviders.listProvider.updateLastSyncTimeStamp(remoteLists) {success in
                             if !success {
                                 QL4("Error storing last update timestamp")
                             }
@@ -98,13 +98,13 @@ class ListProviderImpl: ListProvider {
     }
     
     func update(lists: [List], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbProvider.saveLists(lists, update: true) {[weak self] updated in
+        DBProviders.listProvider.saveLists(lists, update: true) {[weak self] updated in
             handler(ProviderResult(status: updated ? .Success : .DatabaseSavingError))
             if updated {
                 if remote {
                     self?.remoteListProvider.update(lists) {remoteResult in
                         if let remoteLists = remoteResult.successResult {
-                            self?.dbProvider.updateLastSyncTimeStamp(remoteLists) {success in
+                            DBProviders.listProvider.updateLastSyncTimeStamp(remoteLists) {success in
                                 if !success {
                                     QL4("Error storing last update timestamp")
                                 }
@@ -133,13 +133,13 @@ class ListProviderImpl: ListProvider {
         // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
         
         // TODO when removing and item doesn't exist shouldn't we return an error (currently at least local db returns success)?
-        self.dbProvider.remove(listUuid, markForSync: true, handler: {[weak self] removed in
+        DBProviders.listProvider.remove(listUuid, markForSync: true, handler: {[weak self] removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseSavingError))
             if removed {
                 if remote {
                     self?.remoteListProvider.remove(listUuid) {remoteResult in
                         if remoteResult.success {
-                            self?.dbProvider.clearListTombstone(listUuid) {removeTombstoneSuccess in
+                            DBProviders.listProvider.clearListTombstone(listUuid) {removeTombstoneSuccess in
                                 if !removeTombstoneSuccess {
                                     QL4("Couldn't delete tombstone for list: \(listUuid)")
                                 }
@@ -160,9 +160,9 @@ class ListProviderImpl: ListProvider {
     // TODO do we still need this?
     func syncListsWithListItems(handler: (ProviderResult<[Any]> -> ())) {
         
-        self.dbProvider.loadLists {dbLists in
+        DBProviders.listProvider.loadLists {dbLists in
             
-            self.dbProvider.loadAllListItems {dbListItems in
+            DBProviders.listItemProvider.loadAllListItems {dbListItems in
 
                 let listsSync = SyncUtils.toListsSync(dbLists, dbListItems: dbListItems)
 
@@ -170,7 +170,7 @@ class ListProviderImpl: ListProvider {
                     
                     if let syncResult = remoteResult.successResult {
                         
-                        self.dbProvider.saveListsSyncResult(syncResult) {success in
+                        DBProviders.listItemProvider.saveListsSyncResult(syncResult) {success in
                             if success {
                                 handler(ProviderResult(status: .Success))
                             } else {

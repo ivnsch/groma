@@ -27,9 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
     private var reachability: Reachability!
     
     private let userProvider = ProviderFactory().userProvider // arc
-    private let listProvider = RealmListItemProvider() // arc   
-    private let inventoryProvider = RealmInventoryProvider() // arc
-    
+
     private var suggestionsPrefiller: SuggestionsPrefiller? // arc
 
     private var ratingPopup: RatingPopup? // arc
@@ -199,20 +197,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
         let product1 = Product(uuid: uuid, name: "Birnen", price: 3, category: fruitsCat, baseQuantity: 1, unit: .None, brand: "")
 
         let inventory1 = Inventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreenColor(), order: 0)
-        inventoryProvider.saveInventory(inventory1) {[weak self] saved in
+        DBProviders.inventoryProvider.saveInventory(inventory1) {[weak self] saved in
         
             let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0, inventory: inventory1)
-            self?.listProvider.saveList(list1) {[weak self] result in
-                
-                guard let weakSelf = self else {return}
+            DBProviders.listProvider.saveList(list1) {[weak self] result in
                 
                 let section1 = Section(uuid: uuid, name: "Obst", list: list1, order: ListItemStatusOrder(status: .Todo, order: 0))
                 let listItems = [
                     ListItem(uuid: uuid, product: product1, section: section1, list: list1, todoQuantity: 5, todoOrder: 0)
                 ]
                 
-                weakSelf.listProvider.saveListItems(listItems, incrementQuantity: false) {saved in
-                    print("Done adding dummy data (mini)")
+                DBProviders.listItemProvider.saveListItems(listItems, incrementQuantity: false) {saved in
+                    QL1("Done adding dummy data (mini)")
                 }
             }
         }
@@ -259,7 +255,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
         
         
         let inventory1 = Inventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreenColor(), order: 0)
-        inventoryProvider.saveInventory(inventory1) {[weak self] saved in
+        DBProviders.inventoryProvider.saveInventory(inventory1) {[weak self] saved in
             
             func inventoryItem(quantityDelta quantityDelta: Int, product: Product, inventory: Inventory) -> InventoryItem {
                 return InventoryItem(uuid: uuid, quantity: quantityDelta, quantityDelta: quantityDelta, product: product, inventory: inventory)
@@ -420,12 +416,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
 //                return InventoryItemWithHistoryEntry(inventoryItem: inventoryItem, historyItemUuid: "111\(i)", addedDate: NSDate(), user: user)
 //            }
             
-            self?.inventoryProvider.add(inventoryWithHistoryItems/* + moreItems*/) {saved in
+            DBProviders.inventoryItemProvider.add(inventoryWithHistoryItems/* + moreItems*/) {saved in
                 
                 let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0, inventory: inventory1)
-                self?.listProvider.saveList(list1) {[weak self] result in
-                    
-                    guard let weakSelf = self else {return}
+                DBProviders.listProvider.saveList(list1) {result in
                     
                     let section1 = Section(uuid: uuid, name: "Obst", list: list1, order: ListItemStatusOrder(status: .Todo, order: 0))
                     let section2 = Section(uuid: uuid, name: "Gemuese", list: list1, order: ListItemStatusOrder(status: .Todo, order: 1))
@@ -448,8 +442,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
                         ListItem(uuid: uuid, product: product7, section: section6, list: list1, todoQuantity: 4, todoOrder: 5)
                     ]
                     
-                    weakSelf.listProvider.saveListItems(listItems, incrementQuantity: false) {saved in
-                        print("Done adding dummy data")
+                    DBProviders.listItemProvider.saveListItems(listItems, incrementQuantity: false) {saved in
+                        QL1("Done adding dummy data")
                     }
                 }
                 

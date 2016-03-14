@@ -14,24 +14,23 @@ class ProductProviderImpl: ProductProvider {
 
     private let dbProvider = RealmListItemProvider()
     private let dbBrandProvider = RealmBrandProvider()
-    private let productDbProvider = RealmProductProvider()
     private let remoteProvider = RemoteProductProvider()
     
     func products(range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<[Product]> -> Void) {
-        dbProvider.loadProducts(range, sortBy: sortBy) {products in
+        DBProviders.productProvider.loadProducts(range, sortBy: sortBy) {products in
             handler(ProviderResult(status: .Success, sucessResult: products))
             // For products no background sync, this is a very long list and not justified as this screen is not used frequently. Also when there are new products mostly this is because new list/inventory/group items were added, and we get these new products already as a dependency in the respective background updates of these items.
         }
     }
     
     func products(text: String, range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<(substring: String?, products: [Product])> -> Void) {
-        dbProvider.products(text, range: range, sortBy: sortBy) {products in
+        DBProviders.productProvider.products(text, range: range, sortBy: sortBy) {products in
             handler(ProviderResult(status: .Success, sucessResult: products))
         }
     }
 
     func product(name: String, brand: String, store: String, handler: ProviderResult<Product> -> ()) {
-        dbProvider.loadProductWithName(name, brand: brand, store: store) {dbProduct in
+        DBProviders.productProvider.loadProductWithName(name, brand: brand, store: store) {dbProduct in
             if let dbProduct = dbProduct {
                 handler(ProviderResult(status: .Success, sucessResult: dbProduct))
             } else {
@@ -41,7 +40,7 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func add(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbProvider.saveProducts([product], update: true) {[weak self] saved in
+        DBProviders.productProvider.saveProducts([product], update: true) {[weak self] saved in
             handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
             
             if saved {
@@ -62,7 +61,7 @@ class ProductProviderImpl: ProductProvider {
     }
 
     func add(productInput: ProductInput, _ handler: ProviderResult<Product> -> ()) {
-        dbProvider.saveProduct(productInput, update: true) {[weak self] productMaybe in
+        DBProviders.productProvider.saveProduct(productInput, update: true) {[weak self] productMaybe in
             if let product = productMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: product))
                 
@@ -84,7 +83,7 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func update(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbProvider.saveProducts([product], update: true) {[weak self] saved in
+        DBProviders.productProvider.saveProducts([product], update: true) {[weak self] saved in
             if saved {
                 Providers.listItemsProvider.invalidateMemCache() // reflect product updates in possible referencing list items
                 
@@ -106,13 +105,13 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func delete(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbProvider.deleteProductAndDependencies(product, markForSync: true) {[weak self] saved in
+        DBProviders.productProvider.deleteProductAndDependencies(product, markForSync: true) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             
             if remote {
                 self?.remoteProvider.deleteProduct(product.uuid) {remoteResult in
                     if remoteResult.success {
-                        self?.dbProvider.clearProductTombstone(product.uuid) {removeTombstoneSuccess in
+                        DBProviders.productProvider.clearProductTombstone(product.uuid) {removeTombstoneSuccess in
                             if !removeTombstoneSuccess {
                                 QL4("Couldn't delete tombstone for product: \(product.uuid)")
                             }
@@ -128,7 +127,7 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func incrementFav(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        productDbProvider.incrementFav(product, {[weak self] saved in
+        DBProviders.productProvider.incrementFav(product, {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             
             if remote {
@@ -149,7 +148,7 @@ class ProductProviderImpl: ProductProvider {
     
     // TODO why do we have incrementFav and updateFav?
     func updateFav(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbProvider.saveProducts([product], update: true) {[weak self] saved in
+        DBProviders.productProvider.saveProducts([product], update: true) {[weak self] saved in
             if saved {
                 if remote {
                     // TODO!! separate service with only uuid (not even delta - server increments always 1)
@@ -172,7 +171,7 @@ class ProductProviderImpl: ProductProvider {
     // TODO why do we have incrementFav, updateFav and another incrementFav?
     func incrementFav(product: Product, _ handler: ProviderResult<Any> -> Void) {
         let incrementedProduct = product.copy(fav: product.fav + 1)
-        dbProvider.saveProducts([incrementedProduct], updateSuggestions: false) {[weak self] saved in // we are only incrementing a(n existing) product, so update suggestions doesn't make sense
+        DBProviders.productProvider.saveProducts([incrementedProduct], updateSuggestions: false) {[weak self] saved in // we are only incrementing a(n existing) product, so update suggestions doesn't make sense
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             if saved {
                 // TODO!! separate service with only uuid (not even delta - server increments always 1)
@@ -192,14 +191,14 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func productSuggestions(handler: ProviderResult<[Suggestion]> -> ()) {
-        dbProvider.loadProductSuggestions {dbSuggestions in
+        DBProviders.productProvider.loadProductSuggestions {dbSuggestions in
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSuggestions))
         }
     }
     
     
     func loadProduct(name: String, brand: String, store: String, handler: ProviderResult<Product> -> ()) {
-        dbProvider.loadProductWithName(name, brand: brand, store: store) {dbProductMaybe in
+        DBProviders.productProvider.loadProductWithName(name, brand: brand, store: store) {dbProductMaybe in
             if let dbProduct = dbProductMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: dbProduct))
             } else {
@@ -221,7 +220,7 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func categoriesContaining(name: String, _ handler: ProviderResult<[String]> -> Void) {
-        dbProvider.categoriesContaining(name) {dbCategories in
+        DBProviders.productProvider.categoriesContaining(name) {dbCategories in
             handler(ProviderResult(status: .Success, sucessResult: dbCategories))
         }
     }
@@ -266,7 +265,7 @@ class ProductProviderImpl: ProductProvider {
     
     
     func countProducts(handler: ProviderResult<Int> -> Void) {
-        dbProvider.countProducts {countMaybe in
+        DBProviders.productProvider.countProducts {countMaybe in
             if let count = countMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: count))
             } else {

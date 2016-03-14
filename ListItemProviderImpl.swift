@@ -108,14 +108,14 @@ class ListItemProviderImpl: ListItemProvider {
     
     func remove(listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         memProvider.invalidate()
-        self.dbProvider.remove(listUuid, markForSync: true) {[weak self] removed in
+        DBProviders.listProvider.remove(listUuid, markForSync: true) {[weak self] removed in
             handler(ProviderResult(status: removed ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
             
             if remote {
                 if removed {
                     self?.remoteProvider.remove(listUuid) {remoteResult in
                         if remoteResult.success {
-                            self?.dbProvider.clearListTombstone(listUuid) {removeTombstoneSuccess in
+                            DBProviders.listProvider.clearListTombstone(listUuid) {removeTombstoneSuccess in
                                 if !removeTombstoneSuccess {
                                     QL4("Couldn't delete tombstone for list: \(listUuid)")
                                 }

@@ -42,7 +42,7 @@ class RealmProductCategoryProvider: RealmProvider {
                     let dbProducts: Results<DBProduct> = realm.objects(DBProduct).filter(DBProduct.createFilterCategory(category.uuid))
                     // delete first dependencies of products (realm requires this order, otherwise db is inconsistent. There's no cascade delete yet also).
                     for dbProduct in dbProducts {
-                        RealmListItemProvider().deleteProductDependenciesSync(realm, productUuid: dbProduct.uuid, markForSync: markForSync)
+                        DBProviders.productProvider.deleteProductDependenciesSync(realm, productUuid: dbProduct.uuid, markForSync: markForSync)
                     }
                     
                     // delete products
@@ -70,6 +70,8 @@ class RealmProductCategoryProvider: RealmProvider {
             handler(result)
         }
     }
+    
+    // MARK: - Sync
     
     func updateLastSyncTimeStamp(category: RemoteProductCategory, handler: Bool -> Void) {
         doInWriteTransaction({[weak self] realm in

@@ -12,7 +12,7 @@ import QorumLogs
 class InventoryItemsProviderImpl: InventoryItemsProvider {
    
     let remoteInventoryItemsProvider = RemoteInventoryItemsProvider()
-    let dbInventoryProvider = RealmInventoryProvider()
+//    let dbInventoryProvider = RealmInventoryProvider()
     let memProvider = MemInventoryItemProvider(enabled: true)
 
     // TODO we are sorting 3x! Optimise this. Ponder if it makes sense to do the server objects sorting in the server (where it can be done at db level)
@@ -28,7 +28,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
         
         // FIXME: sortBy and range don't work in db (see notes in implementation). For now we have to do this programmatically
-        self.dbInventoryProvider.loadInventory(inventory, sortBy: sortBy, range: range) {[weak self] (var dbInventoryItems) in
+        DBProviders.inventoryProvider.loadInventory(inventory, sortBy: sortBy, range: range) {[weak self] (var dbInventoryItems) in
             
             dbInventoryItems = dbInventoryItems.sortBy(sortBy)
             dbInventoryItems = dbInventoryItems[range]
@@ -45,7 +45,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     let inventoryItemsInRange = inventoryItems[range]
                     
                     if (dbInventoryItems != inventoryItemsInRange) {
-                        self?.dbInventoryProvider.overwrite(inventoryItems, inventoryUuid: inventory.uuid, clearTombstones: true) {saved in // if items in range are not equal overwritte with all the items
+                        DBProviders.inventoryItemProvider.overwrite(inventoryItems, inventoryUuid: inventory.uuid, clearTombstones: true) {saved in // if items in range are not equal overwritte with all the items
                             handler(ProviderResult(status: .Success, sucessResult: inventoryItemsInRange))
                             self?.memProvider.overwrite(inventoryItems)
                         }
@@ -59,7 +59,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
     
     func countInventoryItems(inventory: Inventory, _ handler: ProviderResult<Int> -> Void) {
-        dbInventoryProvider.countInventoryItems(inventory) {countMaybe in
+        DBProviders.inventoryItemProvider.countInventoryItems(inventory) {countMaybe in
             if let count = countMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: count))
             } else {
@@ -82,7 +82,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
     
     func addToInventory(inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<[InventoryItemWithHistoryEntry]> -> Void) {
-        dbInventoryProvider.addOrIncrementInventoryItemWithInput(itemInputs, inventory: inventory) {[weak self] addOrIncrementInventoryItemsWithInputMaybe in
+        DBProviders.inventoryItemProvider.addOrIncrementInventoryItemWithInput(itemInputs, inventory: inventory) {[weak self] addOrIncrementInventoryItemsWithInputMaybe in
 
             if let addOrIncrementInventoryItemWithInput = addOrIncrementInventoryItemsWithInputMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: addOrIncrementInventoryItemWithInput))
@@ -113,7 +113,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                             //                }
                             
                             
-                            self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
+                            DBProviders.inventoryItemProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
                             }
                         } else {
                             DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[InventoryItemWithHistoryEntry]>) in
@@ -136,7 +136,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     
     func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> Void) {
     
-        dbInventoryProvider.addOrIncrementInventoryItemWithInput(itemInput, inventory: inventory, delta: itemInput.quantity) {addedInventoryItemWithHistoryMaybe in
+        DBProviders.inventoryItemProvider.addOrIncrementInventoryItemWithInput(itemInput, inventory: inventory, delta: itemInput.quantity) {addedInventoryItemWithHistoryMaybe in
             
             if let addedInventoryItemWithHistory = addedInventoryItemWithHistoryMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: addedInventoryItemWithHistory))
@@ -158,7 +158,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             handler(ProviderResult(status: .Success))
         }
         
-        self.dbInventoryProvider.add(items) {[weak self] saved in
+        DBProviders.inventoryItemProvider.add(items) {[weak self] saved in
 
             if !memAdded { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
                 if saved {
@@ -187,7 +187,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                         //                }
                         
                         
-                        self?.dbInventoryProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
+                        DBProviders.inventoryItemProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
                         }
                     } else {
                         DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
@@ -209,7 +209,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             handler(ProviderResult(status: .Success, sucessResult: memItem))
             
         } else {
-            dbInventoryProvider.findInventoryItem(item) {inventoryItemMaybe in
+            DBProviders.inventoryItemProvider.findInventoryItem(item) {inventoryItemMaybe in
                 if let inventoryItem = inventoryItemMaybe {
                     handler(ProviderResult(status: .Success, sucessResult: inventoryItem))
                 } else {
@@ -221,7 +221,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     
     // only db no memory cache or remote, this is currently used only by websocket update (when receive websocket increment, fetch inventory item in order to increment it locally)
     private func findInventoryItem(productUuid: String, inventoryUuid: String, _ handler: ProviderResult<InventoryItem> -> ()) {
-        dbInventoryProvider.findInventoryItem(productUuid, inventoryUuid: inventoryUuid) {inventoryItemMaybe in
+        DBProviders.inventoryItemProvider.findInventoryItem(productUuid, inventoryUuid: inventoryUuid) {inventoryItemMaybe in
             if let inventoryItem = inventoryItemMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: inventoryItem))
             } else {
@@ -262,7 +262,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             handler(ProviderResult(status: .Success))
         }
         
-        dbInventoryProvider.incrementInventoryItem(item, delta: delta, onlyDelta: false) {[weak self] saved in
+        DBProviders.inventoryItemProvider.incrementInventoryItem(item, delta: delta, onlyDelta: false) {[weak self] saved in
             
             if !memIncremented { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
                 if saved {
@@ -281,11 +281,11 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     //                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
                     
                     let updateTimeStampDict = RemoteInventoryItem.createTimestampUpdateDict(uuid: item.uuid, lastUpdate: serverLastUpdateTimestamp)
-                    self?.dbInventoryProvider.updateInventoryItemLastUpdate(updateTimeStampDict) {success in
+                    DBProviders.inventoryItemProvider.updateInventoryItemLastUpdate(updateTimeStampDict) {success in
                     
                         // Now that the item was updated in server, set back delta in local database
                         // Note we subtract instead of set to 0, to handle possible parallel requests correctly
-                        self?.dbInventoryProvider.incrementInventoryItem(item, delta: -delta, onlyDelta: true) {saved in
+                        DBProviders.inventoryItemProvider.incrementInventoryItem(item, delta: -delta, onlyDelta: true) {saved in
                             
                             if saved {
                                 //                            self?.findInventoryItem(item) {result in
@@ -315,7 +315,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     func updateInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         memProvider.updateInventoryItem(item)
         
-        dbInventoryProvider.saveInventoryItems([item]) {[weak self] updated in
+        DBProviders.inventoryItemProvider.saveInventoryItems([item]) {[weak self] updated in
             if !updated {
                 self?.memProvider.invalidate()
             }
@@ -335,7 +335,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             handler(ProviderResult(status: .Success))
         }
         
-        dbInventoryProvider.removeInventoryItem(productUuid, inventoryUuid: inventoryUuid, markForSync: true) {[weak self] removed in
+        DBProviders.inventoryItemProvider.removeInventoryItem(productUuid, inventoryUuid: inventoryUuid, markForSync: true) {[weak self] removed in
             if removed {
                 if !memUpdated {
                     handler(ProviderResult(status: .Success))
@@ -348,7 +348,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             if remote {
                 self?.remoteInventoryItemsProvider.removeInventoryItem(productUuid, inventoryUuid: inventoryUuid) {remoteResult in
                     if remoteResult.success {
-                        self?.dbInventoryProvider.clearInventoryItemTombstone(productUuid, inventoryUuid: inventoryUuid) {removeTombstoneSuccess in
+                        DBProviders.inventoryItemProvider.clearInventoryItemTombstone(productUuid, inventoryUuid: inventoryUuid) {removeTombstoneSuccess in
                             if !removeTombstoneSuccess {
                                 QL4("Couldn't delete tombstone for inventory item: \(productUuid)::\(inventoryUuid)")
                             }
