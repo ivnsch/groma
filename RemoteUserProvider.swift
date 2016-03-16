@@ -112,6 +112,7 @@ class RemoteUserProvider {
             if !valet.removeObjectForKey(KeychainKeys.token) {
                 QL4("Remove token returned false")
             }
+            QL1("Removed login token")
         } else {
             QL4("Valet not set")
         }

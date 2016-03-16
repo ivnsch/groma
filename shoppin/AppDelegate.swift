@@ -57,6 +57,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
         
         initWebsocket()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketConnectionChange:", name: WSNotificationName.Connection.rawValue, object: nil)
+        
         return initFb
     }
     
@@ -491,7 +493,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
-        checkPing()
+        checkPing() // TODO!!!! applicationWillEnterForeground seems not to be called on launch - is this intended?
     }
 
     private func checkPing() {
@@ -576,6 +578,72 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
     }
     
     // MARK: - Websocket
+    
+    func onWebsocketConnectionChange(note: NSNotification) {
+        
+        if let info = note.userInfo as? Dictionary<String, Bool> {
+            if let notification = info[WSNotificationValue] {
+                switch notification {
+                case true:
+                    if let window = window {
+                        if let connectionLabel = window.viewWithTag(ViewTags.ConnectionLabel) {
+                            connectionLabel.removeFromSuperview()
+                            
+                            // Do sync
+                            // The fact that we check first if we are showing the no-connection label to be here, means that we do sync only after
+                            // 1. The websocket connection was refused - (server was down when we started the app and tried to establish a connection, for example)
+                            // 2. The connection was interrupted - (server was stopped after having established a connection)
+                            // In these cases the time between the interruption and restoring of connection is arbitrary we have to sync possible actions of user during this time.
+                            // The normal flow of the app is that if we have an internet connection and have a (valid) login token the websocket connection should also work. So in these cases, we don't need a sync as there is a connection from the beginning (TODO check if it's possible that user can do some actions in the short time between app start and the connection is done?)
+                            // If there's no connection or no login token, there will be no attempt to establish a websocket connection. In these cases the sync is done when the connection status changes or the user logs in.
+                            // If the login token is expired, the websocket connection returns ----> ???? in this case we delete the login token just like when we call a rest service with an expired token.  Here the next sync will happen when the user logs in again. TODO: handle the not auth response of websocket: 1. delete token like in service, 2. show login screen (this is also a TODO!!!! for service)
+                            if let controller = window.rootViewController {
+                                controller.progressVisible()
+                                QL2("Websocket reconnected. Starting sync...")
+                                
+                                Providers.globalProvider.sync(controller.successHandler{invitations in
+                                    QL3("Sync complete")
+                                    // Broadcast such that controllers can e.g. reload items.
+                                    NSNotificationCenter.defaultCenter().postNotificationName(WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil, userInfo: info)
+                                })
+                                
+                            } else {
+                                QL4("Couldn't do sync, root controller: \(window.rootViewController) is nil)")
+                            }
+                        }
+                    } else {
+                        QL4("Couldn't show popup, is nil)")
+                    }
+                case false:
+                    if let window = window
+//                        ,controller = window.rootViewController
+//                        , tabBarHeight = controller.tabBarController?.tabBar.frame.height // nil
+                    {
+                        
+                        guard window.viewWithTag(ViewTags.ConnectionLabel) == nil else {return}
+                        
+                        let tabBarHeight: CGFloat = 49
+                        let labelHeight: CGFloat = 20
+                        let label = UILabel(frame: CGRectMake(0, window.frame.height - tabBarHeight - labelHeight, window.frame.width, labelHeight))
+                        label.tag = ViewTags.ConnectionLabel
+                        label.font = Fonts.smallerLight
+                        label.textAlignment = .Center
+                        label.backgroundColor = UIColor.flatRedColor()
+                        label.textColor = UIColor.whiteColor()
+                        label.text = "No server connection. Trying to connect..."
+                        window.addSubview(label)
+                        
+                    } else {
+                        QL4("Couldn't show popup, is nil)")
+                    }
+                }
+            } else {
+                QL4("No value")
+            }
+            
+        }
+    }
+
     
     func onWebsocketList(note: NSNotification) {
         

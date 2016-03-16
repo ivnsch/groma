@@ -12,4 +12,6 @@ import Foundation
 struct ViewTags {
     
     static let GlobalActivityIndicator = 123
+    static let ConnectionLabel = 124
+    
 }

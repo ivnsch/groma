@@ -17,4 +17,8 @@ extension Double {
     public static func random() -> Double {
         return Double(arc4random()) / 0xFFFFFFFF
     }
+    
+    func randomFrom0() -> Double {
+        return Double.random() * self
+    }
 }

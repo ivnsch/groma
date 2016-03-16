@@ -25,6 +25,8 @@ enum WSNotificationName: String {
     case HistoryItem = "WSHistoryItem"
     case PlanItem = "WSPlanItem"
     case SyncShared = "WSSyncShared"
+
+    case Connection = "WSConnection"
     
     // In some cases we need to receive the notification only after items have been persisted
     case InventoryItemsWithHistoryAfterSave = "WSInventoryItemsWithHistoryAfterSave"
@@ -60,30 +62,8 @@ final class WSEmptyNotification: AnyObject {
 let WSNotificationValue = "value"
 
 struct MyWebsocketDispatcher {
-
-    static func process(text: String) {
-        
-        if let data = (text as NSString).dataUsingEncoding(NSUTF8StringEncoding) {
-            do {
-                let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions())
-                if let dict =  json as? Dictionary<String, AnyObject>  {
-                    if let verb = dict["verb"] as? String, category = dict["category"] as? String, topic = dict["topic"] as? String, data = dict["message"] {
-                        QL1("Websocket: Verb: \(verb), category: \(category), topic: \(topic), data: \(data)")
-                        processCategory(category, verb: verb, topic: topic, data: data)
-                    }
-                }
-                
-            } catch let e as NSError { 
-                QL4("Error: MyWebSocket.websocketDidReceiveMessage: deserializing json: \(e)")
-            }
-            
-        } else {
-            QL4("Error: MyWebSocket.websocketDidReceiveMessage: couldn't get data from text: \(text)")
-        }
-    }
     
-    
-    private static func processCategory(category: String, verb verbStr: String, topic: String, data: AnyObject) {
+    static func processCategory(category: String, verb verbStr: String, topic: String, data: AnyObject) {
         guard let verb = WSNotificationVerb.init(rawValue: verbStr) else {QL4("Error: MyWebsocketDispatcher: Verb not supported: \(verbStr). Can't process. Category: \(category), topic: \(topic)"); return}
         
         switch category {
