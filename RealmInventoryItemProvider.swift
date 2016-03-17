@@ -40,17 +40,15 @@ class RealmInventoryItemProvider: RealmProvider {
         saveInventoryItems([item], handler: handler)
     }
     
-    // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
-    // param onlyDelta: if we want to update only quantityDelta field (opposed to updating both quantity and quantityDelta)
-    func incrementInventoryItem(item: InventoryItem, delta: Int, onlyDelta: Bool = false, handler: Bool -> ()) {
-        
+    
+    func incrementInventoryItem(itemUuid: String, delta: Int, onlyDelta: Bool = false, handler: Bool -> ()) {
         do {
             //        synced(self)  {
             
             // load
             let realm = try! Realm()
             var results = realm.objects(DBInventoryItem)
-            results = results.filter(NSPredicate(format: DBInventoryItem.createFilter(item.product, item.inventory), argumentArray: []))
+            results = results.filter(NSPredicate(format: DBInventoryItem.createFilterUuid(itemUuid), argumentArray: []))
             let objs: [DBInventoryItem] = results.toArray(nil)
             let dbInventoryItems = objs.map{InventoryItemMapper.inventoryItemWithDB($0)}
             let inventoryItemMaybe = dbInventoryItems.first
@@ -81,7 +79,7 @@ class RealmInventoryItemProvider: RealmProvider {
                 
                 
             } else {
-                print("Info: RealmInventoryProvider.incrementInventoryItem: Inventory item not found: \(item)")
+                print("Info: RealmInventoryProvider.incrementInventoryItem: Inventory item not found: \(itemUuid)")
                 handler(false)
             }
             //        }
@@ -92,6 +90,11 @@ class RealmInventoryItemProvider: RealmProvider {
         }
     }
     
+    // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
+    // param onlyDelta: if we want to update only quantityDelta field (opposed to updating both quantity and quantityDelta)
+    func incrementInventoryItem(item: InventoryItem, delta: Int, onlyDelta: Bool = false, handler: Bool -> ()) {
+        incrementInventoryItem(item.uuid, delta: delta, onlyDelta: onlyDelta, handler: handler)
+    }
     
     private func incrementInventoryItemSync(realm: Realm, dbInventoryItem: DBInventoryItem, delta: Int, onlyDelta: Bool = false) {
         

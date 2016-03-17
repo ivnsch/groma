@@ -42,6 +42,7 @@ enum WSNotificationVerb: String {
     case Delete = "delete"
     case Invite = "invite"
     case Sync = "sync"
+    case Increment = "incr"
 }
 
 final class WSNotification<T>: AnyObject {
@@ -557,6 +558,21 @@ struct MyWebsocketDispatcher {
 //            Providers.inventoryItemsProvider.updateInventoryItem(inventoryItem, remote: false) {result in
 //                postNotification(.InventoryItem, verb, inventoryItem)
 //            }
+            
+        case WSNotificationVerb.Increment:
+            if let remoteIncrement = RemoteIncrement(representation: data) {
+                let increment = InventoryItemIncrement(delta: remoteIncrement.delta, inventoryItemUuid: remoteIncrement.uuid) // TODO!!!! pass the last update timestamp also?
+                Providers.inventoryItemsProvider.incrementInventoryItem(increment, remote: false) {result in
+                    if result.success {
+                        postNotification(.InventoryItem, verb, increment)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Increment inventory item \(remoteIncrement)", result: result)
+                    }
+                }
+
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventory, data: \(data)")
+            }
             
         case WSNotificationVerb.Delete:
             if let containedItemIdentifier = RemoteContainedItemIdentifier(representation: data) {
