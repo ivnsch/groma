@@ -14,9 +14,13 @@ protocol SectionProvider {
     
     func add(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
+    func update(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    
     func update(sections: [Section], remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     func remove(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    
+    func remove(sectionUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
     // Gets suggestions both from section and category names
     func sectionSuggestionsContainingText(text: String, _ handler: ProviderResult<[String]> -> ())

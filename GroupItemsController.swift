@@ -76,12 +76,11 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         
         topBar.delegate = self
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryItems:", name: WSNotificationName.InventoryItems.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketGroupItem:", name: WSNotificationName.GroupItem.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryWithHistoryAfterSave:", name: WSNotificationName.InventoryItemsWithHistoryAfterSave.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketGroup:", name: WSNotificationName.Group.rawValue, object: nil)
     }
     
     deinit {
@@ -223,12 +222,12 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
-        if let group = group, groupItem = updatingGroupItem {
+        if let groupItem = updatingGroupItem {
             if let price = priceText.floatValue, quantity = Int(quantityText) {
                 let updatedCategory = groupItem.product.category.copy(name: category, color: categoryColor)
                 let updatedProduct = groupItem.product.copy(name: name, price: price, category: updatedCategory, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
                 let updatedGroupItem = groupItem.copy(quantity: quantity, product: updatedProduct)
-                Providers.listItemGroupsProvider.update(updatedGroupItem, group: group, remote: true, successHandler{[weak self] in
+                Providers.listItemGroupsProvider.update(updatedGroupItem, remote: true, successHandler{[weak self] in
                     self?.onGroupItemUpdated(true)
                 })
             }
@@ -276,7 +275,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func onGroupItemUpdated(tryCloseTop: Bool) {
         // we have pagination so we don't know if the item is visible atm. For now simply cause a reload and start at first page. TODO nicer solution
-        productsWithQuantityController?.clearAndLoadFirstPage()
+        reload()
 //        topAddEditListItemControllerManager?.controller?.clear()
         if tryCloseTop {
             topAddEditListItemControllerManager?.expand(false)
@@ -284,9 +283,13 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         }
     }
     
+    private func reload() {
+        productsWithQuantityController?.clearAndLoadFirstPage()
+    }
+    
     func onGroupItemAdded(tryCloseTop: Bool) {
         // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end. TODO nicer solution
-        productsWithQuantityController?.clearAndLoadFirstPage()
+        reload()
         if tryCloseTop {
             toggleTopAddController()
         }
@@ -388,7 +391,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         if let group = group {
             let groupItem = GroupItem(uuid: NSUUID().UUIDString, quantity: 1, product: product, group: group)
             
-            Providers.listItemGroupsProvider.add(groupItem, group: group, remote: true, successHandler{[weak self] result in
+            Providers.listItemGroupsProvider.add(groupItem, remote: true, successHandler{[weak self] result in
                 self?.productsWithQuantityController?.addOrIncrementUI(ProductWithQuantityGroup(groupItem: groupItem))
             })
         }
@@ -445,7 +448,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             Providers.listItemGroupsProvider.groupItems(group, successHandler{groupItems in
                 let productsWithQuantity = groupItems.map{ProductWithQuantityGroup(groupItem: $0)}
                 onSuccess(productsWithQuantity)
-                })
+            })
         } else {
             print("Error: InventoryItemsController.loadModels: no inventory")
         }
@@ -500,58 +503,16 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     // MARK: - Websocket // TODO websocket group items?
     
-//    func onWebsocketGroup(note: NSNotification) {
-//        if let info = note.userInfo as? Dictionary<String, WSNotification<Inventory>> {
-//            if let notification = info[WSNotificationValue] {
-//                switch notification.verb {
-//                    //                case .Add: // we only use 1 inventory currently
-//                case .Update:
-//                    // TODO review this carefully, if we update the inventory here but the provider saving fails currently nothing happens
-//                    // and changes the user do to this not saved inventory get lost
-//                    // Ideally in the future we trigger also notifications when saving fails, such that the controllers revert their changes (and maybe show non-modal small error notification)
-//                    // added following temporary uuid check just to help avoiding issues here (should not happen though!)
-//                    if let inventory = inventory {
-//                        if notification.obj.uuid == inventory.uuid {
-//                            self.inventory = notification.obj
-//                        } else {
-//                            print("Error: Invalid state: we should not get updates for an inventory with a different uuid than our inventory")
-//                        }
-//                    } else {
-//                        print("Info: Received a websocket inventory update before inventory is loaded. Doing nothing.")
-//                    }
-//                    
-//                    //                case .Delete: // we only use 1 inventory currently and it can't be deleted
-//                    //                    removeProductUI(notification.obj)
-//                default: print("Error: InventoryItemsViewController.onWebsocketInventory: not implemented: \(notification.verb)")
-//                    
-//                }
-//            } else {
-//                print("Error: ViewController.onWebsocketInventory: no userInfo")
-//            }
-//        }
-//    }
-//    
-    
-    
     func onWebsocketGroupItem(note: NSNotification) {
         if let info = note.userInfo as? Dictionary<String, WSNotification<GroupItem>> {
             if let notification = info[WSNotificationValue] {
-                let groupItem = notification.obj
-                
-                if let group = group {
-                    switch notification.verb {
-                    case .Add:
-                        Providers.listItemGroupsProvider.add(groupItem, group: group, remote: false, successHandler {[weak self] in
-                            self?.onGroupItemAdded(false)
-                        })
-                    case .Update:
-                        Providers.listItemGroupsProvider.update(groupItem, group: group, remote: false, successHandler{[weak self] in
-                            self?.onGroupItemUpdated(false)
-                        })
-                    default: QL4("Not handled case: \(notification.verb))")
-                    }
-                } else {
-                    QL4("No group")
+//                let groupItem = notification.obj
+                switch notification.verb {
+                case .Add:
+                    onGroupItemAdded(false)
+                case .Update:
+                    onGroupItemUpdated(false)
+                default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {
                 QL4("No value")
@@ -564,23 +525,16 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
                 
                 switch notification.verb {
                 case .Delete:
-                    
-                    Providers.listItemGroupsProvider.removeGroupItem(groupItemUuid, remote: false, successHandler{[weak self] in
-                        if let weakSelf = self {
-                            if let model = ((weakSelf.productsWithQuantityController.models as! [ProductWithQuantityGroup]).filter{$0.groupItem.uuid == groupItemUuid}).first {
-                                Providers.listItemGroupsProvider.remove(model.groupItem, remote: false, weakSelf.successHandler {
-                                    if let indexPath = self?.indexPathOfItem(model) {
-                                        self?.productsWithQuantityController.removeItemUI(indexPath)
-                                    } else {
-                                        QL2("Group item to remove is not in table view: \(groupItemUuid)")
-                                    }
-                                })
-
-                            } else {
-                                QL3("Received notification to remove group but it wasn't in table view. Uuid: \(groupItemUuid)")
-                            }
+                    if let model = ((productsWithQuantityController.models as! [ProductWithQuantityGroup]).filter{$0.groupItem.uuid == groupItemUuid}).first {
+                        if let indexPath = indexPathOfItem(model) {
+                            productsWithQuantityController.removeItemUI(indexPath)
+                        } else {
+                            QL2("Group item to remove is not in table view: \(groupItemUuid)")
                         }
-                    })
+
+                    } else {
+                        QL3("Received notification to remove group item but it wasn't in table view. Uuid: \(groupItemUuid)")
+                    }
 
                 default: QL4("Not handled case: \(notification.verb))")
                 }
@@ -593,85 +547,87 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         }
     }
     
-//    func onWebsocketGroupItems(note: NSNotification) {
-//        if let info = note.userInfo as? Dictionary<String, WSNotification<InventoryItemIncrement>> {
-//            if let notification = info[WSNotificationValue] {
-//                switch notification.verb {
-//                case WSNotificationVerb.Add:
-//                    let incr = notification.obj
-//                    Providers.inventoryItemsProvider.incrementInventoryItem(incr, remote: false, successHandler{[weak self] inventoryItem in
-//                        self?.productsWithQuantityController?.updateIncrementUI(ProductWithQuantityInv(inventoryItem: inventoryItem), delta: incr.delta)
-//                        })
-//                default: print("Error: ViewController.onWebsocketInventoryItems: Not handled: \(notification.verb)")
-//                }
-//            } else {
-//                print("Error: ViewController.onWebsocketInventoryItems: no value")
-//            }
-//        } else {
-//            print("Error: ViewController.onWebsocketInventoryItems: no userInfo")
-//        }
-//    }
-//    
-//    func onWebsocketGroupItem(note: NSNotification) {
-//        if let info = note.userInfo as? Dictionary<String, WSNotification<Any>> {
-//            
-//            if let notification = info[WSNotificationValue] {
-//                
-//                switch notification.verb {
-//                case .Update:
-//                    if let inventoryItem = notification.obj as? InventoryItem {
-//                        Providers.inventoryItemsProvider.updateInventoryItem(inventoryItem, remote: false, successHandler {[weak self] in
-//                            self?.onInventoryItemUpdated()
-//                            })
-//                    } else {
-//                        print("Error: InventoryItemsViewController.onWebsocketInventoryItem: not expected type in: \(notification.verb): \(notification.obj)")
-//                    }
-//                    
-//                    // TODO? increment is covered in onWebsocketInventoryItems, but user can e.g. change name (update of product in this case, but still triggered from inventory...)
-//                    
-//                case .Delete:
-//                    if let inventoryItemId = notification.obj as? InventoryItemId {
-//                        Providers.inventoryItemsProvider.removeInventoryItem(inventoryItemId.productUuid, inventoryUuid: inventoryItemId.inventoryUuid, remote: true, successHandler{[weak self] result in
-//                            self?.productsWithQuantityController?.remove(inventoryItemId.inventoryUuid, inventoryItemProductUuid: inventoryItemId.productUuid)
-//                            })
-//                    } else {
-//                        print("Error: InventoryItemsViewController.onWebsocketInventoryItem: not expected type in: \(notification.verb): \(notification.obj)")
-//                    }
-//                    
-//                default: print("Error: InventoryItemsViewController.onWebsocketInventoryItem: not implemented: \(notification.verb)")
-//                }
-//                
-//            } else {
-//                print("Error: InventoryItemsViewController.onWebsocketUpdateListItem: no value")
-//            }
-//            
-//        } else {
-//            print("Error: InventoryItemsViewController.onWebsocketAddListItems: no userInfo")
-//        }
-//    }
+    func onWebsocketGroup(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                
+                let groupUuid = notification.obj
+                if let group = group {
+                    
+                    if group.uuid == groupUuid {
+                        AlertPopup.show(title: "Group deleted", message: "The group \(group.name) was deleted from another device. Returning to groups.", controller: self, onDismiss: {[weak self] in
+                            self?.navigationController?.popViewControllerAnimated(true)
+                        })
+                    } else {
+                        QL1("Websocket: Group items controller received a notification to delete a group which is not the one being currently shown")
+                    }
+                } else {
+                    QL4("Websocket: Can't process delete group notification because there's no group set")
+                }
+                
+            } else {
+                QL4("No value")
+            }
+            
+        } else {
+            QL4("No userInfo")
+        }
+    }
     
     func onWebsocketProduct(note: NSNotification) {
         if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Update:
-                    // TODO!! update all listitems that reference this product
-                    print("Warn: TODO onWebsocketProduct")
-                case .Delete:
-                    // TODO!! delete all listitems that reference this product
-                    print("Warn: TODO onWebsocketProduct")
+                    reload()
                 default: break // no error msg here, since we will receive .Add but not handle it in this view controller
                 }
             } else {
-                print("Error: InventoryItemsViewController.onWebsocketProduct: no value")
+                QL4("No value")
+            }
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Delete:
+                    reload()
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
             }
         } else {
-            print("Error: InventoryItemsViewController.onWebsocketProduct: no userInfo")
+            QL4("No userInfo")
+        }
+    }
+    
+    func onWebsocketProductCategory(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Add:
+                    reload()
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Delete:
+                    reload()
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+        } else {
+            print("Error: ViewController.onWebsocketProduct: no userInfo")
         }
     }
     
     func onIncomingGlobalSyncFinished(note: NSNotification) {
         // TODO notification - note has the sender name
-        productsWithQuantityController?.clearAndLoadFirstPage()
+        reload()
     }
 }

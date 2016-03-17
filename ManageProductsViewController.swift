@@ -81,6 +81,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         })
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
     }
     
@@ -407,6 +408,32 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             }
         } else {
             QL4("Error: ManageProductsViewController.onWebsocketProduct: no userInfo")
+        }
+    }
+    
+    func onWebsocketProductCategory(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Add:
+                    clearAndLoadFirstPage()
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Delete:
+                    clearAndLoadFirstPage()
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+        } else {
+            print("Error: ViewController.onWebsocketProduct: no userInfo")
         }
     }
     

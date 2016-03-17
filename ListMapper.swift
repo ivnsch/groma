@@ -71,4 +71,16 @@ class ListMapper {
         
         return lists.sortedByOrder()
     }
+    
+    class func listWithRemote(remoteList: RemoteListWithDependencies) -> List {
+        let inventory = InventoryMapper.inventoryWithRemote(remoteList.inventory)
+        return List(
+            uuid: remoteList.list.uuid,
+            name: remoteList.list.name,
+            users: remoteList.list.users.map{SharedUserMapper.sharedUserWithRemote($0)},
+            bgColor: remoteList.list.color,
+            order: remoteList.list.order,
+            inventory: inventory
+        )
+    }
 }

@@ -288,6 +288,10 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
     
+    func update(product: Product) -> ListItem {
+        return copy(product: product, note: nil)
+    }
+    
     func switchStatusQuantity(status: ListItemStatus, targetStatus: ListItemStatus) -> ListItem {
         
         func updateFieldQuantity(fieldStatus: ListItemStatus, status: ListItemStatus, targetStatus: ListItemStatus) -> Int {

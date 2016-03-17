@@ -220,8 +220,8 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
     
     // only db no memory cache or remote, this is currently used only by websocket update (when receive websocket increment, fetch inventory item in order to increment it locally)
-    private func findInventoryItem(productUuid: String, inventoryUuid: String, _ handler: ProviderResult<InventoryItem> -> ()) {
-        DBProviders.inventoryItemProvider.findInventoryItem(productUuid, inventoryUuid: inventoryUuid) {inventoryItemMaybe in
+    private func findInventoryItem(uuid: String, _ handler: ProviderResult<InventoryItem> -> ()) {
+        DBProviders.inventoryItemProvider.findInventoryItem(uuid) {inventoryItemMaybe in
             if let inventoryItem = inventoryItemMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: inventoryItem))
             } else {
@@ -231,7 +231,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
     
     func incrementInventoryItem(item: InventoryItemIncrement, remote: Bool, _ handler: ProviderResult<InventoryItem> -> ()) {
-        findInventoryItem(item.productUuid, inventoryUuid: item.inventoryUuid) {[weak self] result in
+        findInventoryItem(item.inventoryItemUuid) {[weak self] result in
             if let inventoryItem = result.sucessResult {
                 
                 self?.incrementInventoryItem(inventoryItem, delta: item.delta) {result in
@@ -328,14 +328,18 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    func removeInventoryItem(productUuid: String, inventoryUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func removeInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        removeInventoryItem(item.uuid, inventoryUuid: item.inventory.uuid, remote: remote, handler)
+    }
+    
+    func removeInventoryItem(uuid: String, inventoryUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         
-        let memUpdated = memProvider.removeInventoryItem(productUuid, productUuid: inventoryUuid)
+        let memUpdated = memProvider.removeInventoryItem(uuid, inventoryUuid: inventoryUuid)
         if memUpdated {
             handler(ProviderResult(status: .Success))
         }
         
-        DBProviders.inventoryItemProvider.removeInventoryItem(productUuid, inventoryUuid: inventoryUuid, markForSync: true) {[weak self] removed in
+        DBProviders.inventoryItemProvider.removeInventoryItem(uuid, inventoryUuid: inventoryUuid, markForSync: true) {[weak self] removed in
             if removed {
                 if !memUpdated {
                     handler(ProviderResult(status: .Success))
@@ -346,16 +350,16 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             }
             
             if remote {
-                self?.remoteInventoryItemsProvider.removeInventoryItem(productUuid, inventoryUuid: inventoryUuid) {remoteResult in
+                self?.remoteInventoryItemsProvider.removeInventoryItem(uuid) {remoteResult in
                     if remoteResult.success {
-                        DBProviders.inventoryItemProvider.clearInventoryItemTombstone(productUuid, inventoryUuid: inventoryUuid) {removeTombstoneSuccess in
+                        DBProviders.inventoryItemProvider.clearInventoryItemTombstone(uuid) {removeTombstoneSuccess in
                             if !removeTombstoneSuccess {
-                                QL4("Couldn't delete tombstone for inventory item: \(productUuid)::\(inventoryUuid)")
+                                QL4("Couldn't delete tombstone for inventory item: \(uuid)::\(inventoryUuid)")
                             }
                         }
                     } else {
                         DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-                            print("Error removing inventory item in server: productUuid: \(productUuid), inventoryUuid: \(inventoryUuid), result: \(remoteResult)")
+                            print("Error removing inventory item in uuid: productUuid: \(uuid), inventoryUuid: \(inventoryUuid), result: \(remoteResult)")
                             // if there's a not connection related server error, invalidate cache
                             self?.memProvider.invalidate()
                             handler(remoteResult)
@@ -366,10 +370,6 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
 
-    func removeInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        removeInventoryItem(item.product.uuid, inventoryUuid: item.inventory.uuid, remote: remote, handler)
-    }
-    
     func invalidateMemCache() {
         memProvider.invalidate()
     }

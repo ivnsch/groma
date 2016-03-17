@@ -99,3 +99,6 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
 func ==(lhs: Product, rhs: Product) -> Bool {
     return lhs.uuid == rhs.uuid
 }
+
+// convenience (redundant) holder to avoid having to iterate through listitems to find unique categories
+typealias ProductsWithDependencies = (products: [Product], categories: [ProductCategory])

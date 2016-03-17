@@ -41,14 +41,18 @@ class SectionProviderImpl: SectionProvider {
         }
     }
     
-    func remove(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func remove(sectionUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         Providers.listItemsProvider.invalidateMemCache()
-        DBProviders.sectionProvider.remove(section, markForSync: true) {removed in
+        DBProviders.sectionProvider.remove(sectionUuid, markForSync: true) {removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
             if removed && remote {
                 // TODO!! server
             }
         }
+    }
+    
+    func remove(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        remove(section.uuid, remote: remote, handler)
     }
     
     func update(sections: [Section], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
@@ -59,6 +63,10 @@ class SectionProviderImpl: SectionProvider {
                 // TODO!! server
             }
         }
+    }
+    
+    func update(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        update([section], remote: remote, handler)
     }
     
     func sectionSuggestionsContainingText(text: String, _ handler: ProviderResult<[String]> -> ()) {

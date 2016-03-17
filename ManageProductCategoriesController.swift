@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftValidator
+import QorumLogs
 
 class ManageProductCategoriesController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, EditProductCategoryControllerDelegate, ListTopBarViewDelegate, ExpandableTopViewControllerDelegate {
     
@@ -61,8 +62,8 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         
         initNavBar([.Edit])
         
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
     }
     
     deinit {
@@ -360,26 +361,32 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
     }
     
     // MARK: - Websocket
-    // TODO
-//    
-//    func onWebsocketProduct(note: NSNotification) {
-//        if let info = note.userInfo as? Dictionary<String, WSNotification<Product>> {
-//            if let notification = info[WSNotificationValue] {
-//                switch notification.verb {
-//                case .Add:
-//                    addProductUI(notification.obj)
-//                case .Update:
-//                    updateProductUI(notification.obj)
-//                case .Delete:
-//                    removeProductUI(notification.obj)
-//                }
-//            } else {
-//                print("Error: ManageProductsViewController.onWebsocketProduct: no value")
-//            }
-//        } else {
-//            print("Error: ManageProductsViewController.onWebsocketProduct: no userInfo")
-//        }
-//    }
+    
+    func onWebsocketProductCategory(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Add:
+                    clearAndLoadFirstPage(true)
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Delete:
+                    clearAndLoadFirstPage(true)
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+        } else {
+            print("Error: ViewController.onWebsocketProduct: no userInfo")
+        }
+    }
     
     func onIncomingGlobalSyncFinished(note: NSNotification) {
         // TODO notification - note has the sender name

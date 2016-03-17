@@ -18,7 +18,7 @@ class AlertPopup {
         return alert
     }
     
-    static func show(title title: String? = nil, message: String, controller: UIViewController, onDismiss: VoidFunction? = nil, onCancel: VoidFunction? = nil) {
+    static func show(title title: String? = nil, message: String, controller: UIViewController, onDismiss: VoidFunction? = nil) {
         let alert = create(title: title, message: message, onDismiss: onDismiss)
         controller.presentViewController(alert, animated: true, completion: nil)
     }

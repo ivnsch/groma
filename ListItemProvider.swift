@@ -12,6 +12,8 @@ protocol ListItemProvider {
   
     func remove(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
+    func removeListItem(listItemUuid: String, listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    
     func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     func add(listItem: ListItem, remote: Bool, _ handler: ProviderResult<ListItem> -> ())
@@ -37,6 +39,9 @@ protocol ListItemProvider {
     func update(listItems: [ListItem], remote: Bool, _ handler: ProviderResult<Any> -> ())
     
     func listItems(list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[ListItem]> -> ())
+
+    // This is currently used only to retrieve possible product's list item on receiving a websocket notification with a product update
+    func listItem(product: Product, list: List, _ handler: ProviderResult<ListItem?> -> ())
     
     func increment(listItem: ListItem, delta: Int, _ handler: ProviderResult<Any> -> ())
 

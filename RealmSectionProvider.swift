@@ -42,13 +42,17 @@ class RealmSectionProvider: RealmProvider {
     }
     
     func remove(section: Section, markForSync: Bool, handler: Bool -> ()) {
+        remove(section.uuid, markForSync: markForSync, handler: handler)
+    }
+    
+    func remove(sectionUuid: String, markForSync: Bool, handler: Bool -> ()) {
         
         let additionalActions: (Realm -> Void)? = markForSync ? {realm in
-            let toRemove = DBSectionToRemove(section)
+            let toRemove = DBSectionToRemove(uuid: sectionUuid, lastServerUpdate: NSDate()) // TODO!!!! review lastServerUpdate - what to set here?
             realm.add(toRemove, update: true)
         } : nil
         
-        self.remove(DBSection.createFilter(section.uuid), handler: handler, objType: DBSection.self, additionalActions: additionalActions)
+        self.remove(DBSection.createFilter(sectionUuid), handler: handler, objType: DBSection.self, additionalActions: additionalActions)
     }
     
     func update(sections: [Section], handler: Bool -> ()) {

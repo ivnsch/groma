@@ -189,13 +189,13 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func add(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func add(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         DBProviders.groupItemProvider.addOrIncrement(item) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
                 if saved {
-                    self?.remoteGroupsProvider.addGroupItem(item, group: group) {remoteResult in
+                    self?.remoteGroupsProvider.addGroupItem(item) {remoteResult in
                         if let remoteListItems = remoteResult.successResult {
                             DBProviders.groupItemProvider.updateLastSyncTimeStamp(remoteListItems) {success in
                             }
@@ -239,7 +239,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         
         func onHasProduct(product: Product) {
             let groupItem = GroupItem(uuid: NSUUID().UUIDString, quantity: 1, product: product, group: group)
-            add(groupItem, group: group, remote: remote) {result in
+            add(groupItem, remote: remote) {result in
                 if result.success {
                     handler(ProviderResult(status: .Success, sucessResult: groupItem))
                 } else {
@@ -273,13 +273,13 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func update(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func update(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         DBProviders.groupItemProvider.update(item) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
                 if saved {
-                    self?.remoteGroupsProvider.updateGroupItem(item, group: group) {remoteResult in
+                    self?.remoteGroupsProvider.updateGroupItem(item) {remoteResult in
                         if let remoteListItems = remoteResult.successResult {
                             DBProviders.groupItemProvider.updateLastSyncTimeStamp(remoteListItems) {success in
                             }

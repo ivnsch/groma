@@ -53,15 +53,15 @@ class RemoteGroupsProvider: RemoteProvider {
         }
     }
     
-    func addGroupItem(groupItem: GroupItem, group: ListItemGroup, handler: RemoteResult<RemoteGroupItemsWithDependencies> -> ()) {
-        let params = toRequestParams(groupItem, group: group)
+    func addGroupItem(groupItem: GroupItem, handler: RemoteResult<RemoteGroupItemsWithDependencies> -> ()) {
+        let params = toRequestParams(groupItem)
         RemoteProvider.authenticatedRequest(.POST, Urls.groupItem, params) {result in
             handler(result)
         }
     }
     
-    func updateGroupItem(groupItem: GroupItem, group: ListItemGroup, handler: RemoteResult<RemoteGroupItemsWithDependencies> -> ()) {
-        let params = toRequestParams(groupItem, group: group)
+    func updateGroupItem(groupItem: GroupItem, handler: RemoteResult<RemoteGroupItemsWithDependencies> -> ()) {
+        let params = toRequestParams(groupItem)
         RemoteProvider.authenticatedRequest(.PUT, Urls.groupItem, params) {result in
             handler(result)
         }
@@ -98,11 +98,11 @@ class RemoteGroupsProvider: RemoteProvider {
         return dict
     }
     
-    func toRequestParams(groupItem: GroupItem, group: ListItemGroup) -> [String: AnyObject] {
+    func toRequestParams(groupItem: GroupItem) -> [String: AnyObject] {
         
         let productDict = RemoteListItemProvider().toRequestParams(groupItem.product)
         
-        let groupDict = toRequestParams(group)
+        let groupDict = toRequestParams(groupItem.group)
         
         let dict: [String: AnyObject] = [
             "uuid": groupItem.uuid,

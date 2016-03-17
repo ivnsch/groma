@@ -293,7 +293,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
                     listItemsTableViewController.updateListItem(listItem, status: .Done, notifyRemote: false)
                     
                 case .Delete:
-                    listItemsTableViewController.removeListItem(listItem, animation: .Bottom)
+                    listItemsTableViewController.removeListItem(listItem)
                     
                 default: QL4("Not handled verb: \(notification.verb)")
                 }

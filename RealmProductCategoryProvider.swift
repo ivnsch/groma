@@ -35,11 +35,15 @@ class RealmProductCategoryProvider: RealmProvider {
     }
     
     func removeCategory(category: ProductCategory, markForSync: Bool, _ handler: Bool -> Void) {
+        removeCategory(category.uuid, markForSync: markForSync, handler)
+    }
+    
+    func removeCategory(categoryUuid: String, markForSync: Bool, _ handler: Bool -> Void) {
         background({[weak self] in
             do {
                 let realm = try Realm()
                 try realm.write {
-                    let dbProducts: Results<DBProduct> = realm.objects(DBProduct).filter(DBProduct.createFilterCategory(category.uuid))
+                    let dbProducts: Results<DBProduct> = realm.objects(DBProduct).filter(DBProduct.createFilterCategory(categoryUuid))
                     // delete first dependencies of products (realm requires this order, otherwise db is inconsistent. There's no cascade delete yet also).
                     for dbProduct in dbProducts {
                         DBProviders.productProvider.deleteProductDependenciesSync(realm, productUuid: dbProduct.uuid, markForSync: markForSync)
@@ -53,7 +57,7 @@ class RealmProductCategoryProvider: RealmProvider {
                     }
                     
                     // delete cateogories
-                    let dbCategories = realm.objects(DBProductCategory).filter(DBProductCategory.createFilter(category.uuid))
+                    let dbCategories = realm.objects(DBProductCategory).filter(DBProductCategory.createFilter(categoryUuid))
                     realm.delete(dbCategories)
                     if markForSync {
                         let toRemoveCategories = dbCategories.map{DBRemoveProductCategory($0)}
@@ -66,8 +70,8 @@ class RealmProductCategoryProvider: RealmProvider {
                 QL4("Realm error: \(error)")
                 return false
             }
-        }) {(result: Bool) in
-            handler(result)
+            }) {(result: Bool) in
+                handler(result)
         }
     }
     

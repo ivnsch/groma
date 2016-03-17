@@ -182,13 +182,9 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                 let list = notification.obj
                 switch notification.verb {
                 case .Add:
-                    Providers.listProvider.add(list, remote: false, successHandler {[weak self] savedList in
-                        self?.onListAdded(savedList)
-                    })
+                    onListAdded(list)
                 case .Update:
-                    Providers.listProvider.update(list, remote: false, successHandler{[weak self] in
-                        self?.onListUpdated(list)
-                    })
+                    onListUpdated(list)
                 default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {
@@ -200,15 +196,11 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                 let listUuid = notification.obj
                 switch notification.verb {
                 case .Delete:
-                    Providers.listProvider.remove(listUuid, remote: false, successHandler{[weak self] in
-                        if let weakSelf = self {
-                            if let model = ((weakSelf.models as! [ExpandableTableViewListModel]).filter{$0.list.uuid == listUuid}).first {
-                                self?.removeModel(model)
-                            } else {
-                                QL3("Received notification to remove list but it wasn't in table view. Uuid: \(listUuid)")
-                            }
-                        }
-                    })
+                    if let model = ((models as! [ExpandableTableViewListModel]).filter{$0.list.uuid == listUuid}).first {
+                        removeModel(model)
+                    } else {
+                        QL3("Received notification to remove list but it wasn't in table view. Uuid: \(listUuid)")
+                    }
                 default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {

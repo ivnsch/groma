@@ -49,8 +49,8 @@ class RemoteListItemProvider {
         }
     }
     
-    func remove(listItem: ListItem, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.listItem + "/\(listItem.uuid)", toRequestParams(listItem)) {result in
+    func removeListItem(listItemUuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.listItem + "/\(listItemUuid)") {result in
             handler(result)
         }
     }

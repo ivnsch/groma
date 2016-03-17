@@ -162,6 +162,24 @@ class MemListItemProvider {
             return false
         }
     }
+
+    func removeListItem(listUuid: String, uuid: String) -> Bool {
+        guard enabled else {return false}
+        guard listItems != nil else {return false}
+        
+        if let list = (self.listItems?.keys.filter{$0.uuid == listUuid})?.first {
+            // TODO more elegant way to write this?
+            if self.listItems![list] != nil {
+                self.listItems![list]!.removeWithUuid(uuid)
+                return true
+            } else {
+                return false
+            }
+        } else {
+            QL3("Didn't find list of list item to be removed: listUuid: \(listUuid), list item uuid: \(uuid)")
+            return false
+        }
+    }
     
     func updateListItem(listItem: ListItem) -> Bool {
         guard enabled else {return false}

@@ -41,6 +41,8 @@ protocol ProductProvider {
 
     func delete(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
+    func delete(productUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    
     func incrementFav(product: Product, _ handler: ProviderResult<Any> -> Void)
 
     func productSuggestions(handler: ProviderResult<[Suggestion]> -> ())

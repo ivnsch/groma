@@ -304,21 +304,30 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
     
     // TODO return bool
-    func removeListItem(listItem:ListItem, animation:UITableViewRowAnimation) {
-        
+    func removeListItem(listItem: ListItem, animation: UITableViewRowAnimation = .Bottom) {
         if let indexPath = self.getIndexPath(listItem) {
             self.removeListItem(listItem, indexPath: indexPath, animation: animation)
         }
     }
     
+    func removeListItem(uuid: String, animation: UITableViewRowAnimation = .Bottom) {
+        if let indexPath = self.getIndexPath(uuid) {
+            self.removeListItem(uuid, indexPath: indexPath, animation: animation)
+        }
+    }
+
+    private func removeListItem(listItem: ListItem, indexPath: NSIndexPath, animation: UITableViewRowAnimation = .Bottom) {
+        removeListItem(listItem.uuid, animation: animation)
+    }
+    
     // TODO return bool
-    private func removeListItem(listItem:ListItem, indexPath:NSIndexPath, animation:UITableViewRowAnimation) {
+    private func removeListItem(listItemUuid: String, indexPath: NSIndexPath, animation: UITableViewRowAnimation = .Bottom) {
         // TODO review this, we store items reduntantely, so find index in one list, remove, use indexPath for the other list....
         // also is it thread safe to pass indexpath like this
         // paramater indexPath and listitem?
         var indexMaybe:Int?
         for i in 0...self.items.count {
-            if self.items[i] == listItem {
+            if self.items[i].uuid == listItemUuid {
                 indexMaybe = i
                 break
             }
@@ -336,16 +345,53 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             
             // remove section if no items
             if tableViewSection.tableViewListItems.isEmpty {
-                // remove table view section
-                self.tableViewSections.removeAtIndex(indexPath.section)
-                // remove model section TODO better way
-                let sectionIndexMaybe: Int? = getIndex(tableViewSection.section)
-                if let sectionIndex = sectionIndexMaybe {
-                    self.sections.removeAtIndex(sectionIndex)
-                    self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: animation)
-                }
+                removeSection(tableViewSection.section.uuid, indexPath: indexPath, animation: animation)
             }
             self.tableView.endUpdates()
+        }
+    }
+    
+    // TODO we are iterating multiple times through listitems, once to find the product and in removeListItem...
+    func removeListItemReferencingProduct(productUuid: String) {
+        if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.product.uuid == productUuid}) {
+            removeListItem(tableViewListItem.listItem)
+        } else {
+            QL1("removeListItemReferencingProduct list item is not in list items table view. Product uuid: \(productUuid)")
+        }
+    }
+
+    func removeListItemsReferencingCategory(categoryUuid: String) {
+        for (tableViewListItem, _) in findListItemsWithIndexPath({$0.product.category.uuid == categoryUuid}) {
+            removeListItem(tableViewListItem.listItem)
+        }
+    }
+    
+    // Used by websocket, when receiving a notification of an updated product
+    func updateProduct(product: Product, status: ListItemStatus) {
+        if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.product.uuid == product.uuid}) {
+            let updated = tableViewListItem.listItem.update(product)
+            updateListItem(updated, status: status, notifyRemote: false)
+        } else {
+            QL1("updateProduct list item is not in list items table view. Product uuid: \(product.uuid)")
+        }
+    }
+    
+    // TODO why do we need indexPath and have to look for the index in the sections array using uuid, shouldn't both have the same index?
+    private func removeSection(uuid: String, indexPath: NSIndexPath, animation: UITableViewRowAnimation = .Bottom) {
+        // remove table view section
+        self.tableViewSections.removeAtIndex(indexPath.section)
+        // remove model section TODO better way
+        let sectionIndexMaybe: Int? = getSectionIndex(uuid)
+        if let sectionIndex = sectionIndexMaybe {
+            self.sections.removeAtIndex(sectionIndex)
+            // remove from table view
+            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: animation)
+        }
+    }
+    
+    func removeSection(uuid: String) {
+        if let indexPath = getSectionIndexPath(uuid) {
+            removeSection(uuid, indexPath: indexPath)
         }
     }
     
@@ -358,27 +404,62 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         clearPendingSwipeItemIfAny(true)
     }
     
-    func getIndexPath(listItem: ListItem) -> NSIndexPath? {
+    func getIndexPath(listItemUuid: String) -> NSIndexPath? {
         for (sectionIndex, s) in self.tableViewSections.enumerate() {
             for (listItemIndex, l) in s.tableViewListItems.enumerate() {
-                if (listItem.same(l.listItem)) { // find by only uuid
+                if (listItemUuid == l.listItem.uuid) {
                     let indexPath = NSIndexPath(forRow: listItemIndex, inSection: sectionIndex)
                     return indexPath
                 }
             }
         }
-        return nil
+        return findListItemsWithIndexPath{$0.uuid == listItemUuid}.first.map{$0.indexPath}
+    }
+    
+    private typealias TableViewListItemWithIndexPath = (item: TableViewListItem, indexPath: NSIndexPath)
+
+    private func findFirstListItemWithIndexPath(filter: ListItem -> Bool) -> TableViewListItemWithIndexPath? {
+        return findListItemsWithIndexPath(filter).first
+    }
+    
+    private func findListItemsWithIndexPath(filter: ListItem -> Bool) -> [TableViewListItemWithIndexPath] {
+        var arr: [TableViewListItemWithIndexPath] = []
+        for (sectionIndex, s) in self.tableViewSections.enumerate() {
+            for (listItemIndex, l) in s.tableViewListItems.enumerate() {
+                if (filter(l.listItem)) {
+                    let indexPath = NSIndexPath(forRow: listItemIndex, inSection: sectionIndex)
+                    arr.append((l, indexPath))
+                }
+            }
+        }
+        return arr
+    }
+    
+    func getIndexPath(listItem: ListItem) -> NSIndexPath? {
+        return getIndexPath(listItem.uuid)
     }
     
     func getIndex(section: Section) -> Int? {
+        return getSectionIndex(section.uuid)
+    }
+    
+    func getSectionIndex(uuid: String) -> Int? {
         for (index, s) in self.sections.enumerate() {
-            if section.same(s) {
+            if uuid == s.uuid {
                 return index
             }
         }
         return nil
     }
     
+    func getSectionIndexPath(uuid: String) -> NSIndexPath? {
+        for (sectionIndex, s) in self.tableViewSections.enumerate() {
+            if (uuid == s.section.uuid) {
+                return NSIndexPath(forRow: 0, inSection: sectionIndex)
+            }
+        }
+        return nil
+    }
     
     /**
     Submits item marked as "undo" if there is any

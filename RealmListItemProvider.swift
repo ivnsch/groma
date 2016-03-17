@@ -144,6 +144,11 @@ class RealmListItemProvider: RealmProvider {
         self.load(mapper, filter: DBListItem.createFilterList(list.uuid), handler: handler)
     }
     
+    func listItem(list: List, product: Product, handler: ListItem? -> Void) {
+        let mapper = {ListItemMapper.listItemWithDB($0)}
+        self.loadFirst(mapper, filter: DBListItem.createFilter(list, product: product), handler: handler)
+    }
+    
     // hm...
     func loadAllListItems(handler: [ListItem] -> ()) {
         let mapper = {ListItemMapper.listItemWithDB($0)}
@@ -151,13 +156,18 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func remove(listItem: ListItem, markForSync: Bool, handler: Bool -> ()) {
+        remove(listItem.uuid, listUuid: listItem.list.uuid, markForSync: markForSync, handler: handler)
+    }
+    
+    func remove(listItemUuid: String, listUuid: String, markForSync: Bool, handler: Bool -> ()) {
         
         let additionalActions: (Realm -> Void)? = markForSync ? {realm in
-            let toRemoveListItem = DBRemoveListItem(listItem)
+            // TODO!!!! lastServerUpdate? what should it be? do we need this here?
+            let toRemoveListItem = DBRemoveListItem(uuid: listItemUuid, listUuid: listUuid, lastServerUpdate: NSDate())
             realm.add(toRemoveListItem, update: true)
-        } : nil
-
-        self.remove(DBListItem.createFilter(listItem.uuid), handler: handler, objType: DBListItem.self, additionalActions: additionalActions)
+            } : nil
+        
+        self.remove(DBListItem.createFilter(listItemUuid), handler: handler, objType: DBListItem.self, additionalActions: additionalActions)
     }
     
     // TODO remove this method? Or if it's still needed, pass only list items, all the dependencies are in list items already

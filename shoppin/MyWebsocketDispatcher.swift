@@ -15,6 +15,7 @@ enum WSNotificationName: String {
     case ListItem = "WSListItem"
     case List = "WSList"
     case Product = "WSProduct"
+    case ProductCategory = "WSProductCategory"
     case Group = "WSGroup"
     case GroupItem = "WSGroupItem"
     case Section = "WSSection"
@@ -69,12 +70,12 @@ struct MyWebsocketDispatcher {
         switch category {
             case "product":
                 processProduct(verb, topic, data)
+            case "category":
+                processProduct(verb, topic, data)
             case "group":
                 processGroup(verb, topic, data)
             case "groupItem":
                 processGroupItem(verb, topic, data)
-            case "planItem":
-                processPlanItem(verb, topic, data)
             case "list":
                 processList(verb, topic, data)
             case "listItem":
@@ -93,9 +94,30 @@ struct MyWebsocketDispatcher {
                 processHistoryItem(verb, topic, data)
             case "shared":
                 processShared(verb, topic, data)
+//            case "planItem":
+//                processPlanItem(verb, topic, data)
         default:
             QL4("MyWebsocketDispatcher.processCategory not handled: \(category)")
         }
+    }
+    
+    // Report errors when storing objects that came via websocket
+    private static func reportWebsocketStoringError<T>(msg: String, result: ProviderResult<T>) {
+        let report = ErrorReport(title: "Websocket storing", body: "msg: \(msg), result: \(result)")
+        Providers.errorProvider.reportError(report)
+        QL4("Websocket: Couldn't store: \(msg), result: \(result)")
+    }
+
+    private static func reportWebsocketParsingError(msg: String) {
+        let report = ErrorReport(title: "Websocket parsing", body: "msg: \(msg)")
+        Providers.errorProvider.reportError(report)
+        QL4("Websocket: Couldn't parse: \(msg)")
+    }
+    
+    private static func reportWebsocketGeneralError(msg: String) {
+        let report = ErrorReport(title: "Websocket", body: "msg: \(msg)")
+        Providers.errorProvider.reportError(report)
+        QL4("Websocket General error: \(msg)")
     }
     
     static func postNotification<T: Any>(notificationName: WSNotificationName, _ verb: WSNotificationVerb, _ obj: T) {
@@ -110,44 +132,153 @@ struct MyWebsocketDispatcher {
         NSNotificationCenter.defaultCenter().postNotificationName(notificationName.rawValue, object: nil, userInfo: ["value": WSEmptyNotification(verb)])
     }
     
+    
+    //this is called on batch list item update, which is used when reordering list items
     private static func processListItems(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
             case WSNotificationVerb.Update:
-            let dataArr = data as! [AnyObject]
-            let listItems = ListItemParser.parseArray(dataArr)
-            postNotification(.ListItems, verb, listItems)
-            
+                if let remoteListItems = RemoteListItems(representation: data) {
+                    let listItems = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: nil)
+                    // TODO!!!! review that the dependencies of the items are my own ones not the ones of the user sending. Also check the possible optimised service only for order.
+                    Providers.listItemsProvider.update(listItems.listItems, remote: false) {result in
+                        postNotification(.ListItems, verb, listItems)
+                    }
+                }
+
         default:
-            QL4("MyWebsocketDispatcher.processListItems not handled: \(verb)")
+            QL4("Not handled verb: \(verb)")
         }
     }
     
     private static func processProduct(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
-            case WSNotificationVerb.Add:
-                let product = ListItemParser.parseProduct(data)
-                postNotification(WSNotificationName.Product, verb, product)
-            case WSNotificationVerb.Update:
-                let product = ListItemParser.parseProduct(data)
-                postNotification(.Product, verb, product)
-            case WSNotificationVerb.Delete:
-                let product = ListItemParser.parseProduct(data)
-                postNotification(.Product, verb, product)
+            case .Add:
+                if let remoteProducts = RemoteProductsWithDependencies(representation: data) {
+                    if let product = ProductMapper.productsWithRemote(remoteProducts).products.first {
+                        Providers.productProvider.add(product, remote: false) {result in
+                            if result.success {
+                                postNotification(.Product, verb, product)
+                            } else {
+                                MyWebsocketDispatcher.reportWebsocketStoringError("Add \(product)", result: result)
+                            }
+                        }
+                    } else {
+                        reportWebsocketGeneralError("Add product didn't return a product")
+                    }
+                } else {
+                    MyWebsocketDispatcher.reportWebsocketParsingError("Add product, data: \(data)")
+                }
+
+            case .Update:
+                if let remoteProducts = RemoteProductsWithDependencies(representation: data) {
+                    if let product = ProductMapper.productsWithRemote(remoteProducts).products.first {
+                        Providers.productProvider.update(product, remote: false) {result in
+                            if result.success {
+                                postNotification(.Product, verb, product)
+                            } else {
+                                MyWebsocketDispatcher.reportWebsocketStoringError("Update \(product)", result: result)
+                            }
+                        }
+                    } else {
+                        reportWebsocketGeneralError("Update product didn't return a product")
+                    }
+                } else {
+                    MyWebsocketDispatcher.reportWebsocketParsingError("Update product, data: \(data)")
+                }
+                
+            case .Delete:
+                if let productUuid = data as? String {
+                    Providers.productProvider.delete(productUuid, remote: false) {result in
+                        if result.success {
+                            postNotification(.Product, verb, productUuid)
+                        } else {
+                            MyWebsocketDispatcher.reportWebsocketStoringError("Delete \(productUuid)", result: result)
+                        }
+                    }
+                } else {
+                    MyWebsocketDispatcher.reportWebsocketParsingError("Delete product, data: \(data)")
+                }
+
             default: QL4("Not handled verb: \(verb)")
+        }
+    }
+    
+    private static func processProductCategory(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+        switch verb {
+        case .Update:
+            if let remoteCategory = RemoteProductCategory(representation: data) {
+                let category = ProductCategoryMapper.categoryWithRemote(remoteCategory)
+                Providers.productCategoryProvider.update(category, remote: false) {result in
+                    if result.success {
+                        postNotification(.ProductCategory, verb, category)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Update \(category)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update category, data: \(data)")
+            }
+            
+        case .Delete:
+            if let categoryUuid = data as? String {
+                Providers.productCategoryProvider.remove(categoryUuid, remote: false) {result in
+                    if result.success {
+                        postNotification(.ProductCategory, verb, categoryUuid)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete \(categoryUuid)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Delete category, data: \(data)")
+            }
+
+        default: QL4("Not handled verb: \(verb)")
         }
     }
     
     private static func processGroup(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
-            let group = WSGroupParser.parseGroup(data) // TODO review do we need group items here? if yes are they sent?
-            postNotification(.Group, verb, group)
+            if let remoteGroup = RemoteGroup(representation: data) {
+                let group = ListItemGroupMapper.listItemGroupWithRemote(remoteGroup)
+                Providers.listItemGroupsProvider.add(group, remote: false) {result in
+                    if result.success {
+                        postNotification(.Group, verb, group)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Add \(group)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Add Group, data: \(data)")
+            }
+
         case WSNotificationVerb.Update:
-            let group = WSGroupParser.parseGroup(data)
-            postNotification(.Group, verb, group)
+            if let remoteGroup = RemoteGroup(representation: data) {
+                let group = ListItemGroupMapper.listItemGroupWithRemote(remoteGroup)
+                Providers.listItemGroupsProvider.update(group, remote: false) {result in
+                    if result.success {
+                        postNotification(.Group, verb, group)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Update \(group)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update Group, data: \(data)")
+            }
+            
         case WSNotificationVerb.Delete:
-            let uuid = data as! String
-            postNotification(.Group, verb, uuid)
+            if let groupUuid = data as? String {
+                Providers.listItemGroupsProvider.removeGroup(groupUuid, remote: false) {result in
+                    if result.success {
+                        postNotification(.Group, verb, groupUuid)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete \(groupUuid)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Delete Group, data: \(data)")
+            }
+
         default: QL4("Not handled verb: \(verb)")
         }
     }
@@ -156,44 +287,106 @@ struct MyWebsocketDispatcher {
         switch verb {
 //        // for now not implemented as we don't add single group items, user always has to confirm on the group. Also, we don't have group here which is required by the provider
         case WSNotificationVerb.Add:
-            let groupItemWithGroup = WSGroupParser.parseGroupItem(data)
-            postNotification(.GroupItem, verb, groupItemWithGroup)
+            if let remoteGroupItems = RemoteGroupItemsWithDependencies(representation: data) {
+                if let groupItem = GroupItemMapper.groupItemsWithRemote(remoteGroupItems).groupItems.first {
+                    Providers.listItemGroupsProvider.add(groupItem, remote: false) {result in
+                        if result.success {
+                            postNotification(.GroupItem, verb, groupItem)
+                        } else {
+                            MyWebsocketDispatcher.reportWebsocketStoringError("Add \(groupItem)", result: result)
+                        }
+                    }
+                } else {
+                    reportWebsocketGeneralError("Add group item didn't return a group item")
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Add group item, data: \(data)")
+            }
+
+            
         case WSNotificationVerb.Update:
-            let groupItemWithGroup = WSGroupParser.parseGroupItem(data)
-            postNotification(.GroupItem, verb, groupItemWithGroup)
+            if let remoteGroupItems = RemoteGroupItemsWithDependencies(representation: data) {
+                if let groupItem = GroupItemMapper.groupItemsWithRemote(remoteGroupItems).groupItems.first {
+                    Providers.listItemGroupsProvider.update(groupItem, remote: false) {result in
+                        if result.success {
+                            postNotification(.GroupItem, verb, groupItem)
+                        } else {
+                            MyWebsocketDispatcher.reportWebsocketStoringError("Update \(groupItem)", result: result)
+                        }
+                    }
+                } else {
+                    reportWebsocketGeneralError("Add group item didn't return a group item")
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Add group item, data: \(data)")
+            }
+            
         case WSNotificationVerb.Delete:
-            let uuid = data as! String
-            postNotification(.GroupItem, verb, uuid)
+            if let groupItemUuid = data as? String {
+                Providers.listItemGroupsProvider.removeGroupItem(groupItemUuid, remote: false) {result in
+                    if result.success {
+                        postNotification(.GroupItem, verb, groupItemUuid)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete \(groupItemUuid)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Delete Group item, data: \(data)")
+            }
+            
         default: QL4("Not handled verb: \(verb)")
         }
     }
-    
-    private static func processPlanItem(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
-        switch verb {
-        case WSNotificationVerb.Add:
-            let items = WSPlanItemParser.parsePlanItem(data) // TODO review do we need group items here? if yes are they sent?
-            postNotification(.PlanItem, verb, items)
-        case WSNotificationVerb.Update:
-            let items = WSPlanItemParser.parsePlanItem(data)
-            postNotification(.PlanItem, verb, items)
-        case WSNotificationVerb.Delete:
-            let items = WSPlanItemParser.parsePlanItem(data)
-            postNotification(.PlanItem, verb, items)
-        default: QL4("Not handled verb: \(verb)")
-        }
-    }
-    
+
     private static func processList(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
-            let list = ListItemParser.parseList(data)
-            postNotification(.List, verb, list)
+            if let remoteList = RemoteListsWithDependencies(representation: data) {
+                if let list = ListMapper.listsWithRemote(remoteList).first {
+                    Providers.listProvider.add(list, remote: false) {result in
+                        if result.success {
+                            postNotification(.List, verb, list)
+                        } else {
+                            MyWebsocketDispatcher.reportWebsocketStoringError("Add \(list)", result: result)
+                        }
+                    }
+                } else {
+                    reportWebsocketGeneralError("Add list didn't return a list")
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Add list, data: \(data)")
+            }
+            
         case WSNotificationVerb.Update:
-            let list = ListItemParser.parseList(data)
-            postNotification(.List, verb, list)
+            if let remoteList = RemoteListsWithDependencies(representation: data) {
+                if let list = ListMapper.listsWithRemote(remoteList).first {
+                    Providers.listProvider.update(list, remote: false) {result in
+                        if result.success {
+                            postNotification(.List, verb, list)
+                        } else {
+                            MyWebsocketDispatcher.reportWebsocketStoringError("Update \(list)", result: result)
+                        }
+                    }
+                } else {
+                    reportWebsocketGeneralError("Update list didn't return a list")
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update list, data: \(data)")
+            }
+            
         case WSNotificationVerb.Delete:
-            let listUuid = data as! String
-            postNotification(.List, verb, listUuid)
+            if let listUuid = data as? String {
+                Providers.listProvider.remove(listUuid, remote: false) {result in
+                    if result.success {
+                        postNotification(.List, verb, listUuid)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete \(listUuid)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Delete list, data: \(data)")
+            }
+            
         case WSNotificationVerb.Invite:
             if let remoteListInvitation = RemoteListInvitation(representation: data) {
                 postNotification(.List, verb, remoteListInvitation)
@@ -207,29 +400,90 @@ struct MyWebsocketDispatcher {
     private static func processListItem(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
-            let group = ListItemParser.parse(data)
-            postNotification(.ListItem, verb, group)
+            if let remoteListItems = RemoteListItems(representation: data) {
+                if let listItem = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: nil).listItems.first {
+                    Providers.listItemsProvider.add(listItem, remote: false) {result in
+                        if result.success {
+                            postNotification(.ListItem, verb, listItem)
+                        } else {
+                            MyWebsocketDispatcher.reportWebsocketStoringError("Add \(listItem)", result: result)
+                        }
+                    }
+                } else {
+                    reportWebsocketGeneralError("Add list item didn't return a list")
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Add list item, data: \(data)")
+            }
+
         case WSNotificationVerb.Update:
-            let group = ListItemParser.parse(data)
-            postNotification(.ListItem, verb, group)
+            if let remoteListItems = RemoteListItems(representation: data) {
+                if let listItem = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: nil).listItems.first {
+                    Providers.listItemsProvider.update(listItem, remote: false) {result in
+                        if result.success {
+                            postNotification(.ListItem, verb, listItem)
+                        } else {
+                            MyWebsocketDispatcher.reportWebsocketStoringError("Update \(listItem)", result: result)
+                        }
+                    }
+                } else {
+                    reportWebsocketGeneralError("Update list item didn't return a list")
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update list item, data: \(data)")
+            }
+
         case WSNotificationVerb.Delete:
-            let group = ListItemParser.parse(data)
-            postNotification(.ListItem, verb, group)
+            if let containedItemIdentifier = RemoteContainedItemIdentifier(representation: data) {
+                Providers.listItemsProvider.removeListItem(containedItemIdentifier.itemUuid, listUuid: containedItemIdentifier.containerUuid, remote: false) {result in
+                    if result.success {
+                        postNotification(.ListItem, verb, containedItemIdentifier.itemUuid)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete \(containedItemIdentifier)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Delete listitem, data: \(data)")
+            }
         default: QL4("Not handled verb: \(verb)")
         }
     }
     
     private static func processSection(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
-        case WSNotificationVerb.Add:
-            let group = ListItemParser.parseSection(data)
-            postNotification(.Section, verb, group)
+            // Not used as it's not possible to add sections directly
+//        case WSNotificationVerb.Add:
+//            let group = ListItemParser.parseSection(data)
+//            postNotification(.Section, verb, group)
+            
         case WSNotificationVerb.Update:
-            let group = ListItemParser.parseSection(data)
-            postNotification(.Section, verb, group)
+            if let remoteSection = RemoteSectionWithDependencies(representation: data) {
+                let list = ListMapper.listWithRemote(remoteSection.list)
+                let section = SectionMapper.SectionWithRemote(remoteSection.section, list: list)
+                Providers.sectionProvider.update(section, remote: false) {result in
+                    if result.success {
+                        postNotification(.Section, verb, section)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Update section \(section)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update section, data: \(data)")
+            }
+            
         case WSNotificationVerb.Delete:
-            let group = ListItemParser.parseSection(data)
-            postNotification(.Section, verb, group)
+            if let sectionUuid = data as? String {
+                Providers.sectionProvider.remove(sectionUuid, remote: false) {result in
+                    if result.success {
+                        postNotification(.Section, verb, sectionUuid)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete section \(sectionUuid)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Delete section, data: \(data)")
+            }
+
         default: QL4("Not handled verb: \(verb)")
         }
     }
@@ -237,14 +491,46 @@ struct MyWebsocketDispatcher {
     private static func processInventory(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
-            let inventory = WSInventoryParser.parseInventory(data)
-            postNotification(.Inventory, verb, inventory)
+            if let remoteInventory = RemoteInventory(representation: data) {
+                let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
+                Providers.inventoryProvider.addInventory(inventory, remote: false) {result in
+                    if result.success {
+                        postNotification(.Inventory, verb, inventory)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory \(inventory)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Add inventory, data: \(data)")
+            }
+            
         case WSNotificationVerb.Update:
-            let inventory = WSInventoryParser.parseInventory(data)
-            postNotification(.Inventory, verb, inventory)
+            if let remoteInventory = RemoteInventory(representation: data) {
+                let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
+                Providers.inventoryProvider.updateInventory(inventory, remote: false) {result in
+                    if result.success {
+                        postNotification(.Inventory, verb, inventory)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory \(inventory)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventory, data: \(data)")
+            }
+            
         case WSNotificationVerb.Delete:
-            let uuid = data as! String
-            postNotification(.Inventory, verb, uuid)
+            if let inventoryUuid = data as? String {
+                Providers.listProvider.remove(inventoryUuid, remote: false) {result in
+                    if result.success {
+                        postNotification(.Inventory, verb, inventoryUuid)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete inventory \(inventoryUuid)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Delete inventory, data: \(data)")
+            }
+            
         case WSNotificationVerb.Invite:
             if let remoteInventoryInvitation = RemoteInventoryInvitation(representation: data) {
                 postNotification(.Inventory, verb, remoteInventoryInvitation)
@@ -255,39 +541,77 @@ struct MyWebsocketDispatcher {
         }
     }
     
+    
+    /////////////////////////////////////////////////////////////////////////////////
+    // TODO!!!! inventory items - there seem to be some inconsistencies / not implemented
+    /////////////////////////////////////////////////////////////////////////////////
+
     private static func processInventoryItem(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
-            let dataArr = data as! [AnyObject]
-            let group = WSInventoryParser.parseInventoryItemsWithHistory(dataArr)
-            postNotification(.InventoryItemsWithHistory, verb, group)
+            QL4("TODO inventory item add, also server") // TODO!!!! inventory items add - also in server. Now we can add items directly to the inventory.
+            
         case WSNotificationVerb.Update:
-            let group = WSInventoryParser.parseInventoryItem(data)
-            postNotification(.InventoryItem, verb, group)
+            QL4("TODO inventory item update, also server!") // TODO!!!!
+//            let inventoryItem = WSInventoryParser.parseInventoryItem(data)
+//            Providers.inventoryItemsProvider.updateInventoryItem(inventoryItem, remote: false) {result in
+//                postNotification(.InventoryItem, verb, inventoryItem)
+//            }
+            
         case WSNotificationVerb.Delete:
-            let group = WSInventoryParser.parseInventoryItemId(data)
-            postNotification(.InventoryItem, verb, group)
+            if let containedItemIdentifier = RemoteContainedItemIdentifier(representation: data) {
+                Providers.inventoryItemsProvider.removeInventoryItem(containedItemIdentifier.itemUuid, inventoryUuid: containedItemIdentifier.containerUuid, remote: false) {result in
+                    if result.success {
+                        postNotification(.InventoryItem, verb, containedItemIdentifier.itemUuid)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete inventory item \(containedItemIdentifier)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Delete inventory item, data: \(data)")
+            }
+
         default: QL4("Not handled verb: \(verb)")
         }
     }
     
+    // TODO!!!! this seems to be used for move cart->history, it accepts a sequence!
     private static func processInventoryItems(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
-            let group = WSInventoryParser.parseInventoryItemIncrement(data)
-            postNotification(.InventoryItems, verb, group)
+            QL4("TODO processInventoryItems")
+//            let incr = WSInventoryParser.parseInventoryItemIncrement(data)
+//            Providers.inventoryItemsProvider.incrementInventoryItem(incr, remote: false) {result in
+//                if result.success {
+//                    postNotification(.Inventory, verb, incr)
+//                } else {
+//                    MyWebsocketDispatcher.reportWebsocketStoringError("Add (increment) \(incr)", result: result)
+//                }
+//            }
             
-        default: QL4("MyWebsocketDispatcher.processListItems not handled: \(verb)")
+        default: QL4("Not handled verb: \(verb)")
         }
     }
+    
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
     
     private static func processHistoryItem(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Delete:
-            let historyItemUuid = data
-            postNotification(.HistoryItem, verb, historyItemUuid)
+            if let historyItemUuid = data as? String {
+                Providers.historyProvider.removeHistoryItem(historyItemUuid, remote: false) {result in
+                    if result.success {
+                        postNotification(.HistoryItem, verb, historyItemUuid)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete history item \(historyItemUuid)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Delete history item, data: \(data)")
+            }
             
-        default: QL4("MyWebsocketDispatcher.processListItems not handled: \(verb)")
+        default: QL4("Not handled verb: \(verb)")
         }
     }
     
@@ -304,4 +628,20 @@ struct MyWebsocketDispatcher {
         default: QL4("Not handled verb: \(verb)")
         }
     }
+    
+    
+    //    private static func processPlanItem(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    //        switch verb {
+    //        case WSNotificationVerb.Add:
+    //            let items = WSPlanItemParser.parsePlanItem(data) // TODO review do we need group items here? if yes are they sent?
+    //            postNotification(.PlanItem, verb, items)
+    //        case WSNotificationVerb.Update:
+    //            let items = WSPlanItemParser.parsePlanItem(data)
+    //            postNotification(.PlanItem, verb, items)
+    //        case WSNotificationVerb.Delete:
+    //            let items = WSPlanItemParser.parsePlanItem(data)
+    //            postNotification(.PlanItem, verb, items)
+    //        default: QL4("Not handled verb: \(verb)")
+    //        }
+    //    }
 }

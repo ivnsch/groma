@@ -14,8 +14,6 @@ struct RemoteListsWithDependencies: ResponseObjectSerializable, CustomDebugStrin
     let inventories: [RemoteInventory]
     let lists: [RemoteList]
     
-    // TODO After porting to Swift 2.0 catch exception in these initializers and show msg to client accordingly, or don't use force unwrap
-    // if server for some reason doesn't send a field the app currently crashes
     init?(representation: AnyObject) {
         guard
         let inventoriesObj = representation.valueForKeyPath("inventories"),

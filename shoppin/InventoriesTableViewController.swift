@@ -177,9 +177,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
                 let inventory = notification.obj
                 switch notification.verb {
                 case .Add:
-                    Providers.inventoryProvider.addInventory(inventory, remote: false, successHandler {[weak self] in
-                        self?.onInventoryAdded(inventory)
-                    })
+                    onInventoryAdded(inventory)
                 case .Update:
                     Providers.inventoryProvider.updateInventory(inventory, remote: false, successHandler{[weak self] in
                         self?.onInventoryUpdated(inventory)
@@ -195,15 +193,11 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
                 let inventoryUuid = notification.obj
                 switch notification.verb {
                 case .Delete:
-                    Providers.inventoryProvider.removeInventory(inventoryUuid, remote: false, successHandler{[weak self] in
-                        if let weakSelf = self {
-                            if let model = ((weakSelf.models as! [ExpandableTableViewInventoryModel]).filter{$0.inventory.uuid == inventoryUuid}).first {
-                                self?.removeModel(model)
-                            } else {
-                                QL3("Received notification to remove list but it wasn't in table view. Uuid: \(inventoryUuid)")
-                            }
-                        }
-                    })
+                    if let model = ((models as! [ExpandableTableViewInventoryModel]).filter{$0.inventory.uuid == inventoryUuid}).first {
+                        removeModel(model)
+                    } else {
+                        QL3("Received notification to remove list but it wasn't in table view. Uuid: \(inventoryUuid)")
+                    }
                 default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {

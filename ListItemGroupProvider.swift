@@ -36,7 +36,7 @@ protocol ListItemGroupProvider {
     
     func groupItems(group: ListItemGroup, _ handler: ProviderResult<[GroupItem]> -> Void)
     
-    func add(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func add(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 
     func add(items: [GroupItem], group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 
@@ -44,7 +44,7 @@ protocol ListItemGroupProvider {
 
     func add(itemInput: GroupItemInput, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<GroupItem> -> Void)
     
-    func update(item: GroupItem, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func update(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
     func remove(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     

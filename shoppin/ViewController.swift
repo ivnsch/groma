@@ -88,7 +88,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItem:", name: WSNotificationName.ListItem.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketSection:", name: WSNotificationName.Section.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)        
     }
     
     deinit {
@@ -955,6 +957,32 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     // MARK: - Websocket
     
+    func onWebsocketList(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                let listUuid = notification.obj
+                switch notification.verb {
+                case .Delete:
+                    if let list = currentList {
+                        if list.uuid == listUuid {
+                            AlertPopup.show(title: "List deleted", message: "The list \(list.name) was deleted from another device. Returning to lists.", controller: self, onDismiss: {[weak self] in
+                                self?.navigationController?.popViewControllerAnimated(true)
+                            })
+                        } else {
+                            QL1("Websocket: List items controller received a notification to delete a list which is not the one being currently shown")
+                        }
+                    } else {
+                        QL4("Websocket: Can't process delete list notification because there's no list set")
+                    }
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+        }
+    }
+    
+    // This is called on batch list item update, which is used when reordering list items
     func onWebsocketListItems(note: NSNotification) {
         if let info = note.userInfo as? Dictionary<String, WSNotification<[ListItem]>> {
             if let notification = info[WSNotificationValue] {
@@ -963,7 +991,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     listItemsTableViewController.updateListItems(notification.obj, status: .Todo, notifyRemote: false)
                     updatePrices(.MemOnly)
                     
-                default: print("Error: ViewController.onWebsocketUpdateListItems: Not handled: \(notification.verb)")
+                default: print("Error: ViewController.onWebsocketUpdateListItems: Not handled: z\(notification.verb)")
                 }
             } else {
                 print("Error: ViewController.onWebsocketAddListItems: no value")
@@ -988,9 +1016,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     updatePrices(.MemOnly)
                     
                 case .Delete:
-                    listItemsTableViewController.removeListItem(listItem, animation: .Bottom)
-                    updatePrices(.MemOnly)
-                    
+                    let itemUuid = notification.obj
+                    switch notification.verb {
+                    case .Delete:
+                        listItemsTableViewController.removeListItem(itemUuid)
+                        updatePrices(.MemOnly)
+                        
+                    default: QL4("Not handled case: \(notification.verb))")
+                    }
+
                 default: QL4("Not handled verb: \(notification.verb)")
                 }
             } else {
@@ -1007,21 +1041,28 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 switch notification.verb {
                     // There's no direct add of section
 //                case .Add:
-//                    addProductUI(notification.obj)
                 case .Update:
-                    // TODO what do we do here, if we reload the list (section order can be updated, not only name) can conflict with current state e.g. if user is editing or just swiping and item. For now do nothing - user will see updated section the next time list it's loaded
-//                    updateProductUI(notification.obj)
-                    print("Warn: TODO websocket section update")
-                case .Delete:
-                    // TODO similar to .Update comment
-                    print("Warn: TODO websocket section delete")
-                default: print("Error: ViewController.onWebsocketSection: Not handled: \(notification.verb)")
+                    // NOTE: this doesn't update order. Update reorder would require to reload the table view and this can e.g. revert undo cells or interfere with current action like swiping an item. So to update order the user has to reopen the list.
+                    listItemsTableViewController.updateSection(notification.obj)
+
+                default: QL4("Not handled: \(notification.verb)")
                 }
             } else {
-                print("Error: ViewController.onWebsocketUpdateListItem: no value")
+                QL4("no value")
+            }
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Delete:
+                    listItemsTableViewController.removeSection(notification.obj)
+                    
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
             }
         } else {
-            print("Error: ViewController.onWebsocketAddListItems: no userInfo")
+            QL4("No userInfo")
         }
     }
     
@@ -1030,15 +1071,42 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Update:
-                    // TODO!! update all listitems that reference this product
-                    print("Warn: TODO onWebsocketProduct")
-                case .Delete:
-                    // TODO!! delete all listitems that reference this product
-                    print("Warn: TODO onWebsocketProduct")
+                    listItemsTableViewController.updateProduct(notification.obj, status: .Todo)
                 default: break // no error msg here, since we will receive .Add but not handle it in this view controller
                 }
             } else {
                 print("Error: ViewController.onWebsocketProduct: no value")
+            }
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                let productUuid = notification.obj
+                switch notification.verb {
+                case .Delete:
+                    listItemsTableViewController.removeListItemReferencingProduct(productUuid)
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+        } else {
+            print("Error: ViewController.onWebsocketProduct: no userInfo")
+        }
+    }
+
+    func onWebsocketProductCategory(note: NSNotification) {
+        
+        // category udpate not relevant for list items since items show only section, not category. The add/edit has also only section
+        
+        if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Delete:
+                    let categoryUuid = notification.obj
+                    listItemsTableViewController.removeListItemsReferencingCategory(categoryUuid)
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
             }
         } else {
             print("Error: ViewController.onWebsocketProduct: no userInfo")

@@ -9,7 +9,7 @@
 import UIKit
 import ChameleonFramework
 import SwiftValidator
-
+import QorumLogs
 
 class ProductWithQuantityInv: ProductWithQuantity {
     let inventoryItem: InventoryItem
@@ -77,6 +77,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryItem:", name: WSNotificationName.InventoryItem.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryWithHistoryAfterSave:", name: WSNotificationName.InventoryItemsWithHistoryAfterSave.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
     }
     
@@ -267,7 +268,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, self.successHandler{[weak self] (inventoryItemWithHistoryEntry: InventoryItemWithHistoryEntry) in
                     // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end. TODO nicer solution
                     
-                    self?.productsWithQuantityController?.clearAndLoadFirstPage()
+                    self?.reload()
                     
                     self?.toggleTopAddController()
                 })
@@ -281,12 +282,16 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func onInventoryItemUpdated() {
         // we have pagination so we don't know if the item is visible atm. For now simply cause a reload and start at first page. TODO nicer solution
-        productsWithQuantityController?.clearAndLoadFirstPage()
-//        addEditInventoryItemControllerManager?.controller?.clear()
+        reload()
         addEditInventoryItemControllerManager?.expand(false)
         topBarOnCloseExpandable()
     }
 
+    private func reload() {
+        productsWithQuantityController?.clearAndLoadFirstPage()
+        //        addEditInventoryItemControllerManager?.controller?.clear()
+
+    }
     
     // MARK: - ListTopBarViewDelegate
     
@@ -496,6 +501,17 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         toggleTopAddController()
     }
     
+    func indexPathOfItem(model: ProductWithQuantityInv) -> NSIndexPath? {
+        let models = productsWithQuantityController.models as! [ProductWithQuantityInv]
+        for i in 0..<models.count {
+            if models[i].same(model) {
+                return NSIndexPath(forRow: i, inSection: 0)
+            }
+        }
+        return nil
+    }
+    
+    
     // MARK: - Websocket
     
     func onWebsocketInventory(note: NSNotification) {
@@ -518,8 +534,33 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                         print("Info: Received a websocket inventory update before inventory is loaded. Doing nothing.")
                     }
                     
-                    //                case .Delete: // we only use 1 inventory currently and it can't be deleted
-                    //                    removeProductUI(notification.obj)
+                default: break
+                    
+                }
+            } else {
+                print("Error: ViewController.onWebsocketInventory: no userInfo")
+            }
+            
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+
+                case .Delete:
+                    let inventoryUuid = notification.obj
+                    if let inventory = inventory {
+                        
+                        if inventory.uuid == inventoryUuid {
+                            AlertPopup.show(title: "Inventory deleted", message: "The inventory \(inventory.name) was deleted from another device. Returning to inventories.", controller: self, onDismiss: {[weak self] in
+                                self?.navigationController?.popViewControllerAnimated(true)
+                            })
+                        } else {
+                            QL1("Websocket: Inventory items controller received a notification to delete an inventory which is not the one being currently shown")
+                        }
+                    } else {
+                        QL4("Websocket: Can't process delete inventory notification because there's no inventory set")
+                    }
+                    
                 default: print("Error: InventoryItemsViewController.onWebsocketInventory: not implemented: \(notification.verb)")
                     
                 }
@@ -535,9 +576,19 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 switch notification.verb {
                 case WSNotificationVerb.Add:
                     let incr = notification.obj
-                    Providers.inventoryItemsProvider.incrementInventoryItem(incr, remote: false, successHandler{[weak self] inventoryItem in
-                        self?.productsWithQuantityController?.updateIncrementUI(ProductWithQuantityInv(inventoryItem: inventoryItem), delta: incr.delta)
-                    })
+                    if let inventoryItemModels = productsWithQuantityController?.models as? [ProductWithQuantityInv] {
+                        if let inventoryItemModel = (inventoryItemModels.findFirst{$0.inventoryItem.uuid == incr.inventoryItemUuid}) {
+                            productsWithQuantityController?.updateIncrementUI(ProductWithQuantityInv(inventoryItem: inventoryItemModel.inventoryItem), delta: incr.delta)
+                            
+                        } else {
+                            QL3("Didn't find inventory item, can't increment") // this is not forcibly an error, it can be e.g. that user just removed the item
+                        }
+                        
+                        
+                    } else {
+                        QL4("Couldn't cast models to [ProductWithQuantityInv]")
+                    }
+
                 default: print("Error: ViewController.onWebsocketInventoryItems: Not handled: \(notification.verb)")
                 }
             } else {
@@ -549,36 +600,46 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onWebsocketInventoryItem(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<Any>> {
+        
+        if let info = note.userInfo as? Dictionary<String, WSNotification<InventoryItem>> {
             
             if let notification = info[WSNotificationValue] {
                 
                 switch notification.verb {
                 case .Update:
-                    if let inventoryItem = notification.obj as? InventoryItem {
-                        Providers.inventoryItemsProvider.updateInventoryItem(inventoryItem, remote: false, successHandler {[weak self] in
-                            self?.onInventoryItemUpdated()
-                        })
-                    } else {
-                        print("Error: InventoryItemsViewController.onWebsocketInventoryItem: not expected type in: \(notification.verb): \(notification.obj)")
-                    }
+//                    let inventoryItem = notification.obj
+                    onInventoryItemUpdated()
                     
                     // TODO? increment is covered in onWebsocketInventoryItems, but user can e.g. change name (update of product in this case, but still triggered from inventory...)
-                    
-                case .Delete:
-                    if let inventoryItemId = notification.obj as? InventoryItemId {
-                        Providers.inventoryItemsProvider.removeInventoryItem(inventoryItemId.productUuid, inventoryUuid: inventoryItemId.inventoryUuid, remote: true, successHandler{[weak self] result in
-                            self?.productsWithQuantityController?.remove(inventoryItemId.inventoryUuid, inventoryItemProductUuid: inventoryItemId.productUuid)
-                        })
-                    } else {
-                        print("Error: InventoryItemsViewController.onWebsocketInventoryItem: not expected type in: \(notification.verb): \(notification.obj)")
-                    }
                     
                 default: print("Error: InventoryItemsViewController.onWebsocketInventoryItem: not implemented: \(notification.verb)")
                 }
                 
             } else {
                 print("Error: InventoryItemsViewController.onWebsocketUpdateListItem: no value")
+            }
+            
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                
+                let inventoryItemUuid = notification.obj
+                
+                switch notification.verb {
+                case .Delete:
+                    if let model = ((productsWithQuantityController.models as! [ProductWithQuantityInv]).filter{$0.inventoryItem.uuid == inventoryItemUuid}).first {
+                        if let indexPath = indexPathOfItem(model) {
+                            productsWithQuantityController.removeItemUI(indexPath)
+                        } else {
+                            QL2("Group item to remove is not in table view: \(inventoryItemUuid)")
+                        }
+                    } else {
+                        QL3("Received notification to remove inventory item but it wasn't in table view. Uuid: \(inventoryItemUuid)")
+                    }
+                    
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
             }
             
         } else {
@@ -606,23 +667,55 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Update:
-                    // TODO!! update all listitems that reference this product
-                    print("Warn: TODO onWebsocketProduct")
-                case .Delete:
-                    // TODO!! delete all listitems that reference this product
-                    print("Warn: TODO onWebsocketProduct")
+                    reload()
                 default: break // no error msg here, since we will receive .Add but not handle it in this view controller
                 }
             } else {
-                print("Error: InventoryItemsViewController.onWebsocketProduct: no value")
+                QL4("No value")
+            }
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Delete:
+                    reload()
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
             }
         } else {
-            print("Error: InventoryItemsViewController.onWebsocketProduct: no userInfo")
+            QL4("No userInfo")
+        }
+    }
+    
+    func onWebsocketProductCategory(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<ProductCategory>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Add:
+                    reload()
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Delete:
+                    reload()
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+        } else {
+            print("Error: ViewController.onWebsocketProduct: no userInfo")
         }
     }
     
     func onIncomingGlobalSyncFinished(note: NSNotification) {
         // TODO notification - note has the sender name
-        productsWithQuantityController.clearAndLoadFirstPage()
+        reload()
     }
 }

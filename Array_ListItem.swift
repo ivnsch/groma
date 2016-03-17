@@ -120,5 +120,16 @@ extension Array where Element: ListItem {
     func filterStatus(status: ListItemStatus) -> Array<Element> {
         return self.filter{$0.quantity(status) > 0}
     }
+    
+    mutating func removeWithUuid(uuid: String) -> ListItem? {
+        for i in 0..<self.count {
+            if self[i].uuid == uuid {
+                let listItem = self[i]
+                self.removeAtIndex(i)
+                return listItem
+            }
+        }
+        return nil
+    }
 }
 

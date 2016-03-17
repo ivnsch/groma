@@ -97,13 +97,13 @@ class MemInventoryItemProvider {
         }
     }
     
-    func removeInventoryItem(inventoryUuid: String, productUuid: String) -> Bool {
+    func removeInventoryItem(uuid: String, inventoryUuid: String) -> Bool {
         guard enabled else {return false}
         
         for (inventory, items) in inventoryItems {
             if inventory.uuid == inventoryUuid {
                 for item in items {
-                    if item.inventory.uuid == inventoryUuid && item.product.uuid == productUuid {
+                    if item.uuid == uuid {
                         inventoryItems[inventory]?.remove(item)
                         return true
                     }

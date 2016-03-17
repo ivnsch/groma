@@ -93,10 +93,10 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    func deleteProductAndDependencies(product: Product, markForSync: Bool, handler: Bool -> Void) {
+    func deleteProductAndDependencies(productUuid: String, markForSync: Bool, handler: Bool -> Void) {
         doInWriteTransaction({[weak self] realm in
             if let weakSelf = self {
-                return weakSelf.deleteProductAndDependenciesSync(realm, productUuid: product.uuid, markForSync: markForSync)
+                return weakSelf.deleteProductAndDependenciesSync(realm, productUuid: productUuid, markForSync: markForSync)
             } else {
                 print("WARN: RealmListItemProvider.deleteProductAndDependencies: self is nil")
                 return false
@@ -104,6 +104,10 @@ class RealmProductProvider: RealmProvider {
             }, finishHandler: {success in
                 handler(success ?? false)
         })
+    }
+    
+    func deleteProductAndDependencies(product: Product, markForSync: Bool, handler: Bool -> Void) {
+        deleteProductAndDependencies(product.uuid, markForSync: markForSync, handler: handler)
     }
     
     // Note: This is expected to be called from inside a transaction and in a background operation

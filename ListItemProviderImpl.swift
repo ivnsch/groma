@@ -16,6 +16,8 @@ class ListItemProviderImpl: ListItemProvider {
     let remoteProvider = RemoteListItemProvider()
     let memProvider = MemListItemProvider(enabled: true)
 
+    // MARK: - Get
+    
     func listItems(list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus = .Both, _ handler: ProviderResult<[ListItem]> -> ()) {
 
         let memListItemsMaybe = memProvider.listItems(list)
@@ -67,14 +69,31 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
     
+    // This is currently used only to retrieve possible product's list item on receiving a websocket notification with a product update
+    func listItem(product: Product, list: List, _ handler: ProviderResult<ListItem?> -> ()) {
+        DBProviders.listItemProvider.listItem(list, product: product) {listItemMaybe in
+            if let listItem = listItemMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: listItem))
+            } else {
+                handler(ProviderResult(status: .NotFound))
+            }
+        }
+    }
+
+    // MARK: -
+    
     func remove(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        removeListItem(listItem.uuid, listUuid: listItem.list.uuid, remote: remote, handler)
+    }
+
+    func removeListItem(listItemUuid: String, listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         
-        let memUpdated = memProvider.removeListItem(listItem)
+        let memUpdated = memProvider.removeListItem(listUuid, uuid: listItemUuid)
         if memUpdated {
             handler(ProviderResult(status: ProviderStatusCode.Success))
         }
         
-        self.dbProvider.remove(listItem, markForSync: true, handler: {[weak self] removed in
+        self.dbProvider.remove(listItemUuid, listUuid: listUuid, markForSync: true, handler: {[weak self] removed in
             if removed {
                 if !memUpdated {
                     handler(ProviderResult(status: .Success))
@@ -84,23 +103,22 @@ class ListItemProviderImpl: ListItemProvider {
                 self?.memProvider.invalidate()
             }
             if remote {
-                self?.remoteProvider.remove(listItem) {result in
+                self?.remoteProvider.removeListItem(listItemUuid) {result in
                     if result.success {
-                        self?.dbProvider.clearListItemTombstone(listItem.uuid) {removeTombstoneSuccess in
+                        self?.dbProvider.clearListItemTombstone(listItemUuid) {removeTombstoneSuccess in
                             if !removeTombstoneSuccess {
-                                QL4("Couldn't delete tombstone for: \(listItem)")
+                                QL4("Couldn't delete tombstone for: \(listItemUuid)")
                             }
                         }
                     } else {
                         DefaultRemoteErrorHandler.handle(result, handler: {(result: ProviderResult<[Any]>) in
-                            print("Error: Removing listItem: \(listItem)")
+                            print("Error: Removing listItem: \(listItemUuid)")
                         })
                     }
                 }
             }
         })
     }
-
     
     func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         remove(list.uuid, remote: remote, handler)

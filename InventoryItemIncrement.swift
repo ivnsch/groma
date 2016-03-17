@@ -11,16 +11,14 @@ import Foundation
 class InventoryItemIncrement: CustomDebugStringConvertible {
     
     let delta: Int
-    let productUuid: String
-    let inventoryUuid: String
+    let inventoryItemUuid: String
     
-    init(delta: Int, productUuid: String, inventoryUuid: String) {
+    init(delta: Int, inventoryItemUuid: String) {
         self.delta = delta
-        self.productUuid = productUuid
-        self.inventoryUuid = inventoryUuid
+        self.inventoryItemUuid = inventoryItemUuid
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) delta: \(delta), productUuid: \(productUuid)}, inventoryUuid: \(inventoryUuid)}"
+        return "{\(self.dynamicType) delta: \(delta), inventoryUuid: \(inventoryItemUuid)}"
     }
 }

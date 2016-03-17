@@ -105,20 +105,24 @@ class ProductProviderImpl: ProductProvider {
     }
     
     func delete(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        DBProviders.productProvider.deleteProductAndDependencies(product, markForSync: true) {[weak self] saved in
+        delete(product.uuid, remote: remote, handler)
+    }
+    
+    func delete(productUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        DBProviders.productProvider.deleteProductAndDependencies(productUuid, markForSync: true) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             
             if remote {
-                self?.remoteProvider.deleteProduct(product.uuid) {remoteResult in
+                self?.remoteProvider.deleteProduct(productUuid) {remoteResult in
                     if remoteResult.success {
-                        DBProviders.productProvider.clearProductTombstone(product.uuid) {removeTombstoneSuccess in
+                        DBProviders.productProvider.clearProductTombstone(productUuid) {removeTombstoneSuccess in
                             if !removeTombstoneSuccess {
-                                QL4("Couldn't delete tombstone for product: \(product.uuid)")
+                                QL4("Couldn't delete tombstone for product: \(productUuid)")
                             }
                         }
                     } else {
                         DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-                            print("Error: removing product in remote: \(product.uuid), result: \(remoteResult)")
+                            print("Error: removing product in remote: \(productUuid), result: \(remoteResult)")
                         }
                     }
                 }

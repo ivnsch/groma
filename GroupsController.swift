@@ -209,9 +209,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
                 let group = notification.obj
                 switch notification.verb {
                 case .Add:
-                    Providers.listItemGroupsProvider.add(group, remote: false, successHandler {[weak self] in
-                        self?.onGroupAdded(group)
-                    })
+                    onGroupAdded(group)
                 case .Update:
                     Providers.listItemGroupsProvider.update(group, remote: false, successHandler{[weak self] in
                         self?.onGroupUpdated(group)
@@ -229,15 +227,11 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
                 
                 switch notification.verb {
                 case .Delete:
-                    Providers.listItemGroupsProvider.removeGroup(groupUuid, remote: false, successHandler{[weak self] in
-                        if let weakSelf = self {
-                            if let model = ((weakSelf.models as! [ExpandableTableViewGroupModel]).filter{$0.group.uuid == groupUuid}).first {
-                                self?.removeModel(model)
-                            } else {
-                                QL3("Received notification to remove group but it wasn't in table view. Uuid: \(groupUuid)")
-                            }
-                        }
-                    })
+                    if let model = ((models as! [ExpandableTableViewGroupModel]).filter{$0.group.uuid == groupUuid}).first {
+                        removeModel(model)
+                    } else {
+                        QL3("Received notification to remove group but it wasn't in table view. Uuid: \(groupUuid)")
+                    }
                     
                 default: QL4("Not handled case: \(notification.verb))")
                 }

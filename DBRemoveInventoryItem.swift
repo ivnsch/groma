@@ -12,12 +12,12 @@ import QorumLogs
 
 class DBRemoveInventoryItem: Object {
     
-    dynamic var productUuid: String = ""
+    dynamic var uuid: String = ""
     dynamic var inventoryUuid: String = ""
     dynamic var lastServerUpdate: NSDate = NSDate()
 
     convenience init(_ dbInventoryItem: DBInventoryItem) {
-        self.init(productUuid: dbInventoryItem.product.uuid, inventoryUuid: dbInventoryItem.inventory.uuid, lastServerUpdate: dbInventoryItem.lastServerUpdate)
+        self.init(uuid: dbInventoryItem.uuid, inventoryUuid: dbInventoryItem.inventory.uuid, lastServerUpdate: dbInventoryItem.lastServerUpdate)
     }
     
     convenience init(_ inventoryItem: InventoryItem) {
@@ -27,27 +27,26 @@ class DBRemoveInventoryItem: Object {
             return NSDate()
         }()
         
-        self.init(productUuid: inventoryItem.product.uuid, inventoryUuid: inventoryItem.inventory.uuid, lastServerUpdate: lastServerUpdate)
+        self.init(uuid: inventoryItem.uuid, inventoryUuid: inventoryItem.inventory.uuid, lastServerUpdate: lastServerUpdate)
     }
     
-    convenience init(productUuid: String, inventoryUuid: String, lastServerUpdate: NSDate) {
+    convenience init(uuid: String, inventoryUuid: String, lastServerUpdate: NSDate) {
         self.init()
-        self.productUuid = productUuid
+        self.uuid = uuid
         self.inventoryUuid = inventoryUuid
         self.lastServerUpdate = lastServerUpdate
     }
     
-    dynamic lazy var compoundKey: String? = self.compoundKeyValue()
-    
-    private func compoundKeyValue() -> String? {
-        return "\(productUuid)-\(inventoryUuid)"
+    override static func primaryKey() -> String? {
+        return "uuid"
     }
     
-    override static func primaryKey() -> String {
-        return "compoundKey"
-    }
     
     // MARK: - Filter
+
+    static func createFilterUuid(uuid: String) -> String {
+        return "uuid == '\(uuid)'"
+    }
     
     static func createFilterForInventory(inventoryUuid: String) -> String {
         return "inventoryUuid == '\(inventoryUuid)'"
@@ -61,8 +60,7 @@ class DBRemoveInventoryItem: Object {
     
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
-        dict["productUuid"] = productUuid
-        dict["inventoryUuid"] = inventoryUuid
+        dict["uuid"] = uuid
         dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
         return dict
     }

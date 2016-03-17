@@ -70,19 +70,23 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
     }
     
     func remove(category: ProductCategory, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        dbCategoryProvider.removeCategory(category, markForSync: true) {[weak self] success in
+        remove(category.uuid, remote: remote, handler)
+    }
+    
+    func remove(categoryUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        DBProviders.productCategoryProvider.removeCategory(categoryUuid, markForSync: true) {[weak self] success in
             handler(ProviderResult(status: success ? .Success : .Unknown))
             
             if remote {
-                self?.remoteCategoryProvider.removeCategory(category.uuid) {remoteResult in
+                self?.remoteCategoryProvider.removeCategory(categoryUuid) {remoteResult in
                     if remoteResult.success {
-                        self?.dbCategoryProvider.clearCategoryTombstone(category.uuid) {removeTombstoneSuccess in
+                        self?.dbCategoryProvider.clearCategoryTombstone(categoryUuid) {removeTombstoneSuccess in
                             if !removeTombstoneSuccess {
-                                QL4("Couldn't delete tombstone for product category: \(category.uuid)")
+                                QL4("Couldn't delete tombstone for product category: \(categoryUuid)")
                             }
                         }
                     } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, errorMsg: "removeGroupItem\(category.uuid)", handler: handler)
+                        DefaultRemoteErrorHandler.handle(remoteResult, errorMsg: "removeGroupItem\(categoryUuid)", handler: handler)
                     }
                 }
             }

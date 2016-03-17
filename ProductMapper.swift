@@ -101,4 +101,34 @@ class ProductMapper {
         
         return products
     }
+    
+    class func productsWithRemote(remoteProducts: RemoteProductsWithDependencies) -> ProductsWithDependencies {
+        
+        func toProductCategoryDict(remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
+            var dict: [String: ProductCategory] = [:]
+            var arr: [ProductCategory] = []
+            for remoteProductCategory in remoteProductsCategories {
+                let category = ProductCategoryMapper.categoryWithRemote(remoteProductCategory)
+                dict[remoteProductCategory.uuid] = category
+                arr.append(category)
+                
+            }
+            return (dict, arr)
+        }
+        
+        
+        let (productsCategoriesDict, categories) = toProductCategoryDict(remoteProducts.categories)
+        
+        let remoteListItemsArr = remoteProducts.products
+        
+        let products: [Product] = remoteListItemsArr.map {remoteProduct in
+            let category = productsCategoriesDict[remoteProduct.categoryUuid]!
+            return productWithRemote(remoteProduct, category: category)
+        }
+        
+        return (
+            products,
+            categories
+        )
+    }
 }
