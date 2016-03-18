@@ -43,9 +43,9 @@ protocol ListItemProvider {
     // This is currently used only to retrieve possible product's list item on receiving a websocket notification with a product update
     func listItem(product: Product, list: List, _ handler: ProviderResult<ListItem?> -> ())
     
-    func increment(listItem: ListItem, delta: Int, _ handler: ProviderResult<Any> -> ())
+    func increment(listItem: ListItem, delta: Int, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
-    func increment(increment: ItemIncrement, _ handler: ProviderResult<Any> -> ())
+    func increment(increment: ItemIncrement, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
     /**
     Updates done status of listItems, and their "order" field such that they are positioned at the end of the new section.

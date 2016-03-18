@@ -248,10 +248,11 @@ class RealmListItemProvider: RealmProvider {
     
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
     func incrementTodoListItem(item: ListItem, delta: Int, handler: Bool -> Void) {
-        incrementTodoListItem(ItemIncrement(delta: delta, itemUuid: item.uuid))
+        incrementTodoListItem(ItemIncrement(delta: delta, itemUuid: item.uuid), handler: handler)
     }
     
-    func incrementTodoListItem(increment: IncrementItem, handler: Bool -> Void) {
+    // TODO!!!! remote?
+    func incrementTodoListItem(increment: ItemIncrement, handler: Bool -> Void) {
         
         do {
             //        synced(self)  {

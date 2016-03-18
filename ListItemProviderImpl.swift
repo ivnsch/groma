@@ -596,7 +596,8 @@ class ListItemProviderImpl: ListItemProvider {
         update([listItem], remote: remote, handler)
     }
     
-    func increment(listItem: ListItem, delta: Int, _ handler: ProviderResult<Any> -> ()) {
+    // TODO!!!! remote? why did this service not have remote before, forgot or we don't need it there?
+    func increment(listItem: ListItem, delta: Int, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         
         // Get item from database with updated quantityDelta
         // The reason we do this instead of using the item parameter, is that later doesn't always have valid quantityDelta
@@ -670,11 +671,11 @@ class ListItemProviderImpl: ListItemProvider {
     }
 
     // TODO this can be optimised, such that we don't have to prefetch the item but increment directly at least in memory
-    func increment(increment: ItemIncrement, _ handler: ProviderResult<Any> -> Void) {
+    func increment(increment: ItemIncrement, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         findListItem(increment.itemUuid) {[weak self] result in
             if let listItem = result.sucessResult {
                 
-                self?.increment(listItem, delta: increment.delta) {result in
+                self?.increment(listItem, delta: increment.delta, remote: remote) {result in
 
                     if result.success {
                         handler(ProviderResult(status: .Success, sucessResult: listItem))

@@ -503,7 +503,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onIncrementItem(tableViewListItem: TableViewListItem, delta: Int) {
-        Providers.listItemsProvider.increment(tableViewListItem.listItem, delta: delta, successHandler{[weak self] in
+        Providers.listItemsProvider.increment(tableViewListItem.listItem, delta: delta, remote: true, successHandler{[weak self] in
             // TODO do this in  the provider, provider should return incremented item
             let incremented: ListItem = tableViewListItem.listItem.increment(ListItemStatusQuantity(status: .Todo, quantity: delta))
             self?.listItemsTableViewController.updateOrAddListItem(incremented, status: .Todo, increment: false, notifyRemote: false)
@@ -1014,22 +1014,27 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 case .Update:
                     listItemsTableViewController.updateListItem(listItem, status: .Todo, notifyRemote: false)
                     updatePrices(.MemOnly)
-                    
-                    //TODO!!!! this is wrong
-                case .Delete:
-                    let itemUuid = notification.obj
-                    switch notification.verb {
-                    case .Delete:
-                        listItemsTableViewController.removeListItem(itemUuid)
-                        updatePrices(.MemOnly)
-                        
-                    default: QL4("Not handled case: \(notification.verb))")
-                    }
 
                 default: QL4("Not handled verb: \(notification.verb)")
                 }
             } else {
                 print("Error: ViewController.onWebsocketUpdateListItem: no value")
+            }
+            
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                
+                let itemUuid = notification.obj
+                
+                switch notification.verb {
+                case .Delete:
+                    listItemsTableViewController.removeListItem(itemUuid)
+                    updatePrices(.MemOnly)
+                    
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
             }
             
         } else if let info = note.userInfo as? Dictionary<String, WSNotification<ItemIncrement>> {
