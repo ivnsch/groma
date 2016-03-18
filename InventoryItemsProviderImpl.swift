@@ -229,7 +229,8 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             }
         }
     }
-    
+
+    // TODO this can be optimised, such that we don't have to prefetch the item but increment directly at least in memory    
     func incrementInventoryItem(item: ItemIncrement, remote: Bool, _ handler: ProviderResult<InventoryItem> -> ()) {
         findInventoryItem(item.itemUuid) {[weak self] result in
             if let inventoryItem = result.sucessResult {

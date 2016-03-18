@@ -45,6 +45,8 @@ protocol ListItemProvider {
     
     func increment(listItem: ListItem, delta: Int, _ handler: ProviderResult<Any> -> ())
 
+    func increment(increment: ItemIncrement, _ handler: ProviderResult<Any> -> ())
+    
     /**
     Updates done status of listItems, and their "order" field such that they are positioned at the end of the new section.
     ** Note ** word SWITCH: done expected to be != all listItem.done. This operation is meant to be used to append the items at the end of the section corresponding to new "done" state

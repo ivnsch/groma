@@ -334,7 +334,7 @@ struct MyWebsocketDispatcher {
                 }
                 
             } else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventory, data: \(data)")
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update group item, data: \(data)")
             }
             
         case WSNotificationVerb.Delete:
@@ -448,7 +448,22 @@ struct MyWebsocketDispatcher {
             } else {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Update list item, data: \(data)")
             }
-
+            
+        case WSNotificationVerb.Increment:
+            if let remoteIncrement = RemoteIncrement(representation: data) {
+                let increment = ItemIncrement(delta: remoteIncrement.delta, itemUuid: remoteIncrement.uuid) // TODO!!!! pass the last update timestamp also?
+                Providers.listItemsProvider.increment(increment, remote: false) {result in
+                    if result.success {
+                        postNotification(.GroupItem, verb, increment)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Increment list item \(remoteIncrement)", result: result)
+                    }
+                }
+                
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update list item, data: \(data)")
+            }
+            
         case WSNotificationVerb.Delete:
             if let containedItemIdentifier = RemoteContainedItemIdentifier(representation: data) {
                 Providers.listItemsProvider.removeListItem(containedItemIdentifier.itemUuid, listUuid: containedItemIdentifier.containerUuid, remote: false) {result in

@@ -1015,6 +1015,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     listItemsTableViewController.updateListItem(listItem, status: .Todo, notifyRemote: false)
                     updatePrices(.MemOnly)
                     
+                    //TODO!!!! this is wrong
                 case .Delete:
                     let itemUuid = notification.obj
                     switch notification.verb {
@@ -1029,6 +1030,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 }
             } else {
                 print("Error: ViewController.onWebsocketUpdateListItem: no value")
+            }
+            
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<ItemIncrement>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case WSNotificationVerb.Increment:
+                    let incr = notification.obj
+                    listItemsTableViewController.incrementListItem(incr, status: .Todo, notifyRemote: false)
+                default: QL4("Not handled: \(notification.verb)")
+                }
+            } else {
+                QL4("Mo value")
             }
         } else {
             print("Error: ViewController.onWebsocketAddListItems: no userInfo")

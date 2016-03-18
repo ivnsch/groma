@@ -658,6 +658,39 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
+    // only db no memory cache or remote, this is currently used only by websocket update (when receive websocket increment, fetch inventory item in order to increment it locally)
+    private func findListItem(uuid: String, _ handler: ProviderResult<ListItem> -> ()) {
+        DBProviders.listItemProvider.findListItem(uuid) {listItemMaybe in
+            if let listItem = listItemMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: listItem))
+            } else {
+                handler(ProviderResult(status: .NotFound))
+            }
+        }
+    }
+
+    // TODO this can be optimised, such that we don't have to prefetch the item but increment directly at least in memory
+    func increment(increment: ItemIncrement, _ handler: ProviderResult<Any> -> Void) {
+        findListItem(increment.itemUuid) {[weak self] result in
+            if let listItem = result.sucessResult {
+                
+                self?.increment(listItem, delta: increment.delta) {result in
+
+                    if result.success {
+                        handler(ProviderResult(status: .Success, sucessResult: listItem))
+                    } else {
+                        handler(ProviderResult(status: .DatabaseSavingError))
+                    }
+                }
+                
+            } else {
+                print("InventoryItemsProviderImpl.incrementInventoryItem: Didn't find inventory item to increment, for: \(increment)")
+                handler(ProviderResult(status: .NotFound))
+            }
+        }
+    }
+
+    
     func invalidateMemCache() {
         memProvider.invalidate()
     }
