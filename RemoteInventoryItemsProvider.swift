@@ -28,7 +28,14 @@ class RemoteInventoryItemsProvider: Any {
             print("Warn: RemoteInventoryItemsProvider.addToInventory: called without items. Remote service was not called.")
         }
     }
-
+    
+    func updateInventoryItem(inventoryItem: InventoryItem, handler: RemoteResult<RemoteInventoryItemWithProduct> -> ()) {
+        let params = toRequestParams(inventoryItem)
+        RemoteProvider.authenticatedRequest(.PUT, Urls.inventoryItem, params) {result in
+            handler(result)
+        }
+    }
+    
     func removeInventoryItem(inventoryItem: InventoryItem, handler: RemoteResult<NoOpSerializable> -> ()) {
         removeInventoryItem(inventoryItem.uuid, handler: handler)
     }
@@ -53,17 +60,13 @@ class RemoteInventoryItemsProvider: Any {
     private func toDictionary(inventoryItem: InventoryItemWithHistoryEntry) -> [String: AnyObject] {
         
         let productDict = RemoteListItemProvider().toRequestParams(inventoryItem.inventoryItem.product)
-        let inventoryDict = RemoteInventoryProvider().toRequestParams(inventoryItem.inventoryItem.inventory)
+        
+        let inventoryItemDict = toRequestParams(inventoryItem.inventoryItem)
         
         // TODO correct this structure in the server, product 2x
         return [
             "product": productDict,
-            "inventoryItem": [
-                "uuid": inventoryItem.inventoryItem.uuid,
-                "quantity": inventoryItem.inventoryItem.quantityDelta,
-                "inventory": inventoryDict,
-                "product": productDict
-            ],
+            "inventoryItem": inventoryItemDict,
             "historyItemUuid": inventoryItem.historyItemUuid,
             "paidPrice": inventoryItem.paidPrice,
             "addedDate": NSNumber(double: inventoryItem.addedDate.timeIntervalSince1970).longValue,
@@ -75,6 +78,20 @@ class RemoteInventoryItemsProvider: Any {
         return [
             "email": sharedUser.email,
             "foo": "" // FIXME this is a workaround for serverside, for some reason case class & serialization didn't work with only one field
+        ]
+    }
+    
+    
+    private func toRequestParams(inventoryItem: InventoryItem) -> [String: AnyObject] {
+        
+        let productDict = RemoteListItemProvider().toRequestParams(inventoryItem.product)
+        let inventoryDict = RemoteInventoryProvider().toRequestParams(inventoryItem.inventory)
+        
+        return [
+            "uuid": inventoryItem.uuid,
+            "quantity": inventoryItem.quantityDelta,
+            "inventory": inventoryDict,
+            "product": productDict
         ]
     }
 }

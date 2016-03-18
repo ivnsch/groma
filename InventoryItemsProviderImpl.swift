@@ -293,7 +293,10 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     
                     let updateTimeStampDict = RemoteInventoryItem.createTimestampUpdateDict(uuid: item.uuid, lastUpdate: serverLastUpdateTimestamp)
                     DBProviders.inventoryItemProvider.updateInventoryItemLastUpdate(updateTimeStampDict) {success in
-                    
+                        if !success {
+                            QL4("Couldn't save server timestamp for item: \(item), remoteResult: \(remoteResult)")
+                        }
+                        
                         // Now that the item was updated in server, set back delta in local database
                         // Note we subtract instead of set to 0, to handle possible parallel requests correctly
                         DBProviders.inventoryItemProvider.incrementInventoryItem(item, delta: -delta, onlyDelta: true) {saved in
@@ -306,7 +309,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                                 //                            }
                                 
                             } else {
-                                print("Error: couln't save remote inventory item")
+                                QL4("Error: couln't save remote inventory item")
                             }
                         }
                     }
@@ -334,7 +337,25 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
             
             if remote {
-                // TODO!!!! server
+                self?.remoteInventoryItemsProvider.updateInventoryItem(item) {remoteResult in
+                    
+                    if let remoteInventoryItemsWithDependencies = remoteResult.successResult {
+
+                        DBProviders.inventoryItemProvider.updateInventoryItemLastUpdate(remoteInventoryItemsWithDependencies) {success in
+                            if !success {
+                                QL4("Couldn't save server timestamp for item: \(item), remoteResult: \(remoteResult)")
+                            }
+                        }
+                        
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                            QL4("Error updating item: \(item) in remote, result: \(result)")
+                            // if there's a not connection related server error, invalidate cache
+                            self?.memProvider.invalidate()
+                            handler(result)
+                        })
+                    }
+                }
             }
         }
     }
