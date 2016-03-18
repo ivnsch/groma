@@ -41,6 +41,20 @@ class RealmInventoryItemProvider: RealmProvider {
     }
     
     
+    func saveInventoryAndHistoryItem(inventoryItems: [InventoryItem], historyItems: [HistoryItem], handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            
+            let dbInventoryItem = inventoryItems.map{InventoryItemMapper.dbWithInventoryItem($0)}
+            let dbHistorytem = historyItems.map{HistoryItemMapper.dbWithHistoryItem($0)}
+            realm.add(dbInventoryItem, update: true) // update true just in case
+            realm.add(dbHistorytem, update: true) // update true just in case
+            return true
+            
+            }) {(successMaybe: Bool?) in
+            handler(successMaybe ?? false)
+        }
+    }
+    
     func incrementInventoryItem(itemUuid: String, delta: Int, onlyDelta: Bool = false, handler: Bool -> ()) {
         do {
             //        synced(self)  {

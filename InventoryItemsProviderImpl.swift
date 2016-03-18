@@ -148,6 +148,16 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
+    func addToInventoryLocal(inventoryItems: [InventoryItem], historyItems: [HistoryItem], handler: ProviderResult<Any> -> Void) {
+        DBProviders.inventoryItemProvider.saveInventoryAndHistoryItem(inventoryItems, historyItems: historyItems) {success in
+            if success {
+                handler(ProviderResult(status: .Success))
+            } else {
+                QL4("Error adding to inventory: inventoryItems: \(inventoryItems), historyItems: \(historyItems)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
     
     // TODO!!!! remove this if not used anymore? this should be now done in:
     // func addToInventory(inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<Any> -> Void) {

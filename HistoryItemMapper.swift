@@ -52,6 +52,20 @@ class HistoryItemMapper {
         )
     }
     
+    class func historyItemWithRemote(remoteHistoryItem: RemoteHistoryItem, inventory: Inventory, product: Product, user: SharedUser) -> HistoryItem {
+        return HistoryItem(
+            uuid: remoteHistoryItem.uuid,
+            inventory: inventory,
+            product: product,
+            addedDate: remoteHistoryItem.addedDate,
+            quantity: remoteHistoryItem.quantity,
+            user: user,
+            paidPrice: remoteHistoryItem.paidPrice,
+            lastUpdate: remoteHistoryItem.lastUpdate,
+            lastServerUpdate: remoteHistoryItem.lastUpdate
+        )
+    }
+    
     class func historyItemsWithRemote(remoteListItems: RemoteHistoryItems) -> HistoryItemsWithRelations {
 
         func toInventoryDict(remoteInventories: [RemoteInventory]) -> ([String: Inventory], [Inventory]) {
@@ -104,7 +118,7 @@ class HistoryItemMapper {
             return (dict, arr)
         }
 
-        let (productsCategoriesDict, productsCategories) = toProductCategoryDict(remoteListItems.productsCategories) // TODO review if productsCategories array is necessary if not remove
+        let (productsCategoriesDict, _) = toProductCategoryDict(remoteListItems.productsCategories) // TODO review if productsCategories array is necessary if not remove
         let (productsDict, products) = toProductDict(remoteListItems.products, categories: productsCategoriesDict)
         let (usersDict, users) = toUserDict(remoteListItems.users)
         let (inventoriesDict, inventories) = toInventoryDict(remoteListItems.inventories)

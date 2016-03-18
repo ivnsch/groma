@@ -601,14 +601,32 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func onWebsocketInventoryItem(note: NSNotification) {
         
-        if let info = note.userInfo as? Dictionary<String, WSNotification<InventoryItem>> {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<[InventoryItem]>> {
+            
+            if let notification = info[WSNotificationValue] {
+                
+                switch notification.verb {
+                case .Add:
+//                    let inventoryItems = notification.obj
+                    reload()
+                    
+                    // TODO? increment is covered in onWebsocketInventoryItems, but user can e.g. change name (update of product in this case, but still triggered from inventory...)
+                    
+                default: print("Error: InventoryItemsViewController.onWebsocketInventoryItem: not implemented: \(notification.verb)")
+                }
+                
+            } else {
+                print("Error: InventoryItemsViewController.onWebsocketUpdateListItem: no value")
+            }
+            
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<InventoryItem>> {
             
             if let notification = info[WSNotificationValue] {
                 
                 switch notification.verb {
                 case .Update:
 //                    let inventoryItem = notification.obj
-                    onInventoryItemUpdated()
+                    reload()
                     
                     // TODO? increment is covered in onWebsocketInventoryItems, but user can e.g. change name (update of product in this case, but still triggered from inventory...)
                     

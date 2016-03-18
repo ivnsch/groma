@@ -260,6 +260,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         if let info = note.userInfo as? Dictionary<String, WSNotification<HistoryItem>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
+                case .Add:
+                    loadHistory()
                 case .Delete:
                     removeHistoryItemUI(notification.obj)
                 default: QL4("Not handled: \(notification.verb)")

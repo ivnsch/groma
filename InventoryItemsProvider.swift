@@ -25,6 +25,9 @@ protocol InventoryItemsProvider {
     func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> Void)
 
     func addToInventory(inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<[InventoryItemWithHistoryEntry]> -> Void)
+
+    // Add inventory and history items in a transaction. Used by e.g. websocket
+    func addToInventoryLocal(inventoryItems: [InventoryItem], historyItems: [HistoryItem], handler: ProviderResult<Any> -> Void)
     
     func updateInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 

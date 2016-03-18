@@ -580,7 +580,20 @@ struct MyWebsocketDispatcher {
     private static func processInventoryItem(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
-            QL4("TODO inventory item add, also server") // TODO!!!! inventory items add - also in server. Now we can add items directly to the inventory.
+            if let inventoryItemsWithHistoryAndDependencies = RemoteInventoryItemsWithHistoryAndDependencies(representation: data) {
+                let (inventoryItems, historyItems) = InventoryItemMapper.itemsWithRemote(inventoryItemsWithHistoryAndDependencies)
+                Providers.inventoryItemsProvider.addToInventoryLocal(inventoryItems, historyItems: historyItems) {result in
+                    if result.success {
+                        postNotification(.Inventory, verb, inventoryItems)
+                        postNotification(.HistoryItem, verb, historyItems)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory/history item \(inventoryItemsWithHistoryAndDependencies)", result: result)
+                    }
+                }
+                
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Add inventory/history item, data: \(data)")
+            }
             
         case WSNotificationVerb.Update:
             QL4("TODO inventory item update, also server!") // TODO!!!!
@@ -601,7 +614,7 @@ struct MyWebsocketDispatcher {
                 }
 
             } else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventory, data: \(data)")
+                MyWebsocketDispatcher.reportWebsocketParsingError("Increment inventory item, data: \(data)")
             }
             
         case WSNotificationVerb.Delete:
