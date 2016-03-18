@@ -152,12 +152,16 @@ class RealmGroupItemProvider: RealmProvider {
     // Copied from realm list item provider (which is copied from inventory item provider) refactor?
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
     func incrementGroupItem(item: GroupItem, delta: Int, handler: Bool -> ()) {
+        incrementGroupItem(ItemIncrement(delta: delta, itemUuid: item.uuid), handler: handler)
+    }
+    
+    func incrementGroupItem(increment: ItemIncrement, handler: Bool -> ()) {
         
         do {
             //        synced(self)  {
             // load
             let realm = try Realm()
-            let results = realm.objects(DBGroupItem).filter(DBGroupItem.createFilter(item.uuid))
+            let results = realm.objects(DBGroupItem).filter(DBGroupItem.createFilter(increment.itemUuid))
             //        results = results.filter(NSPredicate(format: DBInventoryItem.createFilter(item.product, item.inventory), argumentArray: []))
             let objs: [DBGroupItem] = results.toArray(nil)
             let dbItems = objs.map{GroupItemMapper.groupItemWith($0)}
@@ -165,7 +169,7 @@ class RealmGroupItemProvider: RealmProvider {
             
             if let groupItem = groupItemMaybe {
                 // increment
-                let incrementedListitem = groupItem.copy(quantity: groupItem.quantity + delta)
+                let incrementedListitem = groupItem.copy(quantity: groupItem.quantity + increment.delta)
                 
                 // convert to db object
                 let dbIncrementedInventoryitem = GroupItemMapper.dbWith(incrementedListitem)
@@ -181,7 +185,7 @@ class RealmGroupItemProvider: RealmProvider {
                 handler(true)
                 
             } else {
-                print("Info: RealmListItemGroupProvider.incrementGroupItem: Group item not found: \(item)")
+                print("Info: RealmListItemGroupProvider.incrementGroupItem: Group item not found: \(increment)")
                 handler(false)
             }
             //        }

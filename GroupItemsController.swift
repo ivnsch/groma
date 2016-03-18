@@ -463,7 +463,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func increment(model: ProductWithQuantity, delta: Int, onSuccess: VoidFunction) {
-        Providers.listItemGroupsProvider.increment((model as! ProductWithQuantityGroup).groupItem, delta: delta, successHandler({result in
+        Providers.listItemGroupsProvider.increment((model as! ProductWithQuantityGroup).groupItem, delta: delta, remote: true, successHandler({result in
             onSuccess()
         }))
     }
@@ -542,6 +542,28 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
                 QL4("No value")
             }
             
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<ItemIncrement>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case WSNotificationVerb.Increment:
+                    let incr = notification.obj
+                    if let groupItemModels = productsWithQuantityController?.models as? [ProductWithQuantityGroup] {
+                        if let groupItemModel = (groupItemModels.findFirst{$0.groupItem.uuid == incr.itemUuid}) {
+                            productsWithQuantityController?.updateIncrementUI(ProductWithQuantityGroup(groupItem: groupItemModel.groupItem), delta: incr.delta)
+                            
+                        } else {
+                            QL3("Didn't find group item, can't increment") // this is not forcibly an error, it can be e.g. that user just removed the item
+                        }
+                        
+                    } else {
+                        QL4("Couldn't cast models to [ProductWithQuantityGroup]")
+                    }
+                    
+                default: QL4("Not handled: \(notification.verb)")
+                }
+            } else {
+                QL4("Mo value")
+            }
         } else {
             QL4("No userInfo")
         }

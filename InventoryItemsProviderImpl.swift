@@ -230,8 +230,8 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    func incrementInventoryItem(item: InventoryItemIncrement, remote: Bool, _ handler: ProviderResult<InventoryItem> -> ()) {
-        findInventoryItem(item.inventoryItemUuid) {[weak self] result in
+    func incrementInventoryItem(item: ItemIncrement, remote: Bool, _ handler: ProviderResult<InventoryItem> -> ()) {
+        findInventoryItem(item.itemUuid) {[weak self] result in
             if let inventoryItem = result.sucessResult {
                 
                 self?.incrementInventoryItem(inventoryItem, delta: item.delta) {result in

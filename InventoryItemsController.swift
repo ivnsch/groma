@@ -571,13 +571,13 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onWebsocketInventoryItems(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<InventoryItemIncrement>> {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<ItemIncrement>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case WSNotificationVerb.Add:
                     let incr = notification.obj
                     if let inventoryItemModels = productsWithQuantityController?.models as? [ProductWithQuantityInv] {
-                        if let inventoryItemModel = (inventoryItemModels.findFirst{$0.inventoryItem.uuid == incr.inventoryItemUuid}) {
+                        if let inventoryItemModel = (inventoryItemModels.findFirst{$0.inventoryItem.uuid == incr.itemUuid}) {
                             productsWithQuantityController?.updateIncrementUI(ProductWithQuantityInv(inventoryItem: inventoryItemModel.inventoryItem), delta: incr.delta)
                             
                         } else {
@@ -642,13 +642,13 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 QL4("No value")
             }
             
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<InventoryItemIncrement>> {
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<ItemIncrement>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case WSNotificationVerb.Increment:
                     let incr = notification.obj
                     if let inventoryItemModels = productsWithQuantityController?.models as? [ProductWithQuantityInv] {
-                        if let inventoryItemModel = (inventoryItemModels.findFirst{$0.inventoryItem.uuid == incr.inventoryItemUuid}) {
+                        if let inventoryItemModel = (inventoryItemModels.findFirst{$0.inventoryItem.uuid == incr.itemUuid}) {
                             productsWithQuantityController?.updateIncrementUI(ProductWithQuantityInv(inventoryItem: inventoryItemModel.inventoryItem), delta: incr.delta)
                             
                         } else {

@@ -67,10 +67,10 @@ class RemoteGroupsProvider: RemoteProvider {
         }
     }
     
-    func incrementGroupItem(groupItem: GroupItem, delta: Int, handler: RemoteResult<NSDate> -> ()) {
+    func incrementGroupItem(increment: ItemIncrement, delta: Int, handler: RemoteResult<NSDate> -> ()) {
         let params: [String: AnyObject] = [
-            "delta": delta,
-            "uuid": groupItem.uuid
+            "delta": increment.delta,
+            "uuid": increment.itemUuid
         ]
         RemoteProvider.authenticatedRequestTimestamp(.POST, Urls.incrementGroupItem, params) {result in
             handler(result)

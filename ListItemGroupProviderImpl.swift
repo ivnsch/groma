@@ -331,67 +331,72 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     // Copied from ListItemProviderImpl (which is copied from inventory provider) refactor?
-    func increment(listItem: GroupItem, delta: Int, _ handler: ProviderResult<Any> -> ()) {
-        
+    func increment(groupItem: GroupItem, delta: Int, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        increment(ItemIncrement(delta: delta, itemUuid: groupItem.uuid), remote: remote, handler)
+    }
+    
+    func increment(increment: ItemIncrement, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         // Get item from database with updated quantityDelta
         // The reason we do this instead of using the item parameter, is that later doesn't always have valid quantityDelta
         // -> When item is incremented we set back quantityDelta after the server's response, this is NOT communicated to the item in the view controller (so on next increment, the passed quantityDelta is invalid)
         // Which is ok. because the UI must not have logic related with background server update
         // Cleaner would be to create a lightweight InventoryItem version for the UI - without quantityDelta, etc. But this adds extra complexity
         
-//        let memIncremented = memProvider.increment(listItem, quantity: ListItemStatusQuantity(status: .Todo, quantity: delta))
-//        if memIncremented {
-//            handler(ProviderResult(status: .Success))
-//        }
+        //        let memIncremented = memProvider.increment(listItem, quantity: ListItemStatusQuantity(status: .Todo, quantity: delta))
+        //        if memIncremented {
+        //            handler(ProviderResult(status: .Success))
+        //        }
         
-        DBProviders.groupItemProvider.incrementGroupItem(listItem, delta: delta) {[weak self] saved in
-//            
-//            if !memIncremented { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
-                if saved {
-                    handler(ProviderResult(status: .Success))
-                } else {
-                    handler(ProviderResult(status: .DatabaseSavingError))
-                }
-//            }
+        DBProviders.groupItemProvider.incrementGroupItem(increment) {[weak self] saved in
+            //
+            //            if !memIncremented { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
+            if saved {
+                handler(ProviderResult(status: .Success))
+            } else {
+                handler(ProviderResult(status: .DatabaseSavingError))
+            }
+            //            }
             
             //            print("SAVED DB \(item)(+delta) in local db. now going to update remote")
             
-            // TODO!! no server for gorup item increment yet
-            self?.remoteGroupsProvider.incrementGroupItem(listItem, delta: delta) {remoteResult in
-
-                if let serverLastUpdateTimestamp = remoteResult.successResult {
-
+            if remote {
+                
+                // TODO!! no server for gorup item increment yet
+                self?.remoteGroupsProvider.incrementGroupItem(increment, delta: increment.delta) {remoteResult in
                     
-//                    //                    //                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
-                    //
-                    //                        // Now that the item was updated in server, set back delta in local database
-                    //                        // Note we subtract instead of set to 0, to handle possible parallel requests correctly
-                    //                        self?.dbInventoryProvider.incrementInventoryItem(item, delta: -delta, onlyDelta: true) {saved in
-                    //
-                    //                            if saved {
-                    //                                //                            self?.findInventoryItem(item) {result in
-                    //                                //                                if let newitem = result.sucessResult {
-                    //                                //                                    print("3. CONFIRM incremented item: \(item) + \(delta) == \(newitem)")
-                    //                                //                                }
-                    //                                //                            }
-                    //                                
-                    //                            } else {
-                    //                                print("Error: couln't save remote inventory item")
-                    //                            }
-                    //                        }
-                    
-                    let updateTimeStampDict = RemoteGroupItem.createTimestampUpdateDict(uuid: listItem.uuid, lastUpdate: serverLastUpdateTimestamp)
-                    DBProviders.groupItemProvider.updateGroupItemLastUpdate(updateTimeStampDict) {success in
-                    }
-                } else {
-                    print("Error incrementing item: \(listItem) in remote, result: \(remoteResult)")
-                    DefaultRemoteErrorHandler.handle(remoteResult)  {(result: ProviderResult<Any>) in
-                        QL4("Error incrementing item: \(listItem) in remote, result: \(result)")
-                        handler(result)
+                    if let serverLastUpdateTimestamp = remoteResult.successResult {
+                        
+                        
+                        //                    //                    //                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
+                        //
+                        //                        // Now that the item was updated in server, set back delta in local database
+                        //                        // Note we subtract instead of set to 0, to handle possible parallel requests correctly
+                        //                        self?.dbInventoryProvider.incrementInventoryItem(item, delta: -delta, onlyDelta: true) {saved in
+                        //
+                        //                            if saved {
+                        //                                //                            self?.findInventoryItem(item) {result in
+                        //                                //                                if let newitem = result.sucessResult {
+                        //                                //                                    print("3. CONFIRM incremented item: \(item) + \(delta) == \(newitem)")
+                        //                                //                                }
+                        //                                //                            }
+                        //
+                        //                            } else {
+                        //                                print("Error: couln't save remote inventory item")
+                        //                            }
+                        //                        }
+                        
+                        let updateTimeStampDict = RemoteGroupItem.createTimestampUpdateDict(uuid: increment.itemUuid, lastUpdate: serverLastUpdateTimestamp)
+                        DBProviders.groupItemProvider.updateGroupItemLastUpdate(updateTimeStampDict) {success in
+                        }
+                    } else {
+                        print("Error incrementing item: \(increment) in remote, result: \(remoteResult)")
+                        DefaultRemoteErrorHandler.handle(remoteResult)  {(result: ProviderResult<Any>) in
+                            QL4("Error incrementing item: \(increment) in remote, result: \(result)")
+                            handler(result)
+                        }
                     }
                 }
             }
         }
     }
-    
 }

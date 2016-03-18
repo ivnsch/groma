@@ -142,9 +142,9 @@
 		EB22C7181C4B129300285352 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB22C7171C4B129300285352 /* FBSDKShareKit.framework */; };
 		EB2433EA1BC5A04D00986897 /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2433E91BC5A04D00986897 /* AddItemView.swift */; };
 		EB2433ED1BC5A46800986897 /* AddItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB2433EC1BC5A46800986897 /* AddItemView.xib */; };
-		EB266A761C19DA3900488679 /* InventoryItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB266A751C19DA3500488679 /* InventoryItemIncrement.swift */; };
-		EB266A771C19DA3C00488679 /* InventoryItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB266A751C19DA3500488679 /* InventoryItemIncrement.swift */; };
-		EB266A781C19DA3C00488679 /* InventoryItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB266A751C19DA3500488679 /* InventoryItemIncrement.swift */; };
+		EB266A761C19DA3900488679 /* ItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB266A751C19DA3500488679 /* ItemIncrement.swift */; };
+		EB266A771C19DA3C00488679 /* ItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB266A751C19DA3500488679 /* ItemIncrement.swift */; };
+		EB266A781C19DA3C00488679 /* ItemIncrement.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB266A751C19DA3500488679 /* ItemIncrement.swift */; };
 		EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */; };
 		EB28C1181A58623E00E1C8BC /* PlainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */; };
 		EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D101A4ACC4400DBC4AF /* String.swift */; };
@@ -1089,7 +1089,7 @@
 		EB22C7171C4B129300285352 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "../../../sdks/FacebookSDKs-iOS-20150817/FBSDKShareKit.framework"; sourceTree = "<group>"; };
 		EB2433E91BC5A04D00986897 /* AddItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		EB2433EC1BC5A46800986897 /* AddItemView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddItemView.xib; sourceTree = "<group>"; };
-		EB266A751C19DA3500488679 /* InventoryItemIncrement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemIncrement.swift; sourceTree = "<group>"; };
+		EB266A751C19DA3500488679 /* ItemIncrement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemIncrement.swift; sourceTree = "<group>"; };
 		EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationTitleView.swift; sourceTree = "<group>"; };
 		EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlainTableViewController.swift; sourceTree = "<group>"; };
 		EB2F5D101A4ACC4400DBC4AF /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -2160,7 +2160,7 @@
 				EBD27CD11C171175005D8305 /* RemoteGroup.swift */,
 				EB7858801B7FD87D008AAD12 /* RemoteHistoryItemsSyncResult.swift */,
 				EB792A271B95CCE10004BEEC /* RemoteSocialLoginResult.swift */,
-				EB266A751C19DA3500488679 /* InventoryItemIncrement.swift */,
+				EB266A751C19DA3500488679 /* ItemIncrement.swift */,
 				EB87A4AA1C1A4F13008D2A42 /* GroupItemWithGroup.swift */,
 				EB8EDE211C9B6AEE003B566F /* RemoteIncrement.swift */,
 			);
@@ -3364,7 +3364,7 @@
 				EB1B364C1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */,
 				EB9208241C4EBD4900332332 /* ManageBrandsController.swift in Sources */,
 				EB5666CE1C52BCA90074D2B3 /* LangManager.swift in Sources */,
-				EB266A761C19DA3900488679 /* InventoryItemIncrement.swift in Sources */,
+				EB266A761C19DA3900488679 /* ItemIncrement.swift in Sources */,
 				EB2F5D111A4ACC4400DBC4AF /* String.swift in Sources */,
 				EBA9E6061C64AFCE00A85610 /* ListItemPrototype.swift in Sources */,
 				EB70C2191B4D2C940060E529 /* ListProvider.swift in Sources */,
@@ -4012,7 +4012,7 @@
 				EB78587E1B7FD81A008AAD12 /* HistoryItemsSync.swift in Sources */,
 				EB9208311C4EE9AF00332332 /* BrandProvider.swift in Sources */,
 				EB1B364D1BC2CC79003519F2 /* HistoryItemGroup.swift in Sources */,
-				EB266A771C19DA3C00488679 /* InventoryItemIncrement.swift in Sources */,
+				EB266A771C19DA3C00488679 /* ItemIncrement.swift in Sources */,
 				EBBC9B791C00D7190046966B /* RealmProductProvider.swift in Sources */,
 				EBED0CF61C80E7B700A1EEC4 /* Array_Inventory.swift in Sources */,
 				EB7F59D01BA1D40A00E07EBA /* Option.swift in Sources */,
@@ -4167,7 +4167,7 @@
 				EB7BFA731BD9981400F4C74A /* OrderedDictionary_Quantities.swift in Sources */,
 				EB0C1B8D1B3DA89900F24C85 /* LoginData.swift in Sources */,
 				EBB526831BEFE5490002A286 /* Double.swift in Sources */,
-				EB266A781C19DA3C00488679 /* InventoryItemIncrement.swift in Sources */,
+				EB266A781C19DA3C00488679 /* ItemIncrement.swift in Sources */,
 				EBB526871BEFE6DD0002A286 /* SectionModel.swift in Sources */,
 				EB6E3D3F1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift in Sources */,
 				EBEE7E551C974D3600DBCB6A /* RealmSectionProvider.swift in Sources */,
