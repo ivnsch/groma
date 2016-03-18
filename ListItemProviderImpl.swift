@@ -696,38 +696,6 @@ class ListItemProviderImpl: ListItemProvider {
         memProvider.invalidate()
     }
     
-//    func firstList(handler: Try<List> -> ()) {
-//        
-//        func createList(name: String, #handler: Try<List> -> ()) {
-//            let list = List(id: NSUUID().UUIDString, name: name)
-//            self.add(list, handler: {try in
-//                if let savedList = try.success {
-//                    PreferencesManager.savePreference(PreferencesManagerKey.listId, value: NSString(string: savedList.id))
-//                    handler(Try(savedList))
-//                }
-//            })
-//        }
-//
-//        if let listId:String = PreferencesManager.loadPreference(PreferencesManagerKey.listId) {
-//            self.list(listId, handler: {try in
-//                if let list = try.success {
-//                    handler(Try(list))
-//                }
-//
-//            })
-//            
-//        } else {
-//            createList(Constants.defaultListIdentifier, handler: {try in
-//                if let list = try.success {
-//                    handler(Try(list))
-//                }
-//            })
-//        }
-//    }
-    
-    
-
-    
     func listItemCount(status: ListItemStatus, list: List, fetchMode: ProviderFetchModus = .First, _ handler: ProviderResult<Int> -> Void) {
         let countMaybe = memProvider.listItemCount(.Stash, list: list)
         if let count = countMaybe {
