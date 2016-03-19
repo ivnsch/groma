@@ -356,15 +356,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mf8-a8-xj0" customClass="ListTopBarView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="64" id="7pv-aL-nlg"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ecb-Lc-6L8" customClass="StashView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="520" height="50"/>
+                                <rect key="frame" x="0.0" y="550" width="520" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stash" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5T8-dN-c0D">
                                         <rect key="frame" x="465" y="17" width="35" height="17"/>
@@ -395,7 +388,7 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wdp-hj-bbA" customClass="PricesView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="600" height="50"/>
+                                <rect key="frame" x="0.0" y="550" width="600" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HHn-gV-K9h">
                                         <rect key="frame" x="46" y="25" width="0.0" height="0.0"/>
@@ -442,6 +435,13 @@
                                     <outlet property="widthConstraint" destination="rQC-nu-lkT" id="yDs-1e-dvG"/>
                                 </connections>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mf8-a8-xj0" customClass="ListTopBarView" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="7pv-aL-nlg"/>
+                                </constraints>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VE1-1T-3hF" customClass="ExpandCollapseButton" customModule="shoppin">
                                 <rect key="frame" x="550" y="550" width="40" height="40"/>
                                 <color key="backgroundColor" red="0.61052091549999998" green="0.73144471069999994" blue="0.91775058180000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -451,10 +451,10 @@
                                 </constraints>
                             </button>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5PG-Em-S6N">
-                                <rect key="frame" x="0.0" y="114" width="600" height="486"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="4SH-aZ-z07">
-                                        <rect key="frame" x="270" y="213" width="60" height="60"/>
+                                        <rect key="frame" x="270" y="238" width="60" height="60"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="Hg8-ID-vfl"/>
@@ -462,13 +462,13 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dny-Vg-Zzw">
-                                        <rect key="frame" x="222" y="285" width="156" height="21"/>
+                                        <rect key="frame" x="222" y="310" width="156" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to start adding listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pQ3-yB-b2g">
-                                        <rect key="frame" x="223" y="314" width="154" height="16"/>
+                                        <rect key="frame" x="223" y="339" width="154" height="16"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -489,6 +489,7 @@
                             <constraint firstItem="wdp-hj-bbA" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="AQR-S1-FCJ"/>
                             <constraint firstAttribute="trailing" secondItem="5PG-Em-S6N" secondAttribute="trailing" id="Byg-bZ-mse"/>
                             <constraint firstAttribute="trailing" secondItem="ecb-Lc-6L8" secondAttribute="trailing" constant="80" id="I8w-Yl-hUM"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ecb-Lc-6L8" secondAttribute="bottom" priority="999" id="KNP-9a-zgZ"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="VE1-1T-3hF" secondAttribute="bottom" constant="10" id="TwV-Cd-U3t"/>
                             <constraint firstItem="ecb-Lc-6L8" firstAttribute="top" secondItem="Mf8-a8-xj0" secondAttribute="bottom" priority="999" id="e2g-5h-KpD"/>
                             <constraint firstItem="wdp-hj-bbA" firstAttribute="top" secondItem="Mf8-a8-xj0" secondAttribute="bottom" priority="999" id="ftH-wy-Bgv"/>
@@ -497,9 +498,16 @@
                             <constraint firstItem="Mf8-a8-xj0" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="obo-jI-JBh"/>
                             <constraint firstItem="Mf8-a8-xj0" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="r2T-Mu-HGj"/>
                             <constraint firstItem="wdp-hj-bbA" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="rQC-nu-lkT"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="wdp-hj-bbA" secondAttribute="bottom" priority="999" id="rT4-cw-bV8"/>
                             <constraint firstAttribute="trailing" secondItem="Mf8-a8-xj0" secondAttribute="trailing" id="vNn-9R-uLD"/>
-                            <constraint firstItem="5PG-Em-S6N" firstAttribute="top" secondItem="Mf8-a8-xj0" secondAttribute="bottom" priority="999" constant="50" id="yMy-0m-jXp"/>
+                            <constraint firstItem="5PG-Em-S6N" firstAttribute="top" secondItem="Mf8-a8-xj0" secondAttribute="bottom" priority="999" id="yMy-0m-jXp"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="e2g-5h-KpD"/>
+                                <exclude reference="ftH-wy-Bgv"/>
+                            </mask>
+                        </variation>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
@@ -509,7 +517,6 @@
                         <outlet property="emptyListViewLabel2" destination="pQ3-yB-b2g" id="fRv-bq-ZSX"/>
                         <outlet property="expandCollapseButton" destination="VE1-1T-3hF" id="lCs-ww-Ruj"/>
                         <outlet property="pricesView" destination="wdp-hj-bbA" id="64l-Vh-k1d"/>
-                        <outlet property="pricesViewWidthConstraint" destination="rQC-nu-lkT" id="Ybw-Nn-c8C"/>
                         <outlet property="stashView" destination="ecb-Lc-6L8" id="Wj9-eR-Tta"/>
                         <outlet property="topBar" destination="Mf8-a8-xj0" id="oGu-bF-E6Q"/>
                         <segue destination="yD7-GV-3hX" kind="show" identifier="doneViewControllerSegue" id="83z-nz-sEV"/>

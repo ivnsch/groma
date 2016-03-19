@@ -33,7 +33,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     @IBOutlet weak var pricesView: PricesView!
     
     @IBOutlet weak var stashView: StashView!
-    @IBOutlet weak var pricesViewWidthConstraint: NSLayoutConstraint!
     
     // TODO 1 custom view for empty
     @IBOutlet weak var emptyListView: UIView!
@@ -98,10 +97,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
-        let top = CGRectGetHeight(topBar.frame) + pricesView.frame.height
-        let openInset = CGRectGetHeight(topBar.frame) + pricesView.minimizedHeight
-        let closedInset = top
-        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: 290, openInset: openInset, closeInset: closedInset, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
+        let top = CGRectGetHeight(topBar.frame)
+        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: 290, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
             controller.productDelegate = self
@@ -115,10 +112,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func initAddEditListItemControllerManager() -> ExpandableTopViewController<AddEditListItemViewController> {
-        let top = CGRectGetHeight(topBar.frame) + pricesView.frame.height
-        let openInset = CGRectGetHeight(topBar.frame) + pricesView.minimizedHeight
-        let closedInset = top
-        let manager: ExpandableTopViewController<AddEditListItemViewController> =  ExpandableTopViewController(top: top, height: 240, openInset: openInset, closeInset: closedInset, parentViewController: self, tableView: listItemsTableViewController.tableView) {
+        let top = CGRectGetHeight(topBar.frame)
+        let manager: ExpandableTopViewController<AddEditListItemViewController> =  ExpandableTopViewController(top: top, height: 240, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {
             return UIStoryboard.addEditListItemViewController()
         }
         manager.delegate = self
@@ -126,7 +121,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
 
     private func initEditSectionControllerManager() -> ExpandableTopViewController<EditSectionViewController> {
-        let top = CGRectGetHeight(topBar.frame) + CGRectGetHeight(pricesView.frame)
+        let top = CGRectGetHeight(topBar.frame)
         let manager: ExpandableTopViewController<EditSectionViewController> = ExpandableTopViewController(top: top, height: 60, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
             let controller = EditSectionViewController()
             controller.delegate = self
@@ -342,8 +337,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             topQuickAddControllerManager?.expand(false)
             topAddEditListItemControllerManager?.expand(false)
             topEditSectionControllerManager?.expand(false)
-            
-            pricesView.setExpandedVertical(true)
 
             topBar.setLeftButtonIds([.Edit])
             topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
@@ -355,8 +348,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             
         } else { // if there's no top controller open, open the quick add controller
             topQuickAddControllerManager?.expand(true)
-            
-            pricesView.setExpandedVertical(false)
 
             topBar.setLeftButtonIds([])
             topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
@@ -383,7 +374,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if tryCloseTopViewController {
             topQuickAddControllerManager?.expand(false)
             topAddEditListItemControllerManager?.expand(false)
-            pricesView.setExpandedVertical(true)
         }
         
         expandCollapseButton.setHiddenAnimated(!editing)
@@ -398,19 +388,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         listItemsTableViewController.setEditing(editing, animated: animated)
 
-        let navbarHeight = topBar.frame.height
-//        let statusBarHeight = CGRectGetHeight(UIApplication.sharedApplication().statusBarFrame)
-//
-        let topInset = navbarHeight + CGRectGetHeight(pricesView.frame)
-        
-        // TODO this makes a very big bottom inset why?
-//            let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + addButtonContainer.frame.height
-//        let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + 20
-        let bottomInset: CGFloat = 0
-    
-        listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
-        listItemsTableViewController.tableView.topOffset = -listItemsTableViewController.tableView.inset.top
-        
+
         listItemsTableViewController.cellMode = editing ? .Increment : .Note
     }
     
@@ -428,6 +406,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         listItemsTableViewController.scrollViewDelegate = self
         listItemsTableViewController.listItemsTableViewDelegate = self
         listItemsTableViewController.listItemsEditTableViewDelegate = self
+        
+        let navbarHeight = topBar.frame.height
+        let topInset = navbarHeight
+        let bottomInset: CGFloat = pricesView.frame.height + 10 // 10 - show a little empty space between the last item and the prices view
+        listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0)
+        listItemsTableViewController.tableView.topOffset = -listItemsTableViewController.tableView.inset.top
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
@@ -472,7 +456,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 TopBarButtonModel(buttonId: .Submit),
                 TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
             ])
-            pricesView.setExpandedVertical(false)
             
             topAddEditListItemControllerManager?.controller?.updatingItem = AddEditItem(item: tableViewListItem.listItem)
             topAddEditListItemControllerManager?.controller?.delegate = self
@@ -821,7 +804,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     
                     sectionsTableViewController.onViewDidLoad = {
                         let navbarHeight = self.topBar.frame.height
-                        let topInset = navbarHeight + CGRectGetHeight(self.pricesView.frame)
+                        let topInset = navbarHeight
+                        
                         // TODO this makes a very big bottom inset why?
                         //            let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + addButtonContainer.frame.height
                         //        let bottomInset = (navigationController?.tabBarController?.tabBar.frame.height)! + 20
@@ -890,16 +874,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
         if controller is QuickAddViewController || controller is AddEditListItemViewController {
-            if expand {
-                view.frame.origin.y = CGRectGetHeight(topBar.frame) + pricesView.minimizedHeight
-            } else {
-                view.frame.origin.y = CGRectGetHeight(topBar.frame) + pricesView.originalHeight
-            }
+            view.frame.origin.y = CGRectGetHeight(topBar.frame)
         }
     }
     
     func onExpandableClose() {
-        pricesView.setExpandedVertical(true)
         topBar.setBackVisible(false)
         topBar.setLeftButtonIds([.Edit])
         topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
