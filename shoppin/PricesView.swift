@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 class PricesView: UIView {
 
@@ -16,6 +17,11 @@ class PricesView: UIView {
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!
     @IBOutlet weak var cartImgLeftConstraint: NSLayoutConstraint!
     @IBOutlet weak var cartImg: UIImageView!
+
+    @IBOutlet weak var quantityCenterConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var quantityLabel: UILabel!
+    @IBOutlet weak var stashQuantityLabel: UILabel!
     
     private(set) var totalPrice: Float?
     private(set) var donePrice: Float?
@@ -27,14 +33,41 @@ class PricesView: UIView {
     let minimizedHeight: CGFloat = 20
     
     private let arrowWidth: CGFloat = 20
-    private let openWidth: CGFloat = -80 // width constant while showing stash view behind
+    private let openWidth: CGFloat = -60 // width constant while showing stash view behind
     
     private var open: Bool = false // when stash view behind is visible
     private var expanded: Bool = true // if vertically minimized or expanded (expanded is normal size)
 
+    var cartQuantity: Int = 0 {
+        didSet {
+            if let cartQuantityLabel = quantityLabel {
+                cartQuantityLabel.text = "\(cartQuantity) items in your cart"
+                updateQuantityCenterConstraint()
+            } else {
+                QL3("Setting cart quantity but label is not initialised yet")
+            }
+        }
+    }
+
+    var stashQuantity: Int = 0 {
+        didSet {
+            if let stashQuantityLabel = stashQuantityLabel {
+                stashQuantityLabel.text = "\(stashQuantity) in the backstore"
+                updateQuantityCenterConstraint()
+                stashQuantityLabel.hidden = stashQuantity == 0
+            } else {
+                QL3("Setting stash quantity but label is not initialised yet")
+            }
+        }
+    }
+    
+    private func updateQuantityCenterConstraint() {
+        quantityCenterConstraint.constant = stashQuantity == 0 ? 0 : -10
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        backgroundColor = UIColor.clearColor() // we add the background with layer (because of triangle shape)
+//        backgroundColor = UIColor.clearColor() // we add the background with layer (because of triangle shape)
         originalHeight = heightConstraint.constant
         originalPriceFont = totalPriceLabel.font
         originalCartImgLeftConstraint = cartImgLeftConstraint.constant
@@ -54,12 +87,8 @@ class PricesView: UIView {
     
     func setDonePrice(price: Float, animated: Bool) {
         self.donePrice = price
-        if price == 0 { // done price 0 should be invisible
-            donePriceLabel.text = ""
-        } else {
-            let text = price.toLocalCurrencyString()
-            updatePriceLabel(text, label: donePriceLabel, animated: animated)
-        }
+        let text = price.toLocalCurrencyString()
+        updatePriceLabel(text, label: donePriceLabel, animated: animated)
         updateTotalPriceLabel(false) // depending if done price is 0 (empty - not visible) or not, total label gets a leading "/", so we have to refresh it
     }
     
@@ -82,13 +111,14 @@ class PricesView: UIView {
         }
     }
     
-    override func drawRect(rect: CGRect) {
-        let ctx = UIGraphicsGetCurrentContext()
-        CGContextSetFillColorWithColor(ctx, UIColor.whiteColor().CGColor)
-        CGContextBeginPath(ctx)
-        CGContextAddPath(ctx, Shapes.arrowToRightBGPath(bounds.size, arrowWidth: arrowWidth))
-        CGContextDrawPath(ctx, CGPathDrawingMode.Fill)
-    }
+    // this is to draw arrow shape on the right side - for now disabled
+//    override func drawRect(rect: CGRect) {
+//        let ctx = UIGraphicsGetCurrentContext()
+//        CGContextSetFillColorWithColor(ctx, UIColor.whiteColor().CGColor)
+//        CGContextBeginPath(ctx)
+//        CGContextAddPath(ctx, Shapes.arrowToRightBGPath(bounds.size, arrowWidth: arrowWidth))
+//        CGContextDrawPath(ctx, CGPathDrawingMode.Fill)
+//    }
     
     // expanded: covers all width, contracted: space to see stash view
     func setExpandedHorizontal(expanded: Bool) {

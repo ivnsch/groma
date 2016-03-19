@@ -14,6 +14,8 @@
             <string>HelveticaNeue</string>
             <string>HelveticaNeue</string>
             <string>HelveticaNeue</string>
+            <string>HelveticaNeue</string>
+            <string>HelveticaNeue</string>
         </mutableArray>
         <mutableArray key="HelveticaNeueLights.ttc">
             <string>HelveticaNeue-Light</string>
@@ -357,21 +359,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ecb-Lc-6L8" customClass="StashView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="550" width="520" height="50"/>
+                                <rect key="frame" x="0.0" y="540" width="520" height="60"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stash" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5T8-dN-c0D">
-                                        <rect key="frame" x="465" y="17" width="35" height="17"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5T8-dN-c0D">
+                                        <rect key="frame" x="500" y="30" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aVD-5X-hQA">
-                                        <rect key="frame" x="0.0" y="0.0" width="520" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="520" height="60"/>
                                         <connections>
                                             <segue destination="F26-cA-BBq" kind="show" identifier="stashSegue" id="7eO-Eh-pwZ"/>
                                         </connections>
                                     </button>
                                 </subviews>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="aVD-5X-hQA" secondAttribute="bottom" id="0Yg-z7-b1c"/>
                                     <constraint firstAttribute="trailing" secondItem="5T8-dN-c0D" secondAttribute="trailing" constant="20" id="R30-Wp-hDf"/>
@@ -380,7 +383,7 @@
                                     <constraint firstItem="aVD-5X-hQA" firstAttribute="top" secondItem="ecb-Lc-6L8" secondAttribute="top" id="jKu-Nm-ATH"/>
                                     <constraint firstAttribute="trailing" secondItem="aVD-5X-hQA" secondAttribute="trailing" id="s00-Qn-Y6M"/>
                                     <constraint firstAttribute="width" constant="520" id="sup-Gt-RPo"/>
-                                    <constraint firstAttribute="height" constant="50" id="tFI-d1-SZg"/>
+                                    <constraint firstAttribute="height" constant="60" id="tFI-d1-SZg"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="quantityLabel" destination="5T8-dN-c0D" id="Blw-dl-Lvd"/>
@@ -388,49 +391,79 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wdp-hj-bbA" customClass="PricesView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="550" width="600" height="50"/>
+                                <rect key="frame" x="0.0" y="540" width="600" height="60"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HHn-gV-K9h">
-                                        <rect key="frame" x="46" y="25" width="0.0" height="0.0"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                        <rect key="frame" x="580" y="30" width="0.0" height="0.0"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O2F-Jz-CeL">
-                                        <rect key="frame" x="54" y="25" width="0.0" height="0.0"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                        <color key="textColor" red="0.53812699450000001" green="0.64471197270000002" blue="0.8089261968" alpha="1" colorSpace="calibratedRGB"/>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O2F-Jz-CeL">
+                                        <rect key="frame" x="580" y="30" width="0.0" height="0.0"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cart" translatesAutoresizingMaskIntoConstraints="NO" id="Dqp-d5-Ldb">
-                                        <rect key="frame" x="8" y="10" width="30" height="30"/>
+                                        <rect key="frame" x="20" y="15" width="30" height="30"/>
                                     </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pyJ-GL-SY2">
+                                        <rect key="frame" x="60" y="20" width="0.0" height="0.0"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oGg-M3-YII">
+                                        <rect key="frame" x="60" y="40" width="0.0" height="0.0"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="11"/>
+                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UQu-hi-P8a">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
                                         <connections>
                                             <action selector="onCartTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="487-Fb-qWM"/>
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="pyJ-GL-SY2" firstAttribute="top" secondItem="wdp-hj-bbA" secondAttribute="top" constant="20" id="2Cs-rS-R58"/>
                                     <constraint firstAttribute="bottom" secondItem="UQu-hi-P8a" secondAttribute="bottom" id="3RQ-hB-PcV"/>
                                     <constraint firstItem="O2F-Jz-CeL" firstAttribute="centerY" secondItem="wdp-hj-bbA" secondAttribute="centerY" id="7L4-C6-XsZ"/>
                                     <constraint firstItem="O2F-Jz-CeL" firstAttribute="leading" secondItem="HHn-gV-K9h" secondAttribute="trailing" constant="8" id="Cwz-6J-z9Y"/>
+                                    <constraint firstItem="oGg-M3-YII" firstAttribute="leading" secondItem="wdp-hj-bbA" secondAttribute="leading" constant="60" id="EJm-dn-011"/>
                                     <constraint firstItem="Dqp-d5-Ldb" firstAttribute="centerY" secondItem="wdp-hj-bbA" secondAttribute="centerY" id="FuU-bY-jtL"/>
+                                    <constraint firstItem="pyJ-GL-SY2" firstAttribute="leading" secondItem="wdp-hj-bbA" secondAttribute="leading" constant="60" id="KcZ-Bs-Xbf"/>
+                                    <constraint firstItem="HHn-gV-K9h" firstAttribute="centerY" secondItem="wdp-hj-bbA" secondAttribute="centerY" id="QmT-RD-9Ra"/>
                                     <constraint firstItem="UQu-hi-P8a" firstAttribute="leading" secondItem="wdp-hj-bbA" secondAttribute="leading" id="UPP-Aq-f2w"/>
-                                    <constraint firstAttribute="height" constant="50" id="XTX-5C-Avu"/>
+                                    <constraint firstAttribute="height" constant="60" id="XTX-5C-Avu"/>
+                                    <constraint firstAttribute="trailing" secondItem="HHn-gV-K9h" secondAttribute="trailing" constant="20" id="c3U-FI-cVG"/>
+                                    <constraint firstItem="oGg-M3-YII" firstAttribute="centerY" secondItem="wdp-hj-bbA" secondAttribute="centerY" constant="10" id="cq7-0b-0N6"/>
                                     <constraint firstItem="UQu-hi-P8a" firstAttribute="top" secondItem="wdp-hj-bbA" secondAttribute="top" id="fy0-Dy-wXn"/>
+                                    <constraint firstAttribute="trailing" secondItem="O2F-Jz-CeL" secondAttribute="trailing" constant="20" id="nVB-Pt-LhH"/>
                                     <constraint firstItem="HHn-gV-K9h" firstAttribute="centerY" secondItem="wdp-hj-bbA" secondAttribute="centerY" id="o7A-aj-uG3"/>
                                     <constraint firstItem="UQu-hi-P8a" firstAttribute="width" secondItem="wdp-hj-bbA" secondAttribute="width" id="oaG-bs-F1z"/>
-                                    <constraint firstItem="Dqp-d5-Ldb" firstAttribute="leading" secondItem="wdp-hj-bbA" secondAttribute="leading" constant="8" id="pcT-UX-maN"/>
+                                    <constraint firstItem="Dqp-d5-Ldb" firstAttribute="leading" secondItem="wdp-hj-bbA" secondAttribute="leading" constant="20" id="pcT-UX-maN"/>
+                                    <constraint firstItem="pyJ-GL-SY2" firstAttribute="centerY" secondItem="wdp-hj-bbA" secondAttribute="centerY" constant="-10" id="rI8-ZY-Lno"/>
                                     <constraint firstItem="HHn-gV-K9h" firstAttribute="leading" secondItem="Dqp-d5-Ldb" secondAttribute="trailing" constant="8" id="xiW-kM-yB7"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Cwz-6J-z9Y"/>
+                                        <exclude reference="2Cs-rS-R58"/>
+                                        <exclude reference="QmT-RD-9Ra"/>
+                                        <exclude reference="xiW-kM-yB7"/>
+                                    </mask>
+                                </variation>
                                 <connections>
                                     <outlet property="cartImg" destination="Dqp-d5-Ldb" id="a1O-zO-VgO"/>
                                     <outlet property="cartImgLeftConstraint" destination="pcT-UX-maN" id="F4G-rs-Wfp"/>
                                     <outlet property="donePriceLabel" destination="HHn-gV-K9h" id="d9v-gT-KQ3"/>
                                     <outlet property="heightConstraint" destination="XTX-5C-Avu" id="q55-7c-8Al"/>
+                                    <outlet property="quantityCenterConstraint" destination="rI8-ZY-Lno" id="U6h-A5-9Oa"/>
+                                    <outlet property="quantityLabel" destination="pyJ-GL-SY2" id="Nf2-w5-Urk"/>
+                                    <outlet property="stashQuantityLabel" destination="oGg-M3-YII" id="AGQ-ik-tUO"/>
                                     <outlet property="totalPriceLabel" destination="O2F-Jz-CeL" id="EoQ-8V-xnJ"/>
                                     <outlet property="widthConstraint" destination="rQC-nu-lkT" id="yDs-1e-dvG"/>
                                 </connections>

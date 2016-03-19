@@ -225,6 +225,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     if count != self?.stashView.quantity { // don't animate if there's no change
                         self?.stashView.quantity = count
                         self?.pricesView.setExpandedHorizontal(count == 0)
+                        self?.pricesView.stashQuantity = count
                         self?.stashView.setOpen(count > 0)
                     }
                 })
@@ -469,7 +470,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 // Note also callback onFinish - when there's another undo item it will be submitted automatically, which triggers a provider and price view update
                 // so we have to ensure our fake update comes after this possible update, otherwise it's overwritten.
                 let updatedPrice = (self?.pricesView.donePrice ?? 0) + tableViewListItem.listItem.totalPrice(.Todo)
+                let updatedQuantity = (self?.pricesView.cartQuantity ?? 0) + 1
                 self?.pricesView.setDonePrice(updatedPrice, animated: true)
+                self?.pricesView.cartQuantity = updatedQuantity
             })
         }
     }
@@ -529,10 +532,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     */
     func updatePrices(listItemsFetchMode: ProviderFetchModus = .Both) {
         if let currentList = self.currentList {
-            Providers.listItemsProvider.listItems(currentList, sortOrderByStatus: .Todo, fetchMode: listItemsFetchMode, successHandler{listItems in
-                self.pricesView.setTotalPrice(listItems.totalPriceTodoAndCart, animated: false)
+            Providers.listItemsProvider.listItems(currentList, sortOrderByStatus: .Todo, fetchMode: listItemsFetchMode, successHandler{[weak self] listItems in
+                self?.pricesView.setTotalPrice(listItems.totalPriceTodoAndCart, animated: false)
                 // The reason we exclude stash from total price is that when user is in the store they want to know what they will have to pay at the end (if they buy the complete list - this may not be necessarily the case though), which is todo + stash
-                self.pricesView.setDonePrice(listItems.totalPrice(.Done), animated: false)
+                self?.pricesView.setDonePrice(listItems.totalPrice(.Done), animated: false)
+                self?.pricesView.cartQuantity = listItems.filterDone().count
             })
         }
     }
