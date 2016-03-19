@@ -30,14 +30,14 @@ class RemoteInventoryProvider: RemoteProvider {
         }
     }
 
-    // TODO!!!! server - also handle return to update timestamps
-    func updateInventories(inventories: [Inventory], handler: RemoteResult<NoOpSerializable> -> ()) {
-        let params = inventories.map{self.toRequestParams($0)}
-        // TODO this is no timplemented in the server
-        RemoteProvider.authenticatedRequest(.PUT, Urls.inventories, params) {result in
-            handler(result)
-        }
-    }
+//    // TODO!!!! server - also handle return to update timestamps
+//    func updateInventories(inventories: [Inventory], handler: RemoteResult<NoOpSerializable> -> ()) {
+//        let params = inventories.map{self.toRequestParams($0)}
+//        // TODO this is no timplemented in the server
+//        RemoteProvider.authenticatedRequest(.PUT, Urls.inventories, params) {result in
+//            handler(result)
+//        }
+//    }
 
     func updateInventoriesOrder(orderUpdates: [OrderUpdate], handler: RemoteResult<[RemoteOrderUpdate]> -> ()) {
         let params: [[String: AnyObject]] = orderUpdates.map{
