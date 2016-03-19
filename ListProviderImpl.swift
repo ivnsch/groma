@@ -97,6 +97,7 @@ class ListProviderImpl: ListProvider {
         update([list], remote: remote, handler)
     }
     
+    // TODO! do we still need to update a list array? this use case should be covered now with updateListsOrder?
     func update(lists: [List], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         DBProviders.listProvider.saveLists(lists, update: true) {[weak self] updated in
             handler(ProviderResult(status: updated ? .Success : .DatabaseSavingError))
@@ -118,6 +119,26 @@ class ListProviderImpl: ListProvider {
                 }
             } else {
                 QL4("DB update didn't succeed")
+            }
+        }
+    }
+    
+    func updateListsOrder(orderUpdates: [OrderUpdate], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        DBProviders.listProvider.updateListsOrder(orderUpdates) {[weak self] success in
+            if success {
+                handler(ProviderResult(status: .Success))
+                
+                if remote {
+                    self?.remoteListProvider.updateListsOrder(orderUpdates) {remoteResult in
+                        // Note: no server update timetamps here, because server implementation details, more info see note in RemoteOrderUpdate
+                        if !remoteResult.success {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        }
+                    }
+                }
+            } else {
+                QL4("Error updating lists order in local database, orderUpdates: \(orderUpdates)")
+                handler(ProviderResult(status: .Unknown))
             }
         }
     }

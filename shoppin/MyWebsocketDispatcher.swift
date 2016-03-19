@@ -141,13 +141,18 @@ struct MyWebsocketDispatcher {
     private static func processListItems(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
             case WSNotificationVerb.Update:
-                if let remoteListItems = RemoteListItems(representation: data) {
-                    let listItems = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: nil)
-                    // TODO!!!! review that the dependencies of the items are my own ones not the ones of the user sending. Also check the possible optimised service only for order.
-                    Providers.listItemsProvider.update(listItems.listItems, remote: false) {result in
-                        postNotification(.ListItems, verb, listItems)
+                if let remoteOrderUpdates = RemoteOrderUpdate.collection(data) {
+                    let orderUpdates = remoteOrderUpdates.map{OrderUpdate(uuid: $0.uuid, order: $0.order)}
+                    Providers.inventoryProvider.updateInventoriesOrder(orderUpdates, remote: false) {result in
+                        if result.success {
+                            postNotification(.Inventories, verb, remoteOrderUpdates)
+                        } else {
+                            MyWebsocketDispatcher.reportWebsocketStoringError("Update lists order \(remoteOrderUpdates)", result: result)
+                        }
                     }
-                }
+                } else {
+                    MyWebsocketDispatcher.reportWebsocketParsingError("Update lists order, data: \(data)")
+            }
 
         default:
             QL4("Not handled verb: \(verb)")

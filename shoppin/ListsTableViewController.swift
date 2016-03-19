@@ -45,6 +45,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
 
         topAddEditListControllerManager = initTopAddEditListControllerManager()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketLists:", name: WSNotificationName.List.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
     }
     
@@ -97,9 +98,9 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     override func onReorderedModels() {
         let lists = (models as! [ExpandableTableViewListModel]).map{$0.list}
         
-        let updatedLists = lists.mapEnumerate{index, list in list.copy(order: index)}
+        let orderUpdates = lists.mapEnumerate{index, list in OrderUpdate(uuid: list.uuid, order: index)}
 
-        Providers.listProvider.update(updatedLists, remote: true, successHandler{
+        Providers.listProvider.updateListsOrder(orderUpdates, remote: true, successHandler{
 //            self?.models = models // REVIEW remove? this seem not be necessary...
         })
     }
@@ -201,6 +202,23 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                     } else {
                         QL3("Received notification to remove list but it wasn't in table view. Uuid: \(listUuid)")
                     }
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+            
+        } else {
+            QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
+        }
+    }
+    
+    func onWebsocketLists(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<[RemoteOrderUpdate]>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Update:
+                    initModels()
                 default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {

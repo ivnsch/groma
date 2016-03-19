@@ -45,7 +45,14 @@ class DBList: DBSyncable {
     static func createFilter(uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
-
+    
+    // MARK: - Update
+    
+    // Creates dictionary to update database entry for an order update from server
+    static func createOrderUpdateDict(orderUpdate: OrderUpdate) -> [String: AnyObject] {
+        return ["uuid": orderUpdate.uuid, "order": orderUpdate.order, DBSyncable.dirtyFieldName: false]
+    }
+    
     // MARK: -
     
     static func fromDict(dict: [String: AnyObject], inventory: DBInventory) -> DBList {

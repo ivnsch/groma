@@ -22,6 +22,8 @@ protocol ListProvider {
 
     func update(lists: [List], remote: Bool, _ handler: ProviderResult<Any> -> ())
     
+    func updateListsOrder(orderUpdates: [OrderUpdate], remote: Bool, _ handler: ProviderResult<Any> -> ())
+    
     func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
     func remove(listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())

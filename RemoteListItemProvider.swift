@@ -110,11 +110,19 @@ class RemoteListItemProvider {
         }
     }
     
-    
     // TODO use update
     func update(listItems: [ListItem], handler: RemoteResult<RemoteListItems> -> ()) {
         let parameters = listItems.map{self.toRequestParams($0)}
         RemoteProvider.authenticatedRequest(.PUT, Urls.listItem, parameters) {result in
+            handler(result)
+        }
+    }
+    
+    func updateListsOrder(orderUpdates: [OrderUpdate], handler: RemoteResult<[RemoteOrderUpdate]> -> ()) {
+        let params: [[String: AnyObject]] = orderUpdates.map{
+            ["uuid": $0.uuid, "order": $0.order]
+        }
+        RemoteProvider.authenticatedRequestArray(.PUT, Urls.listsOrder, params) {result in
             handler(result)
         }
     }
