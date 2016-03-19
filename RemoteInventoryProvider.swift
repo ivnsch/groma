@@ -38,6 +38,15 @@ class RemoteInventoryProvider: RemoteProvider {
             handler(result)
         }
     }
+
+    func updateInventoriesOrder(orderUpdates: [OrderUpdate], handler: RemoteResult<[RemoteOrderUpdate]> -> ()) {
+        let params: [[String: AnyObject]] = orderUpdates.map{
+            ["uuid": $0.uuid, "order": $0.order]
+        }
+        RemoteProvider.authenticatedRequestArray(.PUT, Urls.inventoriesOrder, params) {result in
+            handler(result)
+        }
+    }
     
     func removeInventory(inventory: Inventory, handler: RemoteResult<NoOpSerializable> -> ()) {
         removeInventory(inventory.uuid, handler: handler)

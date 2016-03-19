@@ -132,14 +132,22 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    func updateInventories(inventories: [Inventory], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbInventoryProvider.saveInventories(inventories, update: true) {[weak self] saved in
-            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
-            if remote {
-                self?.remoteProvider.updateInventories(inventories) {remoteResult in
-                    DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                    // TODO!!!! server, and then timestamp update
+    func updateInventoriesOrder(orderUpdates: [OrderUpdate], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        DBProviders.inventoryProvider.updateInventoriesOrder(orderUpdates) {[weak self] success in
+            if success {
+                handler(ProviderResult(status: .Success))
+                
+                if remote {
+                    self?.remoteProvider.updateInventoriesOrder(orderUpdates) {remoteResult in
+                        // Note: no server update timetamps here, because server implementation details, more info see note in RemoteOrderUpdate
+                        if !remoteResult.success {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        }
+                    }
                 }
+            } else {
+                QL4("Error updating inventories order in local database, orderUpdates: \(orderUpdates)")
+                handler(ProviderResult(status: .Unknown))
             }
         }
     }

@@ -20,6 +20,7 @@ enum WSNotificationName: String {
     case GroupItem = "WSGroupItem"
     case Section = "WSSection"
     case Inventory = "WSInventory"
+    case Inventories = "WSInventories"
     case InventoryItems = "WSInventoryItems"
     case InventoryItem = "WSInventoryItem"
     case InventoryItemsWithHistory = "WSInventoryItemsWithHistory"
@@ -87,6 +88,8 @@ struct MyWebsocketDispatcher {
                 processSection(verb, topic, data)
             case "inventory":
                 processInventory(verb, topic, data)
+            case "inventories":
+                processInventories(verb, topic, data)
             case "inventoryItem":
                 processInventoryItem(verb, topic, data)
             case "inventoryItems":
@@ -567,6 +570,25 @@ struct MyWebsocketDispatcher {
                 postNotification(.Inventory, verb, remoteInventoryInvitation)
             } else {
                 QL4("Couldn't parse data: \(data)")
+            }
+        default: QL4("Not handled verb: \(verb)")
+        }
+    }
+    
+    private static func processInventories(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+        switch verb {
+        case WSNotificationVerb.Update:
+            if let remoteOrderUpdates = RemoteOrderUpdate.collection(data) {
+                let orderUpdates = remoteOrderUpdates.map{OrderUpdate(uuid: $0.uuid, order: $0.order)}
+                Providers.inventoryProvider.updateInventoriesOrder(orderUpdates, remote: false) {result in
+                    if result.success {
+                        postNotification(.Inventories, verb, remoteOrderUpdates)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Update inventories order \(remoteOrderUpdates)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventories order, data: \(data)")
             }
         default: QL4("Not handled verb: \(verb)")
         }

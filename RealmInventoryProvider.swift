@@ -81,6 +81,17 @@ class RealmInventoryProvider: RealmProvider {
         self.saveInventories([inventory], update: update, handler: handler)
     }
     
+    func updateInventoriesOrder(orderUpdates: [OrderUpdate], _ handler: Bool -> Void) {
+        withRealm({realm in
+            for orderUpdate in orderUpdates {
+                realm.create(DBInventory.self, value: DBInventory.createOrderUpdateDict(orderUpdate), update: true)
+            }
+            return true
+        }) {(successMaybe: Bool?) in
+            handler(successMaybe ?? false)
+        }
+    }
+    
     func removeInventory(uuid: String, update: Bool =  true, markForSync: Bool, handler: Bool -> ()) {
         background({[weak self] in
             do {

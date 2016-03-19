@@ -46,6 +46,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         topAddEditListControllerManager = initTopAddEditListControllerManager()
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsockeInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsockeInventories:", name: WSNotificationName.Inventories.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
     }
     
@@ -99,9 +100,9 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     override func onReorderedModels() {
         let lists = (models as! [ExpandableTableViewInventoryModel]).map{$0.inventory}
         
-        let updatedLists = lists.mapEnumerate{index, list in list.copy(order: index)}
+        let orderUpdates = lists.mapEnumerate{index, list in OrderUpdate(uuid: list.uuid, order: index)}
         
-        Providers.inventoryProvider.updateInventories(updatedLists, remote: true, successHandler{
+        Providers.inventoryProvider.updateInventoriesOrder(orderUpdates, remote: true, successHandler{
             //            self?.models = models // REVIEW remove? this seem not be necessary...
         })
     }
@@ -208,6 +209,24 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
             QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
         }
     }
+
+    func onWebsockeInventories(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<[RemoteOrderUpdate]>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Update:
+                    initModels()
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+            
+        } else {
+            QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
+        }
+    }
+
     
     func onIncomingGlobalSyncFinished(note: NSNotification) {
         // TODO notification - note has the sender name

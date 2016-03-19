@@ -22,8 +22,8 @@ protocol InventoryProvider {
     
     func updateInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
-    func updateInventories(inventories: [Inventory], remote: Bool, _ handler: ProviderResult<Any> -> ())
-
+    func updateInventoriesOrder(orderUpdates: [OrderUpdate], remote: Bool, _ handler: ProviderResult<Any> -> ())
+    
     func removeInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     func removeInventory(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())

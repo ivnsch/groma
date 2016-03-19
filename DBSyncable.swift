@@ -10,6 +10,10 @@ import Foundation
 import RealmSwift
 
 class DBSyncable: Object {
+    
+    static let lastUpdateFieldName = "lastUpdate"
+    static let dirtyFieldName = "dirty"
+    
     // TODO!!!! are we using lastUpdate if not remove or write a comment. Ensure we use lastServerUpdate in sync
     // ensure also that when we create the new objs with lastServerUpdate, lastUpdate is set to the same date
     dynamic var lastUpdate: NSDate = NSDate()
@@ -23,16 +27,16 @@ class DBSyncable: Object {
     // IMPORTANT: Use this only to store sync results
     func setSyncableFieldswithRemoteDict(dict: [String: AnyObject]) {
         // lastServerUpdate is called by server "lastUpdate". So we set lastServerUpdate with this. And subsequently we set lastUpdate with lastServerUpdate, as the sync is effectively updating the local db, so this is also the lastUpdate.
-        self.lastServerUpdate = NSDate(timeIntervalSince1970: dict["lastUpdate"]! as! Double)
+        self.lastServerUpdate = NSDate(timeIntervalSince1970: dict[DBSyncable.lastUpdateFieldName]! as! Double)
         self.lastUpdate = lastServerUpdate
         self.dirty = false
     }
     
     func setSyncableFieldsInDict(var dict: [String: AnyObject]) {
-        dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        dict[DBSyncable.lastUpdateFieldName] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
     }
     
     static func dirtyFilter(dirty: Bool = true) -> String {
-        return "dirty == \(dirty)"
+        return "\(dirtyFieldName) == \(dirty)"
     }
 }
