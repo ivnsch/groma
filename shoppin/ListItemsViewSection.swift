@@ -28,8 +28,8 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     
     private let cellIdentifier = ItemsListTableViewConstants.listItemCellIdentifier
     
-    var headerBGColor: UIColor = UIColor(red: 167/255, green: 1, blue: 93/255, alpha: 1)
-    var headerFontColor: UIColor = UIColor.blackColor()
+    var headerBGColor: UIColor = UIColor.blackColor()
+    var headerFontColor: UIColor = UIColor.whiteColor()
     var labelFontColor: UIColor = UIColor.blackColor()
     
     var section: Section // as var to mutate order in-place (ListItemsTableViewController)
@@ -58,27 +58,6 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
         return color
     }
     
-    private var finalHeaderBGColor: UIColor {
-        var color:UIColor
-        if self.style == .Gray {
-            color = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
-        } else {
-            color = self.headerBGColor
-        }
-        return color
-    }
-    
-    private var finalHeaderFontColor: UIColor {
-        var color:UIColor
-//        if self.style == .Gray {
-//            color = UIColor.grayColor()
-//        } else {
-            color = self.headerFontColor
-//        }
-        return color
-    }
-    
-    
     init(section: Section, tableViewListItems:[TableViewListItem], hasHeader: Bool = true, status: ListItemStatus) {
         self.section = section
         self.tableViewListItems = tableViewListItems
@@ -102,8 +81,8 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
         if self.hasHeader {
             let view = NSBundle.loadView("ListItemsSectionHeaderView", owner: self) as! ListItemsSectionHeaderView
             view.section = section
-            view.backgroundColor = finalHeaderBGColor
-            view.nameLabel.textColor = finalHeaderFontColor
+            view.backgroundColor = headerBGColor
+            view.nameLabel.textColor = headerFontColor
             view.nameLabel.font = headerFont
             view.delegate = self
             return view

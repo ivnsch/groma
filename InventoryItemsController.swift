@@ -216,16 +216,16 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
-        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+        submitInputs(name, price: priceText, quantity: quantityText, category: sectionName, categoryColor: sectionColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
         }
     }
     
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
         
         if let updatingInventoryItem = updatingInventoryItem {
             if let price = priceText.floatValue, quantity = Int(quantityText) {
-                let updatedCategory = updatingInventoryItem.product.category.copy(name: category)
+                let updatedCategory = updatingInventoryItem.product.category.copy(name: sectionName, color: sectionColor)
                 let updatedProduct = updatingInventoryItem.product.copy(name: name, price: price, category: updatedCategory, brand: brand, store: store)
                 // TODO! calculate quantity delta correctly?
                 let updatedInventoryItem = updatingInventoryItem.copy(quantity: quantity, quantityDelta: quantity, product: updatedProduct)

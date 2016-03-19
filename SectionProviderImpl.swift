@@ -81,7 +81,7 @@ class SectionProviderImpl: SectionProvider {
         }
     }
     
-    func mergeOrCreateSection(sectionName: String, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, _ handler: ProviderResult<Section> -> Void) {
+    func mergeOrCreateSection(sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, _ handler: ProviderResult<Section> -> Void) {
         
         // load section or create one (there's no more section data in the input besides of the name, so there's nothing to update).
         // There is no name update since here we have only name so either the name is in db or it's not, if it's not insert a new section
@@ -96,7 +96,7 @@ class SectionProviderImpl: SectionProvider {
                     
                 } else {
                     if let order = possibleNewOrder {
-                        let section = Section(uuid: NSUUID().UUIDString, name: sectionName, list: list, order: order)
+                        let section = Section(uuid: NSUUID().UUIDString, name: sectionName, color: sectionColor, list: list, order: order)
                         handler(ProviderResult(status: .Success, sucessResult: section))
                         
                     } else { // no order known in advance - fetch listItems to count how many sections, order at the end
@@ -106,7 +106,7 @@ class SectionProviderImpl: SectionProvider {
                             if let listItems = result.sucessResult {
                                 let order = listItems.sectionCount(status)
                                 
-                                let section = Section(uuid: NSUUID().UUIDString, name: sectionName, list: list, order: ListItemStatusOrder(status: status, order: order))
+                                let section = Section(uuid: NSUUID().UUIDString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: order))
                                 handler(ProviderResult(status: .Success, sucessResult: section))
                                 
                             } else {

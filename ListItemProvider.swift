@@ -30,7 +30,7 @@ protocol ListItemProvider {
     */
     func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int?, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<ListItem> -> Void)
     
-    func addListItem(product: Product, sectionName: String, quantity: Int, list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<ListItem> -> Void)
+    func addListItem(product: Product, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<ListItem> -> Void)
     
     func add(prototypes: [ListItemPrototype], list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<[ListItem]> -> Void)
 

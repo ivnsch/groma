@@ -16,6 +16,9 @@ class ReorderSectionCell: UITableViewCell {
         didSet {
             if let section = section {
                 nameLabel.text = section.name
+                contentView.backgroundColor = section.color
+                backgroundColor = section.color
+                nameLabel.textColor = UIColor.whiteColor()
             }
         }
     }

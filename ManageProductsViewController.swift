@@ -245,15 +245,15 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
-        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+        submitInputs(name, price: priceText, quantity: quantityText, category: sectionName, categoryColor: sectionColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
         }
     }
     
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
         if let updatingProduct = updatingProduct {
             if let price = priceText.floatValue { // Note quantity for product is ignored
-                updateProduct(updatingProduct, name: name, category: category, categoryColor: categoryColor, price: price, brand: brand, store: store)
+                updateProduct(updatingProduct, name: name, category: sectionName, categoryColor: sectionColor, price: price, brand: brand, store: store)
             }
         } else {
             print("Warn: InventoryItemsController.onUpdateTap: No updatingProduct")

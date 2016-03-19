@@ -151,6 +151,7 @@ class RemoteListItemProvider {
         let parameters: [String: AnyObject] = [
             "uuid": section.uuid,
             "name": section.name,
+            "color": section.color.hexStr,
             "list": listDict,
             "todoOrder": section.todoOrder,
             "doneOrder": section.doneOrder,
@@ -279,6 +280,7 @@ class RemoteListItemProvider {
         return [
             "uuid": section.uuid,
             "name": section.name,
+            "color": section.color,
             "todoOrder": section.todoOrder,
             "doneOrder": section.doneOrder,
             "stashOrder": section.stashOrder,

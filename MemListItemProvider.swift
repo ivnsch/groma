@@ -87,7 +87,7 @@ class MemListItemProvider {
             let sectionName = prototype.targetSectionName
             let section = (self.listItems![list]!.findFirst{$0.section.name == sectionName})?.section ?? {
                 let sectionCount = self.listItems![list]!.sectionCount(status)
-                return Section(uuid: NSUUID().UUIDString, name: sectionName, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
+                return Section(uuid: NSUUID().UUIDString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
             }()
             
             var listItemOrder = 0
@@ -129,11 +129,11 @@ class MemListItemProvider {
     }
 
     
-    func addOrUpdateListItem(product: Product, sectionNameMaybe: String? = nil, status: ListItemStatus, quantity: Int, list: List, note: String? = nil) -> ListItem? {
+    func addOrUpdateListItem(product: Product, sectionNameMaybe: String? = nil, sectionColorMaybe: UIColor?, status: ListItemStatus, quantity: Int, list: List, note: String? = nil) -> ListItem? {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
         
-        let prototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionNameMaybe ?? product.category.name)
+        let prototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionNameMaybe ?? product.category.name, targetSectionColor: sectionColorMaybe ?? product.category.color)
         return addOrUpdateListItem(prototype, status: status, list: list, note: note)
     }
     

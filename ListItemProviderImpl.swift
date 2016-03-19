@@ -150,7 +150,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func add(groupItems: [GroupItem], list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
-        let listItemPrototypes: [ListItemPrototype] = groupItems.map{ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name)}
+        let listItemPrototypes: [ListItemPrototype] = groupItems.map{ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name, targetSectionColor: $0.product.category.color)}
         self.add(listItemPrototypes, list: list, handler)
     }
     
@@ -248,11 +248,12 @@ class ListItemProviderImpl: ListItemProvider {
     // Note: status assumed to be .Todo as we can add list item input only to .Todo
     func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<ListItem> -> Void) {
 
-        Providers.sectionProvider.mergeOrCreateSection(listItemInput.section, status: .Todo, possibleNewOrder: possibleNewSectionOrder, list: list) {[weak self] result in
+        Providers.sectionProvider.mergeOrCreateSection(listItemInput.section, sectionColor: listItemInput.sectionColor, status: .Todo, possibleNewOrder: possibleNewSectionOrder, list: list) {[weak self] result in
 
             if let section = result.sucessResult {
                 
-                Providers.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.category, categoryColor: listItemInput.categoryColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, store: listItemInput.store) {result in
+                // updateCategory: false: we don't touch product's category from list items - our inputs affect only the section. We use them though to create a category in the case a category with the section's name doesn't exists already. A product needs a category and it's logical to simply default this to the section if it doesn't exist, instead of making user enter a second input for the category. From user's perspective, most times category = section.
+                Providers.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.section, categoryColor: listItemInput.sectionColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, store: listItemInput.store, updateCategory: false) {result in
             
                     if let product = result.sucessResult {
                     
@@ -272,8 +273,8 @@ class ListItemProviderImpl: ListItemProvider {
     
 
     // Adds list item with todo status
-    func addListItem(product: Product, sectionName: String, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
-        let listItemPrototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionName)
+    func addListItem(product: Product, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
+        let listItemPrototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionName, targetSectionColor: sectionColor)
         self.add(listItemPrototype, list: list, handler)
     }
     
@@ -360,7 +361,7 @@ class ListItemProviderImpl: ListItemProvider {
                                     let section: DBSection = {
                                         realm.objects(DBSection).filter(DBSection.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first ?? {
                                             let sectionOrder = orderMaybe ?? getOrderForNewSection(existingListItems)
-                                            return DBSection(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, list: dbList, todoOrder: sectionOrder, doneOrder: 0, stashOrder: 0)
+                                            return DBSection(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, bgColorHex: prototype.targetSectionColor.hexStr, list: dbList, todoOrder: sectionOrder, doneOrder: 0, stashOrder: 0)
                                         }()
                                     }()
 
@@ -394,7 +395,7 @@ class ListItemProviderImpl: ListItemProvider {
                                             let sectionCount = getOrderForNewSection(existingListItems)
                                             
                                             // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
-                                            return memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, list: list, order: ListItemStatusOrder(status: .Todo, order: sectionCount))
+                                            return memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: .Todo, order: sectionCount))
                                         }()
                                     
                                     // determine list item order and init/update the map with list items count / section as side effect (which is used to determine the order of the next item)
@@ -492,7 +493,7 @@ class ListItemProviderImpl: ListItemProvider {
 
     func addListItem(product: Product, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
         // for now call the other func, which will fetch the section again... review if this is bad for performance otherwise let like this
-        addListItem(product, sectionName: section.name, quantity: quantity, list: list, note: note, order: orderMaybe, handler)
+        addListItem(product, sectionName: section.name, sectionColor: section.color, quantity: quantity, list: list, note: note, order: orderMaybe, handler)
     }
 
     func switchStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> ()) {

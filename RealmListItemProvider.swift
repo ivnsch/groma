@@ -83,7 +83,7 @@ class RealmListItemProvider: RealmProvider {
     }
     
     
-    func addListItem(status: ListItemStatus, product: Product, sectionNameMaybe: String?, quantity: Int, list: List, note noteMaybe: String? = nil, _ handler: ListItem? -> Void) {
+    func addListItem(status: ListItemStatus, product: Product, sectionNameMaybe: String?, sectionColorMaybe: UIColor?, quantity: Int, list: List, note noteMaybe: String? = nil, _ handler: ListItem? -> Void) {
         
         doInWriteTransaction({realm in
             return syncedRet(self) {
@@ -109,11 +109,12 @@ class RealmListItemProvider: RealmProvider {
                     // see if there's already a section for the new list item in the list, if not create a new one
                     let listItemsInList = realm.objects(DBListItem).filter(DBListItem.createFilterList(list.uuid))
                     let sectionName = sectionNameMaybe ?? product.category.name
+                    let sectionColor = sectionColorMaybe ?? product.category.color
                     let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
                         return SectionMapper.sectionWithDB(item.section)
                         } ?? {
                             let sectionCount = Set(listItemsInList.map{$0.section}).count
-                            return Section(uuid: NSUUID().UUIDString, name: sectionName, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
+                            return Section(uuid: NSUUID().UUIDString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
                         }()
                     
                     

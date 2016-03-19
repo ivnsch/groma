@@ -14,8 +14,8 @@ protocol AddEditListItemViewControllerDelegate {
     
     func onValidationErrors(errors: [UITextField: ValidationError])
     
-    func onOkTap(name: String, price: String, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String)
-    func onUpdateTap(name: String, price: String, quantity: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String)
+    func onOkTap(name: String, price: String, quantity: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String)
+    func onUpdateTap(name: String, price: String, quantity: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String)
     
     func productNameAutocompletions(text: String, handler: [String] -> ())
     func sectionNameAutocompletions(text: String, handler: [String] -> ())
@@ -39,12 +39,14 @@ struct AddEditItem {
     let product: Product
     let quantity: Int
     let sectionName: String? // TODO are we currently overwriting category with section for listitems like we planned?
+    let sectionColor: UIColor?
     let note: String?
     
-    init(product: Product, quantity: Int, sectionName: String, note: String?) {
+    init(product: Product, quantity: Int, sectionName: String, sectionColor: UIColor, note: String?) {
         self.product = product
         self.quantity = quantity
         self.sectionName = sectionName
+        self.sectionColor = sectionColor
         self.note = note
     }
     
@@ -52,6 +54,7 @@ struct AddEditItem {
         self.product = item.product
         self.quantity = item.todoQuantity // only in todo screen we can update items. Note that we will update only the todo quantity, if the item is also in cart or stash this quantities are not updated
         self.sectionName = item.section.name
+        self.sectionColor = item.section.color
         self.note = item.note
     }
     
@@ -59,6 +62,7 @@ struct AddEditItem {
         self.product = item.product
         self.quantity = item.quantity
         self.sectionName = nil
+        self.sectionColor = nil
         self.note = nil
     }
     
@@ -66,6 +70,7 @@ struct AddEditItem {
         self.product = item.product
         self.quantity = item.quantity
         self.sectionName = nil
+        self.sectionColor = nil
         self.note = nil
     }
     
@@ -73,6 +78,7 @@ struct AddEditItem {
         self.product = item
         self.quantity = 0
         self.sectionName = nil
+        self.sectionColor = nil
         self.note = nil
     }
 }
@@ -199,8 +205,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         nameInput.text = item.product.name
         brandInput.text = item.product.brand
         sectionInput.text = item.sectionName ?? item.product.category.name
-        sectionColorButton.tintColor = item.product.category.color
-        sectionColorButton.imageView?.tintColor = item.product.category.color
+        sectionColorButton.tintColor = item.sectionColor ?? item.product.category.color
+        sectionColorButton.imageView?.tintColor = item.sectionColor ?? item.product.category.color
         quantityInput.text = String(item.quantity)
         priceInput.text = item.product.price.toString(2)
         noteInput = item.note
@@ -265,9 +271,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 // at least with the current design, only "overriding" the category may be a bit confusing to the users, when they update the section in add/edit listitem, they will assume this also changes the category, i.e. will appear now unter e.g. stats under this new section. But the category is not updated, so in stats the new section has no effect. The user has to go to the products screen (or inventory, groups where we have also no sections, only category) and update the category there. And this is confusing. Maybe with a design that makes the difference clear we can do it. For now, the provider just saves what we pass as category as category, meaning the section input overwrites always the category. So the section is basically, equivalent with category.
                 switch action {
                 case .Add:
-                    delegate?.onOkTap(text, price: priceText, quantity: quantityText, category: sectionText, categoryColor: sectionColorButton.tintColor, sectionName: sectionText, note: noteInput, baseQuantity: baseQuantity, unit: unit, brand: brandInput.text ?? "", store: store)
+                    delegate?.onOkTap(text, price: priceText, quantity: quantityText, sectionName: sectionText, sectionColor: sectionColorButton.tintColor, note: noteInput, baseQuantity: baseQuantity, unit: unit, brand: brandInput.text ?? "", store: store)
                 case .Update:
-                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, category: sectionText, categoryColor: sectionColorButton.tintColor, sectionName: sectionText, note: noteInput, baseQuantity: baseQuantity, unit: unit, brand: brandInput.text ?? "", store: store)
+                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, sectionName: sectionText, sectionColor: sectionColorButton.tintColor, note: noteInput, baseQuantity: baseQuantity, unit: unit, brand: brandInput.text ?? "", store: store)
                 }
                 
             } else {

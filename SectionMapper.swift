@@ -12,17 +12,18 @@ class SectionMapper {
     
     class func sectionWithDB(dbSection: DBSection) -> Section {
         let list = ListMapper.listWithDB(dbSection.list)
-        return Section(uuid: dbSection.uuid, name: dbSection.name, list: list, todoOrder: dbSection.todoOrder, doneOrder: dbSection.doneOrder, stashOrder: dbSection.stashOrder)
+        return Section(uuid: dbSection.uuid, name: dbSection.name, color: dbSection.color(), list: list, todoOrder: dbSection.todoOrder, doneOrder: dbSection.doneOrder, stashOrder: dbSection.stashOrder)
     }
     
     class func SectionWithRemote(remoteSection: RemoteSection, list: List) -> Section {
-        return Section(uuid: remoteSection.uuid, name: remoteSection.name, list: list, todoOrder: remoteSection.todoOrder, doneOrder: remoteSection.doneOrder, stashOrder: remoteSection.stashOrder)
+        return Section(uuid: remoteSection.uuid, name: remoteSection.name, color: remoteSection.color, list: list, todoOrder: remoteSection.todoOrder, doneOrder: remoteSection.doneOrder, stashOrder: remoteSection.stashOrder)
     }
     
     class func dbWithSection(section: Section) -> DBSection {
         let dbSection = DBSection()
         dbSection.uuid = section.uuid
         dbSection.name = section.name
+        dbSection.setColor(section.color)
         dbSection.list = ListMapper.dbWithList(section.list)
         dbSection.todoOrder = section.todoOrder
         dbSection.doneOrder = section.doneOrder
@@ -39,6 +40,7 @@ class SectionMapper {
         let dbSection = DBSection()
         dbSection.uuid = section.uuid
         dbSection.name = section.name
+        dbSection.setColor(section.color)
         dbSection.list = ListMapper.dbWithList(list)
         dbSection.todoOrder = section.todoOrder
         dbSection.doneOrder = section.doneOrder

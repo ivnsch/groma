@@ -13,12 +13,22 @@ class DBSection: DBSyncable {
 
     dynamic var uuid: String = ""
     dynamic var name: String = ""
+    dynamic var bgColorHex: String = "000000"
+    
 //    let listItems = RealmSwift.List<String>()
     
     dynamic var listOpt: DBList? = DBList()
     dynamic var todoOrder: Int = 0
     dynamic var doneOrder: Int = 0
     dynamic var stashOrder: Int = 0
+
+    func color() -> UIColor {
+        return UIColor(hexString: bgColorHex)
+    }
+    
+    func setColor(bgColor: UIColor) {
+        bgColorHex = bgColor.hexStr
+    }
     
     var list: DBList {
         get {
@@ -37,12 +47,13 @@ class DBSection: DBSyncable {
         return ["name"]
     }
     
-    convenience init(uuid: String, name: String, list: DBList, todoOrder: Int, doneOrder: Int, stashOrder: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    convenience init(uuid: String, name: String, bgColorHex: String, list: DBList, todoOrder: Int, doneOrder: Int, stashOrder: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         
         self.init()
         
         self.uuid = uuid
         self.name = name
+        self.bgColorHex = bgColorHex        
         self.list = list
         
         self.todoOrder = todoOrder
@@ -81,6 +92,9 @@ class DBSection: DBSyncable {
         let item = DBSection()
         item.uuid = dict["uuid"]! as! String
         item.name = dict["name"]! as! String
+        let colorStr = dict["color"]! as! String
+        let color = UIColor(hexString: colorStr)
+        item.setColor(color)
         item.list = list
         item.todoOrder = dict["todoOrder"]! as! Int
         item.doneOrder = dict["doneOrder"]! as! Int
@@ -93,6 +107,7 @@ class DBSection: DBSyncable {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid
         dict["name"] = name
+        dict["color"] = bgColorHex
         dict["list"] = list.toDict()        
         dict["todoOrder"] = todoOrder
         dict["doneOrder"] = doneOrder

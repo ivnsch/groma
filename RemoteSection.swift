@@ -12,7 +12,8 @@ import QorumLogs
 struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
-    var listUuid: String    
+    var color: UIColor
+    var listUuid: String
     let lastUpdate: NSDate
     
     let todoOrder: Int
@@ -23,6 +24,9 @@ struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable
         guard
         let uuid = representation.valueForKeyPath("uuid") as? String,
         let name = representation.valueForKeyPath("name") as? String,
+        let color = ((representation.valueForKeyPath("color") as? String).map{colorStr in
+            UIColor(hexString: colorStr)
+        }),
         let listUuid = representation.valueForKeyPath("listUuid") as? String,
         let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
         let todoOrder = representation.valueForKeyPath("todoOrder") as? Int,
@@ -34,6 +38,8 @@ struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable
         
         self.uuid = uuid
         self.name = name
+        self.color = color
+        
         self.listUuid = listUuid
         self.lastUpdate = lastUpdate
         
@@ -56,7 +62,7 @@ struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), listUuid: \(listUuid), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder), lastUpdate: \(lastUpdate)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), color: \(color), listUuid: \(listUuid), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder), lastUpdate: \(lastUpdate)}"
     }
 }
 

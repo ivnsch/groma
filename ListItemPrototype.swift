@@ -13,11 +13,13 @@ class ListItemPrototype: Equatable, Identifiable, CustomDebugStringConvertible {
     let product: Product
     let quantity: Int
     let targetSectionName: String
+    let targetSectionColor: UIColor
     
-    init(product: Product, quantity: Int, targetSectionName: String) {
+    init(product: Product, quantity: Int, targetSectionName: String, targetSectionColor: UIColor) {
         self.product = product
         self.quantity = quantity
         self.targetSectionName = targetSectionName
+        self.targetSectionColor = targetSectionColor
     }
     
     func same(rhs: ListItemPrototype) -> Bool {
@@ -34,5 +36,5 @@ class ListItemPrototype: Equatable, Identifiable, CustomDebugStringConvertible {
     
 }
 func ==(lhs: ListItemPrototype, rhs: ListItemPrototype) -> Bool {
-    return lhs.product == rhs.product && lhs.quantity == rhs.quantity
+    return lhs.product == rhs.product && lhs.quantity == rhs.quantity && lhs.targetSectionColor == rhs.targetSectionColor
 }

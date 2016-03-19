@@ -204,7 +204,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
             let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0, inventory: inventory1)
             DBProviders.listProvider.saveList(list1) {[weak self] result in
                 
-                let section1 = Section(uuid: uuid, name: "Obst", list: list1, order: ListItemStatusOrder(status: .Todo, order: 0))
+                let section1 = Section(uuid: uuid, name: "Obst", color: UIColor.flatRedColor(), list: list1, order: ListItemStatusOrder(status: .Todo, order: 0))
                 let listItems = [
                     ListItem(uuid: uuid, product: product1, section: section1, list: list1, todoQuantity: 5, todoOrder: 0)
                 ]
@@ -423,12 +423,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
                 let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0, inventory: inventory1)
                 DBProviders.listProvider.saveList(list1) {result in
                     
-                    let section1 = Section(uuid: uuid, name: "Obst", list: list1, order: ListItemStatusOrder(status: .Todo, order: 0))
-                    let section2 = Section(uuid: uuid, name: "Gemuese", list: list1, order: ListItemStatusOrder(status: .Todo, order: 1))
-                    let section3 = Section(uuid: uuid, name: "Milchprodukte", list: list1, order: ListItemStatusOrder(status: .Todo, order: 2))
-                    let section4 = Section(uuid: uuid, name: "Fleisch", list: list1, order: ListItemStatusOrder(status: .Todo, order: 3))
-                    let section5 = Section(uuid: uuid, name: "Pasta", list: list1, order: ListItemStatusOrder(status: .Todo, order: 4))
-                    let section6 = Section(uuid: uuid, name: "Getraenke", list: list1, order: ListItemStatusOrder(status: .Todo, order: 5))
+                    let section1 = Section(uuid: uuid, name: "Obst", color: UIColor.flatRedColor(),list: list1, order: ListItemStatusOrder(status: .Todo, order: 0))
+                    let section2 = Section(uuid: uuid, name: "Gemuese", color: UIColor.flatGreenColor(), list: list1, order: ListItemStatusOrder(status: .Todo, order: 1))
+                    let section3 = Section(uuid: uuid, name: "Milchprodukte", color: UIColor.flatWhiteColor(), list: list1, order: ListItemStatusOrder(status: .Todo, order: 2))
+                    let section4 = Section(uuid: uuid, name: "Fleisch", color: UIColor.flatRedColorDark(), list: list1, order: ListItemStatusOrder(status: .Todo, order: 3))
+                    let section5 = Section(uuid: uuid, name: "Pasta", color: UIColor.flatWhiteColorDark(), list: list1, order: ListItemStatusOrder(status: .Todo, order: 4))
+                    let section6 = Section(uuid: uuid, name: "Getraenke", color: UIColor.flatBlueColor(), list: list1, order: ListItemStatusOrder(status: .Todo, order: 5))
 //                    let cleaning = Section(uuid: uuid, name: "Putzmittel", order: 6)
 //                    let hygienic = Section(uuid: uuid, name: "Hygiene", order: 7)
 //                    let spices = Section(uuid: uuid, name: "Gewürze", order: 8)

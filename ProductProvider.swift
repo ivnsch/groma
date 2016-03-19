@@ -54,7 +54,8 @@ protocol ProductProvider {
     /**
     Utility method to refactor common code in ListItemsProviderImpl and ListItemGroupProviderImpl when adding new list or group items
     Tries to load using unique (name), if existent overrides fields with corresponding input, if not existent creates a new one
+    param updateCategory if we want to overwrite the category data if a category with passed name exists already (currently this means updating the color). If the category exists and this value is false, the categoryColor parameter is ignored.
     TODO use results like everywhere else, maybe put in a different specific utility class this is rather provider-internal
     */
-    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, _ handler: ProviderResult<Product> -> Void)
+    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, updateCategory: Bool, _ handler: ProviderResult<Product> -> Void)
 }

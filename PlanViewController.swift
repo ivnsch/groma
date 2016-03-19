@@ -409,7 +409,7 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
-        if let inventory = currentInventory {
+        if let _ = currentInventory {
 //            Providers.planProvider.addGroupItems(group.items, inventory: inventory, successHandler{[weak self] planItems in
 //                self?.onGroupsAdded()
 //                // TODO!! show popover with "group added etc"
@@ -464,12 +464,12 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - AddEditListItemViewControllerDelegate
 
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
 
         if !name.isEmpty {
             
             if let price = priceText.floatValue, quantity = Int(quantityText), inventory = currentInventory {
-                let planItemInput = PlanItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
+                let planItemInput = PlanItemInput(name: name, quantity: quantity, price: price, category: sectionName, categoryColor: sectionColor, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
                 
                 Providers.planProvider.addPlanItems([planItemInput], inventory: inventory, self.successHandler{[weak self] planItems in
                     self?.initPlanItems() // TODO update only added?
@@ -481,12 +481,12 @@ class PlanViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     // TODO remove not used
-    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit) {
+    func onOkAndAddAnotherTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit) {
     }
     
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
         if let updatingPlanItem = updatingPlanItem, price = priceText.floatValue, quantity = Int(quantityText), inventory = currentInventory {
-            updatePlanItem(updatingPlanItem, inventory: inventory, name: name, price: price, quantity: quantity, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
+            updatePlanItem(updatingPlanItem, inventory: inventory, name: name, price: price, quantity: quantity, category: sectionName, categoryColor: sectionColor, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
         } else {
             print("Error: AddEditPlanItemController.updatePlanItem: validation not implemented correctly or currentInventory not set")
         }

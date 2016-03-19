@@ -163,7 +163,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let colorArray = NSArray(ofColorsWithColorScheme: ColorScheme.Complementary, with: color, flatScheme: true)
         view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
         listItemsTableViewController.view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
-        listItemsTableViewController.headerBGColor = colorArray[1] as? UIColor // as? to silence warning
         
         let compl = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
         
@@ -267,13 +266,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
-        submitInputs(name, price: priceText, quantity: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
+    func onOkTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+        submitInputs(name, price: priceText, quantity: quantityText, sectionName: sectionName, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
         }
     }
 
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
-        if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
+    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+        if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
             
             // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
             listItemsTableViewController.cellMode = .Note
@@ -302,9 +301,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         })
     }
     
-    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, successHandler: VoidFunction? = nil) {
+    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, successHandler: VoidFunction? = nil) {
         if !name.isEmpty {
-            if let listItemInput = processListItemInputs(name, priceText: priceText, quantityText: quantityText, category: category, categoryColor: categoryColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
+            if let listItemInput = processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
                 addItem(listItemInput, successHandler: successHandler)
                 // self.view.endEditing(true)
             }
@@ -313,7 +312,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     // MARK:
     
-    private func processListItemInputs(name: String, priceText: String, quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) -> ListItemInput? {
+    private func processListItemInputs(name: String, priceText: String, quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) -> ListItemInput? {
         //TODO?
         //        if !price {
         //            price = 0
@@ -326,7 +325,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             let quantity = Int(quantityText) ?? 1
             let sectionName = sectionName ?? defaultSectionIdentifier
             
-            return ListItemInput(name: name, quantity: quantity, price: price, category: category, categoryColor: categoryColor, section: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
+            return ListItemInput(name: name, quantity: quantity, price: price, section: sectionName, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
             
         } else {
             print("TODO validation in processListItemInputs")
@@ -584,7 +583,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             
             if let updatingListItem = self.updatingListItem {
                 
-                let category = listItem.product.category.copy(name: listItemInput.category, color: listItemInput.categoryColor)
+                let category = listItem.product.category
                 let product = Product(uuid: updatingListItem.product.uuid, name: listItemInput.name, price: listItemInput.price, category: category, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand) // possible product update
 
                 func onHasSection(section: Section) {
@@ -614,13 +613,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                             if let section = sectionMaybe {
                                 return section
                             } else {
-                                return updatingListItem.section.copy(uuid: NSUUID().UUIDString, name: listItemInput.section)
+                                return updatingListItem.section.copy(uuid: NSUUID().UUIDString, name: listItemInput.section, color: listItemInput.sectionColor)
                             }
                         }()
                         onHasSection(section)
                     })
-                } else { // if the user hasn't entered a different section name, there's no need to load the section from db, just use the existing one
-                    onHasSection(listItem.section)
+                } else { // if the user hasn't entered a different section name, there's no need to load the section from db, just use the existing one. Update possible color change.
+                    let updatedSection = listItem.section.copy(color: listItemInput.sectionColor)
+                    onHasSection(updatedSection)
                 }
                 
             } else {
@@ -699,7 +699,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func onAddProduct(product: Product) {
         if let list = currentList {
-            Providers.listItemsProvider.addListItem(product, sectionName: product.category.name, quantity: 1, list: list, note: nil, order: nil, successHandler {[weak self] savedListItem in
+            Providers.listItemsProvider.addListItem(product, sectionName: product.category.name, sectionColor: product.category.color, quantity: 1, list: list, note: nil, order: nil, successHandler {[weak self] savedListItem in
                 self?.onListItemAddedToProvider(savedListItem)
             })
         } else {
@@ -816,9 +816,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 listItemsTableViewController.setAllSectionsExpanded(!listItemsTableViewController.sectionsExpanded, animated: true, onComplete: { // collapse - add sections table view
                     let sectionsTableViewController = UIStoryboard.reorderSectionTableViewController()
                     
-                    sectionsTableViewController.cellBgColor = self.listItemsTableViewController.headerBGColor
-                    sectionsTableViewController.selectedCellBgColor = self.expandCollapseButton.backgroundColor
-                    sectionsTableViewController.textColor = UIColor(contrastingBlackOrWhiteColorOn: self.listItemsTableViewController.headerBGColor, isFlat: true)
                     sectionsTableViewController.sections = self.listItemsTableViewController.sections
                     sectionsTableViewController.delegate = self
                     

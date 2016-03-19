@@ -229,7 +229,7 @@ class ProductProviderImpl: ProductProvider {
         }
     }
 
-    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, _ handler: ProviderResult<Product> -> Void) {
+    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, updateCategory: Bool, _ handler: ProviderResult<Product> -> Void) {
 
         // load product and update or create one
         // if we find a product with the name we update it - this is for the case the user changes the price etc for an existing product while adding an item
@@ -250,8 +250,12 @@ class ProductProviderImpl: ProductProvider {
                     }
                     
                     if let existingCategory = result.sucessResult {
-                        let udpatedCategory = existingCategory.copy(name: category, color: categoryColor)
-                        onHasCategory(udpatedCategory)
+                        if updateCategory {
+                            let udpatedCategory = existingCategory.copy(color: categoryColor)
+                            onHasCategory(udpatedCategory)
+                        } else {
+                            onHasCategory(existingCategory)
+                        }
                         
                     } else if result.status == .NotFound {
                         let newCategory = ProductCategory(uuid: NSUUID().UUIDString, name: category, color: categoryColor)

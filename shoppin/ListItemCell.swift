@@ -29,6 +29,8 @@ class ListItemCell: SwipeableCell {
     @IBOutlet weak var quantityLabelCenterVerticallyConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var noteButton: UIButton!
+
+    @IBOutlet weak var sectionColorView: UIView!
     
     @IBOutlet weak var plusMinusContainer: UIView!
     @IBOutlet weak var plusMinusWidthConstraint: NSLayoutConstraint!
@@ -59,6 +61,8 @@ class ListItemCell: SwipeableCell {
                 centerVerticallyNameLabelConstraint.constant = listItem.product.brand.isEmpty ? 0 : 10
                 brandLabel.text = listItem.product.brand
                 
+                sectionColorView.backgroundColor = listItem.section.color
+                
                 updateModeItemsVisibility(false)
                 
                 setOpen(tableViewListItem.swiped)
@@ -69,6 +73,11 @@ class ListItemCell: SwipeableCell {
                 }
             }
         }
+    }
+    
+    func update() {
+        let tableViewListItem = self.tableViewListItem
+        self.tableViewListItem = tableViewListItem
     }
 
     func setup(status: ListItemStatus, mode: ListItemCellMode, labelColor: UIColor, tableViewListItem: TableViewListItem, delegate: ListItemCellDelegate) {
@@ -112,9 +121,11 @@ class ListItemCell: SwipeableCell {
             case .Note:
                 noteButton.alpha = showNote ? 1 : 0
                 plusMinusContainer.alpha = 0
+                sectionColorView.alpha = 1
             case .Increment:
                 noteButton.alpha = 0
                 plusMinusContainer.alpha = 1
+                sectionColorView.alpha = 0
             }
         }
         
