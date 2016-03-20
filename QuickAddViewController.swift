@@ -8,16 +8,18 @@
 
 import UIKit
 import SwiftValidator
+import QorumLogs
 
 protocol QuickAddDelegate {
     func onAddProduct(product: Product)
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?)
+    func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) // editingItem == nil -> add
+
+//    func onValidationErrors(errors: [UITextField: ValidationError])
+//    func planItem(productName: String, handler: PlanItem? -> ())
+    
     func onCloseQuickAddTap()
     //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
-    
-    func onValidationErrors(errors: [UITextField: ValidationError])
-    func planItem(productName: String, handler: PlanItem? -> ())
-    
     func onQuickListOpen()
     func onAddProductOpen()
     func onAddGroupOpen()
@@ -28,9 +30,8 @@ private enum AddProductOrGroupContent {
     case Product, Group
 }
 
-
 // The container for quick add, manages top bar buttons and a navigation controller for content (quick add list, add products, add groups)
-class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
+class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISearchBarDelegate, AddEditListItemViewControllerDelegate {
     
     @IBOutlet weak var showGroupsButton: ButtonMore!
     @IBOutlet weak var showProductsButton: ButtonMore!
@@ -44,11 +45,11 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
     
     var delegate: QuickAddDelegate?
     
-    var productDelegate: AddEditListItemViewControllerDelegate?
-    
     var itemType: QuickAddItemType = .Product // for now product/group mutually exclusive (no mixed tableview)
     
     var originalViewFrame: CGRect?
+    
+    @IBOutlet weak var searchBar: UISearchBar!
     
     private var navController: UINavigationController?
     private var quickAddListItemViewController: QuickAddListItemViewController? {
@@ -60,6 +61,20 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
             (navController?.viewControllers.last as? QuickAddListItemViewController)?.contentData = (itemType, sortBy)
             updateSortByButton(sortBy)
         }
+    }
+    
+    private var editingItem: AddEditItem? {
+        didSet {
+            if let editingItem = editingItem {
+                searchBar.text = editingItem.product.name
+            } else {
+                QL3("Setting a nil editingItem")
+            }
+        }
+    }
+    
+    var isEdit: Bool {
+        return editingItem != nil
     }
     
     var open: Bool = false
@@ -78,15 +93,35 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
         updateQuickAddTop(.Product)
     }
     
+    // Show controller either in quick add mode (collection view + possible edit) or edit-only. If this is not called the controller shows without contents.
+    func initContent(editingItem: AddEditItem? = nil) {
+
+        if editingItem != nil {
+            self.editingItem = editingItem
+            showAddProductController()
+            
+        } else {
+            let controller = UIStoryboard.quickAddListItemViewController()
+            controller.delegate = self
+            navController?.pushViewController(controller, animated: false)
+        }
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        if !isEdit {
+            if let quickAddListItemViewController = quickAddListItemViewController {
+                quickAddListItemViewController.searchText = searchText
+            } else {
+                QL3("quickAddListItemViewController is not set")
+            }
+        }
+    }
+    
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "navController" {
             navController = segue.destinationViewController as? UINavigationController
-            if let quickAddListItemViewController = quickAddListItemViewController {
-                quickAddListItemViewController.delegate = self
-                
-            }
         }
     }
     
@@ -131,8 +166,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
         if navController?.viewControllers.last as? AddEditListItemViewController == nil { // don't show if already showing
             let controller = UIStoryboard.addEditListItemViewController()
             controller.view.backgroundColor = addProductsOrGroupBgColor
+            controller.editingItem = editingItem
             controller.modus = modus
-            controller.delegate = productDelegate
+            controller.delegate = self
             navController?.pushViewController(controller, animated: false)
             sortByButton.selected = false
             delegate?.onAddProductOpen()
@@ -311,6 +347,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
         delegate?.onCloseQuickAddTap()
     }
     
+    func onHasItems(hasItems: Bool) {
+        if hasItems {
+            hideAddProductController()
+        } else {
+            showAddProductController()
+        }
+    }
     
     // MARK: - Actions dispatch
     
@@ -324,7 +367,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
         } else if let addEditListItemViewController = showingController as? AddEditListItemViewController {
             switch action {
             case .Submit:
-                addEditListItemViewController.submit(AddEditListItemViewControllerAction.Add)
+                addEditListItemViewController.submit()
             case .Back:
                 navController?.popViewControllerAnimated(false)
                 delegate?.onQuickListOpen() // we are now back in quick list
@@ -332,4 +375,45 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate {
             }
         }
     }
+    
+    // MARK: - 
+    
+    func onValidationErrors(errors: [UITextField: ValidationError]) {
+        // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
+        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+    }
+    
+    func onOkTap(price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, editingItem: Any?) {
+        
+        if let name = searchBar.text {
+            
+            let listItemInput = ListItemInput(name: name, quantity: quantity, price: price, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
+            delegate?.onSubmitAddEditItem(listItemInput, editingItem: editingItem)
+            
+        } else {
+            // There should be always text as we show add/edit only if user enters text and we find no products for it. If user removes the text, the add/edit controller is hidden.
+            // It can be that user taps on submit while we search for products in the databse (which we do before hidding add/edit but this is unlikely as this is a very short time.
+            QL3("Tried to submit item but there's no product name (text in the search bar)")
+        }
+    }
+    
+    func productNameAutocompletions(text: String, handler: [String] -> ()) {
+        Providers.productProvider.productSuggestions(successHandler{suggestions in
+            let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
+            handler(names)
+        })
+    }
+    
+    func sectionNameAutocompletions(text: String, handler: [String] -> ()) {
+        Providers.sectionProvider.sectionSuggestionsContainingText(text, successHandler{suggestions in
+            handler(suggestions)
+        })
+    }
+
+    // Not using plan for now
+//    func planItem(productName: String, handler: PlanItem? -> ()) {
+//        Providers.planProvider.planItem(productName, successHandler {planItemMaybe in
+//            handler(planItemMaybe)
+//        })
+//    }
 }

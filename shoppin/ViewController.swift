@@ -12,7 +12,7 @@ import SwiftValidator
 import ChameleonFramework
 import QorumLogs
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, AddEditListItemViewControllerDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate, ExpandCollapseButtonDelegate
+class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate, ExpandCollapseButtonDelegate
 //    , UIBarPositioningDelegate
 {
     
@@ -21,7 +21,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
 
     // TODO put next vars in a struct
-    private var updatingListItem: ListItem?
+//    private var updatingListItem: ListItem?
     private var updatingSelectedCell: UITableViewCell?
     
     private var listItemsTableViewController: ListItemsTableViewController!
@@ -58,10 +58,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     var onViewWillAppear: VoidFunction?
     
     private var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
-    private var topAddEditListItemControllerManager: ExpandableTopViewController<AddEditListItemViewController>?
     private var topEditSectionControllerManager: ExpandableTopViewController<EditSectionViewController>?
 
-    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -78,7 +76,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         expandCollapseButton.delegate = self
 
         topQuickAddControllerManager = initTopQuickAddControllerManager()
-        topAddEditListItemControllerManager = initAddEditListItemControllerManager()
         topEditSectionControllerManager = initEditSectionControllerManager()
         
         topBar.delegate = self
@@ -101,20 +98,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: 290, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
-            controller.productDelegate = self
             if let backgroundColor = self?.view.backgroundColor {
                 controller.addProductsOrGroupBgColor = UIColor.opaqueColorByApplyingTransparentColorOrBackground(backgroundColor.colorWithAlphaComponent(0.3), backgroundColor: UIColor.whiteColor())
             }
             return controller
-        }
-        manager.delegate = self
-        return manager
-    }
-    
-    private func initAddEditListItemControllerManager() -> ExpandableTopViewController<AddEditListItemViewController> {
-        let top = CGRectGetHeight(topBar.frame)
-        let manager: ExpandableTopViewController<AddEditListItemViewController> =  ExpandableTopViewController(top: top, height: 240, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {
-            return UIStoryboard.addEditListItemViewController()
         }
         manager.delegate = self
         return manager
@@ -255,88 +242,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         })
     }
     
-    // MARK: - AddEditListItemViewControllerDelegate
-
-    func onValidationErrors(errors: [UITextField: ValidationError]) {
-        // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
-        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
-    }
-    
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
-        submitInputs(name, price: priceText, quantity: quantityText, sectionName: sectionName, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
-        }
-    }
-
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
-        if let listItemInput = self.processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
-            
-            // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
-            listItemsTableViewController.cellMode = .Note
-            updateItem(updatingListItem!, listItemInput: listItemInput) {[weak self] in
-                self?.setEditing(false, animated: true, tryCloseTopViewController: true)
-            }
-        }
-    }
-    
-    func productNameAutocompletions(text: String, handler: [String] -> ()) {
-        Providers.productProvider.productSuggestions(successHandler{suggestions in
-            let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
-            handler(names)
-        })
-    }
-    
-    func sectionNameAutocompletions(text: String, handler: [String] -> ()) {
-        Providers.sectionProvider.sectionSuggestionsContainingText(text, successHandler{suggestions in
-            handler(suggestions)
-        })
-    }
-    
-    func planItem(productName: String, handler: PlanItem? -> ()) {
-        Providers.planProvider.planItem(productName, successHandler {planItemMaybe in
-            handler(planItemMaybe)
-        })
-    }
-    
-    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, successHandler: VoidFunction? = nil) {
-        if !name.isEmpty {
-            if let listItemInput = processListItemInputs(name, priceText: priceText, quantityText: quantityText, sectionName: sectionName, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
-                addItem(listItemInput, successHandler: successHandler)
-                // self.view.endEditing(true)
-            }
-        }
-    }
-
     // MARK:
-    
-    private func processListItemInputs(name: String, priceText: String, quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) -> ListItemInput? {
-        //TODO?
-        //        if !price {
-        //            price = 0
-        //        }
-        //        if !quantity {
-        //            quantity = 0
-        //        }
-        
-        if let price = priceText.floatValue {
-            let quantity = Int(quantityText) ?? 1
-            let sectionName = sectionName ?? defaultSectionIdentifier
-            
-            return ListItemInput(name: name, quantity: quantity, price: price, section: sectionName, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
-            
-        } else {
-            print("TODO validation in processListItemInputs")
-            return nil
-        }
-    }
     
     private func toggleTopAddController() {
         
         clearPossibleUndo()
         
         // if any top controller is open, close it
-        if topQuickAddControllerManager?.expanded ?? false || topAddEditListItemControllerManager?.expanded ?? false || topEditSectionControllerManager?.expanded ?? false {
+        if topQuickAddControllerManager?.expanded ?? false || topEditSectionControllerManager?.expanded ?? false {
             topQuickAddControllerManager?.expand(false)
-            topAddEditListItemControllerManager?.expand(false)
             topEditSectionControllerManager?.expand(false)
 
             topBar.setLeftButtonIds([.Edit])
@@ -349,6 +263,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             
         } else { // if there's no top controller open, open the quick add controller
             topQuickAddControllerManager?.expand(true)
+            topQuickAddControllerManager?.controller?.initContent()
 
             topBar.setLeftButtonIds([])
             topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
@@ -374,7 +289,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
         if tryCloseTopViewController {
             topQuickAddControllerManager?.expand(false)
-            topAddEditListItemControllerManager?.expand(false)
         }
         
         expandCollapseButton.setHiddenAnimated(!editing)
@@ -449,17 +363,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
         if self.editing {
-            updatingListItem = tableViewListItem.listItem
             updatingSelectedCell = listItemsTableViewController.tableView.cellForRowAtIndexPath(indexPath)
 
-            topAddEditListItemControllerManager?.expand(true)
+            topQuickAddControllerManager?.expand(true)
             topBar.setRightButtonModels([
                 TopBarButtonModel(buttonId: .Submit),
                 TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
             ])
             
-            topAddEditListItemControllerManager?.controller?.updatingItem = AddEditItem(item: tableViewListItem.listItem)
-            topAddEditListItemControllerManager?.controller?.delegate = self
+            topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: tableViewListItem.listItem))
             
         } else {
 
@@ -565,53 +477,47 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     // Note: don't use this to reorder sections, this doesn't update section order
     // Note: concerning status - this only updates the .Todo related data (quantity, order). This means quantity and order of possible items in .Done or .Stash is not affected
-    private func updateItem(listItem: ListItem, listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
+    private func updateItem(updatingListItem: ListItem, listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
         if let currentList = self.currentList {
             
-            if let updatingListItem = self.updatingListItem {
-                
-                let category = listItem.product.category
-                let product = Product(uuid: updatingListItem.product.uuid, name: listItemInput.name, price: listItemInput.price, category: category, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand) // possible product update
+            let category = updatingListItem.product.category
+            let product = Product(uuid: updatingListItem.product.uuid, name: listItemInput.name, price: listItemInput.price, category: category, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand) // possible product update
 
-                func onHasSection(section: Section) {
-                    let listItem = ListItem(
-                        uuid: updatingListItem.uuid,
-                        product: product,
-                        section: section,
-                        list: currentList,
-                        note: listItemInput.note,
-                        statusOrder: ListItemStatusOrder(status: .Todo, order: updatingListItem.order(.Todo)),
-                        statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: listItemInput.quantity)
-                    )
-                    
-                    Providers.listItemsProvider.update([listItem], remote: true, successHandler {[weak self] in
-                        self?.listItemsTableViewController.updateListItem(listItem, status: .Todo, notifyRemote: true)
-                        self?.updatePrices(.MemOnly)
-                        handler?()
-                    })
-                }
+            func onHasSection(section: Section) {
+                let listItem = ListItem(
+                    uuid: updatingListItem.uuid,
+                    product: product,
+                    section: section,
+                    list: currentList,
+                    note: listItemInput.note,
+                    statusOrder: ListItemStatusOrder(status: .Todo, order: updatingListItem.order(.Todo)),
+                    statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: listItemInput.quantity)
+                )
                 
-                if listItem.section.name != listItemInput.section { // if user changed the section we have to see if a section with new name exists already (explanation below)
-                    
-                    Providers.sectionProvider.loadSection(listItemInput.section, list: listItem.list, handler: successHandler{sectionMaybe in
-                        // if a section with name exists already, use existing section, otherwise create a new one
-                        // Note we don't update here the section of the editing list item, this would mean that we change the section name for existing section, e.g. we change section of "tomatoes" from "vegatables" to "fruits", if we just update the section this means all the items which are in "vegetables" will be now in "fruits" and this is not what we want.
-                        let section: Section = {
-                            if let section = sectionMaybe {
-                                return section
-                            } else {
-                                return updatingListItem.section.copy(uuid: NSUUID().UUIDString, name: listItemInput.section, color: listItemInput.sectionColor)
-                            }
-                        }()
-                        onHasSection(section)
-                    })
-                } else { // if the user hasn't entered a different section name, there's no need to load the section from db, just use the existing one. Update possible color change.
-                    let updatedSection = listItem.section.copy(color: listItemInput.sectionColor)
-                    onHasSection(updatedSection)
-                }
+                Providers.listItemsProvider.update([listItem], remote: true, successHandler {[weak self] in
+                    self?.listItemsTableViewController.updateListItem(listItem, status: .Todo, notifyRemote: true)
+                    self?.updatePrices(.MemOnly)
+                    handler?()
+                })
+            }
+            
+            if updatingListItem.section.name != listItemInput.section { // if user changed the section we have to see if a section with new name exists already (explanation below)
                 
-            } else {
-                print("Error: Invalid state: trying to update list item without updatingListItem")
+                Providers.sectionProvider.loadSection(listItemInput.section, list: updatingListItem.list, handler: successHandler{sectionMaybe in
+                    // if a section with name exists already, use existing section, otherwise create a new one
+                    // Note we don't update here the section of the editing list item, this would mean that we change the section name for existing section, e.g. we change section of "tomatoes" from "vegatables" to "fruits", if we just update the section this means all the items which are in "vegetables" will be now in "fruits" and this is not what we want.
+                    let section: Section = {
+                        if let section = sectionMaybe {
+                            return section
+                        } else {
+                            return updatingListItem.section.copy(uuid: NSUUID().UUIDString, name: listItemInput.section, color: listItemInput.sectionColor)
+                        }
+                    }()
+                    onHasSection(section)
+                })
+            } else { // if the user hasn't entered a different section name, there's no need to load the section from db, just use the existing one. Update possible color change.
+                let updatedSection = updatingListItem.section.copy(color: listItemInput.sectionColor)
+                onHasSection(updatedSection)
             }
 
         } else {
@@ -694,6 +600,31 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
+    func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) {
+        
+        func onEditListItem(input: ListItemInput, editingListItem: ListItem) {
+            // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
+            listItemsTableViewController.cellMode = .Note
+            updateItem(editingListItem, listItemInput: input) {[weak self] in
+                self?.setEditing(false, animated: true, tryCloseTopViewController: true)
+            }
+        }
+        
+        func onAddListItem(input: ListItemInput) {
+            addItem(input, successHandler: nil)
+        }
+        
+        if let editingListItem = editingItem as? ListItem {
+            onEditListItem(input, editingListItem: editingListItem)
+        } else {
+            if editingItem == nil {
+                onAddListItem(input)
+            } else {
+                QL4("Cast didn't work: \(editingItem)")
+            }
+        }
+    }
+    
     func onQuickListOpen() {
         topBar.setBackVisible(false)
         topBar.setLeftButtonModels([])
@@ -768,18 +699,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func sendActionToTopController(action: FLoatingButtonAction) {
-        
         if topQuickAddControllerManager?.expanded ?? false {
             topQuickAddControllerManager?.controller?.handleFloatingButtonAction(action)
-        } else if topAddEditListItemControllerManager?.expanded ?? false {
-            // here we do dispatching in place as it's relatively simple and don't want to contaminate to many view controllers with floating button code
-            // there should be a separate component to do all this but no time now. TODO improve
-            
-            switch action {
-            case .Submit:
-                topAddEditListItemControllerManager?.controller?.submit(AddEditListItemViewControllerAction.Update)
-            case .Back, .Add, .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(topAddEditListItemControllerManager?.controller) instance")
-            }
         }
     }
     

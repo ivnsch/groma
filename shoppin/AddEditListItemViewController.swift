@@ -8,23 +8,18 @@
 
 import UIKit
 import SwiftValidator
-
+import QorumLogs
 
 protocol AddEditListItemViewControllerDelegate {
     
     func onValidationErrors(errors: [UITextField: ValidationError])
     
-    func onOkTap(name: String, price: String, quantity: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String)
-    func onUpdateTap(name: String, price: String, quantity: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String)
+    func onOkTap(price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, editingItem: Any?)
     
     func productNameAutocompletions(text: String, handler: [String] -> ())
     func sectionNameAutocompletions(text: String, handler: [String] -> ())
     
-    func planItem(productName: String, handler: PlanItem? -> ())
-}
-
-enum AddEditListItemViewControllerAction {
-    case Add, Update
+//    func planItem(productName: String, handler: PlanItem? -> ())
 }
 
 // FIXME use instead a "fragment" (custom view) with the common inputs and use this in 2 separate view controllers
@@ -38,16 +33,18 @@ typealias AddEditItemInput2 = (name: String, price: Float, quantity: String, cat
 struct AddEditItem {
     let product: Product
     let quantity: Int
-    let sectionName: String? // TODO are we currently overwriting category with section for listitems like we planned?
-    let sectionColor: UIColor?
+    let sectionName: String
+    let sectionColor: UIColor
     let note: String?
+    let model: Any
     
-    init(product: Product, quantity: Int, sectionName: String, sectionColor: UIColor, note: String?) {
+    init(product: Product, quantity: Int, sectionName: String, sectionColor: UIColor, note: String?, model: Any) {
         self.product = product
         self.quantity = quantity
         self.sectionName = sectionName
         self.sectionColor = sectionColor
         self.note = note
+        self.model = model
     }
     
     init(item: ListItem) {
@@ -56,36 +53,39 @@ struct AddEditItem {
         self.sectionName = item.section.name
         self.sectionColor = item.section.color
         self.note = item.note
+        self.model = item
     }
     
     init(item: GroupItem) {
         self.product = item.product
         self.quantity = item.quantity
-        self.sectionName = nil
-        self.sectionColor = nil
+        self.sectionName = item.product.category.name
+        self.sectionColor = item.product.category.color
         self.note = nil
+        self.model = item
     }
     
     init(item: InventoryItem) {
         self.product = item.product
         self.quantity = item.quantity
-        self.sectionName = nil
-        self.sectionColor = nil
+        self.sectionName = item.product.category.name
+        self.sectionColor = item.product.category.color
         self.note = nil
+        self.model = item
     }
     
-    init(item: Product) {
-        self.product = item
+    init(item: AddEditProductControllerEditingData) {
+        self.product = item.product
         self.quantity = 0
-        self.sectionName = nil
-        self.sectionColor = nil
+        self.sectionName = item.product.category.name
+        self.sectionColor = item.product.category.color
         self.note = nil
+        self.model = item
     }
 }
 
 class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate, ScaleViewControllerDelegate, FlatColorPickerControllerDelegate, SimpleInputPopupControllerDelegate {
 
-    @IBOutlet weak var nameInput: UITextField!
     @IBOutlet weak var brandInput: MLPAutoCompleteTextField!
     @IBOutlet weak var sectionLabel: UILabel!
     @IBOutlet weak var sectionInput: MLPAutoCompleteTextField!
@@ -123,23 +123,23 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         }
     }
     
-    var updatingItem: AddEditItem? {
+    var editingItem: AddEditItem? {
         didSet {
-            if let updatingItem = updatingItem {
-                prefill(updatingItem)
+            if let editingItem = editingItem {
+                prefill(editingItem)
             } else {
-                print("Warn: AddEditListItemViewController.updatingListItem: Setting updatingListItem before outlets are set")
+                QL3("Setting updatingListItem before outlets are set")
             }
         }
     }
 
     // when the view controller is used in .PlanItem modus... // FIXME besser structure
-    var updatingPlanItem: PlanItem? {
+    var editingPlanItem: PlanItem? {
         didSet {
-            if let updatingPlanItem = updatingPlanItem {
-                prefill(updatingPlanItem)
+            if let editingPlanItem = editingPlanItem {
+                prefill(editingPlanItem)
             } else {
-                print("Warn: AddEditListItemViewController.updatingPlanItem: Setting updatingListItem before outlets are set")
+                QL3("Setting updatingListItem before outlets are set")
             }
         }
     }
@@ -202,7 +202,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     private func prefill(item: AddEditItem) {
-        nameInput.text = item.product.name
         brandInput.text = item.product.brand
         sectionInput.text = item.sectionName ?? item.product.category.name
         sectionColorButton.tintColor = item.sectionColor ?? item.product.category.color
@@ -219,7 +218,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
 
     private func prefill(planItem: PlanItem) {
-        nameInput.text = planItem.product.name
         brandInput.text = planItem.product.brand
         sectionInput.text = planItem.product.category.name
         sectionColorButton.tintColor = planItem.product.category.color
@@ -234,7 +232,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     private func initValidator() {
         let validator = Validator()
-        validator.registerField(nameInput, rules: [MinLengthRule(length: 1, message: "validation_item_name_not_empty")])
         validator.registerField(sectionInput, rules: [MinLengthRule(length: 1, message: "validation_section_name_not_empty")])
         validator.registerField(priceInput, rules: [MinLengthRule(length: 1, message: "validation_price_not_empty"), FloatRule(message: "validation_price_number")])
         validator.registerField(quantityInput, rules: [MinLengthRule(length: 1, message: "validation_quantity_not_empty"), FloatRule(message: "validation_quantity_number")])
@@ -242,7 +239,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     // Parameter action is only relevant for add case - in edit it's expected to be always "Ok" (since edit has only ok button) and ignored.
-    func submit(action: AddEditListItemViewControllerAction) {
+//    func submit(action: AddEditListItemViewControllerAction) {
+    func submit() {
         guard validator != nil else {return}
         
         if let errors = validator?.validate() {
@@ -258,8 +256,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 }
             }
             
-            // TODO new input field for section,
-            if let text = nameInput.text, priceText = priceInput.text, quantityText = quantityInput.text, sectionText = sectionInput.text {
+            if let price = priceInput.text?.floatValue, quantityText = quantityInput.text, quantity = Int(quantityText), section = sectionInput.text, brand = brandInput.text {
                 
                 let store = "" // TODO!!!!
                 
@@ -267,17 +264,11 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 let unit = scaleInputs?.unit ?? .None
                 // the price from scaleInputs is inserted in price field, so we have it already
                 
-                // Explanation category/section name: for list items, the section "overrides" the category. For prefill: If there's a section, we show it, otherwise fallback to category. For save: If the product doesn't have a category yet (the product is new) the section input is saved both as section and category. If it already has a category, the section input is saved only as section (this is done in controller/provider). BUT!! ->
-                // at least with the current design, only "overriding" the category may be a bit confusing to the users, when they update the section in add/edit listitem, they will assume this also changes the category, i.e. will appear now unter e.g. stats under this new section. But the category is not updated, so in stats the new section has no effect. The user has to go to the products screen (or inventory, groups where we have also no sections, only category) and update the category there. And this is confusing. Maybe with a design that makes the difference clear we can do it. For now, the provider just saves what we pass as category as category, meaning the section input overwrites always the category. So the section is basically, equivalent with category.
-                switch action {
-                case .Add:
-                    delegate?.onOkTap(text, price: priceText, quantity: quantityText, sectionName: sectionText, sectionColor: sectionColorButton.tintColor, note: noteInput, baseQuantity: baseQuantity, unit: unit, brand: brandInput.text ?? "", store: store)
-                case .Update:
-                    delegate?.onUpdateTap(text, price: priceText, quantity: quantityText, sectionName: sectionText, sectionColor: sectionColorButton.tintColor, note: noteInput, baseQuantity: baseQuantity, unit: unit, brand: brandInput.text ?? "", store: store)
-                }
+                // Explanation category/section name: for list items, the section input refers to the list item's section. For the rest the product category. When we store the list items, if a category with the entered section name doesn't exist yet, one is created with the section's data.
+                delegate?.onOkTap(price, quantity: quantity, section: section, sectionColor: sectionColorButton.tintColor, note: noteInput, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store, editingItem: editingItem?.model)
                 
             } else {
-                print("Error: validation was not implemented correctly")
+                QL4("Validation was not implemented correctly, price: \(priceInput.text), quantity: \(quantityInput.text), section: \(sectionInput.text), brand: \(brandInput.text)")
             }
         }
     }
@@ -286,8 +277,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         view.endEditing(true)
         switch textField {
-        case nameInput:
-            sectionInput.becomeFirstResponder()
         case sectionInput:
             priceInput.becomeFirstResponder()
         case priceInput:
@@ -299,36 +288,17 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     func clearInputs() {
-        for field in [nameInput, sectionInput, quantityInput, priceInput] {
+        for field in [sectionInput, quantityInput, priceInput] {
             field.text = ""
         }
     }
     
     func dismissKeyboard(sender: AnyObject?) {
-        for field in [nameInput, sectionInput, quantityInput, priceInput] {
+        for field in [sectionInput, quantityInput, priceInput] {
             field.resignFirstResponder()
         }
     }
-    
-    @IBAction func productNameEditingDidEnd(sender: AnyObject) {
-        if let text = nameInput.text {
-            onNameInputChange(text)
-        } else {
-            print("Error: unexpected, text field with no text")
-        }
-    }
-    
-    private func onNameInputChange(text: String) {
-        delegate?.planItem(text) {[weak self] planItemMaybe in
-            self?.planItem = planItemMaybe
-        }
-    }
-    
-    @IBAction func productNameEditingDidChange(sender: AnyObject) {
-        let text = nameInput.text ?? ""
-        onNameInputChange(text)
-    }
-    
+
     @IBAction func quantityEditingDidChange(sender: AnyObject) {
         onQuantityChanged()
     }
@@ -391,11 +361,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     func autoCompleteTextField(textField: MLPAutoCompleteTextField!, possibleCompletionsForString string: String!, completionHandler handler: (([AnyObject]!) -> Void)!) {
         switch textField {
-        case nameInput:
-            delegate?.productNameAutocompletions(string) {completions in
-                // don't use autocompletions for product - now that there's quick add, the only reason the user is here is because we don't have the product, so autocompletion doesn't make sense
-//                handler(completions)
-            }
         case sectionInput:
             delegate?.sectionNameAutocompletions(string) {completions in
                 handler(completions)
@@ -412,8 +377,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     // MARK: - MLPAutoCompleteTextFieldDelegate
     
+    // TODO remove this?
     func autoCompleteTextField(textField: MLPAutoCompleteTextField!, didSelectAutoCompleteString selectedString: String!, withAutoCompleteObject selectedObject: MLPAutoCompletionObject!, forRowAtIndexPath indexPath: NSIndexPath!) {
-        onNameInputChange(selectedString)
     }
     
     // MARK: -

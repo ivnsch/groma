@@ -11,7 +11,7 @@ import SwiftValidator
 import CMPopTipView
 import QorumLogs
 
-class ManageProductsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, AddEditListItemViewControllerDelegate, ExpandableTopViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class ManageProductsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var tableViewFooter: LoadingFooter!
@@ -48,9 +48,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     private let toggleButtonAvailableAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: 0, xRight: 20)
     private let toggleButtonActiveAction = FLoatingButtonAttributedAction(action: .Toggle, alpha: 1, rotation: CGFloat(-M_PI_4))
     
-    private var addEditProductControllerManager: ExpandableTopViewController<AddEditListItemViewController>?
-
-    private var updatingProduct: AddEditProductControllerEditingData?
+    private var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -72,7 +70,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         
         tableView.allowsSelectionDuringEditing = true
         
-        addEditProductControllerManager = initAddEditProductControllerManager()
+        topQuickAddControllerManager = initTopQuickAddControllerManager()
 
         initNavBar([.Edit])
         
@@ -94,12 +92,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func onSubmitTap(sender: UIBarButtonItem) {
-        if tableView.editing {
-            addEditProductControllerManager?.controller?.submit(.Update)
-        } else {
-            addEditProductControllerManager?.controller?.submit(.Add)
-        }
-        
+        topQuickAddControllerManager?.controller?.handleFloatingButtonAction(.Submit)
     }
     
     func onEditTap(sender: UIBarButtonItem) {
@@ -126,13 +119,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         navigationItem.rightBarButtonItems = buttons
     }
     
-    private func initAddEditProductControllerManager() -> ExpandableTopViewController<AddEditListItemViewController> {
+    private func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
         let top: CGFloat = 64
-        let manager: ExpandableTopViewController<AddEditListItemViewController> = ExpandableTopViewController(top: top, height: 240, animateTableViewInset: false, parentViewController: self, tableView: tableView) {
-            let controller = UIStoryboard.addEditListItemViewController()
+        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: 290, openInset: top, closeInset: top, parentViewController: self, tableView: tableView) {[weak self] in
+            let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
-            controller.onViewDidLoad = {
-                controller.modus = .Product
+            if let backgroundColor = self?.view.backgroundColor {
+                controller.addProductsOrGroupBgColor = UIColor.opaqueColorByApplyingTransparentColorOrBackground(backgroundColor.colorWithAlphaComponent(0.3), backgroundColor: UIColor.whiteColor())
             }
             return controller
         }
@@ -225,10 +218,10 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
  
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if tableView.editing {
-            let inventoryItem = filteredProducts[indexPath.row].item
-            updatingProduct = AddEditProductControllerEditingData(product: inventoryItem, indexPath: indexPath)
-            addEditProductControllerManager?.expand(true)
-            addEditProductControllerManager?.controller?.updatingItem = AddEditItem(item: inventoryItem)
+            let product = filteredProducts[indexPath.row].item
+            let productEditData = AddEditProductControllerEditingData(product: product, indexPath: indexPath)
+            topQuickAddControllerManager?.expand(true)
+            topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: productEditData))
             initNavBar([.Edit, .Save])
         }
     }
@@ -238,75 +231,64 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         filteredProducts = ItemWithCellAttributes.toItemsWithCellAttributes(products)
     }
     
-    // MARK: - AddEditListItemViewControllerDelegate
     
-    func onValidationErrors(errors: [UITextField: ValidationError]) {
-        // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
-        self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
+    // MARK: - QuickAddDelegate
+    
+    func onCloseQuickAddTap() {
+        topQuickAddControllerManager?.expand(false)
     }
     
-    func onOkTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
-        submitInputs(name, price: priceText, quantity: quantityText, category: sectionName, categoryColor: sectionColor, sectionName: sectionName, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store) {
-        }
+    func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
     }
     
-    func onUpdateTap(name: String, price priceText: String, quantity quantityText: String, sectionName: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
-        if let updatingProduct = updatingProduct {
-            if let price = priceText.floatValue { // Note quantity for product is ignored
-                updateProduct(updatingProduct, name: name, category: sectionName, categoryColor: sectionColor, price: price, brand: brand, store: store)
-            }
-        } else {
-            print("Warn: InventoryItemsController.onUpdateTap: No updatingProduct")
-        }
+    func onAddProduct(product: Product) {
     }
     
-    func productNameAutocompletions(text: String, handler: [String] -> ()) {
-        Providers.productProvider.productSuggestions(successHandler{suggestions in
-            let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
-            handler(names)
-        })
-    }
-    
-    func sectionNameAutocompletions(text: String, handler: [String] -> ()) {
-        Providers.sectionProvider.sectionSuggestionsContainingText(text, successHandler{suggestions in
-            handler(suggestions)
-        })
-    }
-    
-    func planItem(productName: String, handler: PlanItem? -> ()) {
-        Providers.planProvider.planItem(productName, successHandler {planItemMaybe in
-            handler(planItemMaybe)
-        })
-    }
-    
-    private func submitInputs(name: String, price priceText: String, quantity quantityText: String, category: String, categoryColor: UIColor, sectionName: String, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, successHandler: VoidFunction? = nil) {
-        if let price = priceText.floatValue {
-            addProduct(name, category: category, categoryColor: categoryColor, price: price, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
-        } else {
-            print("Error: ManageProductsViewController.submitInputs: Invalid price: \(priceText)")
-        }
-    }
-
-    private func updateProduct(editingData: AddEditProductControllerEditingData, name: String, category: String, categoryColor: UIColor, price: Float, brand: String?, store: String) {
-        let updatedCategory = editingData.product.category.copy(name: category, color: categoryColor)
-        let updatedProduct = editingData.product.copy(name: name, price: price, category: updatedCategory, brand: brand, store: store)
-        Providers.productProvider.update(updatedProduct, remote: true, successHandler{[weak self] in
-            self?.updateProductUI(updatedProduct, indexPath: editingData.indexPath)
-        })
-    }
-    
-    private func addProduct(name: String, category: String, categoryColor: UIColor, price: Float, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
-        let product = ProductInput(name: name, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
+    func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) {
         
-        Providers.productProvider.countProducts(successHandler {[weak self] count in
-            if let weakSelf = self {
-                SizeLimitChecker.checkInventoryItemsSizeLimit(count, controller: weakSelf) {
-                    Providers.productProvider.add(product, weakSelf.successHandler {product in
-                        weakSelf.addProductUI(product)
-                    })
+        func onEditItem(input: ListItemInput, editingItem: AddEditProductControllerEditingData) {
+            let updatedCategory = editingItem.product.category.copy(name: input.section, color: input.sectionColor)
+            let updatedProduct = editingItem.product.copy(name: input.name, price: input.price, category: updatedCategory, brand: input.brand, store: input.store)
+            Providers.productProvider.update(updatedProduct, remote: true, successHandler{[weak self] in
+                self?.updateProductUI(updatedProduct, indexPath: editingItem.indexPath)
+            })
+        }
+        
+        func onAddItem(input: ListItemInput) {
+            let product = ProductInput(name: input.name, price: input.price, category: input.section, categoryColor: input.sectionColor, baseQuantity: input.baseQuantity, unit: input.unit, brand: input.brand, store: input.store)
+            
+            Providers.productProvider.countProducts(successHandler {[weak self] count in
+                if let weakSelf = self {
+                    SizeLimitChecker.checkInventoryItemsSizeLimit(count, controller: weakSelf) {
+                        Providers.productProvider.add(product, weakSelf.successHandler {product in
+                            weakSelf.addProductUI(product)
+                        })
+                    }
                 }
+            })
+        }
+        
+        if let editingItem = editingItem as? AddEditProductControllerEditingData {
+            onEditItem(input, editingItem: editingItem)
+        } else {
+            if editingItem == nil {
+                onAddItem(input)
+            } else {
+                QL4("Cast didn't work: \(editingItem)")
             }
-        })
+        }
+    }
+    
+    func onQuickListOpen() {
+    }
+    
+    func onAddProductOpen() {
+    }
+    
+    func onAddGroupOpen() {
+    }
+    
+    func onAddGroupItemsOpen() {
     }
     
     private func indexPathForProduct(product: Product) -> NSIndexPath? {
@@ -327,7 +309,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         onUpdatedProducts()
         
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
-        addEditProductControllerManager?.expand(false)
+        topQuickAddControllerManager?.expand(false)
         initNavBar([.Edit])
     }
     
@@ -339,7 +321,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     private func setAddEditProductControllerOpen(open: Bool) {
-        addEditProductControllerManager?.expand(open)
+        topQuickAddControllerManager?.expand(open)
         initNavBar([.Edit])
     }
     
@@ -484,7 +466,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
 }
 
-private struct AddEditProductControllerEditingData {
+struct AddEditProductControllerEditingData {
     let product: Product
     let indexPath: NSIndexPath
     init(product: Product, indexPath: NSIndexPath) {

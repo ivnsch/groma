@@ -14,6 +14,7 @@ protocol QuickAddListItemDelegate {
     func onAddProduct(product: Product)
     func onAddGroup(group: ListItemGroup)
     func onCloseQuickAddTap()
+    func onHasItems(hasItems: Bool)
     //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect)
 }
 
@@ -26,10 +27,8 @@ enum QuickAddContent {
 }
 
 
-// Table view controller with searchbox, used for items or groups quick add
-class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
+class QuickAddListItemViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
     
     var delegate: QuickAddListItemDelegate?
@@ -51,7 +50,8 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
         }
     }
     
-    private var searchText: String = "" {
+    // The search for which items are filtered
+    var searchText: String = "" {
         didSet {
             if searchText != oldValue {
                 clearAndLoadFirstPage(true)
@@ -92,10 +92,6 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
         case .Alphabetic: return .Alphabetic
         case .Fav: return .Fav
         }
-    }
-    
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        self.searchText = searchText
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -210,12 +206,20 @@ class QuickAddListItemViewController: UIViewController, UISearchBarDelegate, UIC
         }
         
         func onItemsLoaded(items: [QuickAddItem]) {
-            filteredQuickAddItems.appendAll(items)
             
-            paginator.update(items.count)
-            
-            collectionView.reloadData()
-            setLoading(false)
+            if items.isEmpty {
+                delegate?.onHasItems(false)
+
+            } else {
+                filteredQuickAddItems.appendAll(items)
+                
+                paginator.update(items.count)
+                
+                collectionView.reloadData()
+                setLoading(false)
+                
+                delegate?.onHasItems(true)
+            }
         }
         
         func loadProducts() {

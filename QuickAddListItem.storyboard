@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -54,7 +54,7 @@
                                 </connections>
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wh4-4g-FV0">
-                                <rect key="frame" x="0.0" y="40" width="600" height="560"/>
+                                <rect key="frame" x="0.0" y="84" width="600" height="516"/>
                                 <connections>
                                     <segue destination="cN4-H5-trn" kind="embed" identifier="navController" id="M5Z-aO-UwY"/>
                                 </connections>
@@ -97,6 +97,14 @@
                                     <action selector="onSortByTap:" destination="3Uk-Rq-zKd" eventType="touchUpInside" id="BQQ-mY-hEK"/>
                                 </connections>
                             </button>
+                            <searchBar contentMode="redraw" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="Rao-bd-kBH">
+                                <rect key="frame" x="0.0" y="40" width="600" height="44"/>
+                                <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="3Uk-Rq-zKd" id="Mvh-EO-3Uj"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -106,19 +114,24 @@
                             <constraint firstItem="s1F-jF-pKk" firstAttribute="leading" secondItem="Stp-m3-S0Z" secondAttribute="trailing" id="AC5-X4-Heb"/>
                             <constraint firstItem="Stp-m3-S0Z" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="topMargin" id="OR9-yS-2so"/>
                             <constraint firstItem="dif-9Z-2lr" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="Sa4-KW-eNK"/>
+                            <constraint firstAttribute="trailing" secondItem="Rao-bd-kBH" secondAttribute="trailing" id="Zm2-49-eJx"/>
                             <constraint firstItem="6Ye-nf-OHM" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="bEV-Rl-nvH"/>
                             <constraint firstItem="zcT-I6-trj" firstAttribute="top" secondItem="wh4-4g-FV0" secondAttribute="bottom" id="cmh-td-tpE"/>
                             <constraint firstItem="H9s-Os-9qI" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="eau-bc-tNs"/>
                             <constraint firstItem="H9s-Os-9qI" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="gYK-ka-YZ1"/>
                             <constraint firstAttribute="trailing" secondItem="wh4-4g-FV0" secondAttribute="trailing" id="ght-OL-w3S"/>
                             <constraint firstItem="6Ye-nf-OHM" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" constant="14" id="hVr-Jp-2yK"/>
+                            <constraint firstItem="wh4-4g-FV0" firstAttribute="top" secondItem="Rao-bd-kBH" secondAttribute="bottom" id="l2R-P6-J3X"/>
                             <constraint firstItem="s1F-jF-pKk" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="r6Y-TF-qQJ"/>
+                            <constraint firstItem="Rao-bd-kBH" firstAttribute="top" secondItem="Stp-m3-S0Z" secondAttribute="bottom" id="spv-z7-de3"/>
                             <constraint firstItem="wh4-4g-FV0" firstAttribute="top" secondItem="H9s-Os-9qI" secondAttribute="bottom" id="u81-wJ-tIv"/>
                             <constraint firstAttribute="trailing" secondItem="H9s-Os-9qI" secondAttribute="trailing" id="uOh-JP-CK8"/>
+                            <constraint firstItem="Rao-bd-kBH" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" id="wf9-is-EWW"/>
                             <constraint firstItem="wh4-4g-FV0" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" id="zHj-UK-arQ"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="u81-wJ-tIv"/>
                                 <exclude reference="7tt-9U-vZt"/>
                                 <exclude reference="gYK-ka-YZ1"/>
                             </mask>
@@ -127,6 +140,7 @@
                     <connections>
                         <outlet property="currentQuickAddLabel" destination="6Ye-nf-OHM" id="C0X-sV-12y"/>
                         <outlet property="currentQuickAddLabelLeftConstraint" destination="hVr-Jp-2yK" id="0ak-Yr-ZRL"/>
+                        <outlet property="searchBar" destination="Rao-bd-kBH" id="BLq-Bo-nBl"/>
                         <outlet property="showAddProductsOrGroupButton" destination="H9s-Os-9qI" id="gQT-CB-BuQ"/>
                         <outlet property="showGroupsButton" destination="dif-9Z-2lr" id="KYM-N8-79r"/>
                         <outlet property="showProductsButton" destination="s1F-jF-pKk" id="HS5-dV-G2W"/>
@@ -140,17 +154,17 @@
         <!--Quick Add List Item View Controller-->
         <scene sceneID="scd-Js-Uye">
             <objects>
-                <viewController extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" id="vbO-Z7-ODC" customClass="QuickAddListItemViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="QuickAddListItemViewController" extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" id="vbO-Z7-ODC" customClass="QuickAddListItemViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LOW-cw-O8Y"/>
                         <viewControllerLayoutGuide type="bottom" id="Rsq-FX-9c2"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="wH7-XN-6Ej">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="560"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="v4m-hJ-0qf">
-                                <rect key="frame" x="0.0" y="44" width="600" height="516"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="v4m-hJ-0qf">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="516"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="8" id="2Hc-oR-dUy">
                                     <size key="itemSize" width="50" height="50"/>
@@ -224,29 +238,18 @@
                                     <outlet property="delegate" destination="vbO-Z7-ODC" id="Wxx-AJ-Qbk"/>
                                 </connections>
                             </collectionView>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="C6g-mo-Tty">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="vbO-Z7-ODC" id="zYl-Ki-BiW"/>
-                                </connections>
-                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="v4m-hJ-0qf" secondAttribute="trailing" id="8uI-ND-Oag"/>
-                            <constraint firstItem="v4m-hJ-0qf" firstAttribute="top" secondItem="C6g-mo-Tty" secondAttribute="bottom" id="9pK-RG-vud"/>
-                            <constraint firstItem="C6g-mo-Tty" firstAttribute="leading" secondItem="wH7-XN-6Ej" secondAttribute="leading" id="G9m-uP-gvH"/>
-                            <constraint firstAttribute="trailing" secondItem="C6g-mo-Tty" secondAttribute="trailing" id="SrS-a8-czI"/>
                             <constraint firstItem="v4m-hJ-0qf" firstAttribute="leading" secondItem="wH7-XN-6Ej" secondAttribute="leading" id="YWU-W6-dof"/>
-                            <constraint firstItem="C6g-mo-Tty" firstAttribute="top" secondItem="LOW-cw-O8Y" secondAttribute="bottom" id="irV-Gb-4EY"/>
+                            <constraint firstItem="v4m-hJ-0qf" firstAttribute="top" secondItem="LOW-cw-O8Y" secondAttribute="bottom" id="e6K-XY-1mI"/>
                             <constraint firstItem="Rsq-FX-9c2" firstAttribute="top" secondItem="v4m-hJ-0qf" secondAttribute="bottom" id="xZe-m3-VcS"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="rVK-Qr-ipm"/>
                     <connections>
                         <outlet property="collectionView" destination="v4m-hJ-0qf" id="FFK-yA-5oA"/>
-                        <outlet property="searchBar" destination="C6g-mo-Tty" id="027-FO-doM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kXF-PA-HK1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -266,9 +269,6 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="vbO-Z7-ODC" kind="relationship" relationship="rootViewController" id="Rdw-I1-bUc"/>
-                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a9f-7Q-qm7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
