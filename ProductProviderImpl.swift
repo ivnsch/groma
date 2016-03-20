@@ -236,7 +236,7 @@ class ProductProviderImpl: ProductProvider {
         loadProduct(productName, brand: brand, store: store) {result in
             if let existingProduct = result.sucessResult {
                 let updatedCateogry = existingProduct.category.copy(name: category, color: categoryColor)
-                let updatedProduct = existingProduct.copy(name: productName, price: productPrice, category: updatedCateogry, baseQuantity: baseQuantity, unit: unit)
+                let updatedProduct = existingProduct.copy(name: productName, price: productPrice, category: updatedCateogry, baseQuantity: baseQuantity, unit: unit, store: store)
                 handler(ProviderResult(status: .Success, sucessResult: updatedProduct))
                 
             } else { // product doesn't exist
@@ -245,7 +245,7 @@ class ProductProviderImpl: ProductProvider {
                 Providers.productCategoryProvider.categoryWithName(category) {result in
                     
                     func onHasCategory(category: ProductCategory) {
-                        let newProduct = Product(uuid: NSUUID().UUIDString, name: productName, price: productPrice, category: category, baseQuantity: baseQuantity, unit: unit, brand: brand)
+                        let newProduct = Product(uuid: NSUUID().UUIDString, name: productName, price: productPrice, category: category, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
                         handler(ProviderResult(status: .Success, sucessResult: newProduct))
                     }
                     
@@ -280,6 +280,18 @@ class ProductProviderImpl: ProductProvider {
                 QL4("No count")
                 handler(ProviderResult(status: .DatabaseUnknown))
             }
+        }
+    }
+    
+    func storesContainingText(text: String, _ handler: ProviderResult<[String]> -> Void) {
+        DBProviders.productProvider.storesContainingText(text) {stores in
+            handler(ProviderResult(status: .Success, sucessResult: stores))
+        }
+    }
+    
+    func storesContainingText(text: String, range: NSRange, _ handler: ProviderResult<[String]> -> Void) {
+        DBProviders.productProvider.storesContainingText(text, range: range) {stores in
+            handler(ProviderResult(status: .Success, sucessResult: stores))
         }
     }
 }

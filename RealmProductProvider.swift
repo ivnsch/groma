@@ -449,4 +449,28 @@ class RealmProductProvider: RealmProvider {
     func updateLastSyncTimeStampSync(realm: Realm, product: RemoteProduct) {
         realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
     }
+    
+    // MARK: - Store
+    
+    func storesContainingText(text: String, handler: [String] -> Void) {
+        // this is for now an "infinite" range. This method is ussed for autosuggestions, we assume use will not have more than 10000 brands. If yes it's not critical for autosuggestions.
+        storesContainingText(text, range: NSRange(location: 0, length: 10000), handler)
+    }
+    
+    func storesContainingText(text: String, range: NSRange, _ handler: [String] -> Void) {
+        background({
+            do {
+                let realm = try Realm()
+                // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
+                // .sorted("store", ascending: true)
+                let stores = Array(Set(realm.objects(DBProduct).filter(DBProduct.createFilterStoreContains(text)).map{$0.store}))[range].filter{!$0.isEmpty}.sort()
+                return stores
+            } catch let e {
+                QL4("Couldn't load stores, returning empty array. Error: \(e)")
+                return []
+            }
+            }) {(result: [String]) in
+                handler(result)
+        }
+    }
 }

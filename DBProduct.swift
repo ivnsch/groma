@@ -130,6 +130,10 @@ class DBProduct: DBSyncable {
         return "brand CONTAINS[c] '\(text)'"
     }
     
+    static func createFilterStoreContains(text: String) -> String {
+        return "store CONTAINS[c] '\(text)'"
+    }
+    
     static func createFilterCategory(categoryUuid: String) -> String {
         return "categoryOpt.uuid = '\(categoryUuid)'"
     }

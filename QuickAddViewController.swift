@@ -396,19 +396,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             QL3("Tried to submit item but there's no product name (text in the search bar)")
         }
     }
-    
-    func productNameAutocompletions(text: String, handler: [String] -> ()) {
-        Providers.productProvider.productSuggestions(successHandler{suggestions in
-            let names = suggestions.filterMap({$0.name.contains(text, caseInsensitive: true)}){$0.name}
-            handler(names)
-        })
-    }
-    
-    func sectionNameAutocompletions(text: String, handler: [String] -> ()) {
-        Providers.sectionProvider.sectionSuggestionsContainingText(text, successHandler{suggestions in
-            handler(suggestions)
-        })
-    }
 
     // Not using plan for now
 //    func planItem(productName: String, handler: PlanItem? -> ()) {
