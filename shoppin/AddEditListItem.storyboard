@@ -30,9 +30,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Price" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="NrU-fN-qdF">
-                                <rect key="frame" x="432" y="138" width="70" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Price" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="NrU-fN-qdF" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="432" y="108" width="70" height="40"/>
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="HqM-K2-C7L"/>
                                     <constraint firstAttribute="width" constant="70" id="qrp-kB-pXC"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
@@ -43,8 +44,11 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Section" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="i1w-xi-aFz" customClass="MLPAutoCompleteTextField">
-                                <rect key="frame" x="14" y="88" width="539" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Section" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="i1w-xi-aFz" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="14" y="68" width="539" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="jOx-1e-S6w"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="next"/>
                                 <userDefinedRuntimeAttributes>
@@ -57,8 +61,11 @@
                                     <outlet property="autoCompleteDelegate" destination="CI5-0y-OAL" id="qlf-hn-ADn"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Store" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="R77-Pv-LQA" customClass="MLPAutoCompleteTextField">
-                                <rect key="frame" x="14" y="138" width="404" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Store" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="R77-Pv-LQA" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="14" y="108" width="404" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="aul-P9-Whl"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="next"/>
                                 <userDefinedRuntimeAttributes>
@@ -71,9 +78,10 @@
                                     <outlet property="autoCompleteDelegate" destination="CI5-0y-OAL" id="sKM-xG-gtZ"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Quantity" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vWS-vL-cob">
-                                <rect key="frame" x="516" y="138" width="70" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Quantity" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vWS-vL-cob" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="516" y="108" width="70" height="40"/>
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="6uo-WM-0CH"/>
                                     <constraint firstAttribute="width" constant="70" id="q9d-EY-Wvb"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
@@ -83,12 +91,9 @@
                                         <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="quantityEditingDidChange:" destination="CI5-0y-OAL" eventType="editingChanged" id="FkA-ha-hDp"/>
-                                </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d3W-Q5-Nl0" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="561" y="91" width="25" height="25"/>
+                                <rect key="frame" x="561" y="76" width="25" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="Y1X-J6-8BM"/>
                                     <constraint firstAttribute="width" constant="25" id="j6U-Wo-9LR"/>
@@ -99,8 +104,11 @@
                                     <action selector="onSectionColorButtonTap:" destination="CI5-0y-OAL" eventType="touchUpInside" id="jbC-Lv-qkJ"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Brand name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="r5b-Sz-J4o" customClass="MLPAutoCompleteTextField">
-                                <rect key="frame" x="14" y="38" width="572" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Brand name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="r5b-Sz-J4o" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="14" y="28" width="572" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="bLM-k5-r0i"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="next"/>
                                 <userDefinedRuntimeAttributes>
@@ -119,8 +127,11 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Note" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yfv-oA-AU6" customClass="MLPAutoCompleteTextField">
-                                <rect key="frame" x="14" y="188" width="572" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yfv-oA-AU6" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="14" y="148" width="572" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="ogx-ge-tLz"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="next"/>
                                 <userDefinedRuntimeAttributes>
@@ -128,13 +139,9 @@
                                         <integer key="value" value="30"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <outlet property="autoCompleteDataSource" destination="CI5-0y-OAL" id="cKJ-JC-GHA"/>
-                                    <outlet property="autoCompleteDelegate" destination="CI5-0y-OAL" id="7FK-sE-LGZ"/>
-                                </connections>
                             </textField>
                         </subviews>
-                        <color key="backgroundColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="d3W-Q5-Nl0" firstAttribute="leading" secondItem="i1w-xi-aFz" secondAttribute="trailing" constant="8" id="0Nr-bd-7Zo"/>
                             <constraint firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" constant="14" id="1GZ-LS-nJw"/>
@@ -144,18 +151,18 @@
                             <constraint firstAttribute="trailing" secondItem="vWS-vL-cob" secondAttribute="trailing" constant="14" id="GR2-ry-KGQ"/>
                             <constraint firstItem="i1w-xi-aFz" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="Qwr-vA-3WY"/>
                             <constraint firstItem="r5b-Sz-J4o" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="Sra-Uc-AlA"/>
-                            <constraint firstItem="Yfv-oA-AU6" firstAttribute="top" secondItem="vWS-vL-cob" secondAttribute="bottom" constant="20" id="Tr7-q0-PTa"/>
-                            <constraint firstItem="i1w-xi-aFz" firstAttribute="top" secondItem="r5b-Sz-J4o" secondAttribute="bottom" constant="20" id="Uys-Mm-t4a"/>
+                            <constraint firstItem="Yfv-oA-AU6" firstAttribute="top" secondItem="vWS-vL-cob" secondAttribute="bottom" id="Tr7-q0-PTa"/>
+                            <constraint firstItem="i1w-xi-aFz" firstAttribute="top" secondItem="r5b-Sz-J4o" secondAttribute="bottom" id="Uys-Mm-t4a"/>
                             <constraint firstItem="Yfv-oA-AU6" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="Xka-df-FOU"/>
                             <constraint firstItem="R77-Pv-LQA" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="dHw-Ld-h7E"/>
-                            <constraint firstItem="vWS-vL-cob" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" constant="20" id="dYT-Ag-kT7"/>
+                            <constraint firstItem="vWS-vL-cob" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" id="dYT-Ag-kT7"/>
                             <constraint firstItem="dwL-LH-4dI" firstAttribute="centerX" secondItem="If7-20-6Xv" secondAttribute="centerX" id="ei9-BK-Nvk"/>
                             <constraint firstItem="d3W-Q5-Nl0" firstAttribute="centerY" secondItem="i1w-xi-aFz" secondAttribute="centerY" id="jpc-kU-OUd"/>
-                            <constraint firstItem="NrU-fN-qdF" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" constant="20" id="pJC-Cd-QdD"/>
+                            <constraint firstItem="NrU-fN-qdF" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" id="pJC-Cd-QdD"/>
                             <constraint firstItem="vWS-vL-cob" firstAttribute="leading" secondItem="NrU-fN-qdF" secondAttribute="trailing" constant="14" id="re8-SG-anU"/>
-                            <constraint firstItem="R77-Pv-LQA" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" constant="20" id="tgf-qS-7g1"/>
+                            <constraint firstItem="R77-Pv-LQA" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" id="tgf-qS-7g1"/>
                             <constraint firstItem="NrU-fN-qdF" firstAttribute="leading" secondItem="R77-Pv-LQA" secondAttribute="trailing" constant="14" id="uLU-LF-2Lz"/>
-                            <constraint firstItem="r5b-Sz-J4o" firstAttribute="top" secondItem="dwL-LH-4dI" secondAttribute="bottom" constant="10" id="wtZ-u8-wCv"/>
+                            <constraint firstItem="r5b-Sz-J4o" firstAttribute="top" secondItem="dwL-LH-4dI" secondAttribute="bottom" id="wtZ-u8-wCv"/>
                         </constraints>
                     </view>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

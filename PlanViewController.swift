@@ -82,9 +82,6 @@ class PlanViewController: UIViewController
 //            controller.delegate = self
 //            controller.productDelegate = self
 //            controller.modus = .PlanItem
-//            if let backgroundColor = self?.view.backgroundColor {
-//                controller.addProductsOrGroupBgColor = UIColor.opaqueColorByApplyingTransparentColorOrBackground(backgroundColor.colorWithAlphaComponent(0.3), backgroundColor: UIColor.whiteColor())
-//            }
 //            return controller
 //        }
 //        manager.delegate = self

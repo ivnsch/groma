@@ -41,8 +41,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
 
     @IBOutlet weak var sortByButton: ButtonMore!
     
-    var addProductsOrGroupBgColor: UIColor?
-    
     var delegate: QuickAddDelegate?
     
     var itemType: QuickAddItemType = .Product // for now product/group mutually exclusive (no mixed tableview)
@@ -85,8 +83,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        showAddProductsOrGroupButton.backgroundColor = addProductsOrGroupBgColor
         
         updateSortByButton(sortBy)
 
@@ -165,7 +161,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         
         if navController?.viewControllers.last as? AddEditListItemViewController == nil { // don't show if already showing
             let controller = UIStoryboard.addEditListItemViewController()
-            controller.view.backgroundColor = addProductsOrGroupBgColor
             controller.editingItem = editingItem
             controller.modus = modus
             controller.delegate = self

@@ -98,9 +98,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: 290, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
-            if let backgroundColor = self?.view.backgroundColor {
-                controller.addProductsOrGroupBgColor = UIColor.opaqueColorByApplyingTransparentColorOrBackground(backgroundColor.colorWithAlphaComponent(0.3), backgroundColor: UIColor.whiteColor())
-            }
             return controller
         }
         manager.delegate = self

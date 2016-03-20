@@ -169,6 +169,8 @@
 		EB37AB9E1C9DAFED00FE9D7A /* prefillde.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB37AB9B1C9DAFDD00FE9D7A /* prefillde.realm */; };
 		EB37AB9F1C9DAFED00FE9D7A /* prefillen.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB37AB9C1C9DAFDD00FE9D7A /* prefillen.realm */; };
 		EB37ABA01C9DAFED00FE9D7A /* prefilles.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB37AB9D1C9DAFDD00FE9D7A /* prefilles.realm */; };
+		EB37ABA21C9F249300FE9D7A /* LineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABA11C9F249300FE9D7A /* LineTextField.swift */; };
+		EB37ABA61C9F2DA400FE9D7A /* LineAutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABA51C9F2DA400FE9D7A /* LineAutocompleteTextField.swift */; };
 		EB3C9E2A1BEA47FF00886197 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C9E291BEA47FF00886197 /* Theme.swift */; };
 		EB40A4691B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
 		EB40A46A1B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
@@ -1118,6 +1120,8 @@
 		EB37AB9B1C9DAFDD00FE9D7A /* prefillde.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillde.realm; sourceTree = "<group>"; };
 		EB37AB9C1C9DAFDD00FE9D7A /* prefillen.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillen.realm; sourceTree = "<group>"; };
 		EB37AB9D1C9DAFDD00FE9D7A /* prefilles.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefilles.realm; sourceTree = "<group>"; };
+		EB37ABA11C9F249300FE9D7A /* LineTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineTextField.swift; sourceTree = "<group>"; };
+		EB37ABA51C9F2DA400FE9D7A /* LineAutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAutocompleteTextField.swift; sourceTree = "<group>"; };
 		EB3C9E291BEA47FF00886197 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		EB40A4681B5506FB000E9CAD /* DBSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSection.swift; sourceTree = "<group>"; };
 		EB40A46D1B550804000E9CAD /* RealmProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProvider.swift; sourceTree = "<group>"; };
@@ -2760,6 +2764,8 @@
 				EB28C1171A58623E00E1C8BC /* PlainTableViewController.swift */,
 				EBE366361BCBC346009543AF /* BlurBubbleTransition.swift */,
 				EBB526881BF016910002A286 /* ButtonMore.swift */,
+				EB37ABA11C9F249300FE9D7A /* LineTextField.swift */,
+				EB37ABA51C9F2DA400FE9D7A /* LineAutocompleteTextField.swift */,
 			);
 			name = view;
 			path = shoppin;
@@ -3497,9 +3503,11 @@
 				EBF5D7D71B8FB01B00A235C5 /* Synced.swift in Sources */,
 				EB7E832E1B7B74EF009DEEF4 /* RemoteHistoryProvider.swift in Sources */,
 				EB2F5D771A557AB000DBC4AF /* List.swift in Sources */,
+				EB37ABA21C9F249300FE9D7A /* LineTextField.swift in Sources */,
 				EBFD15C41BA7F99B00E37342 /* ForgotPasswordViewController.swift in Sources */,
 				EB7DA2E71C6FF646007F1E43 /* ValidationRules.swift in Sources */,
 				EBDA75421BCD5C8C00E34AC3 /* ListItemGroupProvider.swift in Sources */,
+				EB37ABA61C9F2DA400FE9D7A /* LineAutocompleteTextField.swift in Sources */,
 				EBEE7E5B1C9750F500DBCB6A /* RealmListProvider.swift in Sources */,
 				EBED0CF11C80E02700A1EEC4 /* Array_ListItemsGroup.swift in Sources */,
 				EBAEB22F1BDBDB2F00FCDA5C /* CGPoint.swift in Sources */,

@@ -90,14 +90,14 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //, ScaleViewControllerDelegate, SimpleInputPopupControllerDelegate
 , FlatColorPickerControllerDelegate {
 
-    @IBOutlet weak var brandInput: MLPAutoCompleteTextField!
+    @IBOutlet weak var brandInput: LineAutocompleteTextField!
 
-    @IBOutlet weak var sectionInput: MLPAutoCompleteTextField!
+    @IBOutlet weak var sectionInput: LineAutocompleteTextField!
     @IBOutlet weak var sectionColorButton: UIButton!
 
-    @IBOutlet weak var priceInput: UITextField!
+    @IBOutlet weak var priceInput: LineTextField!
 
-    @IBOutlet weak var quantityInput: UITextField!
+    @IBOutlet weak var quantityInput: LineTextField!
 
     @IBOutlet weak var titleLabel: UILabel!
     
@@ -125,8 +125,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //    }
 ///////////////////////////////////////////////////////////////////////////
     
-    @IBOutlet weak var storeInput: MLPAutoCompleteTextField!
-    @IBOutlet weak var noteInput: UITextField!
+    @IBOutlet weak var storeInput: LineAutocompleteTextField!
+    @IBOutlet weak var noteInput: LineTextField!
 
     
     var delegate: AddEditListItemViewControllerDelegate?
@@ -205,6 +205,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         
         initValidator()
         
+        initTextFieldPlaceholders()
         initAutocompletionTextFields()
         
         setInputsDefaultValues()
@@ -221,6 +222,19 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         quantityInput.text = String(item.quantity)
         priceInput.text = item.product.price.toString(2)
         noteInput.text = item.note
+    }
+    
+    private func initTextFieldPlaceholders() {
+        for (textField, placeholder) in [
+            (brandInput, "Brand"),
+            (sectionInput, "Section*"),
+            (storeInput, "Store"),
+            (quantityInput, "Quantity*"),
+            (priceInput, "Price*"),
+            (noteInput, "Note")
+            ] {
+            textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+        }
     }
     
     private func initAutocompletionTextFields() {
