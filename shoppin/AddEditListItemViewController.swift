@@ -100,6 +100,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     @IBOutlet weak var quantityInput: LineTextField!
 
     @IBOutlet weak var titleLabel: UILabel!
+
+    var onDidLoad: VoidFunction?
     
 /////////////////////////////////////////////////////////////////////////
 // for now disabled, see comments at the bottom
@@ -210,6 +212,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         
         setInputsDefaultValues()
         
+        onDidLoad?()
 //        updatePlanLeftQuantity(0) // no quantity yet -> 0
     }
     

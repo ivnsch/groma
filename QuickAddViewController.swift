@@ -161,11 +161,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         
         if navController?.viewControllers.last as? AddEditListItemViewController == nil { // don't show if already showing
             let controller = UIStoryboard.addEditListItemViewController()
-            controller.editingItem = editingItem
             controller.modus = modus
             controller.delegate = self
             navController?.pushViewController(controller, animated: false)
             sortByButton.selected = false
+            controller.onDidLoad = {[weak self] in // outlets are not initalised at this point yet
+                controller.editingItem = self?.editingItem
+            }
             delegate?.onAddProductOpen()
             return true
         }
