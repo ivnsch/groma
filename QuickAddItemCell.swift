@@ -25,8 +25,12 @@ class QuickAddItemCell: UICollectionViewCell {
                     nameLabel.text = item.labelText
                 }
 
-                contentView.backgroundColor = item.product.category.color.colorWithAlphaComponent(0.5)
-                let color = UIColor.darkTextColor()
+                contentView.layer.cornerRadius = 18
+                contentView.backgroundColor = item.product.category.color
+                
+//                let color = UIColor(contrastingBlackOrWhiteColorOn: contentView.backgroundColor, isFlat: true)
+                let color = UIColor.whiteColor()
+                
                 nameLabel.textColor = color
                 brandLabel.textColor = color
                 brandLabel.text = item.product.brand

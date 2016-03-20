@@ -136,14 +136,14 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         if let textSize = item.textSize {
             return textSize
         } else {
-            let label1TextSize = item.labelText.size(Fonts.verySmallLight)
+            let label1TextSize = item.labelText.size(Fonts.verySmall)
             
             // For now use same height for all items independently if they have 2nd label or not.
 //            let label2TextSize = item.label2Text?.size(Fonts.verySmallLight) ?? CGSizeZero
             let label2TextSize = item.label2Text?.size(Fonts.verySmallLight) ?? "".size(Fonts.verySmallLight)
             
             let label2Size = min(label2TextSize.width, label1TextSize.width + 30) // allow label2 to be max. 30pt wider than label 1
-            let cellWidth = max(label1TextSize.width, label2Size) + 6 // the cell has to be as wide as the widest label, and add some inset (6)
+            let cellWidth = max(label1TextSize.width, label2Size) + 20 // the cell has to be as wide as the widest label, and add some inset (6)
             let cellHeight = label1TextSize.height + label2TextSize.height + 6 // 6: add some space
             
             let textSize = CGSizeMake(cellWidth, cellHeight)

@@ -22,6 +22,7 @@ class Fonts {
     static let superSmallSize: CGFloat = 11
     
     static var regular: UIFont = {UIFont(name: fontName, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
+    static var verySmall: UIFont = {UIFont(name: fontName, size: verySmallSize) ?? UIFont.systemFontOfSize(verySmallSize)}()
     
     static var regularLight: UIFont = {UIFont(name: fontNameLight, size: regularSize) ?? UIFont.systemFontOfSize(regularSize)}()
     static var smallLight: UIFont = {UIFont(name: fontNameLight, size: smallSize) ?? UIFont.systemFontOfSize(smallSize)}()
