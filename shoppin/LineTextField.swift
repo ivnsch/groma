@@ -11,7 +11,19 @@ import UIKit
 class LineTextField: UITextField {
 
     private let lineWidth: CGFloat = 1
-    private let lineColor = UIColor.grayColor()
+    
+    private static let defaultLineColor = UIColor.grayColor()
+    private var lineColor = defaultLineColor
+
+    override func showValidationError() {
+        lineColor = UIColor.redColor()
+        setNeedsDisplay()
+    }
+    
+    override func clearValidationError() {
+        lineColor = LineTextField.defaultLineColor
+        setNeedsDisplay()
+    }
     
     override func drawRect(rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
