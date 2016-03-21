@@ -64,6 +64,8 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     private var updatingGroupItem: GroupItem?
     
+    private var originalTopbarColor: UIColor?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -104,32 +106,12 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func setThemeColor(color: UIColor) {
-        // TODO complete theme, like in list items?
-        topBar.backgroundColor = color
-        //        view.backgroundColor = UIColor.whiteColor()
-        
-        let colorArray = NSArray(ofColorsWithColorScheme: ColorScheme.Complementary, with: color, flatScheme: true)
-        view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
-        //        listItemsTableViewController.view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
-        //        listItemsTableViewController.headerBGColor = colorArray[1] as? UIColor // as? to silence warning
-        
-        let compl = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
-        
-        // adjust nav controller for cart & stash (in this controller we use a custom view).
-        navigationController?.setColors(color, textColor: compl)
-        
-        titleLabel?.textColor = compl
-        
-        //        expandButtonModel.bgColor = (colorArray[4] as! UIColor).lightenByPercentage(0.5)
-        //        expandButtonModel.pathColor = UIColor(contrastingBlackOrWhiteColorOn: expandButtonModel.bgColor, isFlat: true)
-        
-        topBar.fgColor = compl
-        
-        //        emptyListViewImg.tintColor = compl
-        //        emptyListViewLabel1.textColor = compl
-        //        emptyListViewLabel2.textColor = compl
+        originalTopbarColor = color
+        UIView.animateWithDuration(0.5) {[weak self] in
+            self?.topBar.backgroundColor = UIColor.whiteColor()
+        }
+        view.backgroundColor = UIColor.whiteColor()
     }
-    
     
     private func initTitleLabel() {
         let label = UILabel()
@@ -223,6 +205,9 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         onExpand(false)
         topQuickAddControllerManager?.controller?.onClose()
         expandDelegate?.setExpanded(false)
+        UIView.animateWithDuration(0.5) {[weak self] in
+            self?.topBar.backgroundColor = self?.originalTopbarColor
+        }
     }
     
     func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {

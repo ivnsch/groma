@@ -64,6 +64,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         super.init(coder: aDecoder)
     }
     
+    private var originalTopbarColor: UIColor?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -137,35 +139,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func setThemeColor(color: UIColor) {
         topBar.backgroundColor = color
+        originalTopbarColor = color
+        UIView.animateWithDuration(0.5) {[weak self] in
+            self?.topBar.backgroundColor = UIColor.whiteColor()
+        }
         view.backgroundColor = UIColor.whiteColor()
         
-        let colorArray = NSArray(ofColorsWithColorScheme: ColorScheme.Complementary, with: color, flatScheme: true)
-        view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
-        listItemsTableViewController.view.backgroundColor = colorArray[0] as? UIColor // as? to silence warning
-        
-        let compl = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
-        
-        // adjust nav controller for cart & stash (in this controller we use a custom view).
-        navigationController?.setColors(color, textColor: compl)
+        expandCollapseButton.strokeColor = UIColor.blackColor()
 
-        titleLabel?.textColor = compl
-        
-        expandCollapseButton.backgroundColor = (colorArray[4] as! UIColor).lightenByPercentage(0.5)
-        expandCollapseButton.strokeColor = UIColor(contrastingBlackOrWhiteColorOn: expandCollapseButton.backgroundColor, isFlat: true)
-        
-//        stashView.bgColor = colorArray[3] as? UIColor
-//        if let bgColor = stashView.bgColor {
-//            stashView.setTextColor(UIColor(contrastingBlackOrWhiteColorOn: bgColor, isFlat: true))
-//        } else {
-//            print("Error: ViewController.setThemeColor, colorArray[3] is not a color")
-//        }
-        
-        topBar.fgColor = compl
-        
-        emptyListViewImg.tintColor = compl
-        emptyListViewLabel1.textColor = compl
-        emptyListViewLabel2.textColor = compl
-        
         stashView.setNeedsDisplay()
     }
     
@@ -819,6 +800,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         onExpand(false)
         topQuickAddControllerManager?.controller?.onClose()
         expandDelegate?.setExpanded(false)
+        UIView.animateWithDuration(0.5) {[weak self] in
+            self?.topBar.backgroundColor = self?.originalTopbarColor
+        }
     }
     
     func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
