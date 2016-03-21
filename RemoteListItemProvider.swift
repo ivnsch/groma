@@ -280,7 +280,7 @@ class RemoteListItemProvider {
         return [
             "uuid": section.uuid,
             "name": section.name,
-            "color": section.color,
+            "color": section.color.hexStr,
             "todoOrder": section.todoOrder,
             "doneOrder": section.doneOrder,
             "stashOrder": section.stashOrder,
