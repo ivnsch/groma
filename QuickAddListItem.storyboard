@@ -102,7 +102,7 @@
                             <searchBar contentMode="redraw" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="Rao-bd-kBH">
                                 <rect key="frame" x="0.0" y="40" width="600" height="44"/>
                                 <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                 <connections>
                                     <outlet property="delegate" destination="3Uk-Rq-zKd" id="Mvh-EO-3Uj"/>
                                 </connections>

@@ -24,6 +24,8 @@ protocol QuickAddDelegate {
     func onAddProductOpen()
     func onAddGroupOpen()
     func onAddGroupItemsOpen()
+    
+    func parentViewForAddButton() -> UIView
 }
 
 private enum AddProductOrGroupContent {
@@ -54,6 +56,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         return navController?.viewControllers.first as? QuickAddListItemViewController
     }
     
+    private var showingController: UIViewController? {
+        return navController?.viewControllers.last
+    }
+    
     private var sortBy: QuickAddItemSortBy = .Fav {
         didSet {
             (navController?.viewControllers.last as? QuickAddListItemViewController)?.contentData = (itemType, sortBy)
@@ -71,14 +77,19 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         }
     }
     
+
     var isEdit: Bool {
         return editingItem != nil
     }
+
+    private var addButton: UIButton? = nil
     
     var open: Bool = false
     
     private let toolButtonsHeight: CGFloat = 50 // for now hardcoded, since theres no toolbar-view yet (only buttons + constraits constants). TODO
 
+    private var keyboardHeight: CGFloat?
+    
     var modus: AddEditListItemControllerModus = .ListItem
     
     override func viewDidLoad() {
@@ -87,6 +98,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         updateSortByButton(sortBy)
 
         updateQuickAddTop(.Product)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    func onClose() {
+        removeAddButton()
     }
     
     // Show controller either in quick add mode (collection view + possible edit) or edit-only. If this is not called the controller shows without contents.
@@ -101,6 +119,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             controller.delegate = self
             navController?.pushViewController(controller, animated: false)
         }
+        
+        searchBar.becomeFirstResponder()
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
@@ -111,6 +131,27 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
                 QL3("quickAddListItemViewController is not set")
             }
         }
+    }
+    
+    func keyboardWillAppear(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            if let keyboardSize = (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
+                keyboardHeight = keyboardSize.height
+            } else {
+                QL3("Couldn't retrieve keyboard size from user info")
+            }
+        } else {
+            QL3("Notification has no user info")
+        }
+        
+        delay(0.5) {[weak self] in // let the keyboard reach it's final position before showing the button
+            self?.addButton?.hidden = false
+        }
+    }
+    
+    func keyboardWillDisappear(notification: NSNotification) {
+        // when showing validation popup the keyboard disappears so we have to remove the button - otherwise it looks weird
+        addButton?.hidden = true
     }
     
     // MARK: - Navigation
@@ -169,6 +210,40 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
                 controller.editingItem = self?.editingItem
             }
             delegate?.onAddProductOpen()
+            
+            
+            func addAddButton() {
+                if let parentView = delegate?.parentViewForAddButton(), window = view.window {
+                    
+                    let keyboardHeight = self.keyboardHeight ?? {
+                        QL4("Couldn't get keyboard height dynamically, returning hardcoded value")
+                        return 216
+                        }()
+                    let buttonHeight: CGFloat = 40
+                    
+                    
+                    let addButton = AddItemButton(frame: CGRectMake(0, window.frame.height - keyboardHeight - buttonHeight, parentView.frame.width, buttonHeight))
+                    self.addButton = addButton
+                    parentView.addSubview(addButton)
+                    parentView.bringSubviewToFront(addButton)
+                    addButton.tapHandler = {[weak self] in guard let weakSelf = self else {return}
+                        
+                        if let addEditListItemViewController = weakSelf.showingController as? AddEditListItemViewController {
+                            addEditListItemViewController.submit()
+                        } else {
+                            QL3("Tapped add button but showing controller is not add edit controller")
+                        }
+                    }
+                } else {
+                    QL3("No parent view for add button")
+                }
+            }
+            
+            if addButton == nil {
+                delay(0.5) {
+                    addAddButton()
+                }
+            }
             return true
         }
         return false
@@ -180,6 +255,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             navController?.popToRootViewControllerAnimated(false)
             delegate?.onQuickListOpen()
         
+            removeAddButton()
+
 //            if (navController?.viewControllers.last as? AddEditListItemViewController != nil) {
 //                showGroupsButton.selected = false
 //                showProductsButton.selected = true
@@ -244,6 +321,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
                 print("Error: Unexpected state in QuickAddViewController: Root navigation controller is not QuickAddListItemViewController")
             }
         }
+        
+        removeAddButton()
+    }
+    
+    private func removeAddButton() {
+        addButton?.removeFromSuperview()
+        addButton = nil
     }
     
     @IBAction func onShowProductsTap(sender: UIButton) {
@@ -269,6 +353,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
                 print("Error: Unexpected state in QuickAddViewController: Root navigation controller is not QuickAddListItemViewController")
             }
         }
+        
+        removeAddButton()
     }
     
     @IBAction func onAddProductsOrGroupsTap(sender: UIButton) {
@@ -355,8 +441,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     // MARK: - Actions dispatch
     
     func handleFloatingButtonAction(action: FLoatingButtonAction) {
-        let showingController = navController?.viewControllers.last
-        
         if let _ = showingController as? QuickAddListItemViewController {
             print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
             
@@ -370,6 +454,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
                 delegate?.onQuickListOpen() // we are now back in quick list
             case .Add, .Toggle, .Expand: print("QuickAddViewController.handleFloatingButtonAction: Invalid action: \(action) for \(showingController) instance")
             }
+            
+        } else {
+            QL3("Not showing any controller")
         }
     }
     

@@ -163,6 +163,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func onExpandableClose() {
         topBarOnCloseExpandable()
+        topQuickAddControllerManager?.controller?.onClose()        
     }
     
     private func topBarOnCloseExpandable() {
@@ -195,6 +196,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
 //        topAddEditListItemControllerManager?.controller?.clear()
         if tryCloseTop {
             topQuickAddControllerManager?.expand(false)
+            topQuickAddControllerManager?.controller?.onClose()
             topBarOnCloseExpandable()
         }
     }
@@ -219,6 +221,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func onTopBarTitleTap() {
         onExpand(false)
+        topQuickAddControllerManager?.controller?.onClose()
         expandDelegate?.setExpanded(false)
     }
     
@@ -230,14 +233,12 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
                     weakSelf.sendActionToTopController(.Add)
                 }
             }
-        case .Submit:
-            if topQuickAddControllerManager?.expanded ?? false {
-                sendActionToTopController(.Submit)
-            }
         case .ToggleOpen:
             toggleTopAddController()
         case .Edit:
             toggleEditing()
+        default: QL4("Not handled: \(buttonId)")
+            
         }
     }
     
@@ -246,6 +247,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         // if any top controller is open, close it
         if topQuickAddControllerManager?.expanded ?? false {
             topQuickAddControllerManager?.expand(false)
+            topQuickAddControllerManager?.controller?.onClose()
             
             topBar.setLeftButtonIds([.Edit])
             topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
@@ -283,6 +285,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func onCloseQuickAddTap() {
         topQuickAddControllerManager?.expand(false)
+        topQuickAddControllerManager?.controller?.onClose()
     }
     
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
@@ -344,7 +347,6 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         topBar.setBackVisible(false)
         topBar.setLeftButtonModels([])
         topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .Submit),
             TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
         ])
     }
@@ -354,7 +356,6 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         topBar.setLeftButtonModels([])
         topBar.setRightButtonModels([
             TopBarButtonModel(buttonId: .Add),
-            TopBarButtonModel(buttonId: .Submit),
             TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
         ])
     }
@@ -363,11 +364,13 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         topBar.setBackVisible(true)
         topBar.setLeftButtonModels([])
         topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .Submit),
             TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
         ])
     }
     
+    func parentViewForAddButton() -> UIView {
+        return self.view
+    }
     
     // MARK: - Navigation
     
@@ -412,7 +415,6 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             topQuickAddControllerManager?.expand(true)
             topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: groupItem))
             topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .Submit),
                 TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
             ])
         }

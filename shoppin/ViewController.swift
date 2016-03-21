@@ -248,6 +248,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         // if any top controller is open, close it
         if topQuickAddControllerManager?.expanded ?? false || topEditSectionControllerManager?.expanded ?? false {
             topQuickAddControllerManager?.expand(false)
+            topQuickAddControllerManager?.controller?.onClose()
             topEditSectionControllerManager?.expand(false)
 
             topBar.setLeftButtonIds([.Edit])
@@ -286,6 +287,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
         if tryCloseTopViewController {
             topQuickAddControllerManager?.expand(false)
+            topQuickAddControllerManager?.controller?.onClose()
         }
         
         expandCollapseButton.setHiddenAnimated(!editing)
@@ -364,7 +366,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 
             topQuickAddControllerManager?.expand(true)
             topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .Submit),
                 TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
             ])
             
@@ -413,7 +414,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             topEditSectionControllerManager?.expand(true)
             topEditSectionControllerManager?.controller?.section = section
             topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .Submit),
                 TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
             ])
         }
@@ -566,6 +566,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func onCloseQuickAddTap() {
         topQuickAddControllerManager?.expand(false)
+        topQuickAddControllerManager?.controller?.onClose()
     }
     
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
@@ -632,9 +633,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         topBar.setBackVisible(false)
         topBar.setLeftButtonModels([])
         topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .Submit),
             TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
         ])
+    }
+
+    func parentViewForAddButton() -> UIView {
+        return self.view
     }
     
     func onAddGroupOpen() {
@@ -642,7 +646,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         topBar.setLeftButtonModels([])
         topBar.setRightButtonModels([
             TopBarButtonModel(buttonId: .Add),
-            TopBarButtonModel(buttonId: .Submit),
             TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
         ])
     }
@@ -651,7 +654,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         topBar.setBackVisible(true)
         topBar.setLeftButtonModels([])
         topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .Submit),
             TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
         ])
     }
@@ -804,6 +806,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         topBar.setBackVisible(false)
         topBar.setLeftButtonIds([.Edit])
         topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+        topQuickAddControllerManager?.controller?.onClose()
     }
     
     // MARK: - ListTopBarViewDelegate
@@ -814,6 +817,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func onTopBarTitleTap() {
         onExpand(false)
+        topQuickAddControllerManager?.controller?.onClose()
         expandDelegate?.setExpanded(false)
     }
     
@@ -825,18 +829,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     weakSelf.sendActionToTopController(.Add)
                 }
             }
-        case .Submit:
-            if topEditSectionControllerManager?.expanded ?? false {
-                topEditSectionControllerManager?.controller?.submit()
-            } else {
-                sendActionToTopController(.Submit)
-            }
         case .ToggleOpen:
             toggleTopAddController()
         case .Edit:
             clearPossibleUndo()
             let editing = !self.listItemsTableViewController.editing
             self.setEditing(editing, animated: true, tryCloseTopViewController: true)
+        default: QL4("Not handled: \(buttonId)")
         }
     }
     

@@ -171,6 +171,7 @@
 		EB37ABA01C9DAFED00FE9D7A /* prefilles.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB37AB9D1C9DAFDD00FE9D7A /* prefilles.realm */; };
 		EB37ABA21C9F249300FE9D7A /* LineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABA11C9F249300FE9D7A /* LineTextField.swift */; };
 		EB37ABA61C9F2DA400FE9D7A /* LineAutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABA51C9F2DA400FE9D7A /* LineAutocompleteTextField.swift */; };
+		EB37ABAA1C9F4C0D00FE9D7A /* AddItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABA91C9F4C0D00FE9D7A /* AddItemButton.swift */; };
 		EB3C9E2A1BEA47FF00886197 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C9E291BEA47FF00886197 /* Theme.swift */; };
 		EB40A4691B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
 		EB40A46A1B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
@@ -1122,6 +1123,7 @@
 		EB37AB9D1C9DAFDD00FE9D7A /* prefilles.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefilles.realm; sourceTree = "<group>"; };
 		EB37ABA11C9F249300FE9D7A /* LineTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineTextField.swift; sourceTree = "<group>"; };
 		EB37ABA51C9F2DA400FE9D7A /* LineAutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAutocompleteTextField.swift; sourceTree = "<group>"; };
+		EB37ABA91C9F4C0D00FE9D7A /* AddItemButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemButton.swift; sourceTree = "<group>"; };
 		EB3C9E291BEA47FF00886197 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		EB40A4681B5506FB000E9CAD /* DBSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSection.swift; sourceTree = "<group>"; };
 		EB40A46D1B550804000E9CAD /* RealmProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProvider.swift; sourceTree = "<group>"; };
@@ -2766,6 +2768,7 @@
 				EBB526881BF016910002A286 /* ButtonMore.swift */,
 				EB37ABA11C9F249300FE9D7A /* LineTextField.swift */,
 				EB37ABA51C9F2DA400FE9D7A /* LineAutocompleteTextField.swift */,
+				EB37ABA91C9F4C0D00FE9D7A /* AddItemButton.swift */,
 			);
 			name = view;
 			path = shoppin;
@@ -3742,6 +3745,7 @@
 				EB70C2171B4D2C690060E529 /* ListProviderImpl.swift in Sources */,
 				EBDA754A1BCD5D3E00E34AC3 /* DBListItemGroup.swift in Sources */,
 				EB6E3D3D1C5A596700D65DD5 /* RemoteGroupItemsWithDependenciesNoGroup.swift in Sources */,
+				EB37ABAA1C9F4C0D00FE9D7A /* AddItemButton.swift in Sources */,
 				EB0C1BA91B3EC00700F24C85 /* ProviderResult.swift in Sources */,
 				EB4A389B1C86FC87000714F9 /* ErrorProviderImpl.swift in Sources */,
 				EBB5267B1BEFE20E0002A286 /* HelpHeaderView.swift in Sources */,

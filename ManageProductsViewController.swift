@@ -91,10 +91,6 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
-    func onSubmitTap(sender: UIBarButtonItem) {
-        topQuickAddControllerManager?.controller?.handleFloatingButtonAction(.Submit)
-    }
-    
     func onEditTap(sender: UIBarButtonItem) {
         toggleEditing()
     }
@@ -107,9 +103,6 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         
         for action in actions {
             switch action {
-            case .Save:
-                let button = UIBarButtonItem(image: UIImage(named: "tb_done")!, style: .Plain, target: self, action: "onSubmitTap:")
-                buttons.append(button)
             case .Edit:
                 let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .Plain, target: self, action: "onEditTap:")
                 buttons.append(button)
@@ -233,6 +226,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     
     func onCloseQuickAddTap() {
         topQuickAddControllerManager?.expand(false)
+        topQuickAddControllerManager?.controller?.onClose()
     }
     
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
@@ -288,6 +282,12 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     func onAddGroupItemsOpen() {
     }
     
+    func parentViewForAddButton() -> UIView {
+        return self.view
+    }
+    
+    // MARK: -
+    
     private func indexPathForProduct(product: Product) -> NSIndexPath? {
         let indexMaybe = products.enumerate().filter{$0.element.same(product)}.first?.index
         return indexMaybe.map{NSIndexPath(forRow: $0, inSection: 0)}
@@ -307,6 +307,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
         topQuickAddControllerManager?.expand(false)
+        topQuickAddControllerManager?.controller?.onClose()
         initNavBar([.Edit])
     }
     
@@ -363,6 +364,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func onExpandableClose() {
+        topQuickAddControllerManager?.controller?.onClose()
     }
     
     func onCenterTitleAnimComplete(center: Bool) {
