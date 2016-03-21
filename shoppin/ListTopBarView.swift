@@ -207,10 +207,10 @@ class ListTopBarView: UIView {
 
             var modelsWithButtons: [(model: TopBarButtonModel, button: UIButton, inner: UIButton)] = []
             
-            func createButton(model: TopBarButtonModel, imgName: String) -> UIButton {
+            func createButton(model: TopBarButtonModel, imgName: String, tintColor: UIColor) -> UIButton {
                 let button = UIButton()
                 button.translatesAutoresizingMaskIntoConstraints = false
-                button.imageView?.tintColor = fgColor
+                button.imageView?.tintColor = tintColor
                 
                 button.setImage(UIImage(named: imgName), forState: .Normal)
                 if left {
@@ -238,13 +238,13 @@ class ListTopBarView: UIView {
             for model in models {
                 switch model.buttonId {
                 case .Edit:
-                    createButton(model, imgName: "tb_edit")
+                    createButton(model, imgName: "tb_edit", tintColor: fgColor)
                 case .Add:
-                    createButton(model, imgName: "tb_add")
+                    createButton(model, imgName: "tb_add", tintColor: fgColor)
                 case .Submit:
-                    createButton(model, imgName: "tb_done")
+                    createButton(model, imgName: "tb_done", tintColor: fgColor)
                 case .ToggleOpen:
-                    createButton(model, imgName: "tb_add")
+                    createButton(model, imgName: "tb_add", tintColor: Theme.navBarAddColor)
                 }
             }
             

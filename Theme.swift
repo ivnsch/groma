@@ -15,12 +15,14 @@ struct Theme {
 //    private static var navAndTabFG = UIColor.flatBlackColor()
     
     private static let lightGrey = UIColor(red: 239/255, green: 239/255, blue: 244/255, alpha: 1)
+    private static let blue = UIColor(hexString: "0097D9")
     
     static var navigationBarTextColor = UIColor.blackColor()
 //    static var navigationBarBackgroundColor = UIColor(gradientStyle: UIGradientStyle.TopToBottom, withFrame:CGRectMake(0, 0, 600, 64), andColors:[UIColor.flatNavyBlueColorDark(), UIColor.flatNavyBlueColor()])
 //    static var navigationBarBackgroundColor = UIColor.flatNavyBlueColor()
     static var navigationBarBackgroundColor = UIColor(hexString: "F8F8F8")
-    static var tabBarBackgroundColor = UIColor(hexString: "0097D9")
+    static var tabBarBackgroundColor = blue
+    static var navBarAddColor = blue
     static var tabBarSelectedColor = UIColor.whiteColor()
     static var tabBarIconsColor = UIColor.blackColor()
     static var tabBarTextColor = UIColor.blackColor()
