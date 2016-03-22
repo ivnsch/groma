@@ -86,6 +86,15 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
+    /**
+     Returns total price of shown items exluding those marked for undo
+     */
+    var totalPrice: Float {
+        return tableViewSections.reduce(Float(0)) {sum, section in
+            sum + section.totalPrice
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -688,6 +697,15 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     private func showCellOpen(open: Bool, indexPath: NSIndexPath) {
         if let swipeableCell = tableView.cellForRowAtIndexPath(indexPath) as? SwipeableCell {
+            if let section = tableViewSections[safe: indexPath.section] {
+                if section.tableViewListItems[safe: indexPath.row] != nil {
+                    section.tableViewListItems[indexPath.row].swiped = open
+                } else {
+                    QL3("Didn't find item for index path: \(indexPath)")
+                }
+            } else {
+                QL4("Didn't find section for index path: \(indexPath)")
+            }
             swipeableCell.setOpen(open, animated: true)
         } else {
             print("Warning: showCellOpen: \(open), no swipeable cell for indexPath: \(indexPath)")

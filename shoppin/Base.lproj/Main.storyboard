@@ -16,6 +16,8 @@
             <string>HelveticaNeue</string>
             <string>HelveticaNeue</string>
             <string>HelveticaNeue</string>
+            <string>HelveticaNeue</string>
+            <string>HelveticaNeue-Bold</string>
         </mutableArray>
         <mutableArray key="HelveticaNeueLights.ttc">
             <string>HelveticaNeue-Light</string>
@@ -151,8 +153,53 @@
                                     <constraint firstItem="yjV-hY-4U9" firstAttribute="centerY" secondItem="1W2-R8-CSJ" secondAttribute="centerY" id="tcg-oO-wan"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="13Z-JE-NE8">
+                                <rect key="frame" x="0.0" y="540" width="600" height="60"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dR8-B8-Hqf">
+                                        <rect key="frame" x="580" y="30" width="0.0" height="0.0"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Buy" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bt0-VF-qyw">
+                                        <rect key="frame" x="20" y="20" width="32" height="21"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YZf-MZ-owD">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
+                                        <connections>
+                                            <action selector="onAddToInventoryTap:" destination="yD7-GV-3hX" eventType="touchUpInside" id="aan-yW-vu5"/>
+                                            <action selector="onCartTap:" destination="BYZ-38-t0r" eventType="touchUpInside" id="nn4-Fc-lBF"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.12156862745098039" green="0.67450980392156867" blue="0.41568627450980389" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="416-hJ-10b"/>
+                                    <constraint firstItem="dR8-B8-Hqf" firstAttribute="centerY" secondItem="13Z-JE-NE8" secondAttribute="centerY" id="Oax-M7-pDq"/>
+                                    <constraint firstItem="YZf-MZ-owD" firstAttribute="width" secondItem="13Z-JE-NE8" secondAttribute="width" id="VHs-K8-xM9"/>
+                                    <constraint firstItem="dR8-B8-Hqf" firstAttribute="centerY" secondItem="13Z-JE-NE8" secondAttribute="centerY" id="W7x-lZ-kMt"/>
+                                    <constraint firstItem="Bt0-VF-qyw" firstAttribute="centerY" secondItem="13Z-JE-NE8" secondAttribute="centerY" id="WEG-eW-N67"/>
+                                    <constraint firstItem="Bt0-VF-qyw" firstAttribute="leading" secondItem="13Z-JE-NE8" secondAttribute="leading" constant="20" id="b6u-fs-eFv"/>
+                                    <constraint firstItem="YZf-MZ-owD" firstAttribute="leading" secondItem="13Z-JE-NE8" secondAttribute="leading" id="jTU-Rw-PoS"/>
+                                    <constraint firstAttribute="trailing" secondItem="dR8-B8-Hqf" secondAttribute="trailing" constant="20" id="rLc-JV-iCc"/>
+                                    <constraint firstItem="YZf-MZ-owD" firstAttribute="top" secondItem="13Z-JE-NE8" secondAttribute="top" id="t1y-a1-Wy1"/>
+                                    <constraint firstAttribute="bottom" secondItem="YZf-MZ-owD" secondAttribute="bottom" id="tKM-xk-Lr4"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Oax-M7-pDq"/>
+                                    </mask>
+                                </variation>
+                            </view>
                         </subviews>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="13Z-JE-NE8" secondAttribute="trailing" id="4vL-7x-mW1"/>
+                            <constraint firstItem="13Z-JE-NE8" firstAttribute="leading" secondItem="cbd-Kq-bBv" secondAttribute="leading" id="JFX-2X-qw5"/>
+                            <constraint firstItem="1nH-Fo-ZBe" firstAttribute="top" secondItem="13Z-JE-NE8" secondAttribute="bottom" id="R7u-Wo-mT4"/>
                             <constraint firstItem="1W2-R8-CSJ" firstAttribute="leading" secondItem="cbd-Kq-bBv" secondAttribute="leading" id="aGr-cj-4yV"/>
                             <constraint firstItem="1nH-Fo-ZBe" firstAttribute="top" secondItem="1W2-R8-CSJ" secondAttribute="bottom" id="eo6-9Y-TtU"/>
                             <constraint firstItem="1W2-R8-CSJ" firstAttribute="top" secondItem="5s9-t8-hlI" secondAttribute="bottom" id="nkS-wr-YVU"/>
@@ -160,16 +207,14 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Cart" id="WXN-Hy-99l">
-                        <barButtonItem key="rightBarButtonItem" title="Buy" id="V6t-4K-Jlt">
-                            <connections>
-                                <action selector="onAddToInventoryTap:" destination="yD7-GV-3hX" id="1Yc-uL-aCa"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Buy" id="V6t-4K-Jlt"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="buyLabel" destination="Bt0-VF-qyw" id="qra-bB-c1c"/>
                         <outlet property="emptyCartLabel" destination="hEq-5G-XWq" id="qFT-Gp-0Ni"/>
                         <outlet property="emptyCartStashLabel" destination="tVm-ZY-nIu" id="HAZ-Hp-tYo"/>
                         <outlet property="emptyView" destination="1W2-R8-CSJ" id="GtM-ak-L3r"/>
+                        <outlet property="totalDonePriceLabel" destination="dR8-B8-Hqf" id="gqf-vw-0cA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gw6-cG-vVb" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -80,6 +80,8 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
         if !listToEdit.isSet { // add modus
             colorButton.tintColor = RandomFlatColorWithShade(.Dark)
         }
+        
+        listNameInputField.becomeFirstResponder()
     }
     
     private func prefill(list: List) {

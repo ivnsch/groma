@@ -155,7 +155,8 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
     }
     
-    func onExpandableClose() {
+    override func onExpandableClose() {
+        super.onExpandableClose()
         setTopBarState(.NormalFromExpanded)
     }
     

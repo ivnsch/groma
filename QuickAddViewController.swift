@@ -133,6 +133,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         }
     }
     
+    // MARK: - Keyboard
+
     func keyboardWillAppear(notification: NSNotification) {
         if let userInfo = notification.userInfo {
             if let keyboardSize = (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {

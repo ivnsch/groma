@@ -204,7 +204,8 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
     }
     
-    func onExpandableClose() {
+    override func onExpandableClose() {
+        super.onExpandableClose()
         setTopBarState(.NormalFromExpanded)
     }
     

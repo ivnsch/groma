@@ -38,7 +38,10 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
             }
         }
     }
-
+    
+    @IBOutlet weak var buyLabel: UILabel!
+    @IBOutlet weak var totalDonePriceLabel: UILabel!
+    
     @IBOutlet weak var emptyView: UIView!
     @IBOutlet weak var emptyCartLabel: UILabel!
     @IBOutlet weak var emptyCartStashLabel: UILabel!
@@ -91,11 +94,16 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
                 let doneListItems = listItems.filter{$0.hasStatus(.Done)}
                 weakSelf.listItemsTableViewController.setListItems(doneListItems)
                 self?.updateEmptyView()
+                self?.updatePriceView()
             }
         })
         // FIXME note that list's listItems are not set, so we don't use this, maybe just remove this variable, or set it
 //        let donelistItems = list.listItems.filter{$0.done}
 //        self.listItemsTableViewController.setListItems(donelistItems)
+    }
+    
+    private func updatePriceView() {
+        totalDonePriceLabel.text = listItemsTableViewController.totalPrice.toLocalCurrencyString()
     }
     
     private func updateEmptyView() {
@@ -156,6 +164,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
                 if result.success {
                     self!.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
                     self?.updateEmptyView()
+                    self?.updatePriceView()
                 }
                 onFinish()
             }
@@ -166,6 +175,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
 
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
         listItemsTableViewController.markOpen(true, indexPath: indexPath, notifyRemote: true)
+        updatePriceView()
     }
     
     private func sendAllItemToStash(onFinish: VoidFunction) {
@@ -174,6 +184,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
                 if result.success {
                     self?.listItemsTableViewController.setListItems([])
                     self?.updateEmptyView()
+                    self?.updatePriceView()
                     onFinish()
                 }
             }
@@ -181,7 +192,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     func onListItemReset(tableViewListItem: TableViewListItem) {
-        // do nothing
+        updatePriceView()
     }
     
     func onSectionHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {

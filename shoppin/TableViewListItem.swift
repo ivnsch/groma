@@ -8,14 +8,27 @@
 
 import UIKit
 
-class TableViewListItem: CustomDebugStringConvertible {
+class TableViewListItem: CustomDebugStringConvertible, Identifiable {
    
     let listItem: ListItem
-    var swiped: Bool = false
+    var swiped: Bool
     
-    init(listItem: ListItem) {
+    init(listItem: ListItem, swiped: Bool = false) {
         self.listItem = listItem
+        self.swiped = swiped
     }
+    
+    func same(rhs: TableViewListItem) -> Bool {
+        return listItem.same(rhs.listItem)
+    }
+    
+    func copy(listItem: ListItem? = nil, swiped: Bool? = nil) -> TableViewListItem {
+        return TableViewListItem(
+            listItem: listItem ?? self.listItem,
+            swiped: swiped ?? self.swiped
+        )
+    }
+    
     
     var debugDescription: String {
         return "{\(self.dynamicType) \(listItem)}"

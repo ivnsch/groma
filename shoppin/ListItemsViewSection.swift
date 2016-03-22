@@ -47,6 +47,18 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
 
     var cellMode: ListItemCellMode = .Note
     
+    /**
+     Returns total price of shown items exluding those marked for undo
+     */
+    var totalPrice: Float {
+        return tableViewListItems.reduce(Float(0)) {sum, item in
+            
+            print("item: \(item.listItem.product.name), price: \(item.listItem.product.price), swiped: \(item.swiped)")
+            
+            return sum + (item.swiped ? 0 : item.listItem.totalPrice(status))
+        }
+    }
+    
     // this could be solved maybe with inheritance or sth like "style injection", for now this is ok
     private var finalLabelFontColor:UIColor {
         var color:UIColor
@@ -154,6 +166,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     }
     
     func onButtonTwoTap(listItem: TableViewListItem) {
+        tableViewListItems.update(listItem.copy(swiped: false))
         delegate?.undoSwipe(listItem)
     }
     
