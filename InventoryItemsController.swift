@@ -57,8 +57,6 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     private var productsWithQuantityController: ProductsWithQuantityViewController!
 
-    private var originalTopbarColor: UIColor?
-
     private var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
 
     override func viewDidLoad() {
@@ -103,10 +101,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
 
     func setThemeColor(color: UIColor) {
-        originalTopbarColor = color
-        UIView.animateWithDuration(0.5) {[weak self] in
-            self?.topBar.backgroundColor = UIColor.whiteColor()
-        }
+        topBar.dotColor = color
         view.backgroundColor = UIColor.whiteColor()
     }
     
@@ -198,9 +193,6 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         onExpand(false)
         topQuickAddControllerManager?.controller?.onClose()
         expandDelegate?.setExpanded(false)
-        UIView.animateWithDuration(0.5) {[weak self] in
-            self?.topBar.backgroundColor = self?.originalTopbarColor
-        }
     }
     
     func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {

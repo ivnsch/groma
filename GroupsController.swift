@@ -123,8 +123,9 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         listItemsController.view.clipsToBounds = true
         
         listItemsController.onViewWillAppear = { // FIXME crash here once when tapped on "edit"
-            listItemsController.setThemeColor(cell.backgroundColor!)
+            // Note: order of lines important here, group has to be set first for topbar dot to be positioned correctly right of the title
             listItemsController.group = (model as! ExpandableTableViewGroupModel).group //change
+            listItemsController.setThemeColor(cell.backgroundColor!)
             listItemsController.onExpand(true)
         }
         

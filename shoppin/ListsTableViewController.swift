@@ -126,8 +126,9 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         listItemsController.view.clipsToBounds = true
 
         listItemsController.onViewWillAppear = { // FIXME crash here once when tapped on "edit"
-            listItemsController.setThemeColor(cell.backgroundColor!)
+            // Note: order of lines important here, list has to be set first for topbar dot to be positioned correctly right of the title
             listItemsController.currentList = (model as! ExpandableTableViewListModel).list
+            listItemsController.setThemeColor(cell.backgroundColor!)
             listItemsController.onExpand(true)
         }
 

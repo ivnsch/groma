@@ -64,8 +64,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         super.init(coder: aDecoder)
     }
     
-    private var originalTopbarColor: UIColor?
-    
     private var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
     
     override func viewDidLoad() {
@@ -140,11 +138,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func setThemeColor(color: UIColor) {
-        topBar.backgroundColor = color
-        originalTopbarColor = color
-        UIView.animateWithDuration(0.5) {[weak self] in
-            self?.topBar.backgroundColor = UIColor.whiteColor()
-        }
+        topBar.dotColor = color
         view.backgroundColor = UIColor.whiteColor()
         
         expandCollapseButton.strokeColor = UIColor.blackColor()
@@ -819,9 +813,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         onExpand(false)
         topQuickAddControllerManager?.controller?.onClose()
         expandDelegate?.setExpanded(false)
-        UIView.animateWithDuration(0.5) {[weak self] in
-            self?.topBar.backgroundColor = self?.originalTopbarColor
-        }
     }
     
     func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {

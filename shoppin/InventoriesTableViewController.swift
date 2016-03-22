@@ -129,8 +129,9 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         listItemsController.view.clipsToBounds = true
         
         listItemsController.onViewWillAppear = { // FIXME crash here once when tapped on "edit"
-            listItemsController.setThemeColor(cell.backgroundColor!)
+            // Note: order of lines important here, inventory has to be set first for topbar dot to be positioned correctly right of the title
             listItemsController.inventory = (model as! ExpandableTableViewInventoryModel).inventory
+            listItemsController.setThemeColor(cell.backgroundColor!)
             listItemsController.onExpand(true)
         }
         return listItemsController

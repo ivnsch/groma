@@ -85,6 +85,15 @@ class ListTopBarView: UIView {
     
     private var titleLabelTopConstraint: NSLayoutConstraint?
     
+    
+    private var bgColorLayer: CAShapeLayer?
+    
+    var dotColor: UIColor? {
+        didSet {
+            self.bgColorLayer?.fillColor = dotColor?.CGColor
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         translatesAutoresizingMaskIntoConstraints = false
@@ -112,6 +121,11 @@ class ListTopBarView: UIView {
         hairline.fillSuperviewWidth()
         hairline.heightConstraint(0.5)
         hairline.alignBottom(self, constant: 0)
+        
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.frame = self.bounds
+        self.bgColorLayer = shapeLayer
+        layer.insertSublayer(shapeLayer, atIndex: 0)
     }
     
     var title: String = "" {
@@ -121,8 +135,45 @@ class ListTopBarView: UIView {
         }
     }
     
+    func animateDot(expanding: Bool) {
+        
+        guard let titleTextSize = titleLabel.text?.size(Fonts.regular) else {return}
+        
+        let rectPath = UIBezierPath(roundedRect: CGRectInset(self.bounds, -10, -10), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(5, 5))
+        
+        let circleDiam: CGFloat = 12
+        let cornerRadius = circleDiam / 2
+        let x = frame.width / 2 + (titleTextSize.width / 2) + 8
+        let y = titleTopConstant(expanding) + (titleTextSize.height / 2) - (circleDiam / 2)
+        
+        let circlePath = UIBezierPath(roundedRect: CGRectMake(x, y, circleDiam, circleDiam), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(cornerRadius, cornerRadius))
+        circlePath.closePath()
+        
+        CATransaction.begin()
+        let pathAnimation = CABasicAnimation(keyPath: "path")
+        pathAnimation.duration = 0.3
+        pathAnimation.fillMode = kCAFillModeForwards
+        pathAnimation.removedOnCompletion = false
+        pathAnimation.fromValue = expanding ? rectPath.CGPath : circlePath.CGPath
+        pathAnimation.toValue = expanding ?  circlePath.CGPath : rectPath.CGPath
+        
+        // this causes some flickering (only on device) when expand=false, so for now using kCAFillModeForwards and removedOnCompletion=false instead
+//        CATransaction.setCompletionBlock {[weak self] in
+//            self?.bgColorLayer?.path = expanding ? circlePath.CGPath : rectPath.CGPath
+//        }
+        bgColorLayer?.addAnimation(pathAnimation, forKey: "path")
+        
+        CATransaction.commit()
+    }
+    
+    private func titleTopConstant(expanded: Bool) -> CGFloat {
+        return expanded ? CGFloat(topConstant) : CGFloat(startTopConstant)
+    }
+    
     // parameter: center => center, !center => left
+    // TODO rename maybe "setState(open)" or something, this is not only animating the label now but also the background
     func positionTitleLabelLeft(center: Bool, animated: Bool) {
+        
         titleLabelLeftConstraint?.constant = center ? self.center.x - titleLabel.frame.width / 2 : CGFloat(titleLabelLeftConstant)
         titleLabelTopConstraint?.constant = center ? CGFloat(topConstant) : CGFloat(startTopConstant)
         if animated {
@@ -131,6 +182,10 @@ class ListTopBarView: UIView {
                 }) {[weak self] finished in
                     self?.delegate?.onCenterTitleAnimComplete(center)
             }
+            
+            animateDot(center)
+
+            
         } else {
             layoutIfNeeded()
             delegate?.onCenterTitleAnimComplete(center)
