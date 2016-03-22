@@ -192,6 +192,13 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
         // do nothing
     }
     
+    func onPullToAdd() {
+        // do nothing
+    }
+    
+    func onTableViewScroll(scrollView: UIScrollView) {
+    }
+    
     // MARK: -
     
     func startSideMenuDrag() {

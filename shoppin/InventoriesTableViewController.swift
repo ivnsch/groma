@@ -59,6 +59,10 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         topAddEditListControllerManager?.height = ConnectionProvider.connectedAndLoggedIn ? 140 : 110
     }
     
+    override func onPullToAdd() {
+        onAddTap(false)
+    }
+    
     private func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditInventoryController> {
         let top = CGRectGetHeight(topBar.frame)
         return ExpandableTopViewController(top: top, height: ConnectionProvider.connectedAndLoggedIn ? 140 : 110, parentViewController: self, tableView: tableView) {[weak self] in
@@ -132,13 +136,15 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         return listItemsController
     }
     
-    override func onAddTap() {
+    override func onAddTap(rotateTopBarButton: Bool = true) {
         super.onAddTap()
         SizeLimitChecker.checkInventoriesSizeLimit(models.count, controller: self) {[weak self] in
             if let weakSelf = self {
                 let expand = !(weakSelf.topAddEditListControllerManager?.expanded ?? true) // toggle - if for some reason variable isn't set, set expanded false (!true)
                 weakSelf.topAddEditListControllerManager?.expand(expand)
-                weakSelf.setTopBarStateForAddTap(expand)
+                if rotateTopBarButton { // HACK - don't reset the buttons when we don't want to rotate because this causes the toggle button animation to "jump" (this is used on pull to add - in order to show also the submit button we would have to reset the buttons, but this causes a little jump in the X since when the table view goes a little up because of the pull anim, the X animates back a little and when we reset the buttons, setting it to its final state there's a jump). TODO We need to adjust the general logic for this, we don't need multiple nav bar buttons on each side anyways anymore so maybe we can remove all this?
+                    weakSelf.setTopBarStateForAddTap(expand, rotateTopBarButtonOnExpand: rotateTopBarButton)
+                }
             }
         }
     }

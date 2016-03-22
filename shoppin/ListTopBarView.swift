@@ -187,6 +187,10 @@ class ListTopBarView: UIView {
         
         layoutIfNeeded()
     }
+    
+    func rightButton(identifier: ListTopBarViewButtonId) -> UIButton? {
+        return rightButtons.findFirst({$0.tag == identifier.rawValue})
+    }
 
     private func setButtonModels(models: [TopBarButtonModel], left: Bool) {
 
@@ -218,6 +222,9 @@ class ListTopBarView: UIView {
                 } else {
                     rightButtons.append(button)
                 }
+                
+                button.tag = model.buttonId.rawValue
+                
                 button.userInteractionEnabled = false
                 
                 let tapView = UIButton()

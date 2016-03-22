@@ -172,6 +172,8 @@
 		EB37ABA21C9F249300FE9D7A /* LineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABA11C9F249300FE9D7A /* LineTextField.swift */; };
 		EB37ABA61C9F2DA400FE9D7A /* LineAutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABA51C9F2DA400FE9D7A /* LineAutocompleteTextField.swift */; };
 		EB37ABAA1C9F4C0D00FE9D7A /* AddItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABA91C9F4C0D00FE9D7A /* AddItemButton.swift */; };
+		EB37ABB71CA099BB00FE9D7A /* ToggleButtonRotator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABB61CA099BA00FE9D7A /* ToggleButtonRotator.swift */; };
+		EB37ABB91CA09B4F00FE9D7A /* PullToAddHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABB81CA09B4F00FE9D7A /* PullToAddHelper.swift */; };
 		EB3C9E2A1BEA47FF00886197 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C9E291BEA47FF00886197 /* Theme.swift */; };
 		EB40A4691B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
 		EB40A46A1B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
@@ -1124,6 +1126,8 @@
 		EB37ABA11C9F249300FE9D7A /* LineTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineTextField.swift; sourceTree = "<group>"; };
 		EB37ABA51C9F2DA400FE9D7A /* LineAutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAutocompleteTextField.swift; sourceTree = "<group>"; };
 		EB37ABA91C9F4C0D00FE9D7A /* AddItemButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemButton.swift; sourceTree = "<group>"; };
+		EB37ABB61CA099BA00FE9D7A /* ToggleButtonRotator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButtonRotator.swift; sourceTree = "<group>"; };
+		EB37ABB81CA09B4F00FE9D7A /* PullToAddHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullToAddHelper.swift; path = ../PullToAddHelper.swift; sourceTree = "<group>"; };
 		EB3C9E291BEA47FF00886197 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		EB40A4681B5506FB000E9CAD /* DBSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSection.swift; sourceTree = "<group>"; };
 		EB40A46D1B550804000E9CAD /* RealmProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProvider.swift; sourceTree = "<group>"; };
@@ -1938,6 +1942,14 @@
 			name = common;
 			sourceTree = "<group>";
 		};
+		EB37ABAD1CA01AE400FE9D7A /* pullToAdd */ = {
+			isa = PBXGroup;
+			children = (
+				EB37ABB81CA09B4F00FE9D7A /* PullToAddHelper.swift */,
+			);
+			name = pullToAdd;
+			sourceTree = "<group>";
+		};
 		EB40A4671B5506CC000E9CAD /* realm */ = {
 			isa = PBXGroup;
 			children = (
@@ -2655,6 +2667,7 @@
 				EB80CE481C3DEB8A001DF159 /* InventoryPicker.swift */,
 				EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */,
 				EBED0D131C824FE200A1EEC4 /* EmailHelper.swift */,
+				EB37ABB61CA099BA00FE9D7A /* ToggleButtonRotator.swift */,
 			);
 			name = util;
 			sourceTree = "<group>";
@@ -2756,6 +2769,7 @@
 		EBEEDD631A49A7B500FC3B29 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				EB37ABAD1CA01AE400FE9D7A /* pullToAdd */,
 				EBAEB23A1BDC25FE00FCDA5C /* floatingViews */,
 				EBA575631BCECBE500A0A825 /* quantityView */,
 				EBDA75511BCD95EC00E34AC3 /* okCancelButtons */,
@@ -3538,6 +3552,7 @@
 				EB37AB981C9CA81F00FE9D7A /* OrderUpdate.swift in Sources */,
 				EBA7AC9E1BFEA87300247A8C /* ProductCategoryProvider.swift in Sources */,
 				EBA575711BD031B400A0A825 /* GroupItemInput.swift in Sources */,
+				EB37ABB91CA09B4F00FE9D7A /* PullToAddHelper.swift in Sources */,
 				EB4A38A41C87B96C000714F9 /* GoogleSignInHelper.swift in Sources */,
 				EB3144461B643559005814F0 /* UITextField.swift in Sources */,
 				EB7233BB1C84B5CE002B9903 /* DBSectionToRemove.swift in Sources */,
@@ -3612,6 +3627,7 @@
 				EB80CE531C449E1E001DF159 /* TermsAndConditionsController.swift in Sources */,
 				EB20FC071A599AE20058103B /* ProductWithQuantityTableViewCell.swift in Sources */,
 				EBA575621BCECBDF00A0A825 /* QuantityView.swift in Sources */,
+				EB37ABB71CA099BB00FE9D7A /* ToggleButtonRotator.swift in Sources */,
 				EB7DA2E11C6FCD9F007F1E43 /* SizeLimits.swift in Sources */,
 				EB2F5D5E1A506F5100DBC4AF /* Array.swift in Sources */,
 				EB70C21F1B4D302D0060E529 /* SharedUser.swift in Sources */,

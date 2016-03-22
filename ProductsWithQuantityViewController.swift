@@ -17,13 +17,19 @@ protocol ProductsWithQuantityViewControllerDelegate {
     func onModelSelected(model: ProductWithQuantity, indexPath: NSIndexPath)
     func emptyViewData() -> (text: String, text2: String, imgName: String)
     func onEmptyViewTap()
+    func onTableViewScroll(scrollView: UIScrollView)
+    func onPullToAdd()
 }
 
 
 /// Generic controller for sorted products with a quantity, which can be incremented and decremented
 class ProductsWithQuantityViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ProductWithQuantityTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
 
-    @IBOutlet var tableView: UITableView!
+    private var tableViewController: UITableViewController! // initially there was only a tableview but pull to refresh control seems to work better with table view controller
+    
+    var tableView: UITableView {
+        return tableViewController.tableView
+    }
     
     private(set) var models: [ProductWithQuantity] = []
     
@@ -71,6 +77,11 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         
+        let refreshControl = PullToAddHelper.createPullToAdd(self)
+        tableViewController.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: "onPullRefresh:", forControlEvents: .ValueChanged)
+        
+        
         // TODO custom empty view, put this there
         let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyInventoryViewTap:"))
         emptyView.addGestureRecognizer(tapRecognizer)
@@ -79,6 +90,20 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             emptyViewLabel1.text = emptyViewData.text
             emptyViewLabel2.text = emptyViewData.text2
             emptyViewImg.image = UIImage(named: emptyViewData.imgName)
+        }
+    }
+    
+    func onPullRefresh(sender: UIRefreshControl) {
+        sender.endRefreshing()
+        delegate?.onPullToAdd()
+    }
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "embedTableViewController" {
+            tableViewController = segue.destinationViewController as! UITableViewController
+            tableViewController.tableView.dataSource = self
+            tableViewController.tableView.delegate = self
+            tableViewFooter = tableViewController.view.viewWithTag(ViewTags.TableViewFooter) as! LoadingFooter
         }
     }
     
@@ -191,6 +216,8 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         if (maximumOffset - currentOffset) <= 40 {
             loadPossibleNextPage()
         }
+        
+        delegate?.onTableViewScroll(scrollView)
     }
     
     private func updateEmptyView() {

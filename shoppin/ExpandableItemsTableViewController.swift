@@ -30,13 +30,12 @@ protocol Foo { // TODO rename, put in other file
 }
 
 enum TopBarState {
-    case Normal, NormalFromExpanded, EditTable, EditItem, Add
+    case Normal, NormalFromExpanded, EditTable, EditItem, Add, AddNoAnim
 }
 
 
 class ExpandableItemsTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ExpandCellAnimatorDelegate, Foo, ListTopBarViewDelegate {
     
-    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var topBar: ListTopBarView!
 //    @IBOutlet weak var topBarConstraint: NSLayoutConstraint!
     
@@ -58,19 +57,38 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         }
     }
     
+    
+    private var tableViewController: UITableViewController! // initially there was only a tableview but pull to refresh control seems to work better with table view controller
+    
+    var tableView: UITableView {
+        return tableViewController.tableView
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "embedTableViewController" {
+            tableViewController = segue.destinationViewController as! UITableViewController
+            tableViewController.tableView.dataSource = self
+            tableViewController.tableView.delegate = self
+        }
+    }
+    
+    
     private let expandCellAnimator = ExpandCellAnimator()
     
     private var originalNavBarFrame: CGRect = CGRectZero
     
+    private var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.allowsSelectionDuringEditing = true
+        tableView.allowsSelectionDuringEditing = true
+
+        let refreshControl = PullToAddHelper.createPullToAdd(self)
+        tableViewController.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: "onPullRefresh:", forControlEvents: .ValueChanged)
         
         originalNavBarFrame = topBar.frame
-        
-        view.backgroundColor = Theme.mainViewsBGColor
-        tableView.backgroundColor = Theme.mainViewsBGColor
         
         topBar.delegate = self
         
@@ -78,6 +96,16 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyViewTap:"))
         emptyView.addGestureRecognizer(tapRecognizer)
+    }
+    
+    
+    func onPullRefresh(sender: UIRefreshControl) {
+        sender.endRefreshing()
+        onPullToAdd()
+    }
+
+    func onPullToAdd() {
+        // override
     }
     
     private func initTopBar() {
@@ -108,9 +136,9 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         fatalError("override")
     }
 
-    func setTopBarStateForAddTap(expand: Bool) {
+    func setTopBarStateForAddTap(expand: Bool, rotateTopBarButtonOnExpand: Bool = true) {
         if expand {
-            setTopBarState(.Add)
+            setTopBarState(rotateTopBarButtonOnExpand ? .Add : .AddNoAnim)
         } else {
             setTopBarState(.NormalFromExpanded)
         }
@@ -149,13 +177,24 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         }
         
         // animated
-        func rightSubmitAndCloseFromOpen() { // + -> v x
-            topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .Submit),
-                TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformIdentity, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
-            ])
+        func rightSubmitAndCloseFromOpen(animateToggle: Bool) { // + -> v x
+            var models: [TopBarButtonModel] = [
+                TopBarButtonModel(buttonId: .Submit)
+            ]
+            if animateToggle {
+                models.append(TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformIdentity, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4))))
+            } else {
+//                models.append(TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4))))
+            }
+            
+            topBar.setRightButtonModels(models)
+//            
+//            topBar.setRightButtonModels([
+//                TopBarButtonModel(buttonId: .Submit),
+//                TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformIdentity, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+//            ])
         }
-        
+
         switch topBarState {
         case .Normal:
             leftEdit()
@@ -171,11 +210,15 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
             
         case .EditItem:
             leftEdit()
-            rightSubmitAndCloseFromOpen()
+            rightSubmitAndCloseFromOpen(true)
 
         case .Add:
             leftEdit()
-            rightSubmitAndCloseFromOpen()
+            rightSubmitAndCloseFromOpen(true)
+            
+        case .AddNoAnim:
+            leftEdit()
+            rightSubmitAndCloseFromOpen(false)
         }
     }
     
@@ -285,7 +328,11 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    func onAddTap() {
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
+    }
+    
+    func onAddTap(rotateTopBarButton: Bool = true) {
     }
     
     @IBAction func onEditTap(sender: UIBarButtonItem) {

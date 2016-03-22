@@ -66,6 +66,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     private var originalTopbarColor: UIColor?
     
+    private var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -222,7 +224,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     // MARK:
     
-    private func toggleTopAddController() {
+    private func toggleTopAddController(rotateTopBarButton: Bool = true) {
         
         clearPossibleUndo()
         
@@ -233,7 +235,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             topEditSectionControllerManager?.expand(false)
 
             topBar.setLeftButtonIds([.Edit])
-            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+
+            if rotateTopBarButton {
+                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+            }
+
             
             if editing {
                 // if we are in edit mode, show the reorder sections button again (we hide it when we open the top controller)
@@ -245,7 +251,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             topQuickAddControllerManager?.controller?.initContent()
 
             topBar.setLeftButtonIds([])
-            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+            
+            if rotateTopBarButton {
+                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+            }
             
             // in case we are in reorder sections mode, come back to normal. This mode doesn't make sense while adding list items as we can't see the list items.
             setReorderSections(false)
@@ -292,6 +301,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
 //        self.initList()
 //    }
     
+//    var refreshControl: UIRefreshControl?
     private func initTableViewController() {
         listItemsTableViewController = UIStoryboard.listItemsTableViewController()
         
@@ -307,6 +317,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         let bottomInset: CGFloat = pricesView.frame.height + 10 // 10 - show a little empty space between the last item and the prices view
         listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0)
         listItemsTableViewController.tableView.topOffset = -listItemsTableViewController.tableView.inset.top
+        listItemsTableViewController.enablePullToAdd()
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
@@ -318,6 +329,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     // MARK: - ListItemsTableViewDelegate
+    
+    func onTableViewScroll(scrollView: UIScrollView) {
+        toggleButtonRotator.rotateForOffset(-64, topBar: topBar, scrollView: scrollView)
+    }
+    
+    func onPullToAdd() {
+        toggleTopAddController(false) // this is meant to only open the menu, but toggle is ok since if we can tap on empty view it means it's closed
+    }
     
     func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) {
         tableViewListItem.listItem.switchStatusQuantityMutable(.Todo, targetStatus: .Done)

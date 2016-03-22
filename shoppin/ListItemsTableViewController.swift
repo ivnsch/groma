@@ -15,6 +15,8 @@ protocol ListItemsTableViewDelegate {
     func onListItemReset(tableViewListItem: TableViewListItem) // revert undo
     func onSectionHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection)
     func onIncrementItem(model: TableViewListItem, delta: Int)
+    func onTableViewScroll(scrollView: UIScrollView)
+    func onPullToAdd()
 }
 
 protocol ListItemsEditTableViewDelegate {
@@ -48,6 +50,21 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     func touchEnabled(enabled:Bool) {
         self.tableView.userInteractionEnabled = enabled
+    }
+    
+    func enablePullToAdd() {
+        let refreshControl = PullToAddHelper.createPullToAdd(self)
+        refreshControl.addTarget(self, action: "onPullRefresh:", forControlEvents: .ValueChanged)
+        self.refreshControl = refreshControl
+    }
+    
+    func onPullRefresh(sender: UIRefreshControl) {
+        sender.endRefreshing()
+        listItemsTableViewDelegate?.onPullToAdd()
+    }
+    
+    override func scrollViewDidScroll(scrollView: UIScrollView) {
+        listItemsTableViewDelegate?.onTableViewScroll(scrollView)
     }
     
     var sectionsExpanded: Bool = true

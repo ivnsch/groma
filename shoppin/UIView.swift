@@ -179,4 +179,8 @@ extension UIView {
             }
         }
     }
+    
+    func rotate(degrees: Double) {
+        transform = CGAffineTransformMakeRotation(CGFloat(degrees * M_PI / Double(180)))
+    }
 }

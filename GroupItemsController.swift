@@ -66,6 +66,8 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     private var originalTopbarColor: UIColor?
 
+    private var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -227,7 +229,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         }
     }
     
-    private func toggleTopAddController() {
+    private func toggleTopAddController(rotateTopBarButton: Bool = true) {
         
         // if any top controller is open, close it
         if topQuickAddControllerManager?.expanded ?? false {
@@ -235,14 +237,20 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             topQuickAddControllerManager?.controller?.onClose()
             
             topBar.setLeftButtonIds([.Edit])
-            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+            
+            if rotateTopBarButton {
+                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+            }
             
         } else { // if there's no top controller open, open the quick add controller
             topQuickAddControllerManager?.expand(true)
             topQuickAddControllerManager?.controller?.initContent()
             
             topBar.setLeftButtonIds([])
-            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+            
+            if rotateTopBarButton {
+                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+            }
         }
     }
     
@@ -411,6 +419,14 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func onEmptyViewTap() {
         toggleTopAddController()
+    }
+    
+    func onTableViewScroll(scrollView: UIScrollView) {
+        toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
+    }
+    
+    func onPullToAdd() {
+        toggleTopAddController(false)
     }
     
     func indexPathOfItem(model: ProductWithQuantityGroup) -> NSIndexPath? {

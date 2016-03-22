@@ -59,6 +59,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 
     private var originalTopbarColor: UIColor?
 
+    private var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -158,7 +160,10 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         onViewWillAppear?()
         onViewWillAppear = nil
     }
-
+    
+    func onPullToAdd() {
+        toggleTopAddController(false)
+    }
     
     private func toggleEditing() {
         if let productsWithQuantityController = productsWithQuantityController {
@@ -220,7 +225,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    private func toggleTopAddController() {
+    private func toggleTopAddController(rotateTopBarButton: Bool = true) {
         
         // if any top controller is open, close it
         if topQuickAddControllerManager?.expanded ?? false {
@@ -228,14 +233,20 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             topQuickAddControllerManager?.controller?.onClose()
             
             topBar.setLeftButtonIds([.Edit])
-            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+            
+            if rotateTopBarButton {
+                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+            }
             
         } else { // if there's no top controller open, open the quick add controller
             topQuickAddControllerManager?.expand(true)
             topQuickAddControllerManager?.controller?.initContent()
             
             topBar.setLeftButtonIds([])
-            topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+            
+            if rotateTopBarButton {
+                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+            }
         }
     }
     
@@ -426,6 +437,10 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func onEmptyViewTap() {
         toggleTopAddController()
+    }
+    
+    func onTableViewScroll(scrollView: UIScrollView) {
+        toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
     }
     
     func indexPathOfItem(model: ProductWithQuantityInv) -> NSIndexPath? {
