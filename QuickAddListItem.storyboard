@@ -13,6 +13,7 @@
         <mutableArray key="HelveticaNeueLights.ttc">
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -56,7 +57,7 @@
                                 </connections>
                             </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wh4-4g-FV0">
-                                <rect key="frame" x="0.0" y="84" width="600" height="516"/>
+                                <rect key="frame" x="0.0" y="109" width="600" height="491"/>
                                 <connections>
                                     <segue destination="cN4-H5-trn" kind="embed" identifier="navController" id="M5Z-aO-UwY"/>
                                 </connections>
@@ -99,14 +100,14 @@
                                     <action selector="onSortByTap:" destination="3Uk-Rq-zKd" eventType="touchUpInside" id="BQQ-mY-hEK"/>
                                 </connections>
                             </button>
-                            <searchBar contentMode="redraw" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="Rao-bd-kBH">
-                                <rect key="frame" x="0.0" y="40" width="600" height="44"/>
-                                <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tof-Zs-Hco" customClass="RoundTextField" customModule="shoppin">
+                                <rect key="frame" x="10" y="60" width="580" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="7T7-qi-eka"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
-                                <connections>
-                                    <outlet property="delegate" destination="3Uk-Rq-zKd" id="Mvh-EO-3Uj"/>
-                                </connections>
-                            </searchBar>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -114,25 +115,27 @@
                             <constraint firstItem="H9s-Os-9qI" firstAttribute="trailing" secondItem="uPF-XL-vgJ" secondAttribute="trailingMargin" id="7tt-9U-vZt"/>
                             <constraint firstItem="dif-9Z-2lr" firstAttribute="leading" secondItem="s1F-jF-pKk" secondAttribute="trailing" constant="4" id="9iL-75-PDA"/>
                             <constraint firstItem="s1F-jF-pKk" firstAttribute="leading" secondItem="Stp-m3-S0Z" secondAttribute="trailing" id="AC5-X4-Heb"/>
+                            <constraint firstItem="tof-Zs-Hco" firstAttribute="top" secondItem="tHf-2A-8l9" secondAttribute="bottom" constant="40" id="Ea8-pn-1FI"/>
+                            <constraint firstAttribute="trailing" secondItem="tof-Zs-Hco" secondAttribute="trailing" constant="10" id="Heh-Bc-xTE"/>
                             <constraint firstItem="Stp-m3-S0Z" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="topMargin" id="OR9-yS-2so"/>
                             <constraint firstItem="dif-9Z-2lr" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="Sa4-KW-eNK"/>
-                            <constraint firstAttribute="trailing" secondItem="Rao-bd-kBH" secondAttribute="trailing" id="Zm2-49-eJx"/>
+                            <constraint firstItem="tof-Zs-Hco" firstAttribute="top" secondItem="tHf-2A-8l9" secondAttribute="bottom" id="U8I-y4-y3A"/>
                             <constraint firstItem="6Ye-nf-OHM" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="bEV-Rl-nvH"/>
                             <constraint firstItem="zcT-I6-trj" firstAttribute="top" secondItem="wh4-4g-FV0" secondAttribute="bottom" id="cmh-td-tpE"/>
                             <constraint firstItem="H9s-Os-9qI" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="eau-bc-tNs"/>
                             <constraint firstItem="H9s-Os-9qI" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="gYK-ka-YZ1"/>
                             <constraint firstAttribute="trailing" secondItem="wh4-4g-FV0" secondAttribute="trailing" id="ght-OL-w3S"/>
                             <constraint firstItem="6Ye-nf-OHM" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" constant="14" id="hVr-Jp-2yK"/>
-                            <constraint firstItem="wh4-4g-FV0" firstAttribute="top" secondItem="Rao-bd-kBH" secondAttribute="bottom" id="l2R-P6-J3X"/>
+                            <constraint firstItem="tof-Zs-Hco" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" constant="10" id="icV-i9-SYf"/>
+                            <constraint firstItem="wh4-4g-FV0" firstAttribute="top" secondItem="tof-Zs-Hco" secondAttribute="bottom" constant="14" id="q0w-W0-j3w"/>
                             <constraint firstItem="s1F-jF-pKk" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="r6Y-TF-qQJ"/>
-                            <constraint firstItem="Rao-bd-kBH" firstAttribute="top" secondItem="Stp-m3-S0Z" secondAttribute="bottom" id="spv-z7-de3"/>
                             <constraint firstItem="wh4-4g-FV0" firstAttribute="top" secondItem="H9s-Os-9qI" secondAttribute="bottom" id="u81-wJ-tIv"/>
                             <constraint firstAttribute="trailing" secondItem="H9s-Os-9qI" secondAttribute="trailing" id="uOh-JP-CK8"/>
-                            <constraint firstItem="Rao-bd-kBH" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" id="wf9-is-EWW"/>
                             <constraint firstItem="wh4-4g-FV0" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" id="zHj-UK-arQ"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="U8I-y4-y3A"/>
                                 <exclude reference="u81-wJ-tIv"/>
                                 <exclude reference="7tt-9U-vZt"/>
                                 <exclude reference="gYK-ka-YZ1"/>
@@ -142,7 +145,7 @@
                     <connections>
                         <outlet property="currentQuickAddLabel" destination="6Ye-nf-OHM" id="C0X-sV-12y"/>
                         <outlet property="currentQuickAddLabelLeftConstraint" destination="hVr-Jp-2yK" id="0ak-Yr-ZRL"/>
-                        <outlet property="searchBar" destination="Rao-bd-kBH" id="BLq-Bo-nBl"/>
+                        <outlet property="searchBar" destination="tof-Zs-Hco" id="tdc-D1-2pJ"/>
                         <outlet property="showAddProductsOrGroupButton" destination="H9s-Os-9qI" id="gQT-CB-BuQ"/>
                         <outlet property="showGroupsButton" destination="dif-9Z-2lr" id="KYM-N8-79r"/>
                         <outlet property="showProductsButton" destination="s1F-jF-pKk" id="HS5-dV-G2W"/>
@@ -172,11 +175,11 @@
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="4" minY="12" maxX="4" maxY="12"/>
+                                    <inset key="sectionInset" minX="10" minY="12" maxX="10" maxY="12"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" reuseIdentifier="itemCell" id="TIx-z1-9dZ" customClass="QuickAddItemCell" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="4" y="12" width="50" height="50"/>
+                                        <rect key="frame" x="10" y="12" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -211,7 +214,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="groupCell" id="R4e-iU-Kye" customClass="QuickAddGroupCell" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="64" y="12" width="50" height="50"/>
+                                        <rect key="frame" x="69" y="12" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>

@@ -174,6 +174,7 @@
 		EB37ABAA1C9F4C0D00FE9D7A /* AddItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABA91C9F4C0D00FE9D7A /* AddItemButton.swift */; };
 		EB37ABB71CA099BB00FE9D7A /* ToggleButtonRotator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABB61CA099BA00FE9D7A /* ToggleButtonRotator.swift */; };
 		EB37ABB91CA09B4F00FE9D7A /* PullToAddHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABB81CA09B4F00FE9D7A /* PullToAddHelper.swift */; };
+		EB37ABBB1CA2021C00FE9D7A /* RoundTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABBA1CA2021C00FE9D7A /* RoundTextField.swift */; };
 		EB3C9E2A1BEA47FF00886197 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C9E291BEA47FF00886197 /* Theme.swift */; };
 		EB40A4691B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
 		EB40A46A1B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
@@ -1128,6 +1129,7 @@
 		EB37ABA91C9F4C0D00FE9D7A /* AddItemButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemButton.swift; sourceTree = "<group>"; };
 		EB37ABB61CA099BA00FE9D7A /* ToggleButtonRotator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToggleButtonRotator.swift; sourceTree = "<group>"; };
 		EB37ABB81CA09B4F00FE9D7A /* PullToAddHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullToAddHelper.swift; path = ../PullToAddHelper.swift; sourceTree = "<group>"; };
+		EB37ABBA1CA2021C00FE9D7A /* RoundTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundTextField.swift; sourceTree = "<group>"; };
 		EB3C9E291BEA47FF00886197 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		EB40A4681B5506FB000E9CAD /* DBSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSection.swift; sourceTree = "<group>"; };
 		EB40A46D1B550804000E9CAD /* RealmProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProvider.swift; sourceTree = "<group>"; };
@@ -2781,6 +2783,7 @@
 				EBE366361BCBC346009543AF /* BlurBubbleTransition.swift */,
 				EBB526881BF016910002A286 /* ButtonMore.swift */,
 				EB37ABA11C9F249300FE9D7A /* LineTextField.swift */,
+				EB37ABBA1CA2021C00FE9D7A /* RoundTextField.swift */,
 				EB37ABA51C9F2DA400FE9D7A /* LineAutocompleteTextField.swift */,
 				EB37ABA91C9F4C0D00FE9D7A /* AddItemButton.swift */,
 			);
@@ -3781,6 +3784,7 @@
 				EBF377971B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
 				EB70328B1BEBF31A00779EBB /* SectionProvider.swift in Sources */,
 				EB714AAE1B67895500F91B94 /* RemoteProvider.swift in Sources */,
+				EB37ABBB1CA2021C00FE9D7A /* RoundTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -49,7 +49,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     var originalViewFrame: CGRect?
     
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var searchBar: RoundTextField!
     
     private var navController: UINavigationController?
     private var quickAddListItemViewController: QuickAddListItemViewController? {
@@ -99,12 +99,24 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
 
         updateQuickAddTop(.Product)
         
+        searchBar.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
     }
     
     func onClose() {
         removeAddButton()
+    }
+    
+    func textFieldDidChange(textField: UITextField) {
+        if !isEdit {
+            if let quickAddListItemViewController = quickAddListItemViewController, searchText = textField.text {
+                quickAddListItemViewController.searchText = searchText
+            } else {
+                QL3("quickAddListItemViewController is not set: \(quickAddListItemViewController), or text is not set: \(textField.text)")
+            }
+        }
     }
     
     // Show controller either in quick add mode (collection view + possible edit) or edit-only. If this is not called the controller shows without contents.
@@ -121,16 +133,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         }
         
         searchBar.becomeFirstResponder()
-    }
-    
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        if !isEdit {
-            if let quickAddListItemViewController = quickAddListItemViewController {
-                quickAddListItemViewController.searchText = searchText
-            } else {
-                QL3("quickAddListItemViewController is not set")
-            }
-        }
     }
     
     // MARK: - Keyboard
