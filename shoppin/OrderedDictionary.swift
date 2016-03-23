@@ -97,6 +97,27 @@ struct OrderedDictionary<KeyType: Hashable, ValueType>: SequenceType {
             return (key, value)
         }
     }
+
+    // Returns tuple with optional value
+    // TODO maybe make this the default and remove unsafe get (with force unwrap). Subsequently also rename mapOpt in map and remove the other one. Needs changes in a few places of the app.
+    subscript(safe index: Int) -> (KeyType, ValueType?) {
+        get {
+            precondition(index < self.array.count,
+                "Index out-of-bounds")
+            
+            let key = self.array[index]
+            let value = self.dictionary[key]
+            return (key, value)
+        }
+    }
+
+    func mapOpt<T>(f: ((KeyType, ValueType?)) -> T) -> [T] {
+        var arr: [T] = []
+        for i in 0..<self.count {
+            arr.append(f(self[safe: i]))
+        }
+        return arr
+    }
     
     func map<T>(f: ((KeyType, ValueType)) -> T) -> [T] {
         var arr: [T] = []

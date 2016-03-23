@@ -19,7 +19,9 @@ private enum StatsPresentation {
     case List, Graph
 }
 
-class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class StatsViewController: UIViewController
+//, UIPickerViewDataSource, UIPickerViewDelegate
+{
 
     private let statsProvider = ProviderFactory().statsProvider
     
@@ -31,7 +33,7 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         (TimePeriod(quantity: -12, timeUnit: .Month), "12 months")
     ]
     
-    @IBOutlet weak var timePeriodButton: UIButton!
+//    @IBOutlet weak var timePeriodButton: UIButton!
     @IBOutlet weak var chartView: ChartBaseView!
     @IBOutlet weak var averageLabel: UILabel!
     @IBOutlet weak var dailyAverageLabel: UILabel!
@@ -96,25 +98,29 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     }
     
     private func loadChart() {
-        setTimePeriod((aggregate?.timePeriod).flatMap{findTimePeriodWithText($0)} ?? timePeriods[0])
+//        let timePeriod = (aggregate?.timePeriod).flatMap{findTimePeriodWithText($0)} ?? timePeriods[0]
+        let timePeriod = timePeriods[1]
+        setTimePeriod(timePeriod)
     }
     
-    private func createPicker() -> UIPickerView {
-        let picker = UIPickerView(frame: CGRectMake(0, 0, 150, 100))
-        picker.delegate = self
-        picker.dataSource = self
-        return picker
-    }
+    // MARK: Time period picker
+    
+//    private func createPicker() -> UIPickerView {
+//        let picker = UIPickerView(frame: CGRectMake(0, 0, 150, 100))
+//        picker.delegate = self
+//        picker.dataSource = self
+//        return picker
+//    }
 
-    @IBAction func onTimePeriodTap(sender: UIButton) {
-        if let popup = self.sortByPopup {
-            popup.dismissAnimated(true)
-        } else {
-            let popup = MyTipPopup(customView: createPicker())
-            popup.presentPointingAtView(timePeriodButton, inView: view, animated: true)
-        }
-    }
-
+//    @IBAction func onTimePeriodTap(sender: UIButton) {
+//        if let popup = self.sortByPopup {
+//            popup.dismissAnimated(true)
+//        } else {
+//            let popup = MyTipPopup(customView: createPicker())
+//            popup.presentPointingAtView(timePeriodButton, inView: view, animated: true)
+//        }
+//    }
+//
     private func findTimePeriodWithText(timePeriod: TimePeriod) -> TimePeriodWithText? {
         for timePeriodWithText in timePeriods {
             if timePeriodWithText.timePeriod == timePeriod {
@@ -123,28 +129,26 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         }
         return nil
     }
-    
-    // MARK: - Time period picker
-    
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return timePeriods.count
-    }
-    
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
-        let label = view as? UILabel ?? UILabel()
-        label.font = Fonts.regularLight
-        label.text = timePeriods[row].text
-        return label
-    }
-    
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let timePeriod = timePeriods[row]
-        setTimePeriod(timePeriod)
-    }
+//    
+//    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+//        return 1
+//    }
+//    
+//    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+//        return timePeriods.count
+//    }
+//    
+//    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+//        let label = view as? UILabel ?? UILabel()
+//        label.font = Fonts.regularLight
+//        label.text = timePeriods[row].text
+//        return label
+//    }
+//    
+//    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+//        let timePeriod = timePeriods[row]
+//        setTimePeriod(timePeriod)
+//    }
 
     // MARK: -
     
@@ -169,11 +173,11 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
     private func setTimePeriod(timePeriod: TimePeriodWithText) {
         currentTimePeriod = timePeriod.timePeriod
         updateChart(timePeriod.timePeriod)
-        timePeriodButton.setTitle(timePeriod.text, forState: .Normal)
+//        timePeriodButton.setTitle(timePeriod.text, forState: .Normal)
     }
     
     private func initThisMonthSpendingsLabels(monthYearAggregate: GroupMonthYearAggregate) {
-        if let lastMonthYearAggregate = monthYearAggregate.monthYearAggregates.last { // the spendings of this months (which is always the last in the returned aggregate)
+        if let lastMonthYearAggregate = monthYearAggregate.monthYearAggregates.first { // the spendings of this months (which is always the last in the returned aggregate)
             
             let today = NSDate()
             let dailyAvgSpendingsThisMonth = lastMonthYearAggregate.totalPrice / Float(today.dayMonthYear.day)
@@ -206,12 +210,36 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
             return
         }
         
-        let labelSettings = ChartLabelSettings(font: Fonts.verySmallLight)
+        let labelSettings = ChartLabelSettings(font: Fonts.verySmallLight, fontColor: UIColor.grayColor())
         
         let outputDateFormatter = NSDateFormatter()
         outputDateFormatter.dateFormat = "MMM"
         
-        let xValues: [ChartAxisValueDate] = monthYearAggregate.allDates.map {ChartAxisValueDate(date: $0, formatter: outputDateFormatter, labelSettings: labelSettings)}
+        
+        
+        class MyAxisValueDate: ChartAxisValueDate {
+            let isHighlighted: Bool
+            init(date: NSDate, formatter: NSDateFormatter, isHighlighted: Bool, labelSettings: ChartLabelSettings = ChartLabelSettings()) {
+                self.isHighlighted = isHighlighted
+                super.init(date: date, formatter: formatter, labelSettings: labelSettings)
+            }
+            override var labels: [ChartAxisLabel] {
+                let settings: ChartLabelSettings = {
+                    if isHighlighted {
+                        return labelSettings.copy(fontColor: UIColor.darkTextColor())
+                    } else {
+                        return labelSettings
+                    }
+                    
+                }()
+                let axisLabel = ChartAxisLabel(text: self.description, settings: settings)
+                return [axisLabel]
+            }
+        }
+        
+        let xValues: [ChartAxisValueDate] = monthYearAggregate.allDates.enumerate().map {(index, date) in
+            MyAxisValueDate(date: date, formatter: outputDateFormatter, isHighlighted: index == monthYearAggregate.allDates.count - 1, labelSettings: labelSettings)
+        }
         
         // For each xValue we need a chart point. If there's no aggregate for a value we create one with total price 0 (no spendings)
         let chartPoints: [AggrChartPoint] = xValues.map {xValue in
@@ -233,7 +261,6 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
             return (newSum, newMax)
         }
         let avg = CGFloat(sum) / CGFloat(chartPoints.count) // month average
-        
 
         class EmptyAxisValue: ChartAxisValueDouble {
             override var labels: [ChartAxisLabel] {
@@ -247,9 +274,9 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         let yModel = ChartAxisModel(axisValues: yValues, axisTitleLabel: ChartAxisLabel(text: "Spending", settings: labelSettings.defaultVertical()))
         let chartFrame = CGRectMake(view.frame.origin.x, view.frame.origin.y + 50, view.frame.width - 10, 300)
         let chartSettings = ChartSettings()
-        chartSettings.top = 30
-        chartSettings.trailing = 30
-        chartSettings.leading = 20
+        chartSettings.top = 20
+        chartSettings.trailing = 20
+        chartSettings.leading = 10
         chartSettings.labelsToAxisSpacingY = 0
         chartSettings.axisStrokeWidth = 0
         
@@ -280,18 +307,17 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
             let (p1, p2): (CGPoint, CGPoint) =  (CGPointMake(chartPointModel.screenLoc.x, bottomLeft.y), CGPointMake(chartPointModel.screenLoc.x, chartPointModel.screenLoc.y))
 
             
-            let percentage: CGFloat = {
-                let y = CGFloat(chartPointModel.chartPoint.y.scalar)
-                if y <= avg {
-                    return 0.01
-                } else {
-                    return ((y - avg) / (CGFloat(maxSpendings) - avg)) - 0.01
-                }
-            }()
+//            let percentage: CGFloat = {
+//                let y = CGFloat(chartPointModel.chartPoint.y.scalar)
+//                if y <= avg {
+//                    return 0.01
+//                } else {
+//                    return ((y - avg) / (CGFloat(maxSpendings) - avg)) - 0.01
+//                }
+//            }()
             
             let alpha: CGFloat = 0.7
-            let bgColor = self.gradientPicker.colorForPercentage(percentage).colorWithAlphaComponent(alpha)
-            
+            let bgColor = Theme.orange
             let barView = MyChartPointViewBar(p1: p1, p2: p2, width: barWidth, bgColor: bgColor)
             
             barView.onViewTap = {[weak self] in
@@ -311,63 +337,55 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
             return barView
         }
         let barsLayer = ChartPointsViewsLayer<AggrChartPoint, UIView>(xAxis: xAxis, yAxis: yAxis, innerFrame: innerFrame, chartPoints: chartPoints, viewGenerator: barViewGenerator)
-
-        
-        // labels layer
-        // create chartpoints for the top and bottom of the bars, where we will show the labels
-        let labelChartPoints: [ChartPoint] = cp.collect{bar in
-            if bar.y.scalar > 0 {
-                return ChartPoint(x: bar.x, y: bar.y)
-            } else {
-                return nil
-            }
-        }
         
         let formatter = NSNumberFormatter()
         formatter.maximumFractionDigits = 2
-        let labelsLayer = ChartPointsViewsLayer(xAxis: xAxis, yAxis: yAxis, innerFrame: innerFrame, chartPoints: labelChartPoints, viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
-            let label = HandlingLabel()
-            let posOffset: CGFloat = 10
+        let labelsLayer = ChartPointsViewsLayer(xAxis: xAxis, yAxis: yAxis, innerFrame: innerFrame, chartPoints: cp, viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
             
-            let pos = chartPointModel.chartPoint.y.scalar > 0
-            
-            let yOffset = pos ? -posOffset : posOffset
-            label.text = "\(Float(chartPointModel.chartPoint.y.scalar).toLocalCurrencyString())"
-            label.font = Fonts.verySmallLight
-            label.sizeToFit()
-            label.center = CGPointMake(chartPointModel.screenLoc.x, pos ? innerFrame.origin.y : innerFrame.origin.y + innerFrame.size.height)
-            label.alpha = 0
-            
-            label.movedToSuperViewHandler = {[weak label] in
-                UIView.animateWithDuration(0.3, animations: {
-                    label?.alpha = 1
-                    label?.center.y = chartPointModel.screenLoc.y + yOffset
-                })
+            if chartPointModel.index == cp.count - 1 && chartPointModel.chartPoint.y.scalar > 0 {
+                let label = HandlingLabel()
+                
+                let yOffset: CGFloat = -15
+                label.text = "\(Float(chartPointModel.chartPoint.y.scalar).toLocalCurrencyString())"
+                label.font = Fonts.superSmall
+                label.textColor = UIColor.darkGrayColor()
+                label.sizeToFit()
+                label.center = CGPointMake(chartPointModel.screenLoc.x, innerFrame.origin.y)
+                label.alpha = 0
+                
+                label.movedToSuperViewHandler = {[weak label] in
+                    UIView.animateWithDuration(0.3, animations: {
+                        label?.alpha = 1
+                        label?.center.y = chartPointModel.screenLoc.y + yOffset
+                    })
+                }
+                return label
+            } else {
+                return nil
             }
-            return label
-            
+
         }, displayDelay: 0.3) // show after bars animation
         
-        var layers: [ChartLayer] = [xAxis, barsLayer, labelsLayer]
+        let layers: [ChartLayer] = [xAxis, barsLayer, labelsLayer]
 
         if (chartPoints.contains{$0.y.scalar > 0}) { // don't show avg line if all the prices are 0, it looks weird
             
-            // average layer
-            let avgChartPoint = ChartPoint(x: ChartAxisValueFloat(0), y: ChartAxisValueFloat(avg))
-
-            let avgLayer = ChartPointsViewsLayer(xAxis: xAxis, yAxis: yAxis, innerFrame: innerFrame, chartPoints: [avgChartPoint], viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
-                let line = HandlingView(frame: CGRectMake(xAxis.p1.x, chartPointModel.screenLoc.y, 0, 1))
-                line.backgroundColor = UIColor.blueColor()
-                line.movedToSuperViewHandler = {[weak self] in
-                    if let weakSelf = self {
-                        UIView.animateWithDuration(weakSelf.avgLineDuration) {
-                            let extra = barWidth / 2
-                            line.frame = CGRectMake(xAxis.p1.x - extra, chartPointModel.screenLoc.y, xAxis.length + extra * 2, 1)
-                        }
-                    }
-                }
-                return line
-            }, displayDelay: avgLineDelay)
+            // average line for now disabled
+//            // average layer
+//            let avgChartPoint = ChartPoint(x: ChartAxisValueFloat(0), y: ChartAxisValueFloat(avg))
+//            let avgLayer = ChartPointsViewsLayer(xAxis: xAxis, yAxis: yAxis, innerFrame: innerFrame, chartPoints: [avgChartPoint], viewGenerator: {(chartPointModel, layer, chart) -> UIView? in
+//                let line = HandlingView(frame: CGRectMake(xAxis.p1.x, chartPointModel.screenLoc.y, 0, 1))
+//                line.backgroundColor = UIColor.blueColor()
+//                line.movedToSuperViewHandler = {[weak self] in
+//                    if let weakSelf = self {
+//                        UIView.animateWithDuration(weakSelf.avgLineDuration) {
+//                            let extra = barWidth / 2
+//                            line.frame = CGRectMake(xAxis.p1.x - extra, chartPointModel.screenLoc.y, xAxis.length + extra * 2, 1)
+//                        }
+//                    }
+//                }
+//                return line
+//            }, displayDelay: avgLineDelay)
             
             averageLabel.alpha = 0
             averageLabelLabel.alpha = 0
@@ -377,7 +395,7 @@ class StatsViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
                 self?.averageLabelLabel.alpha = 1
                 }, completion: nil)
             
-            layers.append(avgLayer)
+//            layers.append(avgLayer)
         }
 
         let chart = Chart(

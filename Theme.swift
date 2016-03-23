@@ -14,8 +14,9 @@ struct Theme {
 //    private static var navAndTabBG = UIColor.flatBlackColorDark()
 //    private static var navAndTabFG = UIColor.flatBlackColor()
     
-    private static let lightGrey = UIColor(red: 239/255, green: 239/255, blue: 244/255, alpha: 1)
-    private static let blue = UIColor(hexString: "0097D9")
+    static let lightGrey = UIColor(red: 239/255, green: 239/255, blue: 244/255, alpha: 1)
+    static let blue = UIColor(hexString: "0097D9")
+    static let orange = UIColor(hexString: "FFA83E")
     
     static var navigationBarTextColor = UIColor.blackColor()
 //    static var navigationBarBackgroundColor = UIColor(gradientStyle: UIGradientStyle.TopToBottom, withFrame:CGRectMake(0, 0, 600, 64), andColors:[UIColor.flatNavyBlueColorDark(), UIColor.flatNavyBlueColor()])

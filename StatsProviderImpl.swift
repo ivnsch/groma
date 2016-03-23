@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 struct ProductAggregate {
     let product: Product
@@ -103,6 +104,19 @@ class StatsProviderImpl: StatsProvider {
                 
                 var dict: OrderedDictionary<MonthYear, (price: Float, quantity: Int)> = OrderedDictionary()
                 
+                let (_, referenceDateMonth, referenceDateYear) = referenceDate.dayMonthYear
+                if timePeriod.timeUnit != .Month {
+                    QL4("Error: not supported timeunit: \(timePeriod.timeUnit) - the calculations will be incorrect") // for now we only need months (TODO complete or remove the other enum values, maybe even remove the enum)
+                }
+                
+                // Prefill the dictionary with the month years in time period's range. We need all the months in the result independently if they have history items or not ("left join")
+                let monthYears = min(timePeriod.quantity + 1, 0).stride(through: max(timePeriod.quantity, 0), by: 1).map {quantity in
+                    MonthYear(month: referenceDateMonth + quantity, year: referenceDateYear)
+                }
+                for monthYear in monthYears {
+                    dict[monthYear] = nil
+                }
+                
                 for historyItem in historyItems {
                     
                     let components = NSCalendar.currentCalendar().components([.Month, .Year], fromDate: historyItem.addedDate)
@@ -114,8 +128,8 @@ class StatsProviderImpl: StatsProvider {
                     }
                 }
                 
-                let monthYearAggregates: [MonthYearAggregate] = dict.map {key, value in
-                    MonthYearAggregate(monthYear: key, totalCount: value.quantity, totalPrice: value.price)
+                let monthYearAggregates: [MonthYearAggregate] = dict.mapOpt {key, value in
+                    MonthYearAggregate(monthYear: key, totalCount: value?.quantity ?? 0, totalPrice: value?.price ?? 0)
                 }
                 
                 let groupMonthYearAggregate = GroupMonthYearAggregate(group: group, timePeriod: timePeriod, referenceDate: referenceDate, monthYearAggregates: monthYearAggregates)
