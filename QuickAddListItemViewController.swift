@@ -170,7 +170,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             
         } else if let groupItem = item as? QuickAddGroup {
             groupItem.group.fav++
-            Providers.listItemGroupsProvider.update(groupItem.group, remote: true, successHandler{})
+            Providers.listItemGroupsProvider.incrementFav(groupItem.group.uuid, remote: true, successHandler{})
             // don't wait for db incrementFav - this operation is not critical
             delegate?.onAddGroup(groupItem.group)
             

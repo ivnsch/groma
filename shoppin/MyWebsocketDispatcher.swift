@@ -215,11 +215,11 @@ struct MyWebsocketDispatcher {
                         if result.success {
                             postNotification(.Product, verb, productUuid)
                         } else {
-                            MyWebsocketDispatcher.reportWebsocketStoringError("Increment fav \(productUuid)", result: result)
+                            MyWebsocketDispatcher.reportWebsocketStoringError("Increment product fav \(productUuid)", result: result)
                         }
                     }
                 } else {
-                    MyWebsocketDispatcher.reportWebsocketParsingError("Increment fav, data: \(data)")
+                    MyWebsocketDispatcher.reportWebsocketParsingError("Increment product fav, data: \(data)")
                 }
             
             default: QL4("Not handled verb: \(verb)")
@@ -300,6 +300,19 @@ struct MyWebsocketDispatcher {
                 }
             } else {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Delete Group, data: \(data)")
+            }
+            
+        case .Fav:
+            if let groupUuid = data as? String {
+                Providers.listItemGroupsProvider.incrementFav(groupUuid, remote: false) {result in
+                    if result.success {
+                        postNotification(.Group, verb, groupUuid)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Increment group fav \(groupUuid)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Increment group fav, data: \(data)")
             }
 
         default: QL4("Not handled verb: \(verb)")

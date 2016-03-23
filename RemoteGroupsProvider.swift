@@ -29,6 +29,12 @@ class RemoteGroupsProvider: RemoteProvider {
             handler(result)
         }
     }
+    
+    func incrementFav(groupUuid: String, handler: RemoteResult<RemoteProduct> -> ()) {
+        RemoteProvider.authenticatedRequest(.PUT, Urls.favGroup + "/\(groupUuid)") {result in
+            handler(result)
+        }
+    }
 
     func updateGroups(groups: [ListItemGroup], handler: RemoteResult<[RemoteGroup]> -> ()) {
         let params = groups.map{toRequestParams($0)}

@@ -55,6 +55,20 @@ class RealmListItemGroupProvider: RealmProvider {
         saveObjs(dbObjs, update: true, handler: handler)
     }
     
+    func incrementFav(groupUuid: String, _ handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            if let existingGroup = realm.objects(DBListItemGroup).filter(DBListItemGroup.createFilter(groupUuid)).first {
+                existingGroup.fav++
+                realm.add(existingGroup, update: true)
+                return true
+            } else { // product not found
+                return false
+            }
+            }, finishHandler: {savedMaybe in
+                handler(savedMaybe ?? false)
+        })
+    }
+    
     func overwrite(groups: [ListItemGroup], clearTombstones: Bool, handler: Bool -> ()) {
         let dbGroups = groups.map{ListItemGroupMapper.dbWith($0)}
         let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBListItemGroup)} : nil

@@ -297,6 +297,24 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
+    func incrementFav(groupUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        DBProviders.listItemGroupProvider.incrementFav(groupUuid, {[weak self] saved in
+            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
+            
+            if remote {
+                self?.remoteGroupsProvider.incrementFav(groupUuid) {remoteResult in
+                    if let _ = remoteResult.successResult {
+                        // no timestamp - for increment fav this looks like an overkill. If there's a conflict some favs may get lost - ok
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                            QL4("Remote call no success: \(remoteResult)")
+                        })
+                    }
+                }
+            }
+        })
+    }
+    
     func remove(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         removeGroupItem(item.uuid, remote: remote, handler)
     }
