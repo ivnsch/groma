@@ -301,11 +301,11 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    func incrementFav(product: Product, _ handler: Bool -> Void) {
+    func incrementFav(productUuid: String, _ handler: Bool -> Void) {
         doInWriteTransaction({realm in
-            if let existingProduct = realm.objects(DBProduct).filter(DBProduct.createFilter(product.uuid)).first {
+            if let existingProduct = realm.objects(DBProduct).filter(DBProduct.createFilter(productUuid)).first {
                 existingProduct.fav++
-                realm.add(existingProduct, update: true)
+                realm.add(existingProduct, update: true)                
                 return true
             } else { // product not found
                 return false

@@ -33,17 +33,11 @@ protocol ProductProvider {
     // Update product. Note: This invalidates the list item memory cache, in order to make listitems update stale product references.
     func update(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
-    // Updates product without invalidating list item memory cache (opposed to the normal update method). Since fav doesn't affect listitems. 
-    // WARN: This still does a full update of the product, there doesn't seem to be a way with Realm to update only the fav field (which is all we want to do in this method) and server currently also does a full update. So use only when you are sure that only the fav field changed!
-    func updateFav(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ())
-
-    func incrementFav(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ())
-
     func delete(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     func delete(productUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
-    func incrementFav(product: Product, _ handler: ProviderResult<Any> -> Void)
+    func incrementFav(productUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 
     func productSuggestions(handler: ProviderResult<[Suggestion]> -> ())
     

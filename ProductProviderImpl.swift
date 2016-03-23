@@ -130,68 +130,22 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    func incrementFav(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        DBProviders.productProvider.incrementFav(product, {[weak self] saved in
+    func incrementFav(productUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        DBProviders.productProvider.incrementFav(productUuid, {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             
             if remote {
-                // TODO!! separate service with only uuid (not even delta - server increments always 1)
-                self?.remoteProvider.updateProduct(product) {remoteResult in
-                    if let remoteProduct = remoteResult.successResult {
-                        self?.dbProvider.updateLastSyncTimeStamp(remoteProduct) {success in
-                        }
+                self?.remoteProvider.incrementFav(productUuid) {remoteResult in
+                    if let _ = remoteResult.successResult {
+                        // no timestamp - for increment fav this looks like an overkill. If there's a conflict some favs may get lost - ok
                     } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Product>) in
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
                             QL4("Remote call no success: \(remoteResult)")
                         })
                     }
                 }
             }
         })
-    }
-    
-    // TODO why do we have incrementFav and updateFav?
-    func updateFav(product: Product, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        DBProviders.productProvider.saveProducts([product], update: true) {[weak self] saved in
-            if saved {
-                if remote {
-                    // TODO!! separate service with only uuid (not even delta - server increments always 1)
-                    self?.remoteProvider.updateProduct(product) {remoteResult in
-                        if let remoteProduct = remoteResult.successResult {
-                            self?.dbProvider.updateLastSyncTimeStamp(remoteProduct) {success in
-                            }
-                        } else {
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Product>) in
-                                QL4("Remote call no success: \(remoteResult)")
-                            })
-                        }
-                    }
-                }
-            }
-            handler(ProviderResult(status: saved ? ProviderStatusCode.Success : ProviderStatusCode.DatabaseUnknown))
-        }
-    }
-    
-    // TODO why do we have incrementFav, updateFav and another incrementFav?
-    func incrementFav(product: Product, _ handler: ProviderResult<Any> -> Void) {
-        let incrementedProduct = product.copy(fav: product.fav + 1)
-        DBProviders.productProvider.saveProducts([incrementedProduct], updateSuggestions: false) {[weak self] saved in // we are only incrementing a(n existing) product, so update suggestions doesn't make sense
-            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
-            if saved {
-                // TODO!! separate service with only uuid (not even delta - server increments always 1)
-                self?.remoteProvider.updateProduct(product) {remoteResult in
-                    if let remoteProduct = remoteResult.successResult {
-                        self?.dbProvider.updateLastSyncTimeStamp(remoteProduct) {success in
-                        }
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Product>) in
-                            QL4("Remote call no success: \(remoteResult)")
-                        })
-                    }
-                }
-            }
-            
-        }
     }
     
     func productSuggestions(handler: ProviderResult<[Suggestion]> -> ()) {

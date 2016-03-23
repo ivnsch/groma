@@ -29,6 +29,12 @@ class RemoteProductProvider: RemoteProvider {
             handler(result)
         }
     }
+
+    func incrementFav(productUuid: String, handler: RemoteResult<RemoteProduct> -> ()) {
+        RemoteProvider.authenticatedRequest(.PUT, Urls.favProduct + "/\(productUuid)") {result in
+            handler(result)
+        }
+    }
     
     func deleteProduct(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
         RemoteProvider.authenticatedRequest(.DELETE, Urls.product + "/\(uuid)") {result in

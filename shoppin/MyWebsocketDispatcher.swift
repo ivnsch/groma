@@ -44,6 +44,7 @@ enum WSNotificationVerb: String {
     case Invite = "invite"
     case Sync = "sync"
     case Increment = "incr"
+    case Fav = "fav"
 }
 
 final class WSNotification<T>: AnyObject {
@@ -208,6 +209,19 @@ struct MyWebsocketDispatcher {
                     MyWebsocketDispatcher.reportWebsocketParsingError("Delete product, data: \(data)")
                 }
 
+            case .Fav:
+                if let productUuid = data as? String {
+                    Providers.productProvider.incrementFav(productUuid, remote: false) {result in
+                        if result.success {
+                            postNotification(.Product, verb, productUuid)
+                        } else {
+                            MyWebsocketDispatcher.reportWebsocketStoringError("Increment fav \(productUuid)", result: result)
+                        }
+                    }
+                } else {
+                    MyWebsocketDispatcher.reportWebsocketParsingError("Increment fav, data: \(data)")
+                }
+            
             default: QL4("Not handled verb: \(verb)")
         }
     }
