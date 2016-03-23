@@ -135,9 +135,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
         UITabBar.appearance().barTintColor = Theme.tabBarBackgroundColor
         UITabBar.appearance().translucent = false
 
-//        UINavigationBar.appearance().barTintColor = Theme.navigationBarBackgroundColor
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        UINavigationBar.appearance().barTintColor = Theme.navigationBarBackgroundColor
         UINavigationBar.appearance().tintColor = Theme.navigationBarTextColor
-//        UINavigationBar.appearance().translucent = false
+        UINavigationBar.appearance().translucent = false
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
