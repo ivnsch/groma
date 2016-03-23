@@ -15,6 +15,8 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -30,12 +32,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="List name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="F28-F1-Smm">
-                                <rect key="frame" x="14" y="28" width="533" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="List name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="F28-F1-Smm">
+                                <rect key="frame" x="14" y="28" width="572" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="LNv-ek-7MK"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
@@ -43,33 +46,23 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AuK-2H-ZjF" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="561" y="31" width="25" height="25"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="25" id="FyD-ou-kTM"/>
-                                    <constraint firstAttribute="height" constant="25" id="sEJ-I1-hS0"/>
-                                </constraints>
-                                <color key="tintColor" red="0.95686274510000002" green="0.16862745100000001" blue="0.5450980392" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" image="dot"/>
-                                <connections>
-                                    <action selector="onColorTap" destination="rbt-HL-39m" eventType="touchUpInside" id="o7w-Lr-Bhb"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VtI-z7-VYE">
-                                <rect key="frame" x="87" y="67" width="30" height="30"/>
+                                <rect key="frame" x="39" y="67" width="30" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title=" "/>
+                                <state key="normal" title=" ">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
                                 <connections>
                                     <action selector="onInventoryTap:" destination="rbt-HL-39m" eventType="touchUpInside" id="5MF-cE-WDV"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Inventory" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dqk-Mw-1ri">
-                                <rect key="frame" x="14" y="72" width="59" height="20"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="in" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dqk-Mw-1ri">
+                                <rect key="frame" x="14" y="72" width="11" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="61R-Ve-B0h"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7Md-pb-4Pc">
@@ -156,7 +149,7 @@
                             </button>
                             <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bIs-Iq-gNr">
                                 <rect key="frame" x="0.0" y="106" width="600" height="35"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="Njf-KH-6wq"/>
                                 </constraints>
@@ -166,23 +159,44 @@
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0 participants" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tOo-Ua-Q56">
+                                <rect key="frame" x="492" y="72" width="88" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="wfa-A8-uof"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0bu-Vf-atl">
+                                <rect key="frame" x="275" y="68" width="51" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Colours">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onColorTap" destination="rbt-HL-39m" eventType="touchUpInside" id="qFv-fD-Vx6"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.0" green="0.59215686270000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="tOo-Ua-Q56" firstAttribute="baseline" secondItem="dqk-Mw-1ri" secondAttribute="baseline" id="0pF-fS-w4V"/>
+                            <constraint firstAttribute="trailing" secondItem="F28-F1-Smm" secondAttribute="trailing" constant="14" id="3rT-RA-0y1"/>
                             <constraint firstItem="dqk-Mw-1ri" firstAttribute="top" secondItem="F28-F1-Smm" secondAttribute="bottom" constant="14" id="Av9-3u-cci"/>
-                            <constraint firstItem="AuK-2H-ZjF" firstAttribute="centerX" secondItem="FTk-Cw-gyF" secondAttribute="centerX" constant="-30" id="GQa-Wc-Hew"/>
-                            <constraint firstAttribute="trailing" secondItem="AuK-2H-ZjF" secondAttribute="trailing" constant="14" id="HCs-4w-rdG"/>
+                            <constraint firstAttribute="trailing" secondItem="tOo-Ua-Q56" secondAttribute="trailing" constant="20" id="DE3-Yu-n8n"/>
+                            <constraint firstItem="0bu-Vf-atl" firstAttribute="baseline" secondItem="dqk-Mw-1ri" secondAttribute="baseline" id="Iea-RY-Nyl"/>
                             <constraint firstItem="7Md-pb-4Pc" firstAttribute="top" secondItem="Mh1-a3-60P" secondAttribute="bottom" priority="999" constant="8" id="LbZ-tp-7x3"/>
                             <constraint firstItem="G7W-rN-OkM" firstAttribute="top" secondItem="dqk-Mw-1ri" secondAttribute="bottom" constant="14" id="MGW-8Z-uaG"/>
                             <constraint firstAttribute="trailing" secondItem="Mh1-a3-60P" secondAttribute="trailing" constant="14" id="OiF-2Z-Bf5"/>
-                            <constraint firstItem="AuK-2H-ZjF" firstAttribute="leading" secondItem="F28-F1-Smm" secondAttribute="trailing" constant="14" id="Pyx-7h-adb"/>
                             <constraint firstItem="o4i-09-Scn" firstAttribute="top" secondItem="7Md-pb-4Pc" secondAttribute="bottom" id="SDs-eS-Jaz"/>
                             <constraint firstItem="VtI-z7-VYE" firstAttribute="baseline" secondItem="dqk-Mw-1ri" secondAttribute="baseline" id="Sif-8l-1Y0"/>
                             <constraint firstItem="G7W-rN-OkM" firstAttribute="leading" secondItem="FTk-Cw-gyF" secondAttribute="leading" constant="14" id="TXm-6S-a0A"/>
                             <constraint firstAttribute="trailing" secondItem="7Md-pb-4Pc" secondAttribute="trailing" id="VXb-wL-G5w"/>
                             <constraint firstItem="VtI-z7-VYE" firstAttribute="centerY" secondItem="dqk-Mw-1ri" secondAttribute="centerY" id="Vaz-ec-unt"/>
                             <constraint firstItem="VtI-z7-VYE" firstAttribute="centerY" secondItem="dqk-Mw-1ri" secondAttribute="centerY" id="bNf-Ee-DCn"/>
-                            <constraint firstItem="AuK-2H-ZjF" firstAttribute="centerY" secondItem="F28-F1-Smm" secondAttribute="centerY" id="dCs-n0-Meg"/>
+                            <constraint firstItem="0bu-Vf-atl" firstAttribute="centerX" secondItem="FTk-Cw-gyF" secondAttribute="centerX" id="bey-Ix-bnL"/>
+                            <constraint firstItem="tOo-Ua-Q56" firstAttribute="baseline" secondItem="dqk-Mw-1ri" secondAttribute="baseline" id="epG-1D-WS3"/>
                             <constraint firstItem="dqk-Mw-1ri" firstAttribute="leading" secondItem="FTk-Cw-gyF" secondAttribute="leading" constant="14" id="hQ0-DT-Lc5"/>
                             <constraint firstAttribute="trailing" secondItem="bIs-Iq-gNr" secondAttribute="trailing" id="ifJ-bE-vT8"/>
                             <constraint firstItem="F28-F1-Smm" firstAttribute="top" secondItem="J8v-ps-jZl" secondAttribute="bottom" constant="8" id="mNb-id-cF7"/>
@@ -192,17 +206,14 @@
                             <constraint firstItem="bIs-Iq-gNr" firstAttribute="top" secondItem="dqk-Mw-1ri" secondAttribute="bottom" constant="14" id="taR-Zd-vJk"/>
                             <constraint firstItem="VtI-z7-VYE" firstAttribute="leading" secondItem="dqk-Mw-1ri" secondAttribute="trailing" constant="14" id="uJd-el-B9C"/>
                             <constraint firstItem="bIs-Iq-gNr" firstAttribute="top" secondItem="VtI-z7-VYE" secondAttribute="bottom" priority="999" constant="8" id="uVe-no-j5h"/>
-                            <constraint firstItem="AuK-2H-ZjF" firstAttribute="top" secondItem="F28-F1-Smm" secondAttribute="bottom" constant="14" id="waT-AN-cHD"/>
                             <constraint firstItem="bIs-Iq-gNr" firstAttribute="leading" secondItem="FTk-Cw-gyF" secondAttribute="leading" id="wbZ-YM-Usq"/>
                             <constraint firstItem="Mh1-a3-60P" firstAttribute="leading" secondItem="G7W-rN-OkM" secondAttribute="trailing" constant="14" id="zlm-Ui-Pu0"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="uVe-no-j5h"/>
                                 <exclude reference="Sif-8l-1Y0"/>
                                 <exclude reference="Vaz-ec-unt"/>
-                                <exclude reference="GQa-Wc-Hew"/>
-                                <exclude reference="waT-AN-cHD"/>
+                                <exclude reference="uVe-no-j5h"/>
                             </mask>
                         </variation>
                     </view>
@@ -210,7 +221,7 @@
                     <size key="freeformSize" width="600" height="600"/>
                     <connections>
                         <outlet property="addUserInputField" destination="G7W-rN-OkM" id="9Hb-UW-mSM"/>
-                        <outlet property="colorButton" destination="AuK-2H-ZjF" id="jwh-Ax-XWV"/>
+                        <outlet property="colorButton" destination="0bu-Vf-atl" id="QSK-wB-dfJ"/>
                         <outlet property="inventoriesButton" destination="VtI-z7-VYE" id="XBb-h0-aPL"/>
                         <outlet property="listNameInputField" destination="F28-F1-Smm" id="9dK-8m-h9l"/>
                         <outlet property="offlineOverlayButton" destination="bIs-Iq-gNr" id="nsT-Ce-sqw"/>
@@ -291,6 +302,5 @@
     </scenes>
     <resources>
         <image name="add_user" width="25" height="25"/>
-        <image name="dot" width="25" height="25"/>
     </resources>
 </document>

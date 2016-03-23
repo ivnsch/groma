@@ -77,18 +77,13 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
         
         usersTableView.setEditing(true, animated: false)
         
-        if !listToEdit.isSet { // add modus
-            colorButton.tintColor = RandomFlatColorWithShade(.Dark)
-        }
-        
         listNameInputField.becomeFirstResponder()
     }
     
     private func prefill(list: List) {
         listNameInputField.text = list.name
         userCellModels = list.users.map{SharedUserCellModel(user: $0, acceptedInvitation: true)} // for now we assume that users passed in edit mode have accepted the invitation. TODO!!!! check: do the shared users for editing list come from the server? Or do we store them independently of server. In latest case we have to improve logic here. We must not show "pull products" for users that have not accepted the invitation. Either we don't show the users that haven't accepted at all or we show them with a "pending" status (without "pull products" button). Latest requires some work, if we show this we also should allow e.g. to remove the pending invitation, in which case we need a new service in the server also.
-        colorButton.tintColor = list.bgColor
-        colorButton.imageView?.tintColor = list.bgColor
+        view.backgroundColor = list.bgColor
     }
     
     private func initValidator() {
@@ -109,6 +104,9 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
         
         initValidator()
         
+        view.backgroundColor = UIColor.flatMagentaColorDark()
+        
+        listNameInputField.setPlaceholderWithColor("List name", color: UIColor.whiteColor())
         listNameInputField.becomeFirstResponder()
         
         let connectedAndLoggedIn = ConnectionProvider.connectedAndLoggedIn
@@ -174,35 +172,26 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
         
         validateInputs(self.listInputsValidator) {[weak self] in
             
-            if let weakSelf = self {
-                
-                if let inventory = weakSelf.selectedInventory {
-                
-                    if let listName = weakSelf.listNameInputField.text {
-                        if let listToEdit = weakSelf.listToEdit {
-                            let updatedList = listToEdit.copy(name: listName, users: weakSelf.userCellModels.map{$0.user}, bgColor: weakSelf.colorButton.tintColor, inventory: inventory)
-                            Providers.listProvider.update([updatedList], remote: true, weakSelf.successHandler{
-                                weakSelf.delegate?.onListUpdated(updatedList)
-                            })
-                        
-                        } else {
-                            if let currentListsCount = weakSelf.currentListsCount {
-                                let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: weakSelf.userCellModels.map{$0.user}, bgColor: weakSelf.colorButton.tintColor, order: currentListsCount, inventory: inventory)
-                                Providers.listProvider.add(listWithSharedUsers, remote: true, weakSelf.successHandler{list in
-                                    weakSelf.delegate?.onListAdded(list)
-                                })
-                                
-                            } else {
-                                print("Error: no currentListsCount")
-                            }
-                        }
-                    } else {
-                        print("Error: validation was not implemented correctly")
-                    }
+            guard let weakSelf = self else {return}
+            guard let inventory = weakSelf.selectedInventory else {AlertPopup.show(message: "Please select an inventory", controller: weakSelf); return}
+            guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
+            guard let listName = weakSelf.listNameInputField.text else {QL4("Validation was not implemented correctly"); return}
+            
+            if let listToEdit = weakSelf.listToEdit {
+                let updatedList = listToEdit.copy(name: listName, users: weakSelf.userCellModels.map{$0.user}, bgColor: bgColor, inventory: inventory)
+                Providers.listProvider.update([updatedList], remote: true, weakSelf.successHandler{
+                    weakSelf.delegate?.onListUpdated(updatedList)
+                })
+            
+            } else {
+                if let currentListsCount = weakSelf.currentListsCount {
+                    let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: weakSelf.userCellModels.map{$0.user}, bgColor: bgColor, order: currentListsCount, inventory: inventory)
+                    Providers.listProvider.add(listWithSharedUsers, remote: true, weakSelf.successHandler{list in
+                        weakSelf.delegate?.onListAdded(list)
+                    })
                     
                 } else {
-                    AlertPopup.show(message: "Please select an inventory", controller: weakSelf)
-                    print("Error: selectedInventory is nil - validation was not implemented correctly")
+                    QL4("No currentListsCount")
                 }
             }
         }
@@ -379,8 +368,7 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
                     
                     UIView.animateWithDuration(0.3) {
                         if let selectedColor = selectedColor {
-                            self.colorButton.tintColor = selectedColor
-                            self.colorButton.imageView?.tintColor = selectedColor
+                            self.view.backgroundColor = selectedColor
                         }
                     }
                     UIView.animateWithDuration(0.15) {

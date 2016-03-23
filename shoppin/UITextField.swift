@@ -50,4 +50,8 @@ extension UITextField {
             }
         }
     }
+    
+    func setPlaceholderWithColor(placeholder: String, color: UIColor) {
+        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSForegroundColorAttributeName: color])
+    }
 }
