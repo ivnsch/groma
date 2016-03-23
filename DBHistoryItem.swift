@@ -85,6 +85,7 @@ class DBHistoryItem: DBSyncable {
         item.product = product
         item.addedDate = NSDate(timeIntervalSince1970: dict["addedDate"] as! Double)
         item.quantity = dict["quantity"]! as! Int
+        item.paidPrice = dict["paidPrice"] as! Float
         // TODO!!!! user -> the backend sends us the uuid, we should send for now the email instead
         let user = DBSharedUser()
         user.email = dict["userUuid"]! as! String
