@@ -32,6 +32,7 @@ struct Urls {
     static let ping = host + "ping"
     static let authFacebook = host + "authenticate/facebook"
     static let authGoogle = host + "authenticate/google"
+    static let allKnownSharedUsers = host + "users/shared"
     
     // Lists
     static let lists = host + "lists"

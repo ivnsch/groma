@@ -451,6 +451,10 @@
 		EB741A5C1C22185900E1585D /* ListsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB741A5B1C22185900E1585D /* ListsTableViewController.swift */; };
 		EB7524531BF582FA00A97A10 /* QuickAddItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7524521BF582FA00A97A10 /* QuickAddItemCell.swift */; };
 		EB7524551BF5830600A97A10 /* QuickAddGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7524541BF5830600A97A10 /* QuickAddGroupCell.swift */; };
+		EB75E5471CA360C1006AAEAF /* SharedUsersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75E5461CA360C1006AAEAF /* SharedUsersController.swift */; };
+		EB75E5491CA36174006AAEAF /* SharedUsers.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB75E5481CA36174006AAEAF /* SharedUsers.storyboard */; };
+		EB75E54B1CA424E1006AAEAF /* NewSharedUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75E54A1CA424E1006AAEAF /* NewSharedUserCell.swift */; };
+		EB75E54D1CA424F9006AAEAF /* ExistingSharedUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB75E54C1CA424F9006AAEAF /* ExistingSharedUserCell.swift */; };
 		EB76A7A11BEE6F1600486F30 /* MLPAutoCompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB76A7A01BEE6F1500486F30 /* MLPAutoCompleteTextField.swift */; };
 		EB76A7A41BEE8CD700486F30 /* AddEditPlanItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB76A7A21BEE8CD700486F30 /* AddEditPlanItemController.swift */; };
 		EB76A7A51BEE8CD700486F30 /* AddEditPlanItemController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB76A7A31BEE8CD700486F30 /* AddEditPlanItemController.xib */; };
@@ -1245,6 +1249,10 @@
 		EB741A5B1C22185900E1585D /* ListsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListsTableViewController.swift; sourceTree = "<group>"; };
 		EB7524521BF582FA00A97A10 /* QuickAddItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddItemCell.swift; sourceTree = "<group>"; };
 		EB7524541BF5830600A97A10 /* QuickAddGroupCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddGroupCell.swift; sourceTree = "<group>"; };
+		EB75E5461CA360C1006AAEAF /* SharedUsersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedUsersController.swift; sourceTree = "<group>"; };
+		EB75E5481CA36174006AAEAF /* SharedUsers.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SharedUsers.storyboard; sourceTree = "<group>"; };
+		EB75E54A1CA424E1006AAEAF /* NewSharedUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewSharedUserCell.swift; sourceTree = "<group>"; };
+		EB75E54C1CA424F9006AAEAF /* ExistingSharedUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExistingSharedUserCell.swift; sourceTree = "<group>"; };
 		EB76A7A01BEE6F1500486F30 /* MLPAutoCompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLPAutoCompleteTextField.swift; sourceTree = "<group>"; };
 		EB76A7A21BEE8CD700486F30 /* AddEditPlanItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditPlanItemController.swift; sourceTree = "<group>"; };
 		EB76A7A31BEE8CD700486F30 /* AddEditPlanItemController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddEditPlanItemController.xib; sourceTree = "<group>"; };
@@ -2120,6 +2128,7 @@
 		EB55675B1A86231D00CD3EC6 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				EB75E5451CA3609C006AAEAF /* sharedUsers */,
 				EB4A38A21C87B937000714F9 /* social */,
 				EB1748D71C7E7AF70067FD16 /* invitation */,
 				EB8D1D181C39F2F800ADF884 /* productWithQuantity */,
@@ -2298,6 +2307,17 @@
 				EB741A571C21FA5D00E1585D /* ExpandableItemsTableViewController.swift */,
 			);
 			name = expandableItemsTableView;
+			sourceTree = "<group>";
+		};
+		EB75E5451CA3609C006AAEAF /* sharedUsers */ = {
+			isa = PBXGroup;
+			children = (
+				EB75E5461CA360C1006AAEAF /* SharedUsersController.swift */,
+				EB75E5481CA36174006AAEAF /* SharedUsers.storyboard */,
+				EB75E54A1CA424E1006AAEAF /* NewSharedUserCell.swift */,
+				EB75E54C1CA424F9006AAEAF /* ExistingSharedUserCell.swift */,
+			);
+			name = sharedUsers;
 			sourceTree = "<group>";
 		};
 		EB7BFA781BDA5BBE00F4C74A /* cellQuantity */ = {
@@ -3180,6 +3200,7 @@
 				EB85F4531BD5393800E19E9B /* QuickAddListItem.storyboard in Resources */,
 				EB1B36501BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */,
 				EBB5267F1BEFE39F0002A286 /* HelpHeaderView.xib in Resources */,
+				EB75E5491CA36174006AAEAF /* SharedUsers.storyboard in Resources */,
 				EB1FC51A1BC694AF004E1114 /* OkNextButtonsView.xib in Resources */,
 				EB703FE21B3B5F3A001586C5 /* Intro.storyboard in Resources */,
 				EBED0D0E1C82225B00A1EEC4 /* RatingPopup.storyboard in Resources */,
@@ -3472,6 +3493,7 @@
 				EBDA75441BCD5CC100E34AC3 /* ListItemGroupProviderImpl.swift in Sources */,
 				EBA2C8C81C4F199A00A970B8 /* RealmProductCategoryProvider.swift in Sources */,
 				EB7233DB1C84B6F7002B9903 /* DBRemoveListItemGroup.swift in Sources */,
+				EB75E54B1CA424E1006AAEAF /* NewSharedUserCell.swift in Sources */,
 				EB80CE4D1C3F5F10001DF159 /* InventoryAuthChecker.swift in Sources */,
 				EB6F812D1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
 				EBB5267D1BEFE21F0002A286 /* HelpCell.swift in Sources */,
@@ -3563,6 +3585,7 @@
 				EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */,
 				EB7233BF1C84B66A002B9903 /* DBProductToRemove.swift in Sources */,
 				EB9BE4221B2CB51F005B401A /* RemoteSection.swift in Sources */,
+				EB75E54D1CA424F9006AAEAF /* ExistingSharedUserCell.swift in Sources */,
 				EBB9A73C1B5EB1C700E5487D /* InventoryItemsProvider.swift in Sources */,
 				EBF162ED1A3CA24E0048E37C /* ListItem.swift in Sources */,
 				EB79AC2A1BF12FE000685B30 /* Array_List.swift in Sources */,
@@ -3743,6 +3766,7 @@
 				EB7524551BF5830600A97A10 /* QuickAddGroupCell.swift in Sources */,
 				EB4A38A81C8F8458000714F9 /* PullProvider.swift in Sources */,
 				EBB526811BEFE5490002A286 /* Double.swift in Sources */,
+				EB75E5471CA360C1006AAEAF /* SharedUsersController.swift in Sources */,
 				EB1748D41C7E7AE20067FD16 /* ListInvitationsHandler.swift in Sources */,
 				EB40A47A1B551176000E9CAD /* DBProduct.swift in Sources */,
 				EB0587DE1BBED9C800080626 /* IntroPageView.swift in Sources */,

@@ -9,6 +9,7 @@
 import Foundation
 import FBSDKCoreKit
 import FBSDKLoginKit
+import QorumLogs
 
 class UserProviderImpl: UserProvider {
    
@@ -112,6 +113,26 @@ class UserProviderImpl: UserProvider {
         }
     }
     
+    func findAllKnownSharedUsers(handler: ProviderResult<[SharedUser]> -> Void) {
+        remoteProvider.findAllKnownSharedUsers {result in
+            if let remoteSharedUsers = result.successResult {
+                let sharedUsers = remoteSharedUsers.map{SharedUser(email: $0.email)}
+                
+                let sharedUsersWithoutMe: [SharedUser] = {
+                    if let me = Providers.userProvider.mySharedUser {
+                        return sharedUsers.filter{$0.email != me.email}
+                    } else {
+                        QL4("Invalid state - requesting shared users (we expect the user to be logged in for this), but own user is not stored")
+                        return sharedUsers // this shouldn't happen, but in case we just return the list unfiltered
+                    }
+                }()
+                
+                handler(ProviderResult(status: .Success, sucessResult: sharedUsersWithoutMe))
+            } else {
+                handler(ProviderResult(status: .Unknown))
+            }
+        }
+    }
     
     // MARK: - Social login
     

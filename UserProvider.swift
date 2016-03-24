@@ -52,4 +52,6 @@ protocol UserProvider {
     func connectWebsocketIfLoggedIn()
     
     func disconnectWebsocket()
+    
+    func findAllKnownSharedUsers(handler: ProviderResult<[SharedUser]> -> Void)
 }

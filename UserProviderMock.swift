@@ -93,6 +93,14 @@ class UserProviderMock: UserProvider {
         }
     }
     
+    func findAllKnownSharedUsers(handler: ProviderResult<[SharedUser]> -> Void) {
+        let dummies = [
+            SharedUser(email: "goo@gar.com"),
+            SharedUser(email: "lalala@werw.com"),
+            SharedUser(email: "hello@hello.hello"),
+        ]
+        handler(ProviderResult(status: .Success, sucessResult: dummies))
+    }
     
     // MARK: - Social login
     

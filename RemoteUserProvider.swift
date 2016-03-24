@@ -81,6 +81,12 @@ class RemoteUserProvider {
         }
     }
     
+    func findAllKnownSharedUsers(handler: RemoteResult<[RemoteSharedUser]> -> Void) {
+        RemoteProvider.authenticatedRequestArray(.GET, Urls.allKnownSharedUsers) {(result: RemoteResult<[RemoteSharedUser]>) in
+            handler(result)
+        }
+    }
+    
     func hasToken() -> Bool {
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
         if let valet = valet {

@@ -29,13 +29,17 @@ extension UIStoryboard {
     private class func addEditListStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditList", bundle: NSBundle.mainBundle()) }
     private class func addEditInventoryStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditInventory", bundle: NSBundle.mainBundle()) }
     private class func addEditGroupStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditGroupViewController", bundle: NSBundle.mainBundle()) }
+    
+    // TODO not used, remove
     private class func addEditSharedUsersStoryboard() -> UIStoryboard { return UIStoryboard(name: "SharedUsersViewController", bundle: NSBundle.mainBundle()) }
+    
     private class func addEditInventoryItemStoryboard() -> UIStoryboard { return UIStoryboard(name: "AddEditInventoryItem", bundle: NSBundle.mainBundle()) }
     private class func scaleStoryboard() -> UIStoryboard { return UIStoryboard(name: "Scale", bundle: NSBundle.mainBundle()) }
     private class func productsWithQuantityStoryboard() -> UIStoryboard { return UIStoryboard(name: "ProductsWithQuantity", bundle: NSBundle.mainBundle()) }
     private class func shareAppStoryboard() -> UIStoryboard { return UIStoryboard(name: "ShareApp", bundle: NSBundle.mainBundle()) }
     private class func simpleInputStoryboard() -> UIStoryboard { return UIStoryboard(name: "SimpleInputPopup", bundle: NSBundle.mainBundle()) }
     private class func ratingPopupStoryboard() -> UIStoryboard { return UIStoryboard(name: "RatingPopup", bundle: NSBundle.mainBundle()) }
+    private class func sharedUsersStoryboard() -> UIStoryboard { return UIStoryboard(name: "SharedUsers", bundle: NSBundle.mainBundle()) }
     
     // MARK: - List items
     
@@ -183,10 +187,15 @@ extension UIStoryboard {
     
     // MARK: Shared users
     
+    // TODO not used - remove
     class func sharedUsersViewController() -> SharedUsersViewController {
         return addEditSharedUsersStoryboard().instantiateViewControllerWithIdentifier("SharedUsersViewController") as! SharedUsersViewController
     }
 
+    class func sharedUsersController() -> SharedUsersController {
+        return sharedUsersStoryboard().instantiateViewControllerWithIdentifier("SharedUsersController") as! SharedUsersController
+    }
+    
     // MARK: ScaleViewController
     
     class func scaleViewController() -> ScaleViewController {

@@ -18,15 +18,12 @@ protocol AddEditListControllerDelegate {
 }
 
 
-class AddEditListController: UIViewController, UITableViewDataSource, UITableViewDelegate, FlatColorPickerControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, SharedUserCellDelegate {
+class AddEditListController: UIViewController, FlatColorPickerControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, SharedUsersControllerDelegate {
     
     @IBOutlet weak var listNameInputField: UITextField!
-    @IBOutlet weak var usersTableView: UITableView!
-    @IBOutlet weak var addUserInputField: UITextField!
-    @IBOutlet weak var offlineOverlayButton: UIButton!
     
     @IBOutlet weak var colorButton: UIButton!
-
+    @IBOutlet weak var sharedUsersButton: UIButton!
     @IBOutlet weak var inventoriesButton: UIButton!
     
     private var inventories: [Inventory] = [] {
@@ -43,7 +40,23 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     private var inventoriesPopup: CMPopTipView?
 
     private var listInputsValidator: Validator?
-    private var userInputsValidator: Validator?
+    
+    private var showingColorPicker: FlatColorPickerController?
+
+    private var users: [SharedUser] = [] {
+        didSet {
+            if !users.isEmpty {
+                let title: String = {
+                    if users.count == 1 {
+                        return "\(users.count) participant"
+                    } else {
+                        return "\(users.count) participants"
+                    }
+                }()
+                sharedUsersButton.setTitle(title, forState: .Normal)
+            }
+        }
+    }
     
     var delegate: AddEditListControllerDelegate?
     
@@ -51,6 +64,7 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     
     var currentListsCount: Int? // to determine order. For now we set this field at view controller level, don't do an extra fetch in provider. Maybe it's better like this.
     
+    // NOTE: expected to be called after viewDidLoad (to overwrite e.g. the shared users button visibility)
     var listToEdit: List? {
         didSet {
             if let listToEdit = listToEdit {
@@ -63,38 +77,27 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
         return listToEdit != nil
     }
     
-    private var userCellModels: [SharedUserCellModel] = [] {
-        didSet {
-            usersTableView.reloadData()
-            self.adjustUsersTableViewHeightForContent()
-        }
-    }
-    
-    private var showingColorPicker: FlatColorPickerController?
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        usersTableView.setEditing(true, animated: false)
-        
-        listNameInputField.becomeFirstResponder()
-    }
-    
     private func prefill(list: List) {
         listNameInputField.text = list.name
-        userCellModels = list.users.map{SharedUserCellModel(user: $0, acceptedInvitation: true)} // for now we assume that users passed in edit mode have accepted the invitation. TODO!!!! check: do the shared users for editing list come from the server? Or do we store them independently of server. In latest case we have to improve logic here. We must not show "pull products" for users that have not accepted the invitation. Either we don't show the users that haven't accepted at all or we show them with a "pending" status (without "pull products" button). Latest requires some work, if we show this we also should allow e.g. to remove the pending invitation, in which case we need a new service in the server also.
+
+        users = list.users
+        
+        sharedUsersButton.hidden = {
+            if ConnectionProvider.connectedAndLoggedIn {
+                return true // if the user is connected and logged in, always shows the participants button
+            } else {
+                // if user is not connected/logged in, show participants button only if the list has already some participants. This is to avoid confusion, if there's no connection/account and list has no participants we just don't bother the user showing this button. If the list has participants though we show it, and show a dialog about missing connection/login if user taps it, so user knows why the probably expected (as the list has already participants) sharing functionality is not available. This overwrites the visibility set in viewDidLoad, which sets by default hidden when there's no connection/account.
+                return users.isEmpty
+            }
+        }()
+
         view.backgroundColor = list.bgColor
     }
     
     private func initValidator() {
         let listInputsValidator = Validator()
         listInputsValidator.registerField(self.listNameInputField, rules: [MinLengthRule(length: 1, message: "validation_list_name_not_empty")])
-        
-        let userInputsValidator = Validator()
-        userInputsValidator.registerField(self.addUserInputField, rules: [MinLengthRule(length: 1, message: "validation_user_input_not_empty")])
-        
         self.listInputsValidator = listInputsValidator
-        self.userInputsValidator = userInputsValidator
     }
     
     override func viewDidLoad() {
@@ -109,10 +112,13 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
         listNameInputField.setPlaceholderWithColor("List name", color: UIColor.whiteColor())
         listNameInputField.becomeFirstResponder()
         
-        let connectedAndLoggedIn = ConnectionProvider.connectedAndLoggedIn
-        offlineOverlayButton.userInteractionEnabled = !connectedAndLoggedIn
-        offlineOverlayButton.hidden = connectedAndLoggedIn
+        sharedUsersButton.hidden = !ConnectionProvider.connectedAndLoggedIn
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+
     
     // MARK: - Inventories picker
     
@@ -165,6 +171,7 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     
     func submit() {
         
+        // TODO what is this todo, is it still relevant?
         // This is a workaround because right now the server requires us to send only emails of users in order to do the update
         // This is like this because the update was implemented as if we are editing the shared users the first time
         // But now we have an additional service where we do this beforehand
@@ -176,16 +183,17 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
             guard let inventory = weakSelf.selectedInventory else {AlertPopup.show(message: "Please select an inventory", controller: weakSelf); return}
             guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
             guard let listName = weakSelf.listNameInputField.text else {QL4("Validation was not implemented correctly"); return}
-            
+
             if let listToEdit = weakSelf.listToEdit {
-                let updatedList = listToEdit.copy(name: listName, users: weakSelf.userCellModels.map{$0.user}, bgColor: bgColor, inventory: inventory)
+                // Note on shared users: if the shared users controller was not opened this will be nil so listToEdit is not affected (passing nil on copy is a noop)
+                let updatedList = listToEdit.copy(name: listName, users: weakSelf.users, bgColor: bgColor, inventory: inventory)
                 Providers.listProvider.update([updatedList], remote: true, weakSelf.successHandler{
                     weakSelf.delegate?.onListUpdated(updatedList)
                 })
             
             } else {
                 if let currentListsCount = weakSelf.currentListsCount {
-                    let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: weakSelf.userCellModels.map{$0.user}, bgColor: bgColor, order: currentListsCount, inventory: inventory)
+                    let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: weakSelf.users ?? [], bgColor: bgColor, order: currentListsCount, inventory: inventory)
                     Providers.listProvider.add(listWithSharedUsers, remote: true, weakSelf.successHandler{list in
                         weakSelf.delegate?.onListAdded(list)
                     })
@@ -221,89 +229,6 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
     @IBAction func onCloseTap(sender: UIBarButtonItem) {
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
-    
-    @IBAction func onAddUserTap(sender: UIButton) {
-        if !ConnectionProvider.connectedAndLoggedIn {
-            AlertPopup.show(message: "You must be logged in to share your list", controller: self)
-            
-        } else {
-            self.validateInputs(userInputsValidator) {[weak self] in
-                
-                if let weakSelf = self {
-                    if let input = weakSelf.addUserInputField.text {
-//                        SharedUserChecker.check(input, users: weakSelf.sharedUsers.map{$0.user}, controller: weakSelf, onSuccess: {
-                            weakSelf.addUserUI(SharedUser(email: input))
-//                        })
-                    } else {
-                        print("Error: validation was not implemented correctly")
-                    }
-                }
-            }
-        }
-    }
-
-    
-    private func addUserUI(user: SharedUser) {
-        userCellModels.append(SharedUserCellModel(user: user))
-        addUserInputField.clear()
-        adjustUsersTableViewHeightForContent()
-    }
-    
-    private func adjustUsersTableViewHeightForContent() {
-        let viewWithoutTableViewHeight: CGFloat = 120
-        let tableViewCellHeight: CGFloat = 44
-        let viewMaxHeight: CGFloat = 260
-        let height = min(viewMaxHeight, viewWithoutTableViewHeight + (CGFloat(userCellModels.count) * tableViewCellHeight)) // tableview height as content, but not higher than max
-        animateHeigth(height)
-    }
-    
-    private func animateHeigth(height: CGFloat) {
-        UIView.animateWithDuration(0.3) {[weak self] in
-            self?.view.frame = self!.view.frame.copy(height: height)
-            self?.view.layoutIfNeeded()
-        }
-    }
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return userCellModels.count
-    }
-    
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("userCell", forIndexPath: indexPath) as! ListSharedUserCell
-        let cellModel = userCellModels[indexPath.row]
-        cell.cellModel = cellModel
-        cell.delegate = self
-        
-        return cell
-    }
-    
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            self.usersTableView.wrapUpdates {[weak self] in
-                if let weakSelf = self {
-                    weakSelf.userCellModels.removeAtIndex(indexPath.row)
-                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-                }
-            }
-        }
-    }
-    
-    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return false
-    }
-    
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        self.addUserInputField.resignFirstResponder() // hide keyboard
-    }
 
     @IBAction func onColorTap() {
         let picker = UIStoryboard.listColorPicker()
@@ -335,15 +260,21 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
         } else {
             print("Warning: AddEditListController.onColorTap: no parentViewController")
         }
-        
     }
     
-    func clear() {
-        listNameInputField.clear()
-        addUserInputField.clear()
-        userCellModels = []
-        listToEdit = nil
+    @IBAction func onSharedUsersTap() {
+        if ConnectionProvider.connectedAndLoggedIn {
+            let sharedUsersController = UIStoryboard.sharedUsersController()
+            self.parentViewController?.navigationController?.pushViewController(sharedUsersController, animated: true)
+            self.parentViewController?.navigationController?.setNavigationBarHidden(false, animated: false)
+            sharedUsersController.delegate = self
+            sharedUsersController.onViewDidLoad = {[weak self] in guard let weakSelf = self else {return}
+                sharedUsersController.existingUsers = weakSelf.users
+            }
         
+        } else {
+            AlertPopup.show(message: "Please login to manage participants", controller: self)
+        }
     }
     
     // MARK: - FlatColorPickerControllerDelegate
@@ -382,14 +313,18 @@ class AddEditListController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    // MARK: - SharedUserCellDelegate
+    // MARK: - SharedUsersControllerDelegate
     
-    func onPullProductsTap(user: SharedUser, cell: ListSharedUserCell) {
+    func onPull(user: SharedUser) {
         progressVisible(true)
         if let list = listToEdit {
             Providers.pullProvider.pullListProducs(list.uuid, srcUser: user, successHandler{[weak self] listItems in
                 self?.progressVisible(false)
             })
         }
+    }
+    
+    func onUsersUpdated(users: [SharedUser]) {
+        self.users = users
     }
 }
