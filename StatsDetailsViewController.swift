@@ -133,24 +133,42 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        //        let radius: CGFloat = 100
+        //        let center = CGPointMake(pieChartContainer.bounds.width / , <#T##y: CGFloat##CGFloat#>)
         let pieChart = XYPieChart(frame: CGRectInset(pieChartContainer.bounds, 0, 0))
         pieChart.pieCenter = CGPointMake(pieChart.pieRadius + 20, pieChart.pieRadius + 10)
+        pieChart.pieRadius = 85
         pieChart.labelRadius = 70
-        pieChart.showPercentage = false
+        //        pieChart.showPercentage = true
         pieChart.showLabel = true
         pieChart.labelFont = Fonts.superSmallLight
         pieChart.labelColor = UIColor.blackColor()
-//        pieChart.selectedSliceOffsetRadius = 0
+        //        pieChart.pieCenter = CGPointMake(100, 100)
+        //        pieChart.selectedSliceOffsetRadius = 0
         pieChartContainer.addSubview(pieChart)
         pieChart.dataSource = self
         pieChart.delegate = self
         pieChart.reloadData()
         self.pieChart = pieChart
         
+        let centerDiam: CGFloat = 110
+        
+        // FIXME!! + 20 (10 in case of y) because this is the offset we pass to pieCenter and + 15 because the radius we pass (85) is 15 less than the default - TODO calculate this correctly! Apparently the pieCenter is not updated ?
+        let x = pieChart.pieCenter.x - centerDiam / 2 + 20 + 15
+        let y = pieChart.pieCenter.y - centerDiam / 2 + 10 + 15
+        
+        let centerView = UIView(frame: CGRectMake(x, y, centerDiam, centerDiam))
+        centerView.layer.cornerRadius = centerDiam / 2
+        centerView.backgroundColor = UIColor.whiteColor()
+        pieChartContainer.addSubview(centerView)
+        
         onViewDidLoad?()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+    }
     
     // MARK: - UITableViewDataSource
     
