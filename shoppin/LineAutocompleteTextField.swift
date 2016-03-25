@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LineAutocompleteTextField: MLPAutoCompleteTextField {
+class LineAutocompleteTextField: MyAutoCompleteTextField {
 
     private let lineWidth: CGFloat = 1
     

@@ -54,6 +54,17 @@ class SectionProviderImpl: SectionProvider {
     func remove(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         remove(section.uuid, remote: remote, handler)
     }
+
+    
+    func removeAllWithName(sectionName: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        Providers.listItemsProvider.invalidateMemCache()
+        DBProviders.sectionProvider.removeAllWithName(sectionName, markForSync: true) {removed in
+            handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
+            if removed && remote {
+                // TODO!! server
+            }
+        }
+    }
     
     func update(sections: [Section], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         Providers.listItemsProvider.invalidateMemCache()
@@ -64,7 +75,7 @@ class SectionProviderImpl: SectionProvider {
             }
         }
     }
-    
+
     func update(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         update([section], remote: remote, handler)
     }

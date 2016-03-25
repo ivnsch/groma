@@ -14,5 +14,6 @@ struct ViewTags {
     static let GlobalActivityIndicator = 123
     static let ConnectionLabel = 124
     static let TableViewFooter = 125
+    static let AutoCompleteCellButton = 126
     
 }

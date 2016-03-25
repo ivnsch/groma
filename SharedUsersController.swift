@@ -93,22 +93,22 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     
     func addAddButton() {
         func add() {
-            if let parentView = parentViewController?.view, window = view.window {
+            if let tabBarHeight = tabBarController?.tabBar.bounds.size.height {
                 let keyboardHeight = self.keyboardHeight ?? {
                     QL4("Couldn't get keyboard height dynamically, returning hardcoded value")
                     return 216
                 }()
                 let buttonHeight: CGFloat = 40
                 
-                let addButton = AddItemButton(frame: CGRectMake(0, window.frame.height - keyboardHeight - buttonHeight, parentView.frame.width, buttonHeight))
+                let addButton = AddItemButton(frame: CGRectMake(0, view.frame.height - keyboardHeight - buttonHeight + tabBarHeight, view.frame.width, buttonHeight))
                 self.addButton = addButton
-                parentView.addSubview(addButton)
-                parentView.bringSubviewToFront(addButton)
+                view.addSubview(addButton)
+                view.bringSubviewToFront(addButton)
                 addButton.tapHandler = {[weak self] in guard let weakSelf = self else {return}
                     weakSelf.tryAddInputUser()
                 }
             } else {
-                QL3("No parent view for add button")
+                QL3("No tabbar height add button")
             }
         }
         

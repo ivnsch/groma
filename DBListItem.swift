@@ -158,6 +158,10 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
     static func createFilterWithProductName(productName: String) -> String {
         return "productOpt.name == '\(productName)'"
     }
+
+    static func createFilterWithSection(sectionUuid: String) -> String {
+        return "sectionOpt.uuid == '\(sectionUuid)'"
+    }
     
     // Finds list items that have the same product names as listItems and are in the same list
     // WARN: Assumes all the list items belong to the same list (list uuid of first list item is used)

@@ -35,12 +35,14 @@ class BrandProviderImpl: BrandProvider {
         }
     }
     
-    func removeBrand(name: String, _ handler: ProviderResult<Any> -> Void) {
+    func removeBrand(name: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         dbProvider.removeBrand(name) {success in
             if success {
                 // Trigger to reload items from database to see updated brands
                 Providers.listItemsProvider.invalidateMemCache()
                 Providers.inventoryItemsProvider.invalidateMemCache()
+                
+                //TODO!!!! server
             }
             handler(ProviderResult(status: success ? .Success : .Unknown))
         }

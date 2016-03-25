@@ -73,6 +73,9 @@
 - (void)registerAutoCompleteCellClass:(Class)cellClass forCellReuseIdentifier:(NSString *)reuseIdentifier;
 
 - (void)reloadData; //it will ask DataSource for data again
+
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath withAutoCompleteString:(NSString *)string;
+    
 @end
 
 

@@ -855,6 +855,10 @@
 		EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C31AD11EA100E48F95 /* NSView.swift */; };
 		EBDFE3C61AD11F6700E48F95 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */; };
 		EBE366371BCBC346009543AF /* BlurBubbleTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE366361BCBC346009543AF /* BlurBubbleTransition.swift */; };
+		EBEA0CC81CA5ABBE00E68B81 /* MyAutoCompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CC71CA5ABBE00E68B81 /* MyAutoCompleteTextField.swift */; };
+		EBEA0CCF1CA5B24C00E68B81 /* MyAutocompleteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CCD1CA5B24C00E68B81 /* MyAutocompleteCell.swift */; };
+		EBEA0CD01CA5B24C00E68B81 /* MyAutocompleteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBEA0CCE1CA5B24C00E68B81 /* MyAutocompleteCell.xib */; };
+		EBEA0CD21CA5BF3E00E68B81 /* HandlingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CD11CA5BF3E00E68B81 /* HandlingButton.swift */; };
 		EBEBA6B21BF14C36000E5653 /* ListSharedUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEBA6B01BF14C36000E5653 /* ListSharedUserCell.swift */; };
 		EBEBA6B51BF14EFF000E5653 /* AddEditList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBEBA6B41BF14EFF000E5653 /* AddEditList.storyboard */; };
 		EBEBA6B71BF16492000E5653 /* FlatColorPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEBA6B61BF16492000E5653 /* FlatColorPickerController.swift */; };
@@ -1497,6 +1501,10 @@
 		EBDFE3C31AD11EA100E48F95 /* NSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSView.swift; sourceTree = "<group>"; };
 		EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
 		EBE366361BCBC346009543AF /* BlurBubbleTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurBubbleTransition.swift; sourceTree = "<group>"; };
+		EBEA0CC71CA5ABBE00E68B81 /* MyAutoCompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAutoCompleteTextField.swift; sourceTree = "<group>"; };
+		EBEA0CCD1CA5B24C00E68B81 /* MyAutocompleteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAutocompleteCell.swift; sourceTree = "<group>"; };
+		EBEA0CCE1CA5B24C00E68B81 /* MyAutocompleteCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyAutocompleteCell.xib; sourceTree = "<group>"; };
+		EBEA0CD11CA5BF3E00E68B81 /* HandlingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlingButton.swift; sourceTree = "<group>"; };
 		EBEBA6B01BF14C36000E5653 /* ListSharedUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListSharedUserCell.swift; sourceTree = "<group>"; };
 		EBEBA6B41BF14EFF000E5653 /* AddEditList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddEditList.storyboard; sourceTree = "<group>"; };
 		EBEBA6B61BF16492000E5653 /* FlatColorPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlatColorPickerController.swift; sourceTree = "<group>"; };
@@ -2144,6 +2152,9 @@
 				EBF162CC1A3C82380048E37C /* tableView */,
 				EBB5A0451B65393D00FB9C58 /* validatorHelpers */,
 				EB451C491B8649FC000DE208 /* popup */,
+				EBEA0CC71CA5ABBE00E68B81 /* MyAutoCompleteTextField.swift */,
+				EBEA0CCD1CA5B24C00E68B81 /* MyAutocompleteCell.swift */,
+				EBEA0CCE1CA5B24C00E68B81 /* MyAutocompleteCell.xib */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -2809,6 +2820,7 @@
 				EB37ABBA1CA2021C00FE9D7A /* RoundTextField.swift */,
 				EB37ABA51C9F2DA400FE9D7A /* LineAutocompleteTextField.swift */,
 				EB37ABA91C9F4C0D00FE9D7A /* AddItemButton.swift */,
+				EBEA0CD11CA5BF3E00E68B81 /* HandlingButton.swift */,
 			);
 			name = view;
 			path = shoppin;
@@ -3202,6 +3214,7 @@
 				EB0C1B971B3DBD1300F24C85 /* Login.storyboard in Resources */,
 				EB85F4531BD5393800E19E9B /* QuickAddListItem.storyboard in Resources */,
 				EB1B36501BC31774003519F2 /* HistoryItemGroupHeaderView.xib in Resources */,
+				EBEA0CD01CA5B24C00E68B81 /* MyAutocompleteCell.xib in Resources */,
 				EBB5267F1BEFE39F0002A286 /* HelpHeaderView.xib in Resources */,
 				EB75E5491CA36174006AAEAF /* SharedUsers.storyboard in Resources */,
 				EB1FC51A1BC694AF004E1114 /* OkNextButtonsView.xib in Resources */,
@@ -3453,6 +3466,7 @@
 				EB7F59C21BA1049100E07EBA /* Identifiable.swift in Sources */,
 				EBF162FD1A3DDE5D0048E37C /* ProductMapper.swift in Sources */,
 				EBDF8D0F1BFB7E2A00F6830A /* ListTopBarView.swift in Sources */,
+				EBEA0CC81CA5ABBE00E68B81 /* MyAutoCompleteTextField.swift in Sources */,
 				EB4A38971C86FBE8000714F9 /* RemoteErrorReporter.swift in Sources */,
 				EB20FBFA1A5971C20058103B /* InventoryItemMapper.swift in Sources */,
 				EB4FD46C1AC73B590000F952 /* PreferencesManager.swift in Sources */,
@@ -3587,6 +3601,7 @@
 				EB4A389F1C86FC96000714F9 /* ErrorProvider.swift in Sources */,
 				EBEEDD6D1A49C9B100FC3B29 /* SectionMapper.swift in Sources */,
 				EB7233BF1C84B66A002B9903 /* DBProductToRemove.swift in Sources */,
+				EBEA0CD21CA5BF3E00E68B81 /* HandlingButton.swift in Sources */,
 				EB9BE4221B2CB51F005B401A /* RemoteSection.swift in Sources */,
 				EB75E54D1CA424F9006AAEAF /* ExistingSharedUserCell.swift in Sources */,
 				EBB9A73C1B5EB1C700E5487D /* InventoryItemsProvider.swift in Sources */,
@@ -3756,6 +3771,7 @@
 				EBEE7E681C99979000DBCB6A /* RemoteContainedItemIdentifier.swift in Sources */,
 				EB6E3D231C5A346100D65DD5 /* RemoteGlobalSyncResult.swift in Sources */,
 				EB7233E31C84B713002B9903 /* DBRemoveProductCategory.swift in Sources */,
+				EBEA0CCF1CA5B24C00E68B81 /* MyAutocompleteCell.swift in Sources */,
 				EB85F4631BD54E8D00E19E9B /* QuickAddItem.swift in Sources */,
 				EB6E3D351C5A51FA00D65DD5 /* RemoteInventoryItemsWithDependenciesNoInventory.swift in Sources */,
 				EB4C365B1B4C120E00C387C5 /* EditablePlainTableViewController.swift in Sources */,

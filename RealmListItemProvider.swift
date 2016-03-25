@@ -426,4 +426,22 @@ class RealmListItemProvider: RealmProvider {
     func updateLastSyncTimeStampSync(realm: Realm, product: RemoteProduct) {
         realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
     }
+    
+    func updateStore(oldName: String, newName: String, _ handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            let dbProducts = realm.objects(DBProduct).filter(DBProduct.createFilterStore(oldName))
+            for dbProduct in dbProducts {
+                dbProduct.store = newName
+                realm.add(dbProduct, update: true)
+            }
+            return true
+            }, finishHandler: {savedMaybe in
+                handler(savedMaybe ?? false)
+        })
+    }
+    
+    func removeStore(name: String, _ handler: Bool -> Void) {
+        updateStore(name, newName: "", handler)
+    }
+    
 }

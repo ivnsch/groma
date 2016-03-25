@@ -88,7 +88,7 @@ struct AddEditItem {
 
 class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPAutoCompleteTextFieldDataSource, MLPAutoCompleteTextFieldDelegate
 //, ScaleViewControllerDelegate, SimpleInputPopupControllerDelegate
-, FlatColorPickerControllerDelegate {
+, FlatColorPickerControllerDelegate, MyAutoCompleteTextFieldDelegate {
 
     @IBOutlet weak var brandInput: LineAutocompleteTextField!
 
@@ -243,6 +243,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     private func initAutocompletionTextFields() {
         for textField in [brandInput, sectionInput, storeInput] {
             textField.defaultAutocompleteStyle()
+            textField.myDelegate = self
         }
     }
 
@@ -459,6 +460,31 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         )
     }
     
+    // MARK: - MyAutoCompleteTextFieldDelegate
+    
+    func onDeleteSuggestion(string: String, sender: MyAutoCompleteTextField) {
+        switch sender {
+        case sectionInput:
+            ConfirmationPopup.show(title: "Confirmation", message: "Do you want to remove: \(string)?\nThis will remove sections with this name in all lists and all possible listitems inside these sections", okTitle: "Yes", cancelTitle: "No", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+                Providers.sectionProvider.removeAllWithName(string, remote: true, weakSelf.successHandler {
+                    AlertPopup.show(message: "Section: \(string) removed", controller: weakSelf)
+                })
+            })
+        case brandInput:
+            ConfirmationPopup.show(title: "Confirmation", message: "Do you want to remove: \(string)?\nThis will remove this brand from all your products (everywhere in the app).", okTitle: "Yes", cancelTitle: "No", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+                Providers.brandProvider.removeBrand(string, remote: true, weakSelf.successHandler {
+                    AlertPopup.show(message: "Brand: \(string) removed", controller: weakSelf)
+                })
+            })
+        case storeInput:
+            ConfirmationPopup.show(title: "Confirmation", message: "Do you want to remove: \(string)?\nThis will remove this store from all your products (everywhere in the app).", okTitle: "Yes", cancelTitle: "No", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+                Providers.productProvider.removeStore(string, remote: true, weakSelf.successHandler {
+                    AlertPopup.show(message: "Store: \(string) removed", controller: weakSelf)
+                })
+            })
+        default: QL4("Not handled input")
+        }
+    }
     
 ///////////////////////////////////////////////////////////////////////////
 // note popup - for now disabled

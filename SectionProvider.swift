@@ -22,6 +22,9 @@ protocol SectionProvider {
     
     func remove(sectionUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
+    // Removes all the sections found with given name (across lists)
+    func removeAllWithName(sectionName: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    
     // Gets suggestions both from section and category names
     func sectionSuggestionsContainingText(text: String, _ handler: ProviderResult<[String]> -> ())
     

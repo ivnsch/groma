@@ -248,4 +248,17 @@ class ProductProviderImpl: ProductProvider {
             handler(ProviderResult(status: .Success, sucessResult: stores))
         }
     }
+    
+    func removeStore(name: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        dbProvider.removeStore(name) {success in
+            if success {
+                // Trigger to reload items from database to see updated brands
+                Providers.listItemsProvider.invalidateMemCache()
+                Providers.inventoryItemsProvider.invalidateMemCache()
+                
+                //TODO!!!! server
+            }
+            handler(ProviderResult(status: success ? .Success : .Unknown))
+        }
+    }
 }

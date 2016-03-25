@@ -73,6 +73,10 @@ class DBSection: DBSyncable {
         return "uuid == '\(uuid)'"
     }
     
+    static func createFilterWithName(name: String) -> String {
+        return "name == '\(name)'"
+    }
+    
     static func createFilter(name: String, listUuid: String) -> String {
         return "name == '\(name)' AND listOpt.uuid = '\(listUuid)'"
     }

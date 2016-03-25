@@ -49,6 +49,8 @@ protocol ProductProvider {
     
     func storesContainingText(text: String, range: NSRange, _ handler: ProviderResult<[String]> -> Void)
     
+    func removeStore(name: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    
     /**
     Utility method to refactor common code in ListItemsProviderImpl and ListItemGroupProviderImpl when adding new list or group items
     Tries to load using unique (name), if existent overrides fields with corresponding input, if not existent creates a new one
