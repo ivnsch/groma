@@ -52,11 +52,6 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        topAddEditListControllerManager?.height = ConnectionProvider.connectedAndLoggedIn ? 140 : 110
-    }
 
     override func onPullToAdd() {
         onAddTap(false)
@@ -64,7 +59,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     
     private func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditListController> {
         let top = CGRectGetHeight(topBar.frame)
-        let expandableTopViewController: ExpandableTopViewController<AddEditListController> = ExpandableTopViewController(top: top, height: ConnectionProvider.connectedAndLoggedIn ? 140 : 110, parentViewController: self, tableView: tableView) {[weak self] in
+        let expandableTopViewController: ExpandableTopViewController<AddEditListController> = ExpandableTopViewController(top: top, height: Constants.topAddContainerViewHeight, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.addEditList()
             controller.delegate = self
             controller.currentListsCount = self?.models.count ?? {

@@ -10,4 +10,6 @@ import Foundation
 
 struct Constants {
     static let defaultListIdentifier = "Todo"
+    
+    static let topAddContainerViewHeight: CGFloat = 100
 }

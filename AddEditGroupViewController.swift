@@ -9,6 +9,7 @@
 import UIKit
 import SwiftValidator
 import ChameleonFramework
+import QorumLogs
 
 //change
 protocol AddEditGroupControllerDelegate {
@@ -44,17 +45,11 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-
-        if !listToEdit.isSet {
-            colorButton.tintColor = RandomFlatColorWithShade(.Dark)
-        }
     }
     
     private func prefill(list: ListItemGroup) {
         groupNameInputField.text = list.name
-        colorButton.tintColor = list.bgColor
-        colorButton.imageView?.tintColor = list.bgColor
-        
+        view.backgroundColor = list.bgColor
     }
     
     private func initValidator() {
@@ -70,6 +65,9 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
         
         initValidator()
         
+        view.backgroundColor = UIColor.flatMagentaColorDark()
+        
+        groupNameInputField.setPlaceholderWithColor("Group name", color: UIColor.whiteColor())
         groupNameInputField.becomeFirstResponder()
     }
     
@@ -86,28 +84,26 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
         
         validateInputs(self.listInputsValidator) {[weak self] in
             
-            if let weakSelf = self {
-                
-                if let listName = weakSelf.groupNameInputField.text {
-                    if let listToEdit = weakSelf.listToEdit {
-                        let updatedList = listToEdit.copy(name: listName, bgColor: weakSelf.colorButton.tintColor)
-                        Providers.listItemGroupsProvider.update(updatedList, remote: true, weakSelf.successHandler{//change
-                            weakSelf.delegate?.onGroupUpdated(updatedList)
-                        })
-                    } else {
-                        if let currentListsCount = weakSelf.currentListsCount {
-                        let inventoryWithSharedUsers = ListItemGroup(uuid: NSUUID().UUIDString, name: listName, bgColor: weakSelf.colorButton.tintColor, order: currentListsCount)
-                        Providers.listItemGroupsProvider.add(inventoryWithSharedUsers, remote: true, weakSelf.successHandler{
-                            weakSelf.delegate?.onGroupAdded(inventoryWithSharedUsers)
-                        })
-                            
-                        } else {
-                            print("Error: no currentListsCount")
-                        }
-                    }
-                }
+            guard let weakSelf = self else {return}
+            guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
+            guard let listName = weakSelf.groupNameInputField.text else {QL4("Validation was not implemented correctly"); return}
+
+
+            if let listToEdit = weakSelf.listToEdit {
+                let updatedList = listToEdit.copy(name: listName, bgColor: bgColor)
+                Providers.listItemGroupsProvider.update(updatedList, remote: true, weakSelf.successHandler{//change
+                    weakSelf.delegate?.onGroupUpdated(updatedList)
+                })
             } else {
-                print("Error: validation was not implemented correctly")
+                if let currentListsCount = weakSelf.currentListsCount {
+                let inventoryWithSharedUsers = ListItemGroup(uuid: NSUUID().UUIDString, name: listName, bgColor: bgColor, order: currentListsCount)
+                Providers.listItemGroupsProvider.add(inventoryWithSharedUsers, remote: true, weakSelf.successHandler{
+                    weakSelf.delegate?.onGroupAdded(inventoryWithSharedUsers)
+                })
+                    
+                } else {
+                    print("Error: no currentListsCount")
+                }
             }
         }
     }
@@ -174,13 +170,6 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
         
     }
     
-    @IBAction func onAddUsersTap() {
-        UIView.animateWithDuration(0.3) {[weak self] in
-            self?.view.frame = self!.view.frame.copy(height: 260)
-            self?.view.layoutIfNeeded()
-        }
-    }
-    
     func clear() {
         groupNameInputField.clear()
         listToEdit = nil
@@ -209,8 +198,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
                     
                     UIView.animateWithDuration(0.3) {
                         if let selectedColor = selectedColor {
-                            self.colorButton.tintColor = selectedColor
-                            self.colorButton.imageView?.tintColor = selectedColor
+                            self.view.backgroundColor = selectedColor
                         }
                     }
                     UIView.animateWithDuration(0.15) {
