@@ -327,4 +327,14 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     func onUsersUpdated(users: [SharedUser]) {
         self.users = users
     }
+    
+    func invitedUsers(handler: [SharedUser] -> Void) {
+        if let list = listToEdit {
+            Providers.listProvider.findInvitedUsers(list.uuid, successHandler {users in
+                handler(users)
+            })
+        } else { // adding a list - there can't be invited users yet
+            handler([])
+        }
+    }
 }

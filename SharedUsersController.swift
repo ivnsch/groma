@@ -13,18 +13,21 @@ import QorumLogs
 protocol SharedUsersControllerDelegate {
     func onPull(user: SharedUser)
     func onUsersUpdated(users: [SharedUser])
+    func invitedUsers(handler: [SharedUser] -> Void)
 }
+
+private enum SharedUserState {case New, Existing, Invited}
 
 private struct UserCellModel {
     let user: SharedUser
-    let isNew: Bool
-    init(user: SharedUser, isNew: Bool) {
+    let state: SharedUserState
+    init(user: SharedUser, state: SharedUserState) {
         self.user = user
-        self.isNew = isNew
+        self.state = state
     }
 }
 
-class SharedUsersController: UIViewController, UITableViewDataSource, UITableViewDelegate, NewSharedUserCellDelegate, ExistingSharedUserCellDelegate {
+class SharedUsersController: UIViewController, UITableViewDataSource, UITableViewDelegate, NewSharedUserCellDelegate, ExistingSharedUserCellDelegate, InvitedSharedUserCellDelegate {
 
     @IBOutlet weak var addUserInputField: UITextField!
     @IBOutlet weak var usersTableView: UITableView!
@@ -46,6 +49,11 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     private var allKnownUsers: [SharedUser] = [] {
+        didSet {
+            updateCellModels()
+        }
+    }
+    private var invitedUsers: [SharedUser] = [] {
         didSet {
             updateCellModels()
         }
@@ -78,6 +86,9 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
         Providers.userProvider.findAllKnownSharedUsers(successHandler {[weak self] sharedUsers in
             self?.allKnownUsers = sharedUsers
         })
+        delegate?.invitedUsers {[weak self] invitedUsers in
+            self?.invitedUsers = invitedUsers
+        }
         
         navigationItem.title = "Participants"
         
@@ -149,9 +160,10 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: -
 
     func updateCellModels() {
-        let existingUserModels = existingUsers.map{UserCellModel(user: $0, isNew: false)}
-        let newUserModels = allKnownUsers.filter{!existingUsers.contains($0)}.map{UserCellModel(user: $0, isNew: true)}
-        userModels = existingUserModels + newUserModels
+        let existingUserModels = existingUsers.map{UserCellModel(user: $0, state: .Existing)}
+        let invitedUserModels = invitedUsers.map{UserCellModel(user: $0, state: .Invited)}
+        let newUserModels = allKnownUsers.filter{!existingUsers.contains($0) && !invitedUsers.contains($0)}.map{UserCellModel(user: $0, state: .New)}
+        userModels = existingUserModels + invitedUserModels + newUserModels
     }
     
     private func tryAddInputUser() {
@@ -209,13 +221,19 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cellModel = userModels[indexPath.row]
-        if cellModel.isNew {
+        switch cellModel.state {
+        case .New:
             let cell = tableView.dequeueReusableCellWithIdentifier("newUserCell", forIndexPath: indexPath) as! NewSharedUserCell
             cell.sharedUser = cellModel.user
             cell.delegate = self
             return cell
-        } else {
+        case .Existing:
             let cell = tableView.dequeueReusableCellWithIdentifier("existingUserCell", forIndexPath: indexPath) as! ExistingSharedUserCell
+            cell.sharedUser = cellModel.user
+            cell.delegate = self
+            return cell
+        case .Invited:
+            let cell = tableView.dequeueReusableCellWithIdentifier("invitedUserCell", forIndexPath: indexPath) as! InvitedUserCell
             cell.sharedUser = cellModel.user
             cell.delegate = self
             return cell
@@ -263,5 +281,11 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     
     func onPullSharedUser(sharedUser: SharedUser, cell: ExistingSharedUserCell) {
         delegate?.onPull(sharedUser)
+    }
+    
+    // MARK: - InvitedSharedUserCellDelegate
+    
+    func onInviteInfoSharedUser(sharedUser: SharedUser, cell: InvitedUserCell) {
+        AlertPopup.show(message: "Invitation pending", controller: self)
     }
 }

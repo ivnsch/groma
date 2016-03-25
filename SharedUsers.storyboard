@@ -12,6 +12,7 @@
         <mutableArray key="HelveticaNeueLights.ttc">
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -126,6 +127,45 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="emailLabel" destination="ops-44-eo7" id="BN1-en-qqn"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="invitedUserCell" id="ZvO-LF-uTB" customClass="ExistingSharedUserCell" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="128" width="600" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZvO-LF-uTB" id="b1c-pk-26t">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="49"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zfC-Vb-FUc">
+                                                    <rect key="frame" x="556" y="10" width="30" height="30"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="F9H-DQ-RtJ"/>
+                                                        <constraint firstAttribute="width" constant="30" id="Stz-GZ-Ci3"/>
+                                                    </constraints>
+                                                    <state key="normal" title="?">
+                                                        <color key="titleColor" red="0.63137254899999995" green="0.65490196079999996" blue="0.65490196079999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="onDeleteTap:" destination="ZvO-LF-uTB" eventType="touchUpInside" id="aot-Zj-Y5H"/>
+                                                    </connections>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="chc-Gh-oNj">
+                                                    <rect key="frame" x="18" y="16" width="564" height="18"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                                    <color key="textColor" red="0.63137254899999995" green="0.65490196079999996" blue="0.65490196079999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="zfC-Vb-FUc" secondAttribute="trailing" constant="14" id="4mf-0E-TwV"/>
+                                                <constraint firstAttribute="trailing" secondItem="chc-Gh-oNj" secondAttribute="trailing" constant="18" id="7nI-Gb-qHm"/>
+                                                <constraint firstItem="chc-Gh-oNj" firstAttribute="centerY" secondItem="b1c-pk-26t" secondAttribute="centerY" id="Mci-iO-t9M"/>
+                                                <constraint firstItem="chc-Gh-oNj" firstAttribute="leading" secondItem="b1c-pk-26t" secondAttribute="leading" constant="18" id="VOx-iF-lkn"/>
+                                                <constraint firstItem="zfC-Vb-FUc" firstAttribute="centerY" secondItem="b1c-pk-26t" secondAttribute="centerY" id="gEK-hC-8cY"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="emailLabel" destination="chc-Gh-oNj" id="WrO-0G-Zhl"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

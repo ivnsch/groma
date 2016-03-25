@@ -39,7 +39,8 @@ struct Urls {
     static let listsWithItemsSync = host + "lists/sync"
     static let listInvitation = host + "list/invitation"
     static let listsOrder = host + "lists/order"
-
+    static let listInvitedUsers = host + "list/invs"
+    
     // List items
     static let listItems = host + "listItems"
     static let addListItem = host + "addListItem"

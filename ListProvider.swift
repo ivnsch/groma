@@ -33,4 +33,6 @@ protocol ListProvider {
     func acceptInvitation(invitation: RemoteListInvitation, _ handler: ProviderResult<Any> -> Void)
     
     func rejectInvitation(invitation: RemoteListInvitation, _ handler: ProviderResult<Any> -> Void)
+    
+    func findInvitedUsers(listUuid: String, _ handler: ProviderResult<[SharedUser]> -> Void)    
 }

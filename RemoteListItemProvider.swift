@@ -219,6 +219,12 @@ class RemoteListItemProvider {
         }
     }
     
+    func findInvitedUsers(listUuid: String, handler: RemoteResult<[RemoteSharedUser]> -> Void) {
+        RemoteProvider.authenticatedRequestArray(.POST, Urls.listInvitedUsers + "/\(listUuid)") {result in
+            handler(result)
+        }
+    }
+    
 //    // for unit tests
 //    func removeAll(handler: Try<Bool> -> ()) {
 //        Alamofire.request(.GET, Urls.removeAll).responseString { (request, _, string: String?) in

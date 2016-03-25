@@ -787,6 +787,7 @@
 		EBBC9B781C00D7190046966B /* RealmProductProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC9B771C00D7190046966B /* RealmProductProvider.swift */; };
 		EBBC9B791C00D7190046966B /* RealmProductProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC9B771C00D7190046966B /* RealmProductProvider.swift */; };
 		EBBC9B7A1C00D7190046966B /* RealmProductProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC9B771C00D7190046966B /* RealmProductProvider.swift */; };
+		EBBF2B9B1CA4BBA1003A9449 /* InvitedUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBF2B9A1CA4BBA1003A9449 /* InvitedUserCell.swift */; };
 		EBC6ADEB1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
 		EBC6ADED1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */; };
@@ -1450,6 +1451,7 @@
 		EBBC232C1BB607DA0002F6B1 /* ConfirmationPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmationPopup.swift; sourceTree = "<group>"; };
 		EBBC23301BB6C91A0002F6B1 /* TaggedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaggedView.swift; sourceTree = "<group>"; };
 		EBBC9B771C00D7190046966B /* RealmProductProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProductProvider.swift; sourceTree = "<group>"; };
+		EBBF2B9A1CA4BBA1003A9449 /* InvitedUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InvitedUserCell.swift; sourceTree = "<group>"; };
 		EBC6ADEA1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemWithHistory.swift; sourceTree = "<group>"; };
 		EBC6ADEE1B7E839800BD0ABC /* TestHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHistory.swift; sourceTree = "<group>"; };
 		EBC9D2371BE3F2F50088E3CF /* TimerUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerUtils.swift; sourceTree = "<group>"; };
@@ -2316,6 +2318,7 @@
 				EB75E5481CA36174006AAEAF /* SharedUsers.storyboard */,
 				EB75E54A1CA424E1006AAEAF /* NewSharedUserCell.swift */,
 				EB75E54C1CA424F9006AAEAF /* ExistingSharedUserCell.swift */,
+				EBBF2B9A1CA4BBA1003A9449 /* InvitedUserCell.swift */,
 			);
 			name = sharedUsers;
 			sourceTree = "<group>";
@@ -3691,6 +3694,7 @@
 				EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */,
 				EB1B36451BC1D001003519F2 /* MLPAutoCompleteTextField.m in Sources */,
 				EB6F8DE11C1B29B300C05466 /* InventoryItemId.swift in Sources */,
+				EBBF2B9B1CA4BBA1003A9449 /* InvitedUserCell.swift in Sources */,
 				EB6E3D511C5A9ADE00D65DD5 /* RealmGlobalProvider.swift in Sources */,
 				EB1219DB1BD8EB23004351E0 /* QuickAddViewController.swift in Sources */,
 				EB4A38B01C8F86B4000714F9 /* RemotePullProvider.swift in Sources */,
