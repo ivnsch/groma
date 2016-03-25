@@ -103,6 +103,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
                 self.initView(view, height: height)
                 parentController.addChildViewControllerAndView(controller)
                 self.controller = controller
+                view.clipsToBounds = false
                 
                 // self.view.bringSubviewToFront(floatingViews) TODO!
             }

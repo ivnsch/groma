@@ -163,6 +163,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "navController" {
             navController = segue.destinationViewController as? UINavigationController
+            navController?.view.clipsToBounds = false
         }
     }
     
