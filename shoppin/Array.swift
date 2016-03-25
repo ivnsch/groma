@@ -177,7 +177,7 @@ extension Array where Element: Equatable {
     func distinctUsingEquatable() -> Array<Element> {
         var array = [Element]()
         for element in self {
-            if !self.contains(element) {
+            if !array.contains(element) {
                 array.append(element)
             }
         }
