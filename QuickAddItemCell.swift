@@ -16,7 +16,7 @@ class QuickAddItemCell: UICollectionViewCell {
     
     @IBOutlet weak var nameLabelVerticalCenterContraint: NSLayoutConstraint!
     
-    var item: QuickAddProduct? {
+    var item: QuickAddItem? {
         didSet {
             if let item = item {
                 if let boldRange = item.boldRange {
@@ -26,16 +26,16 @@ class QuickAddItemCell: UICollectionViewCell {
                 }
 
                 contentView.layer.cornerRadius = 18
-                contentView.backgroundColor = item.product.category.color
+                contentView.backgroundColor = item.color
                 
 //                let color = UIColor(contrastingBlackOrWhiteColorOn: contentView.backgroundColor, isFlat: true)
                 let color = UIColor.whiteColor()
                 
                 nameLabel.textColor = color
                 brandLabel.textColor = color
-                brandLabel.text = item.product.brand
+                brandLabel.text = item.label2Text
                 
-                nameLabelVerticalCenterContraint.constant = item.product.brand.isEmpty ? 0 : -6
+                nameLabelVerticalCenterContraint.constant = item.label2Text.isEmpty ? 0 : -6
             }
         }
     }

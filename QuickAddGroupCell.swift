@@ -12,7 +12,7 @@ class QuickAddGroupCell: UICollectionViewCell {
     
     @IBOutlet weak var nameLabel: UILabel!
     
-    var item: QuickAddGroup? {
+    var item: QuickAddItem? {
         didSet {
             if let item = item {
                 if let boldRange = item.boldRange {
@@ -22,7 +22,7 @@ class QuickAddGroupCell: UICollectionViewCell {
                 }
                 nameLabel.textColor = UIColor.darkTextColor()
                 
-                contentView.backgroundColor = item.group.bgColor.colorWithAlphaComponent(0.5)
+                contentView.backgroundColor = item.color.colorWithAlphaComponent(0.5)
             }
         }
     }
