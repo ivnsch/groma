@@ -93,7 +93,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     @IBOutlet weak var brandInput: LineAutocompleteTextField!
 
     @IBOutlet weak var sectionInput: LineAutocompleteTextField!
-    @IBOutlet weak var sectionColorButton: UIButton!
+    @IBOutlet weak var sectionColorButton: LineTextField!
 
     @IBOutlet weak var priceInput: LineTextField!
 
@@ -222,8 +222,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         brandInput.text = item.product.brand
         sectionInput.text = item.sectionName ?? item.product.category.name
         storeInput.text = item.product.store
-        sectionColorButton.tintColor = item.sectionColor ?? item.product.category.color
-        sectionColorButton.imageView?.tintColor = item.sectionColor ?? item.product.category.color
+        sectionColorButton.textColor = item.sectionColor ?? item.product.category.color
         quantityInput.text = String(item.quantity)
         priceInput.text = item.product.price.toString(2)
         noteInput.text = item.note
@@ -253,8 +252,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         brandInput.text = planItem.product.brand
         sectionInput.text = planItem.product.category.name
         storeInput.text = planItem.product.store
-        sectionColorButton.tintColor = planItem.product.category.color
-        sectionColorButton.imageView?.tintColor = planItem.product.category.color
+        sectionColorButton.textColor = planItem.product.category.color
         quantityInput.text = String(planItem.quantity)
         priceInput.text = planItem.product.price.toString(2)
     }
@@ -289,7 +287,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 }
             }
             
-            if let price = priceInput.text?.floatValue, quantityText = quantityInput.text, quantity = Int(quantityText), section = sectionInput.text, brand = brandInput.text, store = storeInput.text, note = noteInput.text {
+            if let price = priceInput.text?.floatValue, quantityText = quantityInput.text, quantity = Int(quantityText), section = sectionInput.text, brand = brandInput.text, store = storeInput.text, note = noteInput.text, sectionColor = sectionColorButton.textColor {
                 
                 // for now disabled due to new designs
 //                let baseQuantity = scaleInputs?.baseQuantity ?? 1
@@ -300,10 +298,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 // the price from scaleInputs is inserted in price field, so we have it already
                 
                 // Explanation category/section name: for list items, the section input refers to the list item's section. For the rest the product category. When we store the list items, if a category with the entered section name doesn't exist yet, one is created with the section's data.
-                delegate?.onOkTap(price, quantity: quantity, section: section, sectionColor: sectionColorButton.tintColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store, editingItem: editingItem?.model)
+                delegate?.onOkTap(price, quantity: quantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store, editingItem: editingItem?.model)
                 
             } else {
-                QL4("Validation was not implemented correctly, price: \(priceInput.text), quantity: \(quantityInput.text), section: \(sectionInput.text), brand: \(brandInput.text)")
+                QL4("Validation was not implemented correctly, price: \(priceInput.text), quantity: \(quantityInput.text), section: \(sectionInput.text), brand: \(brandInput.text), sectionColor: \(sectionColorButton.textColor)")
             }
         }
     }
@@ -374,7 +372,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         }
     }
     
-    private func showPopup(button: UIButton, controller: UIViewController, topOffset: CGFloat = 0, width: CGFloat? = nil, height: CGFloat? = nil, onWillShow: VoidFunction) {
+    private func showPopup(button: UIView, controller: UIViewController, topOffset: CGFloat = 0, width: CGFloat? = nil, height: CGFloat? = nil, onWillShow: VoidFunction) {
         
         if let windowView = UIApplication.sharedApplication().keyWindow { // add popup and overlay on top of everything
             
@@ -437,16 +435,15 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 
                 UIView.animateWithDuration(0.3) {
                     if let selectedColor = selectedColor {
-                        self.sectionColorButton.tintColor = selectedColor
-                        self.sectionColorButton.imageView?.tintColor = selectedColor
+                        self.sectionColorButton.textColor = selectedColor
                     }
                 }
-                UIView.animateWithDuration(0.15) {
-                    self.sectionColorButton.transform = CGAffineTransformMakeScale(2, 2)
-                    UIView.animateWithDuration(0.15) {
-                        self.sectionColorButton.transform = CGAffineTransformMakeScale(1, 1)
-                    }
-                }
+//                UIView.animateWithDuration(0.15) {
+//                    self.sectionColorButton.transform = CGAffineTransformMakeScale(2, 2)
+//                    UIView.animateWithDuration(0.15) {
+//                        self.sectionColorButton.transform = CGAffineTransformMakeScale(1, 1)
+//                    }
+//                }
             }
         }
     }
