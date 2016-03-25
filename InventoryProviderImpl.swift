@@ -220,4 +220,15 @@ class InventoryProviderImpl: InventoryProvider {
             DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
         }
     }
+    
+    func findInvitedUsers(listUuid: String, _ handler: ProviderResult<[SharedUser]> -> Void) {
+        remoteProvider.findInvitedUsers(listUuid) {remoteResult in
+            if let remoteSharedUsers = remoteResult.successResult {
+                let sharedUsers: [SharedUser] = remoteSharedUsers.map{SharedUserMapper.sharedUserWithRemote($0)}
+                handler(ProviderResult(status: .Success, sucessResult: sharedUsers))
+            } else {
+                DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+            }
+        }
+    }
 }

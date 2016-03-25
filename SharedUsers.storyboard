@@ -129,7 +129,7 @@
                                             <outlet property="emailLabel" destination="ops-44-eo7" id="BN1-en-qqn"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="invitedUserCell" id="ZvO-LF-uTB" customClass="ExistingSharedUserCell" customModule="shoppin" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="invitedUserCell" id="ZvO-LF-uTB" customClass="InvitedUserCell" customModule="shoppin" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="128" width="600" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZvO-LF-uTB" id="b1c-pk-26t">
@@ -146,7 +146,7 @@
                                                         <color key="titleColor" red="0.63137254899999995" green="0.65490196079999996" blue="0.65490196079999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="onDeleteTap:" destination="ZvO-LF-uTB" eventType="touchUpInside" id="aot-Zj-Y5H"/>
+                                                        <action selector="onInfoTap:" destination="ZvO-LF-uTB" eventType="touchUpInside" id="o7Q-N8-8sr"/>
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="chc-Gh-oNj">

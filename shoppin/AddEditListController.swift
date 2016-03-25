@@ -17,7 +17,7 @@ protocol AddEditListControllerDelegate {
     func onListUpdated(list: List)
 }
 
-
+// TODO try to refactor with AddEditInventoryController, lot of repeated code
 class AddEditListController: UIViewController, FlatColorPickerControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, SharedUsersControllerDelegate {
     
     @IBOutlet weak var listNameInputField: UITextField!
@@ -57,7 +57,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             }
         }
     }
-    
+
+    private var invitedUsers: [SharedUser] = []
+
     var delegate: AddEditListControllerDelegate?
     
     var open: Bool = false
@@ -165,10 +167,6 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
 
     // MARK: -
     
-    @IBAction func onDoneTap(sender: UIBarButtonItem) {
-        submit()
-    }
-    
     func submit() {
         
         // TODO what is this todo, is it still relevant?
@@ -183,7 +181,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             guard let inventory = weakSelf.selectedInventory else {AlertPopup.show(message: "Please select an inventory", controller: weakSelf); return}
             guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
             guard let listName = weakSelf.listNameInputField.text else {QL4("Validation was not implemented correctly"); return}
-
+            
             if let listToEdit = weakSelf.listToEdit {
                 // Note on shared users: if the shared users controller was not opened this will be nil so listToEdit is not affected (passing nil on copy is a noop)
                 let updatedList = listToEdit.copy(name: listName, users: weakSelf.users, bgColor: bgColor, inventory: inventory)
@@ -225,10 +223,6 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             onValid()
         }
     }
-    
-    @IBAction func onCloseTap(sender: UIBarButtonItem) {
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-    }
 
     @IBAction func onColorTap() {
         let picker = UIStoryboard.listColorPicker()
@@ -269,14 +263,47 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             self.parentViewController?.navigationController?.setNavigationBarHidden(false, animated: false)
             sharedUsersController.delegate = self
             sharedUsersController.onViewDidLoad = {[weak self] in guard let weakSelf = self else {return}
-                sharedUsersController.existingUsers = weakSelf.users
+                // we load the invited/known users on demand, so we load each time when we open the controller (we could also have a lazy variable but loading each time doesn't hurt, maybe we get updates of other users in the meantime).
+                // we call this on view did load to ensure 100% init happens after outlets are sest
+                weakSelf.loadKnownAndInvitedUsers{(known, invited) in
+                    
+                    // besides the users that have been already invited (submitted - come in server response), we also want to show possible invited users that have not been submitted yet (the user opened shared users controllers, added them, went back, opens again shared user controller, without leaving add/edit). Note that these appear equal to the submitted invitations. The difference, is that the not submitted ones will disappear after the user closes add/edit.
+                    // we need to use distinct because the invited users we get from shared users controller(weakSelf.invitedUsers) of course contains both, and when we request invites from server(invited) there will be duplicates.
+                    let allInvited = (invited + weakSelf.invitedUsers).distinctUsingEquatable()
+                    
+                    sharedUsersController.initUsers(weakSelf.users, invited: allInvited, all: known)
+                }
             }
-        
+            
         } else {
             AlertPopup.show(message: "Please login to manage participants", controller: self)
         }
     }
     
+    private func loadKnownAndInvitedUsers(onLoaded: (known: [SharedUser], invited: [SharedUser]) -> Void) {
+        var allResult: [SharedUser]?
+        var invitedResult: [SharedUser]?
+        func check() {
+            if let allResult = allResult, invitedResult = invitedResult {
+                onLoaded(known: allResult, invited: invitedResult)
+            }
+        }
+        Providers.userProvider.findAllKnownSharedUsers(successHandler {sharedUsers in
+            allResult = sharedUsers
+            check()
+            })
+        
+        if let inventory = listToEdit {
+            Providers.inventoryProvider.findInvitedUsers(inventory.uuid, successHandler {sharedUsers in
+                invitedResult = sharedUsers
+                check()
+                })
+        } else {
+            invitedResult = []
+            check()
+        }
+    }
+
     // MARK: - FlatColorPickerControllerDelegate
     
     func onColorPicked(color: UIColor) {
@@ -324,8 +351,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         }
     }
     
-    func onUsersUpdated(users: [SharedUser]) {
-        self.users = users
+    func onUsersUpdated(exitingUsers: [SharedUser], invitedUsers: [SharedUser]) {
+        self.users = exitingUsers
+        self.invitedUsers = invitedUsers        
     }
     
     func invitedUsers(handler: [SharedUser] -> Void) {

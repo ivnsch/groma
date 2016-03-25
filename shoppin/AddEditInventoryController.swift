@@ -17,17 +17,14 @@ protocol AddEditInventoryControllerDelegate {
     func onInventoryUpdated(inventory: Inventory)
 }
 
-class AddEditInventoryController: UIViewController, UITableViewDataSource, UITableViewDelegate, FlatColorPickerControllerDelegate, SharedUserCellDelegate {
+// TODO try to refactor with AddEditListController, lot of repeated code
+class AddEditInventoryController: UIViewController, FlatColorPickerControllerDelegate, SharedUsersControllerDelegate {
     
     @IBOutlet weak var listNameInputField: UITextField!
-    @IBOutlet weak var usersTableView: UITableView!
-    @IBOutlet weak var addUserInputField: UITextField!
     @IBOutlet weak var colorButton: UIButton!
-    @IBOutlet weak var addUserButton: UIButton!
-    @IBOutlet weak var offlineOverlayButton: UIButton!
+    @IBOutlet weak var sharedUsersButton: UIButton!
     
     private var listInputsValidator: Validator?
-    private var userInputsValidator: Validator?
     
     var delegate: AddEditInventoryControllerDelegate?
     
@@ -43,46 +40,45 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    var userCellModels: [SharedUserCellModel] = [] {
-        didSet {
-            usersTableView.reloadData()
-            self.adjustUsersTableViewHeightForContent()
-        }
-    }
-    
     private var showingColorPicker: FlatColorPickerController?
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        usersTableView.setEditing(true, animated: false)
 
-        if !listToEdit.isSet { // add modus
-            colorButton.tintColor = RandomFlatColorWithShade(.Dark)
+    private var users: [SharedUser] = [] {
+        didSet {
+            if !users.isEmpty {
+                let title: String = {
+                    if users.count == 1 {
+                        return "\(users.count) participant"
+                    } else {
+                        return "\(users.count) participants"
+                    }
+                }()
+                sharedUsersButton.setTitle(title, forState: .Normal)
+            }
         }
     }
-
-//    override func viewDidAppear(animated: Bool) {
-//        super.viewDidAppear(animated)
-//        animateHeigth(ConnectionProvider.connectedAndLoggedIn ? 100 : 70)
-//    }
+    private var invitedUsers: [SharedUser] = []
     
     private func prefill(list: Inventory) {
         listNameInputField.text = list.name
-        userCellModels = list.users.map{SharedUserCellModel(user: $0, acceptedInvitation: true)}
-        colorButton.tintColor = list.bgColor
-        colorButton.imageView?.tintColor = list.bgColor
+        
+        users = list.users
+        
+        sharedUsersButton.hidden = {
+            if ConnectionProvider.connectedAndLoggedIn {
+                return true // if the user is connected and logged in, always shows the participants button
+            } else {
+                // if user is not connected/logged in, show participants button only if the list has already some participants. This is to avoid confusion, if there's no connection/account and list has no participants we just don't bother the user showing this button. If the list has participants though we show it, and show a dialog about missing connection/login if user taps it, so user knows why the probably expected (as the list has already participants) sharing functionality is not available. This overwrites the visibility set in viewDidLoad, which sets by default hidden when there's no connection/account.
+                return users.isEmpty
+            }
+        }()
+        
+        view.backgroundColor = list.bgColor
     }
     
     private func initValidator() {
         let listInputsValidator = Validator()
         listInputsValidator.registerField(self.listNameInputField, rules: [MinLengthRule(length: 1, message: "validation_list_name_not_empty")])
-        
-        let userInputsValidator = Validator()
-        userInputsValidator.registerField(self.addUserInputField, rules: [MinLengthRule(length: 1, message: "validation_user_input_not_empty")])
-        
         self.listInputsValidator = listInputsValidator
-        self.userInputsValidator = userInputsValidator
     }
     
     override func viewDidLoad() {
@@ -90,15 +86,17 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
         
         initValidator()
         
+        view.backgroundColor = UIColor.flatMagentaColorDark()
+        
+        listNameInputField.setPlaceholderWithColor("Inventory name", color: UIColor.whiteColor())
         listNameInputField.becomeFirstResponder()
         
-        let connectedAndLoggedIn = ConnectionProvider.connectedAndLoggedIn
-        offlineOverlayButton.userInteractionEnabled = !connectedAndLoggedIn
-        offlineOverlayButton.hidden = connectedAndLoggedIn
+//        sharedUsersButton.hidden = !ConnectionProvider.connectedAndLoggedIn
     }
     
-    @IBAction func onDoneTap(sender: UIBarButtonItem) {
-        submit()
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     func submit() {
@@ -110,27 +108,24 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
         
         validateInputs(self.listInputsValidator) {[weak self] in
             
-            if let weakSelf = self {
+            guard let weakSelf = self else {return}
+            guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
+            guard let listName = weakSelf.listNameInputField.text else {QL4("Validation was not implemented correctly"); return}
+
+            if let listToEdit = weakSelf.listToEdit {
+                let updatedList = listToEdit.copy(name: listName, users: weakSelf.users, bgColor: bgColor)
+                Providers.inventoryProvider.updateInventory(updatedList, remote: true, weakSelf.successHandler{//change
+                    weakSelf.delegate?.onInventoryUpdated(updatedList)
+                })
                 
-                if let listName = weakSelf.listNameInputField.text {
-                    if let listToEdit = weakSelf.listToEdit {
-                        let updatedList = listToEdit.copy(name: listName, users: weakSelf.userCellModels.map{$0.user}, bgColor: weakSelf.colorButton.tintColor)
-                        Providers.inventoryProvider.updateInventory(updatedList, remote: true, weakSelf.successHandler{//change
-                            weakSelf.delegate?.onInventoryUpdated(updatedList)
-                        })
-                        
-                    } else {
-                        if let currentListsCount = weakSelf.currentListsCount {
-                            let inventoryWithSharedUsers = Inventory(uuid: NSUUID().UUIDString, name: listName, users: weakSelf.userCellModels.map{$0.user}, bgColor: weakSelf.colorButton.tintColor, order: currentListsCount)//change
-                            Providers.inventoryProvider.addInventory(inventoryWithSharedUsers, remote: true, weakSelf.successHandler{//change
-                                weakSelf.delegate?.onInventoryAdded(inventoryWithSharedUsers)
-                            })
-                        } else {
-                            print("Error: no currentListsCount")
-                        }
-                    }
+            } else {
+                if let currentListsCount = weakSelf.currentListsCount {
+                    let inventoryWithSharedUsers = Inventory(uuid: NSUUID().UUIDString, name: listName, users: weakSelf.users ?? [], bgColor: bgColor, order: currentListsCount)//change
+                    Providers.inventoryProvider.addInventory(inventoryWithSharedUsers, remote: true, weakSelf.successHandler{//change
+                        weakSelf.delegate?.onInventoryAdded(inventoryWithSharedUsers)
+                    })
                 } else {
-                    print("Error: validation was not implemented correctly")
+                    print("Error: no currentListsCount")
                 }
             }
         }
@@ -155,91 +150,6 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
             
             onValid()
         }
-    }
-    
-    @IBAction func onCloseTap(sender: UIBarButtonItem) {
-        self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    @IBAction func onAddUserTap(sender: UIButton) {
-        if !ConnectionProvider.connectedAndLoggedIn {
-            AlertPopup.show(message: "You must be logged in to share your inventory", controller: self)
-            
-        } else {
-            self.validateInputs(userInputsValidator) {[weak self] in
-                
-                if let weakSelf = self {
-                    if let input = weakSelf.addUserInputField.text {
-                        SharedUserChecker.check(input, users: weakSelf.userCellModels.map{$0.user}, controller: weakSelf, onSuccess: {
-                            weakSelf.addUserUI(SharedUser(email: input))
-                        })
-                    } else {
-                        print("Error: validation was not implemented correctly")
-                    }
-                }
-            }
-        }
-    }
-    
-    private func addUserUI(user: SharedUser) {
-        userCellModels.append(SharedUserCellModel(user: user))
-        addUserInputField.clear()
-        adjustUsersTableViewHeightForContent()
-    }
-
-    private func adjustUsersTableViewHeightForContent() {
-        let viewWithoutTableViewHeight: CGFloat = 120
-        let tableViewCellHeight: CGFloat = 44
-        let viewMaxHeight: CGFloat = 260
-        let height = min(viewMaxHeight, viewWithoutTableViewHeight + (CGFloat(userCellModels.count) * tableViewCellHeight)) // tableview height as content, but not higher than max
-        animateHeigth(height)
-    }
-    
-    private func animateHeigth(height: CGFloat) {
-        UIView.animateWithDuration(0.3) {[weak self] in
-            self?.view.frame = self!.view.frame.copy(height: height)
-            self?.view.layoutIfNeeded()
-        }
-    }
-    
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return userCellModels.count
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("userCell", forIndexPath: indexPath) as! ListSharedUserCell
-        let sharedUser = userCellModels[indexPath.row]
-        cell.cellModel = sharedUser
-        cell.delegate = self
-
-        return cell
-    }
-    
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            self.usersTableView.wrapUpdates {[weak self] in
-                if let weakSelf = self {
-                    weakSelf.userCellModels.removeAtIndex(indexPath.row)
-                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-                }
-            }
-        }
-    }
-    
-    func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return false
-    }
-    
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        self.addUserInputField.resignFirstResponder() // hide keyboard
     }
     
     @IBAction func onColorTap() {
@@ -272,15 +182,54 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
         } else {
             print("Warning: AddEditListController.onColorTap: no parentViewController")
         }
-        
     }
     
-    func clear() {
-        listNameInputField.clear()
-        addUserInputField.clear()
-        userCellModels = []
-        listToEdit = nil
+    @IBAction func onSharedUsersTap() {
+        if ConnectionProvider.connectedAndLoggedIn {
+            let sharedUsersController = UIStoryboard.sharedUsersController()
+            self.parentViewController?.navigationController?.pushViewController(sharedUsersController, animated: true)
+            self.parentViewController?.navigationController?.setNavigationBarHidden(false, animated: false)
+            sharedUsersController.delegate = self
+            sharedUsersController.onViewDidLoad = {[weak self] in guard let weakSelf = self else {return}
+                // we load the invited/known users on demand, so we load each time when we open the controller (we could also have a lazy variable but loading each time doesn't hurt, maybe we get updates of other users in the meantime).
+                // we call this on view did load to ensure 100% init happens after outlets are sest
+                weakSelf.loadKnownAndInvitedUsers{(known, invited) in
+                    
+                    // besides the users that have been already invited (submitted - come in server response), we also want to show possible invited users that have not been submitted yet (the user opened shared users controllers, added them, went back, opens again shared user controller, without leaving add/edit). Note that these appear equal to the submitted invitations. The difference, is that the not submitted ones will disappear after the user closes add/edit.
+                    // we need to use distinct because the invited users we get from shared users controller(weakSelf.invitedUsers) of course contains both, and when we request invites from server(invited) there will be duplicates.
+                    let allInvited = (invited + weakSelf.invitedUsers).distinctUsingEquatable()
+                    
+                    sharedUsersController.initUsers(weakSelf.users, invited: allInvited, all: known)
+                }
+            }
         
+        } else {
+            AlertPopup.show(message: "Please login to manage participants", controller: self)
+        }
+    }
+    
+    private func loadKnownAndInvitedUsers(onLoaded: (known: [SharedUser], invited: [SharedUser]) -> Void) {
+        var allResult: [SharedUser]?
+        var invitedResult: [SharedUser]?
+        func check() {
+            if let allResult = allResult, invitedResult = invitedResult {
+                onLoaded(known: allResult, invited: invitedResult)
+            }
+        }
+        Providers.userProvider.findAllKnownSharedUsers(successHandler {sharedUsers in
+            allResult = sharedUsers
+            check()
+        })
+        
+        if let inventory = listToEdit {
+            Providers.inventoryProvider.findInvitedUsers(inventory.uuid, successHandler {sharedUsers in
+                invitedResult = sharedUsers
+                check()
+            })
+        } else {
+            invitedResult = []
+            check()
+        }
     }
     
     // MARK: - FlatColorPickerControllerDelegate
@@ -305,8 +254,7 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
                     
                     UIView.animateWithDuration(0.3) {
                         if let selectedColor = selectedColor {
-                            self.colorButton.tintColor = selectedColor
-                            self.colorButton.imageView?.tintColor = selectedColor
+                            self.view.backgroundColor = selectedColor
                         }
                     }
                     UIView.animateWithDuration(0.15) {
@@ -320,14 +268,29 @@ class AddEditInventoryController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-    // MARK: - SharedUserCellDelegate
+    // MARK: - SharedUsersControllerDelegate
     
-    func onPullProductsTap(user: SharedUser, cell: ListSharedUserCell) {
+    func onPull(user: SharedUser) {
         progressVisible(true)
         if let inventory = listToEdit {
             Providers.pullProvider.pullInventoryProducs(inventory.uuid, srcUser: user, successHandler{[weak self] listItems in
                 self?.progressVisible(false)
             })
+        }
+    }
+    
+    func onUsersUpdated(exitingUsers: [SharedUser], invitedUsers: [SharedUser]) {
+        self.users = exitingUsers
+        self.invitedUsers = invitedUsers
+    }
+    
+    func invitedUsers(handler: [SharedUser] -> Void) {
+        if let inventory = listToEdit {
+            Providers.inventoryProvider.findInvitedUsers(inventory.uuid, successHandler {users in
+                handler(users)
+            })
+        } else { // adding inventory - there can't be invited users yet
+            handler([])
         }
     }
 }

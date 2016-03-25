@@ -72,6 +72,12 @@ class RemoteInventoryProvider: RemoteProvider {
         }
     }
     
+    func findInvitedUsers(inventoryUuid: String, handler: RemoteResult<[RemoteSharedUser]> -> Void) {
+        RemoteProvider.authenticatedRequestArray(.GET, Urls.inventoryInvitedUsers + "/\(inventoryUuid)") {result in
+            handler(result)
+        }
+    }
+    
     func syncInventoriesWithInventoryItems(inventoriesSync: InventoriesSync, handler: RemoteResult<RemoteInventoriesWithInventoryItemsSyncResult> -> ()) {
         
         let inventoriesSyncDicts: [[String: AnyObject]] = inventoriesSync.inventoriesSyncs.map {inventorySync in

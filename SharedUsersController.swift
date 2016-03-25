@@ -12,7 +12,7 @@ import QorumLogs
 
 protocol SharedUsersControllerDelegate {
     func onPull(user: SharedUser)
-    func onUsersUpdated(users: [SharedUser])
+    func onUsersUpdated(existingUsers: [SharedUser], invitedUsers: [SharedUser])
     func invitedUsers(handler: [SharedUser] -> Void)
 }
 
@@ -48,30 +48,22 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
             usersTableView.reloadData()
         }
     }
-    private var allKnownUsers: [SharedUser] = [] {
-        didSet {
-            updateCellModels()
-        }
-    }
-    private var invitedUsers: [SharedUser] = [] {
-        didSet {
-            updateCellModels()
-        }
-    }
-    var existingUsers: [SharedUser] = [] {
-        didSet {
-            if usersTableView != nil {
-                updateCellModels()
-            } else {
-                QL4("Outlets not initialised yet")
-            }
-        }
-    }
     
+    private var existingUsers: [SharedUser] = []
+    private var invitedUsers: [SharedUser] = []
+    private var allKnownUsers: [SharedUser] = []
+
     var onViewDidLoad: VoidFunction?
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    func initUsers(existing: [SharedUser], invited: [SharedUser], all: [SharedUser]) {
+        self.existingUsers = existing
+        self.invitedUsers = invited
+        self.allKnownUsers = all
+        updateCellModels()
     }
     
     private func initValidator() {
@@ -83,13 +75,6 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Providers.userProvider.findAllKnownSharedUsers(successHandler {[weak self] sharedUsers in
-            self?.allKnownUsers = sharedUsers
-        })
-        delegate?.invitedUsers {[weak self] invitedUsers in
-            self?.invitedUsers = invitedUsers
-        }
-        
         navigationItem.title = "Participants"
         
         initValidator()
@@ -168,7 +153,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     
     private func tryAddInputUser() {
         if !ConnectionProvider.connectedAndLoggedIn {
-            AlertPopup.show(message: "You must be logged in to share your list", controller: self)
+            AlertPopup.show(message: "You must be logged in to share with other users", controller: self)
             
         } else {
             validateInputs(userInputsValidator) {[weak self] in
@@ -260,9 +245,10 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     private func addSharedUser(sharedUser: SharedUser) {
-        existingUsers.append(sharedUser)
+        invitedUsers.append(sharedUser)
+        updateCellModels()
         usersTableView.reloadData()
-        delegate?.onUsersUpdated(existingUsers)
+        notifyDelegateUsersUpdated()
     }
     
     // MARK: - NewSharedUserCellDelegate
@@ -275,8 +261,13 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     
     func onDeleteSharedUser(sharedUser: SharedUser, cell: ExistingSharedUserCell) {
         existingUsers.remove(sharedUser)
+        updateCellModels()
         usersTableView.reloadData()
-        delegate?.onUsersUpdated(existingUsers)
+        notifyDelegateUsersUpdated()
+    }
+    
+    private func notifyDelegateUsersUpdated() {
+        delegate?.onUsersUpdated(existingUsers, invitedUsers: invitedUsers)
     }
     
     func onPullSharedUser(sharedUser: SharedUser, cell: ExistingSharedUserCell) {

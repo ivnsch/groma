@@ -25,7 +25,7 @@ class UserProviderImpl: UserProvider {
                     handler(result)
                 }
             } else {
-                DefaultRemoteErrorHandler.handle(result, handler: handler)
+                handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
             }
         }
     }
@@ -38,7 +38,7 @@ class UserProviderImpl: UserProvider {
                     handler(result)
                 }
             } else {
-                DefaultRemoteErrorHandler.handle(result, handler: handler)
+                handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
             }
         }
     }
@@ -129,13 +129,14 @@ class UserProviderImpl: UserProvider {
                 
                 handler(ProviderResult(status: .Success, sucessResult: sharedUsersWithoutMe))
             } else {
-                handler(ProviderResult(status: .Unknown))
+                handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
             }
         }
     }
     
     // MARK: - Social login
     
+    // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore
     func authenticateWithFacebook(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.authenticateWithFacebook(token) {[weak self] result in
             if result.success {
@@ -143,12 +144,12 @@ class UserProviderImpl: UserProvider {
                     handler(result)
                 }   
             } else {
-                DefaultRemoteErrorHandler.handle(result, handler: handler)
+                handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
             }
         }
     }
 
-    
+    // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore
     func authenticateWithGoogle(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.authenticateWithGoogle(token) {[weak self] result in
             if result.success {
@@ -156,7 +157,7 @@ class UserProviderImpl: UserProvider {
                     handler(result)
                 }
             } else {
-                DefaultRemoteErrorHandler.handle(result, handler: handler)
+                handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
             }
         }
     }

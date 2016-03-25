@@ -33,4 +33,6 @@ protocol InventoryProvider {
     func acceptInvitation(invitation: RemoteInventoryInvitation, _ handler: ProviderResult<Any> -> Void)
     
     func rejectInvitation(invitation: RemoteInventoryInvitation, _ handler: ProviderResult<Any> -> Void)
+    
+    func findInvitedUsers(listUuid: String, _ handler: ProviderResult<[SharedUser]> -> Void)
 }

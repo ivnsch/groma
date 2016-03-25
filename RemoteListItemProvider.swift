@@ -220,7 +220,7 @@ class RemoteListItemProvider {
     }
     
     func findInvitedUsers(listUuid: String, handler: RemoteResult<[RemoteSharedUser]> -> Void) {
-        RemoteProvider.authenticatedRequestArray(.POST, Urls.listInvitedUsers + "/\(listUuid)") {result in
+        RemoteProvider.authenticatedRequestArray(.GET, Urls.listInvitedUsers + "/\(listUuid)") {result in
             handler(result)
         }
     }
