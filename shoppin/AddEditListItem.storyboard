@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
@@ -44,7 +44,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Section" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="i1w-xi-aFz" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="List section" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="i1w-xi-aFz" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="14" y="68" width="539" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="jOx-1e-S6w"/>
@@ -61,7 +61,7 @@
                                     <outlet property="autoCompleteDelegate" destination="CI5-0y-OAL" id="qlf-hn-ADn"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Store" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="R77-Pv-LQA" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Store (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="R77-Pv-LQA" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="14" y="108" width="404" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="aul-P9-Whl"/>
@@ -104,7 +104,7 @@
                                     <action selector="onSectionColorButtonTap:" destination="CI5-0y-OAL" eventType="touchUpInside" id="jbC-Lv-qkJ"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Brand name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="r5b-Sz-J4o" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Brand (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="r5b-Sz-J4o" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="14" y="28" width="572" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="bLM-k5-r0i"/>
@@ -127,7 +127,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yfv-oA-AU6" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yfv-oA-AU6" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="14" y="148" width="572" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="ogx-ge-tLz"/>

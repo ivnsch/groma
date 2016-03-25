@@ -168,8 +168,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 
 //                let sectionText = "Section"
 //                let categoryText = "Category"
-                let sectionPlaceHolderText = "Section (e.g. vegetables)"
-                let categoryPlaceHolderText = "Category (e.g. vegetables)"
+                let sectionPlaceHolderText = "List section"
+                let categoryPlaceHolderText = "Category"
                 
                 switch modus {
                 case .ListItem:
@@ -230,10 +230,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     private func initTextFieldPlaceholders() {
         for (textField, placeholder) in [
             (brandInput, "Brand"),
-            (sectionInput, "Section*"),
+            (sectionInput, "Section"),
             (storeInput, "Store"),
-            (quantityInput, "Quantity*"),
-            (priceInput, "Price*"),
+            (quantityInput, "Quantity"),
+            (priceInput, "Price"),
             (noteInput, "Note")
             ] {
             textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
