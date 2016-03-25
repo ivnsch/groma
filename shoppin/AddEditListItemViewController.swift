@@ -265,7 +265,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         let validator = Validator()
         validator.registerField(sectionInput, rules: [MinLengthRule(length: 1, message: "validation_section_name_not_empty")])
         validator.registerField(priceInput, rules: [MinLengthRule(length: 1, message: "validation_price_not_empty"), FloatRule(message: "validation_price_number")])
-        validator.registerField(storeInput, rules: [MinLengthRule(length: 1, message: "validation_store_not_empty")])
         validator.registerField(quantityInput, rules: [MinLengthRule(length: 1, message: "validation_quantity_not_empty"), FloatRule(message: "validation_quantity_number")])
         self.validator = validator
     }
