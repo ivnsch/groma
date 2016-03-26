@@ -108,7 +108,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
                 // self.view.bringSubviewToFront(floatingViews) TODO!
             }
             
-            UIView.animateWithDuration(0.3, animations: {[weak self] in
+            UIView.animateWithDuration(0.2, animations: {[weak self] in
                 
                 if let weakSelf = self, view = weakSelf.controller?.view {
                     
