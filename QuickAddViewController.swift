@@ -10,6 +10,7 @@ import UIKit
 import SwiftValidator
 import QorumLogs
 
+
 protocol QuickAddDelegate {
     func onAddProduct(product: Product)
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?)
@@ -33,15 +34,7 @@ private enum AddProductOrGroupContent {
 }
 
 // The container for quick add, manages top bar buttons and a navigation controller for content (quick add list, add products, add groups)
-class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISearchBarDelegate, AddEditListItemViewControllerDelegate {
-    
-    @IBOutlet weak var showGroupsButton: ButtonMore!
-    @IBOutlet weak var showProductsButton: ButtonMore!
-    @IBOutlet weak var showAddProductsOrGroupButton: ButtonMore!
-    @IBOutlet weak var currentQuickAddLabel: UILabel!
-    @IBOutlet weak var currentQuickAddLabelLeftConstraint: NSLayoutConstraint!
-
-    @IBOutlet weak var sortByButton: ButtonMore!
+class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISearchBarDelegate, AddEditListItemViewControllerDelegate, QuickAddPageControllerDelegate {
     
     var delegate: QuickAddDelegate?
     
@@ -52,19 +45,12 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     @IBOutlet weak var searchBar: RoundTextField!
     
     private var navController: UINavigationController?
-    private var quickAddListItemViewController: QuickAddListItemViewController? {
-        return navController?.viewControllers.first as? QuickAddListItemViewController
+    private var quickAddListItemViewController: QuickAddPageController? {
+        return navController?.viewControllers.first as? QuickAddPageController
     }
     
     private var showingController: UIViewController? {
         return navController?.viewControllers.last
-    }
-    
-    private var sortBy: QuickAddItemSortBy = .Fav {
-        didSet {
-            (navController?.viewControllers.last as? QuickAddListItemViewController)?.contentData = (itemType, sortBy)
-            updateSortByButton(sortBy)
-        }
     }
     
     private var editingItem: AddEditItem? {
@@ -92,18 +78,20 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     var modus: AddEditListItemControllerModus = .ListItem
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        updateSortByButton(sortBy)
 
-        updateQuickAddTop(.Product)
-        
         searchBar.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
-        
+
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
     }
+    
+    func onPageChanged(newIndex: Int) {
+        searchBar.text = ""
+    }
+
     
     func onClose() {
         removeAddButton()
@@ -111,10 +99,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     func textFieldDidChange(textField: UITextField) {
         if !isEdit {
-            if let quickAddListItemViewController = quickAddListItemViewController, searchText = textField.text {
-                quickAddListItemViewController.searchText = searchText
+            if let controller = quickAddListItemViewController, searchText = textField.text {
+                controller.search(searchText)
             } else {
-                QL3("quickAddListItemViewController is not set: \(quickAddListItemViewController), or text is not set: \(textField.text)")
+                QL3("Controller: \(quickAddListItemViewController) or search is nil: \(textField.text)")
             }
         }
     }
@@ -127,8 +115,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             showAddProductController()
             
         } else {
-            let controller = UIStoryboard.quickAddListItemViewController()
+            let controller = UIStoryboard.quickAddPageController()
             controller.delegate = self
+            controller.quickAddListItemDelegate = self
             navController?.pushViewController(controller, animated: false)
         }
         
@@ -163,28 +152,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "navController" {
             navController = segue.destinationViewController as? UINavigationController
-            navController?.view.clipsToBounds = false
+        } else {
+            QL3("Not handled segue")
         }
     }
-    
-    // Toggle for showProduct state - if showing product, show product button has to be disabled and group enabled, same for group
-    // Assumes only 2 possible states, product and group (Bool)
-    // TODO use image, button should not be disabled
-    private func toggleItemTypeButtons(showProduct: Bool) {
-//        showGroupsButton.enabled = showProduct
-//        showProductsButton.enabled = !showProduct
-    }
-    
-    // was used to expand the embedded view controller to fill available space when adding group items. Maybe will be used again in the future.
-    //    // MARK: - AddElementViewControllerDelegate
-    //
-    //    func setContentViewExpanded(expanded: Bool) {
-    //        if let originalFrame = originalViewFrame {
-    //            delegate?.setContentViewExpanded(expanded, myTopOffset: toolButtonsHeight, originalFrame: originalFrame)
-    //        } else {
-    //            print("Error: no original frame in QuickAddListItemViewController")
-    //        }
-    //    }
     
     
     ///////////////////////////////////////////
@@ -196,7 +167,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         if navController?.viewControllers.last as? AddEditListItemViewController != nil {
             navController?.popViewControllerAnimated(false)
             delegate?.onQuickListOpen()
-            sortByButton.selected = true
+//            sortByButton.selected = true
             return true
         }
         return false
@@ -205,12 +176,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     // returns: status changed: if it was not showing and was subsequently shown
     private func showAddProductController() -> Bool {
         
+        // TODO now that we removed all the topbar buttons and added swiper, do we still need this check?
         if navController?.viewControllers.last as? AddEditListItemViewController == nil { // don't show if already showing
             let controller = UIStoryboard.addEditListItemViewController()
             controller.modus = modus
             controller.delegate = self
             navController?.pushViewController(controller, animated: false)
-            sortByButton.selected = false
+//            sortByButton.selected = false
             controller.onDidLoad = {[weak self] in // outlets are not initalised at this point yet
                 controller.editingItem = self?.editingItem
             }
@@ -254,167 +226,15 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         return false
     }
     
-    private func hideAddProductOrGroupController() -> Bool {
-        if (navController?.viewControllers.last as? AddEditListItemViewController != nil) {
-            
-            navController?.popToRootViewControllerAnimated(false)
-            delegate?.onQuickListOpen()
-        
-            removeAddButton()
-
-//            if (navController?.viewControllers.last as? AddEditListItemViewController != nil) {
-//                showGroupsButton.selected = false
-//                showProductsButton.selected = true
-//            }
-            
-            return true
-        }
-        return false
-    }
-    
-    // if it's showing, hides it, otherwise shows it
-    private func toggleAddProductController() {
-        if !hideAddProductController() { // was not showing
-            showAddProductController() // show product (first segment)
-        }
-
-    }
-    
-    @IBAction func onSortByTap(sender: UIButton) {
-        let toggled: QuickAddItemSortBy = {
-            switch sortBy {
-            case .Alphabetic: return .Fav
-            case .Fav: return .Alphabetic
-            }
-        }()
-        sortBy = toggled
-        
-        updateSortByButton(sortBy)
-    }
-    
-    private func updateSortByButton(sortBy: QuickAddItemSortBy) {
-        let imgName: String = {
-            switch sortBy {
-            case .Alphabetic: return "sort_alpha"
-            case .Fav:  return "sort_fav"
-            }
-        }()
-        sortByButton.setImage(UIImage(named: imgName), forState: .Normal)
-        sortByButton.selected = true
-    }
-    
-    @IBAction func onShowGroupsTap(sender: UIButton) {
-        
-        func onHasController(controller: QuickAddListItemViewController) {
-            controller.contentData = (.Group, .Fav)
-            toggleItemTypeButtons(true)
-            
-            updateQuickAddTop(.Group)
-        }
-        
-        // update current controller or pop to controller and then update
-        if let quickAddListItemViewController = navController?.presentedViewController as? QuickAddListItemViewController {
-            onHasController(quickAddListItemViewController)
-        } else {
-
-            navController?.popToRootViewControllerAnimated(false) // assumption: QuickAddListItemViewController is root
-            delegate?.onQuickListOpen()
-            
-            if let quickAddListItemViewController = quickAddListItemViewController {
-                onHasController(quickAddListItemViewController)
-            } else {
-                print("Error: Unexpected state in QuickAddViewController: Root navigation controller is not QuickAddListItemViewController")
-            }
-        }
-        
-        removeAddButton()
-    }
-    
     private func removeAddButton() {
         addButton?.removeFromSuperview()
         addButton = nil
     }
     
-    @IBAction func onShowProductsTap(sender: UIButton) {
-        
-        func onHasController(controller: QuickAddListItemViewController) {
-            controller.contentData = (.Product, .Fav)
-            toggleItemTypeButtons(true)
-
-            updateQuickAddTop(.Product)
-        }
-        
-        // update current controller or pop to controller and then update
-        if let quickAddListItemViewController = navController?.presentedViewController as? QuickAddListItemViewController {
-            onHasController(quickAddListItemViewController)
-        } else {
-            
-            navController?.popToRootViewControllerAnimated(false) // assumption: QuickAddListItemViewController is root
-            delegate?.onQuickListOpen()
-            
-            if let quickAddListItemViewController = quickAddListItemViewController {
-                onHasController(quickAddListItemViewController)
-            } else {
-                print("Error: Unexpected state in QuickAddViewController: Root navigation controller is not QuickAddListItemViewController")
-            }
-        }
-        
-        removeAddButton()
-    }
-    
-    @IBAction func onAddProductsOrGroupsTap(sender: UIButton) {
-        
-        updateQuickAddTop(.AddNew)
-        
-        toggleAddProductController()
-    }
-
-    
     private enum QuickAddTopState {
         case Product, Group, AddNew
     }
-    private func updateQuickAddTop(topState: QuickAddTopState) {
-        let title: String = {
-            switch topState {
-                case .Product: return "Products"
-                case .Group: return "Groups"
-                case .AddNew: return "New item"
-            }
-        }()
-        currentQuickAddLabel.text = title
 
-        showProductsButton.selected = topState == .Product
-        showGroupsButton.selected =  topState == .Group
-        sortByButton.selected = topState == .Product || topState == .Group
-
-        
-        // TODO remove this (with related contraint variable) or modify when final transition is decided
-//        currentQuickAddLabelLeftConstraint.constant = 200
-//        UIView.animateWithDuration(0.15, animations: {[weak self] in
-//            self?.currentQuickAddLabel.alpha = 0
-//            self?.view.layoutIfNeeded()
-//            
-//            }, completion: {[weak self] finished in
-//                
-//                if topState != .AddNew {
-//                    
-//                    self?.currentQuickAddLabelLeftConstraint.constant = -150
-//                    self?.view.layoutIfNeeded()
-//                    self?.currentQuickAddLabelLeftConstraint.constant = 14
-//                    if topState == .Product {
-//                        self?.currentQuickAddLabel.text = "Items"
-//                    } else {
-//                        self?.currentQuickAddLabel.text = "Groups"
-//                    }
-//                    
-//                    UIView.animateWithDuration(0.15) {
-//                        self?.view.layoutIfNeeded()
-//                        self?.currentQuickAddLabel.alpha = 1
-//                    }
-//                }
-//        })
-    }
-    
     //////////////////////////////////////////
     //////////////////////////////////////////
     
@@ -435,6 +255,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         delegate?.onCloseQuickAddTap()
     }
     
+    // TODO review if this is still needed
     func onHasItems(hasItems: Bool) {
         if hasItems {
             hideAddProductController()

@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeue.ttc">
@@ -11,7 +10,6 @@
             <string>HelveticaNeue</string>
         </mutableArray>
         <mutableArray key="HelveticaNeueLights.ttc">
-            <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
         </mutableArray>
@@ -29,132 +27,53 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s1F-jF-pKk" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="482" y="0.0" width="40" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="40" id="8gY-IF-0vb"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="Cgy-ox-AVK"/>
-                                    <constraint firstAttribute="height" constant="40" id="Lpr-wY-Yaz"/>
-                                </constraints>
-                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <inset key="contentEdgeInsets" minX="13" minY="13" maxX="13" maxY="13"/>
-                                <state key="normal" image="dot"/>
-                                <connections>
-                                    <action selector="onShowProductsTap:" destination="3Uk-Rq-zKd" eventType="touchUpInside" id="dll-f2-jg0"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H9s-Os-9qI" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="570" y="0.0" width="30" height="40"/>
-                                <color key="backgroundColor" red="0.93333333333333335" green="0.93333333333333335" blue="0.93333333333333335" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="da4-1r-jRw"/>
-                                </constraints>
-                                <state key="normal" title="+">
-                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onAddProductsOrGroupsTap:" destination="3Uk-Rq-zKd" eventType="touchUpInside" id="d72-YA-o5v"/>
-                                </connections>
-                            </button>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wh4-4g-FV0">
-                                <rect key="frame" x="0.0" y="109" width="600" height="491"/>
-                                <connections>
-                                    <segue destination="cN4-H5-trn" kind="embed" identifier="navController" id="M5Z-aO-UwY"/>
-                                </connections>
-                            </containerView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dif-9Z-2lr" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="526" y="0.0" width="40" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="2aj-Mg-bCn"/>
-                                    <constraint firstAttribute="width" constant="40" id="sgz-bN-tXh"/>
-                                </constraints>
-                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
-                                <state key="normal" image="group"/>
-                                <connections>
-                                    <action selector="onShowGroupsTap:" destination="3Uk-Rq-zKd" eventType="touchUpInside" id="QHD-pf-eiY"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Items" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Ye-nf-OHM">
-                                <rect key="frame" x="14" y="0.0" width="40" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="3LK-bE-3X6"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Stp-m3-S0Z" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="442" y="0.0" width="40" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="40" id="50Q-VN-tvf"/>
-                                    <constraint firstAttribute="height" constant="40" id="S5H-Mq-sHB"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="hkT-El-sCJ"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="idT-1t-eKx"/>
-                                    <constraint firstAttribute="width" constant="40" id="nRI-DD-bXf"/>
-                                </constraints>
-                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <inset key="contentEdgeInsets" minX="13" minY="13" maxX="13" maxY="13"/>
-                                <state key="normal" image="dot"/>
-                                <connections>
-                                    <action selector="onSortByTap:" destination="3Uk-Rq-zKd" eventType="touchUpInside" id="BQQ-mY-hEK"/>
-                                </connections>
-                            </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tof-Zs-Hco" customClass="RoundTextField" customModule="shoppin">
-                                <rect key="frame" x="10" y="60" width="580" height="35"/>
+                                <rect key="frame" x="10" y="30" width="580" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="7T7-qi-eka"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mt4-1h-sRG">
+                                <rect key="frame" x="0.0" y="65" width="600" height="535"/>
+                                <connections>
+                                    <segue destination="1wx-Be-Utw" kind="embed" identifier="navController" id="gsr-0X-Jyl"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="H9s-Os-9qI" firstAttribute="leading" secondItem="dif-9Z-2lr" secondAttribute="trailing" constant="4" id="1tL-ec-QI5"/>
-                            <constraint firstItem="H9s-Os-9qI" firstAttribute="trailing" secondItem="uPF-XL-vgJ" secondAttribute="trailingMargin" id="7tt-9U-vZt"/>
-                            <constraint firstItem="dif-9Z-2lr" firstAttribute="leading" secondItem="s1F-jF-pKk" secondAttribute="trailing" constant="4" id="9iL-75-PDA"/>
-                            <constraint firstItem="s1F-jF-pKk" firstAttribute="leading" secondItem="Stp-m3-S0Z" secondAttribute="trailing" id="AC5-X4-Heb"/>
-                            <constraint firstItem="tof-Zs-Hco" firstAttribute="top" secondItem="tHf-2A-8l9" secondAttribute="bottom" constant="40" id="Ea8-pn-1FI"/>
+                            <constraint firstItem="mt4-1h-sRG" firstAttribute="top" secondItem="tof-Zs-Hco" secondAttribute="bottom" id="CrW-zp-1ck"/>
+                            <constraint firstItem="tof-Zs-Hco" firstAttribute="top" secondItem="tHf-2A-8l9" secondAttribute="bottom" constant="10" id="Ea8-pn-1FI"/>
                             <constraint firstAttribute="trailing" secondItem="tof-Zs-Hco" secondAttribute="trailing" constant="10" id="Heh-Bc-xTE"/>
-                            <constraint firstItem="Stp-m3-S0Z" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="topMargin" id="OR9-yS-2so"/>
-                            <constraint firstItem="dif-9Z-2lr" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="Sa4-KW-eNK"/>
                             <constraint firstItem="tof-Zs-Hco" firstAttribute="top" secondItem="tHf-2A-8l9" secondAttribute="bottom" id="U8I-y4-y3A"/>
-                            <constraint firstItem="6Ye-nf-OHM" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="bEV-Rl-nvH"/>
-                            <constraint firstItem="zcT-I6-trj" firstAttribute="top" secondItem="wh4-4g-FV0" secondAttribute="bottom" id="cmh-td-tpE"/>
-                            <constraint firstItem="H9s-Os-9qI" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="eau-bc-tNs"/>
-                            <constraint firstItem="H9s-Os-9qI" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="gYK-ka-YZ1"/>
-                            <constraint firstAttribute="trailing" secondItem="wh4-4g-FV0" secondAttribute="trailing" id="ght-OL-w3S"/>
-                            <constraint firstItem="6Ye-nf-OHM" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" constant="14" id="hVr-Jp-2yK"/>
                             <constraint firstItem="tof-Zs-Hco" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" constant="10" id="icV-i9-SYf"/>
-                            <constraint firstItem="wh4-4g-FV0" firstAttribute="top" secondItem="tof-Zs-Hco" secondAttribute="bottom" constant="14" id="q0w-W0-j3w"/>
-                            <constraint firstItem="s1F-jF-pKk" firstAttribute="top" secondItem="uPF-XL-vgJ" secondAttribute="top" id="r6Y-TF-qQJ"/>
-                            <constraint firstItem="wh4-4g-FV0" firstAttribute="top" secondItem="H9s-Os-9qI" secondAttribute="bottom" id="u81-wJ-tIv"/>
-                            <constraint firstAttribute="trailing" secondItem="H9s-Os-9qI" secondAttribute="trailing" id="uOh-JP-CK8"/>
-                            <constraint firstItem="wh4-4g-FV0" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" id="zHj-UK-arQ"/>
+                            <constraint firstItem="mt4-1h-sRG" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" id="jMO-Hq-uXS"/>
+                            <constraint firstItem="zcT-I6-trj" firstAttribute="top" secondItem="mt4-1h-sRG" secondAttribute="bottom" id="mpG-Wh-cPX"/>
+                            <constraint firstAttribute="trailing" secondItem="mt4-1h-sRG" secondAttribute="trailing" id="vsw-a8-yxY"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="U8I-y4-y3A"/>
-                                <exclude reference="u81-wJ-tIv"/>
-                                <exclude reference="7tt-9U-vZt"/>
-                                <exclude reference="gYK-ka-YZ1"/>
                             </mask>
                         </variation>
                     </view>
                     <connections>
-                        <outlet property="currentQuickAddLabel" destination="6Ye-nf-OHM" id="C0X-sV-12y"/>
-                        <outlet property="currentQuickAddLabelLeftConstraint" destination="hVr-Jp-2yK" id="0ak-Yr-ZRL"/>
                         <outlet property="searchBar" destination="tof-Zs-Hco" id="tdc-D1-2pJ"/>
-                        <outlet property="showAddProductsOrGroupButton" destination="H9s-Os-9qI" id="gQT-CB-BuQ"/>
-                        <outlet property="showGroupsButton" destination="dif-9Z-2lr" id="KYM-N8-79r"/>
-                        <outlet property="showProductsButton" destination="s1F-jF-pKk" id="HS5-dV-G2W"/>
-                        <outlet property="sortByButton" destination="Stp-m3-S0Z" id="O3k-yv-bia"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D9M-cB-Ln6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="738" y="531"/>
+        </scene>
+        <!--Quick Add Page Controller-->
+        <scene sceneID="uzh-Kz-AMf">
+            <objects>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="S6x-Hu-rmv" customClass="QuickAddPageController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nbm-oQ-W8x" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1443" y="573.5"/>
         </scene>
         <!--Quick Add List Item View Controller-->
         <scene sceneID="scd-Js-Uye">
@@ -259,29 +178,72 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kXF-PA-HK1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2238" y="1272"/>
+            <point key="canvasLocation" x="2132" y="1287"/>
+        </scene>
+        <!--Data Source-->
+        <scene sceneID="e6S-HV-hw7">
+            <objects>
+                <viewController storyboardIdentifier="QuickAddPageController" extendedLayoutIncludesOpaqueBars="YES" id="zgT-Dj-oGS" customClass="QuickAddPageController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Qmz-dg-bQL"/>
+                        <viewControllerLayoutGuide type="bottom" id="cpK-no-yeS"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="mya-NU-eDe">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wSc-mF-ACk" customClass="SwipeView">
+                                <rect key="frame" x="0.0" y="70" width="600" height="530"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="zgT-Dj-oGS" id="gwo-8A-hmn"/>
+                                    <outlet property="delegate" destination="zgT-Dj-oGS" id="uy2-SS-OW3"/>
+                                </connections>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wcl-fH-zQ7" customClass="SlidingTabsView" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="20" width="600" height="50"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="0ls-8N-bWU"/>
+                                    <constraint firstAttribute="height" constant="50" id="SE0-cv-2Tr"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="wSc-mF-ACk" secondAttribute="trailing" id="Htb-Uh-nZh"/>
+                            <constraint firstItem="cpK-no-yeS" firstAttribute="top" secondItem="wSc-mF-ACk" secondAttribute="bottom" id="JkK-w9-ZW4"/>
+                            <constraint firstItem="wSc-mF-ACk" firstAttribute="leading" secondItem="mya-NU-eDe" secondAttribute="leading" id="MUv-AV-Dlc"/>
+                            <constraint firstAttribute="trailing" secondItem="wcl-fH-zQ7" secondAttribute="trailing" id="T5L-sF-eyv"/>
+                            <constraint firstItem="wcl-fH-zQ7" firstAttribute="top" secondItem="Qmz-dg-bQL" secondAttribute="bottom" id="anD-eP-nSt"/>
+                            <constraint firstItem="wcl-fH-zQ7" firstAttribute="leading" secondItem="mya-NU-eDe" secondAttribute="leading" id="icJ-Ak-9Wk"/>
+                            <constraint firstItem="wSc-mF-ACk" firstAttribute="top" secondItem="wcl-fH-zQ7" secondAttribute="bottom" id="oqo-vy-uU3"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="tcN-zM-Mnk"/>
+                    <connections>
+                        <outlet property="slidingTabsView" destination="wcl-fH-zQ7" id="Eos-bg-ji7"/>
+                        <outlet property="swipeView" destination="wSc-mF-ACk" id="B6c-uv-JtM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xpc-vj-YeO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1443" y="1287"/>
         </scene>
         <!--Navigation Controller-->
-        <scene sceneID="Itm-VZ-TiH">
+        <scene sceneID="osm-UO-UAJ">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="cN4-H5-trn" sceneMemberID="viewController">
+                <navigationController extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="1wx-Be-Utw" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <nil key="simulatedStatusBarMetrics"/>
-                    <nil key="simulatedTopBarMetrics"/>
-                    <nil key="simulatedBottomBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Rng-We-t3f">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="3Sg-A1-eFS">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="a9f-7Q-qm7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gI3-En-xcO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1504" y="1272"/>
+            <point key="canvasLocation" x="738" y="1287"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="dot" width="25" height="25"/>
-        <image name="group" width="25" height="25"/>
-    </resources>
 </document>

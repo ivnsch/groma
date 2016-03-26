@@ -81,4 +81,11 @@ extension CGPoint {
     }
     /////////////////////////////////////////////////////////////////////////////////////
 
+    func copy(x x: CGFloat? = nil, y: CGFloat? = nil) -> CGPoint {
+        return CGPoint(x: x ?? self.x, y: y ?? self.y)
+    }
+    
+    func plusX(dx: CGFloat) -> CGPoint {
+        return CGPoint(x: self.x + dx, y: self.y)
+    }
 }

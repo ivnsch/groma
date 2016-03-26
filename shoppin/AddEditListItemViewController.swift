@@ -212,7 +212,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         
         setInputsDefaultValues()
         
-        view.clipsToBounds = false
+        view.clipsToBounds = true
         
         onDidLoad?()
 //        updatePlanLeftQuantity(0) // no quantity yet -> 0

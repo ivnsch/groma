@@ -137,6 +137,10 @@ extension UIStoryboard {
         return quickAddListItemStoryboard().instantiateViewControllerWithIdentifier("QuickAddListItemViewController") as! QuickAddListItemViewController
     }
     
+    class func quickAddPageController() -> QuickAddPageController {
+        return quickAddListItemStoryboard().instantiateViewControllerWithIdentifier("QuickAddPageController") as! QuickAddPageController
+    }
+    
     // MARK: Add edit list item
     
     class func addEditListItemViewController() -> AddEditListItemViewController {

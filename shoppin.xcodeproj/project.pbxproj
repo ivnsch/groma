@@ -859,6 +859,9 @@
 		EBEA0CCF1CA5B24C00E68B81 /* MyAutocompleteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CCD1CA5B24C00E68B81 /* MyAutocompleteCell.swift */; };
 		EBEA0CD01CA5B24C00E68B81 /* MyAutocompleteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBEA0CCE1CA5B24C00E68B81 /* MyAutocompleteCell.xib */; };
 		EBEA0CD21CA5BF3E00E68B81 /* HandlingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CD11CA5BF3E00E68B81 /* HandlingButton.swift */; };
+		EBEA0CDE1CA6C0F500E68B81 /* QuickAddPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CDD1CA6C0F500E68B81 /* QuickAddPageController.swift */; };
+		EBEA0CE01CA6C69F00E68B81 /* SlidingTabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CDF1CA6C69F00E68B81 /* SlidingTabsView.swift */; };
+		EBEA0CE21CA6C6BC00E68B81 /* SlidingTabsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBEA0CE11CA6C6BC00E68B81 /* SlidingTabsView.xib */; };
 		EBEBA6B21BF14C36000E5653 /* ListSharedUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEBA6B01BF14C36000E5653 /* ListSharedUserCell.swift */; };
 		EBEBA6B51BF14EFF000E5653 /* AddEditList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBEBA6B41BF14EFF000E5653 /* AddEditList.storyboard */; };
 		EBEBA6B71BF16492000E5653 /* FlatColorPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEBA6B61BF16492000E5653 /* FlatColorPickerController.swift */; };
@@ -1505,6 +1508,9 @@
 		EBEA0CCD1CA5B24C00E68B81 /* MyAutocompleteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAutocompleteCell.swift; sourceTree = "<group>"; };
 		EBEA0CCE1CA5B24C00E68B81 /* MyAutocompleteCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyAutocompleteCell.xib; sourceTree = "<group>"; };
 		EBEA0CD11CA5BF3E00E68B81 /* HandlingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandlingButton.swift; sourceTree = "<group>"; };
+		EBEA0CDD1CA6C0F500E68B81 /* QuickAddPageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddPageController.swift; sourceTree = "<group>"; };
+		EBEA0CDF1CA6C69F00E68B81 /* SlidingTabsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlidingTabsView.swift; sourceTree = "<group>"; };
+		EBEA0CE11CA6C6BC00E68B81 /* SlidingTabsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SlidingTabsView.xib; sourceTree = "<group>"; };
 		EBEBA6B01BF14C36000E5653 /* ListSharedUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListSharedUserCell.swift; sourceTree = "<group>"; };
 		EBEBA6B41BF14EFF000E5653 /* AddEditList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddEditList.storyboard; sourceTree = "<group>"; };
 		EBEBA6B61BF16492000E5653 /* FlatColorPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlatColorPickerController.swift; sourceTree = "<group>"; };
@@ -2390,6 +2396,9 @@
 				EBA18C1F1BF5638D009291F2 /* QuickAddListItemViewController.swift */,
 				EB85F4521BD5393800E19E9B /* QuickAddListItem.storyboard */,
 				EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */,
+				EBEA0CDD1CA6C0F500E68B81 /* QuickAddPageController.swift */,
+				EBEA0CDF1CA6C69F00E68B81 /* SlidingTabsView.swift */,
+				EBEA0CE11CA6C6BC00E68B81 /* SlidingTabsView.xib */,
 			);
 			name = quickAdd;
 			sourceTree = "<group>";
@@ -3198,6 +3207,7 @@
 				EB37AB9E1C9DAFED00FE9D7A /* prefillde.realm in Resources */,
 				EB37AB9F1C9DAFED00FE9D7A /* prefillen.realm in Resources */,
 				EB37ABA01C9DAFED00FE9D7A /* prefilles.realm in Resources */,
+				EBEA0CE21CA6C6BC00E68B81 /* SlidingTabsView.xib in Resources */,
 				EB9208021C4DBC7700332332 /* SimpleInputPopup.storyboard in Resources */,
 				EB92082E1C4ECE3D00332332 /* EditBrandController.xib in Resources */,
 				EB7BFA7C1BDA5BE500F4C74A /* QuantityCell.xib in Resources */,
@@ -3533,6 +3543,7 @@
 				EBA5756D1BD00A2500A0A825 /* DBGroupItem.swift in Sources */,
 				EBEBA6B21BF14C36000E5653 /* ListSharedUserCell.swift in Sources */,
 				EBA7AC9A1BFE962E00247A8C /* ProductCategoryMapper.swift in Sources */,
+				EBEA0CDE1CA6C0F500E68B81 /* QuickAddPageController.swift in Sources */,
 				EBAEB23C1BDC262400FCDA5C /* FloatingViews.swift in Sources */,
 				EB7032801BEBBBB100779EBB /* ReorderSectionTableViewController.swift in Sources */,
 				EBF608B51C0F5D0E00EDB33E /* RemotePlanItemsProvider.swift in Sources */,
@@ -3697,6 +3708,7 @@
 				EB0C1BA01B3DF2B500F24C85 /* UserTabItemViewController.swift in Sources */,
 				EB76A7A11BEE6F1600486F30 /* MLPAutoCompleteTextField.swift in Sources */,
 				EB6E3D491C5A986C00D65DD5 /* GlobalProviderImpl.swift in Sources */,
+				EBEA0CE01CA6C69F00E68B81 /* SlidingTabsView.swift in Sources */,
 				EB0C2A3E1B583BFE00AF6226 /* RemoteInventoryItemWithProduct.swift in Sources */,
 				EBF162DD1A3C82380048E37C /* DefaultTableViewController.swift in Sources */,
 				EB85F4731BD5605000E19E9B /* ProductProviderImpl.swift in Sources */,
