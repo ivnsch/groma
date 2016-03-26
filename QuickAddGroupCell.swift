@@ -20,9 +20,13 @@ class QuickAddGroupCell: UICollectionViewCell {
                 } else {
                     nameLabel.text = item.labelText
                 }
-                nameLabel.textColor = UIColor.darkTextColor()
+                contentView.layer.cornerRadius = 18
+                contentView.backgroundColor = item.color
                 
-                contentView.backgroundColor = item.color.colorWithAlphaComponent(0.5)
+                //                let color = UIColor(contrastingBlackOrWhiteColorOn: contentView.backgroundColor, isFlat: true)
+                let color = UIColor.whiteColor()
+                
+                nameLabel.textColor = color
             }
         }
     }
