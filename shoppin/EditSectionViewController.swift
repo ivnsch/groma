@@ -29,6 +29,14 @@ class EditSectionViewController: UIViewController {
     
     var delegate: EditSectionViewControllerDelegate?
     
+    init() {
+        super.init(nibName: "EditSectionViewController", bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -37,11 +45,7 @@ class EditSectionViewController: UIViewController {
     
     private func initValidator() {
         let validator = Validator()
-        // TODO!!!! crash here "fatal error: unexpectedly found nil while unwrapping an Optional value", once while testing on device was just expand/collapse list (in edit mode) multiple times
-        // stack strace:  ViewController.onSectionSelectedShared -- topEditSectionControllerManager?.expand(true) -> ExpandableTopViewController.expand -- let view = controller.view -> (system) -> EditSectionViewController.viewDidLoad
-        // This means that I mistakenly tapped on a section header one while tapping on the expand/collapse button. But normally tapping on section header isn't crashing in expanded as well as collapsed mode, so no idea what it is. After viewDidLoad outlet should be set!! Maybe expand/collapse invalidating somehow an opening edit section controller when tap quickly? No idea!
         validator.registerField(nameTextField, rules: [MinLengthRule(length: 1, message: "validation_section_name_not_empty")])
-        
         self.validator = validator
     }
     
