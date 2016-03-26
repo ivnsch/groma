@@ -14,11 +14,14 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var totalSpendLabel: UILabel!
+    
     var onViewDidLoad: VoidFunction?
     
     private var pieChart: XYPieChart?
     
     private var slices: [Slice] = []
+    
     
     
     var initData: (aggr: MonthYearAggregate, inventory: Inventory)? {
@@ -36,10 +39,16 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
             
             slices = generateSlices(productAggregates)
 
+            totalSpendLabel.text = spentTotal(productAggregates).toLocalCurrencyString()
+            
             initLegends(slices)
             
             pieChart?.reloadData()
         }
+    }
+    
+    private func spentTotal(productAggregates: [ProductAggregate]) -> Float {
+        return productAggregates.sum({$0.totalPrice})
     }
     
     
@@ -133,6 +142,13 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        initPieChart()
+        
+        onViewDidLoad?()
+    }
+    
+    private func initPieChart() {
         
         //        let radius: CGFloat = 100
         //        let center = CGPointMake(pieChartContainer.bounds.width / , <#T##y: CGFloat##CGFloat#>)
@@ -162,8 +178,6 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
         centerView.layer.cornerRadius = centerDiam / 2
         centerView.backgroundColor = UIColor.whiteColor()
         pieChartContainer.addSubview(centerView)
-        
-        onViewDidLoad?()
     }
     
     override func viewDidAppear(animated: Bool) {

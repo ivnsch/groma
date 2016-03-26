@@ -118,6 +118,11 @@ extension Array {
         }
     }
 
+    func sum(f: Element -> Float) -> Float {
+        return reduce(0) {sum, element in
+            sum + f(element)
+        }
+    }
 }
 
 extension Array where Element: Hashable {
