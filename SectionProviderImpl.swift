@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 class SectionProviderImpl: SectionProvider {
     
@@ -118,6 +119,8 @@ class SectionProviderImpl: SectionProvider {
                                 let order = listItems.sectionCount(status)
                                 
                                 let section = Section(uuid: NSUUID().UUIDString, name: sectionName, color: sectionColor, list: list, order: ListItemStatusOrder(status: status, order: order))
+                                
+                                QL1("Section: \(sectionName) doesn't exist, will create a new one. New uuid: \(section.uuid). List uuid: \(list.uuid)")
                                 handler(ProviderResult(status: .Success, sucessResult: section))
                                 
                             } else {

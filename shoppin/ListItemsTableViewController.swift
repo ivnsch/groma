@@ -128,6 +128,11 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     func setListItems(items: [ListItem]) { // as function instead of variable+didSet because didSet is called each time we modify the array
         self.items = items
         self.initTableViewContent()
+        
+        if QorumLogs.minimumLogLevelShown < 2 {
+            print("List for status: \(status)")
+            print(debugTableViewListItemsOrder())
+        }
     }
     
     private func initTableViewContent() {
@@ -273,6 +278,16 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 return "\(str),\(tableViewListItem)"
             }
             return "(\(str),\(section.section.name)):[\(sectionListItemsStr)]"
+        }
+    }
+
+    // Returns a string representing current sections with listitems - focus: order
+    private func debugTableViewListItemsOrder() -> String {
+        return tableViewSections.reduce("") {str, section in
+            let sectionListItemsStr = section.tableViewListItems.reduce("") {str, tableViewListItem in
+                return "\(str)\t\(tableViewListItem.listItem.shortOrderDebugDescription)\n"
+            }
+            return "\(str)\(section.section.name):\n[\(sectionListItemsStr)]"
         }
     }
     
