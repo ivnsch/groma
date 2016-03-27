@@ -136,7 +136,7 @@ class ProductProviderImpl: ProductProvider {
             
             if remote {
                 self?.remoteProvider.incrementFav(productUuid) {remoteResult in
-                    if let _ = remoteResult.successResult {
+                    if remoteResult.success {
                         // no timestamp - for increment fav this looks like an overkill. If there's a conflict some favs may get lost - ok
                     } else {
                         DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
