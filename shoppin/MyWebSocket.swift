@@ -167,7 +167,7 @@ class MyWebSocket: WebSocketDelegate {
         if let error = error {
             switch error.code {
             case 401:
-                QL2("Not authorized, removing login token \(error)")
+                QL3("Not authorized, removing login token \(error) TODO show login screen")
                 Providers.userProvider.removeLoginToken()
             case 1000:
                 // Called when we close the connection explicitly with disconnect()
