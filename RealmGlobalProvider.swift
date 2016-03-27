@@ -87,7 +87,9 @@ class RealmGlobalProvider: RealmProvider {
     
     func saveSyncResult(syncResult: RemoteSyncResult, handler: Bool -> Void) {
 
-        func toTuple<T: DBSyncable>(dictArray: [[String: AnyObject]], mapper: [String: AnyObject] -> T, idExtractor: T -> String) -> ([T], [String: T]) {
+        // Maps an array of dictionaries(object representations from server) to an array of objects T by applying mapper to each dictionary
+        // Returns, together with the array also a dictionary which maps a unique identifier of the object to the object, for quick access.
+        func toObjs<T: DBSyncable>(dictArray: [[String: AnyObject]], mapper: [String: AnyObject] -> T, idExtractor: T -> String) -> ([T], [String: T]) {
             var objArray = [T]()
             var objDict = [String: T]()
             for dict in dictArray {
@@ -104,38 +106,25 @@ class RealmGlobalProvider: RealmProvider {
             // TODO!!!! write this code with proper optional handling and error logging
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
-            let (productCategoriesArr, productCategoriesDict): ([DBProductCategory], [String: DBProductCategory]) = toTuple(syncResult.productCategories, mapper: {DBProductCategory.fromDict($0)}, idExtractor: {$0.uuid})
+            let (productCategoriesArr, productCategoriesDict): ([DBProductCategory], [String: DBProductCategory]) = toObjs(syncResult.productCategories, mapper: {DBProductCategory.fromDict($0)}, idExtractor: {$0.uuid})
             
-            let m: [String: AnyObject] -> DBProduct = {(dict: [String: AnyObject]) in
-                
-                let cat = productCategoriesDict[dict["categoryUuid"]! as! String]!
-                return DBProduct.fromDict(dict, category: cat)
-                
-            }
-            let (productsArr, productsDict): ([DBProduct], [String: DBProduct]) = toTuple(syncResult.products, mapper: {DBProduct.fromDict($0, category: productCategoriesDict[$0["categoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+            let (productsArr, productsDict): ([DBProduct], [String: DBProduct]) = toObjs(syncResult.products, mapper: {DBProduct.fromDict($0, category: productCategoriesDict[$0["categoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
 
+            let (inventoriesArr, inventoriesDict): ([DBInventory], [String: DBInventory]) = toObjs(syncResult.inventories, mapper: {DBInventory.fromDict($0)}, idExtractor: {$0.uuid})
             
-            let (inventoriesArr, inventoriesDict): ([DBInventory], [String: DBInventory]) = toTuple(syncResult.inventories, mapper: {DBInventory.fromDict($0)}, idExtractor: {$0.uuid})
+            let (inventoryItemsArr, inventoryItemsDict): ([DBInventoryItem], [String: DBInventoryItem]) = toObjs(syncResult.inventoriesItems, mapper: {DBInventoryItem.fromDict($0, product: productsDict[$0["productUuid"]! as! String]!, inventory: inventoriesDict[$0["inventoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
             
-            // inventory items has different unique so we need adjusted code
-            var inventoryItemsArr = [DBInventoryItem]()
-            for dict in syncResult.inventoriesItems {
-                let element = DBInventoryItem.fromDict(dict, product: productsDict[dict["productUuid"]! as! String]!, inventory: inventoriesDict[dict["inventoryUuid"]! as! String]!)
-                inventoryItemsArr.append(element)
-            }
+            let (listsArr, listsDict): ([DBList], [String: DBList]) = toObjs(syncResult.lists, mapper: {DBList.fromDict($0, inventory: inventoriesDict[$0["list"]!["inventoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
             
+            let (sectionsArr, sectionsDict): ([DBSection], [String: DBSection]) = toObjs(syncResult.sections, mapper: {DBSection.fromDict($0, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
             
-            let (listsArr, listsDict): ([DBList], [String: DBList]) = toTuple(syncResult.lists, mapper: {DBList.fromDict($0, inventory: inventoriesDict[$0["list"]!["inventoryUuid"]! as! String]!)}, idExtractor: {$0.uuid})
-            
-            let (sectionsArr, sectionsDict): ([DBSection], [String: DBSection]) = toTuple(syncResult.sections, mapper: {DBSection.fromDict($0, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
-            
-            let (listItemsArr, listItemsDict): ([DBListItem], [String: DBListItem]) = toTuple(syncResult.listsItems, mapper: {DBListItem.fromDict($0, section: sectionsDict[$0["sectionUuid"]! as! String]!, product: productsDict[$0["productUuid"]! as! String]!, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+            let (listItemsArr, listItemsDict): ([DBListItem], [String: DBListItem]) = toObjs(syncResult.listsItems, mapper: {DBListItem.fromDict($0, section: sectionsDict[$0["sectionUuid"]! as! String]!, product: productsDict[$0["productUuid"]! as! String]!, list: listsDict[$0["listUuid"]! as! String]!)}, idExtractor: {$0.uuid})
             
             //        // TODO!!!! set BOTH group in groups items and group items in group Realm needs both set to save correctly ............ this is needed also for lists and inventories probably
-            let (groupsArr, groupsDict): ([DBListItemGroup], [String: DBListItemGroup]) = toTuple(syncResult.groups, mapper: {DBListItemGroup.fromDict($0)}, idExtractor: {$0.uuid})
-            let (groupItemsArr, groupItemsDict): ([DBGroupItem], [String: DBGroupItem]) = toTuple(syncResult.groupsItems, mapper: {DBGroupItem.fromDict($0, product: productsDict[$0["productUuid"]! as! String]!, group: groupsDict[$0["groupUuid"]! as! String]!)}, idExtractor: {$0.uuid})
+            let (groupsArr, groupsDict): ([DBListItemGroup], [String: DBListItemGroup]) = toObjs(syncResult.groups, mapper: {DBListItemGroup.fromDict($0)}, idExtractor: {$0.uuid})
+            let (groupItemsArr, groupItemsDict): ([DBGroupItem], [String: DBGroupItem]) = toObjs(syncResult.groupsItems, mapper: {DBGroupItem.fromDict($0, product: productsDict[$0["productUuid"]! as! String]!, group: groupsDict[$0["groupUuid"]! as! String]!)}, idExtractor: {$0.uuid})
             
-            let (historyItemsArr, historyItemsDict): ([DBHistoryItem], [String: DBHistoryItem]) = toTuple(syncResult.history, mapper: {DBHistoryItem.fromDict($0, inventory: inventoriesDict[$0["inventoryUuid"]! as! String]!, product: productsDict[$0["productUuid"] as! String]!)}, idExtractor: {$0.uuid})
+            let (historyItemsArr, historyItemsDict): ([DBHistoryItem], [String: DBHistoryItem]) = toObjs(syncResult.history, mapper: {DBHistoryItem.fromDict($0, inventory: inventoriesDict[$0["inventoryUuid"]! as! String]!, product: productsDict[$0["productUuid"] as! String]!)}, idExtractor: {$0.uuid})
             
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
