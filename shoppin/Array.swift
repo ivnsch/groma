@@ -93,6 +93,12 @@ extension Array {
         }
         return arr
     }
+
+    func forEachEnumerate(f: (Int, Element) -> Void) {
+        for i in 0..<self.count {
+            f(i, self[i])
+        }
+    }
     
     func toDictionary<K: Hashable, V>(mapFunc: Element -> (K, V?)) -> [K: V] {
         var dict = [K: V]()

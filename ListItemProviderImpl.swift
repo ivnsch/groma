@@ -361,7 +361,9 @@ class ListItemProviderImpl: ListItemProvider {
                                     let section: DBSection = {
                                         realm.objects(DBSection).filter(DBSection.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first ?? {
                                             let sectionOrder = orderMaybe ?? getOrderForNewSection(existingListItems)
-                                            return DBSection(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, bgColorHex: prototype.targetSectionColor.hexStr, list: dbList, todoOrder: sectionOrder, doneOrder: 0, stashOrder: 0)
+                                            let newSection = DBSection(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, bgColorHex: prototype.targetSectionColor.hexStr, list: dbList, todoOrder: sectionOrder, doneOrder: 0, stashOrder: 0)
+                                            QL1("Section: \(prototype.targetSectionName) doesn't exist, creating a new one. uuid: \(newSection.uuid), in list: \(list.uuid)")
+                                            return newSection
                                         }()
                                     }()
 
@@ -501,7 +503,11 @@ class ListItemProviderImpl: ListItemProvider {
         self.listItems(list, sortOrderByStatus: status, fetchMode: .MemOnly) {result in // TODO review .First suitable here
 
             if let storedListItems = result.sucessResult {
-            
+                
+                // before we update the listitems, capture the order of the first item (in src status)
+                let srcStoredItems = storedListItems.filter{$0.hasStatus(status1)}
+                let firstInputItemOrderInSrcStatusMaybe = srcStoredItems.first.map{$0.order(status1)}
+                
                 // Update done and order field - by changing "done" we are moving list items from one tableview to another
                 // we append the items at the end of the section (order == section.count)
                 var sectionsDict = storedListItems.sectionCountDict(status)
@@ -515,6 +521,17 @@ class ListItemProviderImpl: ListItemProvider {
                         listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: 0))
                         sectionsDict[listItem.section] = 1 // we are adding an item to section - items count is 1
                     }
+                }
+                
+                // shift following items in src status up
+                if let firstInputItemOrderInSrcStatus = firstInputItemOrderInSrcStatusMaybe {
+                    let srcStatusFollowers = srcStoredItems.filter{$0.order(status1) > firstInputItemOrderInSrcStatus}
+                    srcStatusFollowers.forEachEnumerate({(index, listItem) -> Void in
+                        listItem.updateOrderMutable(ListItemStatusOrder(status1, order: index + firstInputItemOrderInSrcStatus))
+                    })
+                } else {
+                    // we can be here only if the passed list items are empty - this is not expected. We can be here if 1. user swiped a listitem - there's always 1 listitem, 2. users taps on "reset" in stash to put the list items back to the todo list - this button should be disabled when the stash is empty (TODO!!), 3. we receive swipe action via websocket (though currently this is processed in other method) in which case also there must be a list item, as the websocket action is also triggered by 1. or 2.
+                    QL4("Error/warning: Src order: \(firstInputItemOrderInSrcStatusMaybe) is nil")
                 }
                 
                 // persist changes
@@ -602,7 +619,7 @@ class ListItemProviderImpl: ListItemProvider {
         self.updateLocal(listItems, handler: handler, onFinishLocal: {[weak self] in
             if remote {
                 self?.remoteProvider.updateListItemsTodoOrder(listItems) {remoteResult in
-                    if let _ = remoteResult.successResult {
+                    if remoteResult.success {
                         // TODO see note in RemoteListItemProvider.updateListItemsTodoOrder
 //                        self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
 //                        }
