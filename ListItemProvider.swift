@@ -38,6 +38,11 @@ protocol ListItemProvider {
 
     func update(listItems: [ListItem], remote: Bool, _ handler: ProviderResult<Any> -> ())
     
+    func updateListItemsTodoOrder(listItems: [ListItem], remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    
+    // The counterpart of updateListItemsTodoOrder to process the update when it comes via websocket. We need a special service because websockets sends us a reduced payload (only the order and sections).
+    func updateListItemsTodoOrderRemote(orderUpdates: [RemoteListItemReorder], sections: [Section], _ handler: ProviderResult<Any> -> Void)
+    
     func listItems(list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[ListItem]> -> ())
 
     // This is currently used only to retrieve possible product's list item on receiving a websocket notification with a product update

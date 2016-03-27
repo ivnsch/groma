@@ -45,6 +45,7 @@ enum WSNotificationVerb: String {
     case Sync = "sync"
     case Increment = "incr"
     case Fav = "fav"
+    case Order = "order"
 }
 
 final class WSNotification<T>: AnyObject {
@@ -141,20 +142,33 @@ struct MyWebsocketDispatcher {
     //this is called on batch list item update, which is used when reordering list items
     private static func processListItems(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
         switch verb {
-            case WSNotificationVerb.Update:
-                if let remoteOrderUpdates = RemoteOrderUpdate.collection(data) {
-                    let orderUpdates = remoteOrderUpdates.map{OrderUpdate(uuid: $0.uuid, order: $0.order)}
-                    Providers.inventoryProvider.updateInventoriesOrder(orderUpdates, remote: false) {result in
-                        if result.success {
-                            postNotification(.Inventories, verb, remoteOrderUpdates)
+        // TODO!!!! test this
+        case WSNotificationVerb.Order:
+            if let remoteOrderUpdates = RemoteListItemsReorderResult(representation: data) {
+                // NOTE: Assumption the update belongs to 1 list, that is, all the sections have the same list
+                if let listUuid = remoteOrderUpdates.sections.first?.listUuid {
+                    Providers.listProvider.list(listUuid) {listResult in
+                        
+                        if let list = listResult.sucessResult {
+                            let sections = remoteOrderUpdates.sections.map{SectionMapper.SectionWithRemote($0, list: list)}
+                            
+                            Providers.listItemsProvider.updateListItemsTodoOrderRemote(remoteOrderUpdates.items, sections: sections) {updateResult in
+                                if updateResult.success {
+                                    postNotification(.ListItems, verb, remoteOrderUpdates)
+                                } else {
+                                    MyWebsocketDispatcher.reportWebsocketStoringError("Update list items order \(remoteOrderUpdates)", result: updateResult)
+                                }
+                            }
                         } else {
-                            MyWebsocketDispatcher.reportWebsocketStoringError("Update lists order \(remoteOrderUpdates)", result: result)
+                            MyWebsocketDispatcher.reportWebsocketStoringError("Update list items order \(remoteOrderUpdates)", result: listResult)
                         }
                     }
                 } else {
-                    MyWebsocketDispatcher.reportWebsocketParsingError("Update lists order, data: \(data)")
+                    QL4("Websocket warning/error: Received list items order update but the list was not found.") // Can happen if e.g. receiver just deleted the list. This must happen in a very short time, after the server did the order update. If we see this message frequently it's an error, as this is expected to happen rarely.
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update list items order, data: \(data)")
             }
-
         default:
             QL4("Not handled verb: \(verb)")
         }

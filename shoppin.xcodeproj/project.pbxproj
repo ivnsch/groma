@@ -862,6 +862,10 @@
 		EBEA0CDE1CA6C0F500E68B81 /* QuickAddPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CDD1CA6C0F500E68B81 /* QuickAddPageController.swift */; };
 		EBEA0CE01CA6C69F00E68B81 /* SlidingTabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CDF1CA6C69F00E68B81 /* SlidingTabsView.swift */; };
 		EBEA0CE21CA6C6BC00E68B81 /* SlidingTabsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBEA0CE11CA6C6BC00E68B81 /* SlidingTabsView.xib */; };
+		EBEA0CE41CA7F27700E68B81 /* RemoteListItemsReorderResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CE31CA7F27700E68B81 /* RemoteListItemsReorderResult.swift */; };
+		EBEA0CE61CA7F2DC00E68B81 /* RemoteListItemReorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CE51CA7F2DC00E68B81 /* RemoteListItemReorder.swift */; };
+		EBEA0CE71CA7F2DC00E68B81 /* RemoteListItemReorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CE51CA7F2DC00E68B81 /* RemoteListItemReorder.swift */; };
+		EBEA0CE81CA7F2DC00E68B81 /* RemoteListItemReorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CE51CA7F2DC00E68B81 /* RemoteListItemReorder.swift */; };
 		EBEBA6B21BF14C36000E5653 /* ListSharedUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEBA6B01BF14C36000E5653 /* ListSharedUserCell.swift */; };
 		EBEBA6B51BF14EFF000E5653 /* AddEditList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBEBA6B41BF14EFF000E5653 /* AddEditList.storyboard */; };
 		EBEBA6B71BF16492000E5653 /* FlatColorPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEBA6B61BF16492000E5653 /* FlatColorPickerController.swift */; };
@@ -1511,6 +1515,8 @@
 		EBEA0CDD1CA6C0F500E68B81 /* QuickAddPageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddPageController.swift; sourceTree = "<group>"; };
 		EBEA0CDF1CA6C69F00E68B81 /* SlidingTabsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlidingTabsView.swift; sourceTree = "<group>"; };
 		EBEA0CE11CA6C6BC00E68B81 /* SlidingTabsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SlidingTabsView.xib; sourceTree = "<group>"; };
+		EBEA0CE31CA7F27700E68B81 /* RemoteListItemsReorderResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemsReorderResult.swift; sourceTree = "<group>"; };
+		EBEA0CE51CA7F2DC00E68B81 /* RemoteListItemReorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemReorder.swift; sourceTree = "<group>"; };
 		EBEBA6B01BF14C36000E5653 /* ListSharedUserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListSharedUserCell.swift; sourceTree = "<group>"; };
 		EBEBA6B41BF14EFF000E5653 /* AddEditList.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = AddEditList.storyboard; sourceTree = "<group>"; };
 		EBEBA6B61BF16492000E5653 /* FlatColorPickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlatColorPickerController.swift; sourceTree = "<group>"; };
@@ -2220,6 +2226,8 @@
 				EB266A751C19DA3500488679 /* ItemIncrement.swift */,
 				EB87A4AA1C1A4F13008D2A42 /* GroupItemWithGroup.swift */,
 				EB8EDE211C9B6AEE003B566F /* RemoteIncrement.swift */,
+				EBEA0CE31CA7F27700E68B81 /* RemoteListItemsReorderResult.swift */,
+				EBEA0CE51CA7F2DC00E68B81 /* RemoteListItemReorder.swift */,
 			);
 			name = remote;
 			sourceTree = "<group>";
@@ -3779,6 +3787,7 @@
 				EBD27CCE1C1710F8005D8305 /* RemoteGroupsProvider.swift in Sources */,
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,
 				EB4A388B1C8670E1000714F9 /* RemoteProductCategoryProvider.swift in Sources */,
+				EBEA0CE61CA7F2DC00E68B81 /* RemoteListItemReorder.swift in Sources */,
 				EB92082D1C4ECE3D00332332 /* EditBrandController.swift in Sources */,
 				EBEE7E681C99979000DBCB6A /* RemoteContainedItemIdentifier.swift in Sources */,
 				EB6E3D231C5A346100D65DD5 /* RemoteGlobalSyncResult.swift in Sources */,
@@ -3793,6 +3802,7 @@
 				EBDCA1251B87AE96000020BF /* XYPieChart.m in Sources */,
 				EBC9D23C1BE41F440088E3CF /* StatsDetailsViewController.swift in Sources */,
 				EB20FBFE1A5972C70058103B /* InventoryItemsProviderImpl.swift in Sources */,
+				EBEA0CE41CA7F27700E68B81 /* RemoteListItemsReorderResult.swift in Sources */,
 				EBB5A04D1B6596D400FB9C58 /* ProviderFetchModus.swift in Sources */,
 				EB4D57B01B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */,
 				EB7524551BF5830600A97A10 /* QuickAddGroupCell.swift in Sources */,
@@ -3904,6 +3914,7 @@
 				EBA9E5E51C62977300A85610 /* UserProviderMock.swift in Sources */,
 				EB7E83271B7B723C009DEEF4 /* DBHistoryItem.swift in Sources */,
 				EB7233DC1C84B6F7002B9903 /* DBRemoveListItemGroup.swift in Sources */,
+				EBEA0CE71CA7F2DC00E68B81 /* RemoteListItemReorder.swift in Sources */,
 				EBF608BA1C0F5D9000EDB33E /* RemotePlanItems.swift in Sources */,
 				EB55676C1A8643C300CD3EC6 /* InventoryItem.swift in Sources */,
 				EB202B981B54109A001699E7 /* RemoteRegisterResult.swift in Sources */,
@@ -4262,6 +4273,7 @@
 				EB6E3D251C5A346100D65DD5 /* RemoteGlobalSyncResult.swift in Sources */,
 				EB4A389D1C86FC87000714F9 /* ErrorProviderImpl.swift in Sources */,
 				EB7F59CD1BA1970200E07EBA /* Dictionary.swift in Sources */,
+				EBEA0CE81CA7F2DC00E68B81 /* RemoteListItemReorder.swift in Sources */,
 				EB7233D11C84B6CD002B9903 /* DBRemoveInventoryItem.swift in Sources */,
 				EB7F59D91BA1E0DF00E07EBA /* Performance.swift in Sources */,
 				EBF3776C1B342ABB00EEB6DB /* InventoryProvider.swift in Sources */,

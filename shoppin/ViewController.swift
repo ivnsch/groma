@@ -428,7 +428,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onListItemsChangedSection(tableViewListItems: [TableViewListItem]) {
-        Providers.listItemsProvider.update(tableViewListItems.map{$0.listItem}, remote: true, successHandler{result in
+        Providers.listItemsProvider.updateListItemsTodoOrder(tableViewListItems.map{$0.listItem}, remote: true, successHandler{result in
         })
     }
     
@@ -882,11 +882,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     // This is called on batch list item update, which is used when reordering list items
     func onWebsocketListItems(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<[ListItem]>> {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteListItemsReorderResult>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
-                case WSNotificationVerb.Update:
-                    listItemsTableViewController.updateListItems(notification.obj, status: .Todo, notifyRemote: false)
+                case WSNotificationVerb.Order:
+                    updatePossibleList() // reload list
                     updatePrices(.MemOnly)
                     
                 default: print("Error: ViewController.onWebsocketUpdateListItems: Not handled: z\(notification.verb)")

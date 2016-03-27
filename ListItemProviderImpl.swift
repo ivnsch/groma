@@ -550,9 +550,9 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
 
-    // Helper for common code of status switch update and full update - the only difference of these method is the remote call, switch uses an optimised service.
-    // The local call is in both cases a full update.
-    // The local call could principially also be optimised for switch but don't see it's worth it, as we still have to update 6 fields so I assume just saving the whole object has about the same performance.
+    // Helper for common code of status switch update, order update and full update - the only difference of these method is the remote call, switch and order use optimised services.
+    // The local call is in all cases a full update.
+    // The local call could principially also be optimised but don't see it's worth it, probably the performance is not very different than updating the whole object.
     private func updateLocal(listItems: [ListItem], remote: Bool = true, handler: ProviderResult<Any> -> Void, onFinishLocal: VoidFunction) {
         let memUpdated = memProvider.updateListItems(listItems)
         if memUpdated {
@@ -595,6 +595,38 @@ class ListItemProviderImpl: ListItemProvider {
     
     func update(listItem: ListItem, remote: Bool = true, _ handler: ProviderResult<Any> -> ()) {
         update([listItem], remote: remote, handler)
+    }
+    
+    func updateListItemsTodoOrder(listItems: [ListItem], remote: Bool = true, _ handler: ProviderResult<Any> -> Void) {
+        
+        self.updateLocal(listItems, handler: handler, onFinishLocal: {[weak self] in
+            if remote {
+                self?.remoteProvider.updateListItemsTodoOrder(listItems) {remoteResult in
+                    if let _ = remoteResult.successResult {
+                        // TODO see note in RemoteListItemProvider.updateListItemsTodoOrder
+//                        self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+//                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                            QL4("Remote call no success: \(remoteResult) items: \(listItems)")
+                            self?.memProvider.invalidate()
+                            handler(result)
+                        })
+                    }
+                }
+            }
+        })
+    }
+    
+    func updateListItemsTodoOrderRemote(orderUpdates: [RemoteListItemReorder], sections: [Section], _ handler: ProviderResult<Any> -> Void) {
+        DBProviders.listItemProvider.updateListItemsTodoOrderRemote(orderUpdates, sections: sections) {success in
+            if success {
+                handler(ProviderResult(status: .Success))
+            } else {
+                QL4("Couldn't store remote list items order update")
+                handler(ProviderResult(status: .Unknown))
+            }
+        }
     }
     
     // TODO!!!! remote? why did this service not have remote before, forgot or we don't need it there?
