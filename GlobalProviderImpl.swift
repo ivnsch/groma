@@ -42,8 +42,9 @@ class GlobalProviderImpl: GlobalProvider {
                         }
                         
                     } else {
-                        QL3("Remote error doing sync, result: \(remoteResult)") // show err msg in any case (also not logged in etc) as in sync we are expected to be
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        QL3("Remote error doing sync, result: \(remoteResult)")
+                        // show err msg in any case (also not logged in etc) as in sync we are expected to be connected
+                        handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)))
                     }
                 }
             } else {

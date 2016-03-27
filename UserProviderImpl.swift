@@ -60,6 +60,8 @@ class UserProviderImpl: UserProvider {
         FBSDKLoginManager().logOut()
         GIDSignIn.sharedInstance().signOut()
         GIDSignIn.sharedInstance().disconnect()
+        
+        QL2("User logged out")
     }
     
     func sync(handler: ProviderResult<SyncResult> -> Void) {

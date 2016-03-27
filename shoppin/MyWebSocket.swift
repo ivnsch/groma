@@ -172,8 +172,11 @@ class MyWebSocket: WebSocketDelegate {
             case 1000:
                 // Called when we close the connection explicitly with disconnect()
                 QL2("Websocket: Closed connection")
+                // ! sometimes this was called when the server was down also, so we try to reconnect here also, if there's a login token. If the user just logged out this does nothing as logout removes the login token.
+                tryReconnectIfLoggedIn()
+                
             case 61:
-                // "Connection refused" - Called e.g. when trying to connect while the server is down
+                // "Connection refused" - Called e.g. when trying to connect while the server is down. Here we don't check for login token because we should have checked for login token in the call that originated this reponse. This is only used for retry. If we are here, it means a connection attempt just was done, which means there is a login token stored.
                 QL3("Websocket: Connection refused")
 
                 tryReconnectAndIncrementDelay()
@@ -183,9 +186,16 @@ class MyWebSocket: WebSocketDelegate {
             }
         } else {
             // Called when the server is stopped (e.g. restarted) NOTE we assume for now this is the only reason, there may be other(?) TODO: review. We should only try to reconnect when the server was down or general connection error, not when client intentionally disconnects.
+            // EDIT: Apparently called also when the user logs out - first we see "Websocket: Closed connection[;" in log (case 1000 above) and immediately after "Websocket: Server closed the connection[;" which means we are being notified 2x. So now we check here if user has a login token (this is removed when the user logs out), so we don't try to reconnect or sent the notification to show the "websocket disconnected" message in this case. 
+            // The responses seem to be a bit inconsistent, so we call now tryReconnectIfLoggedIn both on 1000 and here and check for login token in both cases. >> in server down case anyway only 1 of them is called, not both at the same time, so we will not have the situation of running the retry timier 2x (even if, it will just access the timer 2x)
             QL2("Websocket: Server closed the connection")
+            tryReconnectIfLoggedIn()
+        }
+    }
+    
+    private func tryReconnectIfLoggedIn() {
+        if Providers.userProvider.hasLoginToken {
             notifyConnected(false)
-            
             tryReconnectAndIncrementDelay()
         }
     }

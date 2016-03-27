@@ -47,7 +47,7 @@ enum RemoteStatusCode: Int {
     case UnknownServerCommunicationError = 10007 // Communication errors other than .ServerNotReachable
     case ClientParamsParsingError = 10008 // This should really not happen, but the serialization for some requests needs do catch so for overall consistency in catch we return this error
     case NoConnection = 10009 // Used when we detect in advance that there's no connectivity and don't proceed making the request. When this is not used, the execution of a request without a connection results in .ServerNotReachable
-    case NotLoggedIn = 10010 // Normally same meaning as .NotAuthenticated - difference is that .NotAuthenticated is determined by the server
+    case NotLoggedIn = 10010 // Returned when there's no login token stored. For caller normally same meaning as .NotAuthenticated - difference is that .NotAuthenticated is determined by the server
 }
 
 extension RemoteStatusCode: CustomStringConvertible {
