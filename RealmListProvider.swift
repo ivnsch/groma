@@ -27,7 +27,7 @@ class RealmListProvider: RealmProvider {
     }
     
     func updateListsOrder(orderUpdates: [OrderUpdate], _ handler: Bool -> Void) {
-        withRealm({realm in
+        doInWriteTransaction({realm in
             for orderUpdate in orderUpdates {
                 realm.create(DBList.self, value: DBList.createOrderUpdateDict(orderUpdate), update: true)
             }
