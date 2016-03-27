@@ -40,16 +40,11 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
         
         initTableViewController()
         
-        if let navigationItemTextColor = navigationItemTextColor {
-            // seems there's no way to change back button text color at nav controller level so we do it statically and rever in viewWillDisappear
-            UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: navigationItemTextColor], forState: .Normal)
-            UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: navigationItemTextColor]
-            navigationController?.navigationBar.translucent = false
-        }
         navigationController?.setNavigationBarHidden(false, animated: true)
 
-        onUIReady?()
+        navigationItem.title = "Back store"
         
+        onUIReady?()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItems:", name: WSNotificationName.ListItems.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItem:", name: WSNotificationName.ListItem.rawValue, object: nil)
@@ -62,8 +57,6 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     override func viewWillDisappear(animated: Bool) {
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Theme.navigationBarTextColor]
         listItemsTableViewController.clearPendingSwipeItemIfAny(true)
     }
     

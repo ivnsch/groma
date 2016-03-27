@@ -53,14 +53,10 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
 
         self.initTableViewController()
         
-        if let navigationItemTextColor = navigationItemTextColor {
-            // seems there's no way to change back button text color at nav controller level so we do it statically and rever in viewWillDisappear
-            UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: navigationItemTextColor], forState: .Normal)
-            UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: navigationItemTextColor]
-            navigationController?.navigationBar.translucent = false
-        }
         navigationController?.setNavigationBarHidden(false, animated: true)
 
+        navigationItem.title = "Cart"
+        
         onUIReady?()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItems:", name: WSNotificationName.ListItems.rawValue, object: nil)
@@ -75,8 +71,6 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     }
     
     override func viewWillDisappear(animated: Bool) {
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: Theme.navigationBarTextColor], forState: .Normal)
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: Theme.navigationBarTextColor]
         listItemsTableViewController.clearPendingSwipeItemIfAny(true)
     }
     
