@@ -12,7 +12,7 @@ import SwipeView
 
 protocol QuickAddPageControllerDelegate {
 //    func onPagerScroll(xOffset: CGFloat)
-    func onPageChanged(newIndex: Int)
+    func onPageChanged(newIndex: Int, pageType: QuickAddItemType)
 }
 
 
@@ -29,6 +29,10 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
 
         slidingTabsView.delegate = self
         swipeView.delegate = self
+        
+        swipeView.pagingEnabled = true
+        swipeView.defersItemViewLoading = true
+        
         slidingTabsView.onViewsReady = {[weak self] in
             self?.slidingTabsView.setSelected(0)
         }
@@ -52,11 +56,13 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
             currentSwipeController?.removeFromParentViewController()
         }
         
-        delegate?.onPageChanged(index)
+
         
         if quickAddListItemDelegate == nil {
             QL3("delegate is nil")
         }
+        
+        QL1("viewForItemAtIndex: index: \(index)")
         
         if index == 0 {
             let productsController = UIStoryboard.quickAddListItemViewController()
@@ -66,6 +72,9 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
             }
             currentSwipeController = productsController
             addChildViewController(productsController)
+            
+            delegate?.onPageChanged(index, pageType: .Product)
+            
             return productsController.view
             
         } else {
@@ -76,6 +85,9 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
             }
             currentSwipeController = productsController
             addChildViewController(productsController)
+            
+            delegate?.onPageChanged(index, pageType: .Group)
+
             return productsController.view
         }
     }
@@ -86,6 +98,15 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
         } else {
             QL3("No controller/failed: \(currentSwipeController)")
         }
+    }
+    
+    func setEmptyViewVisible(visible: Bool) {
+        if let currentSwipeController = currentSwipeController {
+            currentSwipeController.setEmptyViewVisible(visible)
+        } else {
+            QL3("setEmptyViewVisible: no controller")
+        }
+        
     }
     
     // MARK: - SwipeViewDelegate

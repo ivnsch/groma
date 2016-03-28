@@ -88,10 +88,14 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
     }
     
-    func onPageChanged(newIndex: Int) {
+    // MARK: - QuickAddPageControllerDelegate
+    
+    func onPageChanged(newIndex: Int, pageType: QuickAddItemType) {
+        itemType = pageType
         searchBar.text = ""
     }
 
+    // MARK: -
     
     func onClose() {
         removeAddButton()
@@ -255,12 +259,15 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         delegate?.onCloseQuickAddTap()
     }
     
-    // TODO review if this is still needed
     func onHasItems(hasItems: Bool) {
         if hasItems {
             hideAddProductController()
+            quickAddListItemViewController?.setEmptyViewVisible(false) // this is a no op for .Product as we never show empty view here (we show add products view instead)
         } else {
-            showAddProductController()
+            switch itemType {
+            case .Product: showAddProductController()
+            case .Group: quickAddListItemViewController?.setEmptyViewVisible(true)
+            }
         }
     }
     

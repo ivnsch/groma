@@ -30,6 +30,7 @@ enum QuickAddContent {
 class QuickAddListItemViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var emptyView: UIView!
     
     var delegate: QuickAddListItemDelegate?
     
@@ -43,10 +44,10 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     var contentData: (itemType: QuickAddItemType, sortBy: QuickAddItemSortBy) = (.Product, .Fav) {
         didSet {
-            if contentData.itemType != oldValue.itemType || contentData.sortBy != oldValue.sortBy {
+//            if contentData.itemType != oldValue.itemType || contentData.sortBy != oldValue.sortBy {
                 clearAndLoadFirstPage(false)
                 
-            }
+//            }
         }
     }
     
@@ -71,7 +72,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        clearAndLoadFirstPage(false)
+//        clearAndLoadFirstPage(false)
     }
     
     private func clearAndLoadFirstPage(isSearchLoad: Bool) {
@@ -192,6 +193,12 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         }
     }
     
+    func setEmptyViewVisible(visible: Bool) {
+        UIView.animateWithDuration(0.3) {[weak self] in
+            self?.emptyView.hidden = !visible
+        }
+    }
+    
     override func setEditing(editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
 //        collectionView.editing = editing // TODO! collection view doesn't know this - for what did we need editing with tableview here anyway?
@@ -280,5 +287,9 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                 }
             }
         }
+    }
+    
+    @IBAction func onEmptyViewTap(sender: UIButton) {
+        tabBarController?.selectedIndex = Constants.tabGroupsIndex
     }
 }
