@@ -29,6 +29,9 @@ enum WSNotificationName: String {
     case PlanItem = "WSPlanItem"
     case SyncShared = "WSSyncShared"
 
+    case Reception = "WSReception" // client generated
+    case ProcessingError = "WSProcessingError" // client generated
+    
     case Connection = "WSConnection"
     
     // In some cases we need to receive the notification only after items have been persisted
@@ -48,6 +51,25 @@ enum WSNotificationVerb: String {
     case Fav = "fav"
     case Order = "order"
 }
+
+enum WSNotificationCategory: String {
+    case Product = "product"
+    case Category = "category"
+    case Group = "group"
+    case Groups = "groups"
+    case GroupItem = "groupItem"
+    case List = "list"
+    case ListItem = "listItem"
+    case ListItems = "listItems"
+    case Section = "section"
+    case Inventory = "inventory"
+    case Inventories = "inventories"
+    case InventoryItem = "inventoryItem"
+    case InventoryItems = "inventoryItems"
+    case History = "history"
+    case Shared = "shared"
+}
+
 
 final class WSNotification<T>: AnyObject {
     let verb: WSNotificationVerb
@@ -69,43 +91,47 @@ let WSNotificationValue = "value"
 
 struct MyWebsocketDispatcher {
     
-    static func processCategory(category: String, verb verbStr: String, topic: String, data: AnyObject) {
-        guard let verb = WSNotificationVerb.init(rawValue: verbStr) else {QL4("Error: MyWebsocketDispatcher: Verb not supported: \(verbStr). Can't process. Category: \(category), topic: \(topic)"); return}
+    static func processCategory(category: String, verb verbStr: String, topic: String, sender: String, data: AnyObject) {
+        guard let verb = WSNotificationVerb.init(rawValue: verbStr) else {QL4("Error: MyWebsocketDispatcher: Verb not supported: \(verbStr). Can't process. Category: \(category), topic: \(topic), sender: \(sender)"); return}
         
-        switch category {
-            case "product":
-                processProduct(verb, topic, data)
-            case "category":
-                processProduct(verb, topic, data)
-            case "group":
-                processGroup(verb, topic, data)
-            case "groups":
-                processGroups(verb, topic, data)
-            case "groupItem":
-                processGroupItem(verb, topic, data)
-            case "list":
-                processList(verb, topic, data)
-            case "listItem":
-                processListItem(verb, topic, data)
-            case "listItems":
-                processListItems(verb, topic, data)
-            case "section":
-                processSection(verb, topic, data)
-            case "inventory":
-                processInventory(verb, topic, data)
-            case "inventories":
-                processInventories(verb, topic, data)
-            case "inventoryItem":
-                processInventoryItem(verb, topic, data)
-            case "inventoryItems":
-                processInventoryItems(verb, topic, data)
-            case "history":
-                processHistoryItem(verb, topic, data)
-            case "shared":
-                processShared(verb, topic, data)
+        NSNotificationCenter.defaultCenter().postNotificationName(WSNotificationName.Reception.rawValue, object: nil, userInfo: ["verb": verbStr, "category": category, "sender": sender])
+        
+        if let enumValue = WSNotificationCategory(rawValue: category) {
+            switch enumValue {
+            case .Product:
+                processProduct(verb, topic, sender, data)
+            case .Category:
+                processProduct(verb, topic, sender, data)
+            case .Group:
+                processGroup(verb, topic, sender, data)
+            case .Groups:
+                processGroups(verb, topic, sender, data)
+            case .GroupItem:
+                processGroupItem(verb, topic, sender, data)
+            case .List:
+                processList(verb, topic, sender, data)
+            case .ListItem:
+                processListItem(verb, topic, sender, data)
+            case .ListItems:
+                processListItems(verb, topic, sender, data)
+            case .Section:
+                processSection(verb, topic, sender, data)
+            case .Inventory:
+                processInventory(verb, topic, sender, data)
+            case .Inventories:
+                processInventories(verb, topic, sender, data)
+            case .InventoryItem:
+                processInventoryItem(verb, topic, sender, data)
+            case .InventoryItems:
+                processInventoryItems(verb, topic, sender, data)
+            case .History:
+                processHistoryItem(verb, topic, sender, data)
+            case .Shared:
+                processShared(verb, topic, sender, data)
 //            case "planItem":
 //                processPlanItem(verb, topic, data)
-        default:
+            }
+        } else {
             QL4("MyWebsocketDispatcher.processCategory not handled: \(category)")
         }
     }
@@ -113,27 +139,30 @@ struct MyWebsocketDispatcher {
     // Report errors when storing objects that came via websocket
     private static func reportWebsocketStoringError<T>(msg: String, result: ProviderResult<T>) {
         let report = ErrorReport(title: "Websocket storing", body: "msg: \(msg), result: \(result)")
+        NSNotificationCenter.defaultCenter().postNotificationName(WSNotificationName.ProcessingError.rawValue, object: nil, userInfo: nil)
         Providers.errorProvider.reportError(report)
         QL4("Websocket: Couldn't store: \(msg), result: \(result)")
     }
 
     private static func reportWebsocketParsingError(msg: String) {
         let report = ErrorReport(title: "Websocket parsing", body: "msg: \(msg)")
+        NSNotificationCenter.defaultCenter().postNotificationName(WSNotificationName.ProcessingError.rawValue, object: nil, userInfo: nil)
         Providers.errorProvider.reportError(report)
         QL4("Websocket: Couldn't parse: \(msg)")
     }
     
     private static func reportWebsocketGeneralError(msg: String) {
         let report = ErrorReport(title: "Websocket", body: "msg: \(msg)")
+        NSNotificationCenter.defaultCenter().postNotificationName(WSNotificationName.ProcessingError.rawValue, object: nil, userInfo: nil)
         Providers.errorProvider.reportError(report)
         QL4("Websocket General error: \(msg)")
     }
     
-    static func postNotification<T: Any>(notificationName: WSNotificationName, _ verb: WSNotificationVerb, _ obj: T) {
+    static func postNotification<T: Any>(notificationName: WSNotificationName, _ verb: WSNotificationVerb, _ sender: String, _ obj: T) {
         NSNotificationCenter.defaultCenter().postNotificationName(notificationName.rawValue, object: nil, userInfo: ["value": WSNotification(verb, obj)])
     }
     
-    static func postNotification<T: Any>(notificationName: WSNotificationName, _ verb: WSNotificationVerb, _ obj: [T]) {
+    static func postNotification<T: Any>(notificationName: WSNotificationName, _ verb: WSNotificationVerb, _ sender: String, _ obj: [T]) {
         NSNotificationCenter.defaultCenter().postNotificationName(notificationName.rawValue, object: nil, userInfo: ["value": WSNotification(verb, obj)])
     }
     
@@ -143,7 +172,7 @@ struct MyWebsocketDispatcher {
     
     
     //this is called on batch list item update, which is used when reordering list items
-    private static func processListItems(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processListItems(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         // TODO!!!! test this
         case WSNotificationVerb.Order:
@@ -157,7 +186,7 @@ struct MyWebsocketDispatcher {
                             
                             Providers.listItemsProvider.updateListItemsTodoOrderRemote(remoteOrderUpdates.items, sections: sections) {updateResult in
                                 if updateResult.success {
-                                    postNotification(.ListItems, verb, remoteOrderUpdates)
+                                    postNotification(.ListItems, verb, sender, remoteOrderUpdates)
                                 } else {
                                     MyWebsocketDispatcher.reportWebsocketStoringError("Update list items order \(remoteOrderUpdates)", result: updateResult)
                                 }
@@ -177,14 +206,14 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    private static func processProduct(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processProduct(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
             case .Add:
                 if let remoteProducts = RemoteProductsWithDependencies(representation: data) {
                     if let product = ProductMapper.productsWithRemote(remoteProducts).products.first {
                         Providers.productProvider.add(product, remote: false) {result in
                             if result.success {
-                                postNotification(.Product, verb, product)
+                                postNotification(.Product, verb, sender, product)
                             } else {
                                 MyWebsocketDispatcher.reportWebsocketStoringError("Add \(product)", result: result)
                             }
@@ -201,7 +230,7 @@ struct MyWebsocketDispatcher {
                     if let product = ProductMapper.productsWithRemote(remoteProducts).products.first {
                         Providers.productProvider.update(product, remote: false) {result in
                             if result.success {
-                                postNotification(.Product, verb, product)
+                                postNotification(.Product, verb, sender, product)
                             } else {
                                 MyWebsocketDispatcher.reportWebsocketStoringError("Update \(product)", result: result)
                             }
@@ -217,7 +246,7 @@ struct MyWebsocketDispatcher {
                 if let productUuid = data as? String {
                     Providers.productProvider.delete(productUuid, remote: false) {result in
                         if result.success {
-                            postNotification(.Product, verb, productUuid)
+                            postNotification(.Product, verb, sender, productUuid)
                         } else {
                             MyWebsocketDispatcher.reportWebsocketStoringError("Delete \(productUuid)", result: result)
                         }
@@ -230,7 +259,7 @@ struct MyWebsocketDispatcher {
                 if let productUuid = data as? String {
                     Providers.productProvider.incrementFav(productUuid, remote: false) {result in
                         if result.success {
-                            postNotification(.Product, verb, productUuid)
+                            postNotification(.Product, verb, sender, productUuid)
                         } else {
                             MyWebsocketDispatcher.reportWebsocketStoringError("Increment product fav \(productUuid)", result: result)
                         }
@@ -243,14 +272,14 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    private static func processProductCategory(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processProductCategory(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case .Update:
             if let remoteCategory = RemoteProductCategory(representation: data) {
                 let category = ProductCategoryMapper.categoryWithRemote(remoteCategory)
                 Providers.productCategoryProvider.update(category, remote: false) {result in
                     if result.success {
-                        postNotification(.ProductCategory, verb, category)
+                        postNotification(.ProductCategory, verb, sender, category)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Update \(category)", result: result)
                     }
@@ -263,7 +292,7 @@ struct MyWebsocketDispatcher {
             if let categoryUuid = data as? String {
                 Providers.productCategoryProvider.remove(categoryUuid, remote: false) {result in
                     if result.success {
-                        postNotification(.ProductCategory, verb, categoryUuid)
+                        postNotification(.ProductCategory, verb, sender, categoryUuid)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Delete \(categoryUuid)", result: result)
                     }
@@ -276,14 +305,14 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    private static func processGroup(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processGroup(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
             if let remoteGroup = RemoteGroup(representation: data) {
                 let group = ListItemGroupMapper.listItemGroupWithRemote(remoteGroup)
                 Providers.listItemGroupsProvider.add(group, remote: false) {result in
                     if result.success {
-                        postNotification(.Group, verb, group)
+                        postNotification(.Group, verb, sender, group)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Add \(group)", result: result)
                     }
@@ -297,7 +326,7 @@ struct MyWebsocketDispatcher {
                 let group = ListItemGroupMapper.listItemGroupWithRemote(remoteGroup)
                 Providers.listItemGroupsProvider.update(group, remote: false) {result in
                     if result.success {
-                        postNotification(.Group, verb, group)
+                        postNotification(.Group, verb, sender, group)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Update \(group)", result: result)
                     }
@@ -310,7 +339,7 @@ struct MyWebsocketDispatcher {
             if let groupUuid = data as? String {
                 Providers.listItemGroupsProvider.removeGroup(groupUuid, remote: false) {result in
                     if result.success {
-                        postNotification(.Group, verb, groupUuid)
+                        postNotification(.Group, verb, sender, groupUuid)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Delete \(groupUuid)", result: result)
                     }
@@ -323,7 +352,7 @@ struct MyWebsocketDispatcher {
             if let groupUuid = data as? String {
                 Providers.listItemGroupsProvider.incrementFav(groupUuid, remote: false) {result in
                     if result.success {
-                        postNotification(.Group, verb, groupUuid)
+                        postNotification(.Group, verb, sender, groupUuid)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Increment group fav \(groupUuid)", result: result)
                     }
@@ -336,14 +365,14 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    private static func processGroups(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processGroups(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Order:
             if let remoteOrderUpdates = RemoteOrderUpdate.collection(data) {
                 let orderUpdates = remoteOrderUpdates.map{OrderUpdate(uuid: $0.uuid, order: $0.order)}
                 Providers.listItemGroupsProvider.updateGroupsOrder(orderUpdates, remote: false) {result in
                     if result.success {
-                        postNotification(.Groups, verb, remoteOrderUpdates)
+                        postNotification(.Groups, verb, sender, remoteOrderUpdates)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Update groups order \(remoteOrderUpdates)", result: result)
                     }
@@ -355,7 +384,7 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    private static func processGroupItem(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processGroupItem(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
 //        // for now not implemented as we don't add single group items, user always has to confirm on the group. Also, we don't have group here which is required by the provider
         case WSNotificationVerb.Add:
@@ -363,7 +392,7 @@ struct MyWebsocketDispatcher {
                 if let groupItem = GroupItemMapper.groupItemsWithRemote(remoteGroupItems).groupItems.first {
                     Providers.listItemGroupsProvider.add(groupItem, remote: false) {result in
                         if result.success {
-                            postNotification(.GroupItem, verb, groupItem)
+                            postNotification(.GroupItem, verb, sender, groupItem)
                         } else {
                             MyWebsocketDispatcher.reportWebsocketStoringError("Add \(groupItem)", result: result)
                         }
@@ -381,7 +410,7 @@ struct MyWebsocketDispatcher {
                 if let groupItem = GroupItemMapper.groupItemsWithRemote(remoteGroupItems).groupItems.first {
                     Providers.listItemGroupsProvider.update(groupItem, remote: false) {result in
                         if result.success {
-                            postNotification(.GroupItem, verb, groupItem)
+                            postNotification(.GroupItem, verb, sender, groupItem)
                         } else {
                             MyWebsocketDispatcher.reportWebsocketStoringError("Update \(groupItem)", result: result)
                         }
@@ -398,7 +427,7 @@ struct MyWebsocketDispatcher {
                 let increment = ItemIncrement(delta: remoteIncrement.delta, itemUuid: remoteIncrement.uuid) // TODO!!!! pass the last update timestamp also?
                 Providers.listItemGroupsProvider.increment(increment, remote: false) {result in
                     if result.success {
-                        postNotification(.GroupItem, verb, increment)
+                        postNotification(.GroupItem, verb, sender, increment)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Increment group item \(remoteIncrement)", result: result)
                     }
@@ -412,7 +441,7 @@ struct MyWebsocketDispatcher {
             if let groupItemUuid = data as? String {
                 Providers.listItemGroupsProvider.removeGroupItem(groupItemUuid, remote: false) {result in
                     if result.success {
-                        postNotification(.GroupItem, verb, groupItemUuid)
+                        postNotification(.GroupItem, verb, sender, groupItemUuid)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Delete \(groupItemUuid)", result: result)
                     }
@@ -425,14 +454,14 @@ struct MyWebsocketDispatcher {
         }
     }
 
-    private static func processList(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processList(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
             if let remoteList = RemoteListsWithDependencies(representation: data) {
                 if let list = ListMapper.listsWithRemote(remoteList).first {
                     Providers.listProvider.add(list, remote: false) {result in
                         if result.success {
-                            postNotification(.List, verb, list)
+                            postNotification(.List, verb, sender, list)
                         } else {
                             MyWebsocketDispatcher.reportWebsocketStoringError("Add \(list)", result: result)
                         }
@@ -449,7 +478,7 @@ struct MyWebsocketDispatcher {
                 if let list = ListMapper.listsWithRemote(remoteList).first {
                     Providers.listProvider.update(list, remote: false) {result in
                         if result.success {
-                            postNotification(.List, verb, list)
+                            postNotification(.List, verb, sender, list)
                         } else {
                             MyWebsocketDispatcher.reportWebsocketStoringError("Update \(list)", result: result)
                         }
@@ -465,7 +494,7 @@ struct MyWebsocketDispatcher {
             if let listUuid = data as? String {
                 Providers.listProvider.remove(listUuid, remote: false) {result in
                     if result.success {
-                        postNotification(.List, verb, listUuid)
+                        postNotification(.List, verb, sender, listUuid)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Delete \(listUuid)", result: result)
                     }
@@ -476,7 +505,7 @@ struct MyWebsocketDispatcher {
             
         case WSNotificationVerb.Invite:
             if let remoteListInvitation = RemoteListInvitation(representation: data) {
-                postNotification(.List, verb, remoteListInvitation)
+                postNotification(.List, verb, sender, remoteListInvitation)
             } else {
                 QL4("Couldn't parse data: \(data)")
             }
@@ -484,14 +513,14 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    private static func processListItem(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processListItem(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
             if let remoteListItems = RemoteListItems(representation: data) {
                 if let listItem = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: nil).listItems.first {
                     Providers.listItemsProvider.add(listItem, remote: false) {result in
                         if result.success {
-                            postNotification(.ListItem, verb, listItem)
+                            postNotification(.ListItem, verb, sender, listItem)
                         } else {
                             MyWebsocketDispatcher.reportWebsocketStoringError("Add \(listItem)", result: result)
                         }
@@ -508,7 +537,7 @@ struct MyWebsocketDispatcher {
                 if let listItem = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: nil).listItems.first {
                     Providers.listItemsProvider.update(listItem, remote: false) {result in
                         if result.success {
-                            postNotification(.ListItem, verb, listItem)
+                            postNotification(.ListItem, verb, sender, listItem)
                         } else {
                             MyWebsocketDispatcher.reportWebsocketStoringError("Update \(listItem)", result: result)
                         }
@@ -525,7 +554,7 @@ struct MyWebsocketDispatcher {
                 let increment = ItemIncrement(delta: remoteIncrement.delta, itemUuid: remoteIncrement.uuid) // TODO!!!! pass the last update timestamp also?
                 Providers.listItemsProvider.increment(increment, remote: false) {result in
                     if result.success {
-                        postNotification(.GroupItem, verb, increment)
+                        postNotification(.GroupItem, verb, sender, increment)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Increment list item \(remoteIncrement)", result: result)
                     }
@@ -539,7 +568,7 @@ struct MyWebsocketDispatcher {
             if let containedItemIdentifier = RemoteContainedItemIdentifier(representation: data) {
                 Providers.listItemsProvider.removeListItem(containedItemIdentifier.itemUuid, listUuid: containedItemIdentifier.containerUuid, remote: false) {result in
                     if result.success {
-                        postNotification(.ListItem, verb, containedItemIdentifier.itemUuid)
+                        postNotification(.ListItem, verb, sender, containedItemIdentifier.itemUuid)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Delete \(containedItemIdentifier)", result: result)
                     }
@@ -551,7 +580,7 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    private static func processSection(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processSection(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
             // Not used as it's not possible to add sections directly
 //        case WSNotificationVerb.Add:
@@ -564,7 +593,7 @@ struct MyWebsocketDispatcher {
                 let section = SectionMapper.SectionWithRemote(remoteSection.section, list: list)
                 Providers.sectionProvider.update(section, remote: false) {result in
                     if result.success {
-                        postNotification(.Section, verb, section)
+                        postNotification(.Section, verb, sender, section)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Update section \(section)", result: result)
                     }
@@ -577,7 +606,7 @@ struct MyWebsocketDispatcher {
             if let sectionUuid = data as? String {
                 Providers.sectionProvider.remove(sectionUuid, remote: false) {result in
                     if result.success {
-                        postNotification(.Section, verb, sectionUuid)
+                        postNotification(.Section, verb, sender, sectionUuid)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Delete section \(sectionUuid)", result: result)
                     }
@@ -590,14 +619,14 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    private static func processInventory(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processInventory(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
             if let remoteInventory = RemoteInventory(representation: data) {
                 let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
                 Providers.inventoryProvider.addInventory(inventory, remote: false) {result in
                     if result.success {
-                        postNotification(.Inventory, verb, inventory)
+                        postNotification(.Inventory, verb, sender, inventory)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory \(inventory)", result: result)
                     }
@@ -611,7 +640,7 @@ struct MyWebsocketDispatcher {
                 let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
                 Providers.inventoryProvider.updateInventory(inventory, remote: false) {result in
                     if result.success {
-                        postNotification(.Inventory, verb, inventory)
+                        postNotification(.Inventory, verb, sender, inventory)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory \(inventory)", result: result)
                     }
@@ -624,7 +653,7 @@ struct MyWebsocketDispatcher {
             if let inventoryUuid = data as? String {
                 Providers.listProvider.remove(inventoryUuid, remote: false) {result in
                     if result.success {
-                        postNotification(.Inventory, verb, inventoryUuid)
+                        postNotification(.Inventory, verb, sender, inventoryUuid)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Delete inventory \(inventoryUuid)", result: result)
                     }
@@ -635,7 +664,7 @@ struct MyWebsocketDispatcher {
             
         case WSNotificationVerb.Invite:
             if let remoteInventoryInvitation = RemoteInventoryInvitation(representation: data) {
-                postNotification(.Inventory, verb, remoteInventoryInvitation)
+                postNotification(.Inventory, verb, sender, remoteInventoryInvitation)
             } else {
                 QL4("Couldn't parse data: \(data)")
             }
@@ -643,14 +672,14 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    private static func processInventories(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processInventories(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Update:
             if let remoteOrderUpdates = RemoteOrderUpdate.collection(data) {
                 let orderUpdates = remoteOrderUpdates.map{OrderUpdate(uuid: $0.uuid, order: $0.order)}
                 Providers.inventoryProvider.updateInventoriesOrder(orderUpdates, remote: false) {result in
                     if result.success {
-                        postNotification(.Inventories, verb, remoteOrderUpdates)
+                        postNotification(.Inventories, verb, sender, remoteOrderUpdates)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Update inventories order \(remoteOrderUpdates)", result: result)
                     }
@@ -667,15 +696,15 @@ struct MyWebsocketDispatcher {
     // TODO!!!! inventory items - there seem to be some inconsistencies / not implemented
     /////////////////////////////////////////////////////////////////////////////////
 
-    private static func processInventoryItem(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processInventoryItem(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
             if let inventoryItemsWithHistoryAndDependencies = RemoteInventoryItemsWithHistoryAndDependencies(representation: data) {
                 let (inventoryItems, historyItems) = InventoryItemMapper.itemsWithRemote(inventoryItemsWithHistoryAndDependencies)
                 Providers.inventoryItemsProvider.addToInventoryLocal(inventoryItems, historyItems: historyItems) {result in
                     if result.success {
-                        postNotification(.Inventory, verb, inventoryItems)
-                        postNotification(.HistoryItem, verb, historyItems)
+                        postNotification(.Inventory, verb, sender, inventoryItems)
+                        postNotification(.HistoryItem, verb, sender, historyItems)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory/history item \(inventoryItemsWithHistoryAndDependencies)", result: result)
                     }
@@ -697,7 +726,7 @@ struct MyWebsocketDispatcher {
                 let increment = ItemIncrement(delta: remoteIncrement.delta, itemUuid: remoteIncrement.uuid) // TODO!!!! pass the last update timestamp also?
                 Providers.inventoryItemsProvider.incrementInventoryItem(increment, remote: false) {result in
                     if result.success {
-                        postNotification(.InventoryItem, verb, increment)
+                        postNotification(.InventoryItem, verb, sender, increment)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Increment inventory item \(remoteIncrement)", result: result)
                     }
@@ -711,7 +740,7 @@ struct MyWebsocketDispatcher {
             if let containedItemIdentifier = RemoteContainedItemIdentifier(representation: data) {
                 Providers.inventoryItemsProvider.removeInventoryItem(containedItemIdentifier.itemUuid, inventoryUuid: containedItemIdentifier.containerUuid, remote: false) {result in
                     if result.success {
-                        postNotification(.InventoryItem, verb, containedItemIdentifier.itemUuid)
+                        postNotification(.InventoryItem, verb, sender, containedItemIdentifier.itemUuid)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Delete inventory item \(containedItemIdentifier)", result: result)
                     }
@@ -725,7 +754,7 @@ struct MyWebsocketDispatcher {
     }
     
     // TODO!!!! this seems to be used for move cart->history, it accepts a sequence!
-    private static func processInventoryItems(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processInventoryItems(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
             QL4("TODO processInventoryItems")
@@ -745,13 +774,13 @@ struct MyWebsocketDispatcher {
     /////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
     
-    private static func processHistoryItem(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processHistoryItem(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Delete:
             if let historyItemUuid = data as? String {
                 Providers.historyProvider.removeHistoryItem(historyItemUuid, remote: false) {result in
                     if result.success {
-                        postNotification(.HistoryItem, verb, historyItemUuid)
+                        postNotification(.HistoryItem, verb, sender, historyItemUuid)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Delete history item \(historyItemUuid)", result: result)
                     }
@@ -764,12 +793,12 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    private static func processShared(verb: WSNotificationVerb, _ topic: String, _ data: AnyObject) {
+    private static func processShared(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Sync:
             if let sender = data.valueForKeyPath("sender") as? String {
                 
-                postNotification(.SyncShared, verb, sender)
+                postNotification(.SyncShared, verb, sender, sender)
             } else {
                 QL4("No sender. Data: \(data)")
             }

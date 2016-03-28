@@ -15,5 +15,6 @@ struct ViewTags {
     static let ConnectionLabel = 124
     static let TableViewFooter = 125
     static let AutoCompleteCellButton = 126
-    
+    static let WebsocketSenderNotification = 127
+    static let WebsocketErrorNotification = 128
 }

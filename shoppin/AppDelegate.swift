@@ -87,6 +87,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
     private func initWebsocket() {
         Providers.userProvider.connectWebsocketIfLoggedIn()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketReceptionNotification:", name: WSNotificationName.Reception.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProcessingError:", name: WSNotificationName.ProcessingError.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketSharedSync:", name: WSNotificationName.SyncShared.rawValue, object: nil)
@@ -588,11 +590,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
                 switch notification {
                 case true:
                     if let window = window {
-                        if let connectionLabel = window.viewWithTag(ViewTags.ConnectionLabel) {
-                            connectionLabel.removeFromSuperview()
+                        if isShowingBottomNotification(ViewTags.ConnectionLabel) {
+                            removeBottomNotification()
                             
                             // Do sync
-                            // The fact that we check first if we are showing the no-connection label to be here, means that we do sync only after
+                            // The fact that we check first if we are showing the no-connection label to be here, means that we do sync only after:
                             // 1. The websocket connection was refused - (server was down when we started the app and tried to establish a connection, for example)
                             // 2. The connection was interrupted - (server was stopped after having established a connection)
                             // In these cases the time between the interruption and restoring of connection is arbitrary we have to sync possible actions of user during this time.
@@ -617,26 +619,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
                         QL4("Couldn't show popup, is nil)")
                     }
                 case false:
-                    if let window = window
-//                        ,controller = window.rootViewController
-//                        , tabBarHeight = controller.tabBarController?.tabBar.frame.height // nil
-                    {
-                        
-                        guard window.viewWithTag(ViewTags.ConnectionLabel) == nil else {return}
-                        
-                        let tabBarHeight: CGFloat = 49
-                        let labelHeight: CGFloat = 20
-                        let label = UILabel(frame: CGRectMake(0, window.frame.height - tabBarHeight - labelHeight, window.frame.width, labelHeight))
-                        label.tag = ViewTags.ConnectionLabel
-                        label.font = Fonts.smallerLight
-                        label.textAlignment = .Center
-                        label.backgroundColor = UIColor.flatRedColor()
-                        label.textColor = UIColor.whiteColor()
-                        label.text = "No server connection. Trying to connect..."
-                        window.addSubview(label)
-                        
-                    } else {
-                        QL4("Couldn't show popup, is nil)")
+                    if window?.viewWithTag(ViewTags.ConnectionLabel) == nil {
+                        showBottomNotification("No server connection. Trying to connect...", textColor: UIColor.flatRedColor(), tag: ViewTags.ConnectionLabel)
                     }
                 }
             } else {
@@ -646,6 +630,63 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
         }
     }
 
+    private func isShowingBottomNotification(tag: Int) -> Bool {
+        return window?.viewWithTag(tag) != nil
+    }
+    
+    private func removeBottomNotification() {
+        window?.viewWithTag(ViewTags.ConnectionLabel)?.removeFromSuperview()
+    }
+    
+    private func showBottomNotification(text: String, textColor: UIColor, tag: Int) -> UIView? {
+        if let window = window
+            //                        ,controller = window.rootViewController
+            //                        , tabBarHeight = controller.tabBarController?.tabBar.frame.height // nil
+        {
+            
+            let tabBarHeight: CGFloat = 49
+            let labelHeight: CGFloat = 20
+            let label = UILabel(frame: CGRectMake(0, window.frame.height - tabBarHeight - labelHeight, window.frame.width, labelHeight))
+            label.tag = tag
+            label.font = Fonts.smallerLight
+            label.textAlignment = .Center
+            label.backgroundColor = UIColor.whiteColor()
+            label.textColor = textColor
+            label.text = text
+            window.addSubview(label)
+            return label
+            
+        } else {
+            QL4("Couldn't show popup, is nil)")
+            return nil
+        }
+    }
+    
+    func onWebsocketReceptionNotification(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, String> {
+            if let sender = info["sender"], category = info["category"], _ = info["verb"] {
+                
+                let categoryText = category.capitalizedString
+                let msg = "Update: \(categoryText): \(sender)"
+                
+                let notificationView = showBottomNotification(msg, textColor: UIColor.whiteColor(), tag: ViewTags.WebsocketSenderNotification)
+                delay(0.5) {
+                    notificationView?.removeFromSuperview()
+                }
+            } else {
+                QL4("Invalid dictionary format: \(info)")
+            }
+        } else {
+            QL4("No userInfo")
+        }
+    }
+    
+    func onWebsocketProcessingError(note: NSNotification) {
+        let notificationView = showBottomNotification("Error processing incoming update", textColor: UIColor.whiteColor(), tag: ViewTags.WebsocketErrorNotification)
+        delay(0.5) {
+            notificationView?.removeFromSuperview()
+        }
+    }
     
     func onWebsocketList(note: NSNotification) {
         

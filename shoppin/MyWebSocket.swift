@@ -31,6 +31,7 @@ private class Keys {
     static let verb = "verb"
     static let category = "category"
     static let topic = "topic"
+    static let sender = "sender"
     static let message = "message"
 }
 
@@ -276,9 +277,9 @@ class MyWebSocket: WebSocketDelegate {
                         
                     } else {
                         // If the dictionary has no action key we expected it to be a standard message
-                        if let verb = dict[Keys.verb] as? String, category = dict[Keys.category] as? String, topic = dict[Keys.topic] as? String, data = dict[Keys.message] {
-                            QL1("Websocket: Verb: \(verb), category: \(category), topic: \(topic), data: \(data)")
-                            MyWebsocketDispatcher.processCategory(category, verb: verb, topic: topic, data: data)
+                        if let verb = dict[Keys.verb] as? String, category = dict[Keys.category] as? String, topic = dict[Keys.topic] as? String, sender = dict[Keys.sender] as? String, data = dict[Keys.message] {
+                            QL1("Websocket: Verb: \(verb), category: \(category), topic: \(topic), sender: \(sender), data: \(data)")
+                            MyWebsocketDispatcher.processCategory(category, verb: verb, topic: topic, sender: sender, data: data)
                         } else {
                             QL4("Websocket: Dictionary has not expected contents: \(dict)")
                         }
