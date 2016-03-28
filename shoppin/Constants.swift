@@ -12,4 +12,5 @@ struct Constants {
     static let defaultListIdentifier = "Todo"
     
     static let topAddContainerViewHeight: CGFloat = 100
+    static let cellDefaultHeight: CGFloat = 76
 }

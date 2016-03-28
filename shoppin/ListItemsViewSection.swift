@@ -78,7 +78,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     }
     
     func heightForHeader() -> Float {
-        return self.hasHeader ? 30 : 0
+        return self.hasHeader ? 35 : 0
     }
     
     func heightForFooter() -> Float {
@@ -108,7 +108,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     }
     
     func heightForRow(row: Int) -> CGFloat {
-        return 50
+        return Constants.cellDefaultHeight
     }
     
     //    func cellsToRegister() -> NSSet {
