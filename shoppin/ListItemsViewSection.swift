@@ -78,7 +78,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     }
     
     func heightForHeader() -> Float {
-        return self.hasHeader ? 35 : 0
+        return self.hasHeader ? Float(Constants.listItemsTableViewHeaderHeight) : 0
     }
     
     func heightForFooter() -> Float {
