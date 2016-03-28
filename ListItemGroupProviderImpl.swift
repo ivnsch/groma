@@ -296,6 +296,26 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
             }
         }
     }
+
+    func updateGroupsOrder(orderUpdates: [OrderUpdate], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+        DBProviders.listItemGroupProvider.updateGroupsOrder(orderUpdates) {[weak self] success in
+            if success {
+                handler(ProviderResult(status: .Success))
+                
+                if remote {
+                    self?.remoteGroupsProvider.updateGroupsOrder(orderUpdates) {remoteResult in
+                        // Note: no server update timetamps here, because server implementation details, more info see note in RemoteOrderUpdate
+                        if !remoteResult.success {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        }
+                    }
+                }
+            } else {
+                QL4("Error updating lists order in local database, orderUpdates: \(orderUpdates)")
+                handler(ProviderResult(status: .Unknown))
+            }
+        }
+    }
     
     func incrementFav(groupUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         DBProviders.listItemGroupProvider.incrementFav(groupUuid, {[weak self] saved in

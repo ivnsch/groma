@@ -28,6 +28,8 @@ protocol ListItemGroupProvider {
 
     func update(groups: [ListItemGroup], remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
+    func updateGroupsOrder(orderUpdates: [OrderUpdate], remote: Bool, _ handler: ProviderResult<Any> -> ())
+    
     func incrementFav(productUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
     func remove(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)

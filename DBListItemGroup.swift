@@ -43,6 +43,13 @@ class DBListItemGroup: DBSyncable {
         return "name CONTAINS[c] '\(text)'"
     }
     
+    // MARK: - Update
+    
+    // Creates dictionary to update database entry for an order update from server
+    static func createOrderUpdateDict(orderUpdate: OrderUpdate) -> [String: AnyObject] {
+        return ["uuid": orderUpdate.uuid, "order": orderUpdate.order, DBSyncable.dirtyFieldName: false]
+    }
+    
     // MARK: -
     
     static func fromDict(dict: [String: AnyObject]) -> DBListItemGroup {

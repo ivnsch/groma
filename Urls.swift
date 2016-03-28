@@ -83,6 +83,7 @@ struct Urls {
     static let groupItem = host + "groupItem"
     static let incrementGroupItem = host + "groupItem/incr"
     static let favGroup = host + "group/fav"
+    static let groupsOrder = host + "groups/order"
     
     // Product
     static let products = host + "products"

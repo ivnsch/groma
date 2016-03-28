@@ -50,6 +50,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         
         topAddEditListControllerManager = initTopAddEditListControllerManager()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketGroup:", name: WSNotificationName.Group.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketGroups:", name: WSNotificationName.Groups.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)    
     }
     
@@ -98,11 +99,10 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     override func onReorderedModels() {
         // TODO groups don't support reordering yet (also not in server)
         let groups = (models as! [ExpandableTableViewGroupModel]).map{$0.group}
-
-        let updatedGroups = groups.mapEnumerate{index, group in group.copy(order: index)}
+        let orderUpdates = groups.mapEnumerate{index, group in OrderUpdate(uuid: group.uuid, order: index)}
         
-        Providers.listItemGroupsProvider.update(updatedGroups, remote: true, successHandler{
-//            self.models = models // REVIEW remove? this seem not be necessary...
+        Providers.listItemGroupsProvider.updateGroupsOrder(orderUpdates, remote: true, successHandler{
+            //            self?.models = models // REVIEW remove? this seem not be necessary...
         })
     }
     
@@ -249,6 +249,23 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
             
         } else {
             QL4("No userInfo")
+        }
+    }
+    
+    func onWebsocketGroups(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<[RemoteOrderUpdate]>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Update:
+                    initModels()
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+            
+        } else {
+            QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
         }
     }
     

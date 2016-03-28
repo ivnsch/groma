@@ -30,6 +30,15 @@ class RemoteGroupsProvider: RemoteProvider {
         }
     }
     
+    func updateGroupsOrder(orderUpdates: [OrderUpdate], handler: RemoteResult<[RemoteOrderUpdate]> -> ()) {
+        let params: [[String: AnyObject]] = orderUpdates.map{
+            ["uuid": $0.uuid, "order": $0.order]
+        }
+        RemoteProvider.authenticatedRequestArray(.PUT, Urls.groupsOrder, params) {result in
+            handler(result)
+        }
+    }
+    
     func incrementFav(groupUuid: String, handler: RemoteResult<RemoteProduct> -> ()) {
         RemoteProvider.authenticatedRequest(.PUT, Urls.favGroup + "/\(groupUuid)") {result in
             handler(result)
