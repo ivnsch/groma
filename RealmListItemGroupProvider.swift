@@ -94,11 +94,11 @@ class RealmListItemGroupProvider: RealmProvider {
         // Needs custom handling because we need the lastUpdate server timestamp and for this we have to retrieve the item from db
         self.doInWriteTransaction({realm in
             if let itemToRemove = realm.objects(DBListItemGroup).filter(DBListItemGroup.createFilter(uuid)).first {
-                realm.delete(itemToRemove)
                 if markForSync {
                     let toRemove = DBRemoveListItemGroup(uuid: uuid, lastServerUpdate: itemToRemove.lastServerUpdate)
                     realm.add(toRemove, update: true)
                 }
+                realm.delete(itemToRemove)
             }
             return true
             
