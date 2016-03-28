@@ -161,6 +161,8 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         //            //}
         //        }
         
+        cell.contentView.addBottomBorderWithColor(Theme.cellBottomBorderColor, width: 1)
+        
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell

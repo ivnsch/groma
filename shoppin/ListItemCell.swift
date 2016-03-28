@@ -181,6 +181,8 @@ class ListItemCell: SwipeableCell {
         
         selectionStyle = UITableViewCellSelectionStyle.None
 
+        contentView.addBottomBorderWithColor(Theme.cellBottomBorderColor, width: 1)
+        
         // block tapping the cell behind the +/- buttons, otherwise it's easy to open the edit listitem view by mistake
         let tapRecognizer = UITapGestureRecognizer(target: self, action: "onTapPlusMinusContainer:")
         plusMinusContainer.addGestureRecognizer(tapRecognizer)
