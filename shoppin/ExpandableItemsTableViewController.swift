@@ -193,7 +193,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         
         func rightSubmitAndClose() { // v x
             topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .Submit),
+//                TopBarButtonModel(buttonId: .Submit),
                 TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
             ])
         }
@@ -220,7 +220,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         // animated
         func rightSubmitAndCloseFromOpen(animateToggle: Bool) { // + -> v x
             var models: [TopBarButtonModel] = [
-                TopBarButtonModel(buttonId: .Submit)
+//                TopBarButtonModel(buttonId: .Submit)
             ]
             if animateToggle {
                 models.append(TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformIdentity, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4))))
