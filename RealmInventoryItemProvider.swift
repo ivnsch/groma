@@ -56,11 +56,9 @@ class RealmInventoryItemProvider: RealmProvider {
     }
     
     func incrementInventoryItem(itemUuid: String, delta: Int, onlyDelta: Bool = false, handler: Bool -> ()) {
-        do {
-            //        synced(self)  {
+        
+        doInWriteTransaction({realm in
             
-            // load
-            let realm = try! Realm()
             var results = realm.objects(DBInventoryItem)
             results = results.filter(NSPredicate(format: DBInventoryItem.createFilterUuid(itemUuid), argumentArray: []))
             let objs: [DBInventoryItem] = results.toArray(nil)
@@ -80,27 +78,20 @@ class RealmInventoryItemProvider: RealmProvider {
                 // convert to db object
                 let dbIncrementedInventoryitem = InventoryItemMapper.dbWithInventoryItem(incrementedInventoryitem)
                 
-                
                 // save
-                try realm.write {
-                    for obj in objs {
-                        obj.lastUpdate = NSDate()
-                        realm.add(dbIncrementedInventoryitem, update: true)
-                    }
+                for obj in objs {
+                    obj.lastUpdate = NSDate()
+                    realm.add(dbIncrementedInventoryitem, update: true)
                 }
-                
-                handler(true)
-                
+                return true
                 
             } else {
-                print("Info: RealmInventoryProvider.incrementInventoryItem: Inventory item not found: \(itemUuid)")
-                handler(false)
+                QL3("Inventory item not found: \(itemUuid)")
+                return false
             }
-            //        }
             
-        } catch let e {
-            QL4("Realm error: \(e)")
-            handler(false)
+        }) {(successMaybe: Bool?) in
+            handler(successMaybe ?? false)
         }
     }
     
