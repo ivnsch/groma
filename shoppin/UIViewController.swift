@@ -66,8 +66,11 @@ extension UIViewController {
             onSuccess()
             
         } else {
-            // TODO!!!! check these warnings - is the defaultErrorHandler called when there's an error and onError is nil? Important to remove possible progress indicator
-            onError?(providerResult) ?? self.defaultErrorHandler()(providerResult: providerResult)
+            if let onError = onError {
+                onError(providerResult)
+            } else {
+                self.defaultErrorHandler()(providerResult: providerResult)
+            }
         }
         self.progressVisible(false)
     }
@@ -83,8 +86,11 @@ extension UIViewController {
             }
             
         } else {
-            // TODO!!!! check these warnings - is the defaultErrorHandler called when there's an error and onError is nil? Important to remove possible progress indicator
-            onError?(providerResult) ?? defaultErrorHandler()(providerResult: providerResult)
+            if let onError = onError {
+                onError(providerResult)
+            } else {
+                self.defaultErrorHandler()(providerResult: providerResult)
+            }
         }
         
         progressVisible(false)
@@ -95,36 +101,38 @@ extension UIViewController {
     
     func defaultErrorHandler(ignore: [ProviderStatusCode] = [])(providerResult: ProviderResult<Any>) {
         if !ignore.contains(providerResult.status) {
-            self.showProviderErrorAlert(providerResult)
+            handleResultHelper(providerResult.status, error: providerResult.error, errorObj: providerResult.errorObj)
+            progressVisible(false)
         }
     }
 
     func defaultErrorHandler<T>(ignore: [ProviderStatusCode] = [])(providerResult: ProviderResult<T>) {
         if !ignore.contains(providerResult.status) {
-            
-            if providerResult.status == .ServerInvalidParamsError {
-                if let error = providerResult.error {
-                    showRemoteValidationErrorAlert(providerResult.status, error: error)
-                } else {
-                    print("UIViewController.defaultErrorHandler: Invalid state: Has invalid params status but no error obj: \(providerResult)")
-                }
-            } else {
-                showProviderErrorAlert(providerResult)
-            }
+            handleResultHelper(providerResult.status, error: providerResult.error, errorObj: providerResult.errorObj)
             progressVisible(false)
         }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     
-    private func showProviderErrorAlert<T>(providerResult: ProviderResult<T>) {
-        switch providerResult.status {
+    private func handleResultHelper(status: ProviderStatusCode, error: RemoteInvalidParametersResult?, errorObj: Any?) {
+        switch status {
+        case .ServerInvalidParamsError:
+            if let error = error {
+                showRemoteValidationErrorAlert(status, error: error)
+            } else {
+                QL4("Invalid state: Has invalid params status but no error, status: \(status), error: \(error), errorObj: \(errorObj)")
+            }
         case .SizeLimit:
-            let size = providerResult.errorObj.map{$0}
+            let size = errorObj.map{$0}
             let sizeStr = size.map{"(\($0))"} ?? ""
             AlertPopup.show(title: title, message: "size_limit_exceeded \(sizeStr)", controller: self)
-  
-        default: ProviderPopupManager.instance.showStatusPopup(providerResult.status, controller: self)
+            
+        default: ProviderPopupManager.instance.showStatusPopup(status, controller: self)
         }
+    }
+    
+    private func showProviderErrorAlert<T>(providerResult: ProviderResult<T>) {
+        ProviderPopupManager.instance.showStatusPopup(providerResult.status, controller: self)
     }
     
     private func showRemoteValidationErrorAlert(status: ProviderStatusCode, error: RemoteInvalidParametersResult) {

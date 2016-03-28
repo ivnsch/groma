@@ -295,7 +295,7 @@ class ListItemProviderImpl: ListItemProvider {
                 }
             } else {
                 print("Error: ListItemProviderImpl.add:prototype: Add didn't return success result, status: \(result.status)")
-                handler(ProviderResult(status: .Unknown))
+                handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
             }
         }
     }

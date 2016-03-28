@@ -63,7 +63,7 @@ public class ProviderResult<T>: CustomDebugStringConvertible {
         self.init(status: status, sucessResult: nil, error: nil, errorObj: nil)
     }
     
-    private init(status: ProviderStatusCode, sucessResult: T?, error: RemoteInvalidParametersResult?, errorObj: Any?) {
+    init(status: ProviderStatusCode, sucessResult: T?, error: RemoteInvalidParametersResult?, errorObj: Any?) {
         self.status = status
         self.sucessResult = sucessResult
         self.error = error

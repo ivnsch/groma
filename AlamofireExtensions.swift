@@ -185,7 +185,7 @@ public class RemoteResult<T>: CustomDebugStringConvertible {
     
     public var debugDescription: String {
         let errorText = error.map{$0.debugDescription} ?? ""
-        return "{\(self.dynamicType) status: \(status), model: \(successResult), error: \(errorText), errorObj: \(error)}"
+        return "{\(self.dynamicType) status: \(status), model: \(successResult), error: \(errorText), errorObj: \(errorObj)}"
     }
 }
 
@@ -378,7 +378,7 @@ extension Alamofire.Request {
                 logRequesstWarningOrError(msg, isWarning: false, reportToServer: false)
             }
             
-//            print("method: \(request?.HTTPMethod), response: \(responseMaybe)")
+//            QL1("method: \(request?.HTTPMethod), response: \(responseMaybe)")
             if let response = responseMaybe {
                 
                 let statusCode = response.statusCode
@@ -390,7 +390,7 @@ extension Alamofire.Request {
                     switch JSON {
                     case .Success(let dataObj):
                         
-//                        print("JSON (request \(request?.HTTPMethod), \(request?.URL): \(dataObj)")
+//                        QL1("JSON (request \(request?.HTTPMethod), \(request?.URL): \(dataObj)")
 
                         let statusInt = dataObj.valueForKeyPath("status") as! Int
                         if let status = RemoteStatusCode(rawValue: statusInt) {
@@ -424,7 +424,7 @@ extension Alamofire.Request {
                                         }
                                         
                                     } else { // the result has no data
-                                        logRequesstError("Unexpected format in invalid parameters response")
+                                        logRequesstError("No data key: \(dataObj)")
                                         return Result.Success(RemoteResult<T>(status: .ParsingError))
                                     }
                                     
