@@ -121,6 +121,7 @@ extension UIViewController {
                 showRemoteValidationErrorAlert(status, error: error)
             } else {
                 QL4("Invalid state: Has invalid params status but no error, status: \(status), error: \(error), errorObj: \(errorObj)")
+                ProviderPopupManager.instance.showStatusPopup(status, controller: self)
             }
         case .SizeLimit:
             let size = errorObj.map{$0}
