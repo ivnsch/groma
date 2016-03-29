@@ -403,6 +403,54 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mf8-a8-xj0" customClass="ListTopBarView" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="7pv-aL-nlg"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VE1-1T-3hF" customClass="ExpandCollapseButton" customModule="shoppin">
+                                <rect key="frame" x="550" y="550" width="40" height="40"/>
+                                <color key="backgroundColor" red="0.61052091549999998" green="0.73144471069999994" blue="0.91775058180000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="Fol-Rb-oXr"/>
+                                    <constraint firstAttribute="height" constant="40" id="val-K9-the"/>
+                                </constraints>
+                            </button>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5PG-Em-S6N">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="4SH-aZ-z07">
+                                        <rect key="frame" x="270" y="238" width="60" height="60"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="Hg8-ID-vfl"/>
+                                            <constraint firstAttribute="width" constant="60" id="SMG-SM-nhM"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dny-Vg-Zzw">
+                                        <rect key="frame" x="222" y="310" width="156" height="21"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to start adding listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pQ3-yB-b2g">
+                                        <rect key="frame" x="223" y="339" width="154" height="16"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="4SH-aZ-z07" firstAttribute="centerX" secondItem="5PG-Em-S6N" secondAttribute="centerX" id="4ge-ja-9NN"/>
+                                    <constraint firstItem="pQ3-yB-b2g" firstAttribute="top" secondItem="Dny-Vg-Zzw" secondAttribute="bottom" constant="8" id="7I2-MW-THo"/>
+                                    <constraint firstItem="Dny-Vg-Zzw" firstAttribute="top" secondItem="4SH-aZ-z07" secondAttribute="bottom" constant="12" id="WQu-g0-gi4"/>
+                                    <constraint firstItem="pQ3-yB-b2g" firstAttribute="centerX" secondItem="5PG-Em-S6N" secondAttribute="centerX" id="ciK-zj-Qqz"/>
+                                    <constraint firstItem="4SH-aZ-z07" firstAttribute="centerY" secondItem="5PG-Em-S6N" secondAttribute="centerY" id="eSL-aS-nwi"/>
+                                    <constraint firstItem="Dny-Vg-Zzw" firstAttribute="centerX" secondItem="5PG-Em-S6N" secondAttribute="centerX" id="yuk-2W-FTP"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ecb-Lc-6L8" customClass="StashView" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="540" width="520" height="60"/>
                                 <subviews>
@@ -512,54 +560,6 @@
                                     <outlet property="totalPriceLabel" destination="O2F-Jz-CeL" id="EoQ-8V-xnJ"/>
                                     <outlet property="widthConstraint" destination="rQC-nu-lkT" id="yDs-1e-dvG"/>
                                 </connections>
-                            </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mf8-a8-xj0" customClass="ListTopBarView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="64" id="7pv-aL-nlg"/>
-                                </constraints>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VE1-1T-3hF" customClass="ExpandCollapseButton" customModule="shoppin">
-                                <rect key="frame" x="550" y="550" width="40" height="40"/>
-                                <color key="backgroundColor" red="0.61052091549999998" green="0.73144471069999994" blue="0.91775058180000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="40" id="Fol-Rb-oXr"/>
-                                    <constraint firstAttribute="height" constant="40" id="val-K9-the"/>
-                                </constraints>
-                            </button>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5PG-Em-S6N">
-                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="4SH-aZ-z07">
-                                        <rect key="frame" x="270" y="238" width="60" height="60"/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="60" id="Hg8-ID-vfl"/>
-                                            <constraint firstAttribute="width" constant="60" id="SMG-SM-nhM"/>
-                                        </constraints>
-                                    </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dny-Vg-Zzw">
-                                        <rect key="frame" x="222" y="310" width="156" height="21"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to start adding listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pQ3-yB-b2g">
-                                        <rect key="frame" x="223" y="339" width="154" height="16"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="4SH-aZ-z07" firstAttribute="centerX" secondItem="5PG-Em-S6N" secondAttribute="centerX" id="4ge-ja-9NN"/>
-                                    <constraint firstItem="pQ3-yB-b2g" firstAttribute="top" secondItem="Dny-Vg-Zzw" secondAttribute="bottom" constant="8" id="7I2-MW-THo"/>
-                                    <constraint firstItem="Dny-Vg-Zzw" firstAttribute="top" secondItem="4SH-aZ-z07" secondAttribute="bottom" constant="12" id="WQu-g0-gi4"/>
-                                    <constraint firstItem="pQ3-yB-b2g" firstAttribute="centerX" secondItem="5PG-Em-S6N" secondAttribute="centerX" id="ciK-zj-Qqz"/>
-                                    <constraint firstItem="4SH-aZ-z07" firstAttribute="centerY" secondItem="5PG-Em-S6N" secondAttribute="centerY" id="eSL-aS-nwi"/>
-                                    <constraint firstItem="Dny-Vg-Zzw" firstAttribute="centerX" secondItem="5PG-Em-S6N" secondAttribute="centerX" id="yuk-2W-FTP"/>
-                                </constraints>
                             </view>
                         </subviews>
                         <constraints>
