@@ -122,8 +122,9 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
                     if weakSelf.animateTableViewInset {
                         let topInset = (expanded ? weakSelf.openInset : weakSelf.closeInset) + view.frame.height
                         //                    let bottomInset = weakSelf.navigationController?.tabBarController?.tabBar.frame.height // TODO !!?
-                        let bottomInset: CGFloat = 0
-                        tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
+//                        let bottomInset: CGFloat = 0
+                        tableView.topInset = topInset
+//                        tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0) // TODO can we use tableViewShiftDown here also? why was the bottomInset necessary?
                         tableView.topOffset = -tableView.inset.top
                     }
 

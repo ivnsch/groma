@@ -25,7 +25,7 @@ extension UITableView {
     
     var topOffset: CGFloat {
         set {
-            self.contentOffset = CGPointMake(0, newValue)
+            self.contentOffset = CGPointMake(contentOffset.x, newValue)
         }
         get {
             return self.contentOffset.y
@@ -34,7 +34,7 @@ extension UITableView {
     
     var topInset: CGFloat {
         set {
-            self.contentInset = UIEdgeInsetsMake(newValue, 0, 0, 0)
+            self.contentInset = UIEdgeInsetsMake(newValue, contentInset.left, contentInset.bottom, contentInset.right)
         }
         get {
             return self.contentInset.top
@@ -43,7 +43,7 @@ extension UITableView {
 
     var bottomInset: CGFloat {
         set {
-            self.contentInset = UIEdgeInsetsMake(0, 0, newValue, 0)
+            self.contentInset = UIEdgeInsetsMake(contentInset.top, contentInset.left, newValue, contentInset.right)
         }
         get {
             return self.contentInset.bottom
