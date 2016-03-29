@@ -121,6 +121,9 @@
 		EB1B36761BC4832D003519F2 /* PlanItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1B36741BC4832D003519F2 /* PlanItemMapper.swift */; };
 		EB1B36771BC4832D003519F2 /* PlanItemMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1B36741BC4832D003519F2 /* PlanItemMapper.swift */; };
 		EB1B7D181BD2DBBC006DFDEE /* SuggestionsPrefiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */; };
+		EB1D69611CAB0563004892A2 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1D69601CAB0563004892A2 /* Notification.swift */; };
+		EB1D69621CAB0563004892A2 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1D69601CAB0563004892A2 /* Notification.swift */; };
+		EB1D69631CAB0563004892A2 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1D69601CAB0563004892A2 /* Notification.swift */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAF1A3334EC00D778DE /* ViewController.swift */; };
 		EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB11A3334EC00D778DE /* Main.storyboard */; };
@@ -1093,6 +1096,7 @@
 		EB1B366C1BC48238003519F2 /* DBPlanItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBPlanItem.swift; sourceTree = "<group>"; };
 		EB1B36701BC48278003519F2 /* RealmPlanProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmPlanProvider.swift; sourceTree = "<group>"; };
 		EB1B36741BC4832D003519F2 /* PlanItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanItemMapper.swift; sourceTree = "<group>"; };
+		EB1D69601CAB0563004892A2 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1961,6 +1965,7 @@
 				EBB5A0441B65391200FB9C58 /* validatorHelpers */,
 				EB2F5D7E1A559C8800DBC4AF /* Constants.swift */,
 				EB4FD44F1AC6BE960000F952 /* Globals.swift */,
+				EB1D69601CAB0563004892A2 /* Notification.swift */,
 				EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */,
 				EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */,
 				EB7E8B601B2ADF620090409A /* Try.swift */,
@@ -3574,6 +3579,7 @@
 				EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */,
 				EB7233C31C84B69A002B9903 /* DBRemoveSharedUser.swift in Sources */,
 				EB7032851BEBBD5D00779EBB /* ReorderSectionCell.swift in Sources */,
+				EB1D69611CAB0563004892A2 /* Notification.swift in Sources */,
 				EBA18C201BF5638D009291F2 /* QuickAddListItemViewController.swift in Sources */,
 				EB7E831E1B7B7069009DEEF4 /* HistoryProvider.swift in Sources */,
 				EBD558CB1BF3C1090048F287 /* ScaleViewController.swift in Sources */,
@@ -4045,6 +4051,7 @@
 				EB80CE561C44B000001DF159 /* NSMutableAttributedString.swift in Sources */,
 				EB7233D81C84B6E3002B9903 /* DBRemoveHistoryItem.swift in Sources */,
 				EBDFE3BF1ACEF60100E48F95 /* HeaderCell.swift in Sources */,
+				EB1D69621CAB0563004892A2 /* Notification.swift in Sources */,
 				EBD27CD31C171175005D8305 /* RemoteGroup.swift in Sources */,
 				EB714AAF1B67895500F91B94 /* RemoteProvider.swift in Sources */,
 				EBBC23021BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */,
@@ -4201,6 +4208,7 @@
 				EB714AB01B67895500F91B94 /* RemoteProvider.swift in Sources */,
 				EB85CEDF1C91E423008E3BA0 /* ProductWithQuantityInput.swift in Sources */,
 				EB451C431B861544000DE208 /* OrderedDictionary.swift in Sources */,
+				EB1D69631CAB0563004892A2 /* Notification.swift in Sources */,
 				EB1B36771BC4832D003519F2 /* PlanItemMapper.swift in Sources */,
 				EB70C22B1B4D3DD50060E529 /* ListProvider.swift in Sources */,
 				EB4A38AE1C8F863D000714F9 /* PullProviderImpl.swift in Sources */,

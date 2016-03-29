@@ -97,9 +97,9 @@ class RealmInventoryProvider: RealmProvider {
             do {
                 let realm = try Realm()
                 try realm.write {
+                    // Remove dependencies
                     DBProviders.listProvider.removeListSync(realm, listUuid: uuid, markForSync: markForSync)
-                    
-                    RealmHistoryProvider().removeHistoryItemsForInventory(realm, inventoryUuid: uuid, markForSync: markForSync)
+                    DBProviders.historyProvider.removeHistoryItemsForInventory(realm, inventoryUuid: uuid, markForSync: markForSync)
                     
                     let inventoryResults = realm.objects(DBInventory).filter(DBInventory.createFilter(uuid))
                     realm.delete(inventoryResults)

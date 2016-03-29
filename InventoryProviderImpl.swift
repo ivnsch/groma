@@ -160,6 +160,9 @@ class InventoryProviderImpl: InventoryProvider {
         dbInventoryProvider.removeInventory(uuid, markForSync: true) {[weak self] removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
             if removed {
+                
+                Notification.send(.ListRemoved, dict: [NotificationKey.list: uuid])
+
                 if remote {
                     self?.remoteProvider.removeInventory(uuid) {remoteResult in
                         if remoteResult.success {

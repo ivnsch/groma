@@ -83,6 +83,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         
         topBar.delegate = self
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onListRemovedNotification:", name: Notification.ListRemoved.rawValue, object: nil)
+        
+        // websocket
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItems:", name: WSNotificationName.ListItems.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItem:", name: WSNotificationName.ListItem.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketSection:", name: WSNotificationName.Section.rawValue, object: nil)
@@ -818,6 +821,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onTopBarTitleTap() {
+        back()
+    }
+    
+    func back() {
         onExpand(false)
         topQuickAddControllerManager?.controller?.onClose()
         topEditSectionControllerManager?.controller?.onClose()
@@ -855,6 +862,21 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         toggleReorderSections()
     }
     
+    
+    // MARK: - Notification
+    
+    func onListRemovedNotification(note: NSNotification) {
+        guard let info = note.userInfo as? Dictionary<String, String> else {QL4("Invalid info: \(note)"); return}
+        guard let listUuid = info[NotificationKey.list] else {QL4("No list uuid: \(info)"); return}
+        guard let currentList = currentList else {QL3("No current list, ignoring list removed notification."); return}
+        
+        // If we happen to be showing a list that was just removed (e.g. because user removed an inventory the list was associated to), exit.
+        // In this case (opposed to websocket notification) we don't show an alert, as this is triggered by an action of the user in the same device and user should know it was removed.
+        if listUuid == currentList.uuid {
+            back()
+        }
+    }
+    
     // MARK: - Websocket
     
     func onWebsocketList(note: NSNotification) {
@@ -866,7 +888,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     if let list = currentList {
                         if list.uuid == listUuid {
                             AlertPopup.show(title: "List deleted", message: "The list \(list.name) was deleted from another device. Returning to lists.", controller: self, onDismiss: {[weak self] in
-                                self?.navigationController?.popViewControllerAnimated(true)
+                                self?.back()
                             })
                         } else {
                             QL1("Websocket: List items controller received a notification to delete a list which is not the one being currently shown")

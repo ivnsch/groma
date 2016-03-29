@@ -108,12 +108,17 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     
     override func onRemoveModel(model: ExpandableTableViewModel) {
-        Providers.inventoryProvider.removeInventory((model as! ExpandableTableViewInventoryModel).inventory, remote: true, resultHandler(onSuccess: {
-            }, onError: {[weak self] result in
-                self?.initModels()
-                self?.defaultErrorHandler()(providerResult: result)
-            }
-        ))
+        
+        let inventory = (model as! ExpandableTableViewInventoryModel).inventory
+        
+        ConfirmationPopup.show(title: "Warning", message: "Removing '\(inventory.name)' will remove also all the history items, stats and lists associated with it.", okTitle: "Remove", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+            Providers.inventoryProvider.removeInventory(inventory, remote: true, weakSelf.resultHandler(onSuccess: {
+                }, onError: {[weak self] result in
+                    self?.initModels()
+                    self?.defaultErrorHandler()(providerResult: result)
+                }
+            ))
+        })
     }
     
     override func initDetailController(cell: UITableViewCell, model: ExpandableTableViewModel) -> UIViewController {
