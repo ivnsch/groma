@@ -270,7 +270,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             quickAddListItemViewController?.setEmptyViewVisible(false) // this is a no op for .Product as we never show empty view here (we show add products view instead)
         } else {
             switch itemType {
-            case .Product: showAddProductController()
+            case .Product:
+                searchBar.text = searchBar.text?.capitalizedString // on has not items the search text becomes item name input, so we capitalize the first letter. Note we don't revert this in hasItems = true, because maybe the user entered a capitalised string. Also nothing bad happens if we let the string capitalised.
+                showAddProductController()
             case .Group: quickAddListItemViewController?.setEmptyViewVisible(true)
             }
         }
