@@ -211,7 +211,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     // isSearchLoad: true if load is triggered from search box, false if pagination/first load
     private func loadPossibleNextPage(isSearchLoad: Bool) {
         
-        QL1("Called loadPossibleNextPage, isSearchLoad: \(isSearchLoad)")
+//        QL1("Called loadPossibleNextPage, isSearchLoad: \(isSearchLoad)")
         
         func setLoading(loading: Bool) {
             self.loadingPage = loading
@@ -282,7 +282,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         synced(self) {[weak self] in
             let weakSelf = self!
             
-            QL1("Trying to load: \(weakSelf.contentData.itemType) current page: \(weakSelf.paginator.currentPage), reachedEnd: \(weakSelf.paginator.reachedEnd), isSearchLoad: \(isSearchLoad)")
+//            QL1("Trying to load: \(weakSelf.contentData.itemType) current page: \(weakSelf.paginator.currentPage), reachedEnd: \(weakSelf.paginator.reachedEnd), isSearchLoad: \(isSearchLoad)")
 
             if !weakSelf.paginator.reachedEnd || isSearchLoad { // if pagination, load only if we are not at the end, for search load always
                 
