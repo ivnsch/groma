@@ -172,7 +172,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
             
         } else {
-            print("Warn: HistoryViewController.loadPossibleNextPage: Can't load page because there's no selected inventory")
+            QL2("Can't load page because there's no selected inventory")
+            self.tableViewFooter.hidden = true
         }
     }
 
