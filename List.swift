@@ -41,6 +41,10 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
         self.lastServerUpdate = lastServerUpdate
         self.removed = removed
     }
+
+    var shortDebugDescription: String {
+        return "{uuid: \(uuid), name: \(name), order: \(order)}"
+    }
     
     var debugDescription: String {
         return "{\(self.dynamicType) uuid: \(uuid), name: \(name), bgColor: \(bgColor), order: \(order), inventory: \(inventory), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"

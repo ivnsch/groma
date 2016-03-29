@@ -76,6 +76,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     override func initModels() {
         Providers.listProvider.lists(true, successHandler{[weak self] lists in
             self?.models = lists.map{ExpandableTableViewListModel(list: $0)}
+            self?.debugItems()
         })
     }
     
@@ -175,6 +176,13 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     // MARK:
 
     override func onExpand(expanding: Bool) {
+    }
+    
+    private func debugItems() {
+        if QorumLogs.minimumLogLevelShown < 2 {
+            print("Lists:")
+            (models as! [ExpandableTableViewListModel]).forEach{print("\($0.list.shortDebugDescription)")}
+        }
     }
 
     // MARK: - Websocket

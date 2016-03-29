@@ -52,7 +52,11 @@ class ListItemGroup: Identifiable, Equatable {
     func same(rhs: ListItemGroup) -> Bool {
         return uuid == rhs.uuid
     }
-    
+
+    var shortDebugDescription: String {
+        return "{uuid: \(uuid), name: \(name), order: \(order)}"
+    }
+
     var debugDescription: String {
         return "{\(self.dynamicType) uuid: \(uuid), name: \(name), bgColor: \(bgColor.hexStr), order: \(order), fav: \(fav), removed: \(removed), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
     }

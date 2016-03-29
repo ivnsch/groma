@@ -78,6 +78,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     override func initModels() {
         Providers.listItemGroupsProvider.groups(NSRange(location: 0, length: 1000), sortBy: .Order, successHandler{[weak self] groups in
             self?.models = groups.map{ExpandableTableViewGroupModel(group: $0)}
+            self?.debugItems()
         })
     }
     
@@ -150,6 +151,12 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         view.backgroundColor = UIColor.whiteColor()
     }
     
+    private func debugItems() {
+        if QorumLogs.minimumLogLevelShown < 2 {
+            print("Groups:")
+            (models as! [ExpandableTableViewGroupModel]).forEach{print("\($0.group.shortDebugDescription)")}
+        }
+    }
     
     // We have to do this programmatically since our storyboard does not contain the nav controller, which is in the main storyboard ("more"), thus the nav bar in our storyboard is not used. Maybe there's a better solution - no time now
     private func initNavBar(actions: [UIBarButtonSystemItem]) {

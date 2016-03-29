@@ -77,6 +77,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
             if let weakSelf = self {
                 let authInventories = inventories.filter{InventoryAuthChecker.checkAccess($0, controller: weakSelf)}
                 weakSelf.models = authInventories.map{ExpandableTableViewInventoryModel(inventory: $0)}
+                weakSelf.debugItems()
             }
         })
     }
@@ -144,6 +145,14 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
             }
         }
     }
+    
+    private func debugItems() {
+        if QorumLogs.minimumLogLevelShown < 2 {
+            print("Inventories:")
+            (models as! [ExpandableTableViewInventoryModel]).forEach{print("\($0.inventory.shortDebugDescription)")}
+        }
+    }
+
     
     // MARK: - ExpandableTopViewControllerDelegate
     

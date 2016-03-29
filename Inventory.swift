@@ -36,6 +36,10 @@ class Inventory: Equatable, Identifiable, Hashable {
         self.lastServerUpdate = lastServerUpdate
         self.removed = removed
     }
+
+    var shortDebugDescription: String {
+        return "{uuid: \(uuid), name: \(name), order: \(order)}"
+    }
     
     var debugDescription: String {
         return "{\(self.dynamicType) uuid: \(uuid), name: \(name), users: \(users), bgColor: \(bgColor), order: \(order), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
