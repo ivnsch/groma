@@ -80,7 +80,7 @@ class ListTopBarView: UIView {
     private var titleLabelCentered = false
     private let titleLabelLeftConstant: Float = 14
     
-    private let startTopConstant: Float = 20
+    private let startTopConstant: Float = 27
     private let topConstant: Float = 32
     
     private var titleLabelTopConstraint: NSLayoutConstraint?
@@ -171,8 +171,15 @@ class ListTopBarView: UIView {
     }
     
     // parameter: center => center, !center => left
-    // TODO rename maybe "setState(open)" or something, this is not only animating the label now but also the background
-    func positionTitleLabelLeft(center: Bool, animated: Bool) {
+    // TODO rename maybe "setState(open)" or something, this is not only animating the label now but also the background and the height
+    func positionTitleLabelLeft(center: Bool, animated: Bool, heightConstraint: NSLayoutConstraint? = nil) {
+        
+        if let heightConstraint = heightConstraint {
+            // The cell and topbar have different heights so we hav to animate this too. Sometimes the topbar is used without animation (e.g. top bar from lists/inventories/groups controller - in this case heightConstraint is nil)
+            heightConstraint.constant = center ? Constants.cellDefaultHeight : 64
+            layoutIfNeeded()
+            heightConstraint.constant = center ? 64 : Constants.cellDefaultHeight
+        }
         
         titleLabelLeftConstraint?.constant = center ? self.center.x - titleLabel.frame.width / 2 : CGFloat(titleLabelLeftConstant)
         titleLabelTopConstraint?.constant = center ? CGFloat(topConstant) : CGFloat(startTopConstant)

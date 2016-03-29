@@ -38,7 +38,8 @@ class ProductWithQuantityGroup: ProductWithQuantity {
 class GroupItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate {
 
     @IBOutlet weak var topBar: ListTopBarView!
-    
+    @IBOutlet weak var topBarHeightConstraint: NSLayoutConstraint!
+
     @IBOutlet weak var containerView: UIView!
     
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
@@ -137,7 +138,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             topBar.setRightButtonIds([])
         }
         topBar.layoutIfNeeded() // FIXME weird effect and don't we need this in view controller
-        topBar.positionTitleLabelLeft(expanding, animated: true)
+        topBar.positionTitleLabelLeft(expanding, animated: true, heightConstraint: topBarHeightConstraint)
     }
     
     func onExpandableClose() {

@@ -43,7 +43,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     @IBOutlet weak var listNameView: UILabel!
     
     @IBOutlet weak var topBar: ListTopBarView!
-
+    @IBOutlet weak var topBarHeightConstraint: NSLayoutConstraint!
+    
     private let transition = BlurBubbleTransition()
     
     private var titleLabel: UILabel?
@@ -134,7 +135,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             // Clear list item memory cache when we leave controller. This is not really necessary but just "in case". The list item memory cache is there to smooth things *inside* a list, that is transitions between todo/done/stash, and adding/incrementing items. Causing a db-reload when we load the controller is totally ok.
             Providers.listItemsProvider.invalidateMemCache()
         }
-        topBar.positionTitleLabelLeft(expanding, animated: true)
+        
+        topBar.positionTitleLabelLeft(expanding, animated: true, heightConstraint: topBarHeightConstraint)
     }
     
     func setThemeColor(color: UIColor) {

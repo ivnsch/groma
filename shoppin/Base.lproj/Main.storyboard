@@ -597,6 +597,7 @@
                         <outlet property="pricesView" destination="wdp-hj-bbA" id="64l-Vh-k1d"/>
                         <outlet property="stashView" destination="ecb-Lc-6L8" id="Wj9-eR-Tta"/>
                         <outlet property="topBar" destination="Mf8-a8-xj0" id="oGu-bF-E6Q"/>
+                        <outlet property="topBarHeightConstraint" destination="7pv-aL-nlg" id="GlV-TO-Zxm"/>
                         <segue destination="yD7-GV-3hX" kind="show" identifier="doneViewControllerSegue" id="83z-nz-sEV"/>
                     </connections>
                 </viewController>
@@ -1265,7 +1266,6 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="64" id="gL5-vI-X1T"/>
                                     <constraint firstAttribute="height" constant="64" id="yiz-QM-P6v"/>
                                 </constraints>
                             </view>
@@ -1294,6 +1294,7 @@
                     <connections>
                         <outlet property="containerView" destination="fqR-hq-Fa0" id="qlt-9X-kyP"/>
                         <outlet property="topBar" destination="ufg-SM-m4Q" id="uE4-KF-TYz"/>
+                        <outlet property="topBarHeightConstraint" destination="yiz-QM-P6v" id="3Vz-Sc-QC1"/>
                         <outlet property="topControlTopConstraint" destination="C3v-lB-8od" id="CLE-R6-Sy4"/>
                     </connections>
                 </viewController>
@@ -2184,7 +2185,6 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="64" id="NPb-f1-dRG"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="64" id="utn-mM-iuJ"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -2212,6 +2212,7 @@
                     <connections>
                         <outlet property="containerView" destination="CKE-Og-1Zr" id="RJs-m1-HDC"/>
                         <outlet property="topBar" destination="ces-XQ-rV3" id="scY-8j-YL3"/>
+                        <outlet property="topBarHeightConstraint" destination="NPb-f1-dRG" id="w2a-CB-nQ0"/>
                         <outlet property="topControlTopConstraint" destination="fC0-q5-7u8" id="TWt-hD-eUi"/>
                     </connections>
                 </viewController>
