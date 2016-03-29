@@ -108,6 +108,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             } else {
                 QL3("Controller: \(quickAddListItemViewController) or search is nil: \(textField.text)")
             }
+        } else {
+            QL3("Trying to search while isEdit (quick add has an edit item) - doing nothing.")
         }
     }
     

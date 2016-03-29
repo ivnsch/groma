@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 // TODO rename this controller in only groups controller and remove the old groups controller. Also delegate methods not with "Add" but simply "Tap" - the implementation of this delegate decides what the tap means.
 
@@ -56,6 +57,8 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         didSet {
             if searchText != oldValue {
                 clearAndLoadFirstPage(true)
+            } else {
+                QL2("Search text is equal to last value: \(searchText) - doing nothing")
             }
         }
     }
