@@ -19,20 +19,56 @@ protocol LoginDelegate {
     func onRegisterFromLoginSuccess()
 }
 
-class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate {
+// Things that make sense only for the re-login modal
+protocol ExpiredLoginDelegate {
+    func onUseAppOfflineTap()
+}
+
+enum LoginControllerMode {
+    case Normal, Expired
+}
+
+class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, ExpiredLoginDelegate {
 
     @IBOutlet weak var userNameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
     @IBOutlet weak var fbButton: FBSDKLoginButton!
 
+    @IBOutlet weak var registerButton: UIButton!
+    
+    // expired views
+    @IBOutlet weak var pleaseLoginAgainLabel: UILabel!
+    @IBOutlet weak var useAppOfflineButton: UIButton!
+    @IBOutlet weak var useAppOfflineLabel: UILabel!
+    
     var delegate: LoginDelegate?
+    var expiredLoginDelegate: ExpiredLoginDelegate?
     
     private var validator: Validator?
 
+    var mode: LoginControllerMode = .Normal {
+        didSet {
+            if registerButton != nil {
+                
+                let isNormal = mode == .Normal
+                pleaseLoginAgainLabel.hidden = isNormal
+                useAppOfflineButton.hidden = isNormal
+                useAppOfflineLabel.hidden = isNormal
+                
+                registerButton.hidden = !isNormal
+
+            } else {
+                QL3("Setting mode before outlets are initialised")
+            }
+        }
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+    
+    var onUIReady: VoidFunction?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +84,8 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         self.initValidator()
         
         fbButton.readPermissions = ["public_profile"]
+        
+        onUIReady?()
     }
 
     private func initValidator() {
@@ -104,7 +142,12 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     }
     
     func onRegisterSuccess() {
-        self.delegate?.onRegisterFromLoginSuccess() ?? print("Warn: no login delegate")
+        self.delegate?.onRegisterFromLoginSuccess() ?? QL3("No login delegate")
+    }
+    
+    // Button is visible only in .Expired mode
+    @IBAction func onUseAppOfflineTap() {
+        expiredLoginDelegate?.onUseAppOfflineTap()
     }
     
     // MARK: ForgotPasswordDelegate
@@ -116,7 +159,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     // MARK:
     
     func onLoginSuccess() {
-        delegate?.onLoginSuccess() ?? print("Warn: no login delegate")
+        delegate?.onLoginSuccess() ?? QL3("No login delegate")
     }
     
     // TODO refactor, same code as in LoginController

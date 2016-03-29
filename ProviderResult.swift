@@ -116,7 +116,7 @@ struct DefaultRemoteErrorHandler {
 //        guard remoteResult.status != .Success else {return} // if it's a success response, there's nothing to do here. Handler will not be called.
         
         switch remoteResult.status {
-        case .NoConnection, .NotLoggedIn, .NotAuthenticated
+        case .NoConnection, .NotLoggedIn
             // WARN: enable this only for testing (when using the moch user provider). In normal use, server not reachable should be shown. But:
             // TODO!!!! check priorities are correct during normal use: this error should appear ONLY when there's a connection AND user is logged in
             ,.ServerNotReachable
@@ -138,12 +138,20 @@ struct DefaultRemoteErrorHandler {
     }
     
     private static func handleError<T, U>(remoteResult: RemoteResult<T>, errorMsg: String? = nil, handler: ProviderResult<U> -> ()) {
-//        guard remoteResult.status != .Success else {return} // if it's a success response, there's nothing to do here. Handler will not be called.
         
-        let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-        let errorText = errorMsg.map{"\($0)::"} ?? ""
-        QL4("\(errorText)\(remoteResult)")
-        handler(ProviderResult(status: providerStatus, sucessResult: nil, error: remoteResult.error, errorObj: remoteResult.errorObj)) // TODO when remote fails somehow trigger a revert of local updates
+        // NotAuthenticated: special handling to show a login modal.
+        // NotAuthenticated happens when we send a token to the server but the server rejects it. When we don't have a token, the remove provider returns .NotLoggedIn before doing the request, so if everything is implemented correctly, it should not be possible to try to do requests without a login token, which means .NotAuthenticated can happen only when the token is invalid/expired, which meeans on .NotAuthenticated results we should show the login modal.
+        // On NotAuthenticated we also don't call the handler, we assume this is always used to call the default controller error handler which shows an error popup - since with the login modal we are already informing the user, the error popup is not necessary.
+        // Note that when user does create/update/delete with an expired token, the operation first stays as usual in the local database, and is sent to server via the sync that is done immediately after login.
+        if remoteResult.status == RemoteStatusCode.NotAuthenticated {
+            Notification.send(Notification.LoginTokenExpired)
+            
+        } else {
+            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
+            let errorText = errorMsg.map{"\($0)::"} ?? ""
+            QL4("\(errorText)\(remoteResult)")
+            handler(ProviderResult(status: providerStatus, sucessResult: nil, error: remoteResult.error, errorObj: remoteResult.errorObj)) // TODO when remote fails somehow trigger a revert of local updates
+        }
     }
     
 }

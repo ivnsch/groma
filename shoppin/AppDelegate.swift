@@ -56,9 +56,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
         checkRatePopup()
         
         initWebsocket()
-        
+
+        Notification.subscribe(.LoginTokenExpired, selector: "onLoginTokenExpired:", observer: self)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketConnectionChange:", name: WSNotificationName.Connection.rawValue, object: nil)
-        
+
         return initFb
     }
     
@@ -579,6 +580,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
     
     func onDismissRatingPopup() {
         ratingPopup = nil
+    }
+    
+    func onLoginTokenExpired(note: NSNotification) {
+        guard let controller = window?.rootViewController else {"Can't show login modal, either window: \(window) or root controller: \(window?.rootViewController) is nil)"; return}
+
+        let loginController = ModalLoginController()
+        controller.presentViewController(loginController, animated: true, completion: nil)
     }
     
     // MARK: - Websocket

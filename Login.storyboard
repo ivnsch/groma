@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeueLights.ttc">
+            <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
@@ -95,30 +96,62 @@
                                     <constraint firstAttribute="height" constant="45" id="iIg-YA-BDh"/>
                                 </constraints>
                             </view>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yQG-pO-NNA">
+                                <rect key="frame" x="252" y="434" width="97" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Use app offline">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onUseAppOfflineTap" destination="rg4-qz-Lat" eventType="touchUpInside" id="ebr-Dc-EXb"/>
+                                </connections>
+                            </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can log in again any time!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3G3-DS-C6O">
+                                <rect key="frame" x="211" y="466" width="178" height="16"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="13"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome back! Please log in again." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D7c-wL-aYY">
+                                <rect key="frame" x="181" y="44" width="238" height="18"/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="EgA-OH-X0u" firstAttribute="top" secondItem="TsF-zg-FLy" secondAttribute="bottom" constant="18" id="1k1-lB-RYq"/>
+                            <constraint firstItem="3G3-DS-C6O" firstAttribute="top" secondItem="yQG-pO-NNA" secondAttribute="bottom" constant="2" id="2pC-SO-dSA"/>
                             <constraint firstItem="QVU-Pz-cxq" firstAttribute="top" secondItem="Crr-TG-4lg" secondAttribute="bottom" constant="42" id="8uY-u1-TFg"/>
                             <constraint firstAttribute="trailing" secondItem="Yt4-Ha-XoG" secondAttribute="trailing" constant="16" id="A7N-aN-EYy"/>
                             <constraint firstAttribute="centerX" secondItem="v0i-2j-jaS" secondAttribute="centerX" id="EV7-Ej-izx"/>
                             <constraint firstItem="TsF-zg-FLy" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="16" id="Lko-r6-N2Y"/>
                             <constraint firstItem="t83-R4-Wil" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="NDQ-dn-mEJ"/>
                             <constraint firstItem="Crr-TG-4lg" firstAttribute="top" secondItem="t83-R4-Wil" secondAttribute="bottom" constant="8" id="UbY-6B-uvg"/>
+                            <constraint firstItem="D7c-wL-aYY" firstAttribute="top" secondItem="Pdv-bE-LUR" secondAttribute="bottom" constant="24" id="WY8-qe-Y5s"/>
                             <constraint firstItem="TsF-zg-FLy" firstAttribute="top" secondItem="Yt4-Ha-XoG" secondAttribute="bottom" constant="14" id="bbt-tb-zJh"/>
                             <constraint firstAttribute="trailing" secondItem="TsF-zg-FLy" secondAttribute="trailing" constant="16" id="bnR-83-IbH"/>
                             <constraint firstItem="v0i-2j-jaS" firstAttribute="top" secondItem="QVU-Pz-cxq" secondAttribute="bottom" constant="36" id="d4g-t2-NwM"/>
                             <constraint firstAttribute="centerX" secondItem="EgA-OH-X0u" secondAttribute="centerX" id="hGs-ao-zBv"/>
                             <constraint firstItem="Crr-TG-4lg" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="hQT-Qg-8lc"/>
+                            <constraint firstItem="yQG-pO-NNA" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="hlT-Pp-1W9"/>
                             <constraint firstItem="t83-R4-Wil" firstAttribute="top" secondItem="EgA-OH-X0u" secondAttribute="bottom" constant="16" id="kf2-SC-Gzm"/>
+                            <constraint firstItem="3G3-DS-C6O" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="l47-dr-7sR"/>
                             <constraint firstItem="Yt4-Ha-XoG" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="16" id="moB-wI-T5L"/>
                             <constraint firstItem="Yt4-Ha-XoG" firstAttribute="top" secondItem="bQi-hy-w8S" secondAttribute="top" constant="90" id="pAc-tg-rHQ"/>
+                            <constraint firstItem="yQG-pO-NNA" firstAttribute="top" secondItem="v0i-2j-jaS" secondAttribute="top" id="ubk-Vt-DK9"/>
+                            <constraint firstItem="D7c-wL-aYY" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="zVV-df-Bkg"/>
                             <constraint firstItem="QVU-Pz-cxq" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="zca-DM-UcM"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="fbButton" destination="t83-R4-Wil" id="0Ui-Vf-SgW"/>
                         <outlet property="passwordField" destination="TsF-zg-FLy" id="EPF-z5-er4"/>
+                        <outlet property="pleaseLoginAgainLabel" destination="D7c-wL-aYY" id="3eM-ml-0uA"/>
+                        <outlet property="registerButton" destination="v0i-2j-jaS" id="pi3-4z-XxM"/>
+                        <outlet property="useAppOfflineButton" destination="yQG-pO-NNA" id="4vZ-P8-ld8"/>
+                        <outlet property="useAppOfflineLabel" destination="3G3-DS-C6O" id="htq-6v-NRs"/>
                         <outlet property="userNameField" destination="Yt4-Ha-XoG" id="6hb-wf-wFB"/>
                     </connections>
                 </viewController>
