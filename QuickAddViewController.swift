@@ -102,6 +102,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     }
     
     func textFieldDidChange(textField: UITextField) {
+        
+        QL1("textFieldDidChange, text: \(textField.text)")
+        
         if !isEdit {
             if let controller = quickAddListItemViewController, searchText = textField.text {
                 controller.search(searchText)

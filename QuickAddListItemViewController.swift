@@ -210,12 +210,16 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     // isSearchLoad: true if load is triggered from search box, false if pagination/first load
     private func loadPossibleNextPage(isSearchLoad: Bool) {
         
+        QL1("Called loadPossibleNextPage, isSearchLoad: \(isSearchLoad)")
+        
         func setLoading(loading: Bool) {
             self.loadingPage = loading
 //            self.tableViewFooter.hidden = !loading
         }
         
         func onItemsLoaded(items: [QuickAddItem]) {
+            
+            QL1("onItemsLoaded: \(items.count)")
             
             if items.isEmpty {
                 delegate?.onHasItems(false)
@@ -233,7 +237,11 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
         }
         
         func loadProducts() {
-            let handler: ProviderResult<(substring: String?, products: [Product])> -> Void = resultHandler(onSuccess: {[weak self] tuple in
+            
+            Providers.productProvider.products(searchText, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
+                
+                QL1("Loaded products, current search: \(self?.searchText), range: \(self?.paginator.currentPage), sortBy: \(self?.contentData.sortBy), result search: \(tuple.substring), results: \(tuple.products.count)")
+
                 if let weakSelf = self {
                     // ensure we use only results for the string we have currently in the searchbox - the reason this check exists is that concurrent requests can cause problems,
                     // e.g. search that returns less results returns quicker, so if we type a word very fast, the results for the first letters (which are more than the ones when we add more letters) come *after* the results for more letters overriding the search results for the current text.
@@ -244,16 +252,16 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                         setLoading(false)
                     }
                 }
-            }, onError: {[weak self] result in
-                setLoading(false)
-                self?.defaultErrorHandler()(providerResult: result)
-            })
-            
-            Providers.productProvider.products(searchText, range: paginator.currentPage, sortBy: toProductSortBy(contentData.sortBy), handler)
+                }, onError: {[weak self] result in
+                    setLoading(false)
+                    self?.defaultErrorHandler()(providerResult: result)
+                })
+            )
         }
 
         func loadGroups() {
-            let handler: ProviderResult<(substring: String?, groups: [ListItemGroup])> -> Void = resultHandler(onSuccess: {[weak self] tuple in
+            
+            Providers.listItemGroupsProvider.groups(searchText, range: paginator.currentPage, sortBy: toGroupSortBy(contentData.sortBy), resultHandler(onSuccess: {[weak self] tuple in
                 if let weakSelf = self {
                     
                     if tuple.substring == weakSelf.searchText { // See comment about this above in products
@@ -263,17 +271,18 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
                         setLoading(false)
                     }
                 }
-            }, onError: {[weak self] result in
-                setLoading(false)
-                self?.defaultErrorHandler()(providerResult: result)
-            })
-            
-            Providers.listItemGroupsProvider.groups(searchText, range: paginator.currentPage, sortBy: toGroupSortBy(contentData.sortBy), handler)
+                }, onError: {[weak self] result in
+                    setLoading(false)
+                    self?.defaultErrorHandler()(providerResult: result)
+                })
+            )
         }
         
         synced(self) {[weak self] in
             let weakSelf = self!
             
+            QL1("Trying to load: \(weakSelf.contentData.itemType) current page: \(weakSelf.paginator.currentPage), reachedEnd: \(weakSelf.paginator.reachedEnd), isSearchLoad: \(isSearchLoad)")
+
             if !weakSelf.paginator.reachedEnd || isSearchLoad { // if pagination, load only if we are not at the end, for search load always
                 
                 if (!weakSelf.loadingPage) {
