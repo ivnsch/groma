@@ -534,7 +534,7 @@ class ListItemProviderImpl: ListItemProvider {
                     QL4("Error/warning: Src order: \(firstInputItemOrderInSrcStatusMaybe) is nil")
                 }
                 
-                // persist changes
+                // Persist changes. If mem cached is enabled this calls handler directly after mem cache is updated and does db update in the background.
                 self.updateLocal(listItems, handler: handler, onFinishLocal: {[weak self] in
                     
                     if remote {

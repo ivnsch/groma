@@ -129,6 +129,12 @@ extension Array {
             sum + f(element)
         }
     }
+    
+    func sum(f: Element -> Int) -> Int {
+        return reduce(0) {sum, element in
+            sum + f(element)
+        }
+    }
 }
 
 extension Array where Element: Hashable {

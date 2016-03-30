@@ -40,15 +40,16 @@ extension UIStoryboard {
     private class func simpleInputStoryboard() -> UIStoryboard { return UIStoryboard(name: "SimpleInputPopup", bundle: NSBundle.mainBundle()) }
     private class func ratingPopupStoryboard() -> UIStoryboard { return UIStoryboard(name: "RatingPopup", bundle: NSBundle.mainBundle()) }
     private class func sharedUsersStoryboard() -> UIStoryboard { return UIStoryboard(name: "SharedUsers", bundle: NSBundle.mainBundle()) }
+    private class func listItemsStoryboard() -> UIStoryboard { return UIStoryboard(name: "ListItemsControllers", bundle: NSBundle.mainBundle()) }
     
     // MARK: - List items
     
-    class func todoItemsViewController() -> ViewController {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("ViewController") as! ViewController
+    class func todoItemsViewController() -> TodoListItemsController {
+        return listItemsStoryboard().instantiateViewControllerWithIdentifier("TodoListItemsController") as! TodoListItemsController
     }
     
     class func listItemsTableViewController() -> ListItemsTableViewController {
-        return mainStoryboard().instantiateViewControllerWithIdentifier("ListItemsTableViewController") as! ListItemsTableViewController
+        return listItemsStoryboard().instantiateViewControllerWithIdentifier("ListItemsTableViewController") as! ListItemsTableViewController
     }
     
     // MARK: - Groups

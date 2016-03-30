@@ -126,8 +126,10 @@
 		EB1D69631CAB0563004892A2 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1D69601CAB0563004892A2 /* Notification.swift */; };
 		EB1D69661CAB220F004892A2 /* ModalLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1D69651CAB220F004892A2 /* ModalLoginController.swift */; };
 		EB1D69681CAB2235004892A2 /* ModalLoginController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1D69671CAB2234004892A2 /* ModalLoginController.storyboard */; };
+		EB1D696A1CABE71A004892A2 /* ListItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1D69691CABE71A004892A2 /* ListItemsController.swift */; };
+		EB1D696C1CABEB7B004892A2 /* TodoListItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1D696B1CABEB7B004892A2 /* TodoListItemsController.swift */; };
+		EB1D696E1CABEF9E004892A2 /* ListItemsControllers.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1D696D1CABEF9E004892A2 /* ListItemsControllers.storyboard */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
-		EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAF1A3334EC00D778DE /* ViewController.swift */; };
 		EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB11A3334EC00D778DE /* Main.storyboard */; };
 		EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB41A3334EC00D778DE /* Images.xcassets */; };
 		EB1DDEB81A3334EC00D778DE /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB61A3334EC00D778DE /* LaunchScreen.xib */; };
@@ -1101,10 +1103,12 @@
 		EB1D69601CAB0563004892A2 /* Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		EB1D69651CAB220F004892A2 /* ModalLoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModalLoginController.swift; sourceTree = "<group>"; };
 		EB1D69671CAB2234004892A2 /* ModalLoginController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ModalLoginController.storyboard; sourceTree = "<group>"; };
+		EB1D69691CABE71A004892A2 /* ListItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsController.swift; sourceTree = "<group>"; };
+		EB1D696B1CABEB7B004892A2 /* TodoListItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListItemsController.swift; sourceTree = "<group>"; };
+		EB1D696D1CABEF9E004892A2 /* ListItemsControllers.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ListItemsControllers.storyboard; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		EB1DDEAF1A3334EC00D778DE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		EB1DDEB21A3334EC00D778DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EB1DDEB41A3334EC00D778DE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		EB1DDEB71A3334EC00D778DE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -1892,8 +1896,10 @@
 				EB2F5D721A55754400DBC4AF /* PricesView.swift */,
 				EBD827FF1BE95C8B0072F9FA /* StashView.swift */,
 				EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */,
-				EB1DDEAF1A3334EC00D778DE /* ViewController.swift */,
 				EB741A5B1C22185900E1585D /* ListsTableViewController.swift */,
+				EB1D69691CABE71A004892A2 /* ListItemsController.swift */,
+				EB1D696B1CABEB7B004892A2 /* TodoListItemsController.swift */,
+				EB1D696D1CABEF9E004892A2 /* ListItemsControllers.storyboard */,
 				EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */,
 				EB4612B91BE56D970049DAD1 /* ExpandCellAnimator.swift */,
 				EB79AC251BF0E3B700685B30 /* AddEditListController.swift */,
@@ -3260,6 +3266,7 @@
 				EB8D1D0D1C38363400ADF884 /* AddEditGroupViewController.storyboard in Resources */,
 				EBA2C8CE1C4F207800A970B8 /* EditProductCategoryController.xib in Resources */,
 				EB7032831BEBBC6400779EBB /* ReorderSectionTableViewController.storyboard in Resources */,
+				EB1D696E1CABEF9E004892A2 /* ListItemsControllers.storyboard in Resources */,
 				EBDA75571BCD966D00E34AC3 /* OkCancelButtonsView.xib in Resources */,
 				EBA575651BCECC0000A0A825 /* QuantityView.xib in Resources */,
 				EB0587DC1BBED86C00080626 /* IntroPageView.xib in Resources */,
@@ -3596,6 +3603,7 @@
 				EB7032851BEBBD5D00779EBB /* ReorderSectionCell.swift in Sources */,
 				EB1D69611CAB0563004892A2 /* Notification.swift in Sources */,
 				EBA18C201BF5638D009291F2 /* QuickAddListItemViewController.swift in Sources */,
+				EB1D696A1CABE71A004892A2 /* ListItemsController.swift in Sources */,
 				EB7E831E1B7B7069009DEEF4 /* HistoryProvider.swift in Sources */,
 				EBD558CB1BF3C1090048F287 /* ScaleViewController.swift in Sources */,
 				EB0C1BA71B3DFD0800F24C85 /* NSLayoutConstraint.swift in Sources */,
@@ -3747,7 +3755,6 @@
 				EB0C1B831B3D626500F24C85 /* IntroViewController.swift in Sources */,
 				EB79AC271BF0E3B700685B30 /* AddEditListController.swift in Sources */,
 				EBCE418B1B5D10BA00583551 /* ListTableViewCell.swift in Sources */,
-				EB1DDEB01A3334EC00D778DE /* ViewController.swift in Sources */,
 				EB1B36451BC1D001003519F2 /* MLPAutoCompleteTextField.m in Sources */,
 				EB6F8DE11C1B29B300C05466 /* InventoryItemId.swift in Sources */,
 				EBBF2B9B1CA4BBA1003A9449 /* InvitedUserCell.swift in Sources */,
@@ -3870,6 +3877,7 @@
 				EB0C2A301B57BA9300AF6226 /* RequestErrorToMsgMapper.swift in Sources */,
 				EB6E3D391C5A591800D65DD5 /* RemoteGroupWithItems.swift in Sources */,
 				EBF377971B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
+				EB1D696C1CABEB7B004892A2 /* TodoListItemsController.swift in Sources */,
 				EB70328B1BEBF31A00779EBB /* SectionProvider.swift in Sources */,
 				EB714AAE1B67895500F91B94 /* RemoteProvider.swift in Sources */,
 				EB37ABBB1CA2021C00FE9D7A /* RoundTextField.swift in Sources */,

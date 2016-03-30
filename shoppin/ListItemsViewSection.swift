@@ -52,10 +52,16 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
      */
     var totalPrice: Float {
         return tableViewListItems.reduce(Float(0)) {sum, item in
-            
-            print("item: \(item.listItem.product.name), price: \(item.listItem.product.price), swiped: \(item.swiped)")
-            
             return sum + (item.swiped ? 0 : item.listItem.totalPrice(status))
+        }
+    }
+
+    /**
+     Returns total quantity of shown items exluding those marked for undo
+     */
+    var totalQuantity: Int {
+        return tableViewListItems.reduce(0) {sum, item in
+            return sum + (item.swiped ? 0 : item.listItem.quantity(status))
         }
     }
     

@@ -104,6 +104,15 @@ extension Array where Element: ListItem {
         }
     }
 
+    func totalQuanityAndPrice(status: ListItemStatus) -> (quantity: Int, price: Float) {
+        return reduce((0, 0)) {priceAndQuantity, listItem in
+            (
+                quantity: priceAndQuantity.0 + listItem.quantity(status),
+                price: priceAndQuantity.1 + listItem.totalPrice(status)
+            )
+        }
+    }
+    
     // Total price excluding stash
     var totalPriceTodoAndCart: Float {
         return totalPrice(.Todo) + totalPrice(.Done)

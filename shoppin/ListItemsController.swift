@@ -1,9 +1,9 @@
 //
-//  ViewController.swift
+//  ListItemsController.swift
 //  shoppin
 //
-//  Created by ischuetz on 06.12.14.
-//  Copyright (c) 2014 ivanschuetz. All rights reserved.
+//  Created by ischuetz on 30/03/16.
+//  Copyright © 2016 ivanschuetz. All rights reserved.
 //
 
 import UIKit
@@ -12,27 +12,23 @@ import SwiftValidator
 import ChameleonFramework
 import QorumLogs
 
-class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate, ExpandCollapseButtonDelegate
-//    , UIBarPositioningDelegate
+class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate, ExpandCollapseButtonDelegate
+    //    , UIBarPositioningDelegate
 {
     
     // TODO remove fields that are not necessary anymore
     
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
-
+    
     // TODO put next vars in a struct
-//    private var updatingListItem: ListItem?
+    //    private var updatingListItem: ListItem?
     private var updatingSelectedCell: UITableViewCell?
     
-    private var listItemsTableViewController: ListItemsTableViewController!
-
+    var listItemsTableViewController: ListItemsTableViewController!
+    
     private var currentTopController: UIViewController?
     
     @IBOutlet weak var expandCollapseButton: ExpandCollapseButton!
-    
-    @IBOutlet weak var pricesView: PricesView!
-    
-    @IBOutlet weak var stashView: StashView!
     
     // TODO 1 custom view for empty
     @IBOutlet weak var emptyListView: UIView!
@@ -58,9 +54,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     var onViewWillAppear: VoidFunction?
     
+    
+    var status: ListItemStatus {
+        fatalError("override")
+    }
+    
+    var tableViewBottomInset: CGFloat {
+        return 0
+    }
+    
     private var topQuickAddControllerManager: ExpandableTopViewController<QuickAddViewController>?
     private var topEditSectionControllerManager: ExpandableTopViewController<EditSectionViewController>?
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -71,13 +76,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         super.viewDidLoad()
         
         initTableViewController()
-
+        
         setEditing(false, animated: false, tryCloseTopViewController: false)
         
         initTitleLabel()
-
+        
         expandCollapseButton.delegate = self
-
+        
         topQuickAddControllerManager = initTopQuickAddControllerManager()
         topEditSectionControllerManager = initEditSectionControllerManager()
         
@@ -92,7 +97,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
     }
     
     deinit {
@@ -109,7 +114,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         manager.delegate = self
         return manager
     }
-
+    
     private func initEditSectionControllerManager() -> ExpandableTopViewController<EditSectionViewController> {
         let top = CGRectGetHeight(topBar.frame)
         let manager: ExpandableTopViewController<EditSectionViewController> = ExpandableTopViewController(top: top, height: 70, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
@@ -128,7 +133,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         topBar.addSubview(label)
         titleLabel = label
     }
-
+    
     func onExpand(expanding: Bool) {
         if !expanding {
             emptyListView.hidden = true
@@ -147,31 +152,27 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         view.backgroundColor = UIColor.whiteColor()
         
         expandCollapseButton.strokeColor = UIColor.blackColor()
-
-        stashView.setNeedsDisplay()
     }
     
     private func updatePossibleList() {
         if let list = self.currentList {
-//            self.navigationItem.title = list.name
+            //            self.navigationItem.title = list.name
             self.initWithList(list)
         }
     }
-
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         navigationController?.setNavigationBarHidden(true, animated: true)
-
+        
         updatePossibleList() // if there's a list already (e.g. come back from cart or stash - reload. If not (come from lists) onViewWillAppear triggers it.
         
         onViewWillAppear?()
         onViewWillAppear = nil
         
-        updateStashView(withDelay: true)
+//        updatePrices(.First)
         
-        updatePrices(.First)
-     
         // TODO custom empty view, put this there
         let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyListViewTap:"))
         emptyListView.addGestureRecognizer(tapRecognizer)
@@ -180,33 +181,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     func onEmptyListViewTap(sender: UITapGestureRecognizer) {
         toggleTopAddController() // this is meant to only open the menu, but toggle is ok since if we can tap on empty view it means it's closed
     }
-    
-    
-    // Update stash view after a delay. The delay is for design reason, to let user see what's hapenning otherwise not clear together with view controller transition
-    // but it ALSO turned to fix bug when user adds to stash and goes back to view controller too fast - count would not be updated (count fetch is quicker than writing items to database). FIXME (not critical) don't depend on this delay to fix this bug.
-    func updateStashView(withDelay withDelay: Bool) {
-        func f() {
-            if let list = currentList {
-                Providers.listItemsProvider.listItemCount(ListItemStatus.Stash, list: list, fetchMode: .MemOnly, successHandler {[weak self] count in
-                    if count != self?.stashView.quantity { // don't animate if there's no change
-                        self?.stashView.quantity = count
-                        self?.pricesView.setExpandedHorizontal(count == 0)
-                        self?.pricesView.stashQuantity = count
-                        self?.stashView.setOpen(count > 0)
-                    }
-                })
-            }
-        }
-        
-        if withDelay {
-            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(0.3 * Double(NSEC_PER_SEC)))
-            dispatch_after(delay, dispatch_get_main_queue()) {
-                f()
-            }
-        } else {
-            f()
-        }
-    }
+
     
     private func initWithList(list: List) {
         topBar.title = list.name
@@ -214,9 +189,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func udpateListItems(list: List, onFinish: VoidFunction? = nil) {
-        Providers.listItemsProvider.listItems(list, sortOrderByStatus: .Todo, fetchMode: .MemOnly, successHandler{[weak self] listItems in
-            self?.listItemsTableViewController.setListItems(listItems.filter{$0.hasStatus(.Todo)})
-            self?.updateEmptyView()
+        Providers.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: .MemOnly, successHandler{[weak self] listItems in guard let weakSelf = self else {return}
+            weakSelf.listItemsTableViewController.setListItems(listItems.filter{$0.hasStatus(weakSelf.status)})
+            weakSelf.onTableViewChangedQuantifiables()
             onFinish?()
         })
     }
@@ -233,13 +208,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             topQuickAddControllerManager?.controller?.onClose()
             topEditSectionControllerManager?.expand(false)
             topEditSectionControllerManager?.controller?.onClose()
-
+            
             topBar.setLeftButtonIds([.Edit])
-
+            
             if rotateTopBarButton {
                 topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
             }
-
+            
             
             if editing {
                 // if we are in edit mode, show the reorder sections button again (we hide it when we open the top controller)
@@ -249,7 +224,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         } else { // if there's no top controller open, open the quick add controller
             topQuickAddControllerManager?.expand(true)
             topQuickAddControllerManager?.controller?.initContent()
-
+            
             topBar.setLeftButtonIds([])
             
             if rotateTopBarButton {
@@ -274,7 +249,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         if editing == false {
             view.endEditing(true)
         }
-
+        
         if tryCloseTopViewController {
             topQuickAddControllerManager?.expand(false)
             topQuickAddControllerManager?.controller?.onClose()
@@ -292,30 +267,30 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
         
         listItemsTableViewController.setEditing(editing, animated: animated)
-
-
+        
+        
         listItemsTableViewController.cellMode = editing ? .Increment : .Note
     }
     
     // TODO do we still need this? This was prob used by done view controller to update our list
-//    func itemsChanged() {
-//        self.initList()
-//    }
+    //    func itemsChanged() {
+    //        self.initList()
+    //    }
     
-//    var refreshControl: UIRefreshControl?
+    //    var refreshControl: UIRefreshControl?
     private func initTableViewController() {
         listItemsTableViewController = UIStoryboard.listItemsTableViewController()
         
         addChildViewControllerAndView(listItemsTableViewController, viewIndex: 0)
         
-        listItemsTableViewController.status = .Todo
+        listItemsTableViewController.status = status
         listItemsTableViewController.scrollViewDelegate = self
         listItemsTableViewController.listItemsTableViewDelegate = self
         listItemsTableViewController.listItemsEditTableViewDelegate = self
         
         let navbarHeight = topBar.frame.height
         let topInset = navbarHeight
-        let bottomInset: CGFloat = pricesView.frame.height + 10 // 10 - show a little empty space between the last item and the prices view
+        let bottomInset: CGFloat = tableViewBottomInset + 10 // 10 - show a little empty space between the last item and the prices view
         listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0)
         listItemsTableViewController.tableView.topOffset = -listItemsTableViewController.tableView.inset.top
         listItemsTableViewController.enablePullToAdd()
@@ -340,31 +315,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) {
-        tableViewListItem.listItem.switchStatusQuantityMutable(.Todo, targetStatus: .Done)
-        
-        if let list = self.currentList {
-            
-            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status1: .Todo, status: .Done, remote: notifyRemote) {[weak self] result in
-                if result.success {
-                    self?.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
-                    self?.updatePrices(.MemOnly)
-                    self?.updateEmptyView()
-                }
-                onFinish()
-            }
-        } else {
-            onFinish()
-        }
+        listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
+        onTableViewChangedQuantifiables()
+        onFinish()
     }
     
-    private func updateEmptyView() {
-        emptyListView.setHiddenAnimated(!listItemsTableViewController.items.isEmpty)
-    }
-
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
         if self.editing {
             updatingSelectedCell = listItemsTableViewController.tableView.cellForRowAtIndexPath(indexPath)
-
+            
             topQuickAddControllerManager?.expand(true)
             topBar.setRightButtonModels([
                 TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
@@ -373,25 +332,48 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: tableViewListItem.listItem))
             
         } else {
-
-            listItemsTableViewController.markOpen(true, indexPath: indexPath, notifyRemote: true, onFinish: {[weak self] in
-                // "fake" update of price labels - the update has not been submitted yet to provider, since we just opened the cell and the item is submitted only after "undo" is cleared
-                // we do this for simplicity purposes, if we submitted on cell open we would have to revert the update on "undo".
-                // Note that after item is submitted we fetch from provider and update the labels again, to "be sure" (this time without animation). There's no real reason for this, just in case.
-                // Note also callback onFinish - when there's another undo item it will be submitted automatically, which triggers a provider and price view update
-                // so we have to ensure our fake update comes after this possible update, otherwise it's overwritten.
-                let updatedPrice = (self?.pricesView.donePrice ?? 0) + tableViewListItem.listItem.totalPrice(.Todo)
-                let updatedQuantity = (self?.pricesView.cartQuantity ?? 0) + 1
-                self?.pricesView.setDonePrice(updatedPrice, animated: true)
-                self?.pricesView.cartQuantity = updatedQuantity
+            
+            listItemsTableViewController.markOpen(true, indexPath: indexPath, notifyRemote: true, onFinish: {[weak self] in guard let weakSelf = self else {return}
+                let targetStatus: ListItemStatus = {
+                    switch weakSelf.status {
+                    case .Todo: return .Done
+                    case .Done: return .Todo
+                    case .Stash: return .Todo
+                    }
+                }()
+                Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, remote: true, weakSelf.successHandler {
+                        weakSelf.onTableViewChangedQuantifiables()
+                })
             })
         }
     }
     
+    // Callen when table view contents affecting list items quantity/price is modified
+    private func onTableViewChangedQuantifiables() {
+        updateQuantifiables()
+        
+        // update empty view
+        emptyListView.setHiddenAnimated(!listItemsTableViewController.items.isEmpty)
+    }
+    
+    func updateQuantifiables() {
+    }
+    
     func onListItemReset(tableViewListItem: TableViewListItem) {
-        // since we do a "fake" update of done price label when item is marked as undo (provider is not updated yet), we have to set label back when undo is reverted
-        // this is done by simply reloading the prices from the provider
-        updatePrices(.MemOnly)
+        // revert list item operation
+        let srcStatus: ListItemStatus = {
+            switch status {
+            case .Todo: return .Done
+            case .Done: return .Todo
+            case .Stash: return .Todo
+            }
+        }()
+        
+        Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: tableViewListItem.listItem.list, status1: srcStatus, status: status, remote: true, successHandler{[weak self] in
+            QL1("Undo successful")
+            self?.listItemsTableViewController.tableView.reloadData()
+            self?.onTableViewChangedQuantifiables()
+        })
     }
     
     func onSectionHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection) {
@@ -399,12 +381,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     func onIncrementItem(tableViewListItem: TableViewListItem, delta: Int) {
-        Providers.listItemsProvider.increment(tableViewListItem.listItem, delta: delta, remote: true, successHandler{[weak self] in
+        Providers.listItemsProvider.increment(tableViewListItem.listItem, delta: delta, remote: true, successHandler{[weak self] in guard let weakSelf = self else {return}
             // TODO do this in  the provider, provider should return incremented item
-            let incremented: ListItem = tableViewListItem.listItem.increment(ListItemStatusQuantity(status: .Todo, quantity: delta))
-            self?.listItemsTableViewController.updateOrAddListItem(incremented, status: .Todo, increment: false, notifyRemote: false)
+            let incremented: ListItem = tableViewListItem.listItem.increment(ListItemStatusQuantity(status: weakSelf.status, quantity: delta))
+            self?.listItemsTableViewController.updateOrAddListItem(incremented, status: weakSelf.status, increment: false, notifyRemote: false)
+            self?.onTableViewChangedQuantifiables()
         })
     }
+    
+    
+    
     
     // MARK: -
     
@@ -420,67 +406,59 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         }
     }
     
-//    func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
-//        return UIBarPosition.TopAttached
-//    }
+    //    func positionForBar(bar: UIBarPositioning) -> UIBarPosition {
+    //        return UIBarPosition.TopAttached
+    //    }
     
-//    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-//        return UIStatusBarStyle.LightContent
-//    }
-
+    //    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    //        return UIStatusBarStyle.LightContent
+    //    }
+    
     private func getTableViewInset() -> CGFloat {
         return topBar.frame.height
     }
     
-    func onListItemsChangedSection(tableViewListItems: [TableViewListItem]) {
-        Providers.listItemsProvider.updateListItemsTodoOrder(tableViewListItems.map{$0.listItem}, remote: true, successHandler{result in
-        })
+    func onListItemsOrderChangedSection(tableViewListItems: [TableViewListItem]) {
+        fatalError("override")
     }
     
     /**
-    Update price labels (total, done) using state in provider
-    */
+     Update price labels (total, done) using state in provider
+     */
     func updatePrices(listItemsFetchMode: ProviderFetchModus = .Both) {
-        if let currentList = self.currentList {
-            Providers.listItemsProvider.listItems(currentList, sortOrderByStatus: .Todo, fetchMode: listItemsFetchMode, successHandler{[weak self] listItems in
-                self?.pricesView.setTotalPrice(listItems.totalPriceTodoAndCart, animated: false)
-                // The reason we exclude stash from total price is that when user is in the store they want to know what they will have to pay at the end (if they buy the complete list - this may not be necessarily the case though), which is todo + stash
-                self?.pricesView.setDonePrice(listItems.totalPrice(.Done), animated: false)
-                self?.pricesView.cartQuantity = listItems.filterDone().count
-            })
-        }
+        // override
+        QL3("No override for updatePrices")
     }
     
     private func addItem(listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
-
+        
         if let currentList = self.currentList {
-            Providers.listItemsProvider.add(listItemInput, list: currentList, order: nil, possibleNewSectionOrder: ListItemStatusOrder(status: .Todo, order: listItemsTableViewController.sections.count), successHandler {[weak self] savedListItem in
-                self?.onListItemAddedToProvider(savedListItem)
+            Providers.listItemsProvider.add(listItemInput, list: currentList, order: nil, possibleNewSectionOrder: ListItemStatusOrder(status: status, order: listItemsTableViewController.sections.count), successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
+                self?.onListItemAddedToProvider(savedListItem, status: weakSelf.status)
                 handler?()
             })
             
         } else {
             print("Error: Invalid state: trying to add item without current list")
         }
-
+        
     }
     
-    
-    private func onListItemAddedToProvider(savedListItem: ListItem, notifyRemote: Bool = true) {
+    private func onListItemAddedToProvider(savedListItem: ListItem, status: ListItemStatus, notifyRemote: Bool = true) {
         // Our "add" can also be an update - if user adds an item with a name that already exists, it's an update (increment)
-        listItemsTableViewController.updateOrAddListItem(savedListItem, status: .Todo, increment: true, scrollToSelection: true, notifyRemote: notifyRemote)
-        updatePrices(.MemOnly)
-        updateEmptyView()
+        listItemsTableViewController.updateOrAddListItem(savedListItem, status: status, increment: true, scrollToSelection: true, notifyRemote: notifyRemote)
+        onTableViewChangedQuantifiables()
+//        updatePrices(.MemOnly)
     }
     
     // Note: don't use this to reorder sections, this doesn't update section order
-    // Note: concerning status - this only updates the .Todo related data (quantity, order). This means quantity and order of possible items in .Done or .Stash is not affected
+    // Note: concerning status - this only updates the current status related data (quantity, order). This means quantity and order of possible items in the other status is not affected
     private func updateItem(updatingListItem: ListItem, listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
         if let currentList = self.currentList {
             
             let category = updatingListItem.product.category
             let product = Product(uuid: updatingListItem.product.uuid, name: listItemInput.name, price: listItemInput.price, category: category, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand) // possible product update
-
+            
             func onHasSection(section: Section) {
                 let listItem = ListItem(
                     uuid: updatingListItem.uuid,
@@ -488,13 +466,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                     section: section,
                     list: currentList,
                     note: listItemInput.note,
-                    statusOrder: ListItemStatusOrder(status: .Todo, order: updatingListItem.order(.Todo)),
-                    statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: listItemInput.quantity)
+                    statusOrder: ListItemStatusOrder(status: status, order: updatingListItem.order(status)),
+                    statusQuantity: ListItemStatusQuantity(status: status, quantity: listItemInput.quantity)
                 )
                 
-                Providers.listItemsProvider.update([listItem], remote: true, successHandler {[weak self] in
-                    self?.listItemsTableViewController.updateListItem(listItem, status: .Todo, notifyRemote: true)
-                    self?.updatePrices(.MemOnly)
+                Providers.listItemsProvider.update([listItem], remote: true, successHandler {[weak self] in guard let weakSelf = self else {return}
+                    self?.listItemsTableViewController.updateListItem(listItem, status: weakSelf.status, notifyRemote: true)
+//                    self?.updatePrices(.MemOnly)
+                    self?.onTableViewChangedQuantifiables()
                     handler?()
                 })
             }
@@ -517,16 +496,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 let updatedSection = updatingListItem.section.copy(color: listItemInput.sectionColor)
                 onHasSection(updatedSection)
             }
-
+            
         } else {
             print("Error: Invalid state: trying to update list item without current list")
         }
-
+        
     }
     
     func onListItemDeleted(tableViewListItem: TableViewListItem) {
         Providers.listItemsProvider.remove(tableViewListItem.listItem, remote: true, successHandler{[weak self] in
-            self?.updateEmptyView()
+            self?.onTableViewChangedQuantifiables()
         })
     }
     
@@ -561,7 +540,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             print("Invalid segue: \(segue.identifier)")
         }
     }
-
+    
     
     // MARK: - QuickAddDelegate
     
@@ -573,7 +552,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
         if let list = currentList {
-
+            
             // TODO save "group list item" don't desintegrate group immediatly
             
             Providers.listItemsProvider.addGroupItems(group, list: list, successHandler{[weak self] addedListItems in
@@ -584,7 +563,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 }
                 onFinish?()
                 
-            })
+                })
         } else {
             print("Error: Add product from quick list but there's no current list in ViewController'")
         }
@@ -592,8 +571,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     func onAddProduct(product: Product) {
         if let list = currentList {
-            Providers.listItemsProvider.addListItem(product, sectionName: product.category.name, sectionColor: product.category.color, quantity: 1, list: list, note: nil, order: nil, successHandler {[weak self] savedListItem in
-                self?.onListItemAddedToProvider(savedListItem)
+            Providers.listItemsProvider.addListItem(product, sectionName: product.category.name, sectionColor: product.category.color, quantity: 1, list: list, note: nil, order: nil, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
+                weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status)
             })
         } else {
             print("Error: Add product from quick list but there's no current list in ViewController'")
@@ -638,7 +617,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
         ])
     }
-
+    
     func parentViewForAddButton() -> UIView {
         return self.view
     }
@@ -662,25 +641,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     
     
     // was used to expand the quick add embedded view controller to fill available space when adding group items. Maybe will be used again in the future.
-//    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect) {
-//        
-//        let topOffset = myTopOffset + pricesView.frame.height
-//        
-//        UIView.animateWithDuration(0.3) {[weak self] in
-//            if let weakSelf = self {
-//                if expanded {
-//                    weakSelf.quickAddController.view.frame = CGRectMake(originalFrame.origin.x, originalFrame.origin.y - topOffset, originalFrame.width, weakSelf.view.frame.height)
-////                    weakSelf.quickAddController.view.frame.origin = CGPointMake(originalFrame.origin.x, originalFrame.origin.y - topOffset)
-////                    weakSelf.quickAddController.view.transform = CGAffineTransformMakeScale(1, 1.5)
-//                } else {
-//                    weakSelf.quickAddController.view.frame = CGRectMake(originalFrame.origin.x, originalFrame.origin.y, originalFrame.width, originalFrame.height)
-////                    weakSelf.quickAddController.view.frame.origin = CGPointMake(originalFrame.origin.x, originalFrame.origin.y)
-////                    weakSelf.quickAddController.view.transform = CGAffineTransformMakeScale(1, 1.0)
-//                }
-////                            self?.view.layoutIfNeeded()
-//            }
-//        }
-//    }
+    //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect) {
+    //
+    //        let topOffset = myTopOffset + pricesView.frame.height
+    //
+    //        UIView.animateWithDuration(0.3) {[weak self] in
+    //            if let weakSelf = self {
+    //                if expanded {
+    //                    weakSelf.quickAddController.view.frame = CGRectMake(originalFrame.origin.x, originalFrame.origin.y - topOffset, originalFrame.width, weakSelf.view.frame.height)
+    ////                    weakSelf.quickAddController.view.frame.origin = CGPointMake(originalFrame.origin.x, originalFrame.origin.y - topOffset)
+    ////                    weakSelf.quickAddController.view.transform = CGAffineTransformMakeScale(1, 1.5)
+    //                } else {
+    //                    weakSelf.quickAddController.view.frame = CGRectMake(originalFrame.origin.x, originalFrame.origin.y, originalFrame.width, originalFrame.height)
+    ////                    weakSelf.quickAddController.view.frame.origin = CGPointMake(originalFrame.origin.x, originalFrame.origin.y)
+    ////                    weakSelf.quickAddController.view.transform = CGAffineTransformMakeScale(1, 1.0)
+    //                }
+    ////                            self?.view.layoutIfNeeded()
+    //            }
+    //        }
+    //    }
     
     // MARK: - EditSectionViewControllerDelegate
     
@@ -697,7 +676,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
         listItemsTableViewController.updateSection(section)
         
         // because updateSection/reloadData listItemsTableViewController sets back expanded to true, set correct state. If sectionsTableViewController is not visible it means it's expanded.
-//        listItemsTableViewController.sectionsExpanded = sectionsTableViewController == nil
+        //        listItemsTableViewController.sectionsExpanded = sectionsTableViewController == nil
     }
     
     private func sendActionToTopController(action: FLoatingButtonAction) {
@@ -717,7 +696,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
     }
     
     private func setReorderSections(reorderSections: Bool) {
-
+        
         if !lockToggleSectionsTableView {
             lockToggleSectionsTableView = true
             
@@ -911,7 +890,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 switch notification.verb {
                 case WSNotificationVerb.Order:
                     updatePossibleList() // reload list
-                    updatePrices(.MemOnly)
                     
                 default: print("Error: ViewController.onWebsocketUpdateListItems: Not handled: z\(notification.verb)")
                 }
@@ -931,12 +909,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 
                 switch notification.verb {
                 case .Add:
-                    onListItemAddedToProvider(listItem, notifyRemote: false)
+                    // TODO!!!!! websocket add/update must send status also
+                    onListItemAddedToProvider(listItem, status: .Todo, notifyRemote: false)
                     
                 case .Update:
+                    
+                    // TODO!!!!! websocket add/update must send status also
                     listItemsTableViewController.updateListItem(listItem, status: .Todo, notifyRemote: false)
-                    updatePrices(.MemOnly)
-
+                    onTableViewChangedQuantifiables()
+                    
                 default: QL4("Not handled verb: \(notification.verb)")
                 }
             } else {
@@ -951,7 +932,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 switch notification.verb {
                 case .Delete:
                     listItemsTableViewController.removeListItem(itemUuid)
-                    updatePrices(.MemOnly)
+                    onTableViewChangedQuantifiables()
                     
                 default: QL4("Not handled case: \(notification.verb))")
                 }
@@ -964,6 +945,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
                 switch notification.verb {
                 case WSNotificationVerb.Increment:
                     let incr = notification.obj
+                    // TODO!!!!! websocket add/update must send status also
                     listItemsTableViewController.incrementListItem(incr, status: .Todo, notifyRemote: false)
                 default: QL4("Not handled: \(notification.verb)")
                 }
@@ -980,11 +962,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                     // There's no direct add of section
-//                case .Add:
+                    //                case .Add:
                 case .Update:
                     // NOTE: this doesn't update order. Update reorder would require to reload the table view and this can e.g. revert undo cells or interfere with current action like swiping an item. So to update order the user has to reopen the list.
                     listItemsTableViewController.updateSection(notification.obj)
-
+                    
                 default: QL4("Not handled: \(notification.verb)")
                 }
             } else {
@@ -1011,6 +993,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Update:
+                    // TODO!!!!! websocket add/update must send status also
                     listItemsTableViewController.updateProduct(notification.obj, status: .Todo)
                 default: break // no error msg here, since we will receive .Add but not handle it in this view controller
                 }
@@ -1032,7 +1015,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UIScrollViewDelegat
             print("Error: ViewController.onWebsocketProduct: no userInfo")
         }
     }
-
+    
     func onWebsocketProductCategory(note: NSNotification) {
         
         // category udpate not relevant for list items since items show only section, not category. The add/edit has also only section

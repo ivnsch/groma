@@ -20,7 +20,7 @@ protocol ListItemsTableViewDelegate {
 }
 
 protocol ListItemsEditTableViewDelegate {
-    func onListItemsChangedSection(tableViewListItems: [TableViewListItem])
+    func onListItemsOrderChangedSection(tableViewListItems: [TableViewListItem])
     func onListItemDeleted(tableViewListItem: TableViewListItem)
 }
 
@@ -90,9 +90,14 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
      Returns total price of shown items exluding those marked for undo
      */
     var totalPrice: Float {
-        return tableViewSections.reduce(Float(0)) {sum, section in
-            sum + section.totalPrice
-        }
+        return tableViewSections.sum{$0.totalPrice}
+    }
+
+    /**
+     Returns total quantity of shown items exluding those marked for undo
+     */
+    var totalQuantity: Int {
+        return tableViewSections.sum{$0.totalQuantity}
     }
     
     override func viewDidLoad() {
@@ -706,7 +711,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             }
             
         } else {
-            print("Warning: markOpen: \(open), self not set or indexPath not found: \(indexPath)")
+            QL3("markOpen: \(open), self not set or indexPath not found: \(indexPath)")
         }
     }
     
@@ -766,7 +771,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 tableView.reloadData()
             }
             
-            self.listItemsEditTableViewDelegate?.onListItemsChangedSection(modifiedListItems)
+            self.listItemsEditTableViewDelegate?.onListItemsOrderChangedSection(modifiedListItems)
         }
     }
 }
