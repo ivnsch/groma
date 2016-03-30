@@ -135,7 +135,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             Providers.inventoryItemsProvider.invalidateMemCache()
         }
         topBar.layoutIfNeeded() // FIXME weird effect and don't we need this in view controller
-        topBar.positionTitleLabelLeft(expanding, animated: true, heightConstraint: topBarHeightConstraint)
+        topBar.positionTitleLabelLeft(expanding, animated: true, withDot: true, heightConstraint: topBarHeightConstraint)
     }
     
     func onExpandableClose() {

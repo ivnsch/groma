@@ -516,21 +516,24 @@ struct MyWebsocketDispatcher {
     private static func processListItem(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
-            if let remoteListItems = RemoteListItems(representation: data) {
-                if let listItem = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: nil).listItems.first {
-                    Providers.listItemsProvider.add(listItem, remote: false) {result in
-                        if result.success {
-                            postNotification(.ListItem, verb, sender, listItem)
-                        } else {
-                            MyWebsocketDispatcher.reportWebsocketStoringError("Add \(listItem)", result: result)
-                        }
-                    }
-                } else {
-                    reportWebsocketGeneralError("Add list item didn't return a list")
-                }
-            } else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Add list item, data: \(data)")
-            }
+            QL3("Websocket TODO!!!!")
+            // now that we have to pass status to list item add, we need this info in websocket also? or do we simply have to insert, if yes maybe we need a provider method special for this, and delete the old ones?
+            
+//            if let remoteListItems = RemoteListItems(representation: data) {
+//                if let listItem = ListItemMapper.listItemsWithRemote(remoteListItems, sortOrderByStatus: nil).listItems.first {
+//                    Providers.listItemsProvider.add(listItem, remote: false) {result in
+//                        if result.success {
+//                            postNotification(.ListItem, verb, sender, listItem)
+//                        } else {
+//                            MyWebsocketDispatcher.reportWebsocketStoringError("Add \(listItem)", result: result)
+//                        }
+//                    }
+//                } else {
+//                    reportWebsocketGeneralError("Add list item didn't return a list")
+//                }
+//            } else {
+//                MyWebsocketDispatcher.reportWebsocketParsingError("Add list item, data: \(data)")
+//            }
 
         case WSNotificationVerb.Update:
             if let remoteListItems = RemoteListItems(representation: data) {

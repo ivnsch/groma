@@ -129,6 +129,7 @@
 		EB1D696A1CABE71A004892A2 /* ListItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1D69691CABE71A004892A2 /* ListItemsController.swift */; };
 		EB1D696C1CABEB7B004892A2 /* TodoListItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1D696B1CABEB7B004892A2 /* TodoListItemsController.swift */; };
 		EB1D696E1CABEF9E004892A2 /* ListItemsControllers.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1D696D1CABEF9E004892A2 /* ListItemsControllers.storyboard */; };
+		EB1D69701CAC32E4004892A2 /* CartListItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1D696F1CAC32E4004892A2 /* CartListItemsController.swift */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB11A3334EC00D778DE /* Main.storyboard */; };
 		EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB41A3334EC00D778DE /* Images.xcassets */; };
@@ -1106,6 +1107,7 @@
 		EB1D69691CABE71A004892A2 /* ListItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemsController.swift; sourceTree = "<group>"; };
 		EB1D696B1CABEB7B004892A2 /* TodoListItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListItemsController.swift; sourceTree = "<group>"; };
 		EB1D696D1CABEF9E004892A2 /* ListItemsControllers.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ListItemsControllers.storyboard; sourceTree = "<group>"; };
+		EB1D696F1CAC32E4004892A2 /* CartListItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartListItemsController.swift; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1899,6 +1901,7 @@
 				EB741A5B1C22185900E1585D /* ListsTableViewController.swift */,
 				EB1D69691CABE71A004892A2 /* ListItemsController.swift */,
 				EB1D696B1CABEB7B004892A2 /* TodoListItemsController.swift */,
+				EB1D696F1CAC32E4004892A2 /* CartListItemsController.swift */,
 				EB1D696D1CABEF9E004892A2 /* ListItemsControllers.storyboard */,
 				EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */,
 				EB4612B91BE56D970049DAD1 /* ExpandCellAnimator.swift */,
@@ -3794,6 +3797,7 @@
 				EB1B36611BC47D88003519F2 /* PlanProvider.swift in Sources */,
 				EB70C2231B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBF162F51A3CA4BA0048E37C /* ProviderFactory.swift in Sources */,
+				EB1D69701CAC32E4004892A2 /* CartListItemsController.swift in Sources */,
 				EB0870CB1BC050A300169E29 /* MyTipPopup.swift in Sources */,
 				EBB5266F1BEFD8A20002A286 /* HelpViewController.swift in Sources */,
 				EB4147CD1BE2288E00549CE4 /* ManageGroupsCell.swift in Sources */,

@@ -138,7 +138,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             topBar.setRightButtonIds([])
         }
         topBar.layoutIfNeeded() // FIXME weird effect and don't we need this in view controller
-        topBar.positionTitleLabelLeft(expanding, animated: true, heightConstraint: topBarHeightConstraint)
+        topBar.positionTitleLabelLeft(expanding, animated: true, withDot: true, heightConstraint: topBarHeightConstraint)
     }
     
     func onExpandableClose() {

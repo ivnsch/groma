@@ -15,4 +15,6 @@ struct Constants {
     static let cellDefaultHeight: CGFloat = 76
     static let listItemsTableViewHeaderHeight: CGFloat = 35
     static let tabGroupsIndex: Int = 1
+    
+    static let tableViewAdditionalBottomInset: CGFloat = 10
 }

@@ -12,7 +12,7 @@ import SwiftValidator
 import ChameleonFramework
 import QorumLogs
 
-class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, CartViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate, ExpandCollapseButtonDelegate
+class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate, ExpandCollapseButtonDelegate
     //    , UIBarPositioningDelegate
 {
     
@@ -30,20 +30,14 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     @IBOutlet weak var expandCollapseButton: ExpandCollapseButton!
     
-    // TODO 1 custom view for empty
-    @IBOutlet weak var emptyListView: UIView!
-    @IBOutlet weak var emptyListViewImg: UIImageView!
-    @IBOutlet weak var emptyListViewLabel1: UILabel!
-    @IBOutlet weak var emptyListViewLabel2: UILabel!
-    
-    @IBOutlet weak var listNameView: UILabel!
+//    @IBOutlet weak var listNameView: UILabel!
     
     @IBOutlet weak var topBar: ListTopBarView!
     @IBOutlet weak var topBarHeightConstraint: NSLayoutConstraint!
     
     private let transition = BlurBubbleTransition()
     
-    private var titleLabel: UILabel?
+    var titleLabel: UILabel?
     
     var expandDelegate: Foo?
     
@@ -71,6 +65,10 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     private var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
+    
+    var emptyView: UIView {
+        fatalError("override")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -136,7 +134,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     func onExpand(expanding: Bool) {
         if !expanding {
-            emptyListView.hidden = true
+            setEmptyViewVisible(false, animated: false)
             clearPossibleUndo()
             topBar.setLeftButtonIds([])
             topBar.setRightButtonIds([])
@@ -144,7 +142,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             Providers.listItemsProvider.invalidateMemCache()
         }
         
-        topBar.positionTitleLabelLeft(expanding, animated: true, heightConstraint: topBarHeightConstraint)
+        topBar.positionTitleLabelLeft(expanding, animated: true, withDot: true, heightConstraint: topBarHeightConstraint)
     }
     
     func setThemeColor(color: UIColor) {
@@ -161,6 +159,10 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
+    func setEmptyViewVisible(visible: Bool, animated: Bool) {
+        fatalError("override")
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -175,7 +177,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         
         // TODO custom empty view, put this there
         let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyListViewTap:"))
-        emptyListView.addGestureRecognizer(tapRecognizer)
+        emptyView.addGestureRecognizer(tapRecognizer)
     }
     
     func onEmptyListViewTap(sender: UITapGestureRecognizer) {
@@ -184,8 +186,12 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
 
     
     private func initWithList(list: List) {
-        topBar.title = list.name
+        topBar.title = topBarTitle(list)
         udpateListItems(list)
+    }
+    
+    func topBarTitle(list: List) -> String {
+        return list.name
     }
     
     private func udpateListItems(list: List, onFinish: VoidFunction? = nil) {
@@ -194,6 +200,11 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             weakSelf.onTableViewChangedQuantifiables()
             onFinish?()
         })
+    }
+    
+    // buttons for left nav bar side in default state (e.g. not while the top controller is open)
+    func setDefaultLeftButtons() {
+        topBar.setLeftButtonIds([.Edit])
     }
     
     // MARK:
@@ -209,7 +220,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             topEditSectionControllerManager?.expand(false)
             topEditSectionControllerManager?.controller?.onClose()
             
-            topBar.setLeftButtonIds([.Edit])
+            setDefaultLeftButtons()
             
             if rotateTopBarButton {
                 topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
@@ -349,11 +360,11 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     // Callen when table view contents affecting list items quantity/price is modified
-    private func onTableViewChangedQuantifiables() {
+    func onTableViewChangedQuantifiables() {
         updateQuantifiables()
         
         // update empty view
-        emptyListView.setHiddenAnimated(!listItemsTableViewController.items.isEmpty)
+        setEmptyViewVisible(listItemsTableViewController.items.isEmpty, animated: true)
     }
     
     func updateQuantifiables() {
@@ -433,7 +444,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     private func addItem(listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
         
         if let currentList = self.currentList {
-            Providers.listItemsProvider.add(listItemInput, list: currentList, order: nil, possibleNewSectionOrder: ListItemStatusOrder(status: status, order: listItemsTableViewController.sections.count), successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
+            Providers.listItemsProvider.add(listItemInput, status: status, list: currentList, order: nil, possibleNewSectionOrder: ListItemStatusOrder(status: status, order: listItemsTableViewController.sections.count), successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
                 self?.onListItemAddedToProvider(savedListItem, status: weakSelf.status)
                 handler?()
             })
@@ -509,39 +520,6 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         })
     }
     
-    @IBAction func onCartTap(sender: UIButton) {
-        performSegueWithIdentifier("doneViewControllerSegue", sender: self)
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "doneViewControllerSegue" {
-            if let doneViewController = segue.destinationViewController as? DoneViewController {
-                doneViewController.navigationItemTextColor = titleLabel?.textColor
-                doneViewController.delegate = self
-                doneViewController.onUIReady = {
-                    self.listItemsTableViewController.clearPendingSwipeItemIfAny(true) {
-                        doneViewController.list = self.currentList
-                        doneViewController.backgroundColor = self.listItemsTableViewController.view.backgroundColor
-                    }
-                }
-            }
-        } else if segue.identifier == "stashSegue" {
-            if let stashViewController = segue.destinationViewController as? StashViewController {
-                stashViewController.navigationItemTextColor = titleLabel?.textColor
-                listItemsTableViewController.clearPendingSwipeItemIfAny(true) {
-                    stashViewController.onUIReady = {
-                        stashViewController.list = self.currentList
-                        stashViewController.backgroundColor = self.listItemsTableViewController.view.backgroundColor
-                    }
-                }
-            }
-            
-        } else {
-            print("Invalid segue: \(segue.identifier)")
-        }
-    }
-    
-    
     // MARK: - QuickAddDelegate
     
     func onCloseQuickAddTap() {
@@ -555,27 +533,27 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             
             // TODO save "group list item" don't desintegrate group immediatly
             
-            Providers.listItemsProvider.addGroupItems(group, list: list, successHandler{[weak self] addedListItems in
+            Providers.listItemsProvider.addGroupItems(group, status: status, list: list, successHandler{[weak self] addedListItems in
                 if let list = self?.currentList {
                     self?.initWithList(list) // refresh list items
                 } else {
-                    print("Warn: Group was added but couldn't reinit list, self or currentList is not set: self: \(self), currentlist: \(self?.currentList)")
+                    QL3("Group was added but couldn't reinit list, self or currentList is not set: self: \(self), currentlist: \(self?.currentList)")
                 }
                 onFinish?()
                 
                 })
         } else {
-            print("Error: Add product from quick list but there's no current list in ViewController'")
+            QL4("Add product from quick list but there's no current list in ViewController'")
         }
     }
     
     func onAddProduct(product: Product) {
         if let list = currentList {
-            Providers.listItemsProvider.addListItem(product, sectionName: product.category.name, sectionColor: product.category.color, quantity: 1, list: list, note: nil, order: nil, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
+            Providers.listItemsProvider.addListItem(product, status: status, sectionName: product.category.name, sectionColor: product.category.color, quantity: 1, list: list, note: nil, order: nil, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
                 weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status)
             })
         } else {
-            print("Error: Add product from quick list but there's no current list in ViewController'")
+            QL4("Add product from quick list but there's no current list in ViewController'")
         }
     }
     
@@ -768,13 +746,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     func onSectionSelected(section: Section) {
         onSectionSelectedShared(section)
     }
-    
-    // MARK: - CartViewControllerDelegate
-    
-    func onEmptyCartTap() {
-        navigationController?.popViewControllerAnimated(true)
-        performSegueWithIdentifier("stashSegue", sender: self)
-    }
+
     
     // MARK: - ExpandableTopViewControllerDelegate
     
@@ -785,8 +757,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     func onExpandableClose() {
-        topBar.setBackVisible(false)
-        topBar.setLeftButtonIds([.Edit])
+//        topBar.setBackVisible(false)
+        setDefaultLeftButtons()
         topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
         topQuickAddControllerManager?.controller?.onClose()
         topEditSectionControllerManager?.controller?.onClose()
@@ -800,7 +772,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     func onTopBarTitleTap() {
-        back()
+        // override
     }
     
     func back() {
@@ -830,7 +802,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     func onCenterTitleAnimComplete(center: Bool) {
         if center {
-            topBar.setLeftButtonIds([.Edit])
+            setDefaultLeftButtons()
             topBar.setRightButtonIds([.ToggleOpen])
         }
     }

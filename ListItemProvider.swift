@@ -16,9 +16,9 @@ protocol ListItemProvider {
     
     func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
-    func add(listItem: ListItem, remote: Bool, _ handler: ProviderResult<ListItem> -> ())
+//    func add(listItem: ListItem, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<ListItem> -> ())
 
-    func add(listItems: [ListItem], remote: Bool, _ handler: ProviderResult<[ListItem]> -> ())
+//    func add(listItems: [ListItem], status: ListItemStatus, remote: Bool, _ handler: ProviderResult<[ListItem]> -> ())
     
     /**
     Adds a new list item
@@ -28,17 +28,17 @@ protocol ListItemProvider {
     - parameter possibleNewSectionOrder: if the section is determined to be new, position of section in list. If the section already exists this is not used. If nil this will be at the end of the list (an additional database fetch will be made to count the sections).
     - parameter handler
     */
-    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int?, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<ListItem> -> Void)
+    func add(listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int?, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<ListItem> -> Void)
     
-    func addListItem(product: Product, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<ListItem> -> Void)
+    func addListItem(product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<ListItem> -> Void)
     
-    func add(prototypes: [ListItemPrototype], list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<[ListItem]> -> Void)
+    func add(prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<[ListItem]> -> Void)
 
     func update(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     func update(listItems: [ListItem], remote: Bool, _ handler: ProviderResult<Any> -> ())
     
-    func updateListItemsTodoOrder(listItems: [ListItem], remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func updateListItemsOrder(listItems: [ListItem], status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
     // The counterpart of updateListItemsTodoOrder to process the update when it comes via websocket. We need a special service because websockets sends us a reduced payload (only the order and sections).
     func updateListItemsTodoOrderRemote(orderUpdates: [RemoteListItemReorder], sections: [Section], _ handler: ProviderResult<Any> -> Void)
@@ -67,9 +67,9 @@ protocol ListItemProvider {
     /**
     * Converts group items in list items and adds them to list
     */
-    func add(groupItems: [GroupItem], list: List, _ handler: ProviderResult<[ListItem]> -> ())
+    func add(groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: ProviderResult<[ListItem]> -> ())
 
-    func addGroupItems(group: ListItemGroup, list: List, _ handler: ProviderResult<[ListItem]> -> ())
+    func addGroupItems(group: ListItemGroup, status: ListItemStatus, list: List, _ handler: ProviderResult<[ListItem]> -> ())
     
     /**
     Gets list items count with a certain status in a certain list

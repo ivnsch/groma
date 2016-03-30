@@ -135,7 +135,7 @@ class ListTopBarView: UIView {
         }
     }
     
-    func animateDot(expanding: Bool) {
+    func animateDot(expanding: Bool, duration: CFTimeInterval = 0.3) {
         
         guard let titleTextSize = titleLabel.text?.size(Fonts.regular) else {return}
         
@@ -151,7 +151,7 @@ class ListTopBarView: UIView {
         
         CATransaction.begin()
         let pathAnimation = CABasicAnimation(keyPath: "path")
-        pathAnimation.duration = 0.3
+        pathAnimation.duration = duration
         pathAnimation.fillMode = kCAFillModeForwards
         pathAnimation.removedOnCompletion = false
         pathAnimation.fromValue = expanding ? rectPath.CGPath : circlePath.CGPath
@@ -172,7 +172,7 @@ class ListTopBarView: UIView {
     
     // parameter: center => center, !center => left
     // TODO rename maybe "setState(open)" or something, this is not only animating the label now but also the background and the height
-    func positionTitleLabelLeft(center: Bool, animated: Bool, heightConstraint: NSLayoutConstraint? = nil) {
+    func positionTitleLabelLeft(center: Bool, animated: Bool, withDot: Bool, heightConstraint: NSLayoutConstraint? = nil) {
         
         if let heightConstraint = heightConstraint {
             // The cell and topbar have different heights so we hav to animate this too. Sometimes the topbar is used without animation (e.g. top bar from lists/inventories/groups controller - in this case heightConstraint is nil)
@@ -190,10 +190,15 @@ class ListTopBarView: UIView {
                     self?.delegate?.onCenterTitleAnimComplete(center)
             }
             
-            animateDot(center)
+            if withDot {
+                animateDot(center)
+            }
 
-            
         } else {
+            
+            if withDot && center { // we want to show the dot when the view is in expanded (label=center) state
+                animateDot(true, duration: 0.1) // since the dot is not added as a view but simply animation with fill after, to show dot without animation we run the animation with duration 0
+            }
             layoutIfNeeded()
             delegate?.onCenterTitleAnimComplete(center)
         }

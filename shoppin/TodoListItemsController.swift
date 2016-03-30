@@ -9,12 +9,16 @@
 import UIKit
 import QorumLogs
 
-class TodoListItemsController: ListItemsController {
+class TodoListItemsController: ListItemsController, CartViewControllerDelegate {
 
     @IBOutlet weak var pricesView: PricesView!
-    
     @IBOutlet weak var stashView: StashView!
     
+    // TODO 1 custom view for empty
+    @IBOutlet weak var emptyListView: UIView!
+    @IBOutlet weak var emptyListViewImg: UIImageView!
+    @IBOutlet weak var emptyListViewLabel1: UILabel!
+    @IBOutlet weak var emptyListViewLabel2: UILabel!
     
     override var status: ListItemStatus {
         return .Todo
@@ -22,6 +26,10 @@ class TodoListItemsController: ListItemsController {
     
     override var tableViewBottomInset: CGFloat {
         return pricesView.frame.height
+    }
+    
+    override var emptyView: UIView {
+        return emptyListView
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -70,8 +78,64 @@ class TodoListItemsController: ListItemsController {
     }
     
     override func onListItemsOrderChangedSection(tableViewListItems: [TableViewListItem]) {
-        Providers.listItemsProvider.updateListItemsTodoOrder(tableViewListItems.map{$0.listItem}, remote: true, successHandler{result in
+        Providers.listItemsProvider.updateListItemsOrder(tableViewListItems.map{$0.listItem}, status: status, remote: true, successHandler{result in
         })
     }
     
+    override func setEmptyViewVisible(visible: Bool, animated: Bool) {
+        let hidden = !visible
+        if animated {
+            emptyListView.setHiddenAnimated(hidden)
+        } else {
+            emptyListView.hidden = hidden
+        }
+    }
+    
+    override func onTopBarTitleTap() {
+        back()
+    }
+    
+    @IBAction func onCartTap(sender: UIButton) {
+        performSegueWithIdentifier("doneViewControllerSegue", sender: self)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "doneViewControllerSegue" {
+            if let doneViewController = segue.destinationViewController as? CartListItemsController {
+//                doneViewController.navigationItemTextColor = titleLabel?.textColor
+                doneViewController.delegate = self
+                doneViewController.onUIReady = {
+                    doneViewController.currentList = self.currentList
+                    if let dotColor = self.topBar.dotColor {
+                        doneViewController.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
+                    } else {
+                        QL4("Invalid state: top bar has no dot color")
+                    }
+                }
+                self.listItemsTableViewController.clearPendingSwipeItemIfAny(true) {}
+            }
+            
+        } else if segue.identifier == "stashSegue" {
+            if let stashViewController = segue.destinationViewController as? StashViewController {
+                stashViewController.navigationItemTextColor = titleLabel?.textColor
+                listItemsTableViewController.clearPendingSwipeItemIfAny(true) {
+                    stashViewController.onUIReady = {
+                        stashViewController.list = self.currentList
+                        stashViewController.backgroundColor = self.listItemsTableViewController.view.backgroundColor
+                    }
+                }
+            }
+            
+        } else {
+            print("Invalid segue: \(segue.identifier)")
+        }
+    }
+    
+    
+    // MARK: - CartViewControllerDelegate
+    
+    func onEmptyCartTap() {
+        navigationController?.popViewControllerAnimated(true)
+        performSegueWithIdentifier("stashSegue", sender: self)
+    }
 }

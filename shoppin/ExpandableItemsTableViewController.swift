@@ -165,7 +165,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     func setNavTitle(title: String) {
         topBar.title = title
-        topBar.positionTitleLabelLeft(true, animated: false)
+        topBar.positionTitleLabelLeft(true, animated: false, withDot: false)
     }
     
     override func viewWillAppear(animated: Bool) {

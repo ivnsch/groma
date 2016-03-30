@@ -67,6 +67,20 @@ class DBSection: DBSyncable {
         self.removed = removed
     }
     
+    // NOTE: we reuse ListItemStatusOrder from list items, as content is what we need here also, maybe we should rename it
+    convenience init(uuid: String, name: String, bgColorHex: String, list: DBList, order: ListItemStatusOrder, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+        
+        let (todoOrder, doneOrder, stashOrder): (Int, Int, Int) = {
+            switch order.status {
+            case .Todo: return (order.order, 0, 0)
+            case .Done: return (0, order.order, 0)
+            case .Stash: return (0, 0, order.order)
+            }
+        }()
+        
+        self.init(uuid: uuid, name: name, bgColorHex: bgColorHex, list: list, todoOrder: todoOrder, doneOrder: doneOrder, stashOrder: stashOrder, lastUpdate: lastUpdate, lastServerUpdate: lastServerUpdate, removed: removed)
+    }
+    
     // MARK: - Filters
     
     static func createFilter(uuid: String) -> String {

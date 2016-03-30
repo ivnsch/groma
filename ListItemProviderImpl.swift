@@ -149,15 +149,15 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func add(groupItems: [GroupItem], list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
+    func add(groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
         let listItemPrototypes: [ListItemPrototype] = groupItems.map{ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name, targetSectionColor: $0.product.category.color)}
-        self.add(listItemPrototypes, list: list, handler)
+        self.add(listItemPrototypes, status: status, list: list, handler)
     }
     
-    func addGroupItems(group: ListItemGroup, list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
+    func addGroupItems(group: ListItemGroup, status: ListItemStatus, list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
         Providers.listItemGroupsProvider.groupItems(group) {[weak self] result in
             if let groupItems = result.sucessResult {
-                self?.add(groupItems, list: list, handler)
+                self?.add(groupItems, status: status, list: list, handler)
             } else {
                 print("Error: ListItemProviderImpl.addGroupItems: Can't get group items for group: \(group)")
                 handler(ProviderResult(status: .DatabaseUnknown))
@@ -165,6 +165,11 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // TODO these services now are only for the websockets - and websocket call is commented. We just added status parameter to all the add-calls, do we need it here also? Do we have to change sth in the backend? In any case these services probably need to be rewritten now, these services where implemented at the very beginning for sth different and "reused" for websockets. For example it may be that we don't need the increment functionality for websockets.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     func add(listItems: [ListItem], remote: Bool = true, _ handler: ProviderResult<[ListItem]> -> ()) {
 
         let addedListItemsMaybe = memProvider.addListItems(listItems)
@@ -244,9 +249,12 @@ class ListItemProviderImpl: ListItemProvider {
             }
         }
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     
     // Note: status assumed to be .Todo as we can add list item input only to .Todo
-    func add(listItemInput: ListItemInput, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<ListItem> -> Void) {
+    func add(listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<ListItem> -> Void) {
 
         Providers.sectionProvider.mergeOrCreateSection(listItemInput.section, sectionColor: listItemInput.sectionColor, status: .Todo, possibleNewOrder: possibleNewSectionOrder, list: list) {[weak self] result in
 
@@ -257,7 +265,7 @@ class ListItemProviderImpl: ListItemProvider {
             
                     if let product = result.sucessResult {
                     
-                        self?.addListItem(product, section: section, quantity: listItemInput.quantity, list: list, note: listItemInput.note, order: orderMaybe, handler)
+                        self?.addListItem(product, status: status, section: section, quantity: listItemInput.quantity, list: list, note: listItemInput.note, order: orderMaybe, handler)
 
                     } else {
                         print("Error fetching product: \(result.status)")
@@ -273,18 +281,18 @@ class ListItemProviderImpl: ListItemProvider {
     
 
     // Adds list item with todo status
-    func addListItem(product: Product, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
+    func addListItem(product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
         let listItemPrototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionName, targetSectionColor: sectionColor)
-        self.add(listItemPrototype, list: list, handler)
+        self.add(listItemPrototype, status: status, list: list, handler)
     }
     
     private func addSync(prototype: ListItemPrototype) {
     
     }
     
-    func add(prototype: ListItemPrototype, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
+    func add(prototype: ListItemPrototype, status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
         
-        add([prototype], list: list, note: note, order: orderMaybe) {result in
+        add([prototype], status: status, list: list, note: note, order: orderMaybe) {result in
             if let addedListItems = result.sucessResult {
                 
                 if let addedListItem = addedListItems.first {
@@ -301,13 +309,13 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // Adds list items to .Todo
-    func add(prototypes: [ListItemPrototype], list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<[ListItem]> -> Void) {
+    func add(prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<[ListItem]> -> Void) {
         
         QL1("add prototypes: \(prototypes)")
         
         func getOrderForNewSection(existingListItems: Results<DBListItem>) -> Int {
             let sectionsOfItemsWithStatus: [DBSection] = existingListItems.collect({
-                if $0.hasStatus(.Todo) {
+                if $0.hasStatus(status) {
                     return $0.section
                 } else {
                     return nil
@@ -323,7 +331,7 @@ class ListItemProviderImpl: ListItemProvider {
             if let weakSelf = self {
                 let bgResultMaybe: BGResult? = syncedRet(weakSelf) {
                     do {
-                        let memAddedListItemsMaybe = weakSelf.memProvider.addOrUpdateListItems(prototypes, status: .Todo, list: list, note: note)
+                        let memAddedListItemsMaybe = weakSelf.memProvider.addOrUpdateListItems(prototypes, status: status, list: list, note: note)
                         if let addedListItems = memAddedListItemsMaybe {
                             dispatch_async(dispatch_get_main_queue(), {
                                 // return in advance so our client is quick - the database update continues in the background
@@ -355,13 +363,13 @@ class ListItemProviderImpl: ListItemProvider {
                             for prototype in prototypes {
                                 if var existingListItem = existingListItemsDict[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)] {
                                     
-                                    existingListItem.increment(ListItemStatusQuantity(status: .Todo, quantity: prototype.quantity))
+                                    existingListItem.increment(ListItemStatusQuantity(status: status, quantity: prototype.quantity))
                                     
                                     // load section with given name or create a new one if it doesn't exist
                                     let section: DBSection = {
                                         realm.objects(DBSection).filter(DBSection.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first ?? {
                                             let sectionOrder = orderMaybe ?? getOrderForNewSection(existingListItems)
-                                            let newSection = DBSection(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, bgColorHex: prototype.targetSectionColor.hexStr, list: dbList, todoOrder: sectionOrder, doneOrder: 0, stashOrder: 0)
+                                            let newSection = DBSection(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, bgColorHex: prototype.targetSectionColor.hexStr, list: dbList, order: ListItemStatusOrder(status: status, order: sectionOrder))
                                             QL1("Section: \(prototype.targetSectionName) doesn't exist, creating a new one. uuid: \(newSection.uuid), in list: \(list.uuid)")
                                             return newSection
                                         }()
@@ -397,7 +405,7 @@ class ListItemProviderImpl: ListItemProvider {
                                             let sectionCount = getOrderForNewSection(existingListItems)
                                             
                                             // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
-                                            return memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: .Todo, order: sectionCount))
+                                            return memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
                                         }()
                                     
                                     // determine list item order and init/update the map with list items count / section as side effect (which is used to determine the order of the next item)
@@ -411,7 +419,7 @@ class ListItemProviderImpl: ListItemProvider {
                                             var existingCountInSection = 0
                                             // Note that currently we are doing this iteration even if we just created the section, where order is always 0. Not a big issue in our case but can be optimised (TODO?)
                                             for existingListItem in existingListItems {
-                                                if existingListItem.section.uuid == section.uuid && existingListItem.hasStatus(.Todo) {
+                                                if existingListItem.section.uuid == section.uuid && existingListItem.hasStatus(status) {
                                                     existingCountInSection++
                                                 }
                                             }
@@ -430,8 +438,8 @@ class ListItemProviderImpl: ListItemProvider {
                                         section: section,
                                         list: list,
                                         note: note,
-                                        statusOrder: ListItemStatusOrder(status: .Todo, order: listItemOrder),
-                                        statusQuantity: ListItemStatusQuantity(status: .Todo, quantity: prototype.quantity)
+                                        statusOrder: ListItemStatusOrder(status: status, order: listItemOrder),
+                                        statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.quantity)
                                     )
 
                                     QL1("item doesn't exist, created: \(listItem)")
@@ -493,9 +501,9 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
 
-    func addListItem(product: Product, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
+    func addListItem(product: Product, status: ListItemStatus, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
         // for now call the other func, which will fetch the section again... review if this is bad for performance otherwise let like this
-        addListItem(product, sectionName: section.name, sectionColor: section.color, quantity: quantity, list: list, note: note, order: orderMaybe, handler)
+        addListItem(product, status: status, sectionName: section.name, sectionColor: section.color, quantity: quantity, list: list, note: note, order: orderMaybe, handler)
     }
 
     func switchStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
@@ -614,11 +622,11 @@ class ListItemProviderImpl: ListItemProvider {
         update([listItem], remote: remote, handler)
     }
     
-    func updateListItemsTodoOrder(listItems: [ListItem], remote: Bool = true, _ handler: ProviderResult<Any> -> Void) {
+    func updateListItemsOrder(listItems: [ListItem], status: ListItemStatus, remote: Bool = true, _ handler: ProviderResult<Any> -> Void) {
         
         self.updateLocal(listItems, handler: handler, onFinishLocal: {[weak self] in
             if remote {
-                self?.remoteProvider.updateListItemsTodoOrder(listItems) {remoteResult in
+                self?.remoteProvider.updateListItemsOrder(listItems, status: status) {remoteResult in
                     if remoteResult.success {
                         // TODO see note in RemoteListItemProvider.updateListItemsTodoOrder
 //                        self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
@@ -635,6 +643,7 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
     
+    // TODO!!!! for all status
     func updateListItemsTodoOrderRemote(orderUpdates: [RemoteListItemReorder], sections: [Section], _ handler: ProviderResult<Any> -> Void) {
         DBProviders.listItemProvider.updateListItemsTodoOrderRemote(orderUpdates, sections: sections) {success in
             if success {

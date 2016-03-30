@@ -1,0 +1,156 @@
+//
+//  CartListItemsController.swift
+//  shoppin
+//
+//  Created by ischuetz on 30/03/16.
+//  Copyright © 2016 ivanschuetz. All rights reserved.
+//
+
+import UIKit
+import QorumLogs
+
+class CartListItemsController: ListItemsController {
+    
+    @IBOutlet weak var buyLabel: UILabel!
+    @IBOutlet weak var totalDonePriceLabel: UILabel!
+    @IBOutlet weak var buyView: UIView!
+    
+    @IBOutlet weak var emptyListView: UIView!
+    @IBOutlet weak var emptyCartLabel: UILabel!
+    @IBOutlet weak var emptyCartStashLabel: UILabel!
+    
+    var delegate: CartViewControllerDelegate?
+
+    override var status: ListItemStatus {
+        return .Done
+    }
+    
+    var onUIReady: VoidFunction? // avoid crash trying to access not yet initialized ui elements
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    
+        onUIReady?()
+        
+        topBar.setBackVisible(true)
+        topBar.positionTitleLabelLeft(true, animated: false, withDot: true)
+        
+        listItemsTableViewController.tableView.bottomInset = buyView.frame.height
+//            + Constants.tableViewAdditionalBottomInset
+    }
+    
+//    override var tableViewBottomInset: CGFloat {
+//        return pricesView.frame.height
+//    }
+    
+    override var emptyView: UIView {
+        return emptyListView
+    }
+    
+    override func updateQuantifiables() {
+        totalDonePriceLabel.text = listItemsTableViewController.totalPrice.toLocalCurrencyString()
+    }
+    
+    override func onListItemsOrderChangedSection(tableViewListItems: [TableViewListItem]) {
+        Providers.listItemsProvider.updateListItemsOrder(tableViewListItems.map{$0.listItem}, status: status, remote: true, successHandler{result in
+        })
+    }
+
+    override func topBarTitle(list: List) -> String {
+        return "Cart"
+    }
+    
+    private func addAllItemsToInventory() {
+        
+        func onSizeLimitOk(list: List) {
+            listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
+                if let weakSelf = self {
+                    let inventoryItemsInput = weakSelf.listItemsTableViewController.items.map{ProductWithQuantityInput(product: $0.product, quantity: $0.doneQuantity)}
+                    Providers.inventoryItemsProvider.addToInventory(list.inventory, itemInputs: inventoryItemsInput, remote: true, weakSelf.successHandler{result in
+                        weakSelf.sendAllItemToStash {
+                            weakSelf.close()
+                        }
+                    })
+                }
+            }
+        }
+        
+        if let list = currentList {
+            Providers.inventoryItemsProvider.countInventoryItems(list.inventory, successHandler {[weak self] count in
+                if let weakSelf = self {
+                    SizeLimitChecker.checkInventoryItemsSizeLimit(count, controller: weakSelf) {
+                        onSizeLimitOk(list)
+                    }
+                }
+                })
+        } else {
+            QL3("List is not set, can't add to inventory")
+        }
+        
+    }
+    
+    private func sendAllItemToStash(onFinish: VoidFunction) {
+        if let list = currentList {
+            Providers.listItemsProvider.switchStatus(self.listItemsTableViewController.items, list: list, status1: .Done, status: .Stash, remote: true) {[weak self] result in
+                if result.success {
+                    self?.listItemsTableViewController.setListItems([])
+                    self?.onTableViewChangedQuantifiables()
+                    onFinish()
+                }
+            }
+        }
+    }
+    
+    override func setDefaultLeftButtons() {
+        topBar.setBackVisible(true)
+        topBar.setLeftButtonIds([.Edit])
+    }
+    
+    private func close() {
+        listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
+            self?.navigationController?.popViewControllerAnimated(true)
+        }
+    }
+    
+    override func setEmptyViewVisible(visible: Bool, animated: Bool) {
+        let hidden = !visible
+        if animated {
+            emptyListView.setHiddenAnimated(hidden)
+        } else {
+            emptyListView.hidden = hidden
+        }
+    }
+
+    override func onEmptyListViewTap(sender: UITapGestureRecognizer) {
+        super.onEmptyListViewTap(sender)
+        
+        if !emptyCartStashLabel.hidden { // emptyCartStashLabel.hidden means: stash item count is 0 which means we don't direct the user to stash when tap on empty items button
+            // quick "tapped" effect
+            emptyCartLabel.textColor = emptyCartLabel.textColor.colorWithAlphaComponent(0.3)
+            emptyCartStashLabel.textColor = emptyCartStashLabel.textColor.colorWithAlphaComponent(0.3)
+            delay(0.3) {[weak self] in
+                self?.emptyCartLabel.textColor = self?.emptyCartLabel.textColor.colorWithAlphaComponent(1)
+                self?.emptyCartStashLabel.textColor = self?.emptyCartStashLabel.textColor.colorWithAlphaComponent(1)
+            }
+            
+            delegate?.onEmptyCartTap()
+        }
+    }
+    
+    @IBAction func onAddToInventoryTap(sender: UIBarButtonItem) {
+        if let list = currentList {
+            
+            if InventoryAuthChecker.checkAccess(list.inventory, controller: self) {
+                addAllItemsToInventory()
+            }
+        } else {
+            QL3("Warn: DoneViewController.onAddToInventoryTap: list is not set, can't add to inventory")
+        }
+    }
+    
+    override func onTopBarBackButtonTap() {
+        super.onTopBarBackButtonTap()
+        navigationController?.popViewControllerAnimated(true)
+    }
+}
+
