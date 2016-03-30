@@ -24,7 +24,7 @@ struct InventoryAuthChecker {
                 return true
                 
             } else { // the inventory has shared users and I'm not included
-                AlertPopup.show(message: "You can't move items to the inventory: \(inventory.name)\nAsk a user with access to this inventory to share it with you.", controller: controller)
+                AlertPopup.show(message: "You can't move items to the inventory '\(inventory.name)'\nAsk a user with access to this inventory to share it with you.", controller: controller)
                 return false
             }
         } else { // I don't have registered or logged in on this device, which means all the data is local so I'm the owner of everything
