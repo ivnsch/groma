@@ -35,7 +35,7 @@ class SwipeableCell: UITableViewCell {
     
     @IBOutlet weak var myContentView: UIView!
     
-    var panRecognizer:UIPanGestureRecognizer!
+//    var panRecognizer:UIPanGestureRecognizer!
     var panStartPoint:CGPoint!
     var startingLeftLayoutConstraint: CGFloat = 0
     
@@ -47,9 +47,9 @@ class SwipeableCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        self.panRecognizer = UIPanGestureRecognizer(target: self, action: "onPanCell:")
-        self.panRecognizer.delegate = self
-        self.myContentView.addGestureRecognizer(self.panRecognizer)
+//        self.panRecognizer = UIPanGestureRecognizer(target: self, action: "onPanCell:")
+//        self.panRecognizer.delegate = self
+//        self.myContentView.addGestureRecognizer(self.panRecognizer)
         
         myContentView.translatesAutoresizingMaskIntoConstraints = false
     }
