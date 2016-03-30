@@ -12,7 +12,7 @@ import SwiftValidator
 import ChameleonFramework
 import QorumLogs
 
-class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate, ExpandCollapseButtonDelegate
+class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate, ExpandCollapseButtonDelegate, UIGestureRecognizerDelegate
     //    , UIBarPositioningDelegate
 {
     
@@ -86,6 +86,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         
         topBar.delegate = self
         
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onListRemovedNotification:", name: Notification.ListRemoved.rawValue, object: nil)
         
         // websocket
@@ -96,6 +98,10 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
+    }
+
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
     
     deinit {
