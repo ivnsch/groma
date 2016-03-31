@@ -90,7 +90,7 @@ class SlidingTabsView: UIView {
     private func addButtons() {
         func createButton() -> HandlingButton {
             let button = HandlingButton()
-            button.titleLabel?.font = Fonts.small
+            button.titleLabel?.font = DimensionsManager.font(.Small, fontType: .Regular)
             button.setTitleColor(unselectedButtonColor, forState: .Normal)
             return button
         }

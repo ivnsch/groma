@@ -290,6 +290,7 @@
 		EB51ED7F1CAD53A4008AAAE1 /* prefillde.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB51ED7C1CAD5398008AAAE1 /* prefillde.realm */; };
 		EB51ED801CAD53A4008AAAE1 /* prefillen.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB51ED7D1CAD5398008AAAE1 /* prefillen.realm */; };
 		EB51ED811CAD53A4008AAAE1 /* prefilles.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB51ED7E1CAD5398008AAAE1 /* prefilles.realm */; };
+		EB51ED831CADA30B008AAAE1 /* DimensionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB51ED821CADA30B008AAAE1 /* DimensionsManager.swift */; };
 		EB5529E41BC6F2A800EDCEAF /* PlanItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5529E31BC6F2A800EDCEAF /* PlanItemInput.swift */; };
 		EB5529E51BC6F2A800EDCEAF /* PlanItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5529E31BC6F2A800EDCEAF /* PlanItemInput.swift */; };
 		EB5529E61BC6F2A800EDCEAF /* PlanItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5529E31BC6F2A800EDCEAF /* PlanItemInput.swift */; };
@@ -1206,6 +1207,7 @@
 		EB51ED7C1CAD5398008AAAE1 /* prefillde.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillde.realm; sourceTree = "<group>"; };
 		EB51ED7D1CAD5398008AAAE1 /* prefillen.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillen.realm; sourceTree = "<group>"; };
 		EB51ED7E1CAD5398008AAAE1 /* prefilles.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefilles.realm; sourceTree = "<group>"; };
+		EB51ED821CADA30B008AAAE1 /* DimensionsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DimensionsManager.swift; sourceTree = "<group>"; };
 		EB5529E31BC6F2A800EDCEAF /* PlanItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanItemInput.swift; sourceTree = "<group>"; };
 		EB5567841A86590800CD3EC6 /* shoppin-osx-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "shoppin-osx-Bridging-Header.h"; sourceTree = "<group>"; };
 		EB5666C91C52B6F80074D2B3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -2153,6 +2155,14 @@
 			name = input;
 			sourceTree = "<group>";
 		};
+		EB51ED841CADA322008AAAE1 /* dimensionsManager */ = {
+			isa = PBXGroup;
+			children = (
+				EB51ED821CADA30B008AAAE1 /* DimensionsManager.swift */,
+			);
+			name = dimensionsManager;
+			sourceTree = "<group>";
+		};
 		EB55675A1A8622E600CD3EC6 /* shoppin_ios */ = {
 			isa = PBXGroup;
 			children = (
@@ -2202,6 +2212,7 @@
 				EBF162CC1A3C82380048E37C /* tableView */,
 				EBB5A0451B65393D00FB9C58 /* validatorHelpers */,
 				EB451C491B8649FC000DE208 /* popup */,
+				EB51ED841CADA322008AAAE1 /* dimensionsManager */,
 				EBEA0CC71CA5ABBE00E68B81 /* MyAutoCompleteTextField.swift */,
 				EBEA0CCD1CA5B24C00E68B81 /* MyAutocompleteCell.swift */,
 				EBEA0CCE1CA5B24C00E68B81 /* MyAutocompleteCell.xib */,
@@ -3690,6 +3701,7 @@
 				EB714ABF1B681AF700F91B94 /* RemoteSyncResult.swift in Sources */,
 				EB7DA2E31C6FCF65007F1E43 /* SizeLimitChecker.swift in Sources */,
 				EB80CE491C3DEB8A001DF159 /* InventoryPicker.swift in Sources */,
+				EB51ED831CADA30B008AAAE1 /* DimensionsManager.swift in Sources */,
 				EB451C411B861544000DE208 /* OrderedDictionary.swift in Sources */,
 				EBDA754E1BCD621C00E34AC3 /* ListItemGroupMapper.swift in Sources */,
 				EBD828051BEA441B0072F9FA /* UINavigationController.swift in Sources */,

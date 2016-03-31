@@ -110,7 +110,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     private func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
         let top = CGRectGetHeight(topBar.frame)
-        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: 290, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
+        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
             return controller

@@ -90,6 +90,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //, ScaleViewControllerDelegate, SimpleInputPopupControllerDelegate
 , FlatColorPickerControllerDelegate, MyAutoCompleteTextFieldDelegate {
 
+    
+    @IBOutlet weak var addNewItemLabel: UILabel!
+    
     @IBOutlet weak var brandInput: LineAutocompleteTextField!
 
     @IBOutlet weak var sectionInput: LineAutocompleteTextField!
@@ -214,8 +217,15 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         
         view.clipsToBounds = true
         
+        initStaticLabels()
+        
         onDidLoad?()
 //        updatePlanLeftQuantity(0) // no quantity yet -> 0
+    }
+    
+    private func initStaticLabels() {
+        addNewItemLabel.font = DimensionsManager.font(.Regular, fontType: .Regular)
+        addNewItemLabel.text = "Add new item"
     }
     
     private func prefill(item: AddEditItem) {

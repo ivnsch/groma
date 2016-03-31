@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="wfF-r6-NmF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="wfF-r6-NmF">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeueLights.ttc">
@@ -25,7 +25,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lJm-Gk-QuM">
-                                <rect key="frame" x="222" y="497" width="36" height="30"/>
+                                <rect key="frame" x="222" y="480" width="36" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Login">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -35,7 +35,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NJR-Pk-tTx">
-                                <rect key="frame" x="285" y="557" width="30" height="30"/>
+                                <rect key="frame" x="285" y="530" width="30" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Skip">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -45,7 +45,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VOU-gm-XDH">
-                                <rect key="frame" x="333" y="497" width="54" height="30"/>
+                                <rect key="frame" x="333" y="480" width="54" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Register">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -55,18 +55,24 @@
                                 </connections>
                             </button>
                             <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="6ZS-ry-WaI" customClass="SwipeView">
-                                <rect key="frame" x="45" y="90" width="510" height="327"/>
+                                <rect key="frame" x="45" y="60" width="510" height="336"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstAttribute="height" constant="336" id="4om-Ot-q7o"/>
                                     <constraint firstAttribute="height" constant="327" id="LQ2-9g-9jp"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="LQ2-9g-9jp"/>
+                                    </mask>
+                                </variation>
                                 <connections>
                                     <outlet property="dataSource" destination="k9Y-sO-uBl" id="2Sa-1E-BJa"/>
                                     <outlet property="delegate" destination="k9Y-sO-uBl" id="U2a-xG-2zJ"/>
                                 </connections>
                             </view>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="mkE-ao-QPc">
-                                <rect key="frame" x="281" y="434" width="39" height="37"/>
+                                <rect key="frame" x="281" y="413" width="39" height="37"/>
                                 <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="currentPageIndicatorTintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </pageControl>
@@ -76,11 +82,12 @@
                             <constraint firstAttribute="centerX" secondItem="lJm-Gk-QuM" secondAttribute="centerX" constant="60" id="2fY-wd-HkW"/>
                             <constraint firstAttribute="centerX" secondItem="VOU-gm-XDH" secondAttribute="centerX" constant="-60" id="3Jo-QL-mnK"/>
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="centerX" secondItem="q6e-yE-ONc" secondAttribute="centerX" id="7sM-E7-U7q"/>
-                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="lJm-Gk-QuM" secondAttribute="bottom" constant="30" id="8ma-O2-nDG"/>
-                            <constraint firstItem="lJm-Gk-QuM" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="80" id="9Fg-nf-oQu"/>
-                            <constraint firstItem="6ZS-ry-WaI" firstAttribute="top" secondItem="cyK-8M-e3A" secondAttribute="bottom" constant="70" id="AtZ-cr-BlG"/>
-                            <constraint firstItem="VOU-gm-XDH" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="80" id="Qgk-KN-jKQ"/>
+                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="lJm-Gk-QuM" secondAttribute="bottom" constant="20" id="8ma-O2-nDG"/>
+                            <constraint firstItem="6ZS-ry-WaI" firstAttribute="top" secondItem="cyK-8M-e3A" secondAttribute="bottom" constant="40" id="AtZ-cr-BlG"/>
+                            <constraint firstItem="VOU-gm-XDH" firstAttribute="baseline" secondItem="lJm-Gk-QuM" secondAttribute="baseline" id="Cry-uG-BOE"/>
                             <constraint firstAttribute="trailing" secondItem="6ZS-ry-WaI" secondAttribute="trailing" constant="45" id="UXA-eI-YHD"/>
+                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="80" id="avb-5u-aGZ"/>
+                            <constraint firstItem="OHf-Rk-Mbe" firstAttribute="top" secondItem="NJR-Pk-tTx" secondAttribute="bottom" constant="40" id="h7N-G4-e5v"/>
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="17" id="m7i-8H-34d"/>
                             <constraint firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="mK8-90-YtI"/>
                             <constraint firstItem="6ZS-ry-WaI" firstAttribute="leading" secondItem="q6e-yE-ONc" secondAttribute="leading" constant="45" id="oRD-Fi-ofb"/>
