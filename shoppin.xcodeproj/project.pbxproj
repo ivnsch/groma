@@ -130,6 +130,7 @@
 		EB1D696C1CABEB7B004892A2 /* TodoListItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1D696B1CABEB7B004892A2 /* TodoListItemsController.swift */; };
 		EB1D696E1CABEF9E004892A2 /* ListItemsControllers.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1D696D1CABEF9E004892A2 /* ListItemsControllers.storyboard */; };
 		EB1D69701CAC32E4004892A2 /* CartListItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1D696F1CAC32E4004892A2 /* CartListItemsController.swift */; };
+		EB1D69731CAC82BF004892A2 /* AddButtonHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1D69721CAC82BF004892A2 /* AddButtonHelper.swift */; };
 		EB1DDEAB1A3334EC00D778DE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */; };
 		EB1DDEB31A3334EC00D778DE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB11A3334EC00D778DE /* Main.storyboard */; };
 		EB1DDEB51A3334EC00D778DE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB1DDEB41A3334EC00D778DE /* Images.xcassets */; };
@@ -1108,6 +1109,7 @@
 		EB1D696B1CABEB7B004892A2 /* TodoListItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListItemsController.swift; sourceTree = "<group>"; };
 		EB1D696D1CABEF9E004892A2 /* ListItemsControllers.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = ListItemsControllers.storyboard; sourceTree = "<group>"; };
 		EB1D696F1CAC32E4004892A2 /* CartListItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartListItemsController.swift; sourceTree = "<group>"; };
+		EB1D69721CAC82BF004892A2 /* AddButtonHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddButtonHelper.swift; sourceTree = "<group>"; };
 		EB1DDEA51A3334EC00D778DE /* shoppin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = shoppin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB1DDEA91A3334EC00D778DE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1DDEAA1A3334EC00D778DE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1795,6 +1797,14 @@
 				EB1D69671CAB2234004892A2 /* ModalLoginController.storyboard */,
 			);
 			name = loginModal;
+			sourceTree = "<group>";
+		};
+		EB1D69711CAC82AC004892A2 /* addButton */ = {
+			isa = PBXGroup;
+			children = (
+				EB1D69721CAC82BF004892A2 /* AddButtonHelper.swift */,
+			);
+			name = addButton;
 			sourceTree = "<group>";
 		};
 		EB1DDE9C1A3334EC00D778DE = {
@@ -2850,6 +2860,7 @@
 		EBEEDD631A49A7B500FC3B29 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				EB1D69711CAC82AC004892A2 /* addButton */,
 				EB37ABAD1CA01AE400FE9D7A /* pullToAdd */,
 				EBAEB23A1BDC25FE00FCDA5C /* floatingViews */,
 				EBA575631BCECBE500A0A825 /* quantityView */,
@@ -3619,6 +3630,7 @@
 				EBDA75421BCD5C8C00E34AC3 /* ListItemGroupProvider.swift in Sources */,
 				EB37ABA61C9F2DA400FE9D7A /* LineAutocompleteTextField.swift in Sources */,
 				EBEE7E5B1C9750F500DBCB6A /* RealmListProvider.swift in Sources */,
+				EB1D69731CAC82BF004892A2 /* AddButtonHelper.swift in Sources */,
 				EBED0CF11C80E02700A1EEC4 /* Array_ListItemsGroup.swift in Sources */,
 				EBAEB22F1BDBDB2F00FCDA5C /* CGPoint.swift in Sources */,
 				EB9208381C4EEA5E00332332 /* RealmBrandProvider.swift in Sources */,

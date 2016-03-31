@@ -68,7 +68,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         return editingItem != nil
     }
 
-    private var addButton: UIButton? = nil
+    deinit {
+        // TODO!!!! check memory, this is never being called though the controller should be allocated when closed. Also, on a short run with instruments noticed memory consumption keeps increasing when we do things in the app but never decreases.
+        print("Quick add deinit")
+    }
     
     var open: Bool = false
     
@@ -78,14 +81,36 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     var modus: AddEditListItemControllerModus = .ListItem
     
+    private var addButtonHelper: AddButtonHelper?
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        addButtonHelper?.addObserver()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        addButtonHelper?.removeObserver()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         searchBar.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
+        addButtonHelper = initAddButtonHelper()
+    }
+    
+    private func initAddButtonHelper() -> AddButtonHelper? {
+        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return nil}
+        let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton) {[weak self] in guard let weakSelf = self else {return}
+            if let addEditListItemViewController = weakSelf.showingController as? AddEditListItemViewController {
+                addEditListItemViewController.submit()
+            } else {
+                QL3("Tapped add button but showing controller is not add edit controller")
+            }
+        }
+        return addButtonHelper
     }
     
     // MARK: - QuickAddPageControllerDelegate
@@ -98,7 +123,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     // MARK: -
     
     func onClose() {
-        removeAddButton()
     }
     
     func textFieldDidChange(textField: UITextField) {
@@ -132,30 +156,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         
         searchBar.becomeFirstResponder()
     }
-    
-    // MARK: - Keyboard
 
-    func keyboardWillAppear(notification: NSNotification) {
-        if let userInfo = notification.userInfo {
-            if let keyboardSize = (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-                keyboardHeight = keyboardSize.height
-            } else {
-                QL3("Couldn't retrieve keyboard size from user info")
-            }
-        } else {
-            QL3("Notification has no user info")
-        }
-        
-        delay(0.5) {[weak self] in // let the keyboard reach it's final position before showing the button
-            self?.addButton?.hidden = false
-        }
-    }
-    
-    func keyboardWillDisappear(notification: NSNotification) {
-        // when showing validation popup the keyboard disappears so we have to remove the button - otherwise it looks weird
-        addButton?.hidden = true
-    }
-    
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -197,47 +198,11 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             }
             delegate?.onAddProductOpen()
             
-            
-            func addAddButton() {
-                if let parentView = delegate?.parentViewForAddButton(), window = view.window {
-                    
-                    let keyboardHeight = self.keyboardHeight ?? {
-                        QL4("Couldn't get keyboard height dynamically, returning hardcoded value")
-                        return 216
-                        }()
-                    let buttonHeight: CGFloat = 40
-                    
-                    
-                    let addButton = AddItemButton(frame: CGRectMake(0, window.frame.height - keyboardHeight - buttonHeight, parentView.frame.width, buttonHeight))
-                    self.addButton = addButton
-                    parentView.addSubview(addButton)
-                    parentView.bringSubviewToFront(addButton)
-                    addButton.tapHandler = {[weak self] in guard let weakSelf = self else {return}
-                        
-                        if let addEditListItemViewController = weakSelf.showingController as? AddEditListItemViewController {
-                            addEditListItemViewController.submit()
-                        } else {
-                            QL3("Tapped add button but showing controller is not add edit controller")
-                        }
-                    }
-                } else {
-                    QL3("No parent view for add button")
-                }
-            }
-            
-            if addButton == nil {
-                delay(0.5) {
-                    addAddButton()
-                }
-            }
+            addButtonHelper?.add()
+
             return true
         }
         return false
-    }
-    
-    private func removeAddButton() {
-        addButton?.removeFromSuperview()
-        addButton = nil
     }
     
     private enum QuickAddTopState {

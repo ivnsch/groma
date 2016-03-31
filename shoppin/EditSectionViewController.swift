@@ -15,17 +15,16 @@ protocol EditSectionViewControllerDelegate {
 }
 
 class EditSectionViewController: UIViewController, FlatColorPickerControllerDelegate {
-
+    
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var colorButton: UITextField!
     
     private var showingColorPicker: FlatColorPickerController?
-
+    
     var open: Bool = false
     
     private var validator: Validator?
-
-    private var addButton: UIButton? = nil
+    
     private var keyboardHeight: CGFloat?
     
     var section: Section? {
@@ -39,19 +38,21 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
         }
     }
     
+    private var addButtonHelper: AddButtonHelper?
+    
     var delegate: EditSectionViewControllerDelegate?
     
     init() {
         super.init(nibName: "EditSectionViewController", bundle: nil)
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         nameTextField.attributedPlaceholder = NSAttributedString(string: "Section name", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
         
         initValidator()
@@ -59,8 +60,26 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
         nameTextField.becomeFirstResponder()
         
         view.clipsToBounds = false
-        
-        addAddButton()
+    }
+    
+    private func initAddButtonHelper() -> AddButtonHelper? {
+        guard let parentView = parentViewController?.view else {QL4("No parentController"); return nil}
+        let addButtonHelper = AddButtonHelper(parentView: parentView) {[weak self] in
+            self?.submit()
+        }
+        return addButtonHelper
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        addButtonHelper = initAddButtonHelper() // parent controller not set yet in earlier lifecycle methods
+        addButtonHelper?.addObserver()
+        addButtonHelper?.add()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        addButtonHelper?.removeObserver()
     }
     
     private func initValidator() {
@@ -94,7 +113,7 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
                 Providers.sectionProvider.update([updatedSection], remote: true, successHandler {[weak self] in
                     self?.delegate?.onSectionUpdated(updatedSection)
                 })
-
+                
             } else {
                 print("Error: EditSectionViewController.submit: validation was not implemented correctly")
             }
@@ -169,65 +188,6 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
         }
     }
     
-    // MARK: - Add button
-    // TODO refactor exactly this (+keyboard code below) is in other view controllers
-    func addAddButton() {
-        func add() {
-            if let parentView = parentViewController?.view, tabBarHeight = tabBarController?.tabBar.bounds.size.height {
-                let keyboardHeight = self.keyboardHeight ?? {
-                    QL4("Couldn't get keyboard height dynamically, returning hardcoded value")
-                    return 216
-                }()
-                let buttonHeight: CGFloat = 40
-                
-                let addButton = AddItemButton(frame: CGRectMake(0, parentView.frame.height - keyboardHeight - buttonHeight + tabBarHeight, view.frame.width, buttonHeight))
-                self.addButton = addButton
-                parentView.addSubview(addButton)
-                view.bringSubviewToFront(addButton)
-                addButton.tapHandler = {[weak self] in guard let weakSelf = self else {return}
-                    weakSelf.submit()
-                }
-            } else {
-                QL3("No parent view: \(parentViewController?.view) or tabbar height add button")
-            }
-        }
-        
-        if addButton == nil {
-            delay(0.5) {
-                add()
-            }
-        }
-    }
-    
     func onClose() {
-        removeAddButton()
-    }
-    
-    private func removeAddButton() {
-        addButton?.removeFromSuperview()
-        addButton = nil
-    }
-    
-    // MARK: - Keyboard
-    
-    func keyboardWillAppear(notification: NSNotification) {
-        if let userInfo = notification.userInfo {
-            if let keyboardSize = (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-                keyboardHeight = keyboardSize.height
-            } else {
-                QL3("Couldn't retrieve keyboard size from user info")
-            }
-        } else {
-            QL3("Notification has no user info")
-        }
-        
-        delay(0.5) {[weak self] in // let the keyboard reach it's final position before showing the button
-            self?.addButton?.hidden = false
-        }
-    }
-    
-    func keyboardWillDisappear(notification: NSNotification) {
-        // when showing validation popup the keyboard disappears so we have to remove the button - otherwise it looks weird
-        addButton?.hidden = true
     }
 }

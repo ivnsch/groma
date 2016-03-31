@@ -33,9 +33,6 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var usersTableView: UITableView!
     
     private var userInputsValidator: Validator?
-
-    private var addButton: UIButton? = nil
-    private var keyboardHeight: CGFloat?
     
     var users: [SharedUser] {
         return userModels.map{$0.user}
@@ -55,10 +52,8 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
 
     var onViewDidLoad: VoidFunction?
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
+    private var addButtonHelper: AddButtonHelper?
+
     func initUsers(existing: [SharedUser], invited: [SharedUser], all: [SharedUser]) {
         self.existingUsers = existing
         self.invitedUsers = invited
@@ -81,65 +76,35 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
         
         addUserInputField.becomeFirstResponder()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
-        
         onViewDidLoad?()
         
-        addAddButton()
     }
     
-    // MARK: - Add button
-    
-    func addAddButton() {
-        func add() {
-            if let tabBarHeight = tabBarController?.tabBar.bounds.size.height {
-                let keyboardHeight = self.keyboardHeight ?? {
-                    QL4("Couldn't get keyboard height dynamically, returning hardcoded value")
-                    return 216
-                }()
-                let buttonHeight: CGFloat = 40
-                
-                let addButton = AddItemButton(frame: CGRectMake(0, view.frame.height - keyboardHeight - buttonHeight + tabBarHeight, view.frame.width, buttonHeight))
-                self.addButton = addButton
-                view.addSubview(addButton)
-                view.bringSubviewToFront(addButton)
-                addButton.tapHandler = {[weak self] in guard let weakSelf = self else {return}
-                    weakSelf.tryAddInputUser()
-                }
-            } else {
-                QL3("No tabbar height add button")
-            }
-        }
+    private func initAddButtonHelper() -> AddButtonHelper? {
+        guard let tabBarHeight = tabBarController?.tabBar.bounds.size.height else {QL4("No tabBarController"); return nil}
         
-        if addButton == nil {
-            delay(0.5) {
-                add()
-            }
+        let overrideCenterY: CGFloat = view.frame.height + tabBarHeight
+        let addButtonHelper = AddButtonHelper(parentView: view, overrideCenterY: overrideCenterY) {[weak self] in
+            self?.tryAddInputUser()
         }
+        return addButtonHelper
     }
     
-    // MARK: - Keyboard
-    
-    func keyboardWillAppear(notification: NSNotification) {
-        if let userInfo = notification.userInfo {
-            if let keyboardSize = (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-                keyboardHeight = keyboardSize.height
-            } else {
-                QL3("Couldn't retrieve keyboard size from user info")
-            }
-        } else {
-            QL3("Notification has no user info")
-        }
-        
-        delay(0.5) {[weak self] in // let the keyboard reach it's final position before showing the button
-            self?.addButton?.hidden = false
-        }
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
     }
     
-    func keyboardWillDisappear(notification: NSNotification) {
-        // when showing validation popup the keyboard disappears so we have to remove the button - otherwise it looks weird
-        addButton?.hidden = true
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        addButtonHelper = initAddButtonHelper()
+        addButtonHelper?.addObserver()
+        addButtonHelper?.add() // window not set yet in earlier lifecycle methods. We actually don't really need window for addButtonHelper here (or genererally). Code needs to be improved.
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        addButtonHelper?.removeObserver()
     }
     
     // MARK: -
