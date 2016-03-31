@@ -24,6 +24,10 @@ class QuickAddGroup: QuickAddItem {
     override var label2Text: String {
         return ""
     }
+
+    override var label3Text: String {
+        return ""
+    }
     
     override var color: UIColor {
         return group.bgColor

@@ -25,6 +25,10 @@ class QuickAddProduct: QuickAddItem {
         return product.brand
     }
     
+    override var label3Text: String {
+        return product.store
+    }
+    
     override var color: UIColor {
         return product.category.color
     }

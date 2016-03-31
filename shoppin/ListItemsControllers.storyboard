@@ -341,9 +341,9 @@
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="RVl-9B-dbj"/>
-                                        <exclude reference="yfA-y9-d3R"/>
-                                        <exclude reference="b2X-D3-84O"/>
                                         <exclude reference="DfM-FT-kFe"/>
+                                        <exclude reference="b2X-D3-84O"/>
+                                        <exclude reference="yfA-y9-d3R"/>
                                     </mask>
                                 </variation>
                                 <connections>

@@ -14,6 +14,7 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -113,14 +114,24 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="sdfsdfsdfsf" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6FL-TB-RmW">
-                                                    <rect key="frame" x="6" y="25" width="38" height="13"/>
+                                                    <rect key="frame" x="6" y="27" width="38" height="13"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="11"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="sdfsdfsdfsf" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nmD-eA-3gR">
+                                                    <rect key="frame" x="6" y="40" width="38" height="11"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="9"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
+                                            <constraint firstItem="nmD-eA-3gR" firstAttribute="top" secondItem="6FL-TB-RmW" secondAttribute="bottom" id="50F-ac-tCv"/>
+                                            <constraint firstItem="nmD-eA-3gR" firstAttribute="leading" secondItem="TIx-z1-9dZ" secondAttribute="leading" constant="6" id="Eg6-Bc-I1X"/>
+                                            <constraint firstItem="nmD-eA-3gR" firstAttribute="centerX" secondItem="TIx-z1-9dZ" secondAttribute="centerX" id="IG0-g7-wsx"/>
+                                            <constraint firstItem="6FL-TB-RmW" firstAttribute="top" secondItem="1GS-hs-GBX" secondAttribute="bottom" id="OyH-O4-Kxt"/>
+                                            <constraint firstAttribute="trailing" secondItem="nmD-eA-3gR" secondAttribute="trailing" constant="6" id="SKN-qe-9yQ"/>
                                             <constraint firstItem="6FL-TB-RmW" firstAttribute="centerX" secondItem="TIx-z1-9dZ" secondAttribute="centerX" id="T9G-Cj-y7F"/>
                                             <constraint firstAttribute="trailing" secondItem="6FL-TB-RmW" secondAttribute="trailing" constant="6" id="XTG-3E-3CJ"/>
                                             <constraint firstItem="6FL-TB-RmW" firstAttribute="leading" secondItem="TIx-z1-9dZ" secondAttribute="leading" constant="6" id="YKR-94-pup"/>
@@ -128,10 +139,16 @@
                                             <constraint firstItem="6FL-TB-RmW" firstAttribute="centerY" secondItem="TIx-z1-9dZ" secondAttribute="centerY" constant="6" id="kgo-FE-5T6"/>
                                             <constraint firstItem="1GS-hs-GBX" firstAttribute="centerX" secondItem="TIx-z1-9dZ" secondAttribute="centerX" id="vmT-Gk-CKC"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="kgo-FE-5T6"/>
+                                            </mask>
+                                        </variation>
                                         <connections>
                                             <outlet property="brandLabel" destination="6FL-TB-RmW" id="7pT-4h-0qT"/>
                                             <outlet property="nameLabel" destination="1GS-hs-GBX" id="Ehb-oh-jw7"/>
                                             <outlet property="nameLabelVerticalCenterContraint" destination="gIP-ch-5Rt" id="j8u-MV-KqD"/>
+                                            <outlet property="storeLabel" destination="nmD-eA-3gR" id="HYx-QZ-jWP"/>
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="groupCell" id="R4e-iU-Kye" customClass="QuickAddGroupCell" customModule="shoppin" customModuleProvider="target">
