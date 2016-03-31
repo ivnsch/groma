@@ -26,6 +26,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     @IBOutlet weak var sharedUsersButton: UIButton!
     @IBOutlet weak var inventoriesButton: UIButton!
     
+    @IBOutlet weak var storeInputField: UITextField!
+    @IBOutlet weak var sharedUsersWidthConstraint: NSLayoutConstraint!
+    
     private var inventories: [Inventory] = [] {
         didSet {
             selectedInventory = inventories.first
@@ -84,21 +87,24 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
 
         users = list.users
         
-        sharedUsersButton.hidden = {
+        let sharedButtonVisible: Bool = {
             if ConnectionProvider.connectedAndLoggedIn {
                 return true // if the user is connected and logged in, always shows the participants button
             } else {
                 // if user is not connected/logged in, show participants button only if the list has already some participants. This is to avoid confusion, if there's no connection/account and list has no participants we just don't bother the user showing this button. If the list has participants though we show it, and show a dialog about missing connection/login if user taps it, so user knows why the probably expected (as the list has already participants) sharing functionality is not available. This overwrites the visibility set in viewDidLoad, which sets by default hidden when there's no connection/account.
-                return users.isEmpty
+                return !users.isEmpty
             }
         }()
+        setSharedButtonVisibile(sharedButtonVisible)
 
+        storeInputField.text = list.store ?? ""
         view.backgroundColor = list.bgColor
     }
     
     private func initValidator() {
         let listInputsValidator = Validator()
-        listInputsValidator.registerField(self.listNameInputField, rules: [MinLengthRule(length: 1, message: "validation_list_name_not_empty")])
+        listInputsValidator.registerField(listNameInputField, rules: [MinLengthRule(length: 1, message: "validation_list_name_not_empty")])
+        listInputsValidator.registerField(storeInputField, rules: [MaxLengthRule(length: 50, message: "validation_store_max")])
         self.listInputsValidator = listInputsValidator
     }
     
@@ -112,9 +118,18 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         view.backgroundColor = UIColor.flatMagentaColorDark()
         
         listNameInputField.setPlaceholderWithColor("List name", color: UIColor.whiteColor())
+        storeInputField.setPlaceholderWithColor("Store (optional)", color: UIColor.whiteColor())
+        
         listNameInputField.becomeFirstResponder()
         
-        sharedUsersButton.hidden = !ConnectionProvider.connectedAndLoggedIn
+        setSharedButtonVisibile(ConnectionProvider.connectedAndLoggedIn)
+    }
+    
+    private func setSharedButtonVisibile(visible: Bool) {
+        sharedUsersButton.hidden = !visible
+        if sharedUsersButton.hidden {
+            sharedUsersWidthConstraint.constant = 0
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -182,16 +197,18 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
             guard let listName = weakSelf.listNameInputField.text else {QL4("Validation was not implemented correctly"); return}
             
+            let store: String? = weakSelf.storeInputField.optText
+            
             if let listToEdit = weakSelf.listToEdit {
                 // Note on shared users: if the shared users controller was not opened this will be nil so listToEdit is not affected (passing nil on copy is a noop)
-                let updatedList = listToEdit.copy(name: listName, users: weakSelf.users, bgColor: bgColor, inventory: inventory)
+                let updatedList = listToEdit.copy(name: listName, users: weakSelf.users, bgColor: bgColor, inventory: inventory, store: ListCopyStore(store))
                 Providers.listProvider.update([updatedList], remote: true, weakSelf.successHandler{
                     weakSelf.delegate?.onListUpdated(updatedList)
                 })
             
             } else {
                 if let currentListsCount = weakSelf.currentListsCount {
-                    let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: weakSelf.users ?? [], bgColor: bgColor, order: currentListsCount, inventory: inventory)
+                    let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: weakSelf.users ?? [], bgColor: bgColor, order: currentListsCount, inventory: inventory, store: store)
                     Providers.listProvider.add(listWithSharedUsers, remote: true, weakSelf.successHandler{list in
                         weakSelf.delegate?.onListAdded(list)
                     })

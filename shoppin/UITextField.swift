@@ -26,6 +26,13 @@ extension UITextField {
         self.text = ""
     }
     
+    var optText: String? {
+        if let text = text {
+            return text == "" ? nil : text
+        } else {
+            return nil
+        }
+    }
     
     @IBInspectable var maxLength: Int {
         get {

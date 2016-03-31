@@ -13,7 +13,8 @@ struct RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, C
     let uuid: String
     let name: String
     let order: Int
-    var color: UIColor    
+    var color: UIColor
+    let store: String?
     let users: [RemoteSharedUser]
     let lastUpdate: NSDate
     let inventoryUuid: String
@@ -35,6 +36,7 @@ struct RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, C
         self.lastUpdate = list.lastUpdate
         self.inventoryUuid = list.inventoryUuid
         self.color = list.color
+        self.store = list.store
     }
     
     static func collection(representation: AnyObject) -> [RemoteList]? {
@@ -51,7 +53,7 @@ struct RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, C
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), users: \(users), inventoryUuid: \(inventoryUuid), lastUpdate: \(lastUpdate), color: \(color)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), users: \(users), inventoryUuid: \(inventoryUuid), lastUpdate: \(lastUpdate), color: \(color), store: \(store)}"
     }
 }
 

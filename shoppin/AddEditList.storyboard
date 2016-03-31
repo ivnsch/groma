@@ -11,6 +11,7 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -40,6 +41,20 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Store (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="tkj-0N-ADP">
+                                <rect key="frame" x="14" y="111" width="482" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="VtH-ud-VeT"/>
+                                </constraints>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
+                                        <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VtI-z7-VYE">
                                 <rect key="frame" x="39" y="67" width="30" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
@@ -60,7 +75,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0bu-Vf-atl">
-                                <rect key="frame" x="275" y="68" width="51" height="30"/>
+                                <rect key="frame" x="535" y="68" width="51" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Colours">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -69,10 +84,13 @@
                                     <action selector="onColorTap" destination="rbt-HL-39m" eventType="touchUpInside" id="qFv-fD-Vx6"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1sk-oR-mxV">
-                                <rect key="frame" x="474" y="68" width="106" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1sk-oR-mxV">
+                                <rect key="frame" x="496" y="111" width="90" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="90" id="3P0-MK-95M"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Add participants">
+                                <state key="normal" title="Participants">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -82,15 +100,20 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.59215686270000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="0bu-Vf-atl" secondAttribute="trailing" constant="14" id="15y-3m-1co"/>
                             <constraint firstAttribute="trailing" secondItem="F28-F1-Smm" secondAttribute="trailing" constant="14" id="3rT-RA-0y1"/>
+                            <constraint firstItem="1sk-oR-mxV" firstAttribute="leading" secondItem="tkj-0N-ADP" secondAttribute="trailing" id="7Iv-TQ-QaH"/>
                             <constraint firstItem="dqk-Mw-1ri" firstAttribute="top" secondItem="F28-F1-Smm" secondAttribute="bottom" constant="14" id="Av9-3u-cci"/>
+                            <constraint firstItem="1sk-oR-mxV" firstAttribute="baseline" secondItem="tkj-0N-ADP" secondAttribute="baseline" id="ExU-lD-ig6"/>
                             <constraint firstItem="0bu-Vf-atl" firstAttribute="baseline" secondItem="dqk-Mw-1ri" secondAttribute="baseline" id="Iea-RY-Nyl"/>
-                            <constraint firstAttribute="trailing" secondItem="1sk-oR-mxV" secondAttribute="trailing" constant="20" id="RN9-Bj-2v7"/>
+                            <constraint firstItem="tkj-0N-ADP" firstAttribute="leading" secondItem="FTk-Cw-gyF" secondAttribute="leading" constant="14" id="NMv-pk-IlR"/>
+                            <constraint firstAttribute="trailing" secondItem="1sk-oR-mxV" secondAttribute="trailing" constant="14" id="RN9-Bj-2v7"/>
                             <constraint firstItem="VtI-z7-VYE" firstAttribute="baseline" secondItem="dqk-Mw-1ri" secondAttribute="baseline" id="Sif-8l-1Y0"/>
                             <constraint firstItem="VtI-z7-VYE" firstAttribute="centerY" secondItem="dqk-Mw-1ri" secondAttribute="centerY" id="Vaz-ec-unt"/>
                             <constraint firstItem="VtI-z7-VYE" firstAttribute="centerY" secondItem="dqk-Mw-1ri" secondAttribute="centerY" id="bNf-Ee-DCn"/>
                             <constraint firstItem="0bu-Vf-atl" firstAttribute="centerX" secondItem="FTk-Cw-gyF" secondAttribute="centerX" id="bey-Ix-bnL"/>
                             <constraint firstItem="dqk-Mw-1ri" firstAttribute="leading" secondItem="FTk-Cw-gyF" secondAttribute="leading" constant="14" id="hQ0-DT-Lc5"/>
+                            <constraint firstItem="tkj-0N-ADP" firstAttribute="top" secondItem="VtI-z7-VYE" secondAttribute="bottom" constant="14" id="iJN-nf-tR5"/>
                             <constraint firstItem="F28-F1-Smm" firstAttribute="top" secondItem="J8v-ps-jZl" secondAttribute="bottom" constant="8" id="mNb-id-cF7"/>
                             <constraint firstItem="F28-F1-Smm" firstAttribute="leading" secondItem="FTk-Cw-gyF" secondAttribute="leading" constant="14" id="tHd-Cv-1P5"/>
                             <constraint firstItem="VtI-z7-VYE" firstAttribute="leading" secondItem="dqk-Mw-1ri" secondAttribute="trailing" constant="14" id="uJd-el-B9C"/>
@@ -100,6 +123,8 @@
                             <mask key="constraints">
                                 <exclude reference="Sif-8l-1Y0"/>
                                 <exclude reference="Vaz-ec-unt"/>
+                                <exclude reference="yK5-hd-MF1"/>
+                                <exclude reference="bey-Ix-bnL"/>
                             </mask>
                         </variation>
                     </view>
@@ -110,6 +135,8 @@
                         <outlet property="inventoriesButton" destination="VtI-z7-VYE" id="XBb-h0-aPL"/>
                         <outlet property="listNameInputField" destination="F28-F1-Smm" id="9dK-8m-h9l"/>
                         <outlet property="sharedUsersButton" destination="1sk-oR-mxV" id="84V-ay-JjN"/>
+                        <outlet property="sharedUsersWidthConstraint" destination="3P0-MK-95M" id="cec-C6-AZN"/>
+                        <outlet property="storeInputField" destination="tkj-0N-ADP" id="SwX-f8-nZb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jkz-rc-N7s" userLabel="First Responder" sceneMemberID="firstResponder"/>

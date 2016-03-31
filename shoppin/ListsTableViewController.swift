@@ -59,7 +59,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     
     private func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditListController> {
         let top = CGRectGetHeight(topBar.frame)
-        let expandableTopViewController: ExpandableTopViewController<AddEditListController> = ExpandableTopViewController(top: top, height: Constants.topAddContainerViewHeight, parentViewController: self, tableView: tableView) {[weak self] in
+        let expandableTopViewController: ExpandableTopViewController<AddEditListController> = ExpandableTopViewController(top: top, height: Constants.topAddContainerViewHeight + 40, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.addEditList()
             controller.delegate = self
             controller.currentListsCount = self?.models.count ?? {

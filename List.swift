@@ -8,6 +8,14 @@
 
 import Foundation
 
+// Used for copy - for store which is itself an optional field, we would not be able to overwrite with a nil value (which would cause to use the value of the copied instance instead), so we wrap it instead an in another object, which correctly signalises if the caller intends to overwrite the parameter or not. If ListCopyStore is not nil, we overwrite store which whatever is passed as store, also nil.
+struct ListCopyStore {
+    let store: String?
+    init(_ store: String?) {
+        self.store = store
+    }
+}
+
 class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
@@ -18,6 +26,8 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
     let bgColor: UIColor
     var order: Int
 
+    let store: String?
+    
     let inventory: Inventory
     
     //////////////////////////////////////////////
@@ -29,7 +39,7 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid: String, name: String, listItems: [ListItem] = [], users: [SharedUser] = [], bgColor: UIColor, order: Int, inventory: Inventory, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, name: String, listItems: [ListItem] = [], users: [SharedUser] = [], bgColor: UIColor, order: Int, inventory: Inventory, store: String?, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.name = name
         self.listItems = listItems
@@ -37,6 +47,7 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
         self.bgColor = bgColor
         self.order = order
         self.inventory = inventory
+        self.store = store
         self.lastUpdate = lastUpdate
         self.lastServerUpdate = lastServerUpdate
         self.removed = removed
@@ -47,7 +58,7 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), bgColor: \(bgColor), order: \(order), inventory: \(inventory), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), bgColor: \(bgColor), order: \(order), inventory: \(inventory), store: \(store), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
     }
     
     func same(rhs: List) -> Bool {
@@ -58,7 +69,7 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
         return uuid.hashValue
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, listItems: [ListItem]? = nil, users: [SharedUser]? = nil, bgColor: UIColor? = nil, order: Int? = nil, inventory: Inventory? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> List {
+    func copy(uuid uuid: String? = nil, name: String? = nil, listItems: [ListItem]? = nil, users: [SharedUser]? = nil, bgColor: UIColor? = nil, order: Int? = nil, inventory: Inventory? = nil, store: ListCopyStore? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> List {
         return List(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -67,6 +78,7 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
             bgColor: bgColor ?? self.bgColor,
             order: order ?? self.order,
             inventory: inventory ?? self.inventory,
+            store: store.map{$0.store} ?? self.store,
             lastUpdate: lastUpdate ?? self.lastUpdate,
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
             removed: removed ?? self.removed

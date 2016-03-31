@@ -18,6 +18,7 @@ class ListMapper {
         dbList.setBgColor(list.bgColor)
         dbList.order = list.order
         dbList.inventory = InventoryMapper.dbWithInventory(list.inventory)
+        dbList.storeOpt = list.store
         let dbSharedUsers = list.users.map{SharedUserMapper.dbWithSharedUser($0)}
         for dbObj in dbSharedUsers {
             dbList.users.append(dbObj)
@@ -39,6 +40,7 @@ class ListMapper {
             dbList.setBgColor(remoteList.color)
             dbList.order = remoteList.order
             dbList.inventory = inventoriesDict[remoteList.inventoryUuid]!
+            dbList.storeOpt = remoteList.store
             let dbSharedUsers = remoteList.users.map{SharedUserMapper.dbWithSharedUser($0)}
             dbList.dirty = false
             for dbObj in dbSharedUsers {
@@ -52,7 +54,7 @@ class ListMapper {
     class func listWithDB(dbList: DBList) -> List {
         let users = dbList.users.toArray().map{SharedUserMapper.sharedUserWithDB($0)}
         let inventory = InventoryMapper.inventoryWithDB(dbList.inventory)
-        return List(uuid: dbList.uuid, name: dbList.name, users: users, bgColor: dbList.bgColor(), order: dbList.order, inventory: inventory)
+        return List(uuid: dbList.uuid, name: dbList.name, users: users, bgColor: dbList.bgColor(), order: dbList.order, inventory: inventory, store: dbList.storeOpt)
     }
     
     class func listsWithRemote(remoteLists: RemoteListsWithDependencies) -> [List] {
@@ -66,7 +68,8 @@ class ListMapper {
                 users: remoteList.users.map{SharedUserMapper.sharedUserWithRemote($0)},
                 bgColor: remoteList.color,
                 order: remoteList.order,
-                inventory: inventoriesDict[remoteList.inventoryUuid]!)
+                inventory: inventoriesDict[remoteList.inventoryUuid]!,
+                store: remoteList.store)
         }
         
         return lists.sortedByOrder()
@@ -80,7 +83,8 @@ class ListMapper {
             users: remoteList.list.users.map{SharedUserMapper.sharedUserWithRemote($0)},
             bgColor: remoteList.list.color,
             order: remoteList.list.order,
-            inventory: inventory
+            inventory: inventory,
+            store: remoteList.list.store
         )
     }
 }

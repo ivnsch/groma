@@ -16,6 +16,7 @@ class DBList: DBSyncable {
     dynamic var bgColorHex: String = "000000"
     dynamic var order: Int = 0
     dynamic var inventoryOpt: DBInventory? = DBInventory()
+    dynamic var storeOpt: String?
     
     var inventory: DBInventory {
         get {
@@ -64,6 +65,7 @@ class DBList: DBSyncable {
         let color = UIColor(hexString: colorStr)
         item.setBgColor(color)
         item.order = listDict["order"]! as! Int
+        item.storeOpt = listDict["store"] as? String
         item.inventory = inventory
         
         let usersDict = dict["users"] as! [[String: AnyObject]]
@@ -83,6 +85,9 @@ class DBList: DBSyncable {
         dict["color"] = bgColorHex
         dict["order"] = order
         dict["inventory"] = inventory.toDict()
+        if let store = storeOpt {
+            dict["store"] = store
+        }
         dict["users"] = users.map{$0.toDict()}
         setSyncableFieldsInDict(dict)
         return dict

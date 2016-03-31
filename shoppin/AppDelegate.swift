@@ -206,7 +206,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
         let inventory1 = Inventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreenColor(), order: 0)
         DBProviders.inventoryProvider.saveInventory(inventory1) {[weak self] saved in
         
-            let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0, inventory: inventory1)
+            let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0, inventory: inventory1, store: nil)
             DBProviders.listProvider.saveList(list1) {[weak self] result in
                 
                 let section1 = Section(uuid: uuid, name: "Obst", color: UIColor.flatRedColor(), list: list1, order: ListItemStatusOrder(status: .Todo, order: 0))
@@ -425,7 +425,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
             
             DBProviders.inventoryItemProvider.add(inventoryWithHistoryItems/* + moreItems*/) {saved in
                 
-                let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0, inventory: inventory1)
+                let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0, inventory: inventory1, store: nil)
                 DBProviders.listProvider.saveList(list1) {result in
                     
                     let section1 = Section(uuid: uuid, name: "Obst", color: UIColor.flatRedColor(),list: list1, order: ListItemStatusOrder(status: .Todo, order: 0))
