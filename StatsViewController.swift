@@ -272,7 +272,6 @@ class StatsViewController: UIViewController
         
         let xModel = ChartAxisModel(axisValues: xValues, axisTitleLabel: ChartAxisLabel(text: "", settings: labelSettings))
         let yModel = ChartAxisModel(axisValues: yValues, axisTitleLabel: ChartAxisLabel(text: "Spending", settings: labelSettings.defaultVertical()))
-        let chartFrame = CGRectMake(view.frame.origin.x, view.frame.origin.y + 50, view.frame.width - 10, 300)
         let chartSettings = ChartSettings()
         chartSettings.top = 20
         chartSettings.trailing = 20
@@ -280,7 +279,7 @@ class StatsViewController: UIViewController
         chartSettings.labelsToAxisSpacingY = 0
         chartSettings.axisStrokeWidth = 0
         
-        let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: chartSettings, chartFrame: chartFrame, xModel: xModel, yModel: yModel)
+        let coordsSpace = ChartCoordsSpaceLeftBottomSingleAxis(chartSettings: chartSettings, chartFrame: chartView.bounds, xModel: xModel, yModel: yModel)
         let (xAxis, yAxis, innerFrame) = (coordsSpace.xAxis, coordsSpace.yAxis, coordsSpace.chartInnerFrame)
         
         let cp: [ChartPoint] = xValues.map {xValue in
