@@ -35,7 +35,7 @@ protocol UserProvider {
 
     func login(loginData: LoginData, _ handler: ProviderResult<SyncResult> -> ())
     
-    func register(user: UserInput, _ handler: ProviderResult<SyncResult> -> ())
+    func register(user: UserInput, _ handler: ProviderResult<Any> -> ())
     
     func isRegistered(email: String, _ handler: ProviderResult<Any> -> ())
     

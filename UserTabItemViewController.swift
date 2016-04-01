@@ -35,8 +35,6 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     }
     
     func onRegisterFromLoginSuccess() {
-        navigationController?.popViewControllerAnimated(true)
-        self.onLoginOrRegisterSuccess()
     }
     
     private func onLoginOrRegisterSuccess() {

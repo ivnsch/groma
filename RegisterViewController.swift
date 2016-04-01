@@ -102,10 +102,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                     let user = UserInput(email: email, password: password, firstName: firstName, lastName: lastName)
                     
                     self.progressVisible()
-                    Providers.userProvider.register(user, successHandler{[weak self] syncResult in
-                        if let weakSelf = self {
-                            InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
-                        }
+                    Providers.userProvider.register(user, successHandler{[weak self] in
                         self?.onRegisterSuccess()
                     })
                     

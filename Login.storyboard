@@ -5,6 +5,9 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <customFonts key="customFonts">
+        <mutableArray key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </mutableArray>
         <mutableArray key="HelveticaNeueLights.ttc">
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
@@ -109,13 +112,13 @@
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can log in again any time!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3G3-DS-C6O">
                                 <rect key="frame" x="211" y="466" width="178" height="16"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="13"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome back! Please log in again." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D7c-wL-aYY">
-                                <rect key="frame" x="181" y="44" width="238" height="18"/>
-                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome back! Please log in again." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D7c-wL-aYY">
+                                <rect key="frame" x="14" y="44" width="572" height="18"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -125,9 +128,11 @@
                             <constraint firstItem="3G3-DS-C6O" firstAttribute="top" secondItem="yQG-pO-NNA" secondAttribute="bottom" constant="2" id="2pC-SO-dSA"/>
                             <constraint firstItem="QVU-Pz-cxq" firstAttribute="top" secondItem="Crr-TG-4lg" secondAttribute="bottom" constant="42" id="8uY-u1-TFg"/>
                             <constraint firstAttribute="trailing" secondItem="Yt4-Ha-XoG" secondAttribute="trailing" constant="16" id="A7N-aN-EYy"/>
+                            <constraint firstAttribute="trailing" secondItem="D7c-wL-aYY" secondAttribute="trailing" constant="14" id="B2D-ZC-c6e"/>
                             <constraint firstAttribute="centerX" secondItem="v0i-2j-jaS" secondAttribute="centerX" id="EV7-Ej-izx"/>
                             <constraint firstItem="TsF-zg-FLy" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="16" id="Lko-r6-N2Y"/>
                             <constraint firstItem="t83-R4-Wil" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="NDQ-dn-mEJ"/>
+                            <constraint firstItem="D7c-wL-aYY" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="14" id="NYK-Oa-BEo"/>
                             <constraint firstItem="Crr-TG-4lg" firstAttribute="top" secondItem="t83-R4-Wil" secondAttribute="bottom" constant="8" id="UbY-6B-uvg"/>
                             <constraint firstItem="D7c-wL-aYY" firstAttribute="top" secondItem="Pdv-bE-LUR" secondAttribute="bottom" constant="24" id="WY8-qe-Y5s"/>
                             <constraint firstItem="TsF-zg-FLy" firstAttribute="top" secondItem="Yt4-Ha-XoG" secondAttribute="bottom" constant="14" id="bbt-tb-zJh"/>
@@ -144,6 +149,11 @@
                             <constraint firstItem="D7c-wL-aYY" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="zVV-df-Bkg"/>
                             <constraint firstItem="QVU-Pz-cxq" firstAttribute="centerX" secondItem="bQi-hy-w8S" secondAttribute="centerX" id="zca-DM-UcM"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="zVV-df-Bkg"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="fbButton" destination="t83-R4-Wil" id="0Ui-Vf-SgW"/>

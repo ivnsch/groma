@@ -58,8 +58,16 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     }
     
     @IBAction func loginTapped(sender: UIButton) {
+        startLogin(.Normal)
+    }
+    
+    private func startLogin(mode: LoginControllerMode) {
         let loginController = UIStoryboard.loginViewController()
         loginController.delegate = self
+        loginController.onUIReady = {
+            loginController.mode = mode
+        }
+
         self.navigationController?.pushViewController(loginController, animated: true)
     }
 
@@ -133,9 +141,14 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         self.startMainStoryboard()
     }
     
+    // MARK: - RegisterDelegate
+    
     func onRegisterSuccess() {
-        self.startMainStoryboard()
+        self.navigationController?.popViewControllerAnimated(true)
+        startLogin(.AfterRegister)
     }
+    
+    // MARK: -
     
     private func startMainStoryboard() {
         self.navigationController?.navigationBarHidden = true // otherwise it overlays the navigation of the nested view controllers (not sure if this structure is ok, maybe all should use the same navigation controller?)
@@ -150,8 +163,6 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     }
     
     func onRegisterFromLoginSuccess() {
-        PreferencesManager.savePreference(PreferencesManagerKey.showIntro, value: false)
-        self.startMainStoryboard()
     }
     
     // MARK: - SwipeViewDataSource

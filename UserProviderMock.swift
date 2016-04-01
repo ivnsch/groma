@@ -33,7 +33,7 @@ class UserProviderMock: UserProvider {
         }
     }
     
-    func register(user: UserInput, _ handler: ProviderResult<SyncResult> -> ()) {
+    func register(user: UserInput, _ handler: ProviderResult<Any> -> ()) {
         delay(requestDelay) {[weak self] in
             self?.isLoggedIn = true
             self?.email = user.email

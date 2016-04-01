@@ -33,16 +33,9 @@ class UserProviderImpl: UserProvider {
         }
     }
     
-    func register(user: UserInput, _ handler: ProviderResult<SyncResult> -> ()) {
-        self.remoteProvider.register(user) {[weak self] result in
-            if result.success {
-                self?.sync {result in
-                    self?.connectWebsocketIfLoggedIn()
-                    handler(result)
-                }
-            } else {
-                handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
-            }
+    func register(user: UserInput, _ handler: ProviderResult<Any> -> ()) {
+        self.remoteProvider.register(user) {result in
+            handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
         }
     }
     

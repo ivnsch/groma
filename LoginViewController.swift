@@ -25,7 +25,7 @@ protocol ExpiredLoginDelegate {
 }
 
 enum LoginControllerMode {
-    case Normal, Expired
+    case Normal, Expired, AfterRegister
 }
 
 class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, ExpiredLoginDelegate {
@@ -53,10 +53,21 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                 
                 let isNormal = mode == .Normal
                 pleaseLoginAgainLabel.hidden = isNormal
-                useAppOfflineButton.hidden = isNormal
-                useAppOfflineLabel.hidden = isNormal
                 
-                registerButton.hidden = !isNormal
+                // on expired mode show below "use app offline" instead of register - there's no sense of registering here because the token just expired + we want to make clear to the users they can close the modal and continue using the app offline.
+                let isExpired = mode == .Expired
+                useAppOfflineButton.hidden = !isExpired
+                useAppOfflineLabel.hidden = !isExpired
+                registerButton.hidden = isExpired
+                
+                switch mode {
+                case .Expired:
+                    pleaseLoginAgainLabel.text = "Welcome back! Please log in again."
+                case .AfterRegister:
+                    pleaseLoginAgainLabel.text = "You will receive an email to confirm your registration soon.\nPlease confirm and login."
+                case .Normal: break
+                }
+                
 
             } else {
                 QL3("Setting mode before outlets are initialised")
@@ -84,10 +95,19 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         self.initValidator()
         
         fbButton.readPermissions = ["public_profile"]
-        
+
         onUIReady?()
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // in will appear such that it works also when we are coming back from register controller
+        if let storedEmail = Providers.userProvider.mySharedUser?.email {
+            userNameField.text = storedEmail
+        }
+    }
+    
     private func initValidator() {
         let validator = Validator()
         validator.registerField(self.userNameField, rules: [EmailRule(message: "validation_email_format")])
@@ -142,6 +162,8 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     }
     
     func onRegisterSuccess() {
+        self.mode = .AfterRegister
+        navigationController?.popViewControllerAnimated(true)
         self.delegate?.onRegisterFromLoginSuccess() ?? QL3("No login delegate")
     }
     

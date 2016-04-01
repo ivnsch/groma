@@ -31,15 +31,15 @@ class RemoteUserProvider {
         }
     }
     
-    func register(user: UserInput, handler: RemoteResult<RemoteRegisterResult> -> ()) {
+    func register(user: UserInput, handler: RemoteResult<NoOpSerializable> -> ()) {
         
         let parameters = self.toRequestParams(user)
         
-        RemoteProvider.request(.POST, Urls.register, parameters) {[weak self] (result: RemoteResult<RemoteRegisterResult>) in
-            if let successResult = result.successResult {
-                self?.storeUserData(successResult.token, email: user.email)
+        RemoteProvider.request(.POST, Urls.register, parameters) {[weak self] (result: RemoteResult<NoOpSerializable>) in
+            if result.success {
+                self?.storeEmail(user.email) // store the email in prefs so we can e.g. prefill login controller, which is opened after registration
             } else {
-                QL4("No token. Result: \(result)")
+                QL4("Error registering. Result: \(result)")
             }
             handler(result)
         }
