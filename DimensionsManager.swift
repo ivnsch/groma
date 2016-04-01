@@ -80,4 +80,24 @@ class DimensionsManager {
         case .Large: return 310
         }
     }
+    
+    // MARK: 
+
+    static var listItemsHeaderHeight: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 28
+        case .Small: return 30
+        case .Middle: return 35
+        case .Large: return 35
+        }
+    }
+    
+    static var defaultCellHeight: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 65
+        case .Small: return 67
+        case .Middle: return 76
+        case .Large: return 76
+        }
+    }
 }

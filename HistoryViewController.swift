@@ -38,6 +38,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
         }
     }
+    
+    private let cellHeight = DimensionsManager.defaultCellHeight
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,6 +91,10 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionModel = sectionModels[section]
         return sectionModel.expanded ? sectionModel.obj.historyItems.count : 0
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return cellHeight
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

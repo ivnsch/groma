@@ -82,6 +82,8 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     private var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
 
+    private let cellHeight = DimensionsManager.defaultCellHeight
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -293,7 +295,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return Constants.cellDefaultHeight
+        return cellHeight
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {

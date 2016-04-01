@@ -46,6 +46,9 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     private let headerFont = Fonts.regular
 
     var cellMode: ListItemCellMode = .Note
+
+    private let headerHeight = Float(DimensionsManager.listItemsHeaderHeight)
+    private let cellHeight = DimensionsManager.defaultCellHeight
     
     /**
      Returns total price of shown items exluding those marked for undo
@@ -84,7 +87,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     }
     
     func heightForHeader() -> Float {
-        return self.hasHeader ? Float(Constants.listItemsTableViewHeaderHeight) : 0
+        return self.hasHeader ? headerHeight : 0
     }
     
     func heightForFooter() -> Float {
@@ -114,7 +117,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     }
     
     func heightForRow(row: Int) -> CGFloat {
-        return Constants.cellDefaultHeight
+        return cellHeight
     }
     
     //    func cellsToRegister() -> NSSet {

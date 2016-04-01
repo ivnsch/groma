@@ -176,9 +176,9 @@ class ListTopBarView: UIView {
         
         if let heightConstraint = heightConstraint {
             // The cell and topbar have different heights so we hav to animate this too. Sometimes the topbar is used without animation (e.g. top bar from lists/inventories/groups controller - in this case heightConstraint is nil)
-            heightConstraint.constant = center ? Constants.cellDefaultHeight : 64
+            heightConstraint.constant = center ? DimensionsManager.defaultCellHeight : 64
             layoutIfNeeded()
-            heightConstraint.constant = center ? 64 : Constants.cellDefaultHeight
+            heightConstraint.constant = center ? 64 : DimensionsManager.defaultCellHeight
         }
         
         titleLabelLeftConstraint?.constant = center ? self.center.x - titleLabel.frame.width / 2 : CGFloat(titleLabelLeftConstant)

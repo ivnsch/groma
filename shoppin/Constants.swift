@@ -12,8 +12,6 @@ struct Constants {
     static let defaultListIdentifier = "Todo"
     
     static let topAddContainerViewHeight: CGFloat = 100
-    static let cellDefaultHeight: CGFloat = 76
-    static let listItemsTableViewHeaderHeight: CGFloat = 35
     static let tabGroupsIndex: Int = 1
     
     static let tableViewAdditionalBottomInset: CGFloat = 10

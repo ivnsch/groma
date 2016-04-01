@@ -215,6 +215,10 @@ extension UIView {
         self.layer.addSublayer(border)
     }
     
-
-
+    func addBorderWithYOffset(color: UIColor, width: CGFloat, offset: CGFloat) {
+        let border = CALayer()
+        border.backgroundColor = color.CGColor
+        border.frame = CGRectMake(0, offset - width, self.bounds.size.width, width)
+        self.layer.addSublayer(border)
+    }
 }

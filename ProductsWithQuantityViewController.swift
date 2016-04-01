@@ -64,6 +64,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     private let paginator = Paginator(pageSize: 20)
     private var loadingPage: Bool = false
     
+    private let cellHeight = DimensionsManager.defaultCellHeight
     
     func clearAndLoadFirstPage() {
         models = []
@@ -166,6 +167,10 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return cellHeight
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

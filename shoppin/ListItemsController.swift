@@ -720,7 +720,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 
                 if let sectionsTableViewController = sectionsTableViewController { // expand while in collapsed state (sections tableview is set) - remove sections table view
                     
-                    sectionsTableViewController.setCellHeight(Constants.listItemsTableViewHeaderHeight, animated: true)
+                    sectionsTableViewController.setCellHeight(DimensionsManager.listItemsHeaderHeight, animated: true)
                     sectionsTableViewController.setEdit(false, animated: true) {
                         sectionsTableViewController.removeFromParentViewController()
                         sectionsTableViewController.view.removeFromSuperview()

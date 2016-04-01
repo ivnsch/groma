@@ -21,7 +21,7 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
     
     var onViewDidLoad: VoidFunction?
     
-    var cellHeight: CGFloat = Constants.listItemsTableViewHeaderHeight
+    var cellHeight: CGFloat = DimensionsManager.listItemsHeaderHeight
     
     var delegate: ReorderSectionTableViewControllerDelegate?
     
@@ -51,7 +51,7 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
     override func viewDidAppear(animated: Bool) {
         setEdit(true, animated: false)
         // cell starts small to blend with the collapsed original tableview and grows to normal size
-        setCellHeight(Constants.cellDefaultHeight, animated: true)
+        setCellHeight(DimensionsManager.defaultCellHeight, animated: true)
     }
     
     // Animate cell height
