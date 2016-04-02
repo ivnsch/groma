@@ -147,8 +147,8 @@ class RealmProvider {
                 let models = self.loadSync(realm, mapper: mapper, predicate: predicateMaybe, sortDescriptor: sortDescriptorMaybe, range: rangeMaybe)
                 finished(models)
                 
-            } catch _ {
-                QL4("Error: creating Realm, returning empty results")
+            } catch let e {
+                QL4("Error: creating Realm, returning empty results, error: \(e)")
                 finished([]) // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
             }
         })
