@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-class PricesView: UIView {
+class PricesView: UIView, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var totalPriceLabel: UILabel!
     @IBOutlet weak var donePriceLabel: UILabel!
@@ -35,9 +35,11 @@ class PricesView: UIView {
     private let arrowWidth: CGFloat = 20
     private let openWidth: CGFloat = -60 // width constant while showing stash view behind
     
-    private var open: Bool = false // when stash view behind is visible
+    private(set) var open: Bool = false // when stash view behind is visible
     private var expanded: Bool = true // if vertically minimized or expanded (expanded is normal size)
 
+    @IBOutlet weak var button: UIButton!
+    
     var cartQuantity: Int = 0 {
         didSet {
             if let cartQuantityLabel = quantityLabel {
@@ -65,12 +67,99 @@ class PricesView: UIView {
         quantityCenterConstraint.constant = stashQuantity == 0 ? 0 : -10
     }
     
+    var panRecognizer: UIPanGestureRecognizer!
+    var panStartPoint: CGPoint!
+    @IBOutlet weak var leftLayoutConstraint: NSLayoutConstraint!
+    var startingLeftLayoutConstraint: CGFloat!
+    var allowOpen: Bool = false
+    
     override func awakeFromNib() {
         super.awakeFromNib()
 //        backgroundColor = UIColor.clearColor() // we add the background with layer (because of triangle shape)
         originalHeight = heightConstraint.constant
         originalPriceFont = totalPriceLabel.font
         originalCartImgLeftConstraint = cartImgLeftConstraint.constant
+        
+        
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: "onPanCell:")
+        panRecognizer.delegate = self
+        self.button.addGestureRecognizer(panRecognizer)
+        self.panRecognizer = panRecognizer
+    }
+    
+    
+    func onPanCell(recognizer:UIPanGestureRecognizer) {
+    
+        guard allowOpen else {return}
+        
+        let stashViewWidth: CGFloat = 60
+        
+        var movingHorizontally = false
+        if let panStartPoint = self.panStartPoint {
+            movingHorizontally = fabsf(Float(panStartPoint.y)) < fabsf(Float(panStartPoint.x))
+        }
+        
+        switch recognizer.state {
+        case .Began:
+            self.panStartPoint = recognizer.translationInView(self.button)
+            self.startingLeftLayoutConstraint = self.leftLayoutConstraint.constant
+            
+        case .Changed:
+            if movingHorizontally {
+                let currentPoint = recognizer.translationInView(self)
+                let deltaX = abs(currentPoint.x - self.panStartPoint.x)
+                let panningLeft = currentPoint.x < self.panStartPoint.x
+                
+                if panningLeft {
+                    if deltaX < stashViewWidth {
+                        leftLayoutConstraint.constant = startingLeftLayoutConstraint - deltaX
+                    } else {
+                        
+                        leftLayoutConstraint.constant = startingLeftLayoutConstraint - ((stashViewWidth + (deltaX - stashViewWidth) / 2))
+                    }
+                } else {
+                    leftLayoutConstraint.constant = min(0, startingLeftLayoutConstraint + deltaX)
+                }
+            }
+            
+        case .Ended:
+            if movingHorizontally {
+                if abs(leftLayoutConstraint.constant) < stashViewWidth {
+                    leftLayoutConstraint.constant = 0
+                } else if abs(leftLayoutConstraint.constant) >= stashViewWidth {
+                    leftLayoutConstraint.constant = -stashViewWidth
+                    open = true
+                }
+                UIView.animateWithDuration(0.3) {[weak self] in
+                    self?.layoutIfNeeded()
+                }
+            }
+            
+        case .Cancelled:
+            if movingHorizontally {
+                if leftLayoutConstraint.constant < stashViewWidth {
+                    leftLayoutConstraint.constant = 0
+                } else if leftLayoutConstraint.constant >= stashViewWidth {
+                    leftLayoutConstraint.constant = -stashViewWidth
+                    open = true
+                }
+                UIView.animateWithDuration(0.3) {[weak self] in
+                    self?.layoutIfNeeded()
+                }
+            }
+            
+        default:
+            "Not handled"
+        }
+    }
+
+    // TODO generic open/close
+    func close() {
+        open = false
+        leftLayoutConstraint.constant = 0
+        UIView.animateWithDuration(0.3) {[weak self] in
+            self?.layoutIfNeeded()
+        }
     }
     
     func setTotalPrice(price: Float, animated: Bool) {
@@ -123,10 +212,10 @@ class PricesView: UIView {
     // expanded: covers all width, contracted: space to see stash view
     func setExpandedHorizontal(expanded: Bool) {
         open = !expanded
-        widthConstraint.constant = widthConstant
-        UIView.animateWithDuration(0.5) {[weak self] in
-            self?.layoutIfNeeded()
-        }
+//        widthConstraint.constant = widthConstant
+//        UIView.animateWithDuration(0.5) {[weak self] in
+//            self?.layoutIfNeeded()
+//        }
     }
     
     private var widthConstant: CGFloat {

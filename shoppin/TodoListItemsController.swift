@@ -57,12 +57,17 @@ class TodoListItemsController: ListItemsController, CartViewControllerDelegate {
         func f() {
             if let list = currentList {
                 Providers.listItemsProvider.listItemCount(ListItemStatus.Stash, list: list, fetchMode: .MemOnly, successHandler {[weak self] count in
-                    if count != self?.stashView.quantity { // don't animate if there's no change
+//                    if count != self?.stashView.quantity { // don't animate if there's no change
                         self?.stashView.quantity = count
+                        self?.pricesView.allowOpen = count > 0
+                        if count == 0 {
+                            self?.pricesView.close()
+                        }
                         self?.pricesView.setExpandedHorizontal(count == 0)
                         self?.pricesView.stashQuantity = count
-                        self?.stashView.setOpen(count > 0)
-                    }
+//                        self?.stashView.setOpen(count > 0)
+                        
+//                    }
                 })
             }
         }
@@ -96,7 +101,11 @@ class TodoListItemsController: ListItemsController, CartViewControllerDelegate {
     }
     
     @IBAction func onCartTap(sender: UIButton) {
-        performSegueWithIdentifier("doneViewControllerSegue", sender: self)
+        if pricesView.open {
+            pricesView.close()
+        } else {
+            performSegueWithIdentifier("doneViewControllerSegue", sender: self)
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

@@ -13,11 +13,14 @@ class StashView: UIView {
     @IBOutlet weak var rightConstraint: NSLayoutConstraint!
     @IBOutlet weak var quantityLabel: UILabel!
 
+    @IBOutlet weak var button: UIButton!
+    
     var bgColor: UIColor?
     
     var quantity: Int = 0 {
         didSet {
-            quantityLabel.text = String(quantity)
+//            quantityLabel.text = String(quantity)
+            button.tintColor = quantity > 0 ? UIColor.whiteColor() : UIColor(hexString: "3FCF9C")
         }
     }
     

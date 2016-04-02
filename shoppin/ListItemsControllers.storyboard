@@ -23,7 +23,6 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -247,16 +246,15 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5T4-jf-M2R" customClass="StashView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="540" width="520" height="60"/>
+                                <rect key="frame" x="80" y="540" width="520" height="60"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ynf-1d-oXI">
-                                        <rect key="frame" x="500" y="30" width="0.0" height="0.0"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0eD-HV-Myo">
-                                        <rect key="frame" x="0.0" y="0.0" width="520" height="60"/>
+                                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0eD-HV-Myo">
+                                        <rect key="frame" x="460" y="0.0" width="60" height="60"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="q4Q-KL-w5r"/>
+                                        </constraints>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <state key="normal" image="stash"/>
                                         <connections>
                                             <segue destination="KWE-NE-tbC" kind="show" identifier="stashSegue" id="Bbh-0T-TaJ">
                                                 <nil key="action"/>
@@ -264,19 +262,22 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.1215686275" green="0.67450980390000004" blue="0.41568627450000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="520" id="0f8-8Q-Vt8"/>
-                                    <constraint firstAttribute="trailing" secondItem="ynf-1d-oXI" secondAttribute="trailing" constant="20" id="Aka-l2-0m0"/>
                                     <constraint firstAttribute="trailing" secondItem="0eD-HV-Myo" secondAttribute="trailing" id="Hlf-fx-LlM"/>
                                     <constraint firstAttribute="height" constant="60" id="OvZ-Vs-sjM"/>
                                     <constraint firstItem="0eD-HV-Myo" firstAttribute="leading" secondItem="5T4-jf-M2R" secondAttribute="leading" id="Y3j-hu-rmH"/>
                                     <constraint firstItem="0eD-HV-Myo" firstAttribute="top" secondItem="5T4-jf-M2R" secondAttribute="top" id="hXi-E7-V0I"/>
                                     <constraint firstAttribute="bottom" secondItem="0eD-HV-Myo" secondAttribute="bottom" id="nfc-pA-CeF"/>
-                                    <constraint firstItem="ynf-1d-oXI" firstAttribute="centerY" secondItem="5T4-jf-M2R" secondAttribute="centerY" id="vGc-7Z-BhD"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="Y3j-hu-rmH"/>
+                                    </mask>
+                                </variation>
                                 <connections>
-                                    <outlet property="quantityLabel" destination="ynf-1d-oXI" id="Nys-nx-OVe"/>
+                                    <outlet property="button" destination="0eD-HV-Myo" id="SzM-vC-UJD"/>
                                     <outlet property="rightConstraint" destination="Gsx-FO-ul6" id="2Rt-ry-sJh"/>
                                 </connections>
                             </view>
@@ -312,7 +313,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Om-sR-QxE">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
                                         <connections>
-                                            <action selector="onCartTap:" destination="QHZ-uV-ZSM" eventType="touchUpInside" id="EVi-Yz-ONU"/>
+                                            <action selector="onCartTap:" destination="QHZ-uV-ZSM" eventType="touchUpInside" id="95P-SU-3Lw"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -347,10 +348,12 @@
                                     </mask>
                                 </variation>
                                 <connections>
+                                    <outlet property="button" destination="8Om-sR-QxE" id="6AZ-uD-fAs"/>
                                     <outlet property="cartImg" destination="jvm-6H-Duz" id="RzP-6X-oJ1"/>
                                     <outlet property="cartImgLeftConstraint" destination="N2L-3E-box" id="U1C-ox-V0r"/>
                                     <outlet property="donePriceLabel" destination="mNO-iA-eWt" id="VER-DG-ld2"/>
                                     <outlet property="heightConstraint" destination="FDi-oR-jaL" id="P8B-4h-wQs"/>
+                                    <outlet property="leftLayoutConstraint" destination="R3l-IW-TzB" id="MEl-ba-T3l"/>
                                     <outlet property="quantityCenterConstraint" destination="ufs-0F-FLZ" id="mIA-oq-vd6"/>
                                     <outlet property="quantityLabel" destination="E7V-vH-7DE" id="Paq-ev-gGV"/>
                                     <outlet property="stashQuantityLabel" destination="Fgk-0h-BDM" id="agH-Pg-xTs"/>
@@ -377,7 +380,7 @@
                         <constraints>
                             <constraint firstItem="CzC-OK-nPG" firstAttribute="top" secondItem="Ytc-Mq-xYS" secondAttribute="top" id="BIM-hI-uax"/>
                             <constraint firstItem="iVM-Kg-U2m" firstAttribute="width" secondItem="Ytc-Mq-xYS" secondAttribute="width" id="CQQ-wq-7AI"/>
-                            <constraint firstAttribute="trailing" secondItem="5T4-jf-M2R" secondAttribute="trailing" constant="80" id="Gsx-FO-ul6"/>
+                            <constraint firstAttribute="trailing" secondItem="5T4-jf-M2R" secondAttribute="trailing" id="Gsx-FO-ul6"/>
                             <constraint firstAttribute="trailing" secondItem="40h-cB-Pev" secondAttribute="trailing" constant="10" id="IX9-qF-FAD"/>
                             <constraint firstItem="peQ-Fh-dVX" firstAttribute="top" secondItem="iVM-Kg-U2m" secondAttribute="bottom" priority="999" id="IrT-Je-DDy"/>
                             <constraint firstItem="peQ-Fh-dVX" firstAttribute="top" secondItem="5T4-jf-M2R" secondAttribute="bottom" priority="999" id="NDB-NB-vei"/>
@@ -597,5 +600,6 @@
         <image name="minus" width="20" height="20"/>
         <image name="plus" width="20" height="20"/>
         <image name="speechbubble" width="30" height="30"/>
+        <image name="stash" width="25" height="25"/>
     </resources>
 </document>
