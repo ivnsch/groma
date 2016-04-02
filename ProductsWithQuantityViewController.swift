@@ -51,16 +51,6 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     var onViewWillAppear: VoidFunction? // to be able to ensure sortBy is not set before UI is ready
 
-    
-    var tableViewTopInset: CGFloat {
-        get {
-            return tableView.topInset
-        }
-        set {
-            tableView.topInset = newValue
-        }
-    }
-    
     private let paginator = Paginator(pageSize: 20)
     private var loadingPage: Bool = false
     
@@ -116,7 +106,14 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         onViewWillAppear?()
         
         tableView.allowsSelectionDuringEditing = true
-        tableView.bottomInset = tabBarController?.tabBar.frame.height ?? 100
+        
+        if let _ = tabBarController?.tabBar.frame.height {
+            // TODO this is not enough, why?
+//            tableView.bottomInset = tabBarHeight + Constants.tableViewAdditionalBottomInset
+            tableView.bottomInset = 120
+        } else {
+            QL3("No tabBarController: \(tabBarController)")
+        }
         
         clearAndLoadFirstPage()
     }
