@@ -44,7 +44,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.topInset = 64 + 40 // (top + menu bar)
+        tableView.topInset = 40 // (menu bar)
         
         dateFormatter = NSDateFormatter()
         dateFormatter.dateStyle = .FullStyle
