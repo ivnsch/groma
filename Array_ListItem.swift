@@ -88,6 +88,25 @@ extension Array where Element: ListItem {
         return Set(sectionsOfItemsWithStatus).count
     }
     
+    // How many list items with given section are in this array
+    func count(section: Section) -> Int {
+        var count = 0
+        for listItem in self {
+            if listItem.section.same(section) {
+                count = count + 1
+            }
+        }
+        return count
+    }
+    
+    func sectionsInOrder(status: ListItemStatus) -> [Section] {
+        var set: Set<Section> = Set<Section>()
+        for listItem in self {
+            set.insert(listItem.section)
+        }
+        return Array<Section>(set).inOrder(status)
+    }
+    
     func findFirstWithProductNameAndBrand(productName: String, brand: String) -> ListItem? {
         
         for listItem in self {

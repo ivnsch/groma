@@ -514,12 +514,13 @@ class ListItemProviderImpl: ListItemProvider {
 
             if let storedListItems = result.sucessResult {
                 
-                // before we update the listitems, capture the order of the first item (in src status)
                 let srcStoredItems = storedListItems.filter{$0.hasStatus(status1)}
+                
+                // before we update the listitems, capture the order of the first item (in src status)
                 let firstInputItemOrderInSrcStatusMaybe = listItems.first.map{$0.order(status1)}
                 
-                // Update done and order field - by changing "done" we are moving list items from one tableview to another
-                // we append the items at the end of the section (order == section.count)
+                // Update quantity and order field - by changing quantity we are moving list items from one status to another
+                // we append the items at the end of the dst section (order == section.count)
                 var dstSectionsDict = storedListItems.sectionCountDict(status)
                 for listItem in listItems {
                     listItem.switchStatusQuantityMutable(status1, targetStatus: status)
@@ -527,8 +528,10 @@ class ListItemProviderImpl: ListItemProvider {
                         listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: sectionCount))
                         dstSectionsDict[listItem.section]!++ // we are adding an item to section - increment count for possible next item
                         
-                    } else { // item's section is not in target list - set order 0 (first item in section) and add section to the dictionary
+                    } else { // item's section is not in target status - set order 0 (first item in section) and add section to the dictionary
                         listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: 0))
+                        // update order such that section is appended at the end
+                        listItem.section.updateOrderMutable(ListItemStatusOrder(status: status, order: dstSectionsDict.count))
                         dstSectionsDict[listItem.section] = 1 // we are adding an item to section - items count is 1
                     }
                     // this is not really necessary, but for consistency - reset order to 0 in the src status.
@@ -540,30 +543,69 @@ class ListItemProviderImpl: ListItemProvider {
                     switch mode {
                     case .Single:
                         if let srcListItemSection = listItems.first?.section { // use the section of first item - there's only 1 list item.
+
+                            // If src section is now empty, shift following sections in src status up, also clear its own order for consistency
+                            let possibleFollowingSectionsToUpdate: [Section]? = {
+                                if srcStoredItems.count(srcListItemSection) - listItems.count == 0 {
+                                    let srcStatusSectionFollowers = storedListItems.sectionsInOrder(status1).filter{$0.order(status1) > srcListItemSection.order(status1)}
+                                    srcStatusSectionFollowers.forEachEnumerate({(index, section) -> Void in
+                                        section.updateOrderMutable(ListItemStatusOrder(status: status1, order: index + srcListItemSection.order(status1)))
+                                    })
+                                    return srcStatusSectionFollowers
+                                } else {
+                                    return nil
+                                }
+                            }()
+                            // In order to update the sections we will just set them back in the stored list items - so this update is also saved when we save the list items
+                            // NOTE: this is not optimal performance wise, since now we have to write all these list items to database instead of only the sections but the code is simpler (we would have to modify the mem cache as well as the db to update the sections separately). 
+                            // NOTE also, that this is only for the local update - to the server we send only the switched item(s)! the server does itself again all the reordering logic. The reason for this logic duplication is that the app has to work offline and when online we have to ensure consistency for concurrent access.
+                            let possibleListItemsToUpdateInFollowingSections: [ListItem] = {
+                                if let sectionsToUpdate = possibleFollowingSectionsToUpdate {
+                                    let sectionsToUpdateDict = sectionsToUpdate.toDictionary{($0.uuid, $0)}
+                                    return srcStoredItems.collect {srcStoredItem in
+                                        if let sectionToUpdate = sectionsToUpdateDict[srcStoredItem.section.uuid] {
+                                            return srcStoredItem.copy(section: sectionToUpdate, note: nil)
+                                        } else {
+                                            return nil
+                                        }
+                                    }
+                                } else {
+                                    return []
+                                }
+                            }()
                             
-                            // shift following items in src status up
-                            if let firstInputItemOrderInSrcStatus = firstInputItemOrderInSrcStatusMaybe {
-                                let srcStatusFollowers = srcStoredItems.filter{$0.section.same(srcListItemSection) && $0.order(status1) > firstInputItemOrderInSrcStatus}
-                                srcStatusFollowers.forEachEnumerate({(index, listItem) -> Void in
-                                    listItem.updateOrderMutable(ListItemStatusOrder(status1, order: index + firstInputItemOrderInSrcStatus))
-                                })
-                                return listItems + srcStatusFollowers
-                            } else {
-                                // we can be here only if the passed list items are empty - this is not expected. We can be here if 1. user swiped a listitem - there's always 1 listitem, 2. users taps on "reset" in stash to put the list items back to the todo list - this button should be disabled when the stash is empty (TODO!!), 3. we receive swipe action via websocket (though currently this is processed in other method) in which case also there must be a list item, as the websocket action is also triggered by 1. or 2.
-                                QL4("Error/warning: Src order: \(firstInputItemOrderInSrcStatusMaybe) is nil")
-                                return listItems
-                            }
-                            
+                            // The order of possible following items inside the same section also has to be udpated
+                            let possibleFollowingListItemsInSectionToUpdate: [ListItem] = {
+                                // shift following items (inside section) in src status up
+                                if let firstInputItemOrderInSrcStatus = firstInputItemOrderInSrcStatusMaybe {
+                                    let srcStatusListItemsFollowers = srcStoredItems.filter{$0.section.same(srcListItemSection) && $0.order(status1) > firstInputItemOrderInSrcStatus}
+                                    return srcStatusListItemsFollowers.mapEnumerate {(index, listItem) in
+                                        listItem.updateOrder(ListItemStatusOrder(status: status1, order: index + firstInputItemOrderInSrcStatus))
+                                            .copy(section: srcListItemSection, note: nil) // TODO!!! review this, this is a hack because of the broad way we are using to do updates - since we do a "big update" for all list items (independently if we want to update only status, or order, or section), the section from these items, which are later in the array than the passed ones, overwrites their section, which may have been mutated at the beginning of this method. So we set the (possibly mutated) section here in the copy so when they are overwritten the mutated section data doesn't get lost.
+                                    }
+                                } else {
+                                    // we can be here only if the passed list items are empty - this is not expected. We can be here if 1. user swiped a listitem - there's always 1 listitem, 2. users taps on "reset" in stash to put the list items back to the todo list - this button should be disabled when the stash is empty (TODO!!), 3. we receive swipe action via websocket (though currently this is processed in other method) in which case also there must be a list item, as the websocket action is also triggered by 1. or 2.
+                                    QL4("Error/warning: Src order: \(firstInputItemOrderInSrcStatusMaybe) is nil")
+                                    return []
+                                }
+                            }()
+
+                            // Total things to update - passed list items (quantity/order), possible following src list items (order), possible following src sections (order)
+                            // Note in dst status we don't update order of following items/sections as they are always inserted at the end
+                            return listItems + possibleFollowingListItemsInSectionToUpdate + possibleListItemsToUpdateInFollowingSections
+
                         } else {
                             QL4("Error/warning: list items is empty")
                             return listItems
                         }
                         
                     case .All:
-                        srcStoredItems.forEach({listItem -> Void in
+                        // all the list items in src status are gone - set order to 0, just for consistency
+                        listItems.forEach({listItem -> Void in
                             listItem.updateOrderMutable(ListItemStatusOrder(status1, order: 0))
+                            listItem.section.updateOrderMutable(ListItemStatusOrder(status1, order: 0)) // this may update sections multiple times but it doesn't matter
                         })
-                        return srcStoredItems
+                        return listItems
                     }
                 }()
                 
@@ -571,7 +613,10 @@ class ListItemProviderImpl: ListItemProvider {
                 self.updateLocal(allItemsToUpdate, handler: handler, onFinishLocal: {[weak self] in
                     
                     if remote {
-                        
+                        // TODO!!!! we have to either send the server the order update too or implement in the server the reorder logic for followers and possible section removal. Right now server just updates status!
+                        // Then, also, server has to communicate this to other devices via websockets so it could 1. send the clients only the status update and let them calculate the rest - using this method, or 2. send the client the final update result (status update + reorder + possible section removal. First is less code as we already have method but there may(?) be some inconsistencies with the server at some point (which would be "fixed" though the next time the client opens the list and requests from server(?), 2. is a bit more consistent with server but requires to adjust the protocol and new provider methods
+                        // finally decided solution:
+                        // 1. client sends update to server (only item) 2. server does (like client) the order update and possible section removal (we can have paralel updates since list is shared so it's important server does reordering on its own) 3. server sends result to client and websocket subscribers - we can here either A. send only switched item, let clients do the reordering etc and use the server's timestamp or B. simply save what the server sends, this means we need a new structure with - switched item, order udpates to be stored and possible section removal, each with its timestamp. Considering that we need to use the server's timestamp either way for sync to work correctly (otherwise in the next sync our items will be "too old" and maybe the updates be lost), it looks B is the way to go.
                         self?.remoteProvider.updateStatus(listItems) {remoteResult in
                             
                             if let serverLastUpdateTimestamp = remoteResult.successResult {

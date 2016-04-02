@@ -709,6 +709,9 @@
 		EBA9E6061C64AFCE00A85610 /* ListItemPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */; };
 		EBA9E6071C64AFCE00A85610 /* ListItemPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */; };
 		EBA9E6081C64AFCE00A85610 /* ListItemPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */; };
+		EBAB0BB41CB000E9001B8B01 /* Array_Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB0BB31CB000E9001B8B01 /* Array_Section.swift */; };
+		EBAB0BB51CB000E9001B8B01 /* Array_Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB0BB31CB000E9001B8B01 /* Array_Section.swift */; };
+		EBAB0BB61CB000E9001B8B01 /* Array_Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAB0BB31CB000E9001B8B01 /* Array_Section.swift */; };
 		EBAEB22F1BDBDB2F00FCDA5C /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB22E1BDBDB2F00FCDA5C /* CGPoint.swift */; };
 		EBAEB23C1BDC262400FCDA5C /* FloatingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB23B1BDC262400FCDA5C /* FloatingViews.swift */; };
 		EBAEB23E1BDC263800FCDA5C /* FloatingViews.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBAEB23D1BDC263800FCDA5C /* FloatingViews.xib */; };
@@ -1419,6 +1422,7 @@
 		EBA9E5E91C6380ED00A85610 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		EBA9E6031C64AD7C00A85610 /* ProductWithQuantity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWithQuantity.swift; sourceTree = "<group>"; };
 		EBA9E6051C64AFCE00A85610 /* ListItemPrototype.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListItemPrototype.swift; sourceTree = "<group>"; };
+		EBAB0BB31CB000E9001B8B01 /* Array_Section.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_Section.swift; sourceTree = "<group>"; };
 		EBAEB22E1BDBDB2F00FCDA5C /* CGPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
 		EBAEB23B1BDC262400FCDA5C /* FloatingViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingViews.swift; sourceTree = "<group>"; };
 		EBAEB23D1BDC263800FCDA5C /* FloatingViews.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FloatingViews.xib; sourceTree = "<group>"; };
@@ -1738,6 +1742,7 @@
 			isa = PBXGroup;
 			children = (
 				EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */,
+				EBAB0BB31CB000E9001B8B01 /* Array_Section.swift */,
 				EBED0CF81C8111A400A1EEC4 /* Array_GroupItem.swift */,
 				EBED0CF41C80E7B700A1EEC4 /* Array_Inventory.swift */,
 				EBED0CF01C80E02700A1EEC4 /* Array_ListItemsGroup.swift */,
@@ -3810,6 +3815,7 @@
 				EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */,
 				EB9208221C4EBCE000332332 /* ManageProductsSelectionController.swift in Sources */,
 				EB1748D01C7E79230067FD16 /* SyncResult.swift in Sources */,
+				EBAB0BB41CB000E9001B8B01 /* Array_Section.swift in Sources */,
 				EBA7AC8E1BFE90C000247A8C /* DBProductCategory.swift in Sources */,
 				EB87A4AB1C1A4F13008D2A42 /* GroupItemWithGroup.swift in Sources */,
 				EB1D69661CAB220F004892A2 /* ModalLoginController.swift in Sources */,
@@ -4191,6 +4197,7 @@
 				EBA5756A1BD009DE00A0A825 /* GroupItemMapper.swift in Sources */,
 				EB7E831B1B7B703B009DEEF4 /* HistoryProviderImpl.swift in Sources */,
 				EB7E82F51B7A141E009DEEF4 /* RegisterViewController.swift in Sources */,
+				EBAB0BB51CB000E9001B8B01 /* Array_Section.swift in Sources */,
 				EB5529E51BC6F2A800EDCEAF /* PlanItemInput.swift in Sources */,
 				EBA7AC971BFE95AF00247A8C /* RemoteProductCategory.swift in Sources */,
 				EB40A48B1B553A19000E9CAD /* DBListItem.swift in Sources */,
@@ -4227,6 +4234,7 @@
 				EB7E83201B7B7069009DEEF4 /* HistoryProvider.swift in Sources */,
 				EB4A38991C86FBE8000714F9 /* RemoteErrorReporter.swift in Sources */,
 				EBF3777D1B342B2E00EEB6DB /* InventoryItem.swift in Sources */,
+				EBAB0BB61CB000E9001B8B01 /* Array_Section.swift in Sources */,
 				EB40A4741B5508B6000E9CAD /* DBResult.swift in Sources */,
 				EB7233C51C84B69A002B9903 /* DBRemoveSharedUser.swift in Sources */,
 				EB7233D91C84B6E3002B9903 /* DBRemoveHistoryItem.swift in Sources */,

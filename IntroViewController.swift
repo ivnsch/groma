@@ -33,8 +33,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         super.viewDidLoad()
         pageControl.numberOfPages = pageCount
         
-        let initActions =  PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false
-//        let initActions = true
+//        let initActions =  PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false
+        let initActions = true
         
         QL1("Will init database: \(initActions)")
         

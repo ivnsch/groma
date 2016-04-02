@@ -15,9 +15,9 @@ final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
     let color: UIColor
     var list: List
 
-    let todoOrder: Int
-    let doneOrder: Int
-    let stashOrder: Int
+    var todoOrder: Int
+    var doneOrder: Int
+    var stashOrder: Int
     
     // TODO! list reference - a section belongs to a list
     
@@ -94,6 +94,14 @@ final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
         case .Todo: return todoOrder
         case .Done: return doneOrder
         case .Stash: return stashOrder
+        }
+    }
+    
+    func updateOrderMutable(order: ListItemStatusOrder) {
+        switch order.status {
+        case .Todo: todoOrder = order.order
+        case .Done: doneOrder = order.order
+        case .Stash: stashOrder = order.order
         }
     }
 }

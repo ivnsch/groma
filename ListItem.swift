@@ -259,6 +259,22 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
     
+    func updateOrder(order: ListItemStatusOrder) -> ListItem {
+        return copy(
+            uuid: uuid,
+            product: product,
+            section: section,
+            list: list,
+            note: note,
+            todoQuantity: todoQuantity,
+            todoOrder: order.status == .Todo ? order.order : todoOrder,
+            doneQuantity: doneQuantity,
+            doneOrder: order.status == .Done ? order.order : doneOrder,
+            stashQuantity: stashQuantity,
+            stashOrder: order.status == .Stash ? order.order : stashOrder
+        )
+    }
+    
     func updateOrderMutable(order: ListItemStatusOrder) {
         switch order.status {
         case .Todo: todoOrder = order.order
