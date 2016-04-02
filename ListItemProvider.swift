@@ -8,6 +8,8 @@
 
 import Foundation
 
+enum SwitchListItemMode {case Single, All}
+
 protocol ListItemProvider {
   
     func remove(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
@@ -58,7 +60,7 @@ protocol ListItemProvider {
     so we must not use it against the same tableview/state where we already are, because the items will update "order" field incorrectly by basically being appended after themselves.
     TODO cleaner implementation, maybe split in smaller methods. The method should not lead to inconsistent result when used in wrong context (see explanation above)
     */
-    func switchStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func switchStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, mode: SwitchListItemMode, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
     func invalidateMemCache()
     

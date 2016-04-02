@@ -154,7 +154,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
 
     func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) {
         if let list = self.list {
-            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status1: .Done, status: .Todo, remote: notifyRemote) {[weak self] result in
+            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status1: .Done, status: .Todo, mode: .Single, remote: notifyRemote) {[weak self] result in
                 if result.success {
                     self!.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
                     self?.updateEmptyView()
@@ -174,7 +174,7 @@ class DoneViewController: UIViewController, ListItemsTableViewDelegate {
     
     private func sendAllItemToStash(onFinish: VoidFunction) {
         if let list = self.list {
-            Providers.listItemsProvider.switchStatus(self.listItemsTableViewController.items, list: list, status1: .Done, status: .Stash, remote: true) {[weak self] result in
+            Providers.listItemsProvider.switchStatus(self.listItemsTableViewController.items, list: list, status1: .Done, status: .Stash, mode: .All, remote: true) {[weak self] result in
                 if result.success {
                     self?.listItemsTableViewController.setListItems([])
                     self?.updateEmptyView()

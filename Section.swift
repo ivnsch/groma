@@ -60,6 +60,10 @@ final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
         return uuid.hashValue
     }
     
+    var shortOrderDebugDescription: String {
+        return "[\(name)], todo: \(todoOrder), done: \(doneOrder), stash: \(stashOrder)"
+    }
+    
     var debugDescription: String {
         return "{\(self.dynamicType) uuid: \(uuid), name: \(name), color: \(color), listUuid: \(list), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}}"
     }

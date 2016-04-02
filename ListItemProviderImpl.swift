@@ -22,7 +22,9 @@ class ListItemProviderImpl: ListItemProvider {
 
         let memListItemsMaybe = memProvider.listItems(list)
         if let memListItems = memListItemsMaybe {
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: memListItems))
+            // Sorting is for the case the list items order was updated (either with reorder or switch status) it's a bit easier right now to put the sorting here TODO resort when storing in mem cache
+            let memSortedListItems = memListItems.sortedByOrder(sortOrderByStatus)
+            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: memSortedListItems))
             if fetchMode == .MemOnly || fetchMode == .First {
                 return
             }
@@ -506,7 +508,7 @@ class ListItemProviderImpl: ListItemProvider {
         addListItem(product, status: status, sectionName: section.name, sectionColor: section.color, quantity: quantity, list: list, note: note, order: orderMaybe, handler)
     }
 
-    func switchStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func switchStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, mode: SwitchListItemMode, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         
         self.listItems(list, sortOrderByStatus: status, fetchMode: .MemOnly) {result in // TODO review .First suitable here
 
@@ -514,36 +516,59 @@ class ListItemProviderImpl: ListItemProvider {
                 
                 // before we update the listitems, capture the order of the first item (in src status)
                 let srcStoredItems = storedListItems.filter{$0.hasStatus(status1)}
-                let firstInputItemOrderInSrcStatusMaybe = srcStoredItems.first.map{$0.order(status1)}
+                let firstInputItemOrderInSrcStatusMaybe = listItems.first.map{$0.order(status1)}
                 
                 // Update done and order field - by changing "done" we are moving list items from one tableview to another
                 // we append the items at the end of the section (order == section.count)
-                var sectionsDict = storedListItems.sectionCountDict(status)
+                var dstSectionsDict = storedListItems.sectionCountDict(status)
                 for listItem in listItems {
                     listItem.switchStatusQuantityMutable(status1, targetStatus: status)
-                    if let sectionCount = sectionsDict[listItem.section] {
+                    if let sectionCount = dstSectionsDict[listItem.section] {
                         listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: sectionCount))
-                        sectionsDict[listItem.section]!++ // we are adding an item to section - increment count for possible next item
+                        dstSectionsDict[listItem.section]!++ // we are adding an item to section - increment count for possible next item
                         
                     } else { // item's section is not in target list - set order 0 (first item in section) and add section to the dictionary
                         listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: 0))
-                        sectionsDict[listItem.section] = 1 // we are adding an item to section - items count is 1
+                        dstSectionsDict[listItem.section] = 1 // we are adding an item to section - items count is 1
                     }
+                    // this is not really necessary, but for consistency - reset order to 0 in the src status.
+                    listItem.updateOrderMutable(ListItemStatusOrder(status: status1, order: 0))
                 }
                 
-                // shift following items in src status up
-                if let firstInputItemOrderInSrcStatus = firstInputItemOrderInSrcStatusMaybe {
-                    let srcStatusFollowers = srcStoredItems.filter{$0.order(status1) > firstInputItemOrderInSrcStatus}
-                    srcStatusFollowers.forEachEnumerate({(index, listItem) -> Void in
-                        listItem.updateOrderMutable(ListItemStatusOrder(status1, order: index + firstInputItemOrderInSrcStatus))
-                    })
-                } else {
-                    // we can be here only if the passed list items are empty - this is not expected. We can be here if 1. user swiped a listitem - there's always 1 listitem, 2. users taps on "reset" in stash to put the list items back to the todo list - this button should be disabled when the stash is empty (TODO!!), 3. we receive swipe action via websocket (though currently this is processed in other method) in which case also there must be a list item, as the websocket action is also triggered by 1. or 2.
-                    QL4("Error/warning: Src order: \(firstInputItemOrderInSrcStatusMaybe) is nil")
-                }
+                // All the items that have to be updated - we need to update also order of following items in src status. We use modes .Single and .Reset to simplify the algorithm for the different use cases. In .Single we know there's only 1 listitem+section, and in .Reset we know we are emptying the list in targetStatus, so we just the order of all to 0. The main reason this differentiation is necessary is that order is relative to section, and to update the order of the followers, we need to know if they are in the same section of the switched listitem(s). In the case of single list item we just havee to query the section of the list item, in the case of multiple it's more complicated.
+                let allItemsToUpdate: [ListItem] = {
+                    switch mode {
+                    case .Single:
+                        if let srcListItemSection = listItems.first?.section { // use the section of first item - there's only 1 list item.
+                            
+                            // shift following items in src status up
+                            if let firstInputItemOrderInSrcStatus = firstInputItemOrderInSrcStatusMaybe {
+                                let srcStatusFollowers = srcStoredItems.filter{$0.section.same(srcListItemSection) && $0.order(status1) > firstInputItemOrderInSrcStatus}
+                                srcStatusFollowers.forEachEnumerate({(index, listItem) -> Void in
+                                    listItem.updateOrderMutable(ListItemStatusOrder(status1, order: index + firstInputItemOrderInSrcStatus))
+                                })
+                                return listItems + srcStatusFollowers
+                            } else {
+                                // we can be here only if the passed list items are empty - this is not expected. We can be here if 1. user swiped a listitem - there's always 1 listitem, 2. users taps on "reset" in stash to put the list items back to the todo list - this button should be disabled when the stash is empty (TODO!!), 3. we receive swipe action via websocket (though currently this is processed in other method) in which case also there must be a list item, as the websocket action is also triggered by 1. or 2.
+                                QL4("Error/warning: Src order: \(firstInputItemOrderInSrcStatusMaybe) is nil")
+                                return listItems
+                            }
+                            
+                        } else {
+                            QL4("Error/warning: list items is empty")
+                            return listItems
+                        }
+                        
+                    case .All:
+                        srcStoredItems.forEach({listItem -> Void in
+                            listItem.updateOrderMutable(ListItemStatusOrder(status1, order: 0))
+                        })
+                        return srcStoredItems
+                    }
+                }()
                 
                 // Persist changes. If mem cached is enabled this calls handler directly after mem cache is updated and does db update in the background.
-                self.updateLocal(listItems, handler: handler, onFinishLocal: {[weak self] in
+                self.updateLocal(allItemsToUpdate, handler: handler, onFinishLocal: {[weak self] in
                     
                     if remote {
                         

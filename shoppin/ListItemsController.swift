@@ -358,7 +358,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                     case .Stash: return .Todo
                     }
                 }()
-                Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, remote: true, weakSelf.successHandler {
+                Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, mode: .Single, remote: true, weakSelf.successHandler {
                         weakSelf.onTableViewChangedQuantifiables()
                 })
             })
@@ -386,7 +386,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             }
         }()
         
-        Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: tableViewListItem.listItem.list, status1: srcStatus, status: status, remote: true, successHandler{[weak self] in
+        Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: tableViewListItem.listItem.list, status1: srcStatus, status: status, mode: .Single, remote: true, successHandler{[weak self] in
             QL1("Undo successful")
             self?.listItemsTableViewController.tableView.reloadData()
             self?.onTableViewChangedQuantifiables()
