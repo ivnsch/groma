@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 class MonthYear: Equatable, Hashable, CustomDebugStringConvertible {
     
@@ -31,8 +32,41 @@ class MonthYear: Equatable, Hashable, CustomDebugStringConvertible {
         let components = NSDateComponents()
         components.month = month
         components.year = year
-        return gregorian!.dateFromComponents(components)
+        return gregorian?.dateFromComponents(components)
     }
+    
+    func offsetMonths(months: Int) -> MonthYear? {
+        let date = toDate()
+        if let dateWithOffset = date?.inMonths(months) {
+            let (_, month, year) = dateWithOffset.dayMonthYear
+            return MonthYear(month: month, year: year)
+        } else {
+            QL4("Date is nil \(self)")
+            return nil
+        }
+    }
+}
+
+func > (lhs: MonthYear, rhs: MonthYear) -> Bool {
+    if lhs.year > rhs.year {
+        return true
+    } else if lhs.year < rhs.year {
+        return false
+    } else {
+        return lhs.month > rhs.month
+    }
+}
+
+func < (lhs: MonthYear, rhs: MonthYear) -> Bool {
+    return !(lhs > rhs || lhs == rhs)
+}
+
+func >= (lhs: MonthYear, rhs: MonthYear) -> Bool {
+    return (lhs > rhs || lhs == rhs)
+}
+
+func <= (lhs: MonthYear, rhs: MonthYear) -> Bool {
+    return (lhs < rhs || lhs == rhs)
 }
 
 func ==(lhs: MonthYear, rhs: MonthYear) -> Bool {

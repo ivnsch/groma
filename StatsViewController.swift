@@ -237,8 +237,20 @@ class StatsViewController: UIViewController
             }
         }
         
-        let xValues: [ChartAxisValueDate] = monthYearAggregate.allDates.enumerate().map {(index, date) in
-            MyAxisValueDate(date: date, formatter: outputDateFormatter, isHighlighted: index == monthYearAggregate.allDates.count - 1, labelSettings: labelSettings)
+        let firstDateWithData = monthYearAggregate.monthYearAggregates.findFirst {$0.totalCount > 0}
+
+        let xValues: [MyAxisValueDate] = monthYearAggregate.allDates.map {date in
+            // highlight active months: >= the first date where there are data entries
+            let isHighlighted: Bool = {
+                if let firstDateWithData = firstDateWithData {
+                    let (_, aggrMonth, aggrYear) = date.dayMonthYear
+                    let aggrMonthYear = MonthYear(month: aggrMonth, year: aggrYear)
+                    return aggrMonthYear >= firstDateWithData.monthYear
+                } else {
+                    return false
+                }
+            }()
+            return MyAxisValueDate(date: date, formatter: outputDateFormatter, isHighlighted: isHighlighted, labelSettings: labelSettings)
         }
         
         // For each xValue we need a chart point. If there's no aggregate for a value we create one with total price 0 (no spendings)
@@ -249,10 +261,13 @@ class StatsViewController: UIViewController
             return monthYearAggregate.monthYearAggregates.findFirst {monthYearAggregate in // find aggregate
                 monthYearAggregate.monthYear.month == month && monthYearAggregate.monthYear.year == year
                 }.map {aggr in // create chartpoint for aggregate
-                    AggrChartPoint(x: xValue, y: ChartAxisValueFloat(CGFloat(aggr.totalPrice)), aggr: aggr)
-                } ?? AggrChartPoint(x: xValue, y: ChartAxisValueFloat(0), aggr: nil) // create 0 value chartpoint if there's no aggregate
+                    AggrChartPoint(x: xValue, y: ChartAxisValueDouble(Double(aggr.totalPrice)), aggr: aggr)
+                } ?? AggrChartPoint(x: xValue, y: ChartAxisValueDouble(0), aggr: nil) // create 0 value chartpoint if there's no aggregate
         }
 
+        
+        
+        
         let (sum, maxSpendings): (Double, Double) = chartPoints.reduce((Double(0), Double(0))) {tuple, chartPoint in
             
             let newSum = tuple.0 + chartPoint.y.scalar
@@ -260,7 +275,15 @@ class StatsViewController: UIViewController
             
             return (newSum, newMax)
         }
-        let avg = CGFloat(sum) / CGFloat(chartPoints.count) // month average
+        
+        let monthlyAverage: Double = {
+            if let firstDateWithData = firstDateWithData {
+                let activeMonthsCount = monthYearAggregate.monthYearAggregates.filter{$0.monthYear >= firstDateWithData.monthYear}.count
+                return sum / Double(activeMonthsCount)
+            } else {
+                return 0
+            }
+        }()
 
         class EmptyAxisValue: ChartAxisValueDouble {
             override var labels: [ChartAxisLabel] {
@@ -367,8 +390,8 @@ class StatsViewController: UIViewController
         
         let layers: [ChartLayer] = [xAxis, barsLayer, labelsLayer]
 
-        if (chartPoints.contains{$0.y.scalar > 0}) { // don't show avg line if all the prices are 0, it looks weird
-            
+//        if (chartPoints.contains{$0.y.scalar > 0}) { // don't show avg line if all the prices are 0, it looks weird
+        
             // average line for now disabled
 //            // average layer
 //            let avgChartPoint = ChartPoint(x: ChartAxisValueFloat(0), y: ChartAxisValueFloat(avg))
@@ -388,14 +411,14 @@ class StatsViewController: UIViewController
             
             averageLabel.alpha = 0
             averageLabelLabel.alpha = 0
-            averageLabel.text = Float(avg).toLocalCurrencyString()
+            averageLabel.text = monthlyAverage.toLocalCurrencyString()
             UIView.animateWithDuration(NSTimeInterval(avgLineDuration), delay: NSTimeInterval(avgLineDelay), options: UIViewAnimationOptions.CurveLinear, animations: {[weak self] in
                 self?.averageLabel.alpha = 1
                 self?.averageLabelLabel.alpha = 1
                 }, completion: nil)
             
 //            layers.append(avgLayer)
-        }
+//        }
 
         let chart = Chart(
             view: chartView,

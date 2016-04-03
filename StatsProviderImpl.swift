@@ -111,9 +111,10 @@ class StatsProviderImpl: StatsProvider {
                 
                 // Prefill the dictionary with the month years in time period's range. We need all the months in the result independently if they have history items or not ("left join")
                 let monthYears = min(timePeriod.quantity + 1, 0).stride(through: max(timePeriod.quantity, 0), by: 1).map {quantity in
-                    MonthYear(month: referenceDateMonth + quantity, year: referenceDateYear)
+                    MonthYear(month: referenceDateMonth, year: referenceDateYear).offsetMonths(quantity)
                 }
-                for monthYear in monthYears {
+                let monthYearsWithoutNils = monthYears.flatMap{$0} // we are not expecting nils here but we avoid ! (except in outlets) as general rule. There's an error log in offestMonths.
+                for monthYear in monthYearsWithoutNils {
                     dict[monthYear] = nil
                 }
                 

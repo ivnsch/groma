@@ -68,6 +68,14 @@ extension NSDate: Comparable {
             toDate: today,
             options: NSCalendarOptions(rawValue: 0))!
     }
+    
+    func inMonths(months: Int) -> NSDate {
+        return NSCalendar.currentCalendar().dateByAddingUnit(
+            .Month,
+            value: months,
+            toDate: self,
+            options: NSCalendarOptions(rawValue: 0))!
+    }
 }
 
 public func <(a: NSDate, b: NSDate) -> Bool {

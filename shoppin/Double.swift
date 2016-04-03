@@ -21,4 +21,8 @@ extension Double {
     func randomFrom0() -> Double {
         return Double.random() * self
     }
+    
+    func toLocalCurrencyString() -> String {
+        return Float.currencyFormatter.stringFromNumber(self)!
+    }
 }
