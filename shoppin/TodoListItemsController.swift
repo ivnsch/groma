@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-class TodoListItemsController: ListItemsController, CartViewControllerDelegate {
+class TodoListItemsController: ListItemsController {
 
     @IBOutlet weak var pricesView: PricesView!
     @IBOutlet weak var stashView: StashView!
@@ -112,7 +112,6 @@ class TodoListItemsController: ListItemsController, CartViewControllerDelegate {
         if segue.identifier == "doneViewControllerSegue" {
             if let doneViewController = segue.destinationViewController as? CartListItemsController {
 //                doneViewController.navigationItemTextColor = titleLabel?.textColor
-                doneViewController.delegate = self
                 doneViewController.onUIReady = {
                     doneViewController.currentList = self.currentList
                     if let dotColor = self.topBar.dotColor {
@@ -138,13 +137,5 @@ class TodoListItemsController: ListItemsController, CartViewControllerDelegate {
         } else {
             print("Invalid segue: \(segue.identifier)")
         }
-    }
-    
-    
-    // MARK: - CartViewControllerDelegate
-    
-    func onEmptyCartTap() {
-        navigationController?.popViewControllerAnimated(true)
-        performSegueWithIdentifier("stashSegue", sender: self)
     }
 }

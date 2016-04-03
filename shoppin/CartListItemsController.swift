@@ -16,10 +16,6 @@ class CartListItemsController: ListItemsController {
     @IBOutlet weak var buyView: UIView!
     
     @IBOutlet weak var emptyListView: UIView!
-    @IBOutlet weak var emptyCartLabel: UILabel!
-    @IBOutlet weak var emptyCartStashLabel: UILabel!
-    
-    var delegate: CartViewControllerDelegate?
 
     override var status: ListItemStatus {
         return .Done
@@ -118,22 +114,6 @@ class CartListItemsController: ListItemsController {
             emptyListView.setHiddenAnimated(hidden)
         } else {
             emptyListView.hidden = hidden
-        }
-    }
-
-    override func onEmptyListViewTap(sender: UITapGestureRecognizer) {
-        super.onEmptyListViewTap(sender)
-        
-        if !emptyCartStashLabel.hidden { // emptyCartStashLabel.hidden means: stash item count is 0 which means we don't direct the user to stash when tap on empty items button
-            // quick "tapped" effect
-            emptyCartLabel.textColor = emptyCartLabel.textColor.colorWithAlphaComponent(0.3)
-            emptyCartStashLabel.textColor = emptyCartStashLabel.textColor.colorWithAlphaComponent(0.3)
-            delay(0.3) {[weak self] in
-                self?.emptyCartLabel.textColor = self?.emptyCartLabel.textColor.colorWithAlphaComponent(1)
-                self?.emptyCartStashLabel.textColor = self?.emptyCartStashLabel.textColor.colorWithAlphaComponent(1)
-            }
-            
-            delegate?.onEmptyCartTap()
         }
     }
     
