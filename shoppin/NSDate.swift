@@ -76,6 +76,12 @@ extension NSDate: Comparable {
             toDate: self,
             options: NSCalendarOptions(rawValue: 0))!
     }
+    
+    // src http://stackoverflow.com/a/5330027/930450
+    func dateWithZeroSeconds() -> NSDate {
+        let time = floor(self.timeIntervalSinceReferenceDate / 60.0) * 60.0
+        return NSDate(timeIntervalSinceReferenceDate: time)
+    }
 }
 
 public func <(a: NSDate, b: NSDate) -> Bool {

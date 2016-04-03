@@ -70,10 +70,11 @@ class RealmHistoryProvider: RealmProvider {
                 // Group by date
                 var dateDictDB: OrderedDictionary<NSDate, [DBHistoryItem]> = OrderedDictionary()
                 for result in results {
-                    if dateDictDB[result.addedDate] == nil {
-                        dateDictDB[result.addedDate] = []
+                    let addedDateWithoutSeconds = result.addedDate.dateWithZeroSeconds() // items are groped using minutes
+                    if dateDictDB[addedDateWithoutSeconds] == nil {
+                        dateDictDB[addedDateWithoutSeconds] = []
                     }
-                    dateDictDB[result.addedDate]!.append(result)
+                    dateDictDB[addedDateWithoutSeconds]!.append(result)
                 }
                 
                 dateDictDB = dateDictDB[range] // extract range
