@@ -20,6 +20,10 @@ enum PreferencesManagerKey: String {
     case lastTokenUpdate = "lastTokenUpdate"
     case dontShowAppRatingDialogAgain = "dontShowAppRatingDialogAgain"
     case lastAppRatingDialogDate = "lastAppRatingDialogDate"
+    
+    // explanation popups that are displayed only once after installation
+    case showedAddDirectlyToInventoryHelp = "showedAddDirectlyToInventoryHelp"
+    case showedIncrementInventoryItemHelp = "showedIncrementInventoryItemHelp"
 }
 
 class PreferencesManager {

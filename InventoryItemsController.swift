@@ -232,13 +232,26 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             }
             
         } else { // if there's no top controller open, open the quick add controller
-            topQuickAddControllerManager?.expand(true)
-            topQuickAddControllerManager?.controller?.initContent()
             
-            topBar.setLeftButtonIds([])
+            func open() {
+                topQuickAddControllerManager?.expand(true)
+                topQuickAddControllerManager?.controller?.initContent()
+                
+                topBar.setLeftButtonIds([])
+                
+                if rotateTopBarButton {
+                    topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+                }
+            }
             
-            if rotateTopBarButton {
-                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+            let alreadyShowedPopup: Bool = PreferencesManager.loadPreference(PreferencesManagerKey.showedAddDirectlyToInventoryHelp) ?? false
+            if alreadyShowedPopup {
+                open()
+            } else {
+                AlertPopup.show(title: "Info", message: "Inventory items added here will be added to your history and stats, like when tapping 'buy' in the cart.", controller: self, okMsg: "Got it!") {
+                    PreferencesManager.savePreference(PreferencesManagerKey.showedAddDirectlyToInventoryHelp, value: true)
+                    open()
+                }
             }
         }
     }
@@ -406,9 +419,29 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func increment(model: ProductWithQuantity, delta: Int, onSuccess: VoidFunction) {
-        Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, successHandler({result in
-            onSuccess()
-        }))
+
+        func increment() {
+            Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, successHandler({result in
+                onSuccess()
+            }))
+        }
+        
+        let alreadyShowedPopup: Bool = PreferencesManager.loadPreference(PreferencesManagerKey.showedIncrementInventoryItemHelp) ?? false
+        if alreadyShowedPopup {
+            increment()
+            
+        } else {
+            if delta > 0 { // positive increment - show info
+                AlertPopup.show(title: "Info", message: "Incrementing inventory items does NOT affect history and stats.", controller: self, okMsg: "Got it!") {[weak self] in guard let weakSelf = self else {return}
+                    PreferencesManager.savePreference(PreferencesManagerKey.showedIncrementInventoryItemHelp, value: true)
+                    Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, weakSelf.successHandler({result in
+                        increment()
+                    }))
+                }
+            } else {
+                increment()
+            }
+        }
     }
     
     func onModelSelected(model: ProductWithQuantity, indexPath: NSIndexPath) {
