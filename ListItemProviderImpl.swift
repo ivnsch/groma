@@ -525,6 +525,7 @@ class ListItemProviderImpl: ListItemProvider {
                 for listItem in listItems {
                     listItem.switchStatusQuantityMutable(status1, targetStatus: status)
                     if let sectionCount = dstSectionsDict[listItem.section] {
+                        // Note that this updates the list item's order to the last of in section also when the list item is in dst already, so in all cases user knows the item appears at the end of the section.
                         listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: sectionCount))
                         dstSectionsDict[listItem.section]!++ // we are adding an item to section - increment count for possible next item
                         
