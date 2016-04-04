@@ -186,6 +186,7 @@
                     <connections>
                         <outlet property="buyLabel" destination="oYb-WW-vJz" id="qxH-Lx-ZuQ"/>
                         <outlet property="buyView" destination="Juy-Wa-8fi" id="8dK-bt-Wso"/>
+                        <outlet property="buyViewHeightConstraint" destination="LsL-Ma-0NL" id="JKN-cL-vSY"/>
                         <outlet property="emptyListView" destination="blz-rx-aVz" id="mXI-w9-FJN"/>
                         <outlet property="expandCollapseButton" destination="Sem-f2-5X6" id="aHy-gq-PRb"/>
                         <outlet property="topBar" destination="Dhe-Wt-ZWJ" id="OKD-Rj-Ta9"/>
@@ -275,6 +276,7 @@
                                 </variation>
                                 <connections>
                                     <outlet property="button" destination="0eD-HV-Myo" id="SzM-vC-UJD"/>
+                                    <outlet property="heightConstraint" destination="OvZ-Vs-sjM" id="JCf-Ph-iy6"/>
                                     <outlet property="rightConstraint" destination="Gsx-FO-ul6" id="2Rt-ry-sJh"/>
                                 </connections>
                             </view>

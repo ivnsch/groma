@@ -17,6 +17,8 @@ class CartListItemsController: ListItemsController {
     
     @IBOutlet weak var emptyListView: UIView!
 
+    @IBOutlet weak var buyViewHeightConstraint: NSLayoutConstraint!
+    
     override var status: ListItemStatus {
         return .Done
     }
@@ -31,6 +33,8 @@ class CartListItemsController: ListItemsController {
         topBar.setBackVisible(true)
         topBar.positionTitleLabelLeft(true, animated: false, withDot: true)
         
+        buyViewHeightConstraint.constant = DimensionsManager.listItemsPricesViewHeight
+
         listItemsTableViewController.tableView.bottomInset = buyView.frame.height
 //            + Constants.tableViewAdditionalBottomInset
     }

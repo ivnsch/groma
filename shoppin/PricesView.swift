@@ -76,7 +76,8 @@ class PricesView: UIView, UIGestureRecognizerDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
 //        backgroundColor = UIColor.clearColor() // we add the background with layer (because of triangle shape)
-        originalHeight = heightConstraint.constant
+//        originalHeight = heightConstraint.constant
+        heightConstraint.constant = DimensionsManager.listItemsPricesViewHeight
         originalPriceFont = totalPriceLabel.font
         originalCartImgLeftConstraint = cartImgLeftConstraint.constant
         

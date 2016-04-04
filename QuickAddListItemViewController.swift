@@ -149,9 +149,9 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
             let label3TextSize = item.label3Text.isEmpty ? CGSizeZero : item.label3Text.size(Fonts.verySmallLight)
             
             let label2Size = min(label2TextSize.width, label1TextSize.width + 30) // allow label2 to be max. 30pt wider than label 1
-            let cellWidth = max(label1TextSize.width, label2Size) + 20 // the cell has to be as wide as the widest label, and add some inset (20)
+            let cellWidth = max(label1TextSize.width, label2Size) + DimensionsManager.quickAddCollectionViewCellHPadding // the cell has to be as wide as the widest label, and add some inset (20)
             let finalCellWidth = max(cellWidth, 50) // don't allow cell to have less width than 50pt otherwise shape looks weird
-            let cellHeight = label1TextSize.height + label2TextSize.height + label3TextSize.height + 6 // 6: add some space
+            let cellHeight = label1TextSize.height + label2TextSize.height + label3TextSize.height + DimensionsManager.quickAddCollectionViewCellVPadding // 6: add some space
             
             let textSize = CGSizeMake(finalCellWidth, cellHeight)
             

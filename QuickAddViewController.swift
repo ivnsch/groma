@@ -43,6 +43,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     var originalViewFrame: CGRect?
     
     @IBOutlet weak var searchBar: RoundTextField!
+    @IBOutlet weak var searchBarHeightConstraint: NSLayoutConstraint!
     
     private var navController: UINavigationController?
     private var quickAddListItemViewController: QuickAddPageController? {
@@ -98,6 +99,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
 
         searchBar.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
 
+        searchBarHeightConstraint.constant = DimensionsManager.searchBarHeight
         addButtonHelper = initAddButtonHelper()
     }
     

@@ -12,6 +12,7 @@ class StashView: UIView {
     
     @IBOutlet weak var rightConstraint: NSLayoutConstraint!
     @IBOutlet weak var quantityLabel: UILabel!
+    @IBOutlet weak var heightConstraint: NSLayoutConstraint!
 
     @IBOutlet weak var button: UIButton!
     
@@ -27,6 +28,7 @@ class StashView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
 //        backgroundColor = UIColor.clearColor()
+        heightConstraint.constant = DimensionsManager.listItemsPricesViewHeight
     }
     
     // this is to draw arrow shape on the right side - for now disabled

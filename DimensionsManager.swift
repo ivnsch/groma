@@ -81,8 +81,62 @@ class DimensionsManager {
         }
     }
     
-    // MARK: 
+    static var quickAddSlidingTabsViewHeight: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 35
+        case .Small: return 35
+        case .Middle: return 50
+        case .Large: return 50
+        }
+    }
+    
+    static var quickAddSlidingLineBottomOffset: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 5
+        case .Small: return 5
+        case .Middle: return 10
+        case .Large: return 10
+        }
+    }
+    
+    static var quickAddCollectionViewSpacing: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 10
+        case .Small: return 10
+        case .Middle: return 20
+        case .Large: return 20
+        }
+    }
 
+    static var quickAddCollectionViewCellHPadding: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 10
+        case .Small: return 10
+        case .Middle: return 20
+        case .Large: return 20
+        }
+    }
+
+    static var quickAddCollectionViewCellVPadding: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 3
+        case .Small: return 3
+        case .Middle: return 6
+        case .Large: return 6
+        }
+    }
+
+    static var quickAddCollectionViewCellCornerRadius: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 15
+        case .Small: return 15
+        case .Middle: return 18
+        case .Large: return 18
+        }
+    }
+
+    // MARK: list items
+    
     static var listItemsHeaderHeight: CGFloat {
         switch heightDimension {
         case .VerySmall: return 28
@@ -91,6 +145,17 @@ class DimensionsManager {
         case .Large: return 35
         }
     }
+
+    static var listItemsPricesViewHeight: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 54
+        case .Small: return 54
+        case .Middle: return 60
+        case .Large: return 60
+        }
+    }
+    
+    // MARK: Common
     
     static var defaultCellHeight: CGFloat {
         switch heightDimension {
@@ -100,4 +165,14 @@ class DimensionsManager {
         case .Large: return 76
         }
     }
+    
+    static var searchBarHeight: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 30
+        case .Small: return 30
+        case .Middle: return 35
+        case .Large: return 35
+        }
+    }
+    
 }

@@ -19,9 +19,11 @@ class SlidingTabsView: UIView {
     private let lineColor: UIColor = Theme.lightGrey2
     private let selectedButtonColor: UIColor = UIColor.darkTextColor()
     private let unselectedButtonColor: UIColor = UIColor.grayColor()
-    private let lineBottomOffset: CGFloat = 10
+    private let lineBottomOffset: CGFloat = DimensionsManager.quickAddSlidingLineBottomOffset
     private let lineWidth: CGFloat = 70
     private let linePadding: CGFloat = 160
+    
+    @IBOutlet weak var heightConstraint: NSLayoutConstraint!
     
     private var line: UIView?
     
@@ -74,6 +76,10 @@ class SlidingTabsView: UIView {
         
         if !addedViews { // it's possible that onFinishLayout() is called multiple times, e.g. if called from viewDidAppear, so we need a flag to not add the views again
             addedViews = true
+            
+            heightConstraint.constant = DimensionsManager.quickAddSlidingTabsViewHeight
+            setNeedsLayout()
+            layoutIfNeeded()
             
             addButtons()
             
