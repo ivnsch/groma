@@ -103,12 +103,21 @@ class RemoteListItemProvider {
 //        }
 //    }
     
-    func updateStatus(listItems: [ListItem], handler: RemoteResult<NSDate> -> ()) {
-        let parameters = listItems.map{self.toRequestParamsForStatusUpdate($0)}
-        RemoteProvider.authenticatedRequestArrayParamsTimestamp(.PUT, Urls.updateListItemsStatus, parameters) {result in
+//    RemoteSwitchListItemResult
+    func updateStatus(listItem: ListItem, statusUpdate: ListItemStatusUpdate, handler: RemoteResult<RemoteSwitchListItemResult> -> Void) {
+        let parameters = toRequestParamsForStatusUpdate(listItem, statusUpdate: statusUpdate)
+        RemoteProvider.authenticatedRequest(.PUT, Urls.updateListItemsStatus, parameters) {result in
             handler(result)
         }
     }
+    
+//    // TODO remove - we will use spearaete service for batch status update
+//    func updateStatus(listItems: [ListItem], handler: RemoteResult<NSDate> -> ()) {
+//        let parameters = listItems.map{self.toRequestParamsForStatusUpdate($0)}
+//        RemoteProvider.authenticatedRequestArrayParamsTimestamp(.PUT, Urls.updateListItemsStatus, parameters) {result in
+//            handler(result)
+//        }
+//    }
     
     // TODO use update
     func update(listItems: [ListItem], handler: RemoteResult<RemoteListItems> -> ()) {
@@ -336,15 +345,13 @@ class RemoteListItemProvider {
 
     }
 
-    func toRequestParamsForStatusUpdate(listItem: ListItem) -> [String: AnyObject] {
+    func toRequestParamsForStatusUpdate(listItem: ListItem, statusUpdate: ListItemStatusUpdate) -> [String: AnyObject] {
         return [
             "uuid": listItem.uuid,
-            "t": listItem.todoQuantity,
-            "d": listItem.doneQuantity,
-            "s": listItem.stashQuantity,
-            "to": listItem.todoOrder,
-            "do": listItem.doneOrder,
-            "so": listItem.stashOrder
+            "src": statusUpdate.src.rawValue,
+            "dst": statusUpdate.dst.rawValue,
+            "l": listItem.list.uuid,
+            "s": listItem.section.uuid
         ]
     }
     

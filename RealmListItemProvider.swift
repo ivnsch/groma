@@ -104,6 +104,45 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
+    func storeRemoteListItemSwitchResult(statusUpdate: ListItemStatusUpdate, result: RemoteSwitchListItemResult, _ handler: Bool -> Void) {
+
+        doInWriteTransaction({realm in
+
+            let lastUpdate = result.lastUpdate
+            
+            let switchedItem = result.switchedItem
+            let itemDict = ["uuid": switchedItem.uuid, "todoQuantity": switchedItem.todoQuantity, "doneQuantity": switchedItem.doneQuantity, "todoOrder": switchedItem.todoOrder, "doneOrder": switchedItem.doneOrder, "stashOrder": switchedItem.stashOrder, DBSyncable.lastUpdateFieldName: lastUpdate]
+            
+            let srcOrderUpdateKey: String = {
+                switch statusUpdate.src {
+                case .Todo: return "todoOrder"
+                case .Done: return "doneOrder"
+                case .Stash: return "stashOrder"
+                }
+            }()
+            
+            let srcItemsOrderDicts = result.itemOrderUpdates.map {item in
+                return ["uuid": item.uuid, srcOrderUpdateKey: item.order, DBSyncable.lastUpdateFieldName: lastUpdate]
+            }
+            
+            let sectionsOrderDicts = result.sectionOrderUpdates.map {item in
+                return ["uuid": item.uuid, "todoOrder": item.todoOrder, "doneOrder": item.doneOrder, "stashOrder": item.stashOrder, DBSyncable.lastUpdateFieldName: lastUpdate]
+            }
+
+            realm.create(DBListItem.self, value: itemDict, update: true)
+            srcItemsOrderDicts.forEach {
+                realm.create(DBListItem.self, value: $0, update: true)
+            }
+            sectionsOrderDicts.forEach {
+                realm.create(DBSection.self, value: $0, update: true)
+            }
+            return true
+            
+            }, finishHandler: {(successMaybe: Bool?) in
+                handler(successMaybe ?? false)
+        })
+    }
+    
     
     func addListItem(status: ListItemStatus, product: Product, sectionNameMaybe: String?, sectionColorMaybe: UIColor?, quantity: Int, list: List, note noteMaybe: String? = nil, _ handler: ListItem? -> Void) {
         

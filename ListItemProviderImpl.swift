@@ -508,7 +508,119 @@ class ListItemProviderImpl: ListItemProvider {
         addListItem(product, status: status, sectionName: section.name, sectionColor: section.color, quantity: quantity, list: list, note: note, order: orderMaybe, handler)
     }
 
-    func switchStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, mode: SwitchListItemMode, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        
+        self.listItems(list, sortOrderByStatus: status, fetchMode: .MemOnly) {result in // TODO review .First suitable here
+            
+            if let storedListItems = result.sucessResult {
+                
+                let srcStoredItems = storedListItems.filter{$0.hasStatus(status1)}
+                
+                // before we update the listitems, capture the order of the first item (in src status)
+                let firstInputItemOrderInSrcStatus = listItem.order(status1)
+                
+                // Update quantity and order field - by changing quantity we are moving list items from one status to another
+                // we append the items at the end of the dst section (order == section.count)
+                var dstSectionsDict = storedListItems.sectionCountDict(status)
+                listItem.switchStatusQuantityMutable(status1, targetStatus: status)
+                if let sectionCount = dstSectionsDict[listItem.section] {
+                    // Note that this updates the list item's order to the last of in section also when the list item is in dst already, so in all cases user knows the item appears at the end of the section.
+                    // TODO!!!! do not update order if list item is already in the dst section!
+                    listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: sectionCount))
+                    dstSectionsDict[listItem.section]!++ // we are adding an item to section - increment count for possible next item
+                    
+                } else { // item's section is not in target status - set order 0 (first item in section) and add section to the dictionary
+                    listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: 0))
+                    // update order such that section is appended at the end
+                    listItem.section.updateOrderMutable(ListItemStatusOrder(status: status, order: dstSectionsDict.count))
+                    dstSectionsDict[listItem.section] = 1 // we are adding an item to section - items count is 1
+                }
+                // this is not really necessary, but for consistency - reset order to 0 in the src status.
+                listItem.updateOrderMutable(ListItemStatusOrder(status: status1, order: 0))
+                
+                // All the items that have to be updated - we need to update also order of following items in src status. We use modes .Single and .Reset to simplify the algorithm for the different use cases. In .Single we know there's only 1 listitem+section, and in .Reset we know we are emptying the list in targetStatus, so we just the order of all to 0. The main reason this differentiation is necessary is that order is relative to section, and to update the order of the followers, we need to know if they are in the same section of the switched listitem(s). In the case of single list item we just havee to query the section of the list item, in the case of multiple it's more complicated.
+                let allItemsToUpdate: [ListItem] = {
+
+                   let srcListItemSection = listItem.section
+                    
+                    // If src section is now empty, shift following sections in src status up, also clear its own order for consistency
+                    let possibleFollowingSectionsToUpdate: [Section]? = {
+                        if srcStoredItems.count(srcListItemSection) - 1 == 0 {
+                            let srcStatusSectionFollowers = storedListItems.sectionsInOrder(status1).filter{$0.order(status1) > srcListItemSection.order(status1)}
+                            srcStatusSectionFollowers.forEachEnumerate({(index, section) -> Void in
+                                section.updateOrderMutable(ListItemStatusOrder(status: status1, order: index + srcListItemSection.order(status1)))
+                            })
+                            return srcStatusSectionFollowers
+                        } else {
+                            return nil
+                        }
+                    }()
+                    // In order to update the sections we will just set them back in the stored list items - so this update is also saved when we save the list items
+                    // NOTE: this is not optimal performance wise, since now we have to write all these list items to database instead of only the sections but the code is simpler (we would have to modify the mem cache as well as the db to update the sections separately).
+                    // NOTE also, that this is only for the local update - to the server we send only the switched item(s)! the server does itself again all the reordering logic. The reason for this logic duplication is that the app has to work offline and when online we have to ensure consistency for concurrent access.
+                    let possibleListItemsToUpdateInFollowingSections: [ListItem] = {
+                        if let sectionsToUpdate = possibleFollowingSectionsToUpdate {
+                            let sectionsToUpdateDict = sectionsToUpdate.toDictionary{($0.uuid, $0)}
+                            return srcStoredItems.collect {srcStoredItem in
+                                if let sectionToUpdate = sectionsToUpdateDict[srcStoredItem.section.uuid] {
+                                    return srcStoredItem.copy(section: sectionToUpdate, note: nil)
+                                } else {
+                                    return nil
+                                }
+                            }
+                        } else {
+                            return []
+                        }
+                    }()
+                    
+                    // The order of possible following items inside the same section also has to be udpated
+                    let possibleFollowingListItemsInSectionToUpdate: [ListItem] = {
+                        // shift following items (inside section) in src status up
+                        let firstInputItemOrderInSrcStatus = firstInputItemOrderInSrcStatus
+                        let srcStatusListItemsFollowers = srcStoredItems.filter{$0.section.same(srcListItemSection) && $0.order(status1) > firstInputItemOrderInSrcStatus}
+                        return srcStatusListItemsFollowers.mapEnumerate {(index, listItem) in
+                            listItem.updateOrder(ListItemStatusOrder(status: status1, order: index + firstInputItemOrderInSrcStatus))
+                                .copy(section: srcListItemSection, note: nil) // TODO!!! review this, this is a hack because of the broad way we are using to do updates - since we do a "big update" for all list items (independently if we want to update only status, or order, or section), the section from these items, which are later in the array than the passed ones, overwrites their section, which may have been mutated at the beginning of this method. So we set the (possibly mutated) section here in the copy so when they are overwritten the mutated section data doesn't get lost.
+                        }
+                    }()
+                    
+                    // Total things to update - passed list items (quantity/order), possible following src list items (order), possible following src sections (order)
+                    // Note in dst status we don't update order of following items/sections as they are always inserted at the end
+                    return [listItem] + possibleFollowingListItemsInSectionToUpdate + possibleListItemsToUpdateInFollowingSections
+                }()
+                
+                // Persist changes. If mem cached is enabled this calls handler directly after mem cache is updated and does db update in the background.
+                self.updateLocal(allItemsToUpdate, handler: handler, onFinishLocal: {[weak self] in
+                    
+                    if remote {
+                        let statusUpdate = ListItemStatusUpdate(src: status1, dst: status)
+                        self?.remoteProvider.updateStatus(listItem, statusUpdate: statusUpdate) {remoteResult in
+                            if let remoteUpdateResult = remoteResult.successResult {
+                                DBProviders.listItemProvider.storeRemoteListItemSwitchResult(statusUpdate, result: remoteUpdateResult) {success in
+                                    if !success {
+                                        QL4("Couldn't store remote switch result in database: \(remoteResult) item: \(listItem)")
+                                    }
+                                }
+
+                            } else {
+                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                                    QL4("Remote call no success: \(remoteResult) item: \(listItem)")
+                                    self?.memProvider.invalidate()
+                                    handler(result)
+                                })
+                            }
+                        }
+                    }
+                })
+            } else {
+                print("Error: didn't get listItems in updateBatchDone: \(result.status)")
+                handler(ProviderResult(status: .Unknown))
+            }
+        }
+    }
+    
+    // TODO remove, create new method for "all" case
+    func switchStatus2(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, mode: SwitchListItemMode, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         
         self.listItems(list, sortOrderByStatus: status, fetchMode: .MemOnly) {result in // TODO review .First suitable here
 
@@ -618,24 +730,24 @@ class ListItemProviderImpl: ListItemProvider {
                         // Then, also, server has to communicate this to other devices via websockets so it could 1. send the clients only the status update and let them calculate the rest - using this method, or 2. send the client the final update result (status update + reorder + possible section removal. First is less code as we already have method but there may(?) be some inconsistencies with the server at some point (which would be "fixed" though the next time the client opens the list and requests from server(?), 2. is a bit more consistent with server but requires to adjust the protocol and new provider methods
                         // finally decided solution:
                         // 1. client sends update to server (only item) 2. server does (like client) the order update and possible section removal (we can have paralel updates since list is shared so it's important server does reordering on its own) 3. server sends result to client and websocket subscribers - we can here either A. send only switched item, let clients do the reordering etc and use the server's timestamp or B. simply save what the server sends, this means we need a new structure with - switched item, order udpates to be stored and possible section removal, each with its timestamp. Considering that we need to use the server's timestamp either way for sync to work correctly (otherwise in the next sync our items will be "too old" and maybe the updates be lost), it looks B is the way to go.
-                        self?.remoteProvider.updateStatus(listItems) {remoteResult in
-                            
-                            if let serverLastUpdateTimestamp = remoteResult.successResult {
-
-                                // The batch update returns 1 timestamp for all the items. We generate here the timestamp update dicts for all the items with this timestamp.
-                                let updateTimestampDicts = listItems.map{listItem in
-                                    RemoteListItem.createTimestampUpdateDict(uuid: listItem.uuid, lastUpdate: serverLastUpdateTimestamp)
-                                }
-                                self?.dbProvider.updateListItemsLastSyncTimeStamps(updateTimestampDicts) {success in
-                                }
-                            } else {
-                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-                                    QL4("Remote call no success: \(remoteResult) items: \(listItems)")
-                                    self?.memProvider.invalidate()
-                                    handler(result)
-                                })
-                            }
-                        }
+//                        self?.remoteProvider.updateStatus(listItems) {remoteResult in
+//                            
+//                            if let serverLastUpdateTimestamp = remoteResult.successResult {
+//
+//                                // The batch update returns 1 timestamp for all the items. We generate here the timestamp update dicts for all the items with this timestamp.
+//                                let updateTimestampDicts = listItems.map{listItem in
+//                                    RemoteListItem.createTimestampUpdateDict(uuid: listItem.uuid, lastUpdate: serverLastUpdateTimestamp)
+//                                }
+//                                self?.dbProvider.updateListItemsLastSyncTimeStamps(updateTimestampDicts) {success in
+//                                }
+//                            } else {
+//                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+//                                    QL4("Remote call no success: \(remoteResult) items: \(listItems)")
+//                                    self?.memProvider.invalidate()
+//                                    handler(result)
+//                                })
+//                            }
+//                        }
                     }
                 })
                 

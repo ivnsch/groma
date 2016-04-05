@@ -101,7 +101,7 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
 
     func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) {
         if let list = list {
-            Providers.listItemsProvider.switchStatus([tableViewListItem.listItem], list: list, status1: .Stash, status: .Todo, mode: .Single, remote: notifyRemote) {[weak self] result in
+            Providers.listItemsProvider.switchStatus(tableViewListItem.listItem, list: list, status1: .Stash, status: .Todo, remote: notifyRemote) {[weak self] result in
                 if result.success {
                     self?.listItemsTableViewController.removeListItem(tableViewListItem.listItem, animation: .Bottom)
                 }
@@ -153,12 +153,13 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
         if let list = list {
             listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
                 if let weakSelf = self {
-                    Providers.listItemsProvider.switchStatus(weakSelf.listItemsTableViewController.items, list: list, status1: .Stash, status: .Todo, mode: .All, remote: true) {result in
-                        if result.success {
-                            weakSelf.listItemsTableViewController.setListItems([])
-                            weakSelf.close()
-                        }
-                    }
+                    // TODO!!!!
+//                    Providers.listItemsProvider.switchStatus(weakSelf.listItemsTableViewController.items, list: list, status1: .Stash, status: .Todo, mode: .All, remote: true) {result in
+//                        if result.success {
+//                            weakSelf.listItemsTableViewController.setListItems([])
+//                            weakSelf.close()
+//                        }
+//                    }
                 }
             }
         }

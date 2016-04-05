@@ -91,13 +91,14 @@ class CartListItemsController: ListItemsController {
     
     private func sendAllItemToStash(onFinish: VoidFunction) {
         if let list = currentList {
-            Providers.listItemsProvider.switchStatus(self.listItemsTableViewController.items, list: list, status1: .Done, status: .Stash, mode: .All, remote: true) {[weak self] result in
-                if result.success {
-                    self?.listItemsTableViewController.setListItems([])
-                    self?.onTableViewChangedQuantifiables()
-                    onFinish()
-                }
-            }
+            // TODO!!!!
+//            Providers.listItemsProvider.switchStatus(self.listItemsTableViewController.items, list: list, status1: .Done, status: .Stash, mode: .All, remote: true) {[weak self] result in
+//                if result.success {
+//                    self?.listItemsTableViewController.setListItems([])
+//                    self?.onTableViewChangedQuantifiables()
+//                    onFinish()
+//                }
+//            }
         }
     }
     

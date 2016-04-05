@@ -10,6 +10,7 @@ import Foundation
 import QorumLogs
 
 enum ListItemStatus: Int {
+    // Note: the raw values are used in server communication, don't change.
     case Todo = 0, Done = 1, Stash = 2
 }
 
