@@ -62,6 +62,8 @@ protocol ListItemProvider {
     */
     func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
+    func switchAllToStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    
     func invalidateMemCache()
     
     // MARK: - GroupItem / ListItem

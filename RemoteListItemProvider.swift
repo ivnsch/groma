@@ -106,18 +106,18 @@ class RemoteListItemProvider {
 //    RemoteSwitchListItemResult
     func updateStatus(listItem: ListItem, statusUpdate: ListItemStatusUpdate, handler: RemoteResult<RemoteSwitchListItemResult> -> Void) {
         let parameters = toRequestParamsForStatusUpdate(listItem, statusUpdate: statusUpdate)
-        RemoteProvider.authenticatedRequest(.PUT, Urls.updateListItemsStatus, parameters) {result in
+        RemoteProvider.authenticatedRequest(.PUT, Urls.updateListItemStatus, parameters) {result in
             handler(result)
         }
     }
     
-//    // TODO remove - we will use spearaete service for batch status update
-//    func updateStatus(listItems: [ListItem], handler: RemoteResult<NSDate> -> ()) {
-//        let parameters = listItems.map{self.toRequestParamsForStatusUpdate($0)}
-//        RemoteProvider.authenticatedRequestArrayParamsTimestamp(.PUT, Urls.updateListItemsStatus, parameters) {result in
-//            handler(result)
-//        }
-//    }
+    // IMPORTANT: Assumes that the passed list items are ALL the existing list items in src status. If this is not the case, the remaining items/sections in src status will likely be left with a wrong order.
+    func updateAllStatus(listUuid: String, statusUpdate: ListItemStatusUpdate, handler: RemoteResult<RemoteSwitchAllListItemsResult> -> ()) {
+        let parameters: [String: AnyObject] = ["listUuid": listUuid, "src": statusUpdate.dst.rawValue, "dst": statusUpdate.dst.rawValue]
+        RemoteProvider.authenticatedRequest(.PUT, Urls.updateAllListItemsStatus, parameters) {result in
+            handler(result)
+        }
+    }
     
     // TODO use update
     func update(listItems: [ListItem], handler: RemoteResult<RemoteListItems> -> ()) {

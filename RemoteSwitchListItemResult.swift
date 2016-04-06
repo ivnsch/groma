@@ -18,7 +18,7 @@ struct RemoteSwitchListItemResult: ResponseObjectSerializable, CustomDebugString
     
     init?(representation: AnyObject) {
         guard
-            let switchedItemObj = representation.valueForKeyPath("item") as? String,
+            let switchedItemObj = representation.valueForKeyPath("item"),
             let switchedItem = RemoteSwitchListItemItemResult(representation: switchedItemObj),
             let itemOrderUpdatesObj = representation.valueForKeyPath("orderItems") as? [AnyObject],
             let itemOrderUpdates = RemoteSwitchListItemOrderUpdateResult.collection(itemOrderUpdatesObj),

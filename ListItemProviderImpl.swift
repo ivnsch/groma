@@ -507,42 +507,56 @@ class ListItemProviderImpl: ListItemProvider {
         // for now call the other func, which will fetch the section again... review if this is bad for performance otherwise let like this
         addListItem(product, status: status, sectionName: section.name, sectionColor: section.color, quantity: quantity, list: list, note: note, order: orderMaybe, handler)
     }
-
-    func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    
+    // Common code for update single and batch list items switch status (in case of single listItems contains only 1 element)
+    private func switchStatusInsertInDst(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: (switchedItems: [ListItem], storedItems: [ListItem])? -> Void) {
         
         self.listItems(list, sortOrderByStatus: status, fetchMode: .MemOnly) {result in // TODO review .First suitable here
             
             if let storedListItems = result.sucessResult {
                 
-                let srcStoredItems = storedListItems.filter{$0.hasStatus(status1)}
-                
-                // before we update the listitems, capture the order of the first item (in src status)
-                let firstInputItemOrderInSrcStatus = listItem.order(status1)
-                
                 // Update quantity and order field - by changing quantity we are moving list items from one status to another
                 // we append the items at the end of the dst section (order == section.count)
                 var dstSectionsDict = storedListItems.sectionCountDict(status)
-                listItem.switchStatusQuantityMutable(status1, targetStatus: status)
-                if let sectionCount = dstSectionsDict[listItem.section] {
-                    // Note that this updates the list item's order to the last of in section also when the list item is in dst already, so in all cases user knows the item appears at the end of the section.
-                    // TODO!!!! do not update order if list item is already in the dst section!
-                    listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: sectionCount))
-                    dstSectionsDict[listItem.section]!++ // we are adding an item to section - increment count for possible next item
-                    
-                } else { // item's section is not in target status - set order 0 (first item in section) and add section to the dictionary
-                    listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: 0))
-                    // update order such that section is appended at the end
-                    listItem.section.updateOrderMutable(ListItemStatusOrder(status: status, order: dstSectionsDict.count))
-                    dstSectionsDict[listItem.section] = 1 // we are adding an item to section - items count is 1
+                for listItem in listItems {
+                    listItem.switchStatusQuantityMutable(status1, targetStatus: status)
+                    if let sectionCount = dstSectionsDict[listItem.section] {
+                        // Note that this updates the list item's order to the last of in section also when the list item is in dst already, so in all cases user knows the item appears at the end of the section.
+                        listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: sectionCount))
+                        dstSectionsDict[listItem.section]!++ // we are adding an item to section - increment count for possible next item
+                        
+                    } else { // item's section is not in target status - set order 0 (first item in section) and add section to the dictionary
+                        listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: 0))
+                        // update order such that section is appended at the end
+                        listItem.section.updateOrderMutable(ListItemStatusOrder(status: status, order: dstSectionsDict.count))
+                        dstSectionsDict[listItem.section] = 1 // we are adding an item to section - items count is 1
+                    }
+                    // this is not really necessary, but for consistency - reset order to 0 in the src status.
+                    listItem.updateOrderMutable(ListItemStatusOrder(status: status1, order: 0))
                 }
-                // this is not really necessary, but for consistency - reset order to 0 in the src status.
-                listItem.updateOrderMutable(ListItemStatusOrder(status: status1, order: 0))
+                
+                handler((switchedItems: listItems, storedItems: storedListItems))
+        
+            } else {
+                QL4("Didn't get listItems: \(result.status), can't switch")
+                handler(nil)
+            }
+        }
+    }
+
+    func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        
+        switchStatusInsertInDst([listItem], list: list, status1: status1, status: status, remote: remote) {switchResult in
+            
+            if let (switchedItems, storedListItems) = switchResult { // here switchedItems is a 1 element array, containing the switched listItem
                 
                 // All the items that have to be updated - we need to update also order of following items in src status. We use modes .Single and .Reset to simplify the algorithm for the different use cases. In .Single we know there's only 1 listitem+section, and in .Reset we know we are emptying the list in targetStatus, so we just the order of all to 0. The main reason this differentiation is necessary is that order is relative to section, and to update the order of the followers, we need to know if they are in the same section of the switched listitem(s). In the case of single list item we just havee to query the section of the list item, in the case of multiple it's more complicated.
                 let allItemsToUpdate: [ListItem] = {
-
-                   let srcListItemSection = listItem.section
                     
+                    let srcListItemSection = listItem.section
+                    
+                    let srcStoredItems = storedListItems.filter{$0.hasStatus(status1)}
+
                     // If src section is now empty, shift following sections in src status up, also clear its own order for consistency
                     let possibleFollowingSectionsToUpdate: [Section]? = {
                         if srcStoredItems.count(srcListItemSection) - 1 == 0 {
@@ -576,7 +590,7 @@ class ListItemProviderImpl: ListItemProvider {
                     // The order of possible following items inside the same section also has to be udpated
                     let possibleFollowingListItemsInSectionToUpdate: [ListItem] = {
                         // shift following items (inside section) in src status up
-                        let firstInputItemOrderInSrcStatus = firstInputItemOrderInSrcStatus
+                        let firstInputItemOrderInSrcStatus = listItem.order(status1)
                         let srcStatusListItemsFollowers = srcStoredItems.filter{$0.section.same(srcListItemSection) && $0.order(status1) > firstInputItemOrderInSrcStatus}
                         return srcStatusListItemsFollowers.mapEnumerate {(index, listItem) in
                             listItem.updateOrder(ListItemStatusOrder(status: status1, order: index + firstInputItemOrderInSrcStatus))
@@ -586,7 +600,7 @@ class ListItemProviderImpl: ListItemProvider {
                     
                     // Total things to update - passed list items (quantity/order), possible following src list items (order), possible following src sections (order)
                     // Note in dst status we don't update order of following items/sections as they are always inserted at the end
-                    return [listItem] + possibleFollowingListItemsInSectionToUpdate + possibleListItemsToUpdateInFollowingSections
+                    return switchedItems + possibleFollowingListItemsInSectionToUpdate + possibleListItemsToUpdateInFollowingSections
                 }()
                 
                 // Persist changes. If mem cached is enabled this calls handler directly after mem cache is updated and does db update in the background.
@@ -601,7 +615,7 @@ class ListItemProviderImpl: ListItemProvider {
                                         QL4("Couldn't store remote switch result in database: \(remoteResult) item: \(listItem)")
                                     }
                                 }
-
+                                
                             } else {
                                 DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
                                     QL4("Remote call no success: \(remoteResult) item: \(listItem)")
@@ -613,10 +627,54 @@ class ListItemProviderImpl: ListItemProvider {
                     }
                 })
             } else {
-                print("Error: didn't get listItems in updateBatchDone: \(result.status)")
+                QL4("Stored list items returned nil")
                 handler(ProviderResult(status: .Unknown))
             }
         }
+    }
+    
+    // IMPORTANT: Assumes that the passed list items are ALL the existing list items in src status. If this is not the case, the remaining items/sections in src status will likely be left with a wrong order.
+    func switchAllToStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        
+        switchStatusInsertInDst(listItems, list: list, status1: status1, status: status, remote: remote) {switchResult in
+            
+            if let (switchedItems, _) = switchResult { // here switchedItems is a 1 element array, containing the switched listItem
+                
+                // all the list items in src status are gone - set src order to 0, just for consistency
+                switchedItems.forEach({listItem -> Void in
+                    listItem.updateOrderMutable(ListItemStatusOrder(status1, order: 0))
+                    listItem.section.updateOrderMutable(ListItemStatusOrder(status1, order: 0)) // this may update sections multiple times but it doesn't matter
+                })
+                
+                // Persist changes. If mem cached is enabled this calls handler directly after mem cache is updated and does db update in the background.
+                self.updateLocal(switchedItems, handler: handler, onFinishLocal: {[weak self] in
+                    
+                    if remote {
+                        let statusUpdate = ListItemStatusUpdate(src: status1, dst: status)
+                        self?.remoteProvider.updateAllStatus(list.uuid, statusUpdate: statusUpdate) {remoteResult in
+                            if let remoteUpdateResult = remoteResult.successResult {
+                                DBProviders.listItemProvider.storeRemoteAllListItemSwitchResult(statusUpdate, result: remoteUpdateResult) {success in
+                                    if !success {
+                                        QL4("Couldn't store remote all switch result in database: \(remoteResult) items: \(listItems)")
+                                    }
+                                }
+                                
+                            } else {
+                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                                    QL4("Remote call no success: \(remoteResult) items: \(listItems)")
+                                    self?.memProvider.invalidate()
+                                    handler(result)
+                                })
+                            }
+                        }
+                    }
+                })
+            } else {
+                QL4("Stored list items returned nil")
+                handler(ProviderResult(status: .Unknown))
+            }
+        }
+        
     }
     
     // TODO remove, create new method for "all" case

@@ -153,13 +153,12 @@ class StashViewController: UIViewController, ListItemsTableViewDelegate {
         if let list = list {
             listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
                 if let weakSelf = self {
-                    // TODO!!!!
-//                    Providers.listItemsProvider.switchStatus(weakSelf.listItemsTableViewController.items, list: list, status1: .Stash, status: .Todo, mode: .All, remote: true) {result in
-//                        if result.success {
-//                            weakSelf.listItemsTableViewController.setListItems([])
-//                            weakSelf.close()
-//                        }
-//                    }
+                    Providers.listItemsProvider.switchAllToStatus(weakSelf.listItemsTableViewController.items, list: list, status1: .Stash, status: .Todo, remote: true) {result in
+                        if result.success {
+                            weakSelf.listItemsTableViewController.setListItems([])
+                            weakSelf.close()
+                        }
+                    }
                 }
             }
         }

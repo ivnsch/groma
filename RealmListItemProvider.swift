@@ -143,6 +143,43 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
+    func storeRemoteAllListItemSwitchResult(statusUpdate: ListItemStatusUpdate, result: RemoteSwitchAllListItemsResult, _ handler: Bool -> Void) {
+        
+        doInWriteTransaction({realm in
+            
+            let lastUpdate = result.lastUpdate
+            
+            func quantityKey(status: ListItemStatus) -> String {
+                switch status {
+                case .Todo: return "todoQuantity"
+                case .Done: return "doneQuantity"
+                case .Stash: return "stashQuantity"
+                }
+            }
+            func orderKey(status: ListItemStatus) -> String {
+                switch status {
+                case .Todo: return "todoOrder"
+                case .Done: return "doneOrder"
+                case .Stash: return "stashOrder"
+                }
+            }
+            
+            result.items.forEach {item in
+                let dict = ["uuid": item.uuid, orderKey(statusUpdate.dst): item.dstOrder, quantityKey(statusUpdate.dst): item.dstQuantity, DBSyncable.lastUpdateFieldName: lastUpdate]
+                realm.create(DBListItem.self, value: dict, update: true)
+            }
+            
+            result.sections.forEach {section in
+                let dict = ["uuid": section.uuid, orderKey(statusUpdate.dst): section.dstOrder, DBSyncable.lastUpdateFieldName: lastUpdate]
+                realm.create(DBSection.self, value: dict, update: true)
+            }
+            
+            return true
+            
+            }, finishHandler: {(successMaybe: Bool?) in
+                handler(successMaybe ?? false)
+        })
+    }
     
     func addListItem(status: ListItemStatus, product: Product, sectionNameMaybe: String?, sectionColorMaybe: UIColor?, quantity: Int, list: List, note noteMaybe: String? = nil, _ handler: ListItem? -> Void) {
         
