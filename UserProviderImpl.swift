@@ -21,10 +21,12 @@ class UserProviderImpl: UserProvider {
         self.remoteProvider.login(loginData) {[weak self] result in
             if result.success {
                 self?.sync {result in
-                    if !result.success {
-                        QL3("Sync didn't return success: \(result), trying to connect socket anyway")
+                    if result.success {
+                        QL2("Sync success, connecting websocket...")
+                        self?.connectWebsocketIfLoggedIn()
+                    } else {
+                        QL4("Sync didn't return success: \(result)")
                     }
-                    self?.connectWebsocketIfLoggedIn()
                     handler(result)
                 }
             } else {
