@@ -27,8 +27,7 @@ struct RemoteListNoUsers: ResponseObjectSerializable, ResponseCollectionSerializ
             let inventoryUuid = representation.valueForKeyPath("inventoryUuid") as? String,
             let color = ((representation.valueForKeyPath("color") as? String).map{colorStr in
                 UIColor(hexString: colorStr)
-            }),
-            let store = representation.valueForKeyPath("store") as? String
+            })
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -39,7 +38,15 @@ struct RemoteListNoUsers: ResponseObjectSerializable, ResponseCollectionSerializ
         self.lastUpdate = lastUpdate
         self.inventoryUuid = inventoryUuid
         self.color = color
-        self.store = store
+        
+        if let storeMaybe = representation.valueForKeyPath("store") {
+            if let store = storeMaybe as? String {
+                self.store = store
+            } else {
+                QL4("Invalid store type: \(storeMaybe)")
+                return nil
+            }
+        }
     }
     
     static func collection(representation: AnyObject) -> [RemoteListNoUsers]? {

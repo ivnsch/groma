@@ -18,6 +18,7 @@ class RealmGlobalProvider: RealmProvider {
 
             let productCategories = realm.objects(DBProductCategory).filter(DBSyncable.dirtyFilter())
             let products = realm.objects(DBProduct).filter(DBSyncable.dirtyFilter())
+            let storeProducts = realm.objects(DBStoreProduct).filter(DBSyncable.dirtyFilter())
             let lists = realm.objects(DBList).filter(DBSyncable.dirtyFilter())
             let sections = realm.objects(DBSection).filter(DBSyncable.dirtyFilter())
             let listsItems = realm.objects(DBListItem).filter(DBSyncable.dirtyFilter())
@@ -29,6 +30,7 @@ class RealmGlobalProvider: RealmProvider {
 
             let categoriesToSync = productCategories.map{$0.toDict()}
             let productsToSync = products.map{$0.toDict()}
+            let storeProductsToSync = storeProducts.map{$0.toDict()}
             let listsToSync = lists.map{$0.toDict()}
             let sectionsToSync = sections.map{$0.toDict()}
             let listItemsToSync = listsItems.map{$0.toDict()}
@@ -40,6 +42,7 @@ class RealmGlobalProvider: RealmProvider {
             
             let categoriesToRemove = realm.objects(DBRemoveProductCategory).map{$0.toDict()}
             let productsToRemove = realm.objects(DBProductToRemove).map{$0.toDict()}
+            let storeProductsToRemove = realm.objects(DBStoreProductToRemove).map{$0.toDict()}
             let listsToRemove = realm.objects(DBRemoveList).map{$0.toDict()}
             let sectionsToRemove = realm.objects(DBSectionToRemove).map{$0.toDict()}
             let listItemsToRemove = realm.objects(DBRemoveListItem).map{$0.toDict()}
@@ -51,6 +54,7 @@ class RealmGlobalProvider: RealmProvider {
             
             let categoriesDict = ["categories": categoriesToSync, "toRemove": categoriesToRemove]
             let productsDict = ["products": productsToSync, "toRemove": productsToRemove]
+            let storeProductsDict = ["storeProducts": storeProductsToSync, "toRemove": storeProductsToRemove]
             let listsDict = ["lists": listsToSync, "toRemove": listsToRemove]
             let sectionsDict = ["sections": sectionsToSync, "toRemove": sectionsToRemove]
             let listItemsDict = ["listItems": listItemsToSync, "toRemove": listItemsToRemove]
@@ -63,6 +67,7 @@ class RealmGlobalProvider: RealmProvider {
             var syncDict = [String: AnyObject]()
             syncDict["productCategories"] = categoriesDict
             syncDict["products"] = productsDict
+            syncDict["storeProducts"] = storeProductsDict
             syncDict["lists"] = listsDict
             syncDict["sections"] = sectionsDict
             syncDict["listItems"] = listItemsDict

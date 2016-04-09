@@ -518,6 +518,9 @@
 		EB7D241F1CB959440017EFE6 /* CellUncoverer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D241E1CB959440017EFE6 /* CellUncoverer.swift */; };
 		EB7D24201CB959460017EFE6 /* CellUncoverer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D241E1CB959440017EFE6 /* CellUncoverer.swift */; };
 		EB7D24211CB959460017EFE6 /* CellUncoverer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D241E1CB959440017EFE6 /* CellUncoverer.swift */; };
+		EB7D24231CB9A2C70017EFE6 /* DBStoreProductToRemove.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D24221CB9A2C70017EFE6 /* DBStoreProductToRemove.swift */; };
+		EB7D24241CB9A2C70017EFE6 /* DBStoreProductToRemove.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D24221CB9A2C70017EFE6 /* DBStoreProductToRemove.swift */; };
+		EB7D24251CB9A2C70017EFE6 /* DBStoreProductToRemove.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D24221CB9A2C70017EFE6 /* DBStoreProductToRemove.swift */; };
 		EB7D24291CB9B57A0017EFE6 /* prefillde.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB7D24261CB9B5670017EFE6 /* prefillde.realm */; };
 		EB7D242A1CB9B57A0017EFE6 /* prefillen.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB7D24271CB9B5670017EFE6 /* prefillen.realm */; };
 		EB7D242B1CB9B57A0017EFE6 /* prefilles.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB7D24281CB9B5670017EFE6 /* prefilles.realm */; };
@@ -1332,6 +1335,7 @@
 		EB7D24101CB8165B0017EFE6 /* RealmStoreProductProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmStoreProductProvider.swift; sourceTree = "<group>"; };
 		EB7D24141CB8360E0017EFE6 /* StoreListItemPrototype.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreListItemPrototype.swift; sourceTree = "<group>"; };
 		EB7D241E1CB959440017EFE6 /* CellUncoverer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellUncoverer.swift; sourceTree = "<group>"; };
+		EB7D24221CB9A2C70017EFE6 /* DBStoreProductToRemove.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBStoreProductToRemove.swift; sourceTree = "<group>"; };
 		EB7D24261CB9B5670017EFE6 /* prefillde.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillde.realm; sourceTree = "<group>"; };
 		EB7D24271CB9B5670017EFE6 /* prefillen.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillen.realm; sourceTree = "<group>"; };
 		EB7D24281CB9B5670017EFE6 /* prefilles.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefilles.realm; sourceTree = "<group>"; };
@@ -2400,6 +2404,7 @@
 			children = (
 				EB7233BA1C84B5CE002B9903 /* DBSectionToRemove.swift */,
 				EB7233BE1C84B66A002B9903 /* DBProductToRemove.swift */,
+				EB7D24221CB9A2C70017EFE6 /* DBStoreProductToRemove.swift */,
 				EB7233C21C84B69A002B9903 /* DBRemoveSharedUser.swift */,
 				EB7233C61C84B6B6002B9903 /* DBRemoveList.swift */,
 				EB7233CA1C84B6C2002B9903 /* DBRemoveListItem.swift */,
@@ -3823,6 +3828,7 @@
 				EB6E3D491C5A986C00D65DD5 /* GlobalProviderImpl.swift in Sources */,
 				EBEA0CE01CA6C69F00E68B81 /* SlidingTabsView.swift in Sources */,
 				EB0C2A3E1B583BFE00AF6226 /* RemoteInventoryItemWithProduct.swift in Sources */,
+				EB7D24231CB9A2C70017EFE6 /* DBStoreProductToRemove.swift in Sources */,
 				EBF162DD1A3C82380048E37C /* DefaultTableViewController.swift in Sources */,
 				EB85F4731BD5605000E19E9B /* ProductProviderImpl.swift in Sources */,
 				EBEBA6B71BF16492000E5653 /* FlatColorPickerController.swift in Sources */,
@@ -4167,6 +4173,7 @@
 				EBBC23021BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */,
 				EB7BFA761BD99CB600F4C74A /* Addable.swift in Sources */,
 				EB7233D41C84B6D8002B9903 /* DBRemoveInventory.swift in Sources */,
+				EB7D24241CB9A2C70017EFE6 /* DBStoreProductToRemove.swift in Sources */,
 				EB6D93A31B1B788200ED8999 /* AutosuggestionsTableViewController.swift in Sources */,
 				EB7D240E1CB70C430017EFE6 /* StoreProductMapper.swift in Sources */,
 				EBB9A7351B5EB11600E5487D /* Inventory.swift in Sources */,
@@ -4497,6 +4504,7 @@
 				EBF377671B342A9A00EEB6DB /* RemoteProduct.swift in Sources */,
 				EB4A38B61C8F8901000714F9 /* RemoteProductsWithDependencies.swift in Sources */,
 				EB4A38951C86FB7B000714F9 /* ErrorReport.swift in Sources */,
+				EB7D24251CB9A2C70017EFE6 /* DBStoreProductToRemove.swift in Sources */,
 				EB85F4691BD54FA800E19E9B /* QuickAddProduct.swift in Sources */,
 				EBB526751BEFD8E90002A286 /* HelpItem.swift in Sources */,
 				EBBC23071BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */,
