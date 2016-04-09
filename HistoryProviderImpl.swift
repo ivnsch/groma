@@ -59,8 +59,7 @@ class HistoryProviderImpl: HistoryProvider {
                                 }
                             }
                         } else {
-                            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status)
-                            handler(ProviderResult(status: providerStatus))
+                            DefaultRemoteErrorHandler.handle(result, handler: handler)
                         }
                     }
                 }
@@ -91,8 +90,7 @@ class HistoryProviderImpl: HistoryProvider {
                                 }
                             }
                         } else {
-                            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status)
-                            handler(ProviderResult(status: providerStatus))
+                            DefaultRemoteErrorHandler.handle(result, handler: handler)
                         }
                     }
                 }
