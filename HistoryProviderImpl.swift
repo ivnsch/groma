@@ -49,6 +49,7 @@ class HistoryProviderImpl: HistoryProvider {
     func removeHistoryItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         dbProvider.removeHistoryItem(uuid) {[weak self] success in
             if success {
+                handler(ProviderResult(status: .Success))
                 if remote {
                     self?.remoteProvider.removeHistoryItem(uuid) {result in
                         if result.success {
@@ -77,9 +78,28 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
-    // TODO after implement groups in separate table
-    func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, _ handler: ProviderResult<Any> -> ()) {
-        print("TODO: remove history item group")
+    func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        dbProvider.removeHistoryItemsGroup(historyItemGroup, markForSync: true) {[weak self] success in
+            if success {
+                handler(ProviderResult(status: .Success))
+                if remote {
+                    self?.remoteProvider.removeHistoryItems(historyItemGroup) {result in
+                        if result.success {
+                            self?.dbProvider.clearHistoryItemsTombstones(historyItemGroup) {removeTombstoneSuccess in
+                                if !removeTombstoneSuccess {
+                                    QL4("Couldn't delete tombstones for history items: \(historyItemGroup)")
+                                }
+                            }
+                        } else {
+                            let providerStatus = DefaultRemoteResultMapper.toProviderStatus(result.status)
+                            handler(ProviderResult(status: providerStatus))
+                        }
+                    }
+                }
+            } else {
+                QL4("Coult not remove historyItem group: \(historyItemGroup)")
+            }
+        }
     }
     
     func addHistoryItems(historyItems: [HistoryItem], _ handler: ProviderResult<Any> -> Void) {

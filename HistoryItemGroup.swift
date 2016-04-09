@@ -8,7 +8,7 @@
 
 import Foundation
 
-class HistoryItemGroup {
+class HistoryItemGroup: CustomDebugStringConvertible {
 
     let date: NSDate
     let user: SharedUser
@@ -30,5 +30,9 @@ class HistoryItemGroup {
             user: user ?? self.user,
             historyItems: historyItems ?? self.historyItems
         )
+    }
+    
+    var debugDescription: String {
+        return "[date: \(date), user: \(user), historyItems: \(historyItems)]"
     }
 }

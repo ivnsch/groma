@@ -62,6 +62,11 @@ class DBHistoryItem: DBSyncable {
     static func createFilterWithInventory(inventoryUuid: String) -> String {
         return "inventoryOpt.uuid == '\(inventoryUuid)'"
     }
+
+    static func createFilter(historyItemGroup: HistoryItemGroup) -> String {
+        let historyItemsUuidsStr: String = historyItemGroup.historyItems.map{"'\($0.uuid)'"}.joinWithSeparator(",")
+        return "uuid IN {\(historyItemsUuidsStr)}"
+    }
     
     static func createPredicate(addedDate: NSDate, inventoryUuid: String) -> NSPredicate {
         return NSPredicate(format: "addedDate >= %@ AND inventoryOpt.uuid == %@", addedDate, inventoryUuid)

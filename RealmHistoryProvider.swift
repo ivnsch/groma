@@ -200,6 +200,26 @@ class RealmHistoryProvider: RealmProvider {
         )
     }
     
+    func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, markForSync: Bool, _ handler: Bool -> Void) {
+        self.doInWriteTransaction({[weak self] realm in
+            let dbHistoryItems = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilter(historyItemGroup))
+            realm.delete(dbHistoryItems)
+            if markForSync {
+                let toRemove = dbHistoryItems.map{DBRemoveHistoryItem($0)}
+                self?.saveObjsSyncInt(realm, objs: toRemove, update: true)
+            }
+            return true
+            }, finishHandler: {(successMaybe: Bool?) in
+                if let success = successMaybe {
+                    handler(success)
+                } else {
+                    print("Error: RealmHistoryProvider.removeHistoryItemsGroup: success in nil")
+                    handler(false)
+                }
+            }
+        )
+    }
+    
     func addHistoryItems(historyItems: [HistoryItem], handler: Bool -> Void) {
         doInWriteTransaction({realm in
             let dbHistoryItems: [DBHistoryItem] = historyItems.map{HistoryItemMapper.dbWithHistoryItem($0)}
@@ -222,6 +242,17 @@ class RealmHistoryProvider: RealmProvider {
     func clearHistoryItemTombstone(uuid: String, handler: Bool -> Void) {
         doInWriteTransaction({realm in
             realm.deleteForFilter(DBRemoveHistoryItem.self, DBRemoveHistoryItem.createFilter(uuid))
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func clearHistoryItemsTombstones(historyItemGroup: HistoryItemGroup, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            for historyItem in historyItemGroup.historyItems {
+                realm.deleteForFilter(DBRemoveHistoryItem.self, DBRemoveHistoryItem.createFilter(historyItem.uuid))
+            }
             return true
             }, finishHandler: {success in
                 handler(success ?? false)

@@ -25,7 +25,7 @@ protocol HistoryProvider {
 
     func removeHistoryItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
-    func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, _ handler: ProviderResult<Any> -> ())
+    func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
     func removeAllHistoryItems(handler: ProviderResult<Any> -> Void)
     

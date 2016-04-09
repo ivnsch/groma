@@ -396,8 +396,8 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="kOv-kV-Afg"/>
                                 <exclude reference="yQN-xy-2qf"/>
+                                <exclude reference="kOv-kV-Afg"/>
                             </mask>
                         </variation>
                     </view>

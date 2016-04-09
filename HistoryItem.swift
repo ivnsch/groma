@@ -8,7 +8,7 @@
 
 import Foundation
 
-class HistoryItem: Equatable, Identifiable {
+class HistoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     
     let uuid: String
     let product: Product
@@ -45,6 +45,11 @@ class HistoryItem: Equatable, Identifiable {
     
     func same(rhs: HistoryItem) -> Bool {
         return uuid == rhs.uuid
+    }
+    
+    
+    var debugDescription: String {
+        return "[uuid: \(uuid), product: \(product), paidPrice: \(paidPrice), quantity: \(quantity), addedDate: \(addedDate), user: \(user), inventory: \(inventory)]"
     }
 }
 

@@ -23,6 +23,12 @@ class RemoteHistoryProvider {
         }
     }
     
+    func removeHistoryItems(historyItemGroup: HistoryItemGroup, handler: RemoteResult<NoOpSerializable> -> ()) {
+        let params: [String: AnyObject] = ["uuids": historyItemGroup.historyItems.map{$0.uuid}, "foo": ""] // foo -> server workaround for 1 element json
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.historyItems, params) {result in
+            handler(result)
+        }
+    }
     
     func toRequestParamsToRemove(historyItem: HistoryItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = ["uuid": historyItem.uuid]

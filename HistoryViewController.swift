@@ -98,7 +98,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
+        return cellHeight
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -235,8 +235,22 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     // MARK: - HistoryItemGroupHeaderViewDelegate
     
     func onHeaderTap(header: HistoryItemGroupHeaderView, sectionIndex: Int, sectionModel: SectionModel<HistoryItemGroup>) {
-        setHeaderExpanded(header, sectionIndex: sectionIndex, sectionModel: sectionModel)
+        if header.open {
+            header.open = false
+        } else {
+            setHeaderExpanded(header, sectionIndex: sectionIndex, sectionModel: sectionModel)
+        }
     }
+    
+    func onDeleteGroupTap(sectionModel: SectionModel<HistoryItemGroup>, header: HistoryItemGroupHeaderView) {
+        ConfirmationPopup.show(title: "Confirm", message: "This will delete all the history items in this group (also from stats)", okTitle: "Ok", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+            Providers.historyProvider.removeHistoryItemsGroup(sectionModel.obj, remote: true, weakSelf.successHandler{
+                weakSelf.loadHistory()
+            })
+        }, onCancel: nil)
+    }
+
+    // MARK: -
     
     private func setHeaderExpanded(header: HistoryItemGroupHeaderView, sectionIndex: Int, sectionModel: SectionModel<HistoryItemGroup>) {
         
