@@ -43,18 +43,19 @@ class ExpandableItemsTableViewCell: UITableViewCell {
                     nameVerticalCenterConstraint?.constant = 0
                 }
                 
-                let showUserInfo = model.users.count > 0
+//                let showUserInfo = model.users.count > 0
+                let showUserInfo = false
                 
                 usersIcon.hidden = !showUserInfo
                 userCountLabel.hidden = !showUserInfo
                 
-                if showUserInfo {
-                    userCountLabel.text = "\(model.users.count)"
-                    usersIcon.tintColor = contrastingTextColor
-                    userCountLabel.textColor = contrastingTextColor
-                } else {
-                    userCountLabel.text = ""
-                }
+//                if showUserInfo {
+//                    userCountLabel.text = "\(model.users.count)"
+//                    usersIcon.tintColor = contrastingTextColor
+//                    userCountLabel.textColor = contrastingTextColor
+//                } else {
+//                    userCountLabel.text = ""
+//                }
                 
             }
         }
