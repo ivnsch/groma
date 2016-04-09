@@ -210,11 +210,12 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     private func removeHistoryItemUI(indexPath: NSIndexPath) {
         tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        let group = sectionModels[indexPath.section].obj
+        let section = sectionModels[indexPath.section]
+        let group = section.obj
         var historyItems = group.historyItems
         historyItems.removeAtIndex(indexPath.row)
         let updatedGroup = group.copy(historyItems: historyItems)
-        sectionModels[indexPath.section] = SectionModel(obj: updatedGroup)
+        sectionModels[indexPath.section] = SectionModel(expanded: section.expanded, obj: updatedGroup)
     }
     
     private func removeHistoryItemUI(historyItem: HistoryItem) {
