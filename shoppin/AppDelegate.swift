@@ -201,17 +201,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
             return NSUUID().UUIDString
         }
         let fruitsCat = ProductCategory(uuid: uuid, name: "Obst", color: UIColor.flatRedColor())
-        let product1 = Product(uuid: uuid, name: "Birnen", price: 3, category: fruitsCat, baseQuantity: 1, unit: .None, brand: "")
+        let product1 = Product(uuid: uuid, name: "Birnen", category: fruitsCat, brand: "")
 
         let inventory1 = Inventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreenColor(), order: 0)
-        DBProviders.inventoryProvider.saveInventory(inventory1) {[weak self] saved in
+        DBProviders.inventoryProvider.saveInventory(inventory1) {saved in
         
             let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0, inventory: inventory1, store: nil)
-            DBProviders.listProvider.saveList(list1) {[weak self] result in
+            DBProviders.listProvider.saveList(list1) {result in
                 
                 let section1 = Section(uuid: uuid, name: "Obst", color: UIColor.flatRedColor(), list: list1, order: ListItemStatusOrder(status: .Todo, order: 0))
+                let storeProduct1 = StoreProduct(uuid: uuid, price: 1, baseQuantity: 1, unit: .None, store: "my store", product: product1)
                 let listItems = [
-                    ListItem(uuid: uuid, product: product1, section: section1, list: list1, todoQuantity: 5, todoOrder: 0)
+                    ListItem(uuid: uuid, product: storeProduct1, section: section1, list: list1, todoQuantity: 5, todoOrder: 0)
                 ]
                 
                 DBProviders.listItemProvider.saveListItems(listItems, incrementQuantity: false) {saved in
@@ -239,27 +240,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
         let spicesCat = ProductCategory(uuid: uuid, name: "Gewürze", color: UIColor.flatBrownColor())
         let breadCat = ProductCategory(uuid: uuid, name: "Brot", color: UIColor.flatYellowColorDark())
         
-        let product1 = Product(uuid: uuid, name: "Birnen", price: 3, category: fruitsCat, baseQuantity: 1, unit: .None, brand: "")
-        let product2 = Product(uuid: uuid, name: "Tomaten", price: 2, category: vegetablesCat, baseQuantity: 1, unit: .None, brand: "")
-        let product3 = Product(uuid: uuid, name: "Schwarzer Tee", price: 2, category: drinksCat, baseQuantity: 1, unit: .None, brand: "")
-        let product4 = Product(uuid: uuid, name: "Haenchen", price: 5, category: meatCat, baseQuantity: 1, unit: .None, brand: "")
-        let product5 = Product(uuid: uuid, name: "Spaguetti", price: 0.8, category: pastaCat, baseQuantity: 1, unit: .None, brand: "")
-        let product6 = Product(uuid: uuid, name: "Sahne", price: 1, category: milkCat, baseQuantity: 1, unit: .None, brand: "")
-        let product7 = Product(uuid: uuid, name: "Pfefferminz Tee", price: 1, category: drinksCat, baseQuantity: 1, unit: .None, brand: "")
+        let product1 = Product(uuid: uuid, name: "Birnen", category: fruitsCat, brand: "")
+        let product2 = Product(uuid: uuid, name: "Tomaten", category: vegetablesCat, brand: "")
+        let product3 = Product(uuid: uuid, name: "Schwarzer Tee", category: drinksCat, brand: "")
+        let product4 = Product(uuid: uuid, name: "Haenchen", category: meatCat, brand: "")
+        let product5 = Product(uuid: uuid, name: "Spaguetti", category: pastaCat, brand: "")
+        let product6 = Product(uuid: uuid, name: "Sahne", category: milkCat, brand: "")
+        let product7 = Product(uuid: uuid, name: "Pfefferminz Tee", category: drinksCat, brand: "")
         
-        let product8 = Product(uuid: uuid, name: "Kartoffeln", price: 1.2, category: vegetablesCat, baseQuantity: 1, unit: .None, brand: "")
-        let product9 = Product(uuid: uuid, name: "Thunfisch", price: 0.9, category: fishCat, baseQuantity: 1, unit: .None, brand: "")
-        let product10 = Product(uuid: uuid, name: "Zitronen", price: 1.3, category: fruitsCat, baseQuantity: 1, unit: .None, brand: "")
-        let product11 = Product(uuid: uuid, name: "Kidney bohnen", price: 1, category: vegetablesCat, baseQuantity: 1, unit: .None, brand: "")
-        let product12 = Product(uuid: uuid, name: "Klopapier", price: 3.4, category: cleaningCat, baseQuantity: 1, unit: .None, brand: "")
-        let product13 = Product(uuid: uuid, name: "Putzmittel boden", price: 5.1, category: hygienicCat, baseQuantity: 1, unit: .None, brand: "")
-        let product14 = Product(uuid: uuid, name: "Bier", price: 0.8, category: drinksCat, baseQuantity: 1, unit: .None, brand: "")
-        let product15 = Product(uuid: uuid, name: "Cola (1L)", price: 1.2, category: drinksCat, baseQuantity: 1, unit: .None, brand: "")
-        let product16 = Product(uuid: uuid, name: "Salz", price: 0.7, category: spicesCat, baseQuantity: 1, unit: .None, brand: "")
-        let product17 = Product(uuid: uuid, name: "Zucker", price: 0.9, category: spicesCat, baseQuantity: 1, unit: .None, brand: "")
-        let product18 = Product(uuid: uuid, name: "Seife", price: 0.8, category: hygienicCat, baseQuantity: 1, unit: .None, brand: "")
-        let product19 = Product(uuid: uuid, name: "Toastbrot", price: 0.7, category: breadCat, baseQuantity: 1, unit: .None, brand: "")
+        let product8 = Product(uuid: uuid, name: "Kartoffeln", category: vegetablesCat, brand: "")
+        let product9 = Product(uuid: uuid, name: "Thunfisch", category: fishCat, brand: "")
+        let product10 = Product(uuid: uuid, name: "Zitronen", category: fruitsCat, brand: "")
+        let product11 = Product(uuid: uuid, name: "Kidney bohnen", category: vegetablesCat, brand: "")
+        let product12 = Product(uuid: uuid, name: "Klopapier", category: cleaningCat, brand: "")
+        let product13 = Product(uuid: uuid, name: "Putzmittel boden", category: hygienicCat, brand: "")
+        let product14 = Product(uuid: uuid, name: "Bier", category: drinksCat, brand: "")
+        let product15 = Product(uuid: uuid, name: "Cola (1L)", category: drinksCat, brand: "")
+        let product16 = Product(uuid: uuid, name: "Salz", category: spicesCat, brand: "")
+        let product17 = Product(uuid: uuid, name: "Zucker", category: spicesCat, brand: "")
+        let product18 = Product(uuid: uuid, name: "Seife", category: hygienicCat, brand: "")
+        let product19 = Product(uuid: uuid, name: "Toastbrot", category: breadCat, brand: "")
         
+        let storeProduct1 = StoreProduct(uuid: uuid, price: 3, baseQuantity: 1, unit: .None, store: "", product: product1)
+        let storeProduct2 = StoreProduct(uuid: uuid, price: 2, baseQuantity: 1, unit: .None, store: "", product: product2)
+        let storeProduct3 = StoreProduct(uuid: uuid, price: 2, baseQuantity: 1, unit: .None, store: "", product: product3)
+        let storeProduct4 = StoreProduct(uuid: uuid, price: 5, baseQuantity: 1, unit: .None, store: "", product: product4)
+        let storeProduct5 = StoreProduct(uuid: uuid, price: 0.8, baseQuantity: 1, unit: .None, store: "", product: product5)
+        let storeProduct6 = StoreProduct(uuid: uuid, price: 1, baseQuantity: 1, unit: .None, store: "", product: product6)
+        let storeProduct7 = StoreProduct(uuid: uuid, price: 1, baseQuantity: 1, unit: .None, store: "", product: product7)
+        
+        let storeProduct8 = StoreProduct(uuid: uuid, price: 1.2, baseQuantity: 1, unit: .None, store: "", product: product8)
+        let storeProduct9 = StoreProduct(uuid: uuid, price: 0.9, baseQuantity: 1, unit: .None, store: "", product: product9)
+        let storeProduct10 = StoreProduct(uuid: uuid, price: 1.3, baseQuantity: 1, unit: .None, store: "", product: product10)
+        let storeProduct11 = StoreProduct(uuid: uuid, price: 1, baseQuantity: 1, unit: .None, store: "", product: product11)
+        let storeProduct12 = StoreProduct(uuid: uuid, price: 3.4, baseQuantity: 1, unit: .None, store: "", product: product12)
+        let storeProduct13 = StoreProduct(uuid: uuid, price: 5.1, baseQuantity: 1, unit: .None, store: "", product: product13)
+        let storeProduct14 = StoreProduct(uuid: uuid, price: 0.8, baseQuantity: 1, unit: .None, store: "", product: product14)
+        let storeProduct15 = StoreProduct(uuid: uuid, price: 1.2, baseQuantity: 1, unit: .None, store: "", product: product15)
+        let storeProduct16 = StoreProduct(uuid: uuid, price: 0.7, baseQuantity: 1, unit: .None, store: "", product: product16)
+        let storeProduct17 = StoreProduct(uuid: uuid, price: 0.9, baseQuantity: 1, unit: .None, store: "", product: product17)
+        let storeProduct18 = StoreProduct(uuid: uuid, price: 0.8, baseQuantity: 1, unit: .None, store: "", product: product18)
+        let storeProduct19 = StoreProduct(uuid: uuid, price: 0.7, baseQuantity: 1, unit: .None, store: "", product: product19)
         
         let inventory1 = Inventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreenColor(), order: 0)
         DBProviders.inventoryProvider.saveInventory(inventory1) {[weak self] saved in
@@ -348,70 +369,70 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
             
             // TODO !! why items with date before today not stored in the database? why server has after sync 75 items and client db 60 (correct count)?
             let inventoryWithHistoryItems = [
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[0], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[1], historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[2], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[3], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[4], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[5], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[6], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[7], historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[8], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[9], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[10], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[11], historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[0], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[1], storeProduct: storeProduct9, historyItemUuid: uuid, addedDate: months4Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[2], storeProduct: storeProduct10, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[3], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[4], storeProduct: storeProduct12, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[5], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[6], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[7], storeProduct: storeProduct15, historyItemUuid: uuid, addedDate: months4Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[8], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[9], storeProduct: storeProduct17, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[10], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[11], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate(), user: user),
                 
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[12], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[13], historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[14], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[15], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[16], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[17], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[18], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[19], historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[20], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[21], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[22], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[23], historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[12], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[13], storeProduct: storeProduct9, historyItemUuid: uuid, addedDate: months4Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[14], storeProduct: storeProduct10, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[15], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[16], storeProduct: storeProduct12, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[17], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[18], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[19], storeProduct: storeProduct15, historyItemUuid: uuid, addedDate: months4Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[20], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[21], storeProduct: storeProduct17, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[22], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[23], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate(), user: user),
                 
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[24], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[25], historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[26], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[27], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[28], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[29], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[30], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[31], historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[32], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[33], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[34], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[35], historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[24], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[25], storeProduct: storeProduct9, historyItemUuid: uuid, addedDate: months4Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[26], storeProduct: storeProduct10, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[27], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[28], storeProduct: storeProduct12, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[29], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[30], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[31], storeProduct: storeProduct15, historyItemUuid: uuid, addedDate: months4Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[32], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[33], storeProduct: storeProduct17, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[34], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[35], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate(), user: user),
                 
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[36], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[37], historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[38], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[39], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[40], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[41], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[42], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[43], historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[44], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[45], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[46], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[47], historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[36], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[37], storeProduct: storeProduct9, historyItemUuid: uuid, addedDate: months4Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[38], storeProduct: storeProduct10, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[39], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[40], storeProduct: storeProduct12, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[41], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[42], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[43], storeProduct: storeProduct15, historyItemUuid: uuid, addedDate: months4Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[44], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[45], storeProduct: storeProduct17, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[46], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[47], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate(), user: user),
                 
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[48], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[49], historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[50], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[51], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[52], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[53], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[54], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[55], historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[56], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[57], historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[58], historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[59], historyItemUuid: uuid, addedDate: NSDate(), user: user)
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[48], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[49], storeProduct: storeProduct9, historyItemUuid: uuid, addedDate: months4Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[50], storeProduct: storeProduct10, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[51], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[52], storeProduct: storeProduct12, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[53], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[54], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[55], storeProduct: storeProduct15, historyItemUuid: uuid, addedDate: months4Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[56], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[57], storeProduct: storeProduct17, historyItemUuid: uuid, addedDate: months2Ago, user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[58], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[59], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate(), user: user)
             ]
             
             
@@ -440,13 +461,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
 //                    let bread = Section(uuid: uuid, name: "Brot", order: 8)
                     
                     let listItems = [
-                        ListItem(uuid: uuid, product: product1, section: section1, list: list1, todoQuantity: 5, todoOrder: 0),
-                        ListItem(uuid: uuid, product: product2, section: section2, list: list1, todoQuantity: 2, todoOrder: 0),
-                        ListItem(uuid: uuid, product: product3, section: section6, list: list1, todoQuantity: 3, todoOrder: 1),
-                        ListItem(uuid: uuid, product: product4, section: section4, list: list1, todoQuantity: 3, todoOrder: 2),
-                        ListItem(uuid: uuid, product: product5, section: section5, list: list1, todoQuantity: 4, todoOrder: 3),
-                        ListItem(uuid: uuid, product: product6, section: section3, list: list1, todoQuantity: 3, todoOrder: 4),
-                        ListItem(uuid: uuid, product: product7, section: section6, list: list1, todoQuantity: 4, todoOrder: 5)
+                        ListItem(uuid: uuid, product: storeProduct1, section: section1, list: list1, todoQuantity: 5, todoOrder: 0),
+                        ListItem(uuid: uuid, product: storeProduct2, section: section2, list: list1, todoQuantity: 2, todoOrder: 0),
+                        ListItem(uuid: uuid, product: storeProduct3, section: section6, list: list1, todoQuantity: 3, todoOrder: 1),
+                        ListItem(uuid: uuid, product: storeProduct4, section: section4, list: list1, todoQuantity: 3, todoOrder: 2),
+                        ListItem(uuid: uuid, product: storeProduct5, section: section5, list: list1, todoQuantity: 4, todoOrder: 3),
+                        ListItem(uuid: uuid, product: storeProduct6, section: section3, list: list1, todoQuantity: 3, todoOrder: 4),
+                        ListItem(uuid: uuid, product: storeProduct7, section: section6, list: list1, todoQuantity: 4, todoOrder: 5)
                     ]
                     
                     DBProviders.listItemProvider.saveListItems(listItems, incrementQuantity: false) {saved in

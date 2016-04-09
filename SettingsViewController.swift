@@ -39,6 +39,8 @@ class SettingsViewController: UIViewController {
                 
                 if let inventory = inventories.first {
                     
+                    
+                    
                     Providers.productProvider.products(NSRange(location: 0, length: 500), sortBy: .Alphabetic, weakSelf.successHandler{products in
 
                         guard products.count > 0 else {
@@ -54,7 +56,7 @@ class SettingsViewController: UIViewController {
                             let monthHistoryItems: [HistoryItem] = (2..<Int.random(2, max: 50)).map {_ in
                                 let randomIndex = Int.random(products.count)
                                 let product = products[randomIndex]
-                                return HistoryItem(uuid: NSUUID().UUIDString, inventory: inventory, product: product, addedDate: date, quantity: Int.random(10), user: user, paidPrice: product.price)
+                                return HistoryItem(uuid: NSUUID().UUIDString, inventory: inventory, product: product, addedDate: date, quantity: Int.random(10), user: user, paidPrice: Float(Double.random()) * 10)
                             }
                             return monthHistoryItems
                         }

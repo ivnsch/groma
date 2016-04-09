@@ -68,7 +68,7 @@ class RealmListItemProvider: RealmProvider {
                 realm.add(dbListItem, update: true)
                 
                 if updateSuggestions {
-                    DBProviders.productProvider.saveProductSuggestionHelper(realm, product: listItem.product) // TODO still needed?
+                    DBProviders.productProvider.saveProductSuggestionHelper(realm, product: listItem.product.product) // TODO still needed?
                     
                     let sectionSuggestion = SectionSuggestionMapper.dbWithSection(listItem.section)
                     realm.add(sectionSuggestion, update: true)
@@ -181,13 +181,13 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
-    func addListItem(status: ListItemStatus, product: Product, sectionNameMaybe: String?, sectionColorMaybe: UIColor?, quantity: Int, list: List, note noteMaybe: String? = nil, _ handler: ListItem? -> Void) {
+    func addListItem(status: ListItemStatus, product: StoreProduct, sectionNameMaybe: String?, sectionColorMaybe: UIColor?, quantity: Int, list: List, note noteMaybe: String? = nil, _ handler: ListItem? -> Void) {
         
         doInWriteTransaction({realm in
             return syncedRet(self) {
                 
                 // see if there's already a listitem for this product in the list - if yes only increment it
-                if let existingListItem = realm.objects(DBListItem).filter(DBListItem.createFilterWithProductName(product.name)).first {
+                if let existingListItem = realm.objects(DBListItem).filter(DBListItem.createFilterWithProductName(product.product.name)).first {
                     existingListItem.increment(ListItemStatusQuantity(status: status, quantity: quantity))
                     
                     // possible updates (when user submits a new list item using add edit product controller)
@@ -206,8 +206,8 @@ class RealmListItemProvider: RealmProvider {
                     
                     // see if there's already a section for the new list item in the list, if not create a new one
                     let listItemsInList = realm.objects(DBListItem).filter(DBListItem.createFilterList(list.uuid))
-                    let sectionName = sectionNameMaybe ?? product.category.name
-                    let sectionColor = sectionColorMaybe ?? product.category.color
+                    let sectionName = sectionNameMaybe ?? product.product.category.name
+                    let sectionColor = sectionColorMaybe ?? product.product.category.color
                     let section = listItemsInList.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
                         return SectionMapper.sectionWithDB(item.section)
                         } ?? {
@@ -527,7 +527,7 @@ class RealmListItemProvider: RealmProvider {
     
     func updateStore(oldName: String, newName: String, _ handler: Bool -> Void) {
         doInWriteTransaction({realm in
-            let dbProducts = realm.objects(DBProduct).filter(DBProduct.createFilterStore(oldName))
+            let dbProducts = realm.objects(DBStoreProduct).filter(DBStoreProduct.createFilterStore(oldName))
             for dbProduct in dbProducts {
                 dbProduct.store = newName
                 realm.add(dbProduct, update: true)

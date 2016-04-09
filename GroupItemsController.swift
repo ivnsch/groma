@@ -294,7 +294,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         
         func onEditItem(input: ListItemInput, editingItem: GroupItem) {
             let updatedCategory = editingItem.product.category.copy(name: input.section, color: input.sectionColor)
-            let updatedProduct = editingItem.product.copy(name: input.name, price: input.price, category: updatedCategory, baseQuantity: input.baseQuantity, unit: input.unit, brand: input.brand, store: input.store)
+            let updatedProduct = editingItem.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
             let updatedGroupItem = editingItem.copy(quantity: input.quantity, product: updatedProduct)
             Providers.listItemGroupsProvider.update(updatedGroupItem, remote: true, successHandler{[weak self] in
                 self?.onGroupItemUpdated(true)
@@ -303,7 +303,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         
         func onAddItem(input: ListItemInput) {
             if let group = group {
-                let groupItemInput = GroupItemInput(name: input.name, quantity: input.quantity, price: input.price, category: input.section, categoryColor: input.sectionColor, baseQuantity: input.baseQuantity, unit: input.unit, brand: input.brand, store: input.store)
+                let groupItemInput = GroupItemInput(name: input.name, quantity: input.quantity, price: input.price, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
                 Providers.listItemGroupsProvider.add(groupItemInput, group: group, remote: true, self.successHandler{[weak self] groupItem in
                     self?.onGroupItemAdded(true)
                 })
@@ -416,6 +416,10 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func onTableViewScroll(scrollView: UIScrollView) {
         toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
+    }
+    
+    func isPullToAddEnabled() -> Bool {
+        return true
     }
     
     func onPullToAdd() {

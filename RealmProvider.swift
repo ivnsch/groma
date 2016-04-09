@@ -246,7 +246,18 @@ class RealmProvider {
     func doInWriteTransactionSync<T>(f: Realm -> T?) -> T? {
         do {
             let realm = try Realm()
+            return doInWriteTransactionWithRealmSync(realm, f: f)
+        } catch let error as NSError {
+            QL4("Realm error: \(error)")
+            return nil
+        } catch let error {
+            QL4("Realm error: \(error)")
+            return nil
+        }
+    }
 
+    func doInWriteTransactionWithRealmSync<T>(realm: Realm, f: Realm -> T?) -> T? {
+        do {
             var obj: T?
             try realm.write {
                 obj = f(realm)
@@ -263,23 +274,25 @@ class RealmProvider {
     }
     
     func withRealm<T>(f: Realm -> T?, resultHandler: T? -> Void) {
-        background({
-            do {
-                let realm = try Realm()
-                return f(realm)
-                
-            } catch let error as NSError {
-                QL4("Realm error: \(error)")
-                return nil
-            } catch let error {
-                QL4("Realm error: \(error)")
-                return nil
-            }
+        background({[weak self] in
+            return self?.withRealmSync(f)
             }) { (result: T?) in
                 resultHandler(result)
         }
     }
     
+    func withRealmSync<T>(f: Realm -> T?) -> T? {
+        do {
+            let realm = try Realm()
+            return f(realm)
+        } catch let error as NSError {
+            QL4("Realm error: \(error)")
+            return nil
+        } catch let error {
+            QL4("Realm error: \(error)")
+            return nil
+        }
+    }
     
     // resetLastUpdateToServer = true should be always used when this method is called for sync. TODO no resetLastUpdateToServer default = true, it's better to pass it explicitly
     // additionalActions: optional additional actions to be executed in the transaction

@@ -266,11 +266,11 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
             if let categoryData = categoryDict[aggregate.product.category.uuid] {
                 categoryDict[aggregate.product.category.uuid] = CategoryData(
                     category: aggregate.product.category,
-                    price: aggregate.product.price + categoryData.price,
+                    price: aggregate.totalPrice + categoryData.price,
                     percentage: aggregate.percentage + categoryData.percentage
                 )
             } else {
-                categoryDict[aggregate.product.category.uuid] = CategoryData(category: aggregate.product.category, price: aggregate.product.price, percentage: aggregate.percentage)
+                categoryDict[aggregate.product.category.uuid] = CategoryData(category: aggregate.product.category, price: aggregate.totalPrice, percentage: aggregate.percentage)
             }
         }
         

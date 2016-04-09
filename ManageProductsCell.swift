@@ -34,7 +34,6 @@ class ManageProductsCell: UITableViewCell {
                 
                 productCategoryLabel.text = NSLocalizedString(product.item.category.name, comment: "")
                 productBrandLabel.text = product.item.brand
-                productPriceLabel.text = product.item.price.toLocalCurrencyString()
                 
                 productCategoryLabelTopConstraint.constant = product.item.brand.isEmpty ? 0 : 2
             }

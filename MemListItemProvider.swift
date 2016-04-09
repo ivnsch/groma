@@ -42,7 +42,7 @@ class MemListItemProvider {
             // add case when a listitem with same product name already exist becomes an update: use uuid of existing item, and increment quantity - and of course use the rest of fields of new list item
             var addedListItem: ListItem
             
-            if let existingListItem = self.listItems![listItem.list]?.findFirstWithProductNameAndBrand(listItem.product.name, brand: listItem.product.brand) {
+            if let existingListItem = self.listItems![listItem.list]?.findFirstWithProductNameAndBrand(listItem.product.product.name, brand: listItem.product.product.brand) {
                 let updatedListItem = existingListItem.increment(listItem)
                 self.listItems![listItem.list]?.update(updatedListItem)
                 addedListItem = updatedListItem
@@ -57,7 +57,7 @@ class MemListItemProvider {
         }
     }
 
-    func addOrUpdateListItem(prototype: ListItemPrototype, status: ListItemStatus, list: List, note: String? = nil) -> ListItem? {
+    func addOrUpdateListItem(prototype: StoreListItemPrototype, status: ListItemStatus, list: List, note: String? = nil) -> ListItem? {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
         
@@ -68,7 +68,7 @@ class MemListItemProvider {
         
         // TODO optimise this, for each list item we are iterating through the whole list items list. We should put listitems in dictionary with uuid or product name, or something
         // add case when a listitem with same product name already exist becomes an update: use uuid of existing item, and increment quantity - and of course use the rest of fields of new list item
-        if let existingListItem = self.listItems![list]!.findFirstWithProductNameAndBrand(prototype.product.name, brand: prototype.product.brand) {
+        if let existingListItem = self.listItems![list]!.findFirstWithProductNameAndBrand(prototype.product.product.name, brand: prototype.product.product.brand) {
             
             let updatedSection = existingListItem.section.copy(name: prototype.targetSectionName) // TODO!!!! I think this is related with the bug with unwanted section update? for now letting like this since it's same functionality as before
             
@@ -108,7 +108,7 @@ class MemListItemProvider {
         }
     }
 
-    func addOrUpdateListItems(prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String? = nil) -> [ListItem]? {
+    func addOrUpdateListItems(prototypes: [StoreListItemPrototype], status: ListItemStatus, list: List, note: String? = nil) -> [ListItem]? {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
         
@@ -129,11 +129,11 @@ class MemListItemProvider {
     }
 
     
-    func addOrUpdateListItem(product: Product, sectionNameMaybe: String? = nil, sectionColorMaybe: UIColor?, status: ListItemStatus, quantity: Int, list: List, note: String? = nil) -> ListItem? {
+    func addOrUpdateListItem(product: StoreProduct, sectionNameMaybe: String? = nil, sectionColorMaybe: UIColor?, status: ListItemStatus, quantity: Int, list: List, note: String? = nil) -> ListItem? {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
         
-        let prototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionNameMaybe ?? product.category.name, targetSectionColor: sectionColorMaybe ?? product.category.color)
+        let prototype = StoreListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionNameMaybe ?? product.product.category.name, targetSectionColor: sectionColorMaybe ?? product.product.category.color)
         return addOrUpdateListItem(prototype, status: status, list: list, note: note)
     }
     

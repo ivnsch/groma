@@ -17,7 +17,7 @@ protocol ProductProvider {
 
     func products(range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<[Product]> -> Void)
     
-    func product(name: String, brand: String, store: String, handler: ProviderResult<Product> -> ())
+    func product(name: String, brand: String, handler: ProviderResult<Product> -> ())
 
     func products(text: String, range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<(substring: String?, products: [Product])> -> Void)
     
@@ -40,8 +40,8 @@ protocol ProductProvider {
     func incrementFav(productUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 
     func productSuggestions(handler: ProviderResult<[Suggestion]> -> ())
-    
-    func loadProduct(name: String, brand: String, store: String, handler: ProviderResult<Product> -> ())
+
+    func loadProduct(name: String, brand: String, handler: ProviderResult<Product> -> ())
     
     func categoriesContaining(name: String, _ handler: ProviderResult<[String]> -> ())
     
@@ -57,5 +57,5 @@ protocol ProductProvider {
     param updateCategory if we want to overwrite the category data if a category with passed name exists already (currently this means updating the color). If the category exists and this value is false, the categoryColor parameter is ignored.
     TODO use results like everywhere else, maybe put in a different specific utility class this is rather provider-internal
     */
-    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, updateCategory: Bool, _ handler: ProviderResult<Product> -> Void)
+    func mergeOrCreateProduct(productName: String, category: String, categoryColor: UIColor, baseQuantity: Float, unit: StoreProductUnit, brand: String, updateCategory: Bool, _ handler: ProviderResult<Product> -> Void)
 }

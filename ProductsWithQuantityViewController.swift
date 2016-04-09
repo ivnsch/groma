@@ -18,6 +18,8 @@ protocol ProductsWithQuantityViewControllerDelegate {
     func emptyViewData() -> (text: String, text2: String, imgName: String)
     func onEmptyViewTap()
     func onTableViewScroll(scrollView: UIScrollView)
+    
+    func isPullToAddEnabled() -> Bool
     func onPullToAdd()
 }
 
@@ -68,10 +70,11 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         
         tableView.tableFooterView = UIView() // quick fix to hide separators in empty space http://stackoverflow.com/a/14461000/930450
         
-        let refreshControl = PullToAddHelper.createPullToAdd(self)
-        tableViewController.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: "onPullRefresh:", forControlEvents: .ValueChanged)
-        
+        if delegate?.isPullToAddEnabled() ?? false {
+            let refreshControl = PullToAddHelper.createPullToAdd(self)
+            tableViewController.refreshControl = refreshControl
+            refreshControl.addTarget(self, action: "onPullRefresh:", forControlEvents: .ValueChanged)
+        }
         
         // TODO custom empty view, put this there
         let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyInventoryViewTap:"))

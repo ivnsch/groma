@@ -145,7 +145,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     private func topBarOnCloseExpandable() {
         topBar.setLeftButtonIds([.Edit])
-        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+//        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -155,10 +155,6 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         
         onViewWillAppear?()
         onViewWillAppear = nil
-    }
-    
-    func onPullToAdd() {
-        toggleTopAddController(false)
     }
     
     private func toggleEditing() {
@@ -199,17 +195,18 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func onTopBarButtonTap(buttonId: ListTopBarViewButtonId) {
         switch buttonId {
         case .Add:
-            if let inventory = inventory {
-                Providers.inventoryItemsProvider.countInventoryItems(inventory, successHandler {[weak self] count in
-                    if let weakSelf = self {
-                        SizeLimitChecker.checkInventoryItemsSizeLimit(weakSelf.productsWithQuantityController.models.count, controller: weakSelf) {
-                            self?.sendActionToTopController(.Add)
-                        }
-                    }
-                })
-            } else {
-                print("InventoryItemsController.onTopBarButtonTap: No inventory")
-            }
+            QL4("Outdated implementation - to add products to inventory we now have to fetch store product (to get the price)")
+//            if let inventory = inventory {
+//                Providers.inventoryItemsProvider.countInventoryItems(inventory, successHandler {[weak self] count in
+//                    if let weakSelf = self {
+//                        SizeLimitChecker.checkInventoryItemsSizeLimit(weakSelf.productsWithQuantityController.models.count, controller: weakSelf) {
+//                            self?.sendActionToTopController(.Add)
+//                        }
+//                    }
+//                })
+//            } else {
+//                print("InventoryItemsController.onTopBarButtonTap: No inventory")
+//            }
         case .ToggleOpen:
             toggleTopAddController()
         case .Edit:
@@ -228,7 +225,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             topBar.setLeftButtonIds([.Edit])
             
             if rotateTopBarButton {
-                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+//                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
             }
             
         } else { // if there's no top controller open, open the quick add controller
@@ -240,7 +237,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 topBar.setLeftButtonIds([])
                 
                 if rotateTopBarButton {
-                    topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+//                    topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
                 }
             }
             
@@ -266,7 +263,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func onCenterTitleAnimComplete(center: Bool) {
         if center {
             topBar.setLeftButtonIds([.Edit])
-            topBar.setRightButtonIds([.ToggleOpen])
+//            topBar.setRightButtonIds([.ToggleOpen])
         }
     }
     
@@ -285,94 +282,97 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
-        if let inventory = inventory {
-            Providers.listItemGroupsProvider.groupItems(group, successHandler {[weak self] groupItems in
-                if let weakSelf = self {
-                    let inventoryItemsInput = groupItems.map{ProductWithQuantityInput(product: $0.product, quantity: $0.quantity)}
-                    Providers.inventoryItemsProvider.addToInventory(inventory, itemInputs: inventoryItemsInput, remote: true, weakSelf.successHandler{[weak self] inventoryItems in
-                        self?.productsWithQuantityController?.addOrIncrementUI(inventoryItems.map{ProductWithQuantityInv(inventoryItem: $0.inventoryItem)})
-                    })
-                }
-            })
-        }
+        QL4("Outdated implementation, needs now store product")
+//        if let inventory = inventory {
+//            Providers.listItemGroupsProvider.groupItems(group, successHandler {[weak self] groupItems in
+//                if let weakSelf = self {
+//                    let inventoryItemsInput = groupItems.map{ProductWithQuantityInput(product: $0.product, quantity: $0.quantity)}
+//                    Providers.inventoryItemsProvider.addToInventory(inventory, itemInputs: inventoryItemsInput, remote: true, weakSelf.successHandler{[weak self] inventoryItems in
+//                        self?.productsWithQuantityController?.addOrIncrementUI(inventoryItems.map{ProductWithQuantityInv(inventoryItem: $0.inventoryItem)})
+//                    })
+//                }
+//            })
+//        }
     }
     
     func onAddProduct(product: Product) {
-        if let inventory = inventory {
-            let productInput = ProductWithQuantityInput(product: product, quantity: 1)
-            Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: productInput, remote: true, successHandler{[weak self] addedIem in
-                self?.productsWithQuantityController?.addOrIncrementUI(ProductWithQuantityInv(inventoryItem: addedIem.inventoryItem))
-            })
-        }
+        QL4("Outdated implementation, needs now store product")
+//        if let inventory = inventory {
+//            let productInput = ProductWithQuantityInput(product: product, quantity: 1)
+//            Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: productInput, remote: true, successHandler{[weak self] addedIem in
+//                self?.productsWithQuantityController?.addOrIncrementUI(ProductWithQuantityInv(inventoryItem: addedIem.inventoryItem))
+//            })
+//        }
     }
     
     func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) {
+        QL4("Outdated implementation, needs now store product")
         
-        func onEditListItem(input: ListItemInput, editingItem: InventoryItem) {
-            let updatedCategory = editingItem.product.category.copy(name: input.section, color: input.sectionColor)
-            let updatedProduct = editingItem.product.copy(name: input.name, price: input.price, category: updatedCategory, brand: input.brand, store: input.store)
-            // TODO! calculate quantity delta correctly?
-            let updatedInventoryItem = editingItem.copy(quantity: input.quantity, quantityDelta: input.quantity, product: updatedProduct)
-            Providers.inventoryItemsProvider.updateInventoryItem(updatedInventoryItem, remote: true, successHandler {[weak self] in
-                self?.onInventoryItemUpdated()
-            })
-        }
-        
-        func onAddListItem(input: ListItemInput) {
-            if let inventory = inventory {
-                let input = InventoryItemInput(name: input.name, quantity: input.quantity, price: input.price, category: input.section, categoryColor: input.sectionColor, baseQuantity: input.baseQuantity, unit: input.unit, brand: input.brand, store: input.store)
-                
-                Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, self.successHandler{[weak self] (inventoryItemWithHistoryEntry: InventoryItemWithHistoryEntry) in
-                    // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end. TODO nicer solution
-                    self?.reload()
-                    
-                    self?.toggleTopAddController()
-                })
-            } else {
-                QL4("Inventory isn't set, can't add item")
-            }
-        }
-        
-        if let editingItem = editingItem as? InventoryItem {
-            onEditListItem(input, editingItem: editingItem)
-        } else {
-            if editingItem == nil {
-                onAddListItem(input)
-            } else {
-                QL4("Cast didn't work: \(editingItem)")
-            }
-        }
+//        func onEditListItem(input: ListItemInput, editingItem: InventoryItem) {
+//            let updatedCategory = editingItem.product.category.copy(name: input.section, color: input.sectionColor)
+//            let updatedProduct = editingItem.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
+//            // TODO! calculate quantity delta correctly?
+//            let updatedInventoryItem = editingItem.copy(quantity: input.quantity, quantityDelta: input.quantity, product: updatedProduct)
+//            Providers.inventoryItemsProvider.updateInventoryItem(updatedInventoryItem, remote: true, successHandler {[weak self] in
+//                self?.onInventoryItemUpdated()
+//            })
+//        }
+//        
+//        func onAddListItem(input: ListItemInput) {
+//            if let inventory = inventory {
+//                let input = InventoryItemInput(name: input.name, quantity: input.quantity, price: input.price, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
+//                
+//                Providers.inventoryItemsProvider.addToInventory(inventory, itemInput: input, self.successHandler{[weak self] (inventoryItemWithHistoryEntry: InventoryItemWithHistoryEntry) in
+//                    // we have pagination so we can't just append at the end of table view. For now simply cause a reload and start at first page. The new item will appear when user scrolls to the end. TODO nicer solution
+//                    self?.reload()
+//                    
+//                    self?.toggleTopAddController()
+//                })
+//            } else {
+//                QL4("Inventory isn't set, can't add item")
+//            }
+//        }
+//        
+//        if let editingItem = editingItem as? InventoryItem {
+//            onEditListItem(input, editingItem: editingItem)
+//        } else {
+//            if editingItem == nil {
+//                onAddListItem(input)
+//            } else {
+//                QL4("Cast didn't work: \(editingItem)")
+//            }
+//        }
     }
     
     func onQuickListOpen() {
-        topBar.setBackVisible(false)
-        topBar.setLeftButtonModels([])
-        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+//        topBar.setBackVisible(false)
+//        topBar.setLeftButtonModels([])
+//        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
     }
     
     func onAddProductOpen() {
-        topBar.setBackVisible(false)
-        topBar.setLeftButtonModels([])
-        topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
-        ])
+//        topBar.setBackVisible(false)
+//        topBar.setLeftButtonModels([])
+//        topBar.setRightButtonModels([
+//            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+//        ])
     }
     
     func onAddGroupOpen() {
-        topBar.setBackVisible(false)
-        topBar.setLeftButtonModels([])
-        topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .Add),
-            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
-        ])
+//        topBar.setBackVisible(false)
+//        topBar.setLeftButtonModels([])
+//        topBar.setRightButtonModels([
+//            TopBarButtonModel(buttonId: .Add),
+//            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+//        ])
     }
     
     func onAddGroupItemsOpen() {
-        topBar.setBackVisible(true)
-        topBar.setLeftButtonModels([])
-        topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
-        ])
+//        topBar.setBackVisible(true)
+//        topBar.setLeftButtonModels([])
+//        topBar.setRightButtonModels([
+//            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+//        ])
     }
     
     func parentViewForAddButton() -> UIView {
@@ -451,9 +451,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             topQuickAddControllerManager?.expand(true)
             topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: inventoryItem))
             
-            topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
-            ])
+//            topBar.setRightButtonModels([
+//                TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
+//            ])
         }
     }
     
@@ -479,6 +479,13 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         return nil
     }
     
+    func isPullToAddEnabled() -> Bool {
+        return false
+    }
+    
+    func onPullToAdd() {
+        toggleTopAddController(false)
+    }
     
     // MARK: - Websocket
     

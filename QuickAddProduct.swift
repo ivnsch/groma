@@ -12,8 +12,12 @@ class QuickAddProduct: QuickAddItem {
 
     let product: Product
     
-    init(_ product: Product, boldRange: NSRange? = nil) {
+    // TODO better implementation than passing this additionally to product, which is used only when quick add is used for list items
+    let storeProduct: StoreProduct?
+    
+    init(_ product: Product, storeProduct: StoreProduct? = nil, boldRange: NSRange? = nil) {
         self.product = product
+        self.storeProduct = storeProduct
         super.init(boldRange: boldRange)
     }
     
@@ -26,7 +30,7 @@ class QuickAddProduct: QuickAddItem {
     }
     
     override var label3Text: String {
-        return product.store
+        return storeProduct?.store ?? ""
     }
     
     override var color: UIColor {

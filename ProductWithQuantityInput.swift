@@ -9,10 +9,10 @@
 import Foundation
 
 struct ProductWithQuantityInput {
-    let product: Product
+    let product: StoreProduct
     let quantity: Int
     
-    init(product: Product, quantity: Int) {
+    init(product: StoreProduct, quantity: Int) {
         self.product = product
         self.quantity = quantity
     }

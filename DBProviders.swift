@@ -13,7 +13,8 @@ class DBProviders {
     static var listItemProvider = RealmListItemProvider()
 
     static var productProvider = RealmProductProvider()
-
+    static var storeProductProvider = RealmStoreProductProvider()
+    
     static var productCategoryProvider = RealmProductCategoryProvider()
     
     static var sectionProvider = RealmSectionProvider()

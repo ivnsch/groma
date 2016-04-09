@@ -47,7 +47,7 @@ class DimensionsManager {
             default: return .Large // iPhone 4,5
             }
         }()
-        QL2("Screen width: \(screenSize.width), widthDimension: \(dimension)")
+//        QL2("Screen width: \(screenSize.width), widthDimension: \(dimension)")
         return dimension
     }
     
@@ -60,7 +60,7 @@ class DimensionsManager {
             default: return .VerySmall // iPhone 4
             }
         }()
-        QL2("Screen height: \(screenSize.height), heightDimension: \(dimension)")
+//        QL2("Screen height: \(screenSize.height), heightDimension: \(dimension)")
         return dimension
     }
 

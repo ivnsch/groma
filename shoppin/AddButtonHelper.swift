@@ -105,6 +105,8 @@ class AddButtonHelper: NSObject {
     func add() {
         if addButton == nil {
             addAddButton()
+        } else {
+            QL3("Called addButton, there's already a button")
         }
     }
 }

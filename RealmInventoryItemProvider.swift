@@ -143,9 +143,10 @@ class RealmInventoryItemProvider: RealmProvider {
     }
     
     // Helper function for common code
-    private func addOrIncrementInventoryItemWithProduct(realm: Realm, product: Product, inventory: Inventory, quantity: Int) -> InventoryItemWithHistoryEntry {
+    // This is only called when using quick add, not +/-.
+    private func addOrIncrementInventoryItemWithProduct(realm: Realm, product: StoreProduct, inventory: Inventory, quantity: Int) -> InventoryItemWithHistoryEntry {
         let inventoryItemWithHistoryEntry = InventoryItemWithHistoryEntry(
-            inventoryItem: InventoryItem(uuid: NSUUID().UUIDString, quantity: quantity, quantityDelta: quantity, product: product, inventory: inventory),
+            inventoryItem: InventoryItem(uuid: NSUUID().UUIDString, quantity: quantity, quantityDelta: quantity, product: product.product, inventory: inventory),
             historyItemUuid: NSUUID().UUIDString,
             paidPrice: product.price,
             addedDate: NSDate(),
@@ -159,24 +160,25 @@ class RealmInventoryItemProvider: RealmProvider {
     }
     
     // NOTE: Adds also history item.
-    func addOrIncrementInventoryItemWithInput(itemInput: InventoryItemInput, inventory: Inventory, delta: Int, onlyDelta: Bool = false, handler: InventoryItemWithHistoryEntry? -> ()) {
-        
-        self.doInWriteTransaction({[weak self] realm in
-            
-            if let weakSelf = self {
-                // upsert product
-                let updatedDbProduct = DBProviders.productProvider.upsertProductSync(realm, prototype: itemInput.productPrototype)
-                
-                // create new inventory item + history entry
-                let product = ProductMapper.productWithDB(updatedDbProduct)
-                return weakSelf.addOrIncrementInventoryItemWithProduct(realm, product: product, inventory: inventory, quantity: itemInput.quantity)
-            }
-            return nil
-            
-            }, finishHandler: {(addedInventoryItemWithHistoryEntryMaybe: InventoryItemWithHistoryEntry?) in
-                handler(addedInventoryItemWithHistoryEntryMaybe)
-        })
-    }
+    // Outdated implementation, needs now store product
+//    func addOrIncrementInventoryItemWithInput(itemInput: InventoryItemInput, inventory: Inventory, delta: Int, onlyDelta: Bool = false, handler: InventoryItemWithHistoryEntry? -> ()) {
+//        
+//        self.doInWriteTransaction({[weak self] realm in
+//            
+//            if let weakSelf = self {
+//                // upsert product
+//                let updatedDbProduct = DBProviders.productProvider.upsertProductSync(realm, prototype: itemInput.productPrototype)
+//                
+//                // create new inventory item + history entry
+//                let product = ProductMapper.productWithDB(updatedDbProduct)
+//                return weakSelf.addOrIncrementInventoryItemWithProduct(realm, product: product, inventory: inventory, quantity: itemInput.quantity)
+//            }
+//            return nil
+//            
+//            }, finishHandler: {(addedInventoryItemWithHistoryEntryMaybe: InventoryItemWithHistoryEntry?) in
+//                handler(addedInventoryItemWithHistoryEntryMaybe)
+//        })
+//    }
     
     func incrementInventoryItemOnlyDelta(item: InventoryItem, delta: Int, handler: Bool -> ()) {
         let incrementedInventoryItem = item.copy(quantityDelta: item.quantityDelta + delta)

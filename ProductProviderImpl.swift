@@ -29,8 +29,8 @@ class ProductProviderImpl: ProductProvider {
         }
     }
 
-    func product(name: String, brand: String, store: String, handler: ProviderResult<Product> -> ()) {
-        DBProviders.productProvider.loadProductWithName(name, brand: brand, store: store) {dbProduct in
+    func product(name: String, brand: String, handler: ProviderResult<Product> -> ()) {
+        DBProviders.productProvider.loadProductWithName(name, brand: brand) {dbProduct in
             if let dbProduct = dbProduct {
                 handler(ProviderResult(status: .Success, sucessResult: dbProduct))
             } else {
@@ -154,9 +154,8 @@ class ProductProviderImpl: ProductProvider {
         }
     }
     
-    
-    func loadProduct(name: String, brand: String, store: String, handler: ProviderResult<Product> -> ()) {
-        DBProviders.productProvider.loadProductWithName(name, brand: brand, store: store) {dbProductMaybe in
+    func loadProduct(name: String, brand: String, handler: ProviderResult<Product> -> ()) {
+        DBProviders.productProvider.loadProductWithName(name, brand: brand) {dbProductMaybe in
             if let dbProduct = dbProductMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: dbProduct))
             } else {
@@ -183,14 +182,14 @@ class ProductProviderImpl: ProductProvider {
         }
     }
 
-    func mergeOrCreateProduct(productName: String, productPrice: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, updateCategory: Bool, _ handler: ProviderResult<Product> -> Void) {
+    func mergeOrCreateProduct(productName: String, category: String, categoryColor: UIColor, baseQuantity: Float, unit: StoreProductUnit, brand: String, updateCategory: Bool, _ handler: ProviderResult<Product> -> Void) {
 
         // load product and update or create one
         // if we find a product with the name we update it - this is for the case the user changes the price etc for an existing product while adding an item
-        loadProduct(productName, brand: brand, store: store) {result in
+        loadProduct(productName, brand: brand) {result in
             if let existingProduct = result.sucessResult {
                 let updatedCateogry = existingProduct.category.copy(name: category, color: categoryColor)
-                let updatedProduct = existingProduct.copy(name: productName, price: productPrice, category: updatedCateogry, baseQuantity: baseQuantity, unit: unit, store: store)
+                let updatedProduct = existingProduct.copy(name: productName, category: updatedCateogry)
                 handler(ProviderResult(status: .Success, sucessResult: updatedProduct))
                 
             } else { // product doesn't exist
@@ -199,7 +198,7 @@ class ProductProviderImpl: ProductProvider {
                 Providers.productCategoryProvider.categoryWithName(category) {result in
                     
                     func onHasCategory(category: ProductCategory) {
-                        let newProduct = Product(uuid: NSUUID().UUIDString, name: productName, price: productPrice, category: category, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
+                        let newProduct = Product(uuid: NSUUID().UUIDString, name: productName, category: category, brand: brand)
                         handler(ProviderResult(status: .Success, sucessResult: newProduct))
                     }
                     

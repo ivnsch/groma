@@ -12,8 +12,8 @@ struct InventoryItemInput {
     let productPrototype: ProductPrototype
     let quantity: Int
     
-    init(name: String, quantity: Int, price: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
-        self.productPrototype = ProductPrototype(name: name, price: price, category: category, categoryColor: categoryColor, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
+    init(name: String, quantity: Int, price: Float, category: String, categoryColor: UIColor, brand: String) {
+        self.productPrototype = ProductPrototype(name: name, price: price, category: category, categoryColor: categoryColor, brand: brand)
         self.quantity = quantity
     }
 }

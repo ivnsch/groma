@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ProductUnit: Int {
+enum StoreProductUnit: Int {
     case None = 0
     case Gram = 1
     case Kilogram = 2
@@ -30,13 +30,13 @@ enum ProductUnit: Int {
     }
 }
 
-final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvertible {
+final class StoreProduct: Equatable, Hashable, Identifiable, CustomDebugStringConvertible {
     let uuid: String
-    let name: String
-    let category: ProductCategory
-    var fav: Int
-    let brand: String
-
+    let price: Float
+    let product: Product
+    let baseQuantity: Float
+    let unit: StoreProductUnit
+    let store: String
     
     //////////////////////////////////////////////
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
@@ -47,12 +47,13 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid: String, name: String, category: ProductCategory, fav: Int = 0, brand: String = "", lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, price: Float, baseQuantity: Float, unit: StoreProductUnit, store: String, product: Product, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
-        self.name = name
-        self.category = category
-        self.fav = fav
-        self.brand = brand
+        self.price = price
+        self.product = product
+        self.baseQuantity = baseQuantity
+        self.unit = unit
+        self.store = store
         
         self.lastUpdate = lastUpdate
         self.lastServerUpdate = lastServerUpdate
@@ -60,34 +61,35 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), category: \(category), fav: \(fav), brand: \(brand), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
+        return "{\(self.dynamicType) uuid: \(uuid), price: \(price), baseQuantity: \(baseQuantity), unit: \(unit), store: \(store), product: \(product), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
     }
-
+    
     var hashValue: Int {
         return self.uuid.hashValue
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, category: ProductCategory? = nil, fav: Int? = nil, brand: String? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> Product {
-        return Product(
+    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: ProductCategory? = nil, baseQuantity: Float? = nil, unit: StoreProductUnit? = nil, fav: Int? = nil, brand: String? = nil, store: String? = nil, product: Product? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> StoreProduct {
+        return StoreProduct(
             uuid: uuid ?? self.uuid,
-            name: name ?? self.name,
-            category: category ?? self.category,
-            fav: fav ?? self.fav,
-            brand: brand ?? self.brand,
+            price: price ?? self.price,
+            baseQuantity: baseQuantity ?? self.baseQuantity,
+            unit: unit ?? self.unit,
+            store: store ?? self.store,
+            product: product ?? self.product,
             lastUpdate: lastUpdate ?? self.lastUpdate,
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
             removed: removed ?? self.removed
         )
     }
     
-    func same(rhs: Product) -> Bool {
+    func same(rhs: StoreProduct) -> Bool {
         return uuid == rhs.uuid
     }
 }
 
-func ==(lhs: Product, rhs: Product) -> Bool {
+func ==(lhs: StoreProduct, rhs: StoreProduct) -> Bool {
     return lhs.uuid == rhs.uuid
 }
 
-// convenience (redundant) holder to avoid having to iterate through listitems to find unique categories
-typealias ProductsWithDependencies = (products: [Product], categories: [ProductCategory])
+// convenience (redundant) holder to avoid having to iterate through products to find unique dependencies
+typealias StoreProductsWithDependencies = (storeProducts: [StoreProduct], products: [Product], categories: [ProductCategory])

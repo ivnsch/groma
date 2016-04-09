@@ -15,7 +15,6 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -32,10 +31,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Price" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="NrU-fN-qdF" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="432" y="108" width="70" height="40"/>
+                                <rect key="frame" x="14" y="108" width="120" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="HqM-K2-C7L"/>
-                                    <constraint firstAttribute="width" constant="70" id="qrp-kB-pXC"/>
+                                    <constraint firstAttribute="width" constant="120" id="qrp-kB-pXC"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next"/>
@@ -62,28 +61,11 @@
                                     <outlet property="autoCompleteDelegate" destination="CI5-0y-OAL" id="qlf-hn-ADn"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Store (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="R77-Pv-LQA" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="14" y="108" width="404" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="aul-P9-Whl"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" returnKeyType="next"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
-                                        <integer key="value" value="30"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <outlet property="autoCompleteDataSource" destination="CI5-0y-OAL" id="cx0-Ns-a1x"/>
-                                    <outlet property="autoCompleteDelegate" destination="CI5-0y-OAL" id="sKM-xG-gtZ"/>
-                                </connections>
-                            </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Quantity" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vWS-vL-cob" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="516" y="108" width="70" height="40"/>
+                                <rect key="frame" x="148" y="108" width="120" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="6uo-WM-0CH"/>
-                                    <constraint firstAttribute="width" constant="70" id="q9d-EY-Wvb"/>
+                                    <constraint firstAttribute="width" constant="120" id="q9d-EY-Wvb"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
@@ -157,7 +139,6 @@
                             <constraint firstItem="dwL-LH-4dI" firstAttribute="top" secondItem="If7-20-6Xv" secondAttribute="top" constant="8" id="5vc-zY-2WJ"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="i1w-xi-aFz" secondAttribute="trailing" id="8QS-gR-4dR"/>
                             <constraint firstAttribute="trailing" secondItem="Yfv-oA-AU6" secondAttribute="trailing" constant="14" id="GAE-Dh-oZk"/>
-                            <constraint firstAttribute="trailing" secondItem="vWS-vL-cob" secondAttribute="trailing" constant="14" id="GR2-ry-KGQ"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="width" secondItem="Xjl-8k-ZTY" secondAttribute="width" id="Ixd-KJ-nvO"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="height" secondItem="Xjl-8k-ZTY" secondAttribute="height" id="KLz-mz-O6h"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="top" secondItem="Xjl-8k-ZTY" secondAttribute="top" id="Lj3-kE-rMA"/>
@@ -169,14 +150,12 @@
                             <constraint firstItem="i1w-xi-aFz" firstAttribute="top" secondItem="r5b-Sz-J4o" secondAttribute="bottom" id="Uys-Mm-t4a"/>
                             <constraint firstItem="Yfv-oA-AU6" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="Xka-df-FOU"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="baseline" secondItem="i1w-xi-aFz" secondAttribute="baseline" id="ZXj-Jt-gIn"/>
-                            <constraint firstItem="R77-Pv-LQA" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="dHw-Ld-h7E"/>
                             <constraint firstItem="vWS-vL-cob" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" id="dYT-Ag-kT7"/>
                             <constraint firstItem="dwL-LH-4dI" firstAttribute="centerX" secondItem="If7-20-6Xv" secondAttribute="centerX" id="ei9-BK-Nvk"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="trailing" secondItem="Xjl-8k-ZTY" secondAttribute="trailing" id="lg7-IJ-coN"/>
                             <constraint firstItem="NrU-fN-qdF" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" id="pJC-Cd-QdD"/>
                             <constraint firstItem="vWS-vL-cob" firstAttribute="leading" secondItem="NrU-fN-qdF" secondAttribute="trailing" constant="14" id="re8-SG-anU"/>
-                            <constraint firstItem="R77-Pv-LQA" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" id="tgf-qS-7g1"/>
-                            <constraint firstItem="NrU-fN-qdF" firstAttribute="leading" secondItem="R77-Pv-LQA" secondAttribute="trailing" constant="14" id="uLU-LF-2Lz"/>
+                            <constraint firstItem="NrU-fN-qdF" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="vrk-14-Re1"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="Xjl-8k-ZTY" secondAttribute="leading" id="wmD-8b-t71"/>
                             <constraint firstItem="r5b-Sz-J4o" firstAttribute="top" secondItem="dwL-LH-4dI" secondAttribute="bottom" id="wtZ-u8-wCv"/>
                         </constraints>
@@ -197,7 +176,6 @@
                         <outlet property="quantityInput" destination="vWS-vL-cob" id="Jgc-GC-VfN"/>
                         <outlet property="sectionColorButton" destination="CcK-74-2fx" id="ZsK-bj-Mmn"/>
                         <outlet property="sectionInput" destination="i1w-xi-aFz" id="8ba-aL-isS"/>
-                        <outlet property="storeInput" destination="R77-Pv-LQA" id="zDN-Ab-mHh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tgx-6o-HeU" userLabel="First Responder" sceneMemberID="firstResponder"/>

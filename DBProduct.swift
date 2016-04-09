@@ -13,13 +13,9 @@ class DBProduct: DBSyncable {
     
     dynamic var uuid: String = ""
     dynamic var name: String = ""
-    dynamic var price: Float = 0
     dynamic var categoryOpt: DBProductCategory? = DBProductCategory()
-    dynamic var baseQuantity: Float = 0
-    dynamic var unit: Int = 0
     dynamic var fav: Int = 0
     dynamic var brand: String = ""
-    dynamic var store: String = ""
     
     var category: DBProductCategory {
         get {
@@ -38,19 +34,15 @@ class DBProduct: DBSyncable {
         return ["name"]
     }
     
-    convenience init(uuid: String, name: String, price: Float, category: DBProductCategory, baseQuantity: Float, unit: Int, fav: Int = 0, brand: String = "", store: String = "", lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    convenience init(uuid: String, name: String, category: DBProductCategory, fav: Int = 0, brand: String = "", lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         
         self.init()
         
         self.uuid = uuid
         self.name = name
-        self.price = price
         self.category = category
-        self.baseQuantity = baseQuantity
-        self.unit = unit
         self.fav = fav
         self.brand = brand
-        self.store = store
         
         self.lastUpdate = lastUpdate
         if let lastServerUpdate = lastServerUpdate {
@@ -63,27 +55,19 @@ class DBProduct: DBSyncable {
         self.init(
             uuid: NSUUID().UUIDString,
             name: prototype.name,
-            price: prototype.price,
             category: category,
-            baseQuantity: prototype.baseQuantity,
-            unit: prototype.unit.rawValue,
             fav: 0,
-            brand: prototype.brand,
-            store: prototype.store
+            brand: prototype.brand
         )
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: DBProductCategory? = nil, baseQuantity: Float? = nil, unit: Int? = nil, fav: Int? = nil, brand: String? = nil, store: String? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> DBProduct {
+    func copy(uuid uuid: String? = nil, name: String? = nil, category: DBProductCategory? = nil, fav: Int? = nil, brand: String? = nil, store: String? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> DBProduct {
         return DBProduct(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
-            price: price ?? self.price,
             category: category ?? self.category,
-            baseQuantity: baseQuantity ?? self.baseQuantity,
-            unit: unit ?? self.unit,
             fav: fav ?? self.fav,
             brand: brand ?? self.brand,
-            store: store ?? self.store,
             lastUpdate: lastUpdate ?? self.lastUpdate,
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
             removed: removed ?? self.removed
@@ -93,7 +77,7 @@ class DBProduct: DBSyncable {
     // Overwrites fields with corresponding fields of prototype.
     // NOTE: Does not update category fields.
     func update(prototype: ProductPrototype) -> DBProduct {
-        return copy(name: prototype.name, price: prototype.price, baseQuantity: prototype.baseQuantity, unit: prototype.unit.rawValue, brand: prototype.brand, store: prototype.store)
+        return copy(name: prototype.name, brand: prototype.brand)
     }
     
     // MARK: - Filters
@@ -106,16 +90,12 @@ class DBProduct: DBSyncable {
         return "brand == '\(brand)'"
     }
     
-    static func createFilterStore(store: String) -> String {
-        return "store == '\(store)'"
-    }
-    
     static func createFilterUnique(prototype: ProductPrototype) -> String {
-        return createFilterNameBrand(prototype.name, brand: prototype.brand, store: prototype.store)
+        return createFilterNameBrand(prototype.name, brand: prototype.brand)
     }
     
-    static func createFilterNameBrand(name: String, brand: String, store: String) -> String {
-        return "\(createFilterName(name)) AND \(createFilterBrand(brand)) AND \(createFilterStore(store))"
+    static func createFilterNameBrand(name: String, brand: String) -> String {
+        return "\(createFilterName(name)) AND \(createFilterBrand(brand))"
     }
     
     static func createFilterName(name: String) -> String {
@@ -148,13 +128,9 @@ class DBProduct: DBSyncable {
         let item = DBProduct()
         item.uuid = dict["uuid"]! as! String
         item.name = dict["name"]! as! String
-        item.price = dict["price"]! as! Float
         item.category = category
-        item.baseQuantity = dict["baseQuantity"]! as! Float
-        item.unit = dict["unit"]! as! Int
         item.fav = dict["fav"]! as! Int
         item.brand = dict["brand"]! as! String
-        item.store = dict["store"]! as! String
         item.setSyncableFieldswithRemoteDict(dict)        
         return item
     }
@@ -163,13 +139,9 @@ class DBProduct: DBSyncable {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid
         dict["name"] = name
-        dict["price"] = price
         dict["category"] = category.toDict()
-        dict["baseQuantity"] = baseQuantity
-        dict["unit"] = unit
         dict["fav"] = fav
         dict["brand"] = brand
-        dict["store"] = store
         setSyncableFieldsInDict(dict)
         return dict
     }

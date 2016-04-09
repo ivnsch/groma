@@ -477,13 +477,14 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     private func updateItem(updatingListItem: ListItem, listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
         if let currentList = self.currentList {
             
-            let category = updatingListItem.product.category
-            let product = Product(uuid: updatingListItem.product.uuid, name: listItemInput.name, price: listItemInput.price, category: category, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, store: listItemInput.store) // possible product update
+            let category = updatingListItem.product.product.category
+            let product = Product(uuid: updatingListItem.product.product.uuid, name: listItemInput.name, category: category, brand: listItemInput.brand) // possible product update
+            let storeProduct = StoreProduct(uuid: updatingListItem.product.uuid, price: listItemInput.price, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, store: updatingListItem.list.store ?? "", product: product) // possible store product update
             
             func onHasSection(section: Section) {
                 let listItem = ListItem(
                     uuid: updatingListItem.uuid,
-                    product: product,
+                    product: storeProduct,
                     section: section,
                     list: currentList,
                     note: listItemInput.note,

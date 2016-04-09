@@ -14,6 +14,9 @@ class ExpandableTableViewModel: NSObject, Identifiable {
     var name: String {
         fatalError("override")
     }
+    var subtitle: String? {
+        return nil
+    }
     var bgColor: UIColor {
         fatalError("override")
     }

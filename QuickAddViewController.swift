@@ -267,18 +267,18 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         }
     }
     
-    // MARK: - 
+    // MARK: - AddEditListItemViewControllerDelegate
     
     func onValidationErrors(errors: [UITextField: ValidationError]) {
         // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
         self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)
     }
     
-    func onOkTap(price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, editingItem: Any?) {
+    func onOkTap(price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: StoreProductUnit, brand: String, editingItem: Any?) {
         
         if let name = searchBar.text {
             
-            let listItemInput = ListItemInput(name: name, quantity: quantity, price: price, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store)
+            let listItemInput = ListItemInput(name: name, quantity: quantity, price: price, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand)
             delegate?.onSubmitAddEditItem(listItemInput, editingItem: editingItem)
             
         } else {

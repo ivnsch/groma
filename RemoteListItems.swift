@@ -12,6 +12,7 @@ import QorumLogs
 struct RemoteListItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
 
     let lists: RemoteListsWithDependencies
+    let storeProducts: [RemoteStoreProduct]
     let products: [RemoteProduct]
     let productsCategories: [RemoteProductCategory]
     let sections: [RemoteSection]
@@ -29,6 +30,8 @@ struct RemoteListItems: ResponseObjectSerializable, ResponseCollectionSerializab
         guard
             let listsObj = representation.valueForKeyPath("lists"),
             let lists = RemoteListsWithDependencies(representation: listsObj),
+            let storeProductsObj = representation.valueForKeyPath("storeProducts") as? [AnyObject],
+            let storeProducts = RemoteStoreProduct.collection(storeProductsObj),
             let productsObj = representation.valueForKeyPath("products") as? [AnyObject],
             let products = RemoteProduct.collection(productsObj),
             let productsCategoriesObj = representation.valueForKeyPath("productsCategories") as? [AnyObject],
@@ -42,6 +45,7 @@ struct RemoteListItems: ResponseObjectSerializable, ResponseCollectionSerializab
                 return nil}
         
         self.lists = lists
+        self.storeProducts = storeProducts
         self.products = products
         self.productsCategories = productsCategories
         self.sections = sections
@@ -63,6 +67,6 @@ struct RemoteListItems: ResponseObjectSerializable, ResponseCollectionSerializab
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) lists: \(lists), productsCategories: [\(productsCategories)], products: [\(products)], listItems: [\(listItems)}"
+        return "{\(self.dynamicType) lists: \(lists), storeProducts: \(storeProducts), productsCategories: [\(productsCategories)], products: [\(products)], listItems: [\(listItems)}"
     }
 }

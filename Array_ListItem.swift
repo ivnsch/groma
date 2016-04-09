@@ -110,7 +110,7 @@ extension Array where Element: ListItem {
     func findFirstWithProductNameAndBrand(productName: String, brand: String) -> ListItem? {
         
         for listItem in self {
-            if listItem.product.name == productName && listItem.product.brand == brand {
+            if listItem.product.product.name == productName && listItem.product.product.brand == brand {
                 return listItem
             }
         }

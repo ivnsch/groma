@@ -257,13 +257,13 @@ class ListItemProviderImpl: ListItemProvider {
     
     // Note: status assumed to be .Todo as we can add list item input only to .Todo
     func add(listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<ListItem> -> Void) {
-
         Providers.sectionProvider.mergeOrCreateSection(listItemInput.section, sectionColor: listItemInput.sectionColor, status: .Todo, possibleNewOrder: possibleNewSectionOrder, list: list) {[weak self] result in
 
             if let section = result.sucessResult {
                 
                 // updateCategory: false: we don't touch product's category from list items - our inputs affect only the section. We use them though to create a category in the case a category with the section's name doesn't exists already. A product needs a category and it's logical to simply default this to the section if it doesn't exist, instead of making user enter a second input for the category. From user's perspective, most times category = section.
-                Providers.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.section, categoryColor: listItemInput.sectionColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, store: listItemInput.store, updateCategory: false) {result in
+                //Providers.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.section, categoryColor: listItemInput.sectionColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, store: listItemInput.store, updateCategory: false)
+                Providers.productProvider.mergeOrCreateProduct(listItemInput.name, category: listItemInput.section, categoryColor: listItemInput.sectionColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, updateCategory: false) {result in
             
                     if let product = result.sucessResult {
                     
@@ -328,179 +328,190 @@ class ListItemProviderImpl: ListItemProvider {
         
         typealias BGResult = (success: Bool, listItems: [ListItem]) // helper to differentiate between nil result (db error) and nil listitem (the item was already returned from memory - don't return anything)
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in
+        dbProvider.withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
             
-            if let weakSelf = self {
-                let bgResultMaybe: BGResult? = syncedRet(weakSelf) {
-                    do {
-                        let memAddedListItemsMaybe = weakSelf.memProvider.addOrUpdateListItems(prototypes, status: status, list: list, note: note)
-                        if let addedListItems = memAddedListItemsMaybe {
-                            dispatch_async(dispatch_get_main_queue(), {
-                                // return in advance so our client is quick - the database update continues in the background
-                                handler(ProviderResult(status: .Success, sucessResult: addedListItems))
-                            })
+            let storePrototypes: [StoreListItemPrototype] = {
+                let existingStoreProducts = DBProviders.storeProductProvider.storeProductsSync(prototypes.map{$0.product}, store: list.store ?? "") ?? {
+                    QL4("An error ocurred fetching store products, array is nil")
+                    return [] // maybe we should exit from method here - for now only error log and return empty array
+                    }()
+                let existingStoreProductsDict = existingStoreProducts.toDictionary{($0.product.uuid, $0)}
+                return prototypes.map {prototype in
+                    let storeProduct = existingStoreProductsDict[prototype.product.uuid] ?? {
+                        let storeProduct = StoreProduct(uuid: NSUUID().UUIDString, price: 1, baseQuantity: 1, unit: StoreProductUnit.None, store: list.store ?? "", product: prototype.product)
+                        QL1("Store product doesn't exist, created: \(storeProduct)")
+                        return storeProduct
+                    }()
+                    return StoreListItemPrototype(product: storeProduct, quantity: prototype.quantity, targetSectionName: prototype.targetSectionName, targetSectionColor: prototype.targetSectionColor)
+                }
+            }()
+            
+            let memAddedListItemsMaybe = weakSelf.memProvider.addOrUpdateListItems(storePrototypes, status: status, list: list, note: note)
+            if let addedListItems = memAddedListItemsMaybe {
+                dispatch_async(dispatch_get_main_queue(), {
+                    // return in advance so our client is quick - the database update continues in the background
+                    handler(ProviderResult(status: .Success, sucessResult: addedListItems))
+                })
+            }
+
+            return weakSelf.dbProvider.doInWriteTransactionSync({realm in
+
+                // even if we have the possibly updated item from mem cache, do always a fetch to db and use this item - to guarantee max. consistency.s
+                // theoretically the state in mem should match the state in db so this fetch should not be necessary, but for now let's be secure.
+                
+                // see if there's already a listitem for this product in the list - if yes only increment it
+                
+                let existingListItems = realm.objects(DBListItem).filter(DBListItem.createFilterList(list.uuid))
+                let existingListItemsDict: [String: DBListItem] = existingListItems.toDictionary{(DBStoreProduct.nameBrandStoreKey($0.product.product.name, brand: $0.product.product.brand, store: $0.product.store), $0)}
+                
+                // Quick access for mem cache items - for some things we need to check if list items were added in the mem cache
+                let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(DBStoreProduct.nameBrandStoreKey($0.product.product.name, brand: $0.product.product.brand, store: $0.product.store), $0)}
+                
+                // Holds count of new items per section, which is incremented while we loop through prototypes
+                // we need this to determine the order of the items in the sections - which is the last index in existing items + new items count so far in section
+                var sectionCountNewItemsDict: [String: Int] = [:]
+                
+                var savedListItems: [ListItem] = []
+                
+                let dbList = ListMapper.dbWithList(list)
+                
+                for prototype in storePrototypes {
+                    if var existingListItem = existingListItemsDict[DBStoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)] {
+                        
+                        existingListItem.increment(ListItemStatusQuantity(status: status, quantity: prototype.quantity))
+                        
+                        // load section with given name or create a new one if it doesn't exist
+                        let section: DBSection = {
+                            realm.objects(DBSection).filter(DBSection.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first ?? {
+                                let sectionOrder = orderMaybe ?? getOrderForNewSection(existingListItems)
+                                let newSection = DBSection(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, bgColorHex: prototype.targetSectionColor.hexStr, list: dbList, order: ListItemStatusOrder(status: status, order: sectionOrder))
+                                QL1("Section: \(prototype.targetSectionName) doesn't exist, creating a new one. uuid: \(newSection.uuid), in list: \(list.uuid)")
+                                return newSection
+                                }()
+                        }()
+                        
+                        // for some reason it crashes in this line (yes here not when saving) with reason: 'Can't set primary key property 'uuid' to existing value '03F949BB-AE2A-427A-B49B-D53FA290977D'.' (this is the uuid of the list), no idea why, so doing a copy.
+                        //                                    existingListItem.section = section
+                        existingListItem = existingListItem.copy(section: section)
+                        
+                        if let note = note {
+                            existingListItem.note = note
                         }
                         
-                        return weakSelf.dbProvider.doInWriteTransactionSync({realm in
-                            
-                            // even if we have the possibly updated item from mem cache, do always a fetch to db and use this item - to guarantee max. consistency.s
-                            // theoretically the state in mem should match the state in db so this fetch should not be necessary, but for now let's be secure.
-                            
-                            // see if there's already a listitem for this product in the list - if yes only increment it
-                            
-                            let existingListItems = realm.objects(DBListItem).filter(DBListItem.createFilterList(list.uuid))
-                            let existingListItemsDict: [String: DBListItem] = existingListItems.toDictionary{(DBProduct.nameBrandKey($0.product.name, brand: $0.product.brand), $0)}
-                            
-                            // Quick access for mem cache items - for some things we need to check if list items were added in the mem cache
-                            let memoryCacheItemsDict: [String: ListItem]? = memAddedListItemsMaybe?.toDictionary{(DBProduct.nameBrandKey($0.product.name, brand: $0.product.brand), $0)}
-                            
-                            // Holds count of new items per section, which is incremented while we loop through prototypes
-                            // we need this to determine the order of the items in the sections - which is the last index in existing items + new items count so far in section
-                            var sectionCountNewItemsDict: [String: Int] = [:]
-                            
-                            var savedListItems: [ListItem] = []
-                            
-                            let dbList = ListMapper.dbWithList(list)
-                            
-                            for prototype in prototypes {
-                                if var existingListItem = existingListItemsDict[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)] {
-                                    
-                                    existingListItem.increment(ListItemStatusQuantity(status: status, quantity: prototype.quantity))
-                                    
-                                    // load section with given name or create a new one if it doesn't exist
-                                    let section: DBSection = {
-                                        realm.objects(DBSection).filter(DBSection.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first ?? {
-                                            let sectionOrder = orderMaybe ?? getOrderForNewSection(existingListItems)
-                                            let newSection = DBSection(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, bgColorHex: prototype.targetSectionColor.hexStr, list: dbList, order: ListItemStatusOrder(status: status, order: sectionOrder))
-                                            QL1("Section: \(prototype.targetSectionName) doesn't exist, creating a new one. uuid: \(newSection.uuid), in list: \(list.uuid)")
-                                            return newSection
-                                        }()
-                                    }()
-
-                                    // for some reason it crashes in this line (yes here not when saving) with reason: 'Can't set primary key property 'uuid' to existing value '03F949BB-AE2A-427A-B49B-D53FA290977D'.' (this is the uuid of the list), no idea why, so doing a copy.
-//                                    existingListItem.section = section
-                                    existingListItem = existingListItem.copy(section: section)
-                                    
-                                    if let note = note {
-                                        existingListItem.note = note
+                        // let incrementedListItem = existingListItem.copy(quantity: existingListItem.quantity + 1)
+                        realm.add(existingListItem, update: true)
+                        
+                        let savedListItem = ListItemMapper.listItemWithDB(existingListItem)
+                        
+                        QL1("item exists, affter incrementent: \(savedListItem)")
+                        
+                        savedListItems.append(savedListItem)
+                        
+                        
+                    } else { // item doesn't exist
+                        
+                        // see if there's already a section for the new list item in the list, if not create a new one
+//                        let listItemsInList = realm.objects(DBListItem).filter(DBListItem.createFilter(list))
+                        let sectionName = prototype.targetSectionName
+                        let section = existingListItems.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
+                            return SectionMapper.sectionWithDB(item.section)
+                            } ?? { // section not existent create a new one
+                                
+                                let sectionCount = getOrderForNewSection(existingListItems)
+                                
+                                // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
+                                return memoryCacheItemsDict?[DBStoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)]?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
+                            }()
+                        
+                        // determine list item order and init/update the map with list items count / section as side effect (which is used to determine the order of the next item)
+                        let listItemOrder: Int = {
+                            if let sectionCount = sectionCountNewItemsDict[section.uuid] { // if already initialised (existing items count) increment 1 (for new item we are adding)
+                                let order = sectionCount + 1
+                                sectionCountNewItemsDict[section.uuid] = order
+                                return order
+                                
+                            } else { // init to existing count
+                                var existingCountInSection = 0
+                                // Note that currently we are doing this iteration even if we just created the section, where order is always 0. Not a big issue in our case but can be optimised (TODO?)
+                                for existingListItem in existingListItems {
+                                    if existingListItem.section.uuid == section.uuid && existingListItem.hasStatus(status) {
+                                        existingCountInSection++
                                     }
-                                    
-                                    // let incrementedListItem = existingListItem.copy(quantity: existingListItem.quantity + 1)
-                                    realm.add(existingListItem, update: true)
-                                    
-                                    let savedListItem = ListItemMapper.listItemWithDB(existingListItem)
-                                    
-                                    QL1("item exists, affter incrementent: \(savedListItem)")
-
-                                    savedListItems.append(savedListItem)
-                                    
-                                    
-                                } else { // item doesn't exist
-                                    
-//                                    // see if there's already a section for the new list item in the list, if not create a new one
-//                                    let listItemsInList = realm.objects(DBListItem).filter(DBListItem.createFilter(list))
-                                    let sectionName = prototype.targetSectionName
-                                    let section = existingListItems.findFirst{$0.section.name == sectionName}.map {item in  // it's is a bit more practical to use plain models and map than adding initialisers to db objs
-                                        return SectionMapper.sectionWithDB(item.section)
-                                        } ?? { // section not existent create a new one
-                                            
-                                            let sectionCount = getOrderForNewSection(existingListItems)
-                                            
-                                            // if we already created a new section in the memory cache use that one otherwise create (create case normally only if memcache is disabled)
-                                            return memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.section ?? Section(uuid: NSUUID().UUIDString, name: sectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: sectionCount))
-                                        }()
-                                    
-                                    // determine list item order and init/update the map with list items count / section as side effect (which is used to determine the order of the next item)
-                                    let listItemOrder: Int = {
-                                        if let sectionCount = sectionCountNewItemsDict[section.uuid] { // if already initialised (existing items count) increment 1 (for new item we are adding)
-                                            let order = sectionCount + 1
-                                            sectionCountNewItemsDict[section.uuid] = order
-                                            return order
-                                            
-                                        } else { // init to existing count
-                                            var existingCountInSection = 0
-                                            // Note that currently we are doing this iteration even if we just created the section, where order is always 0. Not a big issue in our case but can be optimised (TODO?)
-                                            for existingListItem in existingListItems {
-                                                if existingListItem.section.uuid == section.uuid && existingListItem.hasStatus(status) {
-                                                    existingCountInSection++
-                                                }
-                                            }
-                                            sectionCountNewItemsDict[section.uuid] = existingCountInSection
-                                            return existingCountInSection
-                                        }
-                                    }()
-                                    
-                                    let uuid = memoryCacheItemsDict?[DBProduct.nameBrandKey(prototype.product.name, brand: prototype.product.brand)]?.uuid ?? NSUUID().UUIDString
-                                    
-                                    // create the list item and save it
-                                    // memcache uuid: if we created a new listitem in memcache use this uuid so our data is consistent mem/db
-                                    let listItem = ListItem(
-                                        uuid: uuid,
-                                        product: prototype.product,
-                                        section: section,
-                                        list: list,
-                                        note: note,
-                                        statusOrder: ListItemStatusOrder(status: status, order: listItemOrder),
-                                        statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.quantity)
-                                    )
-
-                                    QL1("item doesn't exist, created: \(listItem)")
-                                    
-                                    let dbListItem = ListItemMapper.dbWithListItem(listItem)
-                                    realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
-                                    
-                                    let savedListItem = ListItemMapper.listItemWithDB(dbListItem)
-                                    savedListItems.append(savedListItem)
                                 }
+                                sectionCountNewItemsDict[section.uuid] = existingCountInSection
+                                return existingCountInSection
                             }
-                            
-                            return (success: true, listItems: savedListItems)
-                        })
+                        }()
+                        
+                        let uuid = memoryCacheItemsDict?[DBStoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)]?.uuid ?? NSUUID().UUIDString
+                        
+                        
+                        // create the list item and save it
+                        // memcache uuid: if we created a new listitem in memcache use this uuid so our data is consistent mem/db
+                        let listItem = ListItem(
+                            uuid: uuid,
+                            product: prototype.product,
+                            section: section,
+                            list: list,
+                            note: note,
+                            statusOrder: ListItemStatusOrder(status: status, order: listItemOrder),
+                            statusQuantity: ListItemStatusQuantity(status: status, quantity: prototype.quantity)
+                        )
+                        
+                        QL1("item doesn't exist, created: \(listItem)")
+                        
+                        let dbListItem = ListItemMapper.dbWithListItem(listItem)
+                        realm.add(dbListItem, update: true) // this should be update false, but update true is a little more "safer" (e.g uuid clash?), TODO review, maybe false better performance
+                        
+                        let savedListItem = ListItemMapper.listItemWithDB(dbListItem)
+                        savedListItems.append(savedListItem)
                     }
                 }
                 
-                dispatch_async(dispatch_get_main_queue(), {
+                return (success: true, listItems: savedListItems)
+            })
+
+            
+            }) {[weak self] (bgResultMaybe: BGResult?) -> Void in
+                
+                if let bgResult = bgResultMaybe { // bg ran successfully
                     
-                    if let bgResult = bgResultMaybe { // bg ran successfully
+                    if self?.memProvider.enabled ?? false {
+                        // bgResult & mem enabled -> do nothing: added item was returned to handler already (after add to mem provider), no need to return it again
                         
-                        if self?.memProvider.enabled ?? false {
-                            // bgResult & mem enabled -> do nothing: added item was returned to handler already (after add to mem provider), no need to return it again
-                            
-                        } else {
-                            // mem provider is not enabled - controller is waiting for result - return it
-                            handler(ProviderResult(status: .Success, sucessResult: bgResult.listItems))
-                        }
-                        
-                        //                        if let addedListItem = bgResult.listItem { // bg returned a list item
-                        //                            handler(ProviderResult(status: .Success, sucessResult: bgResult.addedListItem))
-                        //
-                        //
-                        //                        } else {
-                        //                            // bg was successful but didn't return a list item, this happens when the item was returned from the memory cache
-                        //                            // in this case we do nothing - the client already has the added object
-                        //                        }
-                        
-                        
-                        // add to server
-                        self?.remoteProvider.add(bgResult.listItems) {remoteResult in
-                            if let remoteListItems = remoteResult.successResult {
-                                self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
-                                }
-                            } else {
-                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[ListItem]>) in
-                                    QL4("Remote call no success: \(remoteResult)")
-                                    self?.memProvider.invalidate()
-                                    handler(result)
-                                })
-                            }
-                        }
-                        
-                    } else { // there was a database error
-                        handler(ProviderResult(status: .DatabaseUnknown))
+                    } else {
+                        // mem provider is not enabled - controller is waiting for result - return it
+                        handler(ProviderResult(status: .Success, sucessResult: bgResult.listItems))
                     }
-                })
-            }
-        })
+                    
+                    //                        if let addedListItem = bgResult.listItem { // bg returned a list item
+                    //                            handler(ProviderResult(status: .Success, sucessResult: bgResult.addedListItem))
+                    //
+                    //
+                    //                        } else {
+                    //                            // bg was successful but didn't return a list item, this happens when the item was returned from the memory cache
+                    //                            // in this case we do nothing - the client already has the added object
+                    //                        }
+                    
+                    
+                    // add to server
+                    self?.remoteProvider.add(bgResult.listItems) {remoteResult in
+                        if let remoteListItems = remoteResult.successResult {
+                            self?.dbProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[ListItem]>) in
+                                QL4("Remote call no success: \(remoteResult)")
+                                self?.memProvider.invalidate()
+                                handler(result)
+                            })
+                        }
+                    }
+                    
+                } else { // there was a database error
+                    handler(ProviderResult(status: .DatabaseUnknown))
+                }
+        }
     }
 
     func addListItem(product: Product, status: ListItemStatus, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {

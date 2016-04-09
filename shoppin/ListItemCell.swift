@@ -55,11 +55,11 @@ class ListItemCell: SwipeableCell {
                 
                 let listItem = tableViewListItem.listItem
                 
-                nameLabel.text = NSLocalizedString(listItem.product.name, comment: "")
+                nameLabel.text = NSLocalizedString(listItem.product.product.name, comment: "")
                 quantityLabel.text = String("\(listItem.quantity(status)) \(listItem.product.unit.shortText)")
                 
-                centerVerticallyNameLabelConstraint.constant = listItem.product.brand.isEmpty ? 0 : 10
-                brandLabel.text = listItem.product.brand
+                centerVerticallyNameLabelConstraint.constant = listItem.product.product.brand.isEmpty ? 0 : 10
+                brandLabel.text = listItem.product.product.brand
                 
                 sectionColorView.backgroundColor = listItem.section.color
                 

@@ -232,9 +232,6 @@ class RealmPlanProvider: RealmProvider {
                             updatedCategory.name = planItemInput.category
                             updatedCategory.setColor(planItemInput.categoryColor)
                             existingPlanItemProduct.category = updatedCategory
-                            existingPlanItemProduct.baseQuantity = planItemInput.baseQuantity
-                            existingPlanItemProduct.unit = planItemInput.unit.rawValue
-                            existingPlanItemProduct.price = planItemInput.price
                             
                             // update the plan item
                             existingPlanItem.quantity = existingPlanItem.quantity + planItemInput.quantity
@@ -267,10 +264,7 @@ class RealmPlanProvider: RealmProvider {
                                     let product = DBProduct()
                                     product.uuid = NSUUID().UUIDString
                                     product.name = planItemInput.name
-                                    product.price = planItemInput.price
                                     product.category = category
-                                    product.baseQuantity = planItemInput.baseQuantity
-                                    product.unit = planItemInput.unit.rawValue
                                     return product
                                 }()
                             }()

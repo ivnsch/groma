@@ -19,7 +19,7 @@ typealias ListItemStatusOrder = (status: ListItemStatus, order: Int) // TODO ren
 
 final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     let uuid: String
-    let product: Product
+    let product: StoreProduct
     var section: Section
     var list: List
 
@@ -63,7 +63,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         }
     }
     
-    init(uuid: String, product: Product, section: Section, list: List, note: String? = nil, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, product: StoreProduct, section: Section, list: List, note: String? = nil, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.product = product
         self.section = section
@@ -82,7 +82,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         self.removed = removed
     }
 
-    convenience init(uuid: String, product: Product, section: Section, list: List, note: String? = nil, statusOrder: ListItemStatusOrder, statusQuantity: ListItemStatusQuantity, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String? = nil, statusOrder: ListItemStatusOrder, statusQuantity: ListItemStatusQuantity, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         
         func quantity(selfStatus: ListItemStatus, _ statusQuantity: ListItemStatusQuantity) -> Int {
             return statusQuantity.status == selfStatus ? statusQuantity.quantity : 0
@@ -110,7 +110,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
 
-    convenience init(uuid: String, product: Product, section: Section, list: List, note: String? = nil, todoQuantity: Int, todoOrder: Int) {
+    convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String? = nil, todoQuantity: Int, todoOrder: Int) {
         self.init(
             uuid: uuid,
             product: product,
@@ -148,32 +148,32 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     
     var debugDescription: String {
 //        return shortDebugDescription
-//        return longDebugDescription
+        return longDebugDescription
 //        return quantityDebugDescription
-        return quantityAndOrderDebugDescription
+//        return quantityAndOrderDebugDescription
     }
     
     var shortOrderDebugDescription: String {
-        return "[\(product.name)], todo: \(todoOrder), done: \(doneOrder), stash: \(stashOrder)"
+        return "[\(product.product.name)], todo: \(todoOrder), done: \(doneOrder), stash: \(stashOrder)"
     }
     
     private var shortDebugDescription: String {
-        return "[\(product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)"
+        return "[\(product.product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)"
     }
     
     private var quantityDebugDescription: String {
-        return "\(uuid), \(product.name), todoQuantity: \(todoQuantity), doneQuantity: \(doneQuantity), stashQuantity: \(stashQuantity)"
+        return "\(uuid), \(product.product.name), todoQuantity: \(todoQuantity), doneQuantity: \(doneQuantity), stashQuantity: \(stashQuantity)"
     }
     
     private var quantityAndOrderDebugDescription: String {
-        return "\(uuid), \(product.name), todoQuantity: \(todoQuantity), doneQuantity: \(doneQuantity), stashQuantity: \(stashQuantity), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder)"
+        return "\(uuid), \(product.product.name), todoQuantity: \(todoQuantity), doneQuantity: \(doneQuantity), stashQuantity: \(stashQuantity), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder)"
     }
     
     private var longDebugDescription: String {
         return "{\(self.dynamicType) uuid: \(uuid), note: \(note), productUuid: \(product), sectionUuid: \(section), listUuid: \(list), todoQuantity: \(todoQuantity), todoOrder: \(todoOrder), doneQuantity: \(doneQuantity), doneOrder: \(doneOrder), stashQuantity: \(stashQuantity), stashOrder: \(stashOrder), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
     }
     
-    func copy(uuid uuid: String? = nil, product: Product? = nil, section: Section? = nil, list: List? = nil, note: String?, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> ListItem {
+    func copy(uuid uuid: String? = nil, product: StoreProduct? = nil, section: Section? = nil, list: List? = nil, note: String?, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> ListItem {
         return ListItem(
             uuid: uuid ?? self.uuid,
             product: product ?? self.product,
@@ -238,7 +238,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         return increment(increments.todo, doneQuantity: increments.done, stashQuantity: increments.stash)
     }
     
-    func copyIncrement(uuid uuid: String? = nil, product: Product? = nil, section: Section? = nil, list: List? = nil, note: String?, todoOrder: Int? = nil, doneOrder: Int? = nil, stashOrder: Int? = nil, statusQuantity: ListItemStatusQuantity) -> ListItem {
+    func copyIncrement(uuid uuid: String? = nil, product: StoreProduct? = nil, section: Section? = nil, list: List? = nil, note: String?, todoOrder: Int? = nil, doneOrder: Int? = nil, stashOrder: Int? = nil, statusQuantity: ListItemStatusQuantity) -> ListItem {
         
         // returns self quantity incremented if self status is the same as statusQuantity status, or returns self quantity unchanged
         func incr(selfQuantity: Int, _ selfStatus: ListItemStatus, _ statusQuantity: ListItemStatusQuantity) -> Int {
@@ -309,8 +309,13 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
     
-    func update(product: Product) -> ListItem {
+    func update(product: StoreProduct) -> ListItem {
         return copy(product: product, note: nil)
+    }
+
+    func update(product: Product) -> ListItem {
+        let updatedStoreProduct = self.product.copy(product: product)
+        return copy(product: updatedStoreProduct, note: nil)
     }
     
     func switchStatusQuantity(status: ListItemStatus, targetStatus: ListItemStatus) -> ListItem {
@@ -393,4 +398,4 @@ func ==(lhs: ListItem, rhs: ListItem) -> Bool {
 
 // convenience (redundant) holder to avoid having to iterate through listitems to find unique products, sections, list
 // so products, sections arrays and list are the result of extracting the unique products, sections and list from listItems array
-typealias ListItemsWithRelations = (listItems: [ListItem], products: [Product], sections: [Section])
+typealias ListItemsWithRelations = (listItems: [ListItem], storeProducts: [StoreProduct], products: [Product], sections: [Section])

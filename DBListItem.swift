@@ -13,7 +13,7 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
     
     dynamic var uuid: String = ""
     dynamic var sectionOpt: DBSection? = DBSection()
-    dynamic var productOpt: DBProduct? = DBProduct()
+    dynamic var productOpt: DBStoreProduct? = DBStoreProduct()
     dynamic var listOpt: DBList? = DBList()
     dynamic var note: String = "" // TODO review if we can use optionals in realm, if not check if in newer version
     
@@ -42,9 +42,9 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
         }
     }
     
-    var product: DBProduct {
+    var product: DBStoreProduct {
         get {
-            return productOpt ?? DBProduct()
+            return productOpt ?? DBStoreProduct()
         }
         set(newProduct) {
             productOpt = newProduct
@@ -55,7 +55,7 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
         return "uuid"
     }
     
-    convenience init(uuid: String, product: DBProduct, section: DBSection, list: DBList, note: String, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    convenience init(uuid: String, product: DBStoreProduct, section: DBSection, list: DBList, note: String, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         
         self.init()
         
@@ -115,7 +115,7 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
         }
     }
     
-    func copy(uuid uuid: String? = nil, product: DBProduct? = nil, section: DBSection? = nil, list: DBList? = nil, note: String? = nil, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> DBListItem {
+    func copy(uuid uuid: String? = nil, product: DBStoreProduct? = nil, section: DBSection? = nil, list: DBList? = nil, note: String? = nil, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> DBListItem {
         return DBListItem(
             uuid: uuid ?? self.uuid,
             product: product ?? self.product,
@@ -166,7 +166,7 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
     // Finds list items that have the same product names as listItems and are in the same list
     // WARN: Assumes all the list items belong to the same list (list uuid of first list item is used)
     static func createFilter(listItems: [ListItem]) -> String {
-        let productNamesStr: String = listItems.map{"'\($0.product.name)'"}.joinWithSeparator(",")
+        let productNamesStr: String = listItems.map{"'\($0.product.product.name)'"}.joinWithSeparator(",")
         let listUuid = listItems.first?.list.uuid ?? ""
         return "productOpt.name IN {\(productNamesStr)} AND listOpt.uuid = '\(listUuid)'"
     }
@@ -174,10 +174,10 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
     // MARK: - CustomDebugStringConvertible
     
     override var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), \(product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)}"
+        return "{\(self.dynamicType) uuid: \(uuid), \(product.product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)}"
     }
     
-    static func fromDict(dict: [String: AnyObject], section: DBSection, product: DBProduct, list: DBList) -> DBListItem {
+    static func fromDict(dict: [String: AnyObject], section: DBSection, product: DBStoreProduct, list: DBList) -> DBListItem {
         let item = DBListItem()
         item.uuid = dict["uuid"]! as! String
         item.section = section
@@ -198,8 +198,7 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid
         dict["sectionInput"] = section.toDict()
-        dict["productInput"] = product.toDict()
-        
+        dict["storeProductInput"] = product.toDict()
         // TODO fix sync input models
 //        dict["list"] = list.toDict()
         dict["listUuid"] = list.uuid

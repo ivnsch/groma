@@ -14,13 +14,9 @@ class ProductMapper {
         return Product(
             uuid: dbProduct.uuid,
             name: dbProduct.name,
-            price: dbProduct.price,
             category: ProductCategoryMapper.categoryWithDB(dbProduct.category),
-            baseQuantity: dbProduct.baseQuantity,
-            unit: ProductUnit(rawValue: dbProduct.unit)!,
             fav: dbProduct.fav,
-            brand: dbProduct.brand,
-            store: dbProduct.store
+            brand: dbProduct.brand
         )
     }
     
@@ -28,13 +24,9 @@ class ProductMapper {
         let dbProduct = DBProduct()
         dbProduct.uuid = product.uuid
         dbProduct.name = product.name
-        dbProduct.price = product.price
         dbProduct.category = ProductCategoryMapper.dbWithCategory(product.category)
-        dbProduct.baseQuantity = product.baseQuantity
-        dbProduct.unit = product.unit.rawValue
         dbProduct.fav = product.fav
         dbProduct.brand = product.brand
-        dbProduct.store = product.store
         return dbProduct
     }
     
@@ -55,13 +47,9 @@ class ProductMapper {
         return Product(
             uuid: remoteProduct.uuid,
             name: remoteProduct.name,
-            price: remoteProduct.price,
             category: category,
-            baseQuantity: remoteProduct.baseQuantity,
-            unit: ProductUnit(rawValue: remoteProduct.unit)!,
             fav: remoteProduct.fav,
-            brand: remoteProduct.brand,
-            store: remoteProduct.store
+            brand: remoteProduct.brand
         )
     }
     
@@ -69,13 +57,9 @@ class ProductMapper {
         let dbProduct = DBProduct()
         dbProduct.uuid = product.uuid
         dbProduct.name = product.name
-        dbProduct.price = product.price
         dbProduct.category = ProductCategoryMapper.dbCategoryWithRemote(category)
-        dbProduct.baseQuantity = product.baseQuantity
-        dbProduct.unit = product.unit
         dbProduct.fav = product.fav
         dbProduct.brand = product.brand
-        dbProduct.store = product.store
         dbProduct.dirty = false
         return dbProduct
     }

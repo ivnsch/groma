@@ -30,8 +30,9 @@ class InventoryItemWithHistoryEntry: Equatable {
         self.user = user
     }
 
-    convenience init(inventoryItem: InventoryItem, historyItemUuid: String, addedDate: NSDate, user: SharedUser) {
-        self.init(inventoryItem: inventoryItem, historyItemUuid: historyItemUuid, paidPrice: inventoryItem.product.price, addedDate: addedDate, user: user)
+
+    convenience init(inventoryItem: InventoryItem, storeProduct: StoreProduct, historyItemUuid: String, addedDate: NSDate, user: SharedUser) {
+        self.init(inventoryItem: inventoryItem, historyItemUuid: historyItemUuid, paidPrice: storeProduct.price, addedDate: addedDate, user: user)
     }
     
     func copy(inventoryItem inventoryItem: InventoryItem? = nil, historyItemUuid: String? = nil, paidPrice: Float? = nil, addedDate: NSDate? = nil, user: SharedUser? = nil) -> InventoryItemWithHistoryEntry {

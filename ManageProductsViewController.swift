@@ -239,14 +239,14 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         
         func onEditItem(input: ListItemInput, editingItem: AddEditProductControllerEditingData) {
             let updatedCategory = editingItem.product.category.copy(name: input.section, color: input.sectionColor)
-            let updatedProduct = editingItem.product.copy(name: input.name, price: input.price, category: updatedCategory, brand: input.brand, store: input.store)
+            let updatedProduct = editingItem.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
             Providers.productProvider.update(updatedProduct, remote: true, successHandler{[weak self] in
                 self?.updateProductUI(updatedProduct, indexPath: editingItem.indexPath)
             })
         }
         
         func onAddItem(input: ListItemInput) {
-            let product = ProductInput(name: input.name, price: input.price, category: input.section, categoryColor: input.sectionColor, baseQuantity: input.baseQuantity, unit: input.unit, brand: input.brand, store: input.store)
+            let product = ProductInput(name: input.name, price: input.price, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
             
             Providers.productProvider.countProducts(successHandler {[weak self] count in
                 if let weakSelf = self {

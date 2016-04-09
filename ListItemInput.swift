@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO rename this is a generic input container from quick add that is used now not only in listitems but groups, inventory and products screen.
 struct ListItemInput {
     
     let name: String
@@ -17,11 +18,10 @@ struct ListItemInput {
     let sectionColor: UIColor
     let note: String?
     let baseQuantity: Float
-    let unit: ProductUnit
+    let unit: StoreProductUnit
     let brand: String
-    let store: String
     
-    init(name: String, quantity: Int, price: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+    init(name: String, quantity: Int, price: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: StoreProductUnit, brand: String) {
         self.name = name
         self.quantity = quantity
         self.price = price
@@ -31,6 +31,5 @@ struct ListItemInput {
         self.baseQuantity = baseQuantity
         self.unit = unit
         self.brand = brand
-        self.store = store
     }
 }

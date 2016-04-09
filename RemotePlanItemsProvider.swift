@@ -52,9 +52,6 @@ class RemotePlanItemsProvider {
             "productInput": [
                 "uuid": planItem.product.uuid,
                 "name": planItem.product.name,
-                "price": planItem.product.price,
-                "baseQuantity": planItem.product.baseQuantity,
-                "unit": planItem.product.unit.rawValue,
                 "category": RemoteListItemProvider().toRequestParams(planItem.product.category)
             ]
         ]

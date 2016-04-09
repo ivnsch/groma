@@ -411,14 +411,14 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     }
 
     func removeListItemsReferencingCategory(categoryUuid: String) {
-        for (tableViewListItem, _) in findListItemsWithIndexPath({$0.product.category.uuid == categoryUuid}) {
+        for (tableViewListItem, _) in findListItemsWithIndexPath({$0.product.product.category.uuid == categoryUuid}) {
             removeListItem(tableViewListItem.listItem)
         }
     }
     
     // Used by websocket, when receiving a notification of an updated product
     func updateProduct(product: Product, status: ListItemStatus) {
-        if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.product.uuid == product.uuid}) {
+        if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.product.product.uuid == product.uuid}) {
             let updated = tableViewListItem.listItem.update(product)
             updateListItem(updated, status: status, notifyRemote: false)
         } else {

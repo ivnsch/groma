@@ -7,11 +7,12 @@
 //
 
 import Foundation
+import QorumLogs
 
 class ListItemMapper {
     
     class func listItemWithDB(dbListItem: DBListItem) -> ListItem {
-        let product = ProductMapper.productWithDB(dbListItem.product)
+        let product = StoreProductMapper.productWithDB(dbListItem.product)
         let section = SectionMapper.sectionWithDB(dbListItem.section)
         let list = ListMapper.listWithDB(dbListItem.list)
         return ListItem(
@@ -41,7 +42,7 @@ class ListItemMapper {
         dbListItem.stashQuantity = listItem.stashQuantity
         dbListItem.stashOrder = listItem.stashOrder
         
-        dbListItem.product = ProductMapper.dbWithProduct(listItem.product)
+        dbListItem.product = StoreProductMapper.dbWithProduct(listItem.product)
         dbListItem.section = SectionMapper.dbWithSection(listItem.section)
         dbListItem.list = ListMapper.dbWithList(listItem.list)
         
@@ -79,7 +80,22 @@ class ListItemMapper {
                     dict[remoteProduct.uuid] = product
                     arr.append(product)
                 } else {
-                    print("Error: ListItemMapper.listItemsWithRemote: Got product with category uuid: \(remoteProduct.categoryUuid) which is not in the category dict: \(categories)")
+                    QL4("Got product with category uuid: \(remoteProduct.categoryUuid) which is not in the category dict: \(categories)")
+                }
+            }
+            return (dict, arr)
+        }
+        
+        func toStoreProductDict(remoteProducts: [RemoteStoreProduct], products: [String: Product]) -> ([String: StoreProduct], [StoreProduct]) {
+            var dict: [String: StoreProduct] = [:]
+            var arr: [StoreProduct] = []
+            for remoteProduct in remoteProducts {
+                if let product = products[remoteProduct.productUuid] {
+                    let storeProduct = StoreProductMapper.productWithRemote(remoteProduct, product: product)
+                    dict[remoteProduct.uuid] = storeProduct
+                    arr.append(storeProduct)
+                } else {
+                    QL4("Got store product with product uuid: \(remoteProduct.productUuid) which is not in the products dict: \(products)")
                 }
             }
             return (dict, arr)
@@ -94,7 +110,7 @@ class ListItemMapper {
                     dict[remoteSection.uuid] = section
                     arr.append(section)
                 } else {
-                    print("Error: ListItemMapper.listItemsWithRemote: Got section with list uuid: \(remoteSection.listUuid) which is not in the list dict: \(lists)")
+                    QL4("Got section with list uuid: \(remoteSection.listUuid) which is not in the list dict: \(lists)")
                 }
             }
             return (dict, arr)
@@ -105,6 +121,7 @@ class ListItemMapper {
 
         let (productsCategoriesDict, _) = toProductCategoryDict(remoteListItems.productsCategories) // TODO review if productsCategories array is necessary if not remove
         let (productsDict, products) = toProductDict(remoteListItems.products, categories: productsCategoriesDict)
+        let (storeProductsDict, storeProducts) = toStoreProductDict(remoteListItems.storeProducts, products: productsDict)
         let (sectionsDict, sections) = toSectionDict(remoteListItems.sections, lists: listDict)
 
         let remoteListItemsArr = remoteListItems.listItems
@@ -112,7 +129,7 @@ class ListItemMapper {
         let listItems = remoteListItemsArr.map {remoteListItem in
             ListItem(
                 uuid: remoteListItem.uuid,
-                product: productsDict[remoteListItem.productUuid]!,
+                product: storeProductsDict[remoteListItem.productUuid]!,
                 section: sectionsDict[remoteListItem.sectionUuid]!,
                 list: listDict[remoteListItem.listUuid]!,
                 note: remoteListItem.note,
@@ -135,6 +152,7 @@ class ListItemMapper {
         
         return (
             maybeSortedItems,
+            storeProducts,
             products,
             sections
         )

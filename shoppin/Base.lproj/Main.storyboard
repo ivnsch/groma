@@ -17,6 +17,7 @@
             <string>HelveticaNeue</string>
             <string>HelveticaNeue</string>
             <string>HelveticaNeue</string>
+            <string>HelveticaNeue</string>
         </mutableArray>
         <mutableArray key="HelveticaNeueLights.ttc">
             <string>HelveticaNeue-Light</string>
@@ -1696,7 +1697,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JGo-Cb-Ord">
-                                            <rect key="frame" x="14" y="24" width="42" height="20"/>
+                                            <rect key="frame" x="14" y="14" width="42" height="20"/>
                                             <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -1714,18 +1715,28 @@
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZxO-Om-OC1">
+                                            <rect key="frame" x="14" y="36" width="32" height="16"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="JGo-Cb-Ord" firstAttribute="centerY" secondItem="HrI-DL-GBd" secondAttribute="centerY" id="3hu-pT-XRR"/>
+                                        <constraint firstItem="JGo-Cb-Ord" firstAttribute="centerY" secondItem="HrI-DL-GBd" secondAttribute="centerY" constant="-10" id="3hu-pT-XRR"/>
                                         <constraint firstItem="mx1-zn-oyy" firstAttribute="leading" secondItem="DGQ-wr-teW" secondAttribute="trailing" constant="4" id="56f-aK-X8I"/>
                                         <constraint firstItem="JGo-Cb-Ord" firstAttribute="leading" secondItem="HrI-DL-GBd" secondAttribute="leading" constant="14" id="8bc-CX-Dcb"/>
+                                        <constraint firstItem="ZxO-Om-OC1" firstAttribute="leading" secondItem="HrI-DL-GBd" secondAttribute="leading" constant="14" id="903-hO-dQh"/>
                                         <constraint firstItem="mx1-zn-oyy" firstAttribute="centerY" secondItem="HrI-DL-GBd" secondAttribute="centerY" id="NTY-T1-Df1"/>
+                                        <constraint firstItem="ZxO-Om-OC1" firstAttribute="centerY" secondItem="HrI-DL-GBd" secondAttribute="centerY" constant="10" id="cW9-WH-KWu"/>
                                         <constraint firstItem="DGQ-wr-teW" firstAttribute="centerY" secondItem="HrI-DL-GBd" secondAttribute="centerY" id="vJe-Su-cKN"/>
                                         <constraint firstAttribute="trailing" secondItem="mx1-zn-oyy" secondAttribute="trailing" constant="14" id="weX-eC-Hkl"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="listName" destination="JGo-Cb-Ord" id="dwU-un-Egq"/>
+                                    <outlet property="nameVerticalCenterConstraint" destination="3hu-pT-XRR" id="TUW-Xf-Vhe"/>
+                                    <outlet property="subtitleLabel" destination="ZxO-Om-OC1" id="Tlf-on-cNw"/>
                                     <outlet property="userCountLabel" destination="mx1-zn-oyy" id="axM-oq-aI8"/>
                                     <outlet property="usersIcon" destination="DGQ-wr-teW" id="7Nd-77-gJX"/>
                                 </connections>

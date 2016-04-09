@@ -133,20 +133,21 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             }
         }
     }
-    
-    func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> Void) {
-    
-        DBProviders.inventoryItemProvider.addOrIncrementInventoryItemWithInput(itemInput, inventory: inventory, delta: itemInput.quantity) {addedInventoryItemWithHistoryMaybe in
-            
-            if let addedInventoryItemWithHistory = addedInventoryItemWithHistoryMaybe {
-                handler(ProviderResult(status: .Success, sucessResult: addedInventoryItemWithHistory))
-            } else {
-                QL4("Error fetching product")
-                handler(ProviderResult(status: .DatabaseUnknown))
-                
-            }
-        }
-    }
+
+    // Outdated implementation, needs now store product
+//    func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> Void) {
+//    
+//        DBProviders.inventoryItemProvider.addOrIncrementInventoryItemWithInput(itemInput, inventory: inventory, delta: itemInput.quantity) {addedInventoryItemWithHistoryMaybe in
+//            
+//            if let addedInventoryItemWithHistory = addedInventoryItemWithHistoryMaybe {
+//                handler(ProviderResult(status: .Success, sucessResult: addedInventoryItemWithHistory))
+//            } else {
+//                QL4("Error fetching product")
+//                handler(ProviderResult(status: .DatabaseUnknown))
+//                
+//            }
+//        }
+//    }
     
     func addToInventoryLocal(inventoryItems: [InventoryItem], historyItems: [HistoryItem], handler: ProviderResult<Any> -> Void) {
         DBProviders.inventoryItemProvider.saveInventoryAndHistoryItem(inventoryItems, historyItems: historyItems) {success in

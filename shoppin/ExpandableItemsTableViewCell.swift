@@ -15,11 +15,15 @@ class ExpandableItemsTableViewCell: UITableViewCell {
     @IBOutlet weak var userCountLabel: UILabel!
     @IBOutlet weak var usersIcon: UIImageView!
 
+    // There are optional because in IB we have this cell in different controllers and some don't have this
+    @IBOutlet weak var subtitleLabel: UILabel?
+    @IBOutlet weak var nameVerticalCenterConstraint: NSLayoutConstraint?
+    
     var model: ExpandableTableViewModel? {
         didSet {
             if let model = model {
                 listName.text = model.name
-                
+
                 let c = model.bgColor
                 contentView.backgroundColor = c
                 backgroundColor = c
@@ -29,6 +33,15 @@ class ExpandableItemsTableViewCell: UITableViewCell {
                 
                 let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: model.bgColor, isFlat: true)
                 listName.textColor = contrastingTextColor
+                
+                if let subtitle = model.subtitle {
+                    subtitleLabel?.text = subtitle
+                    subtitleLabel?.textColor = contrastingTextColor
+                    nameVerticalCenterConstraint?.constant = -10
+                } else {
+                    subtitleLabel?.hidden = true
+                    nameVerticalCenterConstraint?.constant = 0
+                }
                 
                 let showUserInfo = model.users.count > 0
                 

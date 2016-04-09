@@ -145,17 +145,17 @@ class PlanProviderImpl: PlanProvider {
          
                 // if item with product and inventory already exists, increment it
                 let updatedCategory = existingPlanItem.product.category.copy(name: itemInput.category, color: itemInput.categoryColor)
-                let updatedProduct = existingPlanItem.product.copy(name: itemInput.name, price: itemInput.price, category: updatedCategory)
+                let updatedProduct = existingPlanItem.product.copy(name: itemInput.name, category: updatedCategory)
                 let updatedPlanItem = existingPlanItem.copy(product: updatedProduct, quantity: existingPlanItem.quantity + itemInput.quantity, quantityDelta: existingPlanItem.quantityDelta + itemInput.quantity)
                 self?.updatePlanItem(updatedPlanItem, inventory: inventory, handler)
                 
             } else { // if it doesn't exist, add it
                 
                 // check if product exists
-                Providers.productProvider.product(itemInput.name, brand: itemInput.brand, store: itemInput.store) {result in
+                Providers.productProvider.product(itemInput.name, brand: itemInput.brand) {result in
                     if let product = result.sucessResult { // products exists - update it and reference it
                         let mergedCategory = product.category.copy(name: itemInput.category, color: itemInput.categoryColor)
-                        let mergedProduct = Product(uuid: product.uuid, name: itemInput.name, price: itemInput.price, category: mergedCategory, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit, brand: itemInput.brand)
+                        let mergedProduct = Product(uuid: product.uuid, name: itemInput.name, category: mergedCategory, brand: itemInput.brand)
                         onHasProduct(mergedProduct, isUpdate: true)
                     } else { // product doesn't exist - add it
                         
@@ -166,7 +166,7 @@ class PlanProviderImpl: PlanProvider {
                             let category: ProductCategory = result.sucessResult ?? ProductCategory(uuid: NSUUID().UUIDString, name: itemInput.category, color: itemInput.categoryColor)
 
                             // add the product
-                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, price: itemInput.price, category: category, baseQuantity: itemInput.baseQuantity, unit: itemInput.unit, brand: itemInput.brand)
+                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.name, category: category, brand: itemInput.brand)
                             Providers.productProvider.add(product, remote: true) {result in
                                 if result.success {
                                     onHasProduct(product, isUpdate: false)

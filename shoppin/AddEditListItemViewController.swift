@@ -14,7 +14,7 @@ protocol AddEditListItemViewControllerDelegate {
     
     func onValidationErrors(errors: [UITextField: ValidationError])
     
-    func onOkTap(price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: ProductUnit, brand: String, store: String, editingItem: Any?)
+    func onOkTap(price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: StoreProductUnit, brand: String, editingItem: Any?)
     
 //    func productNameAutocompletions(text: String, handler: [String] -> Void)
 //    func sectionNameAutocompletions(text: String, handler: [String] -> Void)
@@ -34,14 +34,16 @@ typealias AddEditItemInput2 = (name: String, price: Float, quantity: String, cat
 
 struct AddEditItem {
     let product: Product
+    let storeProduct: StoreProduct? // TODO? no redundancy with product
     let quantity: Int
     let sectionName: String
     let sectionColor: UIColor
     let note: String?
     let model: Any
     
-    init(product: Product, quantity: Int, sectionName: String, sectionColor: UIColor, note: String?, model: Any) {
+    init(product: Product, storeProduct: StoreProduct? = nil, quantity: Int, sectionName: String, sectionColor: UIColor, note: String?, model: Any) {
         self.product = product
+        self.storeProduct = storeProduct
         self.quantity = quantity
         self.sectionName = sectionName
         self.sectionColor = sectionColor
@@ -50,7 +52,8 @@ struct AddEditItem {
     }
     
     init(item: ListItem) {
-        self.product = item.product
+        self.product = item.product.product
+        self.storeProduct = item.product
         self.quantity = item.todoQuantity // only in todo screen we can update items. Note that we will update only the todo quantity, if the item is also in cart or stash this quantities are not updated
         self.sectionName = item.section.name
         self.sectionColor = item.section.color
@@ -60,6 +63,7 @@ struct AddEditItem {
     
     init(item: GroupItem) {
         self.product = item.product
+        self.storeProduct = nil
         self.quantity = item.quantity
         self.sectionName = item.product.category.name
         self.sectionColor = item.product.category.color
@@ -69,6 +73,7 @@ struct AddEditItem {
     
     init(item: InventoryItem) {
         self.product = item.product
+        self.storeProduct = nil
         self.quantity = item.quantity
         self.sectionName = item.product.category.name
         self.sectionColor = item.product.category.color
@@ -78,6 +83,7 @@ struct AddEditItem {
     
     init(item: AddEditProductControllerEditingData) {
         self.product = item.product
+        self.storeProduct = nil
         self.quantity = 0
         self.sectionName = item.product.category.name
         self.sectionColor = item.product.category.color
@@ -130,7 +136,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //    }
 ///////////////////////////////////////////////////////////////////////////
     
-    @IBOutlet weak var storeInput: LineAutocompleteTextField!
     @IBOutlet weak var noteInput: LineTextField!
 
     
@@ -165,9 +170,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         didSet {
             if let noteInput = noteInput {
                 
-                let showNote = modus == .ListItem
-                noteInput.hidden = !showNote
-//                noteLabel.hidden = !showNote
+                let isListItem = modus == .ListItem
+                noteInput.hidden = !isListItem
+                priceInput.hidden = !isListItem
+                quantityInput.hidden = !isListItem
                 
 //                let sectionText = "Section"
 //                let categoryText = "Category"
@@ -231,10 +237,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     private func prefill(item: AddEditItem) {
         brandInput.text = item.product.brand
         sectionInput.text = item.sectionName ?? item.product.category.name
-        storeInput.text = item.product.store
         sectionColorButton.textColor = item.sectionColor ?? item.product.category.color
         quantityInput.text = String(item.quantity)
-        priceInput.text = item.product.price.toString(2)
+        priceInput.text = item.storeProduct?.price.toString(2)
         noteInput.text = item.note
     }
     
@@ -242,7 +247,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         for (textField, placeholder) in [
             (brandInput, "Brand"),
             (sectionInput, "Section"),
-            (storeInput, "Store"),
             (quantityInput, "Quantity"),
             (priceInput, "Price"),
             (noteInput, "Note")
@@ -252,7 +256,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     private func initAutocompletionTextFields() {
-        for textField in [brandInput, sectionInput, storeInput] {
+        for textField in [brandInput, sectionInput] {
             textField.defaultAutocompleteStyle()
             textField.myDelegate = self
         }
@@ -261,10 +265,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     private func prefill(planItem: PlanItem) {
         brandInput.text = planItem.product.brand
         sectionInput.text = planItem.product.category.name
-        storeInput.text = planItem.product.store
         sectionColorButton.textColor = planItem.product.category.color
         quantityInput.text = String(planItem.quantity)
-        priceInput.text = planItem.product.price.toString(2)
     }
     
     private func setInputsDefaultValues() {
@@ -297,18 +299,18 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 }
             }
             
-            if let price = priceInput.text?.floatValue, quantityText = quantityInput.text, quantity = Int(quantityText), section = sectionInput.text, brand = brandInput.text, store = storeInput.text, note = noteInput.text, sectionColor = sectionColorButton.textColor {
+            if let price = priceInput.text?.floatValue, quantityText = quantityInput.text, quantity = Int(quantityText), section = sectionInput.text, brand = brandInput.text, note = noteInput.text, sectionColor = sectionColorButton.textColor {
                 
                 // for now disabled due to new designs
 //                let baseQuantity = scaleInputs?.baseQuantity ?? 1
 //                let unit = scaleInputs?.unit ?? .None
                 let baseQuantity: Float = 1
-                let unit = ProductUnit.None
+                let unit = StoreProductUnit.None
                 
                 // the price from scaleInputs is inserted in price field, so we have it already
                 
                 // Explanation category/section name: for list items, the section input refers to the list item's section. For the rest the product category. When we store the list items, if a category with the entered section name doesn't exist yet, one is created with the section's data.
-                delegate?.onOkTap(price, quantity: quantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, store: store, editingItem: editingItem?.model)
+                delegate?.onOkTap(price, quantity: quantity, section: section, sectionColor: sectionColor, note: note, baseQuantity: baseQuantity, unit: unit, brand: brand, editingItem: editingItem?.model)
                 
             } else {
                 QL4("Validation was not implemented correctly, price: \(priceInput.text), quantity: \(quantityInput.text), section: \(sectionInput.text), brand: \(brandInput.text), sectionColor: \(sectionColorButton.textColor)")
@@ -353,10 +355,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         case brandInput:
             Providers.brandProvider.brandsContainingText(string, successHandler{brands in
                 handler(brands)
-            })
-        case storeInput:
-            Providers.productProvider.storesContainingText(string, successHandler{stores in
-                handler(stores)
             })
         case _:
             print("Error: Not handled text field in autoCompleteTextField")
@@ -482,12 +480,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             ConfirmationPopup.show(title: "Confirmation", message: "Do you want to remove: \(string)?\nThis will remove this brand from all your products (everywhere in the app).", okTitle: "Yes", cancelTitle: "No", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
                 Providers.brandProvider.removeBrand(string, remote: true, weakSelf.successHandler {
                     AlertPopup.show(message: "Brand: \(string) removed", controller: weakSelf)
-                })
-            })
-        case storeInput:
-            ConfirmationPopup.show(title: "Confirmation", message: "Do you want to remove: \(string)?\nThis will remove this store from all your products (everywhere in the app).", okTitle: "Yes", cancelTitle: "No", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
-                Providers.productProvider.removeStore(string, remote: true, weakSelf.successHandler {
-                    AlertPopup.show(message: "Store: \(string) removed", controller: weakSelf)
                 })
             })
         default: QL4("Not handled input")

@@ -127,8 +127,7 @@ class RemoteInventoryProvider: RemoteProvider {
             "quantityDelta": inventoryItem.quantityDelta,
             "product": [
                 "uuid": inventoryItem.product.uuid,
-                "name": inventoryItem.product.name,
-                "price": inventoryItem.product.price,
+                "name": inventoryItem.product.name
             ],
             "inventoryUuid": inventoryItem.inventory.uuid
         ]

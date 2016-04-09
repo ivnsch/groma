@@ -21,6 +21,10 @@ class ExpandableTableViewListModel: ExpandableTableViewModel {
         return list.name
     }
     
+    override var subtitle: String? {
+        return list.store
+    }
+    
     override var bgColor: UIColor {
         return list.bgColor
     }

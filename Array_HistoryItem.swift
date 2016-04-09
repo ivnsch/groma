@@ -15,6 +15,6 @@ extension Array where Element: HistoryItem {
     }
 
     var totalPrice: Float {
-        return reduce(0) {sum, element in sum + (Float(element.quantity) * element.product.price)}
+        return reduce(0) {sum, element in sum + (Float(element.quantity) * element.paidPrice)}
     }
 }

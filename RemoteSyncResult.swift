@@ -13,6 +13,7 @@ import QorumLogs
 struct RemoteSyncResult: ResponseObjectSerializable, CustomDebugStringConvertible {
     let productCategories: [[String: AnyObject]]
     let products: [[String: AnyObject]]
+    let storeProducts: [[String: AnyObject]]
     let inventories: [[String: AnyObject]]
     let inventoriesItems: [[String: AnyObject]]
     let lists: [[String: AnyObject]]
@@ -28,6 +29,7 @@ struct RemoteSyncResult: ResponseObjectSerializable, CustomDebugStringConvertibl
         guard
             let productCategories = representation.valueForKeyPath("productCategories") as? [[String: AnyObject]],
             let products = representation.valueForKeyPath("products") as? [[String: AnyObject]],
+            let storeProducts = representation.valueForKeyPath("storeProducts") as? [[String: AnyObject]],
             let inventories = representation.valueForKeyPath("inventories") as? [[String: AnyObject]],
             let inventoriesItems = representation.valueForKeyPath("inventoriesItems") as? [[String: AnyObject]],
             let lists = representation.valueForKeyPath("lists") as? [[String: AnyObject]],
@@ -46,6 +48,7 @@ struct RemoteSyncResult: ResponseObjectSerializable, CustomDebugStringConvertibl
         
         self.productCategories = productCategories
         self.products = products
+        self.storeProducts = storeProducts
         self.inventories = inventories
         self.inventoriesItems = inventoriesItems
         self.lists = lists
@@ -59,6 +62,6 @@ struct RemoteSyncResult: ResponseObjectSerializable, CustomDebugStringConvertibl
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) productCategories: \(productCategories), products: \(products), inventories: \(inventories), inventoryInvitations: \(inventoryInvitations)}"
+        return "{\(self.dynamicType) productCategories: \(productCategories), products: \(products), storeProducts: \(storeProducts), inventories: \(inventories), inventoryInvitations: \(inventoryInvitations)}"
     }
 }

@@ -15,12 +15,10 @@ import QorumLogs
 struct ProductUnique {
     let name: String
     let brand: String
-    let store: String
     
-    init(name: String, brand: String, store: String) {
+    init(name: String, brand: String) {
         self.name = name
         self.brand = brand
-        self.store = store
     }
 }
 
@@ -29,18 +27,24 @@ struct ProductPrototype {
     let price: Float
     let category: String
     let categoryColor: UIColor
-    let baseQuantity: Float
-    let unit: ProductUnit
     let brand: String
-    let store: String
     
-    init(name: String, price: Float, category: String, categoryColor: UIColor, baseQuantity: Float, unit: ProductUnit, brand: String, store: String) {
+    init(name: String, price: Float, category: String, categoryColor: UIColor, brand: String) {
         self.name = name
         self.price = price
         self.category = category
         self.categoryColor = categoryColor
-        self.baseQuantity = baseQuantity
-        self.unit = unit
+        self.brand = brand
+    }
+}
+
+struct StoreProductUnique {
+    let name: String
+    let brand: String
+    let store: String
+    
+    init(name: String, brand: String, store: String) {
+        self.name = name
         self.brand = brand
         self.store = store
     }
@@ -53,10 +57,12 @@ class RealmProductProvider: RealmProvider {
         self.loadFirst(mapper, filter: DBProduct.createFilter(uuid), handler: handler)
     }
     
-    // TODO rename method (uses now brand and store too)
-    func loadProductWithName(name: String, brand: String, store: String, handler: Product? -> ()) {
+    // TODO rename method (uses now brand too)
+    func loadProductWithName(name: String, brand: String, handler: Product? -> ()) {
+        
         let mapper = {ProductMapper.productWithDB($0)}
-        self.loadFirst(mapper, filter: DBProduct.createFilterNameBrand(name, brand: brand, store: store), handler: handler)
+        self.loadFirst(mapper, filter: DBProduct.createFilterNameBrand(name, brand: brand), handler: handler)
+        
     }
     
     func loadProducts(range: NSRange, sortBy: ProductSortBy, handler: [Product] -> ()) {
@@ -163,7 +169,7 @@ class RealmProductProvider: RealmProvider {
     
     func saveProduct(productInput: ProductInput, updateSuggestions: Bool = true, update: Bool = true, handler: Product? -> ()) {
         
-        loadProductWithName(productInput.name, brand: productInput.brand, store: productInput.store) {[weak self] productMaybe in
+        loadProductWithName(productInput.name, brand: productInput.brand) {[weak self] productMaybe in
             
             if productMaybe.isSet && !update {
                 print("Product with name: \(productInput.name), already exists, no update")
@@ -197,7 +203,7 @@ class RealmProductProvider: RealmProvider {
                     
                     // Save product with new/updated category
                     if let category = category {
-                        let product = Product(uuid: uuid, name: productInput.name, price: productInput.price, category: category, baseQuantity: productInput.baseQuantity, unit: productInput.unit, brand: productInput.brand)
+                        let product = Product(uuid: uuid, name: productInput.name, category: category, brand: productInput.brand)
                         self?.saveProducts([product]) {saved in
                             if saved {
                                 handler(product)
@@ -282,9 +288,9 @@ class RealmProductProvider: RealmProvider {
             handler(distinctCategories)
         }
     }
-    
-    func productWithUniqueSync(realm: Realm, name: String, brand: String, store: String) -> DBProduct? {
-        return realm.objects(DBProduct).filter(DBProduct.createFilterNameBrand(name, brand: brand, store: store)).first
+
+    func productWithUniqueSync(realm: Realm, name: String, brand: String) -> DBProduct? {
+        return realm.objects(DBProduct).filter(DBProduct.createFilterNameBrand(name, brand: brand)).first
     }
     
     func categoryWithName(name: String, handler: ProductCategory? -> ()) {
@@ -463,7 +469,7 @@ class RealmProductProvider: RealmProvider {
                 let realm = try Realm()
                 // TODO sort in the database? Right now this doesn't work because we pass the results through a Set to filter duplicates
                 // .sorted("store", ascending: true)
-                let stores = Array(Set(realm.objects(DBProduct).filter(DBProduct.createFilterStoreContains(text)).map{$0.store}))[range].filter{!$0.isEmpty}.sort()
+                let stores = Array(Set(realm.objects(DBStoreProduct).filter(DBStoreProduct.createFilterStoreContains(text)).map{$0.store}))[range].filter{!$0.isEmpty}.sort()
                 return stores
             } catch let e {
                 QL4("Couldn't load stores, returning empty array. Error: \(e)")
