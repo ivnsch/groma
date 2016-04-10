@@ -61,11 +61,8 @@ class HistoryItemGroupHeaderView: UIView, CellUncovererDelegate {
     var open: Bool = false {
         didSet {
             if !open {
-                cellUncoverer?.close()
-            } else {
-                QL3("Opening of cell not supported yet")
+                cellUncoverer?.setOpen(false, animated: true)
             }
-            
         }
     }
 

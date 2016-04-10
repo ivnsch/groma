@@ -9,6 +9,11 @@
 import UIKit
 import QorumLogs
 
+
+protocol CartListItemsControllerDelegate {
+    func onCartSendItemsToStash(listItems: [ListItem])
+}
+
 class CartListItemsController: ListItemsController {
     
     @IBOutlet weak var buyLabel: UILabel!
@@ -18,6 +23,8 @@ class CartListItemsController: ListItemsController {
     @IBOutlet weak var emptyListView: UIView!
 
     @IBOutlet weak var buyViewHeightConstraint: NSLayoutConstraint!
+    
+    var delegate: CartListItemsControllerDelegate?
     
     override var status: ListItemStatus {
         return .Done
@@ -91,10 +98,11 @@ class CartListItemsController: ListItemsController {
     
     private func sendAllItemToStash(onFinish: VoidFunction) {
         if let list = currentList {
-            Providers.listItemsProvider.switchAllToStatus(listItemsTableViewController.items, list: list, status1: .Done, status: .Stash, remote: true) {[weak self] result in
+            Providers.listItemsProvider.switchAllToStatus(listItemsTableViewController.items, list: list, status1: .Done, status: .Stash, remote: true) {[weak self] result in guard let weakSelf = self else {return}
                 if result.success {
-                    self?.listItemsTableViewController.setListItems([])
-                    self?.onTableViewChangedQuantifiables()
+                    weakSelf.delegate?.onCartSendItemsToStash(weakSelf.listItemsTableViewController.items)
+                    weakSelf.listItemsTableViewController.setListItems([])
+                    weakSelf.onTableViewChangedQuantifiables()
                     onFinish()
                 }
             }

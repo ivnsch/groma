@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-class TodoListItemsController: ListItemsController {
+class TodoListItemsController: ListItemsController, CartListItemsControllerDelegate {
 
     @IBOutlet weak var pricesView: PricesView!
     @IBOutlet weak var stashView: StashView!
@@ -61,7 +61,7 @@ class TodoListItemsController: ListItemsController {
                         self?.stashView.quantity = count
                         self?.pricesView.allowOpen = count > 0
                         if count == 0 {
-                            self?.pricesView.close()
+                            self?.pricesView.setOpen(false, animated: true)
                         }
                         self?.pricesView.setExpandedHorizontal(count == 0)
                         self?.pricesView.stashQuantity = count
@@ -102,7 +102,7 @@ class TodoListItemsController: ListItemsController {
     
     @IBAction func onCartTap(sender: UIButton) {
         if pricesView.open {
-            pricesView.close()
+            pricesView.setOpen(false, animated: true)
         } else {
             performSegueWithIdentifier("doneViewControllerSegue", sender: self)
         }
@@ -112,6 +112,7 @@ class TodoListItemsController: ListItemsController {
         if segue.identifier == "doneViewControllerSegue" {
             if let doneViewController = segue.destinationViewController as? CartListItemsController {
 //                doneViewController.navigationItemTextColor = titleLabel?.textColor
+                doneViewController.delegate = self
                 doneViewController.onUIReady = {
                     doneViewController.currentList = self.currentList
                     if let dotColor = self.topBar.dotColor {
@@ -136,6 +137,25 @@ class TodoListItemsController: ListItemsController {
             
         } else {
             print("Invalid segue: \(segue.identifier)")
+        }
+    }
+    
+    // MARK: - CartListItemsControllerDelegate
+    
+    func onCartSendItemsToStash(listItems: [ListItem]) {
+        // Open quickly the stash view to show/remind users they can open it by swiping.
+        // Note: Assumes the cart controller is closing when this is called otherwise the user will not see anything.
+        if listItems.count > 0 {
+            let alreadyShowedAnim: Bool = PreferencesManager.loadPreference(PreferencesManagerKey.shownCanSwipeToOpenStash) ?? false
+            if !alreadyShowedAnim {
+                PreferencesManager.savePreference(PreferencesManagerKey.showedAddDirectlyToInventoryHelp, value: true)
+                delay(0.4) {[weak self] in
+                    self?.pricesView.setOpen(true)
+                    delay(0.8) {
+                        self?.pricesView.setOpen(false)
+                    }
+                }
+            }
         }
     }
 }

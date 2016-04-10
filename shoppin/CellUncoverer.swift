@@ -104,13 +104,17 @@ class CellUncoverer: NSObject, UIGestureRecognizerDelegate {
         }
     }
 
-    // TODO generic open/close
-    func close() {
-        leftLayoutConstraint.constant = 0
+    func setOpen(open: Bool, animated: Bool = true) {
+        parentView.layoutIfNeeded()
+        if open {
+            leftLayoutConstraint.constant = -stashViewWidth
+        } else {
+            leftLayoutConstraint.constant = 0
+        }
         UIView.animateWithDuration(0.3) {[weak self] in
-            self?.button.layoutIfNeeded()
+            self?.parentView.layoutIfNeeded()
         }
     }
-    
+
 }
 

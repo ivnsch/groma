@@ -93,12 +93,13 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
         self.open = open
     }
 
-    // TODO generic open/close
-    func close() {
-        open = false
-        cellUncoverer?.close()
-    }
+    // MARK -
     
+    func setOpen(open: Bool, animated: Bool = true) {
+        self.open = open
+        cellUncoverer?.setOpen(open, animated: animated)
+    }
+      
     func setTotalPrice(price: Float, animated: Bool) {
         self.totalPrice = price
         updateTotalPriceLabel(animated)
