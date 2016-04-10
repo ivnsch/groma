@@ -299,17 +299,22 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            
             let model = models[indexPath.row]
-            
-            // update the table view in advance, so delete animation is quick. If something goes wrong we reload the content in onError and do default error handling
-            tableView.wrapUpdates {[weak self] in
-                self?.models.remove(model)
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
+            canRemoveModel(model) {[weak self] can in
+                if can {
+                    // update the table view in advance, so delete animation is quick. If something goes wrong we reload the content in onError and do default error handling
+                    tableView.wrapUpdates {
+                        self?.models.remove(model)
+                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
+                    }
+                    self?.onRemoveModel(model)
+                }
             }
-            
-            onRemoveModel(model)
         }
+    }
+    
+    func canRemoveModel(model: ExpandableTableViewModel, can: Bool -> Void) {
+        can(true)
     }
     
     func onRemoveModel(model: ExpandableTableViewModel) {
