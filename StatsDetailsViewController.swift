@@ -20,9 +20,11 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     private var pieChart: XYPieChart?
     
-    private var slices: [Slice] = []
-    
-    
+    private var slices: [Slice] = [] {
+        didSet {
+            pieChart?.selectedSliceOffsetRadius = slices.count <= 1 ? 0 : 10
+        }
+    }
     
     var initData: (aggr: MonthYearAggregate, inventory: Inventory)? {
         didSet {
@@ -161,7 +163,6 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
         pieChart.labelFont = Fonts.superSmallLight
         pieChart.labelColor = UIColor.blackColor()
         //        pieChart.pieCenter = CGPointMake(100, 100)
-        //        pieChart.selectedSliceOffsetRadius = 0
         pieChartContainer.addSubview(pieChart)
         pieChart.dataSource = self
         pieChart.delegate = self
