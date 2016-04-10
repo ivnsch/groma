@@ -458,11 +458,11 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func emptyViewData() -> (text: String, text2: String, imgName: String) {
-        return (text: "You inventory is empty", text2: "Mark cart items as \"bought\" or tap to add directly", imgName: "empty_shelf")
+        return (text: "You inventory is empty", text2: "To add items, tap on 'buy' in the cart.", imgName: "empty_shelf")
     }
     
     func onEmptyViewTap() {
-        toggleTopAddController()
+//        toggleTopAddController()
     }
     
     func onTableViewScroll(scrollView: UIScrollView) {

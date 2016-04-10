@@ -63,7 +63,6 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
                         if count == 0 {
                             self?.pricesView.setOpen(false, animated: true)
                         }
-                        self?.pricesView.setExpandedHorizontal(count == 0)
                         self?.pricesView.stashQuantity = count
 //                        self?.stashView.setOpen(count > 0)
                         
