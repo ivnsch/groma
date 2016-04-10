@@ -61,7 +61,13 @@ class AddButtonHelper: NSObject {
     }
     
     private func animateVisible(visible: Bool) {
+        if addButton == nil {
+            addAddButton(false)
+            parentView?.setNeedsLayout()
+            parentView?.layoutIfNeeded()
+        }
         guard let addButton = addButton else {QL3("No add button, can't animate"); return}
+        
         let (startY, endY) = visible ? (centerY(false), centerY(true)) : (centerY(true), centerY(false))
         addButton.center = addButton.center.copy(y: startY)
         addButton.setNeedsLayout()
@@ -86,13 +92,13 @@ class AddButtonHelper: NSObject {
         }
     }
     
-    private func addAddButton() {
-        if let parentView = parentView, window = parentView.window, centerY = centerY(true) {
+    private func addAddButton(visible: Bool = true) {
+        if let parentView = parentView, window = parentView.window, centerY = centerY(visible) {
             let frameY = centerY - buttonHeight / 2
             let addButton = AddItemButton(frame: CGRectMake(0, frameY, parentView.frame.width, buttonHeight))
             self.addButton = addButton
             parentView.addSubview(addButton)
-            animateVisible(true)
+//            animateVisible(true)
             parentView.bringSubviewToFront(addButton)
             addButton.tapHandler = {[weak self] in
                 self?.tapHandler?()

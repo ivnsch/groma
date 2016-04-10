@@ -51,8 +51,8 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
 
     private let listItemsProvider = ProviderFactory().listItemProvider
     
-    private var addButton: UIButton? = nil
-
+    private var addButtonHelper: AddButtonHelper?
+    
     var models: [ExpandableTableViewModel] = [] {
         didSet {
             emptyView.hidden = !models.isEmpty
@@ -102,45 +102,13 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         
         initTopBar()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
-        
         let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyViewTap:"))
         emptyView.addGestureRecognizer(tapRecognizer)
-    }
-    
-    // MARK: - Keyboard
-    
-    func keyboardWillAppear(notification: NSNotification) {
-        if let userInfo = notification.userInfo {
-            if let keyboardSize = (userInfo[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue() {
-                keyboardHeight = keyboardSize.height
-            } else {
-                QL3("Couldn't retrieve keyboard size from user info")
-            }
-        } else {
-            QL3("Notification has no user info")
-        }
-        
-        delay(0.5) {[weak self] in // let the keyboard reach it's final position before showing the button
-            self?.addButton?.hidden = false
-        }
-    }
-    
-    func keyboardWillDisappear(notification: NSNotification) {
-        // when showing validation popup the keyboard disappears so we have to remove the button - otherwise it looks weird
-        addButton?.hidden = true
     }
 
     // MARK: -
     
     func onExpandableClose() {
-        delay(0.3) {[weak self] in
-            if self?.addButton?.superview != nil {
-                self?.addButton?.removeFromSuperview()
-            }
-            self?.addButton = nil
-        }
     }
     
     // MARK: - Pull to add
@@ -176,6 +144,22 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         initModels()
+        
+        addButtonHelper = initAddButtonHelper()
+        addButtonHelper?.addObserver()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        addButtonHelper?.removeObserver()
+    }
+    
+    private func initAddButtonHelper() -> AddButtonHelper? {
+        guard let parentView = parentViewController?.view else {QL4("No parentController"); return nil}
+        let addButtonHelper = AddButtonHelper(parentView: parentView) {[weak self] in
+            self?.onSubmitTap()
+        }
+        return addButtonHelper
     }
     
     func initModels() {
@@ -378,56 +362,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         toggleButtonRotator.rotateForOffset(0, topBar: topBar, scrollView: scrollView)
     }
     
-    private var keyboardHeight: CGFloat?
     func onAddTap(rotateTopBarButton: Bool = true) {
-        
-        if let addButton = addButton {
-            self.addButton = nil
-            delay(0.3) {
-                addButton.removeFromSuperview()
-            }
-        } else {
-            if let window = view.window {
-                
-                let keyboardHeight = self.keyboardHeight ?? {
-                    QL4("Couldn't get keyboard height dynamically, returning hardcoded value")
-                    return 216
-                    }()
-                let buttonHeight: CGFloat = 40
-                
-                delay(0.3) {[weak self] in
-                    guard let weakSelf = self else {return}
-                    
-                    let addButton = AddItemButton(frame: CGRectMake(0, window.frame.height - keyboardHeight - buttonHeight, window.frame.width, buttonHeight))
-                    weakSelf.addButton = addButton
-                    weakSelf.view.addSubview(addButton)
-                    weakSelf.view.bringSubviewToFront(addButton)
-                    addButton.tapHandler = {[weak self] in
-                        self?.onSubmitTap()
-                    }
-                }
-                
-            } else {
-                QL3("No parent view for add button")
-            }
-        }
-
-        
-        
-//        let addButton = AddItemButton(frame: CGRectMake(0, view.frame.height - keyboardHeight - buttonHeight, parentView.frame.width, buttonHeight))
-//        self.addButton = addButton
-//        view.addSubview(addButton)
-//        view.bringSubviewToFront(addButton)
-//        addButton.tapHandler = {[weak self] in guard let weakSelf = self else {return}
-//            
-//            if let addEditListItemViewController = weakSelf.showingController as? AddEditListItemViewController {
-//                addEditListItemViewController.submit()
-//            } else {
-//                QL3("Tapped add button but showing controller is not add edit controller")
-//            }
-//        }
-        
-        
     }
     
     @IBAction func onEditTap(sender: UIBarButtonItem) {
