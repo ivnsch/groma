@@ -49,7 +49,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     
     private func prefill(list: ListItemGroup) {
         groupNameInputField.text = list.name
-        view.backgroundColor = list.bgColor
+        setBackgroundColor(list.bgColor)
     }
     
     private func initValidator() {
@@ -65,10 +65,27 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
         
         initValidator()
         
-        view.backgroundColor = UIColor.flatMagentaColorDark()
-        
         groupNameInputField.setPlaceholderWithColor("Group name", color: UIColor.whiteColor())
+        
+        setBackgroundColor(UIColor.randomColor())
+        
         groupNameInputField.becomeFirstResponder()
+    }
+    
+    private func setBackgroundColor(color: UIColor) {
+        
+        func setContrastingTextColor(color: UIColor) {
+            guard groupNameInputField != nil else {QL4("Outlets not initialised yet"); return}
+            
+            let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
+            
+            groupNameInputField.setPlaceholderWithColor("Group name", color: contrastingTextColor)
+            groupNameInputField.textColor = contrastingTextColor
+            colorButton.setTitleColor(contrastingTextColor, forState: .Normal)
+        }
+        
+        view.backgroundColor = color
+        setContrastingTextColor(color)
     }
     
     @IBAction func onDoneTap(sender: UIBarButtonItem) {
@@ -192,19 +209,19 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
             UIView.animateWithDuration(0.3, animations: {
                 showingColorPicker.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
                 
-                }, completion: {finished in
-                    self.showingColorPicker = nil
-                    self.showingColorPicker?.removeFromParentViewControllerWithView()
+                }, completion: {[weak self] finished in
+                    self?.showingColorPicker = nil
+                    self?.showingColorPicker?.removeFromParentViewControllerWithView()
                     
                     UIView.animateWithDuration(0.3) {
                         if let selectedColor = selectedColor {
-                            self.view.backgroundColor = selectedColor
+                            self?.setBackgroundColor(selectedColor)
                         }
                     }
                     UIView.animateWithDuration(0.15) {
-                        self.colorButton.transform = CGAffineTransformMakeScale(2, 2)
+                        self?.colorButton.transform = CGAffineTransformMakeScale(2, 2)
                         UIView.animateWithDuration(0.15) {
-                            self.colorButton.transform = CGAffineTransformMakeScale(1, 1)
+                            self?.colorButton.transform = CGAffineTransformMakeScale(1, 1)
                         }
                     }
                 }

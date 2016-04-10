@@ -133,6 +133,7 @@
                     <connections>
                         <outlet property="colorButton" destination="0bu-Vf-atl" id="QSK-wB-dfJ"/>
                         <outlet property="inventoriesButton" destination="VtI-z7-VYE" id="XBb-h0-aPL"/>
+                        <outlet property="inventoriesLabel" destination="dqk-Mw-1ri" id="TJr-wp-i3N"/>
                         <outlet property="listNameInputField" destination="F28-F1-Smm" id="9dK-8m-h9l"/>
                         <outlet property="sharedUsersButton" destination="1sk-oR-mxV" id="84V-ay-JjN"/>
                         <outlet property="sharedUsersWidthConstraint" destination="3P0-MK-95M" id="cec-C6-AZN"/>

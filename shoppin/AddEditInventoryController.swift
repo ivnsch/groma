@@ -72,7 +72,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
             }
         }()
         
-        view.backgroundColor = list.bgColor
+        setBackgroundColor(list.bgColor)
     }
     
     private func initValidator() {
@@ -86,12 +86,30 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         
         initValidator()
         
-        view.backgroundColor = UIColor.flatMagentaColorDark()
-        
         listNameInputField.setPlaceholderWithColor("Inventory name", color: UIColor.whiteColor())
+        
+        setBackgroundColor(UIColor.randomFlatColor())
+        
         listNameInputField.becomeFirstResponder()
         
 //        sharedUsersButton.hidden = !ConnectionProvider.connectedAndLoggedIn
+    }
+    
+    private func setBackgroundColor(color: UIColor) {
+        
+        func setContrastingTextColor(color: UIColor) {
+            guard listNameInputField != nil else {QL4("Outlets not initialised yet"); return}
+            
+            let contrastingTextColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
+            
+            listNameInputField.setPlaceholderWithColor("Inventory name", color: contrastingTextColor)
+            listNameInputField.textColor = contrastingTextColor
+            colorButton.setTitleColor(contrastingTextColor, forState: .Normal)
+            sharedUsersButton.setTitleColor(contrastingTextColor, forState: .Normal)
+        }
+        
+        view.backgroundColor = color
+        setContrastingTextColor(color)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -248,19 +266,19 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
             UIView.animateWithDuration(0.3, animations: {
                 showingColorPicker.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
                 
-                }, completion: {finished in
-                    self.showingColorPicker = nil
-                    self.showingColorPicker?.removeFromParentViewControllerWithView()
+                }, completion: {[weak self] finished in
+                    self?.showingColorPicker = nil
+                    self?.showingColorPicker?.removeFromParentViewControllerWithView()
                     
                     UIView.animateWithDuration(0.3) {
                         if let selectedColor = selectedColor {
-                            self.view.backgroundColor = selectedColor
+                            self?.setBackgroundColor(selectedColor)
                         }
                     }
                     UIView.animateWithDuration(0.15) {
-                        self.colorButton.transform = CGAffineTransformMakeScale(2, 2)
+                        self?.colorButton.transform = CGAffineTransformMakeScale(2, 2)
                         UIView.animateWithDuration(0.15) {
-                            self.colorButton.transform = CGAffineTransformMakeScale(1, 1)
+                            self?.colorButton.transform = CGAffineTransformMakeScale(1, 1)
                         }
                     }
                 }
