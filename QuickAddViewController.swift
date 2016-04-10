@@ -82,37 +82,12 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     var modus: AddEditListItemControllerModus = .ListItem
     
-    private var addButtonHelper: AddButtonHelper?
-
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        addButtonHelper?.addObserver()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        addButtonHelper?.removeObserver()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         searchBar.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
 
         searchBarHeightConstraint.constant = DimensionsManager.searchBarHeight
-        addButtonHelper = initAddButtonHelper()
-    }
-    
-    private func initAddButtonHelper() -> AddButtonHelper? {
-        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return nil}
-        let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton) {[weak self] in guard let weakSelf = self else {return}
-            if let addEditListItemViewController = weakSelf.showingController as? AddEditListItemViewController {
-                addEditListItemViewController.submit()
-            } else {
-                QL3("Tapped add button but showing controller is not add edit controller")
-            }
-        }
-        return addButtonHelper
     }
     
     // MARK: - QuickAddPageControllerDelegate
@@ -200,8 +175,6 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             }
             delegate?.onAddProductOpen()
             
-            addButtonHelper?.add()
-
             return true
         }
         return false
@@ -288,6 +261,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         }
     }
 
+    func parentViewForAddButton() -> UIView? {
+        return delegate?.parentViewForAddButton()
+    }
+    
     // Not using plan for now
 //    func planItem(productName: String, handler: PlanItem? -> ()) {
 //        Providers.planProvider.planItem(productName, successHandler {planItemMaybe in

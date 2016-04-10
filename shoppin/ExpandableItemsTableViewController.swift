@@ -352,6 +352,8 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
                 
                 expandCellAnimator.animateTransition(true, topOffsetY: 64)
                 
+                addButtonHelper?.removeObserver()
+                
             } else {
                 print("Warn: no cell for indexPath: \(indexPath)")
             }
@@ -404,6 +406,11 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     func setExpanded(expanded: Bool) {
         expandCellAnimator.animateTransition(false, topOffsetY: 64)
+        if expanded {
+            addButtonHelper?.removeObserver()
+        } else {
+            addButtonHelper?.addObserver()
+        }
     }
     
     func animationsComplete(wasExpanding: Bool, frontView: UIView) {

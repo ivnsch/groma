@@ -21,6 +21,8 @@ class AddButtonHelper: NSObject {
     
     private var tapHandler: VoidFunction?
     
+    private var isVisible: Bool = false
+    
     private var centerYOverride: CGFloat? // quick fix - if it's necessary to override the default centerY which is calculated in this helper. Doesn't include -keyboardHeight and buttonHeight! keyboardHeight and buttonHeight/2  are subtracted from this value TODO better solution to position the button correctly in all cases. The default is just the result of trial and error.
     
     init(parentView: UIView, overrideCenterY: CGFloat? = nil, tapHandler: VoidFunction?) {
@@ -60,7 +62,7 @@ class AddButtonHelper: NSObject {
         animateVisible(false)
     }
     
-    private func animateVisible(visible: Bool) {
+    func animateVisible(visible: Bool) {
         if addButton == nil {
             addAddButton(false)
             parentView?.setNeedsLayout()
@@ -68,12 +70,16 @@ class AddButtonHelper: NSObject {
         }
         guard let addButton = addButton else {QL3("No add button, can't animate"); return}
         
-        let (startY, endY) = visible ? (centerY(false), centerY(true)) : (centerY(true), centerY(false))
-        addButton.center = addButton.center.copy(y: startY)
-        addButton.setNeedsLayout()
-        addButton.layoutIfNeeded()
-        UIView.animateWithDuration(0.3) {
-            addButton.center = addButton.center.copy(y: endY)
+        if isVisible != visible {
+            isVisible = visible
+            
+            let (startY, endY) = visible ? (centerY(false), centerY(true)) : (centerY(true), centerY(false))
+            addButton.center = addButton.center.copy(y: startY)
+            addButton.setNeedsLayout()
+            addButton.layoutIfNeeded()
+            UIView.animateWithDuration(0.3) {
+                addButton.center = addButton.center.copy(y: endY)
+            }
         }
     }
     
@@ -109,10 +115,10 @@ class AddButtonHelper: NSObject {
     }
     
     func add() {
-        if addButton == nil {
-            addAddButton()
-        } else {
-            QL3("Called addButton, there's already a button")
-        }
+//        if addButton == nil {
+//            addAddButton()
+//        } else {
+//            QL3("Called addButton, there's already a button")
+//        }
     }
 }

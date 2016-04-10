@@ -16,6 +16,8 @@ protocol AddEditListItemViewControllerDelegate {
     
     func onOkTap(price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: StoreProductUnit, brand: String, editingItem: Any?)
     
+    func parentViewForAddButton() -> UIView?
+    
 //    func productNameAutocompletions(text: String, handler: [String] -> Void)
 //    func sectionNameAutocompletions(text: String, handler: [String] -> Void)
 //    func storeNameAutocompletions(text: String, handler: [String] -> Void)
@@ -209,6 +211,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     var onViewDidLoad: VoidFunction?
     
+    private var addButtonHelper: AddButtonHelper?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -224,9 +228,30 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         view.clipsToBounds = true
         
         initStaticLabels()
+
+        addButtonHelper = initAddButtonHelper()
         
         onDidLoad?()
 //        updatePlanLeftQuantity(0) // no quantity yet -> 0
+    }
+    
+    private func initAddButtonHelper() -> AddButtonHelper? {
+        guard let parentViewForAddButton = delegate?.parentViewForAddButton() else {QL4("No delegate: \(delegate)"); return nil}
+        let addButtonHelper = AddButtonHelper(parentView: parentViewForAddButton) {[weak self] in guard let weakSelf = self else {return}
+            weakSelf.submit()
+        }
+        return addButtonHelper
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        addButtonHelper?.addObserver()
+        addButtonHelper?.animateVisible(true)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        addButtonHelper?.removeObserver()
     }
     
     private func initStaticLabels() {
