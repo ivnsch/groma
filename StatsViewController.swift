@@ -338,7 +338,6 @@ class StatsViewController: UIViewController
 //                }
 //            }()
             
-            let alpha: CGFloat = 0.7
             let bgColor = Theme.orange
             let barView = MyChartPointViewBar(p1: p1, p2: p2, width: barWidth, bgColor: bgColor)
             
@@ -352,7 +351,7 @@ class StatsViewController: UIViewController
                 
                 barView.backgroundColor = barView.backgroundColor?.colorWithAlphaComponent(0.5)
                 delay(0.5) {
-                    barView.backgroundColor = barView.backgroundColor?.colorWithAlphaComponent(alpha)
+                    barView.backgroundColor = barView.backgroundColor?.colorWithAlphaComponent(1)
                 }
             }
             
