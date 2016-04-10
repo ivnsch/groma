@@ -846,7 +846,7 @@
         <!--Groups-->
         <scene sceneID="qcl-F7-W8f">
             <objects>
-                <viewController id="Nmw-ML-kCx" customClass="GroupsController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="Nmw-ML-kCx" customClass="GroupsController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="OZg-gd-M7u"/>
                         <viewControllerLayoutGuide type="bottom" id="UlD-cV-LuH"/>
