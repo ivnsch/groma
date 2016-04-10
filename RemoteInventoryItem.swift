@@ -57,6 +57,6 @@ extension RemoteInventoryItem {
     }
     
     static func createTimestampUpdateDict(uuid uuid: String, lastUpdate: NSDate) -> [String: AnyObject] {
-        return ["uuid": uuid, "lastupdate": lastUpdate, "dirty": false]
+        return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
 }

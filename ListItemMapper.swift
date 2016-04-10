@@ -46,7 +46,6 @@ class ListItemMapper {
         dbListItem.section = SectionMapper.dbWithSection(listItem.section)
         dbListItem.list = ListMapper.dbWithList(listItem.list)
         
-        dbListItem.lastUpdate = listItem.lastUpdate
         if let lastServerUpdate = listItem.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
             dbListItem.lastServerUpdate = lastServerUpdate
         }

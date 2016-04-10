@@ -38,7 +38,6 @@ class DBProductCategory: DBSyncable {
         self.name = name
         self.bgColorHex = bgColorHex
         
-        self.lastUpdate = lastUpdate
         if let lastServerUpdate = lastServerUpdate {
             self.lastServerUpdate = lastServerUpdate
         }
@@ -50,7 +49,6 @@ class DBProductCategory: DBSyncable {
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             bgColorHex: bgColorHex ?? self.bgColorHex,
-            lastUpdate: lastUpdate ?? self.lastUpdate,
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
             removed: removed ?? self.removed
         )

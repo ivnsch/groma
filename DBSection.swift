@@ -60,7 +60,6 @@ class DBSection: DBSyncable {
         self.doneOrder = doneOrder
         self.stashOrder = stashOrder
         
-        self.lastUpdate = lastUpdate
         if let lastServerUpdate = lastServerUpdate {
             self.lastServerUpdate = lastServerUpdate
         }

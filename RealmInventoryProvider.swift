@@ -102,11 +102,11 @@ class RealmInventoryProvider: RealmProvider {
                     DBProviders.historyProvider.removeHistoryItemsForInventory(realm, inventoryUuid: uuid, markForSync: markForSync)
                     
                     let inventoryResults = realm.objects(DBInventory).filter(DBInventory.createFilter(uuid))
-                    realm.delete(inventoryResults)
                     if markForSync {
                         let toRemove = inventoryResults.map{DBRemoveInventory($0)}
                         self?.saveObjsSyncInt(realm, objs: toRemove, update: true)
                     }
+                    realm.delete(inventoryResults)
                 }
                 return true
             } catch let e {

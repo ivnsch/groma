@@ -79,10 +79,7 @@ class RealmInventoryItemProvider: RealmProvider {
                 let dbIncrementedInventoryitem = InventoryItemMapper.dbWithInventoryItem(incrementedInventoryitem)
                 
                 // save
-                for obj in objs {
-                    obj.lastUpdate = NSDate()
-                    realm.add(dbIncrementedInventoryitem, update: true)
-                }
+                realm.add(dbIncrementedInventoryitem, update: true)
                 return true
                 
             } else {

@@ -344,10 +344,7 @@ class RealmPlanProvider: RealmProvider {
                         let dbIncrementedPlanItem = PlanItemMapper.dbWith(incrementedPlanItem)
                         
                         // save
-                        for obj in objs {
-                            obj.lastUpdate = NSDate()
-                            realm.add(dbIncrementedPlanItem, update: true)
-                        }
+                        realm.add(dbIncrementedPlanItem, update: true)
                         
                         return true
                         

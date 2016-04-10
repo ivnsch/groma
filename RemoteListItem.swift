@@ -80,10 +80,10 @@ struct RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerializabl
 
 extension RemoteListItem {
     var timestampUpdateDict: [String: AnyObject] {
-        return ["uuid": uuid, "lastupdate": lastUpdate, "dirty": false]
+        return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
     
     static func createTimestampUpdateDict(uuid uuid: String, lastUpdate: NSDate) -> [String: AnyObject] {
-        return ["uuid": uuid, "lastupdate": lastUpdate, "dirty": false]
+        return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
 }

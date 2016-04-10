@@ -62,7 +62,7 @@ class RealmListProvider: RealmProvider {
         background({[weak self] in
             do {
                 let realm = try Realm()
-                var success = false
+                var success = false 
                 try realm.write {
                     success = self?.removeListSync(realm, listUuid: listUuid, markForSync: markForSync) ?? false
                 }
@@ -84,11 +84,12 @@ class RealmListProvider: RealmProvider {
         // NOTE: it's not necessary to mark list items deletes for sync as syncing the list delete will also delete the list items.
         
         // delete list
-        let listResults = realm.objects(DBList).filter(DBList.createFilter(listUuid))
-        realm.delete(listResults)
-        if markForSync {
-            let toRemoveListItems = dbListItems.map{DBRemoveListItem($0)}
-            saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
+        if let dbList = realm.objects(DBList).filter(DBList.createFilter(listUuid)).first {
+            if markForSync {
+                let toRemoveList = DBRemoveList(dbList)
+                saveObjsSyncInt(realm, objs: [toRemoveList], update: true)
+            }
+            realm.delete(dbList)
         }
         return true
     }

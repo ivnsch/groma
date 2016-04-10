@@ -29,7 +29,6 @@ class SectionMapper {
         dbSection.doneOrder = section.doneOrder
         dbSection.stashOrder = section.stashOrder
         // TODO!!!! ensure that in all mappers and mapper's methods (also when setting from remote object) we are setting lastUpdate/lastServer update, for example here it was missing
-        dbSection.lastUpdate = section.lastUpdate
         if let lastServerUpdate = section.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
             dbSection.lastServerUpdate = lastServerUpdate
         }

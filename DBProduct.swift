@@ -34,7 +34,7 @@ class DBProduct: DBSyncable {
         return ["name"]
     }
     
-    convenience init(uuid: String, name: String, category: DBProductCategory, fav: Int = 0, brand: String = "", lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    convenience init(uuid: String, name: String, category: DBProductCategory, fav: Int = 0, brand: String = "", lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         
         self.init()
         
@@ -44,7 +44,6 @@ class DBProduct: DBSyncable {
         self.fav = fav
         self.brand = brand
         
-        self.lastUpdate = lastUpdate
         if let lastServerUpdate = lastServerUpdate {
             self.lastServerUpdate = lastServerUpdate
         }
@@ -61,14 +60,13 @@ class DBProduct: DBSyncable {
         )
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, category: DBProductCategory? = nil, fav: Int? = nil, brand: String? = nil, store: String? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> DBProduct {
+    func copy(uuid uuid: String? = nil, name: String? = nil, category: DBProductCategory? = nil, fav: Int? = nil, brand: String? = nil, store: String? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> DBProduct {
         return DBProduct(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
             category: category ?? self.category,
             fav: fav ?? self.fav,
             brand: brand ?? self.brand,
-            lastUpdate: lastUpdate ?? self.lastUpdate,
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
             removed: removed ?? self.removed
         )

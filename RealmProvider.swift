@@ -33,7 +33,7 @@ class RealmProvider {
     
     func saveObjSync<T: DBSyncable>(obj: T, update: Bool = false) -> Bool {
         do {
-            obj.lastUpdate = NSDate()
+//            obj.lastUpdate = NSDate()
             let realm = try Realm()
             try realm.write {
                 realm.add(obj, update: update)
@@ -106,7 +106,7 @@ class RealmProvider {
                 let realm = try Realm()
                 try realm.write {
                     for obj in objs {
-                        obj.lastUpdate = NSDate()
+//                        obj.lastUpdate = NSDate()
                         realm.add(obj, update: update)
                     }
                 }
@@ -309,11 +309,11 @@ class RealmProvider {
             realm.delete(results)
             for obj in newObjects {
                 if resetLastUpdateToServer {
-                    obj.lastUpdate = obj.lastServerUpdate // TODO remove lastUpdate (and rename resetLastUpdateToServer accordingly, maybe resetDirty)? we now have dirty
+//                    obj.lastUpdate = obj.lastServerUpdate
                     obj.dirty = false
                     
                 } else {
-                    obj.lastUpdate = NSDate()
+//                    obj.lastUpdate = NSDate()
                 }
                 
                 realm.add(obj, update: true) // update: true just in case some dependencies have repeated data (e.g. a shared user), if false the second shared user with same unique causes an exception

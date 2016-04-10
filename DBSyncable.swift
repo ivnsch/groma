@@ -10,13 +10,15 @@ import Foundation
 import RealmSwift
 
 class DBSyncable: Object {
+
+    static let lastServerUpdateFieldName = "lastServerUpdate" // the field name in the db objects, used e.g. to do update queries
     
-    static let lastUpdateFieldName = "lastUpdate"
+    static let lastUpdateFieldName = "lastUpdate" // used to send and parse the timestamp from server which is called lastUpdate instead of lastServerUpdate
     static let dirtyFieldName = "dirty"
     
     // TODO!!!! are we using lastUpdate if not remove or write a comment. Ensure we use lastServerUpdate in sync
     // ensure also that when we create the new objs with lastServerUpdate, lastUpdate is set to the same date
-    dynamic var lastUpdate: NSDate = NSDate()
+//    dynamic var lastUpdate: NSDate = NSDate()
     dynamic var lastServerUpdate: NSDate = NSDate(timeIntervalSince1970: 1) // Realm doesn't support nilable NSDate yet
     dynamic var removed: Bool = false
     
@@ -28,7 +30,7 @@ class DBSyncable: Object {
     func setSyncableFieldswithRemoteDict(dict: [String: AnyObject]) {
         // lastServerUpdate is called by server "lastUpdate". So we set lastServerUpdate with this. And subsequently we set lastUpdate with lastServerUpdate, as the sync is effectively updating the local db, so this is also the lastUpdate.
         self.lastServerUpdate = NSDate(timeIntervalSince1970: dict[DBSyncable.lastUpdateFieldName]! as! Double)
-        self.lastUpdate = lastServerUpdate
+//        self.lastUpdate = lastServerUpdate
         self.dirty = false
     }
     
@@ -38,5 +40,10 @@ class DBSyncable: Object {
     
     static func dirtyFilter(dirty: Bool = true) -> String {
         return "\(dirtyFieldName) == \(dirty)"
+    }
+    
+    // Helper for common code for different objects where we want to update the last server update timestamp on server response. The dirty flag is set to false, we assume this is called after server operation success so the object is synced.
+    static func timestampUpdateDict(uuid: String, lastServerUpdate: NSDate) -> [String: AnyObject] {
+        return ["uuid": uuid, DBSyncable.lastServerUpdateFieldName: lastServerUpdate, dirtyFieldName: false]
     }
 }

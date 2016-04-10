@@ -55,7 +55,7 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
         return "uuid"
     }
     
-    convenience init(uuid: String, product: DBStoreProduct, section: DBSection, list: DBList, note: String, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    convenience init(uuid: String, product: DBStoreProduct, section: DBSection, list: DBList, note: String, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         
         self.init()
         
@@ -72,7 +72,6 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
         self.stashQuantity = stashQuantity
         self.stashOrder = stashOrder
         
-        self.lastUpdate = lastUpdate
         if let lastServerUpdate = lastServerUpdate {
             self.lastServerUpdate = lastServerUpdate
         }
@@ -130,7 +129,6 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
             stashQuantity: stashQuantity ?? self.stashQuantity,
             stashOrder: stashOrder ?? self.stashOrder,
             
-            lastUpdate: self.lastUpdate,
             lastServerUpdate: self.lastServerUpdate,
             removed: self.removed
         )

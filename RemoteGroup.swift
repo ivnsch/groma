@@ -58,6 +58,6 @@ struct RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializable, 
 
 extension RemoteGroup {
     var timestampUpdateDict: [String: AnyObject] {
-        return ["uuid": uuid, "lastupdate": lastUpdate, "dirty": false]
+        return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
 }

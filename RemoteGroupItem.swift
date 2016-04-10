@@ -55,10 +55,10 @@ struct RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSerializab
 
 extension RemoteGroupItem {
     var timestampUpdateDict: [String: AnyObject] {
-        return ["uuid": uuid, "lastupdate": lastUpdate, "dirty": false]
+        return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
     
     static func createTimestampUpdateDict(uuid uuid: String, lastUpdate: NSDate) -> [String: AnyObject] {
-        return ["uuid": uuid, "lastupdate": lastUpdate, "dirty": false]
+        return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
 }

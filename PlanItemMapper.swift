@@ -15,7 +15,6 @@ class PlanItemMapper {
         dbPlanItem.inventory = InventoryMapper.dbWithInventory(planItem.inventory)
         dbPlanItem.product  = ProductMapper.dbWithProduct(planItem.product)
         dbPlanItem.quantity = planItem.quantity
-        dbPlanItem.lastUpdate = planItem.lastUpdate
         dbPlanItem.lastServerUpdate = planItem.lastUpdate
         return dbPlanItem
     }
@@ -26,7 +25,6 @@ class PlanItemMapper {
             product: ProductMapper.productWithDB(dbPlanItem.product),
             quantity: dbPlanItem.quantity,
             usedQuantity: usedQuantity,
-            lastUpdate: dbPlanItem.lastUpdate,
             lastServerUpdate: dbPlanItem.lastServerUpdate
         )
     }

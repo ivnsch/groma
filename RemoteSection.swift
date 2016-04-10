@@ -68,6 +68,6 @@ struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable
 
 extension RemoteSection {
     var timestampUpdateDict: [String: AnyObject] {
-        return ["uuid": uuid, "lastupdate": lastUpdate, "dirty": false]
+        return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
 }

@@ -19,7 +19,6 @@ class HistoryItemMapper {
         dbHistoryItem.quantity = historyItem.quantity
         dbHistoryItem.paidPrice = historyItem.paidPrice
         dbHistoryItem.user = SharedUserMapper.dbWithSharedUser(historyItem.user)
-        dbHistoryItem.lastUpdate = historyItem.lastUpdate
         dbHistoryItem.lastServerUpdate = historyItem.lastUpdate
         return dbHistoryItem
     }
@@ -33,7 +32,6 @@ class HistoryItemMapper {
         dbHistoryItem.quantity = inventoryItemWithHistory.inventoryItem.quantityDelta
         dbHistoryItem.paidPrice = inventoryItemWithHistory.paidPrice
         dbHistoryItem.user = SharedUserMapper.dbWithSharedUser(inventoryItemWithHistory.user)
-        dbHistoryItem.lastUpdate = inventoryItemWithHistory.inventoryItem.lastUpdate
         if let lastServerUpdate = inventoryItemWithHistory.inventoryItem.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
             dbHistoryItem.lastServerUpdate = lastServerUpdate
         }
@@ -49,7 +47,6 @@ class HistoryItemMapper {
             quantity: dbHistoryItem.quantity,
             user: SharedUserMapper.sharedUserWithDB(dbHistoryItem.user),
             paidPrice: dbHistoryItem.paidPrice,
-            lastUpdate: dbHistoryItem.lastUpdate,
             lastServerUpdate: dbHistoryItem.lastServerUpdate
         )
     }
@@ -63,7 +60,6 @@ class HistoryItemMapper {
             quantity: remoteHistoryItem.quantity,
             user: user,
             paidPrice: remoteHistoryItem.paidPrice,
-            lastUpdate: remoteHistoryItem.lastUpdate,
             lastServerUpdate: remoteHistoryItem.lastUpdate
         )
     }

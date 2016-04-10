@@ -177,7 +177,7 @@ class RealmGroupItemProvider: RealmProvider {
                 // save
                 try realm.write {
                     for obj in objs {
-                        obj.lastUpdate = NSDate()
+//                        obj.lastUpdate = NSDate()
                         realm.add(dbIncrementedInventoryitem, update: true)
                     }
                 }

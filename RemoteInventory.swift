@@ -61,6 +61,6 @@ struct RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializab
 
 extension RemoteInventory {
     var timestampUpdateDict: [String: AnyObject] {
-        return ["uuid": uuid, "lastupdate": lastUpdate, "dirty": false]
+        return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
 }
