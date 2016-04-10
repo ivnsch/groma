@@ -148,7 +148,7 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
         if listItems.count > 0 {
             let alreadyShowedAnim: Bool = PreferencesManager.loadPreference(PreferencesManagerKey.shownCanSwipeToOpenStash) ?? false
             if !alreadyShowedAnim {
-                PreferencesManager.savePreference(PreferencesManagerKey.showedAddDirectlyToInventoryHelp, value: true)
+                PreferencesManager.savePreference(PreferencesManagerKey.shownCanSwipeToOpenStash, value: true)
                 delay(0.4) {[weak self] in
                     self?.pricesView.setOpen(true)
                     delay(0.8) {
