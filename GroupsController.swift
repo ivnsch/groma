@@ -33,6 +33,10 @@ class ExpandableTableViewGroupModel: ExpandableTableViewModel {
     override func same(rhs: ExpandableTableViewModel) -> Bool {
         return group.same((rhs as! ExpandableTableViewGroupModel).group)
     }
+    
+    override var debugDescription: String {
+        return group.debugDescription
+    }
 }
 
 class GroupsController: ExpandableItemsTableViewController, AddEditGroupControllerDelegate, ExpandableTopViewControllerDelegate {
@@ -98,12 +102,14 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     }
     
     override func onReorderedModels() {
-        // TODO groups don't support reordering yet (also not in server)
         let groups = (models as! [ExpandableTableViewGroupModel]).map{$0.group}
-        let orderUpdates = groups.mapEnumerate{index, group in OrderUpdate(uuid: group.uuid, order: index)}
+        
+        let reorderedGroups = groups.mapEnumerate{index, group in group.copy(order: index)}
+        let orderUpdates = reorderedGroups.map{group in OrderUpdate(uuid: group.uuid, order: group.order)}
+        
+        models = reorderedGroups.map{ExpandableTableViewGroupModel(group: $0)}
         
         Providers.listItemGroupsProvider.updateGroupsOrder(orderUpdates, remote: true, successHandler{
-            //            self?.models = models // REVIEW remove? this seem not be necessary...
         })
     }
     

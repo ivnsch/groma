@@ -32,6 +32,10 @@ class ExpandableTableViewInventoryModel: ExpandableTableViewModel {
     override func same(rhs: ExpandableTableViewModel) -> Bool {
         return inventory.same((rhs as! ExpandableTableViewInventoryModel).inventory)
     }
+    
+    override var debugDescription: String {
+        return inventory.debugDescription
+    }
 }
 
 class InventoriesTableViewController: ExpandableItemsTableViewController, AddEditInventoryControllerDelegate, ExpandableTopViewControllerDelegate {
@@ -98,12 +102,14 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     }
     
     override func onReorderedModels() {
-        let lists = (models as! [ExpandableTableViewInventoryModel]).map{$0.inventory}
+        let inventories = (models as! [ExpandableTableViewInventoryModel]).map{$0.inventory}
         
-        let orderUpdates = lists.mapEnumerate{index, list in OrderUpdate(uuid: list.uuid, order: index)}
+        let reorderedInventories = inventories.mapEnumerate{index, inventory in inventory.copy(order: index)}
+        let orderUpdates = reorderedInventories.map{inventory in OrderUpdate(uuid: inventory.uuid, order: inventory.order)}
+        
+        models = reorderedInventories.map{ExpandableTableViewInventoryModel(inventory: $0)}
         
         Providers.inventoryProvider.updateInventoriesOrder(orderUpdates, remote: true, successHandler{
-            //            self?.models = models // REVIEW remove? this seem not be necessary...
         })
     }
     

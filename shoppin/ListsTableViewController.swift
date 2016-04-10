@@ -36,6 +36,10 @@ class ExpandableTableViewListModel: ExpandableTableViewModel {
     override func same(rhs: ExpandableTableViewModel) -> Bool {
         return list.same((rhs as! ExpandableTableViewListModel).list)
     }
+    
+    override var debugDescription: String {
+        return list.debugDescription
+    }
 }
 
 class ListsTableViewController: ExpandableItemsTableViewController, AddEditListControllerDelegate, ExpandableTopViewControllerDelegate {
@@ -102,10 +106,12 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
     override func onReorderedModels() {
         let lists = (models as! [ExpandableTableViewListModel]).map{$0.list}
         
-        let orderUpdates = lists.mapEnumerate{index, list in OrderUpdate(uuid: list.uuid, order: index)}
+        let reorderedLists = lists.mapEnumerate{index, list in list.copy(order: index)}
+        let orderUpdates = reorderedLists.map{list in OrderUpdate(uuid: list.uuid, order: list.order)}
 
+        models = reorderedLists.map{ExpandableTableViewListModel(list: $0)}
+        
         Providers.listProvider.updateListsOrder(orderUpdates, remote: true, successHandler{
-//            self?.models = models // REVIEW remove? this seem not be necessary...
         })
     }
     

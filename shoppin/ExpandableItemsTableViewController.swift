@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-class ExpandableTableViewModel: NSObject, Identifiable {
+class ExpandableTableViewModel: NSObject, Identifiable, CustomDebugStringConvertible {
 
     var name: String {
         fatalError("override")
@@ -26,6 +26,10 @@ class ExpandableTableViewModel: NSObject, Identifiable {
     
     func same(rhs: ExpandableTableViewModel) -> Bool {
         fatalError("override")
+    }
+    
+    override var debugDescription: String {
+        return ""
     }
 }
 
@@ -60,6 +64,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
             if models != oldValue {
                 tableView.reloadData()
             }
+//            printDebugModels()
         }
     }
     
@@ -106,6 +111,13 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         emptyView.addGestureRecognizer(tapRecognizer)
     }
 
+    private func printDebugModels() {
+        print("ExpandableItemsTableViewController items:")
+        for model in models {
+            print(model.debugDescription)
+        }
+    }
+    
     // MARK: -
     
     func onExpandableClose() {
