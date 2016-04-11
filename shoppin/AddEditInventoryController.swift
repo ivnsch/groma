@@ -41,6 +41,8 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     }
     
     private var showingColorPicker: FlatColorPickerController?
+    
+    private var addButtonHelper: AddButtonHelper?
 
     private var users: [SharedUser] = [] {
         didSet {
@@ -115,6 +117,22 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        addButtonHelper = initAddButtonHelper()
+        addButtonHelper?.addObserver()
+    }
+    
+    private func initAddButtonHelper() -> AddButtonHelper? {
+        guard let parentView = parentViewController?.view else {QL4("No parentController"); return nil}
+        let addButtonHelper = AddButtonHelper(parentView: parentView) {[weak self] in
+            self?.submit()
+        }
+        return addButtonHelper
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        addButtonHelper?.removeObserver()
     }
     
     func submit() {

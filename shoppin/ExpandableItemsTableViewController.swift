@@ -55,8 +55,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
 
     private let listItemsProvider = ProviderFactory().listItemProvider
     
-    private var addButtonHelper: AddButtonHelper?
-    
     var models: [ExpandableTableViewModel] = [] {
         didSet {
             emptyView.hidden = !models.isEmpty
@@ -156,22 +154,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         initModels()
-        
-        addButtonHelper = initAddButtonHelper()
-        addButtonHelper?.addObserver()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        addButtonHelper?.removeObserver()
-    }
-    
-    private func initAddButtonHelper() -> AddButtonHelper? {
-        guard let parentView = parentViewController?.view else {QL4("No parentController"); return nil}
-        let addButtonHelper = AddButtonHelper(parentView: parentView) {[weak self] in
-            self?.onSubmitTap()
-        }
-        return addButtonHelper
     }
     
     func initModels() {
@@ -369,8 +351,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
                 
                 expandCellAnimator.animateTransition(true, topOffsetY: 64)
                 
-                addButtonHelper?.removeObserver()
-                
             } else {
                 print("Warn: no cell for indexPath: \(indexPath)")
             }
@@ -423,11 +403,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     func setExpanded(expanded: Bool) {
         expandCellAnimator.animateTransition(false, topOffsetY: 64)
-        if expanded {
-            addButtonHelper?.removeObserver()
-        } else {
-            addButtonHelper?.addObserver()
-        }
     }
     
     func animationsComplete(wasExpanding: Bool, frontView: UIView) {

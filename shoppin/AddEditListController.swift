@@ -48,6 +48,8 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     
     private var showingColorPicker: FlatColorPickerController?
 
+    private var addButtonHelper: AddButtonHelper?
+
     private var users: [SharedUser] = [] {
         didSet {
             if !users.isEmpty {
@@ -157,8 +159,23 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     
     override func viewWillAppear(animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        addButtonHelper = initAddButtonHelper()
+        addButtonHelper?.addObserver()
     }
-
+    
+    private func initAddButtonHelper() -> AddButtonHelper? {
+        guard let parentView = parentViewController?.view else {QL4("No parentController"); return nil}
+        let addButtonHelper = AddButtonHelper(parentView: parentView) {[weak self] in
+            self?.submit()
+        }
+        return addButtonHelper
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        addButtonHelper?.removeObserver()
+    }
     
     // MARK: - Inventories picker
     
