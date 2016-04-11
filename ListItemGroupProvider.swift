@@ -47,7 +47,10 @@ protocol ListItemGroupProvider {
     func addGroupItems(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<[GroupItem]> -> ())
 
     func add(itemInput: GroupItemInput, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<GroupItem> -> Void)
+
+    func update(input: ListItemInput, updatingGroupItem: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
+    // Used by websockets TODO review (compare with update:input)
     func update(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
     func remove(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void)

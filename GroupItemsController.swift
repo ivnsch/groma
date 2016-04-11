@@ -293,10 +293,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) {
         
         func onEditItem(input: ListItemInput, editingItem: GroupItem) {
-            let updatedCategory = editingItem.product.category.copy(name: input.section, color: input.sectionColor)
-            let updatedProduct = editingItem.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
-            let updatedGroupItem = editingItem.copy(quantity: input.quantity, product: updatedProduct)
-            Providers.listItemGroupsProvider.update(updatedGroupItem, remote: true, successHandler{[weak self] in
+            Providers.listItemGroupsProvider.update(input, updatingGroupItem: editingItem, remote: true, successHandler{[weak self] in
                 self?.onGroupItemUpdated(true)
             })
         }

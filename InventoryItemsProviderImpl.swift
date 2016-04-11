@@ -327,6 +327,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
+    // NOTE: this is not used anymore because we disabled quick add in inventory items, if we enable it again it needs to be modified, update now has to load first possible existent product by unique like in group item/list item update.
     func updateInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         memProvider.updateInventoryItem(item)
         

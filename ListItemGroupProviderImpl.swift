@@ -273,6 +273,21 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
+    
+    func update(input: ListItemInput, updatingGroupItem: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        
+        Providers.productProvider.mergeOrCreateProduct(input.name, category: input.section, categoryColor: input.sectionColor, baseQuantity: input.baseQuantity, unit: input.unit, brand: input.brand, updateCategory: false) {[weak self] result in
+            
+            if let product = result.sucessResult {
+                let updatedGroupItem = updatingGroupItem.copy(quantity: input.quantity, product: product)
+                self?.update(updatedGroupItem, remote: remote, handler)
+            } else {
+                QL4("Error fetching product: \(result.status)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+    
     func update(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         DBProviders.groupItemProvider.update(item) {[weak self] saved in
             if saved {
