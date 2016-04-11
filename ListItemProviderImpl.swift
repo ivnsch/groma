@@ -543,6 +543,8 @@ class ListItemProviderImpl: ListItemProvider {
                     }
                     // this is not really necessary, but for consistency - reset order to 0 in the src status.
                     listItem.updateOrderMutable(ListItemStatusOrder(status: status1, order: 0))
+                    
+//                    QL2("List item after status update: \(listItem.quantityDebugDescription)")
                 }
                 
                 handler((switchedItems: listItems, storedItems: storedListItems))
@@ -556,62 +558,26 @@ class ListItemProviderImpl: ListItemProvider {
 
     func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         
+//        QL2("Switching status from \(listItem.product.product.name) from status \(status1) to \(status)")
+        
         switchStatusInsertInDst([listItem], list: list, status1: status1, status: status, remote: remote) {switchResult in
             
             if let (switchedItems, storedListItems) = switchResult { // here switchedItems is a 1 element array, containing the switched listItem
                 
-                // All the items that have to be updated - we need to update also order of following items in src status. We use modes .Single and .Reset to simplify the algorithm for the different use cases. In .Single we know there's only 1 listitem+section, and in .Reset we know we are emptying the list in targetStatus, so we just the order of all to 0. The main reason this differentiation is necessary is that order is relative to section, and to update the order of the followers, we need to know if they are in the same section of the switched listitem(s). In the case of single list item we just havee to query the section of the list item, in the case of multiple it's more complicated.
+                // Update src items order. We have to shift the followers in the same section or, if the section is empty after we switch item the order of the follower sections - for simplicity we just update the order field of all src list items and sections.
                 let allItemsToUpdate: [ListItem] = {
-                    
-                    let srcListItemSection = listItem.section
-                    
-                    let srcStoredItems = storedListItems.filter{$0.hasStatus(status1)}
-
-                    // If src section is now empty, shift following sections in src status up, also clear its own order for consistency
-                    let possibleFollowingSectionsToUpdate: [Section]? = {
-                        if srcStoredItems.count(srcListItemSection) - 1 == 0 {
-                            let srcStatusSectionFollowers = storedListItems.sectionsInOrder(status1).filter{$0.order(status1) > srcListItemSection.order(status1)}
-                            srcStatusSectionFollowers.forEachEnumerate({(index, section) -> Void in
-                                section.updateOrderMutable(ListItemStatusOrder(status: status1, order: index + srcListItemSection.order(status1)))
-                            })
-                            return srcStatusSectionFollowers
-                        } else {
-                            return nil
-                        }
-                    }()
-                    // In order to update the sections we will just set them back in the stored list items - so this update is also saved when we save the list items
-                    // NOTE: this is not optimal performance wise, since now we have to write all these list items to database instead of only the sections but the code is simpler (we would have to modify the mem cache as well as the db to update the sections separately).
-                    // NOTE also, that this is only for the local update - to the server we send only the switched item(s)! the server does itself again all the reordering logic. The reason for this logic duplication is that the app has to work offline and when online we have to ensure consistency for concurrent access.
-                    let possibleListItemsToUpdateInFollowingSections: [ListItem] = {
-                        if let sectionsToUpdate = possibleFollowingSectionsToUpdate {
-                            let sectionsToUpdateDict = sectionsToUpdate.toDictionary{($0.uuid, $0)}
-                            return srcStoredItems.collect {srcStoredItem in
-                                if let sectionToUpdate = sectionsToUpdateDict[srcStoredItem.section.uuid] {
-                                    return srcStoredItem.copy(section: sectionToUpdate, note: nil)
-                                } else {
-                                    return nil
-                                }
-                            }
-                        } else {
-                            return []
-                        }
-                    }()
-                    
-                    // The order of possible following items inside the same section also has to be udpated
-                    let possibleFollowingListItemsInSectionToUpdate: [ListItem] = {
-                        // shift following items (inside section) in src status up
-                        let firstInputItemOrderInSrcStatus = listItem.order(status1)
-                        let srcStatusListItemsFollowers = srcStoredItems.filter{$0.section.same(srcListItemSection) && $0.order(status1) > firstInputItemOrderInSrcStatus}
-                        return srcStatusListItemsFollowers.mapEnumerate {(index, listItem) in
-                            listItem.updateOrder(ListItemStatusOrder(status: status1, order: index + firstInputItemOrderInSrcStatus))
-                                .copy(section: srcListItemSection, note: nil) // TODO!!! review this, this is a hack because of the broad way we are using to do updates - since we do a "big update" for all list items (independently if we want to update only status, or order, or section), the section from these items, which are later in the array than the passed ones, overwrites their section, which may have been mutated at the beginning of this method. So we set the (possibly mutated) section here in the copy so when they are overwritten the mutated section data doesn't get lost.
-                        }
-                    }()
-                    
-                    // Total things to update - passed list items (quantity/order), possible following src list items (order), possible following src sections (order)
-                    // Note in dst status we don't update order of following items/sections as they are always inserted at the end
-                    return switchedItems + possibleFollowingListItemsInSectionToUpdate + possibleListItemsToUpdateInFollowingSections
+                    if let switchedItem = switchedItems.first {
+                        var items = storedListItems
+                        items.update(switchedItem) // Update switched item in this array such that it's count in src is 0 and reorder works correctly
+                        items.sortAndUpdateOrderFieldsMutating(status1) // This filters and sorts by src status, iterates through them setting order to index.
+                        return switchedItems + items // Add again the switched list item to the array (it's lost when we filter by src status)
+                    } else {
+                        QL4("Invalid state: there should be a switched list item")
+                        return switchedItems
+                    }
                 }()
+                
+//                QL2("After switching: \(listItem.product.product.name), writing updated items to db: \(allItemsToUpdate)")
                 
                 // Persist changes. If mem cached is enabled this calls handler directly after mem cache is updated and does db update in the background.
                 self.updateLocal(allItemsToUpdate, handler: handler, onFinishLocal: {[weak self] in

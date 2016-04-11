@@ -148,8 +148,8 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     
     var debugDescription: String {
 //        return shortDebugDescription
-        return longDebugDescription
-//        return quantityDebugDescription
+//        return longDebugDescription
+        return quantityOrderDebugDescription
 //        return quantityAndOrderDebugDescription
     }
     
@@ -161,8 +161,12 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         return "[\(product.product.name)], todo: \(todoQuantity), done: \(doneQuantity), stash: \(stashQuantity)"
     }
     
-    private var quantityDebugDescription: String {
+    var quantityDebugDescription: String {
         return "\(uuid), \(product.product.name), todoQuantity: \(todoQuantity), doneQuantity: \(doneQuantity), stashQuantity: \(stashQuantity)"
+    }
+    
+    var quantityOrderDebugDescription: String {
+        return "\(uuid), \(product.product.name), TODO: (q: \(todoQuantity), o: \(todoOrder)), DONE: (q: \(doneQuantity), o; \(doneOrder)), STASH: (q: \(stashQuantity), o: \(stashOrder))"
     }
     
     private var quantityAndOrderDebugDescription: String {

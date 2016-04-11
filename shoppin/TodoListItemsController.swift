@@ -42,6 +42,10 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
         if let list = currentList {
             Providers.listItemsProvider.listItems(list, sortOrderByStatus: ListItemStatus.Todo, fetchMode: .First, successHandler {listItems in
                 let (totalCartQuantity, totalCartPrice) = listItems.totalQuanityAndPrice(.Done)
+//                let itemsStr = listItems.reduce("") {str, item in
+//                    str + item.quantityDebugDescription + ","
+//                }
+//                QL2("updating price, items: \(itemsStr), total cart quantity: \(totalCartQuantity), done price: \(totalCartPrice)")
                 self.pricesView.cartQuantity = totalCartQuantity
                 self.pricesView.setDonePrice(totalCartPrice, animated: true)
             })

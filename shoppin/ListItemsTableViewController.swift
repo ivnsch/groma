@@ -136,7 +136,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         
         if QorumLogs.minimumLogLevelShown < 2 {
             print("List for status: \(status)")
-            print(debugTableViewListItemsOrder())
+            print(debugTableViewListItems())
         }
     }
     
@@ -280,9 +280,9 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     private func debugTableViewListItems() -> String {
         return tableViewSections.reduce("") {str, section in
             let sectionListItemsStr = section.tableViewListItems.reduce("") {str, tableViewListItem in
-                return "\(str),\(tableViewListItem)"
+                return "\(str)\t\(tableViewListItem)\n"
             }
-            return "(\(str),\(section.section.name)):[\(sectionListItemsStr)]"
+            return "(\(str)\(section.section.name)):\n[\(sectionListItemsStr)]"
         }
     }
 

@@ -13,7 +13,7 @@ extension Array where Element: ListItem {
     /**
     Sorts increasingly by section and list item order
     */
-    func sortedByOrder(status: ListItemStatus) -> [ListItem] {
+    func sortedByOrder(status: ListItemStatus) -> [Element] {
         
         // src (sort by multiple criteria) http://stackoverflow.com/a/27596550/930450
         
@@ -30,6 +30,22 @@ extension Array where Element: ListItem {
         }
         
         return result
+    }
+    
+    mutating func sortAndUpdateOrderFieldsMutating(status: ListItemStatus) {
+        
+        self = filter{$0.hasStatus(status)}
+        
+        self = sortedByOrder(status)
+        
+        let orderedDict = groupBySectionOrdered()
+        orderedDict.enumerate().forEach {index, sectionWithListItems in
+            sectionWithListItems.0.updateOrderMutable(ListItemStatusOrder(status, index))
+            
+            sectionWithListItems.1.enumerate().forEach {index, listItem in
+                listItem.updateOrderMutable(ListItemStatusOrder(status, index))
+            }
+        }
     }
     
     /**
@@ -135,6 +151,10 @@ extension Array where Element: ListItem {
     // Total price excluding stash
     var totalPriceTodoAndCart: Float {
         return totalPrice(.Todo) + totalPrice(.Done)
+    }
+    
+    func filterTodo() -> Array<Element> {
+        return self.filter{$0.todoQuantity > 0}
     }
     
     func filterDone() -> Array<Element> {
