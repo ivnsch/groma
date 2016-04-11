@@ -21,6 +21,7 @@ struct Urls {
 
     // Global
     static let sync = host + "sync"
+    static let fullDownload = host + "down"
     
     // User
     static let register = host + "register"

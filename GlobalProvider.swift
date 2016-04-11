@@ -14,4 +14,6 @@ protocol GlobalProvider {
     func sync(handler: ProviderResult<SyncResult> -> Void)
     
     func clearAllData(handler: ProviderResult<Any> -> Void)
+    
+    func fullDownload(handler: ProviderResult<SyncResult> -> Void)
 }

@@ -20,36 +20,39 @@ class GlobalProviderImpl: GlobalProvider {
             if let syncDict = syncDict {
                 
                 self?.remoteProvider.sync(syncDict) {remoteResult in
-                    
-                    if let syncDict = remoteResult.successResult {
-                        
-                        self?.dbProvider.saveSyncResult(syncDict) {saved in
-                            if saved {
-                                Providers.listItemsProvider.invalidateMemCache()
-                                Providers.inventoryItemsProvider.invalidateMemCache()
-                                if let remoteSyncResult = remoteResult.successResult {
-                                    let syncResult = SyncResult(listInvites: remoteSyncResult.listInvitations, inventoryInvites: remoteSyncResult.inventoryInvitations)
-                                    handler(ProviderResult(status: .Success, sucessResult: syncResult))
-                                } else {
-                                    QL4("Invalid state, remote result should have a successResult")
-                                    handler(ProviderResult(status: .Unknown))
-                                }
-                                
-                            } else {
-                                QL4("Coudln't save sync result to database")
-                                handler(ProviderResult(status: .Unknown))
-                            }
-                        }
-                        
-                    } else {
-                        QL3("Remote error doing sync, result: \(remoteResult)")
-                        // show err msg in any case (also not logged in etc) as in sync we are expected to be connected
-                        handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)))
-                    }
+                    self?.handleSyncResult(remoteResult, handler: handler)
                 }
             } else {
                 QL4("Couldn't load sync dictionary")
             }
+        }
+    }
+    
+    private func handleSyncResult(syncResult: RemoteResult<RemoteSyncResult>, handler: ProviderResult<SyncResult> -> Void) {
+        if let syncDict = syncResult.successResult {
+            
+            dbProvider.saveSyncResult(syncDict) {saved in
+                if saved {
+                    Providers.listItemsProvider.invalidateMemCache()
+                    Providers.inventoryItemsProvider.invalidateMemCache()
+                    if let remoteSyncResult = syncResult.successResult {
+                        let syncResult = SyncResult(listInvites: remoteSyncResult.listInvitations, inventoryInvites: remoteSyncResult.inventoryInvitations)
+                        handler(ProviderResult(status: .Success, sucessResult: syncResult))
+                    } else {
+                        QL4("Invalid state, remote result should have a successResult")
+                        handler(ProviderResult(status: .Unknown))
+                    }
+                    
+                } else {
+                    QL4("Coudln't save sync result to database")
+                    handler(ProviderResult(status: .Unknown))
+                }
+            }
+            
+        } else {
+            QL3("Remote error doing sync, result: \(syncResult)")
+            // show err msg in any case (also not logged in etc) as in sync we are expected to be connected
+            handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(syncResult.status)))
         }
     }
     
@@ -58,6 +61,13 @@ class GlobalProviderImpl: GlobalProvider {
             handler(ProviderResult(status: success ? .Success : .DatabaseUnknown))
             
             // TODO!!!! server
+        }
+    }
+    
+    func fullDownload(handler: ProviderResult<SyncResult> -> Void) {
+        remoteProvider.fullDownload() {[weak self] remoteResult in
+            // Full download result handling is the same as sync - full overwrite of local db. Note that the caller decides what to do with the possible invitations - show, ignore, etc.
+            self?.handleSyncResult(remoteResult, handler: handler)
         }
     }
 }

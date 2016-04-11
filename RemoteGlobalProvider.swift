@@ -15,4 +15,10 @@ class RemoteGlobalProvider {
             handler(result)
         }
     }
+    
+    func fullDownload(handler: RemoteResult<RemoteSyncResult> -> ()) {
+        RemoteProvider.authenticatedRequest(.GET, Urls.fullDownload) {result in
+            handler(result)
+        }
+    }
 }
