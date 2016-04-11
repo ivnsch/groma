@@ -279,7 +279,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             // in case we are in reorder sections mode, come back to normal. This is an edit specific mode.
             setReorderSections(false)
             expandCollapseButton.setHiddenAnimated(true)
-            
+         
+            setDefaultLeftButtons()
             topBar.setRightButtonIds([.ToggleOpen])
         }
         
