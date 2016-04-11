@@ -96,15 +96,15 @@ class SectionProviderImpl: SectionProvider {
     func mergeOrCreateSection(sectionName: String, sectionColor: UIColor, status: ListItemStatus, possibleNewOrder: ListItemStatusOrder?, list: List, _ handler: ProviderResult<Section> -> Void) {
         
         // load section or create one (there's no more section data in the input besides of the name, so there's nothing to update).
-        // There is no name update since here we have only name so either the name is in db or it's not, if it's not insert a new section
         loadSection(sectionName, list: list) {result in
             
             // TODO!!!! check if the optional section from db works otherwise return to using .Success / .NotFound with non optional
-            // load product and update or create one
-            // if we find a product with the name we update it - this is for the case the user changes the price for an existing product while adding an item
-            if let existingSectionMaybe = result.sucessResult {
+            // load section and update or create one
+            // if we find a section with the name we update it - this is for the case the user changes the color of section when editing item
+             if let existingSectionMaybe = result.sucessResult {
                 if let existingSection = existingSectionMaybe {
-                    handler(ProviderResult(status: .Success, sucessResult: existingSection))
+                    let updatedSection = existingSection.copy(color: sectionColor)
+                    handler(ProviderResult(status: .Success, sucessResult: updatedSection))
                     
                 } else {
                     if let order = possibleNewOrder {

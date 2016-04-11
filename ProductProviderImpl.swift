@@ -185,11 +185,11 @@ class ProductProviderImpl: ProductProvider {
     func mergeOrCreateProduct(productName: String, category: String, categoryColor: UIColor, baseQuantity: Float, unit: StoreProductUnit, brand: String, updateCategory: Bool, _ handler: ProviderResult<Product> -> Void) {
 
         // load product and update or create one
-        // if we find a product with the name we update it - this is for the case the user changes the price etc for an existing product while adding an item
+        // if we find a product with the name/brand we update it - this is for the case the user changes the price etc for an existing product while adding an item
         loadProduct(productName, brand: brand) {result in
             if let existingProduct = result.sucessResult {
                 let updatedCateogry = existingProduct.category.copy(name: category, color: categoryColor)
-                let updatedProduct = existingProduct.copy(name: productName, category: updatedCateogry)
+                let updatedProduct = existingProduct.copy(category: updatedCateogry)
                 handler(ProviderResult(status: .Success, sucessResult: updatedProduct))
                 
             } else { // product doesn't exist

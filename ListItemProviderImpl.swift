@@ -254,28 +254,72 @@ class ListItemProviderImpl: ListItemProvider {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
-    
     // Note: status assumed to be .Todo as we can add list item input only to .Todo
     func add(listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<ListItem> -> Void) {
-        Providers.sectionProvider.mergeOrCreateSection(listItemInput.section, sectionColor: listItemInput.sectionColor, status: .Todo, possibleNewOrder: possibleNewSectionOrder, list: list) {[weak self] result in
-
+        sectionAndProductForAddUpdate(listItemInput, list: list, possibleNewSectionOrder: possibleNewSectionOrder) {[weak self] result in
+            if let (section, product) = result.sucessResult {
+                self?.addListItem(product, status: status, section: section, quantity: listItemInput.quantity, list: list, note: listItemInput.note, order: orderMaybe, handler)
+            } else {
+                QL4("Error fetching section and/or product: \(result.status)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+    
+    // Updates list item
+    // We load product and section from db identified by uniques and update and link to them, instead of updating directly the product and section of the item
+    // The reason for this, is that if we udpate a part of the unique say the product's brand, we have to look if a product with the new unique exist and link to that one - otherwise we may end with 2 products (or sections) with the same semantic unique (but different uuids) and this is invalid, among others it causes an error in the server. 
+    // NOTE: for now assumes that the store is not updated (the app doesn't allow to edit the store of a list item). This means that we don't look if a store product with the name-brand-store exists and link to that one if it does like we do with product or category. We just update the current store product. TODO review this
+    func update(listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, _ handler: ProviderResult<ListItem> -> Void) {
+        sectionAndProductForAddUpdate(listItemInput, list: list, possibleNewSectionOrder: nil) {[weak self] result in
+            if let (section, product) = result.sucessResult {
+                
+                let storeProduct = StoreProduct(uuid: updatingListItem.product.product.uuid, price: listItemInput.price, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, store: updatingListItem.list.store ?? "", product: product) // possible store product update
+                
+                let listItem = ListItem(
+                    uuid: updatingListItem.uuid,
+                    product: storeProduct,
+                    section: section,
+                    list: list,
+                    note: listItemInput.note,
+                    statusOrder: ListItemStatusOrder(status: status, order: updatingListItem.order(status)),
+                    statusQuantity: ListItemStatusQuantity(status: status, quantity: listItemInput.quantity)
+                )
+                
+                self?.update([listItem], remote: remote) {result in
+                    if result.success {
+                        handler(ProviderResult(status: .Success, sucessResult: listItem))
+                    } else {
+                        QL4("Error updating list item: \(result)")
+                        handler(ProviderResult(status: result.status))
+                    }
+                }
+            } else {
+                QL4("Error fetching section and/or product: \(result.status)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+    
+    private func sectionAndProductForAddUpdate(listItemInput: ListItemInput, list: List, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<(Section, Product)> -> Void) {
+        Providers.sectionProvider.mergeOrCreateSection(listItemInput.section, sectionColor: listItemInput.sectionColor, status: .Todo, possibleNewOrder: possibleNewSectionOrder, list: list) {result in
+            
             if let section = result.sucessResult {
                 
                 // updateCategory: false: we don't touch product's category from list items - our inputs affect only the section. We use them though to create a category in the case a category with the section's name doesn't exists already. A product needs a category and it's logical to simply default this to the section if it doesn't exist, instead of making user enter a second input for the category. From user's perspective, most times category = section.
                 //Providers.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.section, categoryColor: listItemInput.sectionColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, store: listItemInput.store, updateCategory: false)
                 Providers.productProvider.mergeOrCreateProduct(listItemInput.name, category: listItemInput.section, categoryColor: listItemInput.sectionColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, updateCategory: false) {result in
-            
-                    if let product = result.sucessResult {
                     
-                        self?.addListItem(product, status: status, section: section, quantity: listItemInput.quantity, list: list, note: listItemInput.note, order: orderMaybe, handler)
-
+                    if let product = result.sucessResult {
+                        handler(ProviderResult(status: .Success, sucessResult: (section, product)))
+                        
                     } else {
-                        print("Error fetching product: \(result.status)")
+                        QL4("Error fetching product: \(result.status)")
                         handler(ProviderResult(status: .DatabaseUnknown))
                     }
                 }
             } else {
-                print("Error fetching section: \(result.status)")
+                QL4("Error fetching section: \(result.status)")
                 handler(ProviderResult(status: .DatabaseUnknown))
             }
         }

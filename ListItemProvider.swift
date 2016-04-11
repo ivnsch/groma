@@ -32,6 +32,9 @@ protocol ListItemProvider {
     */
     func add(listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int?, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<ListItem> -> Void)
     
+    // product/section same logic as add(listItemInput) (see doc above). TODO review other update methods maybe these should be removed or at least made private, since they don't have this product/section logic and there's no reason from outside of the provider to use a different logic (which would be to update the linked product/section directly).
+    func update(listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, _ handler: ProviderResult<ListItem> -> Void)
+    
     func addListItem(product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<ListItem> -> Void)
     
     func add(prototypes: [ListItemPrototype], status: ListItemStatus, list: List, note: String?, order orderMaybe: Int?, _ handler: ProviderResult<[ListItem]> -> Void)

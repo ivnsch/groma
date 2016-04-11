@@ -477,48 +477,12 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     private func updateItem(updatingListItem: ListItem, listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
         if let currentList = self.currentList {
             
-            let category = updatingListItem.product.product.category
-            let product = Product(uuid: updatingListItem.product.product.uuid, name: listItemInput.name, category: category, brand: listItemInput.brand) // possible product update
-            let storeProduct = StoreProduct(uuid: updatingListItem.product.uuid, price: listItemInput.price, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, store: updatingListItem.list.store ?? "", product: product) // possible store product update
-            
-            func onHasSection(section: Section) {
-                let listItem = ListItem(
-                    uuid: updatingListItem.uuid,
-                    product: storeProduct,
-                    section: section,
-                    list: currentList,
-                    note: listItemInput.note,
-                    statusOrder: ListItemStatusOrder(status: status, order: updatingListItem.order(status)),
-                    statusQuantity: ListItemStatusQuantity(status: status, quantity: listItemInput.quantity)
-                )
-                
-                Providers.listItemsProvider.update([listItem], remote: true, successHandler {[weak self] in guard let weakSelf = self else {return}
-                    self?.listItemsTableViewController.updateListItem(listItem, status: weakSelf.status, notifyRemote: true)
-//                    self?.updatePrices(.MemOnly)
-                    self?.onTableViewChangedQuantifiables()
-                    handler?()
-                })
-            }
-            
-            if updatingListItem.section.name != listItemInput.section { // if user changed the section we have to see if a section with new name exists already (explanation below)
-                
-                Providers.sectionProvider.loadSection(listItemInput.section, list: updatingListItem.list, handler: successHandler{sectionMaybe in
-                    // if a section with name exists already, use existing section, otherwise create a new one
-                    // Note we don't update here the section of the editing list item, this would mean that we change the section name for existing section, e.g. we change section of "tomatoes" from "vegatables" to "fruits", if we just update the section this means all the items which are in "vegetables" will be now in "fruits" and this is not what we want.
-                    let section: Section = {
-                        if let section = sectionMaybe {
-                            return section
-                        } else {
-                            return updatingListItem.section.copy(uuid: NSUUID().UUIDString, name: listItemInput.section, color: listItemInput.sectionColor)
-                        }
-                    }()
-                    onHasSection(section)
-                })
-            } else { // if the user hasn't entered a different section name, there's no need to load the section from db, just use the existing one. Update possible color change.
-                let updatedSection = updatingListItem.section.copy(color: listItemInput.sectionColor)
-                onHasSection(updatedSection)
-            }
-            
+            Providers.listItemsProvider.update(listItemInput, updatingListItem: updatingListItem, status: status, list: currentList, true, successHandler {[weak self] listItem in guard let weakSelf = self else {return}
+                weakSelf.listItemsTableViewController.updateListItem(listItem, status: weakSelf.status, notifyRemote: true)
+                //                    self?.updatePrices(.MemOnly)
+                weakSelf.onTableViewChangedQuantifiables()
+                handler?()
+            })
         } else {
             print("Error: Invalid state: trying to update list item without current list")
         }
