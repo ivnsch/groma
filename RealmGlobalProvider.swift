@@ -8,7 +8,8 @@
 
 import Foundation
 import RealmSwift
-
+import QorumLogs
+    
 class RealmGlobalProvider: RealmProvider {
 
     // TODO map db objects directly to dicts, mapping to our plain objects is not necessary
@@ -168,6 +169,7 @@ class RealmGlobalProvider: RealmProvider {
     }
     
     private func clearAllDataSync(realm: Realm) {
+        // TODO!!!! wasn't order important for delete?
         realm.delete(realm.objects(DBProductCategory))
         realm.delete(realm.objects(DBProduct))
         realm.delete(realm.objects(DBSection))

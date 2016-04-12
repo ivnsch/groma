@@ -77,9 +77,6 @@
 		EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */; };
 		EB0F5F8C1B9A0A8000035175 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */; };
 		EB0F5F8D1B9A0A8000035175 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */; };
-		EB119E731CBAFCCB00FF1672 /* prefillde.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB119E701CBAFCB200FF1672 /* prefillde.realm */; };
-		EB119E741CBAFCCB00FF1672 /* prefillen.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB119E711CBAFCB200FF1672 /* prefillen.realm */; };
-		EB119E751CBAFCCB00FF1672 /* prefilles.realm in Resources */ = {isa = PBXBuildFile; fileRef = EB119E721CBAFCB200FF1672 /* prefilles.realm */; };
 		EB1219DB1BD8EB23004351E0 /* QuickAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */; };
 		EB135B941BED21490093DE70 /* ExpandFloatingButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB135B931BED21490093DE70 /* ExpandFloatingButtonModel.swift */; };
 		EB135B961BED5F130093DE70 /* ItemWithCellAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB135B951BED5F130093DE70 /* ItemWithCellAttributes.swift */; };
@@ -1107,9 +1104,6 @@
 		EB0F5F851B962D2100035175 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EB0F5F871B98A10100035175 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_ListItem.swift; sourceTree = "<group>"; };
-		EB119E701CBAFCB200FF1672 /* prefillde.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillde.realm; sourceTree = "<group>"; };
-		EB119E711CBAFCB200FF1672 /* prefillen.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefillen.realm; sourceTree = "<group>"; };
-		EB119E721CBAFCB200FF1672 /* prefilles.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = prefilles.realm; sourceTree = "<group>"; };
 		EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddViewController.swift; sourceTree = "<group>"; };
 		EB135B931BED21490093DE70 /* ExpandFloatingButtonModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandFloatingButtonModel.swift; sourceTree = "<group>"; };
 		EB135B951BED5F130093DE70 /* ItemWithCellAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemWithCellAttributes.swift; sourceTree = "<group>"; };
@@ -1853,9 +1847,6 @@
 		EB1DDE9C1A3334EC00D778DE = {
 			isa = PBXGroup;
 			children = (
-				EB119E701CBAFCB200FF1672 /* prefillde.realm */,
-				EB119E711CBAFCB200FF1672 /* prefillen.realm */,
-				EB119E721CBAFCB200FF1672 /* prefilles.realm */,
 				EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */,
 				EB1DDEA71A3334EC00D778DE /* shoppin */,
 				EB55675A1A8622E600CD3EC6 /* shoppin_ios */,
@@ -3303,9 +3294,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB119E731CBAFCCB00FF1672 /* prefillde.realm in Resources */,
-				EB119E741CBAFCCB00FF1672 /* prefillen.realm in Resources */,
-				EB119E751CBAFCCB00FF1672 /* prefilles.realm in Resources */,
 				EBEA0CE21CA6C6BC00E68B81 /* SlidingTabsView.xib in Resources */,
 				EB9208021C4DBC7700332332 /* SimpleInputPopup.storyboard in Resources */,
 				EB92082E1C4ECE3D00332332 /* EditBrandController.xib in Resources */,

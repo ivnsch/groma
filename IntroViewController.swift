@@ -72,32 +72,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     }
 
     private func initDatabase(onComplete: VoidFunction) {
-        
+
         func prefillDatabase(onFinish: VoidFunction? = nil) {
-            background({
-                let p = NSHomeDirectory() + "/Documents/default.realm"
-                let lang = LangManager().appLang
-                if let prefillPath = NSBundle.mainBundle().pathForResource("prefill\(lang)", ofType: "realm") {
-                    QL2("Copying prefill database for lang: \(lang) to: \(p)")
-                    do {
-//                        try NSFileManager.defaultManager().removeItemAtPath(p)
-                        try NSFileManager.defaultManager().copyItemAtPath(prefillPath, toPath: p)
-                        QL1("Copied prefill database")
-                        return true
-                        
-                    } catch let error as NSError {
-                        QL4("Error copying prefill database: \(error)")
-                        return false
-                    }
-                } else {
-                    QL4("Prefill database was not found")
-                    return false
-                }
-                }) {(success: Bool) in
-                    if !success {
-                        QL4("Not success prefilling database")
-                    }
-                    onFinish?() // don't return anything, if prefill fails we still start the app normally
+            let lang = LangManager().appLang // note that the prefill items are left permanently in whatever lang the device was when the user installed the app
+            
+            SuggestionsPrefiller().prefill(lang) {success in
+                QL1("Finish initialising database, success: \(success)")
+                onFinish?()
             }
         }
         

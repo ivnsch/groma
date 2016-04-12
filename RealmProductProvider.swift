@@ -321,10 +321,7 @@ class RealmProductProvider: RealmProvider {
         })
     }
     
-    func save(categories: [ProductCategory], products: [Product], _ handler: Bool -> Void) {
-        
-        let dbCategories = categories.map{ProductCategoryMapper.dbWithCategory($0)}
-        let dbProducts = products.map{ProductMapper.dbWithProduct($0)}
+    func save(dbCategories: [DBProductCategory], dbProducts: [DBProduct], _ handler: Bool -> Void) {
         
         doInWriteTransaction({realm in
             for dbCategory in dbCategories {
