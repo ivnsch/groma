@@ -16,7 +16,8 @@ class ProductMapper {
             name: dbProduct.name,
             category: ProductCategoryMapper.categoryWithDB(dbProduct.category),
             fav: dbProduct.fav,
-            brand: dbProduct.brand
+            brand: dbProduct.brand,
+            lastServerUpdate: dbProduct.lastServerUpdate
         )
     }
     
@@ -27,6 +28,9 @@ class ProductMapper {
         dbProduct.category = ProductCategoryMapper.dbWithCategory(product.category)
         dbProduct.fav = product.fav
         dbProduct.brand = product.brand
+        if let lastServerUpdate = product.lastServerUpdate {
+            dbProduct.lastServerUpdate = lastServerUpdate
+        }
         return dbProduct
     }
     
@@ -49,7 +53,8 @@ class ProductMapper {
             name: remoteProduct.name,
             category: category,
             fav: remoteProduct.fav,
-            brand: remoteProduct.brand
+            brand: remoteProduct.brand,
+            lastServerUpdate: remoteProduct.lastUpdate
         )
     }
     
@@ -61,6 +66,7 @@ class ProductMapper {
         dbProduct.fav = product.fav
         dbProduct.brand = product.brand
         dbProduct.dirty = false
+        dbProduct.lastServerUpdate = product.lastUpdate
         return dbProduct
     }
     

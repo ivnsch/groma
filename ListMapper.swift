@@ -54,7 +54,7 @@ class ListMapper {
     class func listWithDB(dbList: DBList) -> List {
         let users = dbList.users.toArray().map{SharedUserMapper.sharedUserWithDB($0)}
         let inventory = InventoryMapper.inventoryWithDB(dbList.inventory)
-        return List(uuid: dbList.uuid, name: dbList.name, users: users, bgColor: dbList.bgColor(), order: dbList.order, inventory: inventory, store: dbList.storeOpt)
+        return List(uuid: dbList.uuid, name: dbList.name, users: users, bgColor: dbList.bgColor(), order: dbList.order, inventory: inventory, store: dbList.storeOpt, lastServerUpdate: dbList.lastServerUpdate)
     }
     
     class func listsWithRemote(remoteLists: RemoteListsWithDependencies) -> [List] {
@@ -69,7 +69,9 @@ class ListMapper {
                 bgColor: remoteList.color,
                 order: remoteList.order,
                 inventory: inventoriesDict[remoteList.inventoryUuid]!,
-                store: remoteList.store)
+                store: remoteList.store,
+                lastServerUpdate: remoteList.lastUpdate
+            )
         }
         
         return lists.sortedByOrder()
@@ -84,7 +86,8 @@ class ListMapper {
             bgColor: remoteList.list.color,
             order: remoteList.list.order,
             inventory: inventory,
-            store: remoteList.list.store
+            store: remoteList.list.store,
+            lastServerUpdate: remoteList.list.lastUpdate
         )
     }
 }

@@ -133,7 +133,8 @@ class HistoryItemMapper {
                 addedDate: remoteListItem.addedDate,
                 quantity: remoteListItem.quantity,
                 user: usersDict[remoteListItem.userUuid]!,
-                paidPrice: remoteListItem.paidPrice
+                paidPrice: remoteListItem.paidPrice,
+                lastServerUpdate: remoteListItem.lastUpdate
             )
         }
         

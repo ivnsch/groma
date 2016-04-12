@@ -18,6 +18,9 @@ class ListItemGroupMapper {
         dbListItemGroup.setBgColor(listItemGroup.bgColor)
         dbListItemGroup.setBgColor(listItemGroup.bgColor)
         dbListItemGroup.fav  = listItemGroup.fav
+        if let lastServerUpdate = listItemGroup.lastServerUpdate {
+            dbListItemGroup.lastServerUpdate = lastServerUpdate
+        }
         return dbListItemGroup
     }
     
@@ -27,7 +30,8 @@ class ListItemGroupMapper {
             name: dbListItemGroup.name,
             bgColor: dbListItemGroup.bgColor(),
             order: dbListItemGroup.order,
-            fav: dbListItemGroup.fav
+            fav: dbListItemGroup.fav,
+            lastServerUpdate: dbListItemGroup.lastServerUpdate
         )
     }
     
@@ -37,7 +41,8 @@ class ListItemGroupMapper {
             name: remoteGroup.name,
             bgColor: remoteGroup.color,
             order: remoteGroup.order,
-            fav: remoteGroup.fav
+            fav: remoteGroup.fav,
+            lastServerUpdate: remoteGroup.lastUpdate
         )
     }
 }

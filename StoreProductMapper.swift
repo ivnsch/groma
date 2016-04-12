@@ -19,7 +19,8 @@ class StoreProductMapper {
             baseQuantity: dbStoreProduct.baseQuantity,
             unit: StoreProductUnit(rawValue: dbStoreProduct.unit)!,
             store: dbStoreProduct.store,
-            product: product
+            product: product,
+            lastServerUpdate: dbStoreProduct.lastServerUpdate
         )
     }
     
@@ -31,6 +32,9 @@ class StoreProductMapper {
         dbProduct.unit = storeProduct.unit.rawValue
         dbProduct.store = storeProduct.store
         dbProduct.product = ProductMapper.dbWithProduct(storeProduct.product)
+        if let lastServerUpdate = storeProduct.lastServerUpdate {
+            dbProduct.lastServerUpdate = lastServerUpdate
+        }
         return dbProduct
     }
     
@@ -54,7 +58,8 @@ class StoreProductMapper {
             baseQuantity: storeProduct.baseQuantity,
             unit: StoreProductUnit(rawValue: storeProduct.unit)!,
             store: storeProduct.store,
-            product: product
+            product: product,
+            lastServerUpdate: storeProduct.lastUpdate
         )
     }
     

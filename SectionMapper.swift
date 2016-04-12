@@ -12,11 +12,11 @@ class SectionMapper {
     
     class func sectionWithDB(dbSection: DBSection) -> Section {
         let list = ListMapper.listWithDB(dbSection.list)
-        return Section(uuid: dbSection.uuid, name: dbSection.name, color: dbSection.color(), list: list, todoOrder: dbSection.todoOrder, doneOrder: dbSection.doneOrder, stashOrder: dbSection.stashOrder)
+        return Section(uuid: dbSection.uuid, name: dbSection.name, color: dbSection.color(), list: list, todoOrder: dbSection.todoOrder, doneOrder: dbSection.doneOrder, stashOrder: dbSection.stashOrder, lastServerUpdate: dbSection.lastServerUpdate)
     }
     
     class func SectionWithRemote(remoteSection: RemoteSection, list: List) -> Section {
-        return Section(uuid: remoteSection.uuid, name: remoteSection.name, color: remoteSection.color, list: list, todoOrder: remoteSection.todoOrder, doneOrder: remoteSection.doneOrder, stashOrder: remoteSection.stashOrder)
+        return Section(uuid: remoteSection.uuid, name: remoteSection.name, color: remoteSection.color, list: list, todoOrder: remoteSection.todoOrder, doneOrder: remoteSection.doneOrder, stashOrder: remoteSection.stashOrder, lastServerUpdate: remoteSection.lastUpdate)
     }
     
     class func dbWithSection(section: Section) -> DBSection {
@@ -28,7 +28,6 @@ class SectionMapper {
         dbSection.todoOrder = section.todoOrder
         dbSection.doneOrder = section.doneOrder
         dbSection.stashOrder = section.stashOrder
-        // TODO!!!! ensure that in all mappers and mapper's methods (also when setting from remote object) we are setting lastUpdate/lastServer update, for example here it was missing
         if let lastServerUpdate = section.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
             dbSection.lastServerUpdate = lastServerUpdate
         }
@@ -45,6 +44,7 @@ class SectionMapper {
         dbSection.doneOrder = section.doneOrder
         dbSection.stashOrder = section.stashOrder
         dbSection.dirty = false
+        dbSection.lastServerUpdate = section.lastUpdate
         return dbSection
     }
 }

@@ -14,7 +14,8 @@ class ProductCategoryMapper {
         return ProductCategory(
             uuid: dbCategory.uuid,
             name: dbCategory.name,
-            color: dbCategory.color() // TODO!!! sometimes crash here - bad access. no more message, checked with realm browser and data looks ok (but there's no way to check binary data of color is correct). Maybe store color as hex. Curious was also - added a debug print for uuid, name, colorData, all output was empty (why?). It crashed when printing colorData. Ahhh: Probably this happens when deleting products which currently doesn't delete the list items, and then accessing the list items again! It strange though because colorData has a default value.
+            color: dbCategory.color(),
+            lastServerUpdate: dbCategory.lastServerUpdate
         )
     }
     
@@ -23,6 +24,9 @@ class ProductCategoryMapper {
         dbCategory.uuid = category.uuid
         dbCategory.name = category.name
         dbCategory.setColor(category.color)
+        if let lastServerUpdate = category.lastServerUpdate {
+            dbCategory.lastServerUpdate = lastServerUpdate
+        }
         return dbCategory
     }
     
@@ -30,7 +34,8 @@ class ProductCategoryMapper {
         return ProductCategory(
             uuid: remoteCategory.uuid,
             name: remoteCategory.name,
-            color: remoteCategory.color
+            color: remoteCategory.color,
+            lastServerUpdate: remoteCategory.lastUpdate
         )
     }
     
@@ -40,6 +45,7 @@ class ProductCategoryMapper {
         dbCategory.name = category.name
         dbCategory.setColor(category.color)
         dbCategory.dirty = false
+        dbCategory.lastServerUpdate = category.lastUpdate
         return dbCategory
     }
 }

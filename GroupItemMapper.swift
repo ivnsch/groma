@@ -16,17 +16,20 @@ class GroupItemMapper {
         dbListItemGroup.quantity = groupItem.quantity
         dbListItemGroup.product = ProductMapper.dbWithProduct(groupItem.product)
         dbListItemGroup.group = ListItemGroupMapper.dbWith(groupItem.group)
+        if let lastServerUpdate = groupItem.lastServerUpdate {
+            dbListItemGroup.lastServerUpdate = lastServerUpdate
+        }
         return dbListItemGroup
     }
     
     class func groupItemWith(dbGroupItem: DBGroupItem) -> GroupItem {
         let product = ProductMapper.productWithDB(dbGroupItem.product)
         let group = ListItemGroupMapper.listItemGroupWith(dbGroupItem.group)
-        return GroupItem(uuid: dbGroupItem.uuid, quantity: dbGroupItem.quantity, product: product, group: group)
+        return GroupItem(uuid: dbGroupItem.uuid, quantity: dbGroupItem.quantity, product: product, group: group, lastServerUpdate: dbGroupItem.lastServerUpdate)
     }
     
     class func groupItemWithRemote(remoteGroupItem: RemoteGroupItem, product: Product, group: ListItemGroup) -> GroupItem {
-        return GroupItem(uuid: remoteGroupItem.uuid, quantity: remoteGroupItem.quantity, product: product, group: group)
+        return GroupItem(uuid: remoteGroupItem.uuid, quantity: remoteGroupItem.quantity, product: product, group: group, lastServerUpdate: remoteGroupItem.lastUpdate)
     }
     
     /**

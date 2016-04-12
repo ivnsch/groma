@@ -14,12 +14,12 @@ class InventoryItemMapper {
     class func inventoryItemWithDB(dbInventoryItem: DBInventoryItem) -> InventoryItem {
         let product = ProductMapper.productWithDB(dbInventoryItem.product)
         let inventory = InventoryMapper.inventoryWithDB(dbInventoryItem.inventory)
-        return InventoryItem(uuid: dbInventoryItem.uuid, quantity: dbInventoryItem.quantity, quantityDelta: dbInventoryItem.quantityDelta, product: product, inventory: inventory)
+        return InventoryItem(uuid: dbInventoryItem.uuid, quantity: dbInventoryItem.quantity, quantityDelta: dbInventoryItem.quantityDelta, product: product, inventory: inventory, lastServerUpdate: dbInventoryItem.lastServerUpdate)
     }
     
     class func inventoryItemWithRemote(remoteItem: RemoteInventoryItemWithProduct, inventory: Inventory) -> InventoryItem {
         let product = ProductMapper.productWithRemote(remoteItem.product, category: remoteItem.productCategory)
-        return InventoryItem(uuid: remoteItem.inventoryItem.uuid, quantity: remoteItem.inventoryItem.quantity, product: product, inventory: inventory)
+        return InventoryItem(uuid: remoteItem.inventoryItem.uuid, quantity: remoteItem.inventoryItem.quantity, product: product, inventory: inventory, lastServerUpdate: remoteItem.inventoryItem.lastUpdate)
     }
     
     class func dbWithInventoryItem(item: InventoryItem) -> DBInventoryItem {
@@ -132,7 +132,8 @@ class InventoryItemMapper {
                 quantity: remoteInventoryItem.quantity,
                 quantityDelta: 0,
                 product: productsDict[remoteInventoryItem.productUuid]!,
-                inventory: inventoriesDict[remoteInventoryItem.inventoryUuid]!
+                inventory: inventoriesDict[remoteInventoryItem.inventoryUuid]!,
+                lastServerUpdate: remoteInventoryItem.lastUpdate
             )
         }
 

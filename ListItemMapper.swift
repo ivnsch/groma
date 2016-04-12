@@ -26,7 +26,8 @@ class ListItemMapper {
             doneQuantity: dbListItem.doneQuantity,
             doneOrder: dbListItem.doneOrder,
             stashQuantity: dbListItem.stashQuantity,
-            stashOrder: dbListItem.stashOrder
+            stashOrder: dbListItem.stashOrder,
+            lastServerUpdate: dbListItem.lastServerUpdate
         )
     }
     
@@ -137,7 +138,8 @@ class ListItemMapper {
                 doneQuantity: remoteListItem.doneQuantity,
                 doneOrder: remoteListItem.doneOrder,
                 stashQuantity: remoteListItem.stashQuantity,
-                stashOrder: remoteListItem.stashOrder
+                stashOrder: remoteListItem.stashOrder,
+                lastServerUpdate: remoteListItem.lastUpdate
             )
         }
         

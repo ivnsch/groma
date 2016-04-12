@@ -73,7 +73,8 @@ class PlanItemMapper {
                 inventory: inventory,
                 product: productsDict[remoteListItem.productUuid]!,
                 quantity: remoteListItem.quantity,
-                usedQuantity: 0 // TODO review - ensure this is always calculated from history, and not use this "0"
+                usedQuantity: 0, // TODO review - ensure this is always calculated from history, and not use this "0"
+                lastServerUpdate: remoteListItem.lastUpdate
             )
         }
         
