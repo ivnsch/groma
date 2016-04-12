@@ -19,7 +19,9 @@ class HistoryItemMapper {
         dbHistoryItem.quantity = historyItem.quantity
         dbHistoryItem.paidPrice = historyItem.paidPrice
         dbHistoryItem.user = SharedUserMapper.dbWithSharedUser(historyItem.user)
-        dbHistoryItem.lastServerUpdate = historyItem.lastUpdate
+        if let lastServerUpdate = historyItem.lastServerUpdate {
+            dbHistoryItem.lastServerUpdate = lastServerUpdate
+        }
         return dbHistoryItem
     }
     

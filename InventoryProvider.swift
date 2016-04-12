@@ -27,8 +27,6 @@ protocol InventoryProvider {
     func removeInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
     func removeInventory(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
-
-    func syncInventoriesWithInventoryItems(handler: (ProviderResult<[Any]> -> ()))
     
     func acceptInvitation(invitation: RemoteInventoryInvitation, _ handler: ProviderResult<Any> -> Void)
     

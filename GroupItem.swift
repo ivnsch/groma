@@ -18,18 +18,16 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
     // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
     // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
-    let lastUpdate: NSDate
     let lastServerUpdate: NSDate?
     let removed: Bool
     //////////////////////////////////////////////
     
     
-    init(uuid: String, quantity: Int, product: Product, group: ListItemGroup, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, quantity: Int, product: Product, group: ListItemGroup, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.quantity = quantity
         self.product = product
         self.group = group
-        self.lastUpdate = lastUpdate
         self.lastServerUpdate = lastServerUpdate
         self.removed = removed
     }
@@ -43,7 +41,7 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     var completeDebugDescription: String {
-        return "{\(self.dynamicType) uuid: \(self.uuid), quantity: \(self.quantity), product: \(self.product), group: \(self.group), lastUpdate: \(self.lastUpdate), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
+        return "{\(self.dynamicType) uuid: \(self.uuid), quantity: \(self.quantity), product: \(self.product), group: \(self.group), lastServerUpdate: \(self.lastServerUpdate), removed: \(self.removed)}"
     }
     
     var debugDescription: String {
@@ -57,7 +55,6 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
             quantity: quantity ?? self.quantity,
             product: product ?? self.product,
             group: group ?? self.group,
-            lastUpdate: self.lastUpdate,
             lastServerUpdate: self.lastServerUpdate,
             removed: self.removed
         )

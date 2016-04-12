@@ -15,7 +15,9 @@ class PlanItemMapper {
         dbPlanItem.inventory = InventoryMapper.dbWithInventory(planItem.inventory)
         dbPlanItem.product  = ProductMapper.dbWithProduct(planItem.product)
         dbPlanItem.quantity = planItem.quantity
-        dbPlanItem.lastServerUpdate = planItem.lastUpdate
+        if let lastServerUpdate = planItem.lastServerUpdate {
+            dbPlanItem.lastServerUpdate = lastServerUpdate
+        }
         return dbPlanItem
     }
     

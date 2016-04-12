@@ -34,12 +34,11 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
     // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
     // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
-    let lastUpdate: NSDate
     let lastServerUpdate: NSDate?
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid: String, name: String, listItems: [ListItem] = [], users: [SharedUser] = [], bgColor: UIColor, order: Int, inventory: Inventory, store: String?, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, name: String, listItems: [ListItem] = [], users: [SharedUser] = [], bgColor: UIColor, order: Int, inventory: Inventory, store: String?, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.name = name
         self.listItems = listItems
@@ -48,7 +47,6 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
         self.order = order
         self.inventory = inventory
         self.store = store
-        self.lastUpdate = lastUpdate
         self.lastServerUpdate = lastServerUpdate
         self.removed = removed
     }
@@ -59,7 +57,7 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
     
     var debugDescription: String {
         return shortDebugDescription
-//        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), bgColor: \(bgColor), order: \(order), inventory: \(inventory), store: \(store), lastUpdate: \(lastUpdate), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
+//        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), bgColor: \(bgColor), order: \(order), inventory: \(inventory), store: \(store), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
     }
     
     func same(rhs: List) -> Bool {
@@ -70,7 +68,7 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
         return uuid.hashValue
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, listItems: [ListItem]? = nil, users: [SharedUser]? = nil, bgColor: UIColor? = nil, order: Int? = nil, inventory: Inventory? = nil, store: ListCopyStore? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> List {
+    func copy(uuid uuid: String? = nil, name: String? = nil, listItems: [ListItem]? = nil, users: [SharedUser]? = nil, bgColor: UIColor? = nil, order: Int? = nil, inventory: Inventory? = nil, store: ListCopyStore? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> List {
         return List(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -80,7 +78,6 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
             order: order ?? self.order,
             inventory: inventory ?? self.inventory,
             store: store.map{$0.store} ?? self.store,
-            lastUpdate: lastUpdate ?? self.lastUpdate,
             lastServerUpdate: lastServerUpdate ?? self.lastServerUpdate,
             removed: removed ?? self.removed
         )

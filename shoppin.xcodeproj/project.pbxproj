@@ -270,9 +270,6 @@
 		EB4D57A81B74B90600BC6171 /* ListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D57A71B74B90600BC6171 /* ListSync.swift */; };
 		EB4D57A91B74B90600BC6171 /* ListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D57A71B74B90600BC6171 /* ListSync.swift */; };
 		EB4D57AA1B74B90600BC6171 /* ListSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D57A71B74B90600BC6171 /* ListSync.swift */; };
-		EB4D57AC1B7505DD00BC6171 /* SyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D57AB1B7505DD00BC6171 /* SyncUtils.swift */; };
-		EB4D57AD1B7505DD00BC6171 /* SyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D57AB1B7505DD00BC6171 /* SyncUtils.swift */; };
-		EB4D57AE1B7505DD00BC6171 /* SyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D57AB1B7505DD00BC6171 /* SyncUtils.swift */; };
 		EB4D57B01B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D57AF1B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift */; };
 		EB4D57B11B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D57AF1B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift */; };
 		EB4D57B21B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4D57AF1B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift */; };
@@ -1231,7 +1228,6 @@
 		EB4C365E1B4C142600C387C5 /* EditableChoiceModal.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EditableChoiceModal.storyboard; sourceTree = "<group>"; };
 		EB4C4F621BC9358A00DCA048 /* Array_HistoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_HistoryItem.swift; sourceTree = "<group>"; };
 		EB4D57A71B74B90600BC6171 /* ListSync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListSync.swift; sourceTree = "<group>"; };
-		EB4D57AB1B7505DD00BC6171 /* SyncUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncUtils.swift; sourceTree = "<group>"; };
 		EB4D57AF1B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListWithListItemsSyncResult.swift; sourceTree = "<group>"; };
 		EB4FD44D1AC6BE390000F952 /* NSTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSTableView.swift; sourceTree = "<group>"; };
 		EB4FD44F1AC6BE960000F952 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
@@ -2379,7 +2375,6 @@
 			isa = PBXGroup;
 			children = (
 				EB6F81311B4717C2008680E0 /* KeychainKeys.swift */,
-				EB4D57AB1B7505DD00BC6171 /* SyncUtils.swift */,
 				EB7F59D61BA1E0DF00E07EBA /* Performance.swift */,
 				EBC9D2371BE3F2F50088E3CF /* TimerUtils.swift */,
 				EB9207C81C4BD3F600332332 /* AsyncUtils.swift */,
@@ -3636,7 +3631,6 @@
 				EB0C1B931B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,
 				EBE366371BCBC346009543AF /* BlurBubbleTransition.swift in Sources */,
 				EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */,
-				EB4D57AC1B7505DD00BC6171 /* SyncUtils.swift in Sources */,
 				EB85F4671BD54FA800E19E9B /* QuickAddProduct.swift in Sources */,
 				EB4A38B41C8F8901000714F9 /* RemoteProductsWithDependencies.swift in Sources */,
 				EB70C22F1B5021D50060E529 /* UserInput.swift in Sources */,
@@ -4020,7 +4014,6 @@
 				EBED0CF21C80E02700A1EEC4 /* Array_ListItemsGroup.swift in Sources */,
 				EB85F4741BD5605000E19E9B /* ProductProviderImpl.swift in Sources */,
 				EB5567631A86438100CD3EC6 /* InventoryItemMapper.swift in Sources */,
-				EB4D57AD1B7505DD00BC6171 /* SyncUtils.swift in Sources */,
 				EB85F4701BD5600A00E19E9B /* ProductProvider.swift in Sources */,
 				EBA5756E1BD00A2500A0A825 /* DBGroupItem.swift in Sources */,
 				EB4D57A91B74B90600BC6171 /* ListSync.swift in Sources */,
@@ -4376,7 +4369,6 @@
 				EB8EDE1C1C9B1A78003B566F /* RemoteSectionWithDependencies.swift in Sources */,
 				EBA2C8D41C502C3200A970B8 /* ConnectionProvider.swift in Sources */,
 				EB70328D1BEBF31A00779EBB /* SectionProvider.swift in Sources */,
-				EB4D57AE1B7505DD00BC6171 /* SyncUtils.swift in Sources */,
 				EB7233C11C84B66A002B9903 /* DBProductToRemove.swift in Sources */,
 				EB0C1BAB1B3ED8D600F24C85 /* ProviderResult.swift in Sources */,
 				EBB526791BEFE10B0002A286 /* HelpProvider.swift in Sources */,

@@ -178,37 +178,6 @@ class ListProviderImpl: ListProvider {
         })
     }
     
-    // TODO do we still need this?
-    func syncListsWithListItems(handler: (ProviderResult<[Any]> -> ())) {
-        
-        DBProviders.listProvider.loadLists {dbLists in
-            
-            DBProviders.listItemProvider.loadAllListItems {dbListItems in
-
-                let listsSync = SyncUtils.toListsSync(dbLists, dbListItems: dbListItems)
-
-                self.remoteListProvider.syncListsWithListItems(listsSync) {remoteResult in
-                    
-                    if let syncResult = remoteResult.successResult {
-                        
-                        DBProviders.listItemProvider.saveListsSyncResult(syncResult) {success in
-                            if success {
-                                handler(ProviderResult(status: .Success))
-                            } else {
-                                handler(ProviderResult(status: .DatabaseSavingError))
-                            }
-                        }
-                        
-                    } else {
-                        print("Error: sync list with list items: \(remoteResult)")
-                        let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status)
-                        handler(ProviderResult(status: providerStatus))
-                    }
-                }
-            }
-        }
-    }
-    
     func acceptInvitation(invitation: RemoteListInvitation, _ handler: ProviderResult<Any> -> Void) {
         remoteListProvider.acceptInvitation(invitation) {remoteResult in
             DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)

@@ -28,8 +28,6 @@ protocol ListProvider {
     
     func remove(listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
-    func syncListsWithListItems(handler: (ProviderResult<[Any]> -> ()))
-    
     func acceptInvitation(invitation: RemoteListInvitation, _ handler: ProviderResult<Any> -> Void)
     
     func rejectInvitation(invitation: RemoteListInvitation, _ handler: ProviderResult<Any> -> Void)

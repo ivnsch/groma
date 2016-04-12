@@ -182,36 +182,6 @@ class InventoryProviderImpl: InventoryProvider {
         }
     }
     
-    // TODO is this still needed?
-    func syncInventoriesWithInventoryItems(handler: (ProviderResult<[Any]> -> ())) {
-        
-        self.dbInventoryProvider.loadInventories {dbInventories in
-            
-            DBProviders.inventoryItemProvider.loadAllInventoryItems {dbInventoryItems in
-
-                let inventoriesSync = SyncUtils.toInventoriesSync(dbInventories, dbInventoryItems: dbInventoryItems)
-
-                self.remoteProvider.syncInventoriesWithInventoryItems(inventoriesSync) {remoteResult in
-                    
-                    if let syncResult = remoteResult.successResult {
-                        
-                        self.dbInventoryProvider.saveInventoriesSyncResult(syncResult) {success in
-                            if success {
-                                handler(ProviderResult(status: .Success))
-                            } else {
-                                handler(ProviderResult(status: .DatabaseSavingError))
-                            }
-                        }
-                        
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-                    }
-                }
-            }
-        }
-    }
-    
-    
     func acceptInvitation(invitation: RemoteInventoryInvitation, _ handler: ProviderResult<Any> -> Void) {
         remoteProvider.acceptInvitation(invitation) {remoteResult in
             DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
