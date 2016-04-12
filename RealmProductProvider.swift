@@ -225,58 +225,19 @@ class RealmProductProvider: RealmProvider {
         }
     }
     
-    func saveProducts(products: [Product], updateSuggestions: Bool = true, update: Bool = true, handler: Bool -> ()) {
+    func saveProducts(products: [Product], update: Bool = true, handler: Bool -> ()) {
         
         for product in products { // product marked as var to be able to update uuid
             
-            doInWriteTransaction({[weak self] realm in
+            doInWriteTransaction({realm in
                 let dbProduct = ProductMapper.dbWithProduct(product)
                 realm.add(dbProduct, update: update)
-                if updateSuggestions {
-                    self?.saveProductSuggestionHelper(realm, product: product)
-                }
                 return true
                 
                 }, finishHandler: {success in
                     handler(success ?? false)
             })
         }
-    }
-    
-    // TODO!!!! do we still need this?
-    // MARK: - Suggestion
-    
-    func loadProductSuggestions(handler: [Suggestion] -> ()) {
-        let mapper = {ProductSuggestionMapper.suggestionWithDB($0)}
-        self.load(mapper, handler: handler)
-    }
-
-    
-    //    /**
-    //    Helper to save a list item with optional saving of product and section autosuggestion
-    //    Expected to be executed inside a transaction
-    //    */
-    //    private func saveListItemHelper(realm: Realm, listItem: ListItem, updateSuggestions: Bool = true) {
-    //        let dbListItem = ListItemMapper.dbWithListItem(listItem)
-    //        realm.add(dbListItem, update: true)
-    //
-    //        if updateSuggestions {
-    //            saveProductSuggestionHelper(realm, product: listItem.product)
-    //
-    //            let sectionSuggestion = SectionSuggestionMapper.dbWithSection(listItem.section)
-    //            realm.add(sectionSuggestion, update: true)
-    //        }
-    //    }
-    
-    /**
-    Helper to save suggestion corresponding to a product
-    Expected to be executed in a write block
-    */
-    func saveProductSuggestionHelper(realm: Realm, product: Product) {
-        // TODO update suggestions - right now only insert - product is updated based on uuid, but with autosuggestion, since no ids old names keep there
-        // so we need to either do a query for the product/old name, and delete the autosuggestion with this name or use ids
-        let suggestion = ProductSuggestionMapper.dbWithProduct(product)
-        realm.add(suggestion, update: true)
     }
     
     // TODO: -

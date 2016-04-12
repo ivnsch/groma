@@ -37,7 +37,7 @@ class RealmListItemProvider: RealmProvider {
     When used for add: incrementQuantity should be true, update: false. After clearing db (e.g. sync) also false (since there's nothing to increment)
     NOTE: Assumes all listItems belong to the same list (only the list of first list item is used for filtering)
     */
-    func saveListItems(var listItems: [ListItem], updateSuggestions: Bool = true, incrementQuantity: Bool, updateSection: Bool = true, handler: [ListItem]? -> ()) {
+    func saveListItems(var listItems: [ListItem], incrementQuantity: Bool, updateSection: Bool = true, handler: [ListItem]? -> ()) {
         doInWriteTransaction({realm in
            
             // if we want to increment if item with same product name exists
@@ -66,14 +66,6 @@ class RealmListItemProvider: RealmProvider {
                 // TODO possible to use batch save here?
                 let dbListItem = ListItemMapper.dbWithListItem(listItem)
                 realm.add(dbListItem, update: true)
-                
-                if updateSuggestions {
-                    DBProviders.productProvider.saveProductSuggestionHelper(realm, product: listItem.product.product) // TODO still needed?
-                    
-                    let sectionSuggestion = SectionSuggestionMapper.dbWithSection(listItem.section)
-                    realm.add(sectionSuggestion, update: true)
-                }
-                
             }
             return listItems
             

@@ -39,8 +39,6 @@ protocol ProductProvider {
     
     func incrementFav(productUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 
-    func productSuggestions(handler: ProviderResult<[Suggestion]> -> ())
-
     func loadProduct(name: String, brand: String, handler: ProviderResult<Product> -> ())
     
     func categoriesContaining(name: String, _ handler: ProviderResult<[String]> -> ())

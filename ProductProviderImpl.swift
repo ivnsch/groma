@@ -148,12 +148,6 @@ class ProductProviderImpl: ProductProvider {
         })
     }
     
-    func productSuggestions(handler: ProviderResult<[Suggestion]> -> ()) {
-        DBProviders.productProvider.loadProductSuggestions {dbSuggestions in
-            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: dbSuggestions))
-        }
-    }
-    
     func loadProduct(name: String, brand: String, handler: ProviderResult<Product> -> ()) {
         DBProviders.productProvider.loadProductWithName(name, brand: brand) {dbProductMaybe in
             if let dbProduct = dbProductMaybe {

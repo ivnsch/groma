@@ -798,18 +798,6 @@
 		EBBC22FD1BB4080E0002F6B1 /* Suggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC22FC1BB4080E0002F6B1 /* Suggestion.swift */; };
 		EBBC22FE1BB4080E0002F6B1 /* Suggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC22FC1BB4080E0002F6B1 /* Suggestion.swift */; };
 		EBBC22FF1BB4080E0002F6B1 /* Suggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC22FC1BB4080E0002F6B1 /* Suggestion.swift */; };
-		EBBC23011BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23001BB4086D0002F6B1 /* DBProductSuggestion.swift */; };
-		EBBC23021BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23001BB4086D0002F6B1 /* DBProductSuggestion.swift */; };
-		EBBC23031BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23001BB4086D0002F6B1 /* DBProductSuggestion.swift */; };
-		EBBC23051BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */; };
-		EBBC23061BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */; };
-		EBBC23071BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */; };
-		EBBC23091BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23081BB469690002F6B1 /* DBSectionSuggestion.swift */; };
-		EBBC230A1BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23081BB469690002F6B1 /* DBSectionSuggestion.swift */; };
-		EBBC230B1BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23081BB469690002F6B1 /* DBSectionSuggestion.swift */; };
-		EBBC230D1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */; };
-		EBBC230E1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */; };
-		EBBC230F1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */; };
 		EBBC23131BB475440002F6B1 /* SuggestionsPrefiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */; };
 		EBBC23151BB483E90002F6B1 /* SuggestionsPrefiller.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */; };
 		EBBC23171BB4840F0002F6B1 /* PrefillDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBC23161BB4840F0002F6B1 /* PrefillDatabase.swift */; };
@@ -1499,10 +1487,6 @@
 		EBBC22F81BB308A20002F6B1 /* FacebookBrowser.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FacebookBrowser.xib; sourceTree = "<group>"; };
 		EBBC22FA1BB30A2C0002F6B1 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		EBBC22FC1BB4080E0002F6B1 /* Suggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Suggestion.swift; sourceTree = "<group>"; };
-		EBBC23001BB4086D0002F6B1 /* DBProductSuggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBProductSuggestion.swift; sourceTree = "<group>"; };
-		EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductSuggestionMapper.swift; sourceTree = "<group>"; };
-		EBBC23081BB469690002F6B1 /* DBSectionSuggestion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSectionSuggestion.swift; sourceTree = "<group>"; };
-		EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SectionSuggestionMapper.swift; sourceTree = "<group>"; };
 		EBBC23111BB475440002F6B1 /* SuggestionsPrefiller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SuggestionsPrefiller.swift; path = ../SuggestionsPrefiller.swift; sourceTree = "<group>"; };
 		EBBC23161BB4840F0002F6B1 /* PrefillDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefillDatabase.swift; sourceTree = "<group>"; };
 		EBBC231D1BB575340002F6B1 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
@@ -2059,8 +2043,6 @@
 				EBB9A7311B5EB0FC00E5487D /* DBInventory.swift */,
 				EB714AA51B66BBA800F91B94 /* DBSyncable.swift */,
 				EB7E83251B7B723C009DEEF4 /* DBHistoryItem.swift */,
-				EBBC23001BB4086D0002F6B1 /* DBProductSuggestion.swift */,
-				EBBC23081BB469690002F6B1 /* DBSectionSuggestion.swift */,
 				EB1B366C1BC48238003519F2 /* DBPlanItem.swift */,
 				EBDA75491BCD5D3E00E34AC3 /* DBListItemGroup.swift */,
 				EBA5756C1BD00A2500A0A825 /* DBGroupItem.swift */,
@@ -3103,8 +3085,6 @@
 				EBDA754D1BCD621C00E34AC3 /* ListItemGroupMapper.swift */,
 				EBA575681BD009DE00A0A825 /* GroupItemMapper.swift */,
 				EB1B36741BC4832D003519F2 /* PlanItemMapper.swift */,
-				EBBC23041BB439990002F6B1 /* ProductSuggestionMapper.swift */,
-				EBBC230C1BB469A80002F6B1 /* SectionSuggestionMapper.swift */,
 			);
 			name = mapper;
 			sourceTree = "<group>";
@@ -3560,7 +3540,6 @@
 				EB79AC2E1BF1343A00685B30 /* CGRect.swift in Sources */,
 				EBD558C61BF366350048F287 /* InventoryItemInput.swift in Sources */,
 				EBF5D7D31B8F868E00A235C5 /* Paginator.swift in Sources */,
-				EBBC23011BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */,
 				EBA7AC921BFE950300247A8C /* ProductCategory.swift in Sources */,
 				EB9BE4191B2CB355005B401A /* RemoteListItems.swift in Sources */,
 				EB7F59C21BA1049100E07EBA /* Identifiable.swift in Sources */,
@@ -3585,7 +3564,6 @@
 				EB0A05901BDFCE8200D1E29D /* ManageProductsViewController.swift in Sources */,
 				EB1B36541BC31B16003519F2 /* HistoryItemGroupHeaderView.swift in Sources */,
 				EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */,
-				EBBC23091BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */,
 				EBB9A7481B5EB46C00E5487D /* InventoryMapper.swift in Sources */,
 				EBF162EB1A3CA2470048E37C /* Product.swift in Sources */,
 				EB1B365D1BC4653C003519F2 /* PlanTableViewCell.swift in Sources */,
@@ -3716,7 +3694,6 @@
 				EB79AC2A1BF12FE000685B30 /* Array_List.swift in Sources */,
 				EB9207C91C4BD3F600332332 /* AsyncUtils.swift in Sources */,
 				EBED0D141C824FE200A1EEC4 /* EmailHelper.swift in Sources */,
-				EBBC230D1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */,
 				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
 				EB9BE41F1B2CB513005B401A /* RemoteProduct.swift in Sources */,
 				EB9208261C4EC53D00332332 /* ManageBrandsCell.swift in Sources */,
@@ -3750,7 +3727,6 @@
 				EB135B941BED21490093DE70 /* ExpandFloatingButtonModel.swift in Sources */,
 				EB7D24051CB70A220017EFE6 /* RemoteStoreProduct.swift in Sources */,
 				EBC9D2381BE3F2F50088E3CF /* TimerUtils.swift in Sources */,
-				EBBC23051BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */,
 				EBED0CF51C80E7B700A1EEC4 /* Array_Inventory.swift in Sources */,
 				EB80CE4B1C3EA628001DF159 /* RemoteListsWithDependencies.swift in Sources */,
 				EB6E3D311C5A519600D65DD5 /* RemoteInventoryWithItems.swift in Sources */,
@@ -4126,13 +4102,10 @@
 				EBDFE3AB1ACE935600E48F95 /* ListItemRow.swift in Sources */,
 				EB7233E81C85B5EF002B9903 /* Realm.swift in Sources */,
 				EB620DC71C7F85CF0095BFB9 /* InvitationsHandler.swift in Sources */,
-				EBBC230E1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */,
-				EBBC23061BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */,
 				EB6E3D241C5A346100D65DD5 /* RemoteGlobalSyncResult.swift in Sources */,
 				EB6D93A81B1C8CE500ED8999 /* HandlingTableView.swift in Sources */,
 				EB7F59CC1BA1970200E07EBA /* Dictionary.swift in Sources */,
 				EB7E8B621B2ADF9A0090409A /* Try.swift in Sources */,
-				EBBC230A1BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */,
 				EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */,
 				EB4A38A51C87B96C000714F9 /* GoogleSignInHelper.swift in Sources */,
 				EB37AB991C9CA81F00FE9D7A /* OrderUpdate.swift in Sources */,
@@ -4151,7 +4124,6 @@
 				EB1D69621CAB0563004892A2 /* Notification.swift in Sources */,
 				EBD27CD31C171175005D8305 /* RemoteGroup.swift in Sources */,
 				EB714AAF1B67895500F91B94 /* RemoteProvider.swift in Sources */,
-				EBBC23021BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */,
 				EB7BFA761BD99CB600F4C74A /* Addable.swift in Sources */,
 				EB7233D41C84B6D8002B9903 /* DBRemoveInventory.swift in Sources */,
 				EB7D24241CB9A2C70017EFE6 /* DBStoreProductToRemove.swift in Sources */,
@@ -4272,7 +4244,6 @@
 				EB7E83281B7B723C009DEEF4 /* DBHistoryItem.swift in Sources */,
 				EB6E3D3B1C5A591800D65DD5 /* RemoteGroupWithItems.swift in Sources */,
 				EB40A4881B55159D000E9CAD /* DBList.swift in Sources */,
-				EBBC230B1BB469690002F6B1 /* DBSectionSuggestion.swift in Sources */,
 				EB7E83201B7B7069009DEEF4 /* HistoryProvider.swift in Sources */,
 				EB4A38991C86FBE8000714F9 /* RemoteErrorReporter.swift in Sources */,
 				EBF3777D1B342B2E00EEB6DB /* InventoryItem.swift in Sources */,
@@ -4487,7 +4458,6 @@
 				EB7D24251CB9A2C70017EFE6 /* DBStoreProductToRemove.swift in Sources */,
 				EB85F4691BD54FA800E19E9B /* QuickAddProduct.swift in Sources */,
 				EBB526751BEFD8E90002A286 /* HelpItem.swift in Sources */,
-				EBBC23071BB439990002F6B1 /* ProductSuggestionMapper.swift in Sources */,
 				EB0C1BAF1B3F33CE00F24C85 /* remoteResultHandler.swift in Sources */,
 				EBB9A7461B5EB28500E5487D /* RemoteInventoryItemsProvider.swift in Sources */,
 				EB4A38AA1C8F8458000714F9 /* PullProvider.swift in Sources */,
@@ -4505,11 +4475,9 @@
 				EBA7AC981BFE95AF00247A8C /* RemoteProductCategory.swift in Sources */,
 				EB4A38A61C87B96C000714F9 /* GoogleSignInHelper.swift in Sources */,
 				EB7233C91C84B6B6002B9903 /* DBRemoveList.swift in Sources */,
-				EBBC230F1BB469A80002F6B1 /* SectionSuggestionMapper.swift in Sources */,
 				EB77A0B41C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift in Sources */,
 				EB9207CB1C4BD3F600332332 /* AsyncUtils.swift in Sources */,
 				EB7D24211CB959460017EFE6 /* CellUncoverer.swift in Sources */,
-				EBBC23031BB4086D0002F6B1 /* DBProductSuggestion.swift in Sources */,
 				EBEE7E5D1C9750F500DBCB6A /* RealmListProvider.swift in Sources */,
 				EB6E3D531C5A9ADE00D65DD5 /* RealmGlobalProvider.swift in Sources */,
 			);
