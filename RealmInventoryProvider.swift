@@ -130,7 +130,7 @@ class RealmInventoryProvider: RealmProvider {
     func overwrite(inventories: [Inventory], clearTombstones: Bool, handler: Bool -> Void) {
         let dbInventories = inventories.map{InventoryMapper.dbWithInventory($0)}
         let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBRemoveInventory)} : nil
-        self.overwrite(dbInventories, resetLastUpdateToServer: true, additionalActions: additionalActions, handler: handler)
+        self.overwrite(dbInventories, resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
     }
     
     // MARK: - Sync

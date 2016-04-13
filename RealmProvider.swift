@@ -296,7 +296,7 @@ class RealmProvider {
     
     // resetLastUpdateToServer = true should be always used when this method is called for sync. TODO no resetLastUpdateToServer default = true, it's better to pass it explicitly
     // additionalActions: optional additional actions to be executed in the transaction
-    func overwrite<T: DBSyncable>(newObjects: [T], deleteFilter deleteFilterMaybe: String? = nil, resetLastUpdateToServer: Bool = true, additionalActions: (Realm -> Void)? = nil, handler: Bool -> ()) {
+    func overwrite<T: DBSyncable>(newObjects: [T], deleteFilter deleteFilterMaybe: String? = nil, resetLastUpdateToServer: Bool = true, idExtractor: T -> String, additionalActions: (Realm -> Void)? = nil, handler: Bool -> ()) {
         
         self.doInWriteTransaction({realm in
             
@@ -306,7 +306,9 @@ class RealmProvider {
                 results = results.filter(filter)
             }
             
-            realm.delete(results)
+            // Collect the stored items that are not in the updated items to delete them. Note that we can't just call delete on the results, as even when we write the same items after it in the same transaction the references to the them (from other objects) will be set to nil.
+            var toDeleteDict = results.toDictionary{(idExtractor($0), $0)}
+            
             for obj in newObjects {
                 if resetLastUpdateToServer {
 //                    obj.lastUpdate = obj.lastServerUpdate
@@ -317,6 +319,11 @@ class RealmProvider {
                 }
                 
                 realm.add(obj, update: true) // update: true just in case some dependencies have repeated data (e.g. a shared user), if false the second shared user with same unique causes an exception
+                toDeleteDict.removeValueForKey(idExtractor(obj))
+            }
+            
+            for val in toDeleteDict.values {
+                realm.delete(val)
             }
             
             additionalActions?(realm)
