@@ -87,11 +87,17 @@ class RemoteInventoryItemsProvider: Any {
         let productDict = RemoteListItemProvider().toRequestParams(inventoryItem.product)
         let inventoryDict = RemoteInventoryProvider().toRequestParams(inventoryItem.inventory)
         
-        return [
+        var dict: [String: AnyObject] = [
             "uuid": inventoryItem.uuid,
             "quantity": inventoryItem.quantityDelta,
             "inventory": inventoryDict,
             "product": productDict
         ]
+        
+        if let lastServerUpdate = inventoryItem.lastServerUpdate {
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+        }
+        
+        return dict
     }
 }

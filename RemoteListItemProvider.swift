@@ -310,7 +310,7 @@ class RemoteListItemProvider {
         
         let listDict = toRequestParams(section.list)
 
-        return [
+        var dict: [String: AnyObject] = [
             "uuid": section.uuid,
             "name": section.name,
             "color": section.color.hexStr,
@@ -319,6 +319,12 @@ class RemoteListItemProvider {
             "stashOrder": section.stashOrder,
             "listInput": listDict
         ]
+        
+        if let lastServerUpdate = section.lastServerUpdate {
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+        }
+
+        return dict
     }
     
     func toRequestParams(listItem: ListItem) -> [String: AnyObject] {
@@ -356,7 +362,7 @@ class RemoteListItemProvider {
     }
 
     func toRequestParams(product: StoreProduct) -> [String: AnyObject] {
-        return [
+        var dict: [String: AnyObject] = [
             "uuid": product.uuid,
             "price": product.price,
             "baseQuantity": product.baseQuantity,
@@ -364,33 +370,57 @@ class RemoteListItemProvider {
             "store": product.store,            
             "product": toRequestParams(product.product)
         ]
+        
+        if let lastServerUpdate = product.lastServerUpdate {
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+        }
+        
+        return dict
     }
     
     func toRequestParams(product: Product) -> [String: AnyObject] {
-        return [
+        var dict: [String: AnyObject] = [
             "uuid": product.uuid,
             "name": product.name,
             "brand": product.brand,
             "category": toRequestParams(product.category),
             "fav": product.fav
         ]
+        
+        if let lastServerUpdate = product.lastServerUpdate {
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+        }
+        
+        return dict
     }
     
     func toRequestParams(productCategory: ProductCategory) -> [String: AnyObject] {
-        return [
+        var dict: [String: AnyObject] = [
             "uuid": productCategory.uuid,
             "name": productCategory.name,
             "color": productCategory.color.hexStr
         ]
+        
+        if let lastServerUpdate = productCategory.lastServerUpdate {
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+        }
+        
+        return dict
     }
     
     func toRequestParamsShort(list: List) -> [String: AnyObject] {
-        return [
+        var dict: [String: AnyObject] = [
             "uuid": list.uuid,
             "name": list.name,
             "order": list.order,
             "color": list.bgColor.hexStr
         ]
+        
+        if let lastServerUpdate = list.lastServerUpdate {
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+        }
+        
+        return dict
     }
     
     func toRequestParams(list: List) -> [String: AnyObject] {
