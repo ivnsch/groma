@@ -81,10 +81,10 @@ class RealmInventoryProvider: RealmProvider {
         self.saveInventories([inventory], update: update, handler: handler)
     }
     
-    func updateInventoriesOrder(orderUpdates: [OrderUpdate], _ handler: Bool -> Void) {
+    func updateInventoriesOrder(orderUpdates: [OrderUpdate], dirty: Bool, _ handler: Bool -> Void) {
         doInWriteTransaction({realm in
             for orderUpdate in orderUpdates {
-                realm.create(DBInventory.self, value: DBInventory.createOrderUpdateDict(orderUpdate), update: true)
+                realm.create(DBInventory.self, value: DBInventory.createOrderUpdateDict(orderUpdate, dirty: dirty), update: true)
             }
             return true
         }) {(successMaybe: Bool?) in

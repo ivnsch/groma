@@ -38,9 +38,9 @@ class DBInventory: DBSyncable {
     
     // MARK: - Update
     
-    // Creates dictionary to update database entry for an order update from server
-    static func createOrderUpdateDict(orderUpdate: OrderUpdate) -> [String: AnyObject] {
-        return ["uuid": orderUpdate.uuid, "order": orderUpdate.order, DBSyncable.dirtyFieldName: false]
+    // Creates dictionary to update database entry for order update
+    static func createOrderUpdateDict(orderUpdate: OrderUpdate, dirty: Bool) -> [String: AnyObject] {
+        return ["uuid": orderUpdate.uuid, "order": orderUpdate.order, DBSyncable.dirtyFieldName: dirty]
     }
 
     // MARK: -
