@@ -157,12 +157,12 @@ class RealmListItemProvider: RealmProvider {
             }
             
             result.items.forEach {item in
-                let dict = ["uuid": item.uuid, orderKey(statusUpdate.dst): item.dstOrder, quantityKey(statusUpdate.dst): item.dstQuantity, DBSyncable.lastUpdateFieldName: lastUpdate]
+                let dict = ["uuid": item.uuid, orderKey(statusUpdate.dst): item.dstOrder, quantityKey(statusUpdate.dst): item.dstQuantity, DBSyncable.lastUpdateFieldName: NSNumber(longLong: Int64(lastUpdate))]
                 realm.create(DBListItem.self, value: dict, update: true)
             }
             
             result.sections.forEach {section in
-                let dict = ["uuid": section.uuid, orderKey(statusUpdate.dst): section.dstOrder, DBSyncable.lastUpdateFieldName: lastUpdate]
+                let dict = ["uuid": section.uuid, orderKey(statusUpdate.dst): section.dstOrder, DBSyncable.lastUpdateFieldName: NSNumber(longLong: Int64(lastUpdate))]
                 realm.create(DBSection.self, value: dict, update: true)
             }
             
@@ -259,7 +259,7 @@ class RealmListItemProvider: RealmProvider {
         
         let additionalActions: (Realm -> Void)? = markForSync ? {realm in
             // TODO!!!! lastServerUpdate? what should it be? do we need this here?
-            let toRemoveListItem = DBRemoveListItem(uuid: listItemUuid, listUuid: listUuid, lastServerUpdate: NSDate())
+            let toRemoveListItem = DBRemoveListItem(uuid: listItemUuid, listUuid: listUuid, lastServerUpdate: 0)
             realm.add(toRemoveListItem, update: true)
             } : nil
         

@@ -25,11 +25,11 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
     // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
     // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
-    let lastServerUpdate: NSDate?
+    let lastServerUpdate: Int64?
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid: String, quantity: Int = 0, quantityDelta: Int = 0, product: Product, inventory: Inventory, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, quantity: Int = 0, quantityDelta: Int = 0, product: Product, inventory: Inventory, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.quantity = quantity
         self.product = product
@@ -44,7 +44,7 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
 
     var completeDebugDescription: String {
-        return "{\(self.dynamicType) product: \(product), quantity: \(quantity), quantityDelta: \(quantityDelta), inventory: \(inventory), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
+        return "{\(self.dynamicType) product: \(product), quantity: \(quantity), quantityDelta: \(quantityDelta), inventory: \(inventory), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
     
     var debugDescription: String {
@@ -55,7 +55,7 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
         return product.uuid == inventoryItem.product.uuid && inventory.uuid == inventoryItem.inventory.uuid
     }
     
-    func copy(uuid uuid: String? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, product: Product? = nil, inventory: Inventory? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> InventoryItem {
+    func copy(uuid uuid: String? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, product: Product? = nil, inventory: Inventory? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> InventoryItem {
         return InventoryItem(
             uuid: uuid ?? self.uuid,
             quantity: quantity ?? self.quantity,

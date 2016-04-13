@@ -325,10 +325,10 @@ extension Alamofire.Request {
         return self.responseHandler(dataParser, completionHandler: completionHandler)
     }
 
-    public func responseMyTimestamp(completionHandler: (NSURLRequest?, Response<RemoteResult<NSDate>, NSError>?, RemoteResult<NSDate>) -> Void) -> Self {
+    public func responseMyTimestamp(completionHandler: (NSURLRequest?, Response<RemoteResult<Int64>, NSError>?, RemoteResult<Int64>) -> Void) -> Self {
         
-        let dataParser: (AnyObject, NSHTTPURLResponse) -> (NSDate?) = {data, response in
-            return ((data as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+        let dataParser: (AnyObject, NSHTTPURLResponse) -> (Int64?) = {data, response in
+            return data as? Int64
         }
         
         return self.responseHandler(dataParser, completionHandler: completionHandler)

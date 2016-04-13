@@ -82,6 +82,17 @@ extension NSDate: Comparable {
         let time = floor(self.timeIntervalSinceReferenceDate / 60.0) * 60.0
         return NSDate(timeIntervalSinceReferenceDate: time)
     }
+    
+    func debugDateStr() -> String {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = .LongStyle
+        dateFormatter.timeStyle = .MediumStyle
+        return dateFormatter.stringFromDate(self)
+    }
+    
+    func toMillis() -> Int64 {
+        return Int64(self.timeIntervalSince1970 * 1000)
+    }
 }
 
 public func <(a: NSDate, b: NSDate) -> Bool {

@@ -13,13 +13,13 @@ class DBRemoveGroupItem: Object {
     
     dynamic var uuid: String = ""
     dynamic var groupUuid: String = ""
-    dynamic var lastServerUpdate: NSDate = NSDate()
+    dynamic var lastServerUpdate: Int64 = 0
 
     convenience init(_ dbGroupItem: DBGroupItem) {
         self.init(uuid: dbGroupItem.uuid, groupUuid: dbGroupItem.group.uuid, lastServerUpdate: dbGroupItem.lastServerUpdate)
     }
     
-    convenience init(uuid: String, groupUuid: String, lastServerUpdate: NSDate) {
+    convenience init(uuid: String, groupUuid: String, lastServerUpdate: Int64) {
         self.init()
         self.uuid = uuid
         self.groupUuid = groupUuid
@@ -45,7 +45,7 @@ class DBRemoveGroupItem: Object {
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid
-        dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         return dict
     }
 }

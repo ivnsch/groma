@@ -42,11 +42,11 @@ final class StoreProduct: Equatable, Hashable, Identifiable, CustomDebugStringCo
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
     // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
     // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
-    let lastServerUpdate: NSDate?
+    let lastServerUpdate: Int64?
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid: String, price: Float, baseQuantity: Float, unit: StoreProductUnit, store: String, product: Product, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, price: Float, baseQuantity: Float, unit: StoreProductUnit, store: String, product: Product, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.price = price
         self.product = product
@@ -59,14 +59,14 @@ final class StoreProduct: Equatable, Hashable, Identifiable, CustomDebugStringCo
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), price: \(price), baseQuantity: \(baseQuantity), unit: \(unit), store: \(store), product: \(product), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
+        return "{\(self.dynamicType) uuid: \(uuid), price: \(price), baseQuantity: \(baseQuantity), unit: \(unit), store: \(store), product: \(product), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
     
     var hashValue: Int {
         return self.uuid.hashValue
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: ProductCategory? = nil, baseQuantity: Float? = nil, unit: StoreProductUnit? = nil, fav: Int? = nil, brand: String? = nil, store: String? = nil, product: Product? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> StoreProduct {
+    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: ProductCategory? = nil, baseQuantity: Float? = nil, unit: StoreProductUnit? = nil, fav: Int? = nil, brand: String? = nil, store: String? = nil, product: Product? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> StoreProduct {
         return StoreProduct(
             uuid: uuid ?? self.uuid,
             price: price ?? self.price,

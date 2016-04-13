@@ -12,20 +12,20 @@ import QorumLogs
 struct RemoteIncrement: ResponseObjectSerializable, CustomDebugStringConvertible {
     let uuid: String
     let delta: Int
-    let lastUpdate: NSDate
+    let lastUpdate: Int64
     
     init?(representation: AnyObject) {
         guard
             let uuid = representation.valueForKeyPath("uuid") as? String,
             let delta = representation.valueForKeyPath("delta") as? Int,
-            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
         
         self.uuid = uuid
         self.delta = delta
-        self.lastUpdate = lastUpdate
+        self.lastUpdate = Int64(lastUpdate)
     }
     
     var debugDescription: String {

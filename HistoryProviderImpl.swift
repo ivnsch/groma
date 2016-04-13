@@ -24,7 +24,7 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
-    func historyItems(startDate: NSDate, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> ()) {
+    func historyItems(startDate: Int64, inventory: Inventory, _ handler: ProviderResult<[HistoryItem]> -> ()) {
         self.dbProvider.loadHistoryItems(startDate: startDate, inventory: inventory) {dbHistoryItems in
             handler(ProviderResult(status: .Success, sucessResult: dbHistoryItems))
         }

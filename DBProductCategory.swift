@@ -30,7 +30,7 @@ class DBProductCategory: DBSyncable {
         bgColorHex = bgColor.hexStr
     }
 
-    convenience init(uuid: String, name: String, bgColorHex: String, lastUpdate: NSDate = NSDate(), lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    convenience init(uuid: String, name: String, bgColorHex: String, lastUpdate: NSDate = NSDate(), lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
@@ -44,7 +44,7 @@ class DBProductCategory: DBSyncable {
         self.removed = removed
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, bgColorHex: String? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> DBProductCategory {
+    func copy(uuid uuid: String? = nil, name: String? = nil, bgColorHex: String? = nil, lastUpdate: NSDate? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> DBProductCategory {
         return DBProductCategory(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,

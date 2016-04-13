@@ -82,7 +82,7 @@ class RemoteGroupsProvider: RemoteProvider {
         }
     }
     
-    func incrementGroupItem(increment: ItemIncrement, delta: Int, handler: RemoteResult<NSDate> -> ()) {
+    func incrementGroupItem(increment: ItemIncrement, delta: Int, handler: RemoteResult<Int64> -> ()) {
         let params: [String: AnyObject] = [
             "delta": increment.delta,
             "uuid": increment.itemUuid

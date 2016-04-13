@@ -13,7 +13,7 @@ import QorumLogs
 class DBSectionToRemove: Object {
     
     dynamic var uuid: String = ""
-    dynamic var lastServerUpdate: NSDate = NSDate()
+    dynamic var lastServerUpdate: Int64 = 0
     
     convenience init(_ dbSection: DBSection) {
         self.init(uuid: dbSection.uuid, lastServerUpdate: dbSection.lastServerUpdate)
@@ -22,14 +22,14 @@ class DBSectionToRemove: Object {
     convenience init(_ section: Section) {
         
         let lastServerUpdate = section.lastServerUpdate ?? {
-            QL4("lastServerUpdate of section object is nil (?)") // don't have time to think about this now so log error msg and use today's date to return something
-            return NSDate()
+            QL4("lastServerUpdate of section object is nil (?)") // don't have time to think about this now so log error msg and use 0 to return something
+            return 0
         }()
         
         self.init(uuid: section.uuid, lastServerUpdate: lastServerUpdate)
     }
     
-    convenience init(uuid: String, lastServerUpdate: NSDate) {
+    convenience init(uuid: String, lastServerUpdate: Int64) {
         self.init()
         self.uuid = uuid
         self.lastServerUpdate = lastServerUpdate
@@ -50,7 +50,7 @@ class DBSectionToRemove: Object {
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid
-        dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         return dict
     }
 }

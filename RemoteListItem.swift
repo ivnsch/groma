@@ -24,12 +24,12 @@ struct RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerializabl
     let stashQuantity: Int
     let stashOrder: Int
 
-    let lastUpdate: NSDate
+    let lastUpdate: Int64
     
     init?(representation: AnyObject) {
         guard
             let uuid = representation.valueForKeyPath("uuid") as? String,
-            let productUuid = representation.valueForKeyPath("productUuid") as? String,
+            let productUuid = representation.valueForKeyPath("storeProductUuid") as? String,
             let sectionUuid = representation.valueForKeyPath("sectionUuid") as? String,
             let listUuid = representation.valueForKeyPath("listUuid") as? String,
             let note = representation.valueForKeyPath("note") as? String?, // TODO is this correct way for optional here?
@@ -39,7 +39,7 @@ struct RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerializabl
             let doneOrder = representation.valueForKeyPath("doneOrder") as? Int,
             let stashQuantity = representation.valueForKeyPath("stashQuantity") as? Int,
             let stashOrder = representation.valueForKeyPath("stashOrder") as? Int,
-            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -57,7 +57,7 @@ struct RemoteListItem: ResponseObjectSerializable, ResponseCollectionSerializabl
         self.stashQuantity = stashQuantity
         self.stashOrder = stashOrder
         
-        self.lastUpdate = lastUpdate
+        self.lastUpdate = Int64(lastUpdate)
     }
     
     static func collection(representation: AnyObject) -> [RemoteListItem]? {
@@ -83,7 +83,7 @@ extension RemoteListItem {
         return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
     
-    static func createTimestampUpdateDict(uuid uuid: String, lastUpdate: NSDate) -> [String: AnyObject] {
+    static func createTimestampUpdateDict(uuid uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
         return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
 }

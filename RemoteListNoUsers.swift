@@ -15,7 +15,7 @@ struct RemoteListNoUsers: ResponseObjectSerializable, ResponseCollectionSerializ
     let order: Int
     var color: UIColor
     var store: String?
-    let lastUpdate: NSDate
+    let lastUpdate: Int64
     let inventoryUuid: String
     
     init?(representation: AnyObject) {
@@ -23,7 +23,7 @@ struct RemoteListNoUsers: ResponseObjectSerializable, ResponseCollectionSerializ
             let uuid = representation.valueForKeyPath("uuid") as? String,
             let name = representation.valueForKeyPath("name") as? String,
             let order = representation.valueForKeyPath("order") as? Int,
-            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
+            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double,
             let inventoryUuid = representation.valueForKeyPath("inventoryUuid") as? String,
             let color = ((representation.valueForKeyPath("color") as? String).map{colorStr in
                 UIColor(hexString: colorStr)
@@ -31,11 +31,10 @@ struct RemoteListNoUsers: ResponseObjectSerializable, ResponseCollectionSerializ
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
-        
         self.uuid = uuid
         self.name = name
         self.order = order
-        self.lastUpdate = lastUpdate
+        self.lastUpdate = Int64(lastUpdate)
         self.inventoryUuid = inventoryUuid
         self.color = color
         

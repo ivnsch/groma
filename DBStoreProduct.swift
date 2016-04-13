@@ -35,7 +35,7 @@ class DBStoreProduct: DBSyncable {
         return ["name"]
     }
     
-    convenience init(uuid: String, price: Float, baseQuantity: Float, unit: Int, store: String = "", product: DBProduct, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    convenience init(uuid: String, price: Float, baseQuantity: Float, unit: Int, store: String = "", product: DBProduct, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         
@@ -52,7 +52,7 @@ class DBStoreProduct: DBSyncable {
         self.removed = removed
     }
 
-    func copy(uuid uuid: String? = nil, price: Float? = nil, baseQuantity: Float? = nil, unit: Int? = nil, product: DBProduct? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> DBStoreProduct {
+    func copy(uuid uuid: String? = nil, price: Float? = nil, baseQuantity: Float? = nil, unit: Int? = nil, product: DBProduct? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> DBStoreProduct {
         return DBStoreProduct(
             uuid: uuid ?? self.uuid,
             price: price ?? self.price,

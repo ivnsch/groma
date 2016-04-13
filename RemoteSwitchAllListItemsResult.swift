@@ -12,7 +12,7 @@ import QorumLogs
 struct RemoteSwitchAllListItemsResult: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let items: [RemoteSwitchAllListItemResult]
     let sections: [RemoteSwitchAllSectionResult]
-    let lastUpdate: NSDate
+    let lastUpdate: Int64
     
     init?(representation: AnyObject) {
         guard
@@ -20,14 +20,14 @@ struct RemoteSwitchAllListItemsResult: ResponseObjectSerializable, ResponseColle
             let items = RemoteSwitchAllListItemResult.collection(itemsObj),
             let sectionsObj = representation.valueForKeyPath("sections"),
             let sections = RemoteSwitchAllSectionResult.collection(sectionsObj),
-            let lastUpdate = ((representation.valueForKeyPath("timestamp") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            let lastUpdate = representation.valueForKeyPath("timestamp") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
         
         self.items = items
         self.sections = sections
-        self.lastUpdate = lastUpdate
+        self.lastUpdate = Int64(lastUpdate)
     }
     
     static func collection(representation: AnyObject) -> [RemoteSwitchAllListItemsResult]? {

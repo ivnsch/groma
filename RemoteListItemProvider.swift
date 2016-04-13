@@ -154,7 +154,7 @@ class RemoteListItemProvider {
         }
     }
     
-    func incrementListItem(listItem: ListItem, delta: Int, handler: RemoteResult<NSDate> -> ()) {
+    func incrementListItem(listItem: ListItem, delta: Int, handler: RemoteResult<Int64> -> ()) {
         let params: [String: AnyObject] = [
             "delta": delta,
             "uuid": listItem.uuid
@@ -205,7 +205,7 @@ class RemoteListItemProvider {
             ]
             
             if let lastServerUpdate = list.lastServerUpdate {
-                dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+                dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
             }
             
             let listItemsDicts = listSync.listItemsSync.listItems.map {toRequestParams($0)}
@@ -289,7 +289,7 @@ class RemoteListItemProvider {
         ]
         
         if let lastServerUpdate = list.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         }
         
         return dict
@@ -338,7 +338,7 @@ class RemoteListItemProvider {
         ]
         
         if let lastServerUpdate = listItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         }
         
         return dict
@@ -405,7 +405,7 @@ class RemoteListItemProvider {
     func toRequestParamsToRemove(listItem: ListItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = ["uuid": listItem.uuid]
         if let lastServerUpdate = listItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         }
         return dict
     }
@@ -413,7 +413,7 @@ class RemoteListItemProvider {
     func toRequestParamsToRemove(list: List) -> [String: AnyObject] {
         var dict: [String: AnyObject] = ["uuid": list.uuid]
         if let lastServerUpdate = list.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         }
         return dict
     }

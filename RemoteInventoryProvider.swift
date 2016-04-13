@@ -93,7 +93,7 @@ class RemoteInventoryProvider: RemoteProvider {
             ]
             
             if let lastServerUpdate = inventory.lastServerUpdate {
-                dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+                dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
             }
             
             let inventoryItemsDicts = inventorySync.inventoryItemsSync.inventoryItems.map {toRequestParamsForSync($0)}
@@ -133,7 +133,7 @@ class RemoteInventoryProvider: RemoteProvider {
         ]
         
         if let lastServerUpdate = inventoryItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         }
         
         return dict
@@ -142,7 +142,7 @@ class RemoteInventoryProvider: RemoteProvider {
     func toRequestParamsToRemove(inventoryItem: InventoryItem) -> [String: AnyObject] {
         var dict: [String: AnyObject] = ["inventoryUuid": inventoryItem.inventory.uuid, "productUuid": inventoryItem.product.uuid]
         if let lastServerUpdate = inventoryItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         }
         return dict
     }
@@ -150,7 +150,7 @@ class RemoteInventoryProvider: RemoteProvider {
     func toRequestParamsToRemove(inventory: Inventory) -> [String: AnyObject] {
         var dict: [String: AnyObject] = ["uuid": inventory.uuid]
         if let lastServerUpdate = inventory.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         }
         return dict
     }
@@ -174,7 +174,7 @@ class RemoteInventoryProvider: RemoteProvider {
         ]
 
         if let lastServerUpdate = inventoryInput.lastServerUpdate {
-            inventoryDict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+            inventoryDict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         }
         
         inventoryDict["users"] = sharedUsers

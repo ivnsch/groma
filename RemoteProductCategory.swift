@@ -13,7 +13,7 @@ struct RemoteProductCategory: ResponseObjectSerializable, ResponseCollectionSeri
     let uuid: String
     let name: String
     var color: UIColor
-    let lastUpdate: NSDate
+    let lastUpdate: Int64
     
     init?(representation: AnyObject) {
         guard
@@ -22,7 +22,7 @@ struct RemoteProductCategory: ResponseObjectSerializable, ResponseCollectionSeri
             let color = ((representation.valueForKeyPath("color") as? String).map{colorStr in
                 UIColor(hexString: colorStr)
             }),
-            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -30,7 +30,7 @@ struct RemoteProductCategory: ResponseObjectSerializable, ResponseCollectionSeri
         self.uuid = uuid
         self.name = name
         self.color = color
-        self.lastUpdate = lastUpdate
+        self.lastUpdate = Int64(lastUpdate)
     }
 
     static func collection(representation: AnyObject) -> [RemoteProductCategory]? {

@@ -11,7 +11,7 @@ import Foundation
 struct RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
-    let lastUpdate: NSDate
+    let lastUpdate: Int64
     let order: Int
     let color: UIColor
     let fav: Int
@@ -20,7 +20,7 @@ struct RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializable, 
         guard
             let uuid = representation.valueForKeyPath("uuid") as? String,
             let name = representation.valueForKeyPath("name") as? String,
-            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
+            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double,
             let order = representation.valueForKeyPath("order") as? Int,
             let color = ((representation.valueForKeyPath("color") as? String).map{colorStr in
                 UIColor(hexString: colorStr)
@@ -32,7 +32,7 @@ struct RemoteGroup: ResponseObjectSerializable, ResponseCollectionSerializable, 
         
         self.uuid = uuid
         self.name = name
-        self.lastUpdate = lastUpdate
+        self.lastUpdate = Int64(lastUpdate)
         self.order = order
         self.color = color
         self.fav = fav

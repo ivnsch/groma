@@ -16,7 +16,7 @@ struct RemoteList: ResponseObjectSerializable, ResponseCollectionSerializable, C
     var color: UIColor
     let store: String?
     let users: [RemoteSharedUser]
-    let lastUpdate: NSDate
+    let lastUpdate: Int64
     let inventoryUuid: String
     
     init?(representation: AnyObject) {

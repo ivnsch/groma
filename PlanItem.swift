@@ -26,7 +26,7 @@ class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
     // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
     // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
-    let lastServerUpdate: NSDate?
+    let lastServerUpdate: Int64?
     let removed: Bool
     //////////////////////////////////////////////
     
@@ -35,7 +35,7 @@ class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
 //        return Float(quantity) * product.price / product.baseQuantity
 //    }
     
-    init(inventory: Inventory, product: Product, quantity: Int, quantityDelta: Int = 0, usedQuantity: Int, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(inventory: Inventory, product: Product, quantity: Int, quantityDelta: Int = 0, usedQuantity: Int, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.inventory = inventory
         self.product = product
         self.quantity = quantity
@@ -45,7 +45,7 @@ class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
         self.quantityDelta = quantityDelta
     }
     
-    func copy(inventory inventory: Inventory? = nil, product: Product? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, usedQuantity: Int? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> PlanItem {
+    func copy(inventory inventory: Inventory? = nil, product: Product? = nil, quantity: Int? = nil, quantityDelta: Int? = nil, usedQuantity: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> PlanItem {
         return PlanItem(
             inventory: inventory ?? self.inventory,
             product: product ?? self.product,
@@ -66,7 +66,7 @@ class PlanItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) product: \(product), quantity: \(quantity), usedQuantity: \(usedQuantity), quantityDelta: \(quantityDelta), inventory: \(inventory), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
+        return "{\(self.dynamicType) product: \(product), quantity: \(quantity), usedQuantity: \(usedQuantity), quantityDelta: \(quantityDelta), inventory: \(inventory), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
 }
 

@@ -55,7 +55,7 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
         return "uuid"
     }
     
-    convenience init(uuid: String, product: DBStoreProduct, section: DBSection, list: DBList, note: String, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    convenience init(uuid: String, product: DBStoreProduct, section: DBSection, list: DBList, note: String, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         self.init()
         

@@ -15,7 +15,7 @@ struct RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSerializab
     let quantity: Int
     let productUuid: String
     let groupUuid: String
-    let lastUpdate: NSDate
+    let lastUpdate: Int64
     
     init?(representation: AnyObject) {
         guard
@@ -23,7 +23,7 @@ struct RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSerializab
             let quantity = representation.valueForKeyPath("quantity") as? Int,
             let productUuid = representation.valueForKeyPath("productUuid") as? String,
             let groupUuid = representation.valueForKeyPath("groupUuid") as? String,
-            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -32,7 +32,7 @@ struct RemoteGroupItem: ResponseObjectSerializable, ResponseCollectionSerializab
         self.quantity = quantity
         self.productUuid = productUuid
         self.groupUuid = groupUuid
-        self.lastUpdate = lastUpdate
+        self.lastUpdate = Int64(lastUpdate)
     }
     
     static func collection(representation: AnyObject) -> [RemoteGroupItem]? {
@@ -58,7 +58,7 @@ extension RemoteGroupItem {
         return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
     
-    static func createTimestampUpdateDict(uuid uuid: String, lastUpdate: NSDate) -> [String: AnyObject] {
+    static func createTimestampUpdateDict(uuid uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
         return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
 }

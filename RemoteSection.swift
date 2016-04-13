@@ -14,7 +14,7 @@ struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable
     let name: String
     var color: UIColor
     var listUuid: String
-    let lastUpdate: NSDate
+    let lastUpdate: Int64
     
     let todoOrder: Int
     let doneOrder: Int
@@ -28,7 +28,7 @@ struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable
             UIColor(hexString: colorStr)
         }),
         let listUuid = representation.valueForKeyPath("listUuid") as? String,
-        let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
+        let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double,
         let todoOrder = representation.valueForKeyPath("todoOrder") as? Int,
         let doneOrder = representation.valueForKeyPath("doneOrder") as? Int,
         let stashOrder = representation.valueForKeyPath("stashOrder") as? Int
@@ -41,7 +41,7 @@ struct RemoteSection: ResponseObjectSerializable, ResponseCollectionSerializable
         self.color = color
         
         self.listUuid = listUuid
-        self.lastUpdate = lastUpdate
+        self.lastUpdate = Int64(lastUpdate)
         
         self.todoOrder = todoOrder
         self.doneOrder = doneOrder

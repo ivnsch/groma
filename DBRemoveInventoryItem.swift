@@ -14,7 +14,7 @@ class DBRemoveInventoryItem: Object {
     
     dynamic var uuid: String = ""
     dynamic var inventoryUuid: String = ""
-    dynamic var lastServerUpdate: NSDate = NSDate()
+    dynamic var lastServerUpdate: Int64 = 0
 
     convenience init(_ dbInventoryItem: DBInventoryItem) {
         self.init(uuid: dbInventoryItem.uuid, inventoryUuid: dbInventoryItem.inventory.uuid, lastServerUpdate: dbInventoryItem.lastServerUpdate)
@@ -23,14 +23,14 @@ class DBRemoveInventoryItem: Object {
     convenience init(_ inventoryItem: InventoryItem) {
         
         let lastServerUpdate = inventoryItem.lastServerUpdate ?? {
-            QL4("lastServerUpdate of inventoryItem object is nil (?)") // don't have time to think about this now so log error msg and use today's date to return something
-            return NSDate()
+            QL4("lastServerUpdate of inventoryItem object is nil (?)") // don't have time to think about this now so log error msg and 0 to return something
+            return 0
         }()
         
         self.init(uuid: inventoryItem.uuid, inventoryUuid: inventoryItem.inventory.uuid, lastServerUpdate: lastServerUpdate)
     }
     
-    convenience init(uuid: String, inventoryUuid: String, lastServerUpdate: NSDate) {
+    convenience init(uuid: String, inventoryUuid: String, lastServerUpdate: Int64) {
         self.init()
         self.uuid = uuid
         self.inventoryUuid = inventoryUuid
@@ -61,7 +61,7 @@ class DBRemoveInventoryItem: Object {
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid
-        dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         return dict
     }
 }

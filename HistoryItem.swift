@@ -12,7 +12,7 @@ class HistoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     
     let uuid: String
     let product: Product
-    let addedDate: NSDate
+    let addedDate: Int64
     let quantity: Int
     let inventory: Inventory
     let user: SharedUser // The user who added the item. This is rather "User" because there's sharing for history items doesn't make sense, but user has information (like pw) which is irrelevant for this
@@ -21,7 +21,7 @@ class HistoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
     // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
     // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
-    let lastServerUpdate: NSDate?
+    let lastServerUpdate: Int64?
     let removed: Bool
     //////////////////////////////////////////////
     
@@ -29,7 +29,7 @@ class HistoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
         return paidPrice * Float(quantity)
     }
     
-    init(uuid: String, inventory: Inventory, product: Product, addedDate: NSDate, quantity: Int, user: SharedUser, paidPrice: Float, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, inventory: Inventory, product: Product, addedDate: Int64, quantity: Int, user: SharedUser, paidPrice: Float, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.inventory = inventory
         self.product = product

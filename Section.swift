@@ -25,11 +25,11 @@ final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
     // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
     // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
-    let lastServerUpdate: NSDate?
+    let lastServerUpdate: Int64?
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid: String, name: String, color: UIColor, list: List, todoOrder: Int, doneOrder: Int, stashOrder: Int, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, name: String, color: UIColor, list: List, todoOrder: Int, doneOrder: Int, stashOrder: Int, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.name = name
         self.color = color
@@ -43,7 +43,7 @@ final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
         self.removed = removed
     }
     
-    convenience init(uuid: String, name: String, color: UIColor, list: List, order: ListItemStatusOrder, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    convenience init(uuid: String, name: String, color: UIColor, list: List, order: ListItemStatusOrder, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         let (todoOrder, doneOrder, stashOrder): (Int, Int, Int) = {
             switch(order.status) {
             case .Todo: return (order.order, 0, 0)
@@ -63,10 +63,10 @@ final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), color: \(color), listUuid: \(list), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), color: \(color), listUuid: \(list), todoOrder: \(todoOrder), doneOrder: \(doneOrder), stashOrder: \(stashOrder), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}}"
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, color: UIColor? = nil, list: List? = nil, todoOrder: Int? = nil, doneOrder: Int? = nil, stashOrder: Int? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> Section {
+    func copy(uuid uuid: String? = nil, name: String? = nil, color: UIColor? = nil, list: List? = nil, todoOrder: Int? = nil, doneOrder: Int? = nil, stashOrder: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Section {
         return Section(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,

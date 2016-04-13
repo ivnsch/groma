@@ -46,7 +46,7 @@ class RemoteInventoryItemsProvider: Any {
         }
     }
     
-    func incrementInventoryItem(inventoryItem: InventoryItem, delta: Int, handler: RemoteResult<NSDate> -> ()) {
+    func incrementInventoryItem(inventoryItem: InventoryItem, delta: Int, handler: RemoteResult<Int64> -> ()) {
         let params: [String: AnyObject] = [
             "delta": delta,
             "uuid": inventoryItem.uuid
@@ -69,7 +69,7 @@ class RemoteInventoryItemsProvider: Any {
             "inventoryItem": inventoryItemDict,
             "historyItemUuid": inventoryItem.historyItemUuid,
             "paidPrice": inventoryItem.paidPrice,
-            "addedDate": NSNumber(double: inventoryItem.addedDate.timeIntervalSince1970).longValue,
+            "addedDate": NSNumber(longLong: Int64(inventoryItem.addedDate)),
             "user": self.toRequestParams(inventoryItem.user)
         ]
     }

@@ -14,7 +14,7 @@ struct RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializab
     let name: String
     let order: Int
     let color: UIColor
-    let lastUpdate: NSDate
+    let lastUpdate: Int64
     let users: [RemoteSharedUser]
 
     init?(representation: AnyObject) {
@@ -26,7 +26,7 @@ struct RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializab
             let color = ((inventory.valueForKeyPath("color") as? String).map{colorStr in
                 UIColor(hexString: colorStr)
             }),
-            let lastUpdate = ((inventory.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
+            let lastUpdate = inventory.valueForKeyPath("lastUpdate") as? Double,
             let unserializedUsers = representation.valueForKeyPath("users"),
             let users = RemoteSharedUser.collection(unserializedUsers)
             else {
@@ -37,7 +37,7 @@ struct RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializab
         self.name = name
         self.order = order
         self.color = color
-        self.lastUpdate = lastUpdate
+        self.lastUpdate = Int64(lastUpdate)
         self.users = users
     }
 

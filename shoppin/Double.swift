@@ -25,4 +25,9 @@ extension Double {
     func toLocalCurrencyString() -> String {
         return Float.currencyFormatter.stringFromNumber(self)!
     }
+    
+    func millisToEpochDate() -> NSDate {
+        // TODO!!!! timezone?
+        return NSDate(timeIntervalSince1970: self / 1000)
+    }
 }

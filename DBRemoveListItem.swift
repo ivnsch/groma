@@ -14,7 +14,7 @@ class DBRemoveListItem: Object {
     
     dynamic var uuid: String = ""
     dynamic var listUuid: String = ""
-    dynamic var lastServerUpdate: NSDate = NSDate()
+    dynamic var lastServerUpdate: Int64 = 0
 
     convenience init(_ dbListItem: DBListItem) {
         self.init(uuid: dbListItem.uuid, listUuid: dbListItem.list.uuid, lastServerUpdate: dbListItem.lastServerUpdate)
@@ -23,14 +23,14 @@ class DBRemoveListItem: Object {
     convenience init(_ listItem: ListItem) {
         
         let lastServerUpdate = listItem.lastServerUpdate ?? {
-            QL4("lastServerUpdate of listItem object is nil (?)") // don't have time to think about this now so log error msg and use today's date to return something
-            return NSDate()
+            QL4("lastServerUpdate of listItem object is nil (?)") // don't have time to think about this now so log error msg and use 0 to return something
+            return 0
         }()
         
         self.init(uuid: listItem.uuid, listUuid: listItem.list.uuid, lastServerUpdate: lastServerUpdate)
     }
     
-    convenience init(uuid: String, listUuid: String, lastServerUpdate: NSDate) {
+    convenience init(uuid: String, listUuid: String, lastServerUpdate: Int64) {
         self.init()
         self.uuid = uuid
         self.listUuid = listUuid
@@ -59,7 +59,7 @@ class DBRemoveListItem: Object {
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid
-        dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         return dict
     }
 }

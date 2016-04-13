@@ -15,8 +15,8 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
     let productUuid: String
     let quantity: Int
     let userUuid: String
-    let addedDate: NSDate
-    let lastUpdate: NSDate
+    let addedDate: Int64
+    let lastUpdate: Int64
     let paidPrice: Float
     
     init?(representation: AnyObject) {
@@ -27,8 +27,8 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
             let productUuid = representation.valueForKeyPath("productUuid") as? String,
             let quantity = representation.valueForKeyPath("quantity") as? Int,
             let userUuid = representation.valueForKeyPath("userUuid") as? String,
-            let addedDate = ((representation.valueForKeyPath("addedDate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
-            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)}),
+            let addedDate = representation.valueForKeyPath("addedDate") as? Double,
+            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double,
             let paidPrice = representation.valueForKeyPath("paidPrice") as? Float
             else {
                 print("Invalid json: \(representation)")
@@ -39,8 +39,8 @@ struct RemoteHistoryItem: ResponseObjectSerializable, ResponseCollectionSerializ
         self.productUuid = productUuid
         self.quantity = quantity
         self.userUuid = userUuid
-        self.addedDate = addedDate
-        self.lastUpdate = lastUpdate
+        self.addedDate = Int64(addedDate)
+        self.lastUpdate = Int64(lastUpdate)
         self.paidPrice = paidPrice
     }
     

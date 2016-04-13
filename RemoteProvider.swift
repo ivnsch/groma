@@ -50,9 +50,9 @@ class RemoteProvider {
     /**
      * Authenticated request with parameter dictionary, timestamp response
      */
-    class func authenticatedRequestTimestamp(method: Alamofire.Method, _ url: String, _ params: [String: AnyObject]? = nil, handler: RemoteResult<NSDate> -> ()) {
+    class func authenticatedRequestTimestamp(method: Alamofire.Method, _ url: String, _ params: [String: AnyObject]? = nil, handler: RemoteResult<Int64> -> ()) {
         onConnectedAndLoggedIn(handler) {
-            AlamofireHelper.authenticatedRequest(method, url, params).responseMyTimestamp {(request, _, result: RemoteResult<NSDate>) in
+            AlamofireHelper.authenticatedRequest(method, url, params).responseMyTimestamp {(request, _, result: RemoteResult<Int64>) in
                 handler(result)
             }
         }
@@ -61,13 +61,13 @@ class RemoteProvider {
     /**
      * Authenticated request with parameter array, timestamp response
      */
-    class func authenticatedRequestArrayParamsTimestamp(method: Alamofire.Method, _ url: String, _ params: [[String: AnyObject]], handler: RemoteResult<NSDate> -> Void) {
+    class func authenticatedRequestArrayParamsTimestamp(method: Alamofire.Method, _ url: String, _ params: [[String: AnyObject]], handler: RemoteResult<Int64> -> Void) {
         onConnectedAndLoggedIn(handler) {
             let request = buildRequest(method, url: url)
             do {
                 // Alamofire's short version currently doesn't support array parameter, so we need this
                 request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(params, options: [])
-                Alamofire.request(request).responseMyTimestamp {(request, _, result: RemoteResult<NSDate>) in
+                Alamofire.request(request).responseMyTimestamp {(request, _, result: RemoteResult<Int64>) in
                     handler(result)
                 }
             } catch _ as NSError {

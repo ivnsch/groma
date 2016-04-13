@@ -146,7 +146,7 @@ class RealmInventoryItemProvider: RealmProvider {
             inventoryItem: InventoryItem(uuid: NSUUID().UUIDString, quantity: quantity, quantityDelta: quantity, product: product.product, inventory: inventory),
             historyItemUuid: NSUUID().UUIDString,
             paidPrice: product.price,
-            addedDate: NSDate(),
+            addedDate: NSDate().toMillis(),
             user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "")
         )
         

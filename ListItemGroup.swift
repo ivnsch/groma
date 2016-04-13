@@ -20,11 +20,11 @@ class ListItemGroup: Identifiable, Equatable {
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
     // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
     // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
-    let lastServerUpdate: NSDate?
+    let lastServerUpdate: Int64?
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid: String, name: String, bgColor: UIColor, order: Int, fav: Int = 0, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, name: String, bgColor: UIColor, order: Int, fav: Int = 0, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.name = name
         self.bgColor = bgColor
@@ -34,7 +34,7 @@ class ListItemGroup: Identifiable, Equatable {
         self.removed = removed
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, bgColor: UIColor? = nil, order: Int? = nil, fav: Int? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> ListItemGroup {
+    func copy(uuid uuid: String? = nil, name: String? = nil, bgColor: UIColor? = nil, order: Int? = nil, fav: Int? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> ListItemGroup {
         return ListItemGroup(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,
@@ -55,7 +55,7 @@ class ListItemGroup: Identifiable, Equatable {
     }
 
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), bgColor: \(bgColor.hexStr), order: \(order), fav: \(fav), removed: \(removed), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), bgColor: \(bgColor.hexStr), order: \(order), fav: \(fav), removed: \(removed), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
 }
 

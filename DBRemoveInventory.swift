@@ -12,13 +12,13 @@ import RealmSwift
 class DBRemoveInventory: Object {
     
     dynamic var uuid: String = ""
-    dynamic var lastServerUpdate: NSDate = NSDate()
+    dynamic var lastServerUpdate: Int64 = 0
 
     convenience init(_ dbInventory: DBInventory) {
         self.init(uuid: dbInventory.uuid, lastServerUpdate: dbInventory.lastServerUpdate)
     }
     
-    convenience init(uuid: String, lastServerUpdate: NSDate) {
+    convenience init(uuid: String, lastServerUpdate: Int64) {
         self.init()
         self.uuid = uuid
         self.lastServerUpdate = lastServerUpdate
@@ -39,7 +39,7 @@ class DBRemoveInventory: Object {
     func toDict() -> [String: AnyObject] {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid
-        dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+        dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         return dict
     }
 }

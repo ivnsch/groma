@@ -81,7 +81,7 @@ class StatsProviderImpl: StatsProvider {
     func aggregate(timePeriod: TimePeriod, groupBy: GroupByAttribute, inventory: Inventory, _ handler: ProviderResult<[ProductAggregate]> -> ()) {
         let dateComponents = timePeriod.dateOffsetComponent()
         
-        if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: NSDate(), options: .WrapComponents) {
+        if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: NSDate(), options: .WrapComponents)?.toMillis() {
             
             RealmHistoryProvider().loadHistoryItems(startDate: startDate, inventory: inventory) {historyItems in
                 let productAggregates = self.toProductAggregates(historyItems)
@@ -98,7 +98,7 @@ class StatsProviderImpl: StatsProvider {
         let dateComponents = timePeriod.dateOffsetComponent()
         
         let referenceDate = NSDate() // today
-        if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: referenceDate, options: []) {
+        if let startDate = NSCalendar.currentCalendar().dateByAddingComponents(dateComponents, toDate: referenceDate, options: [])?.toMillis() {
             
             RealmHistoryProvider().loadHistoryItems(startDate: startDate, inventory: inventory) {historyItems in
                 
@@ -120,7 +120,7 @@ class StatsProviderImpl: StatsProvider {
                 
                 for historyItem in historyItems {
                     
-                    let components = NSCalendar.currentCalendar().components([.Month, .Year], fromDate: historyItem.addedDate)
+                    let components = NSCalendar.currentCalendar().components([.Month, .Year], fromDate: historyItem.addedDate.millisToEpochDate())
                     let key = MonthYear(month: components.month, year: components.year)
                     if let aggr = dict[key] {
                         dict[key] = (price: aggr.price + historyItem.totalPaidPrice, quantity: aggr.quantity + historyItem.quantity)

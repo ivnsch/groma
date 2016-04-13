@@ -15,7 +15,7 @@ struct RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable
     var categoryUuid: String
     let fav: Int
     let brand: String
-    let lastUpdate: NSDate
+    let lastUpdate: Int64
 
     init?(representation: AnyObject) {
         guard
@@ -24,7 +24,7 @@ struct RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable
             let categoryUuid = representation.valueForKeyPath("categoryUuid") as? String,
             let fav = representation.valueForKeyPath("fav") as? Int,
             let brand = representation.valueForKeyPath("brand") as? String,
-            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -34,7 +34,7 @@ struct RemoteProduct: ResponseObjectSerializable, ResponseCollectionSerializable
         self.categoryUuid = categoryUuid
         self.fav = fav
         self.brand = brand
-        self.lastUpdate = lastUpdate
+        self.lastUpdate = Int64(lastUpdate)
     }
     
     static func collection(representation: AnyObject) -> [RemoteProduct]? {

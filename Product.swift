@@ -42,11 +42,11 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
     // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
     // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
-    let lastServerUpdate: NSDate?
+    let lastServerUpdate: Int64?
     let removed: Bool
     //////////////////////////////////////////////
     
-    init(uuid: String, name: String, category: ProductCategory, fav: Int = 0, brand: String = "", lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, name: String, category: ProductCategory, fav: Int = 0, brand: String = "", lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.name = name
         self.category = category
@@ -58,14 +58,14 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), category: \(category), fav: \(fav), brand: \(brand), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), category: \(category), fav: \(fav), brand: \(brand), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
 
     var hashValue: Int {
         return self.uuid.hashValue
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, category: ProductCategory? = nil, fav: Int? = nil, brand: String? = nil, lastServerUpdate: NSDate? = nil, removed: Bool? = nil) -> Product {
+    func copy(uuid uuid: String? = nil, name: String? = nil, category: ProductCategory? = nil, fav: Int? = nil, brand: String? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Product {
         return Product(
             uuid: uuid ?? self.uuid,
             name: name ?? self.name,

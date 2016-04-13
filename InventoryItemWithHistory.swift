@@ -17,12 +17,12 @@ class InventoryItemWithHistoryEntry: Equatable {
     let inventoryItem: InventoryItem
     let historyItemUuid: String
     let paidPrice: Float // product price at the moment of buying the item (per unit)
-    let addedDate: NSDate
+    let addedDate: Int64
     
     // the user that added the item. When the user has never logged in, this user is "empty" (empty email). The user is set by the server during sync the first time the user logs in, or registers. This will be in the sync response, so after sync it's also set in the client. The reason we set this in the server is that history is long and the server has to iterate through the input objects anyway, while in the client we would need to iterate only for this or an additional db query between login and sync, which would make sync even slower.
     let user: SharedUser
     
-    init(inventoryItem: InventoryItem, historyItemUuid: String, paidPrice: Float, addedDate: NSDate, user: SharedUser) {
+    init(inventoryItem: InventoryItem, historyItemUuid: String, paidPrice: Float, addedDate: Int64, user: SharedUser) {
         self.inventoryItem = inventoryItem
         self.historyItemUuid = historyItemUuid
         self.paidPrice = paidPrice
@@ -31,11 +31,11 @@ class InventoryItemWithHistoryEntry: Equatable {
     }
 
 
-    convenience init(inventoryItem: InventoryItem, storeProduct: StoreProduct, historyItemUuid: String, addedDate: NSDate, user: SharedUser) {
+    convenience init(inventoryItem: InventoryItem, storeProduct: StoreProduct, historyItemUuid: String, addedDate: Int64, user: SharedUser) {
         self.init(inventoryItem: inventoryItem, historyItemUuid: historyItemUuid, paidPrice: storeProduct.price, addedDate: addedDate, user: user)
     }
     
-    func copy(inventoryItem inventoryItem: InventoryItem? = nil, historyItemUuid: String? = nil, paidPrice: Float? = nil, addedDate: NSDate? = nil, user: SharedUser? = nil) -> InventoryItemWithHistoryEntry {
+    func copy(inventoryItem inventoryItem: InventoryItem? = nil, historyItemUuid: String? = nil, paidPrice: Float? = nil, addedDate: Int64? = nil, user: SharedUser? = nil) -> InventoryItemWithHistoryEntry {
         return InventoryItemWithHistoryEntry(
             inventoryItem: inventoryItem ?? self.inventoryItem,
             historyItemUuid: historyItemUuid ?? self.historyItemUuid,

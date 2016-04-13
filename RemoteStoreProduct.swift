@@ -16,7 +16,7 @@ struct RemoteStoreProduct: ResponseObjectSerializable, ResponseCollectionSeriali
     let unit: Int
     let store: String
     let productUuid: String
-    let lastUpdate: NSDate
+    let lastUpdate: Int64
     
     init?(representation: AnyObject) {
         guard
@@ -26,7 +26,7 @@ struct RemoteStoreProduct: ResponseObjectSerializable, ResponseCollectionSeriali
             let unit = representation.valueForKeyPath("unit") as? Int,
             let store = representation.valueForKeyPath("store") as? String,
             let productUuid = representation.valueForKeyPath("productUuid") as? String,
-            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -37,7 +37,7 @@ struct RemoteStoreProduct: ResponseObjectSerializable, ResponseCollectionSeriali
         self.unit = unit
         self.store = store
         self.productUuid = productUuid
-        self.lastUpdate = lastUpdate
+        self.lastUpdate = Int64(lastUpdate)
     }
     
     static func collection(representation: AnyObject) -> [RemoteStoreProduct]? {

@@ -36,7 +36,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     // sync properties - FIXME - while Realm allows to return Realm objects from async op. This shouldn't be in model objects.
     // the idea is that we can return the db objs from query and then do sync directly with these objs so no need to put sync attributes in model objs
     // we could map the db objects to other db objs in order to work around the Realm issue, but this adds even more overhead, we make a lot of mappings already
-    let lastServerUpdate: NSDate?
+    let lastServerUpdate: Int64?
     let removed: Bool
     //////////////////////////////////////////////
 
@@ -62,7 +62,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         }
     }
     
-    init(uuid: String, product: StoreProduct, section: Section, list: List, note: String? = nil, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    init(uuid: String, product: StoreProduct, section: Section, list: List, note: String? = nil, todoQuantity: Int, todoOrder: Int, doneQuantity: Int, doneOrder: Int, stashQuantity: Int, stashOrder: Int, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         self.uuid = uuid
         self.product = product
         self.section = section
@@ -80,7 +80,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         self.removed = removed
     }
 
-    convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String? = nil, statusOrder: ListItemStatusOrder, statusQuantity: ListItemStatusQuantity, lastServerUpdate: NSDate? = nil, removed: Bool = false) {
+    convenience init(uuid: String, product: StoreProduct, section: Section, list: List, note: String? = nil, statusOrder: ListItemStatusOrder, statusQuantity: ListItemStatusQuantity, lastServerUpdate: Int64? = nil, removed: Bool = false) {
         
         func quantity(selfStatus: ListItemStatus, _ statusQuantity: ListItemStatusQuantity) -> Int {
             return statusQuantity.status == selfStatus ? statusQuantity.quantity : 0
@@ -171,7 +171,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     }
     
     private var longDebugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), note: \(note), productUuid: \(product), sectionUuid: \(section), listUuid: \(list), todoQuantity: \(todoQuantity), todoOrder: \(todoOrder), doneQuantity: \(doneQuantity), doneOrder: \(doneOrder), stashQuantity: \(stashQuantity), stashOrder: \(stashOrder), lastServerUpdate: \(lastServerUpdate), removed: \(removed)}"
+        return "{\(self.dynamicType) uuid: \(uuid), note: \(note), productUuid: \(product), sectionUuid: \(section), listUuid: \(list), todoQuantity: \(todoQuantity), todoOrder: \(todoOrder), doneQuantity: \(doneQuantity), doneOrder: \(doneOrder), stashQuantity: \(stashQuantity), stashOrder: \(stashOrder), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
     
     func copy(uuid uuid: String? = nil, product: StoreProduct? = nil, section: Section? = nil, list: List? = nil, note: String?, todoQuantity: Int? = nil, todoOrder: Int? = nil, doneQuantity: Int? = nil, doneOrder: Int? = nil, stashQuantity: Int? = nil, stashOrder: Int? = nil) -> ListItem {

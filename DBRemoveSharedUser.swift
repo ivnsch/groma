@@ -13,14 +13,14 @@ import RealmSwift
 class DBRemoveSharedUser: Object {
     
     dynamic var email: String = ""
-    dynamic var lastServerUpdate: NSDate = NSDate()
+    dynamic var lastServerUpdate: Double = 0
 
     convenience init(_ dbSharedUser: DBSharedUser) {
         self.init()
         self.email = dbSharedUser.email
     }
     
-    convenience init(email: String, lastServerUpdate: NSDate) {
+    convenience init(email: String, lastServerUpdate: Double) {
         self.init()
         self.email = email
         self.lastServerUpdate = lastServerUpdate

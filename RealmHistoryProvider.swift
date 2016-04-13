@@ -23,12 +23,12 @@ class RealmHistoryProvider: RealmProvider {
         self.load(mapper, sortDescriptor: historySortDescriptor, range: range, handler: handler)
     }
 
-    func loadHistoryItems(range: NSRange? = nil, startDate: NSDate, inventory: Inventory, handler: [HistoryItem] -> ()) {
+    func loadHistoryItems(range: NSRange? = nil, startDate: Int64, inventory: Inventory, handler: [HistoryItem] -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
         self.load(mapper, predicate: DBHistoryItem.createPredicate(startDate, inventoryUuid: inventory.uuid), sortDescriptor: historySortDescriptor, range: range, handler: handler)
     }
 
-    func loadHistoryItems(productName: String, startDate: NSDate, inventory: Inventory, handler: [HistoryItem] -> ()) {
+    func loadHistoryItems(productName: String, startDate: Int64, inventory: Inventory, handler: [HistoryItem] -> ()) {
         let mapper = {HistoryItemMapper.historyItemWith($0)}
         self.load(mapper, predicate: DBHistoryItem.createPredicate(productName, addedDate: startDate, inventoryUuid: inventory.uuid), sortDescriptor: historySortDescriptor, handler: handler)
     }
@@ -39,7 +39,7 @@ class RealmHistoryProvider: RealmProvider {
     }
     
     func loadHistoryItems(monthYear: MonthYear, inventory: Inventory, handler: [HistoryItem] -> Void) {
-        if let startDate = NSDate.startOfMonth(monthYear.month, year: monthYear.year), endDate = NSDate.endOfMonth(monthYear.month, year: monthYear.year) {
+        if let startDate = NSDate.startOfMonth(monthYear.month, year: monthYear.year)?.toMillis(), endDate = NSDate.endOfMonth(monthYear.month, year: monthYear.year)?.toMillis() {
             loadHistoryItems(startDate, endDate: endDate, inventory: inventory, handler)
         } else {
             print("Error: Invalid month year components to get start/end date: \(monthYear)")
@@ -47,7 +47,7 @@ class RealmHistoryProvider: RealmProvider {
         }
     }
     
-    func loadHistoryItems(startDate: NSDate, endDate: NSDate, inventory: Inventory, _ handler: [HistoryItem] -> Void) {
+    func loadHistoryItems(startDate: Int64, endDate: Int64, inventory: Inventory, _ handler: [HistoryItem] -> Void) {
         let mapper = {HistoryItemMapper.historyItemWith($0)}
         self.load(mapper, predicate: DBHistoryItem.createPredicate(startDate, endAddedDate: endDate, inventoryUuid: inventory.uuid), sortDescriptor: historySortDescriptor, handler: handler)
     }
@@ -70,7 +70,7 @@ class RealmHistoryProvider: RealmProvider {
                 // Group by date
                 var dateDictDB: OrderedDictionary<NSDate, [DBHistoryItem]> = OrderedDictionary()
                 for result in results {
-                    let addedDateWithoutSeconds = result.addedDate.dateWithZeroSeconds() // items are groped using minutes
+                    let addedDateWithoutSeconds = result.addedDate.millisToEpochDate().dateWithZeroSeconds() // items are groped using minutes
                     if dateDictDB[addedDateWithoutSeconds] == nil {
                         dateDictDB[addedDateWithoutSeconds] = []
                     }

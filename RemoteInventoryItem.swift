@@ -14,7 +14,7 @@ struct RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionSerial
     let quantity: Int
     let productUuid: String // TODO remove this? or store product and inventory here not in RemoteInventoryItemWithProduct --- is this todo still valid?
     let inventoryUuid: String
-    let lastUpdate: NSDate
+    let lastUpdate: Int64
     
     init?(representation: AnyObject) {
         guard
@@ -22,7 +22,7 @@ struct RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionSerial
             let quantity = representation.valueForKeyPath("quantity") as? Int,
             let productUuid = representation.valueForKeyPath("productUuid") as? String,
             let inventoryUuid = representation.valueForKeyPath("inventoryUuid") as? String,
-            let lastUpdate = ((representation.valueForKeyPath("lastUpdate") as? Double).map{d in NSDate(timeIntervalSince1970: d)})
+            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -31,7 +31,7 @@ struct RemoteInventoryItem: ResponseObjectSerializable, ResponseCollectionSerial
         self.quantity = quantity
         self.productUuid = productUuid
         self.inventoryUuid = inventoryUuid
-        self.lastUpdate = lastUpdate
+        self.lastUpdate = Int64(lastUpdate)
     }
     
     static func collection(representation: AnyObject) -> [RemoteInventoryItem]? {
@@ -56,7 +56,7 @@ extension RemoteInventoryItem {
         return RemoteInventoryItem.createTimestampUpdateDict(uuid: uuid, lastUpdate: lastUpdate)
     }
     
-    static func createTimestampUpdateDict(uuid uuid: String, lastUpdate: NSDate) -> [String: AnyObject] {
+    static func createTimestampUpdateDict(uuid uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
         return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
 }

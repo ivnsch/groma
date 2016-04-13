@@ -203,7 +203,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
                 generatePrefillDatabase()
             }
             if debugAddDummyData || !(PreferencesManager.loadPreference(PreferencesManagerKey.hasLaunchedBefore) ?? false) { // first launch
-                addDummyData()
+//                addDummyData()
 //                addDummyDataMini()
             }
             #else
@@ -390,77 +390,77 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
             let calendar = NSCalendar.currentCalendar()
             let components = NSDateComponents()
             components.month = -2
-            let months2Ago = calendar.dateByAddingComponents(components, toDate: today, options: .WrapComponents)!
+            let months2Ago = calendar.dateByAddingComponents(components, toDate: today, options: .WrapComponents)!.toMillis()
             components.month = -4
-            let months4Ago = calendar.dateByAddingComponents(components, toDate: today, options: .WrapComponents)!
+            let months4Ago = calendar.dateByAddingComponents(components, toDate: today, options: .WrapComponents)!.toMillis()
             
             
             // TODO !! why items with date before today not stored in the database? why server has after sync 75 items and client db 60 (correct count)?
             let inventoryWithHistoryItems = [
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[0], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[0], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[1], storeProduct: storeProduct9, historyItemUuid: uuid, addedDate: months4Ago, user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[2], storeProduct: storeProduct10, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[3], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[3], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[4], storeProduct: storeProduct12, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[5], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[6], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[5], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[6], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[7], storeProduct: storeProduct15, historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[8], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[8], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[9], storeProduct: storeProduct17, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[10], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[11], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[10], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[11], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[12], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[12], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[13], storeProduct: storeProduct9, historyItemUuid: uuid, addedDate: months4Ago, user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[14], storeProduct: storeProduct10, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[15], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[15], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[16], storeProduct: storeProduct12, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[17], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[18], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[17], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[18], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[19], storeProduct: storeProduct15, historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[20], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[20], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[21], storeProduct: storeProduct17, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[22], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[23], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[22], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[23], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[24], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[24], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[25], storeProduct: storeProduct9, historyItemUuid: uuid, addedDate: months4Ago, user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[26], storeProduct: storeProduct10, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[27], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[27], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[28], storeProduct: storeProduct12, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[29], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[30], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[29], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[30], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[31], storeProduct: storeProduct15, historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[32], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[32], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[33], storeProduct: storeProduct17, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[34], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[35], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[34], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[35], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[36], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[36], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[37], storeProduct: storeProduct9, historyItemUuid: uuid, addedDate: months4Ago, user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[38], storeProduct: storeProduct10, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[39], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[39], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[40], storeProduct: storeProduct12, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[41], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[42], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[41], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[42], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[43], storeProduct: storeProduct15, historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[44], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[44], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[45], storeProduct: storeProduct17, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[46], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[47], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[46], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[47], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[48], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[48], storeProduct: storeProduct8, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[49], storeProduct: storeProduct9, historyItemUuid: uuid, addedDate: months4Ago, user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[50], storeProduct: storeProduct10, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[51], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[51], storeProduct: storeProduct11, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[52], storeProduct: storeProduct12, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[53], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[54], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[53], storeProduct: storeProduct13, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[54], storeProduct: storeProduct14, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[55], storeProduct: storeProduct15, historyItemUuid: uuid, addedDate: months4Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[56], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[56], storeProduct: storeProduct16, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
                 InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[57], storeProduct: storeProduct17, historyItemUuid: uuid, addedDate: months2Ago, user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[58], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate(), user: user),
-                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[59], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate(), user: user)
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[58], storeProduct: storeProduct18, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user),
+                InventoryItemWithHistoryEntry(inventoryItem: inventoryItems[59], storeProduct: storeProduct19, historyItemUuid: uuid, addedDate: NSDate().toMillis(), user: user)
             ]
             
             
@@ -469,7 +469,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
 //                let category = ProductCategory(uuid: "111\(i)", name: "111\(i)", color: UIColor.blackColor())
 //                let product = Product(uuid: "111\(i)", name: "111\(i)", price: 123, category: category, baseQuantity: 1, unit: .None)
 //                let inventoryItem = inventoryItem(quantityDelta: 7, product: product, inventory: inventory1)
-//                return InventoryItemWithHistoryEntry(inventoryItem: inventoryItem, historyItemUuid: "111\(i)", addedDate: NSDate(), user: user)
+//                return InventoryItemWithHistoryEntry(inventoryItem: inventoryItem, historyItemUuid: "111\(i)", addedDate: NSDate().toMillis(), user: user)
 //            }
             
             DBProviders.inventoryItemProvider.add(inventoryWithHistoryItems/* + moreItems*/) {saved in

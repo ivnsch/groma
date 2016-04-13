@@ -13,7 +13,7 @@ class DBHistoryItem: DBSyncable {
     dynamic var uuid: String = ""
     dynamic var inventoryOpt: DBInventory? = DBInventory()
     dynamic var productOpt: DBProduct? = DBProduct()
-    dynamic var addedDate: NSDate = NSDate()
+    dynamic var addedDate: Int64 = 0
     dynamic var quantity: Int = 0
     dynamic var userOpt: DBSharedUser? = DBSharedUser()
     dynamic var paidPrice: Float = 0 // product price at the moment of buying the item (per unit)
@@ -68,27 +68,28 @@ class DBHistoryItem: DBSyncable {
         return "uuid IN {\(historyItemsUuidsStr)}"
     }
     
-    static func createPredicate(addedDate: NSDate, inventoryUuid: String) -> NSPredicate {
-        return NSPredicate(format: "addedDate >= %@ AND inventoryOpt.uuid == %@", addedDate, inventoryUuid)
+    static func createPredicate(addedDate: Int64, inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "addedDate >= %@ AND inventoryOpt.uuid == %@", NSNumber(longLong: Int64(addedDate)), inventoryUuid)
     }
     
-    static func createPredicate(productName: String, addedDate: NSDate, inventoryUuid: String) -> NSPredicate {
-        return NSPredicate(format: "productOpt.name == %@ AND addedDate >= %@ AND inventoryOpt.uuid == %@", productName, addedDate, inventoryUuid)
+    static func createPredicate(productName: String, addedDate: Int64, inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "productOpt.name == %@ AND addedDate >= %@ AND inventoryOpt.uuid == %@", productName, NSNumber(longLong: Int64(addedDate)), inventoryUuid)
     }
     
-    static func createPredicate(startAddedDate: NSDate, endAddedDate: NSDate, inventoryUuid: String) -> NSPredicate {
-        return NSPredicate(format: "addedDate >= %@ AND addedDate <= %@ AND inventoryOpt.uuid == %@", startAddedDate, endAddedDate, inventoryUuid)
+    static func createPredicate(startAddedDate: Int64, endAddedDate: Int64, inventoryUuid: String) -> NSPredicate {
+        return NSPredicate(format: "addedDate >= %@ AND addedDate <= %@ AND inventoryOpt.uuid == %@", NSNumber(longLong: Int64(startAddedDate)), NSNumber(longLong: Int64(endAddedDate)), inventoryUuid)
     }
     
     // MARK: -
 
     
+    // TODO!!!! failable
     static func fromDict(dict: [String: AnyObject], inventory: DBInventory, product: DBProduct) -> DBHistoryItem {
         let item = DBHistoryItem()
         item.uuid = dict["uuid"]! as! String
         item.inventory = inventory
         item.product = product
-        item.addedDate = NSDate(timeIntervalSince1970: dict["addedDate"] as! Double)
+        item.addedDate = Int64(dict["addedDate"] as! Double)
         item.quantity = dict["quantity"]! as! Int
         item.paidPrice = dict["paidPrice"] as! Float
         // TODO!!!! user -> the backend sends us the uuid, we should send for now the email instead
@@ -104,7 +105,7 @@ class DBHistoryItem: DBSyncable {
         dict["uuid"] = uuid
         dict["inventoryUuid"] = inventory.uuid
         dict["productInput"] = product.toDict()
-        dict["addedDate"] = NSNumber(double: addedDate.timeIntervalSince1970).longValue
+        dict["addedDate"] = NSNumber(longLong: Int64(addedDate))
         dict["quantity"] = quantity
         dict["paidPrice"] = paidPrice
         dict["user"] = user.toDict()

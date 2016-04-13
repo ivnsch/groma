@@ -56,7 +56,7 @@ class RemotePlanItemsProvider {
             ]
         ]
         if let lastServerUpdate = planItem.lastServerUpdate {
-            dict["lastUpdate"] = NSNumber(double: lastServerUpdate.timeIntervalSince1970).longValue
+            dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         }
         return dict
     }
