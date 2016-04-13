@@ -34,7 +34,7 @@ class DBSyncable: Object {
         self.dirty = false
     }
     
-    func setSyncableFieldsInDict(var dict: [String: AnyObject]) {
+    func setSyncableFieldsInDict(inout dict: [String: AnyObject]) {
         dict[DBSyncable.lastUpdateFieldName] = NSNumber(longLong: lastServerUpdate)
     }
     

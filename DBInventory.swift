@@ -72,7 +72,7 @@ class DBInventory: DBSyncable {
         dict["color"] = bgColorHex
         dict["order"] = order
         dict["users"] = users.map{$0.toDict()}
-        setSyncableFieldsInDict(dict)
+        setSyncableFieldsInDict(&dict)
         return dict
     }
 }

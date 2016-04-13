@@ -77,7 +77,7 @@ class DBGroupItem: DBSyncable {
         dict["quantity"] = quantity
         dict["product"] = product.toDict()
         dict["group"] = group.toDict()
-        setSyncableFieldsInDict(dict)
+        setSyncableFieldsInDict(&dict)
         return dict
     }
     

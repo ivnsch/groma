@@ -90,7 +90,7 @@ class DBInventoryItem: DBSyncable {
         dict["product"] = product.toDict()
 //        dict["inventory"] = inventory.toDict()
         dict["inventoryUuid"] = inventory.uuid
-        setSyncableFieldsInDict(dict)
+        setSyncableFieldsInDict(&dict)
         return dict
     }
     

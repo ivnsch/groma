@@ -74,7 +74,7 @@ class DBListItemGroup: DBSyncable {
         dict["order"] = order
         dict["color"] = bgColorHex
         dict["fav"] = fav
-        setSyncableFieldsInDict(dict)
+        setSyncableFieldsInDict(&dict)
         return dict
     }
 }

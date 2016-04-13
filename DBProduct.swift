@@ -140,7 +140,7 @@ class DBProduct: DBSyncable {
         dict["category"] = category.toDict()
         dict["fav"] = fav
         dict["brand"] = brand
-        setSyncableFieldsInDict(dict)
+        setSyncableFieldsInDict(&dict)
         return dict
     }
     

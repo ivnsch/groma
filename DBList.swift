@@ -89,7 +89,7 @@ class DBList: DBSyncable {
             dict["store"] = store
         }
         dict["users"] = users.map{$0.toDict()}
-        setSyncableFieldsInDict(dict)
+        setSyncableFieldsInDict(&dict)
         return dict
     }
     

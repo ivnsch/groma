@@ -109,7 +109,7 @@ class DBHistoryItem: DBSyncable {
         dict["quantity"] = quantity
         dict["paidPrice"] = paidPrice
         dict["user"] = user.toDict()
-        setSyncableFieldsInDict(dict)
+        setSyncableFieldsInDict(&dict)
         return dict
     }
     

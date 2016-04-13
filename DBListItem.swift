@@ -209,7 +209,7 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
         dict["doneOrder"] = doneOrder
         dict["stashQuantity"] = stashQuantity
         dict["stashOrder"] = stashOrder
-        setSyncableFieldsInDict(dict)
+        setSyncableFieldsInDict(&dict)
         return dict
     }
     

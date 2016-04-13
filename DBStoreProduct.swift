@@ -142,7 +142,7 @@ class DBStoreProduct: DBSyncable {
         dict["unit"] = unit
         dict["store"] = store
         dict["product"] = product.toDict()
-        setSyncableFieldsInDict(dict)
+        setSyncableFieldsInDict(&dict)
         return dict
     }
     

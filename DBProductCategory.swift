@@ -85,7 +85,7 @@ class DBProductCategory: DBSyncable {
         dict["uuid"] = uuid
         dict["name"] = name
         dict["color"] = bgColorHex
-        setSyncableFieldsInDict(dict)
+        setSyncableFieldsInDict(&dict)
         return dict
     }
 }

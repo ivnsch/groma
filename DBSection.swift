@@ -134,7 +134,7 @@ class DBSection: DBSyncable {
         dict["doneOrder"] = doneOrder
         dict["stashOrder"] = stashOrder
         dict["listInput"] = list.toDict()
-        setSyncableFieldsInDict(dict)
+        setSyncableFieldsInDict(&dict)
         return dict
     }
 
