@@ -16,4 +16,16 @@ extension Array where Element: List {
     func sortedByOrder() -> [List] {
         return self.sort {$0.order <= $1.order}
     }
+    
+    func equalsExcludingSyncAttributes(rhs: [List]) -> Bool {
+        guard self.count == rhs.count else {return false}
+        for i in 0..<self.count {
+            let list = self[i]
+            let otherList = rhs[i]
+            if !list.equalsExcludingSyncAttributes(otherList) {
+                return false
+            }
+        }
+        return true
+    }
 }

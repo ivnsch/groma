@@ -33,8 +33,9 @@ class ListProviderImpl: ListProvider {
                             
                             DBProviders.listProvider.overwriteLists(lists, clearTombstones: true) {saved in
                                 if saved {
-                                    handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: lists))
-                                    
+                                    if !dbLists.equalsExcludingSyncAttributes(lists) { // the sync attributes are not relevant to the ui so notify ui only if sth else changed
+                                        handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: lists))
+                                    }
                                 } else {
                                     print("Error overwriting lists - couldn't save")
                                 }

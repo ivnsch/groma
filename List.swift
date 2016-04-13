@@ -82,9 +82,13 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
             removed: removed ?? self.removed
         )
     }
+    
+    // WARN: doesn't include listItems. Actually, should we remove list items from list? this is never used?
+    func equalsExcludingSyncAttributes(rhs: List) -> Bool {
+        return self.uuid == rhs.uuid && self.name == rhs.name && self.bgColor == rhs.bgColor && self.order == rhs.order && self.inventory == rhs.inventory && self.store == rhs.store
+    }
 }
 
-// TODO implement equality correctly, also in other model classes. Now we have identifiable for this.
 func ==(lhs: List, rhs: List) -> Bool {
-    return lhs.uuid == rhs.uuid
+    return lhs.equalsExcludingSyncAttributes(rhs) && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
 }
