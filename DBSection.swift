@@ -103,6 +103,10 @@ class DBSection: DBSyncable {
         return "name CONTAINS[c] '\(text)'"
     }
     
+    static func createFilterList(listUuid: String) -> String {
+        return "listOpt.uuid == '\(listUuid)'"
+    }
+    
     // MARK: -
     
     static func fromDict(dict: [String: AnyObject], list: DBList) -> DBSection {

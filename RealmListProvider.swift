@@ -81,7 +81,10 @@ class RealmListProvider: RealmProvider {
         // delete listItems
         let dbListItems = realm.objects(DBListItem).filter(DBListItem.createFilterList(listUuid))
         realm.delete(dbListItems)
-        // NOTE: it's not necessary to mark list items deletes for sync as syncing the list delete will also delete the list items.
+        // delete sections
+        let dbSections = realm.objects(DBSection).filter(DBSection.createFilterList(listUuid))
+        realm.delete(dbSections)
+        // NOTE: it's not necessary to mark list items / section deletes for sync as syncing the list delete will also delete these in the server.
         
         // delete list
         if let dbList = realm.objects(DBList).filter(DBList.createFilter(listUuid)).first {
