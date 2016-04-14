@@ -12,6 +12,9 @@ protocol ProductCategoryProvider {
 
     func categoryWithName(name: String, _ handler: ProviderResult<ProductCategory> -> Void)
     
+    // TODO maybe remove category with name and let only this, optional is better than .NotFound status, at least in this case
+    func categoryWithNameOpt(name: String, _ handler: ProviderResult<ProductCategory?> -> Void)
+
     func categoriesContainingText(text: String,  _ handler: ProviderResult<[ProductCategory]> -> Void)
     
     func categories(range: NSRange, _ handler: ProviderResult<[ProductCategory]> -> Void)

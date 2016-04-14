@@ -18,6 +18,8 @@ protocol AddEditListItemViewControllerDelegate {
     
     func parentViewForAddButton() -> UIView?
     
+    func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void)
+    
 //    func productNameAutocompletions(text: String, handler: [String] -> Void)
 //    func sectionNameAutocompletions(text: String, handler: [String] -> Void)
 //    func storeNameAutocompletions(text: String, handler: [String] -> Void)
@@ -386,9 +388,18 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     func autoCompleteTextField(textField: MLPAutoCompleteTextField!, possibleCompletionsForString string: String!, completionHandler handler: (([AnyObject]!) -> Void)!) {
         switch textField {
         case sectionInput:
-            Providers.sectionProvider.sectionSuggestionsContainingText(string, successHandler{suggestions in
-                handler(suggestions)
-            })
+            switch modus {
+            case .ListItem:
+                Providers.sectionProvider.sectionSuggestionsContainingText(string, successHandler{suggestions in
+                    handler(suggestions)
+                })
+            default:
+                Providers.productCategoryProvider.categoriesContainingText(string, successHandler{categories in
+                    let suggestions = categories.map{$0.name}.distinct()
+                    handler(suggestions)
+                })
+            }
+
         case brandInput:
             Providers.brandProvider.brandsContainingText(string, successHandler{brands in
                 handler(brands)
@@ -403,6 +414,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     // TODO remove this?
     func autoCompleteTextField(textField: MLPAutoCompleteTextField!, didSelectAutoCompleteString selectedString: String!, withAutoCompleteObject selectedObject: MLPAutoCompletionObject!, forRowAtIndexPath indexPath: NSIndexPath!) {
+
+        delegate?.addEditSectionOrCategoryColor(selectedString) {[weak self] colorMaybe in
+            self?.sectionColorButton.textColor = colorMaybe ?? {
+                QL4("Invalid state: selected a section or category suggestion and there's no color.")
+                return UIColor.blackColor()
+            }()
+        }
     }
 
     

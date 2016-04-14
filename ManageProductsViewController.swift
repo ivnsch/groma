@@ -286,6 +286,12 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         return self.view
     }
     
+    func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void) {
+        Providers.productCategoryProvider.categoryWithName(name, successHandler {category in
+            handler(category.color)
+        })
+    }
+    
     // MARK: -
     
     private func indexPathForProduct(product: Product) -> NSIndexPath? {

@@ -576,6 +576,27 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         return self.view
     }
     
+    func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void) {
+        if let list = currentList {
+            Providers.sectionProvider.sections([name], list: list, handler: successHandler {[weak self] sections in guard let weakSelf = self else {return}
+                if let section = sections.first {
+                    handler(section.color)
+                } else {
+                    // Suggestions can be sections and/or categories. If there's no section with this name (which we look up first, since we are in list items so section has higher prio) we look for a category.
+                    Providers.productCategoryProvider.categoryWithNameOpt(name, weakSelf.successHandler {categoryMaybe in
+                        handler(categoryMaybe?.color)
+                        
+                        if categoryMaybe == nil {
+                            QL4("No section or category found with name: \(name) in list: \(list)") // if it's in the autocompletions it must be either the name of a section or category so we should have found one of these
+                        }
+                    })
+                }
+            })
+        } else {
+            QL4("Invalid state: retrieving section color for add/edit but list is not set")
+        }
+    }
+    
     func onAddGroupOpen() {
         topBar.setBackVisible(false)
         topBar.setLeftButtonModels([])

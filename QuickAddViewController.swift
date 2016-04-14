@@ -27,6 +27,8 @@ protocol QuickAddDelegate {
     func onAddGroupItemsOpen()
     
     func parentViewForAddButton() -> UIView
+    
+    func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void)
 }
 
 private enum AddProductOrGroupContent {
@@ -263,6 +265,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
 
     func parentViewForAddButton() -> UIView? {
         return delegate?.parentViewForAddButton()
+    }
+    
+    func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void) {
+        delegate?.addEditSectionOrCategoryColor(name, handler: handler)
     }
     
     // Not using plan for now

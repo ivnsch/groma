@@ -25,6 +25,12 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
         }
     }
     
+    func categoryWithNameOpt(name: String, _ handler: ProviderResult<ProductCategory?> -> Void) {
+        dbProductProvider.categoryWithName(name) {categoryMaybe in
+            handler(ProviderResult(status: .Success, sucessResult: categoryMaybe))
+        }
+    }
+    
     func categoriesContainingText(text: String,  _ handler: ProviderResult<[ProductCategory]> -> Void) {
         dbCategoryProvider.categoriesContainingText(text) {categories in
             handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: categories))

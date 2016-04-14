@@ -355,6 +355,12 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         return self.view
     }
     
+    func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void) {
+        Providers.productCategoryProvider.categoryWithName(name, successHandler {category in
+            handler(category.color)
+        })
+    }
+    
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
