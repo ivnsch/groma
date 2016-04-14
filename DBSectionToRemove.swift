@@ -19,16 +19,6 @@ class DBSectionToRemove: Object {
         self.init(uuid: dbSection.uuid, lastServerUpdate: dbSection.lastServerUpdate)
     }
     
-    convenience init(_ section: Section) {
-        
-        let lastServerUpdate = section.lastServerUpdate ?? {
-            QL4("lastServerUpdate of section object is nil (?)") // don't have time to think about this now so log error msg and use 0 to return something
-            return 0
-        }()
-        
-        self.init(uuid: section.uuid, lastServerUpdate: lastServerUpdate)
-    }
-    
     convenience init(uuid: String, lastServerUpdate: Int64) {
         self.init()
         self.uuid = uuid

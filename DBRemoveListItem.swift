@@ -20,16 +20,6 @@ class DBRemoveListItem: Object {
         self.init(uuid: dbListItem.uuid, listUuid: dbListItem.list.uuid, lastServerUpdate: dbListItem.lastServerUpdate)
     }
     
-    convenience init(_ listItem: ListItem) {
-        
-        let lastServerUpdate = listItem.lastServerUpdate ?? {
-            QL4("lastServerUpdate of listItem object is nil (?)") // don't have time to think about this now so log error msg and use 0 to return something
-            return 0
-        }()
-        
-        self.init(uuid: listItem.uuid, listUuid: listItem.list.uuid, lastServerUpdate: lastServerUpdate)
-    }
-    
     convenience init(uuid: String, listUuid: String, lastServerUpdate: Int64) {
         self.init()
         self.uuid = uuid

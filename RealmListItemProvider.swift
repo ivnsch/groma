@@ -251,18 +251,20 @@ class RealmListItemProvider: RealmProvider {
         self.load(mapper, handler: handler)
     }
     
-    func remove(listItem: ListItem, markForSync: Bool, handler: Bool -> ()) {
-        remove(listItem.uuid, listUuid: listItem.list.uuid, sectionUuid: listItem.section.uuid, markForSync: markForSync, handler: handler)
+    func remove(listItem: ListItem, lastServerUpdate: Int64?, handler: Bool -> ()) {
+        remove(listItem.uuid, listUuid: listItem.list.uuid, sectionUuid: listItem.section.uuid, lastServerUpdate: lastServerUpdate, handler: handler)
     }
 
-    
-    func remove(listItemUuid: String, listUuid: String, sectionUuid sectionUuidMaybe: String? = nil, markForSync: Bool, handler: Bool -> ()) {
-        
-        let additionalActions: (Realm -> Void)? = markForSync ? {realm in
-            // TODO!!!! lastServerUpdate? what should it be? do we need this here?
-            let toRemoveListItem = DBRemoveListItem(uuid: listItemUuid, listUuid: listUuid, lastServerUpdate: 0)
-            realm.add(toRemoveListItem, update: true)
-            } : nil
+    // lastServerUpdate != nil here is same as markForSync == true: If there is a last server udpate in the object and we pass it, it means we want to mark for sync (add tombstone). If there's no last server update we don't mark for sync. Independently if we pass nil intentionally or not(e.g. lastServerUpdate called as property of model objects where this is optional, may be set or not depending if the object is already synced), this makes sense, as if the object has no last server update, it means it was never synchronised, which means it's not in the server, which means we don't need to add a tombstone for it.
+    // When we call this as part of websocket message processing, the object does have a lastServerUpdate timestamp but we pass nil - to indicate that we don't want to add a tombstone, as the server just sent us the delete meaning it's already deleted there.
+    // TODO improve implementation such that purpose becomes clearer, this would be hard to figure out without comment.
+    func remove(listItemUuid: String, listUuid: String, sectionUuid sectionUuidMaybe: String? = nil, lastServerUpdate: Int64?, handler: Bool -> ()) {
+
+        let additionalActions: (Realm -> Void)? = lastServerUpdate.map{lastServerUpdate in {realm in
+                let toRemoveListItem = DBRemoveListItem(uuid: listItemUuid, listUuid: listUuid, lastServerUpdate: lastServerUpdate)
+                realm.add(toRemoveListItem, update: true)
+            }
+        }
         
         self.remove(DBListItem.createFilter(listItemUuid), handler: handler, objType: DBListItem.self, additionalActions: additionalActions)
     }
