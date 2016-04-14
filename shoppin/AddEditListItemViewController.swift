@@ -112,8 +112,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 
     @IBOutlet weak var titleLabel: UILabel!
 
-    var onDidLoad: VoidFunction?
-    
 /////////////////////////////////////////////////////////////////////////
 // for now disabled, see comments at the bottom
 //    @IBOutlet weak var sectionLabel: UILabel!
@@ -175,7 +173,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 let isListItem = modus == .ListItem
                 noteInput.hidden = !isListItem
                 priceInput.hidden = !isListItem
-                quantityInput.hidden = !isListItem
                 
 //                let sectionText = "Section"
 //                let categoryText = "Category"
@@ -209,7 +206,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     private var validator: Validator?
     
-    var onViewDidLoad: VoidFunction?
+    // TODO improve this, it's finicky.
+    var onViewDidLoad: VoidFunction? // Called on view did load at the beginning e.g. to set mode from which other methods called in viewDidLoad may depend.
+    var onDidLoad: VoidFunction? // Called on view did load at the end
     
     private var addButtonHelper: AddButtonHelper?
 
@@ -301,8 +300,11 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     private func initValidator() {
         let validator = Validator()
         validator.registerField(sectionInput, rules: [MinLengthRule(length: 1, message: "validation_section_name_not_empty")])
-        validator.registerField(priceInput, rules: [MinLengthRule(length: 1, message: "validation_price_not_empty"), FloatRule(message: "validation_price_number")])
         validator.registerField(quantityInput, rules: [MinLengthRule(length: 1, message: "validation_quantity_not_empty"), FloatRule(message: "validation_quantity_number")])
+
+        if modus == .ListItem {
+            validator.registerField(priceInput, rules: [MinLengthRule(length: 1, message: "validation_price_not_empty"), FloatRule(message: "validation_price_number")])
+        }
         self.validator = validator
     }
     
@@ -324,7 +326,16 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
                 }
             }
             
-            if let price = priceInput.text?.floatValue, quantityText = quantityInput.text, quantity = Int(quantityText), section = sectionInput.text, brand = brandInput.text, note = noteInput.text, sectionColor = sectionColorButton.textColor {
+            // For some items (e.g. group items) we don't have a price but our current implementation expects one so we just pass 0 in these case (it will not be used). // TODO improve
+            let priceMaybe: Float? = {
+                if modus == .ListItem {
+                    return priceInput.text?.floatValue
+                } else {
+                    return 0
+                }
+            }()
+            
+            if let price = priceMaybe, quantityText = quantityInput.text, quantity = Int(quantityText), section = sectionInput.text, brand = brandInput.text, note = noteInput.text, sectionColor = sectionColorButton.textColor {
                 
                 // for now disabled due to new designs
 //                let baseQuantity = scaleInputs?.baseQuantity ?? 1

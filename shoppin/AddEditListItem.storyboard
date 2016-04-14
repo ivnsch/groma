@@ -31,7 +31,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Price" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="NrU-fN-qdF" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="14" y="108" width="120" height="40"/>
+                                <rect key="frame" x="148" y="108" width="120" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="HqM-K2-C7L"/>
                                     <constraint firstAttribute="width" constant="120" id="qrp-kB-pXC"/>
@@ -62,7 +62,7 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Quantity" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vWS-vL-cob" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="148" y="108" width="120" height="40"/>
+                                <rect key="frame" x="14" y="108" width="120" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="6uo-WM-0CH"/>
                                     <constraint firstAttribute="width" constant="120" id="q9d-EY-Wvb"/>
@@ -150,12 +150,12 @@
                             <constraint firstItem="i1w-xi-aFz" firstAttribute="top" secondItem="r5b-Sz-J4o" secondAttribute="bottom" id="Uys-Mm-t4a"/>
                             <constraint firstItem="Yfv-oA-AU6" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="Xka-df-FOU"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="baseline" secondItem="i1w-xi-aFz" secondAttribute="baseline" id="ZXj-Jt-gIn"/>
+                            <constraint firstItem="vWS-vL-cob" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="c6r-FY-Tco"/>
                             <constraint firstItem="vWS-vL-cob" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" id="dYT-Ag-kT7"/>
                             <constraint firstItem="dwL-LH-4dI" firstAttribute="centerX" secondItem="If7-20-6Xv" secondAttribute="centerX" id="ei9-BK-Nvk"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="trailing" secondItem="Xjl-8k-ZTY" secondAttribute="trailing" id="lg7-IJ-coN"/>
                             <constraint firstItem="NrU-fN-qdF" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" id="pJC-Cd-QdD"/>
-                            <constraint firstItem="vWS-vL-cob" firstAttribute="leading" secondItem="NrU-fN-qdF" secondAttribute="trailing" constant="14" id="re8-SG-anU"/>
-                            <constraint firstItem="NrU-fN-qdF" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="vrk-14-Re1"/>
+                            <constraint firstItem="NrU-fN-qdF" firstAttribute="leading" secondItem="vWS-vL-cob" secondAttribute="trailing" constant="14" id="t15-nq-DuK"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="Xjl-8k-ZTY" secondAttribute="leading" id="wmD-8b-t71"/>
                             <constraint firstItem="r5b-Sz-J4o" firstAttribute="top" secondItem="dwL-LH-4dI" secondAttribute="bottom" id="wtZ-u8-wCv"/>
                         </constraints>

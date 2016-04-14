@@ -166,12 +166,12 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         // TODO now that we removed all the topbar buttons and added swiper, do we still need this check?
         if navController?.viewControllers.last as? AddEditListItemViewController == nil { // don't show if already showing
             let controller = UIStoryboard.addEditListItemViewController()
-            controller.modus = modus
             controller.delegate = self
             navController?.pushViewController(controller, animated: false)
 //            sortByButton.selected = false
-            controller.onDidLoad = {[weak self] in // outlets are not initalised at this point yet
-                controller.editingItem = self?.editingItem
+            controller.onViewDidLoad = {[weak self] in guard let weakSelf = self else {return}
+                controller.editingItem = weakSelf.editingItem
+                controller.modus = weakSelf.modus
             }
             delegate?.onAddProductOpen()
             
