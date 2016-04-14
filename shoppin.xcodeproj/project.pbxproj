@@ -839,6 +839,7 @@
 		EBD558C81BF366350048F287 /* InventoryItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD558C51BF366350048F287 /* InventoryItemInput.swift */; };
 		EBD558CB1BF3C1090048F287 /* ScaleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD558CA1BF3C1090048F287 /* ScaleViewController.swift */; };
 		EBD558CD1BF3C11E0048F287 /* Scale.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EBD558CC1BF3C11E0048F287 /* Scale.storyboard */; };
+		EBD7A7E01CC0323200B56C41 /* RatingAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD7A7DF1CC0323200B56C41 /* RatingAlert.swift */; };
 		EBD827FA1BE79A280072F9FA /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827F91BE79A280072F9FA /* Fonts.swift */; };
 		EBD827FC1BE8237C0072F9FA /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827FB1BE8237C0072F9FA /* NSRange.swift */; };
 		EBD827FD1BE8237C0072F9FA /* NSRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD827FB1BE8237C0072F9FA /* NSRange.swift */; };
@@ -1516,6 +1517,7 @@
 		EBD558C51BF366350048F287 /* InventoryItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryItemInput.swift; sourceTree = "<group>"; };
 		EBD558CA1BF3C1090048F287 /* ScaleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleViewController.swift; sourceTree = "<group>"; };
 		EBD558CC1BF3C11E0048F287 /* Scale.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Scale.storyboard; sourceTree = "<group>"; };
+		EBD7A7DF1CC0323200B56C41 /* RatingAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingAlert.swift; sourceTree = "<group>"; };
 		EBD827F91BE79A280072F9FA /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		EBD827FB1BE8237C0072F9FA /* NSRange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSRange.swift; sourceTree = "<group>"; };
 		EBD827FF1BE95C8B0072F9FA /* StashView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StashView.swift; sourceTree = "<group>"; };
@@ -2871,6 +2873,7 @@
 				EBED0D0D1C82225B00A1EEC4 /* RatingPopup.storyboard */,
 				EBED0D0F1C82229900A1EEC4 /* RatingPopupController.swift */,
 				EBED0D111C824EC300A1EEC4 /* RatingProvideFeedbackController.swift */,
+				EBD7A7DF1CC0323200B56C41 /* RatingAlert.swift */,
 			);
 			name = rating;
 			sourceTree = "<group>";
@@ -3857,6 +3860,7 @@
 				EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */,
 				EBF5D7DB1B8FB30000A235C5 /* LoadingFooter.swift in Sources */,
 				EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */,
+				EBD7A7E01CC0323200B56C41 /* RatingAlert.swift in Sources */,
 				EB4147B81BDFE9FB00549CE4 /* ManageProductsCell.swift in Sources */,
 				EBB526711BEFD8C10002A286 /* HelpProviderImpl.swift in Sources */,
 				EB40A46E1B550804000E9CAD /* RealmProvider.swift in Sources */,

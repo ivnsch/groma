@@ -13,6 +13,7 @@ protocol RatingPopupDelegate {
     func onDismissRatingPopup()
 }
 
+// A more customisable version of RatingAlert but without a decent UI yet
 class RatingPopup: RatingPopupControllerDelegate {
 
     private let showLaterDays = 7

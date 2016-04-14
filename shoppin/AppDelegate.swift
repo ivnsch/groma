@@ -17,7 +17,7 @@ import RealmSwift
 
 @objc
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
     private let debugAddDummyData = false
     private let debugGeneratePrefillDatabases = false
@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
 
     private var suggestionsPrefiller: SuggestionsPrefiller? // arc
 
-    private var ratingPopup: RatingPopup? // arc
+    private var ratingAlert: RatingAlert? // arc
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
@@ -93,9 +93,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
     
     private func checkRatePopup() {
         if let controller = window?.rootViewController {
-            ratingPopup = RatingPopup()
-            ratingPopup?.delegate = self
-            ratingPopup?.checkShow(controller)
+            ratingAlert = RatingAlert()
+            ratingAlert?.delegate = self
+            ratingAlert?.checkShow(controller)
         } else {
             QL4("Couldn't show rating popup, either window: \(window) or root controller: \(window?.rootViewController) is nil)")
         }
@@ -627,8 +627,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingPopupDelegate {
     
     // MARK: - RatingPopupDelegate
     
-    func onDismissRatingPopup() {
-        ratingPopup = nil
+    func onDismissRatingAlert() {
+        ratingAlert = nil
     }
     
     func onLoginTokenExpired(note: NSNotification) {
