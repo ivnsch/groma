@@ -195,25 +195,38 @@ class RealmProvider {
             })
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            do {
-                let realm = try Realm()
-                var results: Results<T> = realm.objects(T)
-                if let pred = pred {
-                    results = results.filter(pred)
-                }
-                try realm.write {
-                    realm.delete(results)
-                    additionalActions?(realm)
-                }
-                
-                finished(true)
-
-            } catch let error {
-                QL4("Realm error: \(error)")
-                finished(false)
-            }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {[weak self] in guard let weakSelf = self else {return}
+            finished(weakSelf.removeSync(pred, objType: objType, additionalActions: additionalActions))
         })
+    }
+
+    func removeSync<T: Object>(pred: String?, objType: T.Type, additionalActions: (Realm -> Void)? = nil) -> Bool {
+        do {
+            let realm = try Realm()
+            return removeSync(realm, pred: pred, objType: objType, additionalActions: additionalActions)
+        } catch let error {
+            QL4("Realm error: \(error)")
+            return false
+        }
+    }
+
+    func removeSync<T: Object>(realm: Realm, pred: String?, objType: T.Type, additionalActions: (Realm -> Void)? = nil) -> Bool {
+        do {
+            var results: Results<T> = realm.objects(T)
+            if let pred = pred {
+                results = results.filter(pred)
+            }
+            try realm.write {
+                realm.delete(results)
+                additionalActions?(realm)
+            }
+            
+            return true
+            
+        } catch let error {
+            QL4("Realm error: \(error)")
+            return false
+        }
     }
     
     func doInWriteTransaction<T>(f: Realm -> T?, finishHandler: T? -> Void) {

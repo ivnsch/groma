@@ -179,5 +179,9 @@ extension Array where Element: ListItem {
         }
         return nil
     }
+    
+    func hasSection(status: ListItemStatus, section: Section) -> Bool {
+        return filterStatus(status).contains{$0.section.same(section)}
+    }
 }
 

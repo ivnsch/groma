@@ -252,10 +252,11 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func remove(listItem: ListItem, markForSync: Bool, handler: Bool -> ()) {
-        remove(listItem.uuid, listUuid: listItem.list.uuid, markForSync: markForSync, handler: handler)
+        remove(listItem.uuid, listUuid: listItem.list.uuid, sectionUuid: listItem.section.uuid, markForSync: markForSync, handler: handler)
     }
+
     
-    func remove(listItemUuid: String, listUuid: String, markForSync: Bool, handler: Bool -> ()) {
+    func remove(listItemUuid: String, listUuid: String, sectionUuid sectionUuidMaybe: String? = nil, markForSync: Bool, handler: Bool -> ()) {
         
         let additionalActions: (Realm -> Void)? = markForSync ? {realm in
             // TODO!!!! lastServerUpdate? what should it be? do we need this here?
@@ -265,6 +266,37 @@ class RealmListItemProvider: RealmProvider {
         
         self.remove(DBListItem.createFilter(listItemUuid), handler: handler, objType: DBListItem.self, additionalActions: additionalActions)
     }
+// This removes the section when after removing a list item the section is empty. After some thought we prefer to not use this, since removing all the list items in the section doesn't necessarily mean that the user wants to delete the section also. User is always able to delete section directly, or delete it from autosuggestions. This also relates with reorder - here we also don't remove empty sections (section can become empty during reordering when user moves items from one section to another), in this case it has a ux reason, this way the header stays in the table and user can still move items to it, even if it's empty. So to keep things consistent we just don't remove the section in all cases and leave to the user to directly remove it if this is desired. Note that switching status isn't mentioned, while we can leave a section empty in one status, it will be not empty in the dst target status as we are switching the item to it so a section will never be completely empty here.
+//    func remove(listItemUuid: String, listUuid: String, sectionUuid sectionUuidMaybe: String? = nil, markForSync: Bool, handler: Bool -> ()) {
+//        
+//        let additionalActions: (Realm -> Void)? = markForSync ? {realm in
+//            // TODO!!!! lastServerUpdate? what should it be? do we need this here?
+//            let toRemoveListItem = DBRemoveListItem(uuid: listItemUuid, listUuid: listUuid, lastServerUpdate: 0)
+//            realm.add(toRemoveListItem, update: true)
+//            } : nil
+//        
+//        doInWriteTransaction({realm in
+//            realm.delete(realm.objects(DBSection).filter(DBListItem.createFilter(listItemUuid)))
+//            
+//            let sectionUuidMaybeAfterTryRetrieve: String? = sectionUuidMaybe ?? {
+//                return realm.objects(DBListItem).filter(DBListItem.createFilter(listItemUuid)).first?.section.uuid
+//                }()
+//            
+//            additionalActions?(realm)
+//            
+//            // remove the section if it's now empty
+//            if let sectionUuid = sectionUuidMaybeAfterTryRetrieve {
+//                DBProviders.sectionProvider.removeSectionIfEmptySync(realm, sectionUuid: sectionUuid)
+//                return true
+//            } else {
+//                QL4("Warning/maybe error: Section of list item to be removed was not found in database") // with websockets this can happen, though it should be rare - we receive a message to remove a list item just after user removed the section. If we see this log frequently though, it's likely something else/an actual error.
+//                return false
+//            }
+//            
+//            }) { (successMaybe: Bool?) -> Void in
+//                handler(successMaybe ?? false)
+//        }
+//    }
     
     // TODO remove this method? Or if it's still needed, pass only list items, all the dependencies are in list items already
     // TODO do we really need ListItemsWithRelations here, maybe convenience holder made sense only for coredata?

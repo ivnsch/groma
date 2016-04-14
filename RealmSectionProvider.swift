@@ -136,4 +136,11 @@ class RealmSectionProvider: RealmProvider {
                 }
         }
     }
+    
+    func removeSectionIfEmptySync(realm: Realm, sectionUuid: String) {
+        if realm.objects(DBListItem).filter(DBListItem.createFilterWithSection(sectionUuid)).isEmpty { // if no list items reference the section
+            let dbSection = realm.objects(DBSection).filter(DBSection.createFilter(sectionUuid))
+            realm.delete(dbSection)
+        }
+    }
 }
