@@ -146,6 +146,7 @@ class RealmGlobalProvider: RealmProvider {
             }
             saveObjs(productCategoriesArr)
             saveObjs(productsArr)
+            saveObjs(storeProductsArr)
             saveObjs(sectionsArr)
             saveObjs(inventoriesArr)
             saveObjs(inventoryItemsArr)
@@ -172,6 +173,7 @@ class RealmGlobalProvider: RealmProvider {
         // TODO!!!! wasn't order important for delete?
         realm.delete(realm.objects(DBProductCategory))
         realm.delete(realm.objects(DBProduct))
+        realm.delete(realm.objects(DBStoreProduct))
         realm.delete(realm.objects(DBSection))
         realm.delete(realm.objects(DBSharedUser))
         realm.delete(realm.objects(DBInventory))
@@ -185,6 +187,7 @@ class RealmGlobalProvider: RealmProvider {
         // tombstones
         realm.delete(realm.objects(DBRemoveProductCategory))
         realm.delete(realm.objects(DBProductToRemove))
+        realm.delete(realm.objects(DBStoreProductToRemove))
         realm.delete(realm.objects(DBSectionToRemove))
         realm.delete(realm.objects(DBRemoveSharedUser))
         realm.delete(realm.objects(DBRemoveInventory))
