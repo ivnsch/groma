@@ -207,7 +207,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     private var validator: Validator?
     
     // TODO improve this, it's finicky.
-    var onViewDidLoad: VoidFunction? // Called on view did load at the beginning e.g. to set mode from which other methods called in viewDidLoad may depend.
+    var onViewDidLoad: VoidFunction? // Called on view did load before custom logic, use e.g. to set mode from which other methods called in viewDidLoad may depend.
     var onDidLoad: VoidFunction? // Called on view did load at the end
     
     private var addButtonHelper: AddButtonHelper?
@@ -215,14 +215,15 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        onViewDidLoad?()
+        // order is important in these methods, first the "static" ones (don't depend on anything), then onViewDidLoad, which may be used to set the mode, then the rest...
         
-        initValidator()
-        
+        setInputsDefaultValues()
         initTextFieldPlaceholders()
         initAutocompletionTextFields()
         
-        setInputsDefaultValues()
+        onViewDidLoad?()
+        
+        initValidator()
         
         view.clipsToBounds = true
         
