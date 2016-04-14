@@ -115,7 +115,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     
     override func canRemoveModel(model: ExpandableTableViewModel, can: Bool -> Void) {
         let inventory = (model as! ExpandableTableViewInventoryModel).inventory
-        ConfirmationPopup.show(title: "Warning", message: "Removing '\(inventory.name)' will remove also all the history items, stats and lists associated with it.", okTitle: "Remove", cancelTitle: "Cancel", controller: self, onOk: {
+        ConfirmationPopup.show(title: "Warning", message: "Removing the inventory '\(inventory.name)' will remove also all the history items, stats and lists associated with it.", okTitle: "Remove", cancelTitle: "Cancel", controller: self, onOk: {
                 can(true)
             }, onCancel: {
                 can(false)
