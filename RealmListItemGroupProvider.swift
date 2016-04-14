@@ -82,7 +82,7 @@ class RealmListItemGroupProvider: RealmProvider {
     
     func overwrite(groups: [ListItemGroup], clearTombstones: Bool, handler: Bool -> ()) {
         let dbGroups = groups.map{ListItemGroupMapper.dbWith($0)}
-        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBListItemGroup)} : nil
+        let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBRemoveListItemGroup)} : nil
         self.overwrite(dbGroups, resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
     }
     
