@@ -313,7 +313,8 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
 
     func updateGroupsOrder(orderUpdates: [OrderUpdate], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        DBProviders.listItemGroupProvider.updateGroupsOrder(orderUpdates) {[weak self] success in
+        // dirty == remote: if we want to do a remote call, it means the update is client triggered (opposed to e.g. processing a websocket message) which means the data is not in the server yet, which means it's dirty.
+        DBProviders.listItemGroupProvider.updateGroupsOrder(orderUpdates, dirty: remote) {[weak self] success in
             if success {
                 handler(ProviderResult(status: .Success))
                 

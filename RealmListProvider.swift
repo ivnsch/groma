@@ -26,10 +26,10 @@ class RealmListProvider: RealmProvider {
         self.saveObjs(lists, update: update, handler: handler)
     }
     
-    func updateListsOrder(orderUpdates: [OrderUpdate], _ handler: Bool -> Void) {
+    func updateListsOrder(orderUpdates: [OrderUpdate], dirty: Bool, _ handler: Bool -> Void) {
         doInWriteTransaction({realm in
             for orderUpdate in orderUpdates {
-                realm.create(DBList.self, value: DBList.createOrderUpdateDict(orderUpdate), update: true)
+                realm.create(DBList.self, value: DBList.createOrderUpdateDict(orderUpdate, dirty: dirty), update: true)
             }
             return true
             }) {(successMaybe: Bool?) in

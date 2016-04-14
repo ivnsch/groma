@@ -55,10 +55,10 @@ class RealmListItemGroupProvider: RealmProvider {
         saveObjs(dbObjs, update: true, handler: handler)
     }
     
-    func updateGroupsOrder(orderUpdates: [OrderUpdate], _ handler: Bool -> Void) {
+    func updateGroupsOrder(orderUpdates: [OrderUpdate], dirty: Bool, _ handler: Bool -> Void) {
         doInWriteTransaction({realm in
             for orderUpdate in orderUpdates {
-                realm.create(DBListItemGroup.self, value: DBListItemGroup.createOrderUpdateDict(orderUpdate), update: true)
+                realm.create(DBListItemGroup.self, value: DBListItemGroup.createOrderUpdateDict(orderUpdate, dirty: dirty), update: true)
             }
             return true
             }) {(successMaybe: Bool?) in

@@ -125,7 +125,8 @@ class ListProviderImpl: ListProvider {
     }
     
     func updateListsOrder(orderUpdates: [OrderUpdate], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        DBProviders.listProvider.updateListsOrder(orderUpdates) {[weak self] success in
+        // dirty == remote: if we want to do a remote call, it means the update is client triggered (opposed to e.g. processing a websocket message) which means the data is not in the server yet, which means it's dirty.
+        DBProviders.listProvider.updateListsOrder(orderUpdates, dirty: remote) {[weak self] success in
             if success {
                 handler(ProviderResult(status: .Success))
                 
