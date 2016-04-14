@@ -122,7 +122,7 @@ class RemoteListItemProvider {
     // TODO use update
     func update(listItems: [ListItem], handler: RemoteResult<RemoteListItems> -> ()) {
         let parameters = listItems.map{self.toRequestParams($0)}
-        RemoteProvider.authenticatedRequest(.PUT, Urls.listItem, parameters) {result in
+        RemoteProvider.authenticatedRequest(.PUT, Urls.listItems, parameters) {result in
             handler(result)
         }
     }
