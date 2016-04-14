@@ -573,10 +573,16 @@ class ListItemProviderImpl: ListItemProvider {
                 // we append the items at the end of the dst section (order == section.count)
                 var dstSectionsDict = storedListItems.sectionCountDict(status)
                 for listItem in listItems {
+                    
+                    let listItemOrderInDstStatus: Int? = listItem.hasStatus(status) ? listItem.order(status) : nil // catch this before switching quantity
+                    
                     listItem.switchStatusQuantityMutable(status1, targetStatus: status)
-                    if let sectionCount = dstSectionsDict[listItem.section] {
-                        // Note that this updates the list item's order to the last of in section also when the list item is in dst already, so in all cases user knows the item appears at the end of the section.
-                        listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: sectionCount))
+                    if let sectionCount = dstSectionsDict[listItem.section] { // TODO rename this sounds like count of sections but it's count of list item in sections
+
+                        // If there's already a list item in the target status don't update order. If there's not, set order to last item in section
+                        let listItemOrder: Int = listItemOrderInDstStatus ?? sectionCount
+                        
+                        listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: listItemOrder))
                         dstSectionsDict[listItem.section]!++ // we are adding an item to section - increment count for possible next item
                         
                     } else { // item's section is not in target status - set order 0 (first item in section) and add section to the dictionary
