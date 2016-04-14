@@ -193,11 +193,11 @@ class RealmInventoryItemProvider: RealmProvider {
         // Needs custom handling because DBRemoveInventoryItem needs the lastUpdate server timestamp and for this we have to retrieve the item from db
         self.doInWriteTransaction({realm in
             if let itemToRemove = realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilterUuid(uuid)).first {
-                realm.delete(itemToRemove)
                 if markForSync {
                     let toRemoveInventoryItem = DBRemoveInventoryItem(uuid: uuid, inventoryUuid: inventoryUuid, lastServerUpdate: itemToRemove.lastServerUpdate)
                     realm.add(toRemoveInventoryItem, update: true)
                 }
+                realm.delete(itemToRemove)
             }
             return true
             
