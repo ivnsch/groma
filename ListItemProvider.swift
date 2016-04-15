@@ -14,7 +14,7 @@ protocol ListItemProvider {
   
     func remove(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
-    func removeListItem(listItemUuid: String, listUuid: String, lastServerUpdate: Int64?, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func removeListItem(listItemUuid: String, listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
     func remove(list: List, remote: Bool, _ handler: ProviderResult<Any> -> ())
 

@@ -569,7 +569,7 @@ struct MyWebsocketDispatcher {
             
         case WSNotificationVerb.Delete:
             if let containedItemIdentifier = RemoteContainedItemIdentifier(representation: data) {
-                Providers.listItemsProvider.removeListItem(containedItemIdentifier.itemUuid, listUuid: containedItemIdentifier.containerUuid, lastServerUpdate: nil, remote: false) {result in
+                Providers.listItemsProvider.removeListItem(containedItemIdentifier.itemUuid, listUuid: containedItemIdentifier.containerUuid, remote: false) {result in
                     if result.success {
                         postNotification(.ListItem, verb, sender, containedItemIdentifier.itemUuid)
                     } else {

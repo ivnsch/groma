@@ -85,17 +85,18 @@ class ListItemProviderImpl: ListItemProvider {
     // MARK: -
     
     func remove(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        removeListItem(listItem.uuid, listUuid: listItem.list.uuid, lastServerUpdate: listItem.lastServerUpdate, remote: remote, handler)
+        removeListItem(listItem.uuid, listUuid: listItem.list.uuid, remote: remote, handler)
     }
 
-    func removeListItem(listItemUuid: String, listUuid: String, lastServerUpdate: Int64?, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func removeListItem(listItemUuid: String, listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         
         let memUpdated = memProvider.removeListItem(listUuid, uuid: listItemUuid)
         if memUpdated {
             handler(ProviderResult(status: ProviderStatusCode.Success))
         }
         
-        self.dbProvider.remove(listItemUuid, listUuid: listUuid, lastServerUpdate: lastServerUpdate, handler: {[weak self] removed in
+        // remote -> markForSync: if we want to call remote it means we want to mark item for sync.
+        self.dbProvider.remove(listItemUuid, listUuid: listUuid, markForSync: remote, handler: {[weak self] removed in
             if removed {
                 if !memUpdated {
                     handler(ProviderResult(status: .Success))

@@ -251,22 +251,32 @@ class RealmListItemProvider: RealmProvider {
         self.load(mapper, handler: handler)
     }
     
-    func remove(listItem: ListItem, lastServerUpdate: Int64?, handler: Bool -> ()) {
-        remove(listItem.uuid, listUuid: listItem.list.uuid, sectionUuid: listItem.section.uuid, lastServerUpdate: lastServerUpdate, handler: handler)
+    func remove(listItem: ListItem, markForSync: Bool, handler: Bool -> ()) {
+        remove(listItem.uuid, listUuid: listItem.list.uuid, sectionUuid: listItem.section.uuid, markForSync: markForSync, handler: handler)
     }
 
-    // lastServerUpdate != nil here is same as markForSync == true: If there is a last server udpate in the object and we pass it, it means we want to mark for sync (add tombstone). If there's no last server update we don't mark for sync. Independently if we pass nil intentionally or not(e.g. lastServerUpdate called as property of model objects where this is optional, may be set or not depending if the object is already synced), this makes sense, as if the object has no last server update, it means it was never synchronised, which means it's not in the server, which means we don't need to add a tombstone for it.
-    // When we call this as part of websocket message processing, the object does have a lastServerUpdate timestamp but we pass nil - to indicate that we don't want to add a tombstone, as the server just sent us the delete meaning it's already deleted there.
-    // TODO improve implementation such that purpose becomes clearer, this would be hard to figure out without comment.
-    func remove(listItemUuid: String, listUuid: String, sectionUuid sectionUuidMaybe: String? = nil, lastServerUpdate: Int64?, handler: Bool -> ()) {
+    func remove(listItemUuid: String, listUuid: String, sectionUuid sectionUuidMaybe: String? = nil, markForSync: Bool, handler: Bool -> ()) {
 
-        let additionalActions: (Realm -> Void)? = lastServerUpdate.map{lastServerUpdate in {realm in
-                let toRemoveListItem = DBRemoveListItem(uuid: listItemUuid, listUuid: listUuid, lastServerUpdate: lastServerUpdate)
-                realm.add(toRemoveListItem, update: true)
+        doInWriteTransaction({realm in
+            
+            let result = realm.objects(DBListItem).filter(DBListItem.createFilter(listItemUuid))
+            
+            if markForSync { // add tombstone
+                if let dbListItem = result.first {
+                    let toRemoveListItem = DBRemoveListItem(dbListItem)
+                    realm.add(toRemoveListItem, update: true)
+                } else {
+                    QL3("Trying to add tombstone for not existing list item") // if this is because we received a websocket notification and maybe list item was deleted in the meantime, it's ok. Should happen not very frequently though.
+                }
             }
+
+            // delete item
+            realm.delete(result)
+            return true
+            
+            }) { (successMaybe: Bool?) -> Void in
+                handler(successMaybe ?? false)
         }
-        
-        self.remove(DBListItem.createFilter(listItemUuid), handler: handler, objType: DBListItem.self, additionalActions: additionalActions)
     }
 // This removes the section when after removing a list item the section is empty. After some thought we prefer to not use this, since removing all the list items in the section doesn't necessarily mean that the user wants to delete the section also. User is always able to delete section directly, or delete it from autosuggestions. This also relates with reorder - here we also don't remove empty sections (section can become empty during reordering when user moves items from one section to another), in this case it has a ux reason, this way the header stays in the table and user can still move items to it, even if it's empty. So to keep things consistent we just don't remove the section in all cases and leave to the user to directly remove it if this is desired. Note that switching status isn't mentioned, while we can leave a section empty in one status, it will be not empty in the dst target status as we are switching the item to it so a section will never be completely empty here.
 //    func remove(listItemUuid: String, listUuid: String, sectionUuid sectionUuidMaybe: String? = nil, markForSync: Bool, handler: Bool -> ()) {
