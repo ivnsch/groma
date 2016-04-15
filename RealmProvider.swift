@@ -286,7 +286,7 @@ class RealmProvider {
         }
     }
     
-    func withRealm<T>(f: Realm -> T?, resultHandler: T? -> Void) {
+    func withRealm<T>(f: Realm throws -> T?, resultHandler: T? -> Void) {
         background({[weak self] in
             return self?.withRealmSync(f)
             }) { (result: T?) in
@@ -294,10 +294,10 @@ class RealmProvider {
         }
     }
     
-    func withRealmSync<T>(f: Realm -> T?) -> T? {
+    func withRealmSync<T>(f: Realm throws -> T?) -> T? {
         do {
             let realm = try Realm()
-            return f(realm)
+            return try f(realm)
         } catch let error as NSError {
             QL4("Realm error: \(error)")
             return nil

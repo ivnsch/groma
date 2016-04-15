@@ -275,7 +275,7 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
             stashOrder: order.status == .Stash ? order.order : stashOrder
         )
     }
-    
+
     func updateOrderMutable(order: ListItemStatusOrder) {
         switch order.status {
         case .Todo: todoOrder = order.order
@@ -283,7 +283,23 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         case .Stash: stashOrder = order.order
         }
     }
-
+    
+    func updateQuantity(quantity: ListItemStatusQuantity) -> ListItem {
+        return copy(
+            uuid: uuid,
+            product: product,
+            section: section,
+            list: list,
+            note: note,
+            todoQuantity: quantity.status == .Todo ? quantity.quantity : todoQuantity,
+            todoOrder: todoOrder,
+            doneQuantity: quantity.status == .Done ? quantity.quantity : doneQuantity,
+            doneOrder: doneOrder,
+            stashQuantity: quantity.status == .Stash ? quantity.quantity : stashQuantity,
+            stashOrder: stashOrder
+        )
+    }
+    
     // Overwrite all fields with fields of listItem, except uuid
     func update(listItem: ListItem) -> ListItem {
         return copy(
@@ -351,6 +367,13 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
     
+    static func quantityFieldName(status: ListItemStatus) -> String {
+        switch status {
+        case .Todo: return "todoQuantity"
+        case .Done: return "doneQuantity"
+        case .Stash: return "stashQuantity"
+        }
+    }
     
     func switchStatusQuantityMutable(status: ListItemStatus, targetStatus: ListItemStatus) {
         

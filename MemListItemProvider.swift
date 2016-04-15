@@ -219,10 +219,30 @@ class MemListItemProvider {
         }
     }
     
-    func increment(listItem: ListItem, quantity: ListItemStatusQuantity) -> Bool {
-        // increment only quantity - in mem cache we don't care about quantityDelta, this cache is only used by the UI, not to write objs to database or server
-        let incremented = listItem.increment(quantity)
-        return updateListItem(incremented)
+    private func findListItem(uuid: String, list: List) -> ListItem? {
+        return self.listItems?[list]?.findFirst({$0.uuid == uuid})
+    }
+    
+    func increment(listItem: ListItem, quantity: ListItemStatusQuantity) -> ListItem? {
+        guard enabled else {return nil}
+        guard listItems != nil else {return nil}
+        
+        if let cachedListItem = findListItem(listItem.uuid, list: listItem.list) { // increment the stored item - the passed one is just to get the uuid
+            // increment only quantity - in mem cache we don't care about quantityDelta, this cache is only used by the UI, not to write objs to database or server
+            let incremented = cachedListItem.increment(quantity)
+            
+            if updateListItem(incremented) {
+                return incremented
+                
+            } else {
+                QL3("Item not updated")
+                return nil
+            }
+            
+        } else {
+            QL3("Item not found")
+            return nil
+        }
     }
     
     // Sets list items to nil

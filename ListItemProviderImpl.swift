@@ -801,7 +801,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // TODO!!!! remote? why did this service not have remote before, forgot or we don't need it there?
-    func increment(listItem: ListItem, delta: Int, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func increment(listItem: ListItem, status: ListItemStatus, delta: Int, remote: Bool, _ handler: ProviderResult<ListItem> -> ()) {
         
         // Get item from database with updated quantityDelta
         // The reason we do this instead of using the item parameter, is that later doesn't always have valid quantityDelta
@@ -809,22 +809,22 @@ class ListItemProviderImpl: ListItemProvider {
         // Which is ok. because the UI must not have logic related with background server update
         // Cleaner would be to create a lightweight InventoryItem version for the UI - without quantityDelta, etc. But this adds extra complexity
         
-        let memIncremented = memProvider.increment(listItem, quantity: ListItemStatusQuantity(status: .Todo, quantity: delta))
-        if memIncremented {
-            handler(ProviderResult(status: .Success))
-        }
-        
-        dbProvider.incrementTodoListItem(listItem, delta: delta) {[weak self] saved in
+        let memIncremented = memProvider.increment(listItem, quantity: ListItemStatusQuantity(status: status, quantity: delta))
+        if let memIncremented = memIncremented {
             
-            if !memIncremented { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
-                if saved {
-                    handler(ProviderResult(status: .Success))
+            dispatch_async(dispatch_get_main_queue(), { // since the transaction is executed in the background we have to return to main thread here
+                handler(ProviderResult(status: .Success, sucessResult: memIncremented))
+            })
+        }
+        dbProvider.incrementListItem(listItem, delta: delta, status: status) {[weak self] listItemMaybe in
+            
+            if memIncremented == nil { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
+                if let listItem = listItemMaybe {
+                    handler(ProviderResult(status: .Success, sucessResult: listItem))
                 } else {
                     handler(ProviderResult(status: .DatabaseSavingError))
                 }
             }
-            
-            //            print("SAVED DB \(item)(+delta) in local db. now going to update remote")
             
             self?.remoteProvider.incrementListItem(listItem, delta: delta) {remoteResult in
                 
@@ -853,7 +853,7 @@ class ListItemProviderImpl: ListItemProvider {
                     self?.dbProvider.updateListItemLastSyncTimeStamp(updateTimeStampDict) {success in
                     }
                 } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                    DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<ListItem>) in
                         QL4("Remote call no success: \(remoteResult) item: \(listItem)")
                         self?.memProvider.invalidate()
                         handler(result)
@@ -875,14 +875,14 @@ class ListItemProviderImpl: ListItemProvider {
     }
 
     // TODO this can be optimised, such that we don't have to prefetch the item but increment directly at least in memory
-    func increment(increment: ItemIncrement, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func increment(increment: ItemIncrement, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<ListItem> -> Void) {
         findListItem(increment.itemUuid) {[weak self] result in
             if let listItem = result.sucessResult {
                 
-                self?.increment(listItem, delta: increment.delta, remote: remote) {result in
+                self?.increment(listItem, status: status, delta: increment.delta, remote: remote) {result in
 
-                    if result.success {
-                        handler(ProviderResult(status: .Success, sucessResult: listItem))
+                    if let statusQuantity = result.sucessResult {
+                        handler(ProviderResult(status: .Success, sucessResult: statusQuantity))
                     } else {
                         handler(ProviderResult(status: .DatabaseSavingError))
                     }

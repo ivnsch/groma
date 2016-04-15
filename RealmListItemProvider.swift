@@ -382,52 +382,38 @@ class RealmListItemProvider: RealmProvider {
     }
     
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
-    func incrementTodoListItem(item: ListItem, delta: Int, handler: Bool -> Void) {
-        incrementTodoListItem(ItemIncrement(delta: delta, itemUuid: item.uuid), handler: handler)
+    func incrementListItem(item: ListItem, delta: Int, status: ListItemStatus, handler: ListItem? -> Void) {
+        incrementListItem(ItemIncrement(delta: delta, itemUuid: item.uuid), status: status, handler: handler)
     }
-    
-    // TODO!!!! remote?
-    func incrementTodoListItem(increment: ItemIncrement, handler: Bool -> Void) {
-        
-        do {
-            //        synced(self)  {
-            
-            // load
-            let realm = try Realm()
-            let results = realm.objects(DBListItem).filter(DBListItem.createFilter(increment.itemUuid))
-            //        results = results.filter(NSPredicate(format: DBInventoryItem.createFilter(item.product, item.inventory), argumentArray: []))
-            let objs: [DBListItem] = results.toArray(nil)
-            let dbInventoryItems = objs.map{ListItemMapper.listItemWithDB($0)}
-            let listItemMaybe = dbInventoryItems.first
-            
-            if let listItem = listItemMaybe {
-                // increment
-                let incrementedListitem = listItem.copy(note: nil, todoQuantity: listItem.todoQuantity + increment.delta)
+
+    func incrementListItem(increment: ItemIncrement, status: ListItemStatus, handler: ListItem? -> Void) {
+
+        doInWriteTransaction({realm in
+
+            return syncedRet(self) {
+
+                let dbListItems = realm.objects(DBListItem).filter(DBListItem.createFilter(increment.itemUuid)).toArray()
+                let listItems = dbListItems.map{ListItemMapper.listItemWithDB($0)}
                 
-                // convert to db object
-                let dbIncrementedInventoryitem = ListItemMapper.dbWithListItem(incrementedListitem)
-                
-                // save
-                try realm.write {
-                    for obj in objs {
-//                        obj.lastUpdate = NSDate()
-                        realm.add(dbIncrementedInventoryitem, update: true)
-                    }
+                if let listItem = listItems.first {
+                    let incrementedListitem = listItem.increment(ListItemStatusQuantity(status: status, quantity: increment.delta))
+                    
+                    let dbIncrementedItem = ListItemMapper.dbWithListItem(incrementedListitem)
+                    
+                    realm.add(dbIncrementedItem, update: true)
+
+                    return incrementedListitem
+                    
+                } else {
+                    QL3("List item not found: \(increment)")
+                    return nil
                 }
-                
-                handler(true)
-                
-                
-            } else {
-                print("Info: RealmListItemProvider.incrementTodoListItem: List item not found: \(increment)")
-                handler(false)
             }
-            //        }
-            
-        } catch let e {
-            QL4("Realm error: \(e)")
-            handler(false)
-        }
+
+
+        }) { (statusQuantityMaybe) -> Void in
+                handler(statusQuantityMaybe)
+            }
     }
     
     // MARK: - Sync

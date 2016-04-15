@@ -403,10 +403,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     func onIncrementItem(tableViewListItem: TableViewListItem, delta: Int) {
-        Providers.listItemsProvider.increment(tableViewListItem.listItem, delta: delta, remote: true, successHandler{[weak self] in guard let weakSelf = self else {return}
-            // TODO do this in  the provider, provider should return incremented item
-            let incremented: ListItem = tableViewListItem.listItem.increment(ListItemStatusQuantity(status: weakSelf.status, quantity: delta))
-            self?.listItemsTableViewController.updateOrAddListItem(incremented, status: weakSelf.status, increment: false, notifyRemote: false)
+        Providers.listItemsProvider.increment(tableViewListItem.listItem, status: status, delta: delta, remote: true, successHandler{[weak self] incrementedListItem in guard let weakSelf = self else {return}
+            self?.listItemsTableViewController.updateOrAddListItem(incrementedListItem, status: weakSelf.status, increment: false, notifyRemote: false)
             self?.onTableViewChangedQuantifiables()
         })
     }

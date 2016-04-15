@@ -555,7 +555,8 @@ struct MyWebsocketDispatcher {
         case WSNotificationVerb.Increment:
             if let remoteIncrement = RemoteIncrement(representation: data) {
                 let increment = ItemIncrement(delta: remoteIncrement.delta, itemUuid: remoteIncrement.uuid) // TODO!!!! pass the last update timestamp also?
-                Providers.listItemsProvider.increment(increment, remote: false) {result in
+                // TODO!!!! object needs status
+                Providers.listItemsProvider.increment(increment, status: .Todo, remote: false) {result in
                     if result.success {
                         postNotification(.GroupItem, verb, sender, increment)
                     } else {
