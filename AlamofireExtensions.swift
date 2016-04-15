@@ -328,7 +328,7 @@ extension Alamofire.Request {
     public func responseMyTimestamp(completionHandler: (NSURLRequest?, Response<RemoteResult<Int64>, NSError>?, RemoteResult<Int64>) -> Void) -> Self {
         
         let dataParser: (AnyObject, NSHTTPURLResponse) -> (Int64?) = {data, response in
-            return data as? Int64
+            return (data as? Double).map{Int64($0)}
         }
         
         return self.responseHandler(dataParser, completionHandler: completionHandler)
@@ -404,7 +404,7 @@ extension Alamofire.Request {
                                             return Result.Success(remoteResult)
                                             
                                         } else {
-                                            logRequesstError("Error parsing result object")
+                                            logRequesstError("Error parsing result object: \(data)")
                                             return Result.Success(RemoteResult<T>(status: .ParsingError))
                                         }
                                         
