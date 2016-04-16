@@ -130,7 +130,7 @@ class RemoteListItemProvider {
     // TODO!!!! review these responses, the server isn't sending anything back. Do we want to update timestamp on order updates (list, inventory, group, listitem) or not?
     func updateListItemsOrder(listItems: [ListItem], status: ListItemStatus, handler: RemoteResult<[RemoteOrderUpdate]> -> ()) {
         let params: [[String: AnyObject]] = listItems.map{
-            ["uuid": $0.uuid, "sectionUuid": $0.section.uuid, "order": $0.todoOrder]
+            ["uuid": $0.uuid, "sectionUuid": $0.section.uuid, "order": $0.order(status)]
         }
         let url: String = {
             switch status {
