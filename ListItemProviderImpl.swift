@@ -399,7 +399,10 @@ class ListItemProviderImpl: ListItemProvider {
                     let existingSectionMaybe = realm.objects(DBSection).filter(DBSection.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first.map {dbSection in
                         SectionMapper.sectionWithDB(dbSection)
                     }
+                    
+//                    QL2("Section for: \(prototype.product.product.name) exists?: \(existingSectionMaybe)")
                     let section = existingSectionMaybe ?? Section(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: 0)) // NOTE: order for new section is overwritten in mem provider!
+//                    QL2("Section created/reusing: \(section)")
                     
                     return (prototype, section)
                 }
@@ -433,27 +436,16 @@ class ListItemProviderImpl: ListItemProvider {
                     var sectionCountNewItemsDict: [String: Int] = [:]
                     
                     var savedListItems: [ListItem] = []
-                    
-                    let dbList = ListMapper.dbWithList(list)
-                    
-                    for prototype in storePrototypes {
+
+                    for (prototype, section) in prototypesWithSections {
                         if var existingListItem = existingListItemsDict[DBStoreProduct.nameBrandStoreKey(prototype.product.product.name, brand: prototype.product.product.brand, store: prototype.product.store)] {
                             
                             existingListItem.increment(ListItemStatusQuantity(status: status, quantity: prototype.quantity))
                             
-                            // load section with given name or create a new one if it doesn't exist
-                            let section: DBSection = {
-                                realm.objects(DBSection).filter(DBSection.createFilter(prototype.targetSectionName, listUuid: list.uuid)).first ?? {
-                                    let sectionOrder = orderMaybe ?? getOrderForNewSection(existingListItems)
-                                    let newSection = DBSection(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, bgColorHex: prototype.targetSectionColor.hexStr, list: dbList, order: ListItemStatusOrder(status: status, order: sectionOrder))
-                                    QL1("Section: \(prototype.targetSectionName) doesn't exist, creating a new one. uuid: \(newSection.uuid), in list: \(list.uuid)")
-                                    return newSection
-                                    }()
-                            }()
-                            
                             // for some reason it crashes in this line (yes here not when saving) with reason: 'Can't set primary key property 'uuid' to existing value '03F949BB-AE2A-427A-B49B-D53FA290977D'.' (this is the uuid of the list), no idea why, so doing a copy.
                             //                                    existingListItem.section = section
-                            existingListItem = existingListItem.copy(section: section)
+                            let dbSection = SectionMapper.dbWithSection(section)
+                            existingListItem = existingListItem.copy(section: dbSection)
                             
                             if let note = note {
                                 existingListItem.note = note
