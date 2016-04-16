@@ -528,8 +528,8 @@ class ListItemProviderImpl: ListItemProvider {
                 
             if let bgResult = bgResultMaybe { // bg ran successfully
                 
-                if self?.memProvider.enabled ?? false {
-                    // bgResult & mem enabled -> do nothing: added item was returned to handler already (after add to mem provider), no need to return it again
+                if self?.memProvider.valid ?? false {
+                    // bgResult & mem valid -> do nothing: added item was returned to handler already (after add to mem provider), no need to return it again
                     
                 } else {
                     // mem provider is not enabled - controller is waiting for result - return it

@@ -15,6 +15,10 @@ class MemListItemProvider {
     
     let enabled: Bool
     
+    var valid: Bool {
+        return enabled && listItems != nil // listItems != nil is enough but we check for enabled anyway
+    }
+    
     init(enabled: Bool = true) {
         self.enabled = enabled
     }
