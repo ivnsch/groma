@@ -248,4 +248,28 @@ class RealmGroupItemProvider: RealmProvider {
                 handler(success ?? false)
         })
     }
+    
+    func updateGroupItemWithIncrementResult(incrementResult: RemoteIncrementResult, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            if let storedItem = (realm.objects(DBGroupItem).filter(DBGroupItem.createFilter(incrementResult.uuid)).first) {
+                
+                // Notes & todo see equivalent method for list items
+                if (storedItem.lastServerUpdate <= incrementResult.lastUpdate) {
+                    
+                    var updateDict: [String: AnyObject] = DBSyncable.timestampUpdateDict(incrementResult.uuid, lastServerUpdate: incrementResult.lastUpdate)
+                    updateDict[DBGroupItem.quantityFieldName] = incrementResult.updatedQuantity
+                    realm.create(DBGroupItem.self, value: updateDict, update: true)
+                    QL1("Updateded group item with increment result dict: \(updateDict)")
+                    
+                } else {
+                    QL3("Warning: got result with smaller timestamp: \(incrementResult), ignoring")
+                }
+            } else {
+                QL3("Didn't find item for: \(incrementResult)")
+            }
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
 }

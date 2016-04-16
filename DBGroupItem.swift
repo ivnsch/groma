@@ -16,6 +16,10 @@ class DBGroupItem: DBSyncable {
     dynamic var productOpt: DBProduct? = DBProduct()
     dynamic var groupOpt: DBListItemGroup? = DBListItemGroup()
 
+    static var quantityFieldName: String {
+        return "quantity"
+    }
+    
     override static func primaryKey() -> String? {
         return "uuid"
     }
