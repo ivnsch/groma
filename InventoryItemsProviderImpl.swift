@@ -246,7 +246,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         findInventoryItem(item.itemUuid) {[weak self] result in
             if let inventoryItem = result.sucessResult {
                 
-                self?.incrementInventoryItem(inventoryItem, delta: item.delta) {result in
+                self?.incrementInventoryItem(inventoryItem, delta: item.delta, remote: remote) {result in
                     if result.success {
                         handler(ProviderResult(status: .Success, sucessResult: inventoryItem))
                     } else {
@@ -261,7 +261,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
 
-    func incrementInventoryItem(item: InventoryItem, delta: Int, _ handler: ProviderResult<Any> -> ()) {
+    func incrementInventoryItem(item: InventoryItem, delta: Int, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         
         // Get item from database with updated quantityDelta
         // The reason we do this instead of using the item parameter, is that later doesn't always have valid quantityDelta
@@ -284,44 +284,25 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                 }
             }
             
-//            print("SAVED DB \(item)(+delta) in local db. now going to update remote")
-            
-            self?.remoteInventoryItemsProvider.incrementInventoryItem(item, delta: delta) {remoteResult in
-                
-                if let serverLastUpdateTimestamp = remoteResult.successResult {
+            if remote {
+                let itemIncrement = ItemIncrement(delta: delta, itemUuid: item.uuid)
+                self?.remoteInventoryItemsProvider.incrementInventoryItem(itemIncrement) {remoteResult in
                     
-                    //                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
-                    
-                    let updateTimeStampDict = RemoteInventoryItem.createTimestampUpdateDict(uuid: item.uuid, lastUpdate: serverLastUpdateTimestamp)
-                    DBProviders.inventoryItemProvider.updateInventoryItemLastUpdate(updateTimeStampDict) {success in
-                        if !success {
-                            QL4("Couldn't save server timestamp for item: \(item), remoteResult: \(remoteResult)")
-                        }
-                        
-                        // Now that the item was updated in server, set back delta in local database
-                        // Note we subtract instead of set to 0, to handle possible parallel requests correctly
-                        DBProviders.inventoryItemProvider.incrementInventoryItem(item, delta: -delta, onlyDelta: true) {saved in
-                            
-                            if saved {
-                                //                            self?.findInventoryItem(item) {result in
-                                //                                if let newitem = result.sucessResult {
-                                //                                    print("3. CONFIRM incremented item: \(item) + \(delta) == \(newitem)")
-                                //                                }
-                                //                            }
-                                
-                            } else {
-                                QL4("Error: couln't save remote inventory item")
+                    if let incrementResult = remoteResult.successResult {
+                        DBProviders.inventoryItemProvider.updateInventoryItemWithIncrementResult(incrementResult) {success in
+                            if !success {
+                                QL4("Couldn't save increment result for item: \(item), remoteResult: \(remoteResult)")
                             }
                         }
+                        
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                            QL4("Error incrementing item: \(item) in remote, result: \(result)")
+                            // if there's a not connection related server error, invalidate cache
+                            self?.memProvider.invalidate()
+                            handler(result)
+                        })
                     }
-                    
-                } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-                        QL4("Error incrementing item: \(item) in remote, result: \(result)")
-                        // if there's a not connection related server error, invalidate cache
-                        self?.memProvider.invalidate()
-                        handler(result)
-                    })
                 }
             }
         }

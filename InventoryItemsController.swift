@@ -427,7 +427,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func increment(model: ProductWithQuantity, delta: Int, onSuccess: VoidFunction) {
 
         func increment() {
-            Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, successHandler({result in
+            Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, remote: true, successHandler({result in
                 onSuccess()
             }))
         }
@@ -440,7 +440,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             if delta > 0 { // positive increment - show info
                 AlertPopup.show(title: "Info", message: "Incrementing inventory items does NOT affect history and stats.", controller: self, okMsg: "Got it!") {[weak self] in guard let weakSelf = self else {return}
                     PreferencesManager.savePreference(PreferencesManagerKey.showedIncrementInventoryItemHelp, value: true)
-                    Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, weakSelf.successHandler({result in
+                    Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, remote: true, weakSelf.successHandler({result in
                         increment()
                     }))
                 }

@@ -17,6 +17,10 @@ class DBInventoryItem: DBSyncable {
     dynamic var productOpt: DBProduct? = DBProduct()
     dynamic var inventoryOpt: DBInventory? = DBInventory()
 
+    static var quantityFieldName: String {
+        return "quantity"
+    }
+    
     override static func primaryKey() -> String? {
         return "uuid"
     }
