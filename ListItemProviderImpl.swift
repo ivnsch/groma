@@ -826,38 +826,18 @@ class ListItemProviderImpl: ListItemProvider {
                 }
             }
             
-            self?.remoteProvider.incrementListItem(listItem, delta: delta) {remoteResult in
-                
-                if let serverLastUpdateTimestamp = remoteResult.successResult {
-                    
-                    
-                    //                    //                    print("SAVED REMOTE will revert delta now in local db for \(item.product.name), with delta: \(-delta)")
-                    //
-                    //                    // Now that the item was updated in server, set back delta in local database
-                    //                    // Note we subtract instead of set to 0, to handle possible parallel requests correctly
-                    //                    self?.dbInventoryProvider.incrementInventoryItem(listItem, delta: -delta, onlyDelta: true) {saved in
-                    //
-                    //                        if saved {
-                    //                            //                            self?.findInventoryItem(item) {result in
-                    //                            //                                if let newitem = result.sucessResult {
-                    //                            //                                    print("3. CONFIRM incremented item: \(item) + \(delta) == \(newitem)")
-                    //                            //                                }
-                    //                            //                            }
-                    //                            
-                    //                        } else {
-                    //                            print("Error: couln't save remote list item")
-                    //                        }
-                    //                        
-                    //                    }
-                    let updateTimeStampDict = RemoteListItem.createTimestampUpdateDict(uuid: listItem.uuid, lastUpdate: serverLastUpdateTimestamp)
-                    self?.dbProvider.updateListItemLastSyncTimeStamp(updateTimeStampDict) {success in
+            if remote {
+                self?.remoteProvider.incrementListItem(listItem, delta: delta, status: status) {remoteResult in
+                    if let serverLastUpdateTimestamp = remoteResult.successResult {
+                        self?.dbProvider.updateListItemWithIncrementResult(serverLastUpdateTimestamp) {success in
+                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<ListItem>) in
+                            QL4("Remote call no success: \(remoteResult) item: \(listItem)")
+                            self?.memProvider.invalidate()
+                            handler(result)
+                        })
                     }
-                } else {
-                    DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<ListItem>) in
-                        QL4("Remote call no success: \(remoteResult) item: \(listItem)")
-                        self?.memProvider.invalidate()
-                        handler(result)
-                    })
                 }
             }
         }

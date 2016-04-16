@@ -213,6 +213,13 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
         return dict
     }
     
+    static func quantityFieldName(status: ListItemStatus) -> String {
+        switch status {
+        case .Todo: return "todoQuantity"
+        case .Done: return "doneQuantity"
+        case .Stash: return "stashQuantity"
+        }
+    }
     override static func ignoredProperties() -> [String] {
         return ["list", "section", "product"]
     }

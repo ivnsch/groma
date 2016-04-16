@@ -154,12 +154,13 @@ class RemoteListItemProvider {
         }
     }
     
-    func incrementListItem(listItem: ListItem, delta: Int, handler: RemoteResult<Int64> -> ()) {
+    func incrementListItem(listItem: ListItem, delta: Int, status: ListItemStatus, handler: RemoteResult<RemoteListItemIncrementResult> -> ()) {
         let params: [String: AnyObject] = [
-            "delta": delta,
-            "uuid": listItem.uuid
+            "uuid": listItem.uuid,
+            "status": status.rawValue,
+            "delta": delta
         ]
-        RemoteProvider.authenticatedRequestTimestamp(.POST, Urls.incrementListItem, params) {result in
+        RemoteProvider.authenticatedRequest(.POST, Urls.incrementListItem, params) {result in
             handler(result)
         }
     }

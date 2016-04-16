@@ -487,6 +487,31 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
+    func updateListItemWithIncrementResult(incrementResult: RemoteListItemIncrementResult, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            if let storedItem = (realm.objects(DBListItem).filter(DBListItem.createFilter(incrementResult.uuid)).first) {
+                
+                // If 2 items have the same timestamp (were updated in the same millisecond), we choose the one arriving latest, so we use <= instead of only <. If we used only < we would ignore all possible further updates with equal timestamps. The reason for this is that, being imposible to know the order since the timestamp is equal, all what's left is assume the latest to arrive was the latest update, which is somewhat better than assuming it was not. --- IF the item we store is still the wrong one, which is unlikely but can happen, it will likely be corrected soon by the background update done in view did appear in list items. The only situation I can currently think about where this causes to lose an update, is if, after updating with the wrong quantity, the user goes offline, in this case the data will not be "corrected" by downloading it again from the server and in the next sync it will be uploaded. ---> TODO! fix - this is most likely a server only fix, sometimes the server log of the repeated timestamp shows also repeated quantity (but the quantity in the db is still correct), meaning that the read operations after the updates of each of these items seem to be executed "together" reading only the last update result (so the write+read of each increment is not isolated - for 2 increments, instead of write+read,write+read we get write+write,read+read), in other cases the log shows actually different quantities with the same timestamp meaning the updates were written with the same timestamp. This last situation is also a bit strange since the database is using milliseconds, probably the operations are grouped together or something such that they are executed almost simustaneously.
+                if (storedItem.lastServerUpdate <= incrementResult.lastUpdate) {
+                    
+                    var updateDict: [String: AnyObject] = DBSyncable.timestampUpdateDict(incrementResult.uuid, lastServerUpdate: incrementResult.lastUpdate)
+                    updateDict[DBListItem.quantityFieldName(incrementResult.status)] = incrementResult.updatedQuantity
+                    realm.create(DBListItem.self, value: updateDict, update: true)
+                    QL1("Updateded list item with increment result dict: \(updateDict)")
+
+                } else {
+                    QL3("Warning: got result with smaller timestamp: \(incrementResult), ignoring")
+                }
+            } else {
+                QL3("Didn't find item for: \(incrementResult)")
+            }
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    
     func updateListItemLastSyncTimeStamp(updateDict: [String: AnyObject], handler: Bool -> Void) {
         doInWriteTransaction({[weak self] realm in
             self?.updateListItemLastSyncTimeStamp(realm, updateDict: updateDict)
