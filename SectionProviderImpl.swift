@@ -85,10 +85,28 @@ class SectionProviderImpl: SectionProvider {
     
     func update(sections: [Section], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
         Providers.listItemsProvider.invalidateMemCache()
-        DBProviders.sectionProvider.update(sections) {updated in
+        DBProviders.sectionProvider.update(sections) {[weak self] updated in
             handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
             if updated && remote {
-                // TODO!! server
+                
+                self?.remoteProvider.updateSections(sections) {remoteResult in
+                    if let timestamp = remoteResult.successResult {
+                        let updateDicts: [[String: AnyObject]] = sections.map {
+                            DBSyncable.timestampUpdateDict($0.uuid, lastServerUpdate: timestamp)
+                        }
+                        DBProviders.sectionProvider.updateLastSyncTimeStamps(updateDicts) {success in
+                            if !success {
+                                QL4("Couldn't update last server update timestamps for sections: \(sections)")
+                            }
+                        }
+                    } else {
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                            QL4("Remote call no success: \(remoteResult) items: \(sections)")
+                            Providers.listItemsProvider.invalidateMemCache()
+                            handler(result)
+                        })
+                    }
+                }
             }
         }
     }

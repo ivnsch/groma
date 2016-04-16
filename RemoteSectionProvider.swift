@@ -15,4 +15,12 @@ class RemoteSectionProvider: RemoteProvider {
             handler(result)
         }
     }
+    
+    func updateSections(sections: [Section], handler: RemoteResult<Int64> -> ()) {
+        let listItemProvider = RemoteListItemProvider()
+        let parameters: [[String: AnyObject]] = sections.map{listItemProvider.toRequestParams($0)}
+        RemoteProvider.authenticatedRequestArrayParamsTimestamp(.PUT, Urls.sections, parameters) {result in
+            handler(result)
+        }
+    }
 }

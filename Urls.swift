@@ -15,7 +15,6 @@ struct Urls {
 
     static let productWithUnique = host + "productWithUnique"
     static let sectionWithUnique = host + "sectionWithUnique"
-    static let sections = host + "sections"
 
     static let removeAll = host + "debug_clearAll"
 
@@ -59,6 +58,7 @@ struct Urls {
     
     // Section
     static let section = host + "section"
+    static let sections = host + "sections"
     
     // Inventory
     static let inventoryItems = host + "inventoryItems"

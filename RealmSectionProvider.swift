@@ -152,4 +152,16 @@ class RealmSectionProvider: RealmProvider {
                 handler(success ?? false)
         })
     }
+    
+    func updateLastSyncTimeStamps(sectionsUpdateDicts: [[String: AnyObject]], handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            for dict in sectionsUpdateDicts {
+                QL1("Saving dictionaries for section updates: \(sectionsUpdateDicts)")
+                realm.create(DBSection.self, value: dict, update: true)
+            }
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
 }
