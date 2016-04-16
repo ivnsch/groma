@@ -245,6 +245,27 @@ class MemListItemProvider {
         }
     }
     
+    func removeSection(uuid: String, listUuid: String) -> Bool {
+        guard enabled else {return false}
+        
+        // TODO the dictionary accessing logic is a bit weird, improve
+        if let list = (listItems?.keys.filter{$0.uuid == listUuid})?.first {
+            if let listListItems = listItems?[list] {
+                let updatedListItems = listListItems.removeAllWithCondition{$0.section.uuid == uuid}
+                listItems?[list] = updatedListItems
+                
+            } else {
+                QL1("No list items for section: \(uuid) in list: \(list)")
+            }
+            
+        } else {
+            QL3("Didn't find list: \(listUuid)")
+            return false
+        }
+        
+        return true
+    }
+    
     // Sets list items to nil
     // With this access to memory cache will be disabled (guards - check for nil) until the next overwrite
     // If we didn't set to nil we would be able to e.g. add list items to a emptied memory cache in which case it will not match the database contents

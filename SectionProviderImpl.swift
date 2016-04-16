@@ -12,6 +12,7 @@ import QorumLogs
 class SectionProviderImpl: SectionProvider {
     
     let dbProvider = RealmListItemProvider()
+    let remoteProvider = RemoteSectionProvider()
     
     func loadSection(name: String, list: List, handler: ProviderResult<Section?> -> ()) {
         DBProviders.sectionProvider.loadSection(name, list: list) {dbSectionMaybe in
@@ -31,31 +32,46 @@ class SectionProviderImpl: SectionProvider {
             //            }
         }
     }
-
-    func add(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        Providers.listItemsProvider.invalidateMemCache()
-        DBProviders.sectionProvider.saveSection(section) {saved in
-            handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
-            if saved && remote {
-                // TODO!! server
-            }
-        }
-    }
     
-    func remove(sectionUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        Providers.listItemsProvider.invalidateMemCache()
-        DBProviders.sectionProvider.remove(sectionUuid, markForSync: true) {removed in
+    func remove(sectionUuid: String, listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        
+        DBProviders.sectionProvider.remove(sectionUuid, markForSync: true) {[weak self] removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
-            if removed && remote {
-                // TODO!! server
+            if removed {
+                
+                Providers.listItemsProvider.removeSectionFromListItemsMemCacheIfExistent(sectionUuid, listUuid: listUuid) {result in
+                    if !result.success {
+                        QL4("Couldn't remove section from mem cache: \(result)")
+                    }
+                }
+                
+                if remote {
+                    self?.remoteProvider.removeSection(sectionUuid) {remoteResult in
+                        if remoteResult.success {
+                            DBProviders.sectionProvider.clearSectionTombstone(sectionUuid) {removeTombstoneSuccess in
+                                if !removeTombstoneSuccess {
+                                    QL4("Couldn't delete tombstone for section: \(sectionUuid)")
+                                }
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        }
+                    }
+                }
             }
         }
     }
     
     func remove(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        remove(section.uuid, remote: remote, handler)
+        remove(section.uuid, listUuid: section.list.uuid, remote: remote) {result in
+            if result.success {
+                handler(result)
+            } else {
+                QL3("Couldn't remove section: \(section), result: \(result)")
+                handler(result)
+            }
+        }
     }
-
     
     func removeAllWithName(sectionName: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         Providers.listItemsProvider.invalidateMemCache()

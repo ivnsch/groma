@@ -875,11 +875,6 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
 
-    
-    func invalidateMemCache() {
-        memProvider.invalidate()
-    }
-    
     func listItemCount(status: ListItemStatus, list: List, fetchMode: ProviderFetchModus = .First, _ handler: ProviderResult<Int> -> Void) {
         let countMaybe = memProvider.listItemCount(.Stash, list: list)
         if let count = countMaybe {
@@ -899,6 +894,24 @@ class ListItemProviderImpl: ListItemProvider {
             } else {
                 handler(ProviderResult(status: .DatabaseUnknown))
             }
+        }
+    }
+    
+    // MARK: - Memory cache
+    
+    func invalidateMemCache() {
+        memProvider.invalidate()
+    }
+    
+    func removeSectionFromListItemsMemCacheIfExistent(sectionUuid: String, listUuid: String, handler: ProviderResult<Any> -> Void) {
+        if memProvider.enabled {
+            let success = memProvider.removeSection(sectionUuid, listUuid: listUuid)
+            if !success {
+                QL4("Mem cache section removal returned false: sectionUuid: \(sectionUuid), listUuid: \(listUuid)")
+            }
+            handler(ProviderResult(status: .Success))
+        } else {
+            handler(ProviderResult(status: .Success))
         }
     }
 }

@@ -135,6 +135,16 @@ extension Array {
             sum + f(element)
         }
     }
+    
+    func removeAllWithCondition(f: Element -> Bool) -> Array<Element> {
+        var array = Array<Element>()
+        for e in self {
+            if !f(e) {
+               array.append(e)
+            }
+        }
+        return array
+    }
 }
 
 extension Array where Element: Hashable {

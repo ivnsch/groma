@@ -82,4 +82,6 @@ protocol ListItemProvider {
     Gets list items count with a certain status in a certain list
     */
     func listItemCount(status: ListItemStatus, list: List, fetchMode: ProviderFetchModus, _ handler: ProviderResult<Int> -> Void)
+    
+    func removeSectionFromListItemsMemCacheIfExistent(sectionUuid: String, listUuid: String, handler: ProviderResult<Any> -> Void)
 }

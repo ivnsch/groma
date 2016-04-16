@@ -741,6 +741,20 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     func onSectionSelected(section: Section) {
         onSectionSelectedShared(section)
     }
+    
+    func canRemoveSection(section: Section, can: Bool -> Void) {
+        ConfirmationPopup.show(title: "Confirm", message: "Are you sure you want to remove the section '\(section.name)'?\nThis will also remove all the list items contained in this section", okTitle: "Yes", cancelTitle: "Cancel", controller: self, onOk: {
+            can(true)
+        }, onCancel: {
+            can(false)
+        })
+    }
+    
+    func onSectionRemoved(section: Section) {
+        listItemsTableViewController.removeSection(section.uuid)
+        Providers.sectionProvider.remove(section, remote: true, successHandler{
+        })
+    }
 
     
     // MARK: - ExpandableTopViewControllerDelegate

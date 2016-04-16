@@ -11,6 +11,8 @@ import UIKit
 protocol ReorderSectionTableViewControllerDelegate {
     func onSectionsUpdated()
     func onSectionSelected(section: Section)
+    func canRemoveSection(section: Section, can: Bool -> Void)
+    func onSectionRemoved(section: Section)
 }
 
 class ReorderSectionTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -79,18 +81,22 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
         return true
     }
 
-    /*
-    // TODO
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+            
+            let section = sections[indexPath.row]
+            
+            delegate?.canRemoveSection(section) {[weak self] can in
+                if can {
+                    tableView.wrapUpdates {[weak self] in
+                        self?.sections.removeAtIndex(indexPath.row)
+                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                    }
+                    self?.delegate?.onSectionRemoved(section)
+                }
+            }
+        }
     }
-    */
 
     // Note: status of itels in this list assumed to be .Todo! It's not possible to reorder sections in the other status
     func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {

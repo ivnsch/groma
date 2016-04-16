@@ -143,4 +143,13 @@ class RealmSectionProvider: RealmProvider {
             realm.delete(dbSection)
         }
     }
+    
+    func clearSectionTombstone(uuid: String, handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            realm.deleteForFilter(DBRemoveSection.self, DBRemoveSection.createFilter(uuid))
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
 }

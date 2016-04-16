@@ -47,7 +47,6 @@ struct Urls {
     static let addListItem = host + "addListItem"
     static let addListItems = host + "addListItems" // TODO server
     static let listItem = host + "listItem"
-    static let section = host + "section"
     static let list = host + "list"
     static let updateListItemStatus = host + "listItem/ups"
     static let updateAllListItemsStatus = host + "listItems/ups"
@@ -57,6 +56,9 @@ struct Urls {
     static let listItemsStashOrder = host + "listItems/stash/order"
     static let listItemsSync = host + "listItem/sync"
     static let pullListProducts = host + "pullListProducts"
+    
+    // Section
+    static let section = host + "section"
     
     // Inventory
     static let inventoryItems = host + "inventoryItems"
