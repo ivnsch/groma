@@ -679,6 +679,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                     let sectionsTableViewController = UIStoryboard.reorderSectionTableViewController()
                     
                     sectionsTableViewController.sections = self.listItemsTableViewController.sections
+                    sectionsTableViewController.status = self.status
                     sectionsTableViewController.delegate = self
                     
                     sectionsTableViewController.onViewDidLoad = {

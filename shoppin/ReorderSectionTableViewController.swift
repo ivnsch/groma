@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 protocol ReorderSectionTableViewControllerDelegate {
     func onSectionsUpdated()
@@ -26,6 +27,8 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
     var cellHeight: CGFloat = DimensionsManager.listItemsHeaderHeight
     
     var delegate: ReorderSectionTableViewControllerDelegate?
+    
+    var status: ListItemStatus?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,18 +104,23 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
     // Note: status of itels in this list assumed to be .Todo! It's not possible to reorder sections in the other status
     func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
         
-        let section = sections[fromIndexPath.row]
-        sections.removeAtIndex(fromIndexPath.row)
-        
-        sections.insert(section, atIndex: toIndexPath.row)
-        
-        sections = sections.enumerate().map{index, section in
-            section.copy(todoOrder: index)
+        if let status = status {
+            let section = sections[fromIndexPath.row]
+            sections.removeAtIndex(fromIndexPath.row)
+            
+            sections.insert(section, atIndex: toIndexPath.row)
+            
+            sections = sections.enumerate().map{index, section in
+                section.updateOrder(ListItemStatusOrder(status: status, order: index))
+            }
+            
+            Providers.sectionProvider.update(sections, remote: true, successHandler{[weak self] in
+                self?.delegate?.onSectionsUpdated()
+            })
+            
+        } else {
+            QL4("Status not set, can't reorder")
         }
-
-        Providers.sectionProvider.update(sections, remote: true, successHandler{[weak self] in
-            self?.delegate?.onSectionsUpdated()
-        })
     }
 
     func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {

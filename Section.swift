@@ -101,6 +101,14 @@ final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
         case .Stash: stashOrder = order.order
         }
     }
+    
+    func updateOrder(order: ListItemStatusOrder) -> Section {
+        return copy(
+            todoOrder: order.status == .Todo ? order.order : todoOrder,
+            doneOrder: order.status == .Done ? order.order : doneOrder,
+            stashOrder: order.status == .Stash ? order.order : stashOrder
+        )
+    }
 }
 
 func ==(lhs: Section, rhs: Section) -> Bool {
