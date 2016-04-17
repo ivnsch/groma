@@ -47,7 +47,8 @@ class HistoryProviderImpl: HistoryProvider {
     }
     
     func removeHistoryItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbProvider.removeHistoryItem(uuid) {[weak self] success in
+        // remote -> markForSync: if it's a call that's meant to be synced with the server, it means we want to add tombstones.
+        dbProvider.removeHistoryItem(uuid, markForSync: remote) {[weak self] success in
             if success {
                 handler(ProviderResult(status: .Success))
                 if remote {

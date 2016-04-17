@@ -18,14 +18,14 @@ class RemoteHistoryProvider {
     }
     
     func removeHistoryItem(uuid: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.historyItems + "/\(uuid)") {result in
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.historyItem + "/\(uuid)") {result in
             handler(result)
         }
     }
     
     func removeHistoryItems(historyItemGroup: HistoryItemGroup, handler: RemoteResult<NoOpSerializable> -> ()) {
         let params: [String: AnyObject] = ["uuids": historyItemGroup.historyItems.map{$0.uuid}, "foo": ""] // foo -> server workaround for 1 element json
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.historyItems, params) {result in
+        RemoteProvider.authenticatedRequest(.POST, Urls.historyItems, params) {result in
             handler(result)
         }
     }

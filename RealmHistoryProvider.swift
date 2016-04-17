@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import QorumLogs
 
 class RealmHistoryProvider: RealmProvider {
 
@@ -164,18 +165,34 @@ class RealmHistoryProvider: RealmProvider {
         self.saveHistoryItems(historyItems, handler: handler)
     }
     
-    func removeHistoryItem(uuid: String, handler: Bool -> ()) {
-        remove(DBHistoryItem.createFilter(uuid), handler: handler, objType: DBHistoryItem.self)
+    func removeHistoryItem(uuid: String, markForSync: Bool, handler: Bool -> Void) {
+        self.doInWriteTransaction({[weak self] realm in
+            let dbHistoryItems = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilter(uuid))
+            if markForSync {
+                let toRemove = dbHistoryItems.map{DBRemoveHistoryItem($0)}
+                self?.saveObjsSyncInt(realm, objs: toRemove, update: true)
+            }
+            realm.delete(dbHistoryItems)
+            return true
+            }, finishHandler: {(successMaybe: Bool?) in
+                if let success = successMaybe {
+                    handler(success)
+                } else {
+                    QL4("Error: RealmHistoryProvider.removeHistoryItem: success in nil")
+                    handler(false)
+                }
+            }
+        )
     }
     
     // Expected to be executed in do/catch and write block
     func removeHistoryItemsForInventory(realm: Realm, inventoryUuid: String, markForSync: Bool) -> Bool {
         let dbHistoryItems = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilterWithInventory(inventoryUuid))
-        realm.delete(dbHistoryItems)
         if markForSync {
             let toRemove = dbHistoryItems.map{DBRemoveHistoryItem($0)}
             saveObjsSyncInt(realm, objs: toRemove, update: true)
         }
+        realm.delete(dbHistoryItems)
         return true
     }
     
@@ -183,11 +200,11 @@ class RealmHistoryProvider: RealmProvider {
     func removeAllHistoryItems(markForSync: Bool, handler: Bool -> ()) {
         self.doInWriteTransaction({[weak self] realm in
             let dbHistoryItems = realm.objects(DBHistoryItem)
-            realm.delete(dbHistoryItems)
             if markForSync {
                 let toRemove = dbHistoryItems.map{DBRemoveHistoryItem($0)}
                 self?.saveObjsSyncInt(realm, objs: toRemove, update: true)
             }
+            realm.delete(dbHistoryItems)
             return true
             }, finishHandler: {(successMaybe: Bool?) in
                 if let success = successMaybe {
@@ -203,11 +220,11 @@ class RealmHistoryProvider: RealmProvider {
     func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, markForSync: Bool, _ handler: Bool -> Void) {
         self.doInWriteTransaction({[weak self] realm in
             let dbHistoryItems = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilter(historyItemGroup))
-            realm.delete(dbHistoryItems)
             if markForSync {
                 let toRemove = dbHistoryItems.map{DBRemoveHistoryItem($0)}
                 self?.saveObjsSyncInt(realm, objs: toRemove, update: true)
             }
+            realm.delete(dbHistoryItems)
             return true
             }, finishHandler: {(successMaybe: Bool?) in
                 if let success = successMaybe {
