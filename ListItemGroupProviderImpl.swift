@@ -189,19 +189,20 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
+    // TODO pass a prototype or product+quantity similar to list items. Don't pass a new group item, the creation of the new group item should happen in the db provider, only when one with given semantic unique doesn't exist already.
     func add(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        DBProviders.groupItemProvider.addOrIncrement(item) {[weak self] saved in
-            if saved {
+        DBProviders.groupItemProvider.addOrIncrement(item) {[weak self] addedOrIncrementedGroupItemMaybe in
+            if let addedOrIncrementedGroupItem = addedOrIncrementedGroupItemMaybe {
                 handler(ProviderResult(status: .Success))
                 
-                if saved {
-                    self?.remoteGroupsProvider.addGroupItem(item) {remoteResult in
-                        if let remoteListItems = remoteResult.successResult {
-                            DBProviders.groupItemProvider.updateLastSyncTimeStamp(remoteListItems) {success in
+                if remote {
+                    self?.remoteGroupsProvider.addGroupItem(addedOrIncrementedGroupItem) {remoteResult in
+                        if let remoteGroupItems = remoteResult.successResult {
+                            DBProviders.groupItemProvider.updateLastSyncTimeStamp(remoteGroupItems) {success in
                             }
                         } else {
                             DefaultRemoteErrorHandler.handle(remoteResult)  {(remoteResult: ProviderResult<Any>) in
-                                QL4("Error adding group item in remote: \(item), result: \(remoteResult)")
+                                QL4("Error adding group item in remote: \(addedOrIncrementedGroupItem), result: \(remoteResult)")
                             }
                         }
                     }

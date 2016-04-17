@@ -71,9 +71,9 @@ class RealmGroupItemProvider: RealmProvider {
             })
     }
     
-    func addOrIncrement(groupItem: GroupItem, handler: Bool -> Void) {
+    func addOrIncrement(groupItem: GroupItem, handler: GroupItem? -> Void) {
         
-        func addOrIncrement(item: GroupItem) -> Bool {
+        func addOrIncrement(item: GroupItem) -> GroupItem? {
             do {
                 let realm = try Realm()
                 let mapper = {GroupItemMapper.groupItemWith($0)}
@@ -82,21 +82,22 @@ class RealmGroupItemProvider: RealmProvider {
                     let incremented = item.incrementQuantityCopy(groupItem.quantity)
                     let dbItem = GroupItemMapper.dbWith(incremented)
                     saveObjSync(dbItem, update: true)
+                    return incremented
                 } else {
                     let dbItem = GroupItemMapper.dbWith(groupItem)
                     saveObjSync(dbItem, update: true)
+                    return groupItem
                 }
-                return true
                 
             } catch let error {
                 print("Error: creating Realm() in load, returning empty results. Error: \(error)")
-                return false // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
+                return nil // for now return empty array - review this in the future, maybe it's better to return nil or a custom result object, or make function throws...
             }
         }
         
-        func finished(success: Bool) {
+        func finished(groupItemMaybe: GroupItem?) {
             dispatch_async(dispatch_get_main_queue(), {
-                handler(success)
+                handler(groupItemMaybe)
             })
         }
         
@@ -108,9 +109,9 @@ class RealmGroupItemProvider: RealmProvider {
                 finished(success)
             } else {
                 print("Error: RealmListItemGroupProvider.addOrIncrement: no self")
-                finished(false)
+                finished(nil)
             }
-            })
+        })
     }
     
     func update(groupItem: GroupItem, handler: Bool -> Void) {
