@@ -182,8 +182,6 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             
             // update the table view in advance, so delete animation is quick. If something goes wrong we reload the content in onError and do default error handling
             if let item = removeItemUI(indexPath) {
-                removeItemUI(indexPath)
-                
                 delegate?.remove(item, onSuccess: {}, onError: {[weak self] result in
                     self?.clearAndLoadFirstPage()
                     self?.defaultErrorHandler()(providerResult: result)
