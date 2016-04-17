@@ -19,11 +19,6 @@ protocol InventoryItemsProvider {
     func countInventoryItems(inventory: Inventory, _ handler: ProviderResult<Int> -> Void)
     
     func addToInventory(inventory: Inventory, itemInput: ProductWithQuantityInput, remote: Bool, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> Void)
-    
-    func addToInventory(items: [InventoryItemWithHistoryEntry], remote: Bool, _ handler: ProviderResult<Any> -> ())
-
-    // Outdated implementation, needs now store product
-//    func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> Void)
 
     func addToInventory(inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<[InventoryItemWithHistoryEntry]> -> Void)
 

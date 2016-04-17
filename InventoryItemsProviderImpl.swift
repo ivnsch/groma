@@ -160,59 +160,6 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    // TODO!!!! remove this if not used anymore? this should be now done in:
-    // func addToInventory(inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-    func addToInventory(items: [InventoryItemWithHistoryEntry], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        
-        let memAdded = memProvider.addInventoryItems(items)
-        if memAdded {
-            handler(ProviderResult(status: .Success))
-        }
-        
-        DBProviders.inventoryItemProvider.add(items) {[weak self] saved in
-
-            if !memAdded { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
-                if saved {
-                    handler(ProviderResult(status: .Success))
-                } else {
-                    handler(ProviderResult(status: .DatabaseSavingError))
-                }
-            }
-            
-            if remote {
-                self?.remoteInventoryItemsProvider.addToInventory(items) {remoteResult in
-                    
-                    if let remoteInventoryItems = remoteResult.successResult {
-                        
-                        print("DEBUG: add remote inventory items success")
-                        
-                        
-                        // TODO is this comment still relevant?
-                        // For now no saving in local database, since there's no logic to increment in the client
-                        // TODO in the future we should do the increment in the client, as the app can be used offline-only
-                        // then call a sync with the server when we're online, where we either send the pending increments or somehow overwrite with updated items, taking into account timestamps
-                        // remember that the inventory has to support merge since it can be shared with other users
-                        //                self.dbInventoryProvider.saveInventory(items) {saved in
-                        //                    let providerStatus = DefaultRemoteResultMapper.toProviderStatus(remoteResult.status) // return status of remote, for now we don't consider save to db critical - TODO review when focusing on offline mode - in this case at least we have to skip the remote call and db operation is critical
-                        //                    handler(ProviderResult(status: providerStatus))
-                        //                }
-                        
-                        
-                        DBProviders.inventoryItemProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
-                        }
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-                            QL4("Error addToInventory: \(remoteResult.status)")
-                            // if there's a not connection related server error, invalidate cache
-                            self?.memProvider.invalidate()
-                            handler(result)
-                        })
-                    }
-                }
-            }
-        }
-    }
- 
     // For now db only query
     private func findInventoryItem(item: InventoryItem, _ handler: ProviderResult<InventoryItem> -> ()) {
         
