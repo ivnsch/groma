@@ -414,7 +414,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func remove(model: ProductWithQuantity, onSuccess: VoidFunction, onError: ProviderResult<Any> -> Void) {
         if let inventory = inventory {
-            Providers.inventoryItemsProvider.removeInventoryItem(model.product.uuid, inventoryUuid: inventory.uuid, remote: true, resultHandler(onSuccess: {
+            Providers.inventoryItemsProvider.removeInventoryItem((model as! ProductWithQuantityInv).inventoryItem.uuid, inventoryUuid: inventory.uuid, remote: true, resultHandler(onSuccess: {
                 onSuccess()
                 }, onError: {result in
                     onError(result)
