@@ -13,7 +13,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
    
     let remoteInventoryItemsProvider = RemoteInventoryItemsProvider()
 //    let dbInventoryProvider = RealmInventoryProvider()
-    let memProvider = MemInventoryItemProvider(enabled: true)
+    let memProvider = MemInventoryItemProvider(enabled: false)
 
     // TODO we are sorting 3x! Optimise this. Ponder if it makes sense to do the server objects sorting in the server (where it can be done at db level)
     func inventoryItems(range: NSRange, inventory: Inventory, fetchMode: ProviderFetchModus = .Both, sortBy: InventorySortBy = .Count, _ handler: ProviderResult<[InventoryItem]> -> ()) {
