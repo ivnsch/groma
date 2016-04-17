@@ -90,7 +90,7 @@ class DBInventoryItem: DBSyncable {
         var dict = [String: AnyObject]()
         dict["uuid"] = uuid
         dict["quantity"] = quantity
-        dict["quantityDelta"] = quantityDelta
+//        dict["quantityDelta"] = quantityDelta
         dict["product"] = product.toDict()
 //        dict["inventory"] = inventory.toDict()
         dict["inventoryUuid"] = inventory.uuid
