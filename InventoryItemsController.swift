@@ -306,19 +306,18 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) {
-        QL4("Outdated implementation, needs now store product")
         
-//        func onEditListItem(input: ListItemInput, editingItem: InventoryItem) {
-//            let updatedCategory = editingItem.product.category.copy(name: input.section, color: input.sectionColor)
-//            let updatedProduct = editingItem.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
-//            // TODO! calculate quantity delta correctly?
-//            let updatedInventoryItem = editingItem.copy(quantity: input.quantity, quantityDelta: input.quantity, product: updatedProduct)
-//            Providers.inventoryItemsProvider.updateInventoryItem(updatedInventoryItem, remote: true, successHandler {[weak self] in
-//                self?.onInventoryItemUpdated()
-//            })
-//        }
-//        
-//        func onAddListItem(input: ListItemInput) {
+        func onEditListItem(input: ListItemInput, editingItem: InventoryItem) {
+            let updatedCategory = editingItem.product.category.copy(name: input.section, color: input.sectionColor)
+            let updatedProduct = editingItem.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
+            // TODO! calculate quantity delta correctly?
+            let updatedInventoryItem = editingItem.copy(quantity: input.quantity, quantityDelta: input.quantity, product: updatedProduct)
+            Providers.inventoryItemsProvider.updateInventoryItem(updatedInventoryItem, remote: true, successHandler {[weak self] in
+                self?.onInventoryItemUpdated()
+            })
+        }
+        
+//        func onAddInventoryItem(input: ListItemInput) {
 //            if let inventory = inventory {
 //                let input = InventoryItemInput(name: input.name, quantity: input.quantity, price: input.price, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
 //                
@@ -332,16 +331,17 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 //                QL4("Inventory isn't set, can't add item")
 //            }
 //        }
-//        
-//        if let editingItem = editingItem as? InventoryItem {
-//            onEditListItem(input, editingItem: editingItem)
-//        } else {
-//            if editingItem == nil {
-//                onAddListItem(input)
-//            } else {
-//                QL4("Cast didn't work: \(editingItem)")
-//            }
-//        }
+        
+        if let editingItem = editingItem as? InventoryItem {
+            onEditListItem(input, editingItem: editingItem)
+        } else {
+            if editingItem == nil {
+                QL4("Add to inventory is not supported")
+//                onAddInventoryItem(input)
+            } else {
+                QL4("Cast didn't work: \(editingItem)")
+            }
+        }
     }
     
     func onQuickListOpen() {
