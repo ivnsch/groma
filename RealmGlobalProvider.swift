@@ -13,7 +13,7 @@ import QorumLogs
 class RealmGlobalProvider: RealmProvider {
 
     // TODO map db objects directly to dicts, mapping to our plain objects is not necessary
-    func loadGlobalSync(handler: [String: AnyObject]? -> Void) {
+    func loadGlobalSync(isMatchSync: Bool, handler: [String: AnyObject]? -> Void) {
         
         withRealm({realm in
 
@@ -77,6 +77,8 @@ class RealmGlobalProvider: RealmProvider {
             syncDict["groups"] = gropsDict
             syncDict["groupsItems"] = groupItemsDict
             syncDict["history"] = historyDict
+            
+            syncDict["isMatch"] = isMatchSync
             
             return syncDict
             

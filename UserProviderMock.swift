@@ -60,7 +60,7 @@ class UserProviderMock: UserProvider {
     }
     
     func sync(handler: ProviderResult<SyncResult> -> Void) {
-        Providers.globalProvider.sync {result in
+        Providers.globalProvider.sync(false) {result in
             handler(result)
         }
     }

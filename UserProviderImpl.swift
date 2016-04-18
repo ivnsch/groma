@@ -20,7 +20,7 @@ class UserProviderImpl: UserProvider {
     func login(loginData: LoginData, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.login(loginData) {[weak self] result in
             if result.success {
-                self?.sync {result in
+                self?.sync(false) {result in
                     if result.success {
                         QL2("Sync success, connecting websocket...")
                         self?.connectWebsocketIfLoggedIn()
@@ -62,8 +62,8 @@ class UserProviderImpl: UserProvider {
         QL2("User logged out")
     }
     
-    func sync(handler: ProviderResult<SyncResult> -> Void) {
-        Providers.globalProvider.sync {result in
+    func sync(isMatchSync: Bool, handler: ProviderResult<SyncResult> -> Void) {
+        Providers.globalProvider.sync(isMatchSync) {result in
             handler(result)
         }
     }
@@ -140,7 +140,7 @@ class UserProviderImpl: UserProvider {
     func authenticateWithFacebook(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.authenticateWithFacebook(token) {[weak self] result in
             if result.success {
-                self?.sync {result in
+                self?.sync(false) {result in
                     handler(result)
                 }   
             } else {
@@ -153,7 +153,7 @@ class UserProviderImpl: UserProvider {
     func authenticateWithGoogle(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.authenticateWithGoogle(token) {[weak self] result in
             if result.success {
-                self?.sync {result in
+                self?.sync(false) {result in
                     handler(result)
                 }
             } else {

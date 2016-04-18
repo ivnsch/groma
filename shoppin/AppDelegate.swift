@@ -603,7 +603,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             if userProvider.hasLoginToken {
                 QL2("User has login token, start sync")
                 window?.defaultProgressVisible(true)
-                Providers.globalProvider.sync {[weak self] result in
+                Providers.globalProvider.sync(false) {[weak self] result in
                     QL2("Sync finished")
                     if !result.success {
                         QL4("Error: AppDelegate.checkForReachability: Sync didn't succeed: \(result)")
@@ -662,7 +662,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                                 controller.progressVisible()
                                 QL2("Websocket reconnected. Starting sync...")
                                 
-                                Providers.globalProvider.sync(controller.successHandler{invitations in
+                                Providers.globalProvider.sync(false, handler: controller.successHandler{invitations in
                                     QL3("Sync complete")
                                     // Broadcast such that controllers can e.g. reload items.
                                     NSNotificationCenter.defaultCenter().postNotificationName(WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil, userInfo: info)
@@ -800,7 +800,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                         QL2("Shared items sync request by \(sender)")
                         // text to user "Incoming sync request from x" or "Processing sync request from x" or "Sync request triggered by x" or "Sync request by x" or "x Sync request"
                         
-                        Providers.globalProvider.sync(controller.successHandler{invitations in
+                        Providers.globalProvider.sync(true, handler: controller.successHandler{invitations in
                             QL3("Are we really expecting invitations here? (not sure if this should be a warning): \(invitations)")
                             InvitationsHandler.handleInvitations(invitations.listInvites, inventoryInvitations: invitations.inventoryInvites, controller: controller)
                             

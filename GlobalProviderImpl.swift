@@ -14,9 +14,9 @@ class GlobalProviderImpl: GlobalProvider {
     let dbProvider = RealmGlobalProvider()
     let remoteProvider = RemoteGlobalProvider()
     
-    func sync(handler: ProviderResult<SyncResult> -> Void) {
+    func sync(isMatchSync: Bool, handler: ProviderResult<SyncResult> -> Void) {
         
-        dbProvider.loadGlobalSync{[weak self] syncDict in
+        dbProvider.loadGlobalSync(isMatchSync) {[weak self] syncDict in
             if let syncDict = syncDict {
                 
                 self?.remoteProvider.sync(syncDict) {remoteResult in
