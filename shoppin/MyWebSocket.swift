@@ -143,9 +143,10 @@ class MyWebSocket: WebSocketDelegate {
     }
     
     func websocketDidConnect(socket: WebSocket) {
-        QL2("Websocket: Connected. Will send subscribe...")
         
         let deviceId = websocketDeviceId
+        
+        QL2("Websocket: Connected. Device id: \(deviceId). Will send subscribe...")
         
         Providers.listProvider.lists(false) {listsResult in
             
