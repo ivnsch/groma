@@ -89,7 +89,7 @@ class UserProviderImpl: UserProvider {
     }
     
     func removeLoginToken() {
-        remoteProvider.removeToken()
+        AccessTokenHelper.removeToken()
     }
     
     func ping() {
@@ -98,7 +98,7 @@ class UserProviderImpl: UserProvider {
     }
     
     var hasLoginToken: Bool {
-        return remoteProvider.hasToken()
+        return AccessTokenHelper.hasToken()
     }
     
     var hasSignedInOnce: Bool {

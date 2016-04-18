@@ -80,6 +80,7 @@
 		EB1219DB1BD8EB23004351E0 /* QuickAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */; };
 		EB135B941BED21490093DE70 /* ExpandFloatingButtonModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB135B931BED21490093DE70 /* ExpandFloatingButtonModel.swift */; };
 		EB135B961BED5F130093DE70 /* ItemWithCellAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB135B951BED5F130093DE70 /* ItemWithCellAttributes.swift */; };
+		EB1608F41CC594BC0038AB54 /* AccessTokenHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1608F31CC594BA0038AB54 /* AccessTokenHelper.swift */; };
 		EB1748C51C7E4C750067FD16 /* RemoteListNoUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1748C41C7E4C750067FD16 /* RemoteListNoUsers.swift */; };
 		EB1748CC1C7E54860067FD16 /* RemoteListInvitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1748CB1C7E54860067FD16 /* RemoteListInvitation.swift */; };
 		EB1748CD1C7E54860067FD16 /* RemoteListInvitation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1748CB1C7E54860067FD16 /* RemoteListInvitation.swift */; };
@@ -1111,6 +1112,7 @@
 		EB1219DA1BD8EB23004351E0 /* QuickAddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddViewController.swift; sourceTree = "<group>"; };
 		EB135B931BED21490093DE70 /* ExpandFloatingButtonModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandFloatingButtonModel.swift; sourceTree = "<group>"; };
 		EB135B951BED5F130093DE70 /* ItemWithCellAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemWithCellAttributes.swift; sourceTree = "<group>"; };
+		EB1608F31CC594BA0038AB54 /* AccessTokenHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessTokenHelper.swift; sourceTree = "<group>"; };
 		EB1748C41C7E4C750067FD16 /* RemoteListNoUsers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListNoUsers.swift; sourceTree = "<group>"; };
 		EB1748CB1C7E54860067FD16 /* RemoteListInvitation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListInvitation.swift; sourceTree = "<group>"; };
 		EB1748CF1C7E79230067FD16 /* SyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncResult.swift; sourceTree = "<group>"; };
@@ -2246,6 +2248,7 @@
 				EBEA0CC71CA5ABBE00E68B81 /* MyAutoCompleteTextField.swift */,
 				EBEA0CCD1CA5B24C00E68B81 /* MyAutocompleteCell.swift */,
 				EBEA0CCE1CA5B24C00E68B81 /* MyAutocompleteCell.xib */,
+				EB1608F31CC594BA0038AB54 /* AccessTokenHelper.swift */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -3849,6 +3852,7 @@
 				EB741A5C1C22185900E1585D /* ListsTableViewController.swift in Sources */,
 				EB4A38AC1C8F863D000714F9 /* PullProviderImpl.swift in Sources */,
 				EBB9A7381B5EB14300E5487D /* RemoteInventory.swift in Sources */,
+				EB1608F41CC594BC0038AB54 /* AccessTokenHelper.swift in Sources */,
 				EBB526771BEFE10B0002A286 /* HelpProvider.swift in Sources */,
 				EB7BFA7B1BDA5BE500F4C74A /* QuantityCell.swift in Sources */,
 				EB28C1161A5833A200E1C8BC /* NavigationTitleView.swift in Sources */,

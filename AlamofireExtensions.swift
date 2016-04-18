@@ -8,7 +8,6 @@
 
 import Foundation
 import Alamofire
-import Valet
 import QorumLogs
 
 // Representation of status code related with remote responses
@@ -207,14 +206,10 @@ struct AlamofireHelper {
 //            QL1("size dict: \(pars.count)")
 //        }
         
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        
-        let maybeToken = valet?.stringForKey(KeychainKeys.token)
-        
         let mutableURLRequest = NSMutableURLRequest(URL: NSURL(string: url)!)
         mutableURLRequest.HTTPMethod = method.rawValue
         
-        if let token = maybeToken {
+        if let token = AccessTokenHelper.loadToken() {
 //            QL1("Setting the token header: \(token)")
             mutableURLRequest.setValue(token, forHTTPHeaderField: "X-Auth-Token")
         } // TODO if there's no token return status code to direct to login controller or something
@@ -239,12 +234,8 @@ struct AlamofireHelper {
         let request = NSMutableURLRequest(URL: NSURL(string: url)!)
         request.HTTPMethod = method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        
-        let maybeToken = valet?.stringForKey(KeychainKeys.token)
-        
-        if let token = maybeToken {
+                
+        if let token = AccessTokenHelper.loadToken() {
 //            QL1("Setting the token header: \(token)")
             request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
         } // TODO if there's no token return status code to direct to login controller or something

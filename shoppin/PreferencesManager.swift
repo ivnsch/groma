@@ -28,6 +28,8 @@ enum PreferencesManagerKey: String {
     case showedIncrementInventoryItemHelp = "showedIncrementInventoryItemHelp"
     
     case websocketUuid = "websocketUuid"
+    
+    case loginTokenFallback = "loginTokenFallback"
 }
 
 class PreferencesManager {

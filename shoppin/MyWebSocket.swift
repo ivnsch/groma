@@ -7,7 +7,6 @@
 //
 
 import Starscream
-import Valet
 import QorumLogs
 
 private class Keys {
@@ -48,11 +47,8 @@ class MyWebSocket: WebSocketDelegate {
     
     init() {
         if ConnectionProvider.connected {
-            
-            let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-            let maybeToken = valet?.stringForKey(KeychainKeys.token)
-            
-            if let token = maybeToken {
+
+            if let token = AccessTokenHelper.loadToken() {
                 socket = WebSocket(url: NSURL(string: "ws://\(Urls.hostIPPort)/ws")!)
                 socket?.delegate = self
                 socket?.headers["X-Auth-Token"] = token

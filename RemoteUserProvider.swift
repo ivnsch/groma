@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Valet
 import QorumLogs
 
 class RemoteUserProvider {
@@ -46,10 +45,10 @@ class RemoteUserProvider {
     }
     
     func ping(handler: RemoteResult<RemotePingResult> -> ()) {
-        RemoteProvider.authenticatedRequest(.GET, Urls.ping) {[weak self] (result: RemoteResult<RemotePingResult>) in
+        RemoteProvider.authenticatedRequest(.GET, Urls.ping) {(result: RemoteResult<RemotePingResult>) in
             if result.success {
                 if let successResult = result.successResult {
-                    self?.storeToken(successResult.token) // update (replace) the token
+                    AccessTokenHelper.storeToken(successResult.token) // update (replace) the token
                 } else {
                     QL4("No token. Result: \(result)")
                 }
@@ -73,9 +72,9 @@ class RemoteUserProvider {
     }
     
     func removeAccount(handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.removeAccount) {[weak self] (result: RemoteResult<NoOpSerializable>) in
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.removeAccount) {(result: RemoteResult<NoOpSerializable>) in
             if result.success {
-                self?.removeToken()
+                AccessTokenHelper.removeToken()
             }
             handler(result)
         }
@@ -86,43 +85,7 @@ class RemoteUserProvider {
             handler(result)
         }
     }
-    
-    func hasToken() -> Bool {
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        if let valet = valet {
-            return valet.containsObjectForKey(KeychainKeys.token)
-        } else {
-            QL4("Valet not set, returning false")
-            return false
-        }
-    }
-    
-    private func storeToken(token: String) {
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        if let valet = valet {
-            if valet.setString(token, forKey: KeychainKeys.token) {
-                QL1("Stored token: \(token)")
-                PreferencesManager.savePreference(PreferencesManagerKey.lastTokenUpdate, value: NSDate())
-            } else {
-                QL4("Couldn't store token. Can access key chain: \(valet.canAccessKeychain())")
-            }
-        } else {
-            QL4("Valet not set, couldn't store token")
-        }
-    }
-    
-    func removeToken() {
-        QL1("Removing login token")
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        if let valet = valet {
-            if !valet.removeObjectForKey(KeychainKeys.token) {
-                QL4("Remove token returned false")
-            }
-            QL1("Removed login token")
-        } else {
-            QL4("Valet not set")
-        }
-    }
+
     
     // For now store the user's email as simple preference, we need it to be added automatically to list shared users. This may change in the future
     private func storeEmail(email: String) {
@@ -131,7 +94,7 @@ class RemoteUserProvider {
     
     func logout(handler: RemoteResult<NoOpSerializable> -> ()) {
         // with JWT we just have to remove token from client no need to call the server TODO verify this
-        self.removeToken()
+        AccessTokenHelper.removeToken()
         handler(RemoteResult<NoOpSerializable>(status: .Success))
     }
     
@@ -156,8 +119,8 @@ class RemoteUserProvider {
     }
     
     private func storeUserData(token: String, email: String) {
-        self.storeToken(token)
-        self.storeEmail(email)
+        AccessTokenHelper.storeToken(token)
+        storeEmail(email)
     }
     
     func toRequestParams(user: UserInput) -> [String: AnyObject] {

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Valet
 import Alamofire
 import Reachability
 import QorumLogs
@@ -135,11 +134,7 @@ class RemoteProvider {
         request.HTTPMethod = method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        
-        let maybeToken = valet?.stringForKey(KeychainKeys.token)
-        
-        if let token = maybeToken {
+        if let token = AccessTokenHelper.loadToken() {
             request.setValue(token, forHTTPHeaderField: "X-Auth-Token")
         } // TODO if there's no token return status code to direct to login controller or something
         
