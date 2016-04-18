@@ -26,6 +26,8 @@ enum PreferencesManagerKey: String {
     // explanation popups that are displayed only once after installation
     case showedAddDirectlyToInventoryHelp = "showedAddDirectlyToInventoryHelp"
     case showedIncrementInventoryItemHelp = "showedIncrementInventoryItemHelp"
+    
+    case websocketUuid = "websocketUuid"
 }
 
 class PreferencesManager {

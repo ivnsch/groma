@@ -132,11 +132,21 @@ class MyWebSocket: WebSocketDelegate {
         }
     }
     
+    private var websocketDeviceId: String {
+        if let websocketUuid: String = PreferencesManager.loadPreference(PreferencesManagerKey.websocketUuid) {
+            return websocketUuid
+        } else {
+            let websocketUuid: String = NSUUID().UUIDString
+            PreferencesManager.savePreference(PreferencesManagerKey.websocketUuid, value: NSString(string: websocketUuid))
+            return websocketUuid
+        }
+    }
+    
     func websocketDidConnect(socket: WebSocket) {
         QL2("Websocket: Connected. Will send subscribe...")
         
-        let deviceId = NSUUID().UUIDString // we generate uuid always when we connect.
-
+        let deviceId = websocketDeviceId
+        
         Providers.listProvider.lists(false) {listsResult in
             
             if let lists = listsResult.sucessResult {
