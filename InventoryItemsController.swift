@@ -385,6 +385,12 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 //        })
     }
     
+    func onRemovedSectionCategoryName(name: String) {
+    }
+    
+    func onRemovedBrand(name: String) {
+    }
+    
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

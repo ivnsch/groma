@@ -136,7 +136,7 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             let brand = filteredBrands[indexPath.row]
-            Providers.brandProvider.removeBrand(brand.item, remote: true, successHandler {[weak self] in
+            Providers.brandProvider.removeProductsWithBrand(brand.item, remote: true, successHandler {[weak self] in
                 self?.removeBrandUI(brand, indexPath: indexPath)
             })
         }

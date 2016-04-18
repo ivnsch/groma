@@ -41,4 +41,10 @@ class RemoteProductProvider: RemoteProvider {
             handler(result)
         }
     }
+    
+    func deleteProductsWithBrand(brandName: String, handler: RemoteResult<NoOpSerializable> -> ()) {
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.brand + "/\(brandName)") {result in
+            handler(result)
+        }
+    }
 }

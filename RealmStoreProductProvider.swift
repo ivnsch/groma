@@ -45,4 +45,33 @@ class RealmStoreProductProvider: RealmProvider {
             return self?.loadSync(realm, mapper: mapper, filter: DBStoreProduct.createFilterProductsStores(products, store: store))
         }
     }
+    
+    // Note: This is expected to be called from inside a transaction and in a background operation
+    func deleteStoreProductDependenciesSync(realm: Realm, storeProductUuid: String, markForSync: Bool) -> Bool {
+        let storeProductResult = realm.objects(DBStoreProduct).filter(DBStoreProduct.createFilter(storeProductUuid))
+        return deleteStoreProductsAndDependenciesSync(realm, storeProducts: storeProductResult, markForSync: markForSync)
+    }
+
+    func deleteStoreProductsAndDependenciesForProductSync(realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
+        let storeProductResult = realm.objects(DBStoreProduct).filter(DBStoreProduct.createFilterProduct(productUuid))
+        return deleteStoreProductsAndDependenciesSync(realm, storeProducts: storeProductResult, markForSync: markForSync)
+    }
+    
+    func deleteStoreProductsAndDependenciesSync(realm: Realm, storeProducts: Results<DBStoreProduct>, markForSync: Bool) -> Bool {
+        let uuids = storeProducts.map{$0.uuid}
+        let listItemResult = realm.objects(DBListItem).filter(DBListItem.createFilterWithProducts(uuids))
+        if markForSync {
+            let toRemoveListItems = listItemResult.map{DBRemoveListItem($0)}
+            saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
+        }
+        realm.delete(listItemResult)
+        
+        if markForSync {
+            let toRemoveStoreProducts = storeProducts.map{DBStoreProductToRemove($0)}
+            saveObjsSyncInt(realm, objs: toRemoveStoreProducts, update: true)
+        }
+        realm.delete(storeProducts)
+        
+        return true
+    }
 }

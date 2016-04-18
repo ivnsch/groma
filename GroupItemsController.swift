@@ -361,6 +361,14 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         })
     }
     
+    func onRemovedSectionCategoryName(name: String) {
+        reload()
+    }
+    
+    func onRemovedBrand(name: String) {
+        reload()
+    }
+    
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

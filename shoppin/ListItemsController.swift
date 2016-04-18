@@ -612,6 +612,13 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         ])
     }
     
+    func onRemovedSectionCategoryName(name: String) {
+        updatePossibleList()
+    }
+    
+    func onRemovedBrand(name: String) {
+        updatePossibleList()
+    }
     
     // was used to expand the quick add embedded view controller to fill available space when adding group items. Maybe will be used again in the future.
     //    func setContentViewExpanded(expanded: Bool, myTopOffset: CGFloat, originalFrame: CGRect) {

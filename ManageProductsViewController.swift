@@ -292,6 +292,14 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         })
     }
     
+    func onRemovedSectionCategoryName(name: String) {
+        clearAndLoadFirstPage()
+    }
+    
+    func onRemovedBrand(name: String) {
+        clearAndLoadFirstPage()
+    }
+    
     // MARK: -
     
     private func indexPathForProduct(product: Product) -> NSIndexPath? {

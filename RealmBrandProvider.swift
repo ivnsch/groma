@@ -31,6 +31,17 @@ class RealmBrandProvider: RealmProvider {
         }
     }
     
+    func removeProductsWithBrand(brandName: String, markForSync: Bool, _ handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            let dbProducts = realm.objects(DBProduct).filter(DBProduct.createFilterBrand(brandName))
+            for dbProduct in dbProducts {
+                DBProviders.productProvider.deleteProductAndDependenciesSync(realm, dbProduct: dbProduct, markForSync: markForSync)
+            }
+            return true
+            }, finishHandler: {savedMaybe in
+                handler(savedMaybe ?? false)
+        })
+    }
     
     func updateBrand(oldName: String, newName: String, _ handler: Bool -> Void) {
         doInWriteTransaction({realm in

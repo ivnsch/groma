@@ -16,7 +16,7 @@ protocol BrandProvider {
     
     func updateBrand(oldName: String, newName: String, _ handler: ProviderResult<Any> -> Void)
     
-    func removeBrand(name: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func removeProductsWithBrand(name: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
     func brandsContainingText(text: String, range: NSRange, _ handler: ProviderResult<[String]> -> Void)
 }

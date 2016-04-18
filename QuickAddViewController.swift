@@ -29,6 +29,9 @@ protocol QuickAddDelegate {
     func parentViewForAddButton() -> UIView
     
     func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void)
+    
+    func onRemovedSectionCategoryName(name: String)
+    func onRemovedBrand(name: String)
 }
 
 private enum AddProductOrGroupContent {
@@ -269,6 +272,14 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void) {
         delegate?.addEditSectionOrCategoryColor(name, handler: handler)
+    }
+    
+    func onRemovedSectionCategoryName(name: String) {
+        delegate?.onRemovedSectionCategoryName(name)
+    }
+    
+    func onRemovedBrand(name: String) {
+        delegate?.onRemovedBrand(name)
     }
     
     // Not using plan for now

@@ -118,51 +118,50 @@ class RealmProductProvider: RealmProvider {
     
     // Note: This is expected to be called from inside a transaction and in a background operation
     func deleteProductAndDependenciesSync(realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
-        if deleteProductDependenciesSync(realm, productUuid: productUuid, markForSync: markForSync) {
-            if let productResult = realm.objects(DBProduct).filter(DBProduct.createFilter(productUuid)).first {
-                realm.delete(productResult)
-                if markForSync {
-                    let toRemove = DBProductToRemove(productResult)
-                    realm.add(toRemove, update: true)
-                }
-                return true
-            } else {
-                return false
-            }
+        if let productResult = realm.objects(DBProduct).filter(DBProduct.createFilter(productUuid)).first {
+            return deleteProductAndDependenciesSync(realm, dbProduct: productResult, markForSync: markForSync)
         } else {
             return false
         }
     }
     
+    func deleteProductAndDependenciesSync(realm: Realm, dbProduct: DBProduct, markForSync: Bool) -> Bool {
+        if deleteProductDependenciesSync(realm, productUuid: dbProduct.uuid, markForSync: markForSync) {
+            if markForSync {
+                let toRemove = DBProductToRemove(dbProduct)
+                realm.add(toRemove, update: true)
+            }
+            realm.delete(dbProduct)
+            return true
+        } else {
+            return false
+        }
+    }
     
     // Note: This is expected to be called from inside a transaction and in a background operation
     func deleteProductDependenciesSync(realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
-        let listItemResult = realm.objects(DBListItem).filter(DBListItem.createFilterWithProduct(productUuid))
-        realm.delete(listItemResult)
-        if markForSync {
-            let toRemoveListItems = listItemResult.map{DBRemoveListItem($0)}
-            saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
-        }
+        
+        DBProviders.storeProductProvider.deleteStoreProductsAndDependenciesForProductSync(realm, productUuid: productUuid, markForSync: markForSync)
         
         let inventoryResult = realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilterWithProduct(productUuid))
-        realm.delete(inventoryResult)
         if markForSync {
             let toRemoteInventoryItems = inventoryResult.map{DBRemoveInventoryItem($0)}
             saveObjsSyncInt(realm, objs: toRemoteInventoryItems, update: true)
         }
+        realm.delete(inventoryResult)
         
         let historyResult = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilterWithProduct(productUuid))
-        realm.delete(historyResult)
         if markForSync {
             let toRemoteHistoryItems = historyResult.map{DBRemoveHistoryItem($0)}
             saveObjsSyncInt(realm, objs: toRemoteHistoryItems, update: true)
         }
+        realm.delete(historyResult)
         
         let planResult = realm.objects(DBPlanItem).filter(DBPlanItem.createFilterWithProduct(productUuid))
-        realm.delete(planResult)
         if markForSync {
             // TODO plan items either complete or remove this table entirely
         }
+        realm.delete(planResult)
         
         return true
     }

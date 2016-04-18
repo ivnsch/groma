@@ -78,9 +78,13 @@ class DBStoreProduct: DBSyncable {
     static func createFilterStore(store: String) -> String {
         return "store == '\(store)'"
     }
+
+    static func createFilterProduct(productUuid: String) -> String {
+        return "productOpt.uuid == '\(productUuid)'"
+    }
     
     static func createFilterProductStore(productUuid: String, store: String) -> String {
-        return "productOpt.uuid == '\(productUuid)' && store == '\(store)'"
+        return "\(createFilterProduct(productUuid)) && store == '\(store)'"
     }
 
     static func createFilterProductsStores(products: [Product], store: String) -> String {
