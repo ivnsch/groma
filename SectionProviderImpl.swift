@@ -74,9 +74,12 @@ class SectionProviderImpl: SectionProvider {
     }
     
     func removeAllWithName(sectionName: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        Providers.listItemsProvider.invalidateMemCache()
+
         DBProviders.sectionProvider.removeAllWithName(sectionName, markForSync: true) {[weak self] removedSectionsMaybe in
             if let removedSections = removedSectionsMaybe {
+                
+                Providers.listItemsProvider.invalidateMemCache()
+                
                 handler(ProviderResult(status: .Success))
                 
                 if remote {
@@ -102,27 +105,33 @@ class SectionProviderImpl: SectionProvider {
     }
     
     func update(sections: [Section], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        Providers.listItemsProvider.invalidateMemCache()
+
         DBProviders.sectionProvider.update(sections) {[weak self] updated in
             handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
-            if updated && remote {
+            
+            if updated {
                 
-                self?.remoteProvider.updateSections(sections) {remoteResult in
-                    if let timestamp = remoteResult.successResult {
-                        let updateDicts: [[String: AnyObject]] = sections.map {
-                            DBSyncable.timestampUpdateDict($0.uuid, lastServerUpdate: timestamp)
-                        }
-                        DBProviders.sectionProvider.updateLastSyncTimeStamps(updateDicts) {success in
-                            if !success {
-                                QL4("Couldn't update last server update timestamps for sections: \(sections)")
+                Providers.listItemsProvider.invalidateMemCache()
+                
+                if remote {
+                    
+                    self?.remoteProvider.updateSections(sections) {remoteResult in
+                        if let timestamp = remoteResult.successResult {
+                            let updateDicts: [[String: AnyObject]] = sections.map {
+                                DBSyncable.timestampUpdateDict($0.uuid, lastServerUpdate: timestamp)
                             }
+                            DBProviders.sectionProvider.updateLastSyncTimeStamps(updateDicts) {success in
+                                if !success {
+                                    QL4("Couldn't update last server update timestamps for sections: \(sections)")
+                                }
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                                QL4("Remote call no success: \(remoteResult) items: \(sections)")
+                                Providers.listItemsProvider.invalidateMemCache()
+                                handler(result)
+                            })
                         }
-                    } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
-                            QL4("Remote call no success: \(remoteResult) items: \(sections)")
-                            Providers.listItemsProvider.invalidateMemCache()
-                            handler(result)
-                        })
                     }
                 }
             }
