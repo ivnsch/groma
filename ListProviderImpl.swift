@@ -157,7 +157,7 @@ class ListProviderImpl: ListProvider {
         // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
         
         // TODO when removing and item doesn't exist shouldn't we return an error (currently at least local db returns success)?
-        DBProviders.listProvider.remove(listUuid, markForSync: true, handler: {[weak self] removed in
+        DBProviders.listProvider.remove(listUuid, markForSync: remote, handler: {[weak self] removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseSavingError))
             if removed {
                 if remote {
