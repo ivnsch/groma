@@ -232,7 +232,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         let product1 = Product(uuid: uuid, name: "Birnen", category: fruitsCat, brand: "")
 
         let inventory1 = Inventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreenColor(), order: 0)
-        DBProviders.inventoryProvider.saveInventory(inventory1) {saved in
+        DBProviders.inventoryProvider.saveInventory(inventory1, dirty: true) {saved in
         
             let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0, inventory: inventory1, store: nil)
             DBProviders.listProvider.saveList(list1) {result in
@@ -311,7 +311,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         let storeProduct19 = StoreProduct(uuid: uuid, price: 0.7, baseQuantity: 1, unit: .None, store: "", product: product19)
         
         let inventory1 = Inventory(uuid: uuid, name: "My Home inventory", bgColor: UIColor.flatGreenColor(), order: 0)
-        DBProviders.inventoryProvider.saveInventory(inventory1) {[weak self] saved in
+        DBProviders.inventoryProvider.saveInventory(inventory1, dirty: true) {[weak self] saved in
             
             func inventoryItem(quantityDelta quantityDelta: Int, product: Product, inventory: Inventory) -> InventoryItem {
                 return InventoryItem(uuid: uuid, quantity: quantityDelta, quantityDelta: quantityDelta, product: product, inventory: inventory)
@@ -472,7 +472,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 //                return InventoryItemWithHistoryEntry(inventoryItem: inventoryItem, historyItemUuid: "111\(i)", addedDate: NSDate().toMillis(), user: user)
 //            }
             
-            DBProviders.inventoryItemProvider.add(inventoryWithHistoryItems/* + moreItems*/) {saved in
+            DBProviders.inventoryItemProvider.add(inventoryWithHistoryItems/* + moreItems*/, dirty: true) {saved in
                 
                 let list1 = List(uuid: uuid, name: "My first list", bgColor: RandomFlatColorWithShade(.Dark), order: 0, inventory: inventory1, store: nil)
                 DBProviders.listProvider.saveList(list1) {result in

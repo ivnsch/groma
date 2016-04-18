@@ -12,7 +12,7 @@ class PlanItemMapper {
 
     class func dbWith(planItem: PlanItem) -> DBPlanItem {
         let dbPlanItem = DBPlanItem()
-        dbPlanItem.inventory = InventoryMapper.dbWithInventory(planItem.inventory)
+        dbPlanItem.inventory = InventoryMapper.dbWithInventory(planItem.inventory, dirty: true) // FIXME dirty: true no particular reason, since not using plan just want it to compile
         dbPlanItem.product  = ProductMapper.dbWithProduct(planItem.product)
         dbPlanItem.quantity = planItem.quantity
         if let lastServerUpdate = planItem.lastServerUpdate {

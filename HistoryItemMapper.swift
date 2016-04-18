@@ -10,10 +10,10 @@ import Foundation
 
 class HistoryItemMapper {
 
-    class func dbWithHistoryItem(historyItem: HistoryItem) -> DBHistoryItem {
+    class func dbWithHistoryItem(historyItem: HistoryItem, dirty: Bool) -> DBHistoryItem {
         let dbHistoryItem = DBHistoryItem()
         dbHistoryItem.uuid = historyItem.uuid
-        dbHistoryItem.inventory = InventoryMapper.dbWithInventory(historyItem.inventory)
+        dbHistoryItem.inventory = InventoryMapper.dbWithInventory(historyItem.inventory, dirty: dirty)
         dbHistoryItem.product  = ProductMapper.dbWithProduct(historyItem.product)
         dbHistoryItem.addedDate = historyItem.addedDate
         dbHistoryItem.quantity = historyItem.quantity
@@ -22,13 +22,14 @@ class HistoryItemMapper {
         if let lastServerUpdate = historyItem.lastServerUpdate {
             dbHistoryItem.lastServerUpdate = lastServerUpdate
         }
+        dbHistoryItem.dirty = dirty
         return dbHistoryItem
     }
     
-    class func dbWith(inventoryItemWithHistory: InventoryItemWithHistoryEntry) -> DBHistoryItem {
+    class func dbWith(inventoryItemWithHistory: InventoryItemWithHistoryEntry, dirty: Bool) -> DBHistoryItem {
         let dbHistoryItem = DBHistoryItem()
         dbHistoryItem.uuid = inventoryItemWithHistory.historyItemUuid
-        dbHistoryItem.inventory = InventoryMapper.dbWithInventory(inventoryItemWithHistory.inventoryItem.inventory)
+        dbHistoryItem.inventory = InventoryMapper.dbWithInventory(inventoryItemWithHistory.inventoryItem.inventory, dirty: dirty)
         dbHistoryItem.product  = ProductMapper.dbWithProduct(inventoryItemWithHistory.inventoryItem.product)
         dbHistoryItem.addedDate = inventoryItemWithHistory.addedDate
         dbHistoryItem.quantity = inventoryItemWithHistory.inventoryItem.quantityDelta
@@ -37,6 +38,7 @@ class HistoryItemMapper {
         if let lastServerUpdate = inventoryItemWithHistory.inventoryItem.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
             dbHistoryItem.lastServerUpdate = lastServerUpdate
         }
+        dbHistoryItem.dirty = dirty
         return dbHistoryItem
     }
     

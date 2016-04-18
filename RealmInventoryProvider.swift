@@ -77,8 +77,8 @@ class RealmInventoryProvider: RealmProvider {
         self.load(mapper, filter: DBInventoryItem.createFilterInventory(inventory.uuid), /*range: range, sortDescriptor: NSSortDescriptor(key: sortFieldStr, ascending: false), */handler: handler)
     }
     
-    func saveInventory(inventory: Inventory, update: Bool = true, handler: Bool -> ()) {
-        self.saveInventories([inventory], update: update, handler: handler)
+    func saveInventory(inventory: Inventory, update: Bool = true, dirty: Bool, handler: Bool -> ()) {
+        self.saveInventories([inventory], update: update, dirty: dirty, handler: handler)
     }
     
     func updateInventoriesOrder(orderUpdates: [OrderUpdate], dirty: Bool, _ handler: Bool -> Void) {
@@ -118,8 +118,8 @@ class RealmInventoryProvider: RealmProvider {
         }
     }
     
-    func saveInventories(inventories: [Inventory], update: Bool = true, handler: Bool -> ()) {
-        let dbInventories = inventories.map{InventoryMapper.dbWithInventory($0)}
+    func saveInventories(inventories: [Inventory], update: Bool = true, dirty: Bool, handler: Bool -> ()) {
+        let dbInventories = inventories.map{InventoryMapper.dbWithInventory($0, dirty: dirty)}
         saveInventories(dbInventories, handler: handler)
     }
     
@@ -127,8 +127,8 @@ class RealmInventoryProvider: RealmProvider {
         self.saveObjs(inventories, update: update, handler: handler)
     }
     
-    func overwrite(inventories: [Inventory], clearTombstones: Bool, handler: Bool -> Void) {
-        let dbInventories = inventories.map{InventoryMapper.dbWithInventory($0)}
+    func overwrite(inventories: [Inventory], clearTombstones: Bool, dirty: Bool, handler: Bool -> Void) {
+        let dbInventories = inventories.map{InventoryMapper.dbWithInventory($0, dirty: dirty)}
         let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteAll(DBRemoveInventory)} : nil
         self.overwrite(dbInventories, resetLastUpdateToServer: true, idExtractor: {$0.uuid}, additionalActions: additionalActions, handler: handler)
     }

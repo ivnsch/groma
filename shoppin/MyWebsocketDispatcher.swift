@@ -707,7 +707,7 @@ struct MyWebsocketDispatcher {
         case WSNotificationVerb.Add:
             if let inventoryItemsWithHistoryAndDependencies = RemoteInventoryItemsWithHistoryAndDependencies(representation: data) {
                 let (inventoryItems, historyItems) = InventoryItemMapper.itemsWithRemote(inventoryItemsWithHistoryAndDependencies)
-                Providers.inventoryItemsProvider.addToInventoryLocal(inventoryItems, historyItems: historyItems) {result in
+                Providers.inventoryItemsProvider.addToInventoryLocal(inventoryItems, historyItems: historyItems, dirty: false) {result in
                     if result.success {
                         postNotification(.Inventory, verb, sender, inventoryItems)
                         postNotification(.HistoryItem, verb, sender, historyItems)

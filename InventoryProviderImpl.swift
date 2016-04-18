@@ -28,7 +28,7 @@ class InventoryProviderImpl: InventoryProvider {
                         
                         if dbInventories != sortedInventories {
                             
-                            self.dbInventoryProvider.overwrite(sortedInventories, clearTombstones: true) {saved in
+                            self.dbInventoryProvider.overwrite(sortedInventories, clearTombstones: true, dirty: false) {saved in
                                 if saved {
                                     handler(ProviderResult(status: .Success, sucessResult: sortedInventories))
                                     
@@ -88,7 +88,7 @@ class InventoryProviderImpl: InventoryProvider {
 //    }
     
     func addInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        self.dbInventoryProvider.saveInventory(inventory) {[weak self] saved in
+        self.dbInventoryProvider.saveInventory(inventory, dirty: remote) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 if remote {
@@ -114,7 +114,7 @@ class InventoryProviderImpl: InventoryProvider {
     }
     
     func updateInventory(inventory: Inventory, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbInventoryProvider.saveInventory(inventory, update: true) {[weak self] saved in
+        dbInventoryProvider.saveInventory(inventory, update: true, dirty: remote) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             if remote {
                 self?.remoteProvider.updateInventory(inventory) {remoteResult in
@@ -158,7 +158,7 @@ class InventoryProviderImpl: InventoryProvider {
     }
 
     func removeInventory(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbInventoryProvider.removeInventory(uuid, markForSync: true) {[weak self] removed in
+        dbInventoryProvider.removeInventory(uuid, markForSync: remote) {[weak self] removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
             if removed {
                 

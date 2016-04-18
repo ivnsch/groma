@@ -59,7 +59,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
 
     func add(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        dbGroupsProvider.add(group) {[weak self] saved in
+        dbGroupsProvider.add(group, dirty: remote) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseSavingError))
 
             if saved && remote {
@@ -97,7 +97,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
 
     func update(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        dbGroupsProvider.update(group) {[weak self] saved in
+        dbGroupsProvider.update(group, dirty: remote) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseSavingError))
             
             if saved && remote {
@@ -116,7 +116,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     func update(groups: [ListItemGroup], remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        dbGroupsProvider.update(groups) {[weak self] saved in
+        dbGroupsProvider.update(groups, dirty: remote) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseSavingError))
             
             if saved && remote {
@@ -139,7 +139,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
 
     func removeGroup(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        dbGroupsProvider.removeGroup(uuid, markForSync: true) {[weak self] saved in
+        dbGroupsProvider.removeGroup(uuid, markForSync: remote) {[weak self] saved in
             handler(ProviderResult(status: saved ? .Success : .DatabaseUnknown))
             
             if saved && remote {

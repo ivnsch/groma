@@ -22,13 +22,13 @@ class InventoryItemMapper {
         return InventoryItem(uuid: remoteItem.inventoryItem.uuid, quantity: remoteItem.inventoryItem.quantity, product: product, inventory: inventory, lastServerUpdate: remoteItem.inventoryItem.lastUpdate)
     }
     
-    class func dbWithInventoryItem(item: InventoryItem) -> DBInventoryItem {
+    class func dbWithInventoryItem(item: InventoryItem, dirty: Bool) -> DBInventoryItem {
         let db = DBInventoryItem()
         db.uuid = item.uuid
         db.quantity = item.quantity
         db.quantityDelta = item.quantityDelta
         db.product = ProductMapper.dbWithProduct(item.product)
-        db.inventory = InventoryMapper.dbWithInventory(item.inventory)
+        db.inventory = InventoryMapper.dbWithInventory(item.inventory, dirty: dirty)
         if let lastServerUpdate = item.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
             db.lastServerUpdate = lastServerUpdate
         }

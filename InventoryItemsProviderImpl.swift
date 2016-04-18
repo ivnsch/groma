@@ -45,7 +45,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     let inventoryItemsInRange = inventoryItems[range]
                     
                     if (dbInventoryItems != inventoryItemsInRange) {
-                        DBProviders.inventoryItemProvider.overwrite(inventoryItems, inventoryUuid: inventory.uuid, clearTombstones: true) {saved in // if items in range are not equal overwritte with all the items
+                        DBProviders.inventoryItemProvider.overwrite(inventoryItems, inventoryUuid: inventory.uuid, clearTombstones: true, dirty: false) {saved in // if items in range are not equal overwritte with all the items
                             handler(ProviderResult(status: .Success, sucessResult: inventoryItemsInRange))
                             self?.memProvider.overwrite(inventoryItems)
                         }
@@ -82,7 +82,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
     
     func addToInventory(inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<[InventoryItemWithHistoryEntry]> -> Void) {
-        DBProviders.inventoryItemProvider.addOrIncrementInventoryItemWithInput(itemInputs, inventory: inventory) {[weak self] addOrIncrementInventoryItemsWithInputMaybe in
+        DBProviders.inventoryItemProvider.addOrIncrementInventoryItemWithInput(itemInputs, inventory: inventory, dirty: remote) {[weak self] addOrIncrementInventoryItemsWithInputMaybe in
 
             if let addOrIncrementInventoryItemWithInput = addOrIncrementInventoryItemsWithInputMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: addOrIncrementInventoryItemWithInput))
@@ -149,8 +149,8 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 //        }
 //    }
     
-    func addToInventoryLocal(inventoryItems: [InventoryItem], historyItems: [HistoryItem], handler: ProviderResult<Any> -> Void) {
-        DBProviders.inventoryItemProvider.saveInventoryAndHistoryItem(inventoryItems, historyItems: historyItems) {success in
+    func addToInventoryLocal(inventoryItems: [InventoryItem], historyItems: [HistoryItem], dirty: Bool, handler: ProviderResult<Any> -> Void) {
+        DBProviders.inventoryItemProvider.saveInventoryAndHistoryItem(inventoryItems, historyItems: historyItems, dirty: dirty) {success in
             if success {
                 handler(ProviderResult(status: .Success))
             } else {
@@ -221,7 +221,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
             handler(ProviderResult(status: .Success))
         }
         
-        DBProviders.inventoryItemProvider.incrementInventoryItem(item, delta: delta, onlyDelta: false) {[weak self] saved in
+        DBProviders.inventoryItemProvider.incrementInventoryItem(item, delta: delta, onlyDelta: false, dirty: remote) {[weak self] saved in
             
             if !memIncremented { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
                 if saved {
@@ -259,7 +259,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     func updateInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         memProvider.updateInventoryItem(item)
         
-        DBProviders.inventoryItemProvider.saveInventoryItems([item]) {[weak self] updated in
+        DBProviders.inventoryItemProvider.saveInventoryItems([item], dirty: remote) {[weak self] updated in
             if !updated {
                 self?.memProvider.invalidate()
             }

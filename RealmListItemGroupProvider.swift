@@ -41,17 +41,17 @@ class RealmListItemGroupProvider: RealmProvider {
     }
     
     // TODO add group -> update: false, but show an alert to the user that group already exists instead of crash
-    func add(group: ListItemGroup, handler: Bool -> Void) {
-        update(group, handler: handler)
+    func add(group: ListItemGroup, dirty: Bool, handler: Bool -> Void) {
+        update(group, dirty: dirty, handler: handler)
     }
 
-    func update(group: ListItemGroup, handler: Bool -> Void) {
-        let dbObj = ListItemGroupMapper.dbWith(group)
+    func update(group: ListItemGroup, dirty: Bool, handler: Bool -> Void) {
+        let dbObj = ListItemGroupMapper.dbWith(group, dirty: dirty)
         saveObj(dbObj, update: true, handler: handler)
     }
     
-    func update(groups: [ListItemGroup], handler: Bool -> Void) {
-        let dbObjs = groups.map{ListItemGroupMapper.dbWith($0)}
+    func update(groups: [ListItemGroup], dirty: Bool, handler: Bool -> Void) {
+        let dbObjs = groups.map{ListItemGroupMapper.dbWith($0, dirty: dirty)}
         saveObjs(dbObjs, update: true, handler: handler)
     }
     

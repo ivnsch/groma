@@ -10,7 +10,7 @@ import Foundation
 
 class ListItemGroupMapper {
     
-    class func dbWith(listItemGroup: ListItemGroup) -> DBListItemGroup {
+    class func dbWith(listItemGroup: ListItemGroup, dirty: Bool = true) -> DBListItemGroup {
         let dbListItemGroup = DBListItemGroup()
         dbListItemGroup.uuid = listItemGroup.uuid
         dbListItemGroup.name = listItemGroup.name
@@ -21,6 +21,7 @@ class ListItemGroupMapper {
         if let lastServerUpdate = listItemGroup.lastServerUpdate {
             dbListItemGroup.lastServerUpdate = lastServerUpdate
         }
+        dbListItemGroup.dirty = dirty
         return dbListItemGroup
     }
     

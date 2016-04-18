@@ -17,7 +17,7 @@ class ListMapper {
         dbList.name = list.name
         dbList.setBgColor(list.bgColor)
         dbList.order = list.order
-        dbList.inventory = InventoryMapper.dbWithInventory(list.inventory)
+        dbList.inventory = InventoryMapper.dbWithInventory(list.inventory, dirty: dirty)
         dbList.storeOpt = list.store
         let dbSharedUsers = list.users.map{SharedUserMapper.dbWithSharedUser($0)}
         for dbObj in dbSharedUsers {

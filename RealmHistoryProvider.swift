@@ -15,7 +15,7 @@ class RealmHistoryProvider: RealmProvider {
     private lazy var historySortDescriptor: NSSortDescriptor = NSSortDescriptor(key: "addedDate", ascending: false)
     
     func add(historyItem: HistoryItem, handler: Bool -> ()) {
-        let dbObj = HistoryItemMapper.dbWithHistoryItem(historyItem)
+        let dbObj = HistoryItemMapper.dbWithHistoryItem(historyItem, dirty: true)
         self.saveObj(dbObj, update: false, handler: handler)
     }
     
@@ -100,7 +100,7 @@ class RealmHistoryProvider: RealmProvider {
     }
     
     
-    func saveHistoryItems(historyItems: RemoteHistoryItems, handler: Bool -> ()) {
+    func saveHistoryItems(historyItems: RemoteHistoryItems, dirty: Bool, handler: Bool -> ()) {
         
         self.doInWriteTransaction({[weak self] realm in
             
@@ -108,7 +108,7 @@ class RealmHistoryProvider: RealmProvider {
             
             let historyItemsWithRelations = HistoryItemMapper.historyItemsWithRemote(historyItems)
             
-            self?.saveHistoryItemsHelper(realm, historyItemsWithRelations: historyItemsWithRelations)
+            self?.saveHistoryItemsHelper(realm, dirty: dirty, historyItemsWithRelations: historyItemsWithRelations)
             
             return true
             
@@ -119,13 +119,13 @@ class RealmHistoryProvider: RealmProvider {
     }
 
     // Overwrites all the history items
-    func saveHistoryItems(historyItemsWithRelations: HistoryItemsWithRelations, handler: Bool -> ()) {
+    func saveHistoryItems(historyItemsWithRelations: HistoryItemsWithRelations, dirty: Bool, handler: Bool -> ()) {
         
         self.doInWriteTransaction({[weak self] realm in
             
             realm.delete(realm.objects(DBHistoryItem))
             
-            self?.saveHistoryItemsHelper(realm, historyItemsWithRelations: historyItemsWithRelations)
+            self?.saveHistoryItemsHelper(realm, dirty: dirty, historyItemsWithRelations: historyItemsWithRelations)
             
             return true
             
@@ -137,11 +137,11 @@ class RealmHistoryProvider: RealmProvider {
     
     
     // common code, note that this is expected to be executed in a transaction
-    private func saveHistoryItemsHelper(realm: Realm, historyItemsWithRelations: HistoryItemsWithRelations) {
+    private func saveHistoryItemsHelper(realm: Realm, dirty: Bool, historyItemsWithRelations: HistoryItemsWithRelations) {
         
         // save inventory items
         for inventory in historyItemsWithRelations.inventories {
-            let dbInventory = InventoryMapper.dbWithInventory(inventory)
+            let dbInventory = InventoryMapper.dbWithInventory(inventory, dirty: dirty)
             realm.add(dbInventory, update: true) // since we don't delete products (see comment above) we do update
         }
         
@@ -156,13 +156,13 @@ class RealmHistoryProvider: RealmProvider {
         }
         
         for historyItem in historyItemsWithRelations.historyItems {
-            let dbHistoryItem = HistoryItemMapper.dbWithHistoryItem(historyItem)
+            let dbHistoryItem = HistoryItemMapper.dbWithHistoryItem(historyItem, dirty: dirty)
             realm.add(dbHistoryItem, update: true)
         }
     }
     
     func saveHistoryItemsSyncResult(historyItems: RemoteHistoryItems, handler: Bool -> ()) {
-        self.saveHistoryItems(historyItems, handler: handler)
+        self.saveHistoryItems(historyItems, dirty: false, handler: handler)
     }
     
     func removeHistoryItem(uuid: String, markForSync: Bool, handler: Bool -> Void) {
@@ -239,7 +239,7 @@ class RealmHistoryProvider: RealmProvider {
     
     func addHistoryItems(historyItems: [HistoryItem], handler: Bool -> Void) {
         doInWriteTransaction({realm in
-            let dbHistoryItems: [DBHistoryItem] = historyItems.map{HistoryItemMapper.dbWithHistoryItem($0)}
+            let dbHistoryItems: [DBHistoryItem] = historyItems.map{HistoryItemMapper.dbWithHistoryItem($0, dirty: true)}
             for dbHistoryItem in dbHistoryItems {
                 realm.add(dbHistoryItem, update: true)
             }
