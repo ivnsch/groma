@@ -17,8 +17,8 @@ class RealmListProvider: RealmProvider {
         self.saveObj(dbList, update: true, handler: handler)
     }
     
-    func saveLists(lists: [List], update: Bool = false, handler: Bool -> ()) {
-        let dbLists = lists.map{ListMapper.dbWithList($0)}
+    func saveLists(lists: [List], update: Bool = false, dirty: Bool = true, handler: Bool -> ()) {
+        let dbLists = lists.map{ListMapper.dbWithList($0, dirty: dirty)}
         saveLists(dbLists, update: update, handler: handler)
     }
     

@@ -101,7 +101,7 @@ class ListProviderImpl: ListProvider {
     
     // TODO! do we still need to update a list array? this use case should be covered now with updateListsOrder?
     func update(lists: [List], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        DBProviders.listProvider.saveLists(lists, update: true) {[weak self] updated in
+        DBProviders.listProvider.saveLists(lists, update: true, dirty: remote) {[weak self] updated in
             handler(ProviderResult(status: updated ? .Success : .DatabaseSavingError))
             if updated {
                 if remote {
