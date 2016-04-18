@@ -258,9 +258,6 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             } else {
                 QL4("No value")
             }
-            
-        } else {
-            QL4("userInfo not there or couldn't be casted: \(note.userInfo)")
         }
     }
     
