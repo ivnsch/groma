@@ -12,8 +12,8 @@ import QorumLogs
 
 class RealmListProvider: RealmProvider {
 
-    func saveList(list: List, handler: Bool -> ()) {
-        let dbList = ListMapper.dbWithList(list)
+    func saveList(list: List, dirty: Bool = true, handler: Bool -> ()) {
+        let dbList = ListMapper.dbWithList(list, dirty: dirty)
         self.saveObj(dbList, update: true, handler: handler)
     }
     

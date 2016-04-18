@@ -70,7 +70,8 @@ class ListProviderImpl: ListProvider {
         // TODO ensure that in add list case the list is persisted / is never deleted
         // it can be that the user adds it, and we add listitem to tableview immediately to make it responsive
         // but then the background service call fails so nothing is added in the server or db and the user adds 100 items to the list and restarts the app and everything is lost!
-        DBProviders.listProvider.saveList(list, handler: {[weak self] saved in
+        // remote -> dirty: if we want to upload to server, it means item has to be marked as dirty
+        DBProviders.listProvider.saveList(list, dirty: remote, handler: {[weak self] saved in
             
             if saved {
                 handler(ProviderResult(status: .Success, sucessResult: list))
