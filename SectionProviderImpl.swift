@@ -75,10 +75,28 @@ class SectionProviderImpl: SectionProvider {
     
     func removeAllWithName(sectionName: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         Providers.listItemsProvider.invalidateMemCache()
-        DBProviders.sectionProvider.removeAllWithName(sectionName, markForSync: true) {removed in
-            handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
-            if removed && remote {
-                // TODO!! server
+        DBProviders.sectionProvider.removeAllWithName(sectionName, markForSync: true) {[weak self] removedSectionsMaybe in
+            if let removedSections = removedSectionsMaybe {
+                handler(ProviderResult(status: .Success))
+                
+                if remote {
+                    self?.remoteProvider.removeSectionsWithName(sectionName) {remoteResult in
+                        if remoteResult.success {
+                            
+                            let removedSectionsUuids = removedSections.map{$0.uuid}
+                            DBProviders.sectionProvider.clearSectionsTombstones(removedSectionsUuids) {removeTombstoneSuccess in
+                                if !removeTombstoneSuccess {
+                                    QL4("Couldn't delete tombstones for sections: \(removedSections)")
+                                }
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        }
+                    }
+                }
+            } else {
+                QL4("Couldn't remove sections from db for name: \(sectionName)")
+                handler(ProviderResult(status: .DatabaseUnknown))
             }
         }
     }

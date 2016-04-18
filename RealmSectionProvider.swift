@@ -34,7 +34,6 @@ class RealmSectionProvider: RealmProvider {
         self.load(mapper, filter: DBSection.createFilterWithName(name), handler: handler)
     }
 
-    
     func saveSection(section: Section, handler: Bool -> ()) {
         let dbSection = DBSection()
         dbSection.uuid = section.uuid
@@ -52,21 +51,21 @@ class RealmSectionProvider: RealmProvider {
         remove(section.uuid, markForSync: markForSync, handler: handler)
     }
     
-    func removeAllWithName(sectionName: String, markForSync: Bool, handler: Bool -> ()) {
+    func removeAllWithName(sectionName: String, markForSync: Bool, handler: [Section]? -> Void) {
         loadSections(sectionName) {[weak self] sections in guard let weakSelf = self else {return}
             if !sections.isEmpty {
                 weakSelf.doInWriteTransaction({realm in
                     for section in sections {
                         weakSelf.removeSectionAndDependenciesSync(realm, sectionUuid: section.uuid, markForSync: markForSync)
                     }
-                    return true
-                }, finishHandler: {success in
-                    handler(success ?? false)
+                    return sections
+                }, finishHandler: {removedSectionsMaybe in
+                    handler(removedSectionsMaybe)
                 })
                 
             } else {
-                QL3("Didn't find the section to be removed: \(sectionName)")
-                handler(false)
+                QL2("No sections with name: \(sectionName) - nothing to remove") // this is not an error, this can be used e.g. in the autosuggestions where we list also category names.
+                handler([])
             }
         }
     }
@@ -94,19 +93,19 @@ class RealmSectionProvider: RealmProvider {
         
         // delete list items referencing the section
         let dbListItems = realm.objects(DBListItem).filter(DBListItem.createFilterWithSection(sectionUuid))
-        let toRemoveListItems = dbListItems.map{DBRemoveListItem($0)} // create this before the delete or it crashes
-        realm.delete(dbListItems)
         if markForSync {
+            let toRemoveListItems = dbListItems.map{DBRemoveListItem($0)} // create this before the delete or it crashes
             saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
         }
+        realm.delete(dbListItems)
         
         // delete section
         if let dbSection = realm.objects(DBSection).filter(DBSection.createFilter(sectionUuid)).first {
-            let toRemove = DBSectionToRemove(dbSection) // create this before the delete or it crashes TODO!!!! also in other places of the app, this error is in several other providers
-            realm.delete(dbSection)
             if markForSync {
+                let toRemove = DBSectionToRemove(dbSection) // create this before the delete or it crashes TODO!!!! also in other places of the app, this error is in several other providers
                 realm.add(toRemove, update: true)
             }
+            realm.delete(dbSection)
             return true
         } else {
             QL3("Didn't find section to be deleted: \(sectionUuid)")
@@ -143,10 +142,25 @@ class RealmSectionProvider: RealmProvider {
             realm.delete(dbSection)
         }
     }
+
+    func clearSectionsTombstones(uuids: [String], handler: Bool -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            for uuid in uuids {
+                self?.clearSectionTombstoneSync(realm, uuid: uuid)
+            }
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    private func clearSectionTombstoneSync(realm: Realm, uuid: String) {
+        realm.deleteForFilter(DBRemoveSection.self, DBRemoveSection.createFilter(uuid))
+    }
     
     func clearSectionTombstone(uuid: String, handler: Bool -> Void) {
-        doInWriteTransaction({realm in
-            realm.deleteForFilter(DBRemoveSection.self, DBRemoveSection.createFilter(uuid))
+        doInWriteTransaction({[weak self] realm in
+            self?.clearSectionTombstoneSync(realm, uuid: uuid)
             return true
             }, finishHandler: {success in
                 handler(success ?? false)

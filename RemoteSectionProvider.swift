@@ -23,4 +23,10 @@ class RemoteSectionProvider: RemoteProvider {
             handler(result)
         }
     }
+    
+    func removeSectionsWithName(name: String, handler: RemoteResult<NoOpSerializable> -> ()) {
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.sectionsName + "/\(name)") {result in
+            handler(result)
+        }
+    }
 }

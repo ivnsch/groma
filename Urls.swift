@@ -59,6 +59,7 @@ struct Urls {
     // Section
     static let section = host + "section"
     static let sections = host + "sections"
+    static let sectionsName = host + "sections/n"
     
     // Inventory
     static let inventoryItems = host + "inventoryItems"
@@ -99,6 +100,7 @@ struct Urls {
     // Product category
     static let productCategories = host + "productCategories"
     static let productCategory = host + "productCategory"
+    static let productCategoriesName = host + "pcats/n"
     
     // Error report
     static let error = host + "errorRep"

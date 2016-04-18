@@ -98,4 +98,31 @@ class ProductCategoryProviderImpl: ProductCategoryProvider {
             }
         }
     }
+    
+    func removeAllCategoriesWithName(categoryName: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        DBProviders.productCategoryProvider.removeAllWithName(categoryName, markForSync: true) {[weak self] removedCategoriesMaybe in
+            if let removedCategories = removedCategoriesMaybe {
+                handler(ProviderResult(status: .Success))
+                
+                if remote {
+                    self?.remoteCategoryProvider.removeCategoriesWithName(categoryName) {remoteResult in
+                        if remoteResult.success {
+                            
+                            let removedCategoriesUuids = removedCategories.map{$0.uuid}
+                            DBProviders.productCategoryProvider.clearCategoriesTombstones(removedCategoriesUuids) {removeTombstoneSuccess in
+                                if !removeTombstoneSuccess {
+                                    QL4("Couldn't delete tombstones for categories: \(removedCategories)")
+                                }
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        }
+                    }
+                }
+            } else {
+                QL4("Couldn't remove sections from db for name: \(categoryName)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
 }

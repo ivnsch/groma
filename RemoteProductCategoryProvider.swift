@@ -35,4 +35,10 @@ class RemoteProductCategoryProvider {
             handler(result)
         }
     }
+    
+    func removeCategoriesWithName(name: String, handler: RemoteResult<NoOpSerializable> -> ()) {
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.productCategoriesName + "/\(name)") {result in
+            handler(result)
+        }
+    }
 }

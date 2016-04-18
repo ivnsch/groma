@@ -114,9 +114,7 @@ class ListItemProviderImpl: ListItemProvider {
                             }
                         }
                     } else {
-                        DefaultRemoteErrorHandler.handle(result, handler: {(result: ProviderResult<[Any]>) in
-                            print("Error: Removing listItem: \(listItemUuid)")
-                        })
+                        DefaultRemoteErrorHandler.handle(result, handler: handler)
                     }
                 }
             }

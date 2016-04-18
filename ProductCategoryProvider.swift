@@ -28,4 +28,6 @@ protocol ProductCategoryProvider {
     func remove(category: ProductCategory, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
     func remove(categoryUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    
+    func removeAllCategoriesWithName(categoryName: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 }

@@ -526,15 +526,17 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     func onDeleteSuggestion(string: String, sender: MyAutoCompleteTextField) {
         switch sender {
         case sectionInput:
-            ConfirmationPopup.show(title: "Confirmation", message: "Do you want to remove: \(string)?\nThis will remove sections with this name in all lists and all possible listitems inside these sections", okTitle: "Yes", cancelTitle: "No", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+            ConfirmationPopup.show(title: "Confirmation", message: "Do you want to remove: \(string)?\nThis will remove all sections and categories with this name (everywhere in the app) and all associated list, group, inventory and history items", okTitle: "Yes", cancelTitle: "No", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
                 Providers.sectionProvider.removeAllWithName(string, remote: true, weakSelf.successHandler {
-                    AlertPopup.show(message: "Section: \(string) removed", controller: weakSelf)
+                    Providers.productCategoryProvider.removeAllCategoriesWithName(string, remote: true, weakSelf.successHandler {
+                        AlertPopup.show(message: "'\(string)' was removed.", controller: weakSelf)
+                    })
                 })
             })
         case brandInput:
             ConfirmationPopup.show(title: "Confirmation", message: "Do you want to remove: \(string)?\nThis will remove this brand from all your products (everywhere in the app).", okTitle: "Yes", cancelTitle: "No", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
                 Providers.brandProvider.removeBrand(string, remote: true, weakSelf.successHandler {
-                    AlertPopup.show(message: "Brand: \(string) removed", controller: weakSelf)
+                    AlertPopup.show(message: "Brand '\(string)' was removed.", controller: weakSelf)
                 })
             })
         default: QL4("Not handled input")
