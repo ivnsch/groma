@@ -165,7 +165,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         let tableViewListItem = TableViewListItem(listItem: listItem)
         
         let foundSectionMaybe = self.tableViewSections.filter({ (s:ListItemsViewSection) -> Bool in
-            s.section == listItem.section
+            s.section.same(listItem.section)
         }).first
         
         if let foundSection = foundSectionMaybe {
@@ -245,7 +245,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 
                 var finalIndexPath: NSIndexPath?
                 
-                if (oldItem.listItem.section == listItem.section) { // item is already in table view and also has same section
+                if (oldItem.listItem.section.same(listItem.section)) { // item is already in table view and also has same section
                     replaceItemAndRebuildTable(listItem)
                     finalIndexPath = indexPath // item is in the same place as before
                     
@@ -341,7 +341,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                     
                 } else { //the section is in the set, this means it's in the tableViewSections. find it
                     for tableViewSection in tableViewSections {
-                        if tableViewSection.section == listItem.section {
+                        if tableViewSection.section.same(listItem.section) {
                             currentTableViewSection = tableViewSection
                         }
                     }
