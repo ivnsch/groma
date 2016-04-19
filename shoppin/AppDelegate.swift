@@ -151,6 +151,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             PreferencesManager.savePreference(PreferencesManagerKey.hasLaunchedBefore, value: true)
             PreferencesManager.savePreference(PreferencesManagerKey.isFirstLaunch, value: true)
             PreferencesManager.savePreference(PreferencesManagerKey.firstLaunchDate, value: NSDate())
+            
+            // Ensure there's no login token from a previous app installation (token is stored in the keychain, which is not deleted when the app is uninstalled).
+            AccessTokenHelper.removeToken()
+
         } else { // after first launch
             PreferencesManager.savePreference(PreferencesManagerKey.isFirstLaunch, value: false)
         }
