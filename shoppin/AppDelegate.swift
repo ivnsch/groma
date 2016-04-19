@@ -33,6 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
     private var ratingAlert: RatingAlert? // arc
     
+    private let websocketVisualNotificationDuration: Double = 1
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
         initIsFirstLaunch()
@@ -728,10 +730,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             if let sender = info["sender"], category = info["category"], _ = info["verb"] {
                 
                 let categoryText = category.capitalizedString
-                let msg = "Update: \(categoryText): \(sender)"
+                let msg = "\(sender) updated."
                 
-                let notificationView = showBottomNotification(msg, textColor: UIColor.whiteColor(), tag: ViewTags.WebsocketSenderNotification)
-                delay(0.5) {
+                let notificationView = showBottomNotification(msg, textColor: UIColor.blackColor(), tag: ViewTags.WebsocketSenderNotification)
+                delay(websocketVisualNotificationDuration) {
                     notificationView?.removeFromSuperview()
                 }
             } else {
@@ -744,7 +746,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     
     func onWebsocketProcessingError(note: NSNotification) {
         let notificationView = showBottomNotification("Error processing incoming update", textColor: UIColor.whiteColor(), tag: ViewTags.WebsocketErrorNotification)
-        delay(0.5) {
+        delay(websocketVisualNotificationDuration) {
             notificationView?.removeFromSuperview()
         }
     }
