@@ -15,26 +15,39 @@ struct AccessTokenHelper {
     static func loadToken() -> String? {
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
         let maybeToken = valet?.stringForKey(KeychainKeys.token)
-        QL1("Loaded valet token: \(maybeToken)")
+        QL1("Valet has token: \(maybeToken != nil)")
         
         return maybeToken ?? loadPrefsToken()
     }
     
     static func hasToken() -> Bool {
+        
         let valet = VALValet(identifier: KeychainKeys.ValetIdentifier, accessibility: VALAccessibility.AfterFirstUnlock)
-        if let valet = valet {
-            return valet.containsObjectForKey(KeychainKeys.token)
-        } else {
+        let valetHasTokenMaybe = valet?.containsObjectForKey(KeychainKeys.token)
+        
+        func onValetIsNilOrCantAccess() -> Bool {
             let isInPrefs = loadPrefsToken() != nil
-            QL4("Valet token set, is in prefs?: \(isInPrefs)")
+            QL2("No valet token, is it in prefs?: \(isInPrefs)")
             return isInPrefs
+        }
+        
+        if let valet = valet {
+            if valet.canAccessKeychain() {
+                return valet.containsObjectForKey(KeychainKeys.token)
+            } else {
+                QL4("Valet can't access keychain")
+                return onValetIsNilOrCantAccess()
+            }
+        } else {
+            QL4("Valet is nil")
+            return onValetIsNilOrCantAccess()
         }
     }
     
     static func storeToken(token: String) {
         
         func afterStoredToken() {
-            QL1("Stored token: \(token)")
+            QL1("Stored token")
             PreferencesManager.savePreference(PreferencesManagerKey.lastTokenUpdate, value: NSDate())
         }
         
@@ -79,6 +92,7 @@ struct AccessTokenHelper {
     // MARK: - Prefs
     
     private static func loadPrefsToken() -> String? {
+        QL1("Loading token from prefs")
         return PreferencesManager.loadPreference(PreferencesManagerKey.loginTokenFallback)
     }
     
