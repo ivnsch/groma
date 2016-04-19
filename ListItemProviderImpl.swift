@@ -273,7 +273,7 @@ class ListItemProviderImpl: ListItemProvider {
         sectionAndProductForAddUpdate(listItemInput, list: list, possibleNewSectionOrder: nil) {[weak self] result in
             if let (section, product) = result.sucessResult {
                 
-                let storeProduct = StoreProduct(uuid: updatingListItem.product.product.uuid, price: listItemInput.price, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, store: updatingListItem.list.store ?? "", product: product) // possible store product update
+                let storeProduct = StoreProduct(uuid: updatingListItem.product.uuid, price: listItemInput.price, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, store: updatingListItem.list.store ?? "", product: product) // possible store product update
                 
                 let listItem = ListItem(
                     uuid: updatingListItem.uuid,
