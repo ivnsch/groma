@@ -657,7 +657,7 @@ struct MyWebsocketDispatcher {
             
         case WSNotificationVerb.Delete:
             if let inventoryUuid = data as? String {
-                Providers.listProvider.remove(inventoryUuid, remote: false) {result in
+                Providers.inventoryProvider.removeInventory(inventoryUuid, remote: false) {result in
                     if result.success {
                         postNotification(.Inventory, verb, sender, inventoryUuid)
                     } else {
