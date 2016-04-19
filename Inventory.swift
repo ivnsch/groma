@@ -62,8 +62,12 @@ class Inventory: Equatable, Identifiable, Hashable {
             removed: removed ?? self.removed
         )
     }
+    
+    func equalsExcludingSyncAttributes(rhs: Inventory) -> Bool {
+        return uuid == rhs.uuid && name == rhs.name && bgColor == rhs.bgColor && order == rhs.order && users == rhs.users
+    }
 }
 
 func ==(lhs: Inventory, rhs: Inventory) -> Bool {
-    return lhs.uuid == rhs.uuid && lhs.name == rhs.name && lhs.users == rhs.users && lhs.bgColor.hexStr == rhs.bgColor.hexStr && lhs.order == rhs.order
+    return lhs.equalsExcludingSyncAttributes(rhs) && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
 }

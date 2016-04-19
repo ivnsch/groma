@@ -412,11 +412,15 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         doneQuantity = fieldQuantity(.Done, status: status, targetStatus: targetStatus)
         stashQuantity = fieldQuantity(.Stash, status: status, targetStatus: targetStatus)
     }
+    
+    func equalsExcludingSyncAttributes(rhs: ListItem) -> Bool {
+        return uuid == rhs.uuid && product == rhs.product && section == rhs.section && list == rhs.list && note == rhs.note && todoQuantity == rhs.todoQuantity && todoOrder == rhs.todoOrder && doneQuantity == rhs.doneQuantity && doneOrder == rhs.doneOrder && stashQuantity == rhs.stashQuantity && stashOrder == rhs.stashOrder
+    }
 }
 
-// TODO implement equality correctly, also in other model classes. Now we have Identifiable for this.
+
 func ==(lhs: ListItem, rhs: ListItem) -> Bool {
-    return lhs.uuid == rhs.uuid && lhs.product == rhs.product && lhs.section == rhs.section && lhs.list == rhs.list && lhs.note == rhs.note && lhs.todoQuantity == rhs.todoQuantity && lhs.todoOrder == rhs.todoOrder && lhs.doneQuantity == rhs.doneQuantity && lhs.doneOrder == rhs.doneOrder && lhs.stashQuantity == rhs.stashQuantity && lhs.stashOrder == rhs.stashOrder
+    return lhs.equalsExcludingSyncAttributes(rhs) && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
 }
 
 // convenience (redundant) holder to avoid having to iterate through listitems to find unique products, sections, list

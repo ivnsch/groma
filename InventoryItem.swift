@@ -70,8 +70,12 @@ class InventoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     func incrementQuantityCopy(delta: Int) -> InventoryItem {
         return copy(quantity: quantity + delta, quantityDelta: quantityDelta + delta)
     }
+    
+    func equalsExcludingSyncAttributes(rhs: InventoryItem) -> Bool {
+        return uuid == rhs.uuid && product == rhs.product && inventory.uuid == rhs.inventory.uuid && quantity == rhs.quantity
+    }
 }
 
 func ==(lhs: InventoryItem, rhs: InventoryItem) -> Bool {
-    return lhs.uuid == rhs.uuid && lhs.product.uuid == rhs.product.uuid && lhs.inventory.uuid == rhs.inventory.uuid && lhs.quantity == rhs.quantity
+    return lhs.equalsExcludingSyncAttributes(rhs) && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
 }

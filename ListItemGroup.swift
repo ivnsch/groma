@@ -57,8 +57,12 @@ class ListItemGroup: Identifiable, Equatable {
     var debugDescription: String {
         return "{\(self.dynamicType) uuid: \(uuid), name: \(name), bgColor: \(bgColor.hexStr), order: \(order), fav: \(fav), removed: \(removed), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
+    
+    func equalsExcludingSyncAttributes(rhs: ListItemGroup) -> Bool {
+        return uuid == rhs.uuid && name == rhs.name && bgColor == rhs.bgColor && order == rhs.order && fav == rhs.fav
+    }
 }
 
 func ==(lhs: ListItemGroup, rhs: ListItemGroup) -> Bool {
-    return lhs.uuid == rhs.uuid && lhs.name == rhs.name && lhs.bgColor.hexStr == rhs.bgColor.hexStr && lhs.order == rhs.order && lhs.fav == rhs.fav
+    return lhs.equalsExcludingSyncAttributes(rhs) && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
 }

@@ -80,10 +80,14 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
     func same(rhs: Product) -> Bool {
         return uuid == rhs.uuid
     }
+    
+    func equalsExcludingSyncAttributes(rhs: Product) -> Bool {
+        return uuid == rhs.uuid && name == rhs.name && category == rhs.category && brand == rhs.brand
+    }
 }
 
 func ==(lhs: Product, rhs: Product) -> Bool {
-    return lhs.uuid == rhs.uuid
+    return lhs.equalsExcludingSyncAttributes(rhs) && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
 }
 
 // convenience (redundant) holder to avoid having to iterate through listitems to find unique categories

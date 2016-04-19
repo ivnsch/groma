@@ -49,12 +49,15 @@ class HistoryItem: Equatable, Identifiable, CustomDebugStringConvertible {
     var debugDescription: String {
         return "[uuid: \(uuid), product: \(product), paidPrice: \(paidPrice), quantity: \(quantity), addedDate: \(addedDate), user: \(user), inventory: \(inventory)]"
     }
+    
+    func equalsExcludingSyncAttributes(rhs: HistoryItem) -> Bool {
+        return uuid == rhs.uuid && product == rhs.product && addedDate == rhs.addedDate && quantity == rhs.quantity && inventory == rhs.inventory && user == rhs.user && paidPrice == rhs.paidPrice
+    }
 }
 
 func ==(lhs: HistoryItem, rhs: HistoryItem) -> Bool {
-    return lhs.uuid == rhs.uuid
+    return lhs.equalsExcludingSyncAttributes(rhs) && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
 }
-
 
 // convenience (redundant) holder to avoid having to iterate through historyitems to find unique products and users
 // so products, users arrays are the result of extracting the unique products and users from historyItems array

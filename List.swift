@@ -85,7 +85,7 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
     
     // WARN: doesn't include listItems. Actually, should we remove list items from list? this is never used?
     func equalsExcludingSyncAttributes(rhs: List) -> Bool {
-        return self.uuid == rhs.uuid && self.name == rhs.name && self.bgColor == rhs.bgColor && self.order == rhs.order && self.inventory == rhs.inventory && self.store == rhs.store
+        return uuid == rhs.uuid && name == rhs.name && bgColor == rhs.bgColor && order == rhs.order && users == rhs.users && inventory == rhs.inventory && store == rhs.store
     }
 }
 

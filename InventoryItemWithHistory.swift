@@ -47,5 +47,5 @@ class InventoryItemWithHistoryEntry: Equatable {
 }
 
 func ==(lhs: InventoryItemWithHistoryEntry, rhs: InventoryItemWithHistoryEntry) -> Bool {
-    return lhs.historyItemUuid == rhs.historyItemUuid
+    return lhs.historyItemUuid == rhs.historyItemUuid && lhs.inventoryItem == rhs.inventoryItem && lhs.paidPrice == rhs.paidPrice && lhs.addedDate == rhs.addedDate && lhs.user == rhs.user
 }

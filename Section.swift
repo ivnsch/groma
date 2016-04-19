@@ -109,8 +109,12 @@ final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
             stashOrder: order.status == .Stash ? order.order : stashOrder
         )
     }
+    
+    func equalsExcludingSyncAttributes(rhs: Section) -> Bool {
+        return uuid == rhs.uuid && name == rhs.name && color == rhs.color && list == rhs.list && todoOrder == rhs.todoOrder && doneOrder == rhs.doneOrder && stashOrder == rhs.stashOrder
+    }
 }
 
 func ==(lhs: Section, rhs: Section) -> Bool {
-    return lhs.uuid == rhs.uuid && lhs.name == rhs.name && lhs.color == rhs.color && lhs.list.uuid == rhs.list.uuid
+    return lhs.equalsExcludingSyncAttributes(rhs) && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
 }

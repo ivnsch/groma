@@ -59,8 +59,12 @@ class ProductCategory: Equatable, Identifiable, CustomDebugStringConvertible {
     func same(rhs: ProductCategory) -> Bool {
         return uuid == rhs.uuid
     }
+    
+    func equalsExcludingSyncAttributes(rhs: ProductCategory) -> Bool {
+        return uuid == rhs.uuid && name == rhs.name && color == rhs.color
+    }
 }
 
 func ==(lhs: ProductCategory, rhs: ProductCategory) -> Bool {
-    return lhs.uuid == rhs.uuid
+    return lhs.equalsExcludingSyncAttributes(rhs) && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
 }

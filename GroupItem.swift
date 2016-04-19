@@ -63,11 +63,15 @@ class GroupItem: Equatable, Identifiable, CustomDebugStringConvertible {
     func incrementQuantityCopy(delta: Int) -> GroupItem {
         return copy(quantity: quantity + delta)
     }
+    
+    func equalsExcludingSyncAttributes(rhs: GroupItem) -> Bool {
+        return uuid == rhs.uuid && quantity == rhs.quantity && product == rhs.product && group == rhs.group
+    }
 }
 
 // TODO implement equality correctly, also in other model classes. Now we have identifiable for this.
 func ==(lhs: GroupItem, rhs: GroupItem) -> Bool {
-    return lhs.uuid == rhs.uuid
+    return lhs.equalsExcludingSyncAttributes(rhs) && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
 }
 
 // convenience (redundant) holder to avoid having to iterate through group items to find unique products and groups

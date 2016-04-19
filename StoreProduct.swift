@@ -82,10 +82,14 @@ final class StoreProduct: Equatable, Hashable, Identifiable, CustomDebugStringCo
     func same(rhs: StoreProduct) -> Bool {
         return uuid == rhs.uuid
     }
+    
+    func equalsExcludingSyncAttributes(rhs: StoreProduct) -> Bool {
+        return uuid == rhs.uuid && price == rhs.price && product == rhs.product && baseQuantity == rhs.baseQuantity && unit == rhs.unit && store == rhs.store
+    }
 }
 
 func ==(lhs: StoreProduct, rhs: StoreProduct) -> Bool {
-    return lhs.uuid == rhs.uuid
+    return lhs.equalsExcludingSyncAttributes(rhs) && lhs.lastServerUpdate == rhs.lastServerUpdate && lhs.removed == rhs.removed
 }
 
 // convenience (redundant) holder to avoid having to iterate through products to find unique dependencies
