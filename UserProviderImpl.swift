@@ -17,18 +17,11 @@ class UserProviderImpl: UserProvider {
 
     private var webSocket: MyWebSocket? // arc
     
-    func login(loginData: LoginData, _ handler: ProviderResult<SyncResult> -> ()) {
+    func login(loginData: LoginData, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
+
         self.remoteProvider.login(loginData) {[weak self] result in
             if result.success {
-                self?.sync(false) {result in
-                    if result.success {
-                        QL2("Sync success, connecting websocket...")
-                        self?.connectWebsocketIfLoggedIn()
-                    } else {
-                        QL4("Sync didn't return success: \(result)")
-                    }
-                    handler(result)
-                }
+                self?.handleLoginSuccess(controller, handler)
             } else {
                 handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
             }
@@ -37,6 +30,9 @@ class UserProviderImpl: UserProvider {
     
     func register(user: UserInput, _ handler: ProviderResult<Any> -> ()) {
         self.remoteProvider.register(user) {result in
+            if result.success {
+                PreferencesManager.savePreference(PreferencesManagerKey.registeredWithThisDevice, value: true)
+            }
             handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
         }
     }
@@ -62,9 +58,29 @@ class UserProviderImpl: UserProvider {
         QL2("User logged out")
     }
     
-    func sync(isMatchSync: Bool, handler: ProviderResult<SyncResult> -> Void) {
-        Providers.globalProvider.sync(isMatchSync) {result in
+    func sync(isMatchSync isMatchSync: Bool, onlyOverwriteLocal: Bool, additionalActionsOnSyncSuccess: VoidFunction? = nil, handler: ProviderResult<SyncResult> -> Void) {
+        
+        let resultHandler: ProviderResult<SyncResult> -> Void = {[weak self] result in
+            if result.success {
+                QL2("Sync success, connecting websocket...")
+                self?.connectWebsocketIfLoggedIn()
+                if onlyOverwriteLocal {
+                    // overwrote with new device and existing account - store a flag so we don't do this again (after this device is not considered "new" anymore and does normal sync).
+                    PreferencesManager.savePreference(PreferencesManagerKey.overwroteLocalDataAfterNewDeviceLogin, value: true)
+                }
+                additionalActionsOnSyncSuccess?()
+                
+            } else {
+                QL4("Sync didn't return success: \(result)")
+            }
             handler(result)
+        }
+        
+        
+        if onlyOverwriteLocal {
+            Providers.globalProvider.fullDownload(resultHandler)
+        } else {
+            Providers.globalProvider.sync(isMatchSync, handler: resultHandler)
         }
     }
 
@@ -134,15 +150,46 @@ class UserProviderImpl: UserProvider {
         }
     }
     
+    private func handleLoginSuccess(controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
+        
+        // If a user logs in the first time on a device but account exists already, we don't want to do a full sync because this would upload all the prefilled products (which have different uuids) and user would end with a duplicate (name suffix (n)) for each product.
+        // So we remember if the user registered using this device, if not it means they are loggin in with a new device. If the user logs in with a new device we only overwrite the local database, meaning we send a sync with no payload.
+        // We also remember if we overwrote already - this is only for the first login! After this the user of course has to sync normally.
+        let registeredWithThisDevice = PreferencesManager.loadPreference(PreferencesManagerKey.registeredWithThisDevice) ?? false
+        let overwroteLocalDataAfterNewDeviceLogin = PreferencesManager.loadPreference(PreferencesManagerKey.overwroteLocalDataAfterNewDeviceLogin) ?? false
+        
+        if !registeredWithThisDevice && !overwroteLocalDataAfterNewDeviceLogin {
+            ConfirmationPopup.show(title: "New device", message: "Your local data will be overwritten with the data stored in your account", okTitle: "Continue", cancelTitle: "Cancel", controller: controller, onOk: {[weak self] in
+                
+                self?.sync(isMatchSync: false, onlyOverwriteLocal: true, additionalActionsOnSyncSuccess: {
+                    PreferencesManager.savePreference(PreferencesManagerKey.registeredWithThisDevice, value: true)
+                    }, handler: handler)
+                
+                }, onCancel: {[weak self] in
+                    // If user declines to overwrite local data we do nothing and log the user out.
+                    QL1("Declined overwrite sync, logging out")
+                    self?.logout {logoutResult in
+                        QL2("Declined overwrite sync, logged out. Logout result: \(logoutResult)")
+                        handler(ProviderResult(status: .IsNewDeviceLoginAndDeclinedOverwrite))
+                    }
+                })
+            
+        } else { // normal login/sync
+            sync(isMatchSync: false, onlyOverwriteLocal: false, handler: handler)
+        }
+    }
+    
     // MARK: - Social login
     
     // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore
-    func authenticateWithFacebook(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
+    func authenticateWithFacebook(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.authenticateWithFacebook(token) {[weak self] result in
-            if result.success {
-                self?.sync(false) {result in
-                    handler(result)
-                }   
+            if let authResult = result.successResult {
+                if authResult.isRegister {
+                    self?.sync(isMatchSync: false, onlyOverwriteLocal: false, handler: handler)
+                } else {
+                    self?.handleLoginSuccess(controller, handler)
+                }
             } else {
                 handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
             }
@@ -150,16 +197,17 @@ class UserProviderImpl: UserProvider {
     }
 
     // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore
-    func authenticateWithGoogle(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
+    func authenticateWithGoogle(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
         self.remoteProvider.authenticateWithGoogle(token) {[weak self] result in
-            if result.success {
-                self?.sync(false) {result in
-                    handler(result)
+            if let authResult = result.successResult {
+                if authResult.isRegister {
+                    self?.sync(isMatchSync: false, onlyOverwriteLocal: false, handler: handler)
+                } else {
+                    self?.handleLoginSuccess(controller, handler)
                 }
             } else {
                 handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
             }
         }
     }
-    
 }

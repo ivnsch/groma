@@ -35,6 +35,9 @@ enum ProviderStatusCode: Int {
     // Other
     case Unknown = 2000 // Note: This represents unknown client error. Unknown server error is mapped to .ServerError
     case DateCalculationError = 2001
+    
+    // Not strictly an error
+    case IsNewDeviceLoginAndDeclinedOverwrite = 3000
 }
 
 public class ProviderResult<T>: CustomDebugStringConvertible {

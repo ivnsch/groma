@@ -25,7 +25,7 @@ class UserProviderMock: UserProvider {
         return hasLoginToken
     }
     
-    func login(loginData: LoginData, _ handler: ProviderResult<SyncResult> -> ()) {
+    func login(loginData: LoginData, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
         delay(requestDelay) {[weak self] in
             self?.isLoggedIn = true
             self?.email = loginData.email
@@ -104,7 +104,7 @@ class UserProviderMock: UserProvider {
     
     // MARK: - Social login
     
-    func authenticateWithFacebook(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
+    func authenticateWithFacebook(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
         delay(requestDelay) {
             let syncResult = SyncResult(listInvites: [], inventoryInvites: [])
             handler(ProviderResult(status: .Success, sucessResult: syncResult))
@@ -112,7 +112,7 @@ class UserProviderMock: UserProvider {
     }
     
     
-    func authenticateWithGoogle(token: String, _ handler: ProviderResult<SyncResult> -> ()) {
+    func authenticateWithGoogle(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
         delay(requestDelay) {
             let syncResult = SyncResult(listInvites: [], inventoryInvites: [])
             handler(ProviderResult(status: .Success, sucessResult: syncResult))

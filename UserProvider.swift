@@ -33,7 +33,8 @@ protocol UserProvider {
     */
     var mySharedUser: SharedUser? {get}
 
-    func login(loginData: LoginData, _ handler: ProviderResult<SyncResult> -> ())
+    // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
+    func login(loginData: LoginData, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ())
     
     func register(user: UserInput, _ handler: ProviderResult<Any> -> ())
     
@@ -41,9 +42,11 @@ protocol UserProvider {
     
     func logout(handler: ProviderResult<Any> -> ())
     
-    func authenticateWithFacebook(token: String, _ handler: ProviderResult<SyncResult> -> ())
+    // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
+    func authenticateWithFacebook(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ())
     
-    func authenticateWithGoogle(token: String, _ handler: ProviderResult<SyncResult> -> ())
+    // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
+    func authenticateWithGoogle(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ())
 
     func forgotPassword(email: String, _ handler: ProviderResult<Any> -> ())
     

@@ -128,7 +128,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
             QL1("Facebook login success, calling our server...")
             progressVisible()
             let tokenString = result.token.tokenString
-            Providers.userProvider.authenticateWithFacebook(tokenString, socialSignInResultHandler())
+            Providers.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
         }
     }
     
@@ -142,7 +142,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         if (error == nil) {
             QL1("Google login success, calling our server...")
             progressVisible()
-            Providers.userProvider.authenticateWithGoogle(user.authentication.accessToken, socialSignInResultHandler())
+            Providers.userProvider.authenticateWithGoogle(user.authentication.accessToken, controller: self, socialSignInResultHandler())
         } else {
             QL4("Google login error: \(error.localizedDescription)")
         }

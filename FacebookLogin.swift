@@ -16,7 +16,7 @@ import FBSDKLoginKit
 */
 class FacebookLogin {
     
-    static func login(handler: ProviderResult<SyncResult> -> ()) {
+    static func login(controller: UIViewController, handler: ProviderResult<SyncResult> -> ()) {
         let login = FBSDKLoginManager()
         login.logInWithReadPermissions(["public_profile"]) {result, error in
             if let error = error {
@@ -30,7 +30,7 @@ class FacebookLogin {
             } else {
                 print("Facebook login success, calling our server...")
                 let tokenString = result.token.tokenString
-                Providers.userProvider.authenticateWithFacebook(tokenString) {result in
+                Providers.userProvider.authenticateWithFacebook(tokenString, controller: controller) {result in
                     
                     // map already exists status to "social aleready exists", to show a different error message
                     if result.status == .AlreadyExists {

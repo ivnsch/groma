@@ -135,12 +135,16 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                 let loginData = LoginData(email: email, password: password)
                 
                 self.progressVisible()
-                Providers.userProvider.login(loginData, successHandler{[weak self] syncResult in
+                Providers.userProvider.login(loginData, controller: self, resultHandler(onSuccess: {[weak self] syncResult in
                     if let weakSelf = self {
                         InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
                     }
                     self?.onLoginSuccess()
-                })
+                    
+                }, onError: {[weak self] result in
+                    // if it's a new device login and user declined overwrite, nothing to do here, user stays in login form, provider logged user out.
+                    self?.defaultErrorHandler([.IsNewDeviceLoginAndDeclinedOverwrite])(providerResult: result)
+                }))
                 
             } else {
                 print("Error: validation was not implemented correctly")
@@ -199,7 +203,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
             QL1("Facebook login success, calling our server...")
             progressVisible()
             let tokenString = result.token.tokenString
-            Providers.userProvider.authenticateWithFacebook(tokenString, socialSignInResultHandler())
+            Providers.userProvider.authenticateWithFacebook(tokenString, controller: self, socialSignInResultHandler())
         }
     }
     
@@ -213,7 +217,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         if (error == nil) {
             QL1("Google login success, calling our server...")
             progressVisible()
-            Providers.userProvider.authenticateWithGoogle(user.authentication.accessToken, socialSignInResultHandler())
+            Providers.userProvider.authenticateWithGoogle(user.authentication.accessToken, controller: self, socialSignInResultHandler())
         } else {
             QL4("Google login error: \(error.localizedDescription)")
         }

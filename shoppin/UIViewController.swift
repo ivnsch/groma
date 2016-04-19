@@ -110,6 +110,8 @@ extension UIViewController {
         if !ignore.contains(providerResult.status) {
             handleResultHelper(providerResult.status, error: providerResult.error, errorObj: providerResult.errorObj)
             progressVisible(false)
+        } else {
+            QL1("Ignoring status code: \(providerResult.status), result: \(providerResult)")
         }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////

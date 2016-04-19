@@ -30,6 +30,9 @@ enum PreferencesManagerKey: String {
     case websocketUuid = "websocketUuid"
     
     case loginTokenFallback = "loginTokenFallback"
+    
+    case registeredWithThisDevice = "registeredWithThisDevice"
+    case overwroteLocalDataAfterNewDeviceLogin = "overwroteLocalDataAfterNewDeviceLogin"
 }
 
 class PreferencesManager {
