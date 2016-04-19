@@ -77,4 +77,9 @@ class DBListItemGroup: DBSyncable {
         setSyncableFieldsInDict(&dict)
         return dict
     }
+    
+    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
+        DBProviders.listItemGroupProvider.removeGroupDependenciesSync(realm, groupUuid: uuid, markForSync: markForSync)
+        realm.delete(self)
+    }
 }

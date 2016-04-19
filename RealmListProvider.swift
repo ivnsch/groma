@@ -78,13 +78,8 @@ class RealmListProvider: RealmProvider {
     
     // Expected to be executed in do/catch and write block
     func removeListSync(realm: Realm, listUuid: String, markForSync: Bool) -> Bool {
-        // delete listItems
-        let dbListItems = realm.objects(DBListItem).filter(DBListItem.createFilterList(listUuid))
-        realm.delete(dbListItems)
-        // delete sections
-        let dbSections = realm.objects(DBSection).filter(DBSection.createFilterList(listUuid))
-        realm.delete(dbSections)
-        // NOTE: it's not necessary to mark list items / section deletes for sync as syncing the list delete will also delete these in the server.
+
+        removeListDependenciesSync(realm, listUuid: listUuid, markForSync: markForSync)
         
         // delete list
         if let dbList = realm.objects(DBList).filter(DBList.createFilter(listUuid)).first {
@@ -97,8 +92,29 @@ class RealmListProvider: RealmProvider {
         return true
     }
     
-    // TODO update list
+    func removeListDependenciesSync(realm: Realm, listUuid: String, markForSync: Bool) -> Bool {
+        // delete listItems
+        let dbListItems = realm.objects(DBListItem).filter(DBListItem.createFilterList(listUuid))
+        realm.delete(dbListItems)
+        // delete sections
+        let dbSections = realm.objects(DBSection).filter(DBSection.createFilterList(listUuid))
+        realm.delete(dbSections)
+        // NOTE: it's not necessary to mark list items / section deletes for sync as syncing the list delete will also delete these in the server. TODO review if this note is still valid since we now split removeListDependencies from removeListSync and may be used in different context.
+        return true
+    }
     
+    // Expected to be executed in do/catch and write block
+    func removeListsForInventory(realm: Realm, inventoryUuid: String, markForSync: Bool) -> Bool {
+        let dbLists = realm.objects(DBList).filter(DBList.createInventoryFilter(inventoryUuid))
+        if markForSync {
+            let toRemove = dbLists.map{DBRemoveList($0)}
+            saveObjsSyncInt(realm, objs: toRemove, update: true)
+        }
+        realm.delete(dbLists)
+        return true
+    }
+    
+    // TODO update list
     
     
     func updateLastSyncTimeStamp(lists: RemoteListsWithDependencies, handler: Bool -> Void) {

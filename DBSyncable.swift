@@ -46,4 +46,8 @@ class DBSyncable: Object {
     static func timestampUpdateDict(uuid: String, lastServerUpdate: Int64) -> [String: AnyObject] {
         return ["uuid": uuid, DBSyncable.lastServerUpdateFieldName: NSNumber(longLong: Int64(lastServerUpdate)), dirtyFieldName: false]
     }
+    
+    func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
+        realm.delete(self)
+    }
 }

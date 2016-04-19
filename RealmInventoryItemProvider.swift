@@ -191,19 +191,32 @@ class RealmInventoryItemProvider: RealmProvider {
     
     func removeInventoryItem(uuid: String, inventoryUuid: String, markForSync: Bool, handler: Bool -> Void) {
         // Needs custom handling because DBRemoveInventoryItem needs the lastUpdate server timestamp and for this we have to retrieve the item from db
-        self.doInWriteTransaction({realm in
+        self.doInWriteTransaction({[weak self] realm in
             if let itemToRemove = realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilterUuid(uuid)).first {
-                if markForSync {
-                    let toRemoveInventoryItem = DBRemoveInventoryItem(uuid: uuid, inventoryUuid: inventoryUuid, lastServerUpdate: itemToRemove.lastServerUpdate)
-                    realm.add(toRemoveInventoryItem, update: true)
-                }
-                realm.delete(itemToRemove)
+                self?.removeInventoryItemSync(realm, dbInventoryItem: itemToRemove, markForSync: markForSync)
             }
             return true
             
             }, finishHandler: {success in
                 handler(success ?? false)
         })
+    }
+    
+    func removeInventoryItemSync(realm: Realm, dbInventoryItem: DBInventoryItem, markForSync: Bool) {
+        if markForSync {
+            let toRemoveInventoryItem = DBRemoveInventoryItem(uuid: dbInventoryItem.uuid, inventoryUuid: dbInventoryItem.inventory.uuid, lastServerUpdate: dbInventoryItem.lastServerUpdate)
+            realm.add(toRemoveInventoryItem, update: true)
+        }
+        realm.delete(dbInventoryItem)
+    }
+    
+    // Expected to be executed in do/catch and write block
+    func removeInventoryItemsForInventorySync(realm: Realm, inventoryUuid: String, markForSync: Bool) -> Bool {
+        let dbInventoryItems = realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilterInventory(inventoryUuid))
+        for dbInventoryItem in dbInventoryItems {
+            removeInventoryItemSync(realm, dbInventoryItem: dbInventoryItem, markForSync: markForSync)
+        }
+        return true
     }
     
     // hm...

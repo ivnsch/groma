@@ -47,6 +47,10 @@ class DBList: DBSyncable {
         return "uuid == '\(uuid)'"
     }
     
+    static func createInventoryFilter(inventoryUuid: String) -> String {
+        return "inventoryOpt.uuid == '\(inventoryUuid)'"
+    }
+    
     // MARK: - Update
     
     // Creates dictionary to update database entry for an order update

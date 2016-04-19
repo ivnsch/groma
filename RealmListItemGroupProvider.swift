@@ -92,20 +92,35 @@ class RealmListItemGroupProvider: RealmProvider {
 
     func removeGroup(uuid: String, markForSync: Bool, handler: Bool -> Void) {
         // Needs custom handling because we need the lastUpdate server timestamp and for this we have to retrieve the item from db
-        self.doInWriteTransaction({realm in
-            if let itemToRemove = realm.objects(DBListItemGroup).filter(DBListItemGroup.createFilter(uuid)).first {
-                if markForSync {
-                    let toRemove = DBRemoveListItemGroup(uuid: uuid, lastServerUpdate: itemToRemove.lastServerUpdate)
-                    realm.add(toRemove, update: true)
-                }
-                realm.delete(itemToRemove)
-            }
+        self.doInWriteTransaction({[weak self] realm in
+            self?.removeGroupSync(realm, groupUuid: uuid, markForSync: markForSync)
             return true
             
             }, finishHandler: {success in
                 handler(success ?? false)
         })
     }
+    
+    func removeGroupSync(realm: Realm, groupUuid: String, markForSync: Bool) {
+        
+        removeGroupDependenciesSync(realm, groupUuid: groupUuid, markForSync: markForSync)
+        
+        if let itemToRemove = realm.objects(DBListItemGroup).filter(DBListItemGroup.createFilter(groupUuid)).first {
+            if markForSync {
+                let toRemove = DBRemoveListItemGroup(uuid: groupUuid, lastServerUpdate: itemToRemove.lastServerUpdate)
+                realm.add(toRemove, update: true)
+            }
+            realm.delete(itemToRemove)
+            
+        } else {
+            QL1("No group to remove: uuid: \(groupUuid)")
+        }
+    }
+    
+    func removeGroupDependenciesSync(realm: Realm, groupUuid: String, markForSync: Bool) {
+        DBProviders.groupItemProvider.removeGroupItemsForGroupSync(realm, groupUuid: groupUuid, markForSync: markForSync)
+    }
+    
     
     // MARK: - Sync
 

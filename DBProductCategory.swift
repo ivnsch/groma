@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class DBProductCategory: DBSyncable {
     
@@ -87,5 +88,10 @@ class DBProductCategory: DBSyncable {
         dict["color"] = bgColorHex
         setSyncableFieldsInDict(&dict)
         return dict
+    }
+    
+    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
+        DBProviders.productCategoryProvider.removeCategoryDependenciesSync(realm, categoryUuid: uuid, markForSync: markForSync)
+        realm.delete(self)
     }
 }

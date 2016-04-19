@@ -144,6 +144,23 @@ class RealmGroupItemProvider: RealmProvider {
         })
     }
     
+    // Expected to be executed in do/catch and write block
+    func removeGroupItemsForGroupSync(realm: Realm, groupUuid: String, markForSync: Bool) -> Bool {
+        let dbGroupItems = realm.objects(DBGroupItem).filter(DBGroupItem.createFilterGroup(groupUuid))
+        for dbGroupItem in dbGroupItems {
+            removeGroupItemSync(realm, dbGroupItem: dbGroupItem, markForSync: markForSync)
+        }
+        return true
+    }
+    
+    func removeGroupItemSync(realm: Realm, dbGroupItem: DBGroupItem, markForSync: Bool) {
+        if markForSync {
+            let toRemoveGroupItem = DBRemoveGroupItem(dbGroupItem)
+            realm.add(toRemoveGroupItem, update: true)
+        }
+        realm.delete(dbGroupItem)
+    }
+    
     func overwrite(items: [GroupItem], groupUuid: String, clearTombstones: Bool, handler: Bool -> Void) {
         let dbObjs = items.map{GroupItemMapper.dbWith($0)}
         let additionalActions: (Realm -> Void)? = clearTombstones ? {realm in realm.deleteForFilter(DBRemoveGroupItem.self, DBRemoveGroupItem.createFilterWithGroup(groupUuid))} : nil

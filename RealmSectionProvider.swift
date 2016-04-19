@@ -91,13 +91,7 @@ class RealmSectionProvider: RealmProvider {
     // Expected to be executed in a transaction
     func removeSectionAndDependenciesSync(realm: Realm, sectionUuid: String, markForSync: Bool) -> Bool {
         
-        // delete list items referencing the section
-        let dbListItems = realm.objects(DBListItem).filter(DBListItem.createFilterWithSection(sectionUuid))
-        if markForSync {
-            let toRemoveListItems = dbListItems.map{DBRemoveListItem($0)} // create this before the delete or it crashes
-            saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
-        }
-        realm.delete(dbListItems)
+        removeSectionDependenciesSync(realm, sectionUuid: sectionUuid, markForSync: markForSync)
         
         // delete section
         if let dbSection = realm.objects(DBSection).filter(DBSection.createFilter(sectionUuid)).first {
@@ -111,6 +105,17 @@ class RealmSectionProvider: RealmProvider {
             QL3("Didn't find section to be deleted: \(sectionUuid)")
             return false
         }
+    }
+    
+    func removeSectionDependenciesSync(realm: Realm, sectionUuid: String, markForSync: Bool) -> Bool {
+        // delete list items referencing the section
+        let dbListItems = realm.objects(DBListItem).filter(DBListItem.createFilterWithSection(sectionUuid))
+        if markForSync {
+            let toRemoveListItems = dbListItems.map{DBRemoveListItem($0)} // create this before the delete or it crashes
+            saveObjsSyncInt(realm, objs: toRemoveListItems, update: true)
+        }
+        realm.delete(dbListItems)
+        return true
     }
     
     func update(sections: [Section], handler: Bool -> ()) {

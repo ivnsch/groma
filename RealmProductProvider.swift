@@ -166,6 +166,15 @@ class RealmProductProvider: RealmProvider {
         return true
     }
     
+    // Expected to be executed in do/catch and write block
+    func removeProductsForCategorySync(realm: Realm, categoryUuid: String, markForSync: Bool) -> Bool {
+        let dbProducts = realm.objects(DBProduct).filter(DBProduct.createFilterCategory(categoryUuid))
+        for dbProduct in dbProducts {
+            deleteProductAndDependenciesSync(realm, dbProduct: dbProduct, markForSync: markForSync)
+        }
+        return true
+    }
+    
     func saveProduct(productInput: ProductInput, updateSuggestions: Bool = true, update: Bool = true, handler: Product? -> ()) {
         
         loadProductWithName(productInput.name, brand: productInput.brand) {[weak self] productMaybe in

@@ -141,4 +141,9 @@ class DBSection: DBSyncable {
     override static func ignoredProperties() -> [String] {
         return ["list"]
     }
+    
+    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
+        RealmSectionProvider().removeSectionDependenciesSync(realm, sectionUuid: uuid, markForSync: markForSync)
+        realm.delete(self)
+    }
 }

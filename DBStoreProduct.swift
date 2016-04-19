@@ -159,4 +159,9 @@ class DBStoreProduct: DBSyncable {
     static func nameBrandStoreKey(name: String, brand: String, store: String) -> String {
         return name + "-.9#]A-" + brand + "-.9#]A-" + store // insert some random text in between to prevent possible cases where name or brand text matches what would be a combination, e.g. a product is called "soapMyBrand" has empty brand and other product is called "soap" and has a brand "MyBrand" these are different but simple text concatenation would result in the same key.
     }
+    
+    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
+        RealmStoreProductProvider().deleteStoreProductDependenciesSync(realm, storeProductUuid: uuid, markForSync: markForSync)
+        realm.delete(self)
+    }
 }

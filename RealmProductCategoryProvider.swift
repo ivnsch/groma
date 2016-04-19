@@ -140,4 +140,8 @@ class RealmProductCategoryProvider: RealmProvider {
     private func clearCategoryTombstoneSync(realm: Realm, uuid: String) {
         realm.deleteForFilter(DBRemoveProductCategory.self, DBRemoveProductCategory.createFilter(uuid))
     }
+    
+    func removeCategoryDependenciesSync(realm: Realm, categoryUuid: String, markForSync: Bool) {
+        DBProviders.productProvider.removeProductsForCategorySync(realm, categoryUuid: categoryUuid, markForSync: markForSync)
+    }
 }

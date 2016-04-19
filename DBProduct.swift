@@ -153,4 +153,9 @@ class DBProduct: DBSyncable {
     override static func ignoredProperties() -> [String] {
         return ["category"]
     }
+
+    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
+        RealmListProvider().removeListDependenciesSync(realm, listUuid: uuid, markForSync: markForSync)
+        realm.delete(self)
+    }
 }

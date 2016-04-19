@@ -336,7 +336,7 @@ class RealmProvider {
             }
             
             for val in toDeleteDict.values {
-                realm.delete(val)
+                val.deleteWithDependenciesSync(realm, markForSync: !resetLastUpdateToServer)
             }
             
             additionalActions?(realm)

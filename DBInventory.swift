@@ -75,4 +75,9 @@ class DBInventory: DBSyncable {
         setSyncableFieldsInDict(&dict)
         return dict
     }
+    
+    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
+        RealmInventoryProvider().removeInventoryDependenciesSync(realm, inventoryUuid: uuid, markForSync: markForSync)
+        realm.delete(self)
+    }
 }

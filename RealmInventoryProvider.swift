@@ -97,16 +97,7 @@ class RealmInventoryProvider: RealmProvider {
             do {
                 let realm = try Realm()
                 try realm.write {
-                    // Remove dependencies
-                    DBProviders.listProvider.removeListSync(realm, listUuid: uuid, markForSync: markForSync)
-                    DBProviders.historyProvider.removeHistoryItemsForInventory(realm, inventoryUuid: uuid, markForSync: markForSync)
-                    
-                    let inventoryResults = realm.objects(DBInventory).filter(DBInventory.createFilter(uuid))
-                    if markForSync {
-                        let toRemove = inventoryResults.map{DBRemoveInventory($0)}
-                        self?.saveObjsSyncInt(realm, objs: toRemove, update: true)
-                    }
-                    realm.delete(inventoryResults)
+                    self?.removeInventorySync(realm, inventoryUuid: uuid, markForSync: markForSync)
                 }
                 return true
             } catch let e {
@@ -116,6 +107,24 @@ class RealmInventoryProvider: RealmProvider {
             }) {(result: Bool) in
                 handler(result)
         }
+    }
+    
+    func removeInventorySync(realm: Realm, inventoryUuid: String, markForSync: Bool) {
+   
+        removeInventoryDependenciesSync(realm, inventoryUuid: inventoryUuid, markForSync: markForSync)
+        
+        let inventoryResults = realm.objects(DBInventory).filter(DBInventory.createFilter(inventoryUuid))
+        if markForSync {
+            let toRemove = inventoryResults.map{DBRemoveInventory($0)}
+            saveObjsSyncInt(realm, objs: toRemove, update: true)
+        }
+        realm.delete(inventoryResults)
+    }
+    
+    func removeInventoryDependenciesSync(realm: Realm, inventoryUuid: String, markForSync: Bool) {
+        DBProviders.listProvider.removeListsForInventory(realm, inventoryUuid: inventoryUuid, markForSync: markForSync)
+        DBProviders.historyProvider.removeHistoryItemsForInventory(realm, inventoryUuid: inventoryUuid, markForSync: markForSync)
+        DBProviders.inventoryItemProvider.removeInventoryItemsForInventorySync(realm, inventoryUuid: inventoryUuid, markForSync: markForSync)
     }
     
     func saveInventories(inventories: [Inventory], update: Bool = true, dirty: Bool, handler: Bool -> ()) {
