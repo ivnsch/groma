@@ -233,8 +233,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         
             let oldItem = tableViewSections[indexPath.section].tableViewListItems[indexPath.row]
         
-            if !oldItem.listItem.hasStatus(status) {
-        
+            if self.status != status {
                 // the item is in this tableview but has now a new status - delete (swipe) it from tableview. This is used by websockets
                 // when another user e.g. sends to item to cart we want to show the receiving users the item being "swiped" and then deleted
                 markOpen(true, indexPath: indexPath, notifyRemote: notifyRemote) {[weak self] in // swipe
