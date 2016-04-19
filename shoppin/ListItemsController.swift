@@ -898,13 +898,10 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 
                 switch notification.verb {
                 case .Add:
-                    // TODO!!!!! websocket add/update must send status also
-                    onListItemAddedToProvider(listItem, status: .Todo, notifyRemote: false)
+                    onListItemAddedToProvider(listItem, status: status, notifyRemote: false)
                     
                 case .Update:
-                    
-                    // TODO!!!!! websocket add/update must send status also
-                    listItemsTableViewController.updateListItem(listItem, status: .Todo, notifyRemote: false)
+                    listItemsTableViewController.updateListItem(listItem, status: status, notifyRemote: false)
                     onTableViewChangedQuantifiables()
                     
                 default: QL4("Not handled verb: \(notification.verb)")
