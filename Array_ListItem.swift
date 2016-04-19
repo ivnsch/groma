@@ -40,9 +40,9 @@ extension Array where Element: ListItem {
         
         let orderedDict = groupBySectionOrdered()
         orderedDict.enumerate().forEach {index, sectionWithListItems in
-            sectionWithListItems.0.updateOrderMutable(ListItemStatusOrder(status, index))
+            sectionWithListItems.1.section.updateOrderMutable(ListItemStatusOrder(status, index))
             
-            sectionWithListItems.1.enumerate().forEach {index, listItem in
+            sectionWithListItems.1.listItems.enumerate().forEach {index, listItem in
                 listItem.updateOrderMutable(ListItemStatusOrder(status, index))
             }
         }
@@ -51,13 +51,13 @@ extension Array where Element: ListItem {
     /**
     Group list items by list (note that the listitems inside each lists are ordered but the lists not)
     */
-    func groupByList() -> [List: [ListItem]] {
-        var dictionary = [List: [ListItem]]()
+    func groupByList() -> [String: [ListItem]] {
+        var dictionary = [String: [ListItem]]()
         for listItem in self {
-            if dictionary[listItem.list] == nil {
-                dictionary[listItem.list] = []
+            if dictionary[listItem.list.uuid] == nil {
+                dictionary[listItem.list.uuid] = []
             }
-            dictionary[listItem.list]?.append(listItem)
+            dictionary[listItem.list.uuid]?.append(listItem)
         }
         return dictionary
     }
@@ -65,37 +65,37 @@ extension Array where Element: ListItem {
     /**
     Group list items by section (note that the listitems inside each section are ordered but the sections not)
     */
-    func groupBySection() -> [Section: [ListItem]] {
-        var dictionary = [Section: [ListItem]]()
+    func groupBySection() -> [String: [ListItem]] {
+        var dictionary = [String: [ListItem]]()
         for listItem in self {
-            if dictionary[listItem.section] == nil {
-                dictionary[listItem.section] = []
+            if dictionary[listItem.section.uuid] == nil {
+                dictionary[listItem.section.uuid] = []
             }
-            dictionary[listItem.section]?.append(listItem)
+            dictionary[listItem.section.uuid]?.append(listItem)
         }
         return dictionary
     }
     
-    func groupBySectionOrdered() -> OrderedDictionary<Section, [ListItem]> {
-        var dictionary = OrderedDictionary<Section, [ListItem]>()
+    func groupBySectionOrdered() -> OrderedDictionary<String, (section: Section, listItems: [ListItem])> {
+        var dictionary = OrderedDictionary<String, (section: Section, listItems: [ListItem])>()
         for listItem in self {
-            if dictionary[listItem.section] == nil {
-                dictionary[listItem.section] = []
+            if dictionary[listItem.section.uuid] == nil {
+                dictionary[listItem.section.uuid] = (section: listItem.section, listItems: [])
             }
-            dictionary[listItem.section]?.append(listItem)
+            dictionary[listItem.section.uuid]?.listItems.append(listItem)
         }
         return dictionary
     }
     
-    func sectionCountDict(status: ListItemStatus) -> [Section: Int] {
+    func sectionCountDict(status: ListItemStatus) -> [String: Int] {
         return filterStatus(status).groupBySection().map {($0, $1.count)}
     }
     
     func sectionCount(status: ListItemStatus) -> Int {
         
-        let sectionsOfItemsWithStatus: [Section] = collect({
+        let sectionsOfItemsWithStatus: [String] = collect({
             if $0.hasStatus(status) {
-                return $0.section
+                return $0.section.uuid
             } else {
                 return nil
             }
@@ -116,11 +116,15 @@ extension Array where Element: ListItem {
     }
     
     func sectionsInOrder(status: ListItemStatus) -> [Section] {
-        var set: Set<Section> = Set<Section>()
+        var set = Set<String>()
+        var sections = [Section]()
         for listItem in self {
-            set.insert(listItem.section)
+            if !set.contains(listItem.section.uuid) {
+                set.insert(listItem.section.uuid)
+                sections.append(listItem.section)
+            }
         }
-        return Array<Section>(set).inOrder(status)
+        return sections.inOrder(status)
     }
     
     func findFirstWithProductNameAndBrand(productName: String, brand: String) -> ListItem? {

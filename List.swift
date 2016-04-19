@@ -16,7 +16,7 @@ struct ListCopyStore {
     }
 }
 
-class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
+class List: Equatable, Identifiable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let listItems: [ListItem] // TODO is this used? we get the items everywhere from the provider not the list object
@@ -62,10 +62,6 @@ class List: Equatable, Identifiable, Hashable, CustomDebugStringConvertible {
     
     func same(rhs: List) -> Bool {
         return self.uuid == rhs.uuid
-    }
-    
-    var hashValue: Int {
-        return uuid.hashValue
     }
     
     func copy(uuid uuid: String? = nil, name: String? = nil, listItems: [ListItem]? = nil, users: [SharedUser]? = nil, bgColor: UIColor? = nil, order: Int? = nil, inventory: Inventory? = nil, store: ListCopyStore? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> List {

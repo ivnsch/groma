@@ -10,7 +10,7 @@ import Foundation
 
 class MemInventoryItemProvider {
     
-    private var inventoryItems = [Inventory: [InventoryItem]]()
+    private var inventoryItems = [String: [InventoryItem]]()
     
     private let enabled: Bool
     
@@ -21,13 +21,13 @@ class MemInventoryItemProvider {
     func inventoryItems(inventory: Inventory) -> [InventoryItem]? {
         guard enabled else {return nil}
         
-        return inventoryItems[inventory]
+        return inventoryItems[inventory.uuid]
     }
 
     func inventoryItem(item: InventoryItem) -> InventoryItem? {
         guard enabled else {return nil}
         
-        return inventoryItems[item.inventory]?.findFirst {$0.same(item)}
+        return inventoryItems[item.inventory.uuid]?.findFirst {$0.same(item)}
     }
     
     func addInventoryItems(inventoryItems: [InventoryItem]) -> Bool {
@@ -64,12 +64,12 @@ class MemInventoryItemProvider {
         guard enabled else {return false}
         
         // TODO more elegant way to write this?
-        if inventoryItems[inventoryItem.inventory] == nil {
-            inventoryItems[inventoryItem.inventory] = []
+        if inventoryItems[inventoryItem.inventory.uuid] == nil {
+            inventoryItems[inventoryItem.inventory.uuid] = []
         }
 
         var found = false
-        var items: [InventoryItem] = inventoryItems[inventoryItem.inventory]!
+        var items: [InventoryItem] = inventoryItems[inventoryItem.inventory.uuid]!
         for i in 0..<items.count {
             if items[i].same(inventoryItem) {
                 items[i] = items[i].copy(quantity: items[i].quantity + inventoryItem.quantity) // increment quantity
@@ -80,7 +80,7 @@ class MemInventoryItemProvider {
         if !found {
             items.append(inventoryItem)
         }
-        inventoryItems[inventoryItem.inventory] = items
+        inventoryItems[inventoryItem.inventory.uuid] = items
         
         return true
     }
@@ -89,8 +89,8 @@ class MemInventoryItemProvider {
         guard enabled else {return false}
         
         // TODO more elegant way to write this?
-        if inventoryItems[inventoryItem.inventory] != nil {
-            inventoryItems[inventoryItem.inventory]?.remove(inventoryItem)
+        if inventoryItems[inventoryItem.inventory.uuid] != nil {
+            inventoryItems[inventoryItem.inventory.uuid]?.remove(inventoryItem)
             return true
         } else {
             return false
@@ -100,11 +100,11 @@ class MemInventoryItemProvider {
     func removeInventoryItem(uuid: String, inventoryUuid: String) -> Bool {
         guard enabled else {return false}
         
-        for (inventory, items) in inventoryItems {
-            if inventory.uuid == inventoryUuid {
+        for (inventoryUuid, items) in inventoryItems {
+            if inventoryUuid == inventoryUuid {
                 for item in items {
                     if item.uuid == uuid {
-                        inventoryItems[inventory]?.remove(item)
+                        inventoryItems[inventoryUuid]?.remove(item)
                         return true
                     }
                 }
@@ -117,8 +117,8 @@ class MemInventoryItemProvider {
         guard enabled else {return false}
         
         // TODO more elegant way to write this?
-        if inventoryItems[inventoryItem.inventory] != nil {
-            inventoryItems[inventoryItem.inventory]?.update(inventoryItem)
+        if inventoryItems[inventoryItem.inventory.uuid] != nil {
+            inventoryItems[inventoryItem.inventory.uuid]?.update(inventoryItem)
             return true
         } else {
             return false
@@ -149,7 +149,7 @@ class MemInventoryItemProvider {
     func invalidate() {
         guard enabled else {return}
         
-        inventoryItems = [Inventory: [InventoryItem]]()
+        inventoryItems = [String: [InventoryItem]]()
     }
 }
 

@@ -30,7 +30,7 @@ enum ProductUnit: Int {
     }
 }
 
-final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvertible {
+final class Product: Equatable, Identifiable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
     let category: ProductCategory
@@ -59,10 +59,6 @@ final class Product: Equatable, Hashable, Identifiable, CustomDebugStringConvert
     
     var debugDescription: String {
         return "{\(self.dynamicType) uuid: \(uuid), name: \(name), category: \(category), fav: \(fav), brand: \(brand), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
-    }
-
-    var hashValue: Int {
-        return self.uuid.hashValue
     }
     
     func copy(uuid uuid: String? = nil, name: String? = nil, category: ProductCategory? = nil, fav: Int? = nil, brand: String? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> Product {

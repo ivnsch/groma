@@ -584,19 +584,19 @@ class ListItemProviderImpl: ListItemProvider {
                     let listItemOrderInDstStatus: Int? = listItem.hasStatus(status) ? listItem.order(status) : nil // catch this before switching quantity
                     
                     listItem.switchStatusQuantityMutable(status1, targetStatus: status)
-                    if let sectionCount = dstSectionsDict[listItem.section] { // TODO rename this sounds like count of sections but it's count of list item in sections
+                    if let sectionCount = dstSectionsDict[listItem.section.uuid] { // TODO rename this sounds like count of sections but it's count of list item in sections
 
                         // If there's already a list item in the target status don't update order. If there's not, set order to last item in section
                         let listItemOrder: Int = listItemOrderInDstStatus ?? sectionCount
                         
                         listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: listItemOrder))
-                        dstSectionsDict[listItem.section]!++ // we are adding an item to section - increment count for possible next item
+                        dstSectionsDict[listItem.section.uuid]!++ // we are adding an item to section - increment count for possible next item
                         
                     } else { // item's section is not in target status - set order 0 (first item in section) and add section to the dictionary
                         listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: 0))
                         // update order such that section is appended at the end
                         listItem.section.updateOrderMutable(ListItemStatusOrder(status: status, order: dstSectionsDict.count))
-                        dstSectionsDict[listItem.section] = 1 // we are adding an item to section - items count is 1
+                        dstSectionsDict[listItem.section.uuid] = 1 // we are adding an item to section - items count is 1
                     }
                     // this is not really necessary, but for consistency - reset order to 0 in the src status.
                     listItem.updateOrderMutable(ListItemStatusOrder(status: status1, order: 0))

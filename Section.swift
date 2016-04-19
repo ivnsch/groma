@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
+final class Section: Identifiable, CustomDebugStringConvertible {
     let uuid: String
     let name: String
 //    let order: Int
@@ -52,10 +52,6 @@ final class Section: Hashable, Identifiable, CustomDebugStringConvertible {
             }
         }()
         self.init(uuid: uuid, name: name, color: color, list: list, todoOrder: todoOrder, doneOrder: doneOrder, stashOrder: stashOrder, lastServerUpdate: lastServerUpdate, removed: removed)
-    }
-    
-    var hashValue: Int {
-        return uuid.hashValue
     }
     
     var shortOrderDebugDescription: String {

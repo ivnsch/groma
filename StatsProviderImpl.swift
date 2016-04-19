@@ -146,19 +146,22 @@ class StatsProviderImpl: StatsProvider {
     
     private func toProductAggregates(historyItems: [HistoryItem]) -> [ProductAggregate] {
         
-        var dict: OrderedDictionary<Product, (price: Float, quantity: Int)> = OrderedDictionary()
+        // extract from history items total quantity and price for each product (a product can appear in multiple history items)
+        var dict: OrderedDictionary<String, (product: Product, price: Float, quantity: Int)> = OrderedDictionary()
         var totalPrice: Float = 0
         for historyItem in historyItems {
             let product = historyItem.product
             let itemTotalPaidPrice = historyItem.totalPaidPrice
-            if let aggr = dict[product] {
-                dict[product] = (price: aggr.price + itemTotalPaidPrice, quantity: aggr.quantity + historyItem.quantity)
+            if let aggr = dict[product.uuid] {
+                // we put the product in values which overwrites the product of the last entry for this uuid if existent, the product for one uuid is always the same so this doesn't matter.
+                dict[product.uuid] = (product: product, price: aggr.price + itemTotalPaidPrice, quantity: aggr.quantity + historyItem.quantity)
             } else {
-                dict[product] = (price: itemTotalPaidPrice, quantity: historyItem.quantity)
+                dict[product.uuid] = (product: product, price: itemTotalPaidPrice, quantity: historyItem.quantity)
             }
             totalPrice += itemTotalPaidPrice
         }
         
+        // construct the aggregates based on the dictionary
         let productAggregates: [ProductAggregate] = dict.map {key, value in
             
             let percentage: Float = {
@@ -170,7 +173,7 @@ class StatsProviderImpl: StatsProvider {
                 }
             }()
             
-            return ProductAggregate(product: key, totalCount: value.quantity, totalPrice: value.price, percentage: percentage)
+            return ProductAggregate(product: value.product, totalCount: value.quantity, totalPrice: value.price, percentage: percentage)
         }
         
         let sortedByPrice = productAggregates.sort {

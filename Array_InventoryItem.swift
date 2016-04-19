@@ -13,13 +13,13 @@ extension Array where Element: InventoryItem {
     /**
     Group list items by inventory (note that the inventory items inside each inventory are ordered but the inventories not)
     */
-    func groupByInventory() -> [Inventory: [InventoryItem]] {
-        var dictionary = [Inventory: [InventoryItem]]()
+    func groupByInventory() -> [String: [InventoryItem]] {
+        var dictionary = [String: [InventoryItem]]()
         for inventoryItem in self {
-            if dictionary[inventoryItem.inventory] == nil {
-                dictionary[inventoryItem.inventory] = []
+            if dictionary[inventoryItem.inventory.uuid] == nil {
+                dictionary[inventoryItem.inventory.uuid] = []
             }
-            dictionary[inventoryItem.inventory]?.append(inventoryItem)
+            dictionary[inventoryItem.inventory.uuid]?.append(inventoryItem)
         }
         return dictionary
     }

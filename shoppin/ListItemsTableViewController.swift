@@ -316,7 +316,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         var sections:[Section] = []
         
         if !listItems.isEmpty {
-            var set = [Section: Int]() // "set" for quick lookup which sections we added already
+            var set = [String: Int]() // "set" for quick lookup which sections we added already
             
 
             var currentTableViewSection:ListItemsViewSection!
@@ -324,9 +324,10 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             for listItem in listItems {
                 
                 let tableViewListItem = TableViewListItem(listItem: listItem)
-                
-                if set[listItem.section] == nil { // section not created yet - create one
-                    set[listItem.section] = 1 // dummy value... swift doesn't have Set
+
+                if set[listItem.section.uuid] == nil { // section not created yet - create one
+                    set[listItem.section.uuid] = 1 // dummy value... swift doesn't have Set
+
                     sections.append(listItem.section)
                     
                     currentTableViewSection = ListItemsViewSection(section: listItem.section, tableViewListItems: [], status: status)

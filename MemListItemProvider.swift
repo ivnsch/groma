@@ -11,7 +11,7 @@ import QorumLogs
 
 class MemListItemProvider {
 
-    private var listItems: [List: [ListItem]]? = [List: [ListItem]]()
+    private var listItems: [String: [ListItem]]? = [String: [ListItem]]()
     
     let enabled: Bool
     
@@ -27,7 +27,7 @@ class MemListItemProvider {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
 
-        return listItems![list]
+        return listItems![list.uuid]
     }
     
     // Adds or increments listitem. Note: in increment case this increments all the status fron listItem! (todo, done, stash)
@@ -38,21 +38,21 @@ class MemListItemProvider {
 
         return syncedRet(self) {
             // TODO more elegant way to write this?
-            if self.listItems![listItem.list] == nil {
-                self.listItems![listItem.list] = []
+            if self.listItems![listItem.list.uuid] == nil {
+                self.listItems![listItem.list.uuid] = []
             }
             
             // TODO optimise this, for each list item we are iterating through the whole list items list. We should put listitems in dictionary with uuid or product name, or something
             // add case when a listitem with same product name already exist becomes an update: use uuid of existing item, and increment quantity - and of course use the rest of fields of new list item
             var addedListItem: ListItem
             
-            if let existingListItem = self.listItems![listItem.list]?.findFirstWithProductNameAndBrand(listItem.product.product.name, brand: listItem.product.product.brand) {
+            if let existingListItem = self.listItems![listItem.list.uuid]?.findFirstWithProductNameAndBrand(listItem.product.product.name, brand: listItem.product.product.brand) {
                 let updatedListItem = existingListItem.increment(listItem)
-                self.listItems![listItem.list]?.update(updatedListItem)
+                self.listItems![listItem.list.uuid]?.update(updatedListItem)
                 addedListItem = updatedListItem
                 
             } else {
-                self.listItems![listItem.list]?.append(listItem)
+                self.listItems![listItem.list.uuid]?.append(listItem)
                 addedListItem = listItem
 
             }
@@ -66,13 +66,13 @@ class MemListItemProvider {
         guard listItems != nil else {return nil}
         
         // TODO more elegant way to write this?
-        if self.listItems?[list] == nil {
-            self.listItems?[list] = []
+        if self.listItems?[list.uuid] == nil {
+            self.listItems?[list.uuid] = []
         }
         
         // TODO optimise this, for each list item we are iterating through the whole list items list. We should put listitems in dictionary with uuid or product name, or something
         // add case when a listitem with same product name already exist becomes an update: use uuid of existing item, and increment quantity - and of course use the rest of fields of new list item
-        if let existingListItem = self.listItems![list]!.findFirstWithProductNameAndBrand(prototype.prototype.product.product.name, brand: prototype.prototype.product.product.brand) {
+        if let existingListItem = self.listItems![list.uuid]!.findFirstWithProductNameAndBrand(prototype.prototype.product.product.name, brand: prototype.prototype.product.product.brand) {
             
             let updatedSection = existingListItem.section.copy(name: prototype.prototype.targetSectionName) // TODO!!!! I think this is related with the bug with unwanted section update? for now letting like this since it's same functionality as before
             
@@ -82,19 +82,19 @@ class MemListItemProvider {
             
             QL1("Item exists, updated it: \(updatedListItem)")
 
-            self.listItems?[list]?.update(updatedListItem)
+            self.listItems?[list.uuid]?.update(updatedListItem)
             
             return updatedListItem
         } else {
             
             // if the section doesn't exist in the status where we are adding the list item, update its order field in this status to be the last one.
-            if !self.listItems![list]!.hasSection(status, section: prototype.section) {
-                let sectionCount = self.listItems![list]!.sectionCount(status)
+            if !self.listItems![list.uuid]!.hasSection(status, section: prototype.section) {
+                let sectionCount = self.listItems![list.uuid]!.sectionCount(status)
                 prototype.section.updateOrderMutable(ListItemStatusOrder(status: status, order: sectionCount))
             }
 
             var listItemOrder = 0
-            for existingListItem in self.listItems![list]! {
+            for existingListItem in self.listItems![list.uuid]! {
                 if existingListItem.section.uuid == prototype.section.uuid && existingListItem.hasStatus(status) { // count list items in my section (e.g. "vegetables") and status (e.g. "todo") to determine my order
                     listItemOrder++
                 }
@@ -105,7 +105,7 @@ class MemListItemProvider {
             
             QL1("Item didn't exist, created one: \(listItem)")
             
-            self.listItems?[listItem.list]?.append(listItem)
+            self.listItems?[listItem.list.uuid]?.append(listItem)
             
             return listItem
         }
@@ -126,7 +126,7 @@ class MemListItemProvider {
             }
         }
         
-        QL1("List mem cache after update: \(listItems?[list])")
+        QL1("List mem cache after update: \(listItems?[list.uuid])")
 
         return addedListItems
     }
@@ -149,8 +149,8 @@ class MemListItemProvider {
         guard listItems != nil else {return false}
         
         // TODO more elegant way to write this?
-        if self.listItems![listItem.list] != nil {
-            self.listItems![listItem.list]!.remove(listItem)
+        if self.listItems![listItem.list.uuid] != nil {
+            self.listItems![listItem.list.uuid]!.remove(listItem)
             return true
         } else {
             return false
@@ -161,7 +161,7 @@ class MemListItemProvider {
         guard enabled else {return false}
         guard listItems != nil else {return false}
         
-        if let list = (self.listItems?.keys.filter{$0.uuid == listUuid})?.first {
+        if let list = (self.listItems?.keys.filter{$0 == listUuid})?.first {
             // TODO more elegant way to write this?
             if self.listItems![list] != nil {
                 self.listItems![list]!.removeWithUuid(uuid)
@@ -180,8 +180,8 @@ class MemListItemProvider {
         guard listItems != nil else {return false}
         
         // TODO more elegant way to write this?
-        if self.listItems![listItem.list] != nil {
-            self.listItems![listItem.list]?.update(listItem)
+        if self.listItems![listItem.list.uuid] != nil {
+            self.listItems![listItem.list.uuid]?.update(listItem)
             return true
         } else {
             return false
@@ -215,8 +215,8 @@ class MemListItemProvider {
         guard enabled else {return nil}
         guard listItems != nil else {return nil}
         
-        if let _ = self.listItems![list] {
-            return self.listItems![list]!.filterStash().count
+        if let _ = self.listItems![list.uuid] {
+            return self.listItems![list.uuid]!.filterStash().count
         } else {
             QL1("Info: MemListItemProvider.listItemCount: there are no listitems for list: \(list)")
             return 0
@@ -224,7 +224,7 @@ class MemListItemProvider {
     }
     
     private func findListItem(uuid: String, list: List) -> ListItem? {
-        return self.listItems?[list]?.findFirst({$0.uuid == uuid})
+        return self.listItems?[list.uuid]?.findFirst({$0.uuid == uuid})
     }
     
     func increment(listItem: ListItem, quantity: ListItemStatusQuantity) -> ListItem? {
@@ -253,7 +253,7 @@ class MemListItemProvider {
         guard enabled else {return false}
         
         // TODO the dictionary accessing logic is a bit weird, improve
-        if let list = (listItems?.keys.filter{$0.uuid == listUuid})?.first {
+        if let list = (listItems?.keys.filter{$0 == listUuid})?.first {
             if let listListItems = listItems?[list] {
                 let updatedListItems = listListItems.removeAllWithCondition{$0.section.uuid == uuid}
                 listItems?[list] = updatedListItems
