@@ -62,6 +62,7 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -561,7 +562,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="adW-N0-j5a">
-                                <rect key="frame" x="0.0" y="194" width="600" height="200"/>
+                                <rect key="frame" x="0.0" y="244" width="600" height="200"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Developer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CwH-GM-s9p">
                                         <rect key="frame" x="14" y="14" width="74" height="21"/>
@@ -595,16 +596,28 @@
                                     <action selector="onClearHistoryTap:" destination="TSQ-MW-ySX" eventType="touchUpInside" id="94B-f7-P9B"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLW-Jh-3jY">
+                                <rect key="frame" x="14" y="184" width="128" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Overwrite local data">
+                                    <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="onOverwriteLocalDataTap:" destination="TSQ-MW-ySX" eventType="touchUpInside" id="6nW-N4-htT"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="5Yo-HG-bia" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="5jD-rY-HXz"/>
+                            <constraint firstItem="adW-N0-j5a" firstAttribute="top" secondItem="yLW-Jh-3jY" secondAttribute="bottom" constant="30" id="6G0-DN-DZf"/>
+                            <constraint firstItem="yLW-Jh-3jY" firstAttribute="top" secondItem="5Yo-HG-bia" secondAttribute="bottom" constant="20" id="Ah1-yr-PHY"/>
+                            <constraint firstItem="yLW-Jh-3jY" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="DTK-2F-KV3"/>
                             <constraint firstItem="5Yo-HG-bia" firstAttribute="top" secondItem="FTH-bS-K1Q" secondAttribute="bottom" constant="20" id="Dvv-HE-XDi"/>
                             <constraint firstAttribute="trailing" secondItem="adW-N0-j5a" secondAttribute="trailing" id="VE1-JY-ivz"/>
                             <constraint firstItem="FTH-bS-K1Q" firstAttribute="top" secondItem="VOB-7c-032" secondAttribute="bottom" constant="20" id="e1Y-eF-fhk"/>
                             <constraint firstItem="adW-N0-j5a" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" id="pof-HP-Xqt"/>
                             <constraint firstItem="FTH-bS-K1Q" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="qlq-5x-xlh"/>
-                            <constraint firstItem="adW-N0-j5a" firstAttribute="top" secondItem="5Yo-HG-bia" secondAttribute="bottom" constant="30" id="rg6-Uf-STE"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="1iM-IL-890"/>

@@ -26,6 +26,15 @@ class SettingsViewController: UIViewController {
             AlertPopup.show(message: "The history was cleared", controller: self)
         })
     }
+
+    @IBAction func onOverwriteLocalDataTap(sender: UIButton) {
+        ConfirmationPopup.show(title: "Warning", message: "This will overwrite all your (Groma) data on this device with the data stored in the server. You may lose data.\nThis is only a helper to solve technical problems and is not necessary under normal circumstances.", okTitle: "Continue", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+            weakSelf.progressVisible()
+            Providers.globalProvider.fullDownload(weakSelf.successHandler({result in
+                AlertPopup.show(message: "Your local data was overwritten", controller: weakSelf)
+            }))
+        }, onCancel: nil)
+    }
     
     // MARK: - Debug settings
     
