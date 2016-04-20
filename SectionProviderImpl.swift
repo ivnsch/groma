@@ -174,7 +174,7 @@ class SectionProviderImpl: SectionProvider {
                         
                     } else { // no order known in advance - fetch listItems to count how many sections, order at the end
                         
-                        Providers.listItemsProvider.listItems(list, sortOrderByStatus: .Stash, fetchMode: ProviderFetchModus.First) {result in
+                        Providers.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: ProviderFetchModus.First) {result in
                             
                             if let listItems = result.sucessResult {
                                 let order = listItems.sectionCount(status)
