@@ -21,10 +21,14 @@ protocol HistoryProvider {
     
     func historyItemsGroups(range: NSRange, inventory: Inventory, _ handler: ProviderResult<[HistoryItemGroup]> -> ())
     
+    func historyItem(uuid: String, handler: ProviderResult<HistoryItem?> -> Void)
+    
     func removeHistoryItem(historyItem: HistoryItem, _ handler: ProviderResult<Any> -> ())
 
     func removeHistoryItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
 
+    func removeHistoryItemGroupForHistoryItemLocal(uuid: String, _ handler: ProviderResult<Any> -> Void)
+    
     func removeHistoryItemsGroup(historyItemGroup: HistoryItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
     func removeAllHistoryItems(handler: ProviderResult<Any> -> Void)

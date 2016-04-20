@@ -194,14 +194,22 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             
-            // TODO lock? many deletes quickly could cause a crash here. >>> Or remove immediately and rever if failure result
-            let historyItem = sectionModels[indexPath.section].obj.historyItems[indexPath.row]
-            historyProvider.removeHistoryItem(historyItem, successHandler({result in
-                
-                tableView.wrapUpdates {[weak self] in
+            func delete() {
+                let historyItem = sectionModels[indexPath.section].obj.historyItems[indexPath.row]
+                historyProvider.removeHistoryItem(historyItem, successHandler({[weak self] result in
                     self?.removeHistoryItemUI(indexPath)
+                }))
+            }
+            
+            let alreadyShowedPopup: Bool = PreferencesManager.loadPreference(PreferencesManagerKey.showedDeleteHistoryItemHelp) ?? false
+            if alreadyShowedPopup {
+                delete()
+            } else {
+                AlertPopup.show(title: "Info", message: "Deleting history items will also delete their data from the stats", controller: self, okMsg: "Got it!") {
+                    PreferencesManager.savePreference(PreferencesManagerKey.showedDeleteHistoryItemHelp, value: true)
+                    delete()
                 }
-            }))
+            }
 
         } else if editingStyle == .Insert {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -209,28 +217,33 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     private func removeHistoryItemUI(indexPath: NSIndexPath) {
-        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        let section = sectionModels[indexPath.section]
-        let group = section.obj
-        var historyItems = group.historyItems
-        historyItems.removeAtIndex(indexPath.row)
-        let updatedGroup = group.copy(historyItems: historyItems)
-        sectionModels[indexPath.section] = SectionModel(expanded: section.expanded, obj: updatedGroup)
+        tableView.wrapUpdates {[weak self] in guard let weakSelf = self else {return}
+            weakSelf.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Bottom)
+            let section = weakSelf.sectionModels[indexPath.section]
+            let group = section.obj
+            var historyItems = group.historyItems
+            historyItems.removeAtIndex(indexPath.row)
+            let updatedGroup = group.copy(historyItems: historyItems)
+            weakSelf.sectionModels[indexPath.section] = SectionModel(expanded: section.expanded, obj: updatedGroup)
+        }
     }
-    
-    private func removeHistoryItemUI(historyItem: HistoryItem) {
-        var removed = false
-        for sectionModel in sectionModels {
-            for item in sectionModel.obj.historyItems {
-                if item.same(historyItem) {
+
+    private func removeHistoryItemUI(historyItemUuid: String) -> Bool {
+        for (sectionIndex, sectionModel) in sectionModels.enumerate() {
+            for (itemIndex, item) in sectionModel.obj.historyItems.enumerate() {
+                if item.uuid == historyItemUuid {
+                    removeHistoryItemUI(NSIndexPath(forRow: itemIndex, inSection: sectionIndex))
                     sectionModel.obj.historyItems.removeUsingIdentifiable(item)
-                    removed = true
+                    return true
                 }
             }
         }
-        if !removed {
-            print("Info: HistoryViewController.removeHistoryItemUI: historyItem was not in table view: \(historyItem)")
-        }
+        QL1("HistoryItem was not in table view: \(historyItemUuid)")
+        return false
+    }
+    
+    private func removeHistoryItemUI(historyItem: HistoryItem) {
+        removeHistoryItemUI(historyItem.uuid)
     }
 
     // MARK: - HistoryItemGroupHeaderViewDelegate
@@ -244,7 +257,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func onDeleteGroupTap(sectionModel: SectionModel<HistoryItemGroup>, header: HistoryItemGroupHeaderView) {
-        ConfirmationPopup.show(title: "Confirm", message: "This will delete all the history items in this group (also from stats)", okTitle: "Ok", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
+        ConfirmationPopup.show(title: "Confirm", message: "This will delete all the history items in this group", okTitle: "Ok", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in guard let weakSelf = self else {return}
             Providers.historyProvider.removeHistoryItemsGroup(sectionModel.obj, remote: true, weakSelf.successHandler{
                 weakSelf.loadHistory()
             })
@@ -284,9 +297,28 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 switch notification.verb {
                 case .Add:
                     loadHistory()
+                default: QL4("Not handled: \(notification.verb)")
+                }
+            } else {
+                QL4("No value")
+            }
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<String>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
                 case .Delete:
                     removeHistoryItemUI(notification.obj)
-                default: QL4("Not handled: \(notification.verb)")
+                    
+                default: QL4("Not handled case: \(notification.verb))")
+                }
+            } else {
+                QL4("No value")
+            }
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<[String]>> { // group - see note in MyWebsocketDispatcher for explanation
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .Delete:
+                    loadHistory()
+                default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {
                 QL4("No value")

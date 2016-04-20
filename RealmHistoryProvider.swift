@@ -63,21 +63,12 @@ class RealmHistoryProvider: RealmProvider {
             })
         }
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {[weak self] in guard let weakSelf = self else {return}
             do {
                 let realm = try Realm()
                 let results = realm.objects(DBHistoryItem).filter(DBHistoryItem.createFilterWithInventory(inventory.uuid)).sorted("addedDate", ascending: false) // not using constant because weak self etc.
                 
-                // Group by date
-                var dateDictDB: OrderedDictionary<NSDate, [DBHistoryItem]> = OrderedDictionary()
-                for result in results {
-                    let addedDateWithoutSeconds = result.addedDate.millisToEpochDate().dateWithZeroSeconds() // items are groped using minutes
-                    if dateDictDB[addedDateWithoutSeconds] == nil {
-                        dateDictDB[addedDateWithoutSeconds] = []
-                    }
-                    dateDictDB[addedDateWithoutSeconds]!.append(result)
-                }
-                
+                var dateDictDB = weakSelf.groupByDate(results)
                 dateDictDB = dateDictDB[range] // extract range
                 let dateDict: OrderedDictionary<NSDate, [HistoryItem]> = dateDictDB.mapDictionary {(k, v) in // we do this mapping after extract range - in groupBy iteration I think this causes to evaluate the db lazy objects which is very bad performance, since we are fetching the entire history
                     return (k, v.map{item in HistoryItemMapper.historyItemWith(item)})
@@ -99,6 +90,53 @@ class RealmHistoryProvider: RealmProvider {
         }
     }
     
+    private func groupByDate(dbHistoryItems: Results<DBHistoryItem>) -> OrderedDictionary<NSDate, [DBHistoryItem]> {
+        var dateDict: OrderedDictionary<NSDate, [DBHistoryItem]> = OrderedDictionary()
+        for result in dbHistoryItems {
+            let addedDateWithoutSeconds = millisToGroupDate(result.addedDate)
+            if dateDict[addedDateWithoutSeconds] == nil {
+                dateDict[addedDateWithoutSeconds] = []
+            }
+            dateDict[addedDateWithoutSeconds]!.append(result)
+        }
+        return dateDict
+    }
+    
+    private func millisToGroupDate(date: Int64) -> NSDate {
+        return date.millisToEpochDate().dateWithZeroSeconds() // items are grouped using minutes
+    }
+    
+    func loadHistoryItem(uuid: String, handler: HistoryItem? -> Void) {
+        let mapper = {HistoryItemMapper.historyItemWith($0)} // TODO loading shared users (when there are shared users) when accessing, crash: BAD_ACCESS, re-test after realm update
+        self.loadFirst(mapper, filter: DBHistoryItem.createFilter(uuid), handler: handler)
+    }
+    
+    func removeHistoryItemsForGroupDate(date: Int64, inventoryUuid: String, handler: Bool -> Void) {
+        let groupDate = millisToGroupDate(date)
+        
+        // since we don't want to make assumptions here about how the dates are stored (i.e. rounded to minutes or not), we load (minimal) range, group using the default grouping method and then take the items belonging to our group.
+        let startDate = groupDate.inMinutes(-1)
+        let endDate = groupDate.inMinutes(1)
+        
+        doInWriteTransaction({[weak self] realm in guard let weakSelf = self else {return false}
+            let results = realm.objects(DBHistoryItem).filter(DBHistoryItem.createPredicate(startDate.toMillis(), endAddedDate: endDate.toMillis(), inventoryUuid: inventoryUuid))
+            
+            QL1("Found results for date: \(groupDate) in range: \(startDate) to \(endDate): \(results)")
+            
+            var dateDictDB = weakSelf.groupByDate(results)
+            
+            if let itemsForDate = dateDictDB[groupDate] {
+                realm.delete(itemsForDate)
+            } else {
+                QL2("Didn't find any items to delete for date: \(groupDate) in range: \(startDate) to \(endDate)")
+            }
+            
+            return true
+            
+        }) {(successMaybe) -> Void in
+            handler(successMaybe ?? false)
+        }
+    }
     
     func saveHistoryItems(historyItems: RemoteHistoryItems, dirty: Bool, handler: Bool -> ()) {
         

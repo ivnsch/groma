@@ -42,6 +42,12 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
+    func historyItem(uuid: String, handler: ProviderResult<HistoryItem?> -> Void) {
+        dbProvider.loadHistoryItem(uuid) {historyItemMaybe in
+            handler(ProviderResult(status: .Success, sucessResult: historyItemMaybe))
+        }
+    }
+    
     func removeHistoryItem(historyItem: HistoryItem, _ handler: ProviderResult<Any> -> ()) {
         removeHistoryItem(historyItem.uuid, remote: true, handler)
     }
@@ -101,6 +107,29 @@ class HistoryProviderImpl: HistoryProvider {
         }
     }
     
+    func removeHistoryItemGroupForHistoryItemLocal(uuid: String, _ handler: ProviderResult<Any> -> Void) {
+        historyItem(uuid) {[weak self] result in
+            if let historyItemMaybe = result.sucessResult {
+                if let historyItem = historyItemMaybe {
+                    self?.dbProvider.removeHistoryItemsForGroupDate(historyItem.addedDate, inventoryUuid: historyItem.inventory.uuid) {removeSuccess in
+                        if removeSuccess {
+                            handler(ProviderResult(status: .Success))
+                        } else {
+                            QL4("Couldn't remove local history group items for iem: \(uuid)")
+                            handler(ProviderResult(status: .Unknown))
+                        }
+                    }
+                } else {
+                    QL2("History item to remove group was not found: \(uuid)")
+                    handler(ProviderResult(status: .Success))
+                }
+            } else {
+                QL2("History item to remove group was not found: \(uuid) (second optional?)") // TODO does unwrapping the optional twice make sense?
+                handler(ProviderResult(status: .Success))
+            }
+        }
+    }
+
     func addHistoryItems(historyItems: [HistoryItem], _ handler: ProviderResult<Any> -> Void) {
         dbProvider.addHistoryItems(historyItems) {success in
             handler(ProviderResult(status: success ? .Success : .DatabaseUnknown))

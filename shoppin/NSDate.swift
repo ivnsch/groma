@@ -76,6 +76,14 @@ extension NSDate: Comparable {
             toDate: self,
             options: NSCalendarOptions(rawValue: 0))!
     }
+
+    func inMinutes(minutes: Int) -> NSDate {
+        return NSCalendar.currentCalendar().dateByAddingUnit(
+            .Minute,
+            value: minutes,
+            toDate: self,
+            options: NSCalendarOptions(rawValue: 0))!
+    }
     
     // src http://stackoverflow.com/a/5330027/930450
     func dateWithZeroSeconds() -> NSDate {

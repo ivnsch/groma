@@ -799,7 +799,19 @@ struct MyWebsocketDispatcher {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Delete history item \(historyItemUuid)", result: result)
                     }
                 }
-            } else {
+            } else if let historyItemsUuids = data as? [String] {
+                // NOTE: we assume the items identified by these uuids belong to a group (like displayed in the history view controller, i.e. the items share a common date rounded to minutes and belong to the same inventory). It's also assumed these items are the entire group - all items with the same (minutes)date in the same inventory as the item identified by the first uuid will be removed.
+                if let firstUuid = historyItemsUuids.first {
+                    Providers.historyProvider.removeHistoryItemGroupForHistoryItemLocal(firstUuid) {result in
+                        if result.success {
+                            postNotification(.HistoryItem, verb, sender, historyItemsUuids)
+                        } else {
+                            MyWebsocketDispatcher.reportWebsocketStoringError("Delete history items group \(historyItemsUuids)", result: result)
+                        }
+                    }
+                }
+                
+            }else {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Delete history item, data: \(data)")
             }
             
