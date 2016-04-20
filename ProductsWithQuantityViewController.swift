@@ -53,7 +53,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     var onViewWillAppear: VoidFunction? // to be able to ensure sortBy is not set before UI is ready
 
-    private let paginator = Paginator(pageSize: 20)
+    let paginator = Paginator(pageSize: 20)
     private var loadingPage: Bool = false
     
     private let cellHeight = DimensionsManager.defaultCellHeight
@@ -214,14 +214,22 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         return itemMaybe
     }
 
-    func updateModelUI(same: ProductWithQuantity -> Bool, updatedModel: ProductWithQuantity) {
+    func appendItemUI(item: ProductWithQuantity) {
+        tableView.wrapUpdates {[weak self] in guard let weakSelf = self else {return}
+            weakSelf.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.models.count, inSection: 0)], withRowAnimation: .Top)
+            weakSelf.models.append(item)
+        }
+    }
+    
+    func updateModelUI(same: ProductWithQuantity -> Bool, updatedModel: ProductWithQuantity) -> Bool {
         for i in 0..<models.count {
             if same(models[i]) {
                 models[i] = updatedModel
-                break
+                tableView.reloadData()
+                return true
             }
         }
-        tableView.reloadData()
+        return false
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {

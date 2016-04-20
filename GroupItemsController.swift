@@ -369,6 +369,14 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         reload()
     }
     
+    func appendItemUI(item: GroupItem) {
+        productsWithQuantityController.appendItemUI(ProductWithQuantityGroup(groupItem: item))
+    }
+    
+    func updateItemUI(item: GroupItem) -> Bool {
+        return productsWithQuantityController.updateModelUI({($0 as! ProductWithQuantityGroup).groupItem.same(item)}, updatedModel: ProductWithQuantityGroup(groupItem: item))
+    }
+    
     // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -454,12 +462,16 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     func onWebsocketGroupItem(note: NSNotification) {
         if let info = note.userInfo as? Dictionary<String, WSNotification<GroupItem>> {
             if let notification = info[WSNotificationValue] {
-//                let groupItem = notification.obj
                 switch notification.verb {
                 case .Add:
-                    onGroupItemAdded(false)
+                    // Update if item is in tableview, if it's not append at the end if we already scrolled until the last page. If we are not in last page and item is not in table view, it means it will appear when we load more pages so we don't have to do anything here for this case.
+                    if !updateItemUI(notification.obj) {
+                        if productsWithQuantityController.paginator.reachedEnd {
+                           appendItemUI(notification.obj)
+                        }
+                    }
                 case .Update:
-                    onGroupItemUpdated(false)
+                    updateItemUI(notification.obj)
                 default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {
