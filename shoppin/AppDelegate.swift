@@ -37,6 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
+        configLog()
+        
         initIsFirstLaunch()
         
         ifDebugLaunchActions()
@@ -51,8 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         let initFb = FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         initHockey()
-        
-        configLog()
         
         checkPing()
         
@@ -158,6 +158,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             AccessTokenHelper.removeToken()
 
         } else { // after first launch
+            QL1("Not first launch")
             PreferencesManager.savePreference(PreferencesManagerKey.isFirstLaunch, value: false)
         }
     }
