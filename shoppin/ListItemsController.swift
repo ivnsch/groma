@@ -965,6 +965,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 switch notification.verb {
                 case .Delete:
                     listItemsTableViewController.removeSection(notification.obj)
+                    sectionsTableViewController?.removeSection(notification.obj)
                     
                 default: QL4("Not handled case: \(notification.verb))")
                 }

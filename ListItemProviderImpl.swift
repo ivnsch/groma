@@ -898,7 +898,7 @@ class ListItemProviderImpl: ListItemProvider {
         memProvider.invalidate()
     }
     
-    func removeSectionFromListItemsMemCacheIfExistent(sectionUuid: String, listUuid: String, handler: ProviderResult<Any> -> Void) {
+    func removeSectionFromListItemsMemCacheIfExistent(sectionUuid: String, listUuid: String?, handler: ProviderResult<Any> -> Void) {
         if memProvider.enabled {
             let success = memProvider.removeSection(sectionUuid, listUuid: listUuid)
             if !success {

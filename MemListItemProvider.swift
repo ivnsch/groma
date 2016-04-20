@@ -249,22 +249,34 @@ class MemListItemProvider {
         }
     }
     
-    func removeSection(uuid: String, listUuid: String) -> Bool {
+    // listUuid: this is only an optimisation, in case we have the list uuid we avoid iterating through all the lists. Passing list uuid or not doesn't affect the result.
+    // Note that currently this optimisation doesn't matter since we clear the mem cache after we leave a list so we have only one list in mem cache at a time. But we let it just in case.
+    func removeSection(uuid: String, listUuid listUuidMaybe: String?) -> Bool {
         guard enabled else {return false}
+        guard listItems != nil else {return false}
         
-        // TODO the dictionary accessing logic is a bit weird, improve
-        if let list = (listItems?.keys.filter{$0 == listUuid})?.first {
-            if let listListItems = listItems?[list] {
-                let updatedListItems = listListItems.removeAllWithCondition{$0.section.uuid == uuid}
-                listItems?[list] = updatedListItems
+        if let listUuid = listUuidMaybe {
+            // TODO the dictionary accessing logic is a bit weird, improve
+            if let listUuid = (listItems?.keys.filter{$0 == listUuid})?.first {
+                if let listListItems = listItems?[listUuid] {
+                    let updatedListItems = listListItems.removeAllWithCondition{$0.section.uuid == uuid}
+                    listItems?[listUuid] = updatedListItems
+                    
+                } else {
+                    QL1("No list items for section: \(uuid) in list: \(listUuid)")
+                    return false
+                }
                 
             } else {
-                QL1("No list items for section: \(uuid) in list: \(list)")
+                QL3("Didn't find list: \(listUuid)")
+                return false
             }
             
         } else {
-            QL3("Didn't find list: \(listUuid)")
-            return false
+            for (listUuid, listListItems) in listItems! {
+                let updatedListItems = listListItems.removeAllWithCondition{$0.section.uuid == uuid}
+                listItems?[listUuid] = updatedListItems
+            }
         }
         
         return true

@@ -18,7 +18,7 @@ protocol SectionProvider {
 
     func remove(section: Section, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
-    func remove(sectionUuid: String, listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func remove(sectionUuid: String, listUuid: String?, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
     // Removes all the sections found with given name (across lists)
     func removeAllWithName(sectionName: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)

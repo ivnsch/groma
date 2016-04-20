@@ -83,5 +83,5 @@ protocol ListItemProvider {
     */
     func listItemCount(status: ListItemStatus, list: List, fetchMode: ProviderFetchModus, _ handler: ProviderResult<Int> -> Void)
     
-    func removeSectionFromListItemsMemCacheIfExistent(sectionUuid: String, listUuid: String, handler: ProviderResult<Any> -> Void)
+    func removeSectionFromListItemsMemCacheIfExistent(sectionUuid: String, listUuid: String?, handler: ProviderResult<Any> -> Void)
 }

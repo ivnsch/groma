@@ -609,10 +609,8 @@ struct MyWebsocketDispatcher {
             }
             
         case WSNotificationVerb.Delete:
-            // TODO!!!! send also list uuid 
-            let listUuid = "123"
             if let sectionUuid = data as? String {
-                Providers.sectionProvider.remove(sectionUuid, listUuid: listUuid, remote: false) {result in
+                Providers.sectionProvider.remove(sectionUuid, listUuid: nil, remote: false) {result in
                     if result.success {
                         postNotification(.Section, verb, sender, sectionUuid)
                     } else {

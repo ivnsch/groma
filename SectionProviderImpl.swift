@@ -33,7 +33,7 @@ class SectionProviderImpl: SectionProvider {
         }
     }
     
-    func remove(sectionUuid: String, listUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    func remove(sectionUuid: String, listUuid: String?, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         
         DBProviders.sectionProvider.remove(sectionUuid, markForSync: true) {[weak self] removed in
             handler(ProviderResult(status: removed ? .Success : .DatabaseUnknown))
