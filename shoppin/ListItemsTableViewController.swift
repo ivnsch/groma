@@ -443,14 +443,16 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     // TODO why do we need indexPath and have to look for the index in the sections array using uuid, shouldn't both have the same index?
     private func removeSection(uuid: String, indexPath: NSIndexPath, animation: UITableViewRowAnimation = .Bottom) {
-        // remove table view section
-        self.tableViewSections.removeAtIndex(indexPath.section)
-        // remove model section TODO better way
-        let sectionIndexMaybe: Int? = getSectionIndex(uuid)
-        if let sectionIndex = sectionIndexMaybe {
-            self.sections.removeAtIndex(sectionIndex)
-            // remove from table view
-            self.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: animation)
+        tableView.wrapUpdates {[weak self] in guard let weakSelf = self else {return}
+            // remove table view section
+            weakSelf.tableViewSections.removeAtIndex(indexPath.section)
+            // remove model section TODO better way
+            let sectionIndexMaybe: Int? = weakSelf.getSectionIndex(uuid)
+            if let sectionIndex = sectionIndexMaybe {
+                weakSelf.sections.removeAtIndex(sectionIndex)
+                // remove from table view
+                weakSelf.tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: animation)
+            }
         }
     }
     
