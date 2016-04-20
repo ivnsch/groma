@@ -214,6 +214,16 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         return itemMaybe
     }
 
+    func updateModelUI(same: ProductWithQuantity -> Bool, updatedModel: ProductWithQuantity) {
+        for i in 0..<models.count {
+            if same(models[i]) {
+                models[i] = updatedModel
+                break
+            }
+        }
+        tableView.reloadData()
+    }
+    
     func scrollViewDidScroll(scrollView: UIScrollView) {
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height

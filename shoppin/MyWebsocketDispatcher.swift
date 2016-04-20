@@ -628,7 +628,7 @@ struct MyWebsocketDispatcher {
     private static func processInventory(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
         case WSNotificationVerb.Add:
-            if let remoteInventory = RemoteInventory(representation: data) {
+            if let remoteInventory = RemoteInventoryWithDependencies(representation: data) {
                 let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
                 Providers.inventoryProvider.addInventory(inventory, remote: false) {result in
                     if result.success {
@@ -642,7 +642,7 @@ struct MyWebsocketDispatcher {
             }
             
         case WSNotificationVerb.Update:
-            if let remoteInventory = RemoteInventory(representation: data) {
+            if let remoteInventory = RemoteInventoryWithDependencies(representation: data) {
                 let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
                 Providers.inventoryProvider.updateInventory(inventory, remote: false) {result in
                     if result.success {
@@ -709,7 +709,7 @@ struct MyWebsocketDispatcher {
                 let (inventoryItems, historyItems) = InventoryItemMapper.itemsWithRemote(inventoryItemsWithHistoryAndDependencies)
                 Providers.inventoryItemsProvider.addToInventoryLocal(inventoryItems, historyItems: historyItems, dirty: false) {result in
                     if result.success {
-                        postNotification(.Inventory, verb, sender, inventoryItems)
+                        postNotification(.InventoryItem, verb, sender, inventoryItems)
                         postNotification(.HistoryItem, verb, sender, historyItems)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory/history item \(inventoryItemsWithHistoryAndDependencies)", result: result)
@@ -721,11 +721,19 @@ struct MyWebsocketDispatcher {
             }
             
         case WSNotificationVerb.Update:
-            QL4("TODO inventory item update, also server!") // TODO!!!!
-//            let inventoryItem = WSInventoryParser.parseInventoryItem(data)
-//            Providers.inventoryItemsProvider.updateInventoryItem(inventoryItem, remote: false) {result in
-//                postNotification(.InventoryItem, verb, inventoryItem)
-//            }
+            if let remoteInventoryItem = RemoteInventoryItemWithProduct(representation: data) {
+                let inventory = InventoryMapper.inventoryWithRemote(remoteInventoryItem.inventory, users: [])
+                let inventoryItem = InventoryItemMapper.inventoryItemWithRemote(remoteInventoryItem, inventory: inventory)
+                Providers.inventoryItemsProvider.updateInventoryItem(inventoryItem, remote: false) {result in
+                    if result.success {
+                        postNotification(.InventoryItem, verb, sender, inventoryItem)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Update inventory item \(inventoryItem)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update inventory item, data: \(data)")
+            }
             
         case WSNotificationVerb.Increment:
             if let remoteIncrement = RemoteIncrement(representation: data) {

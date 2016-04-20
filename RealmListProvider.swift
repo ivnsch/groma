@@ -131,7 +131,7 @@ class RealmListProvider: RealmProvider {
             realm.create(DBList.self, value: list.timestampUpdateDict, update: true)
         }
         for inventory in lists.inventories {
-            realm.create(DBInventory.self, value: inventory.timestampUpdateDict, update: true)
+            realm.create(DBInventory.self, value: inventory.inventory.timestampUpdateDict, update: true)
         }
     }
     

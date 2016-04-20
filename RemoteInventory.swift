@@ -15,20 +15,16 @@ struct RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializab
     let order: Int
     let color: UIColor
     let lastUpdate: Int64
-    let users: [RemoteSharedUser]
 
     init?(representation: AnyObject) {
         guard
-            let inventory: AnyObject = representation.valueForKeyPath("inventory")!,
-            let uuid = inventory.valueForKeyPath("uuid") as? String,
-            let name = inventory.valueForKeyPath("name") as? String,
-            let order = inventory.valueForKeyPath("order") as? Int,
-            let color = ((inventory.valueForKeyPath("color") as? String).map{colorStr in
+            let uuid = representation.valueForKeyPath("uuid") as? String,
+            let name = representation.valueForKeyPath("name") as? String,
+            let order = representation.valueForKeyPath("order") as? Int,
+            let color = ((representation.valueForKeyPath("color") as? String).map{colorStr in
                 UIColor(hexString: colorStr)
             }),
-            let lastUpdate = inventory.valueForKeyPath("lastUpdate") as? Double,
-            let unserializedUsers = representation.valueForKeyPath("users"),
-            let users = RemoteSharedUser.collection(unserializedUsers)
+            let lastUpdate = representation.valueForKeyPath("lastUpdate") as? Double
             else {
                 QL4("Invalid json: \(representation)")
                 return nil}
@@ -38,7 +34,6 @@ struct RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializab
         self.order = order
         self.color = color
         self.lastUpdate = Int64(lastUpdate)
-        self.users = users
     }
 
     static func collection(representation: AnyObject) -> [RemoteInventory]? {
@@ -55,7 +50,7 @@ struct RemoteInventory: ResponseObjectSerializable, ResponseCollectionSerializab
     }
     
     var debugDescription: String {
-        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), color: \(color.hexStr), lastUpdate: \(lastUpdate), users: \(users)}"
+        return "{\(self.dynamicType) uuid: \(uuid), name: \(name), order: \(order), color: \(color.hexStr), lastUpdate: \(lastUpdate)}"
     }
 }
 

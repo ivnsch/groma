@@ -15,8 +15,13 @@ class InventoryMapper {
         return Inventory(uuid: dbInventory.uuid, name: dbInventory.name, users: users, bgColor: dbInventory.bgColor(), order: dbInventory.order, lastServerUpdate: dbInventory.lastServerUpdate)
     }
     
-    class func inventoryWithRemote(remoteInventory: RemoteInventory) -> Inventory {
-        return Inventory(uuid: remoteInventory.uuid, name: remoteInventory.name, users: remoteInventory.users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: remoteInventory.color, order: remoteInventory.order, lastServerUpdate: remoteInventory.lastUpdate)
+    class func inventoryWithRemote(remoteInventory: RemoteInventory, users: [RemoteSharedUser]) -> Inventory {
+        return Inventory(uuid: remoteInventory.uuid, name: remoteInventory.name, users: users.map{SharedUserMapper.sharedUserWithRemote($0)}, bgColor: remoteInventory.color, order: remoteInventory.order, lastServerUpdate: remoteInventory.lastUpdate)
+    }
+
+    class func inventoryWithRemote(remoteInventoryWithDependencies: RemoteInventoryWithDependencies) -> Inventory {
+        let remoteInventory = remoteInventoryWithDependencies.inventory
+        return inventoryWithRemote(remoteInventory, users: remoteInventoryWithDependencies.users)
     }
     
     class func dbWithInventory(inventory: Inventory, dirty: Bool) -> DBInventory {
@@ -37,14 +42,18 @@ class InventoryMapper {
         return db
     }
     
-    class func dbWithInventory(inventory: RemoteInventory) -> DBInventory {
+    class func dbWithInventory(remoteInventoryWithDependencies: RemoteInventoryWithDependencies) -> DBInventory {
+        return dbWithInventory(remoteInventoryWithDependencies.inventory, users: remoteInventoryWithDependencies.users)
+    }
+    
+    class func dbWithInventory(inventory: RemoteInventory, users: [RemoteSharedUser]) -> DBInventory {
         let db = DBInventory()
         db.uuid = inventory.uuid
         db.name = inventory.name
         db.order = inventory.order
         db.setBgColor(inventory.color)
         db.lastServerUpdate = inventory.lastUpdate
-        let dbSharedUsers = inventory.users.map{SharedUserMapper.dbWithSharedUser($0)}
+        let dbSharedUsers = users.map{SharedUserMapper.dbWithSharedUser($0)}
         for dbObj in dbSharedUsers {
             db.users.append(dbObj)
         }

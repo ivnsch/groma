@@ -159,7 +159,7 @@ class RealmInventoryProvider: RealmProvider {
             let remoteInventories = syncResult.inventories
             for remoteInventory in remoteInventories {
                 let dbInventory = InventoryMapper.dbWithInventory(remoteInventory)
-                dbInventoriesDict[remoteInventory.uuid] = dbInventory
+                dbInventoriesDict[remoteInventory.inventory.uuid] = dbInventory
                 realm.add(dbInventory, update: true)
             }
             

@@ -167,8 +167,6 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     func onInventoryItemUpdated() {
-        // we have pagination so we don't know if the item is visible atm. For now simply cause a reload and start at first page. TODO nicer solution
-        reload()
         topQuickAddControllerManager?.expand(false)
         topQuickAddControllerManager?.controller?.onClose()
         topBarOnCloseExpandable()
@@ -305,6 +303,10 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
 //        }
     }
     
+    func updateItemUI(item: InventoryItem) {
+        productsWithQuantityController.updateModelUI({($0 as! ProductWithQuantityInv).inventoryItem.same(item)}, updatedModel: ProductWithQuantityInv(inventoryItem: item))
+    }
+    
     func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) {
         
         func onEditListItem(input: ListItemInput, editingItem: InventoryItem) {
@@ -312,9 +314,13 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             let updatedProduct = editingItem.product.copy(name: input.name, category: updatedCategory, brand: input.brand)
             // TODO! calculate quantity delta correctly?
             let updatedInventoryItem = editingItem.copy(quantity: input.quantity, quantityDelta: input.quantity, product: updatedProduct)
-            Providers.inventoryItemsProvider.updateInventoryItem(updatedInventoryItem, remote: true, successHandler {[weak self] in
+            Providers.inventoryItemsProvider.updateInventoryItem(updatedInventoryItem, remote: true, resultHandler (onSuccess: {[weak self] in
+                self?.updateItemUI(updatedInventoryItem)
                 self?.onInventoryItemUpdated()
-            })
+            }, onError: {[weak self] result in
+                self?.reload()
+                self?.defaultErrorHandler()(providerResult: result)
+            }))
         }
         
 //        func onAddInventoryItem(input: ListItemInput) {
@@ -612,8 +618,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 
                 switch notification.verb {
                 case .Update:
-//                    let inventoryItem = notification.obj
-                    reload()
+                    updateItemUI(notification.obj)
                     
                     // TODO? increment is covered in onWebsocketInventoryItems, but user can e.g. change name (update of product in this case, but still triggered from inventory...)
                     
@@ -682,7 +687,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                 case .Add:
-                    onInventoryItemUpdated()
+                    reload()
                 default: print("Error: InventoryItemsViewController.onWebsocketInventoryWithHistoryAfterSave: History: not implemented: \(notification.verb)")
                 }
             }

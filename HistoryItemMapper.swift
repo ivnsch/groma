@@ -70,12 +70,12 @@ class HistoryItemMapper {
     
     class func historyItemsWithRemote(remoteListItems: RemoteHistoryItems) -> HistoryItemsWithRelations {
 
-        func toInventoryDict(remoteInventories: [RemoteInventory]) -> ([String: Inventory], [Inventory]) {
+        func toInventoryDict(remoteInventories: [RemoteInventoryWithDependencies]) -> ([String: Inventory], [Inventory]) {
             var dict: [String: Inventory] = [:]
             var arr: [Inventory] = []
             for remoteInventory in remoteInventories {
                 let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
-                dict[remoteInventory.uuid] = inventory
+                dict[remoteInventory.inventory.uuid] = inventory
                 arr.append(inventory)
                 
             }

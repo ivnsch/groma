@@ -31,7 +31,7 @@ class ListMapper {
     }
 
     class func dbWithLists(remoteLists: RemoteListsWithDependencies) -> [DBList] {
-        let inventoriesDict = remoteLists.inventories.toDictionary{($0.uuid, InventoryMapper.dbWithInventory($0))}
+        let inventoriesDict = remoteLists.inventories.toDictionary{($0.inventory.uuid, InventoryMapper.dbWithInventory($0))}
         
         return remoteLists.lists.map {remoteList in
             let dbList = DBList()
@@ -59,7 +59,7 @@ class ListMapper {
     
     class func listsWithRemote(remoteLists: RemoteListsWithDependencies) -> [List] {
 
-        let inventoriesDict = remoteLists.inventories.toDictionary{($0.uuid, InventoryMapper.inventoryWithRemote($0))}
+        let inventoriesDict = remoteLists.inventories.toDictionary{($0.inventory.uuid, InventoryMapper.inventoryWithRemote($0))}
         
         let lists = remoteLists.lists.map {remoteList in
             List(

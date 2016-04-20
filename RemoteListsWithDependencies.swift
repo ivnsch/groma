@@ -11,13 +11,13 @@ import QorumLogs
 
 struct RemoteListsWithDependencies: ResponseObjectSerializable, CustomDebugStringConvertible {
 
-    let inventories: [RemoteInventory]
+    let inventories: [RemoteInventoryWithDependencies]
     let lists: [RemoteList]
     
     init?(representation: AnyObject) {
         guard
         let inventoriesObj = representation.valueForKeyPath("inventories"),
-        let inventories = RemoteInventory.collection(inventoriesObj),
+        let inventories = RemoteInventoryWithDependencies.collection(inventoriesObj),
         let listsObj = representation.valueForKeyPath("lists"),
         let lists = RemoteList.collection(listsObj)
             else {

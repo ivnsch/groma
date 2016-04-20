@@ -362,7 +362,7 @@ class RealmInventoryItemProvider: RealmProvider {
                 realm.create(DBProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
             }
             for inventory in items.inventories {
-                DBProviders.inventoryProvider.updateLastSyncTimeStampSync(realm, inventory: inventory)
+                DBProviders.inventoryProvider.updateLastSyncTimeStampSync(realm, inventory: inventory.inventory)
             }
             for historyItem in items.historyItems {
                 realm.create(DBHistoryItem.self, value: historyItem.timestampUpdateDict, update: true)

@@ -12,7 +12,7 @@ import QorumLogs
 struct RemoteHistoryItems: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let historyItems: [RemoteHistoryItem]
-    let inventories: [RemoteInventory]
+    let inventories: [RemoteInventoryWithDependencies]
     let productsCategories: [RemoteProductCategory]
     let products: [RemoteProduct]
     let users: [RemoteSharedUser]
@@ -22,7 +22,7 @@ struct RemoteHistoryItems: ResponseObjectSerializable, ResponseCollectionSeriali
             let historyItemsObj = representation.valueForKeyPath("historyItems") as? [AnyObject],
             let historyItems = RemoteHistoryItem.collection(historyItemsObj),
             let inventoriesObj = representation.valueForKeyPath("inventories") as? [AnyObject],
-            let inventories = RemoteInventory.collection(inventoriesObj),
+            let inventories = RemoteInventoryWithDependencies.collection(inventoriesObj),
             let productsCategoriesObj = representation.valueForKeyPath("productsCategories") as? [AnyObject],
             let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
             let productsObj = representation.valueForKeyPath("products") as? [AnyObject],

@@ -58,12 +58,12 @@ struct RemoteInventoryItemsSyncResult: ResponseObjectSerializable, ResponseColle
 
 
 struct RemoteInventoriesWithInventoryItemsSyncResult: ResponseObjectSerializable, CustomDebugStringConvertible {
-    let inventories: [RemoteInventory]
+    let inventories: [RemoteInventoryWithDependencies]
     let couldNotUpdate: [String]
     let couldNotDelete: [String]
     let inventoryItemsSyncResults: [RemoteInventoryItemsSyncResult]
     
-    init(inventories: [RemoteInventory], couldNotUpdate: [String], couldNotDelete: [String], inventoryItemsSyncResults: [RemoteInventoryItemsSyncResult]) {
+    init(inventories: [RemoteInventoryWithDependencies], couldNotUpdate: [String], couldNotDelete: [String], inventoryItemsSyncResults: [RemoteInventoryItemsSyncResult]) {
         self.inventories = inventories
         self.couldNotUpdate = couldNotUpdate
         self.couldNotDelete = couldNotDelete
@@ -73,7 +73,7 @@ struct RemoteInventoriesWithInventoryItemsSyncResult: ResponseObjectSerializable
     init?(representation: AnyObject) {
         guard
             let inventoriesObj = representation.valueForKeyPath("inventories") as? [AnyObject],
-            let inventories = RemoteInventory.collection(inventoriesObj),
+            let inventories = RemoteInventoryWithDependencies.collection(inventoriesObj),
             let couldNotUpdate = representation.valueForKeyPath("couldNotUpdate") as? [String],
             let couldNotDelete = representation.valueForKeyPath("couldNotDelete") as? [String],
             let inventoryItemsSyncResultsObj = representation.valueForKeyPath("inventoryItems") as? [AnyObject],

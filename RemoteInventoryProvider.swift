@@ -10,7 +10,7 @@ import Foundation
 
 class RemoteInventoryProvider: RemoteProvider {
     
-    func inventories(handler: RemoteResult<[RemoteInventory]> -> ()) {
+    func inventories(handler: RemoteResult<[RemoteInventoryWithDependencies]> -> ()) {
         RemoteProvider.authenticatedRequestArray(.GET, Urls.inventory) {result in
             handler(result)
         }

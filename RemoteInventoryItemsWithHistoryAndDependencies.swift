@@ -15,7 +15,7 @@ struct RemoteInventoryItemsWithHistoryAndDependencies: ResponseObjectSerializabl
     let historyItems: [RemoteHistoryItem]
     let products: [RemoteProduct]
     let productsCategories: [RemoteProductCategory]
-    let inventories: [RemoteInventory]
+    let inventories: [RemoteInventoryWithDependencies]
     let users: [RemoteSharedUser]
     
     // TODO After porting to Swift 2.0 catch exception in these initializers and show msg to client accordingly, or don't use force unwrap
@@ -31,7 +31,7 @@ struct RemoteInventoryItemsWithHistoryAndDependencies: ResponseObjectSerializabl
             let productsCategoriesObj = representation.valueForKeyPath("productsCategories"),
             let productsCategories = RemoteProductCategory.collection(productsCategoriesObj),
             let inventoriesObj = representation.valueForKeyPath("inventories"),
-            let inventories = RemoteInventory.collection(inventoriesObj),
+            let inventories = RemoteInventoryWithDependencies.collection(inventoriesObj),
             let usersObj = representation.valueForKeyPath("users"),
             let users = RemoteSharedUser.collection(usersObj)
             else {
