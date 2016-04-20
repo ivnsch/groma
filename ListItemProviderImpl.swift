@@ -398,9 +398,11 @@ class ListItemProviderImpl: ListItemProvider {
                         SectionMapper.sectionWithDB(dbSection)
                     }
                     
-//                    QL2("Section for: \(prototype.product.product.name) exists?: \(existingSectionMaybe)")
-                    let section = existingSectionMaybe ?? Section(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: 0)) // NOTE: order for new section is overwritten in mem provider!
-//                    QL2("Section created/reusing: \(section)")
+                    let section = existingSectionMaybe ?? {
+                        let newSection: Section = Section(uuid: NSUUID().UUIDString, name: prototype.targetSectionName, color: prototype.targetSectionColor, list: list, order: ListItemStatusOrder(status: status, order: 0)) // NOTE: order for new section is overwritten in mem provider!
+                        QL1("Section for prototype: \(prototype) didn't exist, created a new one: \(newSection)")
+                        return newSection
+                    }()
                     
                     return (prototype, section)
                 }

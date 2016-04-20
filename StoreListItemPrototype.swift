@@ -31,7 +31,7 @@ class StoreListItemPrototype: Equatable, Identifiable, CustomDebugStringConverti
     }
     
     var debugDescription: String {
-        return "\(product.product.name), \(quantity), \(targetSectionName)"
+        return "\(self.dynamicType), product: \(product), quantity: \(quantity), targetSectionName: \(targetSectionName), targetSectionColor: \(targetSectionColor.hexStr)"
     }
     
 }
