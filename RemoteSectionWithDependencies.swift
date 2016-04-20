@@ -9,16 +9,16 @@
 import Foundation
 import QorumLogs
 
-struct RemoteSectionWithDependencies: ResponseObjectSerializable, CustomDebugStringConvertible {
+struct RemoteSectionWithDependencies: ResponseObjectSerializable, ResponseCollectionSerializable, CustomDebugStringConvertible {
     
     let section: RemoteSection
     let list: RemoteListWithDependencies
 
     init?(representation: AnyObject) {
         guard
-            let sectionObj = representation.valueForKeyPath("section") as? [AnyObject],
+            let sectionObj = representation.valueForKeyPath("section"),
             let section = RemoteSection(representation: sectionObj),
-            let listObj = representation.valueForKeyPath("list") as? [AnyObject],
+            let listObj = representation.valueForKeyPath("list"),
             let list = RemoteListWithDependencies(representation: listObj)
             else {
                 QL4("Invalid json: \(representation)")
@@ -26,6 +26,18 @@ struct RemoteSectionWithDependencies: ResponseObjectSerializable, CustomDebugStr
         
         self.section = section
         self.list = list
+    }
+    
+    static func collection(representation: AnyObject) -> [RemoteSectionWithDependencies]? {
+        var sections = [RemoteSectionWithDependencies]()
+        for obj in representation as! [AnyObject] {
+            if let section = RemoteSectionWithDependencies(representation: obj) {
+                sections.append(section)
+            } else {
+                return nil
+            }
+        }
+        return sections
     }
 
     var debugDescription: String {

@@ -592,14 +592,16 @@ struct MyWebsocketDispatcher {
 //            postNotification(.Section, verb, group)
             
         case WSNotificationVerb.Update:
-            if let remoteSection = RemoteSectionWithDependencies(representation: data) {
-                let list = ListMapper.listWithRemote(remoteSection.list)
-                let section = SectionMapper.SectionWithRemote(remoteSection.section, list: list)
-                Providers.sectionProvider.update(section, remote: false) {result in
+            if let remoteSections = RemoteSectionWithDependencies.collection(data) {
+                let sections: [Section] = remoteSections.map {remoteSection in
+                    let list = ListMapper.listWithRemote(remoteSection.list)
+                    return SectionMapper.SectionWithRemote(remoteSection.section, list: list)
+                }
+                Providers.sectionProvider.update(sections, remote: false) {result in
                     if result.success {
-                        postNotification(.Section, verb, sender, section)
+                        postNotification(.Section, verb, sender, sections)
                     } else {
-                        MyWebsocketDispatcher.reportWebsocketStoringError("Update section \(section)", result: result)
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Update section \(sections)", result: result)
                     }
                 }
             } else {

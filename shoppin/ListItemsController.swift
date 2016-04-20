@@ -944,15 +944,17 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     func onWebsocketSection(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSNotification<Section>> {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<[Section]>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
                     // There's no direct add of section
                     //                case .Add:
                 case .Update:
                     // NOTE: this doesn't update order. Update reorder would require to reload the table view and this can e.g. revert undo cells or interfere with current action like swiping an item. So to update order the user has to reopen the list.
-                    listItemsTableViewController.updateSection(notification.obj)
-                    
+                    for section in notification.obj {
+                        listItemsTableViewController.updateSection(section)
+                    }
+
                 default: QL4("Not handled: \(notification.verb)")
                 }
             } else {

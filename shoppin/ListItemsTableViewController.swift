@@ -308,6 +308,21 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
         setListItems(updatedItems)
     }
+
+    func updateSections(sections: [Section]) {
+        
+        let sectionsDict = sections.toDictionary{($0.uuid, $0)}
+        
+        // This is maybe not the most performant way to do this update but it guarantees consistency as it uses the "official" entry point to initialise the table, which is setListItems
+        let updatedItems: [ListItem] = items.map{item in
+            if let section = sectionsDict[item.section.uuid] {
+                return item.copy(section: section, note: nil)
+            } else {
+                return item
+            }
+        }
+        setListItems(updatedItems)
+    }
     
     // loops through list items to generate tableview sections, returns also found sections so we don't have to loop 2x
     private func buildTableViewSections(listItems: [ListItem]) -> (tableViewSections:[ListItemsViewSection], sections:[Section]) {
