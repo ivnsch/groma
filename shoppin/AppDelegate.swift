@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
     private var ratingAlert: RatingAlert? // arc
     
-    private let websocketVisualNotificationDuration: Double = 1
+    private let websocketVisualNotificationDuration: Double = 2
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
@@ -712,7 +712,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             let labelHeight: CGFloat = 20
             let label = UILabel(frame: CGRectMake(0, window.frame.height - tabBarHeight - labelHeight, window.frame.width, labelHeight))
             label.tag = tag
-            label.font = Fonts.smallerLight
+            label.font = Fonts.smaller
             label.textAlignment = .Center
             label.backgroundColor = UIColor.whiteColor()
             label.textColor = textColor
