@@ -8,6 +8,7 @@
 
 import Foundation
 
+// TODO generic name and put somewhere else, this is also being used by group items (e.g. ProductWithQuantitySortBy)
 enum InventorySortBy {
     case Alphabetic, Count
 }

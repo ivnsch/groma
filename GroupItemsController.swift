@@ -390,7 +390,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func loadModels(page: NSRange, sortBy: InventorySortBy, onSuccess: [ProductWithQuantity] -> Void) {
         if let group = group {
-            Providers.listItemGroupsProvider.groupItems(group, successHandler{groupItems in
+            Providers.listItemGroupsProvider.groupItems(group, sortBy: sortBy, successHandler{groupItems in
                 let productsWithQuantity = groupItems.map{ProductWithQuantityGroup(groupItem: $0)}
                 onSuccess(productsWithQuantity)
             })

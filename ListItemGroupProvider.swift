@@ -38,7 +38,7 @@ protocol ListItemGroupProvider {
     
     // group items
     
-    func groupItems(group: ListItemGroup, _ handler: ProviderResult<[GroupItem]> -> Void)
+    func groupItems(group: ListItemGroup, sortBy: InventorySortBy, _ handler: ProviderResult<[GroupItem]> -> Void)
     
     func add(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 

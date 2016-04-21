@@ -12,7 +12,7 @@ import QorumLogs
 
 class RealmGroupItemProvider: RealmProvider {
     
-    func groupItems(group: ListItemGroup, handler: [GroupItem] -> Void) {
+    func groupItems(group: ListItemGroup, sortBy: InventorySortBy, handler: [GroupItem] -> Void) {
         let mapper = {GroupItemMapper.groupItemWith($0)}
         self.load(mapper, filter: DBGroupItem.createFilterGroup(group.uuid), handler: handler)
     }

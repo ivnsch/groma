@@ -78,7 +78,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     func addGroupItems(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<[GroupItem]> -> ()) {
-        groupItems(group) {[weak self] result in
+        groupItems(group, sortBy: .Alphabetic) {[weak self] result in
             if let groupItems = result.sucessResult {
                 self?.add(groupItems, group: group, remote: remote) {result in
                     // return fetched group items to the caller
@@ -160,21 +160,24 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
 
-    func groupItems(group: ListItemGroup, _ handler: ProviderResult<[GroupItem]> -> Void) {
-        DBProviders.groupItemProvider.groupItems(group) {[weak self] dbItems in
+    func groupItems(group: ListItemGroup, sortBy: InventorySortBy, _ handler: ProviderResult<[GroupItem]> -> Void) {
+        DBProviders.groupItemProvider.groupItems(group, sortBy: sortBy) {[weak self] (var dbItems) in
+            
+            dbItems = dbItems.sortBy(sortBy)
+            
             handler(ProviderResult(status: .Success, sucessResult: dbItems))
             
             self?.remoteGroupsProvider.groupsItems(group) {remoteResult in
                 
                 if let remoteItems = remoteResult.successResult {
                     
-                    let items: GroupItemsWithRelations = GroupItemMapper.groupItemsWithRemote(remoteItems)
+                    let items: [GroupItem] = GroupItemMapper.groupItemsWithRemote(remoteItems).groupItems.sortBy(sortBy)
                     
-                    if dbItems != items.groupItems {
+                    if dbItems != items {
                         
-                        DBProviders.groupItemProvider.overwrite(items.groupItems, groupUuid: group.uuid, clearTombstones: true) {saved in
+                        DBProviders.groupItemProvider.overwrite(items, groupUuid: group.uuid, clearTombstones: true) {saved in
                             if saved {
-                                handler(ProviderResult(status: .Success, sucessResult: items.groupItems))
+                                handler(ProviderResult(status: .Success, sucessResult: items))
                                 
                             } else {
                                 print("Error overwriting group items - couldn't save")
