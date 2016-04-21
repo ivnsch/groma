@@ -952,10 +952,13 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                     // There's no direct add of section
                     //                case .Add:
                 case .Update:
-                    // NOTE: this doesn't update order. Update reorder would require to reload the table view and this can e.g. revert undo cells or interfere with current action like swiping an item. So to update order the user has to reopen the list.
-                    for section in notification.obj {
-                        listItemsTableViewController.updateSection(section)
-                    }
+                    
+                    // Updated note: for now we just update everything immediately - later we think about how to improve UX.
+//                    // NOTE: this doesn't update order. Update reorder would require to reload the table view and this can e.g. revert undo cells or interfere with current action like swiping an item. So to update order the user has to reopen the list.
+//                    for section in notification.obj {
+//                        listItemsTableViewController.updateSection(section)
+//                    }
+                    updatePossibleList() // reload list
 
                 default: QL4("Not handled: \(notification.verb)")
                 }

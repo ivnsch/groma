@@ -107,11 +107,9 @@ class SectionProviderImpl: SectionProvider {
     func update(sections: [Section], remote: Bool, _ handler: ProviderResult<Any> -> ()) {
 
         DBProviders.sectionProvider.update(sections) {[weak self] updated in
-            handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
-            
             if updated {
-                
                 Providers.listItemsProvider.invalidateMemCache()
+                handler(ProviderResult(status: .Success))
                 
                 if remote {
                     
@@ -134,6 +132,8 @@ class SectionProviderImpl: SectionProvider {
                         }
                     }
                 }
+            } else {
+                handler(ProviderResult(status: .DatabaseUnknown))
             }
         }
     }
