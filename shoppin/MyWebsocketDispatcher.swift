@@ -57,7 +57,6 @@ enum WSNotificationCategory: String {
     case Product = "product"
     case Category = "category"
     case Group = "group"
-    case Groups = "groups"
     case GroupItem = "groupItem"
     case List = "list"
     case ListItem = "listItem"
@@ -104,8 +103,6 @@ struct MyWebsocketDispatcher {
                 processProduct(verb, topic, sender, data)
             case .Group:
                 processGroup(verb, topic, sender, data)
-            case .Groups:
-                processGroups(verb, topic, sender, data)
             case .GroupItem:
                 processGroupItem(verb, topic, sender, data)
             case .List:
@@ -358,13 +355,7 @@ struct MyWebsocketDispatcher {
             } else {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Increment group fav, data: \(data)")
             }
-
-        default: QL4("Not handled verb: \(verb)")
-        }
-    }
-    
-    private static func processGroups(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
-        switch verb {
+            
         case WSNotificationVerb.Order:
             if let remoteOrderUpdates = RemoteOrderUpdate.collection(data) {
                 let orderUpdates = remoteOrderUpdates.map{OrderUpdate(uuid: $0.uuid, order: $0.order)}
@@ -378,6 +369,7 @@ struct MyWebsocketDispatcher {
             } else {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Update groups order, data: \(data)")
             }
+
         default: QL4("Not handled verb: \(verb)")
         }
     }
