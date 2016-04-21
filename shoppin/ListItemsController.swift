@@ -877,10 +877,12 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteListItemsReorderResult>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
-                case WSNotificationVerb.Order:
+                case .TodoOrder:
+                    fallthrough
+                case .DoneOrder:
                     updatePossibleList() // reload list
                     
-                default: print("Error: ViewController.onWebsocketUpdateListItems: Not handled: z\(notification.verb)")
+                default: print("Error: ViewController.onWebsocketUpdateListItems: Not handled: \(notification.verb)")
                 }
             } else {
                 print("Error: ViewController.onWebsocketAddListItems: no value")

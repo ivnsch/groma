@@ -780,10 +780,10 @@ class ListItemProviderImpl: ListItemProvider {
         })
     }
     
-    // TODO!!!! for all status
-    func updateListItemsTodoOrderRemote(orderUpdates: [RemoteListItemReorder], sections: [Section], _ handler: ProviderResult<Any> -> Void) {
-        DBProviders.listItemProvider.updateListItemsTodoOrderRemote(orderUpdates, sections: sections) {success in
+    func updateListItemsOrderLocal(orderUpdates: [RemoteListItemReorder], sections: [Section], status: ListItemStatus, _ handler: ProviderResult<Any> -> Void) {
+        DBProviders.listItemProvider.updateListItemsOrderLocal(orderUpdates, sections: sections, status: status) {success in
             if success {
+                Providers.listItemsProvider.invalidateMemCache()
                 handler(ProviderResult(status: .Success))
             } else {
                 QL4("Couldn't store remote list items order update")

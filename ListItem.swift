@@ -374,6 +374,14 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
         case .Stash: return "stashQuantity"
         }
     }
+
+    static func orderFieldName(status: ListItemStatus) -> String {
+        switch status {
+        case .Todo: return "todoOrder"
+        case .Done: return "doneOrder"
+        case .Stash: return "stashOrder"
+        }
+    }
     
     func switchStatusQuantityMutable(status: ListItemStatus, targetStatus: ListItemStatus) {
         

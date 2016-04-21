@@ -74,7 +74,7 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
-    func updateListItemsTodoOrderRemote(orderUpdates: [RemoteListItemReorder], sections: [Section], _ handler: Bool -> Void) {
+    func updateListItemsOrderLocal(orderUpdates: [RemoteListItemReorder], sections: [Section], status: ListItemStatus, _ handler: Bool -> Void) {
         doInWriteTransaction({realm in
             
             // order update can change the section a list item is in, so we need to update the section too.
@@ -83,7 +83,7 @@ class RealmListItemProvider: RealmProvider {
             
             for orderUpdate in orderUpdates {
                 if let dbSection = dbSectionDict[orderUpdate.sectionUuid] {
-                    realm.create(DBListItem.self, value: orderUpdate.updateDict(dbSection), update: true)
+                    realm.create(DBListItem.self, value: orderUpdate.updateDict(status, dbSection: dbSection), update: true)
                 } else {
                     QL4("Invalid state, section object corresponding to uuid: \(orderUpdate.sectionUuid) was not found")
                 }
@@ -91,7 +91,12 @@ class RealmListItemProvider: RealmProvider {
             
             return true
             
-            }, finishHandler: {successMaybe in
+            }, finishHandler: {(successMaybe: Bool?) in
+                if let success = successMaybe {
+                    if success {
+                        Providers.listItemsProvider.invalidateMemCache()
+                    }
+                }
                 handler(successMaybe ?? false)
         })
     }

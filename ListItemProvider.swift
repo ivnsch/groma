@@ -45,8 +45,8 @@ protocol ListItemProvider {
     
     func updateListItemsOrder(listItems: [ListItem], status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
-    // The counterpart of updateListItemsTodoOrder to process the update when it comes via websocket. We need a special service because websockets sends us a reduced payload (only the order and sections).
-    func updateListItemsTodoOrderRemote(orderUpdates: [RemoteListItemReorder], sections: [Section], _ handler: ProviderResult<Any> -> Void)
+    // The counterpart of updateListItemsOrder to process the update when it comes via websocket. We need a special service because websockets sends us a reduced payload (only the order and sections).
+    func updateListItemsOrderLocal(orderUpdates: [RemoteListItemReorder], sections: [Section], status: ListItemStatus, _ handler: ProviderResult<Any> -> Void)
     
     func listItems(list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[ListItem]> -> ())
 
