@@ -199,7 +199,16 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             let incrementedListItem = tableViewListItem.listItem.increment(ListItemStatusQuantity(status: status, quantity: increment.delta))
             updateOrAddListItem(incrementedListItem, status: status, increment: false, notifyRemote: notifyRemote) // update means overwrite - don't increment
         } else {
-            QL1("Couldn't increment list item because it's not in the table view")
+            QL2("Couldn't increment list item because it's not in the table view")
+        }
+    }
+
+    func updateQuantity(uuid: String, quantity: Int, notifyRemote: Bool) {
+        if let (tableViewListItem, _) = findFirstListItemWithIndexPath({$0.uuid == uuid}) {
+            let updatedItem = tableViewListItem.listItem.updateQuantity(ListItemStatusQuantity(status: status, quantity: quantity))
+            updateListItem(updatedItem, status: status, notifyRemote: notifyRemote)
+        } else {
+            QL2("Couldn't update list item quantity because it's not in the table view")
         }
     }
     

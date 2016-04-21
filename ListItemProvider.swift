@@ -55,7 +55,7 @@ protocol ListItemProvider {
     
     func increment(listItem: ListItem, status: ListItemStatus, delta: Int, remote: Bool, _ handler: ProviderResult<ListItem> -> ())
 
-    func increment(increment: ItemIncrement, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<ListItem> -> ())
+    func increment(increment: RemoteListItemIncrement, remote: Bool, _ handler: ProviderResult<ListItem> -> ())
     
     /**
     Updates done status of listItems, and their "order" field such that they are positioned at the end of the new section.

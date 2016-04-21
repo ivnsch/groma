@@ -918,6 +918,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 
                 let listItem = notification.obj
                 
+                // TODO!!!!! websocket add/update must send status also
+                
                 switch notification.verb {
                 case .Add:
                     onListItemAddedToProvider(listItem, status: status, scrollToSelection: false, notifyRemote: false)
@@ -948,13 +950,13 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 QL4("No value")
             }
             
-        } else if let info = note.userInfo as? Dictionary<String, WSNotification<ItemIncrement>> {
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteListItemIncrement>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
-                case WSNotificationVerb.Increment:
+                case .Increment:
                     let incr = notification.obj
-                    // TODO!!!!! websocket add/update must send status also
-                    listItemsTableViewController.incrementListItem(incr, status: .Todo, notifyRemote: false)
+                    listItemsTableViewController.updateQuantity(incr.uuid, quantity: incr.updatedQuantity, notifyRemote: false)
+                    
                 default: QL4("Not handled: \(notification.verb)")
                 }
             } else {

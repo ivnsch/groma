@@ -875,11 +875,11 @@ class ListItemProviderImpl: ListItemProvider {
     }
 
     // TODO this can be optimised, such that we don't have to prefetch the item but increment directly at least in memory
-    func increment(increment: ItemIncrement, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<ListItem> -> Void) {
-        findListItem(increment.itemUuid) {[weak self] result in
+    func increment(increment: RemoteListItemIncrement, remote: Bool, _ handler: ProviderResult<ListItem> -> Void) {
+        findListItem(increment.uuid) {[weak self] result in
             if let listItem = result.sucessResult {
                 
-                self?.increment(listItem, status: status, delta: increment.delta, remote: remote) {result in
+                self?.increment(listItem, status: increment.status, delta: increment.delta, remote: remote) {result in
 
                     if let statusQuantity = result.sucessResult {
                         handler(ProviderResult(status: .Success, sucessResult: statusQuantity))
@@ -889,7 +889,7 @@ class ListItemProviderImpl: ListItemProvider {
                 }
                 
             } else {
-                print("InventoryItemsProviderImpl.incrementInventoryItem: Didn't find inventory item to increment, for: \(increment)")
+                QL2("Didn't find inventory item to increment, for: \(increment)")
                 handler(ProviderResult(status: .NotFound))
             }
         }

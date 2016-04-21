@@ -524,12 +524,11 @@ struct MyWebsocketDispatcher {
             }
             
         case WSNotificationVerb.Increment:
-            if let remoteIncrement = RemoteIncrement(representation: data) {
-                let increment = ItemIncrement(delta: remoteIncrement.delta, itemUuid: remoteIncrement.uuid) // TODO!!!! pass the last update timestamp also?
-                // TODO!!!! object needs status
-                Providers.listItemsProvider.increment(increment, status: .Todo, remote: false) {result in
+            if let remoteIncrement = RemoteListItemIncrement(representation: data) {
+                let increment = ItemIncrement(delta: remoteIncrement.delta, itemUuid: remoteIncrement.uuid)
+                Providers.listItemsProvider.increment(remoteIncrement, remote: false) {result in
                     if result.success {
-                        postNotification(.GroupItem, verb, sender, increment)
+                        postNotification(.ListItem, verb, sender, remoteIncrement)
                     } else {
                         MyWebsocketDispatcher.reportWebsocketStoringError("Increment list item \(remoteIncrement)", result: result)
                     }
