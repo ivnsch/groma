@@ -51,6 +51,7 @@ enum WSNotificationVerb: String {
     case Increment = "incr"
     case Fav = "fav"
     case Order = "ord"
+    case Switch = "switch"
     
     case TodoOrder = "todoOrd"
     case DoneOrder = "doneOrd"
@@ -591,6 +592,19 @@ struct MyWebsocketDispatcher {
                 }
             } else {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Update list items order, data: \(data)")
+            }
+            
+        case WSNotificationVerb.Switch:
+            if let switchFullResult = RemoteSwitchListItemFullResult(representation: data) {
+                Providers.listItemsProvider.switchStatusLocal(switchFullResult.switchResult.switchedItem.uuid, status1: switchFullResult.srcStatus, status: switchFullResult.dstStatus) {result in
+                    if let switchedListItem = result.sucessResult {
+                        postNotification(.ListItem, verb, sender, (result: switchFullResult, switchedListItem: switchedListItem))
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete \(switchFullResult.switchResult.switchedItem.uuid)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Delete listitem, data: \(data)")
             }
             
         default: QL4("Not handled verb: \(verb)")

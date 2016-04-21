@@ -482,6 +482,17 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
         return findListItemsWithIndexPath{$0.uuid == listItemUuid}.first.map{$0.indexPath}
     }
+
+    func getItem(listItemUuid: String) -> TableViewListItem? {
+        for s in self.tableViewSections {
+            for l in s.tableViewListItems {
+                if (listItemUuid == l.listItem.uuid) {
+                    return l
+                }
+            }
+        }
+        return nil
+    }
     
     private typealias TableViewListItemWithIndexPath = (item: TableViewListItem, indexPath: NSIndexPath)
 

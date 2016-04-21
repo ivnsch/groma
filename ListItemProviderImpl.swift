@@ -615,7 +615,18 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
 
-    func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    // Websocket list item switch
+    func switchStatusLocal(listItemUuid: String, status1: ListItemStatus, status: ListItemStatus, _ handler: ProviderResult<ListItem> -> Void) {
+        findListItem(listItemUuid) {[weak self] result in
+            if let listItem = result.sucessResult {
+                self?.switchStatus(listItem, list: listItem.list, status1: status1, status: status, remote: false, handler)
+            } else {
+                QL2("Didn't find list item to be switched, uuid: \(listItemUuid), status1: \(status1), status: \(status)")
+            }
+        }
+    }
+    
+    func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<ListItem> -> Void) {
         
 //        QL2("Switching status from \(listItem.product.product.name) from status \(status1) to \(status)")
         
@@ -639,7 +650,21 @@ class ListItemProviderImpl: ListItemProvider {
 //                QL2("After switching: \(listItem.product.product.name), writing updated items to db: \(allItemsToUpdate)")
                 
                 // Persist changes. If mem cached is enabled this calls handler directly after mem cache is updated and does db update in the background.
-                self.updateLocal(allItemsToUpdate, handler: handler, onFinishLocal: {[weak self] in
+                self.updateLocal(allItemsToUpdate, handler: {result in
+                    
+                    if result.success {
+                        if let listItem = switchedItems.first {
+                            handler(ProviderResult(status: .Success, sucessResult: listItem))
+                        } else {
+                            QL4("Invalid statue: No list item. We should have the switched list item here.")
+                            handler(ProviderResult(status: .Unknown))
+                        }
+                        
+                    } else {
+                        handler(ProviderResult(status: result.status))
+                    }
+                    
+                    }, onFinishLocal: {[weak self] in
                     
                     if remote {
                         let statusUpdate = ListItemStatusUpdate(src: status1, dst: status)
@@ -655,7 +680,7 @@ class ListItemProviderImpl: ListItemProvider {
                                 DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
                                     QL4("Remote call no success: \(remoteResult) item: \(listItem)")
                                     self?.memProvider.invalidate()
-                                    handler(result)
+                                    handler(ProviderResult<ListItem>(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
                                 })
                             }
                         }

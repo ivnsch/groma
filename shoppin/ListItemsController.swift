@@ -363,10 +363,21 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 }()
                 
                 // NOTE: For the provider the whole state is updated here - including possible section removal (if the current undo list item is the last one in the section) and the order field update of possible following sections. This means that the contents of the table view may be in a slightly inconsistent state with the data in the provider during the time cell is in undo (for the table view the section is still there, for the provider it's not). This is fine as the undo state is just a UI thing (local) and it should be cleared as soon as we try to start a new action (add, edit, delete, reorder etc) or go to the cart/stash.
-                Providers.listItemsProvider.switchStatus(tableViewListItem.listItem, list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, remote: true, weakSelf.successHandler {
+                Providers.listItemsProvider.switchStatus(tableViewListItem.listItem, list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, remote: true, weakSelf.successHandler {switchedListItem in
                         weakSelf.onTableViewChangedQuantifiables()
                 })
             })
+        }
+    }
+    
+    // Immediate swipe - websocket
+    private func swipeCell(listItemUuid: String) {
+        if let indexPath = listItemsTableViewController.getIndexPath(listItemUuid) {
+            listItemsTableViewController.markOpen(true, indexPath: indexPath, notifyRemote: true, onFinish: {[weak self] in
+                self?.listItemsTableViewController.clearPendingSwipeItemIfAny(true)
+            })
+        } else {
+            QL2("Didn't find list item uuid in table view: \(listItemUuid)")
         }
     }
     
@@ -382,6 +393,11 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     func onListItemReset(tableViewListItem: TableViewListItem) {
+        onListItemReset(tableViewListItem.listItem)
+    }
+    
+    func onListItemReset(listItem: ListItem) {
+
         // revert list item operation
         let srcStatus: ListItemStatus = {
             switch status {
@@ -391,10 +407,14 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             }
         }()
         
-        Providers.listItemsProvider.switchStatus(tableViewListItem.listItem, list: tableViewListItem.listItem.list, status1: srcStatus, status: status, remote: true, successHandler{[weak self] in
+        func updateUI() {
+            listItemsTableViewController.tableView.reloadData()
+            onTableViewChangedQuantifiables()
+        }
+        
+        Providers.listItemsProvider.switchStatus(listItem, list: listItem.list, status1: srcStatus, status: status, remote: true, successHandler{switchedListItem in
             QL1("Undo successful")
-            self?.listItemsTableViewController.tableView.reloadData()
-            self?.onTableViewChangedQuantifiables()
+            updateUI()
         })
     }
     
@@ -454,7 +474,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         
         if let currentList = self.currentList {
             Providers.listItemsProvider.add(listItemInput, status: status, list: currentList, order: nil, possibleNewSectionOrder: ListItemStatusOrder(status: status, order: listItemsTableViewController.sections.count), successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
-                self?.onListItemAddedToProvider(savedListItem, status: weakSelf.status)
+                self?.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
                 handler?()
             })
             
@@ -464,9 +484,9 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         
     }
     
-    private func onListItemAddedToProvider(savedListItem: ListItem, status: ListItemStatus, notifyRemote: Bool = true) {
+    private func onListItemAddedToProvider(savedListItem: ListItem, status: ListItemStatus, scrollToSelection: Bool, notifyRemote: Bool = true) {
         // Our "add" can also be an update - if user adds an item with a name that already exists, it's an update (increment)
-        listItemsTableViewController.updateOrAddListItem(savedListItem, status: status, increment: true, scrollToSelection: true, notifyRemote: notifyRemote)
+        listItemsTableViewController.updateOrAddListItem(savedListItem, status: status, increment: true, scrollToSelection: scrollToSelection, notifyRemote: notifyRemote)
         onTableViewChangedQuantifiables()
 //        updatePrices(.MemOnly)
     }
@@ -524,7 +544,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     func onAddProduct(product: Product) {
         if let list = currentList {
             Providers.listItemsProvider.addListItem(product, status: status, sectionName: product.category.name, sectionColor: product.category.color, quantity: 1, list: list, note: nil, order: nil, successHandler {[weak self] savedListItem in guard let weakSelf = self else {return}
-                weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status)
+                weakSelf.onListItemAddedToProvider(savedListItem, status: weakSelf.status, scrollToSelection: true)
             })
         } else {
             QL4("Add product from quick list but there's no current list in ViewController'")
@@ -900,7 +920,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 
                 switch notification.verb {
                 case .Add:
-                    onListItemAddedToProvider(listItem, status: status, notifyRemote: false)
+                    onListItemAddedToProvider(listItem, status: status, scrollToSelection: false, notifyRemote: false)
                     
                 case .Update:
                     listItemsTableViewController.updateListItem(listItem, status: status, notifyRemote: false)
@@ -940,6 +960,33 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             } else {
                 QL4("Mo value")
             }
+
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<(result: RemoteSwitchListItemFullResult, switchedListItem: ListItem)>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                    
+                case .Switch:
+                    
+                    let switchResult = notification.obj.result
+                    
+                    // If list item was switched from this status, just "swipe it out"
+                    if switchResult.srcStatus == status {
+                        swipeCell(switchResult.switchResult.switchedItem.uuid)
+                        
+                    // If list item was switched to this status, for the UI this is (for the most part) the same as add, so we call the same handler as add.
+                    // The only difference with add is that when switch back for the original user the item keeps at the original order, while for the receiver it's appended at the end of the section. At the end the order of the original user "wins" (if the users reload the list, the item is still at the undo position not at the end of the section), since the undo of this user is the last operation to be sent to the server.
+                    // For now we let it like this, otherwise we have to implement functionality to insert item at the original index.
+                    } else if switchResult.dstStatus == status {
+                        onListItemAddedToProvider(notification.obj.switchedListItem, status: status, scrollToSelection: false, notifyRemote: false)
+                    }
+
+                default: QL4("Not handled: \(notification.verb)")
+                }
+            } else {
+                QL4("Mo value")
+            }
+            
+            //            RemoteSwitchListItemFullResult
         } else {
             print("Error: ViewController.onWebsocketAddListItems: no userInfo")
         }

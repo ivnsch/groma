@@ -700,6 +700,9 @@
 		EBA575711BD031B400A0A825 /* GroupItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA575701BD031B400A0A825 /* GroupItemInput.swift */; };
 		EBA575721BD031B400A0A825 /* GroupItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA575701BD031B400A0A825 /* GroupItemInput.swift */; };
 		EBA575731BD031B400A0A825 /* GroupItemInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA575701BD031B400A0A825 /* GroupItemInput.swift */; };
+		EBA701A41CC9443F007172CD /* RemoteListItemSwitchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA701A31CC9443F007172CD /* RemoteListItemSwitchResult.swift */; };
+		EBA701A51CC9443F007172CD /* RemoteListItemSwitchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA701A31CC9443F007172CD /* RemoteListItemSwitchResult.swift */; };
+		EBA701A61CC9443F007172CD /* RemoteListItemSwitchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA701A31CC9443F007172CD /* RemoteListItemSwitchResult.swift */; };
 		EBA7AC8E1BFE90C000247A8C /* DBProductCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA7AC8D1BFE90C000247A8C /* DBProductCategory.swift */; };
 		EBA7AC8F1BFE90C900247A8C /* DBProductCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA7AC8D1BFE90C000247A8C /* DBProductCategory.swift */; };
 		EBA7AC901BFE90C900247A8C /* DBProductCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA7AC8D1BFE90C000247A8C /* DBProductCategory.swift */; };
@@ -1445,6 +1448,7 @@
 		EBA575681BD009DE00A0A825 /* GroupItemMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupItemMapper.swift; sourceTree = "<group>"; };
 		EBA5756C1BD00A2500A0A825 /* DBGroupItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBGroupItem.swift; sourceTree = "<group>"; };
 		EBA575701BD031B400A0A825 /* GroupItemInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GroupItemInput.swift; sourceTree = "<group>"; };
+		EBA701A31CC9443F007172CD /* RemoteListItemSwitchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemSwitchResult.swift; sourceTree = "<group>"; };
 		EBA7AC8D1BFE90C000247A8C /* DBProductCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBProductCategory.swift; sourceTree = "<group>"; };
 		EBA7AC911BFE950300247A8C /* ProductCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductCategory.swift; sourceTree = "<group>"; };
 		EBA7AC951BFE95AF00247A8C /* RemoteProductCategory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteProductCategory.swift; sourceTree = "<group>"; };
@@ -2317,6 +2321,7 @@
 				EB87A4AA1C1A4F13008D2A42 /* GroupItemWithGroup.swift */,
 				EB8EDE211C9B6AEE003B566F /* RemoteIncrement.swift */,
 				EBEA0CE31CA7F27700E68B81 /* RemoteListItemsReorderResult.swift */,
+				EBA701A31CC9443F007172CD /* RemoteListItemSwitchResult.swift */,
 				EBEA0CE51CA7F2DC00E68B81 /* RemoteListItemReorder.swift */,
 				EBAB0BB71CB3CFB2001B8B01 /* RemoteSwitchListItemResult.swift */,
 				EBAB0BBD1CB487D5001B8B01 /* RemoteSwitchAllListItemsResult.swift */,
@@ -3714,6 +3719,7 @@
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
 				EB1748C51C7E4C750067FD16 /* RemoteListNoUsers.swift in Sources */,
 				EB4147BC1BE0338800549CE4 /* ProductInput.swift in Sources */,
+				EBA701A41CC9443F007172CD /* RemoteListItemSwitchResult.swift in Sources */,
 				EB451C461B863516000DE208 /* MonthYear.swift in Sources */,
 				EB37AB981C9CA81F00FE9D7A /* OrderUpdate.swift in Sources */,
 				EBA7AC9E1BFEA87300247A8C /* ProductCategoryProvider.swift in Sources */,
@@ -4211,6 +4217,7 @@
 				EBF377981B38A9C900EEB6DB /* AlamofireExtensions.swift in Sources */,
 				EBEE7E581C974E4400DBCB6A /* DBProviders.swift in Sources */,
 				EB9208391C4EEA5E00332332 /* RealmBrandProvider.swift in Sources */,
+				EBA701A51CC9443F007172CD /* RemoteListItemSwitchResult.swift in Sources */,
 				EBD7A7E71CC19E0700B56C41 /* RemoteListItemIncrementResult.swift in Sources */,
 				EB89D3471AD4536300B6E0D0 /* AddListController.swift in Sources */,
 				EB7E82F31B79F97B009DEEF4 /* NSStoryboard.swift in Sources */,
@@ -4467,6 +4474,7 @@
 				EB70C2251B4D33E90060E529 /* SharedUserMapper.swift in Sources */,
 				EBD27CD01C1710F8005D8305 /* RemoteGroupsProvider.swift in Sources */,
 				EB79AC301BF1343A00685B30 /* CGRect.swift in Sources */,
+				EBA701A61CC9443F007172CD /* RemoteListItemSwitchResult.swift in Sources */,
 				EBF3776E1B342ACB00EEB6DB /* ListItemInput.swift in Sources */,
 				EBF3776F1B342AD300EEB6DB /* ListItemMapper.swift in Sources */,
 				EBB9A7361B5EB11700E5487D /* Inventory.swift in Sources */,

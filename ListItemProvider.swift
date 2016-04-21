@@ -63,9 +63,12 @@ protocol ListItemProvider {
     so we must not use it against the same tableview/state where we already are, because the items will update "order" field incorrectly by basically being appended after themselves.
     TODO cleaner implementation, maybe split in smaller methods. The method should not lead to inconsistent result when used in wrong context (see explanation above)
     */
-    func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<ListItem> -> Void)
     
     func switchAllToStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    
+    // Websocket list item switch
+    func switchStatusLocal(listItemUuid: String, status1: ListItemStatus, status: ListItemStatus, _ handler: ProviderResult<ListItem> -> Void)
     
     func invalidateMemCache()
     
