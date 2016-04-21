@@ -53,7 +53,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
 
         topAddEditListControllerManager = initTopAddEditListControllerManager()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketLists:", name: WSNotificationName.List.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketLists:", name: WSNotificationName.Lists.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
     }
     
@@ -251,7 +251,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         if let info = note.userInfo as? Dictionary<String, WSNotification<[RemoteOrderUpdate]>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
-                case .Update:
+                case .Order:
                     initModels()
                 default: QL4("Not handled case: \(notification.verb))")
                 }

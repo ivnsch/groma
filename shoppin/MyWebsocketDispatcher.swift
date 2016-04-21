@@ -14,6 +14,7 @@ enum WSNotificationName: String {
     case ListItems = "WSListItems"
     case ListItem = "WSListItem"
     case List = "WSList"
+    case Lists = "WSLists"
     case Product = "WSProduct"
     case ProductCategory = "WSProductCategory"
     case Group = "WSGroup"
@@ -49,7 +50,7 @@ enum WSNotificationVerb: String {
     case Sync = "sync"
     case Increment = "incr"
     case Fav = "fav"
-    case Order = "order"
+    case Order = "ord"
 }
 
 enum WSNotificationCategory: String {
@@ -509,6 +510,22 @@ struct MyWebsocketDispatcher {
             } else {
                 QL4("Couldn't parse data: \(data)")
             }
+            
+            
+        case WSNotificationVerb.Order:
+            if let remoteOrderUpdates = RemoteOrderUpdate.collection(data) {
+                let orderUpdates = remoteOrderUpdates.map{OrderUpdate(uuid: $0.uuid, order: $0.order)}
+                Providers.listProvider.updateListsOrder(orderUpdates, remote: false) {result in
+                    if result.success {
+                        postNotification(.Lists, verb, sender, remoteOrderUpdates)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Update lists order \(remoteOrderUpdates)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Update lists order, data: \(data)")
+            }
+            
         default: QL4("Not handled verb: \(verb)")
         }
     }
