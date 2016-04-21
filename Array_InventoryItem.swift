@@ -27,9 +27,21 @@ extension Array where Element: InventoryItem {
     func sortBy(sortBy: InventorySortBy) -> [Element] {
         switch sortBy {
         case .Alphabetic:
-            return self.sort{$0.0.product.name < $0.1.product.name}
+            return self.sort{
+                if $0.0.product.name == $0.1.product.name {
+                    return $0.0.quantity < $0.1.quantity
+                } else {
+                    return $0.0.product.name < $0.1.product.name
+                }
+            }
         case .Count:
-            return self.sort{$0.0.quantity < $0.1.quantity}
+            return self.sort{
+                if $0.0.quantity == $0.1.quantity {
+                    return $0.0.product.name < $0.1.product.name
+                } else {
+                    return $0.0.quantity < $0.1.quantity
+                }
+            }
         }
     }
 }
