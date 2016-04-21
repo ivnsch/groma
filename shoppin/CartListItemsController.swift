@@ -132,7 +132,7 @@ class CartListItemsController: ListItemsController {
     @IBAction func onAddToInventoryTap(sender: UIBarButtonItem) {
         if let list = currentList {
             if InventoryAuthChecker.checkAccess(list.inventory, controller: self) {
-                ConfirmationPopup.show(title: "Buy", message: "This will add your cart items to the the inventory '\(list.inventory.name)' and the corresponding history and stats", okTitle: "Continue", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in
+                ConfirmationPopup.show(title: "Confirm", message: "This will add your cart items to the the inventory '\(list.inventory.name)' and the corresponding history and stats", okTitle: "Buy", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in
                     self?.addAllItemsToInventory()
                 }, onCancel: nil)
             }
