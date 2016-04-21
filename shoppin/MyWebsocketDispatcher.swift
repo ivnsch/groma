@@ -64,7 +64,6 @@ enum WSNotificationCategory: String {
     case ListItems = "listItems"
     case Section = "section"
     case Inventory = "inventory"
-    case Inventories = "inventories"
     case InventoryItem = "inventoryItem"
     case InventoryItems = "inventoryItems"
     case History = "history"
@@ -119,8 +118,6 @@ struct MyWebsocketDispatcher {
                 processSection(verb, topic, sender, data)
             case .Inventory:
                 processInventory(verb, topic, sender, data)
-            case .Inventories:
-                processInventories(verb, topic, sender, data)
             case .InventoryItem:
                 processInventoryItem(verb, topic, sender, data)
             case .InventoryItems:
@@ -691,13 +688,8 @@ struct MyWebsocketDispatcher {
             } else {
                 QL4("Couldn't parse data: \(data)")
             }
-        default: QL4("Not handled verb: \(verb)")
-        }
-    }
-    
-    private static func processInventories(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
-        switch verb {
-        case WSNotificationVerb.Update:
+            
+        case WSNotificationVerb.Order:
             if let remoteOrderUpdates = RemoteOrderUpdate.collection(data) {
                 let orderUpdates = remoteOrderUpdates.map{OrderUpdate(uuid: $0.uuid, order: $0.order)}
                 Providers.inventoryProvider.updateInventoriesOrder(orderUpdates, remote: false) {result in
@@ -710,10 +702,10 @@ struct MyWebsocketDispatcher {
             } else {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Update inventories order, data: \(data)")
             }
+            
         default: QL4("Not handled verb: \(verb)")
         }
     }
-    
     
     /////////////////////////////////////////////////////////////////////////////////
     // TODO!!!! inventory items - there seem to be some inconsistencies / not implemented

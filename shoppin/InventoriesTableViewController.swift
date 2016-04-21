@@ -242,7 +242,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         if let info = note.userInfo as? Dictionary<String, WSNotification<[RemoteOrderUpdate]>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
-                case .Update:
+                case .Order:
                     initModels()
                 default: QL4("Not handled case: \(notification.verb))")
                 }
