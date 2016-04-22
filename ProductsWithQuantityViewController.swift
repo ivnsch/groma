@@ -215,9 +215,20 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     }
 
     func appendItemUI(item: ProductWithQuantity) {
-        tableView.wrapUpdates {[weak self] in guard let weakSelf = self else {return}
-            weakSelf.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weakSelf.models.count, inSection: 0)], withRowAnimation: .Top)
-            weakSelf.models.append(item)
+        
+        // Warning (depending where this is used): this adds the inventory item at the end of the current page - this may look a bit buggy and if user scrolls down the item may be "repeated", but for now don't have a better solution,
+        // the alternative which is loading all the pages until we are in the page where the position of the item is correct (according to current sorting criteria) is inefficient as well as difficult to implement
+        // a compromise is to choose a big enough page size where most users will have smaller inventories, so this can't happen
+        tableView.wrapUpdates {[weak self] in
+            if let weakSelf = self {
+                if let indexPathToInsert = weakSelf.findIndexPathForNewItem(item)  { // note: before append
+                    weakSelf.models.insert(item, atIndex: indexPathToInsert.row)
+                    weakSelf.tableView.insertRowsAtIndexPaths([indexPathToInsert], withRowAnimation: .Top)
+                    weakSelf.updateEmptyView()
+                } else {
+                    QL4("No indexPathToInsert")
+                }
+            }
         }
     }
     
@@ -381,22 +392,9 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         }
     }
     
-    func addOrIncrementUI(inventoryItem: ProductWithQuantity) {
-        if !tryIncrementItem(inventoryItem) {
-            // Warning: this adds the inventory item at the end of the current page - this may look a bit buggy and if user scrolls down the item may be "repeated", but for now don't have a better solution,
-            // the alternative which is loading all the pages until we are in the page where the position of the item is correct (according to current sorting criteria) is inefficient as well as difficult to implement
-            // a compromise is to choose a big enough page size where most users will have smaller inventories, so this can't happen
-            tableView.wrapUpdates {[weak self] in
-                if let weakSelf = self {
-                    if let indexPathToInsert = weakSelf.findIndexPathForNewItem(inventoryItem)  { // note: before append
-                        weakSelf.models.insert(inventoryItem, atIndex: indexPathToInsert.row)
-                        weakSelf.tableView.insertRowsAtIndexPaths([indexPathToInsert], withRowAnimation: .Top)
-                        weakSelf.updateEmptyView()
-                    } else {
-                        print("Error: InventoryItemsTableViewController.addOrIncrementUI: No indexPathToInsert")
-                    }
-                }
-            }
+    func addOrIncrementUI(item: ProductWithQuantity) {
+        if !tryIncrementItem(item) {
+            appendItemUI(item)
         }
     }
     
