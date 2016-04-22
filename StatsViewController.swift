@@ -75,7 +75,7 @@ class StatsViewController: UIViewController
             self?.selectedInventory = inventory
         }
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryWithHistoryAfterSave:", name: WSNotificationName.InventoryItemsWithHistoryAfterSave.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItem:", name: WSNotificationName.ListItem.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
@@ -440,16 +440,21 @@ class StatsViewController: UIViewController
         }
     }
     
-    // This is called when added items to inventory / history, which means the chart has to be updated
-    func onWebsocketInventoryWithHistoryAfterSave(note: NSNotification) {
-        if let info = note.userInfo as? Dictionary<String, WSEmptyNotification> {
+    func onWebsocketListItem(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
             if let notification = info[WSNotificationValue] {
                 switch notification.verb {
-                case .Add:
+                case .BuyCart:
                     loadChart()
-                default: print("Error: InventoryItemsViewController.onWebsocketInventoryWithHistoryAfterSave: History: not implemented: \(notification.verb)")
+                    
+                default: QL4("Not handled: \(notification.verb)")
                 }
+            } else {
+                QL4("Mo value")
             }
+            
+        } else {
+            QL4("No userInfo")
         }
     }
     

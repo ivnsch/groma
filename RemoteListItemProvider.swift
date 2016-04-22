@@ -109,6 +109,13 @@ class RemoteListItemProvider {
             handler(result)
         }
     }
+
+    func buyCart(listUuid: String, inventoryItems: [InventoryItemWithHistoryEntry], handler: RemoteResult<Int64> -> Void) {
+        let parameters = toRequestParams(listUuid, items: inventoryItems)
+        RemoteProvider.authenticatedRequestTimestamp(.POST, Urls.buyCart, parameters) {result in
+            handler(result)
+        }
+    }
     
     // IMPORTANT: Assumes that the passed list items are ALL the existing list items in src status. If this is not the case, the remaining items/sections in src status will likely be left with a wrong order.
     func updateAllStatus(listUuid: String, statusUpdate: ListItemStatusUpdate, handler: RemoteResult<RemoteSwitchAllListItemsResult> -> ()) {
@@ -445,6 +452,17 @@ class RemoteListItemProvider {
         if let lastServerUpdate = list.lastServerUpdate {
             dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         }
+        return dict
+    }
+    
+    func toRequestParams(listUuid: String, items: [InventoryItemWithHistoryEntry]) -> [String: AnyObject] {
+        
+        let remoteInventoryItemsProvider = RemoteInventoryItemsProvider()
+        var dict: [String: AnyObject] = ["listUuid": listUuid]
+        let itemsDicts = items.map{remoteInventoryItemsProvider.toDictionary($0)}
+        
+        dict["items"] = itemsDicts
+        
         return dict
     }
 }

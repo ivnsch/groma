@@ -72,11 +72,8 @@ class CartListItemsController: ListItemsController {
         func onSizeLimitOk(list: List) {
             listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
                 if let weakSelf = self {
-                    let inventoryItemsInput = weakSelf.listItemsTableViewController.items.map{ProductWithQuantityInput(product: $0.product, quantity: $0.doneQuantity)}
-                    Providers.inventoryItemsProvider.addToInventory(list.inventory, itemInputs: inventoryItemsInput, remote: true, weakSelf.successHandler{result in
-                        weakSelf.sendAllItemToStash {
-                            weakSelf.close()
-                        }
+                    Providers.listItemsProvider.buyCart(weakSelf.listItemsTableViewController.items, list: list, remote: true, weakSelf.successHandler{result in
+                        weakSelf.close()
                     })
                 }
             }
@@ -89,7 +86,7 @@ class CartListItemsController: ListItemsController {
                         onSizeLimitOk(list)
                     }
                 }
-                })
+            })
         } else {
             QL3("List is not set, can't add to inventory")
         }

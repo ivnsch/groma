@@ -987,6 +987,19 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             }
             
             //            RemoteSwitchListItemFullResult
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .BuyCart:
+                    // This is relevant for all status - cart (list items removed), stash (added), todo (cart price view update)
+                    updatePossibleList() // reload list
+                    
+                default: QL4("Not handled: \(notification.verb)")
+                }
+            } else {
+                QL4("Mo value")
+            }
+            
         } else {
             print("Error: ViewController.onWebsocketAddListItems: no userInfo")
         }

@@ -139,6 +139,11 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
     static func createFilter(uuid: String) -> String {
         return "uuid == '\(uuid)'"
     }
+
+    static func createFilterForUuids(uuids: [String]) -> String {
+        let uuidsStr: String = uuids.map{"'\($0)'"}.joinWithSeparator(",")
+        return "uuid IN {\(uuidsStr)}"
+    }
     
     static func createFilterList(listUuid: String) -> String {
         return "listOpt.uuid == '\(listUuid)'"
@@ -227,5 +232,9 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
     }
     override static func ignoredProperties() -> [String] {
         return ["list", "section", "product"]
+    }
+    
+    static func timestampUpdateDict(uuid: String, lastUpdate: Int64) -> [String: AnyObject] {
+        return DBSyncable.timestampUpdateDict(uuid, lastServerUpdate: lastUpdate)
     }
 }

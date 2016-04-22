@@ -123,25 +123,24 @@ class RealmInventoryItemProvider: RealmProvider {
     func addOrIncrementInventoryItemWithInput(itemInputs: [ProductWithQuantityInput], inventory: Inventory, dirty: Bool, handler: [InventoryItemWithHistoryEntry]? -> Void) {
         
         self.doInWriteTransaction({[weak self] realm in
-            
-            if let weakSelf = self {
-                // Note: map in this case has side effects - it adds the inventory/history to the database
-                let addedInventoryItemsWithHistoryEntries = itemInputs.map {itemInput in
-                    weakSelf.addOrIncrementInventoryItemWithProduct(realm, product: itemInput.product, inventory: inventory, quantity: itemInput.quantity, dirty: dirty)
-                }
-                return addedInventoryItemsWithHistoryEntries
-            }
-            return nil
-            
+            return self?.addOrIncrementInventoryItemsWithProductSync(realm, itemInputs: itemInputs, inventory: inventory, dirty: dirty)
             }, finishHandler: {(addedInventoryItemsWithHistoryEntriesMaybe: [InventoryItemWithHistoryEntry]?) in
                 handler(addedInventoryItemsWithHistoryEntriesMaybe)
         })
         
     }
     
+    func addOrIncrementInventoryItemsWithProductSync(realm: Realm, itemInputs: [ProductWithQuantityInput], inventory: Inventory, dirty: Bool) -> [InventoryItemWithHistoryEntry] {
+        // Note: map in this case has side effects - it adds the inventory/history to the database
+        let addedInventoryItemsWithHistoryEntries = itemInputs.map {itemInput in
+            addOrIncrementInventoryItemWithProductSync(realm, product: itemInput.product, inventory: inventory, quantity: itemInput.quantity, dirty: dirty)
+        }
+        return addedInventoryItemsWithHistoryEntries
+    }
+    
     // Helper function for common code
     // This is only called when using quick add, not +/-.
-    private func addOrIncrementInventoryItemWithProduct(realm: Realm, product: StoreProduct, inventory: Inventory, quantity: Int, dirty: Bool) -> InventoryItemWithHistoryEntry {
+    private func addOrIncrementInventoryItemWithProductSync(realm: Realm, product: StoreProduct, inventory: Inventory, quantity: Int, dirty: Bool) -> InventoryItemWithHistoryEntry {
         let inventoryItemWithHistoryEntry = InventoryItemWithHistoryEntry(
             inventoryItem: InventoryItem(uuid: NSUUID().UUIDString, quantity: quantity, quantityDelta: quantity, product: product.product, inventory: inventory),
             historyItemUuid: NSUUID().UUIDString,

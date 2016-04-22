@@ -81,7 +81,13 @@ class ListItemProviderImpl: ListItemProvider {
             }
         }
     }
-
+    
+    func listItems(uuids: [String], _ handler: ProviderResult<[ListItem]> -> ()) {
+        DBProviders.listItemProvider.loadListItems(uuids) {items in
+            handler(ProviderResult(status: .Success, sucessResult: items))
+        }
+    }
+    
     // MARK: -
     
     func remove(listItem: ListItem, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
@@ -693,8 +699,8 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    // IMPORTANT: Assumes that the passed list items are ALL the existing list items in src status. If this is not the case, the remaining items/sections in src status will likely be left with a wrong order.
-    func switchAllToStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    // Switches status of passed items in memory and returns them. For this we loads the currrent list items either from memory or database if mem cache not available.
+    private func getSwitchedItemsForSwitchAll(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<[ListItem]> -> Void) {
         
         switchStatusInsertInDst(listItems, list: list, status1: status1, status: status, remote: remote) {switchResult in
             
@@ -705,6 +711,109 @@ class ListItemProviderImpl: ListItemProvider {
                     listItem.updateOrderMutable(ListItemStatusOrder(status1, order: 0))
                     listItem.section.updateOrderMutable(ListItemStatusOrder(status1, order: 0)) // this may update sections multiple times but it doesn't matter
                 })
+                
+                handler(ProviderResult(status: .Success, sucessResult: switchedItems))
+
+            } else {
+                QL4("Stored list items returned nil")
+                handler(ProviderResult(status: .Unknown))
+            }
+        }
+    }
+    
+    // Websockets: stores inventory and history items corresponding to buy result and moves item to stash
+    // For now not in a transaction, not very critical as this is only a matching operation and if the user reloads the list the data will be consistent again. Of course, before reloading the list the behaviour looks wrong to the user and using the list in this state leads to more weirdness. TODO! do this also in a transaction.
+    func storeBuyCartResult(switchedResult: RemoteBuyCartResult, _ handler: ProviderResult<Any> -> Void) {
+        
+        let listItemUuids = switchedResult.switchedItems.map{$0.uuid}
+        Providers.listItemsProvider.listItems(listItemUuids) {listItemsResult in
+            
+            if let listItems = listItemsResult.sucessResult {
+                
+                // Note: assumes all the items belong to the same list
+                if let list = listItems.first?.list {
+                    
+                    let (inventoryItems, historyItems) = InventoryItemMapper.itemsWithRemote(switchedResult.inventoryAndHistoryItems)
+                    Providers.inventoryItemsProvider.addToInventoryLocal(inventoryItems, historyItems: historyItems, dirty: false) {saveInventoryAndHistoryItemsResult in
+                        
+                        if saveInventoryAndHistoryItemsResult.success {
+                            Providers.listItemsProvider.switchAllToStatus(listItems, list: list, status1: .Done, status: .Stash, remote: false) {switchListItemsResult in
+                                if switchListItemsResult.success {
+                                    handler(ProviderResult(status: .Success))
+                                } else {
+                                    QL4("Error switching list items: \(switchListItemsResult)")
+                                    handler(ProviderResult(status: .Unknown))
+                                }
+                            }
+                            
+                        } else {
+                            QL4("Error saving inventory and history items: \(saveInventoryAndHistoryItemsResult)")
+                            handler(ProviderResult(status: .Unknown))
+                        }
+                    }
+                    
+                } else {
+                    QL4("None of the items to be switched is in the list") // this is not entirely impossible but extremely unlikely
+                    handler(ProviderResult(status: .Success)) // For now just error log, maybe later we should return error status also
+                }
+            } else {
+                QL4("Error retrieving list items: \(listItemsResult)")
+                handler(ProviderResult(status: listItemsResult.status, sucessResult: nil, error: listItemsResult.error, errorObj: listItemsResult.errorObj))
+            }
+        }
+    }
+    
+    func buyCart(listItems: [ListItem], list: List, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        
+        let inventoryAndHistoryItemsInput = listItems.map{ProductWithQuantityInput(product: $0.product, quantity: $0.doneQuantity)}
+        
+        getSwitchedItemsForSwitchAll(listItems, list: list, status1: .Done, status: .Stash, remote: remote) {result in
+            
+            if let switchedItems = result.sucessResult {
+                
+                DBProviders.listItemProvider.buyCart(list.uuid, switchedItems: switchedItems, inventory: list.inventory, itemInputs: inventoryAndHistoryItemsInput, remote: remote, {[weak self] dbBuyResult -> Void in
+                    if let inventoryWithHistoryItems = dbBuyResult.sucessResult {
+                        
+                        handler(ProviderResult(status: .Success))
+                        
+                        self?.remoteProvider.buyCart(list.uuid, inventoryItems: inventoryWithHistoryItems) {remoteResult in
+                            
+                            if let timestamp = remoteResult.successResult {
+                                
+                                DBProviders.listItemProvider.storeBuyCartResult(listItems, inventoryWithHistoryItems: inventoryWithHistoryItems, lastUpdate: timestamp) {success in
+                                    if !success {
+                                        QL4("Couldn't store remote all switch result in database: \(remoteResult) items: \(listItems)")
+                                    }
+                                }
+                                
+                            } else {
+                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                                    QL4("Remote call no success: \(remoteResult) items: \(listItems)")
+                                    self?.memProvider.invalidate()
+                                    handler(result)
+                                })
+                            }
+                        }
+                        
+                    } else {
+                        QL4("db buy cart didn't return items") // this should not happen as we should not call this method with an empty cart, and if there are cart items there must be inventory/history items.
+                        handler(ProviderResult(status: .Unknown))
+                    }
+                })
+                
+            } else {
+                QL4("No switched items")
+                handler(ProviderResult(status: .Unknown))
+            }
+        }
+    }
+    
+    // IMPORTANT: Assumes that the passed list items are ALL the existing list items in src status. If this is not the case, the remaining items/sections in src status will likely be left with a wrong order.
+    func switchAllToStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+        
+        getSwitchedItemsForSwitchAll(listItems, list: list, status1: status1, status: status, remote: remote) {result in
+            
+            if let switchedItems = result.sucessResult {
                 
                 // Persist changes. If mem cached is enabled this calls handler directly after mem cache is updated and does db update in the background.
                 self.updateLocal(switchedItems, handler: handler, onFinishLocal: {[weak self] in
@@ -729,12 +838,12 @@ class ListItemProviderImpl: ListItemProvider {
                         }
                     }
                 })
+                
             } else {
-                QL4("Stored list items returned nil")
+                QL4("No switched items")
                 handler(ProviderResult(status: .Unknown))
             }
         }
-        
     }
 
     // Helper for common code of status switch update, order update and full update - the only difference of these method is the remote call, switch and order use optimised services.

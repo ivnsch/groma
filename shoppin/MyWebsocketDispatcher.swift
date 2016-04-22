@@ -35,9 +35,6 @@ enum WSNotificationName: String {
     
     case Connection = "WSConnection"
     
-    // In some cases we need to receive the notification only after items have been persisted
-    case InventoryItemsWithHistoryAfterSave = "WSInventoryItemsWithHistoryAfterSave"
-    
     // When a sync triggered by a websocket message (which is sent when another user or device did sync) is finished
     case IncomingGlobalSyncFinished = "WSIncomingGlobalSyncFinished"
 }
@@ -52,9 +49,10 @@ enum WSNotificationVerb: String {
     case Fav = "fav"
     case Order = "ord"
     case Switch = "switch"
-    
+
     case TodoOrder = "todoOrd"
     case DoneOrder = "doneOrd"
+    case BuyCart = "buyCart"
 }
 
 enum WSNotificationCategory: String {
@@ -606,6 +604,19 @@ struct MyWebsocketDispatcher {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Delete listitem, data: \(data)")
             }
             
+        case .BuyCart:
+            if let buyCartResult = RemoteBuyCartResult(representation: data) {
+                Providers.listItemsProvider.storeBuyCartResult(buyCartResult) {result in
+                    if result.success {
+                        postNotification(.ListItem, verb, sender, buyCartResult)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Buy cart \(buyCartResult)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Delete listitem, data: \(data)")
+            }
+            
         default: QL4("Not handled verb: \(verb)")
         }
     }
@@ -719,27 +730,26 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    /////////////////////////////////////////////////////////////////////////////////
-    // TODO!!!! inventory items - there seem to be some inconsistencies / not implemented
-    /////////////////////////////////////////////////////////////////////////////////
 
     private static func processInventoryItem(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
-        case WSNotificationVerb.Add:
-            if let inventoryItemsWithHistoryAndDependencies = RemoteInventoryItemsWithHistoryAndDependencies(representation: data) {
-                let (inventoryItems, historyItems) = InventoryItemMapper.itemsWithRemote(inventoryItemsWithHistoryAndDependencies)
-                Providers.inventoryItemsProvider.addToInventoryLocal(inventoryItems, historyItems: historyItems, dirty: false) {result in
-                    if result.success {
-                        postNotification(.InventoryItem, verb, sender, inventoryItems)
-                        postNotification(.HistoryItem, verb, sender, historyItems)
-                    } else {
-                        MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory/history item \(inventoryItemsWithHistoryAndDependencies)", result: result)
-                    }
-                }
-                
-            } else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Add inventory/history item, data: \(data)")
-            }
+            
+            // Now we have buyCart and there's no other way (for now) to add items to the inventory so this is not necessary. This was also never tested. Letting it here anyway just in case, if we re-allow adding items to inventory directly, maybe it helps as a start.
+//        case WSNotificationVerb.Add:
+//            if let inventoryItemsWithHistoryAndDependencies = RemoteInventoryItemsWithHistoryAndDependencies(representation: data) {
+//                let (inventoryItems, historyItems) = InventoryItemMapper.itemsWithRemote(inventoryItemsWithHistoryAndDependencies)
+//                Providers.inventoryItemsProvider.addToInventoryLocal(inventoryItems, historyItems: historyItems, dirty: false) {result in
+//                    if result.success {
+//                        postNotification(.InventoryItem, verb, sender, inventoryItems)
+//                        postNotification(.HistoryItem, verb, sender, historyItems)
+//                    } else {
+//                        MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory/history item \(inventoryItemsWithHistoryAndDependencies)", result: result)
+//                    }
+//                }
+//                
+//            } else {
+//                MyWebsocketDispatcher.reportWebsocketParsingError("Add inventory/history item, data: \(data)")
+//            }
             
         case WSNotificationVerb.Update:
             if let remoteInventoryItem = RemoteInventoryItemWithProduct(representation: data) {

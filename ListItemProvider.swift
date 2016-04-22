@@ -50,6 +50,8 @@ protocol ListItemProvider {
     
     func listItems(list: List, sortOrderByStatus: ListItemStatus, fetchMode: ProviderFetchModus, _ handler: ProviderResult<[ListItem]> -> ())
 
+    func listItems(uuids: [String], _ handler: ProviderResult<[ListItem]> -> Void)
+    
     // This is currently used only to retrieve possible product's list item on receiving a websocket notification with a product update
     func listItem(product: Product, list: List, _ handler: ProviderResult<ListItem?> -> ())
     
@@ -69,6 +71,12 @@ protocol ListItemProvider {
     
     // Websocket list item switch
     func switchStatusLocal(listItemUuid: String, status1: ListItemStatus, status: ListItemStatus, _ handler: ProviderResult<ListItem> -> Void)
+    
+    // Adds inventory + history items and moves list items to stash
+    func buyCart(listItems: [ListItem], list: List, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+
+    // Websocket
+    func storeBuyCartResult(switchedResult: RemoteBuyCartResult, _ handler: ProviderResult<Any> -> Void)
     
     func invalidateMemCache()
     

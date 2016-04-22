@@ -56,8 +56,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketHistoryItem:", name: WSNotificationName.HistoryItem.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventoryWithHistoryAfterSave:", name: WSNotificationName.InventoryItemsWithHistoryAfterSave.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItem:", name: WSNotificationName.ListItem.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
     }
     
@@ -377,6 +377,24 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
         } else {
             print("Error: ViewController.onWebsocketProduct: no userInfo")
+        }
+    }
+
+    func onWebsocketListItem(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteBuyCartResult>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .BuyCart:
+                    loadHistory()
+                    
+                default: QL4("Not handled: \(notification.verb)")
+                }
+            } else {
+                QL4("Mo value")
+            }
+            
+        } else {
+            QL4("No userInfo")
         }
     }
     
