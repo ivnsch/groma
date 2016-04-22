@@ -366,9 +366,22 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         if let sortBy = sortBy {
             switch sortBy {
             case .Count:
-                return findRow({$0.quantity > inventoryItem.quantity})
+                return findRow({
+                    if $0.quantity == inventoryItem.quantity {
+                        return $0.product.name > inventoryItem.product.name
+                    } else {
+                        return $0.quantity > inventoryItem.quantity
+                    }
+                })
             case .Alphabetic:
-                return findRow({$0.product.name > inventoryItem.product.name})
+                return findRow({
+                    if $0.product.name == inventoryItem.product.name {
+                        return $0.quantity > inventoryItem.quantity
+                    } else {
+                        return $0.product.name > inventoryItem.product.name
+                    }
+                    
+                })
             }
         } else {
             print("Warn: InventoryItemsTableViewController.findIndexPathForNewItem: sortBy is not set")
