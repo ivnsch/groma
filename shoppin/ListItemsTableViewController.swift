@@ -238,6 +238,8 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     // TODO increment seems not ot be used, what was this for? remove?
     func updateOrAddListItem(listItem: ListItem, status: ListItemStatus, increment: Bool, scrollToSelection: Bool = false, notifyRemote: Bool) {
         
+        guard listItem.hasStatus(self.status) else {return} // with websockets it can be that if 2 list items controllers are active at the same time (e.g. when we are in cart) we receive list items here which don't have quantity in the status of this controller, so there's nothing to do in this method. This guard is required for the method to function correctly (otherwise item is appended at the end of table if not found).
+        
         if let indexPath = getIndexPath(listItem) {
         
             let oldItem = tableViewSections[indexPath.section].tableViewListItems[indexPath.row]

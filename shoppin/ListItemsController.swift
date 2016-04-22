@@ -917,9 +917,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             if let notification = info[WSNotificationValue] {
                 
                 let listItem = notification.obj
-                
-                // TODO!!!!! websocket add/update must send status also
-                
+
                 switch notification.verb {
                 case .Add:
                     onListItemAddedToProvider(listItem, status: status, scrollToSelection: false, notifyRemote: false)
