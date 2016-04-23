@@ -474,6 +474,8 @@ class StatsViewController: UIViewController
                 switch notification.verb {
                 case .Delete:
                     loadChart()
+                case .DeleteWithBrand:
+                    loadChart()
                 default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {

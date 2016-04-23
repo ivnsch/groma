@@ -51,6 +51,7 @@ enum WSNotificationVerb: String {
     case Switch = "switch"
     case SwitchAll = "switchAll"
     case DeleteWithName = "delWithName"
+    case DeleteWithBrand = "delWithBrand"
     
     case TodoOrder = "todoOrd"
     case DoneOrder = "doneOrd"
@@ -215,6 +216,19 @@ struct MyWebsocketDispatcher {
                     MyWebsocketDispatcher.reportWebsocketParsingError("Delete product, data: \(data)")
                 }
 
+            case .DeleteWithBrand:
+                if let brandName = data as? String {
+                    Providers.brandProvider.removeProductsWithBrand(brandName, remote: false) {result in
+                        if result.success {
+                            postNotification(.Product, verb, sender, brandName)
+                        } else {
+                            MyWebsocketDispatcher.reportWebsocketStoringError("Delete with brand \(brandName)", result: result)
+                        }
+                    }
+                } else {
+                    MyWebsocketDispatcher.reportWebsocketParsingError("Delete with brand, data: \(data)")
+                }
+            
             case .Fav:
                 if let productUuid = data as? String {
                     Providers.productProvider.incrementFav(productUuid, remote: false) {result in

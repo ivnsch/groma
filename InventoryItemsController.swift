@@ -715,6 +715,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 switch notification.verb {
                 case .Delete:
                     reload()
+                case .DeleteWithBrand:
+                    // we can improve this by at least checking if there's a product that references this brand in the list, for now just reload
+                    reload()
                 default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {

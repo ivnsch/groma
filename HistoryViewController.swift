@@ -370,6 +370,8 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 switch notification.verb {
                 case .Delete:
                     loadHistory()
+                case .DeleteWithBrand:
+                    loadHistory()
                 default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {
