@@ -32,6 +32,7 @@ class InventoryItemMapper {
         if let lastServerUpdate = item.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
             db.lastServerUpdate = lastServerUpdate
         }
+        db.dirty = dirty
         return db
     }
     

@@ -33,6 +33,11 @@ class ProductWithQuantityGroup: ProductWithQuantity {
         let incrementedItem = groupItem.incrementQuantityCopy(delta)
         return ProductWithQuantityGroup(groupItem: incrementedItem)
     }
+    
+    override func updateQuantityCopy(quantity: Int) -> ProductWithQuantity {
+        let udpatedItem = groupItem.copy(quantity: quantity)
+        return ProductWithQuantityGroup(groupItem: udpatedItem)
+    }
 }
 
 class GroupItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate {
@@ -407,9 +412,9 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         }))
     }
     
-    func increment(model: ProductWithQuantity, delta: Int, onSuccess: VoidFunction) {
-        Providers.listItemGroupsProvider.increment((model as! ProductWithQuantityGroup).groupItem, delta: delta, remote: true, successHandler({result in
-            onSuccess()
+    func increment(model: ProductWithQuantity, delta: Int, onSuccess: Int -> Void) {
+        Providers.listItemGroupsProvider.increment((model as! ProductWithQuantityGroup).groupItem, delta: delta, remote: true, successHandler({updatedQuantity in
+            onSuccess(updatedQuantity)
         }))
     }
     

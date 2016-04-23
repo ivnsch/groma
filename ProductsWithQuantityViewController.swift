@@ -13,7 +13,7 @@ import QorumLogs
 protocol ProductsWithQuantityViewControllerDelegate {
     func loadModels(page: NSRange, sortBy: InventorySortBy, onSuccess: [ProductWithQuantity] -> Void)
     func remove(model: ProductWithQuantity, onSuccess: VoidFunction, onError: ProviderResult<Any> -> Void)
-    func increment(model: ProductWithQuantity, delta: Int, onSuccess: VoidFunction)
+    func increment(model: ProductWithQuantity, delta: Int, onSuccess: Int -> Void)
     func onModelSelected(model: ProductWithQuantity, indexPath: NSIndexPath)
     func emptyViewData() -> (text: String, text2: String, imgName: String)
     func onEmptyViewTap()
@@ -296,11 +296,11 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         
         if inventoryItem.quantity + delta >= 0 {
             
-            delegate?.increment(inventoryItem, delta: delta, onSuccess: {[weak self] in
+            delegate?.increment(inventoryItem, delta: delta, onSuccess: {[weak self] updatedQuantity in
                 
                 if let weakSelf = self {
                     
-                    weakSelf.updateIncrementUI(inventoryItem, delta: delta, cell: cell, row: row)
+                    weakSelf.updateQuantityUI(inventoryItem, updatedQuantity: updatedQuantity, cell: cell, row: row)
                     
                     if inventoryItem.quantity + delta == 0 {
                         cell.startDeleteProgress {
@@ -408,6 +408,16 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     func addOrIncrementUI(item: ProductWithQuantity) {
         if !tryIncrementItem(item) {
             appendItemUI(item)
+        }
+    }
+    
+    private func updateQuantityUI(item: ProductWithQuantity, updatedQuantity: Int, cell: ProductWithQuantityTableViewCell?, row: Int) {
+        let updatedItem = item.updateQuantityCopy(updatedQuantity)
+        
+        models[row] = updatedItem
+        if let cell = cell {
+            cell.model = updatedItem
+            cell.quantityLabel.text = "\(updatedItem.quantity)"
         }
     }
     

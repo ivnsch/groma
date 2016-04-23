@@ -55,46 +55,45 @@ class RealmInventoryItemProvider: RealmProvider {
         }
     }
     
-    func incrementInventoryItem(itemUuid: String, delta: Int, onlyDelta: Bool = false, dirty: Bool, handler: Bool -> ()) {
+    func incrementInventoryItem(itemUuid: String, delta: Int, onlyDelta: Bool = false, dirty: Bool, handler: Int? -> ()) {
         
         doInWriteTransaction({realm in
             
-            var results = realm.objects(DBInventoryItem)
-            results = results.filter(NSPredicate(format: DBInventoryItem.createFilterUuid(itemUuid), argumentArray: []))
-            let objs: [DBInventoryItem] = results.toArray(nil)
-            let dbInventoryItems = objs.map{InventoryItemMapper.inventoryItemWithDB($0)}
-            let inventoryItemMaybe = dbInventoryItems.first
-            
-            if let inventoryItem = inventoryItemMaybe {
-                // increment
-                let incrementedInventoryitem: InventoryItem =  {
-                    if onlyDelta {
-                        return inventoryItem.copy(quantityDelta: inventoryItem.quantityDelta + delta)
-                    } else {
-                        return inventoryItem.incrementQuantityCopy(delta)
-                    }
-                }()
+            syncedRet(self) {
+
+                let results = realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilterUuid(itemUuid)).toArray()
+                let dbInventoryItems = results.map{InventoryItemMapper.inventoryItemWithDB($0)}
                 
-                // convert to db object
-                let dbIncrementedInventoryitem = InventoryItemMapper.dbWithInventoryItem(incrementedInventoryitem, dirty: dirty)
-                
-                // save
-                realm.add(dbIncrementedInventoryitem, update: true)
-                return true
-                
-            } else {
-                QL3("Inventory item not found: \(itemUuid)")
-                return false
+                if let inventoryItem = dbInventoryItems.first {
+                    let incrementedInventoryitem: InventoryItem =  {
+                        if onlyDelta {
+                            return inventoryItem.copy(quantityDelta: inventoryItem.quantityDelta + delta)
+                        } else {
+                            return inventoryItem.incrementQuantityCopy(delta)
+                        }
+                    }()
+                    
+                    let dbIncrementedInventoryitem = InventoryItemMapper.dbWithInventoryItem(incrementedInventoryitem, dirty: dirty)
+                    
+                    realm.add(dbIncrementedInventoryitem, update: true)
+                    
+                    return dbIncrementedInventoryitem.quantity
+                    
+                } else {
+                    QL3("Inventory item not found: \(itemUuid)")
+                    return nil
+                }
             }
             
-        }) {(successMaybe: Bool?) in
-            handler(successMaybe ?? false)
+        }) {(updatedQuantityMaybe: Int?) in
+            QL2("Calling handler")
+            handler(updatedQuantityMaybe)
         }
     }
     
     // TODO Asynchronous. dispatch_async + lock inside for some reason didn't work correctly (tap 10 times on increment, only shows 4 or so (after refresh view controller it's correct though), maybe use serial queue?
     // param onlyDelta: if we want to update only quantityDelta field (opposed to updating both quantity and quantityDelta)
-    func incrementInventoryItem(item: InventoryItem, delta: Int, onlyDelta: Bool = false, dirty: Bool, handler: Bool -> ()) {
+    func incrementInventoryItem(item: InventoryItem, delta: Int, onlyDelta: Bool = false, dirty: Bool, handler: Int? -> ()) {
         incrementInventoryItem(item.uuid, delta: delta, onlyDelta: onlyDelta, dirty: dirty, handler: handler)
     }
     
@@ -265,17 +264,23 @@ class RealmInventoryItemProvider: RealmProvider {
         doInWriteTransaction({realm in
             if let storedItem = (realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilterUuid(incrementResult.uuid)).first) {
                 
-                // Notes & todo see equivalent method for list items
-                if (storedItem.lastServerUpdate <= incrementResult.lastUpdate) {
-                    
-                    var updateDict: [String: AnyObject] = DBSyncable.timestampUpdateDict(incrementResult.uuid, lastServerUpdate: incrementResult.lastUpdate)
-                    updateDict[DBInventoryItem.quantityFieldName] = incrementResult.updatedQuantity
-                    realm.create(DBInventoryItem.self, value: updateDict, update: true)
-                    QL1("Updateded inventory item with increment result dict: \(updateDict)")
-                    
+                // store the timestamp only if it matches with the current quantity. E.g. if user increments very quicky 1,2,3,4,5,6
+                // we may receive the response from server for 1 when the database is already at 4 - so we don't want to store 1's timestamp for 4. When the user stops at 6 only the timestamp with the response with 6 quantity will be stored.
+                if storedItem.quantity == incrementResult.updatedQuantity {
+                    // Notes & todo see equivalent method for list items
+                    if (storedItem.lastServerUpdate <= incrementResult.lastUpdate) {
+                        
+                        let updateDict: [String: AnyObject] = DBSyncable.timestampUpdateDict(incrementResult.uuid, lastServerUpdate: incrementResult.lastUpdate)
+                        realm.create(DBInventoryItem.self, value: updateDict, update: true)
+                        QL1("Updateded inventory item with increment result dict: \(updateDict)")
+                        
+                    } else {
+                        QL3("Warning: got result with smaller timestamp: \(incrementResult), ignoring")
+                    }
                 } else {
-                    QL3("Warning: got result with smaller timestamp: \(incrementResult), ignoring")
+                    QL1("Received increment result with outdated quantity: \(incrementResult.updatedQuantity)")
                 }
+
             } else {
                 QL3("Didn't find item for: \(incrementResult)")
             }

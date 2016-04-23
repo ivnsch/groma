@@ -79,7 +79,7 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
     }
     
     // Quantity of listitem in a specific status
-    private func quantityForStatus(status: ListItemStatus) -> Int {
+    func quantityForStatus(status: ListItemStatus) -> Int {
         switch status {
         case .Todo: return todoQuantity
         case .Done: return doneQuantity

@@ -194,7 +194,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     
     // TODO pass a prototype or product+quantity similar to list items. Don't pass a new group item, the creation of the new group item should happen in the db provider, only when one with given semantic unique doesn't exist already.
     func add(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        DBProviders.groupItemProvider.addOrIncrement(item) {[weak self] addedOrIncrementedGroupItemMaybe in
+        DBProviders.groupItemProvider.addOrIncrement(item, dirty: remote) {[weak self] addedOrIncrementedGroupItemMaybe in
             if let addedOrIncrementedGroupItem = addedOrIncrementedGroupItemMaybe {
                 handler(ProviderResult(status: .Success))
                 
@@ -219,7 +219,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
 
     func add(items: [GroupItem], group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        DBProviders.groupItemProvider.addOrIncrement(items) {saved in
+        DBProviders.groupItemProvider.addOrIncrement(items, dirty: remote) {saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
@@ -293,7 +293,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     func update(item: GroupItem, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
-        DBProviders.groupItemProvider.update(item) {[weak self] saved in
+        DBProviders.groupItemProvider.update(item, dirty: remote) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
@@ -389,15 +389,15 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
     }
     
     // Copied from ListItemProviderImpl (which is copied from inventory provider) refactor?
-    func increment(groupItem: GroupItem, delta: Int, remote: Bool, _ handler: ProviderResult<Any> -> ()) {
+    func increment(groupItem: GroupItem, delta: Int, remote: Bool, _ handler: ProviderResult<Int> -> Void) {
         increment(ItemIncrement(delta: delta, itemUuid: groupItem.uuid), remote: remote, handler)
     }
     
-    func increment(increment: ItemIncrement, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        DBProviders.groupItemProvider.incrementGroupItem(increment) {[weak self] saved in
+    func increment(increment: ItemIncrement, remote: Bool, _ handler: ProviderResult<Int> -> Void) {
+        DBProviders.groupItemProvider.incrementGroupItem(increment, dirty: remote) {[weak self] updatedQuantityMaybe in
 
-            if saved {
-                handler(ProviderResult(status: .Success))
+            if let updatedQuantity = updatedQuantityMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: updatedQuantity))
             } else {
                 handler(ProviderResult(status: .DatabaseSavingError))
             }
@@ -413,7 +413,7 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
                         }
                         
                     } else {
-                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                        DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Int>) in
                             QL4("Error incrementing item: \(increment) in remote, result: \(result)")
                             handler(result)
                         })

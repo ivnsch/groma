@@ -57,7 +57,7 @@ protocol ListItemGroupProvider {
     
     func removeGroupItem(uuid: String, remote: Bool, _ handler: ProviderResult<Any> -> Void)
     
-    func increment(listItem: GroupItem, delta: Int, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func increment(groupItem: GroupItem, delta: Int, remote: Bool, _ handler: ProviderResult<Int> -> Void)
 
-    func increment(increment: ItemIncrement, remote: Bool, _ handler: ProviderResult<Any> -> ())
+    func increment(increment: ItemIncrement, remote: Bool, _ handler: ProviderResult<Int> -> Void)
 }

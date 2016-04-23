@@ -29,6 +29,11 @@ class ProductWithQuantityInv: ProductWithQuantity {
         let incrementedItem = inventoryItem.incrementQuantityCopy(delta)
         return ProductWithQuantityInv(inventoryItem: incrementedItem)
     }
+    
+    override func updateQuantityCopy(quantity: Int) -> ProductWithQuantity {
+        let udpatedItem = inventoryItem.copy(quantity: quantity)
+        return ProductWithQuantityInv(inventoryItem: udpatedItem)
+    }
 }
 
 class InventoryItemsController: UIViewController, ProductsWithQuantityViewControllerDelegate, ListTopBarViewDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate {
@@ -436,11 +441,12 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    func increment(model: ProductWithQuantity, delta: Int, onSuccess: VoidFunction) {
+    func increment(model: ProductWithQuantity, delta: Int, onSuccess: Int -> Void) {
 
         func increment() {
-            Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, remote: true, successHandler({result in
-                onSuccess()
+            Providers.inventoryItemsProvider.incrementInventoryItem((model as! ProductWithQuantityInv).inventoryItem, delta: delta, remote: true, successHandler({updatedQuantity in
+                QL2("inv controller CALL SUCEESS: calling on success")
+                onSuccess(updatedQuantity)
             }))
         }
         
@@ -690,8 +696,6 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 QL4("Mo value")
             }
             
-        } else {
-            QL4("No userInfo")
         }
     }
     

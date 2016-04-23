@@ -21,6 +21,10 @@ class ProductWithQuantity: Equatable, Identifiable {
     func incrementQuantityCopy(delta: Int) -> ProductWithQuantity {
         fatalError("override")
     }
+    
+    func updateQuantityCopy(quantity: Int) -> ProductWithQuantity {
+        fatalError("override")
+    }
 }
 func ==(lhs: ProductWithQuantity, rhs: ProductWithQuantity) -> Bool {
     return lhs.product == rhs.product && lhs.quantity == rhs.quantity

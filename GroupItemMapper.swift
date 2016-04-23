@@ -10,7 +10,7 @@ import Foundation
 
 class GroupItemMapper {
     
-    class func dbWith(groupItem: GroupItem) -> DBGroupItem {
+    class func dbWith(groupItem: GroupItem, dirty: Bool) -> DBGroupItem {
         let dbListItemGroup = DBGroupItem()
         dbListItemGroup.uuid = groupItem.uuid
         dbListItemGroup.quantity = groupItem.quantity
@@ -19,6 +19,7 @@ class GroupItemMapper {
         if let lastServerUpdate = groupItem.lastServerUpdate {
             dbListItemGroup.lastServerUpdate = lastServerUpdate
         }
+        dbListItemGroup.dirty = dirty
         return dbListItemGroup
     }
     
