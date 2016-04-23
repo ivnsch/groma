@@ -418,11 +418,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     // TODO remove this?
     func autoCompleteTextField(textField: MLPAutoCompleteTextField!, didSelectAutoCompleteString selectedString: String!, withAutoCompleteObject selectedObject: MLPAutoCompletionObject!, forRowAtIndexPath indexPath: NSIndexPath!) {
 
-        delegate?.addEditSectionOrCategoryColor(selectedString) {[weak self] colorMaybe in
-            self?.sectionColorButton.textColor = colorMaybe ?? {
-                QL4("Invalid state: selected a section or category suggestion and there's no color.")
-                return UIColor.blackColor()
-            }()
+        if textField == sectionInput {
+            delegate?.addEditSectionOrCategoryColor(selectedString) {[weak self] colorMaybe in
+                self?.sectionColorButton.textColor = colorMaybe ?? {
+                    QL4("Invalid state: selected a section or category suggestion and there's no color.")
+                    return UIColor.blackColor()
+                }()
+            }
         }
     }
 
