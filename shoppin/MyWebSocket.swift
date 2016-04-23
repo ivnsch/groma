@@ -189,6 +189,14 @@ class MyWebSocket: WebSocketDelegate {
 
                 tryReconnectAndIncrementDelay()
                 notifyConnected(false)
+                
+            case 57:
+                QL3("Trying to reconnect socket after: \(error)")
+                // Got this sometimes on device, no apparent reason, server wasn't down or anything. Only thing is that it was on the device and the app was in the background 20 mins or so (using twitter while testing with the simulator)
+                // Error Domain=NSPOSIXErrorDomain Code=57 "The operation couldn’t be completed. Socket is not connected"[;
+                // For now we handle as closed connection and try to reconnect
+                tryReconnectIfLoggedIn()
+                
             default:
                 QL4("Unknown websocket connection error: \(error)")
             }
