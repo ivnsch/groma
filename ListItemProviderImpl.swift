@@ -56,11 +56,8 @@ class ListItemProviderImpl: ListItemProvider {
                     if (dbListItems != listItemsWithRelations.listItems) { // note: listItemsWithRelations.listItems is already sorted by order
                         self?.dbProvider.overwrite(listItemsWithRelations.listItems, listUuid: list.uuid, clearTombstones: true) {saved in
                             
-                            if dbListItems.isEmpty // this is quick fix to - generally we want to avoid to reset the memory cache or return items to the handler once the list is loaded the first time (after opening), because switch to "done" and "stash" is very quick and it has to be consitent - things should not get lost. User will see background update result the next time the list is opened. But: The very first time user starts app on a device there may be items in the server already and in this case we want the bg update to be handled immediately - because of this we have this empty check. TODO review this it's not very clean.
-                                || (fetchMode == .Both || fetchMode == .First) {
-                                handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItemsWithRelations.listItems))
-                                self?.memProvider.overwrite(listItemsWithRelations.listItems)
-                            }
+                            handler(ProviderResult(status: ProviderStatusCode.Success, sucessResult: listItemsWithRelations.listItems))
+                            self?.memProvider.overwrite(listItemsWithRelations.listItems)
                         }
                     }
                     
