@@ -806,14 +806,22 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // IMPORTANT: Assumes that the passed list items are ALL the existing list items in src status. If this is not the case, the remaining items/sections in src status will likely be left with a wrong order.
-    func switchAllToStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
+    // Passes to handler the switched list items (state as stored in local db - no remote things like lastUpdate timestamp)
+    func switchAllToStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<[ListItem]> -> Void) {
         
         getSwitchedItemsForSwitchAll(listItems, list: list, status1: status1, status: status, remote: remote) {result in
             
             if let switchedItems = result.sucessResult {
                 
                 // Persist changes. If mem cached is enabled this calls handler directly after mem cache is updated and does db update in the background.
-                self.updateLocal(switchedItems, handler: handler, onFinishLocal: {[weak self] in
+                self.updateLocal(switchedItems, handler: {result in
+                    if result.success {
+                        handler(ProviderResult(status: .Success, sucessResult: switchedItems))
+                    } else {
+                        handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
+                    }
+                    
+                }, onFinishLocal: {[weak self] in
                     
                     if remote {
                         let statusUpdate = ListItemStatusUpdate(src: status1, dst: status)
@@ -826,7 +834,7 @@ class ListItemProviderImpl: ListItemProvider {
                                 }
                                 
                             } else {
-                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<Any>) in
+                                DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[ListItem]>) in
                                     QL4("Remote call no success: \(remoteResult) items: \(listItems)")
                                     self?.memProvider.invalidate()
                                     handler(result)
@@ -842,6 +850,35 @@ class ListItemProviderImpl: ListItemProvider {
             }
         }
     }
+    
+    func switchAllStatusLocal(result: RemoteSwitchAllListItemsLightResult, _ handler: ProviderResult<Any> -> Void) {
+        DBProviders.listProvider.loadList(result.update.listUuid) {listMaybe in
+            if let list = listMaybe {
+                DBProviders.listItemProvider.loadListItems(list.uuid) {listItems in
+                    Providers.listItemsProvider.switchAllToStatus(listItems, list: list, status1: result.update.srcStatus, status: result.update.dstStatus, remote: false) {switchResult in
+                        if let switchedListItems = switchResult.sucessResult {
+                            handler(ProviderResult(status: .Success))
+                            
+                            DBProviders.listItemProvider.storeWebsocketAllListItemSwitchResult(switchedListItems, lastUpdate: result.lastUpdate) {success in
+                                if success {
+                                    QL1("Updated timestamps")
+                                } else {
+                                    QL4("Counldn't update timestamps")
+                                }
+                            }
+                        } else {
+                            QL4("No switched list items, can't store timestamps")
+                            handler(ProviderResult(status: switchResult.status, sucessResult: nil, error: switchResult.error, errorObj: switchResult.errorObj))
+                        }
+                    }
+                }
+            } else {
+                QL2("List to switch items not found: \(result.update.listUuid)")
+                handler(ProviderResult(status: .Success)) // list can be removed shortly before we get the message so this is not an error
+            }
+        }
+    }
+
 
     // Helper for common code of status switch update, order update and full update - the only difference of these method is the remote call, switch and order use optimised services.
     // The local call is in all cases a full update.

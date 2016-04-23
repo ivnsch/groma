@@ -128,14 +128,18 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
             }
             
         } else if segue.identifier == "stashSegue" {
-            if let stashViewController = segue.destinationViewController as? StashViewController {
-                stashViewController.navigationItemTextColor = titleLabel?.textColor
-                listItemsTableViewController.clearPendingSwipeItemIfAny(true) {
-                    stashViewController.onUIReady = {
-                        stashViewController.list = self.currentList
-                        stashViewController.backgroundColor = self.listItemsTableViewController.view.backgroundColor
+            if let stashViewController = segue.destinationViewController as? StashListItemsController {
+//                stashViewController.navigationItemTextColor = titleLabel?.textColor
+                stashViewController.onUIReady = {
+                    stashViewController.currentList = self.currentList
+                    if let dotColor = self.topBar.dotColor {
+                        stashViewController.setThemeColor(dotColor) // TODO rename theme color, we don't have themes anymore. So it's only the dot color and the other things need correct default color
+                    } else {
+                        QL4("Invalid state: top bar has no dot color")
                     }
                 }
+                self.listItemsTableViewController.clearPendingSwipeItemIfAny(true) {}
+
             }
             
         } else {

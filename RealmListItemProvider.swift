@@ -144,6 +144,11 @@ class RealmListItemProvider: RealmProvider {
         })
     }
     
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // TODO these are a bit weird, the data we store on switch all via rest and websockets should be the same? if we need same handling, needs server changes as the data sent is different
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     func storeRemoteAllListItemSwitchResult(statusUpdate: ListItemStatusUpdate, result: RemoteSwitchAllListItemsResult, _ handler: Bool -> Void) {
         
         doInWriteTransaction({realm in
@@ -181,6 +186,25 @@ class RealmListItemProvider: RealmProvider {
                 handler(successMaybe ?? false)
         })
     }
+    
+    // For websockets we just refresh the timestamps. For rest response we update quantity+order, the reason for this is bc concurrency etc. maybe the items get a different order or quantity in the server and we update then the client immediately, sending the state in the response. For websockets we don't have time and chose the most quick implementation which is to send just the timestamp and update the switched client list items with this timestamp.
+    func storeWebsocketAllListItemSwitchResult(listitems: [ListItem], lastUpdate: Int64, _ handler: Bool -> Void) {
+        doInWriteTransaction({realm in
+            listitems.forEach {item in
+                let dict = ["uuid": item.uuid, DBSyncable.lastUpdateFieldName: NSNumber(longLong: Int64(lastUpdate))]
+                realm.create(DBListItem.self, value: dict, update: true)
+            }
+
+            return true
+            
+            }, finishHandler: {(successMaybe: Bool?) in
+                handler(successMaybe ?? false)
+        })
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    
     
     func addListItem(status: ListItemStatus, product: StoreProduct, sectionNameMaybe: String?, sectionColorMaybe: UIColor?, quantity: Int, list: List, note noteMaybe: String? = nil, _ handler: ListItem? -> Void) {
         
@@ -240,10 +264,14 @@ class RealmListItemProvider: RealmProvider {
 
     
     func loadListItems(list: List, handler: [ListItem] -> ()) {
-        let mapper = {ListItemMapper.listItemWithDB($0)}
-        self.load(mapper, filter: DBListItem.createFilterList(list.uuid), handler: handler)
+        loadListItems(list.uuid, handler: handler)
     }
 
+    func loadListItems(listUuid: String, handler: [ListItem] -> Void) {
+        let mapper = {ListItemMapper.listItemWithDB($0)}
+        self.load(mapper, filter: DBListItem.createFilterList(listUuid), handler: handler)
+    }
+    
     func loadListItems(uuids: [String], handler: [ListItem] -> Void) {
         let mapper = {ListItemMapper.listItemWithDB($0)}
         self.load(mapper, filter: DBListItem.createFilterForUuids(uuids), handler: handler)

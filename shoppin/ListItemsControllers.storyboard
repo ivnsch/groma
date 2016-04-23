@@ -23,13 +23,14 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
+            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
-        <!--Stash-->
+        <!--Stash List Items Controller-->
         <scene sceneID="d56-iQ-jMq">
             <objects>
-                <viewController id="KWE-NE-tbC" customClass="StashViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="KWE-NE-tbC" customClass="StashListItemsController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="1cv-XG-LZE"/>
                         <viewControllerLayoutGuide type="bottom" id="ZpL-8v-jz0"/>
@@ -37,15 +38,68 @@
                     <view key="view" contentMode="scaleToFill" id="CGm-mK-G1n">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TBe-aO-06n" customClass="ListTopBarView" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="64" id="QVv-wb-txL"/>
+                                </constraints>
+                            </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PcH-rK-LUL">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="eMF-ZE-4G9">
+                                        <rect key="frame" x="270" y="238" width="60" height="60"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="BdM-XD-w7S"/>
+                                            <constraint firstAttribute="height" constant="60" id="yT8-Af-Lav"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPu-gm-3Bj">
+                                        <rect key="frame" x="222" y="310" width="156" height="21"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="dPu-gm-3Bj" firstAttribute="top" secondItem="eMF-ZE-4G9" secondAttribute="bottom" constant="12" id="Yme-Wv-8jh"/>
+                                    <constraint firstItem="eMF-ZE-4G9" firstAttribute="centerY" secondItem="PcH-rK-LUL" secondAttribute="centerY" id="k1C-Jy-bGV"/>
+                                    <constraint firstItem="dPu-gm-3Bj" firstAttribute="centerX" secondItem="PcH-rK-LUL" secondAttribute="centerX" id="nGd-PG-1PH"/>
+                                    <constraint firstItem="eMF-ZE-4G9" firstAttribute="centerX" secondItem="PcH-rK-LUL" secondAttribute="centerX" id="zgH-sZ-QkL"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S8g-IK-MVw" customClass="ExpandCollapseButton" customModule="shoppin">
+                                <rect key="frame" x="550" y="550" width="40" height="40"/>
+                                <color key="backgroundColor" red="0.61052091549999998" green="0.73144471069999994" blue="0.91775058180000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="NcT-Eq-dEb"/>
+                                    <constraint firstAttribute="height" constant="40" id="cvd-xf-zaO"/>
+                                </constraints>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="PcH-rK-LUL" firstAttribute="leading" secondItem="CGm-mK-G1n" secondAttribute="leading" id="Dvg-oX-IS6"/>
+                            <constraint firstItem="ZpL-8v-jz0" firstAttribute="top" secondItem="PcH-rK-LUL" secondAttribute="bottom" id="EUv-LS-qJx"/>
+                            <constraint firstAttribute="trailing" secondItem="TBe-aO-06n" secondAttribute="trailing" id="IHM-a3-xN5"/>
+                            <constraint firstItem="TBe-aO-06n" firstAttribute="top" secondItem="CGm-mK-G1n" secondAttribute="top" id="Kvz-RW-epT"/>
+                            <constraint firstItem="PcH-rK-LUL" firstAttribute="top" secondItem="TBe-aO-06n" secondAttribute="bottom" id="UOJ-76-IWK"/>
+                            <constraint firstAttribute="trailing" secondItem="PcH-rK-LUL" secondAttribute="trailing" id="c8b-Hb-Ozk"/>
+                            <constraint firstItem="TBe-aO-06n" firstAttribute="leading" secondItem="CGm-mK-G1n" secondAttribute="leading" id="i34-bI-8DB"/>
+                            <constraint firstItem="ZpL-8v-jz0" firstAttribute="top" secondItem="S8g-IK-MVw" secondAttribute="bottom" constant="10" id="sXy-31-x8N"/>
+                            <constraint firstAttribute="trailing" secondItem="S8g-IK-MVw" secondAttribute="trailing" constant="10" id="wKQ-Am-MCj"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Stash" id="qC5-Li-xPa">
-                        <barButtonItem key="rightBarButtonItem" title="Reset" id="i3i-We-y1B">
-                            <connections>
-                                <action selector="onResetTap:" destination="KWE-NE-tbC" id="aBb-NS-GOG"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <connections>
+                        <outlet property="emptyListView" destination="PcH-rK-LUL" id="oh0-eF-1yN"/>
+                        <outlet property="expandCollapseButton" destination="S8g-IK-MVw" id="naL-lv-PJs"/>
+                        <outlet property="topBar" destination="TBe-aO-06n" id="fnw-5e-bxg"/>
+                        <outlet property="topBarHeightConstraint" destination="QVv-wb-txL" id="UxZ-CT-1ku"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mKJ-yc-JKv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

@@ -67,10 +67,13 @@ protocol ListItemProvider {
     */
     func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<ListItem> -> Void)
     
-    func switchAllToStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<Any> -> Void)
+    func switchAllToStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<[ListItem]> -> Void)
     
     // Websocket list item switch
     func switchStatusLocal(listItemUuid: String, status1: ListItemStatus, status: ListItemStatus, _ handler: ProviderResult<ListItem> -> Void)
+
+    // Websocket all list item switch
+    func switchAllStatusLocal(result: RemoteSwitchAllListItemsLightResult, _ handler: ProviderResult<Any> -> Void)
     
     // Adds inventory + history items and moves list items to stash
     func buyCart(listItems: [ListItem], list: List, remote: Bool, _ handler: ProviderResult<Any> -> Void)

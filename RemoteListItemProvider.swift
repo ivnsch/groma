@@ -119,7 +119,7 @@ class RemoteListItemProvider {
     
     // IMPORTANT: Assumes that the passed list items are ALL the existing list items in src status. If this is not the case, the remaining items/sections in src status will likely be left with a wrong order.
     func updateAllStatus(listUuid: String, statusUpdate: ListItemStatusUpdate, handler: RemoteResult<RemoteSwitchAllListItemsResult> -> ()) {
-        let parameters: [String: AnyObject] = ["listUuid": listUuid, "src": statusUpdate.dst.rawValue, "dst": statusUpdate.dst.rawValue]
+        let parameters: [String: AnyObject] = ["listUuid": listUuid, "src": statusUpdate.src.rawValue, "dst": statusUpdate.dst.rawValue]
         RemoteProvider.authenticatedRequest(.PUT, Urls.updateAllListItemsStatus, parameters) {result in
             handler(result)
         }

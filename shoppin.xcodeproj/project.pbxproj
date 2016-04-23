@@ -71,7 +71,6 @@
 		EB0C2A4F1B5841C600AF6226 /* DBInventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A4D1B5841C500AF6226 /* DBInventoryItem.swift */; };
 		EB0C2A501B5841C600AF6226 /* DBInventoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A4D1B5841C500AF6226 /* DBInventoryItem.swift */; };
 		EB0C2A561B590D3D00AF6226 /* TestInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0C2A551B590D3D00AF6226 /* TestInventory.swift */; };
-		EB0CC08C1BD2BC93004A17B4 /* StashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0CC08B1BD2BC93004A17B4 /* StashViewController.swift */; };
 		EB0F5F861B962D2100035175 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = EB0F5F851B962D2100035175 /* GoogleService-Info.plist */; };
 		EB0F5F881B98A10100035175 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB0F5F871B98A10100035175 /* SystemConfiguration.framework */; };
 		EB0F5F8B1B9A0A8000035175 /* Array_ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */; };
@@ -654,6 +653,10 @@
 		EB9208391C4EEA5E00332332 /* RealmBrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208371C4EEA5E00332332 /* RealmBrandProvider.swift */; };
 		EB92083A1C4EEA5E00332332 /* RealmBrandProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9208371C4EEA5E00332332 /* RealmBrandProvider.swift */; };
 		EB969FE11BE4371200F5BC35 /* ProductAggregateCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB969FE01BE4371200F5BC35 /* ProductAggregateCell.swift */; };
+		EB97032B1CCBDE2000A5B284 /* RemoteSwitchAllListItemsLightResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB97032A1CCBDE1F00A5B284 /* RemoteSwitchAllListItemsLightResult.swift */; };
+		EB97032C1CCBDE2100A5B284 /* RemoteSwitchAllListItemsLightResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB97032A1CCBDE1F00A5B284 /* RemoteSwitchAllListItemsLightResult.swift */; };
+		EB97032D1CCBDE2100A5B284 /* RemoteSwitchAllListItemsLightResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB97032A1CCBDE1F00A5B284 /* RemoteSwitchAllListItemsLightResult.swift */; };
+		EB97032F1CCBFABB00A5B284 /* StashListItemsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB97032E1CCBFABB00A5B284 /* StashListItemsController.swift */; };
 		EB9BE4161B2C6556005B401A /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
 		EB9BE4171B2C6556005B401A /* RemoteListItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */; };
 		EB9BE4191B2CB355005B401A /* RemoteListItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9BE4181B2CB355005B401A /* RemoteListItems.swift */; };
@@ -1117,7 +1120,6 @@
 		EB0C2A491B5840F700AF6226 /* RealmInventoryProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmInventoryProvider.swift; sourceTree = "<group>"; };
 		EB0C2A4D1B5841C500AF6226 /* DBInventoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBInventoryItem.swift; sourceTree = "<group>"; };
 		EB0C2A551B590D3D00AF6226 /* TestInventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestInventory.swift; sourceTree = "<group>"; };
-		EB0CC08B1BD2BC93004A17B4 /* StashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StashViewController.swift; sourceTree = "<group>"; };
 		EB0F5F851B962D2100035175 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EB0F5F871B98A10100035175 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		EB0F5F8A1B9A0A8000035175 /* Array_ListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_ListItem.swift; sourceTree = "<group>"; };
@@ -1424,6 +1426,8 @@
 		EB9208331C4EEA2400332332 /* BrandProviderImpl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandProviderImpl.swift; sourceTree = "<group>"; };
 		EB9208371C4EEA5E00332332 /* RealmBrandProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmBrandProvider.swift; sourceTree = "<group>"; };
 		EB969FE01BE4371200F5BC35 /* ProductAggregateCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductAggregateCell.swift; sourceTree = "<group>"; };
+		EB97032A1CCBDE1F00A5B284 /* RemoteSwitchAllListItemsLightResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSwitchAllListItemsLightResult.swift; sourceTree = "<group>"; };
+		EB97032E1CCBFABB00A5B284 /* StashListItemsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StashListItemsController.swift; sourceTree = "<group>"; };
 		EB9BE4151B2C6556005B401A /* RemoteListItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItemProvider.swift; sourceTree = "<group>"; };
 		EB9BE4181B2CB355005B401A /* RemoteListItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItems.swift; sourceTree = "<group>"; };
 		EB9BE41B1B2CB42B005B401A /* RemoteListItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteListItem.swift; sourceTree = "<group>"; };
@@ -1787,7 +1791,7 @@
 		EB0CC08A1BD2BC6A004A17B4 /* stash */ = {
 			isa = PBXGroup;
 			children = (
-				EB0CC08B1BD2BC93004A17B4 /* StashViewController.swift */,
+				EB97032E1CCBFABB00A5B284 /* StashListItemsController.swift */,
 			);
 			name = stash;
 			sourceTree = "<group>";
@@ -2334,6 +2338,7 @@
 				EBEA0CE51CA7F2DC00E68B81 /* RemoteListItemReorder.swift */,
 				EBAB0BB71CB3CFB2001B8B01 /* RemoteSwitchListItemResult.swift */,
 				EBAB0BBD1CB487D5001B8B01 /* RemoteSwitchAllListItemsResult.swift */,
+				EB97032A1CCBDE1F00A5B284 /* RemoteSwitchAllListItemsLightResult.swift */,
 			);
 			name = remote;
 			sourceTree = "<group>";
@@ -3909,6 +3914,7 @@
 				EBF162D91A3C82380048E37C /* DefaultCellIdentifierConstants.swift in Sources */,
 				EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */,
 				EBF5D7DB1B8FB30000A235C5 /* LoadingFooter.swift in Sources */,
+				EB97032F1CCBFABB00A5B284 /* StashListItemsController.swift in Sources */,
 				EB9BE4251B2CB542005B401A /* RemoteList.swift in Sources */,
 				EBD7A7E01CC0323200B56C41 /* RatingAlert.swift in Sources */,
 				EB4147B81BDFE9FB00549CE4 /* ManageProductsCell.swift in Sources */,
@@ -3955,6 +3961,7 @@
 				EB7233CB1C84B6C2002B9903 /* DBRemoveListItem.swift in Sources */,
 				EBF1A1541B82213200F34105 /* HistoryViewController.swift in Sources */,
 				EBB9A72E1B5EB00E00E5487D /* InventoriesTableViewController.swift in Sources */,
+				EB97032B1CCBDE2000A5B284 /* RemoteSwitchAllListItemsLightResult.swift in Sources */,
 				EB22C7111C4B02EE00285352 /* ShareAppViewController.swift in Sources */,
 				EBB9A7541B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */,
 				EBF608B91C0F5D9000EDB33E /* RemotePlanItems.swift in Sources */,
@@ -3970,7 +3977,6 @@
 				EBA2C8CD1C4F207800A970B8 /* EditProductCategoryController.swift in Sources */,
 				EBA9E5E41C62977300A85610 /* UserProviderMock.swift in Sources */,
 				EBBC9B781C00D7190046966B /* RealmProductProvider.swift in Sources */,
-				EB0CC08C1BD2BC93004A17B4 /* StashViewController.swift in Sources */,
 				EB1B36571BC44D9A003519F2 /* PlanViewController.swift in Sources */,
 				EB6E3D151C56D3D600D65DD5 /* ExpandCollapseButton.swift in Sources */,
 				EB1B36711BC48278003519F2 /* RealmPlanProvider.swift in Sources */,
@@ -4036,6 +4042,7 @@
 				EB7D24161CB8360F0017EFE6 /* StoreListItemPrototype.swift in Sources */,
 				EB4A38B11C8F86B4000714F9 /* RemotePullProvider.swift in Sources */,
 				EB0C2A3B1B58330300AF6226 /* RemoteInventoryItem.swift in Sources */,
+				EB97032C1CCBDE2100A5B284 /* RemoteSwitchAllListItemsLightResult.swift in Sources */,
 				EBA575721BD031B400A0A825 /* GroupItemInput.swift in Sources */,
 				EB55677F1A8658AA00CD3EC6 /* InventoryItemsProviderImpl.swift in Sources */,
 				EBF608BE1C0F5DB400EDB33E /* RemotePlanItem.swift in Sources */,
@@ -4423,6 +4430,7 @@
 				EBAB0BC01CB487D5001B8B01 /* RemoteSwitchAllListItemsResult.swift in Sources */,
 				EBF3775E1B342A4900EEB6DB /* InventoryItemsProviderImpl.swift in Sources */,
 				EB40A4701B550804000E9CAD /* RealmProvider.swift in Sources */,
+				EB97032D1CCBDE2100A5B284 /* RemoteSwitchAllListItemsLightResult.swift in Sources */,
 				EB7233E51C84B713002B9903 /* DBRemoveProductCategory.swift in Sources */,
 				EB7233CD1C84B6C2002B9903 /* DBRemoveListItem.swift in Sources */,
 				EB70C2211B4D302D0060E529 /* SharedUser.swift in Sources */,

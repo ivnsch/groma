@@ -53,6 +53,10 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         fatalError("override")
     }
     
+    var isPullToAddEnabled: Bool {
+        return true
+    }
+    
     var tableViewBottomInset: CGFloat {
         return 0
     }
@@ -143,7 +147,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             setEmptyViewVisible(false, animated: false)
             clearPossibleUndo()
             topBar.setLeftButtonIds([])
-            topBar.setRightButtonIds([])
+            topBar.setRightButtonModels(rightButtonsClosing())
             // Clear list item memory cache when we leave controller. This is not really necessary but just "in case". The list item memory cache is there to smooth things *inside* a list, that is transitions between todo/done/stash, and adding/incrementing items. Causing a db-reload when we load the controller is totally ok.
             Providers.listItemsProvider.invalidateMemCache()
         }
@@ -203,6 +207,10 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     private func udpateListItems(list: List, onFinish: VoidFunction? = nil) {
         Providers.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: .MemOnly, successHandler{[weak self] listItems in guard let weakSelf = self else {return}
             weakSelf.listItemsTableViewController.setListItems(listItems.filter{$0.hasStatus(weakSelf.status)})
+            
+            let i = listItems.filter{$0.hasStatus(weakSelf.status)}
+            QL2("status: \(weakSelf.status), items: \(i)")
+            
             weakSelf.onTableViewChangedQuantifiables()
             onFinish?()
         })
@@ -229,7 +237,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             setDefaultLeftButtons()
             
             if rotateTopBarButton {
-                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+                topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
             }
             
             
@@ -245,7 +253,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             topBar.setLeftButtonIds([])
             
             if rotateTopBarButton {
-                topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+                topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
             }
             
             // in case we are in reorder sections mode, come back to normal. This mode doesn't make sense while adding list items as we can't see the list items.
@@ -281,7 +289,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             expandCollapseButton.setHiddenAnimated(true)
          
             setDefaultLeftButtons()
-            topBar.setRightButtonIds([.ToggleOpen])
+            topBar.setRightButtonModels(rightButtonsDefault())
         }
         
         listItemsTableViewController.setEditing(editing, animated: animated)
@@ -311,7 +319,9 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         let bottomInset: CGFloat = tableViewBottomInset + 10 // 10 - show a little empty space between the last item and the prices view
         listItemsTableViewController.tableView.inset = UIEdgeInsetsMake(topInset, 0, bottomInset, 0)
         listItemsTableViewController.tableView.topOffset = -listItemsTableViewController.tableView.inset.top
-        listItemsTableViewController.enablePullToAdd()
+        if isPullToAddEnabled {
+            listItemsTableViewController.enablePullToAdd()
+        }
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
@@ -339,17 +349,15 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
-        if self.editing {
+        if self.editing { // open quick add in edit mode
             updatingSelectedCell = listItemsTableViewController.tableView.cellForRowAtIndexPath(indexPath)
             
             topQuickAddControllerManager?.expand(true)
-            topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
-            ])
+            topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
             
             topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: tableViewListItem.listItem))
             
-        } else {
+        } else { // switch list item
 
             // TODO!!!! when receive switch status via websocket we will *not* show undo (undo should be only for the device doing the switch) but submit immediately this means:
             // 1. call switchstatus like here, 2. switch status in provider updates status/order, maybe deletes section, etc 3. update the table view - swipe the item and maybe delete section(this should be similar to calling onListItemClear except the animation in this case is not swipe, but that should be ok?)
@@ -440,9 +448,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             topEditSectionControllerManager?.tableView = sectionsTableViewController?.tableView ?? listItemsTableViewController.tableView
             topEditSectionControllerManager?.expand(true)
             topEditSectionControllerManager?.controller?.section = section
-            topBar.setRightButtonModels([
-                TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
-            ])
+            topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
         }
     }
     
@@ -579,15 +585,13 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     func onQuickListOpen() {
         topBar.setBackVisible(false)
         topBar.setLeftButtonModels([])
-        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
+        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
     }
     
     func onAddProductOpen() {
         topBar.setBackVisible(false)
         topBar.setLeftButtonModels([])
-        topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
-        ])
+        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
     }
     
     func parentViewForAddButton() -> UIView {
@@ -618,18 +622,11 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     func onAddGroupOpen() {
         topBar.setBackVisible(false)
         topBar.setLeftButtonModels([])
-        topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .Add),
-            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
-        ])
     }
     
     func onAddGroupItemsOpen() {
         topBar.setBackVisible(true)
         topBar.setLeftButtonModels([])
-        topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
-        ])
     }
     
     func onRemovedSectionCategoryName(name: String) {
@@ -796,7 +793,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     func onExpandableClose() {
 //        topBar.setBackVisible(false)
         setDefaultLeftButtons()
-        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
+        rightButtonsClosing()
+        topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
         topQuickAddControllerManager?.controller?.onClose()
         topEditSectionControllerManager?.controller?.onClose()
         
@@ -840,8 +838,26 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     func onCenterTitleAnimComplete(center: Bool) {
         if center {
             setDefaultLeftButtons()
-            topBar.setRightButtonIds([.ToggleOpen])
+            topBar.setRightButtonModels(rightButtonsDefault())
         }
+    }
+    
+    // MARK: - Right buttons
+    
+    func rightButtonsDefault() -> [TopBarButtonModel] {
+        return [TopBarButtonModel(buttonId: .ToggleOpen)]
+    }
+    
+    func rightButtonsOpeningQuickAdd() -> [TopBarButtonModel] {
+        return [TopBarButtonModel(buttonId: .ToggleOpen, endTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))]
+    }
+
+    func rightButtonsClosingQuickAdd() -> [TopBarButtonModel] {
+        return [TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)]
+    }
+    
+    func rightButtonsClosing() -> [TopBarButtonModel] {
+        return []
     }
     
     // MARK: - ExpandCollapseButtonDelegate
@@ -1000,8 +1016,21 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 QL4("Mo value")
             }
             
+        } else if let info = note.userInfo as? Dictionary<String, WSNotification<RemoteSwitchAllListItemsLightResult>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case .SwitchAll:
+                    guard (currentList.map{notification.obj.update.listUuid == $0.uuid}) ?? false else {return} // TODO!!!! add this check to all others, also in inventory and group items
+                    updatePossibleList() // reload list
+                    
+                default: QL4("Not handled: \(notification.verb)")
+                }
+            } else {
+                QL4("No value")
+            }
+            
         } else {
-            print("Error: ViewController.onWebsocketAddListItems: no userInfo")
+            QL4("No userInfo")
         }
     }
     

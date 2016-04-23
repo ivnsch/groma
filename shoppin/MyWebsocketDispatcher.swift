@@ -49,7 +49,8 @@ enum WSNotificationVerb: String {
     case Fav = "fav"
     case Order = "ord"
     case Switch = "switch"
-
+    case SwitchAll = "switchAll"
+    
     case TodoOrder = "todoOrd"
     case DoneOrder = "doneOrd"
     case BuyCart = "buyCart"
@@ -614,7 +615,21 @@ struct MyWebsocketDispatcher {
                     }
                 }
             } else {
-                MyWebsocketDispatcher.reportWebsocketParsingError("Delete listitem, data: \(data)")
+                MyWebsocketDispatcher.reportWebsocketParsingError("Buy cart, data: \(data)")
+            }
+
+            
+        case .SwitchAll:
+            if let switchAllResult = RemoteSwitchAllListItemsLightResult(representation: data) {
+                Providers.listItemsProvider.switchAllStatusLocal(switchAllResult) {result in
+                    if result.success {
+                        postNotification(.ListItem, verb, sender, switchAllResult)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Switch all \(switchAllResult)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Switch all, data: \(data)")
             }
             
         default: QL4("Not handled verb: \(verb)")
