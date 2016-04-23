@@ -75,7 +75,7 @@ class SectionProviderImpl: SectionProvider {
     
     func removeAllWithName(sectionName: String, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
 
-        DBProviders.sectionProvider.removeAllWithName(sectionName, markForSync: true) {[weak self] removedSectionsMaybe in
+        DBProviders.sectionProvider.removeAllWithName(sectionName, markForSync: remote) {[weak self] removedSectionsMaybe in
             if let removedSections = removedSectionsMaybe {
                 
                 Providers.listItemsProvider.invalidateMemCache()

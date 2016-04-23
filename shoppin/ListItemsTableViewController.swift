@@ -813,4 +813,10 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
             self.listItemsEditTableViewDelegate?.onListItemsOrderChangedSection(modifiedListItems)
         }
     }
+    
+    func hasSectionWith(f: Section -> Bool) -> Bool {
+        return tableViewSections.contains({tableViewSection in
+            f(tableViewSection.section)
+        })
+    }
 }

@@ -1061,6 +1061,12 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                     listItemsTableViewController.removeSection(notification.obj)
                     sectionsTableViewController?.removeSection(notification.obj)
                     
+                case .DeleteWithName:
+                    // This deletes sections but also categories so just reload
+//                    if listItemsTableViewController.hasSectionWith({$0.name == notification.obj}) {
+                        updatePossibleList() // reload list
+//                    }
+                    
                 default: QL4("Not handled case: \(notification.verb))")
                 }
             } else {

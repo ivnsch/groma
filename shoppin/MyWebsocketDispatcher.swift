@@ -50,6 +50,7 @@ enum WSNotificationVerb: String {
     case Order = "ord"
     case Switch = "switch"
     case SwitchAll = "switchAll"
+    case DeleteWithName = "delWithName"
     
     case TodoOrder = "todoOrd"
     case DoneOrder = "doneOrd"
@@ -673,6 +674,19 @@ struct MyWebsocketDispatcher {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Delete section, data: \(data)")
             }
 
+        case WSNotificationVerb.DeleteWithName:
+            if let sectionName = data as? String {
+                Providers.sectionProvider.removeAllWithName(sectionName, remote: false) {result in
+                    if result.success {
+                        postNotification(.Section, verb, sender, sectionName)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Delete sections with name \(sectionName)", result: result)
+                    }
+                }
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Delete sections with name, data: \(data)")
+            }
+            
         default: QL4("Not handled verb: \(verb)")
         }
     }

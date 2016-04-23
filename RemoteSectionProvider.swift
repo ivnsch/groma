@@ -25,7 +25,8 @@ class RemoteSectionProvider: RemoteProvider {
     }
     
     func removeSectionsWithName(name: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.sectionsName + "/\(name)") {result in
+        let encodedName = name.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.sectionsName + "/\(encodedName)") {result in
             handler(result)
         }
     }

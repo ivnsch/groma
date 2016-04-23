@@ -37,7 +37,8 @@ class RemoteProductCategoryProvider {
     }
     
     func removeCategoriesWithName(name: String, handler: RemoteResult<NoOpSerializable> -> ()) {
-        RemoteProvider.authenticatedRequest(.DELETE, Urls.productCategoriesName + "/\(name)") {result in
+        let encodedName = name.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!
+        RemoteProvider.authenticatedRequest(.DELETE, Urls.productCategoriesName + "/\(encodedName)") {result in
             handler(result)
         }
     }
