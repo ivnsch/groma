@@ -13,7 +13,7 @@ protocol ForgotPasswordDelegate {
     func onForgotPasswordSuccess()
 }
 
-class ForgotPasswordViewController: UIViewController, UITextFieldDelegate {
+class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var emailField: UITextField!
     
@@ -30,6 +30,14 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate {
         
         initValidator()
         prefill()
+        
+        let recognizer = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
+        recognizer.delegate = self
+        view.addGestureRecognizer(recognizer)
+    }
+    
+    func handleTap(recognizer: UITapGestureRecognizer) {
+        view.endEditing(true)
     }
     
     private func prefill() {

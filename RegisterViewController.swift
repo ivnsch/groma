@@ -16,7 +16,7 @@ protocol RegisterDelegate {
     func onRegisterSuccess()
 }
 
-class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, UITextFieldDelegate {
+class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -54,6 +54,14 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         let attributedText = buttonTranslation.underlineBetweenFirstSeparators("%%")
         attributedText.setTextColor(UIColor.blackColor())
         termsButton.setAttributedTitle(attributedText, forState: .Normal)
+        
+        let recognizer = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
+        recognizer.delegate = self
+        view.addGestureRecognizer(recognizer)
+    }
+    
+    func handleTap(recognizer: UITapGestureRecognizer) {
+        view.endEditing(true)
     }
     
     @IBAction func onShowPasswordChanged(sender: UISwitch) {

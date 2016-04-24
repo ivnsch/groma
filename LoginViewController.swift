@@ -28,7 +28,7 @@ enum LoginControllerMode {
     case Normal, Expired, AfterRegister
 }
 
-class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, ExpiredLoginDelegate, UITextFieldDelegate {
+class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, ExpiredLoginDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var userNameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -96,7 +96,15 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
 
         fbButton.readPermissions = ["public_profile"]
 
+        let recognizer = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
+        recognizer.delegate = self
+        view.addGestureRecognizer(recognizer)
+        
         onUIReady?()
+    }
+    
+    func handleTap(recognizer: UITapGestureRecognizer) {
+        view.endEditing(true)
     }
 
     override func viewWillAppear(animated: Bool) {
