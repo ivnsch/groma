@@ -124,8 +124,6 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         
         setBackgroundColor(UIColor.randomFlatColor())
         
-        listNameInputField.becomeFirstResponder()
-        
         setSharedButtonVisibile(ConnectionProvider.connectedAndLoggedIn)
     }
     
@@ -159,6 +157,8 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     
     override func viewWillAppear(animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        listNameInputField.becomeFirstResponder()
         
         addButtonHelper = initAddButtonHelper()
         addButtonHelper?.addObserver()
