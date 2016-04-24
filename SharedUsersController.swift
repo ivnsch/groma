@@ -129,6 +129,9 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
                             let sharedUser = SharedUser(email: inputEmail)
                             weakSelf.addSharedUser(sharedUser)
                             weakSelf.addUserInputField.clear()
+                            
+                            // TODO!!!! improve this, functionality is a bit weird. either submit the users immediately (needs maybe separate service?) or add some sort of indicator to add/edit screen showing that submitting the updated users is pending. At very least add a preference to show this dialog only once.
+                            AlertPopup.show(title: "Info", message: "The user has not been invited yet. To submit the invitations you have to submit the list.\nIf you close the list without submitting, the participants list is resetted and no invitations are sent.", controller: weakSelf, okMsg: "Got it!")
                         })
                     } else {
                         print("Error: validation was not implemented correctly")
@@ -214,6 +217,16 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
         updateCellModels()
         usersTableView.reloadData()
         notifyDelegateUsersUpdated()
+    }
+    
+    
+    func textFieldShouldReturn(sender: UITextField) -> Bool {
+        if sender == addUserInputField {
+            tryAddInputUser()
+            sender.resignFirstResponder()
+        }
+        
+        return false
     }
     
     // MARK: - NewSharedUserCellDelegate
