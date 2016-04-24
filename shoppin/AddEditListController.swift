@@ -160,7 +160,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         
         listNameInputField.becomeFirstResponder()
         
-        addButtonHelper = initAddButtonHelper()
+        if addButtonHelper == nil {
+            addButtonHelper = initAddButtonHelper() // in view did load parentViewController is nil
+        }
         addButtonHelper?.addObserver()
     }
     

@@ -77,9 +77,14 @@ class AddButtonHelper: NSObject {
             addButton.center = addButton.center.copy(y: startY)
             addButton.setNeedsLayout()
             addButton.layoutIfNeeded()
-            UIView.animateWithDuration(0.3) {
+            UIView.animateWithDuration(0.3, animations: {
                 addButton.center = addButton.center.copy(y: endY)
-            }
+            }, completion: {[weak self] finished in
+                if !visible {
+                    self?.addButton?.removeFromSuperview()
+                    self?.addButton = nil
+                }
+            })
         }
     }
     
