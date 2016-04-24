@@ -24,6 +24,7 @@ class InventoryInvitationsHandler {
                 controller: controller,
                 onOk: {
                     Providers.inventoryProvider.acceptInvitation(invitation, controller.successHandler{
+                        Notification.send(Notification.InventoryInvitationAccepted)
                     })
                 },
                 onCancel: {

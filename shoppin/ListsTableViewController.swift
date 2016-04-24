@@ -55,6 +55,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketLists:", name: WSNotificationName.Lists.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onListInvitationAccepted:", name: Notification.ListInvitationAccepted.rawValue, object: nil)
     }
     
     deinit {
@@ -259,6 +260,10 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
                 QL4("No value")
             }
         }
+    }
+
+    func onListInvitationAccepted(note: NSNotification) {
+        initModels()
     }
     
     func onIncomingGlobalSyncFinished(note: NSNotification) {

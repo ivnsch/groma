@@ -24,6 +24,7 @@ struct ListInvitationsHandler {
                 controller: controller,
                 onOk: {
                     Providers.listProvider.acceptInvitation(invitation, controller.successHandler{
+                        Notification.send(.ListInvitationAccepted)
                     })
                 },
                 onCancel: {

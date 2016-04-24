@@ -11,6 +11,9 @@ import Foundation
 enum Notification: String {
     case ListRemoved = "ListRemoved"
     case LoginTokenExpired = "LoginTokenExpired"
+
+    case ListInvitationAccepted = "ListInvitationAccepted"
+    case InventoryInvitationAccepted = "InventoryInvitationAccepted"
     
     static func send(notification: Notification, dict: [String: AnyObject]? = nil) {
         NSNotificationCenter.defaultCenter().postNotificationName(notification.rawValue, object: nil, userInfo: dict)

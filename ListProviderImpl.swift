@@ -183,13 +183,23 @@ class ListProviderImpl: ListProvider {
     
     func acceptInvitation(invitation: RemoteListInvitation, _ handler: ProviderResult<Any> -> Void) {
         remoteListProvider.acceptInvitation(invitation) {remoteResult in
-            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+            if remoteResult.success {
+                QL1("Accept list invitation success")
+                handler(ProviderResult(status: .Success))
+            } else {
+                DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+            }
         }
     }
     
     func rejectInvitation(invitation: RemoteListInvitation, _ handler: ProviderResult<Any> -> Void) {
         remoteListProvider.rejectInvitation(invitation) {remoteResult in
-            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+            if remoteResult.success {
+                QL1("Reject list invitation success")
+            } else {
+                DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+            }
+            
         }
     }
     
