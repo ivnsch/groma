@@ -35,7 +35,13 @@ class RealmGlobalProvider: RealmProvider {
             let listsToSync = lists.map{$0.toDict()}
             let sectionsToSync = sections.map{$0.toDict()}
             let listItemsToSync = listsItems.map{$0.toDict()}
-            let inventoriesToSync = inventories.map{$0.toDict()}
+            
+            // For inventory we need to filter out inventories where I'm not authorised, otherwise the sync fails. The reason we have these inventories in the client is that they can be referenced by lists. A participant of a list doesn't necessarily have access to its associated inventory. But the list references it so we store it in "read only mode" (note that this is only about the inventory object, we of course don't get its items).
+            let inventoriesToSync = inventories.filter{inventory in
+                let sharedUsers = inventory.users.map{SharedUserMapper.sharedUserWithDB($0)}
+                // for now allow empty participants, this should be the case when the inventory was never shared (TODO confirm. If in all possible cases is guaranteed that the inventory has shared users we can remove this).
+                return sharedUsers.isEmpty || sharedUsers.containsMe()
+            }.map{$0.toDict()}
             let inventoryItemsToSync = inventoryItems.map{$0.toDict()}
             let groupsToSync = groups.map{$0.toDict()}
             let groupItemsToSync = groupItems.map{$0.toDict()}

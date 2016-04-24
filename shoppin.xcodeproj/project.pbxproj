@@ -464,6 +464,9 @@
 		EB76A7A11BEE6F1600486F30 /* MLPAutoCompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB76A7A01BEE6F1500486F30 /* MLPAutoCompleteTextField.swift */; };
 		EB76A7A41BEE8CD700486F30 /* AddEditPlanItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB76A7A21BEE8CD700486F30 /* AddEditPlanItemController.swift */; };
 		EB76A7A51BEE8CD700486F30 /* AddEditPlanItemController.xib in Resources */ = {isa = PBXBuildFile; fileRef = EB76A7A31BEE8CD700486F30 /* AddEditPlanItemController.xib */; };
+		EB7777CC1CCD441A003FF417 /* Array_Participant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7777CB1CCD4419003FF417 /* Array_Participant.swift */; };
+		EB7777CD1CCD441A003FF417 /* Array_Participant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7777CB1CCD4419003FF417 /* Array_Participant.swift */; };
+		EB7777CE1CCD441A003FF417 /* Array_Participant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7777CB1CCD4419003FF417 /* Array_Participant.swift */; };
 		EB77A0B21C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB77A0B11C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift */; };
 		EB77A0B31C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB77A0B11C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift */; };
 		EB77A0B41C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB77A0B11C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift */; };
@@ -1329,6 +1332,7 @@
 		EB76A7A01BEE6F1500486F30 /* MLPAutoCompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLPAutoCompleteTextField.swift; sourceTree = "<group>"; };
 		EB76A7A21BEE8CD700486F30 /* AddEditPlanItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditPlanItemController.swift; sourceTree = "<group>"; };
 		EB76A7A31BEE8CD700486F30 /* AddEditPlanItemController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddEditPlanItemController.xib; sourceTree = "<group>"; };
+		EB7777CB1CCD4419003FF417 /* Array_Participant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_Participant.swift; sourceTree = "<group>"; };
 		EB77A0B11C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteOrderUpdate.swift; sourceTree = "<group>"; };
 		EB7858741B7F6F69008AAD12 /* RemoteHistoryItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteHistoryItems.swift; sourceTree = "<group>"; };
 		EB7858781B7F7083008AAD12 /* RemoteHistoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteHistoryItem.swift; sourceTree = "<group>"; };
@@ -1807,6 +1811,7 @@
 				EB4C4F621BC9358A00DCA048 /* Array_HistoryItem.swift */,
 				EBA288DA1BB9FEE6001A2B95 /* Array_InventoryItem.swift */,
 				EB79AC291BF12FDF00685B30 /* Array_List.swift */,
+				EB7777CB1CCD4419003FF417 /* Array_Participant.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -3785,6 +3790,7 @@
 				EB1B36651BC47DF9003519F2 /* PlanProviderImpl.swift in Sources */,
 				EB1B36691BC47E32003519F2 /* PlanItem.swift in Sources */,
 				EB451C351B85F3DA000DE208 /* StatsProviderImpl.swift in Sources */,
+				EB7777CC1CCD441A003FF417 /* Array_Participant.swift in Sources */,
 				EB620DC61C7F85CF0095BFB9 /* InvitationsHandler.swift in Sources */,
 				EB135B941BED21490093DE70 /* ExpandFloatingButtonModel.swift in Sources */,
 				EB7D24051CB70A220017EFE6 /* RemoteStoreProduct.swift in Sources */,
@@ -4184,6 +4190,7 @@
 				EBC6ADEC1B7CAC9E00BD0ABC /* InventoryItemWithHistory.swift in Sources */,
 				EB4A38A51C87B96C000714F9 /* GoogleSignInHelper.swift in Sources */,
 				EB6008EF1CBD8A920034940E /* Int64.swift in Sources */,
+				EB7777CD1CCD441A003FF417 /* Array_Participant.swift in Sources */,
 				EB37AB991C9CA81F00FE9D7A /* OrderUpdate.swift in Sources */,
 				EB451C3A1B85F3F0000DE208 /* StatsProvider.swift in Sources */,
 				EB55675D1A86433700CD3EC6 /* Product.swift in Sources */,
@@ -4524,6 +4531,7 @@
 				EB6E3D211C5A342200D65DD5 /* RemoteGlobalProvider.swift in Sources */,
 				EB0C2A2A1B570BA700AF6226 /* ViewTags.swift in Sources */,
 				EB7233E11C84B704002B9903 /* DBRemoveGroupItem.swift in Sources */,
+				EB7777CE1CCD441A003FF417 /* Array_Participant.swift in Sources */,
 				EB40A46B1B5506FB000E9CAD /* DBSection.swift in Sources */,
 				EBF377691B342AA800EEB6DB /* RemoteSection.swift in Sources */,
 				EBF377801B342B4000EEB6DB /* Float.swift in Sources */,
