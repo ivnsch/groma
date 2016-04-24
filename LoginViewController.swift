@@ -28,7 +28,7 @@ enum LoginControllerMode {
     case Normal, Expired, AfterRegister
 }
 
-class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, ExpiredLoginDelegate {
+class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, ExpiredLoginDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var userNameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -93,7 +93,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         self.fillTestInput()
         
         self.initValidator()
-        
+
         fbButton.readPermissions = ["public_profile"]
 
         onUIReady?()
@@ -121,9 +121,13 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     }
     
     @IBAction func loginTapped(sender: AnyObject) {
-
+        login()
+    }
+    
+    private func login() {
+        
         guard self.validator != nil else {return}
-
+        
         if let errors = self.validator?.validate() {
             for (field, _) in errors {
                 field.showValidationError()
@@ -141,10 +145,10 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                     }
                     self?.onLoginSuccess()
                     
-                }, onError: {[weak self] result in
-                    // if it's a new device login and user declined overwrite, nothing to do here, user stays in login form, provider logged user out.
-                    self?.defaultErrorHandler([.IsNewDeviceLoginAndDeclinedOverwrite])(providerResult: result)
-                }))
+                    }, onError: {[weak self] result in
+                        // if it's a new device login and user declined overwrite, nothing to do here, user stays in login form, provider logged user out.
+                        self?.defaultErrorHandler([.IsNewDeviceLoginAndDeclinedOverwrite])(providerResult: result)
+                    }))
                 
             } else {
                 print("Error: validation was not implemented correctly")
@@ -169,6 +173,23 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         self.mode = .AfterRegister
         navigationController?.popViewControllerAnimated(true)
         self.delegate?.onRegisterFromLoginSuccess() ?? QL3("No login delegate")
+    }
+    
+    func textFieldShouldReturn(sender: UITextField) -> Bool {
+        
+        if sender == passwordField {
+            login()
+            sender.resignFirstResponder()
+        } else {
+            let textFields: [UITextField] = [userNameField, passwordField]
+            if let index = textFields.indexOf(sender) {
+                if let next = textFields[safe: index + 1] {
+                    next.becomeFirstResponder()
+                }
+            }
+        }
+        
+        return false
     }
     
     // Button is visible only in .Expired mode

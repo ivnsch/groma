@@ -148,7 +148,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     
     private var showingColorPicker: FlatColorPickerController?
     private var showingNoteInputPopup: SimpleInputPopupController?
-    
+
     var editingItem: AddEditItem? {
         didSet {
             if let editingItem = editingItem {
@@ -235,7 +235,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         initStaticLabels()
 
         addButtonHelper = initAddButtonHelper()
-        
+
         onDidLoad?()
 //        updatePlanLeftQuantity(0) // no quantity yet -> 0
     }
@@ -360,18 +360,20 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         }
     }
     
-    // Focus next input field when user presses "Next" on keypad
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(sender: UITextField) -> Bool {
         view.endEditing(true)
-        switch textField {
-        case sectionInput:
-            priceInput.becomeFirstResponder()
-        case priceInput:
-            quantityInput.becomeFirstResponder()
-        case _: break
+        if sender == noteInput {
+            submit()
+            sender.resignFirstResponder()
+        } else {
+            let textFields = [brandInput, sectionInput, quantityInput, priceInput, noteInput]
+            if let index = textFields.indexOf(sender) {
+                if let next = textFields[safe: index + 1] {
+                    next.becomeFirstResponder()
+                }
+            }
         }
-        
-        return true
+        return false
     }
     
     func clearInputs() {

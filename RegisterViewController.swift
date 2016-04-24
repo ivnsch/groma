@@ -16,7 +16,7 @@ protocol RegisterDelegate {
     func onRegisterSuccess()
 }
 
-class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate {
+class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -34,7 +34,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     private var validator: Validator?
 
     private var acceptedTerms: Bool = false
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -49,7 +49,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         initValidator()
         
         fbButton.readPermissions = ["public_profile"]
-
+        
         let buttonTranslation = "I accept the %%terms and conditions%%" // TODO translations
         let attributedText = buttonTranslation.underlineBetweenFirstSeparators("%%")
         attributedText.setTextColor(UIColor.blackColor())
@@ -82,6 +82,10 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
 
 
     @IBAction func onRegisterTap(sender: UIButton) {
+        register()
+    }
+    
+    private func register() {
         
         guard self.validator != nil else {return}
         
@@ -104,13 +108,31 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                     self.progressVisible()
                     Providers.userProvider.register(user, successHandler{[weak self] in
                         self?.onRegisterSuccess()
-                    })
+                        })
                     
                 } else {
                     QL4("Validation was not implemented correctly")
                 }
             }
         }
+    }
+    
+    func textFieldShouldReturn(sender: UITextField) -> Bool {
+        
+        if sender == lastNameField {
+            register()
+            sender.resignFirstResponder()
+        } else {
+            let textFields: [UITextField] = [emailField, passwordField, firstNameField, lastNameField]
+
+            if let index = textFields.indexOf(sender) {
+                if let next = textFields[safe: index + 1] {
+                    next.becomeFirstResponder()
+                }
+            }
+        }
+        
+        return false
     }
     
     // TODO refactor, same code as in LoginController

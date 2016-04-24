@@ -43,6 +43,9 @@
                                         <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="delegate" destination="CI5-0y-OAL" id="F07-38-4aB"/>
+                                </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="List section" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="i1w-xi-aFz" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="14" y="68" width="502" height="40"/>
@@ -59,6 +62,7 @@
                                 <connections>
                                     <outlet property="autoCompleteDataSource" destination="CI5-0y-OAL" id="B3X-dn-HRa"/>
                                     <outlet property="autoCompleteDelegate" destination="CI5-0y-OAL" id="qlf-hn-ADn"/>
+                                    <outlet property="delegate" destination="CI5-0y-OAL" id="B5C-yx-o97"/>
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Quantity" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vWS-vL-cob" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
@@ -74,6 +78,9 @@
                                         <integer key="value" value="10"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="delegate" destination="CI5-0y-OAL" id="b6s-G1-GNp"/>
+                                </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Brand (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="r5b-Sz-J4o" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
                                 <rect key="frame" x="14" y="28" width="572" height="40"/>
@@ -81,7 +88,7 @@
                                     <constraint firstAttribute="height" constant="40" id="bLM-k5-r0i"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" returnKeyType="next"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
                                         <integer key="value" value="30"/>
@@ -90,6 +97,7 @@
                                 <connections>
                                     <outlet property="autoCompleteDataSource" destination="CI5-0y-OAL" id="HMF-dG-TmH"/>
                                     <outlet property="autoCompleteDelegate" destination="CI5-0y-OAL" id="SQQ-me-VYa"/>
+                                    <outlet property="delegate" destination="CI5-0y-OAL" id="Oyx-oe-qTY"/>
                                 </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new item" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dwL-LH-4dI">
@@ -104,12 +112,15 @@
                                     <constraint firstAttribute="height" constant="40" id="ogx-ge-tLz"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" returnKeyType="next"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" returnKeyType="done"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
                                         <integer key="value" value="30"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="delegate" destination="CI5-0y-OAL" id="WeB-S6-pi4"/>
+                                </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xjl-8k-ZTY">
                                 <rect key="frame" x="516" y="68" width="70" height="40"/>

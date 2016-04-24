@@ -13,7 +13,7 @@ protocol ForgotPasswordDelegate {
     func onForgotPasswordSuccess()
 }
 
-class ForgotPasswordViewController: UIViewController {
+class ForgotPasswordViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var emailField: UITextField!
     
@@ -45,10 +45,24 @@ class ForgotPasswordViewController: UIViewController {
         self.validator = validator
     }
     
+    
+    func textFieldShouldReturn(sender: UITextField) -> Bool {
+        if sender == emailField {
+            send()
+            sender.resignFirstResponder()
+        }
+        
+        return false
+    }
+    
     @IBAction func onSubmitTap(sender: UIButton) {
-
+        send()
+    }
+    
+    private func send() {
+        
         guard validator != nil else {return}
-
+        
         if let errors = validator?.validate() {
             for (field, _) in errors {
                 field.showValidationError()
@@ -60,7 +74,7 @@ class ForgotPasswordViewController: UIViewController {
                 progressVisible()
                 Providers.userProvider.forgotPassword(email, successHandler{[weak self] in
                     self?.delegate?.onForgotPasswordSuccess()
-                })
+                    })
                 
             } else {
                 print("Error: validation was not implemented correctly")

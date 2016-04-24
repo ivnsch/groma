@@ -19,7 +19,7 @@ protocol AddEditGroupControllerDelegate {
 
 // TODO after final design either remove color code or reenable it
 
-class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDelegate {
+class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var groupNameInputField: UITextField!
     
@@ -164,6 +164,15 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
             
             onValid()
         }
+    }
+    
+    func textFieldShouldReturn(sender: UITextField) -> Bool {
+        if sender == groupNameInputField {
+            submit()
+            sender.resignFirstResponder()
+        }
+        
+        return false
     }
     
     @IBAction func onCloseTap(sender: UIBarButtonItem) {

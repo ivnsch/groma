@@ -14,7 +14,7 @@ protocol EditSectionViewControllerDelegate {
     func onSectionUpdated(section: Section)
 }
 
-class EditSectionViewController: UIViewController, FlatColorPickerControllerDelegate {
+class EditSectionViewController: UIViewController, FlatColorPickerControllerDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var colorButton: UITextField!
@@ -86,6 +86,15 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
         let validator = Validator()
         validator.registerField(nameTextField, rules: [MinLengthRule(length: 1, message: "validation_section_name_not_empty")])
         self.validator = validator
+    }
+    
+    func textFieldShouldReturn(sender: UITextField) -> Bool {
+        if sender == nameTextField {
+            submit()
+            sender.resignFirstResponder()
+        }
+        
+        return false
     }
     
     func submit() {

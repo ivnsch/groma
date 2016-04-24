@@ -18,7 +18,7 @@ protocol AddEditInventoryControllerDelegate {
 }
 
 // TODO try to refactor with AddEditListController, lot of repeated code
-class AddEditInventoryController: UIViewController, FlatColorPickerControllerDelegate, SharedUsersControllerDelegate {
+class AddEditInventoryController: UIViewController, FlatColorPickerControllerDelegate, SharedUsersControllerDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var listNameInputField: UITextField!
     @IBOutlet weak var colorButton: UIButton!
@@ -242,6 +242,15 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         } else {
             AlertPopup.show(message: "Please login to manage participants", controller: self)
         }
+    }
+    
+    func textFieldShouldReturn(sender: UITextField) -> Bool {
+        if sender == listNameInputField {
+            submit()
+            sender.resignFirstResponder()
+        }
+        
+        return false
     }
     
     private func loadKnownAndInvitedUsers(onLoaded: (known: [SharedUser], invited: [SharedUser]) -> Void) {
