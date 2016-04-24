@@ -79,7 +79,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     override func initModels() {
         Providers.inventoryProvider.inventories(true, successHandler{[weak self] inventories in
             if let weakSelf = self {
-                let authInventories = inventories.filter{InventoryAuthChecker.checkAccess($0, controller: weakSelf)}
+                let authInventories = inventories.filter{InventoryAuthChecker.checkAccess($0)}
                 weakSelf.models = authInventories.map{ExpandableTableViewInventoryModel(inventory: $0)}
                 weakSelf.debugItems()
             }

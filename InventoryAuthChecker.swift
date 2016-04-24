@@ -16,7 +16,7 @@ struct InventoryAuthChecker {
     // Note also that the current implementation means any user who has access to a list associated with unauthorised inventory receives the emails of the shared users of this inventory
     // this is not great (TODO) but for now also don't consider it a big issue, as if someone shares a list with a user (note though - this someone not necessarily has access to the inventory neither), it means there's trust between the users / they know themselves (at least indirectly). In most cases they'll also be sharing the inventory.
     // Note also that here (list) we don't send inventory items.
-    static func checkAccess(inventory: Inventory, controller: UIViewController) -> Bool {
+    static func checkAccess(inventory: Inventory) -> Bool {
         if let me = Providers.userProvider.mySharedUser {
             if inventory.users.isEmpty // the inventory doesn't have shared users -> it wasn't synchronised yet (after sync it contains at least myself) -> it's local, so it belongs to me
                 || (inventory.users.contains{$0.email == me.email}) // the inventory has shared users and I'm included
@@ -24,7 +24,6 @@ struct InventoryAuthChecker {
                 return true
                 
             } else { // the inventory has shared users and I'm not included
-                AlertPopup.show(message: "You can't move items to the inventory '\(inventory.name)'\nAsk a user with access to this inventory to share it with you.", controller: controller)
                 return false
             }
         } else { // I don't have registered or logged in on this device, which means all the data is local so I'm the owner of everything

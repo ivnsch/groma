@@ -128,10 +128,12 @@ class CartListItemsController: ListItemsController {
     
     @IBAction func onAddToInventoryTap(sender: UIBarButtonItem) {
         if let list = currentList {
-            if InventoryAuthChecker.checkAccess(list.inventory, controller: self) {
+            if InventoryAuthChecker.checkAccess(list.inventory) {
                 ConfirmationPopup.show(title: "Confirm", message: "This will add your cart items to the the inventory '\(list.inventory.name)' and the corresponding history and stats", okTitle: "Buy", cancelTitle: "Cancel", controller: self, onOk: {[weak self] in
                     self?.addAllItemsToInventory()
                 }, onCancel: nil)
+            } else {
+                AlertPopup.show(message: "You can't move items to the inventory '\(list.inventory.name)'\nAsk a user with access to this inventory to share it with you.", controller: self)
             }
         } else {
             QL3("Warn: DoneViewController.onAddToInventoryTap: list is not set, can't add to inventory")
