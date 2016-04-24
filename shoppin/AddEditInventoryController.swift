@@ -148,9 +148,10 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
             guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
             guard let listName = weakSelf.listNameInputField.text else {QL4("Validation was not implemented correctly"); return}
 
-            let totalUsers = weakSelf.users + weakSelf.invitedUsers
-
             if let listToEdit = weakSelf.listToEdit {
+                
+                let totalUsers = weakSelf.users + weakSelf.invitedUsers
+
                 let updatedList = listToEdit.copy(name: listName, users: totalUsers, bgColor: bgColor)
                 Providers.inventoryProvider.updateInventory(updatedList, remote: true, weakSelf.successHandler{//change
                     weakSelf.delegate?.onInventoryUpdated(updatedList)
@@ -158,6 +159,10 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
                 
             } else {
                 if let currentListsCount = weakSelf.currentListsCount {
+                    
+                    // If it's a new inventory add myself as a participant, to be consistent with list after server updates it (server adds the caller as a participant)
+                    let totalUsers = (Providers.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
+                    
                     let inventoryWithSharedUsers = Inventory(uuid: NSUUID().UUIDString, name: listName, users: totalUsers, bgColor: bgColor, order: currentListsCount)//change
                     Providers.inventoryProvider.addInventory(inventoryWithSharedUsers, remote: true, weakSelf.successHandler{//change
                         weakSelf.delegate?.onInventoryAdded(inventoryWithSharedUsers)

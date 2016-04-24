@@ -241,9 +241,11 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             
             let store: String? = weakSelf.storeInputField.optText
             
-            let totalUsers = weakSelf.users + weakSelf.invitedUsers
             
             if let listToEdit = weakSelf.listToEdit {
+                
+                let totalUsers = weakSelf.users + weakSelf.invitedUsers
+
                 // Note on shared users: if the shared users controller was not opened this will be nil so listToEdit is not affected (passing nil on copy is a noop)
                 let updatedList = listToEdit.copy(name: listName, users: totalUsers, bgColor: bgColor, inventory: inventory, store: ListCopyStore(store))
                 Providers.listProvider.update([updatedList], remote: true, weakSelf.successHandler{
@@ -252,6 +254,10 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             
             } else {
                 if let currentListsCount = weakSelf.currentListsCount {
+                    
+                    // If it's a new list add myself as a participant, to be consistent with list after server updates it (server adds the caller as a participant)
+                    let totalUsers = (Providers.userProvider.mySharedUser.map{[$0]} ?? []) + weakSelf.invitedUsers
+                    
                     let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: totalUsers, bgColor: bgColor, order: currentListsCount, inventory: inventory, store: store)
                     Providers.listProvider.add(listWithSharedUsers, remote: true, weakSelf.successHandler{list in
                         weakSelf.delegate?.onListAdded(list)
