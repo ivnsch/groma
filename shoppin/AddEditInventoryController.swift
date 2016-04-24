@@ -148,15 +148,17 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
             guard let bgColor = weakSelf.view.backgroundColor else {QL4("Invalid state: view has no bg color"); return}
             guard let listName = weakSelf.listNameInputField.text else {QL4("Validation was not implemented correctly"); return}
 
+            let totalUsers = weakSelf.users + weakSelf.invitedUsers
+
             if let listToEdit = weakSelf.listToEdit {
-                let updatedList = listToEdit.copy(name: listName, users: weakSelf.users, bgColor: bgColor)
+                let updatedList = listToEdit.copy(name: listName, users: totalUsers, bgColor: bgColor)
                 Providers.inventoryProvider.updateInventory(updatedList, remote: true, weakSelf.successHandler{//change
                     weakSelf.delegate?.onInventoryUpdated(updatedList)
                 })
                 
             } else {
                 if let currentListsCount = weakSelf.currentListsCount {
-                    let inventoryWithSharedUsers = Inventory(uuid: NSUUID().UUIDString, name: listName, users: weakSelf.users ?? [], bgColor: bgColor, order: currentListsCount)//change
+                    let inventoryWithSharedUsers = Inventory(uuid: NSUUID().UUIDString, name: listName, users: totalUsers, bgColor: bgColor, order: currentListsCount)//change
                     Providers.inventoryProvider.addInventory(inventoryWithSharedUsers, remote: true, weakSelf.successHandler{//change
                         weakSelf.delegate?.onInventoryAdded(inventoryWithSharedUsers)
                     })

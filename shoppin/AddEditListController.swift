@@ -239,16 +239,18 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             
             let store: String? = weakSelf.storeInputField.optText
             
+            let totalUsers = weakSelf.users + weakSelf.invitedUsers
+            
             if let listToEdit = weakSelf.listToEdit {
                 // Note on shared users: if the shared users controller was not opened this will be nil so listToEdit is not affected (passing nil on copy is a noop)
-                let updatedList = listToEdit.copy(name: listName, users: weakSelf.users, bgColor: bgColor, inventory: inventory, store: ListCopyStore(store))
+                let updatedList = listToEdit.copy(name: listName, users: totalUsers, bgColor: bgColor, inventory: inventory, store: ListCopyStore(store))
                 Providers.listProvider.update([updatedList], remote: true, weakSelf.successHandler{
                     weakSelf.delegate?.onListUpdated(updatedList)
                 })
             
             } else {
                 if let currentListsCount = weakSelf.currentListsCount {
-                    let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: weakSelf.users ?? [], bgColor: bgColor, order: currentListsCount, inventory: inventory, store: store)
+                    let listWithSharedUsers = List(uuid: NSUUID().UUIDString, name: listName, listItems: [], users: totalUsers, bgColor: bgColor, order: currentListsCount, inventory: inventory, store: store)
                     Providers.listProvider.add(listWithSharedUsers, remote: true, weakSelf.successHandler{list in
                         weakSelf.delegate?.onListAdded(list)
                     })
@@ -357,13 +359,13 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         Providers.userProvider.findAllKnownSharedUsers(successHandler {sharedUsers in
             allResult = sharedUsers
             check()
-            })
+        })
         
-        if let inventory = listToEdit {
-            Providers.inventoryProvider.findInvitedUsers(inventory.uuid, successHandler {sharedUsers in
+        if let list = listToEdit {
+            Providers.listProvider.findInvitedUsers(list.uuid, successHandler {sharedUsers in
                 invitedResult = sharedUsers
                 check()
-                })
+            })
         } else {
             invitedResult = []
             check()
