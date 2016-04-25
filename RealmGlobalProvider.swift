@@ -178,33 +178,40 @@ class RealmGlobalProvider: RealmProvider {
     }
     
     private func clearAllDataSync(realm: Realm) {
-        // TODO!!!! wasn't order important for delete?
-        realm.delete(realm.objects(DBProductCategory))
-        realm.delete(realm.objects(DBProduct))
-        realm.delete(realm.objects(DBStoreProduct))
-        realm.delete(realm.objects(DBSection))
-        realm.delete(realm.objects(DBSharedUser))
-        realm.delete(realm.objects(DBInventory))
-        realm.delete(realm.objects(DBInventoryItem))
-        realm.delete(realm.objects(DBList))
-        realm.delete(realm.objects(DBListItem))
-        realm.delete(realm.objects(DBListItemGroup))
         realm.delete(realm.objects(DBGroupItem))
+        realm.delete(realm.objects(DBListItem))
+        realm.delete(realm.objects(DBInventoryItem))
         realm.delete(realm.objects(DBHistoryItem))
         
+        realm.delete(realm.objects(DBSection))
+        
+        realm.delete(realm.objects(DBListItemGroup))
+        realm.delete(realm.objects(DBList))
+        realm.delete(realm.objects(DBInventory))
+        
+        realm.delete(realm.objects(DBStoreProduct))
+        realm.delete(realm.objects(DBProduct))
+        realm.delete(realm.objects(DBProductCategory))
+
+        realm.delete(realm.objects(DBSharedUser))
+
         // tombstones
-        realm.delete(realm.objects(DBRemoveProductCategory))
-        realm.delete(realm.objects(DBProductToRemove))
-        realm.delete(realm.objects(DBStoreProductToRemove))
-        realm.delete(realm.objects(DBSectionToRemove))
-        realm.delete(realm.objects(DBRemoveSharedUser))
-        realm.delete(realm.objects(DBRemoveInventory))
-        realm.delete(realm.objects(DBRemoveInventoryItem))
-        realm.delete(realm.objects(DBRemoveList))
-        realm.delete(realm.objects(DBRemoveListItem))
-        realm.delete(realm.objects(DBRemoveListItemGroup))
         realm.delete(realm.objects(DBRemoveGroupItem))
+        realm.delete(realm.objects(DBRemoveListItem))
+        realm.delete(realm.objects(DBRemoveInventoryItem))
         realm.delete(realm.objects(DBRemoveHistoryItem))
+
+        realm.delete(realm.objects(DBSectionToRemove))
+        
+        realm.delete(realm.objects(DBRemoveListItemGroup))
+        realm.delete(realm.objects(DBRemoveList))
+        realm.delete(realm.objects(DBRemoveInventory))
+
+        realm.delete(realm.objects(DBStoreProductToRemove))
+        realm.delete(realm.objects(DBProductToRemove))
+        realm.delete(realm.objects(DBRemoveProductCategory))
+
+        realm.delete(realm.objects(DBRemoveSharedUser))
     }
     
     func clearAllData(handler: Bool -> Void) {

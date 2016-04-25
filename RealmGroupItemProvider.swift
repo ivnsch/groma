@@ -152,6 +152,14 @@ class RealmGroupItemProvider: RealmProvider {
         }
         return true
     }
+
+    func removeGroupItemsForProductSync(realm: Realm, productUuid: String, markForSync: Bool) -> Bool {
+        let dbGroupItems = realm.objects(DBGroupItem).filter(DBGroupItem.createFilterProduct(productUuid))
+        for dbGroupItem in dbGroupItems {
+            removeGroupItemSync(realm, dbGroupItem: dbGroupItem, markForSync: markForSync)
+        }
+        return true
+    }
     
     func removeGroupItemSync(realm: Realm, dbGroupItem: DBGroupItem, markForSync: Bool) {
         if markForSync {

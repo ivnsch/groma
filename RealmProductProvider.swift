@@ -143,6 +143,8 @@ class RealmProductProvider: RealmProvider {
         
         DBProviders.storeProductProvider.deleteStoreProductsAndDependenciesForProductSync(realm, productUuid: productUuid, markForSync: markForSync)
         
+        DBProviders.groupItemProvider.removeGroupItemsForProductSync(realm, productUuid: productUuid, markForSync: markForSync)
+        
         let inventoryResult = realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilterWithProduct(productUuid))
         if markForSync {
             let toRemoteInventoryItems = inventoryResult.map{DBRemoveInventoryItem($0)}

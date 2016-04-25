@@ -155,7 +155,7 @@ class DBProduct: DBSyncable {
     }
 
     override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
-        RealmListProvider().removeListDependenciesSync(realm, listUuid: uuid, markForSync: markForSync)
+        DBProviders.productProvider.deleteProductDependenciesSync(realm, productUuid: uuid, markForSync: markForSync)
         realm.delete(self)
     }
 }
