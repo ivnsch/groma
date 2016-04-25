@@ -147,15 +147,22 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                 let loginData = LoginData(email: email, password: password)
                 
                 self.progressVisible()
-                Providers.userProvider.login(loginData, controller: self, resultHandler(onSuccess: {[weak self] syncResult in
-                    if let weakSelf = self {
-                        InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
-                    }
-                    self?.onLoginSuccess()
+                Providers.userProvider.login(loginData, controller: self, resultHandler(onSuccess: {[weak self] syncResult in guard let weakSelf = self else {return}
+                    InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
+                    weakSelf.onLoginSuccess()
                     
-                    }, onError: {[weak self] result in
-                        // if it's a new device login and user declined overwrite, nothing to do here, user stays in login form, provider logged user out.
-                        self?.defaultErrorHandler([.IsNewDeviceLoginAndDeclinedOverwrite])(providerResult: result)
+                    }, onError: {[weak self] result in guard let weakSelf = self else {return}
+                        
+                        switch result.status {
+                        case .SyncFailed:
+                            self?.defaultErrorHandler()(providerResult: result) // show alert
+                            self?.onLoginSuccess() // handle like success, this way user still can access settings like full download to try to solve sync problems.
+                        case .IsNewDeviceLoginAndDeclinedOverwrite:
+                            QL1("New device and declined overwrite") // if it's a new device login and user declined overwrite, nothing to do here, user stays in login form, provider logged user out.
+                        default:
+                            self?.defaultErrorHandler()(providerResult: result)
+                            Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared
+                        }
                     }))
                 
             } else {
@@ -272,7 +279,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         resultHandler(
             onSuccess: {[weak self] syncResult in
                 QL1("Login success")
-                self?.onRegisterSuccess()
+                self?.onRegisterSuccess() // TODO!!!! why on register success? this can also be login? now server sends us a flag login/registered maybe we can use this. Also we should probably refactor the login result handler with the credentials login. For example .IsNewDeviceLoginAndDeclinedOverwrite handling seems to be missing here.
                 self?.progressVisible(false)
                 
                 if let weakSelf = self {

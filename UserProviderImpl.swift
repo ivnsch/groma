@@ -69,11 +69,12 @@ class UserProviderImpl: UserProvider {
                     PreferencesManager.savePreference(PreferencesManagerKey.overwroteLocalDataAfterNewDeviceLogin, value: true)
                 }
                 additionalActionsOnSyncSuccess?()
-                
+                handler(result)
             } else {
                 QL4("Sync didn't return success: \(result)")
+                // Return a sync failed status code such that the controller can show error message specific to this. Since we return this as a result of both login and sync, if we let only the server error code client wouldn't know if e.g. "wrong parameters" would be because of login or sync. Differentiation is important because on sync errors we let the user logged in (this way they can e.g. call full download from settings to try to solve the sync problem) while on login errors the user is logged out.
+                handler(ProviderResult(status: .SyncFailed, sucessResult: nil, error: result.error, errorObj: result.errorObj))
             }
-            handler(result)
         }
         
         
@@ -163,7 +164,7 @@ class UserProviderImpl: UserProvider {
                 
                 self?.sync(isMatchSync: false, onlyOverwriteLocal: true, additionalActionsOnSyncSuccess: {
                     PreferencesManager.savePreference(PreferencesManagerKey.registeredWithThisDevice, value: true)
-                    }, handler: handler)
+                }, handler: handler)
                 
                 }, onCancel: {[weak self] in
                     // If user declines to overwrite local data we do nothing and log the user out.

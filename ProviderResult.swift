@@ -27,6 +27,7 @@ enum ProviderStatusCode: Int {
     case SocialLoginCancelled = 106
     case SocialAlreadyExists = 107
     case NoConnection = 108 // Used when we detect in advance that there's no connectivity and don't proceed making the request. When this is not used, the execution of a request without a connection results in .ServerNotReachable
+    case SyncFailed = 109 // Generic status code for a failed sync - for whatever reason - note this is client generated, the server status code that leads to this can be anything.
     
     // DB related
     case DatabaseUnknown = 1000
