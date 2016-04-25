@@ -100,4 +100,9 @@ class DBList: DBSyncable {
     override static func ignoredProperties() -> [String] {
         return ["inventory"]
     }
+    
+    override func deleteWithDependenciesSync(realm: Realm, markForSync: Bool) {
+        DBProviders.listProvider.removeListDependenciesSync(realm, listUuid: uuid, markForSync: markForSync)
+        realm.delete(self)
+    }
 }

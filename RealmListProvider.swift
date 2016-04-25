@@ -59,6 +59,8 @@ class RealmListProvider: RealmProvider {
     }
     
     func remove(listUuid: String, markForSync: Bool, handler: Bool -> Void) {
+        QL1("Removing list, uuid: \(listUuid), markForSync: \(markForSync)")
+        
         background({[weak self] in
             do {
                 let realm = try Realm()
