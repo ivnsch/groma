@@ -110,9 +110,12 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: -
 
     func updateCellModels() {
-        let existingUserModels = existingUsers.map{UserCellModel(user: $0, state: .Existing)}
         let invitedUserModels = invitedUsers.map{UserCellModel(user: $0, state: .Invited)}
+        
+        // For existing we have to filter out invited, because currently we store locally the invited users in shared users of the list, so when we edit the list (without having done sync, which would remove the invited users from shared users, as the server doesn't store them here) we would get duplicates (we call separately invited users service, to get the invited users).
+        let existingUserModels = existingUsers.filter{!invitedUsers.contains($0)}.map{UserCellModel(user: $0, state: .Existing)}
         let newUserModels = allKnownUsers.filter{!existingUsers.contains($0) && !invitedUsers.contains($0)}.map{UserCellModel(user: $0, state: .New)}
+        
         userModels = existingUserModels + invitedUserModels + newUserModels
     }
     
