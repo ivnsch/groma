@@ -23,7 +23,7 @@
                         <viewControllerLayoutGuide type="top" id="J8v-ps-jZl"/>
                         <viewControllerLayoutGuide type="bottom" id="o4i-09-Scn"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="FTk-Cw-gyF">
+                    <view key="view" contentMode="scaleToFill" id="FTk-Cw-gyF" customClass="AddEditListControllerView" customModule="shoppin">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>

@@ -18,7 +18,7 @@ protocol AddEditListControllerDelegate {
 }
 
 // TODO try to refactor with AddEditInventoryController, lot of repeated code
-class AddEditListController: UIViewController, FlatColorPickerControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, SharedUsersControllerDelegate, UITextFieldDelegate {
+class AddEditListController: UIViewController, FlatColorPickerControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, SharedUsersControllerDelegate, UITextFieldDelegate, CMPopTipViewDelegate {
     
     @IBOutlet weak var listNameInputField: UITextField!
     
@@ -216,12 +216,26 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     @IBAction func onInventoryTap(sender: UIButton) {
         if let popup = inventoriesPopup {
             popup.dismissAnimated(true)
+            (view as? AddEditListControllerView)?.popupFrame = nil // restore normal tap area
         } else {
             let popup = MyTipPopup(customView: createPicker())
+            popup.delegate = self
             popup.presentPointingAtView(inventoriesButton, inView: view, animated: true)
+            
+            if let view = view as? AddEditListControllerView {
+                view.popupFrame = popup.frame // include popup in tap area
+            } else {
+                QL4("Cast failed")
+            }
         }
     }
 
+    // MARK: - CMPopTipViewDelegate
+    
+    func popTipViewWasDismissedByUser(popTipView: CMPopTipView!) {
+        (view as? AddEditListControllerView)?.popupFrame = nil // restore normal tap area
+    }
+    
     // MARK: -
     
     func submit() {

@@ -35,6 +35,18 @@ extension CGRect {
     }
     
     /////////////////////////////////////////////////////////////////////////////////////
+
+    var rightTop: CGPoint {
+        get {
+            return CGPoint(x: origin.x + width, y: origin.y)
+        }
+    }
+
+    var leftBottom: CGPoint {
+        get {
+            return CGPoint(x: origin.x, y: origin.y + height)
+        }
+    }
     
     func inset(top: CGFloat = 0, bottom: CGFloat = 0, left: CGFloat = 0, right: CGFloat = 0) -> CGRect {
         return CGRect(x: origin.x + left, y: origin.y + top, width: width - left - right, height: height - top - bottom)

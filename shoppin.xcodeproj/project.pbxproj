@@ -467,6 +467,7 @@
 		EB7777CC1CCD441A003FF417 /* Array_Participant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7777CB1CCD4419003FF417 /* Array_Participant.swift */; };
 		EB7777CD1CCD441A003FF417 /* Array_Participant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7777CB1CCD4419003FF417 /* Array_Participant.swift */; };
 		EB7777CE1CCD441A003FF417 /* Array_Participant.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7777CB1CCD4419003FF417 /* Array_Participant.swift */; };
+		EB7777D01CCFCF4F003FF417 /* AddEditListControllerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7777CF1CCFCF4B003FF417 /* AddEditListControllerView.swift */; };
 		EB77A0B21C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB77A0B11C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift */; };
 		EB77A0B31C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB77A0B11C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift */; };
 		EB77A0B41C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB77A0B11C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift */; };
@@ -1333,6 +1334,7 @@
 		EB76A7A21BEE8CD700486F30 /* AddEditPlanItemController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditPlanItemController.swift; sourceTree = "<group>"; };
 		EB76A7A31BEE8CD700486F30 /* AddEditPlanItemController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AddEditPlanItemController.xib; sourceTree = "<group>"; };
 		EB7777CB1CCD4419003FF417 /* Array_Participant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array_Participant.swift; sourceTree = "<group>"; };
+		EB7777CF1CCFCF4B003FF417 /* AddEditListControllerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddEditListControllerView.swift; sourceTree = "<group>"; };
 		EB77A0B11C9C9C8A0011A8D2 /* RemoteOrderUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteOrderUpdate.swift; sourceTree = "<group>"; };
 		EB7858741B7F6F69008AAD12 /* RemoteHistoryItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteHistoryItems.swift; sourceTree = "<group>"; };
 		EB7858781B7F7083008AAD12 /* RemoteHistoryItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteHistoryItem.swift; sourceTree = "<group>"; };
@@ -1974,6 +1976,7 @@
 				EBCE418A1B5D10BA00583551 /* ListTableViewCell.swift */,
 				EB4612B91BE56D970049DAD1 /* ExpandCellAnimator.swift */,
 				EB79AC251BF0E3B700685B30 /* AddEditListController.swift */,
+				EB7777CF1CCFCF4B003FF417 /* AddEditListControllerView.swift */,
 				EBEBA6B01BF14C36000E5653 /* ListSharedUserCell.swift */,
 				EBEBA6B41BF14EFF000E5653 /* AddEditList.storyboard */,
 				EBEBA6B61BF16492000E5653 /* FlatColorPickerController.swift */,
@@ -3763,6 +3766,7 @@
 				EBED0D141C824FE200A1EEC4 /* EmailHelper.swift in Sources */,
 				EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */,
 				EB9BE41F1B2CB513005B401A /* RemoteProduct.swift in Sources */,
+				EB7777D01CCFCF4F003FF417 /* AddEditListControllerView.swift in Sources */,
 				EB9208261C4EC53D00332332 /* ManageBrandsCell.swift in Sources */,
 				EB7BFA711BD9981400F4C74A /* OrderedDictionary_Quantities.swift in Sources */,
 				EB7233DF1C84B704002B9903 /* DBRemoveGroupItem.swift in Sources */,
