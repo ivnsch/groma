@@ -257,6 +257,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         addButtonHelper?.removeObserver()
+        addButtonHelper?.animateVisible(false)
     }
     
     private func initStaticLabels() {
