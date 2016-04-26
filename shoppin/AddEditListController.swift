@@ -33,7 +33,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     
     private var inventories: [Inventory] = [] {
         didSet {
-            selectedInventory = inventories.first
+            selectedInventory = listToEdit?.inventory ?? inventories.first
         }
     }
     private var selectedInventory: Inventory? {
@@ -101,6 +101,8 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         }()
         setSharedButtonVisibile(sharedButtonVisible)
 
+        inventoriesButton.setTitle(list.inventory.name, forState: .Normal)
+        
         storeInputField.text = list.store ?? ""
         setBackgroundColor(list.bgColor)
     }
@@ -218,9 +220,16 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             popup.dismissAnimated(true)
             (view as? AddEditListControllerView)?.popupFrame = nil // restore normal tap area
         } else {
-            let popup = MyTipPopup(customView: createPicker())
+            let picker = createPicker()
+            let popup = MyTipPopup(customView: picker)
+            
             popup.delegate = self
             popup.presentPointingAtView(inventoriesButton, inView: view, animated: true)
+
+            let inventoryUuids = inventories.map{$0.uuid} // index of using uuids just in case - equals includes timestamps etc.
+            if let listToEdit = listToEdit, row = inventoryUuids.indexOf(listToEdit.inventory.uuid) {
+                picker.selectRow(row, inComponent: 0, animated: false)
+            }
             
             if let view = view as? AddEditListControllerView {
                 view.popupFrame = popup.frame // include popup in tap area
