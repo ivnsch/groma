@@ -65,16 +65,21 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         
         users = list.users
         
-        sharedUsersButton.hidden = {
+        let sharedButtonVisible: Bool = {
             if ConnectionProvider.connectedAndLoggedIn {
                 return true // if the user is connected and logged in, always shows the participants button
             } else {
                 // if user is not connected/logged in, show participants button only if the list has already some participants. This is to avoid confusion, if there's no connection/account and list has no participants we just don't bother the user showing this button. If the list has participants though we show it, and show a dialog about missing connection/login if user taps it, so user knows why the probably expected (as the list has already participants) sharing functionality is not available. This overwrites the visibility set in viewDidLoad, which sets by default hidden when there's no connection/account.
-                return users.isEmpty
+                return !users.isEmpty
             }
         }()
+        setSharedButtonVisibile(sharedButtonVisible)
         
         setBackgroundColor(list.bgColor)
+    }
+    
+    private func setSharedButtonVisibile(visible: Bool) {
+        sharedUsersButton.hidden = !visible
     }
     
     private func initValidator() {
@@ -118,7 +123,9 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
         
-        addButtonHelper = initAddButtonHelper()
+        if addButtonHelper == nil {
+            addButtonHelper = initAddButtonHelper() // in view did load parentViewController is nil
+        }
         addButtonHelper?.addObserver()
     }
     

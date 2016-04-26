@@ -51,7 +51,8 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsockeInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsockeInventories:", name: WSNotificationName.Inventories.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onInventoryInvitationAccepted:", name: Notification.InventoryInvitationAccepted.rawValue, object: nil)
     }
     
     deinit {
@@ -255,6 +256,9 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         }
     }
 
+    func onInventoryInvitationAccepted(note: NSNotification) {
+        initModels()
+    }
     
     func onIncomingGlobalSyncFinished(note: NSNotification) {
         // TODO notification - note has the sender name

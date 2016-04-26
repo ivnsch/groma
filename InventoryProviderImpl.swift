@@ -185,13 +185,22 @@ class InventoryProviderImpl: InventoryProvider {
     
     func acceptInvitation(invitation: RemoteInventoryInvitation, _ handler: ProviderResult<Any> -> Void) {
         remoteProvider.acceptInvitation(invitation) {remoteResult in
-            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+            if remoteResult.success {
+                QL1("Accept inventory invitation success")
+                handler(ProviderResult(status: .Success))
+            } else {
+                DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+            }
         }
     }
     
     func rejectInvitation(invitation: RemoteInventoryInvitation, _ handler: ProviderResult<Any> -> Void) {
         remoteProvider.rejectInvitation(invitation) {remoteResult in
-            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+            if remoteResult.success {
+                QL1("Reject inventory invitation success")
+            } else {
+                DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+            }
         }
     }
     
