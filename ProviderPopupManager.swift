@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 class ProviderPopupManager {
 
@@ -33,6 +34,8 @@ class ProviderPopupManager {
                 // IMPORTANT: When implementing dismissal by tapping outside, ensure the status is also cleared. See http://stackoverflow.com/a/25469305/930450
                 self?.currentStatus = nil
             })
+        } else {
+            QL2("Skipping error popup, currentStatus: \(currentStatus), status: \(status)")
         }
     }
     
@@ -53,6 +56,8 @@ class ProviderPopupManager {
                 // IMPORTANT: When implementing dismissal by tapping outside, ensure the status is also cleared. See http://stackoverflow.com/a/25469305/930450
                 self?.currentStatus = nil
             })
+        } else {
+            QL2("Skipping error popup, currentStatus: \(currentStatus), status: \(status)")
         }
     }
 }

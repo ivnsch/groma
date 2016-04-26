@@ -148,7 +148,13 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                 
                 self.progressVisible()
                 Providers.userProvider.login(loginData, controller: self, resultHandler(onSuccess: {[weak self] syncResult in guard let weakSelf = self else {return}
-                    InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: weakSelf)
+                    
+                    if let controller = UIApplication.sharedApplication().delegate?.window??.rootViewController {
+                        InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: controller)
+                    } else {
+                        QL4("No root view controller, can't show invitations popup")
+                    }
+                    
                     weakSelf.onLoginSuccess()
                     
                     }, onError: {[weak self] result in guard let weakSelf = self else {return}
