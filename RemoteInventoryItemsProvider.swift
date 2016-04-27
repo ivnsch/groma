@@ -17,7 +17,7 @@ class RemoteInventoryItemsProvider: Any {
     }
 
     // Adds inventoryItems to remote, IMPORTANT: All items are assumed to have the same inventory TODO maybe implement server service such that we don't have to put inventory uuid in url, and just use the inventory for each inventory item for the insert
-    func addToInventory(inventoryItems: [InventoryItemWithHistoryEntry], handler: RemoteResult<RemoteInventoryItemsWithHistoryAndDependencies> -> ()) {
+    func addToInventory(inventoryItems: [InventoryItemWithHistoryItem], handler: RemoteResult<RemoteInventoryItemsWithHistoryAndDependencies> -> ()) {
         let parameters = inventoryItems.map{[weak self] in self!.toDictionary($0)}
         if let inventoryUuid = inventoryItems.first?.inventoryItem.inventory.uuid {
             RemoteProvider.authenticatedRequest(.POST, Urls.inventoryItems + "/\(inventoryUuid)", parameters) {result in
@@ -55,21 +55,22 @@ class RemoteInventoryItemsProvider: Any {
         }
     }
     
-    // TODO remote inventory from inventory items, at least for sending - we want to add all the items to one inventory....... for receiving this also wastes payload, they also have the same inventory also
-    func toDictionary(inventoryItem: InventoryItemWithHistoryEntry) -> [String: AnyObject] {
+    // TODO remote inventory from inventory items, at least for sending - we want to add all the items to one inventory.......
+    func toDictionary(item: InventoryItemWithHistoryItem) -> [String: AnyObject] {
         
-        let productDict = RemoteListItemProvider().toRequestParams(inventoryItem.inventoryItem.product)
+        let productDict = RemoteListItemProvider().toRequestParams(item.inventoryItem.product)
         
-        let inventoryItemDict = toRequestParams(inventoryItem.inventoryItem)
+        let inventoryItemDict = toRequestParams(item.inventoryItem)
         
         // TODO correct this structure in the server, product 2x
         return [
             "product": productDict,
             "inventoryItem": inventoryItemDict,
-            "historyItemUuid": inventoryItem.historyItemUuid,
-            "paidPrice": inventoryItem.paidPrice,
-            "addedDate": NSNumber(longLong: Int64(inventoryItem.addedDate)),
-            "user": self.toRequestParams(inventoryItem.user)
+            "historyItemUuid": item.historyItem.uuid,
+            "paidPrice": item.historyItem.paidPrice,
+            "addedDate": NSNumber(longLong: Int64(item.historyItem.addedDate)),
+            "user": self.toRequestParams(item.historyItem.user),
+            "delta": item.historyItem.quantity // history item quantity == delta (the quantity which we just added)
         ]
     }
     

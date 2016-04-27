@@ -19,9 +19,9 @@ protocol InventoryItemsProvider {
 
     func countInventoryItems(inventory: Inventory, _ handler: ProviderResult<Int> -> Void)
     
-    func addToInventory(inventory: Inventory, itemInput: ProductWithQuantityInput, remote: Bool, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> Void)
+    func addToInventory(inventory: Inventory, itemInput: ProductWithQuantityInput, remote: Bool, _ handler: ProviderResult<InventoryItemWithHistoryItem> -> Void)
 
-    func addToInventory(inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<[InventoryItemWithHistoryEntry]> -> Void)
+    func addToInventory(inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<[InventoryItemWithHistoryItem]> -> Void)
 
     // Add inventory and history items in a transaction. Used by e.g. websocket
     func addToInventoryLocal(inventoryItems: [InventoryItem], historyItems: [HistoryItem], dirty: Bool, handler: ProviderResult<Any> -> Void)

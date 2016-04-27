@@ -119,61 +119,35 @@ class RealmInventoryItemProvider: RealmProvider {
     }
     
     
-    func addOrIncrementInventoryItemWithInput(itemInputs: [ProductWithQuantityInput], inventory: Inventory, dirty: Bool, handler: [InventoryItemWithHistoryEntry]? -> Void) {
+    
+    func addOrIncrementInventoryItemWithInput(itemInputs: [ProductWithQuantityInput], inventory: Inventory, dirty: Bool, handler: [InventoryItemWithHistoryItem]? -> Void) {
         
         self.doInWriteTransaction({[weak self] realm in
-            return self?.addOrIncrementInventoryItemsWithProductSync(realm, itemInputs: itemInputs, inventory: inventory, dirty: dirty)
-            }, finishHandler: {(addedInventoryItemsWithHistoryEntriesMaybe: [InventoryItemWithHistoryEntry]?) in
+            return self?.addSync(realm, items: itemInputs, inventory: inventory, dirty: dirty)
+            }, finishHandler: {(addedInventoryItemsWithHistoryEntriesMaybe: [InventoryItemWithHistoryItem]?) in
                 handler(addedInventoryItemsWithHistoryEntriesMaybe)
         })
         
     }
     
-    func addOrIncrementInventoryItemsWithProductSync(realm: Realm, itemInputs: [ProductWithQuantityInput], inventory: Inventory, dirty: Bool) -> [InventoryItemWithHistoryEntry] {
-        // Note: map in this case has side effects - it adds the inventory/history to the database
-        let addedInventoryItemsWithHistoryEntries = itemInputs.map {itemInput in
-            addOrIncrementInventoryItemWithProductSync(realm, product: itemInput.product, inventory: inventory, quantity: itemInput.quantity, dirty: dirty)
-        }
-        return addedInventoryItemsWithHistoryEntries
+    // TODO used? remove?
+    func addOrIncrementInventoryItemsWithProductSync(realm: Realm, itemInputs: [ProductWithQuantityInput], inventory: Inventory, dirty: Bool) -> [InventoryItemWithHistoryItem] {
+        return addSync(realm, items: itemInputs, inventory: inventory, dirty: dirty)
     }
     
     // Helper function for common code
     // This is only called when using quick add, not +/-.
-    private func addOrIncrementInventoryItemWithProductSync(realm: Realm, product: StoreProduct, inventory: Inventory, quantity: Int, dirty: Bool) -> InventoryItemWithHistoryEntry {
-        let inventoryItemWithHistoryEntry = InventoryItemWithHistoryEntry(
-            inventoryItem: InventoryItem(uuid: NSUUID().UUIDString, quantity: quantity, quantityDelta: quantity, product: product.product, inventory: inventory),
-            historyItemUuid: NSUUID().UUIDString,
-            paidPrice: product.price,
-            addedDate: NSDate().toMillis(),
-            user: ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "")
-        )
-        
+    private func addOrIncrementInventoryItemWithProductSync(realm: Realm, product: StoreProduct, inventory: Inventory, quantity: Int, dirty: Bool) -> InventoryItemWithHistoryItem? {
+
         // add/increment item and add history entry
-        addSync(realm, inventoryItemsWithHistory: [inventoryItemWithHistoryEntry], dirty: dirty)
+        let items = addSync(realm, items: [ProductWithQuantityInput(product: product, quantity: quantity)], inventory: inventory, dirty: dirty)
         
-        return inventoryItemWithHistoryEntry
+        if items.count != 1 {
+            QL4("Not expected result items count: \(items.count), items: \(items)")
+        }
+        
+        return items.first
     }
-    
-    // NOTE: Adds also history item.
-    // Outdated implementation, needs now store product
-//    func addOrIncrementInventoryItemWithInput(itemInput: InventoryItemInput, inventory: Inventory, delta: Int, onlyDelta: Bool = false, handler: InventoryItemWithHistoryEntry? -> ()) {
-//        
-//        self.doInWriteTransaction({[weak self] realm in
-//            
-//            if let weakSelf = self {
-//                // upsert product
-//                let updatedDbProduct = DBProviders.productProvider.upsertProductSync(realm, prototype: itemInput.productPrototype)
-//                
-//                // create new inventory item + history entry
-//                let product = ProductMapper.productWithDB(updatedDbProduct)
-//                return weakSelf.addOrIncrementInventoryItemWithProduct(realm, product: product, inventory: inventory, quantity: itemInput.quantity)
-//            }
-//            return nil
-//            
-//            }, finishHandler: {(addedInventoryItemWithHistoryEntryMaybe: InventoryItemWithHistoryEntry?) in
-//                handler(addedInventoryItemWithHistoryEntryMaybe)
-//        })
-//    }
     
     func incrementInventoryItemOnlyDelta(item: InventoryItem, delta: Int, dirty: Bool, handler: Bool -> ()) {
         let incrementedInventoryItem = item.copy(quantityDelta: item.quantityDelta + delta)
@@ -236,30 +210,6 @@ class RealmInventoryItemProvider: RealmProvider {
         }
     }
     
-    
-    /**
-     Adds inventory and corresponding history items, in a transaction
-     */
-    func add(inventoryItemsWithHistory: [InventoryItemWithHistoryEntry], dirty: Bool, handler: Bool -> ()) {
-        
-        self.doInWriteTransaction({[weak self] realm in
-            
-            if let weakSelf = self {
-                synced(weakSelf) {
-                    self?.addSync(realm, inventoryItemsWithHistory: inventoryItemsWithHistory, dirty: dirty)
-                }
-                return true
-                
-            } else {
-                print("Warning: no self reference in RealmInventoryProvider.add, doInWriteTransaction")
-                return false
-            }
-            }, finishHandler: {success in
-                handler(success ?? false)
-            }
-        )
-    }
-    
     func updateInventoryItemWithIncrementResult(incrementResult: RemoteIncrementResult, handler: Bool -> Void) {
         doInWriteTransaction({realm in
             if let storedItem = (realm.objects(DBInventoryItem).filter(DBInventoryItem.createFilterUuid(incrementResult.uuid)).first) {
@@ -292,33 +242,46 @@ class RealmInventoryItemProvider: RealmProvider {
     
     // MARK: - Sync
 
-    private func addSync(realm: Realm, inventoryItemsWithHistory: [InventoryItemWithHistoryEntry], dirty: Bool) {
-        for inventoryItemWithHistory in inventoryItemsWithHistory { // var because we overwrite with incremented item if already exists
+    private func addSync(realm: Realm, items: [ProductWithQuantityInput], inventory: Inventory, dirty: Bool) -> [(inventoryItem: InventoryItem, historyItem: HistoryItem)] {
+        
+        let addedDate = NSDate().toMillis()
+        
+        let sharedUser = ProviderFactory().userProvider.mySharedUser ?? SharedUser(email: "")
+        
+        var adddedOrUpdatedItems: [(inventoryItem: InventoryItem, historyItem: HistoryItem)] = []
+        
+        for item in items {
             
             // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
             let mapper: DBInventoryItem -> InventoryItem = {InventoryItemMapper.inventoryItemWithDB($0)}
             let existingInventoryItems: [InventoryItem] = loadSync(realm, mapper: mapper, filter:
-                DBInventoryItem.createFilter(inventoryItemWithHistory.inventoryItem.product, inventoryItemWithHistory.inventoryItem.inventory)) // TODO if possible don't use implicity wrapped optional here?
+                DBInventoryItem.createFilter(item.product.product, inventory))
             
-            let incrementedOrSameInventoryItem: InventoryItem = {
+            let addedOrIncrementedInventoryItem: InventoryItem = {
                 if let existingInventoryItem = existingInventoryItems.first {
                     let existingQuantity = existingInventoryItem.quantity
                     let existingQuantityDelta = existingInventoryItem.quantityDelta
-                    let inventoryItem = inventoryItemWithHistory.inventoryItem
-                    return existingInventoryItem.copy(quantity: inventoryItem.quantity + existingQuantity, quantityDelta: inventoryItem.quantityDelta + existingQuantityDelta)
-                    //                            inventoryItemWithHistory = inventoryItemWithHistory.copy(inventoryItem: incrementedInventoryItem)
+
+                    return existingInventoryItem.copy(quantity: item.quantity + existingQuantity, quantityDelta: item.quantity + existingQuantityDelta)
                     
                 } else { // if item doesn't exist there's nothing to increment
-                    return inventoryItemWithHistory.inventoryItem
+                    return InventoryItem(uuid: NSUUID().UUIDString, quantity: item.quantity, quantityDelta: item.quantity, product: item.product.product, inventory: inventory)
                 }
             }()
             
             // save
-            let dbInventoryItem = InventoryItemMapper.dbWithInventoryItem(incrementedOrSameInventoryItem, dirty: dirty)
-            let dbHistoryItem = HistoryItemMapper.dbWith(inventoryItemWithHistory, dirty: dirty)
+            let dbInventoryItem = InventoryItemMapper.dbWithInventoryItem(addedOrIncrementedInventoryItem, dirty: dirty)
+            
+            let historyItem = HistoryItem(uuid: NSUUID().UUIDString, inventory: inventory, product: item.product.product, addedDate: addedDate, quantity: item.quantity, user: sharedUser, paidPrice: item.product.price)
+            
+            let dbHistoryItem = HistoryItemMapper.dbWithHistoryItem(historyItem, dirty: dirty)
             realm.add(dbInventoryItem, update: true)
             realm.add(dbHistoryItem, update: true)
+            
+            adddedOrUpdatedItems.append((inventoryItem: addedOrIncrementedInventoryItem, historyItem: historyItem))
         }
+        
+        return adddedOrUpdatedItems
     }
     
     func clearInventoryItemTombstone(uuid: String, handler: Bool -> Void) {

@@ -110,7 +110,7 @@ class RemoteListItemProvider {
         }
     }
 
-    func buyCart(listUuid: String, inventoryItems: [InventoryItemWithHistoryEntry], handler: RemoteResult<Int64> -> Void) {
+    func buyCart(listUuid: String, inventoryItems: [InventoryItemWithHistoryItem], handler: RemoteResult<Int64> -> Void) {
         let parameters = toRequestParams(listUuid, items: inventoryItems)
         RemoteProvider.authenticatedRequestTimestamp(.POST, Urls.buyCart, parameters) {result in
             handler(result)
@@ -455,7 +455,7 @@ class RemoteListItemProvider {
         return dict
     }
     
-    func toRequestParams(listUuid: String, items: [InventoryItemWithHistoryEntry]) -> [String: AnyObject] {
+    func toRequestParams(listUuid: String, items: [InventoryItemWithHistoryItem]) -> [String: AnyObject] {
         
         let remoteInventoryItemsProvider = RemoteInventoryItemsProvider()
         var dict: [String: AnyObject] = ["listUuid": listUuid]

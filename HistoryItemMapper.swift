@@ -26,22 +26,6 @@ class HistoryItemMapper {
         return dbHistoryItem
     }
     
-    class func dbWith(inventoryItemWithHistory: InventoryItemWithHistoryEntry, dirty: Bool) -> DBHistoryItem {
-        let dbHistoryItem = DBHistoryItem()
-        dbHistoryItem.uuid = inventoryItemWithHistory.historyItemUuid
-        dbHistoryItem.inventory = InventoryMapper.dbWithInventory(inventoryItemWithHistory.inventoryItem.inventory, dirty: dirty)
-        dbHistoryItem.product  = ProductMapper.dbWithProduct(inventoryItemWithHistory.inventoryItem.product)
-        dbHistoryItem.addedDate = inventoryItemWithHistory.addedDate
-        dbHistoryItem.quantity = inventoryItemWithHistory.inventoryItem.quantityDelta
-        dbHistoryItem.paidPrice = inventoryItemWithHistory.paidPrice
-        dbHistoryItem.user = SharedUserMapper.dbWithSharedUser(inventoryItemWithHistory.user)
-        if let lastServerUpdate = inventoryItemWithHistory.inventoryItem.lastServerUpdate { // needs if let because Realm doesn't support optional NSDate yet
-            dbHistoryItem.lastServerUpdate = lastServerUpdate
-        }
-        dbHistoryItem.dirty = dirty
-        return dbHistoryItem
-    }
-    
     class func historyItemWith(dbHistoryItem: DBHistoryItem) -> HistoryItem {
         return HistoryItem(
             uuid: dbHistoryItem.uuid,

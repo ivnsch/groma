@@ -40,7 +40,7 @@ class MemInventoryItemProvider {
     }
     
     // Adds only the inventory items - this provider is not for history
-    func addInventoryItems(inventoryItemsWithHistory: [InventoryItemWithHistoryEntry]) -> Bool {
+    func addInventoryItems(inventoryItemsWithHistory: [InventoryItemWithHistoryItem]) -> Bool {
         guard enabled else {return false}
         
         for inventoryItemWithHistory in inventoryItemsWithHistory {

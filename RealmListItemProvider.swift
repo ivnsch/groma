@@ -647,14 +647,14 @@ class RealmListItemProvider: RealmProvider {
         }
     }
 
-    private func updateTimestampsSync(realm: Realm, items: [InventoryItemWithHistoryEntry], lastUpdate: Int64) {
+    private func updateTimestampsSync(realm: Realm, items: [InventoryItemWithHistoryItem], lastUpdate: Int64) {
         for item in items {
             realm.create(DBInventoryItem.self, value: DBSyncable.timestampUpdateDict(item.inventoryItem.uuid, lastServerUpdate: lastUpdate), update: true)
-            realm.create(DBHistoryItem.self, value: DBSyncable.timestampUpdateDict(item.historyItemUuid, lastServerUpdate: lastUpdate), update: true)
+            realm.create(DBHistoryItem.self, value: DBSyncable.timestampUpdateDict(item.historyItem.uuid, lastServerUpdate: lastUpdate), update: true)
         }
     }
     
-    func storeBuyCartResult(listItems: [ListItem], inventoryWithHistoryItems: [InventoryItemWithHistoryEntry], lastUpdate: Int64, handler: Bool -> Void) {
+    func storeBuyCartResult(listItems: [ListItem], inventoryWithHistoryItems: [InventoryItemWithHistoryItem], lastUpdate: Int64, handler: Bool -> Void) {
         doInWriteTransaction({[weak self] realm in
             self?.updateTimestampsSync(realm, listItems: listItems, lastUpdate: lastUpdate)
             self?.updateTimestampsSync(realm, items: inventoryWithHistoryItems, lastUpdate: lastUpdate)
@@ -666,7 +666,7 @@ class RealmListItemProvider: RealmProvider {
     
     // adds inventory/history items and stores the switched list items in a transaction
     // Note "switched"ListItems -> The status of the passed list items is expected to be already updated, this transaction just saves them to the db.
-    func buyCart(listUuid: String, switchedItems: [ListItem], inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<[InventoryItemWithHistoryEntry]> -> Void) {
+    func buyCart(listUuid: String, switchedItems: [ListItem], inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<[InventoryItemWithHistoryItem]> -> Void) {
         doInWriteTransaction({realm in
             
             let items = DBProviders.inventoryItemProvider.addOrIncrementInventoryItemsWithProductSync(realm, itemInputs: itemInputs, inventory: inventory, dirty: remote)
@@ -675,7 +675,7 @@ class RealmListItemProvider: RealmProvider {
             
             return items
             
-            }) {(itemsMaybe: [InventoryItemWithHistoryEntry]?) in
+            }) {(itemsMaybe: [InventoryItemWithHistoryItem]?) in
             if let items = itemsMaybe {
                 handler(ProviderResult(status: .Success, sucessResult: items))
             } else {

@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias InventoryItemWithHistoryItem = (inventoryItem: InventoryItem, historyItem: HistoryItem)
+
 protocol InventoryProvider {
     
     func inventories(remote: Bool, _ handler: ProviderResult<[Inventory]> -> ())

@@ -70,7 +70,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
     }
     
     
-    func addToInventory(inventory: Inventory, itemInput: ProductWithQuantityInput, remote: Bool, _ handler: ProviderResult<InventoryItemWithHistoryEntry> -> Void) {
+    func addToInventory(inventory: Inventory, itemInput: ProductWithQuantityInput, remote: Bool, _ handler: ProviderResult<InventoryItemWithHistoryItem> -> Void) {
         addToInventory(inventory, itemInputs: [itemInput], remote: remote) {result in
             if let addedItem = result.sucessResult?.first {
                 handler(ProviderResult(status: .Success, sucessResult: addedItem))
@@ -81,7 +81,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    func addToInventory(inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<[InventoryItemWithHistoryEntry]> -> Void) {
+    func addToInventory(inventory: Inventory, itemInputs: [ProductWithQuantityInput], remote: Bool, _ handler: ProviderResult<[InventoryItemWithHistoryItem]> -> Void) {
         DBProviders.inventoryItemProvider.addOrIncrementInventoryItemWithInput(itemInputs, inventory: inventory, dirty: remote) {[weak self] addOrIncrementInventoryItemsWithInputMaybe in
 
             if let addOrIncrementInventoryItemWithInput = addOrIncrementInventoryItemsWithInputMaybe {
@@ -116,7 +116,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                             DBProviders.inventoryItemProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
                             }
                         } else {
-                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[InventoryItemWithHistoryEntry]>) in
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[InventoryItemWithHistoryItem]>) in
                                 QL4("Error addToInventory: \(remoteResult.status)")
                                 // if there's a not connection related server error, invalidate cache
                                 self?.memProvider.invalidate()
