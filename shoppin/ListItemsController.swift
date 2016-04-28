@@ -207,13 +207,15 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     private func udpateListItems(list: List, onFinish: VoidFunction? = nil) {
         Providers.listItemsProvider.listItems(list, sortOrderByStatus: status, fetchMode: .MemOnly, successHandler{[weak self] listItems in guard let weakSelf = self else {return}
             weakSelf.listItemsTableViewController.setListItems(listItems.filter{$0.hasStatus(weakSelf.status)})
-            
-            let i = listItems.filter{$0.hasStatus(weakSelf.status)}
-            QL2("status: \(weakSelf.status), items: \(i)")
-            
-            weakSelf.onTableViewChangedQuantifiables()
+            weakSelf.onGetListItems(listItems)
             onFinish?()
         })
+    }
+    
+    func onGetListItems(listItems: [ListItem]) {
+        let i = listItems.filter{$0.hasStatus(status)}
+        QL2("status: \(status), items: \(i)")
+        onTableViewChangedQuantifiables()
     }
     
     // buttons for left nav bar side in default state (e.g. not while the top controller is open)

@@ -34,8 +34,14 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        updateStashView()
+    }
+    
+    override func onGetListItems(listItems: [ListItem]) {
+        super.onGetListItems(listItems)
         
-        updateStashView(withDelay: true)
+        // timing issues - when we query list items it may be that the server items are updated which causes the handler to be called again. In these cases, the updateStashView we call in view did appear doesn't get the server update as this only calls the local db. So now each time the handler is called (which calls onGetListItems) we do the stash call again. We could here just count the stash items from listItems (which contain list items for all status) but for now we keep the changes minimal and just call updateStashView() again.
+        updateStashView()
     }
     
     override func updateQuantifiables() {
@@ -57,31 +63,20 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     
     // Update stash view after a delay. The delay is for design reason, to let user see what's hapenning otherwise not clear together with view controller transition
     // but it ALSO turned to fix bug when user adds to stash and goes back to view controller too fast - count would not be updated (count fetch is quicker than writing items to database). FIXME (not critical) don't depend on this delay to fix this bug.
-    func updateStashView(withDelay withDelay: Bool) {
-        func f() {
-            if let list = currentList {
-                Providers.listItemsProvider.listItemCount(ListItemStatus.Stash, list: list, fetchMode: .MemOnly, successHandler {[weak self] count in
+    func updateStashView() {
+        if let list = currentList {
+            Providers.listItemsProvider.listItemCount(ListItemStatus.Stash, list: list, fetchMode: .MemOnly, successHandler {[weak self] count in
 //                    if count != self?.stashView.quantity { // don't animate if there's no change
-                        self?.stashView.quantity = count
-                        self?.pricesView.allowOpen = count > 0
-                        if count == 0 {
-                            self?.pricesView.setOpen(false, animated: true)
-                        }
-                        self?.pricesView.stashQuantity = count
+                    self?.stashView.quantity = count
+                    self?.pricesView.allowOpen = count > 0
+                    if count == 0 {
+                        self?.pricesView.setOpen(false, animated: true)
+                    }
+                    self?.pricesView.stashQuantity = count
 //                        self?.stashView.setOpen(count > 0)
-                        
+                    
 //                    }
-                })
-            }
-        }
-        
-        if withDelay {
-            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(0.3 * Double(NSEC_PER_SEC)))
-            dispatch_after(delay, dispatch_get_main_queue()) {
-                f()
-            }
-        } else {
-            f()
+            })
         }
     }
     
