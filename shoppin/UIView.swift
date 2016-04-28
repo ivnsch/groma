@@ -147,6 +147,7 @@ extension UIView {
                 
                 view.addSubview(activityIndicator)
                 self.addSubview(view)
+                self.bringSubviewToFront(view)
             }
         } else {
             self.viewWithTag(ViewTags.GlobalActivityIndicator)?.removeFromSuperview()
