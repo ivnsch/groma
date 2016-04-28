@@ -160,7 +160,7 @@ class UserProviderImpl: UserProvider {
         let overwroteLocalDataAfterNewDeviceLogin = PreferencesManager.loadPreference(PreferencesManagerKey.overwroteLocalDataAfterNewDeviceLogin) ?? false
         
         if !registeredWithThisDevice && !overwroteLocalDataAfterNewDeviceLogin {
-            ConfirmationPopup.show(title: "New device", message: "Your local data will be overwritten with the data stored in your account", okTitle: "Continue", cancelTitle: "Cancel", controller: controller, onOk: {[weak self] in
+            ConfirmationPopup.show(title: "New installation", message: "Your local data will be overwritten with the data stored in your account", okTitle: "Continue", cancelTitle: "Cancel", controller: controller, onOk: {[weak self] in
                 
                 self?.sync(isMatchSync: false, onlyOverwriteLocal: true, additionalActionsOnSyncSuccess: {
                     PreferencesManager.savePreference(PreferencesManagerKey.registeredWithThisDevice, value: true)
