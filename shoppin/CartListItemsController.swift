@@ -72,9 +72,14 @@ class CartListItemsController: ListItemsController {
         func onSizeLimitOk(list: List) {
             listItemsTableViewController.clearPendingSwipeItemIfAny(true) {[weak self] in
                 if let weakSelf = self {
-                    Providers.listItemsProvider.buyCart(weakSelf.listItemsTableViewController.items, list: list, remote: true, weakSelf.successHandler{result in
-                        weakSelf.close()
-                    })
+                    
+                    if let controller = UIApplication.sharedApplication().delegate?.window??.rootViewController { // since we change controller on success need root controller in case we show error popup
+                        Providers.listItemsProvider.buyCart(weakSelf.listItemsTableViewController.items, list: list, remote: true, controller.successHandler{result in
+                            weakSelf.close()
+                        })
+                    } else {
+                        QL4("No root view controller, can't handle buy cart success result")
+                    }
                 }
             }
         }
