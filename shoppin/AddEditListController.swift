@@ -442,10 +442,11 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     // MARK: - SharedUsersControllerDelegate
     
     func onPull(user: SharedUser) {
-        progressVisible(true)
+        parentViewController?.progressVisible(true)
         if let list = listToEdit {
-            Providers.pullProvider.pullListProducs(list.uuid, srcUser: user, successHandler{[weak self] listItems in
-                self?.progressVisible(false)
+            Providers.pullProvider.pullListProducs(list.uuid, srcUser: user, successHandler{[weak self] listItems in  guard let weakSelf = self else {return}
+                self?.parentViewController?.progressVisible(false)
+                AlertPopup.show(title: "Success", message: "Your list item products have been updated to match the products of \(user.email).", controller: weakSelf)
             })
         }
     }
