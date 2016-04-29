@@ -27,10 +27,14 @@ enum ListItemCellMode {
     case Increment, Note // TODO rename Increment -> Edit, Note -> Normal
 }
 
+enum SwipeableCellDirection {
+    case Left, Right
+}
+
 class SwipeableCell: UITableViewCell {
     
     @IBOutlet weak var button1: UIButton!
-    @IBOutlet weak var button2: UIButton!
+//    @IBOutlet weak var button2: UIButton!
     @IBOutlet weak var button3: UIButton!
     
     @IBOutlet weak var myContentView: UIView!
@@ -42,6 +46,8 @@ class SwipeableCell: UITableViewCell {
     @IBOutlet weak var contentViewRightConstraint:NSLayoutConstraint!
     @IBOutlet weak var contentViewLeftConstraint:NSLayoutConstraint!
 
+    var direction: SwipeableCellDirection = .Right
+    
 //    var delegate: SwipeableCellDelegate?
     
     override func awakeFromNib() {
@@ -94,8 +100,9 @@ class SwipeableCell: UITableViewCell {
         }
         
         self.updateConstraintsIfNeeded(animated, onCompletion: { (finished) -> Void in
-            self.contentViewLeftConstraint.constant = self.buttonTotalWidth()
-            self.contentViewRightConstraint.constant = -self.buttonTotalWidth()
+            let constant = self.direction == .Right ? self.buttonTotalWidth() : -self.buttonTotalWidth()
+            self.contentViewLeftConstraint.constant = constant
+            self.contentViewRightConstraint.constant = -constant
             
             
             self.updateConstraintsIfNeeded(animated, alpha: 0, onCompletion: {[weak self] (finished) -> Void in
@@ -112,7 +119,7 @@ class SwipeableCell: UITableViewCell {
     func updateConstraintsIfNeeded(animated:Bool, alpha: CGFloat? = nil, onCompletion:((Bool)->Void)?) {
         var duration:NSTimeInterval = 0
         if animated {
-            duration = 0.2
+            duration = 0.3
         }
         let delay:NSTimeInterval = 0
         

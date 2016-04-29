@@ -86,6 +86,8 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         }
     }
     
+    var cellSwipeDirection: SwipeableCellDirection = .Right
+    
     /**
      Returns total price of shown items exluding those marked for undo
      */
@@ -357,6 +359,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                     
                     currentTableViewSection = ListItemsViewSection(section: listItem.section, tableViewListItems: [], status: status)
                     currentTableViewSection.cellMode = cellMode
+                    currentTableViewSection.cellSwipeDirection = cellSwipeDirection
                     currentTableViewSection.delegate = self
                     currentTableViewSection.expanded = sectionsExpanded
 

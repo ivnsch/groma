@@ -46,7 +46,8 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     private let headerFont = Fonts.regular
 
     var cellMode: ListItemCellMode = .Note
-
+    var cellSwipeDirection: SwipeableCellDirection = .Right
+    
     private let headerHeight = Float(DimensionsManager.listItemsHeaderHeight)
     private let cellHeight = DimensionsManager.defaultCellHeight
     
@@ -128,8 +129,9 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     
     func tableView(tableView: UITableView, row: NSInteger) -> UITableViewCell {
 
-        let cell:ListItemCell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! ListItemCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier) as! ListItemCell
         cell.showsReorderControl = true
+        cell.direction = cellSwipeDirection
         
         let tableViewListItem = tableViewListItems[row]
         

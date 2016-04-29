@@ -35,6 +35,9 @@ class ListItemCell: SwipeableCell {
     @IBOutlet weak var plusMinusContainer: UIView!
     @IBOutlet weak var plusMinusWidthConstraint: NSLayoutConstraint!
 
+    @IBOutlet weak var undoLabel1: UILabel!
+    @IBOutlet weak var undoLabel2: UILabel!
+    
     private var delegate: ListItemCellDelegate?
     
     private(set) var status: ListItemStatus?
@@ -64,6 +67,8 @@ class ListItemCell: SwipeableCell {
                 sectionColorView.backgroundColor = listItem.section.color
                 
                 updateModeItemsVisibility(false)
+                
+                undoLabel1.text = listItem.product.product.name
                 
                 setOpen(tableViewListItem.swiped)
                 if tableViewListItem.swiped {
@@ -178,6 +183,8 @@ class ListItemCell: SwipeableCell {
         
         quantityLabelCenterVerticallyConstraint.constant = 0
         priceLabel.alpha = 0
+        
+        undoLabel2.text = "Undo"
         
         selectionStyle = UITableViewCellSelectionStyle.None
 

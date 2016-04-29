@@ -324,6 +324,14 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         if isPullToAddEnabled {
             listItemsTableViewController.enablePullToAdd()
         }
+        
+        listItemsTableViewController.cellSwipeDirection = {
+            switch self.status {
+            case .Todo: return .Right
+            case .Done: return .Left
+            case .Stash: return .Left
+            }
+        }()
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
