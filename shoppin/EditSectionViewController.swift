@@ -74,7 +74,6 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
         super.viewWillAppear(animated)
         addButtonHelper = initAddButtonHelper() // parent controller not set yet in earlier lifecycle methods
         addButtonHelper?.addObserver()
-        addButtonHelper?.add()
     }
     
     override func viewWillDisappear(animated: Bool) {
