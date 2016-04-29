@@ -17,11 +17,13 @@ class HelpItemSectionModel: SectionModel<HelpItem> {
     }
 }
 
-class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, HelpHeaderViewDelegate, UISearchBarDelegate {
+class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, HelpHeaderViewDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var searchBar: UITextField!
     
+    @IBOutlet weak var searchBarHeightConstraint: NSLayoutConstraint!
+
     private var sectionModels: [HelpItemSectionModel] = [] {
         didSet {
             filteredModels = sectionModels
@@ -36,11 +38,23 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        searchBar.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        searchBarHeightConstraint.constant = DimensionsManager.searchBarHeight
+        
+        let recognizer = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
+        recognizer.delegate = self
+        view.addGestureRecognizer(recognizer)
+        
         Providers.helpProvider.helpItems(successHandler {[weak self] helpItems in
             self?.sectionModels = helpItems.map{HelpItemSectionModel(obj: $0)}
         })
     }
-
+    
+    func handleTap(recognizer: UITapGestureRecognizer) {
+        view.endEditing(true)
+    }
+    
     // MARK: - Table view data source
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -108,10 +122,11 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    // MARK: - UISearchBarDelegate
+    // MARK: - Filter
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        filter(searchText)
+    
+    func textFieldDidChange(textField: UITextField) {
+        filter(textField.text ?? "")
     }
     
     private func filter(searchText: String) {

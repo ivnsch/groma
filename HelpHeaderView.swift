@@ -23,10 +23,14 @@ class HelpHeaderView: UIView {
     var sectionModel: HelpItemSectionModel? {
         didSet {
             if let sectionModel = sectionModel {
+                
+                let textColor = sectionModel.obj.type == .Troubleshooting ? UIColor.redColor() : UIColor.darkTextColor()
+                
                 if let boldRange = sectionModel.boldRange {
-                    helpTitleLabel.attributedText = sectionModel.obj.title.makeAttributed(boldRange, normalFont: Fonts.smallerLight, font: Fonts.smallerBold)
+                    helpTitleLabel.attributedText = sectionModel.obj.title.makeAttributed(boldRange, normalFont: Fonts.smaller, font: Fonts.smallerBold, textColor: textColor)
                 } else {
                     helpTitleLabel.text = sectionModel.obj.title
+                    helpTitleLabel.textColor = textColor
                 }
             }
         }

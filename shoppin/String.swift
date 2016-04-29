@@ -42,10 +42,10 @@ extension String {
         return makeAttributed(substringRange, normalFont: normalFont, font: font)
     }
 
-    func makeAttributed(range: NSRange?, normalFont: UIFont, font: UIFont) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: self, attributes: [NSFontAttributeName: normalFont])
+    func makeAttributed(range: NSRange?, normalFont: UIFont, font: UIFont, textColor: UIColor = UIColor.darkTextColor()) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString(string: self, attributes: [NSFontAttributeName: normalFont, NSForegroundColorAttributeName: textColor])
         if let range = range {
-            attributedString.setAttributes([NSFontAttributeName: font], range: range)
+            attributedString.setAttributes([NSFontAttributeName: font, NSForegroundColorAttributeName: textColor], range: range)
         }
         return attributedString
     }
