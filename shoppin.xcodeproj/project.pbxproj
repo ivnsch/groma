@@ -790,6 +790,7 @@
 		EBB5A0431B65386100FB9C58 /* ValidationErrorMsgBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */; };
 		EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */; };
 		EBB5A04D1B6596D400FB9C58 /* ProviderFetchModus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */; };
+		EBB8FC7B1CD3EBC2008FD084 /* WebsocketHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB8FC7A1CD3EBC2008FD084 /* WebsocketHelper.swift */; };
 		EBB9A72E1B5EB00E00E5487D /* InventoriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A72D1B5EB00E00E5487D /* InventoriesTableViewController.swift */; };
 		EBB9A7301B5EB08C00E5487D /* Inventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A72F1B5EB08C00E5487D /* Inventory.swift */; };
 		EBB9A7321B5EB0FC00E5487D /* DBInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A7311B5EB0FC00E5487D /* DBInventory.swift */; };
@@ -1508,6 +1509,7 @@
 		EBB5A0421B65386100FB9C58 /* ValidationErrorMsgBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationErrorMsgBuilder.swift; sourceTree = "<group>"; };
 		EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationAlert.swift; sourceTree = "<group>"; };
 		EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderFetchModus.swift; sourceTree = "<group>"; };
+		EBB8FC7A1CD3EBC2008FD084 /* WebsocketHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsocketHelper.swift; sourceTree = "<group>"; };
 		EBB9A72D1B5EB00E00E5487D /* InventoriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoriesTableViewController.swift; sourceTree = "<group>"; };
 		EBB9A72F1B5EB08C00E5487D /* Inventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inventory.swift; sourceTree = "<group>"; };
 		EBB9A7311B5EB0FC00E5487D /* DBInventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBInventory.swift; sourceTree = "<group>"; };
@@ -2845,6 +2847,7 @@
 				EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */,
 				EBED0D131C824FE200A1EEC4 /* EmailHelper.swift */,
 				EB37ABB61CA099BA00FE9D7A /* ToggleButtonRotator.swift */,
+				EBB8FC7A1CD3EBC2008FD084 /* WebsocketHelper.swift */,
 			);
 			name = util;
 			sourceTree = "<group>";
@@ -3688,6 +3691,7 @@
 				EB40A47E1B5512D6000E9CAD /* DBSharedUser.swift in Sources */,
 				EBB9A7321B5EB0FC00E5487D /* DBInventory.swift in Sources */,
 				EB9208301C4EE9AF00332332 /* BrandProvider.swift in Sources */,
+				EBB8FC7B1CD3EBC2008FD084 /* WebsocketHelper.swift in Sources */,
 				EBD7A7EA1CC25AD000B56C41 /* RemoteSectionProvider.swift in Sources */,
 				EB0A058D1BDFCD6B00D1E29D /* MoreViewController.swift in Sources */,
 				EB28C1181A58623E00E1C8BC /* PlainTableViewController.swift in Sources */,

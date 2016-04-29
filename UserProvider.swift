@@ -56,5 +56,7 @@ protocol UserProvider {
     
     func disconnectWebsocket()
     
+    func isWebsocketConnected() -> Bool
+    
     func findAllKnownSharedUsers(handler: ProviderResult<[SharedUser]> -> Void)
 }

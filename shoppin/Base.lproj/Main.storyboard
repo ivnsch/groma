@@ -562,7 +562,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="adW-N0-j5a">
-                                <rect key="frame" x="0.0" y="244" width="600" height="200"/>
+                                <rect key="frame" x="0.0" y="294" width="600" height="200"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Developer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CwH-GM-s9p">
                                         <rect key="frame" x="14" y="14" width="74" height="21"/>
@@ -606,21 +606,42 @@
                                     <action selector="onOverwriteLocalDataTap:" destination="TSQ-MW-ySX" eventType="touchUpInside" id="6nW-N4-htT"/>
                                 </connections>
                             </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dov-n6-f6k">
+                                <rect key="frame" x="537" y="238" width="51" height="31"/>
+                                <connections>
+                                    <action selector="onRealmTimeConnectionChanged:" destination="TSQ-MW-ySX" eventType="valueChanged" id="GN5-Md-RJi"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Real time connection" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j2q-bI-zJT">
+                                <rect key="frame" x="14" y="234" width="144" height="39"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="j2q-bI-zJT" firstAttribute="top" secondItem="yLW-Jh-3jY" secondAttribute="bottom" constant="20" id="5UC-9w-Vo5"/>
                             <constraint firstItem="5Yo-HG-bia" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="5jD-rY-HXz"/>
-                            <constraint firstItem="adW-N0-j5a" firstAttribute="top" secondItem="yLW-Jh-3jY" secondAttribute="bottom" constant="30" id="6G0-DN-DZf"/>
+                            <constraint firstItem="adW-N0-j5a" firstAttribute="top" secondItem="yLW-Jh-3jY" secondAttribute="bottom" constant="80" id="6G0-DN-DZf"/>
                             <constraint firstItem="yLW-Jh-3jY" firstAttribute="top" secondItem="5Yo-HG-bia" secondAttribute="bottom" constant="20" id="Ah1-yr-PHY"/>
                             <constraint firstItem="yLW-Jh-3jY" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="DTK-2F-KV3"/>
                             <constraint firstItem="5Yo-HG-bia" firstAttribute="top" secondItem="FTH-bS-K1Q" secondAttribute="bottom" constant="20" id="Dvv-HE-XDi"/>
+                            <constraint firstItem="Dov-n6-f6k" firstAttribute="centerY" secondItem="j2q-bI-zJT" secondAttribute="centerY" id="Krh-vz-lec"/>
                             <constraint firstAttribute="trailing" secondItem="adW-N0-j5a" secondAttribute="trailing" id="VE1-JY-ivz"/>
+                            <constraint firstItem="j2q-bI-zJT" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="cYG-Yh-6n6"/>
                             <constraint firstItem="FTH-bS-K1Q" firstAttribute="top" secondItem="VOB-7c-032" secondAttribute="bottom" constant="20" id="e1Y-eF-fhk"/>
+                            <constraint firstAttribute="trailing" secondItem="Dov-n6-f6k" secondAttribute="trailing" constant="14" id="g9v-Su-JU0"/>
                             <constraint firstItem="adW-N0-j5a" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" id="pof-HP-Xqt"/>
+                            <constraint firstItem="Dov-n6-f6k" firstAttribute="baseline" secondItem="j2q-bI-zJT" secondAttribute="baseline" id="qgZ-5p-Mp4"/>
                             <constraint firstItem="FTH-bS-K1Q" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="qlq-5x-xlh"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="1iM-IL-890"/>
+                    <connections>
+                        <outlet property="realTimeConnectionLabel" destination="j2q-bI-zJT" id="ZNc-eN-acK"/>
+                        <outlet property="realTimeConnectionSwitch" destination="Dov-n6-f6k" id="OYo-Pq-QkS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uqf-dC-TOM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

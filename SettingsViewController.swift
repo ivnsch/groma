@@ -10,11 +10,25 @@ import UIKit
 
 class SettingsViewController: UIViewController {
 
+    @IBOutlet weak var realTimeConnectionLabel: UILabel!
+    @IBOutlet weak var realTimeConnectionSwitch: UISwitch!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        let showWebsocketSwitch = ConnectionProvider.connectedAndLoggedIn
+        realTimeConnectionSwitch.hidden = !showWebsocketSwitch
+        realTimeConnectionLabel.hidden = !showWebsocketSwitch
+        
+        if showWebsocketSwitch {
+            realTimeConnectionSwitch.on = Providers.userProvider.isWebsocketConnected()
+        }
+    }
+    
     @IBAction func onClearAllDataTap(sender: UIButton) {
         Providers.globalProvider.clearAllData(successHandler{
             AlertPopup.show(message: "The data was cleared", controller: self)
@@ -47,9 +61,6 @@ class SettingsViewController: UIViewController {
             if let weakSelf = self {
                 
                 if let inventory = inventories.first {
-                    
-                    
-                    
                     Providers.productProvider.products(NSRange(location: 0, length: 500), sortBy: .Alphabetic, weakSelf.successHandler{products in
 
                         guard products.count > 0 else {
@@ -85,5 +96,15 @@ class SettingsViewController: UIViewController {
                 print("Warn: SettingsViewController.onAddDummyHistoryTap: weakSelf is not set")
             }
         })
+    }
+    
+    @IBAction func onRealmTimeConnectionChanged(sender: UISwitch) {
+        WebsocketHelper.saveWebsocketDisabled(!sender.on)
+        
+        if sender.on {
+            Providers.userProvider.connectWebsocketIfLoggedIn()
+        } else {
+            Providers.userProvider.disconnectWebsocket()
+        }
     }
 }

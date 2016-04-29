@@ -34,6 +34,8 @@ enum PreferencesManagerKey: String {
     
     case registeredWithThisDevice = "registeredWithThisDevice"
     case overwroteLocalDataAfterNewDeviceLogin = "overwroteLocalDataAfterNewDeviceLogin"
+    
+    case userDisabledWebsocket = "userDisabledWebsocket"
 }
 
 class PreferencesManager {

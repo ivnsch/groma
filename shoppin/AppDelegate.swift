@@ -116,7 +116,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     }
     
     private func initWebsocket() {
-        Providers.userProvider.connectWebsocketIfLoggedIn()
+        WebsocketHelper.tryConnectWebsocket()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketReceptionNotification:", name: WSNotificationName.Reception.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProcessingError:", name: WSNotificationName.ProcessingError.rawValue, object: nil)

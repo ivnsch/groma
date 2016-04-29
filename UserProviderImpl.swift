@@ -60,10 +60,10 @@ class UserProviderImpl: UserProvider {
     
     func sync(isMatchSync isMatchSync: Bool, onlyOverwriteLocal: Bool, additionalActionsOnSyncSuccess: VoidFunction? = nil, handler: ProviderResult<SyncResult> -> Void) {
         
-        let resultHandler: ProviderResult<SyncResult> -> Void = {[weak self] result in
+        let resultHandler: ProviderResult<SyncResult> -> Void = {result in
             if result.success {
                 QL2("Sync success, connecting websocket...")
-                self?.connectWebsocketIfLoggedIn()
+                WebsocketHelper.tryConnectWebsocket()
                 if onlyOverwriteLocal {
                     // overwrote with new device and existing account - store a flag so we don't do this again (after this device is not considered "new" anymore and does normal sync).
                     PreferencesManager.savePreference(PreferencesManagerKey.overwroteLocalDataAfterNewDeviceLogin, value: true)
@@ -91,6 +91,10 @@ class UserProviderImpl: UserProvider {
     
     func disconnectWebsocket() {
         webSocket?.disconnect()
+    }
+    
+    func isWebsocketConnected() -> Bool {
+        return webSocket?.isConnected ?? false
     }
     
     func forgotPassword(email: String, _ handler: ProviderResult<Any> -> ()) {

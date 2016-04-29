@@ -71,6 +71,10 @@ class UserProviderMock: UserProvider {
     func disconnectWebsocket() {
     }
     
+    func isWebsocketConnected() -> Bool {
+        return false
+    }
+    
     func forgotPassword(email: String, _ handler: ProviderResult<Any> -> ()) {
         delay(requestDelay) {
             handler(ProviderResult(status: .Success, sucessResult: true))

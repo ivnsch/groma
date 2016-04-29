@@ -181,8 +181,9 @@ class MyWebSocket: WebSocketDelegate {
                 // Called when we close the connection explicitly with disconnect()
                 QL2("Websocket: Closed connection")
                 // ! sometimes this was called when the server was down also, so we try to reconnect here also, if there's a login token. If the user just logged out this does nothing as logout removes the login token.
-                tryReconnectIfLoggedIn()
-                
+                if !WebsocketHelper.userDisabledWebsocket() {
+                    tryReconnectIfLoggedIn()
+                }
             case 61:
                 // "Connection refused" - Called e.g. when trying to connect while the server is down. Here we don't check for login token because we should have checked for login token in the call that originated this reponse. This is only used for retry. If we are here, it means a connection attempt just was done, which means there is a login token stored.
                 QL3("Websocket: Connection refused")
