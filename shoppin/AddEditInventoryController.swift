@@ -332,8 +332,9 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     func onPull(user: SharedUser) {
         progressVisible(true)
         if let inventory = listToEdit {
-            Providers.pullProvider.pullInventoryProducs(inventory.uuid, srcUser: user, successHandler{[weak self] listItems in
+            Providers.pullProvider.pullInventoryProducs(inventory.uuid, srcUser: user, successHandler{[weak self] products in  guard let weakSelf = self else {return}
                 self?.progressVisible(false)
+                AlertPopup.show(title: "Success", message: "Your products have been updated to match the products of \(user.email).", controller: weakSelf)
             })
         }
     }
