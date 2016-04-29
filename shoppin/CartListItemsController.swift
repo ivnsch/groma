@@ -14,7 +14,7 @@ protocol CartListItemsControllerDelegate {
     func onCartSendItemsToStash(listItems: [ListItem])
 }
 
-class CartListItemsController: ListItemsController {
+class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate {
     
     @IBOutlet weak var buyLabel: UILabel!
     @IBOutlet weak var totalDonePriceLabel: UILabel!
@@ -23,6 +23,10 @@ class CartListItemsController: ListItemsController {
     @IBOutlet weak var emptyListView: UIView!
 
     @IBOutlet weak var buyViewHeightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var priceRightConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var expandCollapseButton: ExpandCollapseButton!
     
     var delegate: CartListItemsControllerDelegate?
     
@@ -44,11 +48,44 @@ class CartListItemsController: ListItemsController {
 
         listItemsTableViewController.tableView.bottomInset = buyView.frame.height
 //            + Constants.tableViewAdditionalBottomInset
+        
+        expandCollapseButton.delegate = self
     }
     
 //    override var tableViewBottomInset: CGFloat {
 //        return pricesView.frame.height
 //    }
+    
+    override func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
+        super.setEditing(editing, animated: animated, tryCloseTopViewController: tryCloseTopViewController)
+        
+        func toggleButtonVisibility() {
+            expandCollapseButton.setHiddenAnimated(!editing)
+        }
+        
+        if !editing { // if button has to be hidden, hide it before the price moves right
+            toggleButtonVisibility()
+        }
+        
+        // TODO consistent animation with todo - there we have cross fade, because we change the entire view, here we don't change the view. Maybe take the button out of the view and move it like here during the cross fade of the view.
+        if animated {
+            let originalConstant: CGFloat = 20
+            let expandCollapseButtonWidth: CGFloat = 40
+            priceRightConstraint.constant = editing ? originalConstant + expandCollapseButtonWidth : originalConstant
+            let delay: NSTimeInterval = editing ? 0 : 0.1 // when price moves right, wait a bit for the button to disappear
+            UIView.animateWithDuration(0.3, delay: delay, options: [], animations: {[weak self] in
+                self?.view.layoutIfNeeded()
+                }) {finished in
+                if editing {
+                    toggleButtonVisibility() // if button has to be shown, show it after price made space for it
+                }
+            }
+        }
+    }
+    
+    override func onToggleReorderSections(isNowInReorderSections: Bool) {
+        expandCollapseButton.expanded = isNowInReorderSections
+    }
     
     override var emptyView: UIView {
         return emptyListView
@@ -148,6 +185,12 @@ class CartListItemsController: ListItemsController {
     override func onTopBarBackButtonTap() {
         super.onTopBarBackButtonTap()
         navigationController?.popViewControllerAnimated(true)
+    }
+    
+    // MARK: - ExpandCollapseButtonDelegate
+    
+    func onExpandButton(expanded: Bool) {
+        toggleReorderSections()
     }
 }
 

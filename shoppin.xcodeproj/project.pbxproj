@@ -762,6 +762,8 @@
 		EBAEB22F1BDBDB2F00FCDA5C /* CGPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB22E1BDBDB2F00FCDA5C /* CGPoint.swift */; };
 		EBAEB23C1BDC262400FCDA5C /* FloatingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBAEB23B1BDC262400FCDA5C /* FloatingViews.swift */; };
 		EBAEB23E1BDC263800FCDA5C /* FloatingViews.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBAEB23D1BDC263800FCDA5C /* FloatingViews.xib */; };
+		EBB0A8051CD396F6003CB7BA /* TodoListItemsEditBottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB0A8041CD396F6003CB7BA /* TodoListItemsEditBottomView.swift */; };
+		EBB0A8071CD39821003CB7BA /* TodoListItemsEditBottomView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBB0A8061CD39821003CB7BA /* TodoListItemsEditBottomView.xib */; };
 		EBB2AB371B8B2489007B8C59 /* InventoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB361B8B2489007B8C59 /* InventoryViewController.swift */; };
 		EBB2AB391B8B27BD007B8C59 /* InventoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB381B8B27BD007B8C59 /* InventoriesViewController.swift */; };
 		EBB2AB3B1B8B29CF007B8C59 /* InventoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */; };
@@ -1486,6 +1488,8 @@
 		EBAEB22E1BDBDB2F00FCDA5C /* CGPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGPoint.swift; sourceTree = "<group>"; };
 		EBAEB23B1BDC262400FCDA5C /* FloatingViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingViews.swift; sourceTree = "<group>"; };
 		EBAEB23D1BDC263800FCDA5C /* FloatingViews.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FloatingViews.xib; sourceTree = "<group>"; };
+		EBB0A8041CD396F6003CB7BA /* TodoListItemsEditBottomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListItemsEditBottomView.swift; sourceTree = "<group>"; };
+		EBB0A8061CD39821003CB7BA /* TodoListItemsEditBottomView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TodoListItemsEditBottomView.xib; sourceTree = "<group>"; };
 		EBB2AB361B8B2489007B8C59 /* InventoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryViewController.swift; sourceTree = "<group>"; };
 		EBB2AB381B8B27BD007B8C59 /* InventoriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoriesViewController.swift; sourceTree = "<group>"; };
 		EBB2AB3A1B8B29CF007B8C59 /* InventoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryCell.swift; sourceTree = "<group>"; };
@@ -1962,6 +1966,8 @@
 				EB5AD1921BEE2EA500BC6A2F /* editSection */,
 				EB85F47D1BD6ED9500E19E9B /* addEditListItem */,
 				EB2F5D721A55754400DBC4AF /* PricesView.swift */,
+				EBB0A8041CD396F6003CB7BA /* TodoListItemsEditBottomView.swift */,
+				EBB0A8061CD39821003CB7BA /* TodoListItemsEditBottomView.xib */,
 				EBD827FF1BE95C8B0072F9FA /* StashView.swift */,
 				EB28C1151A5833A200E1C8BC /* NavigationTitleView.swift */,
 				EB741A5B1C22185900E1585D /* ListsTableViewController.swift */,
@@ -3337,6 +3343,7 @@
 				EB9208021C4DBC7700332332 /* SimpleInputPopup.storyboard in Resources */,
 				EB92082E1C4ECE3D00332332 /* EditBrandController.xib in Resources */,
 				EB7BFA7C1BDA5BE500F4C74A /* QuantityCell.xib in Resources */,
+				EBB0A8071CD39821003CB7BA /* TodoListItemsEditBottomView.xib in Resources */,
 				EBDF8D111BFB7E4200F6830A /* ListTopBarView.xib in Resources */,
 				EB70327D1BEB700900779EBB /* ListItemsSectionHeaderView.xib in Resources */,
 				EB4C365F1B4C142600C387C5 /* EditableChoiceModal.storyboard in Resources */,
@@ -3969,6 +3976,7 @@
 				EB22C7111C4B02EE00285352 /* ShareAppViewController.swift in Sources */,
 				EBB9A7541B5FED4200E5487D /* InventoryTableViewCell.swift in Sources */,
 				EBF608B91C0F5D9000EDB33E /* RemotePlanItems.swift in Sources */,
+				EBB0A8051CD396F6003CB7BA /* TodoListItemsEditBottomView.swift in Sources */,
 				EB5AD1951BEE2ED400BC6A2F /* EditSectionViewController.swift in Sources */,
 				EB2F5D6F1A530FBC00DBC4AF /* Float.swift in Sources */,
 				EB70C2171B4D2C690060E529 /* ListProviderImpl.swift in Sources */,

@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-class TodoListItemsController: ListItemsController, CartListItemsControllerDelegate {
+class TodoListItemsController: ListItemsController, CartListItemsControllerDelegate, TodoListItemsEditBottomViewDelegate {
 
     @IBOutlet weak var pricesView: PricesView!
     @IBOutlet weak var stashView: StashView!
@@ -19,6 +19,8 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     @IBOutlet weak var emptyListViewImg: UIImageView!
     @IBOutlet weak var emptyListViewLabel1: UILabel!
     @IBOutlet weak var emptyListViewLabel2: UILabel!
+    
+    private var todoListItemsEditBottomView: TodoListItemsEditBottomView?
     
     override var status: ListItemStatus {
         return .Todo
@@ -32,9 +34,64 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
         return emptyListView
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        todoListItemsEditBottomView?.delegate = self
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         updateStashView()
+    }
+    
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if todoListItemsEditBottomView == nil {
+            initBottomEditView()
+        }
+    }
+    
+    private func initBottomEditView() {
+        let view = NSBundle.loadView("TodoListItemsEditBottomView", owner: self) as! TodoListItemsEditBottomView
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.delegate = self
+        todoListItemsEditBottomView = view
+        view.hidden = true
+        self.view.addSubview(view)
+        view.fillSuperviewWidth()
+        view.alignBottom(self.view)
+        view.heightConstraint(60)
+        view.setNeedsLayout()
+        view.setNeedsUpdateConstraints()
+        view.layoutIfNeeded()
+        view.updateConstraintsIfNeeded()
+    }
+    
+    override func toggleTopAddController(rotateTopBarButton: Bool = true) -> Bool {
+        let open = super.toggleTopAddController(rotateTopBarButton)
+        
+        if open { // opened quick add
+            // don't show the reorder sections button during quick add is open because it stand in the way
+            todoListItemsEditBottomView?.setHiddenAnimated(true)
+        } else { // closed quick add
+            if editing {
+                // if we are in edit mode, show the reorder sections button again (we hide it when we open the top controller)
+                todoListItemsEditBottomView?.setHiddenAnimated(false)
+            }
+        }
+        return open
+    }
+    
+    override func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
+        super.setEditing(editing, animated: animated, tryCloseTopViewController: tryCloseTopViewController)
+        
+        todoListItemsEditBottomView?.setHiddenAnimated(!editing)
+    }
+    
+    override func onToggleReorderSections(isNowInReorderSections: Bool) {
+        self.todoListItemsEditBottomView?.expandCollapseButtonExpanded = isNowInReorderSections
     }
     
     override func onGetListItems(listItems: [ListItem]) {
@@ -54,6 +111,8 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
 //                QL2("updating price, items: \(itemsStr), total cart quantity: \(totalCartQuantity), done price: \(totalCartPrice)")
                 self.pricesView.cartQuantity = totalCartQuantity
                 self.pricesView.setDonePrice(totalCartPrice, animated: true)
+                
+                self.todoListItemsEditBottomView?.setTotalPrice(listItems.totalPriceTodoAndCart)
             })
             
         } else {
@@ -61,8 +120,6 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
         }
     }
     
-    // Update stash view after a delay. The delay is for design reason, to let user see what's hapenning otherwise not clear together with view controller transition
-    // but it ALSO turned to fix bug when user adds to stash and goes back to view controller too fast - count would not be updated (count fetch is quicker than writing items to database). FIXME (not critical) don't depend on this delay to fix this bug.
     func updateStashView() {
         if let list = currentList {
             Providers.listItemsProvider.listItemCount(ListItemStatus.Stash, list: list, fetchMode: .MemOnly, successHandler {[weak self] count in
@@ -159,5 +216,11 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
                 }
             }
         }
+    }
+    
+    // MARK: - TodoListItemsEditBottomViewDelegate
+    
+    func onExpandSections(expand: Bool) {
+        toggleReorderSections()
     }
 }

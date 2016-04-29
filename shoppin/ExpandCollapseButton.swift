@@ -16,6 +16,15 @@ class ExpandCollapseButton: PathButton {
 
     var delegate: ExpandCollapseButtonDelegate?
     
+    var expanded: Bool {
+        set {
+            on = newValue
+        }
+        get {
+            return on
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -24,13 +33,11 @@ class ExpandCollapseButton: PathButton {
         
         let model = ExpandFloatingButtonModel()
         setup(offPaths: model.collapsedPaths, onPaths: model.expandedPaths)
+
+        strokeColor = UIColor.blackColor()
     }
     
     override func onTap(on: Bool) {
         delegate?.onExpandButton(on)
-    }
-    
-    func setExpanded(expanded: Bool) {
-        on = expanded
     }
 }

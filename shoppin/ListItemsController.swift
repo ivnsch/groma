@@ -12,7 +12,7 @@ import SwiftValidator
 import ChameleonFramework
 import QorumLogs
 
-class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate, ExpandCollapseButtonDelegate, UIGestureRecognizerDelegate
+class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDelegate, ListItemsTableViewDelegate, ListItemsEditTableViewDelegate, QuickAddDelegate, ReorderSectionTableViewControllerDelegate, EditSectionViewControllerDelegate, ExpandableTopViewControllerDelegate, ListTopBarViewDelegate, UIGestureRecognizerDelegate
     //    , UIBarPositioningDelegate
 {
     
@@ -27,8 +27,6 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     var listItemsTableViewController: ListItemsTableViewController!
     
     private var currentTopController: UIViewController?
-    
-    @IBOutlet weak var expandCollapseButton: ExpandCollapseButton!
     
 //    @IBOutlet weak var listNameView: UILabel!
     
@@ -83,12 +81,11 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         
         initTitleLabel()
         
-        expandCollapseButton.delegate = self
-        
         topQuickAddControllerManager = initTopQuickAddControllerManager()
         topEditSectionControllerManager = initEditSectionControllerManager()
         
         topBar.delegate = self
+
         
         navigationController?.interactivePopGestureRecognizer?.delegate = self
 
@@ -158,8 +155,6 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     func setThemeColor(color: UIColor) {
         topBar.dotColor = color
         view.backgroundColor = UIColor.whiteColor()
-        
-        expandCollapseButton.strokeColor = UIColor.blackColor()
     }
     
     private func updatePossibleList() {
@@ -225,7 +220,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     // MARK:
     
-    private func toggleTopAddController(rotateTopBarButton: Bool = true) {
+    // returns: is now open?
+    func toggleTopAddController(rotateTopBarButton: Bool = true) -> Bool {
         
         clearPossibleUndo()
         
@@ -242,11 +238,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 topBar.setRightButtonModels(rightButtonsClosingQuickAdd())
             }
             
-            
-            if editing {
-                // if we are in edit mode, show the reorder sections button again (we hide it when we open the top controller)
-                expandCollapseButton.setHiddenAnimated(false)
-            }
+            return false
             
         } else { // if there's no top controller open, open the quick add controller
             topQuickAddControllerManager?.expand(true)
@@ -260,8 +252,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             
             // in case we are in reorder sections mode, come back to normal. This mode doesn't make sense while adding list items as we can't see the list items.
             setReorderSections(false)
-            // don't show the reorder sections button during quick add is open because it stand in the way
-            expandCollapseButton.setHiddenAnimated(true)
+            
+            return true
         }
     }
     
@@ -283,12 +275,9 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             topEditSectionControllerManager?.controller?.onClose()
         }
         
-        expandCollapseButton.setHiddenAnimated(!editing)
-        
         if !editing {
             // in case we are in reorder sections mode, come back to normal. This is an edit specific mode.
             setReorderSections(false)
-            expandCollapseButton.setHiddenAnimated(true)
          
             setDefaultLeftButtons()
             topBar.setRightButtonModels(rightButtonsDefault())
@@ -698,7 +687,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     private var lockToggleSectionsTableView: Bool = false // prevent condition in which user presses toggle too quickly many times and sectionsTableViewController doesn't go away
     
     // Toggles between expanded and collapsed section mode. For this a second tableview with only sections is added or removed from foreground. Animates floating button.
-    private func toggleReorderSections() {
+    func toggleReorderSections() {
         setReorderSections(sectionsTableViewController == nil)
     }
     
@@ -737,7 +726,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                     self.addChildViewControllerAndView(sectionsTableViewController, viewIndex: 1)
                     self.sectionsTableViewController = sectionsTableViewController
                     
-                    self.expandCollapseButton.setExpanded(true)
+                    self.onToggleReorderSections(true)
+                    
                 })
                 
             } else { // show normal table view
@@ -751,8 +741,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                         self.sectionsTableViewController = nil
                         self.listItemsTableViewController.setAllSectionsExpanded(!self.listItemsTableViewController.sectionsExpanded, animated: true)
                         self.lockToggleSectionsTableView = false
-                        
-                        self.expandCollapseButton.setExpanded(false)
+                    
+                        self.onToggleReorderSections(false)
                     }
                 } else {
                     // we are already in normal state (sections tableview is not set) - do nothing
@@ -760,6 +750,10 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 }
             }
         }
+    }
+    
+    func onToggleReorderSections(isNowInReorderSections: Bool) {
+        // override
     }
     
     // MARK: - ReorderSectionTableViewControllerDelegate
@@ -869,13 +863,6 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     func rightButtonsClosing() -> [TopBarButtonModel] {
         return []
     }
-    
-    // MARK: - ExpandCollapseButtonDelegate
-    
-    func onExpandButton(expanded: Bool) {
-        toggleReorderSections()
-    }
-    
     
     // MARK: - Notification
     
