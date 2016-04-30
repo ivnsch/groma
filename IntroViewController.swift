@@ -22,11 +22,11 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     private let pageCount = 5 // later replace with array of images
     
     private let pageModels: [(key: String, imageName: String)] = [
-        ("Manage shopping lists comfortably", "empty_shelf"),
-        ("Connect lists with inventories to keep track of your items", "empty_shelf"),
-        ("Share with other users in real time", "empty_shelf"),
-        ("Analyse your shopping behaviour and expenses", "empty_shelf"),
-        ("Browse your shopping history", "empty_shelf")
+        ("Manage shopping lists comfortably", "splash"),
+        ("Connect lists with inventories to keep track of your items", "splash"),
+        ("Share with other users in real time", "splash"),
+        ("Analyse your shopping behaviour and expenses", "splash"),
+        ("Browse your shopping history", "splash")
     ]
     
     override func viewDidLoad() {
