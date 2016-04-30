@@ -23,7 +23,7 @@
                             </constraints>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstItem="wfz-Ah-mSx" firstAttribute="centerX" secondItem="iIy-Fg-8Wk" secondAttribute="centerX" id="F2h-Jt-ZiF"/>
                         <constraint firstItem="wfz-Ah-mSx" firstAttribute="centerY" secondItem="iIy-Fg-8Wk" secondAttribute="centerY" id="PnV-6M-L6a"/>

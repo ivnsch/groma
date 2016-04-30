@@ -50,7 +50,7 @@ class PathButton: UIButton {
             sublayer.lineJoin      = kCALineJoinRound
             sublayer.lineCap       = kCALineCapRound
             sublayer.contentsScale = layer.contentsScale
-            sublayer.lineWidth     = 1
+            sublayer.lineWidth     = 2.5
             layer.addSublayer(sublayer)
         }
         

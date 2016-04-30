@@ -34,7 +34,7 @@ class ExpandCollapseButton: PathButton {
         let model = ExpandFloatingButtonModel()
         setup(offPaths: model.collapsedPaths, onPaths: model.expandedPaths)
 
-        strokeColor = UIColor.blackColor()
+        strokeColor = UIColor(hexString: "2C3D50")
     }
     
     override func onTap(on: Bool) {

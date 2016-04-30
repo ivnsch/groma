@@ -169,6 +169,14 @@
                                     <constraint firstItem="hAl-pb-QcH" firstAttribute="top" secondItem="QQF-1r-ms4" secondAttribute="bottom" constant="12" id="pB3-yS-vOf"/>
                                 </constraints>
                             </view>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i9d-jj-Bdy" customClass="ExpandCollapseButton" customModule="shoppin">
+                                <rect key="frame" x="546" y="550" width="40" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="4V3-4u-uKH"/>
+                                    <constraint firstAttribute="height" constant="40" id="9rj-4r-dtU"/>
+                                </constraints>
+                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xxj-JB-Bmd">
                                 <rect key="frame" x="0.0" y="540" width="600" height="60"/>
                                 <subviews>
@@ -190,21 +198,12 @@
                                             <action selector="onAddToInventoryTap:" destination="Jkv-5K-pqw" eventType="touchUpInside" id="ToD-ff-Iaz"/>
                                         </connections>
                                     </button>
-                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i9d-jj-Bdy" customClass="ExpandCollapseButton" customModule="shoppin">
-                                        <rect key="frame" x="546" y="10" width="40" height="40"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="40" id="4V3-4u-uKH"/>
-                                            <constraint firstAttribute="height" constant="40" id="9rj-4r-dtU"/>
-                                        </constraints>
-                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.1215686275" green="0.67450980390000004" blue="0.41568627450000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="oYb-WW-vJz" firstAttribute="leading" secondItem="Xxj-JB-Bmd" secondAttribute="leading" constant="20" id="2Lv-Cn-xXj"/>
                                     <constraint firstAttribute="trailing" secondItem="Lzh-3J-7ty" secondAttribute="trailing" constant="20" id="4fq-nq-Usg"/>
                                     <constraint firstAttribute="bottom" secondItem="Juy-Wa-8fi" secondAttribute="bottom" id="Dxl-Bj-QdB"/>
-                                    <constraint firstAttribute="trailing" secondItem="i9d-jj-Bdy" secondAttribute="trailing" constant="14" id="Hbw-nf-Sz1"/>
                                     <constraint firstAttribute="height" constant="60" id="LsL-Ma-0NL"/>
                                     <constraint firstItem="Juy-Wa-8fi" firstAttribute="width" secondItem="Xxj-JB-Bmd" secondAttribute="width" id="MbA-v8-f5D"/>
                                     <constraint firstItem="Lzh-3J-7ty" firstAttribute="centerY" secondItem="Xxj-JB-Bmd" secondAttribute="centerY" id="Mbg-xF-269"/>
@@ -212,10 +211,11 @@
                                     <constraint firstItem="Juy-Wa-8fi" firstAttribute="top" secondItem="Xxj-JB-Bmd" secondAttribute="top" id="fJK-o3-27r"/>
                                     <constraint firstItem="Lzh-3J-7ty" firstAttribute="centerY" secondItem="Xxj-JB-Bmd" secondAttribute="centerY" id="iJ2-RM-bje"/>
                                     <constraint firstItem="oYb-WW-vJz" firstAttribute="centerY" secondItem="Xxj-JB-Bmd" secondAttribute="centerY" id="iby-0I-HnO"/>
-                                    <constraint firstItem="i9d-jj-Bdy" firstAttribute="centerY" secondItem="Xxj-JB-Bmd" secondAttribute="centerY" id="jln-Ek-uGH"/>
+                                    <constraint firstAttribute="trailing" secondItem="Juy-Wa-8fi" secondAttribute="trailing" id="siu-Ep-eP3"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="MbA-v8-f5D"/>
                                         <exclude reference="iJ2-RM-bje"/>
                                     </mask>
                                 </variation>
@@ -227,12 +227,14 @@
                             <constraint firstItem="Xxj-JB-Bmd" firstAttribute="leading" secondItem="0tl-vv-fHn" secondAttribute="leading" id="4xL-Qc-HVv"/>
                             <constraint firstItem="blz-rx-aVz" firstAttribute="top" secondItem="Dhe-Wt-ZWJ" secondAttribute="bottom" id="6IN-qJ-cKC"/>
                             <constraint firstItem="Dhe-Wt-ZWJ" firstAttribute="top" secondItem="5H0-4q-wYx" secondAttribute="bottom" id="8IX-Cg-Vqc"/>
+                            <constraint firstItem="LyR-1z-msh" firstAttribute="top" secondItem="i9d-jj-Bdy" secondAttribute="bottom" constant="10" id="Ckv-Rw-F5I"/>
                             <constraint firstItem="blz-rx-aVz" firstAttribute="leading" secondItem="0tl-vv-fHn" secondAttribute="leading" id="FxV-m2-fsd"/>
                             <constraint firstItem="LyR-1z-msh" firstAttribute="top" secondItem="Xxj-JB-Bmd" secondAttribute="bottom" id="Kzh-VA-RKg"/>
                             <constraint firstItem="Dhe-Wt-ZWJ" firstAttribute="top" secondItem="0tl-vv-fHn" secondAttribute="top" id="PyZ-3L-cdU"/>
                             <constraint firstItem="Dhe-Wt-ZWJ" firstAttribute="leading" secondItem="0tl-vv-fHn" secondAttribute="leading" id="QIL-lA-ZYV"/>
                             <constraint firstAttribute="trailing" secondItem="blz-rx-aVz" secondAttribute="trailing" id="Wrm-Mg-bSd"/>
                             <constraint firstAttribute="trailing" secondItem="Dhe-Wt-ZWJ" secondAttribute="trailing" id="p2k-VW-M1h"/>
+                            <constraint firstAttribute="trailing" secondItem="i9d-jj-Bdy" secondAttribute="trailing" constant="14" id="xys-aA-70p"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -245,11 +247,11 @@
                     </navigationItem>
                     <connections>
                         <outlet property="buyLabel" destination="oYb-WW-vJz" id="qxH-Lx-ZuQ"/>
+                        <outlet property="buyRightConstraint" destination="1hJ-0X-jxp" id="RhD-yO-JeI"/>
                         <outlet property="buyView" destination="Juy-Wa-8fi" id="8dK-bt-Wso"/>
                         <outlet property="buyViewHeightConstraint" destination="LsL-Ma-0NL" id="JKN-cL-vSY"/>
                         <outlet property="emptyListView" destination="blz-rx-aVz" id="mXI-w9-FJN"/>
                         <outlet property="expandCollapseButton" destination="i9d-jj-Bdy" id="YTL-yi-3KG"/>
-                        <outlet property="priceRightConstraint" destination="4fq-nq-Usg" id="CAg-7y-RQI"/>
                         <outlet property="topBar" destination="Dhe-Wt-ZWJ" id="OKD-Rj-Ta9"/>
                         <outlet property="topBarHeightConstraint" destination="H5W-Wr-6WR" id="ltK-FE-McL"/>
                         <outlet property="totalDonePriceLabel" destination="Lzh-3J-7ty" id="pad-Ca-PAm"/>

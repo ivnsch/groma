@@ -24,7 +24,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
 
     @IBOutlet weak var buyViewHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var priceRightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var buyRightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var expandCollapseButton: ExpandCollapseButton!
     
@@ -69,9 +69,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
         
         // TODO consistent animation with todo - there we have cross fade, because we change the entire view, here we don't change the view. Maybe take the button out of the view and move it like here during the cross fade of the view.
         if animated {
-            let originalConstant: CGFloat = 20
-            let expandCollapseButtonWidth: CGFloat = 40
-            priceRightConstraint.constant = editing ? originalConstant + expandCollapseButtonWidth : originalConstant
+            buyRightConstraint.constant = editing ? 60 : 0
             let delay: NSTimeInterval = editing ? 0 : 0.1 // when price moves right, wait a bit for the button to disappear
             UIView.animateWithDuration(0.3, delay: delay, options: [], animations: {[weak self] in
                 self?.view.layoutIfNeeded()
