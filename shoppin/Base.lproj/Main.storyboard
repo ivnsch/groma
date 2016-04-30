@@ -232,7 +232,7 @@
         <scene sceneID="aBY-Kl-kXd">
             <objects>
                 <navigationController storyboardIdentifier="NavigationController" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="c6K-Tm-JhD" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="List" image="list" id="uJG-Eo-xiW"/>
+                    <tabBarItem key="tabBarItem" title="List" image="list" selectedImage="list_selected" id="uJG-Eo-xiW"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="FPI-Ud-Czg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -805,7 +805,7 @@
         <scene sceneID="8Hn-kj-aan">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="7A1-RK-HJT" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Inventory" image="inventory" id="yUm-WR-GoU"/>
+                    <tabBarItem key="tabBarItem" title="Inventory" image="inventory" selectedImage="inventory_selected" id="yUm-WR-GoU"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="QjE-wI-irz">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -969,7 +969,7 @@
                             <constraint firstAttribute="trailing" secondItem="RXy-3J-Yb9" secondAttribute="trailing" id="uCi-It-nRW"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Groups" image="group" id="ddO-2P-JLY"/>
+                    <tabBarItem key="tabBarItem" title="Groups" image="group" selectedImage="group_selected" id="ddO-2P-JLY"/>
                     <connections>
                         <outlet property="emptyView" destination="6hQ-kC-l5Y" id="KC3-0Q-jk4"/>
                         <outlet property="topBar" destination="DgW-bs-fnp" id="eUx-Ze-vx7"/>
@@ -1240,13 +1240,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zbV-mP-7M8">
-                                                    <rect key="frame" x="475" y="11" width="40" height="21"/>
+                                                    <rect key="frame" x="491" y="11" width="40" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bhe-SQ-8YA">
-                                                    <rect key="frame" x="420" y="11" width="40" height="21"/>
+                                                    <rect key="frame" x="436" y="11" width="40" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" red="0.40751384761177378" green="0.4882287253211266" blue="0.61258518949468077" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1258,14 +1258,14 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="irF-b4-big">
-                                                    <rect key="frame" x="565" y="11" width="20" height="22"/>
+                                                    <rect key="frame" x="576" y="11" width="9" height="22"/>
                                                     <state key="normal" image="minus"/>
                                                     <connections>
                                                         <action selector="onMinusTap:" destination="Egm-eb-YKK" eventType="touchUpInside" id="U9K-rg-DzM"/>
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fc5-v6-IsF">
-                                                    <rect key="frame" x="530" y="11" width="20" height="22"/>
+                                                    <rect key="frame" x="546" y="11" width="15" height="22"/>
                                                     <state key="normal" image="plus"/>
                                                     <connections>
                                                         <action selector="onPlusTap:" destination="Egm-eb-YKK" eventType="touchUpInside" id="zZS-E4-4cz"/>
@@ -1623,7 +1623,7 @@
         <scene sceneID="GTf-S5-Syy">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="B4w-vm-AVy" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="More" image="more" id="cLJ-PG-GFJ"/>
+                    <tabBarItem key="tabBarItem" title="More" image="more" selectedImage="more_selected" id="cLJ-PG-GFJ"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ufI-Hd-Hpl">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1642,7 +1642,7 @@
         <scene sceneID="l2K-BR-pix">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Tva-Bh-1q8" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Report" image="stats" id="omU-Id-l2V"/>
+                    <tabBarItem key="tabBarItem" title="Report" image="stats" selectedImage="stats_selected" id="omU-Id-l2V"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="qy3-eD-XlX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1856,15 +1856,20 @@
     </scenes>
     <resources>
         <image name="empty_page" width="60" height="60"/>
-        <image name="group" width="25" height="25"/>
+        <image name="group" width="29" height="25"/>
+        <image name="group_selected" width="30" height="25"/>
         <image name="history" width="30" height="30"/>
-        <image name="inventory" width="30" height="30"/>
-        <image name="list" width="30" height="30"/>
-        <image name="minus" width="20" height="20"/>
-        <image name="more" width="30" height="30"/>
+        <image name="inventory" width="24" height="23"/>
+        <image name="inventory_selected" width="24" height="24"/>
+        <image name="list" width="25" height="27"/>
+        <image name="list_selected" width="25" height="27"/>
+        <image name="minus" width="9" height="3"/>
+        <image name="more" width="24" height="6"/>
+        <image name="more_selected" width="25" height="6"/>
         <image name="plan" width="30" height="30"/>
-        <image name="plus" width="20" height="20"/>
-        <image name="stats" width="30" height="30"/>
+        <image name="plus" width="15" height="14"/>
+        <image name="stats" width="25" height="25"/>
+        <image name="stats_selected" width="24" height="24"/>
         <image name="user" width="18" height="18"/>
     </resources>
 </document>
