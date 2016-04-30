@@ -630,6 +630,7 @@
                                             </variation>
                                         </view>
                                     </subviews>
+                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstItem="mEO-yB-hml" firstAttribute="top" secondItem="6dg-3t-A2g" secondAttribute="top" id="1fy-Gk-XaV"/>
                                         <constraint firstAttribute="bottom" secondItem="YuY-vx-r0F" secondAttribute="bottom" id="6QM-DD-zOP"/>
@@ -645,6 +646,7 @@
                                         <constraint firstItem="yHW-3q-Yxc" firstAttribute="centerY" secondItem="6dg-3t-A2g" secondAttribute="centerY" constant="-10" id="zs5-0Z-Pia"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="brandLabel" destination="9Rc-cx-ee2" id="3AD-fD-V2K"/>
                                     <outlet property="centerVerticallyNameLabelConstraint" destination="aPq-1R-TWY" id="eCQ-dH-UjM"/>
