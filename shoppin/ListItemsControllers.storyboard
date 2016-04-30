@@ -77,14 +77,6 @@
                                     <constraint firstItem="eMF-ZE-4G9" firstAttribute="centerX" secondItem="PcH-rK-LUL" secondAttribute="centerX" id="zgH-sZ-QkL"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S8g-IK-MVw" customClass="ExpandCollapseButton" customModule="shoppin">
-                                <rect key="frame" x="550" y="550" width="40" height="40"/>
-                                <color key="backgroundColor" red="0.61052091549999998" green="0.73144471069999994" blue="0.91775058180000002" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="40" id="NcT-Eq-dEb"/>
-                                    <constraint firstAttribute="height" constant="40" id="cvd-xf-zaO"/>
-                                </constraints>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -95,13 +87,10 @@
                             <constraint firstItem="PcH-rK-LUL" firstAttribute="top" secondItem="TBe-aO-06n" secondAttribute="bottom" id="UOJ-76-IWK"/>
                             <constraint firstAttribute="trailing" secondItem="PcH-rK-LUL" secondAttribute="trailing" id="c8b-Hb-Ozk"/>
                             <constraint firstItem="TBe-aO-06n" firstAttribute="leading" secondItem="CGm-mK-G1n" secondAttribute="leading" id="i34-bI-8DB"/>
-                            <constraint firstItem="ZpL-8v-jz0" firstAttribute="top" secondItem="S8g-IK-MVw" secondAttribute="bottom" constant="10" id="sXy-31-x8N"/>
-                            <constraint firstAttribute="trailing" secondItem="S8g-IK-MVw" secondAttribute="trailing" constant="10" id="wKQ-Am-MCj"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="emptyListView" destination="PcH-rK-LUL" id="oh0-eF-1yN"/>
-                        <outlet property="expandCollapseButton" destination="S8g-IK-MVw" id="naL-lv-PJs"/>
                         <outlet property="topBar" destination="TBe-aO-06n" id="fnw-5e-bxg"/>
                         <outlet property="topBarHeightConstraint" destination="QVv-wb-txL" id="UxZ-CT-1ku"/>
                     </connections>
