@@ -51,8 +51,6 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
     private var allKnownUsers: [SharedUser] = []
 
     var onViewDidLoad: VoidFunction?
-    
-    private var addButtonHelper: AddButtonHelper?
 
     func initUsers(existing: [SharedUser], invited: [SharedUser], all: [SharedUser]) {
         self.existingUsers = existing
@@ -78,6 +76,8 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
         
         onViewDidLoad?()
         
+        addUserInputField.text = "ivanschuetz2@gmail.com"
+        
     }
     
     private func initAddButtonHelper() -> AddButtonHelper? {
@@ -88,23 +88,6 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
             self?.tryAddInputUser()
         }
         return addButtonHelper
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        addButtonHelper = initAddButtonHelper()
-        addButtonHelper?.addObserver()
-        addButtonHelper?.add() // window not set yet in earlier lifecycle methods. We actually don't really need window for addButtonHelper here (or genererally). Code needs to be improved.
-    }
-    
-    override func viewDidDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        addButtonHelper?.removeObserver()
     }
     
     // MARK: -
