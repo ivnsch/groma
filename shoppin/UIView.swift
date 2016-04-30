@@ -222,4 +222,14 @@ extension UIView {
         border.frame = CGRectMake(0, offset - width, self.bounds.size.width, width)
         self.layer.addSublayer(border)
     }
+    
+    func scaleUpAndDown() {
+        UIView.animateWithDuration(0.15, animations: {[weak self] in
+            self?.transform = CGAffineTransformMakeScale(1.2, 1.2)
+        }, completion: {[weak self] finished in
+            UIView.animateWithDuration(0.15, animations: {[weak self] in
+                self?.transform = CGAffineTransformMakeScale(1, 1)
+            })
+        })
+    }
 }

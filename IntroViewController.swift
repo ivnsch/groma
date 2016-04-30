@@ -16,8 +16,9 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     @IBOutlet weak var pageControl: UIPageControl!
     
     @IBOutlet weak var skipButton: UIButton!
-    @IBOutlet weak var loginButton: UIButton!
-    @IBOutlet weak var registerButton: UIButton!
+    // This works but for now disabled, no signup in intro
+//    @IBOutlet weak var loginButton: UIButton!
+//    @IBOutlet weak var registerButton: UIButton!
     
     private let pageCount = 5 // later replace with array of images
     
@@ -28,6 +29,12 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         ("Analyse your shopping behaviour and expenses", "splash"),
         ("Browse your shopping history", "splash")
     ]
+    
+    private var finishedSlider = false {
+        didSet {
+            skipButton.setTitle("Start", forState: .Normal)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,13 +60,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     private func setButtonsEnabled(enabled: Bool) {
         skipButton.enabled = enabled
-        loginButton.enabled = enabled
-        registerButton.enabled = enabled
+//        loginButton.enabled = enabled
+//        registerButton.enabled = enabled
     }
     
-    @IBAction func loginTapped(sender: UIButton) {
-        startLogin(.Normal)
-    }
+//    @IBAction func loginTapped(sender: UIButton) {
+//        startLogin(.Normal)
+//    }
     
     private func startLogin(mode: LoginControllerMode) {
         let loginController = UIStoryboard.loginViewController()
@@ -110,11 +117,11 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
         }
     }
 
-    @IBAction func registerTapped(sender: UIButton) {
-        let registerController = UIStoryboard.registerViewController()
-        registerController.delegate = self
-        self.navigationController?.pushViewController(registerController, animated: true)
-    }
+//    @IBAction func registerTapped(sender: UIButton) {
+//        let registerController = UIStoryboard.registerViewController()
+//        registerController.delegate = self
+//        self.navigationController?.pushViewController(registerController, animated: true)
+//    }
 
     
     @IBAction func skipTapped(sender: UIButton) {
@@ -169,6 +176,11 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     func swipeViewCurrentItemIndexDidChange(swipeView: SwipeView!) {
         pageControl.currentPage = swipeView.currentItemIndex
+        if swipeView.currentItemIndex == pageCount - 1 {
+            if !finishedSlider {
+                finishedSlider = true
+            }
+        }
     }
     
     func swipeViewItemSize(swipeView: SwipeView!) -> CGSize {

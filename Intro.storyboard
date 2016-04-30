@@ -5,10 +5,8 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="HelveticaNeueLights.ttc">
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
+        <mutableArray key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -24,45 +22,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lJm-Gk-QuM">
-                                <rect key="frame" x="222" y="480" width="36" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Login">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="loginTapped:" destination="k9Y-sO-uBl" eventType="touchUpInside" id="kIO-jB-xwb"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NJR-Pk-tTx">
-                                <rect key="frame" x="285" y="530" width="30" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <rect key="frame" x="285" y="527" width="30" height="30"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Skip">
+                                    <color key="titleColor" red="0.21176470588235294" green="0.21176470588235294" blue="0.21176470588235294" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="skipTapped:" destination="k9Y-sO-uBl" eventType="touchUpInside" id="DUq-XT-1UN"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VOU-gm-XDH">
-                                <rect key="frame" x="333" y="480" width="54" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Register">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="registerTapped:" destination="k9Y-sO-uBl" eventType="touchUpInside" id="MEU-x5-Uhc"/>
-                                </connections>
-                            </button>
                             <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="6ZS-ry-WaI" customClass="SwipeView">
-                                <rect key="frame" x="45" y="60" width="510" height="336"/>
+                                <rect key="frame" x="150" y="150" width="300" height="300"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="336" id="4om-Ot-q7o"/>
+                                    <constraint firstAttribute="width" constant="300" id="F9J-cf-zXF"/>
                                     <constraint firstAttribute="height" constant="327" id="LQ2-9g-9jp"/>
+                                    <constraint firstAttribute="height" constant="300" id="LYA-2Y-b7H"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="4om-Ot-q7o"/>
                                         <exclude reference="LQ2-9g-9jp"/>
                                     </mask>
                                 </variation>
@@ -72,32 +54,40 @@
                                 </connections>
                             </view>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="mkE-ao-QPc">
-                                <rect key="frame" x="281" y="413" width="39" height="37"/>
+                                <rect key="frame" x="281" y="460" width="39" height="37"/>
                                 <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="currentPageIndicatorTintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </pageControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="centerX" secondItem="lJm-Gk-QuM" secondAttribute="centerX" constant="60" id="2fY-wd-HkW"/>
-                            <constraint firstAttribute="centerX" secondItem="VOU-gm-XDH" secondAttribute="centerX" constant="-60" id="3Jo-QL-mnK"/>
+                            <constraint firstItem="6ZS-ry-WaI" firstAttribute="centerX" secondItem="q6e-yE-ONc" secondAttribute="centerX" id="08e-Fr-iT8"/>
+                            <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="10" id="2Je-Xu-p9d"/>
+                            <constraint firstItem="6ZS-ry-WaI" firstAttribute="centerY" secondItem="q6e-yE-ONc" secondAttribute="centerY" id="3Tk-Zj-DvH"/>
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="centerX" secondItem="q6e-yE-ONc" secondAttribute="centerX" id="7sM-E7-U7q"/>
-                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="lJm-Gk-QuM" secondAttribute="bottom" constant="20" id="8ma-O2-nDG"/>
                             <constraint firstItem="6ZS-ry-WaI" firstAttribute="top" secondItem="cyK-8M-e3A" secondAttribute="bottom" constant="40" id="AtZ-cr-BlG"/>
-                            <constraint firstItem="VOU-gm-XDH" firstAttribute="baseline" secondItem="lJm-Gk-QuM" secondAttribute="baseline" id="Cry-uG-BOE"/>
                             <constraint firstAttribute="trailing" secondItem="6ZS-ry-WaI" secondAttribute="trailing" constant="45" id="UXA-eI-YHD"/>
-                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="80" id="avb-5u-aGZ"/>
-                            <constraint firstItem="OHf-Rk-Mbe" firstAttribute="top" secondItem="NJR-Pk-tTx" secondAttribute="bottom" constant="40" id="h7N-G4-e5v"/>
+                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="30" id="avb-5u-aGZ"/>
+                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="30" id="dKg-jx-UjW"/>
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="17" id="m7i-8H-34d"/>
                             <constraint firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="mK8-90-YtI"/>
+                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="30" id="nIv-Hs-ZG7"/>
                             <constraint firstItem="6ZS-ry-WaI" firstAttribute="leading" secondItem="q6e-yE-ONc" secondAttribute="leading" constant="45" id="oRD-Fi-ofb"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="AtZ-cr-BlG"/>
+                                <exclude reference="UXA-eI-YHD"/>
+                                <exclude reference="oRD-Fi-ofb"/>
+                                <exclude reference="m7i-8H-34d"/>
+                                <exclude reference="avb-5u-aGZ"/>
+                                <exclude reference="nIv-Hs-ZG7"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="05r-p6-eT1"/>
                     <connections>
-                        <outlet property="loginButton" destination="lJm-Gk-QuM" id="9Dr-La-GRw"/>
                         <outlet property="pageControl" destination="mkE-ao-QPc" id="fb6-Vq-8Za"/>
-                        <outlet property="registerButton" destination="VOU-gm-XDH" id="bTR-fp-RH2"/>
                         <outlet property="skipButton" destination="NJR-Pk-tTx" id="vOf-eA-cbw"/>
                         <outlet property="swipeView" destination="6ZS-ry-WaI" id="TgR-a1-308"/>
                     </connections>
