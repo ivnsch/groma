@@ -524,23 +524,26 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SqV-LQ-m9i">
-                                                    <rect key="frame" x="554" y="18" width="40" height="21"/>
+                                                    <rect key="frame" x="560" y="28" width="40" height="21"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OUR-OA-3PQ">
+                                                    <rect key="frame" x="519" y="0.0" width="41" height="76"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="41" id="xtY-uN-SR5"/>
+                                                    </constraints>
+                                                    <state key="normal" image="plus"/>
+                                                    <connections>
+                                                        <action selector="onPlusTap:" destination="qDe-gS-G77" eventType="touchUpInside" id="its-xk-b2U"/>
+                                                    </connections>
+                                                </button>
                                                 <view clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dsB-4p-esJ">
                                                     <rect key="frame" x="600" y="0.0" width="0.0" height="76"/>
                                                     <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OUR-OA-3PQ">
-                                                            <rect key="frame" x="-47" y="27" width="15" height="22"/>
-                                                            <state key="normal" image="plus"/>
-                                                            <connections>
-                                                                <action selector="onPlusTap:" destination="qDe-gS-G77" eventType="touchUpInside" id="its-xk-b2U"/>
-                                                            </connections>
-                                                        </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Pn-i3-NXi">
-                                                            <rect key="frame" x="-17" y="27" width="9" height="22"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="0.0" height="76"/>
                                                             <state key="normal" image="minus"/>
                                                             <connections>
                                                                 <action selector="onMinusTap:" destination="qDe-gS-G77" eventType="touchUpInside" id="vr0-jF-Xrn"/>
@@ -549,22 +552,34 @@
                                                     </subviews>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
-                                                        <constraint firstItem="OUR-OA-3PQ" firstAttribute="centerY" secondItem="dsB-4p-esJ" secondAttribute="centerY" id="Dw6-sr-Cbl"/>
-                                                        <constraint firstItem="5Pn-i3-NXi" firstAttribute="leading" secondItem="OUR-OA-3PQ" secondAttribute="trailing" constant="15" id="F9x-e9-4mP"/>
+                                                        <constraint firstAttribute="bottom" secondItem="5Pn-i3-NXi" secondAttribute="bottom" id="DIY-DX-jRD"/>
+                                                        <constraint firstAttribute="trailing" secondItem="5Pn-i3-NXi" secondAttribute="trailing" id="MHe-Yo-zfk"/>
                                                         <constraint firstAttribute="trailing" secondItem="5Pn-i3-NXi" secondAttribute="trailing" constant="8" id="fln-9K-TrM"/>
                                                         <constraint firstAttribute="width" id="h9y-qq-e3K"/>
                                                         <constraint firstItem="5Pn-i3-NXi" firstAttribute="centerY" secondItem="dsB-4p-esJ" secondAttribute="centerY" id="oWh-Fl-jdc"/>
+                                                        <constraint firstItem="5Pn-i3-NXi" firstAttribute="top" secondItem="dsB-4p-esJ" secondAttribute="top" id="umk-lR-Fvo"/>
+                                                        <constraint firstItem="5Pn-i3-NXi" firstAttribute="leading" secondItem="dsB-4p-esJ" secondAttribute="leading" id="v18-w4-AcT"/>
                                                     </constraints>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="fln-9K-TrM"/>
+                                                            <exclude reference="oWh-Fl-jdc"/>
+                                                        </mask>
+                                                    </variation>
                                                 </view>
                                                 <button opaque="NO" alpha="0.0" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8LP-6w-Aa7">
-                                                    <rect key="frame" x="521" y="26" width="25" height="25"/>
+                                                    <rect key="frame" x="529" y="27" width="23" height="23"/>
                                                     <rect key="contentStretch" x="0.0" y="0.0" width="0.40000000000000002" height="1"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="25" id="P6i-N0-avq"/>
-                                                        <constraint firstAttribute="height" constant="25" id="ttS-kz-1i6"/>
                                                     </constraints>
                                                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                     <state key="normal" image="speechbubble"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="P6i-N0-avq"/>
+                                                        </mask>
+                                                    </variation>
                                                     <connections>
                                                         <action selector="onNoteTap:" destination="qDe-gS-G77" eventType="touchUpInside" id="ERg-HN-Obn"/>
                                                     </connections>
@@ -575,29 +590,33 @@
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LJG-ZQ-jvi">
-                                                    <rect key="frame" x="563" y="40" width="31" height="16"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PHE-mh-lAU">
+                                                    <rect key="frame" x="565" y="49" width="31" height="16"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
-                                                    <color key="textColor" red="0.53725490200000003" green="0.64313725489999995" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="OUR-OA-3PQ" secondAttribute="bottom" id="46G-e4-s4R"/>
+                                                <constraint firstItem="OUR-OA-3PQ" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" id="4L6-Sy-CDL"/>
+                                                <constraint firstItem="PHE-mh-lAU" firstAttribute="top" secondItem="SqV-LQ-m9i" secondAttribute="bottom" id="7NN-oz-hwT"/>
+                                                <constraint firstItem="PHE-mh-lAU" firstAttribute="centerX" secondItem="SqV-LQ-m9i" secondAttribute="centerX" id="80d-5T-asF"/>
                                                 <constraint firstItem="SqV-LQ-m9i" firstAttribute="leading" secondItem="8LP-6w-Aa7" secondAttribute="trailing" constant="8" id="Bu8-oH-DHZ"/>
                                                 <constraint firstItem="npq-ts-NkO" firstAttribute="leading" secondItem="mEO-yB-hml" secondAttribute="leading" constant="6" id="CJ9-z3-d4g"/>
-                                                <constraint firstItem="LJG-ZQ-jvi" firstAttribute="centerY" secondItem="mEO-yB-hml" secondAttribute="centerY" constant="10" id="EkR-lZ-Mjz"/>
                                                 <constraint firstAttribute="bottom" secondItem="W7z-OP-2eO" secondAttribute="bottom" id="FR7-gt-I5f"/>
                                                 <constraint firstItem="W7z-OP-2eO" firstAttribute="leading" secondItem="mEO-yB-hml" secondAttribute="leading" id="Fqx-Wo-FuB"/>
-                                                <constraint firstAttribute="centerY" secondItem="SqV-LQ-m9i" secondAttribute="centerY" constant="10" id="JJd-X6-AeU"/>
+                                                <constraint firstItem="SqV-LQ-m9i" firstAttribute="leading" secondItem="OUR-OA-3PQ" secondAttribute="trailing" id="GHl-ny-xfV"/>
+                                                <constraint firstAttribute="centerY" secondItem="SqV-LQ-m9i" secondAttribute="centerY" id="JJd-X6-AeU"/>
                                                 <constraint firstItem="npq-ts-NkO" firstAttribute="leading" secondItem="W7z-OP-2eO" secondAttribute="trailing" constant="6" id="LUU-o0-wMf"/>
                                                 <constraint firstItem="dsB-4p-esJ" firstAttribute="centerY" secondItem="mEO-yB-hml" secondAttribute="centerY" id="NDO-sz-BFn"/>
                                                 <constraint firstItem="W7z-OP-2eO" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" id="OJx-bm-tMl"/>
                                                 <constraint firstItem="dsB-4p-esJ" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" id="SFi-9p-iSJ"/>
-                                                <constraint firstItem="LJG-ZQ-jvi" firstAttribute="trailing" secondItem="SqV-LQ-m9i" secondAttribute="trailing" id="T1y-HZ-OUA"/>
+                                                <constraint firstItem="OUR-OA-3PQ" firstAttribute="centerY" secondItem="mEO-yB-hml" secondAttribute="centerY" id="SzF-6c-sIJ"/>
                                                 <constraint firstAttribute="bottom" secondItem="dsB-4p-esJ" secondAttribute="bottom" id="YCC-nh-gXU"/>
                                                 <constraint firstAttribute="centerY" secondItem="npq-ts-NkO" secondAttribute="centerY" constant="10" id="aPq-1R-TWY"/>
-                                                <constraint firstItem="dsB-4p-esJ" firstAttribute="leading" secondItem="SqV-LQ-m9i" secondAttribute="trailing" constant="6" id="ajL-Kt-3zI"/>
+                                                <constraint firstItem="dsB-4p-esJ" firstAttribute="leading" secondItem="SqV-LQ-m9i" secondAttribute="trailing" id="ajL-Kt-3zI"/>
                                                 <constraint firstItem="9Rc-cx-ee2" firstAttribute="leading" secondItem="npq-ts-NkO" secondAttribute="leading" id="avc-VW-rvi"/>
                                                 <constraint firstItem="8LP-6w-Aa7" firstAttribute="centerY" secondItem="mEO-yB-hml" secondAttribute="centerY" id="cTT-nZ-E4n"/>
                                                 <constraint firstItem="9Rc-cx-ee2" firstAttribute="centerY" secondItem="mEO-yB-hml" secondAttribute="centerY" constant="10" id="den-ag-xFz"/>
@@ -606,6 +625,7 @@
                                             <variation key="default">
                                                 <mask key="constraints">
                                                     <exclude reference="CJ9-z3-d4g"/>
+                                                    <exclude reference="SzF-6c-sIJ"/>
                                                 </mask>
                                             </variation>
                                         </view>
@@ -633,9 +653,11 @@
                                     <outlet property="myContentView" destination="mEO-yB-hml" id="zsB-5b-YPD"/>
                                     <outlet property="nameLabel" destination="npq-ts-NkO" id="e3j-25-fIv"/>
                                     <outlet property="noteButton" destination="8LP-6w-Aa7" id="6Qg-cK-Ip5"/>
+                                    <outlet property="plusButton" destination="OUR-OA-3PQ" id="q3F-Eq-HeY"/>
+                                    <outlet property="plusButtonWidthConstraint" destination="P6i-N0-avq" id="SMc-Do-QKH"/>
                                     <outlet property="plusMinusContainer" destination="dsB-4p-esJ" id="uhq-Q8-X7u"/>
                                     <outlet property="plusMinusWidthConstraint" destination="h9y-qq-e3K" id="xfL-TA-eDT"/>
-                                    <outlet property="priceLabel" destination="LJG-ZQ-jvi" id="VHv-yf-dAm"/>
+                                    <outlet property="priceLabel" destination="PHE-mh-lAU" id="E2t-cv-Ag0"/>
                                     <outlet property="quantityLabel" destination="SqV-LQ-m9i" id="5No-Si-4uh"/>
                                     <outlet property="quantityLabelCenterVerticallyConstraint" destination="JJd-X6-AeU" id="uGM-Rt-Fmt"/>
                                     <outlet property="sectionColorView" destination="W7z-OP-2eO" id="sfw-1Q-nDR"/>

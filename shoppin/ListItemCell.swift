@@ -22,7 +22,7 @@ class ListItemCell: SwipeableCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var brandLabel: UILabel!
     @IBOutlet weak var quantityLabel: UILabel!
-    @IBOutlet weak var priceLabel: UILabel!
+    @IBOutlet weak var priceLabel: UILabel! // this was a label below the item's quantity in edit mode howing total price for this item. For now disabled as it overlaps with surrounding +/- and maybe a bit too much information for the user.
     
     @IBOutlet weak var centerVerticallyNameLabelConstraint: NSLayoutConstraint!
 
@@ -31,8 +31,10 @@ class ListItemCell: SwipeableCell {
     @IBOutlet weak var noteButton: UIButton!
 
     @IBOutlet weak var sectionColorView: UIView!
-    
+
+    @IBOutlet weak var plusButton: UIView!
     @IBOutlet weak var plusMinusContainer: UIView!
+    @IBOutlet weak var plusButtonWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var plusMinusWidthConstraint: NSLayoutConstraint!
 
     @IBOutlet weak var undoLabel1: UILabel!
@@ -102,12 +104,6 @@ class ListItemCell: SwipeableCell {
     }
     
     private func updateModeItemsVisibility(mode: ListItemCellMode, status: ListItemStatus, tableViewListItem: TableViewListItem, animated: Bool) {
-        let constant: CGFloat = {
-            switch mode {
-            case .Note: return 0
-            case .Increment: return 65
-            }
-        }()
         
         let hasNote = tableViewListItem.listItem.note.map{!$0.isEmpty} ?? false
         let showNote = hasNote && mode == .Note
@@ -125,22 +121,33 @@ class ListItemCell: SwipeableCell {
             switch mode {
             case .Note:
                 noteButton.alpha = showNote ? 1 : 0
+                plusButton.alpha = 0
                 plusMinusContainer.alpha = 0
                 sectionColorView.alpha = 1
             case .Increment:
                 noteButton.alpha = 0
+                plusButton.alpha = 1
                 plusMinusContainer.alpha = 1
                 sectionColorView.alpha = 0
             }
         }
         
         if animated {
+            
+            let constant: CGFloat = {
+                switch mode {
+                case .Note: return 0
+                case .Increment: return 41
+                }
+            }()
+
             delay(itemsDelay) {[weak self] in
                 self?.plusMinusWidthConstraint.constant = constant
                 UIView.animateWithDuration(0.2) {
                     update()
                 }
             }
+            
         } else {
             update()
         }
