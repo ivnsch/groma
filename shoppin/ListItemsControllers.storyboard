@@ -568,7 +568,7 @@
                                                     </variation>
                                                 </view>
                                                 <button opaque="NO" alpha="0.0" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8LP-6w-Aa7">
-                                                    <rect key="frame" x="529" y="27" width="23" height="23"/>
+                                                    <rect key="frame" x="519" y="27" width="23" height="23"/>
                                                     <rect key="contentStretch" x="0.0" y="0.0" width="0.40000000000000002" height="1"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="25" id="P6i-N0-avq"/>
@@ -603,7 +603,7 @@
                                                 <constraint firstItem="OUR-OA-3PQ" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" id="4L6-Sy-CDL"/>
                                                 <constraint firstItem="PHE-mh-lAU" firstAttribute="top" secondItem="SqV-LQ-m9i" secondAttribute="bottom" id="7NN-oz-hwT"/>
                                                 <constraint firstItem="PHE-mh-lAU" firstAttribute="centerX" secondItem="SqV-LQ-m9i" secondAttribute="centerX" id="80d-5T-asF"/>
-                                                <constraint firstItem="SqV-LQ-m9i" firstAttribute="leading" secondItem="8LP-6w-Aa7" secondAttribute="trailing" constant="8" id="Bu8-oH-DHZ"/>
+                                                <constraint firstItem="SqV-LQ-m9i" firstAttribute="leading" secondItem="8LP-6w-Aa7" secondAttribute="trailing" constant="18" id="Bu8-oH-DHZ"/>
                                                 <constraint firstItem="npq-ts-NkO" firstAttribute="leading" secondItem="mEO-yB-hml" secondAttribute="leading" constant="6" id="CJ9-z3-d4g"/>
                                                 <constraint firstAttribute="bottom" secondItem="W7z-OP-2eO" secondAttribute="bottom" id="FR7-gt-I5f"/>
                                                 <constraint firstItem="W7z-OP-2eO" firstAttribute="leading" secondItem="mEO-yB-hml" secondAttribute="leading" id="Fqx-Wo-FuB"/>
