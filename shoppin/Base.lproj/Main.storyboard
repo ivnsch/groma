@@ -64,7 +64,6 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -279,20 +278,26 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="5Id-Il-3kf">
-                                        <rect key="frame" x="250" y="194" width="100" height="100"/>
+                                        <rect key="frame" x="151" y="126" width="299" height="235"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="HRA-vM-YOx"/>
                                             <constraint firstAttribute="height" constant="100" id="ny6-WH-oZd"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="HRA-vM-YOx"/>
+                                                <exclude reference="ny6-WH-oZd"/>
+                                            </mask>
+                                        </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no lists" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bRL-cw-Ukc">
-                                        <rect key="frame" x="238" y="306" width="125" height="21"/>
+                                        <rect key="frame" x="238" y="373" width="125" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to add a list" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7OH-1y-kro">
-                                        <rect key="frame" x="256" y="335" width="89" height="16"/>
+                                        <rect key="frame" x="256" y="402" width="89" height="16"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -689,21 +694,27 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="gqH-SQ-EQ8">
-                                        <rect key="frame" x="250" y="194" width="100" height="100"/>
+                                        <rect key="frame" x="151" y="126" width="299" height="235"/>
                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="100" id="SaJ-y4-6SC"/>
                                             <constraint firstAttribute="height" constant="100" id="VKd-aI-vgR"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="SaJ-y4-6SC"/>
+                                                <exclude reference="VKd-aI-vgR"/>
+                                            </mask>
+                                        </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no Inventories" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xQd-dS-i5E">
-                                        <rect key="frame" x="212" y="306" width="176" height="21"/>
+                                        <rect key="frame" x="212" y="373" width="176" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to add an inventory" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XuI-Ww-EUx">
-                                        <rect key="frame" x="234" y="335" width="132" height="16"/>
+                                        <rect key="frame" x="234" y="402" width="132" height="16"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -926,25 +937,31 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6hQ-kC-l5Y">
                                 <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="Gj5-VG-8a9">
-                                        <rect key="frame" x="250" y="194" width="100" height="100"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="100" id="qiR-Dt-ySO"/>
-                                            <constraint firstAttribute="height" constant="100" id="vqy-jv-6e9"/>
-                                        </constraints>
-                                    </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no Groups" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jve-6C-5eI">
-                                        <rect key="frame" x="225" y="306" width="151" height="21"/>
+                                        <rect key="frame" x="225" y="373" width="151" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to add a group" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AW3-zP-xlQ">
-                                        <rect key="frame" x="247" y="335" width="107" height="16"/>
+                                        <rect key="frame" x="247" y="402" width="107" height="16"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="Gj5-VG-8a9">
+                                        <rect key="frame" x="151" y="126" width="299" height="235"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="qiR-Dt-ySO"/>
+                                            <constraint firstAttribute="height" constant="100" id="vqy-jv-6e9"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="qiR-Dt-ySO"/>
+                                                <exclude reference="vqy-jv-6e9"/>
+                                            </mask>
+                                        </variation>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -1098,22 +1115,28 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qfw-EP-IMI">
                                 <rect key="frame" x="0.0" y="105" width="600" height="446"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="fLS-kD-P95">
-                                        <rect key="frame" x="270" y="172" width="60" height="60"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="fLS-kD-P95">
+                                        <rect key="frame" x="151" y="86" width="299" height="235"/>
                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="qfF-kD-5b6"/>
                                             <constraint firstAttribute="height" constant="60" id="v4C-31-6cA"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="qfF-kD-5b6"/>
+                                                <exclude reference="v4C-31-6cA"/>
+                                            </mask>
+                                        </variation>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="There's nothing to report" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Fg-gJ-nkw">
-                                        <rect key="frame" x="210" y="244" width="181" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There's nothing to report" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Fg-gJ-nkw">
+                                        <rect key="frame" x="210" y="333" width="181" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Mark your first cart items as &quot;bought&quot; to start seeing reports" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dm0-uo-IfV">
-                                        <rect key="frame" x="14" y="273" width="572" height="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mark your first cart items as &quot;bought&quot; to start seeing reports" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dm0-uo-IfV">
+                                        <rect key="frame" x="14" y="362" width="572" height="16"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -1363,20 +1386,26 @@
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="B86-oF-vMU">
-                                        <rect key="frame" x="270" y="238" width="60" height="60"/>
+                                        <rect key="frame" x="151" y="151" width="299" height="235"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="PHy-Ut-Ots"/>
                                             <constraint firstAttribute="width" constant="60" id="XXk-su-u1q"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="PHy-Ut-Ots"/>
+                                                <exclude reference="XXk-su-u1q"/>
+                                            </mask>
+                                        </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no plan items yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="f0H-UL-k6R">
-                                        <rect key="frame" x="200" y="310" width="199" height="21"/>
+                                        <rect key="frame" x="200" y="398" width="199" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to add your first plan item" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="whD-Ml-qX4">
-                                        <rect key="frame" x="217" y="339" width="167" height="16"/>
+                                        <rect key="frame" x="217" y="427" width="167" height="16"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -1534,21 +1563,21 @@
                                 <rect key="frame" x="0.0" y="104" width="600" height="447"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="L5s-CW-xfh">
-                                        <rect key="frame" x="200" y="124" width="200" height="200"/>
+                                        <rect key="frame" x="151" y="106" width="299" height="235"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="200" id="6Jj-Dt-BsC"/>
                                             <constraint firstAttribute="height" constant="200" id="OJU-kg-uEU"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="6Jj-Dt-BsC"/>
+                                                <exclude reference="OJU-kg-uEU"/>
+                                            </mask>
+                                        </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There's no history yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eL2-CC-5WO">
-                                        <rect key="frame" x="222" y="336" width="157" height="21"/>
+                                        <rect key="frame" x="222" y="353" width="157" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mark your first cart items as &quot;bought&quot; to see them in the history" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zCU-qa-UjF">
-                                        <rect key="frame" x="124" y="365" width="353" height="16"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -1558,9 +1587,7 @@
                                     <constraint firstItem="L5s-CW-xfh" firstAttribute="centerY" secondItem="dl2-3s-zxQ" secondAttribute="centerY" id="9AS-QW-bTn"/>
                                     <constraint firstItem="L5s-CW-xfh" firstAttribute="centerX" secondItem="dl2-3s-zxQ" secondAttribute="centerX" id="HGC-8i-pbw"/>
                                     <constraint firstItem="eL2-CC-5WO" firstAttribute="top" secondItem="L5s-CW-xfh" secondAttribute="bottom" constant="12" id="QTk-XT-EUN"/>
-                                    <constraint firstItem="zCU-qa-UjF" firstAttribute="top" secondItem="eL2-CC-5WO" secondAttribute="bottom" constant="8" id="UmA-13-9JV"/>
                                     <constraint firstItem="eL2-CC-5WO" firstAttribute="centerX" secondItem="dl2-3s-zxQ" secondAttribute="centerX" id="rxy-dZ-rNC"/>
-                                    <constraint firstItem="zCU-qa-UjF" firstAttribute="centerX" secondItem="dl2-3s-zxQ" secondAttribute="centerX" id="y67-0B-ow4"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="auc-2c-2Qj">
@@ -1870,7 +1897,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="empty_page" width="60" height="60"/>
+        <image name="empty_page" width="299" height="235"/>
         <image name="group" width="29" height="25"/>
         <image name="group_selected" width="30" height="25"/>
         <image name="history" width="30" height="30"/>

@@ -431,7 +431,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func emptyViewData() -> (text: String, text2: String, imgName: String) {
-        return (text: "You group is empty", text2: "Tap to add items", imgName: "empty_shelf")
+        return (text: "You group is empty", text2: "Tap to add items", imgName: "empty_page")
     }
     
     func onEmptyViewTap() {
