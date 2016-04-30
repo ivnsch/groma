@@ -23,6 +23,8 @@ class ProductWithQuantityTableViewCell: UITableViewCell {
 
     @IBOutlet weak var centerVerticallyNameLabelConstraint: NSLayoutConstraint!
 
+    @IBOutlet weak var categoryColorView: UIView!
+    
     private var isAnimatingProgress: Bool = false
     private var animationCancelled: Bool = false
     

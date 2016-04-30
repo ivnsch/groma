@@ -149,6 +149,8 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         cell.row = indexPath.row
         cell.delegate = self
         
+        cell.categoryColorView.backgroundColor = model.product.category.color
+
         cell.cancelDeleteProgress() // some recycled cells were showing red bar on top
         
         // this was initially a local function but it seems we have to use a closure, see http://stackoverflow.com/a/26237753/930450
