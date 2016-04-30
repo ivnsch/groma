@@ -16,7 +16,7 @@ struct Theme {
 
     static let cellBottomBorderColor = UIColor(hexString: "EADFE4")
     
-    static let blue = UIColor(hexString: "0097D9")
+    static let blue = UIColor(hexString: "0E95E0")
     static let orange = UIColor(hexString: "FFA83E")
     
     static var navigationBarTextColor = UIColor.blackColor()

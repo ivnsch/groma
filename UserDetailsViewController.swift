@@ -9,49 +9,49 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
+import QorumLogs
 
 protocol UserDetailsViewControllerDelegate {
     func onLogoutSuccess()
     func onLogoutError() // TODO do we really need to notify the delegate about error?
-    func onRemoveAccount()
 }
 
 class UserDetailsViewController: UIViewController {
 
     var delegate: UserDetailsViewControllerDelegate?
+
+    @IBOutlet weak var userIdLabel: UILabel!
+    
+    override func viewDidLoad() {
+        if let me = Providers.userProvider.mySharedUser {
+            initContents(me)
+        } else {
+            QL4("Invalid state, we are in user details but there's no stored user")
+        }
+    }
+    
+    private func initContents(user: SharedUser) {
+        if let userIdLabel = userIdLabel {
+            userIdLabel.text = user.email
+        } else {
+            QL3("Outlets not initialised yet, can't show user data")
+        }
+    }
     
     @IBAction func onLogoutTap(sender: UIButton) {
         
-        Providers.userProvider.logout {remoteResult in
+        Providers.userProvider.logout {[weak self] remoteResult in
             
             FBSDKLoginManager().logOut() // in case we logged in using fb
             GIDSignIn.sharedInstance().signOut()  // in case we logged in using google
             
             if remoteResult.success ?? false {
-                self.delegate?.onLogoutSuccess() ?? print("Warn: no login delegate")
+                self?.delegate?.onLogoutSuccess()
                 
             } else {
-                self.delegate?.onLogoutError() ?? print("Warn: no login delegate")
+                self?.delegate?.onLogoutError()
             }
         }
     }
-    
-    
-    @IBAction func onRemoveAccountTap(sender: UIButton) {
-        ConfirmationPopup.show(message: "Are you sure you want to remove your account?", controller: self, onOk: {[weak self] in
-            
-            if let weakSelf = self {
-                
-                Providers.userProvider.removeAccount(weakSelf.successHandler({
-                    // note possible credentials login token deleted in removeAccount
-                    FBSDKLoginManager().logOut() // in case we logged in using fb
-                    GIDSignIn.sharedInstance().signOut()  // in case we logged in using google
-                    
-                    AlertPopup.show(title: "Success", message: "The account was removed", controller: weakSelf, onDismiss: {
-                        weakSelf.delegate?.onRemoveAccount() ?? print("Warn: no login delegate")
-                    })
-                }))
-            }
-        })
-    }
+
 }

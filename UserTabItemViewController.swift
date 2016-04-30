@@ -51,10 +51,6 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
         print("login error!") // TODO handle
     }
     
-    func onRemoveAccount() {
-        showLoginController()
-    }
-    
     private func showUserDetailsController() {
         let userDetailsController = UIStoryboard.userDetailsViewController()
         userDetailsController.delegate = self
@@ -70,13 +66,23 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     }
     
     private func replaceController(newController: UIViewController) {
-        // these loops could be replaced with first? but loop just feels better
-        for view in self.view.subviews {
-            view.removeFromSuperview()
-        }
-        for controller in self.childViewControllers {
-            controller.removeFromParentViewController()
-        }
-        self.addChildViewControllerAndViewFill(newController)
+
+        let currentChildControllers = childViewControllers // normally this should be only 1 - the login controller or user details view
+        
+        newController.view.translatesAutoresizingMaskIntoConstraints = false
+        newController.view.alpha = 0
+        addChildViewControllerAndViewFill(newController)
+        
+        // cross fade
+        UIView.animateWithDuration(0.3, animations: {
+            for controller in currentChildControllers {
+                controller.view.alpha = 0
+            }
+            newController.view.alpha = 1
+            }, completion: {finished in
+            for controller in currentChildControllers {
+                controller.removeFromParentViewControllerWithView()
+            }
+        })
     }
 }

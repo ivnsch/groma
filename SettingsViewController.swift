@@ -7,11 +7,15 @@
 //
 
 import UIKit
+import FBSDKCoreKit
+import FBSDKLoginKit
 
 class SettingsViewController: UIViewController {
 
     @IBOutlet weak var realTimeConnectionLabel: UILabel!
     @IBOutlet weak var realTimeConnectionSwitch: UISwitch!
+    @IBOutlet weak var overwriteLocalDataButton: UIButton!
+    @IBOutlet weak var removeAccountButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,11 +24,16 @@ class SettingsViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
-        let showWebsocketSwitch = ConnectionProvider.connectedAndLoggedIn
-        realTimeConnectionSwitch.hidden = !showWebsocketSwitch
-        realTimeConnectionLabel.hidden = !showWebsocketSwitch
-        
-        if showWebsocketSwitch {
+        updateServerRelatedItemsUI()
+    }
+    
+    private func updateServerRelatedItemsUI() {
+        let showServerThings = ConnectionProvider.connectedAndLoggedIn
+        realTimeConnectionSwitch.hidden = !showServerThings
+        realTimeConnectionLabel.hidden = !showServerThings
+        removeAccountButton.hidden = !showServerThings
+        overwriteLocalDataButton.hidden = !showServerThings
+        if showServerThings {
             realTimeConnectionSwitch.on = Providers.userProvider.isWebsocketConnected()
         }
     }
@@ -106,5 +115,26 @@ class SettingsViewController: UIViewController {
         } else {
             Providers.userProvider.disconnectWebsocket()
         }
+    }
+    
+    
+    
+    @IBAction func onRemoveAccountTap(sender: UIButton) {
+        ConfirmationPopup.show(message: "Are you sure you want to remove your account?", controller: self, onOk: {[weak self] in
+            
+            if let weakSelf = self {
+                
+                Providers.userProvider.removeAccount(weakSelf.successHandler({
+                    // note possible credentials login token deleted in removeAccount
+                    FBSDKLoginManager().logOut() // in case we logged in using fb
+                    GIDSignIn.sharedInstance().signOut()  // in case we logged in using google
+                    
+                    AlertPopup.show(title: "Success", message: "Your account was removed", controller: weakSelf, onDismiss: {
+                        // TODO check that the user here is logged out already
+                        weakSelf.updateServerRelatedItemsUI()
+                    })
+                }))
+            }
+        })
     }
 }

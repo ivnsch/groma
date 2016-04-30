@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="HelveticaNeueLights.ttc">
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
+        <mutableArray key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -24,36 +23,56 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7vg-i2-1c4">
-                                <rect key="frame" x="277" y="90" width="46" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <rect key="frame" x="207" y="442" width="186" height="50"/>
+                                <color key="backgroundColor" red="0.93725490196078431" green="0.29803921568627451" blue="0.29803921568627451" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="186" id="Deo-1L-Ruz"/>
+                                    <constraint firstAttribute="height" constant="50" id="UNj-ti-flC"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="Logout">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onLogoutTap:" destination="h7G-yZ-k7i" eventType="touchUpInside" id="2IZ-Di-JNv"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eYB-7b-UeC">
-                                <rect key="frame" x="245" y="180" width="110" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Remove account"/>
-                                <connections>
-                                    <action selector="onRemoveAccountTap:" destination="h7G-yZ-k7i" eventType="touchUpInside" id="w9j-Rt-LJH"/>
-                                </connections>
-                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile_pic" translatesAutoresizingMaskIntoConstraints="NO" id="1U0-96-zMB">
+                                <rect key="frame" x="148" y="137" width="304" height="187"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pxN-pH-E7g">
+                                <rect key="frame" x="281" y="354" width="38" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.054901960784313725" green="0.58431372549019611" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="eYB-7b-UeC" firstAttribute="centerX" secondItem="FsR-KS-FXf" secondAttribute="centerX" id="A8J-0I-9ii"/>
-                            <constraint firstItem="7vg-i2-1c4" firstAttribute="top" secondItem="FsR-KS-FXf" secondAttribute="top" constant="90" id="axm-iD-Vh3"/>
-                            <constraint firstItem="eYB-7b-UeC" firstAttribute="top" secondItem="7vg-i2-1c4" secondAttribute="bottom" constant="60" id="ihM-pZ-FDb"/>
+                            <constraint firstItem="pxN-pH-E7g" firstAttribute="top" secondItem="1U0-96-zMB" secondAttribute="bottom" constant="30" id="EmJ-aP-vrO"/>
+                            <constraint firstItem="pxN-pH-E7g" firstAttribute="centerX" secondItem="FsR-KS-FXf" secondAttribute="centerX" id="HuE-ZO-W0c"/>
+                            <constraint firstItem="7vg-i2-1c4" firstAttribute="top" secondItem="pxN-pH-E7g" secondAttribute="bottom" constant="70" id="NNr-Xq-QFi"/>
+                            <constraint firstItem="1U0-96-zMB" firstAttribute="centerY" secondItem="FsR-KS-FXf" secondAttribute="centerY" constant="-70" id="PJl-E7-OBh"/>
+                            <constraint firstItem="1U0-96-zMB" firstAttribute="centerX" secondItem="FsR-KS-FXf" secondAttribute="centerX" id="fC3-af-cYM"/>
                             <constraint firstAttribute="centerX" secondItem="7vg-i2-1c4" secondAttribute="centerX" id="v37-Nk-YTL"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="userIdLabel" destination="pxN-pH-E7g" id="Nr7-k2-9jq"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uDG-wC-KnL" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="221" y="455"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="profile_pic" width="304" height="187"/>
+    </resources>
 </document>
