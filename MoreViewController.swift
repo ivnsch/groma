@@ -19,11 +19,11 @@ class MoreViewController: UITableViewController {
             let controller = UIStoryboard.manageProductsSelectionController()
             navigationController?.pushViewController(controller, animated: true)
             
-        case 6: // Feedback
+        case 5: // Feedback
             emailHelper = EmailHelper(controller: self)
             emailHelper?.showEmail()
   
-        case 7: // Share
+        case 6: // Share
             share("Message message", sharingImage: nil, sharingURL: NSURL(string: "https://developers.facebook.com"))
             // Initially implemented this, which contains facebook sharing using its SDK. It seems with the default share we achieve the same functionality (Facebook seems to not allow to add title and description to links to the app store, which is what we want to link to, see https://developers.facebook.com/docs/sharing/ios - this would have been the only reason to use the SDK). Letting it commented just in case.
 //            let controller = UIStoryboard.shareAppViewController()
@@ -32,6 +32,17 @@ class MoreViewController: UITableViewController {
             
         default: break
         }
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return DimensionsManager.defaultCellHeight
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
+        // When returning cell height programatically, here it's still the height from the storyboard so we have to pass the offset for the line to eb draw at the bottom.
+        cell.contentView.addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
+        return cell
     }
     
     func share(sharingText: String?, sharingImage: UIImage?, sharingURL: NSURL?) {
