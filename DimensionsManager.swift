@@ -20,7 +20,7 @@ import QorumLogs
 */
 
 enum WidthDimension {
-    case Small // iPhone 5 / SE
+    case Small // iPhone 4 / 5 / SE
     case Middle // iPhone 6
     case Large // iPhone 6+
 }
