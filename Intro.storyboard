@@ -37,17 +37,9 @@
                                 <rect key="frame" x="150" y="150" width="300" height="300"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="336" id="4om-Ot-q7o"/>
                                     <constraint firstAttribute="width" constant="300" id="F9J-cf-zXF"/>
-                                    <constraint firstAttribute="height" constant="327" id="LQ2-9g-9jp"/>
                                     <constraint firstAttribute="height" constant="300" id="LYA-2Y-b7H"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="4om-Ot-q7o"/>
-                                        <exclude reference="LQ2-9g-9jp"/>
-                                    </mask>
-                                </variation>
                                 <connections>
                                     <outlet property="dataSource" destination="k9Y-sO-uBl" id="2Sa-1E-BJa"/>
                                     <outlet property="delegate" destination="k9Y-sO-uBl" id="U2a-xG-2zJ"/>
@@ -65,25 +57,9 @@
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="10" id="2Je-Xu-p9d"/>
                             <constraint firstItem="6ZS-ry-WaI" firstAttribute="centerY" secondItem="q6e-yE-ONc" secondAttribute="centerY" id="3Tk-Zj-DvH"/>
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="centerX" secondItem="q6e-yE-ONc" secondAttribute="centerX" id="7sM-E7-U7q"/>
-                            <constraint firstItem="6ZS-ry-WaI" firstAttribute="top" secondItem="cyK-8M-e3A" secondAttribute="bottom" constant="40" id="AtZ-cr-BlG"/>
-                            <constraint firstAttribute="trailing" secondItem="6ZS-ry-WaI" secondAttribute="trailing" constant="45" id="UXA-eI-YHD"/>
-                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="30" id="avb-5u-aGZ"/>
-                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="30" id="dKg-jx-UjW"/>
-                            <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="17" id="m7i-8H-34d"/>
+                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="30" id="dKg-jx-UjW" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="mK8-90-YtI"/>
-                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="30" id="nIv-Hs-ZG7"/>
-                            <constraint firstItem="6ZS-ry-WaI" firstAttribute="leading" secondItem="q6e-yE-ONc" secondAttribute="leading" constant="45" id="oRD-Fi-ofb"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="AtZ-cr-BlG"/>
-                                <exclude reference="UXA-eI-YHD"/>
-                                <exclude reference="oRD-Fi-ofb"/>
-                                <exclude reference="m7i-8H-34d"/>
-                                <exclude reference="avb-5u-aGZ"/>
-                                <exclude reference="nIv-Hs-ZG7"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="05r-p6-eT1"/>
                     <connections>
