@@ -341,6 +341,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
             UIView.animateWithDuration(0.3) {
                 picker.view.transform = CGAffineTransformMakeScale(1, 1)
             }
+            
+            view.endEditing(true)
+            
         } else {
             print("Warning: AddEditListController.onColorTap: no parentViewController")
         }
@@ -434,6 +437,8 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
                             self?.colorButton.transform = CGAffineTransformMakeScale(1, 1)
                         }
                     }
+                    
+                    self?.listNameInputField.becomeFirstResponder()
                 }
             )
         }

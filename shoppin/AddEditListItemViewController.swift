@@ -22,7 +22,8 @@ protocol AddEditListItemViewControllerDelegate {
     
     func onRemovedSectionCategoryName(name: String)
     func onRemovedBrand(name: String)
-    
+
+    func endEditing()
 //    func productNameAutocompletions(text: String, handler: [String] -> Void)
 //    func sectionNameAutocompletions(text: String, handler: [String] -> Void)
 //    func storeNameAutocompletions(text: String, handler: [String] -> Void)
@@ -439,6 +440,9 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             if let weakSelf = self {
                 picker.delegate = weakSelf
                 weakSelf.showingColorPicker = picker
+                
+                self?.view.endEditing(true)
+                self?.delegate?.endEditing()
             }
         }
     }
@@ -500,13 +504,13 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     private func dismissColorPicker(selectedColor: UIColor?) {
         if let showingColorPicker = showingColorPicker {
             
-            dismissPopup(showingColorPicker) {
-                self.showingColorPicker = nil
-                self.showingColorPicker?.removeFromParentViewControllerWithView()
+            dismissPopup(showingColorPicker) {[weak self] in
+                self?.showingColorPicker = nil
+                self?.showingColorPicker?.removeFromParentViewControllerWithView()
                 
                 UIView.animateWithDuration(0.3) {
                     if let selectedColor = selectedColor {
-                        self.sectionColorButton.textColor = selectedColor
+                        self?.sectionColorButton.textColor = selectedColor
                     }
                 }
 //                UIView.animateWithDuration(0.15) {
@@ -515,6 +519,8 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
 //                        self.sectionColorButton.transform = CGAffineTransformMakeScale(1, 1)
 //                    }
 //                }
+                
+                self?.sectionInput.becomeFirstResponder() // for now restore always section field TODO restore last responde
             }
         }
     }

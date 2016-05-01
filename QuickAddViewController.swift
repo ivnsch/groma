@@ -282,6 +282,10 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         delegate?.onRemovedBrand(name)
     }
     
+    func endEditing() {
+        view.endEditing(true)
+    }
+    
     // Not using plan for now
 //    func planItem(productName: String, handler: PlanItem? -> ()) {
 //        Providers.planProvider.planItem(productName, successHandler {planItemMaybe in

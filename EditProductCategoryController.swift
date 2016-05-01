@@ -37,6 +37,8 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
         super.viewDidLoad()
         
         initValidator()
+        
+        nameTextField.becomeFirstResponder()
     }
     
     private func initValidator() {
@@ -109,6 +111,9 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
             UIView.animateWithDuration(0.3) {
                 picker.view.transform = CGAffineTransformMakeScale(1, 1)
             }
+            
+            view.endEditing(true)
+            
         } else {
             print("Warning: AddEditListController.onColorTap: no parentViewController")
         }
@@ -131,22 +136,24 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
             UIView.animateWithDuration(0.3, animations: {
                 showingColorPicker.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
                 
-                }, completion: {finished in
-                    self.showingColorPicker = nil
-                    self.showingColorPicker?.removeFromParentViewControllerWithView()
+                }, completion: {[weak self] finished in
+                    self?.showingColorPicker = nil
+                    self?.showingColorPicker?.removeFromParentViewControllerWithView()
                     
                     UIView.animateWithDuration(0.3) {
                         if let selectedColor = selectedColor {
-                            self.categoryColorButton.tintColor = selectedColor
-                            self.categoryColorButton.imageView?.tintColor = selectedColor
+                            self?.categoryColorButton.tintColor = selectedColor
+                            self?.categoryColorButton.imageView?.tintColor = selectedColor
                         }
                     }
                     UIView.animateWithDuration(0.15) {
-                        self.categoryColorButton.transform = CGAffineTransformMakeScale(2, 2)
+                        self?.categoryColorButton.transform = CGAffineTransformMakeScale(2, 2)
                         UIView.animateWithDuration(0.15) {
-                            self.categoryColorButton.transform = CGAffineTransformMakeScale(1, 1)
+                            self?.categoryColorButton.transform = CGAffineTransformMakeScale(1, 1)
                         }
                     }
+
+                    self?.nameTextField.becomeFirstResponder()
                 }
             )
         }

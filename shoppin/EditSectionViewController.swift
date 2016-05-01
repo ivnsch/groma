@@ -140,21 +140,23 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
             UIView.animateWithDuration(0.3, animations: {
                 showingColorPicker.view.transform = CGAffineTransformMakeScale(0.001, 0.001)
                 
-                }, completion: {finished in
-                    self.showingColorPicker = nil
-                    self.showingColorPicker?.removeFromParentViewControllerWithView()
+                }, completion: {[weak self] finished in
+                    self?.showingColorPicker = nil
+                    self?.showingColorPicker?.removeFromParentViewControllerWithView()
                     
                     UIView.animateWithDuration(0.3) {
                         if let selectedColor = selectedColor {
-                            self.view.backgroundColor = selectedColor
+                            self?.view.backgroundColor = selectedColor
                         }
                     }
                     UIView.animateWithDuration(0.15) {
-                        self.colorButton.transform = CGAffineTransformMakeScale(2, 2)
+                        self?.colorButton.transform = CGAffineTransformMakeScale(2, 2)
                         UIView.animateWithDuration(0.15) {
-                            self.colorButton.transform = CGAffineTransformMakeScale(1, 1)
+                            self?.colorButton.transform = CGAffineTransformMakeScale(1, 1)
                         }
                     }
+                    
+                    self?.nameTextField.becomeFirstResponder()
                 }
             )
         }
@@ -191,6 +193,9 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
             UIView.animateWithDuration(0.3) {
                 picker.view.transform = CGAffineTransformMakeScale(1, 1)
             }
+            
+            view.endEditing(true)
+
         } else {
             print("Warning: AddEditListController.onColorTap: no parentViewController")
         }
