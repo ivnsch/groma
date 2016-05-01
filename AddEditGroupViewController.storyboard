@@ -4,12 +4,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <mutableArray key="HelveticaNeueLights.ttc">
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-        </mutableArray>
-    </customFonts>
     <scenes>
         <!--Add Edit Group View Controller-->
         <scene sceneID="coN-hr-b9y">
@@ -23,28 +17,36 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Group name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zZx-UT-Fld">
-                                <rect key="frame" x="14" y="34" width="572" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Group name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zZx-UT-Fld" customClass="TextFieldMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="25" y="34" width="550" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="oGC-xN-853"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" returnKeyType="done"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
                                         <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="50"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <outlet property="delegate" destination="Krn-O3-8LF" id="9rg-hc-FCL"/>
                                 </connections>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jje-xM-Vp4">
-                                <rect key="frame" x="535" y="78" width="51" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jje-xM-Vp4" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="522" y="78" width="53" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Colours">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onColorTap" destination="Krn-O3-8LF" eventType="touchUpInside" id="j87-j7-IXQ"/>
                                 </connections>
@@ -52,10 +54,10 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.59215686270000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="zZx-UT-Fld" firstAttribute="leading" secondItem="Vtl-Cm-eDA" secondAttribute="leading" constant="14" id="IFg-vB-JEq"/>
+                            <constraint firstItem="zZx-UT-Fld" firstAttribute="leading" secondItem="Vtl-Cm-eDA" secondAttribute="leading" constant="25" id="IFg-vB-JEq" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstItem="zZx-UT-Fld" firstAttribute="top" secondItem="9W3-iS-Zr9" secondAttribute="bottom" constant="14" id="PRE-v7-cq8"/>
-                            <constraint firstAttribute="trailing" secondItem="zZx-UT-Fld" secondAttribute="trailing" constant="14" id="Qhq-ZC-Qgj"/>
-                            <constraint firstAttribute="trailing" secondItem="jje-xM-Vp4" secondAttribute="trailing" constant="14" id="dPf-sY-VEz"/>
+                            <constraint firstAttribute="trailing" secondItem="zZx-UT-Fld" secondAttribute="trailing" constant="25" id="Qhq-ZC-Qgj" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                            <constraint firstItem="jje-xM-Vp4" firstAttribute="trailing" secondItem="zZx-UT-Fld" secondAttribute="trailing" id="Sbi-uk-93p"/>
                             <constraint firstItem="jje-xM-Vp4" firstAttribute="top" secondItem="zZx-UT-Fld" secondAttribute="bottom" constant="14" id="zPy-mv-Xo2"/>
                         </constraints>
                     </view>

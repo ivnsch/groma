@@ -10,10 +10,6 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -168,16 +164,21 @@
                                         <constraint firstAttribute="height" constant="20" id="r8V-P3-YOX"/>
                                     </constraints>
                                 </activityIndicatorView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AUs-nL-SaQ">
-                                    <rect key="frame" x="36" y="12" width="59" height="21"/>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AUs-nL-SaQ" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                    <rect key="frame" x="48" y="13" width="55" height="18"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                            <integer key="value" value="40"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
                                 </label>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstItem="AUs-nL-SaQ" firstAttribute="leading" secondItem="LLu-QP-cXx" secondAttribute="trailing" constant="8" id="XU1-w3-tJD"/>
+                                <constraint firstItem="AUs-nL-SaQ" firstAttribute="leading" secondItem="LLu-QP-cXx" secondAttribute="trailing" constant="20" id="XU1-w3-tJD"/>
                                 <constraint firstItem="LLu-QP-cXx" firstAttribute="leading" secondItem="hNH-A1-XZ0" secondAttribute="leading" constant="8" id="eOQ-lN-z3g"/>
                                 <constraint firstItem="LLu-QP-cXx" firstAttribute="centerY" secondItem="hNH-A1-XZ0" secondAttribute="centerY" id="j5d-Kx-Fot"/>
                                 <constraint firstItem="AUs-nL-SaQ" firstAttribute="centerY" secondItem="LLu-QP-cXx" secondAttribute="centerY" id="lw2-p6-yKf"/>
@@ -195,26 +196,41 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="76"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Eg-VM-sQM">
-                                            <rect key="frame" x="10" y="17" width="40" height="21"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Eg-VM-sQM" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                            <rect key="frame" x="29" y="17" width="44" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="50"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BUa-eS-yfp">
-                                            <rect key="frame" x="10" y="40" width="31" height="16"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BUa-eS-yfp" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                            <rect key="frame" x="29" y="39" width="38" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="40"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="esW-fo-yUS">
-                                            <rect key="frame" x="519" y="27" width="40" height="21"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="esW-fo-yUS" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                            <rect key="frame" x="485" y="26" width="49" height="24"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                            <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="60"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K7p-Hq-ZSp">
-                                            <rect key="frame" x="559" y="4" width="41" height="72"/>
+                                            <rect key="frame" x="534" y="4" width="41" height="72"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="41" id="ipa-2D-pDX"/>
                                             </constraints>
@@ -250,7 +266,7 @@
                                             </constraints>
                                         </view>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sa5-bI-suW">
-                                            <rect key="frame" x="478" y="4" width="41" height="72"/>
+                                            <rect key="frame" x="444" y="4" width="41" height="72"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="41" id="Bge-AM-2Ky"/>
                                             </constraints>
@@ -262,20 +278,15 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="centerY" secondItem="0Eg-VM-sQM" secondAttribute="centerY" constant="10" id="1vM-IJ-rPZ"/>
-                                        <constraint firstItem="sa5-bI-suW" firstAttribute="centerY" secondItem="Adh-8H-A6B" secondAttribute="centerY" id="432-Kp-V1W"/>
                                         <constraint firstAttribute="bottom" secondItem="Gco-Oy-7Vf" secondAttribute="bottom" id="5BW-sr-Bmh"/>
-                                        <constraint firstItem="sa5-bI-suW" firstAttribute="leading" secondItem="K7p-Hq-ZSp" secondAttribute="trailing" constant="20" id="9QI-Wx-qov"/>
-                                        <constraint firstAttribute="trailing" secondItem="K7p-Hq-ZSp" secondAttribute="trailing" id="9u4-3K-bV9"/>
-                                        <constraint firstItem="sa5-bI-suW" firstAttribute="centerY" secondItem="0Eg-VM-sQM" secondAttribute="centerY" id="AY2-rq-xWg"/>
+                                        <constraint firstAttribute="trailing" secondItem="K7p-Hq-ZSp" secondAttribute="trailing" constant="25" id="9u4-3K-bV9" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                         <constraint firstAttribute="centerY" secondItem="esW-fo-yUS" secondAttribute="centerY" id="C8z-jm-0Yn"/>
                                         <constraint firstItem="sa5-bI-suW" firstAttribute="top" secondItem="PSh-4D-BZZ" secondAttribute="bottom" id="DKn-EC-O0t"/>
-                                        <constraint firstItem="K7p-Hq-ZSp" firstAttribute="centerY" secondItem="0Eg-VM-sQM" secondAttribute="centerY" id="DaF-Vf-dCX"/>
                                         <constraint firstAttribute="bottom" secondItem="K7p-Hq-ZSp" secondAttribute="bottom" id="Gla-fF-610"/>
                                         <constraint firstItem="K7p-Hq-ZSp" firstAttribute="top" secondItem="PSh-4D-BZZ" secondAttribute="bottom" id="I51-Zg-Pue"/>
-                                        <constraint firstItem="esW-fo-yUS" firstAttribute="centerY" secondItem="0Eg-VM-sQM" secondAttribute="centerY" id="Oww-Pz-v5B"/>
                                         <constraint firstItem="PSh-4D-BZZ" firstAttribute="top" secondItem="Adh-8H-A6B" secondAttribute="top" id="PcZ-wW-Mb4"/>
-                                        <constraint firstItem="0Eg-VM-sQM" firstAttribute="leading" secondItem="Gco-Oy-7Vf" secondAttribute="trailing" constant="6" id="VRR-o2-e1S"/>
-                                        <constraint firstItem="0Eg-VM-sQM" firstAttribute="leading" secondItem="Adh-8H-A6B" secondAttribute="leading" constant="5" id="WVT-Nt-iNn"/>
+                                        <constraint firstItem="0Eg-VM-sQM" firstAttribute="leading" secondItem="Gco-Oy-7Vf" secondAttribute="trailing" constant="25" id="VRR-o2-e1S" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                                        <constraint firstItem="BUa-eS-yfp" firstAttribute="leading" secondItem="0Eg-VM-sQM" secondAttribute="leading" id="abr-Qu-6NS"/>
                                         <constraint firstItem="BUa-eS-yfp" firstAttribute="centerY" secondItem="Adh-8H-A6B" secondAttribute="centerY" constant="10" id="b6y-6O-J9b"/>
                                         <constraint firstItem="PSh-4D-BZZ" firstAttribute="leading" secondItem="Adh-8H-A6B" secondAttribute="leading" id="cGr-yX-iy4"/>
                                         <constraint firstItem="Gco-Oy-7Vf" firstAttribute="leading" secondItem="Adh-8H-A6B" secondAttribute="leading" id="eIo-PB-2ji"/>
@@ -283,23 +294,12 @@
                                         <constraint firstItem="Gco-Oy-7Vf" firstAttribute="top" secondItem="Adh-8H-A6B" secondAttribute="top" id="joI-ef-Bqa"/>
                                         <constraint firstItem="BUa-eS-yfp" firstAttribute="leading" secondItem="Gco-Oy-7Vf" secondAttribute="trailing" constant="6" id="kYC-Pv-PKa"/>
                                         <constraint firstItem="K7p-Hq-ZSp" firstAttribute="leading" secondItem="esW-fo-yUS" secondAttribute="trailing" id="mjU-3u-t6R"/>
-                                        <constraint firstAttribute="trailing" secondItem="esW-fo-yUS" secondAttribute="trailing" constant="5" id="nu3-5V-ZMN"/>
                                         <constraint firstItem="esW-fo-yUS" firstAttribute="leading" secondItem="sa5-bI-suW" secondAttribute="trailing" id="s1y-sY-iw2"/>
-                                        <constraint firstItem="K7p-Hq-ZSp" firstAttribute="centerY" secondItem="Adh-8H-A6B" secondAttribute="centerY" id="uXI-kC-sJw"/>
                                         <constraint firstAttribute="bottom" secondItem="sa5-bI-suW" secondAttribute="bottom" id="xpX-gS-IFf"/>
-                                        <constraint firstItem="BUa-eS-yfp" firstAttribute="leading" secondItem="Adh-8H-A6B" secondAttribute="leading" constant="5" id="yOp-WK-DFb"/>
                                     </constraints>
                                     <variation key="default">
                                         <mask key="constraints">
-                                            <exclude reference="WVT-Nt-iNn"/>
-                                            <exclude reference="yOp-WK-DFb"/>
-                                            <exclude reference="432-Kp-V1W"/>
-                                            <exclude reference="9QI-Wx-qov"/>
-                                            <exclude reference="AY2-rq-xWg"/>
-                                            <exclude reference="Oww-Pz-v5B"/>
-                                            <exclude reference="nu3-5V-ZMN"/>
-                                            <exclude reference="DaF-Vf-dCX"/>
-                                            <exclude reference="uXI-kC-sJw"/>
+                                            <exclude reference="kYC-Pv-PKa"/>
                                         </mask>
                                     </variation>
                                 </tableViewCellContentView>

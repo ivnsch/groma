@@ -6,45 +6,7 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="HelveticaNeue.ttc">
-            <string>HelveticaNeue</string>
-            <string>HelveticaNeue</string>
-            <string>HelveticaNeue</string>
-            <string>HelveticaNeue</string>
-            <string>HelveticaNeue</string>
-            <string>HelveticaNeue</string>
-            <string>HelveticaNeue</string>
-            <string>HelveticaNeue</string>
-            <string>HelveticaNeue</string>
-            <string>HelveticaNeue</string>
-            <string>HelveticaNeue</string>
-        </mutableArray>
         <mutableArray key="HelveticaNeueLights.ttc">
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
@@ -100,7 +62,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="cmp-U7-jlB">
-                                <rect key="frame" x="0.0" y="109" width="600" height="442"/>
+                                <rect key="frame" x="0.0" y="129" width="600" height="422"/>
                                 <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="reuseIdentifier" id="Ijr-7n-zCH" customClass="HelpCell" customModule="shoppin" customModuleProvider="target">
@@ -110,20 +72,25 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O8d-6A-xsA">
-                                                    <rect key="frame" x="14" y="8" width="572" height="27"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O8d-6A-xsA" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="8" width="560" height="28"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="40"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="O8d-6A-xsA" secondAttribute="trailing" constant="14" id="85L-Hy-yJu"/>
+                                                <constraint firstAttribute="trailing" secondItem="O8d-6A-xsA" secondAttribute="trailing" constant="20" id="85L-Hy-yJu"/>
                                                 <constraint firstAttribute="bottom" secondItem="O8d-6A-xsA" secondAttribute="bottom" constant="8" id="BAd-re-Qyn"/>
                                                 <constraint firstItem="O8d-6A-xsA" firstAttribute="top" secondItem="9EK-bc-0K7" secondAttribute="top" constant="8" id="qJi-Ua-gtQ"/>
-                                                <constraint firstItem="O8d-6A-xsA" firstAttribute="leading" secondItem="9EK-bc-0K7" secondAttribute="leading" constant="14" id="rHb-Kw-oax"/>
+                                                <constraint firstItem="O8d-6A-xsA" firstAttribute="leading" secondItem="9EK-bc-0K7" secondAttribute="leading" constant="20" id="rHb-Kw-oax"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -137,22 +104,27 @@
                                 </connections>
                             </tableView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="zUT-nN-8Zc" customClass="RoundTextField" customModule="shoppin">
-                                <rect key="frame" x="10" y="74" width="580" height="35"/>
+                                <rect key="frame" x="20" y="94" width="560" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="BsN-MQ-epw"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="cmp-U7-jlB" firstAttribute="leading" secondItem="NXh-nl-wzj" secondAttribute="leading" id="MSR-1a-4LW"/>
                             <constraint firstItem="ael-u3-p9S" firstAttribute="top" secondItem="cmp-U7-jlB" secondAttribute="bottom" id="O2T-kl-oYK"/>
-                            <constraint firstItem="zUT-nN-8Zc" firstAttribute="leading" secondItem="NXh-nl-wzj" secondAttribute="leading" constant="10" id="c9L-IQ-tad"/>
+                            <constraint firstItem="zUT-nN-8Zc" firstAttribute="leading" secondItem="NXh-nl-wzj" secondAttribute="leading" constant="20" id="c9L-IQ-tad"/>
                             <constraint firstAttribute="trailing" secondItem="cmp-U7-jlB" secondAttribute="trailing" id="kGR-uh-lcr"/>
-                            <constraint firstAttribute="trailing" secondItem="zUT-nN-8Zc" secondAttribute="trailing" constant="10" id="r4S-GI-B3S"/>
-                            <constraint firstItem="zUT-nN-8Zc" firstAttribute="top" secondItem="3sa-HG-6lK" secondAttribute="bottom" constant="10" id="uwW-9E-fhm"/>
+                            <constraint firstAttribute="trailing" secondItem="zUT-nN-8Zc" secondAttribute="trailing" constant="20" id="r4S-GI-B3S"/>
+                            <constraint firstItem="zUT-nN-8Zc" firstAttribute="top" secondItem="3sa-HG-6lK" secondAttribute="bottom" constant="30" id="uwW-9E-fhm"/>
                             <constraint firstItem="cmp-U7-jlB" firstAttribute="top" secondItem="zUT-nN-8Zc" secondAttribute="bottom" id="zBj-jH-N62"/>
                         </constraints>
                     </view>
@@ -370,18 +342,28 @@
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="History" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="93P-6p-iJK">
-                                                    <rect key="frame" x="8" y="20" width="52" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="History" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="93P-6p-iJK" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="18" width="64" height="24"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="50"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="93P-6p-iJK" firstAttribute="centerY" secondItem="pzx-ip-Qus" secondAttribute="centerY" id="6Fu-2V-9Ze"/>
-                                                <constraint firstItem="93P-6p-iJK" firstAttribute="leading" secondItem="pzx-ip-Qus" secondAttribute="leading" constant="8" id="MIk-7N-nu2"/>
+                                                <constraint firstItem="93P-6p-iJK" firstAttribute="leading" secondItem="pzx-ip-Qus" secondAttribute="leading" constant="20" id="MIk-7N-nu2" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                                 <constraint firstItem="93P-6p-iJK" firstAttribute="leading" secondItem="pzx-ip-Qus" secondAttribute="leading" constant="8" id="n1K-jy-jIC"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="n1K-jy-jIC"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                         <connections>
                                             <segue destination="Dq7-4Q-51x" kind="show" id="Uf7-ve-KtR"/>
@@ -394,18 +376,22 @@
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Manage products" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="57p-SP-5tY">
-                                                    <rect key="frame" x="8" y="20" width="129" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Manage products" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="57p-SP-5tY" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="18" width="158" height="24"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="50"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="57p-SP-5tY" firstAttribute="leading" secondItem="rlk-fa-rLN" secondAttribute="leading" constant="8" id="80m-qR-wav"/>
                                                 <constraint firstItem="57p-SP-5tY" firstAttribute="centerY" secondItem="rlk-fa-rLN" secondAttribute="centerY" id="AHy-QP-oo9"/>
                                                 <constraint firstItem="57p-SP-5tY" firstAttribute="centerY" secondItem="rlk-fa-rLN" secondAttribute="centerY" id="GOp-kd-1FE"/>
-                                                <constraint firstItem="57p-SP-5tY" firstAttribute="leading" secondItem="rlk-fa-rLN" secondAttribute="leading" constant="8" id="OBQ-5j-c3y"/>
+                                                <constraint firstItem="57p-SP-5tY" firstAttribute="leading" secondItem="rlk-fa-rLN" secondAttribute="leading" constant="20" id="OBQ-5j-c3y" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -416,17 +402,21 @@
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0H2-xa-BWO">
-                                                    <rect key="frame" x="8" y="20" width="34" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0H2-xa-BWO" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="18" width="42" height="24"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="50"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="0H2-xa-BWO" firstAttribute="centerY" secondItem="zCm-om-Mtm" secondAttribute="centerY" id="LGK-mB-49Q"/>
-                                                <constraint firstItem="0H2-xa-BWO" firstAttribute="leading" secondItem="zCm-om-Mtm" secondAttribute="leading" constant="8" id="Mog-Ra-YAH"/>
-                                                <constraint firstItem="0H2-xa-BWO" firstAttribute="leading" secondItem="zCm-om-Mtm" secondAttribute="leading" constant="8" id="eP3-at-eby"/>
+                                                <constraint firstItem="0H2-xa-BWO" firstAttribute="leading" secondItem="zCm-om-Mtm" secondAttribute="leading" constant="20" id="Mog-Ra-YAH" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                                 <constraint firstItem="0H2-xa-BWO" firstAttribute="centerY" secondItem="zCm-om-Mtm" secondAttribute="centerY" id="srU-26-Nln"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -441,18 +431,22 @@
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zi4-H9-VqQ">
-                                                    <rect key="frame" x="8" y="20" width="60" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zi4-H9-VqQ" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="18" width="74" height="24"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="50"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Zi4-H9-VqQ" firstAttribute="leading" secondItem="gaO-Ik-Fe1" secondAttribute="leading" constant="8" id="27x-Xu-FCC"/>
                                                 <constraint firstItem="Zi4-H9-VqQ" firstAttribute="centerY" secondItem="gaO-Ik-Fe1" secondAttribute="centerY" id="fqn-7q-3oB"/>
                                                 <constraint firstItem="Zi4-H9-VqQ" firstAttribute="centerY" secondItem="gaO-Ik-Fe1" secondAttribute="centerY" id="qDg-xj-MNH"/>
-                                                <constraint firstItem="Zi4-H9-VqQ" firstAttribute="leading" secondItem="gaO-Ik-Fe1" secondAttribute="leading" constant="8" id="zpp-Oi-Kh0"/>
+                                                <constraint firstItem="Zi4-H9-VqQ" firstAttribute="leading" secondItem="gaO-Ik-Fe1" secondAttribute="leading" constant="20" id="zpp-Oi-Kh0" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -466,17 +460,21 @@
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Help" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QFq-IR-td5">
-                                                    <rect key="frame" x="8" y="20" width="34" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Help" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QFq-IR-td5" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="18" width="42" height="24"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="50"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="QFq-IR-td5" firstAttribute="centerY" secondItem="uJp-BR-KMr" secondAttribute="centerY" id="9aj-Uo-52U"/>
-                                                <constraint firstItem="QFq-IR-td5" firstAttribute="leading" secondItem="uJp-BR-KMr" secondAttribute="leading" constant="8" id="DuQ-kV-cC3"/>
-                                                <constraint firstItem="QFq-IR-td5" firstAttribute="leading" secondItem="uJp-BR-KMr" secondAttribute="leading" constant="8" id="dqG-HH-dP5"/>
+                                                <constraint firstItem="QFq-IR-td5" firstAttribute="leading" secondItem="uJp-BR-KMr" secondAttribute="leading" constant="20" id="dqG-HH-dP5" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                                 <constraint firstItem="QFq-IR-td5" firstAttribute="centerY" secondItem="uJp-BR-KMr" secondAttribute="centerY" id="jlQ-WW-W9s"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -491,18 +489,22 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feedback" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vx4-6X-toJ">
-                                                    <rect key="frame" x="8" y="20" width="73" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feedback" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vx4-6X-toJ" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="18" width="89" height="24"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="50"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="vx4-6X-toJ" firstAttribute="centerY" secondItem="rq3-qf-smx" secondAttribute="centerY" id="P94-yC-rO4"/>
-                                                <constraint firstItem="vx4-6X-toJ" firstAttribute="leading" secondItem="rq3-qf-smx" secondAttribute="leading" constant="8" id="Tug-Ap-GgO"/>
                                                 <constraint firstItem="vx4-6X-toJ" firstAttribute="centerY" secondItem="rq3-qf-smx" secondAttribute="centerY" id="lXr-L2-8Yx"/>
-                                                <constraint firstItem="vx4-6X-toJ" firstAttribute="leading" secondItem="rq3-qf-smx" secondAttribute="leading" constant="8" id="sSy-xW-Jpu"/>
+                                                <constraint firstItem="vx4-6X-toJ" firstAttribute="leading" secondItem="rq3-qf-smx" secondAttribute="leading" constant="20" id="sSy-xW-Jpu" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -513,17 +515,21 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NhL-56-zay">
-                                                    <rect key="frame" x="8" y="20" width="43" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NhL-56-zay" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="18" width="52" height="24"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="50"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="NhL-56-zay" firstAttribute="centerY" secondItem="9TQ-fE-nYp" secondAttribute="centerY" id="30c-8G-rGp"/>
-                                                <constraint firstItem="NhL-56-zay" firstAttribute="leading" secondItem="9TQ-fE-nYp" secondAttribute="leading" constant="8" id="ipp-Yk-m0D"/>
-                                                <constraint firstItem="NhL-56-zay" firstAttribute="leading" secondItem="9TQ-fE-nYp" secondAttribute="leading" constant="8" id="xxq-ua-yoH"/>
+                                                <constraint firstItem="NhL-56-zay" firstAttribute="leading" secondItem="9TQ-fE-nYp" secondAttribute="leading" constant="20" id="xxq-ua-yoH" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                                 <constraint firstItem="NhL-56-zay" firstAttribute="centerY" secondItem="9TQ-fE-nYp" secondAttribute="centerY" id="yeu-YE-oGz"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -535,17 +541,21 @@
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="60"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="About" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RHQ-AR-gZ5">
-                                                    <rect key="frame" x="8" y="20" width="45" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="About" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RHQ-AR-gZ5" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="18" width="54" height="24"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="50"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="RHQ-AR-gZ5" firstAttribute="leading" secondItem="Lld-xp-bAz" secondAttribute="leading" constant="8" id="1ZO-15-4MK"/>
                                                 <constraint firstItem="RHQ-AR-gZ5" firstAttribute="centerY" secondItem="Lld-xp-bAz" secondAttribute="centerY" id="SOa-GT-E1H"/>
-                                                <constraint firstItem="RHQ-AR-gZ5" firstAttribute="leading" secondItem="Lld-xp-bAz" secondAttribute="leading" constant="8" id="W0u-VU-yOS"/>
+                                                <constraint firstItem="RHQ-AR-gZ5" firstAttribute="leading" secondItem="Lld-xp-bAz" secondAttribute="leading" constant="20" id="W0u-VU-yOS"/>
                                                 <constraint firstItem="RHQ-AR-gZ5" firstAttribute="centerY" secondItem="Lld-xp-bAz" secondAttribute="centerY" id="eLL-QP-htv"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -579,15 +589,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTH-bS-K1Q">
-                                <rect key="frame" x="14" y="84" width="84" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Clear all data"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTH-bS-K1Q" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="20" y="84" width="90" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Clear all data">
+                                    <color key="titleColor" red="0.054901960780000002" green="0.58431372550000005" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onClearAllDataTap:" destination="TSQ-MW-ySX" eventType="touchUpInside" id="svI-VU-3Lc"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="adW-N0-j5a">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="adW-N0-j5a">
                                 <rect key="frame" x="0.0" y="354" width="600" height="200"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Developer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CwH-GM-s9p">
@@ -614,20 +631,32 @@
                                     <constraint firstItem="VNJ-mv-0y2" firstAttribute="top" secondItem="CwH-GM-s9p" secondAttribute="bottom" constant="20" id="ui2-sU-5UM"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Yo-HG-bia">
-                                <rect key="frame" x="14" y="134" width="81" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Clear history"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Yo-HG-bia" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="20" y="134" width="87" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <state key="normal" title="Clear history">
+                                    <color key="titleColor" red="0.054901960780000002" green="0.58431372550000005" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onClearHistoryTap:" destination="TSQ-MW-ySX" eventType="touchUpInside" id="94B-f7-P9B"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLW-Jh-3jY">
-                                <rect key="frame" x="14" y="184" width="128" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLW-Jh-3jY" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="20" y="184" width="137" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Overwrite local data">
-                                    <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="0.93725490199999995" green="0.29803921570000003" blue="0.29803921570000003" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onOverwriteLocalDataTap:" destination="TSQ-MW-ySX" eventType="touchUpInside" id="6nW-N4-htT"/>
                                 </connections>
@@ -638,18 +667,28 @@
                                     <action selector="onRealmTimeConnectionChanged:" destination="TSQ-MW-ySX" eventType="valueChanged" id="GN5-Md-RJi"/>
                                 </connections>
                             </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Real time connection" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j2q-bI-zJT">
-                                <rect key="frame" x="14" y="234" width="144" height="39"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Real time connection" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j2q-bI-zJT" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="20" y="234" width="144" height="39"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="64f-ws-Ybt">
-                                <rect key="frame" x="14" y="293" width="98" height="30"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="64f-ws-Ybt" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="20" y="293" width="104" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Delete account">
-                                    <color key="titleColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="0.93725490199999995" green="0.29803921570000003" blue="0.29803921570000003" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onRemoveAccountTap:" destination="TSQ-MW-ySX" eventType="touchUpInside" id="oTX-jw-42O"/>
                                 </connections>
@@ -658,21 +697,21 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="j2q-bI-zJT" firstAttribute="top" secondItem="yLW-Jh-3jY" secondAttribute="bottom" constant="20" id="5UC-9w-Vo5"/>
-                            <constraint firstItem="5Yo-HG-bia" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="5jD-rY-HXz"/>
+                            <constraint firstItem="5Yo-HG-bia" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="20" id="5jD-rY-HXz"/>
                             <constraint firstItem="adW-N0-j5a" firstAttribute="top" secondItem="yLW-Jh-3jY" secondAttribute="bottom" constant="140" id="6G0-DN-DZf"/>
                             <constraint firstItem="64f-ws-Ybt" firstAttribute="top" secondItem="j2q-bI-zJT" secondAttribute="bottom" constant="20" id="9Qd-HS-Bjr"/>
                             <constraint firstItem="yLW-Jh-3jY" firstAttribute="top" secondItem="5Yo-HG-bia" secondAttribute="bottom" constant="20" id="Ah1-yr-PHY"/>
-                            <constraint firstItem="yLW-Jh-3jY" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="DTK-2F-KV3"/>
+                            <constraint firstItem="yLW-Jh-3jY" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="20" id="DTK-2F-KV3"/>
                             <constraint firstItem="5Yo-HG-bia" firstAttribute="top" secondItem="FTH-bS-K1Q" secondAttribute="bottom" constant="20" id="Dvv-HE-XDi"/>
                             <constraint firstItem="Dov-n6-f6k" firstAttribute="centerY" secondItem="j2q-bI-zJT" secondAttribute="centerY" id="Krh-vz-lec"/>
                             <constraint firstAttribute="trailing" secondItem="adW-N0-j5a" secondAttribute="trailing" id="VE1-JY-ivz"/>
-                            <constraint firstItem="j2q-bI-zJT" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="cYG-Yh-6n6"/>
+                            <constraint firstItem="j2q-bI-zJT" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="20" id="cYG-Yh-6n6"/>
                             <constraint firstItem="FTH-bS-K1Q" firstAttribute="top" secondItem="VOB-7c-032" secondAttribute="bottom" constant="20" id="e1Y-eF-fhk"/>
-                            <constraint firstItem="64f-ws-Ybt" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="g2y-c2-C1o"/>
+                            <constraint firstItem="64f-ws-Ybt" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="20" id="g2y-c2-C1o"/>
                             <constraint firstAttribute="trailing" secondItem="Dov-n6-f6k" secondAttribute="trailing" constant="14" id="g9v-Su-JU0"/>
                             <constraint firstItem="adW-N0-j5a" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" id="pof-HP-Xqt"/>
                             <constraint firstItem="Dov-n6-f6k" firstAttribute="baseline" secondItem="j2q-bI-zJT" secondAttribute="baseline" id="qgZ-5p-Mp4"/>
-                            <constraint firstItem="FTH-bS-K1Q" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="14" id="qlq-5x-xlh"/>
+                            <constraint firstItem="FTH-bS-K1Q" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="20" id="qlq-5x-xlh"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="1iM-IL-890"/>
@@ -877,13 +916,18 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="76"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iL4-5Y-aAl">
-                                            <rect key="frame" x="14" y="28" width="42" height="20"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iL4-5Y-aAl" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                            <rect key="frame" x="14" y="27" width="44" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="50"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="fAy-mu-XTo">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="fAy-mu-XTo">
                                             <rect key="frame" x="541" y="33" width="10" height="10"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="10" id="O9c-4T-SB1"/>
@@ -891,8 +935,8 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xtG-TL-rqn">
-                                            <rect key="frame" x="555" y="30" width="31" height="16"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                            <rect key="frame" x="553" y="30" width="33" height="16"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -902,7 +946,7 @@
                                         <constraint firstItem="xtG-TL-rqn" firstAttribute="leading" secondItem="fAy-mu-XTo" secondAttribute="trailing" constant="4" id="Efv-Qt-zWg"/>
                                         <constraint firstAttribute="trailing" secondItem="xtG-TL-rqn" secondAttribute="trailing" constant="14" id="Qeq-4Q-FxB"/>
                                         <constraint firstItem="fAy-mu-XTo" firstAttribute="centerY" secondItem="jdz-dt-wvN" secondAttribute="centerY" id="ghC-q7-6P1"/>
-                                        <constraint firstItem="iL4-5Y-aAl" firstAttribute="leading" secondItem="jdz-dt-wvN" secondAttribute="leading" constant="14" id="jq9-8g-Yhr"/>
+                                        <constraint firstItem="iL4-5Y-aAl" firstAttribute="leading" secondItem="jdz-dt-wvN" secondAttribute="leading" constant="14" id="jq9-8g-Yhr" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                         <constraint firstItem="iL4-5Y-aAl" firstAttribute="centerY" secondItem="jdz-dt-wvN" secondAttribute="centerY" id="pzU-Mi-Ale"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -1041,16 +1085,28 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yZf-9B-noG">
                                 <rect key="frame" x="0.0" y="64" width="600" height="40"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rN8-fi-WUd">
-                                        <rect key="frame" x="39" y="5" width="30" height="30"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                        <state key="normal" title=" "/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rN8-fi-WUd" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="46" y="5" width="30" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" title=" ">
+                                            <color key="titleColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                <integer key="value" value="40"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="in" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZdS-Pk-h8r">
-                                        <rect key="frame" x="14" y="11" width="11" height="18"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="in" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZdS-Pk-h8r" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="11" width="12" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" red="0.49019607843137253" green="0.54509803921568623" blue="0.5490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                <integer key="value" value="40"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -1058,7 +1114,7 @@
                                     <constraint firstItem="ZdS-Pk-h8r" firstAttribute="centerY" secondItem="yZf-9B-noG" secondAttribute="centerY" id="Os0-Jb-SYb"/>
                                     <constraint firstItem="rN8-fi-WUd" firstAttribute="leading" secondItem="ZdS-Pk-h8r" secondAttribute="trailing" constant="14" id="Pag-cT-mxv"/>
                                     <constraint firstItem="rN8-fi-WUd" firstAttribute="baseline" secondItem="ZdS-Pk-h8r" secondAttribute="baseline" id="Zp3-on-hbd"/>
-                                    <constraint firstItem="ZdS-Pk-h8r" firstAttribute="leading" secondItem="yZf-9B-noG" secondAttribute="leading" constant="14" id="aAT-NW-Yr8"/>
+                                    <constraint firstItem="ZdS-Pk-h8r" firstAttribute="leading" secondItem="yZf-9B-noG" secondAttribute="leading" constant="20" id="aAT-NW-Yr8"/>
                                     <constraint firstAttribute="height" constant="40" id="qzh-wC-GhB"/>
                                 </constraints>
                             </view>
@@ -1088,8 +1144,9 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Daily average this month" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V34-s8-kUI">
-                                <rect key="frame" x="20" y="419" width="166" height="18"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <rect key="frame" x="20" y="419" width="169" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.21176470588235294" green="0.21176470588235294" blue="0.21176470588235294" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fwZ-a2-d32" userLabel="Divider">
@@ -1100,31 +1157,33 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Projected total this month" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CcA-yY-Wpn">
-                                <rect key="frame" x="20" y="467" width="173" height="18"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <rect key="frame" x="20" y="467" width="178" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.21176470588235294" green="0.21176470588235294" blue="0.21176470588235294" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bvb-VA-geS">
-                                <rect key="frame" x="543" y="419" width="37" height="18"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
-                                <color key="textColor" red="0.0" green="0.59215686270000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="542" y="419" width="38" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.054901960784313725" green="0.58431372549019611" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P5t-9b-PXe">
-                                <rect key="frame" x="543" y="467" width="37" height="18"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
-                                <color key="textColor" red="0.1215686275" green="0.67450980390000004" blue="0.41568627450000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="542" y="467" width="38" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.15294117647058825" green="0.67843137254901964" blue="0.37647058823529411" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lHm-PF-Mch">
-                                <rect key="frame" x="543" y="371" width="37" height="18"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
-                                <color key="textColor" red="0.0" green="0.59215686270000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="542" y="371" width="38" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.054901960784313725" green="0.58431372549019611" blue="0.8784313725490196" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total average" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h5a-TG-tsU">
-                                <rect key="frame" x="20" y="371" width="90" height="18"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <rect key="frame" x="20" y="371" width="92" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.21176470588235294" green="0.21176470588235294" blue="0.21176470588235294" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qfw-EP-IMI">
@@ -1506,11 +1565,16 @@
                                                 <constraint firstAttribute="height" constant="20" id="tHs-fM-yPF"/>
                                             </constraints>
                                         </activityIndicatorView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zs0-Gl-c0J">
-                                            <rect key="frame" x="36" y="12" width="59" height="21"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zs0-Gl-c0J" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                            <rect key="frame" x="48" y="13" width="55" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="40"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1519,7 +1583,7 @@
                                         <constraint firstAttribute="height" constant="44" id="7xs-Km-XX5"/>
                                         <constraint firstItem="zs0-Gl-c0J" firstAttribute="centerY" secondItem="G6S-gR-6TZ" secondAttribute="centerY" id="Dl4-Fo-hih"/>
                                         <constraint firstItem="G6S-gR-6TZ" firstAttribute="centerY" secondItem="Lxj-To-pGn" secondAttribute="centerY" id="T6D-GS-Z1T"/>
-                                        <constraint firstItem="zs0-Gl-c0J" firstAttribute="leading" secondItem="G6S-gR-6TZ" secondAttribute="trailing" constant="8" id="goY-OP-mxL"/>
+                                        <constraint firstItem="zs0-Gl-c0J" firstAttribute="leading" secondItem="G6S-gR-6TZ" secondAttribute="trailing" constant="20" id="goY-OP-mxL"/>
                                     </constraints>
                                     <connections>
                                         <outlet property="activityIndicator" destination="G6S-gR-6TZ" id="MIY-We-qO2"/>
@@ -1533,23 +1597,38 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="59"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="$5" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gpp-Rq-ikf">
-                                                    <rect key="frame" x="565" y="19" width="19" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="$5" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gpp-Rq-ikf" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="553" y="21" width="19" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="40"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Apples" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="sle-Ve-3Yk">
-                                                    <rect key="frame" x="8" y="10" width="537" height="20"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Apples" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="sle-Ve-3Yk" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="11" width="513" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="40"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="bqW-8q-Oq6">
-                                                    <rect key="frame" x="8" y="31" width="537" height="17"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
-                                                    <color key="textColor" red="0.60784313725490191" green="0.72549019607843135" blue="0.90980392156862744" alpha="1" colorSpace="calibratedRGB"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="bqW-8q-Oq6" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="20" y="31" width="513" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="40"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <constraints>
@@ -1558,9 +1637,9 @@
                                                 <constraint firstItem="bqW-8q-Oq6" firstAttribute="leading" secondItem="sle-Ve-3Yk" secondAttribute="leading" id="PyA-JY-waa"/>
                                                 <constraint firstItem="gpp-Rq-ikf" firstAttribute="centerY" secondItem="83V-tT-Uta" secondAttribute="centerY" id="SPM-e6-8qR"/>
                                                 <constraint firstItem="sle-Ve-3Yk" firstAttribute="centerY" secondItem="83V-tT-Uta" secondAttribute="centerY" constant="-10" id="UEm-Hs-C3Q"/>
-                                                <constraint firstItem="sle-Ve-3Yk" firstAttribute="leading" secondItem="83V-tT-Uta" secondAttribute="leading" constant="8" id="jmD-t0-b4G"/>
+                                                <constraint firstItem="sle-Ve-3Yk" firstAttribute="leading" secondItem="83V-tT-Uta" secondAttribute="leading" constant="20" id="jmD-t0-b4G"/>
                                                 <constraint firstItem="bqW-8q-Oq6" firstAttribute="centerY" secondItem="83V-tT-Uta" secondAttribute="centerY" constant="10" id="nwu-d7-5bg"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="gpp-Rq-ikf" secondAttribute="trailing" constant="8" id="oWJ-w6-CtH"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="gpp-Rq-ikf" secondAttribute="trailing" constant="20" id="oWJ-w6-CtH"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -1593,9 +1672,9 @@
                                         </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There's no history yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eL2-CC-5WO">
-                                        <rect key="frame" x="222" y="353" width="157" height="21"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <rect key="frame" x="204" y="353" width="193" height="24"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -1610,16 +1689,28 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="auc-2c-2Qj">
                                 <rect key="frame" x="0.0" y="64" width="600" height="40"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cfR-FR-ibb">
-                                        <rect key="frame" x="87" y="5" width="30" height="30"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                        <state key="normal" title=" "/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cfR-FR-ibb" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="92" y="5" width="30" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" title=" ">
+                                            <color key="titleColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                <integer key="value" value="40"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Inventory" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YTK-jY-FxL">
-                                        <rect key="frame" x="14" y="11" width="59" height="18"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Inventory" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YTK-jY-FxL" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="14" y="11" width="64" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                <integer key="value" value="40"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -1794,13 +1885,18 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="68"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JGo-Cb-Ord">
-                                            <rect key="frame" x="14" y="14" width="42" height="20"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JGo-Cb-Ord" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                            <rect key="frame" x="14" y="13" width="44" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="50"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="DGQ-wr-teW">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="DGQ-wr-teW">
                                             <rect key="frame" x="541" y="29" width="10" height="10"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="10" id="VyC-Qf-nSf"/>
@@ -1808,23 +1904,28 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mx1-zn-oyy">
-                                            <rect key="frame" x="555" y="26" width="31" height="16"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                            <rect key="frame" x="553" y="26" width="33" height="16"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZxO-Om-OC1">
-                                            <rect key="frame" x="14" y="36" width="32" height="16"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="13"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZxO-Om-OC1" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                            <rect key="frame" x="14" y="35" width="38" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="40"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="JGo-Cb-Ord" firstAttribute="centerY" secondItem="HrI-DL-GBd" secondAttribute="centerY" constant="-10" id="3hu-pT-XRR"/>
                                         <constraint firstItem="mx1-zn-oyy" firstAttribute="leading" secondItem="DGQ-wr-teW" secondAttribute="trailing" constant="4" id="56f-aK-X8I"/>
-                                        <constraint firstItem="JGo-Cb-Ord" firstAttribute="leading" secondItem="HrI-DL-GBd" secondAttribute="leading" constant="14" id="8bc-CX-Dcb"/>
-                                        <constraint firstItem="ZxO-Om-OC1" firstAttribute="leading" secondItem="HrI-DL-GBd" secondAttribute="leading" constant="14" id="903-hO-dQh"/>
+                                        <constraint firstItem="JGo-Cb-Ord" firstAttribute="leading" secondItem="HrI-DL-GBd" secondAttribute="leading" constant="14" id="8bc-CX-Dcb" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                                        <constraint firstItem="ZxO-Om-OC1" firstAttribute="leading" secondItem="HrI-DL-GBd" secondAttribute="leading" constant="14" id="903-hO-dQh" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target"/>
                                         <constraint firstItem="mx1-zn-oyy" firstAttribute="centerY" secondItem="HrI-DL-GBd" secondAttribute="centerY" id="NTY-T1-Df1"/>
                                         <constraint firstItem="ZxO-Om-OC1" firstAttribute="centerY" secondItem="HrI-DL-GBd" secondAttribute="centerY" constant="10" id="cW9-WH-KWu"/>
                                         <constraint firstItem="DGQ-wr-teW" firstAttribute="centerY" secondItem="HrI-DL-GBd" secondAttribute="centerY" id="vJe-Su-cKN"/>
@@ -1866,19 +1967,24 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="68"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dxv-Gd-l65">
-                                            <rect key="frame" x="14" y="24" width="42" height="20"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dxv-Gd-l65" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                            <rect key="frame" x="14" y="23" width="44" height="22"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="50"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MLf-Cc-uTT">
-                                            <rect key="frame" x="555" y="26" width="31" height="16"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                            <rect key="frame" x="553" y="26" width="33" height="16"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="8K4-i5-AZ4">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="8K4-i5-AZ4">
                                             <rect key="frame" x="541" y="29" width="10" height="10"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="10" id="Uig-lY-oqP"/>
@@ -1889,7 +1995,7 @@
                                     <constraints>
                                         <constraint firstItem="8K4-i5-AZ4" firstAttribute="centerY" secondItem="g0y-il-hwG" secondAttribute="centerY" id="5o1-mm-5CB"/>
                                         <constraint firstItem="dxv-Gd-l65" firstAttribute="centerY" secondItem="g0y-il-hwG" secondAttribute="centerY" id="Dfp-pC-fKm"/>
-                                        <constraint firstItem="dxv-Gd-l65" firstAttribute="leading" secondItem="g0y-il-hwG" secondAttribute="leading" constant="14" id="ov9-Mg-UYU"/>
+                                        <constraint firstItem="dxv-Gd-l65" firstAttribute="leading" secondItem="g0y-il-hwG" secondAttribute="leading" constant="14" id="ov9-Mg-UYU" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target"/>
                                         <constraint firstItem="MLf-Cc-uTT" firstAttribute="leading" secondItem="8K4-i5-AZ4" secondAttribute="trailing" constant="4" id="scE-uY-Wdf"/>
                                         <constraint firstAttribute="trailing" secondItem="MLf-Cc-uTT" secondAttribute="trailing" constant="14" id="syP-we-d1f"/>
                                         <constraint firstItem="MLf-Cc-uTT" firstAttribute="centerY" secondItem="g0y-il-hwG" secondAttribute="centerY" id="tFD-LY-wxp"/>

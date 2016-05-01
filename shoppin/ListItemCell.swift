@@ -40,6 +40,8 @@ class ListItemCell: SwipeableCell {
     @IBOutlet weak var undoLabel1: UILabel!
     @IBOutlet weak var undoLabel2: UILabel!
     
+    @IBOutlet weak var minusTrailingConstraint: NSLayoutConstraint!
+    
     private var delegate: ListItemCellDelegate?
     
     private(set) var status: ListItemStatus?
@@ -141,8 +143,16 @@ class ListItemCell: SwipeableCell {
                 }
             }()
 
+            let minusConstant: CGFloat = {
+                switch mode {
+                case .Note: return 30
+                case .Increment: return 0
+                }
+            }()
+            
             delay(itemsDelay) {[weak self] in
-                self?.plusMinusWidthConstraint.constant = constant
+//                self?.plusMinusWidthConstraint.constant = constant
+//                self?.minusTrailingConstraint.constant = minusConstant
                 UIView.animateWithDuration(0.2) {
                     update()
                 }

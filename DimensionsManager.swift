@@ -141,8 +141,8 @@ class DimensionsManager {
         switch heightDimension {
         case .VerySmall: return 28
         case .Small: return 30
-        case .Middle: return 35
-        case .Large: return 35
+        case .Middle: return 43
+        case .Large: return 43
         }
     }
 
@@ -161,8 +161,8 @@ class DimensionsManager {
         switch heightDimension {
         case .VerySmall: return 65
         case .Small: return 67
-        case .Middle: return 76
-        case .Large: return 76
+        case .Middle: return 82
+        case .Large: return 91
         }
     }
     
@@ -170,7 +170,7 @@ class DimensionsManager {
         switch heightDimension {
         case .VerySmall: return 30
         case .Small: return 30
-        case .Middle: return 35
+        case .Middle: return 30
         case .Large: return 35
         }
     }

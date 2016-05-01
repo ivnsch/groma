@@ -10,11 +10,20 @@ import UIKit
 
 class LineTextField: UITextField {
 
+    @IBInspectable var fontType: Int = -1
+    
     private let lineWidth: CGFloat = 1
     
     private static let defaultLineColor = UIColor.grayColor()
     private var lineColor = defaultLineColor
 
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        if let size = LabelMore.mapToFontSize(fontType) {
+            self.font = UIFont.systemFontOfSize(size)
+        }
+    }
+    
     override func showValidationError() {
         lineColor = UIColor.redColor()
         setNeedsDisplay()

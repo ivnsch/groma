@@ -4,19 +4,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <mutableArray key="HelveticaNeue.ttc">
-            <string>HelveticaNeue</string>
-        </mutableArray>
-        <mutableArray key="HelveticaNeueLights.ttc">
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-        </mutableArray>
-    </customFonts>
     <scenes>
         <!--Auto Complete Data Source-->
         <scene sceneID="mqV-uX-op9">
@@ -31,16 +18,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Price" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="NrU-fN-qdF" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="148" y="108" width="120" height="40"/>
+                                <rect key="frame" x="159" y="106" width="120" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="HqM-K2-C7L"/>
                                     <constraint firstAttribute="width" constant="120" id="qrp-kB-pXC"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
                                         <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
@@ -48,15 +39,19 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="List section" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="i1w-xi-aFz" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="14" y="68" width="502" height="40"/>
+                                <rect key="frame" x="25" y="66" width="480" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="jOx-1e-S6w"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" returnKeyType="next"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
                                         <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
@@ -66,16 +61,20 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Quantity" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="vWS-vL-cob" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="14" y="108" width="120" height="40"/>
+                                <rect key="frame" x="25" y="106" width="120" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="6uo-WM-0CH"/>
                                     <constraint firstAttribute="width" constant="120" id="q9d-EY-Wvb"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="done"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
                                         <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
@@ -83,15 +82,19 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Brand (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="r5b-Sz-J4o" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="14" y="28" width="572" height="40"/>
+                                <rect key="frame" x="25" y="26" width="550" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="bLM-k5-r0i"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
                                         <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
@@ -100,22 +103,31 @@
                                     <outlet property="delegate" destination="CI5-0y-OAL" id="Oyx-oe-qTY"/>
                                 </connections>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new item" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dwL-LH-4dI">
-                                <rect key="frame" x="248" y="8" width="105" height="20"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new item" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dwL-LH-4dI" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="253" y="8" width="94" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yfv-oA-AU6" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="14" y="148" width="572" height="40"/>
+                                <rect key="frame" x="25" y="146" width="561" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="ogx-ge-tLz"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" returnKeyType="done"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
                                         <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
@@ -123,57 +135,82 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xjl-8k-ZTY">
-                                <rect key="frame" x="516" y="68" width="70" height="40"/>
+                                <rect key="frame" x="505" y="66" width="70" height="40"/>
                                 <connections>
                                     <action selector="onSectionColorButtonTap:" destination="CI5-0y-OAL" eventType="touchUpInside" id="Xu7-Uf-KfM"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Colour" placeholder="Colour" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="CcK-74-2fx" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="516" y="68" width="70" height="40"/>
+                                <rect key="frame" x="505" y="66" width="70" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="2T8-cF-A8U"/>
                                     <constraint firstAttribute="width" constant="70" id="MkS-fK-o65"/>
                                 </constraints>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
                                         <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" constant="14" id="1GZ-LS-nJw"/>
+                            <constraint firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" constant="25" id="1GZ-LS-nJw" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstItem="dwL-LH-4dI" firstAttribute="top" secondItem="If7-20-6Xv" secondAttribute="top" constant="8" id="5vc-zY-2WJ"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="i1w-xi-aFz" secondAttribute="trailing" id="8QS-gR-4dR"/>
+                            <constraint firstItem="vWS-vL-cob" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="leading" id="DJF-Fi-30J"/>
                             <constraint firstAttribute="trailing" secondItem="Yfv-oA-AU6" secondAttribute="trailing" constant="14" id="GAE-Dh-oZk"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="width" secondItem="Xjl-8k-ZTY" secondAttribute="width" id="Ixd-KJ-nvO"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="height" secondItem="Xjl-8k-ZTY" secondAttribute="height" id="KLz-mz-O6h"/>
+                            <constraint firstItem="Xjl-8k-ZTY" firstAttribute="bottom" secondItem="CcK-74-2fx" secondAttribute="bottom" id="LLD-Xt-dbo"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="top" secondItem="Xjl-8k-ZTY" secondAttribute="top" id="Lj3-kE-rMA"/>
                             <constraint firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" constant="14" id="PTH-u2-0Wm"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="bottom" secondItem="Xjl-8k-ZTY" secondAttribute="bottom" id="Qj0-os-Vco"/>
-                            <constraint firstItem="i1w-xi-aFz" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="Qwr-vA-3WY"/>
-                            <constraint firstItem="r5b-Sz-J4o" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="Sra-Uc-AlA"/>
+                            <constraint firstItem="CcK-74-2fx" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="top" id="Sha-Jh-tLV"/>
+                            <constraint firstItem="r5b-Sz-J4o" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="25" id="Sra-Uc-AlA" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                             <constraint firstItem="Yfv-oA-AU6" firstAttribute="top" secondItem="vWS-vL-cob" secondAttribute="bottom" id="Tr7-q0-PTa"/>
                             <constraint firstItem="i1w-xi-aFz" firstAttribute="top" secondItem="r5b-Sz-J4o" secondAttribute="bottom" id="Uys-Mm-t4a"/>
-                            <constraint firstItem="Yfv-oA-AU6" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="Xka-df-FOU"/>
+                            <constraint firstItem="Yfv-oA-AU6" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="leading" id="VUC-z5-1Dn"/>
+                            <constraint firstItem="Xjl-8k-ZTY" firstAttribute="leading" secondItem="CcK-74-2fx" secondAttribute="leading" id="XB8-fm-XNW"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="baseline" secondItem="i1w-xi-aFz" secondAttribute="baseline" id="ZXj-Jt-gIn"/>
-                            <constraint firstItem="vWS-vL-cob" firstAttribute="leading" secondItem="If7-20-6Xv" secondAttribute="leading" constant="14" id="c6r-FY-Tco"/>
+                            <constraint firstItem="CcK-74-2fx" firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" id="chq-t4-DD0"/>
                             <constraint firstItem="vWS-vL-cob" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" id="dYT-Ag-kT7"/>
+                            <constraint firstItem="CcK-74-2fx" firstAttribute="trailing" secondItem="r5b-Sz-J4o" secondAttribute="trailing" id="eXm-PX-v89"/>
                             <constraint firstItem="dwL-LH-4dI" firstAttribute="centerX" secondItem="If7-20-6Xv" secondAttribute="centerX" id="ei9-BK-Nvk"/>
+                            <constraint firstItem="i1w-xi-aFz" firstAttribute="leading" secondItem="r5b-Sz-J4o" secondAttribute="leading" id="fUq-lg-gn6"/>
+                            <constraint firstItem="Xjl-8k-ZTY" firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" id="g2U-te-7jt"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="trailing" secondItem="Xjl-8k-ZTY" secondAttribute="trailing" id="lg7-IJ-coN"/>
+                            <constraint firstAttribute="trailing" secondItem="CcK-74-2fx" secondAttribute="trailing" constant="14" id="m3p-bh-n5t"/>
                             <constraint firstItem="NrU-fN-qdF" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="bottom" id="pJC-Cd-QdD"/>
+                            <constraint firstItem="Xjl-8k-ZTY" firstAttribute="top" secondItem="CcK-74-2fx" secondAttribute="top" id="qie-lk-cf9"/>
                             <constraint firstItem="NrU-fN-qdF" firstAttribute="leading" secondItem="vWS-vL-cob" secondAttribute="trailing" constant="14" id="t15-nq-DuK"/>
+                            <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="i1w-xi-aFz" secondAttribute="trailing" id="tXT-pg-CSu"/>
                             <constraint firstItem="CcK-74-2fx" firstAttribute="leading" secondItem="Xjl-8k-ZTY" secondAttribute="leading" id="wmD-8b-t71"/>
                             <constraint firstItem="r5b-Sz-J4o" firstAttribute="top" secondItem="dwL-LH-4dI" secondAttribute="bottom" id="wtZ-u8-wCv"/>
+                            <constraint firstItem="CcK-74-2fx" firstAttribute="top" secondItem="i1w-xi-aFz" secondAttribute="top" id="xIx-72-dxy"/>
+                            <constraint firstItem="CcK-74-2fx" firstAttribute="baseline" secondItem="i1w-xi-aFz" secondAttribute="baseline" id="zw2-ss-6u3"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="8QS-gR-4dR"/>
                                 <exclude reference="Ixd-KJ-nvO"/>
                                 <exclude reference="KLz-mz-O6h"/>
+                                <exclude reference="Lj3-kE-rMA"/>
+                                <exclude reference="PTH-u2-0Wm"/>
+                                <exclude reference="Qj0-os-Vco"/>
+                                <exclude reference="Sha-Jh-tLV"/>
+                                <exclude reference="ZXj-Jt-gIn"/>
+                                <exclude reference="chq-t4-DD0"/>
+                                <exclude reference="lg7-IJ-coN"/>
+                                <exclude reference="m3p-bh-n5t"/>
+                                <exclude reference="wmD-8b-t71"/>
+                                <exclude reference="zw2-ss-6u3"/>
                             </mask>
                         </variation>
                     </view>

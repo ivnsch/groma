@@ -8,7 +8,6 @@
         <!--Title-->
         <scene sceneID="0H8-Bj-p9B">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="PK1-9u-fYa" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="4XP-Eg-MEi" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="AAB-lO-eTa">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -33,6 +32,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="stop" id="q45-6e-Q0i"/>
                     </navigationItem>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PK1-9u-fYa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="486" y="280"/>
         </scene>

@@ -7,7 +7,6 @@
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeueLights.ttc">
             <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <objects>
@@ -23,25 +22,28 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Section name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ueK-br-rbi">
-                    <rect key="frame" x="14" y="10" width="502" height="40"/>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Section name" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ueK-br-rbi" customClass="TextFieldMore" customModule="shoppin" customModuleProvider="target">
+                    <rect key="frame" x="25" y="10" width="496" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="ri7-SH-Hvd"/>
                     </constraints>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
                             <integer key="value" value="30"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="40"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="delegate" destination="-1" id="jxR-id-pKa"/>
                     </connections>
                 </textField>
-                <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Colour" placeholder="Colour" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="cSV-ub-WtW">
-                    <rect key="frame" x="516" y="10" width="70" height="40"/>
+                <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Colour" placeholder="Colour" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="cSV-ub-WtW">
+                    <rect key="frame" x="531" y="10" width="44" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="uDG-B5-vdU"/>
                         <constraint firstAttribute="width" constant="70" id="wME-uy-DjL"/>
@@ -54,9 +56,14 @@
                             <integer key="value" value="10"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="wME-uy-DjL"/>
+                        </mask>
+                    </variation>
                 </textField>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4YT-VI-Gvw">
-                    <rect key="frame" x="516" y="10" width="70" height="40"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4YT-VI-Gvw" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                    <rect key="frame" x="531" y="10" width="44" height="40"/>
                     <connections>
                         <action selector="onColorTap" destination="-1" eventType="touchUpInside" id="MRL-MU-AlW"/>
                     </connections>
@@ -64,12 +71,12 @@
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.59215686270000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="ueK-br-rbi" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="14" id="18X-0d-4uG"/>
+                <constraint firstItem="ueK-br-rbi" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="25" id="18X-0d-4uG" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                 <constraint firstItem="cSV-ub-WtW" firstAttribute="leading" secondItem="4YT-VI-Gvw" secondAttribute="leading" id="6PX-hM-zBJ"/>
                 <constraint firstItem="cSV-ub-WtW" firstAttribute="top" secondItem="4YT-VI-Gvw" secondAttribute="top" id="6fc-Rc-GjQ"/>
                 <constraint firstItem="ueK-br-rbi" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="Bsf-dJ-z8e"/>
-                <constraint firstAttribute="trailing" secondItem="cSV-ub-WtW" secondAttribute="trailing" constant="14" id="bFL-go-qQr"/>
-                <constraint firstItem="cSV-ub-WtW" firstAttribute="leading" secondItem="ueK-br-rbi" secondAttribute="trailing" id="cMM-3R-rRn"/>
+                <constraint firstAttribute="trailing" secondItem="cSV-ub-WtW" secondAttribute="trailing" constant="25" id="bFL-go-qQr" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                <constraint firstItem="cSV-ub-WtW" firstAttribute="leading" secondItem="ueK-br-rbi" secondAttribute="trailing" constant="10" id="cMM-3R-rRn"/>
                 <constraint firstItem="cSV-ub-WtW" firstAttribute="bottom" secondItem="4YT-VI-Gvw" secondAttribute="bottom" id="hgK-bi-GyI"/>
                 <constraint firstItem="cSV-ub-WtW" firstAttribute="baseline" secondItem="ueK-br-rbi" secondAttribute="baseline" id="mto-aj-en7"/>
                 <constraint firstItem="cSV-ub-WtW" firstAttribute="trailing" secondItem="4YT-VI-Gvw" secondAttribute="trailing" id="sNh-hL-nnB"/>

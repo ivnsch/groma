@@ -4,11 +4,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <mutableArray key="HelveticaNeueLights.ttc">
-            <string>HelveticaNeue-Light</string>
-        </mutableArray>
-    </customFonts>
     <scenes>
         <!--Reorder Section Table View Controller-->
         <scene sceneID="5bY-WD-zlb">
@@ -33,15 +28,20 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="35"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hZG-Sh-ogp">
-                                                    <rect key="frame" x="8" y="7" width="40" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hZG-Sh-ogp" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="25" y="7" width="44" height="22"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="50"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="hZG-Sh-ogp" firstAttribute="leading" secondItem="5DA-mJ-e6r" secondAttribute="leading" constant="8" id="VgO-yf-twa"/>
+                                                <constraint firstItem="hZG-Sh-ogp" firstAttribute="leading" secondItem="5DA-mJ-e6r" secondAttribute="leading" constant="25" id="VgO-yf-twa" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                                 <constraint firstItem="hZG-Sh-ogp" firstAttribute="centerY" secondItem="5DA-mJ-e6r" secondAttribute="centerY" id="hnO-2i-70y"/>
                                             </constraints>
                                         </tableViewCellContentView>

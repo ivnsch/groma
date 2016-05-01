@@ -11,6 +11,8 @@ import UIKit
 // UIButton with utilities
 class ButtonMore: UIButton {
 
+    @IBInspectable var fontType: Int = -1
+    
     var currentSelectedTintColor: UIColor?
     
     let selectedTintColor: UIColor = UIColor.darkGrayColor()
@@ -52,6 +54,14 @@ class ButtonMore: UIButton {
                 currentSelectedTintColor = nil
             }
             super.selected = newValue
+        }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        if let size = LabelMore.mapToFontSize(fontType) {
+            self.titleLabel?.font = UIFont.systemFontOfSize(size)
         }
     }
 }

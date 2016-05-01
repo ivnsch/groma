@@ -7,11 +7,6 @@
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeue.ttc">
             <string>HelveticaNeue</string>
-            <string>HelveticaNeue</string>
-        </mutableArray>
-        <mutableArray key="HelveticaNeueLights.ttc">
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <objects>
@@ -32,23 +27,38 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wc1-WB-Cx0">
                     <rect key="frame" x="0.0" y="0.0" width="569" height="64"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Datum" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="x5x-Ld-BLT">
-                            <rect key="frame" x="14" y="12" width="499" height="20"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Datum" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="x5x-Ld-BLT" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                            <rect key="frame" x="20" y="11" width="478" height="22"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                    <integer key="value" value="50"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Preis" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1XK-Ns-czE">
-                            <rect key="frame" x="523" y="23" width="32" height="18"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Preis" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1XK-Ns-czE" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                            <rect key="frame" x="508" y="21" width="41" height="22"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                    <integer key="value" value="50"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Rhx-FB-89p">
-                            <rect key="frame" x="14" y="33" width="499" height="18"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Rhx-FB-89p" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                            <rect key="frame" x="20" y="33" width="478" height="18"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                    <integer key="value" value="40"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
                         </label>
                     </subviews>
                     <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
@@ -56,9 +66,9 @@
                         <constraint firstItem="Rhx-FB-89p" firstAttribute="centerY" secondItem="Wc1-WB-Cx0" secondAttribute="centerY" constant="10" id="Bi9-YM-tro"/>
                         <constraint firstItem="1XK-Ns-czE" firstAttribute="leading" secondItem="Rhx-FB-89p" secondAttribute="trailing" constant="10" id="Cd3-oW-tIw"/>
                         <constraint firstItem="1XK-Ns-czE" firstAttribute="leading" secondItem="x5x-Ld-BLT" secondAttribute="trailing" constant="10" id="PmB-52-PGi"/>
-                        <constraint firstItem="x5x-Ld-BLT" firstAttribute="leading" secondItem="Wc1-WB-Cx0" secondAttribute="leading" constant="14" id="QAO-Or-H55"/>
+                        <constraint firstItem="x5x-Ld-BLT" firstAttribute="leading" secondItem="Wc1-WB-Cx0" secondAttribute="leading" constant="20" id="QAO-Or-H55"/>
                         <constraint firstItem="1XK-Ns-czE" firstAttribute="centerY" secondItem="Wc1-WB-Cx0" secondAttribute="centerY" id="Vdc-BK-Or4"/>
-                        <constraint firstAttribute="trailing" secondItem="1XK-Ns-czE" secondAttribute="trailing" constant="14" id="iag-zV-7Fg"/>
+                        <constraint firstAttribute="trailing" secondItem="1XK-Ns-czE" secondAttribute="trailing" constant="20" id="iag-zV-7Fg"/>
                         <constraint firstItem="x5x-Ld-BLT" firstAttribute="centerY" secondItem="Wc1-WB-Cx0" secondAttribute="centerY" constant="-10" id="jaU-xP-E3N"/>
                         <constraint firstItem="Rhx-FB-89p" firstAttribute="leading" secondItem="x5x-Ld-BLT" secondAttribute="leading" id="zzs-mG-FVs"/>
                     </constraints>

@@ -1,0 +1,48 @@
+//
+//  LabelMore.swift
+//  shoppin
+//
+//  Created by ischuetz on 01/05/16.
+//  Copyright © 2016 ivanschuetz. All rights reserved.
+//
+
+import UIKit
+import QorumLogs
+
+@IBDesignable class LabelMore: UILabel {
+    
+    @IBInspectable var fontType: Int = -1
+    
+    static func mapToFontSize(fontType: Int) -> CGFloat? {
+        switch (DimensionsManager.widthDimension, fontType) {
+        case (.Small, 20): return 11
+        case (.Small, 30): return 13
+        case (.Small, 40): return 15
+        case (.Small, 50): return 17
+        case (.Small, 60): return 19
+
+        case (.Middle, 20): return 11
+        case (.Middle, 30): return 13
+        case (.Middle, 40): return 15
+        case (.Middle, 50): return 18
+        case (.Middle, 60): return 20
+
+        case (.Large, 20): return 13
+        case (.Large, 30): return 15
+        case (.Large, 40): return 17
+        case (.Large, 50): return 19
+        case (.Large, 60): return 21
+        
+        default:
+            QL3("Didn't provide fontType: \(fontType)")
+            return nil
+        }
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        if let size = LabelMore.mapToFontSize(fontType) {
+            self.font = UIFont.systemFontOfSize(size)
+        }
+    }
+}

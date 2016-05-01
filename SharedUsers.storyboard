@@ -3,18 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <mutableArray key="HelveticaNeue.ttc">
-            <string>HelveticaNeue</string>
-        </mutableArray>
-        <mutableArray key="HelveticaNeueLights.ttc">
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-        </mutableArray>
-    </customFonts>
     <scenes>
         <!--Shared Users Controller-->
         <scene sceneID="QYc-Ox-YGk">
@@ -51,7 +40,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Nd-kj-5ag">
-                                                    <rect key="frame" x="556" y="10" width="30" height="30"/>
+                                                    <rect key="frame" x="545" y="10" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="30" id="rJJ-9X-9MW"/>
                                                         <constraint firstAttribute="height" constant="30" id="shE-u4-5Hg"/>
@@ -63,20 +52,31 @@
                                                         <action selector="onAddTap:" destination="MEl-Am-AKG" eventType="touchUpInside" id="McY-pN-0ga"/>
                                                     </connections>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jeu-Q5-5ML">
-                                                    <rect key="frame" x="18" y="16" width="564" height="18"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jeu-Q5-5ML" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="25" y="16" width="510" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="40"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="jeu-Q5-5ML" firstAttribute="leading" secondItem="3ro-W6-mik" secondAttribute="leadingMargin" constant="10" id="3qc-CY-eDH"/>
+                                                <constraint firstItem="jeu-Q5-5ML" firstAttribute="leading" secondItem="3ro-W6-mik" secondAttribute="leading" constant="25" id="GrR-eN-ad9" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                                 <constraint firstAttribute="trailing" secondItem="2Nd-kj-5ag" secondAttribute="trailing" constant="14" id="H0l-Tg-NRv"/>
                                                 <constraint firstItem="jeu-Q5-5ML" firstAttribute="centerY" secondItem="3ro-W6-mik" secondAttribute="centerY" id="TMJ-1d-rJb"/>
+                                                <constraint firstItem="2Nd-kj-5ag" firstAttribute="leading" secondItem="jeu-Q5-5ML" secondAttribute="trailing" constant="10" id="eCG-Lx-TZN"/>
+                                                <constraint firstAttribute="trailing" secondItem="2Nd-kj-5ag" secondAttribute="trailing" constant="25" id="fG5-gr-JsT" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                                 <constraint firstItem="2Nd-kj-5ag" firstAttribute="centerY" secondItem="3ro-W6-mik" secondAttribute="centerY" id="wBV-0n-yf5"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="jeu-Q5-5ML" secondAttribute="trailing" constant="10" id="xaO-wJ-ksk"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="H0l-Tg-NRv"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="emailLabel" destination="jeu-Q5-5ML" id="poy-rv-90r"/>
@@ -89,30 +89,45 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="49"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ops-44-eo7">
-                                                    <rect key="frame" x="18" y="16" width="564" height="18"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ops-44-eo7" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="25" y="16" width="466" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="40"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1gA-WI-4Gm">
-                                                    <rect key="frame" x="556" y="10" width="30" height="30"/>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1gA-WI-4Gm" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="545" y="10" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="39e-Ef-KLp"/>
                                                         <constraint firstAttribute="width" constant="30" id="L5g-1W-eO4"/>
                                                     </constraints>
                                                     <state key="normal" title="x">
-                                                        <color key="titleColor" red="0.63137254901960782" green="0.65490196078431373" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="40"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                     <connections>
                                                         <action selector="onDeleteTap:" destination="8lJ-FF-muE" eventType="touchUpInside" id="YzB-Ft-3EF"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bey-ba-QU5">
-                                                    <rect key="frame" x="512" y="10" width="30" height="30"/>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="252" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bey-ba-QU5" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="501" y="10" width="30" height="30"/>
                                                     <state key="normal" title="Pull">
-                                                        <color key="titleColor" red="0.63137254901960782" green="0.65490196078431373" blue="0.65490196078431373" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="titleColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="40"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                     <connections>
                                                         <action selector="onPullTap:" destination="8lJ-FF-muE" eventType="touchUpInside" id="riv-0i-iDm"/>
                                                     </connections>
@@ -121,12 +136,18 @@
                                             <constraints>
                                                 <constraint firstItem="1gA-WI-4Gm" firstAttribute="leading" secondItem="Bey-ba-QU5" secondAttribute="trailing" constant="14" id="69h-zf-NVF"/>
                                                 <constraint firstItem="ops-44-eo7" firstAttribute="centerY" secondItem="v77-0u-IQh" secondAttribute="centerY" id="8fT-N2-gdq"/>
-                                                <constraint firstItem="ops-44-eo7" firstAttribute="leading" secondItem="v77-0u-IQh" secondAttribute="leading" constant="18" id="RGx-2S-SEB"/>
+                                                <constraint firstAttribute="trailing" secondItem="1gA-WI-4Gm" secondAttribute="trailing" constant="25" id="Lsh-Fx-isk" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                                                <constraint firstItem="ops-44-eo7" firstAttribute="leading" secondItem="v77-0u-IQh" secondAttribute="leading" constant="25" id="RGx-2S-SEB" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                                                <constraint firstItem="Bey-ba-QU5" firstAttribute="leading" secondItem="ops-44-eo7" secondAttribute="trailing" constant="10" id="WPp-yp-bRH"/>
                                                 <constraint firstAttribute="trailing" secondItem="1gA-WI-4Gm" secondAttribute="trailing" constant="14" id="WWR-qe-SIo"/>
-                                                <constraint firstAttribute="trailing" secondItem="ops-44-eo7" secondAttribute="trailing" constant="18" id="Wf4-0t-129"/>
                                                 <constraint firstItem="Bey-ba-QU5" firstAttribute="centerY" secondItem="v77-0u-IQh" secondAttribute="centerY" id="mnh-S2-v4E"/>
                                                 <constraint firstItem="1gA-WI-4Gm" firstAttribute="centerY" secondItem="v77-0u-IQh" secondAttribute="centerY" id="uX9-se-nNL"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="WWR-qe-SIo"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="emailLabel" destination="ops-44-eo7" id="BN1-en-qqn"/>
@@ -140,7 +161,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zfC-Vb-FUc">
-                                                    <rect key="frame" x="556" y="10" width="30" height="30"/>
+                                                    <rect key="frame" x="545" y="10" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="30" id="F9H-DQ-RtJ"/>
                                                         <constraint firstAttribute="width" constant="30" id="Stz-GZ-Ci3"/>
@@ -152,18 +173,23 @@
                                                         <action selector="onInfoTap:" destination="ZvO-LF-uTB" eventType="touchUpInside" id="o7Q-N8-8sr"/>
                                                     </connections>
                                                 </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="chc-Gh-oNj">
-                                                    <rect key="frame" x="18" y="16" width="564" height="18"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                                    <color key="textColor" red="0.63137254899999995" green="0.65490196079999996" blue="0.65490196079999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="chc-Gh-oNj" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="25" y="16" width="510" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="40"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="zfC-Vb-FUc" secondAttribute="trailing" constant="14" id="4mf-0E-TwV"/>
-                                                <constraint firstAttribute="trailing" secondItem="chc-Gh-oNj" secondAttribute="trailing" constant="18" id="7nI-Gb-qHm"/>
+                                                <constraint firstAttribute="trailing" secondItem="zfC-Vb-FUc" secondAttribute="trailing" constant="25" id="4mf-0E-TwV" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                                                <constraint firstItem="zfC-Vb-FUc" firstAttribute="leading" secondItem="chc-Gh-oNj" secondAttribute="trailing" constant="10" id="5h4-tN-X8Z"/>
                                                 <constraint firstItem="chc-Gh-oNj" firstAttribute="centerY" secondItem="b1c-pk-26t" secondAttribute="centerY" id="Mci-iO-t9M"/>
-                                                <constraint firstItem="chc-Gh-oNj" firstAttribute="leading" secondItem="b1c-pk-26t" secondAttribute="leading" constant="18" id="VOx-iF-lkn"/>
+                                                <constraint firstItem="chc-Gh-oNj" firstAttribute="leading" secondItem="b1c-pk-26t" secondAttribute="leading" constant="25" id="VOx-iF-lkn" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                                 <constraint firstItem="zfC-Vb-FUc" firstAttribute="centerY" secondItem="b1c-pk-26t" secondAttribute="centerY" id="gEK-hC-8cY"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -177,11 +203,16 @@
                                     <outlet property="delegate" destination="qtb-k1-2Rj" id="pnj-sn-2wk"/>
                                 </connections>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Existing participants" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UuL-oD-72e">
-                                <rect key="frame" x="232" y="95" width="136" height="18"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Existing participants" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UuL-oD-72e" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="231" y="95" width="139" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="0.95686274510000002" green="0.95686274510000002" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>

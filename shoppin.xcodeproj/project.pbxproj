@@ -791,6 +791,9 @@
 		EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */; };
 		EBB5A04D1B6596D400FB9C58 /* ProviderFetchModus.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */; };
 		EBB6D74E1CD628A200F9C711 /* MultiLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB6D74D1CD628A200F9C711 /* MultiLayoutConstraint.swift */; };
+		EBB6D7501CD68EC900F9C711 /* LabelMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB6D74F1CD68EC900F9C711 /* LabelMore.swift */; };
+		EBB6D7521CD6910D00F9C711 /* LeftRightPaddingConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB6D7511CD6910D00F9C711 /* LeftRightPaddingConstraint.swift */; };
+		EBB6D7561CD69E6100F9C711 /* TextFieldMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB6D7551CD69E6100F9C711 /* TextFieldMore.swift */; };
 		EBB8FC7B1CD3EBC2008FD084 /* WebsocketHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB8FC7A1CD3EBC2008FD084 /* WebsocketHelper.swift */; };
 		EBB9A72E1B5EB00E00E5487D /* InventoriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A72D1B5EB00E00E5487D /* InventoriesTableViewController.swift */; };
 		EBB9A7301B5EB08C00E5487D /* Inventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A72F1B5EB08C00E5487D /* Inventory.swift */; };
@@ -1511,6 +1514,9 @@
 		EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValidationAlert.swift; sourceTree = "<group>"; };
 		EBB5A04C1B6596D400FB9C58 /* ProviderFetchModus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProviderFetchModus.swift; sourceTree = "<group>"; };
 		EBB6D74D1CD628A200F9C711 /* MultiLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultiLayoutConstraint.swift; sourceTree = "<group>"; };
+		EBB6D74F1CD68EC900F9C711 /* LabelMore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelMore.swift; sourceTree = "<group>"; };
+		EBB6D7511CD6910D00F9C711 /* LeftRightPaddingConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftRightPaddingConstraint.swift; sourceTree = "<group>"; };
+		EBB6D7551CD69E6100F9C711 /* TextFieldMore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldMore.swift; sourceTree = "<group>"; };
 		EBB8FC7A1CD3EBC2008FD084 /* WebsocketHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsocketHelper.swift; sourceTree = "<group>"; };
 		EBB9A72D1B5EB00E00E5487D /* InventoriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoriesTableViewController.swift; sourceTree = "<group>"; };
 		EBB9A72F1B5EB08C00E5487D /* Inventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inventory.swift; sourceTree = "<group>"; };
@@ -2284,6 +2290,9 @@
 				EBEA0CCE1CA5B24C00E68B81 /* MyAutocompleteCell.xib */,
 				EB1608F31CC594BA0038AB54 /* AccessTokenHelper.swift */,
 				EBB6D74D1CD628A200F9C711 /* MultiLayoutConstraint.swift */,
+				EBB6D74F1CD68EC900F9C711 /* LabelMore.swift */,
+				EBB6D7551CD69E6100F9C711 /* TextFieldMore.swift */,
+				EBB6D7511CD6910D00F9C711 /* LeftRightPaddingConstraint.swift */,
 			);
 			name = common;
 			sourceTree = "<group>";
@@ -3878,6 +3887,7 @@
 				EBCE418B1B5D10BA00583551 /* ListTableViewCell.swift in Sources */,
 				EBB6D74E1CD628A200F9C711 /* MultiLayoutConstraint.swift in Sources */,
 				EB1B36451BC1D001003519F2 /* MLPAutoCompleteTextField.m in Sources */,
+				EBB6D7521CD6910D00F9C711 /* LeftRightPaddingConstraint.swift in Sources */,
 				EB6F8DE11C1B29B300C05466 /* InventoryItemId.swift in Sources */,
 				EBBF2B9B1CA4BBA1003A9449 /* InvitedUserCell.swift in Sources */,
 				EB6E3D511C5A9ADE00D65DD5 /* RealmGlobalProvider.swift in Sources */,
@@ -3913,6 +3923,7 @@
 				EB792A281B95CCE10004BEEC /* RemoteSocialLoginResult.swift in Sources */,
 				EBEE7E5F1C97564F00DBCB6A /* RealmInventoryItemProvider.swift in Sources */,
 				EB8D1D151C396F8300ADF884 /* InventoryItemsController.swift in Sources */,
+				EBB6D7561CD69E6100F9C711 /* TextFieldMore.swift in Sources */,
 				EBDCA1311B8A124B000020BF /* NSDate.swift in Sources */,
 				EB7E832A1B7B72B9009DEEF4 /* HistoryItemMapper.swift in Sources */,
 				EB1B36611BC47D88003519F2 /* PlanProvider.swift in Sources */,
@@ -3939,6 +3950,7 @@
 				EB4147B81BDFE9FB00549CE4 /* ManageProductsCell.swift in Sources */,
 				EBB526711BEFD8C10002A286 /* HelpProviderImpl.swift in Sources */,
 				EB40A46E1B550804000E9CAD /* RealmProvider.swift in Sources */,
+				EBB6D7501CD68EC900F9C711 /* LabelMore.swift in Sources */,
 				EBA7AC961BFE95AF00247A8C /* RemoteProductCategory.swift in Sources */,
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
 				EBD27CCE1C1710F8005D8305 /* RemoteGroupsProvider.swift in Sources */,

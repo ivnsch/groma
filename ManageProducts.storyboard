@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeueLights.ttc">
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
@@ -320,18 +313,28 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oip-Bv-T0W">
                                 <rect key="frame" x="0.0" y="20" width="600" height="40"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uaW-wg-NEG">
-                                        <rect key="frame" x="489" y="12" width="45" height="16"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
-                                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Sort by:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uaW-wg-NEG" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="461" y="11" width="54" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                <integer key="value" value="40"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tm6-P2-xyl">
-                                        <rect key="frame" x="550" y="6" width="36" height="28"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tm6-P2-xyl" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="531" y="5" width="44" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <state key="normal" title="Usage">
-                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                <integer key="value" value="40"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="onSortByTap:" destination="Mm3-oP-cdT" eventType="touchUpInside" id="MOY-vK-eno"/>
                                         </connections>
@@ -346,7 +349,7 @@
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="Tm6-P2-xyl" secondAttribute="trailing" constant="14" id="6Gb-5n-utY"/>
+                                    <constraint firstAttribute="trailing" secondItem="Tm6-P2-xyl" secondAttribute="trailing" constant="25" id="6Gb-5n-utY"/>
                                     <constraint firstItem="Tm6-P2-xyl" firstAttribute="leading" secondItem="uaW-wg-NEG" secondAttribute="trailing" constant="16" id="925-15-eAx"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="Cy9-Op-gfL"/>
                                     <constraint firstItem="Tm6-P2-xyl" firstAttribute="centerY" secondItem="oip-Bv-T0W" secondAttribute="centerY" id="Dis-GD-wxq"/>
@@ -386,18 +389,23 @@
                                                 <constraint firstAttribute="width" constant="20" id="hAl-EJ-mwd"/>
                                             </constraints>
                                         </activityIndicatorView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Zv-mK-Xqr">
-                                            <rect key="frame" x="36" y="12" width="59" height="21"/>
-                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Zv-mK-Xqr" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                            <rect key="frame" x="48" y="13" width="55" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                            <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                    <integer key="value" value="40"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </label>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="44" id="GWV-UX-WqT"/>
                                         <constraint firstItem="0lz-8d-axl" firstAttribute="centerY" secondItem="ubd-oF-jDC" secondAttribute="centerY" id="q1w-EY-Yva"/>
-                                        <constraint firstItem="8Zv-mK-Xqr" firstAttribute="leading" secondItem="0lz-8d-axl" secondAttribute="trailing" constant="8" id="sn4-Z8-2px"/>
+                                        <constraint firstItem="8Zv-mK-Xqr" firstAttribute="leading" secondItem="0lz-8d-axl" secondAttribute="trailing" constant="20" id="sn4-Z8-2px"/>
                                         <constraint firstItem="0lz-8d-axl" firstAttribute="leading" secondItem="ubd-oF-jDC" secondAttribute="leading" constant="8" id="unj-hB-mpv"/>
                                         <constraint firstItem="8Zv-mK-Xqr" firstAttribute="centerY" secondItem="0lz-8d-axl" secondAttribute="centerY" id="wnI-nX-xnB"/>
                                     </constraints>
@@ -413,27 +421,37 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="63"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PWR-nr-FTi">
-                                                    <rect key="frame" x="552" y="4" width="40" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PWR-nr-FTi" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="531" y="0.0" width="44" height="22"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="50"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wRH-9P-Cgb">
-                                                    <rect key="frame" x="8" y="4" width="40" height="21"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wRH-9P-Cgb" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="25" y="0.0" width="44" height="22"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                            <integer key="value" value="50"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AN1-gg-SBs">
-                                                    <rect key="frame" x="8" y="45" width="31" height="16"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AN1-gg-SBs" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="25" y="44" width="38" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.65783535420000006" green="0.66059565139999998" blue="0.66513256320000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HDP-Ig-OTR">
-                                                    <rect key="frame" x="8" y="27" width="31" height="16"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HDP-Ig-OTR" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                    <rect key="frame" x="25" y="24" width="38" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -443,13 +461,13 @@
                                                 <constraint firstItem="HDP-Ig-OTR" firstAttribute="top" secondItem="wRH-9P-Cgb" secondAttribute="bottom" constant="2" id="9hd-Z1-PSu"/>
                                                 <constraint firstItem="AN1-gg-SBs" firstAttribute="leading" secondItem="wRH-9P-Cgb" secondAttribute="leading" id="AZP-zS-1Aa"/>
                                                 <constraint firstItem="HDP-Ig-OTR" firstAttribute="leading" secondItem="wRH-9P-Cgb" secondAttribute="leading" id="Ku0-nR-yur"/>
-                                                <constraint firstItem="wRH-9P-Cgb" firstAttribute="top" secondItem="Kqx-Ig-KUx" secondAttribute="top" constant="4" id="LEI-09-1Fp"/>
+                                                <constraint firstItem="wRH-9P-Cgb" firstAttribute="top" secondItem="Kqx-Ig-KUx" secondAttribute="top" id="LEI-09-1Fp"/>
                                                 <constraint firstItem="wRH-9P-Cgb" firstAttribute="centerY" secondItem="Kqx-Ig-KUx" secondAttribute="centerY" constant="-10" id="MHf-ax-l6B"/>
-                                                <constraint firstAttribute="trailing" secondItem="PWR-nr-FTi" secondAttribute="trailing" constant="8" id="QCv-7g-wf6"/>
+                                                <constraint firstAttribute="trailing" secondItem="PWR-nr-FTi" secondAttribute="trailing" constant="25" id="QCv-7g-wf6" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                                 <constraint firstItem="wRH-9P-Cgb" firstAttribute="centerY" secondItem="Kqx-Ig-KUx" secondAttribute="centerY" id="R6S-6g-AjV"/>
                                                 <constraint firstItem="PWR-nr-FTi" firstAttribute="centerY" secondItem="wRH-9P-Cgb" secondAttribute="centerY" id="asw-ln-x5t"/>
                                                 <constraint firstItem="AN1-gg-SBs" firstAttribute="centerY" secondItem="Kqx-Ig-KUx" secondAttribute="centerY" constant="10" id="dVD-h7-Pia"/>
-                                                <constraint firstItem="wRH-9P-Cgb" firstAttribute="leading" secondItem="Kqx-Ig-KUx" secondAttribute="leading" constant="8" id="daQ-Oc-fZR"/>
+                                                <constraint firstItem="wRH-9P-Cgb" firstAttribute="leading" secondItem="Kqx-Ig-KUx" secondAttribute="leading" constant="25" id="daQ-Oc-fZR" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">

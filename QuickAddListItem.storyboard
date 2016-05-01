@@ -14,7 +14,6 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -31,12 +30,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Search" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="tof-Zs-Hco" customClass="RoundTextField" customModule="shoppin">
-                                <rect key="frame" x="10" y="30" width="580" height="35"/>
+                                <rect key="frame" x="20" y="30" width="560" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="7T7-qi-eka"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </textField>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mt4-1h-sRG">
                                 <rect key="frame" x="0.0" y="65" width="600" height="535"/>
@@ -49,9 +53,9 @@
                         <constraints>
                             <constraint firstItem="mt4-1h-sRG" firstAttribute="top" secondItem="tof-Zs-Hco" secondAttribute="bottom" id="CrW-zp-1ck"/>
                             <constraint firstItem="tof-Zs-Hco" firstAttribute="top" secondItem="tHf-2A-8l9" secondAttribute="bottom" constant="10" id="Ea8-pn-1FI"/>
-                            <constraint firstAttribute="trailing" secondItem="tof-Zs-Hco" secondAttribute="trailing" constant="10" id="Heh-Bc-xTE"/>
+                            <constraint firstAttribute="trailing" secondItem="tof-Zs-Hco" secondAttribute="trailing" constant="20" id="Heh-Bc-xTE"/>
                             <constraint firstItem="tof-Zs-Hco" firstAttribute="top" secondItem="tHf-2A-8l9" secondAttribute="bottom" id="U8I-y4-y3A"/>
-                            <constraint firstItem="tof-Zs-Hco" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" constant="10" id="icV-i9-SYf"/>
+                            <constraint firstItem="tof-Zs-Hco" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" constant="20" id="icV-i9-SYf"/>
                             <constraint firstItem="mt4-1h-sRG" firstAttribute="leading" secondItem="uPF-XL-vgJ" secondAttribute="leading" id="jMO-Hq-uXS"/>
                             <constraint firstItem="zcT-I6-trj" firstAttribute="top" secondItem="mt4-1h-sRG" secondAttribute="bottom" id="mpG-Wh-cPX"/>
                             <constraint firstAttribute="trailing" secondItem="mt4-1h-sRG" secondAttribute="trailing" id="vsw-a8-yxY"/>

@@ -4,11 +4,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <mutableArray key="HelveticaNeue.ttc">
-            <string>HelveticaNeue</string>
-        </mutableArray>
-    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -16,18 +11,23 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="47"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ux6-EP-7il">
-                    <rect key="frame" x="14" y="15" width="572" height="18"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ux6-EP-7il" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                    <rect key="frame" x="20" y="15" width="560" height="18"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                            <integer key="value" value="40"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
                 </label>
             </subviews>
             <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="Ux6-EP-7il" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="8Ni-OG-8oR"/>
-                <constraint firstAttribute="trailing" secondItem="Ux6-EP-7il" secondAttribute="trailing" constant="14" id="PoA-dg-8UZ"/>
-                <constraint firstItem="Ux6-EP-7il" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="14" id="iiO-iL-C8j"/>
+                <constraint firstAttribute="trailing" secondItem="Ux6-EP-7il" secondAttribute="trailing" constant="20" id="PoA-dg-8UZ"/>
+                <constraint firstItem="Ux6-EP-7il" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="iiO-iL-C8j"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
