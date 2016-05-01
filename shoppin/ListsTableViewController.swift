@@ -56,12 +56,27 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketLists:", name: WSNotificationName.Lists.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onListInvitationAccepted:", name: Notification.ListInvitationAccepted.rawValue, object: nil)
+        
+        initGlobalTabBar() // since ListsTableViewController is the always the first controller (that shows a tabbar) init tabBar insets here. Tried to do this in AppDelegate with root controller it doesn't have tabBarController.
     }
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
+    private func initGlobalTabBar() {
+        if let tabBar = tabBarController?.tabBar {
+            for tabBarItem in tabBar.items! {
+                tabBarItem.title = ""
+                // Center images (otherwise space for text stays), src http://stackoverflow.com/questions/26494130/remove-tab-bar-item-text-show-only-image
+                // TODO calculate inset dynamically if possible, can we get dynamically the height of the images?
+                tabBarItem.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0)
+            }
+        } else {
+            QL4("Couldn't set tabitems appearance, tabBar is nil")
+        }
+    }
+    
     override func onPullToAdd() {
         onAddTap(false)
     }

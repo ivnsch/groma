@@ -228,11 +228,11 @@
             </objects>
             <point key="canvasLocation" x="-1625.9999999999998" y="861.99999999999989"/>
         </scene>
-        <!--List-->
+        <!--Navigation Controller-->
         <scene sceneID="aBY-Kl-kXd">
             <objects>
                 <navigationController storyboardIdentifier="NavigationController" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="c6K-Tm-JhD" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="List" image="list" selectedImage="list_selected" id="uJG-Eo-xiW"/>
+                    <tabBarItem key="tabBarItem" title="" image="list" selectedImage="list_selected" id="uJG-Eo-xiW"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="FPI-Ud-Czg">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -626,7 +626,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Real time connection" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j2q-bI-zJT">
                                 <rect key="frame" x="14" y="234" width="144" height="39"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="64f-ws-Ybt">
@@ -827,11 +827,11 @@
             </objects>
             <point key="canvasLocation" x="737" y="1216.9999999999998"/>
         </scene>
-        <!--Inventory-->
+        <!--Navigation Controller-->
         <scene sceneID="8Hn-kj-aan">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="7A1-RK-HJT" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Inventory" image="inventory" selectedImage="inventory_selected" id="yUm-WR-GoU"/>
+                    <tabBarItem key="tabBarItem" title="" image="inventory" selectedImage="inventory_selected" id="yUm-WR-GoU"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="QjE-wI-irz">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -908,7 +908,7 @@
             </objects>
             <point key="canvasLocation" x="-3565" y="1594.5"/>
         </scene>
-        <!--Groups-->
+        <!--Groups Controller-->
         <scene sceneID="qcl-F7-W8f">
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="Nmw-ML-kCx" customClass="GroupsController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
@@ -1001,7 +1001,7 @@
                             <constraint firstAttribute="trailing" secondItem="RXy-3J-Yb9" secondAttribute="trailing" id="uCi-It-nRW"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Groups" image="group" selectedImage="group_selected" id="ddO-2P-JLY"/>
+                    <tabBarItem key="tabBarItem" title="" image="group" selectedImage="group_selected" id="ddO-2P-JLY"/>
                     <connections>
                         <outlet property="emptyView" destination="6hQ-kC-l5Y" id="KC3-0Q-jk4"/>
                         <outlet property="topBar" destination="DgW-bs-fnp" id="eUx-Ze-vx7"/>
@@ -1661,11 +1661,11 @@
             </objects>
             <point key="canvasLocation" x="-2130" y="3130.9999999999995"/>
         </scene>
-        <!--More-->
+        <!--Navigation Controller-->
         <scene sceneID="GTf-S5-Syy">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="B4w-vm-AVy" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="More" image="more" selectedImage="more_selected" id="cLJ-PG-GFJ"/>
+                    <tabBarItem key="tabBarItem" title="" image="more" selectedImage="more_selected" id="cLJ-PG-GFJ"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ufI-Hd-Hpl">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1680,11 +1680,11 @@
             </objects>
             <point key="canvasLocation" x="-573" y="2325"/>
         </scene>
-        <!--Report-->
+        <!--Navigation Controller-->
         <scene sceneID="l2K-BR-pix">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Tva-Bh-1q8" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Report" image="stats" selectedImage="stats_selected" id="omU-Id-l2V"/>
+                    <tabBarItem key="tabBarItem" title="" image="stats" selectedImage="stats_selected" id="omU-Id-l2V"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="qy3-eD-XlX">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
