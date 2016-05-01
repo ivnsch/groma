@@ -41,6 +41,22 @@ class ProductWithQuantityTableViewCell: UITableViewCell {
         delegate?.onDecrementItemTap(self)
     }
     
+    override func setEditing(editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        
+        func animate(alpha: CGFloat) {
+            UIView.animateWithDuration(0.2) {[weak self] in
+                self?.categoryColorView.alpha = alpha
+            }
+        }
+
+        if editing {
+            animate(0)
+        } else {
+            animate(1)
+        }
+    }
+    
     func startDeleteProgress(onComplete: VoidFunction) {
         deleteProgressViewWidth.constant = deleteProgressContainer.frame.width
         isAnimatingProgress = true

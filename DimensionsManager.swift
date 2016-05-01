@@ -175,4 +175,15 @@ class DimensionsManager {
         }
     }
     
+    // MARK: User details
+    
+    static var userDetailsLogoutButtonRadius: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 18
+        case .Small: return 18
+        case .Middle: return 25
+        case .Large: return 25
+        }
+    }
+    
 }

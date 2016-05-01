@@ -11,7 +11,7 @@ import UIKit
 class HelpItemSectionModel: SectionModel<HelpItem> {
     var boldRange: NSRange?
     var textHeight: CGFloat? // calculate text size only once, since this is a bit expensive
-    init(expanded: Bool = true, obj: HelpItem, boldRange: NSRange? = nil, textHeight: CGFloat? = nil) {
+    init(expanded: Bool = false, obj: HelpItem, boldRange: NSRange? = nil, textHeight: CGFloat? = nil) {
         self.boldRange = boldRange
         super.init(expanded: expanded, obj: obj)
     }
@@ -44,6 +44,7 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let recognizer = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
         recognizer.delegate = self
+        recognizer.cancelsTouchesInView = false
         view.addGestureRecognizer(recognizer)
         
         Providers.helpProvider.helpItems(successHandler {[weak self] helpItems in

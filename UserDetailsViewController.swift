@@ -21,6 +21,7 @@ class UserDetailsViewController: UIViewController {
     var delegate: UserDetailsViewControllerDelegate?
 
     @IBOutlet weak var userIdLabel: UILabel!
+    @IBOutlet weak var logoutButton: UIButton!
     
     override func viewDidLoad() {
         if let me = Providers.userProvider.mySharedUser {
@@ -28,6 +29,8 @@ class UserDetailsViewController: UIViewController {
         } else {
             QL4("Invalid state, we are in user details but there's no stored user")
         }
+        
+        logoutButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
     }
     
     private func initContents(user: SharedUser) {
