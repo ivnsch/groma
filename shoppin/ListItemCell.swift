@@ -152,7 +152,7 @@ class ListItemCell: SwipeableCell {
             update()
         }
         
-        showPrice(tableViewListItem, status: status, mode: mode, animated: animated, animDelay: priceDelay)
+//        showPrice(tableViewListItem, status: status, mode: mode, animated: animated, animDelay: priceDelay)
     }
     
     private func showPrice(tableViewListItem: TableViewListItem, status: ListItemStatus, mode: ListItemCellMode, animated: Bool, animDelay: NSTimeInterval) {
