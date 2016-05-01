@@ -33,9 +33,9 @@ class ListItemCell: SwipeableCell {
     @IBOutlet weak var sectionColorView: UIView!
 
     @IBOutlet weak var plusButton: UIView!
-    @IBOutlet weak var plusMinusContainer: UIView!
+    @IBOutlet weak var minusButton: UIView!
     @IBOutlet weak var plusButtonWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var plusMinusWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var minusButtonWidthConstraint: NSLayoutConstraint!
 
     @IBOutlet weak var undoLabel1: UILabel!
     @IBOutlet weak var undoLabel2: UILabel!
@@ -124,12 +124,12 @@ class ListItemCell: SwipeableCell {
             case .Note:
                 noteButton.alpha = showNote ? 1 : 0
                 plusButton.alpha = 0
-                plusMinusContainer.alpha = 0
+                minusButton.alpha = 0
                 sectionColorView.alpha = 1
             case .Increment:
                 noteButton.alpha = 0
                 plusButton.alpha = 1
-                plusMinusContainer.alpha = 1
+                minusButton.alpha = 1
                 sectionColorView.alpha = 0
             }
         }
@@ -151,8 +151,8 @@ class ListItemCell: SwipeableCell {
             }()
             
             delay(itemsDelay) {[weak self] in
-//                self?.plusMinusWidthConstraint.constant = constant
-//                self?.minusTrailingConstraint.constant = minusConstant
+                self?.minusButtonWidthConstraint.constant = constant
+                self?.minusTrailingConstraint.constant = minusConstant
                 UIView.animateWithDuration(0.2) {
                     update()
                 }
@@ -208,9 +208,9 @@ class ListItemCell: SwipeableCell {
         // When returning cell height programatically (which we need now in order to use different cell heights for different screen sizes), here it's still the height from the storyboard so we have to pass the offset for the line to eb draw at the bottom. Apparently there's no method where we get the cell with final height (did move to superview / window also still have the height from the storyboard)
         contentView.addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
         
-        // block tapping the cell behind the +/- buttons, otherwise it's easy to open the edit listitem view by mistake
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: "onTapPlusMinusContainer:")
-        plusMinusContainer.addGestureRecognizer(tapRecognizer)
+//        // block tapping the cell behind the +/- buttons, otherwise it's easy to open the edit listitem view by mistake
+//        let tapRecognizer = UITapGestureRecognizer(target: self, action: "onTapPlusMinusContainer:")
+//        minusButton.addGestureRecognizer(tapRecognizer)
     }
     
     func onTapPlusMinusContainer(recognizer: UITapGestureRecognizer) {
