@@ -18,7 +18,7 @@
                             <rect key="frame" x="200" y="200" width="200" height="200"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BQy-XG-p6e" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                    <rect key="frame" x="20" y="89" width="160" height="22"/>
+                                    <rect key="frame" x="20" y="64" width="160" height="22"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="200" id="j6Z-uz-QSm"/>
@@ -39,13 +39,26 @@
                                         </mask>
                                     </variation>
                                 </label>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hjV-7A-rrw">
+                                    <rect key="frame" x="20" y="146" width="160" height="34"/>
+                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                    <state key="normal" title="Button">
+                                        <color key="titleColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="onOkTap" destination="iN0-l3-epB" eventType="touchUpInside" id="fqG-dr-Nts"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="200" id="6WR-rG-Rjh"/>
+                                <constraint firstItem="hjV-7A-rrw" firstAttribute="leading" secondItem="Ul0-kr-5aF" secondAttribute="leading" constant="20" id="CJI-PX-YDZ"/>
+                                <constraint firstAttribute="bottom" secondItem="hjV-7A-rrw" secondAttribute="bottom" constant="20" id="IsZ-KN-wwb"/>
                                 <constraint firstAttribute="width" constant="200" id="MGd-oS-VUd"/>
+                                <constraint firstAttribute="trailing" secondItem="hjV-7A-rrw" secondAttribute="trailing" constant="20" id="R7F-mP-e2S"/>
                                 <constraint firstItem="BQy-XG-p6e" firstAttribute="leading" secondItem="Ul0-kr-5aF" secondAttribute="leading" constant="20" id="pIT-pn-JM0"/>
-                                <constraint firstItem="BQy-XG-p6e" firstAttribute="centerY" secondItem="Ul0-kr-5aF" secondAttribute="centerY" id="xPf-7d-1FJ"/>
+                                <constraint firstItem="BQy-XG-p6e" firstAttribute="centerY" secondItem="Ul0-kr-5aF" secondAttribute="centerY" constant="-25" id="xPf-7d-1FJ"/>
                                 <constraint firstAttribute="trailing" secondItem="BQy-XG-p6e" secondAttribute="trailing" constant="20" id="zhe-V2-DPZ"/>
                             </constraints>
                             <userDefinedRuntimeAttributes>
@@ -74,6 +87,7 @@
                 <outlet property="container" destination="Ul0-kr-5aF" id="BLC-br-5cH"/>
                 <outlet property="heightConstraint" destination="6WR-rG-Rjh" id="vOv-GF-Jyr"/>
                 <outlet property="label" destination="BQy-XG-p6e" id="ohJ-Yo-MKM"/>
+                <outlet property="okButton" destination="hjV-7A-rrw" id="39B-IY-MBX"/>
                 <outlet property="widthConstraint" destination="MGd-oS-VUd" id="H4B-jg-r1E"/>
             </connections>
         </view>

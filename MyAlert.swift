@@ -19,8 +19,9 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     @IBOutlet weak var widthConstraint: NSLayoutConstraint!
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!
     
-    private var panRecognizer: UIPanGestureRecognizer!
+    @IBOutlet weak var okButton: UIButton!
     
+    private var panRecognizer: UIPanGestureRecognizer!
     
     
     var text: String = "" {
@@ -29,7 +30,17 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
                 label.text = text
                 updateContainerSize()
             } else {
-                QL3("Outlets not initialised, can't show text")
+                QL3("Outlets not initialised, can't set text")
+            }
+        }
+    }
+    
+    var buttonText: String = "" {
+        didSet {
+            if let okButton = okButton {
+                okButton.setTitle(buttonText, forState: .Normal)
+            } else {
+                QL3("Outlets not initialised, can't set text")
             }
         }
     }
@@ -67,8 +78,8 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
        
         let paddingMaxSize: CGFloat = 30
         
-        let minWidth: CGFloat = 200
-        let minHeight: CGFloat = 150
+        let minWidth: CGFloat = 250
+        let minHeight: CGFloat = 200
         
         let maxWidth: CGFloat = frame.width - (paddingMaxSize * 2)
         let maxHeight: CGFloat = frame.height - (paddingMaxSize * 2)
@@ -136,5 +147,10 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
         default:
             QL3("Not handled: \(recognizer.state)")
         }
+    }
+    
+    @IBAction func onOkTap() {
+        resetPopupViewAndHide()
+        onDismiss?()
     }
 }

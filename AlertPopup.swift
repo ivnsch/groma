@@ -30,6 +30,7 @@ class AlertPopup: NSObject {
             myAlert.translatesAutoresizingMaskIntoConstraints = false
             myAlert.fillSuperview()
             myAlert.text = message
+            myAlert.buttonText = okMsg
             myAlert.onDismiss = onDismiss
             controller.view.bringSubviewToFront(myAlert)
             
