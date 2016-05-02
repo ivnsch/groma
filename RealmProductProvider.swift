@@ -85,6 +85,38 @@ class RealmProductProvider: RealmProvider {
             handler(substring: substring, products: products)
         }
     }
+
+    func productsWithPosibleSections(substring: String? = nil, list: List, range: NSRange? = nil, sortBy: ProductSortBy, handler: (substring: String?, productsWithMaybeSections: [(product: Product, section: Section?)]?) -> Void) {
+        let sortData: (key: String, ascending: Bool) = {
+            switch sortBy {
+            case .Alphabetic: return ("name", true)
+            case .Fav: return ("fav", false)
+            }
+        }()
+        
+        let filterMaybe = substring.map{DBProduct.createFilterNameContains($0)}
+        let mapper = {ProductMapper.productWithDB($0)}
+        
+        // Note that we are load the sections from db for each range - this could be optimised (load sections only once for all pages) but it shouldn't be an issue since usually there are not a lot of sections and it's performing well.
+        
+        withRealm({[weak self] realm in guard let weakSelf = self else {return nil}
+            let products = weakSelf.loadSync(realm, mapper: mapper, filter: filterMaybe, sortDescriptor: NSSortDescriptor(key: sortData.key, ascending: sortData.ascending), range: range)
+            
+            let categoryNames = products.map{$0.category.name}.distinct()
+        
+            let sectionsDict: [String: DBSection] = realm.objects(DBSection).filter(DBSection.createFilterWithNames(categoryNames, listUuid: list.uuid)).toDictionary{($0.name, $0)}
+            
+            let productsWithMaybeSections: [(product: Product, section: Section?)] = products.map {product in
+                let sectionMaybe = sectionsDict[product.category.name].map{SectionMapper.sectionWithDB($0)}
+                return (product, sectionMaybe)
+            }
+
+            return productsWithMaybeSections
+            
+        }, resultHandler: {(productsWithMaybeSections: [(product: Product, section: Section?)]?) in
+            handler(substring: substring, productsWithMaybeSections: productsWithMaybeSections)
+        })
+    }
     
     func countProducts(handler: Int? -> Void) {
         withRealm({realm in

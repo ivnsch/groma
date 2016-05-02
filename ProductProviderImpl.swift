@@ -28,7 +28,18 @@ class ProductProviderImpl: ProductProvider {
             handler(ProviderResult(status: .Success, sucessResult: products))
         }
     }
-
+    
+    func productsWithPosibleSections(text: String, list: List, range: NSRange, sortBy: ProductSortBy, _ handler: ProviderResult<(substring: String?, productsWithMaybeSections: [(product: Product, section: Section?)])> -> Void) {
+        
+        DBProviders.productProvider.productsWithPosibleSections(text, list: list, range: range, sortBy: sortBy) {result in
+            if let productsWithMaybeSections = result.productsWithMaybeSections {
+                handler(ProviderResult(status: .Success, sucessResult: (substring: result.substring, productsWithMaybeSections: productsWithMaybeSections)))
+            } else {
+                handler(ProviderResult(status: .Unknown))
+            }
+        }
+    }
+    
     func product(name: String, brand: String, handler: ProviderResult<Product> -> ()) {
         DBProviders.productProvider.loadProductWithName(name, brand: brand) {dbProduct in
             if let dbProduct = dbProduct {

@@ -15,9 +15,13 @@ class QuickAddProduct: QuickAddItem {
     // TODO better implementation than passing this additionally to product, which is used only when quick add is used for list items
     let storeProduct: StoreProduct?
     
-    init(_ product: Product, storeProduct: StoreProduct? = nil, boldRange: NSRange? = nil) {
+    // used in list items, where we shows section color if available, instead of category color. A better solution for this may be implementing a new QuickAddItem subclass but for now like this.
+    let colorOverride: UIColor?
+    
+    init(_ product: Product, colorOverride: UIColor? = nil, storeProduct: StoreProduct? = nil, boldRange: NSRange? = nil) {
         self.product = product
         self.storeProduct = storeProduct
+        self.colorOverride = colorOverride
         super.init(boldRange: boldRange)
     }
     
@@ -34,7 +38,7 @@ class QuickAddProduct: QuickAddItem {
     }
     
     override var color: UIColor {
-        return product.category.color
+        return colorOverride ?? product.category.color
     }
     
     override func clearBoldRangeCopy() -> QuickAddProduct {

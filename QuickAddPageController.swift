@@ -24,6 +24,10 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     var delegate: QuickAddPageControllerDelegate?
     var quickAddListItemDelegate: QuickAddListItemDelegate?
     
+    var itemTypeForFirstPage: QuickAddItemType = .Product // TODO improve this, no time now
+    
+    var list: List? // this is only used when quick add is used in list items, in order to use the section colors when available instead of category colors. TODO cleaner solution?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -68,8 +72,9 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
             let productsController = UIStoryboard.quickAddListItemViewController()
             productsController.delegate = quickAddListItemDelegate
             productsController.onViewDidLoad = {
-                productsController.contentData = (.Product, .Fav)
+                productsController.contentData = (self.itemTypeForFirstPage, .Fav)
             }
+            productsController.list = list
             currentSwipeController = productsController
             addChildViewController(productsController)
             

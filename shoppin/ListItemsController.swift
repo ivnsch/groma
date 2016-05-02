@@ -114,6 +114,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, openInset: top, closeInset: top, parentViewController: self, tableView: listItemsTableViewController.tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
+            controller.itemType = .ProductForList
+            controller.list = self?.currentList
             return controller
         }
         manager.delegate = self

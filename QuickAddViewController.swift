@@ -87,6 +87,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     var modus: AddEditListItemControllerModus = .ListItem
     
+    var list: List? // this is only used when quick add is used in list items, in order to use the section colors when available instead of category colors. TODO cleaner solution?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -133,6 +135,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             let controller = UIStoryboard.quickAddPageController()
             controller.delegate = self
             controller.quickAddListItemDelegate = self
+            
+            // HACK - to show the products with section colors when we are in list items - TODO proper solution
+            if itemType == .ProductForList {
+                controller.itemTypeForFirstPage = itemType
+                controller.list = list
+            }
+            
             navController?.pushViewController(controller, animated: false)
         }
         
@@ -216,6 +225,8 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         } else {
             switch itemType {
             case .Product:
+                fallthrough
+            case .ProductForList:
                 searchBar.text = searchBar.text?.capitalizedString // on has not items the search text becomes item name input, so we capitalize the first letter. Note we don't revert this in hasItems = true, because maybe the user entered a capitalised string. Also nothing bad happens if we let the string capitalised.
                 showAddProductController()
             case .Group: quickAddListItemViewController?.setEmptyViewVisible(true)
