@@ -24,8 +24,6 @@
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
             <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
-            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -151,24 +149,33 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Groma" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zWW-Lj-F5Z">
-                                <rect key="frame" x="271" y="184" width="59" height="24"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="20"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RDW-hy-ch1" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="247" y="240" width="107" height="72"/>
+                                <string key="text" base64-UTF8="YES">
+SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
+</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TODO" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RDW-hy-ch1">
-                                <rect key="frame" x="282" y="334" width="36" height="16"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Je8-L8-ALQ">
+                                <rect key="frame" x="250" y="160" width="100" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="1XQ-vd-cWg"/>
+                                    <constraint firstAttribute="height" constant="60" id="giO-xe-YTW"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="RDW-hy-ch1" firstAttribute="top" secondItem="zWW-Lj-F5Z" secondAttribute="bottom" constant="126" id="ARC-sf-lUl"/>
-                            <constraint firstItem="zWW-Lj-F5Z" firstAttribute="top" secondItem="vCj-Rn-aKt" secondAttribute="bottom" constant="120" id="Et6-3m-Vjr"/>
-                            <constraint firstItem="zWW-Lj-F5Z" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" id="KuS-s3-Zhp"/>
+                            <constraint firstItem="Je8-L8-ALQ" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" id="9Bt-VB-Yb3"/>
+                            <constraint firstItem="RDW-hy-ch1" firstAttribute="top" secondItem="Je8-L8-ALQ" secondAttribute="bottom" constant="20" id="EDP-Dp-6AD"/>
+                            <constraint firstItem="RDW-hy-ch1" firstAttribute="centerY" secondItem="nyx-EU-a0C" secondAttribute="centerY" id="TH0-iH-8ot"/>
                             <constraint firstItem="RDW-hy-ch1" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" id="UJp-Zc-5lt"/>
                         </constraints>
                     </view>
