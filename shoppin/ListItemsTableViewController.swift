@@ -612,6 +612,10 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         listItemsTableViewDelegate?.onSectionHeaderTap(header, section: section)
     }
     
+    func onPanQuantityUpdate(tableViewListItem: TableViewListItem, newQuantity: Int) {
+        listItemsTableViewDelegate?.onIncrementItem(tableViewListItem, delta: newQuantity - tableViewListItem.listItem.quantity(status))
+    }
+    
     func setAllSectionsExpanded(expanded: Bool, animated: Bool, onComplete: VoidFunction? = nil) {
         
         var completed = 0

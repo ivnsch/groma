@@ -7,13 +7,15 @@
 //
 
 import UIKit
+import QorumLogs
 
 protocol ProductWithQuantityTableViewCellDelegate {
     func onIncrementItemTap(cell: ProductWithQuantityTableViewCell)
     func onDecrementItemTap(cell: ProductWithQuantityTableViewCell)
+    func onPanQuantityUpdate(cell: ProductWithQuantityTableViewCell, newQuantity: Int)
 }
 
-class ProductWithQuantityTableViewCell: UITableViewCell {
+class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperDelegate {
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var brandLabel: UILabel!
@@ -32,6 +34,21 @@ class ProductWithQuantityTableViewCell: UITableViewCell {
     
     var delegate: ProductWithQuantityTableViewCellDelegate?
     var row: Int?
+
+    private var shownQuantity: Int = 0 {
+        didSet {
+            quantityLabel.text = String("\(shownQuantity)")
+        }
+    }
+    
+    private var swipeToIncrementHelper: SwipeToIncrementHelper?
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        swipeToIncrementHelper = SwipeToIncrementHelper(view: contentView)
+        swipeToIncrementHelper?.delegate = self
+    }
     
     @IBAction func onIncrementTap(sender: UIButton) {
         delegate?.onIncrementItemTap(self)
@@ -85,5 +102,20 @@ class ProductWithQuantityTableViewCell: UITableViewCell {
             layer.removeAllAnimations()
             CATransaction.commit()
         }
+    }
+    
+    
+    // MARK: - SwipeToIncrementHelperDelegate
+    
+    func currentQuantity() -> Int {
+        return shownQuantity
+    }
+    
+    func onQuantityUpdated(quantity: Int) {
+        shownQuantity = quantity
+    }
+    
+    func onFinishSwipe() {
+        delegate?.onPanQuantityUpdate(self, newQuantity: shownQuantity)
     }
 }

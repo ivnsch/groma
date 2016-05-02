@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 protocol ListItemCellDelegate {
     func onItemSwiped(listItem: TableViewListItem)
@@ -15,9 +16,10 @@ protocol ListItemCellDelegate {
     func onNoteTap(listItem: TableViewListItem)
     func onMinusTap(listItem: TableViewListItem)
     func onPlusTap(listItem: TableViewListItem)
+    func onPanQuantityUpdate(tableViewListItem: TableViewListItem, newQuantity: Int)
 }
 
-class ListItemCell: SwipeableCell {
+class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
 
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var brandLabel: UILabel!
@@ -44,10 +46,21 @@ class ListItemCell: SwipeableCell {
     
     private var delegate: ListItemCellDelegate?
     
+    private var swipeToIncrementHelper: SwipeToIncrementHelper?
+    
+    private var shownQuantity: Int = 0 {
+        didSet {
+            if let tableViewListItem = tableViewListItem {
+                quantityLabel.text = String("\(shownQuantity) \(tableViewListItem.listItem.product.unit.shortText)")
+            }
+        }
+    }
+    
     private(set) var status: ListItemStatus?
     var mode: ListItemCellMode = .Note {
         didSet {
             updateModeItemsVisibility(true)
+            swipeToIncrementHelper?.enabled = mode == .Increment
         }
     }
     private(set) var labelColor: UIColor = UIColor.blackColor() {
@@ -63,7 +76,7 @@ class ListItemCell: SwipeableCell {
                 let listItem = tableViewListItem.listItem
                 
                 nameLabel.text = NSLocalizedString(listItem.product.product.name, comment: "")
-                quantityLabel.text = String("\(listItem.quantity(status)) \(listItem.product.unit.shortText)")
+                shownQuantity = listItem.quantity(status)
                 
                 centerVerticallyNameLabelConstraint.constant = listItem.product.product.brand.isEmpty ? 0 : 10
                 brandLabel.text = listItem.product.product.brand
@@ -211,6 +224,9 @@ class ListItemCell: SwipeableCell {
 //        // block tapping the cell behind the +/- buttons, otherwise it's easy to open the edit listitem view by mistake
 //        let tapRecognizer = UITapGestureRecognizer(target: self, action: "onTapPlusMinusContainer:")
 //        minusButton.addGestureRecognizer(tapRecognizer)
+
+        swipeToIncrementHelper = SwipeToIncrementHelper(view: myContentView)
+        swipeToIncrementHelper?.delegate = self
     }
     
     func onTapPlusMinusContainer(recognizer: UITapGestureRecognizer) {
@@ -264,6 +280,24 @@ class ListItemCell: SwipeableCell {
             delegate?.onItemSwiped(tableViewListItem)
         } else {
             print("Warn: ListItemCell.onItemSwiped: no tableViewListItem")
+        }
+    }
+    
+    // MARK: - SwipeToIncrementHelperDelegate
+    
+    func currentQuantity() -> Int {
+        return shownQuantity
+    }
+    
+    func onQuantityUpdated(quantity: Int) {
+        shownQuantity = quantity
+    }
+    
+    func onFinishSwipe() {
+        if let tableViewListItem = tableViewListItem {
+            delegate?.onPanQuantityUpdate(tableViewListItem, newQuantity: shownQuantity)
+        } else {
+            QL3("Warn: ListItemCell.onStartItemSwipe: no tableViewListItem")
         }
     }
 }

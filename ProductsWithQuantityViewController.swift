@@ -270,7 +270,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         tableView.setEditing(editing, animated: true)
     }
     
-    // MARK: - InventoryItemTableViewCellDelegate
+    // MARK: - ProductWithQuantityTableViewCellDelegate
     
     func onIncrementItemTap(cell: ProductWithQuantityTableViewCell) {
         cell.cancelDeleteProgress()
@@ -280,6 +280,15 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     func onDecrementItemTap(cell: ProductWithQuantityTableViewCell) {
         cell.cancelDeleteProgress()
         self.checkChangeInventoryItemQuantity(cell, delta: -1)
+    }
+    
+    func onPanQuantityUpdate(cell: ProductWithQuantityTableViewCell, newQuantity: Int) {
+        cell.cancelDeleteProgress()
+        if let model = cell.model {
+            checkChangeInventoryItemQuantity(cell, delta: newQuantity - model.quantity)
+        } else {
+            QL4("No model, can't update quantity")
+        }
     }
     
     /**

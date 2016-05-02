@@ -39,8 +39,6 @@ class SwipeableCell: UITableViewCell {
     
     @IBOutlet weak var myContentView: UIView!
     
-//    var panRecognizer:UIPanGestureRecognizer!
-    var panStartPoint:CGPoint!
     var startingLeftLayoutConstraint: CGFloat = 0
     
     @IBOutlet weak var contentViewRightConstraint:NSLayoutConstraint!
@@ -48,14 +46,8 @@ class SwipeableCell: UITableViewCell {
 
     var direction: SwipeableCellDirection = .Right
     
-//    var delegate: SwipeableCellDelegate?
-    
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-//        self.panRecognizer = UIPanGestureRecognizer(target: self, action: "onPanCell:")
-//        self.panRecognizer.delegate = self
-//        self.myContentView.addGestureRecognizer(self.panRecognizer)
         
         myContentView.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -130,108 +122,6 @@ class SwipeableCell: UITableViewCell {
             }
             
             }, completion: onCompletion)
-    }
-    
-    func onPanCell(recognizer:UIPanGestureRecognizer) {
-        
-        var movingHorizontally = false
-        if let panStartPoint = self.panStartPoint {
-            movingHorizontally = fabsf(Float(panStartPoint.y)) < fabsf(Float(panStartPoint.x))
-        }
-        
-        
-        switch recognizer.state {
-        case .Began:
-            self.panStartPoint = recognizer.translationInView(self.myContentView)
-            self.startingLeftLayoutConstraint = self.contentViewLeftConstraint.constant
-            
-            onStartItemSwipe()
-            
-        case .Changed:
-            if movingHorizontally {
-                let currentPoint = recognizer.translationInView(self.myContentView)
-                let deltaX = currentPoint.x - self.panStartPoint.x
-                let panningRight = currentPoint.x > self.panStartPoint.x
-                
-                if self.startingLeftLayoutConstraint == 0 { //closed
-                    if !panningRight {
-                        let constant = max(-deltaX, 0)
-                        if constant == 0 {
-                            self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: false)
-                        } else {
-                            //                        self.contentViewRightConstraint.constant = constant
-                        }
-                    } else {
-                        let constant = min(deltaX, self.buttonTotalWidth())
-                        if constant == self.buttonTotalWidth() {
-                            self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen: false)
-                        } else {
-                            self.contentViewLeftConstraint.constant = constant
-                            
-                            //                            let alpha:CGFloat = 1 - (constant / buttonTotalWidth())
-                            //                            self.myContentView.alpha = alpha
-                        }
-                        
-                    }
-                }
-                else { //al least partially open
-                    let adjustment = self.startingLeftLayoutConstraint - deltaX
-                    if !panningRight {
-                        let constant = max(adjustment, 0)
-                        if constant == 0 {
-                            self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: false)
-                        } else {
-                            //                        self.contentViewRightConstraint.constant = constant
-                        }
-                        
-                    } else {
-                        let constant = min(adjustment, self.buttonTotalWidth())
-                        if constant == self.buttonTotalWidth() {
-                            self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen: false)
-                        } else {
-                            self.contentViewLeftConstraint.constant = constant
-                        }
-                    }
-                }
-                
-                self.contentViewRightConstraint.constant = -self.contentViewLeftConstraint.constant
-            }
-            
-        case .Ended:
-            if movingHorizontally {
-                if self.startingLeftLayoutConstraint == 0 {
-                    let halfOfArea = self.buttonTotalWidth() / 2
-                    if self.contentViewLeftConstraint.constant >= halfOfArea {
-                        self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen: true)
-                    } else {
-                        self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
-                    }
-                } else {
-                    //                let buttonOnePlusHalfOfButton2 = CGRectGetWidth(self.button1.frame) + (CGRectGetWidth(self.button2.frame) / 2)
-                    let halfOfArea = self.buttonTotalWidth() / 2
-                    if self.contentViewLeftConstraint.constant >= halfOfArea {
-                        self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen: true)
-                    } else {
-                        self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
-                    }
-                }
-            }
-            
-            
-        case .Cancelled:
-            if movingHorizontally {
-                if self.startingLeftLayoutConstraint == 0 {
-                    self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
-                } else {
-                    self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen: true)
-                }
-                
-            }
-            
-        default:
-            "Not handled"
-        }
-        
     }
     
     override func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {

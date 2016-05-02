@@ -794,6 +794,7 @@
 		EBB6D7501CD68EC900F9C711 /* LabelMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB6D74F1CD68EC900F9C711 /* LabelMore.swift */; };
 		EBB6D7521CD6910D00F9C711 /* LeftRightPaddingConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB6D7511CD6910D00F9C711 /* LeftRightPaddingConstraint.swift */; };
 		EBB6D7561CD69E6100F9C711 /* TextFieldMore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB6D7551CD69E6100F9C711 /* TextFieldMore.swift */; };
+		EBB6D7581CD6D67C00F9C711 /* SwipeToIncrementHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB6D7571CD6D67C00F9C711 /* SwipeToIncrementHelper.swift */; };
 		EBB8FC7B1CD3EBC2008FD084 /* WebsocketHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB8FC7A1CD3EBC2008FD084 /* WebsocketHelper.swift */; };
 		EBB9A72E1B5EB00E00E5487D /* InventoriesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A72D1B5EB00E00E5487D /* InventoriesTableViewController.swift */; };
 		EBB9A7301B5EB08C00E5487D /* Inventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBB9A72F1B5EB08C00E5487D /* Inventory.swift */; };
@@ -1517,6 +1518,7 @@
 		EBB6D74F1CD68EC900F9C711 /* LabelMore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelMore.swift; sourceTree = "<group>"; };
 		EBB6D7511CD6910D00F9C711 /* LeftRightPaddingConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeftRightPaddingConstraint.swift; sourceTree = "<group>"; };
 		EBB6D7551CD69E6100F9C711 /* TextFieldMore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldMore.swift; sourceTree = "<group>"; };
+		EBB6D7571CD6D67C00F9C711 /* SwipeToIncrementHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeToIncrementHelper.swift; sourceTree = "<group>"; };
 		EBB8FC7A1CD3EBC2008FD084 /* WebsocketHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebsocketHelper.swift; sourceTree = "<group>"; };
 		EBB9A72D1B5EB00E00E5487D /* InventoriesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoriesTableViewController.swift; sourceTree = "<group>"; };
 		EBB9A72F1B5EB08C00E5487D /* Inventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inventory.swift; sourceTree = "<group>"; };
@@ -2980,6 +2982,7 @@
 				EB37ABA91C9F4C0D00FE9D7A /* AddItemButton.swift */,
 				EBEA0CD11CA5BF3E00E68B81 /* HandlingButton.swift */,
 				EB7D241E1CB959440017EFE6 /* CellUncoverer.swift */,
+				EBB6D7571CD6D67C00F9C711 /* SwipeToIncrementHelper.swift */,
 			);
 			name = view;
 			path = shoppin;
@@ -3952,6 +3955,7 @@
 				EB40A46E1B550804000E9CAD /* RealmProvider.swift in Sources */,
 				EBB6D7501CD68EC900F9C711 /* LabelMore.swift in Sources */,
 				EBA7AC961BFE95AF00247A8C /* RemoteProductCategory.swift in Sources */,
+				EBB6D7581CD6D67C00F9C711 /* SwipeToIncrementHelper.swift in Sources */,
 				EBF162E91A3CA1F00048E37C /* ListItemProviderImpl.swift in Sources */,
 				EBD27CCE1C1710F8005D8305 /* RemoteGroupsProvider.swift in Sources */,
 				EBF162D81A3C82380048E37C /* CellSpecification.swift in Sources */,

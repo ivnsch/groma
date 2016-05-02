@@ -20,6 +20,7 @@ protocol ItemActionsDelegate {
     func onHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection)
     func onMinusTap(tableViewListItem: TableViewListItem)
     func onPlusTap(tableViewListItem: TableViewListItem)
+    func onPanQuantityUpdate(tableViewListItem: TableViewListItem, newQuantity: Int)
 }
 
 class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListItemCellDelegate {
@@ -191,6 +192,10 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     
     func onPlusTap(listItem: TableViewListItem) {
         delegate?.onPlusTap(listItem)
+    }
+    
+    func onPanQuantityUpdate(tableViewListItem: TableViewListItem, newQuantity: Int) {
+        delegate?.onPanQuantityUpdate(tableViewListItem, newQuantity: newQuantity)
     }
 }
 
