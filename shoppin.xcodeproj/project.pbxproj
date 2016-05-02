@@ -995,6 +995,8 @@
 		EBF1A1541B82213200F34105 /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF1A1531B82213200F34105 /* HistoryViewController.swift */; };
 		EBF1A1591B823A1100F34105 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF1A1581B823A1100F34105 /* StatsViewController.swift */; };
 		EBF1A15F1B82428700F34105 /* HistoryItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF1A15E1B82428700F34105 /* HistoryItemCell.swift */; };
+		EBF1F9E71CD76A1900F8016F /* MyAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF1F9E61CD76A1900F8016F /* MyAlert.swift */; };
+		EBF1F9E91CD76AA500F8016F /* MyAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBF1F9E81CD76AA500F8016F /* MyAlert.xib */; };
 		EBF299831B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */; };
 		EBF299841B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */; };
 		EBF299851B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */; };
@@ -1656,6 +1658,8 @@
 		EBF1A1531B82213200F34105 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		EBF1A1581B823A1100F34105 /* StatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		EBF1A15E1B82428700F34105 /* HistoryItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemCell.swift; sourceTree = "<group>"; };
+		EBF1F9E61CD76A1900F8016F /* MyAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAlert.swift; sourceTree = "<group>"; };
+		EBF1F9E81CD76AA500F8016F /* MyAlert.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyAlert.xib; sourceTree = "<group>"; };
 		EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoriesWithInventoryItemsSyncResult.swift; sourceTree = "<group>"; };
 		EBF299861B791023006BDA1F /* InventorySync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventorySync.swift; sourceTree = "<group>"; };
 		EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "shoppin-prefix.pch"; sourceTree = "<group>"; };
@@ -2802,6 +2806,8 @@
 				EBED0D0A1C82221600A1EEC4 /* rating */,
 				EBBC23221BB5D57C0002F6B1 /* ProviderPopupManager.swift */,
 				EB0870CA1BC050A300169E29 /* MyTipPopup.swift */,
+				EBF1F9E61CD76A1900F8016F /* MyAlert.swift */,
+				EBF1F9E81CD76AA500F8016F /* MyAlert.xib */,
 			);
 			name = popup;
 			sourceTree = "<group>";
@@ -3383,6 +3389,7 @@
 				EBED0D0E1C82225B00A1EEC4 /* RatingPopup.storyboard in Resources */,
 				EB8D1D0D1C38363400ADF884 /* AddEditGroupViewController.storyboard in Resources */,
 				EBA2C8CE1C4F207800A970B8 /* EditProductCategoryController.xib in Resources */,
+				EBF1F9E91CD76AA500F8016F /* MyAlert.xib in Resources */,
 				EB7032831BEBBC6400779EBB /* ReorderSectionTableViewController.storyboard in Resources */,
 				EB1D696E1CABEF9E004892A2 /* ListItemsControllers.storyboard in Resources */,
 				EBDA75571BCD966D00E34AC3 /* OkCancelButtonsView.xib in Resources */,
@@ -3938,6 +3945,7 @@
 				EBB5266F1BEFD8A20002A286 /* HelpViewController.swift in Sources */,
 				EB4147CD1BE2288E00549CE4 /* ManageGroupsCell.swift in Sources */,
 				EBF162E01A3C82380048E37C /* TableViewSectionDelegate.swift in Sources */,
+				EBF1F9E71CD76A1900F8016F /* MyAlert.swift in Sources */,
 				EBB5A0471B65395000FB9C58 /* ValidationAlert.swift in Sources */,
 				EBF1A15F1B82428700F34105 /* HistoryItemCell.swift in Sources */,
 				EBBC22FD1BB4080E0002F6B1 /* Suggestion.swift in Sources */,
