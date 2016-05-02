@@ -80,7 +80,7 @@ class AddButtonHelper: NSObject {
 
         if endY != addButton.center.y { // animate only if there's a change in the position (open, close keyboard / changed between normal and emoji keyboard)
             
-            UIView.animateWithDuration(0.1, animations: {
+            UIView.animateWithDuration(0.4, animations: {
                 QL1("Animating add button to \(endY)")
                 addButton.center = addButton.center.copy(y: endY)
                 }, completion: {[weak self] finished in

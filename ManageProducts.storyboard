@@ -311,7 +311,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oip-Bv-T0W">
-                                <rect key="frame" x="0.0" y="20" width="600" height="40"/>
+                                <rect key="frame" x="0.0" y="75" width="600" height="40"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="Sort by:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uaW-wg-NEG" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
                                         <rect key="frame" x="461" y="11" width="54" height="18"/>
@@ -364,19 +364,14 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="Cy9-Op-gfL"/>
+                                        <exclude reference="xbu-kY-mLQ"/>
                                         <exclude reference="nSD-7P-FTQ"/>
                                     </mask>
                                 </variation>
                             </view>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="YRv-YV-FHW">
-                                <rect key="frame" x="0.0" y="60" width="600" height="44"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="Mm3-oP-cdT" id="eeF-sP-AId"/>
-                                </connections>
-                            </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="64" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OmL-Fh-5Jp">
-                                <rect key="frame" x="0.0" y="104" width="600" height="496"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="64" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OmL-Fh-5Jp">
+                                <rect key="frame" x="0.0" y="115" width="600" height="485"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <view key="tableFooterView" contentMode="scaleToFill" id="ubd-oF-jDC" customClass="LoadingFooter" customModule="shoppin" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="92" width="600" height="44"/>
@@ -418,22 +413,11 @@
                                         <rect key="frame" x="0.0" y="28" width="600" height="64"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yjL-el-KcB" id="Kqx-Ig-KUx">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="63"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="64"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PWR-nr-FTi" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                                    <rect key="frame" x="531" y="0.0" width="44" height="22"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                                            <integer key="value" value="50"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wRH-9P-Cgb" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                                    <rect key="frame" x="25" y="0.0" width="44" height="22"/>
+                                                    <rect key="frame" x="29" y="11" width="44" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -442,47 +426,38 @@
                                                             <integer key="value" value="50"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AN1-gg-SBs" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                                    <rect key="frame" x="25" y="44" width="38" height="18"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" red="0.65783535420000006" green="0.66059565139999998" blue="0.66513256320000003" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HDP-Ig-OTR" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                                    <rect key="frame" x="25" y="24" width="38" height="18"/>
+                                                    <rect key="frame" x="29" y="33" width="38" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qdf-dJ-Pbv">
+                                                    <rect key="frame" x="0.0" y="0.0" width="4" height="63"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="4" id="Jrd-am-Pu5"/>
+                                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="4" id="RMd-JZ-rdl"/>
+                                                        <constraint firstAttribute="width" constant="4" id="SV1-gZ-QKN"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="AN1-gg-SBs" firstAttribute="top" secondItem="HDP-Ig-OTR" secondAttribute="bottom" constant="2" id="1Xy-K7-1nC"/>
-                                                <constraint firstItem="HDP-Ig-OTR" firstAttribute="top" secondItem="wRH-9P-Cgb" secondAttribute="bottom" constant="2" id="9hd-Z1-PSu"/>
-                                                <constraint firstItem="AN1-gg-SBs" firstAttribute="leading" secondItem="wRH-9P-Cgb" secondAttribute="leading" id="AZP-zS-1Aa"/>
+                                                <constraint firstItem="wRH-9P-Cgb" firstAttribute="leading" secondItem="Qdf-dJ-Pbv" secondAttribute="trailing" constant="25" id="420-kk-vOD"/>
+                                                <constraint firstAttribute="bottom" secondItem="Qdf-dJ-Pbv" secondAttribute="bottom" id="7Fq-6Y-dVv"/>
+                                                <constraint firstItem="Qdf-dJ-Pbv" firstAttribute="top" secondItem="Kqx-Ig-KUx" secondAttribute="top" id="IEt-lc-UYM"/>
                                                 <constraint firstItem="HDP-Ig-OTR" firstAttribute="leading" secondItem="wRH-9P-Cgb" secondAttribute="leading" id="Ku0-nR-yur"/>
-                                                <constraint firstItem="wRH-9P-Cgb" firstAttribute="top" secondItem="Kqx-Ig-KUx" secondAttribute="top" id="LEI-09-1Fp"/>
-                                                <constraint firstItem="wRH-9P-Cgb" firstAttribute="centerY" secondItem="Kqx-Ig-KUx" secondAttribute="centerY" constant="-10" id="MHf-ax-l6B"/>
-                                                <constraint firstAttribute="trailing" secondItem="PWR-nr-FTi" secondAttribute="trailing" constant="25" id="QCv-7g-wf6" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
-                                                <constraint firstItem="wRH-9P-Cgb" firstAttribute="centerY" secondItem="Kqx-Ig-KUx" secondAttribute="centerY" id="R6S-6g-AjV"/>
-                                                <constraint firstItem="PWR-nr-FTi" firstAttribute="centerY" secondItem="wRH-9P-Cgb" secondAttribute="centerY" id="asw-ln-x5t"/>
-                                                <constraint firstItem="AN1-gg-SBs" firstAttribute="centerY" secondItem="Kqx-Ig-KUx" secondAttribute="centerY" constant="10" id="dVD-h7-Pia"/>
-                                                <constraint firstItem="wRH-9P-Cgb" firstAttribute="leading" secondItem="Kqx-Ig-KUx" secondAttribute="leading" constant="25" id="daQ-Oc-fZR" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
+                                                <constraint firstItem="Qdf-dJ-Pbv" firstAttribute="leading" secondItem="Kqx-Ig-KUx" secondAttribute="leading" id="TST-X7-cqo"/>
+                                                <constraint firstItem="wRH-9P-Cgb" firstAttribute="centerY" secondItem="Kqx-Ig-KUx" secondAttribute="centerY" constant="-10" id="cSv-sn-7ud"/>
+                                                <constraint firstItem="HDP-Ig-OTR" firstAttribute="centerY" secondItem="Kqx-Ig-KUx" secondAttribute="centerY" constant="10" id="mhP-z7-7MN"/>
                                             </constraints>
-                                            <variation key="default">
-                                                <mask key="constraints">
-                                                    <exclude reference="MHf-ax-l6B"/>
-                                                    <exclude reference="R6S-6g-AjV"/>
-                                                    <exclude reference="dVD-h7-Pia"/>
-                                                </mask>
-                                            </variation>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="categoryColorView" destination="Qdf-dJ-Pbv" id="YZq-Tp-pPz"/>
                                             <outlet property="productBrandLabel" destination="HDP-Ig-OTR" id="rY4-rg-v1k"/>
-                                            <outlet property="productCategoryLabel" destination="AN1-gg-SBs" id="x1q-37-FOH"/>
-                                            <outlet property="productCategoryLabelTopConstraint" destination="1Xy-K7-1nC" id="xNq-jQ-N9N"/>
+                                            <outlet property="productNameCenterConstraint" destination="cSv-sn-7ud" id="aOt-wz-Niq"/>
                                             <outlet property="productNameLabel" destination="wRH-9P-Cgb" id="RPX-rG-vJ9"/>
-                                            <outlet property="productPriceLabel" destination="PWR-nr-FTi" id="ps7-IC-I7K"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -491,33 +466,48 @@
                                     <outlet property="delegate" destination="Mm3-oP-cdT" id="rUf-8R-PXe"/>
                                 </connections>
                             </tableView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="RTF-AV-DL0" customClass="RoundTextField" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="20" y="30" width="560" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="Cem-5r-rUT"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="delegate" destination="Mm3-oP-cdT" id="sEJ-Ia-c3I"/>
+                                </connections>
+                            </textField>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="YRv-YV-FHW" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="H45-ve-tyE"/>
-                            <constraint firstItem="YRv-YV-FHW" firstAttribute="top" secondItem="oip-Bv-T0W" secondAttribute="bottom" id="VR9-G0-XfR"/>
+                            <constraint firstAttribute="trailing" secondItem="RTF-AV-DL0" secondAttribute="trailing" constant="20" id="0Ns-Jn-dzl"/>
+                            <constraint firstItem="RTF-AV-DL0" firstAttribute="top" secondItem="cpC-kT-urS" secondAttribute="bottom" constant="10" id="DH8-xi-G1N"/>
+                            <constraint firstItem="oip-Bv-T0W" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="G3k-L9-udt"/>
+                            <constraint firstItem="oip-Bv-T0W" firstAttribute="top" secondItem="RTF-AV-DL0" secondAttribute="bottom" constant="10" id="OJw-3Z-o6J"/>
+                            <constraint firstItem="OmL-Fh-5Jp" firstAttribute="top" secondItem="oip-Bv-T0W" secondAttribute="bottom" id="UFE-o7-hjh"/>
+                            <constraint firstAttribute="trailing" secondItem="oip-Bv-T0W" secondAttribute="trailing" id="Yq3-8X-378"/>
+                            <constraint firstItem="RTF-AV-DL0" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" constant="20" id="bnv-dw-c53"/>
                             <constraint firstItem="609-Sf-sF9" firstAttribute="top" secondItem="OmL-Fh-5Jp" secondAttribute="bottom" id="hd0-uw-kdN"/>
-                            <constraint firstItem="oip-Bv-T0W" firstAttribute="top" secondItem="cpC-kT-urS" secondAttribute="bottom" id="hrM-d6-Dht"/>
                             <constraint firstItem="oip-Bv-T0W" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="ipW-rC-LBG"/>
-                            <constraint firstItem="OmL-Fh-5Jp" firstAttribute="top" secondItem="YRv-YV-FHW" secondAttribute="bottom" id="lHP-Wq-RS6"/>
                             <constraint firstAttribute="trailing" secondItem="OmL-Fh-5Jp" secondAttribute="trailing" id="mT4-Ox-0dR"/>
                             <constraint firstAttribute="trailing" secondItem="oip-Bv-T0W" secondAttribute="trailing" id="phG-X1-7Rc"/>
-                            <constraint firstItem="YRv-YV-FHW" firstAttribute="top" secondItem="cpC-kT-urS" secondAttribute="bottom" id="r0h-wq-1Zj"/>
                             <constraint firstItem="OmL-Fh-5Jp" firstAttribute="leading" secondItem="NzI-sb-8VM" secondAttribute="leading" id="vTI-qs-AUn"/>
-                            <constraint firstAttribute="trailing" secondItem="YRv-YV-FHW" secondAttribute="trailing" id="xdj-aG-Wa9"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="r0h-wq-1Zj"/>
-                            </mask>
-                        </variation>
                     </view>
                     <connections>
-                        <outlet property="searchBar" destination="YRv-YV-FHW" id="1OM-dG-Aq0"/>
+                        <outlet property="searchBar" destination="RTF-AV-DL0" id="8hA-jF-D8r"/>
+                        <outlet property="searchBoxHeightConstraint" destination="Cem-5r-rUT" id="ONf-DP-ipx"/>
+                        <outlet property="searchBoxMarginBottomConstraint" destination="OJw-3Z-o6J" id="y1N-xj-0uO"/>
+                        <outlet property="searchBoxMarginTopConstraint" destination="DH8-xi-G1N" id="0F5-rM-xM6"/>
                         <outlet property="sortByButton" destination="Tm6-P2-xyl" id="8i2-tn-eHA"/>
                         <outlet property="tableView" destination="OmL-Fh-5Jp" id="DJQ-TI-TmF"/>
                         <outlet property="tableViewFooter" destination="ubd-oF-jDC" id="ddQ-V6-Dck"/>
-                        <outlet property="topControlTopConstraint" destination="hrM-d6-Dht" id="kjw-0t-9oQ"/>
+                        <outlet property="topControlTopConstraint" destination="OJw-3Z-o6J" id="206-ej-6u8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eKA-n5-vJ1" userLabel="First Responder" sceneMemberID="firstResponder"/>

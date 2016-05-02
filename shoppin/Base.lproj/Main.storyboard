@@ -41,7 +41,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="User" id="NwJ-uz-FPH"/>
-                    <navigationItem key="navigationItem" title="User" id="HfT-g5-z2P"/>
+                    <navigationItem key="navigationItem" title="User" id="HfT-g5-z2P">
+                        <barButtonItem key="backBarButtonItem" title=" " id="4J1-ey-WRT"/>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ym6-x2-4rn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -126,7 +128,9 @@
                             <constraint firstItem="cmp-U7-jlB" firstAttribute="top" secondItem="zUT-nN-8Zc" secondAttribute="bottom" id="zBj-jH-N62"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Help" id="HDq-27-xgh"/>
+                    <navigationItem key="navigationItem" title="Help" id="HDq-27-xgh">
+                        <barButtonItem key="backBarButtonItem" title=" " id="ZpF-GF-gBc"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="searchBar" destination="zUT-nN-8Zc" id="bal-fi-Q0z"/>
                         <outlet property="searchBarHeightConstraint" destination="BsN-MQ-epw" id="nvb-aD-nuE"/>
@@ -179,7 +183,9 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                             <constraint firstItem="RDW-hy-ch1" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" id="UJp-Zc-5lt"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="About" id="3A0-vx-wCG"/>
+                    <navigationItem key="navigationItem" title="About" id="3A0-vx-wCG">
+                        <barButtonItem key="backBarButtonItem" title=" " id="thA-Aj-h87"/>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sxw-WL-TR0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -721,7 +727,9 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                             <constraint firstItem="FTH-bS-K1Q" firstAttribute="leading" secondItem="cNM-zT-Jyc" secondAttribute="leading" constant="20" id="qlq-5x-xlh"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Settings" id="1iM-IL-890"/>
+                    <navigationItem key="navigationItem" title="Settings" id="1iM-IL-890">
+                        <barButtonItem key="backBarButtonItem" title=" " id="lpy-SJ-a36"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="overwriteLocalDataButton" destination="yLW-Jh-3jY" id="UcP-UJ-28d"/>
                         <outlet property="realTimeConnectionLabel" destination="j2q-bI-zJT" id="ZNc-eN-acK"/>
@@ -1764,7 +1772,9 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <tabBarItem key="tabBarItem" title="History" image="history" id="sfI-ey-1RN"/>
-                    <navigationItem key="navigationItem" title="History" id="XOb-RL-vmC"/>
+                    <navigationItem key="navigationItem" title="History" id="XOb-RL-vmC">
+                        <barButtonItem key="backBarButtonItem" title=" " id="Wn7-9z-aGH"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="emptyHistoryView" destination="dl2-3s-zxQ" id="Pr2-17-6pm"/>
                         <outlet property="inventoriesButton" destination="cfR-FR-ibb" id="RpE-2o-8hb"/>

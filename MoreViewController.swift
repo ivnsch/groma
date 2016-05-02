@@ -11,12 +11,27 @@ import UIKit
 class MoreViewController: UITableViewController {
    
     private var emailHelper: EmailHelper?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
+        styleBackButton()
+    }
+    
+    private func styleBackButton() {
+        let backBtn = UIImage(named: "tb_back")?.imageWithRenderingMode(.AlwaysOriginal)
+        navigationController?.navigationBar.backIndicatorImage = backBtn
+        navigationController?.navigationBar.backIndicatorTransitionMaskImage = backBtn
+        let backItem = UIBarButtonItem()
+        backItem.title = ""
+        navigationItem.backBarButtonItem = backItem
+    }
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch indexPath.row  {
             
         case 1: // Manage product
-            let controller = UIStoryboard.manageProductsSelectionController()
+            let controller = UIStoryboard.manageProductsViewController()
             navigationController?.pushViewController(controller, animated: true)
             
         case 5: // Feedback

@@ -11,33 +11,45 @@ import SwiftValidator
 import CMPopTipView
 import QorumLogs
 
-class ManageProductsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class ManageProductsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, QuickAddDelegate, ExpandableTopViewControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet var tableViewFooter: LoadingFooter!
 
+    @IBOutlet weak var searchBoxHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var topControlTopConstraint: NSLayoutConstraint!
-
-    @IBOutlet weak var searchBar: UISearchBar!
-    private var editButton: UIBarButtonItem!
-    private var addButton: UIBarButtonItem!
+    @IBOutlet weak var searchBoxMarginTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchBoxMarginBottomConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var searchBar: UITextField!
 
     private let paginator = Paginator(pageSize: 20)
     private var loadingPage: Bool = false
     
-    private var products: [Product] = [] {
+    private var searchText: String = "" {
         didSet {
-            filteredProducts = ItemWithCellAttributes.toItemsWithCellAttributes(products)
+            clearAndLoadFirstPage()
         }
     }
-
+    
     private var filteredProducts: [ItemWithCellAttributes<Product>] = [] {
         didSet {
             tableView.reloadData()
         }
     }
     
-    var sortBy: ProductSortBy = .Fav
+    var sortBy: ProductSortBy = .Fav {
+        didSet {
+            if sortBy != oldValue {
+                if let option = sortByOption(sortBy) {
+                    sortByButton.setTitle(option.key, forState: .Normal)
+                } else {
+                    QL3("No option for \(sortBy)")
+                }
+                clearAndLoadFirstPage()
+            }
+        }
+    }
     @IBOutlet weak var sortByButton: UIButton!
     private var sortByPopup: CMPopTipView?
     private let sortByOptions: [(value: ProductSortBy, key: String)] = [
@@ -57,10 +69,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func clearAndLoadFirstPage() {
-        products = []
+        filteredProducts = []
         paginator.reset()
-        tableView.reloadData()
         loadPossibleNextPage()
+    }
+    
+    func sortByOption(sortBy: ProductSortBy) -> (value: ProductSortBy, key: String)? {
+        return sortByOptions.findFirst{$0.value == sortBy}
     }
     
     override func viewDidLoad() {
@@ -74,13 +89,26 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
 
         initNavBar([.Edit])
         
-        Providers.productProvider.products(paginator.currentPage, sortBy: sortBy, successHandler {[weak self] products in
-            self?.products = products
-        })
+        searchBar.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+
+        loadPossibleNextPage()
+        
+        navigationItem.backBarButtonItem?.title = ""
+        
+        layout()
+
+        let recognizer = UITapGestureRecognizer(target: self, action: Selector("handleTap:"))
+        recognizer.delegate = self
+        recognizer.cancelsTouchesInView = false
+        view.addGestureRecognizer(recognizer)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
+    }
+    
+    private func layout() {
+        searchBoxHeightConstraint.constant = DimensionsManager.searchBarHeight
     }
     
     deinit {
@@ -89,6 +117,10 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     
     override func viewWillDisappear(animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
+    func handleTap(recognizer: UITapGestureRecognizer) {
+        view.endEditing(true)
     }
     
     func onEditTap(sender: UIBarButtonItem) {
@@ -113,8 +145,9 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     private func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
-        let top: CGFloat = 64
-        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: 290, openInset: top, closeInset: top, parentViewController: self, tableView: tableView) {[weak self] in
+//        let top: CGFloat = 55
+        let top: CGFloat = 0
+        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
             return controller
@@ -139,6 +172,9 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         let product = filteredProducts[indexPath.row]
 
         cell.product = product
+        
+        cell.contentView.addBottomBorderWithColor(Theme.cellBottomBorderColor, width: 1)
+        
         return cell
     }
     
@@ -157,8 +193,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let product = filteredProducts[indexPath.row]
-        return product.item.brand.isEmpty ? 50 : 64
+        return DimensionsManager.defaultCellHeight
     }
     
     private func removeProductUI(product: Product) {
@@ -173,37 +208,33 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     private func removeProductUI(product: ItemWithCellAttributes<Product>, indexPath: NSIndexPath) {
         tableView.wrapUpdates {[weak self] in
             self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            self?.products.remove(product.item)
             self?.filteredProducts.remove(product)
         }
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
-        filter(searchText)
+    // MARK: - Filter
+    
+    
+    func textFieldDidChange(textField: UITextField) {
+        filter(textField.text ?? "")
     }
-
+    
     private func filter(searchText: String) {
-        if searchText.isEmpty {
-            filteredProducts = ItemWithCellAttributes.toItemsWithCellAttributes(products)
-        } else {
-            // TODO!!! range, check filter concept probably same problem as with quick add.
-            // TODO sortby recently added or something, so user sees last added products on top
-            Providers.productProvider.products(searchText, range: NSRange(location: 0, length: 10000), sortBy: .Fav, successHandler{[weak self] products in
-                if let weakSelf = self {
-
-                    let productWithCellAttributes = products.products.map{product in
-                        return ItemWithCellAttributes(item: product, boldRange: product.name.range(searchText, caseInsensitive: true))
-                    }
-                    weakSelf.filteredProducts = productWithCellAttributes
-                }
-            })
-        }
+        self.searchText = searchText
     }
+    
+    
+    // MARK: -
     
     private func onUpdatedProducts() {
         if let searchText = searchBar.text {
             filter(searchText)
         }
+    }
+    
+    func textFieldShouldReturn(sender: UITextField) -> Bool {
+        view.endEditing(true)
+        return false
     }
  
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -215,12 +246,6 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             initNavBar([.Edit, .Save])
         }
     }
-    
-    private func clearSearch() {
-        searchBar.text = ""
-        filteredProducts = ItemWithCellAttributes.toItemsWithCellAttributes(products)
-    }
-    
     
     // MARK: - QuickAddDelegate
     
@@ -283,7 +308,8 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func parentViewForAddButton() -> UIView {
-        return self.view
+        // this is a hack, with view the button shows below to where it should be. With super view it works. Not time to find out. Defaulting to view because superview is optional and prefer to avoid ! TODO improve this
+        return view.superview ?? view
     }
     
     func addEditSectionOrCategoryColor(name: String, handler: UIColor? -> Void) {
@@ -303,7 +329,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     // MARK: -
     
     private func indexPathForProduct(product: Product) -> NSIndexPath? {
-        let indexMaybe = products.enumerate().filter{$0.element.same(product)}.first?.index
+        let indexMaybe = filteredProducts.enumerate().filter{$0.element.item.same(product)}.first?.index
         return indexMaybe.map{NSIndexPath(forRow: $0, inSection: 0)}
     }
 
@@ -316,7 +342,13 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     private func updateProductUI(product: Product, indexPath: NSIndexPath) {
-        products.update(product)
+        
+        for i in 0..<filteredProducts.count {
+            if filteredProducts[i].item.same(product) {
+                filteredProducts[i] = ItemWithCellAttributes(item: product, boldRange: product.name.range(searchText, caseInsensitive: true))
+            }
+        }
+        
         onUpdatedProducts()
         
         tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
@@ -326,7 +358,8 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     private func addProductUI(product: Product) {
-        products.append(product)
+        let item = ItemWithCellAttributes(item: product, boldRange: product.name.range(searchText, caseInsensitive: true))
+        filteredProducts.append(item)
         onUpdatedProducts()
         tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: filteredProducts.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
         setAddEditProductControllerOpen(false)
@@ -337,6 +370,15 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         initNavBar([.Edit])
     }
     
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let currentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+        
+        if (maximumOffset - currentOffset) <= 40 {
+            loadPossibleNextPage()
+        }
+    }
+    
     private func loadPossibleNextPage() {
         
         func setLoading(loading: Bool) {
@@ -344,18 +386,21 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             self.tableViewFooter.hidden = !loading
         }
         
-        synced(self) {[weak self] in
-            let weakSelf = self!
+        synced(self) {[weak self] in guard let weakSelf = self else {return}
             
             if !weakSelf.paginator.reachedEnd {
                 
                 if (!weakSelf.loadingPage) {
                     setLoading(true)
                     
-                    Providers.productProvider.products(weakSelf.paginator.currentPage, sortBy: weakSelf.sortBy, weakSelf.successHandler{products in
-                        weakSelf.products.appendAll(products)
+                    Providers.productProvider.products(weakSelf.searchText, range: weakSelf.paginator.currentPage, sortBy: weakSelf.sortBy, weakSelf.successHandler{products in
                         
-                        weakSelf.paginator.update(products.count)
+                        let productWithCellAttributes = products.products.map{product in
+                            return ItemWithCellAttributes(item: product, boldRange: product.name.range(weakSelf.searchText, caseInsensitive: true))
+                        }
+                        weakSelf.filteredProducts.appendAll(productWithCellAttributes)
+                        
+                        weakSelf.paginator.update(products.products.count)
                         
                         weakSelf.tableView.reloadData()
                         setLoading(false)
@@ -373,7 +418,10 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     // MARK: - ExpandableTopViewControllerDelegate
     
     func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
-        topControlTopConstraint.constant = view.frame.height
+        topControlTopConstraint.constant = expand ? view.frame.height : 10
+        searchBoxHeightConstraint.constant = expand ? 0 : DimensionsManager.searchBarHeight
+        searchBoxMarginTopConstraint.constant = expand ? 0 : 10
+//        searchBoxMarginBottomConstraint.constant = expand ? 0 : 10
         self.view.layoutIfNeeded()
     }
     
@@ -450,9 +498,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let sortByOption = sortByOptions[row]
         sortBy = sortByOption.value
-        sortByButton.setTitle(sortByOption.key, forState: .Normal)
-        
-        clearAndLoadFirstPage()
+
     }
     
     func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
@@ -466,7 +512,11 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         if let popup = self.sortByPopup {
             popup.dismissAnimated(true)
         } else {
-            let popup = MyTipPopup(customView: createPicker())
+            let picker = createPicker()
+            let popup = MyTipPopup(customView: picker)
+            if let row = (sortByOptions.indexOf{$0.value == sortBy}) {
+                picker.selectRow(row, inComponent: 0, animated: false)
+            }
             popup.presentPointingAtView(sortByButton, inView: view, animated: true)
         }
     }

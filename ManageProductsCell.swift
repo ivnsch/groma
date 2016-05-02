@@ -12,10 +12,12 @@ class ManageProductsCell: UITableViewCell {
 
     @IBOutlet weak var productNameLabel: UILabel!
     @IBOutlet weak var productBrandLabel: UILabel!
-    @IBOutlet weak var productCategoryLabel: UILabel!
-    @IBOutlet weak var productPriceLabel: UILabel!
+//    @IBOutlet weak var productCategoryLabel: UILabel!
+//    @IBOutlet weak var productPriceLabel: UILabel!
 
-    @IBOutlet weak var productCategoryLabelTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var productNameCenterConstraint: NSLayoutConstraint!
+
+    @IBOutlet weak var categoryColorView: UIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -32,11 +34,31 @@ class ManageProductsCell: UITableViewCell {
                     productNameLabel.text = productNameTranslation
                 }
                 
-                productCategoryLabel.text = NSLocalizedString(product.item.category.name, comment: "")
+//                productCategoryLabel.text = NSLocalizedString(product.item.category.name, comment: "")
                 productBrandLabel.text = product.item.brand
                 
-                productCategoryLabelTopConstraint.constant = product.item.brand.isEmpty ? 0 : 2
+//                productCategoryLabelTopConstraint.constant = product.item.brand.isEmpty ? 0 : 2
+                
+                categoryColorView.backgroundColor = product.item.category.color
+                
+                productNameCenterConstraint.constant = product.item.brand.isEmpty ? 0 : -10
             }
+        }
+    }
+    
+    override func setEditing(editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        
+        func animate(alpha: CGFloat) {
+            UIView.animateWithDuration(0.2) {[weak self] in
+                self?.categoryColorView.alpha = alpha
+            }
+        }
+        
+        if editing {
+            animate(0)
+        } else {
+            animate(1)
         }
     }
 }
