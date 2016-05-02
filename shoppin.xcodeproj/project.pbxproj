@@ -997,6 +997,8 @@
 		EBF1A15F1B82428700F34105 /* HistoryItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF1A15E1B82428700F34105 /* HistoryItemCell.swift */; };
 		EBF1F9E71CD76A1900F8016F /* MyAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF1F9E61CD76A1900F8016F /* MyAlert.swift */; };
 		EBF1F9E91CD76AA500F8016F /* MyAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBF1F9E81CD76AA500F8016F /* MyAlert.xib */; };
+		EBF1F9EB1CD7F75E00F8016F /* SimpleSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF1F9EA1CD7F75E00F8016F /* SimpleSettingCell.swift */; };
+		EBF1F9ED1CD7F77700F8016F /* SwitchSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF1F9EC1CD7F77700F8016F /* SwitchSettingCell.swift */; };
 		EBF299831B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */; };
 		EBF299841B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */; };
 		EBF299851B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */; };
@@ -1660,6 +1662,8 @@
 		EBF1A15E1B82428700F34105 /* HistoryItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryItemCell.swift; sourceTree = "<group>"; };
 		EBF1F9E61CD76A1900F8016F /* MyAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAlert.swift; sourceTree = "<group>"; };
 		EBF1F9E81CD76AA500F8016F /* MyAlert.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyAlert.xib; sourceTree = "<group>"; };
+		EBF1F9EA1CD7F75E00F8016F /* SimpleSettingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleSettingCell.swift; sourceTree = "<group>"; };
+		EBF1F9EC1CD7F77700F8016F /* SwitchSettingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchSettingCell.swift; sourceTree = "<group>"; };
 		EBF299821B79100B006BDA1F /* RemoteInventoriesWithInventoryItemsSyncResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoriesWithInventoryItemsSyncResult.swift; sourceTree = "<group>"; };
 		EBF299861B791023006BDA1F /* InventorySync.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventorySync.swift; sourceTree = "<group>"; };
 		EBF3775C1B34268D00EEB6DB /* shoppin-prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "shoppin-prefix.pch"; sourceTree = "<group>"; };
@@ -2712,6 +2716,8 @@
 			isa = PBXGroup;
 			children = (
 				EBA9E5E91C6380ED00A85610 /* SettingsViewController.swift */,
+				EBF1F9EA1CD7F75E00F8016F /* SimpleSettingCell.swift */,
+				EBF1F9EC1CD7F77700F8016F /* SwitchSettingCell.swift */,
 			);
 			name = settings;
 			sourceTree = "<group>";
@@ -3753,6 +3759,7 @@
 				EBF377931B38A99800EEB6DB /* RemoteUserProvider.swift in Sources */,
 				EB85CEDD1C91E423008E3BA0 /* ProductWithQuantityInput.swift in Sources */,
 				EBB526851BEFE6DD0002A286 /* SectionModel.swift in Sources */,
+				EBF1F9EB1CD7F75E00F8016F /* SimpleSettingCell.swift in Sources */,
 				EB78587D1B7FD81A008AAD12 /* HistoryItemsSync.swift in Sources */,
 				EB7BFA751BD99CB600F4C74A /* Addable.swift in Sources */,
 				EB2F5D731A55754400DBC4AF /* PricesView.swift in Sources */,
@@ -3775,6 +3782,7 @@
 				EB37AB981C9CA81F00FE9D7A /* OrderUpdate.swift in Sources */,
 				EBA7AC9E1BFEA87300247A8C /* ProductCategoryProvider.swift in Sources */,
 				EB896C6B1CC7E7C900F991C6 /* RemoteInventoryWithDependencies.swift in Sources */,
+				EBF1F9ED1CD7F77700F8016F /* SwitchSettingCell.swift in Sources */,
 				EBA575711BD031B400A0A825 /* GroupItemInput.swift in Sources */,
 				EB37ABB91CA09B4F00FE9D7A /* PullToAddHelper.swift in Sources */,
 				EB4A38A41C87B96C000714F9 /* GoogleSignInHelper.swift in Sources */,
