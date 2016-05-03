@@ -139,6 +139,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     func onExpand(expanding: Bool) {
         if !expanding {
             productsWithQuantityController?.emptyView.hidden = true
+            topQuickAddControllerManager?.controller?.removeFromParentViewControllerWithView()
             topBar.setLeftButtonIds([])
             topBar.setRightButtonIds([])
         }

@@ -134,6 +134,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     func onExpand(expanding: Bool) {
         if !expanding {
             productsWithQuantityController?.emptyView.hidden = true
+            topQuickAddControllerManager?.controller?.removeFromParentViewControllerWithView()            
             topBar.setLeftButtonIds([])
             topBar.setRightButtonIds([])
             // Clear memory cache when we leave controller. This is not really necessary but just "in case". The memory cache is there to smooth things *inside* an inventory, Basically quick adding/incrementing.

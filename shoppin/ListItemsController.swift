@@ -144,6 +144,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     func onExpand(expanding: Bool) {
         if !expanding {
             clearPossibleNotePopup()
+            topQuickAddControllerManager?.controller?.removeFromParentViewControllerWithView()
             setEmptyViewVisible(false, animated: false)
             clearPossibleUndo()
             topBar.setLeftButtonIds([])
