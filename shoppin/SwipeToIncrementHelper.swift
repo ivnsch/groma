@@ -34,7 +34,12 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
         
         panRecognizer = UIPanGestureRecognizer(target: self, action: "onPanCell:")
         panRecognizer.delegate = self
+        panRecognizer.cancelsTouchesInView = false
         view.addGestureRecognizer(self.panRecognizer)
+    }
+    
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
     
     func onPanCell(recognizer: UIPanGestureRecognizer) {
@@ -61,14 +66,17 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
                 let updatedQuantity = max(0, initQuantitySlider + deltaForQuantity)
                 delegate.onQuantityUpdated(updatedQuantity)
             }
+    
+        case .Failed:
+            QL3("Failed pan")
+
+        case .Cancelled:
+            QL3("Cancelled pan")
             
         case .Ended:
             if movingHorizontally {
                 delegate.onFinishSwipe()
             }
-            
-        case .Cancelled:
-            QL3("Cancelled pan")
             
         default:
             QL3("Not handled: \(recognizer.state)")
