@@ -1967,7 +1967,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                     <constraints>
                                         <constraint firstItem="8K4-i5-AZ4" firstAttribute="centerY" secondItem="g0y-il-hwG" secondAttribute="centerY" id="5o1-mm-5CB"/>
                                         <constraint firstItem="dxv-Gd-l65" firstAttribute="centerY" secondItem="g0y-il-hwG" secondAttribute="centerY" id="Dfp-pC-fKm"/>
-                                        <constraint firstItem="dxv-Gd-l65" firstAttribute="leading" secondItem="g0y-il-hwG" secondAttribute="leading" constant="14" id="ov9-Mg-UYU" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target"/>
+                                        <constraint firstItem="dxv-Gd-l65" firstAttribute="leading" secondItem="g0y-il-hwG" secondAttribute="leading" constant="14" id="ov9-Mg-UYU" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                         <constraint firstItem="MLf-Cc-uTT" firstAttribute="leading" secondItem="8K4-i5-AZ4" secondAttribute="trailing" constant="4" id="scE-uY-Wdf"/>
                                         <constraint firstAttribute="trailing" secondItem="MLf-Cc-uTT" secondAttribute="trailing" constant="14" id="syP-we-d1f"/>
                                         <constraint firstItem="MLf-Cc-uTT" firstAttribute="centerY" secondItem="g0y-il-hwG" secondAttribute="centerY" id="tFD-LY-wxp"/>
