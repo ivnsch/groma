@@ -13,7 +13,7 @@ protocol ListItemCellDelegate {
     func onItemSwiped(listItem: TableViewListItem)
     func onStartItemSwipe(listItem: TableViewListItem)
     func onButtonTwoTap(listItem: TableViewListItem)
-    func onNoteTap(listItem: TableViewListItem)
+    func onNoteTap(cell: ListItemCell, listItem: TableViewListItem)
     func onMinusTap(listItem: TableViewListItem)
     func onPlusTap(listItem: TableViewListItem)
     func onPanQuantityUpdate(tableViewListItem: TableViewListItem, newQuantity: Int)
@@ -235,7 +235,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
     
     @IBAction func onNoteTap(sender: UIButton) {
         if let tableViewListItem = tableViewListItem{
-            delegate?.onNoteTap(tableViewListItem)
+            delegate?.onNoteTap(self, listItem: tableViewListItem)
         } else {
             print("Warn: ListItemCell.onNoteTap: no tableViewListItem")
         }

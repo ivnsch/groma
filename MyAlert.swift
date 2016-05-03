@@ -9,6 +9,10 @@
 import UIKit
 import QorumLogs
 
+enum MyAlertDismissAnimation {
+    case Fade, None
+}
+
 // Inspired by https://github.com/chrene/swipe-to-dismiss
 class MyAlert: UIView, UIGestureRecognizerDelegate {
 
@@ -19,10 +23,15 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     @IBOutlet weak var widthConstraint: NSLayoutConstraint!
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var labelCenterConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var okButton: UIButton!
     
-    private var panRecognizer: UIPanGestureRecognizer!
-    
+    var dismissWithSwipe = false
+    var dismissAnimation: MyAlertDismissAnimation = .Fade
+
+    var minWidth: CGFloat = 250
+    var minHeight: CGFloat = 160
     
     var text: String = "" {
         didSet {
@@ -46,25 +55,65 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     }
     
     var onDismiss: VoidFunction?
+    var onTapAnywhere: VoidFunction?
+
+    var hasOkButton: Bool = true {
+        didSet {
+            if let okButton = okButton {
+                okButton.hidden = !hasOkButton
+                labelCenterConstraint.constant = hasOkButton ? -25 : 0
+            } else {
+                QL3("No button")
+            }
+        }
+    }
     
-    init() {
-        super.init(frame: CGRectZero)
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
     }
     
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        onTapAnywhere?()
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        panRecognizer = UIPanGestureRecognizer(target: self, action: "onPan:")
-        panRecognizer.delegate = self
-        addGestureRecognizer(panRecognizer)
+        if dismissWithSwipe {
+            let panRecognizer = UIPanGestureRecognizer(target: self, action: "onPan:")
+            panRecognizer.delegate = self
+            panRecognizer.cancelsTouchesInView = false
+            addGestureRecognizer(panRecognizer)
+        }
+    }
+
+    func animateScale(open: Bool, anchorPoint: CGPoint, parentView: UIView, onFinish: VoidFunction? = nil) {
+
+        if open {
+            let fractionX = anchorPoint.x / parentView.frame.width
+            let fractionY = anchorPoint.y / parentView.frame.height
+            
+            layer.anchorPoint = CGPointMake(fractionX, fractionY)
+            
+            frame = CGRectMake(0, 0, parentView.frame.width, parentView.frame.height)
+        }
+        
+        transform = open ? CGAffineTransformMakeScale(0.001, 0.001) : CGAffineTransformMakeScale(1, 1)
+
+        UIView.animateWithDuration(0.3, animations: {[weak self] in
+            self?.transform = open ? CGAffineTransformMakeScale(1, 1) : CGAffineTransformMakeScale(0.001, 0.001)
+        }, completion: {finished in
+            onFinish?()
+        })
     }
     
-    func setVisible(visible: Bool, startPoint: CGPoint) {
-        hidden = !visible
+    func handleTap(recognizer: UITapGestureRecognizer) {
+        onTapAnywhere?()
     }
 
     private func updateContainerSize() {
@@ -78,9 +127,6 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
        
         let paddingMaxSize: CGFloat = 30
         
-        let minWidth: CGFloat = 250
-        let minHeight: CGFloat = 200
-        
         let maxWidth: CGFloat = frame.width - (paddingMaxSize * 2)
         let maxHeight: CGFloat = frame.height - (paddingMaxSize * 2)
         
@@ -88,13 +134,23 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
         heightConstraint.constant = min(max(minHeight, containerHeight), maxHeight)
     }
     
-    func resetPopupViewAndHide() {
-        UIView.animateWithDuration(0.3, animations: {[weak self] in
-            self?.background.alpha = 0
-        }, completion: {[weak self] finished in
-            self?.onDismiss?()
-            self?.removeFromSuperview()
-        })
+    func dismiss() {
+        
+        func dismiss() {
+            onDismiss?()
+            removeFromSuperview()
+        }
+        
+        switch dismissAnimation {
+        case .Fade:
+            UIView.animateWithDuration(0.3, animations: {[weak self] in
+                self?.background.alpha = 0
+                }, completion: {finished in
+                    dismiss()
+            })
+        case .None:
+            dismiss()
+        }
     }
     
     // down 0 up 1
@@ -136,7 +192,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
                 UIView.animateWithDuration(min(0.3, duration), animations: {
                     self.container.center = center
                 }, completion: {finished in
-                    self.resetPopupViewAndHide()
+                    self.dismiss()
                 })
             } else {
                 UIView.animateWithDuration(0.5, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 2, options: [], animations: {
@@ -150,7 +206,6 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     }
     
     @IBAction func onOkTap() {
-        resetPopupViewAndHide()
-        onDismiss?()
+        dismiss()
     }
 }

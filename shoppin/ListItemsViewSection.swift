@@ -16,7 +16,7 @@ protocol ItemActionsDelegate {
     func startItemSwipe(tableViewListItem: TableViewListItem)
     func endItemSwipe(tableViewListItem: TableViewListItem)
     func undoSwipe(tableViewListItem: TableViewListItem)
-    func onNoteTap(tableViewListItem: TableViewListItem)
+    func onNoteTap(cell: ListItemCell, tableViewListItem: TableViewListItem)
     func onHeaderTap(header: ListItemsSectionHeaderView, section: ListItemsViewSection)
     func onMinusTap(tableViewListItem: TableViewListItem)
     func onPlusTap(tableViewListItem: TableViewListItem)
@@ -182,8 +182,8 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
         delegate?.undoSwipe(listItem)
     }
     
-    func onNoteTap(listItem: TableViewListItem) {
-        delegate?.onNoteTap(listItem)
+    func onNoteTap(cell: ListItemCell, listItem: TableViewListItem) {
+        delegate?.onNoteTap(cell, tableViewListItem: listItem)
     }
     
     func onMinusTap(listItem: TableViewListItem) {

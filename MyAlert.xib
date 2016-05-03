@@ -87,6 +87,7 @@
                 <outlet property="container" destination="Ul0-kr-5aF" id="BLC-br-5cH"/>
                 <outlet property="heightConstraint" destination="6WR-rG-Rjh" id="vOv-GF-Jyr"/>
                 <outlet property="label" destination="BQy-XG-p6e" id="ohJ-Yo-MKM"/>
+                <outlet property="labelCenterConstraint" destination="xPf-7d-1FJ" id="7ch-xm-7qW"/>
                 <outlet property="okButton" destination="hjV-7A-rrw" id="39B-IY-MBX"/>
                 <outlet property="widthConstraint" destination="MGd-oS-VUd" id="H4B-jg-r1E"/>
             </connections>

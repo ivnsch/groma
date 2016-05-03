@@ -591,9 +591,18 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
         self.swipedTableViewListItem = nil
     }
 
-    func onNoteTap(tableViewListItem: TableViewListItem) {
+    func onNoteTap(cell: ListItemCell, tableViewListItem: TableViewListItem) {
         if let note = tableViewListItem.listItem.note {
-            AlertPopup.show(message: note, controller: self)
+            
+            if let controller = UIApplication.sharedApplication().delegate?.window??.rootViewController {
+                let noteButton = cell.noteButton
+                let noteButtonPointInRootController = controller.view.convertPoint(CGPointMake(noteButton.center.x, noteButton.center.y), fromView: cell)
+                AlertPopup.show(message: note, controller: self, rootControllerStartPoint: noteButtonPointInRootController)
+            } else {
+                QL3("No root controller, can't show note popup")
+            }
+            
+            
             
         } else {
             print("Error: Invalid state in onNoteTap. There's no note. When there's no note there should be no button so we shouldn't be here.")
