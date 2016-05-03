@@ -80,11 +80,13 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
         view.sectionModel = sectionModel
         view.delegate = self
         view.sectionIndex = section
+        // height now calculated yet so we pass the position of border
+        view.addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
         return view
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
+        return DimensionsManager.defaultCellHeight
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

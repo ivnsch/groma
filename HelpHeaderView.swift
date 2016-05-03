@@ -27,7 +27,7 @@ class HelpHeaderView: UIView {
                 let textColor = sectionModel.obj.type == .Troubleshooting ? UIColor.redColor() : UIColor.darkTextColor()
                 
                 if let boldRange = sectionModel.boldRange {
-                    helpTitleLabel.attributedText = sectionModel.obj.title.makeAttributed(boldRange, normalFont: Fonts.smaller, font: Fonts.smallerBold, textColor: textColor)
+                    helpTitleLabel.attributedText = sectionModel.obj.title.makeAttributed(boldRange, normalFont: Fonts.regular, font: Fonts.regularBold, textColor: textColor)
                 } else {
                     helpTitleLabel.text = sectionModel.obj.title
                     helpTitleLabel.textColor = textColor

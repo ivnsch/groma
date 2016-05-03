@@ -22,8 +22,8 @@ class Fonts {
     static let fontNameLight: String = "\(fontName)-Light"
     static let fontNameBold: String = "\(fontName)-Bold"
     
-    static let largeSize: CGFloat = 19
-    static let regularSize: CGFloat = 17
+    static let largeSize: CGFloat = 20
+    static let regularSize: CGFloat = 18
     static let smallSize: CGFloat = 15
     static let smallerSize: CGFloat = 14 // textfield default
     static let verySmallSize: CGFloat = 13
