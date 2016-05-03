@@ -92,15 +92,17 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
         }
     }
 
-    func animateScale(open: Bool, anchorPoint: CGPoint, parentView: UIView, onFinish: VoidFunction? = nil) {
+    func animateScale(open: Bool, anchorPoint: CGPoint, parentView: UIView, frame: CGRect? = nil, onFinish: VoidFunction? = nil) {
 
+        let frame = frame ?? parentView.frame
+        
         if open {
-            let fractionX = anchorPoint.x / parentView.frame.width
-            let fractionY = anchorPoint.y / parentView.frame.height
+            let fractionX = anchorPoint.x / frame.width
+            let fractionY = anchorPoint.y / frame.height
             
             layer.anchorPoint = CGPointMake(fractionX, fractionY)
             
-            frame = CGRectMake(0, 0, parentView.frame.width, parentView.frame.height)
+            self.frame = CGRectMake(frame.origin.x, frame.origin.y, frame.width, frame.height)
         }
         
         transform = open ? CGAffineTransformMakeScale(0.001, 0.001) : CGAffineTransformMakeScale(1, 1)

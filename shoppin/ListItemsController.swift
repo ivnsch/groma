@@ -143,6 +143,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     func onExpand(expanding: Bool) {
         if !expanding {
+            clearPossibleNotePopup()
             setEmptyViewVisible(false, animated: false)
             clearPossibleUndo()
             topBar.setLeftButtonIds([])
@@ -220,12 +221,20 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         topBar.setLeftButtonIds([.Edit])
     }
     
+    func clearPossibleNotePopup() {
+        if let popup = view.viewWithTag(ViewTags.NotePopup) {
+            popup.removeFromSuperview()
+        }
+    }
+    
     // MARK:
     
     // returns: is now open?
     func toggleTopAddController(rotateTopBarButton: Bool = true) -> Bool {
         
         clearPossibleUndo()
+        
+        clearPossibleNotePopup()
         
         // if any top controller is open, close it
         if topQuickAddControllerManager?.expanded ?? false || topEditSectionControllerManager?.expanded ?? false {
@@ -266,6 +275,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     // Note: Parameter tryCloseTopViewController should not be necessary but quick fix for breaking constraints error when quickAddController (lazy var) is created while viewDidLoad or viewWillAppear. viewDidAppear works but has little strange effect on loading table then
     func setEditing(editing: Bool, animated: Bool, tryCloseTopViewController: Bool) {
         super.setEditing(editing, animated: animated)
+        
+        clearPossibleNotePopup()
         
         if editing == false {
             view.endEditing(true)

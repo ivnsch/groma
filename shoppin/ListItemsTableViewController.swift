@@ -594,12 +594,20 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     func onNoteTap(cell: ListItemCell, tableViewListItem: TableViewListItem) {
         if let note = tableViewListItem.listItem.note {
             
-            if let controller = UIApplication.sharedApplication().delegate?.window??.rootViewController {
+            // use parent controller otherwise popup scrolls with the table
+            if let parentController = parentViewController {
                 let noteButton = cell.noteButton
-                let noteButtonPointInRootController = controller.view.convertPoint(CGPointMake(noteButton.center.x, noteButton.center.y), fromView: cell)
-                AlertPopup.show(message: note, controller: self, rootControllerStartPoint: noteButtonPointInRootController)
+                
+                let topOffset: CGFloat = 64
+                let frame = parentController.view.bounds.copy(y: topOffset, height: parentController.view.bounds.height - DimensionsManager.listItemsPricesViewHeight - topOffset)
+                
+                let noteButtonPointParentController = parentController.view.convertPoint(CGPointMake(noteButton.center.x, noteButton.center.y), fromView: cell)
+                // adjust the anchor point also for topOffset
+                let buttonPointWithOffset = noteButtonPointParentController.copy(y: noteButtonPointParentController.y - topOffset)
+                
+                AlertPopup.show(message: note, controller: parentController, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
             } else {
-                QL3("No root controller, can't show note popup")
+                QL3("No parent controller, can't show note popup")
             }
             
             

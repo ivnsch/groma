@@ -19,39 +19,37 @@ class AlertPopup: NSObject {
         return alert
     }
     
-    static func show(title title: String? = nil, message: String, controller: UIViewController, okMsg: String = "Ok", rootControllerStartPoint: CGPoint? = nil, onDismiss: VoidFunction? = nil) {
+    // Frame of popup (including semitransparent background) in case this is different than the frame controller's view.
+    static func show(title title: String? = nil, message: String, controller: UIViewController, frame: CGRect? = nil, okMsg: String = "Ok", rootControllerStartPoint: CGPoint? = nil, onDismiss: VoidFunction? = nil) {
 //        let alert = create(title: title, message: message, okMsg: okMsg, onDismiss: onDismiss)
 //        controller.presentViewController(alert, animated: true, completion: nil)
-                
-        if let controller = UIApplication.sharedApplication().delegate?.window??.rootViewController {
-    
-            let myAlert = NSBundle.loadView("MyAlert", owner: self) as! MyAlert
-            myAlert.translatesAutoresizingMaskIntoConstraints = true
-            myAlert.frame = CGRectMake(0, 0, controller.view.frame.width, controller.view.frame.height)
-            controller.view.addSubview(myAlert)
-            controller.view.bringSubviewToFront(myAlert)
 
-            myAlert.text = message
-            myAlert.buttonText = okMsg
-            myAlert.onDismiss = onDismiss
-            myAlert.dismissAnimation = .None
-            myAlert.dismissWithSwipe = false
-            myAlert.hasOkButton = false
-            
-            if let point = rootControllerStartPoint {
-                // close
-                myAlert.onTapAnywhere = {
-                    myAlert.animateScale(false, anchorPoint: point, parentView: controller.view) {
-                        myAlert.dismiss()
-                    }
+        guard controller.view.viewWithTag(ViewTags.NotePopup) == nil else {QL2("Already showing popup, return"); return}
+        
+        let myAlert = NSBundle.loadView("MyAlert", owner: self) as! MyAlert
+        myAlert.translatesAutoresizingMaskIntoConstraints = true
+        myAlert.frame = frame ?? controller.view.bounds
+        controller.view.addSubview(myAlert)
+        controller.view.bringSubviewToFront(myAlert)
+        myAlert.tag = ViewTags.NotePopup
+        
+        myAlert.text = message
+        myAlert.buttonText = okMsg
+        myAlert.onDismiss = onDismiss
+        myAlert.dismissAnimation = .None
+        myAlert.dismissWithSwipe = false
+        myAlert.hasOkButton = false
+        
+        if let point = rootControllerStartPoint {
+            // close
+            myAlert.onTapAnywhere = {
+                myAlert.animateScale(false, anchorPoint: point, parentView: controller.view, frame: frame) {
+                    myAlert.dismiss()
                 }
-                
-                // open
-                myAlert.animateScale(true, anchorPoint: point, parentView: controller.view)
             }
-
-        } else {
-            QL4("No root view controller, can't handle buy cart success result")
+            
+            // open
+            myAlert.animateScale(true, anchorPoint: point, parentView: controller.view, frame: frame)
         }
     }
     

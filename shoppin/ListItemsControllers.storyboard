@@ -403,16 +403,13 @@
                                 <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="80h-ha-9Dw" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" id="7Ho-ih-Y8v"/>
-                                    <constraint firstItem="80h-ha-9Dw" firstAttribute="leading" secondItem="mNO-iA-eWt" secondAttribute="trailing" constant="8" id="DfM-FT-kFe"/>
                                     <constraint firstAttribute="trailing" secondItem="80h-ha-9Dw" secondAttribute="trailing" constant="20" id="EFj-TJ-Exd"/>
                                     <constraint firstAttribute="height" constant="60" id="FDi-oR-jaL"/>
                                     <constraint firstItem="jvm-6H-Duz" firstAttribute="leading" secondItem="iVM-Kg-U2m" secondAttribute="leading" constant="20" id="N2L-3E-box"/>
-                                    <constraint firstItem="E7V-vH-7DE" firstAttribute="top" secondItem="iVM-Kg-U2m" secondAttribute="top" constant="20" id="RVl-9B-dbj"/>
                                     <constraint firstItem="8Om-sR-QxE" firstAttribute="width" secondItem="iVM-Kg-U2m" secondAttribute="width" id="RXv-Ls-2G1"/>
                                     <constraint firstAttribute="bottom" secondItem="8Om-sR-QxE" secondAttribute="bottom" id="SXe-fT-Hgl"/>
                                     <constraint firstItem="mNO-iA-eWt" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" id="a0J-pk-79B"/>
                                     <constraint firstAttribute="trailing" secondItem="mNO-iA-eWt" secondAttribute="trailing" constant="20" id="b0s-wD-ouu"/>
-                                    <constraint firstItem="mNO-iA-eWt" firstAttribute="leading" secondItem="jvm-6H-Duz" secondAttribute="trailing" constant="8" id="b2X-D3-84O"/>
                                     <constraint firstItem="8Om-sR-QxE" firstAttribute="leading" secondItem="iVM-Kg-U2m" secondAttribute="leading" id="dTa-M3-0Dy"/>
                                     <constraint firstItem="Fgk-0h-BDM" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" constant="10" id="ehR-wG-94L"/>
                                     <constraint firstItem="8Om-sR-QxE" firstAttribute="top" secondItem="iVM-Kg-U2m" secondAttribute="top" id="hiO-0Z-gGF"/>
@@ -420,16 +417,7 @@
                                     <constraint firstItem="jvm-6H-Duz" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" id="osV-Cj-ABu"/>
                                     <constraint firstItem="Fgk-0h-BDM" firstAttribute="leading" secondItem="iVM-Kg-U2m" secondAttribute="leading" constant="67" id="qKp-qe-yJa"/>
                                     <constraint firstItem="E7V-vH-7DE" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" constant="-10" id="ufs-0F-FLZ"/>
-                                    <constraint firstItem="mNO-iA-eWt" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" id="yfA-y9-d3R"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="RVl-9B-dbj"/>
-                                        <exclude reference="DfM-FT-kFe"/>
-                                        <exclude reference="b2X-D3-84O"/>
-                                        <exclude reference="yfA-y9-d3R"/>
-                                    </mask>
-                                </variation>
                                 <connections>
                                     <outlet property="button" destination="8Om-sR-QxE" id="6AZ-uD-fAs"/>
                                     <outlet property="cartImg" destination="jvm-6H-Duz" id="RzP-6X-oJ1"/>
@@ -462,18 +450,10 @@
                             <constraint firstItem="so5-bY-yhM" firstAttribute="top" secondItem="CzC-OK-nPG" secondAttribute="bottom" priority="999" id="SJe-8i-7tB"/>
                             <constraint firstItem="CzC-OK-nPG" firstAttribute="leading" secondItem="Ytc-Mq-xYS" secondAttribute="leading" id="cRB-8R-1FH"/>
                             <constraint firstItem="so5-bY-yhM" firstAttribute="leading" secondItem="Ytc-Mq-xYS" secondAttribute="leading" id="cia-OM-TGe"/>
-                            <constraint firstItem="5T4-jf-M2R" firstAttribute="top" secondItem="CzC-OK-nPG" secondAttribute="bottom" priority="999" id="kOv-kV-Afg"/>
                             <constraint firstAttribute="trailing" secondItem="CzC-OK-nPG" secondAttribute="trailing" id="muZ-sP-qoQ"/>
                             <constraint firstItem="peQ-Fh-dVX" firstAttribute="top" secondItem="so5-bY-yhM" secondAttribute="bottom" id="nuy-Gu-BZe"/>
                             <constraint firstAttribute="trailing" secondItem="so5-bY-yhM" secondAttribute="trailing" id="oSI-6A-S4k"/>
-                            <constraint firstItem="iVM-Kg-U2m" firstAttribute="top" secondItem="CzC-OK-nPG" secondAttribute="bottom" priority="999" id="yQN-xy-2qf"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="yQN-xy-2qf"/>
-                                <exclude reference="kOv-kV-Afg"/>
-                            </mask>
-                        </variation>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
@@ -585,11 +565,11 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" alpha="0.0" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8LP-6w-Aa7">
-                                                    <rect key="frame" x="444" y="0.0" width="41" height="91"/>
+                                                    <rect key="frame" x="424" y="0.0" width="61" height="91"/>
                                                     <rect key="contentStretch" x="0.0" y="0.0" width="0.40000000000000002" height="1"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="25" id="P6i-N0-avq"/>
-                                                        <constraint firstAttribute="width" constant="41" id="dKo-Iq-2Sh"/>
+                                                        <constraint firstAttribute="width" constant="61" id="dKo-Iq-2Sh"/>
                                                     </constraints>
                                                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                     <state key="normal" image="speechbubble"/>
