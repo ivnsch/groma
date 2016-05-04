@@ -181,6 +181,7 @@
 		EB37ABB91CA09B4F00FE9D7A /* PullToAddHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABB81CA09B4F00FE9D7A /* PullToAddHelper.swift */; };
 		EB37ABBB1CA2021C00FE9D7A /* RoundTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABBA1CA2021C00FE9D7A /* RoundTextField.swift */; };
 		EB3C9E2A1BEA47FF00886197 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C9E291BEA47FF00886197 /* Theme.swift */; };
+		EB3E92EF1CD9347F0048DA0D /* EyeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3E92EE1CD9347E0048DA0D /* EyeView.swift */; };
 		EB40A4691B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
 		EB40A46A1B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
 		EB40A46B1B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
@@ -1220,6 +1221,7 @@
 		EB37ABB81CA09B4F00FE9D7A /* PullToAddHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PullToAddHelper.swift; path = ../PullToAddHelper.swift; sourceTree = "<group>"; };
 		EB37ABBA1CA2021C00FE9D7A /* RoundTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundTextField.swift; sourceTree = "<group>"; };
 		EB3C9E291BEA47FF00886197 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		EB3E92EE1CD9347E0048DA0D /* EyeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EyeView.swift; sourceTree = "<group>"; };
 		EB40A4681B5506FB000E9CAD /* DBSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSection.swift; sourceTree = "<group>"; };
 		EB40A46D1B550804000E9CAD /* RealmProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProvider.swift; sourceTree = "<group>"; };
 		EB40A4711B5508B6000E9CAD /* DBResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBResult.swift; sourceTree = "<group>"; };
@@ -2995,6 +2997,7 @@
 				EBEA0CD11CA5BF3E00E68B81 /* HandlingButton.swift */,
 				EB7D241E1CB959440017EFE6 /* CellUncoverer.swift */,
 				EBB6D7571CD6D67C00F9C711 /* SwipeToIncrementHelper.swift */,
+				EB3E92EE1CD9347E0048DA0D /* EyeView.swift */,
 			);
 			name = view;
 			path = shoppin;
@@ -3691,6 +3694,7 @@
 				EB75E54B1CA424E1006AAEAF /* NewSharedUserCell.swift in Sources */,
 				EB80CE4D1C3F5F10001DF159 /* InventoryAuthChecker.swift in Sources */,
 				EB6F812D1B46E2C4008680E0 /* RemoteLoginResult.swift in Sources */,
+				EB3E92EF1CD9347F0048DA0D /* EyeView.swift in Sources */,
 				EBB5267D1BEFE21F0002A286 /* HelpCell.swift in Sources */,
 				EB7F59D31BA1DBF600E07EBA /* Providers.swift in Sources */,
 				EB0C1B931B3DA9D100F24C85 /* UserProviderImpl.swift in Sources */,

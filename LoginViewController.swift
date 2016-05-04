@@ -28,7 +28,7 @@ enum LoginControllerMode {
     case Normal, Expired, AfterRegister
 }
 
-class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, ExpiredLoginDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
+class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDelegate, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, ExpiredLoginDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, EyeViewDelegate {
 
     @IBOutlet weak var userNameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
@@ -37,6 +37,8 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
 
     @IBOutlet weak var registerButton: UIButton!
     
+    @IBOutlet weak var eyeView: EyeView!
+ 
     // expired views
     @IBOutlet weak var pleaseLoginAgainLabel: UILabel!
     @IBOutlet weak var useAppOfflineButton: UIButton!
@@ -84,6 +86,8 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationItem.title = "Products"
+
         passwordField.secureTextEntry = true
         
         GoogleSignInHelper.configure(uiDelegate: self, delegate: self)
@@ -99,6 +103,8 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         let recognizer = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
         recognizer.delegate = self
         view.addGestureRecognizer(recognizer)
+        
+        eyeView.delegate = self
         
         onUIReady?()
     }
@@ -299,5 +305,11 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                     Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared, buttons text resetted etc. Note this is also triggered by sync error (which is called directly after login)
                 }
             })(providerResult: providerResult)
+    }
+    
+    // MARK: - EyeViewDelegate
+    
+    func onEyeChange(open: Bool) {
+        passwordField.secureTextEntry = open
     }
 }

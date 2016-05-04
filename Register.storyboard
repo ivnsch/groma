@@ -17,94 +17,81 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="qQD-85-qkI">
-                                <rect key="frame" x="17" y="136" width="567" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="qQD-85-qkI" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="17" y="120" width="567" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="kyd-1F-coG"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
                                         <integer key="value" value="20"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <outlet property="delegate" destination="WMc-15-YTM" id="0aa-Tl-4ym"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="n3k-3q-0Hq">
-                                <rect key="frame" x="17" y="90" width="567" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="n3k-3q-0Hq" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="17" y="60" width="567" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="856-jX-J1t"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="next"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
                                         <integer key="value" value="254"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <outlet property="delegate" destination="WMc-15-YTM" id="DSK-fk-Bim"/>
                                 </connections>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="j5w-8b-ths">
-                                <rect key="frame" x="17" y="228" width="567" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="send"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
-                                        <integer key="value" value="30"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <outlet property="delegate" destination="WMc-15-YTM" id="DlI-vU-ffF"/>
-                                </connections>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="YFC-c4-S2N">
-                                <rect key="frame" x="17" y="182" width="567" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="next"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="maxLength">
-                                        <integer key="value" value="30"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <outlet property="delegate" destination="WMc-15-YTM" id="TNR-Ts-lxw"/>
-                                </connections>
-                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5NA-t7-V2O">
-                                <rect key="frame" x="272" y="378" width="57" height="30"/>
+                                <rect key="frame" x="207" y="261" width="186" height="50"/>
+                                <color key="backgroundColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="186" id="8WG-5h-8ym"/>
+                                    <constraint firstAttribute="height" constant="50" id="yed-Vu-WhI"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Register">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="onRegisterTap:" destination="WMc-15-YTM" eventType="touchUpInside" id="YAG-VM-uwL"/>
                                 </connections>
                             </button>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Zfp-Nf-jS0">
-                                <rect key="frame" x="17" y="274" width="51" height="31"/>
-                                <connections>
-                                    <action selector="onShowPasswordChanged:" destination="WMc-15-YTM" eventType="valueChanged" id="YPK-wm-wTo"/>
-                                </connections>
-                            </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UUT-9b-RWK">
-                                <rect key="frame" x="81" y="281" width="108" height="18"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LMD-Gz-aMB" customClass="FBSDKLoginButton">
-                                <rect key="frame" x="175" y="458" width="250" height="45"/>
+                                <rect key="frame" x="175" y="391" width="250" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="LNZ-Zy-o0r"/>
                                     <constraint firstAttribute="width" constant="250" id="s69-yR-bsP"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Facebook"/>
+                                <state key="normal" title="Facebook">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
                                 <connections>
                                     <outlet property="delegate" destination="WMc-15-YTM" id="3iT-VV-kaX"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LDp-kw-m6z" customClass="GIDSignInButton">
-                                <rect key="frame" x="175" y="511" width="250" height="45"/>
+                                <rect key="frame" x="175" y="456" width="250" height="45"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="AnL-2z-gqw"/>
@@ -112,54 +99,72 @@
                                 </constraints>
                             </view>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Y2i-oz-aRO">
-                                <rect key="frame" x="17" y="317" width="51" height="31"/>
+                                <rect key="frame" x="17" y="190" width="51" height="31"/>
                                 <connections>
                                     <action selector="onAcceptTermsChanged:" destination="WMc-15-YTM" eventType="valueChanged" id="S4i-eT-ED2"/>
                                 </connections>
                             </switch>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JMu-N0-SQq">
-                                <rect key="frame" x="81" y="317" width="230" height="30"/>
-                                <state key="normal" title="I accept the terms and conditions"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JMu-N0-SQq" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="81" y="191" width="230" height="30"/>
+                                <state key="normal" title="I accept the terms and conditions">
+                                    <color key="titleColor" red="0.054901960780000002" green="0.58431372550000005" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                        <integer key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <segue destination="IvS-9L-I9T" kind="show" id="oUh-uw-eV4"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WX7-9y-9bC" customClass="EyeView" customModule="shoppin" customModuleProvider="target">
+                                <rect key="frame" x="544" y="125" width="40" height="30"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="5eE-ok-bz7"/>
+                                    <constraint firstAttribute="width" constant="40" id="oOo-Sh-GOI"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="5eE-ok-bz7"/>
+                                    </mask>
+                                </variation>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="WX7-9y-9bC" firstAttribute="bottom" secondItem="qQD-85-qkI" secondAttribute="bottom" constant="-5" id="2YJ-Q5-zja"/>
                             <constraint firstItem="JMu-N0-SQq" firstAttribute="leading" secondItem="Y2i-oz-aRO" secondAttribute="trailing" constant="15" id="6TG-M5-pMV"/>
-                            <constraint firstItem="YFC-c4-S2N" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="17" id="6Zs-4e-Pqw"/>
+                            <constraint firstItem="WX7-9y-9bC" firstAttribute="trailing" secondItem="qQD-85-qkI" secondAttribute="trailing" id="A3T-NN-DE1"/>
                             <constraint firstAttribute="trailing" secondItem="qQD-85-qkI" secondAttribute="trailing" constant="16" id="FBw-In-mZo"/>
                             <constraint firstAttribute="trailing" secondItem="n3k-3q-0Hq" secondAttribute="trailing" constant="16" id="IaX-Wt-mep"/>
                             <constraint firstItem="Y2i-oz-aRO" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="17" id="Isu-AV-IR3"/>
                             <constraint firstItem="LMD-Gz-aMB" firstAttribute="centerX" secondItem="Nnu-ym-gUF" secondAttribute="centerX" id="JOR-1V-7Xp"/>
-                            <constraint firstItem="LMD-Gz-aMB" firstAttribute="top" secondItem="5NA-t7-V2O" secondAttribute="bottom" constant="50" id="L2K-uh-qLz"/>
-                            <constraint firstItem="5NA-t7-V2O" firstAttribute="top" secondItem="j5w-8b-ths" secondAttribute="bottom" constant="120" id="MJp-rg-6Xj"/>
-                            <constraint firstItem="j5w-8b-ths" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="17" id="RQJ-l8-qvf"/>
+                            <constraint firstItem="Y2i-oz-aRO" firstAttribute="top" secondItem="qQD-85-qkI" secondAttribute="bottom" constant="30" id="S1X-kX-AH2"/>
                             <constraint firstItem="n3k-3q-0Hq" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="17" id="SAr-8A-d54"/>
                             <constraint firstAttribute="centerX" secondItem="5NA-t7-V2O" secondAttribute="centerX" id="SD7-OT-3TA"/>
-                            <constraint firstItem="qQD-85-qkI" firstAttribute="top" secondItem="n3k-3q-0Hq" secondAttribute="bottom" constant="16" id="SWf-nW-QyT"/>
+                            <constraint firstItem="qQD-85-qkI" firstAttribute="top" secondItem="n3k-3q-0Hq" secondAttribute="bottom" constant="20" id="SWf-nW-QyT"/>
                             <constraint firstItem="JMu-N0-SQq" firstAttribute="centerY" secondItem="Y2i-oz-aRO" secondAttribute="centerY" id="TvU-Ia-x6G"/>
+                            <constraint firstItem="5NA-t7-V2O" firstAttribute="top" secondItem="JMu-N0-SQq" secondAttribute="bottom" constant="40" id="TzP-Kg-PAQ"/>
                             <constraint firstItem="LDp-kw-m6z" firstAttribute="centerX" secondItem="Nnu-ym-gUF" secondAttribute="centerX" id="WKX-Iz-AgK"/>
                             <constraint firstItem="qQD-85-qkI" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="17" id="Wt7-Lg-Sl2"/>
-                            <constraint firstItem="LDp-kw-m6z" firstAttribute="top" secondItem="LMD-Gz-aMB" secondAttribute="bottom" constant="8" id="ZhT-l4-TbA"/>
-                            <constraint firstItem="UUT-9b-RWK" firstAttribute="centerY" secondItem="Zfp-Nf-jS0" secondAttribute="centerY" id="acD-xe-N8B"/>
-                            <constraint firstItem="UUT-9b-RWK" firstAttribute="leading" secondItem="Zfp-Nf-jS0" secondAttribute="trailing" constant="15" id="cOC-zl-7oV"/>
-                            <constraint firstAttribute="trailing" secondItem="YFC-c4-S2N" secondAttribute="trailing" constant="16" id="eMI-ce-Ota"/>
-                            <constraint firstItem="n3k-3q-0Hq" firstAttribute="top" secondItem="Nnu-ym-gUF" secondAttribute="top" constant="90" id="fOk-eP-QsZ"/>
-                            <constraint firstItem="YFC-c4-S2N" firstAttribute="top" secondItem="qQD-85-qkI" secondAttribute="bottom" constant="16" id="mid-u7-n1Y"/>
-                            <constraint firstItem="Zfp-Nf-jS0" firstAttribute="top" secondItem="j5w-8b-ths" secondAttribute="bottom" constant="16" id="oM3-Z1-Udj"/>
-                            <constraint firstAttribute="trailing" secondItem="j5w-8b-ths" secondAttribute="trailing" constant="16" id="sBv-Kn-oEX"/>
-                            <constraint firstItem="j5w-8b-ths" firstAttribute="top" secondItem="YFC-c4-S2N" secondAttribute="bottom" constant="16" id="sj5-co-8Cj"/>
-                            <constraint firstItem="Y2i-oz-aRO" firstAttribute="top" secondItem="Zfp-Nf-jS0" secondAttribute="bottom" constant="12" id="tnR-GX-tAa"/>
-                            <constraint firstItem="Zfp-Nf-jS0" firstAttribute="leading" secondItem="Nnu-ym-gUF" secondAttribute="leading" constant="17" id="xH5-xv-Bnu"/>
+                            <constraint firstItem="LDp-kw-m6z" firstAttribute="top" secondItem="LMD-Gz-aMB" secondAttribute="bottom" constant="20" id="ZhT-l4-TbA"/>
+                            <constraint firstItem="n3k-3q-0Hq" firstAttribute="top" secondItem="Nnu-ym-gUF" secondAttribute="top" constant="60" id="fOk-eP-QsZ"/>
+                            <constraint firstItem="LMD-Gz-aMB" firstAttribute="top" secondItem="Nnu-ym-gUF" secondAttribute="top" constant="391" id="jGU-iv-c1P"/>
+                            <constraint firstItem="WX7-9y-9bC" firstAttribute="bottom" secondItem="qQD-85-qkI" secondAttribute="bottom" constant="-5" id="o9v-Oh-DFY"/>
+                            <constraint firstItem="WX7-9y-9bC" firstAttribute="top" secondItem="qQD-85-qkI" secondAttribute="top" constant="5" id="yFG-fT-cyB"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="o9v-Oh-DFY"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="emailField" destination="n3k-3q-0Hq" id="1wd-rX-t83"/>
+                        <outlet property="eyeView" destination="WX7-9y-9bC" id="fey-f1-29c"/>
                         <outlet property="fbButton" destination="LMD-Gz-aMB" id="OUX-K3-Ekt"/>
-                        <outlet property="firstNameField" destination="YFC-c4-S2N" id="PzX-xs-Qyn"/>
-                        <outlet property="lastNameField" destination="j5w-8b-ths" id="Zfh-cb-Lqt"/>
                         <outlet property="passwordField" destination="qQD-85-qkI" id="uDG-f3-4Bl"/>
                         <outlet property="termsButton" destination="JMu-N0-SQq" id="oSo-EN-1GJ"/>
                     </connections>

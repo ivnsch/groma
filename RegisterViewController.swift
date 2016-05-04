@@ -16,16 +16,18 @@ protocol RegisterDelegate {
     func onRegisterSuccess()
 }
 
-class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate {
+class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, EyeViewDelegate {
 
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-    @IBOutlet weak var firstNameField: UITextField!
-    @IBOutlet weak var lastNameField: UITextField!
+//    @IBOutlet weak var firstNameField: UITextField!
+//    @IBOutlet weak var lastNameField: UITextField!
     
     @IBOutlet weak var termsButton: UIButton!
     
     @IBOutlet weak var fbButton: FBSDKLoginButton!
+
+    @IBOutlet weak var eyeView: EyeView!
     
     let userProvider = ProviderFactory().userProvider
     
@@ -37,6 +39,8 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.title = "Register"
 
         self.navigationController?.navigationBarHidden = false
         
@@ -48,11 +52,12 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         
         initValidator()
         
+        eyeView.delegate = self
+        
         fbButton.readPermissions = ["public_profile"]
         
         let buttonTranslation = "I accept the %%terms and conditions%%" // TODO translations
         let attributedText = buttonTranslation.underlineBetweenFirstSeparators("%%")
-        attributedText.setTextColor(UIColor.blackColor())
         termsButton.setAttributedTitle(attributedText, forState: .Normal)
         
         let recognizer = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
@@ -63,10 +68,6 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     func handleTap(recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }
-    
-    @IBAction func onShowPasswordChanged(sender: UISwitch) {
-        passwordField.secureTextEntry = !sender.on
-    }
 
     @IBAction func onAcceptTermsChanged(sender: UISwitch) {
         acceptedTerms = sender.on
@@ -76,18 +77,17 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         let validator = Validator()
         validator.registerField(self.emailField, rules: [EmailRule(message: "validation_email_format")])
         validator.registerField(self.passwordField, rules: [PasswordRule(message: "password: 8 letter, 1 uppercase, 1 number")]) // TODO repl with translation key, for now this so testers understand
-        validator.registerField(self.firstNameField, rules: [MinLengthRule(length: 1, message: "validation_first_name_min_length")]) // TODO repl with translation key, for now this so testers understand
-        validator.registerField(self.lastNameField, rules: [MinLengthRule(length: 1, message: "validation_last_name_min_length")]) // TODO repl with translation key, for now this so testers understand
+//        validator.registerField(self.firstNameField, rules: [MinLengthRule(length: 1, message: "validation_first_name_min_length")]) // TODO repl with translation key, for now this so testers understand
+//        validator.registerField(self.lastNameField, rules: [MinLengthRule(length: 1, message: "validation_last_name_min_length")]) // TODO repl with translation key, for now this so testers understand
         self.validator = validator
     }
     
     private func fillTestInput() {
         emailField.text = "ivanschuetz@gmail.com"
-        firstNameField.text = "Ivan"
-        lastNameField.text = "Schuetz"
         passwordField.text = "test123Q"
+//        firstNameField.text = "Ivan"
+//        lastNameField.text = "Schuetz"
     }
-
 
     @IBAction func onRegisterTap(sender: UIButton) {
         register()
@@ -109,9 +109,9 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                 AlertPopup.show(message: "Please accept the terms and conditions", controller: self)
                 
             } else {
-                if let email = emailField.text, password = passwordField.text, firstName = firstNameField.text, lastName = lastNameField.text {
+                if let email = emailField.text, password = passwordField.text/*, firstName = firstNameField.text, lastName = lastNameField.text*/ {
                     
-                    let user = UserInput(email: email, password: password, firstName: firstName, lastName: lastName)
+                    let user = UserInput(email: email, password: password, firstName: "", lastName: "")
                     
                     self.progressVisible()
                     Providers.userProvider.register(user, successHandler{[weak self] in
@@ -127,11 +127,11 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     
     func textFieldShouldReturn(sender: UITextField) -> Bool {
         
-        if sender == lastNameField {
+        if sender == passwordField {
             register()
             sender.resignFirstResponder()
         } else {
-            let textFields: [UITextField] = [emailField, passwordField, firstNameField, lastNameField]
+            let textFields: [UITextField] = [emailField, passwordField/*, firstNameField, lastNameField*/]
 
             if let index = textFields.indexOf(sender) {
                 if let next = textFields[safe: index + 1] {
@@ -216,5 +216,11 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
 
     private func onRegisterSuccess() {
         self.delegate?.onRegisterSuccess() ?? print("Warn: no register delegate")
+    }
+    
+    // MARK: - EyeViewDelegate
+    
+    func onEyeChange(open: Bool) {
+        passwordField.secureTextEntry = open
     }
 }
