@@ -182,6 +182,7 @@
 		EB37ABBB1CA2021C00FE9D7A /* RoundTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABBA1CA2021C00FE9D7A /* RoundTextField.swift */; };
 		EB3C9E2A1BEA47FF00886197 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C9E291BEA47FF00886197 /* Theme.swift */; };
 		EB3E92EF1CD9347F0048DA0D /* EyeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3E92EE1CD9347E0048DA0D /* EyeView.swift */; };
+		EB3E92F41CDA72A90048DA0D /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3E92F31CDA72A90048DA0D /* UIFont.swift */; };
 		EB40A4691B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
 		EB40A46A1B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
 		EB40A46B1B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
@@ -1222,6 +1223,7 @@
 		EB37ABBA1CA2021C00FE9D7A /* RoundTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundTextField.swift; sourceTree = "<group>"; };
 		EB3C9E291BEA47FF00886197 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		EB3E92EE1CD9347E0048DA0D /* EyeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EyeView.swift; sourceTree = "<group>"; };
+		EB3E92F31CDA72A90048DA0D /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		EB40A4681B5506FB000E9CAD /* DBSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSection.swift; sourceTree = "<group>"; };
 		EB40A46D1B550804000E9CAD /* RealmProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProvider.swift; sourceTree = "<group>"; };
 		EB40A4711B5508B6000E9CAD /* DBResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBResult.swift; sourceTree = "<group>"; };
@@ -2106,6 +2108,15 @@
 			name = pullToAdd;
 			sourceTree = "<group>";
 		};
+		EB3E92F21CDA5EC50048DA0D /* alert */ = {
+			isa = PBXGroup;
+			children = (
+				EBF1F9E61CD76A1900F8016F /* MyAlert.swift */,
+				EBF1F9E81CD76AA500F8016F /* MyAlert.xib */,
+			);
+			name = alert;
+			sourceTree = "<group>";
+		};
 		EB40A4671B5506CC000E9CAD /* realm */ = {
 			isa = PBXGroup;
 			children = (
@@ -2322,6 +2333,7 @@
 				EBAEB22E1BDBDB2F00FCDA5C /* CGPoint.swift */,
 				EBD828041BEA441B0072F9FA /* UINavigationController.swift */,
 				EB76A7A01BEE6F1500486F30 /* MLPAutoCompleteTextField.swift */,
+				EB3E92F31CDA72A90048DA0D /* UIFont.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -2811,11 +2823,10 @@
 		EBBC23241BB5D5820002F6B1 /* popup */ = {
 			isa = PBXGroup;
 			children = (
+				EB3E92F21CDA5EC50048DA0D /* alert */,
 				EBED0D0A1C82221600A1EEC4 /* rating */,
 				EBBC23221BB5D57C0002F6B1 /* ProviderPopupManager.swift */,
 				EB0870CA1BC050A300169E29 /* MyTipPopup.swift */,
-				EBF1F9E61CD76A1900F8016F /* MyAlert.swift */,
-				EBF1F9E81CD76AA500F8016F /* MyAlert.xib */,
 			);
 			name = popup;
 			sourceTree = "<group>";
@@ -3716,6 +3727,7 @@
 				EBA7AC9A1BFE962E00247A8C /* ProductCategoryMapper.swift in Sources */,
 				EBEA0CDE1CA6C0F500E68B81 /* QuickAddPageController.swift in Sources */,
 				EBAEB23C1BDC262400FCDA5C /* FloatingViews.swift in Sources */,
+				EB3E92F41CDA72A90048DA0D /* UIFont.swift in Sources */,
 				EB7032801BEBBBB100779EBB /* ReorderSectionTableViewController.swift in Sources */,
 				EBF608B51C0F5D0E00EDB33E /* RemotePlanItemsProvider.swift in Sources */,
 				EB40A4721B5508B6000E9CAD /* DBResult.swift in Sources */,

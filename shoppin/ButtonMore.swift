@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 // UIButton with utilities
 class ButtonMore: UIButton {
@@ -61,7 +62,17 @@ class ButtonMore: UIButton {
         super.awakeFromNib()
         
         if let size = LabelMore.mapToFontSize(fontType) {
-            self.titleLabel?.font = UIFont.systemFontOfSize(size)
+            if let label = self.titleLabel {
+                label.font = {
+                    if label.font.isBold {
+                        return UIFont.boldSystemFontOfSize(size)
+                    } else {
+                        return UIFont.systemFontOfSize(size)
+                    }
+                }()
+            } else {
+                QL3("No label?")
+            }
         }
     }
 }

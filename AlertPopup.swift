@@ -19,28 +19,40 @@ class AlertPopup: NSObject {
         return alert
     }
     
+    // TODO better structure, alert and confirm should be 2 different classes, which share part of the view and code
     // Frame of popup (including semitransparent background) in case this is different than the frame controller's view.
-    static func show(title title: String? = nil, message: String, controller: UIViewController, frame: CGRect? = nil, okMsg: String = "Ok", rootControllerStartPoint: CGPoint? = nil, onDismiss: VoidFunction? = nil) {
+    static func show(title title: String? = nil, message: String, controller: UIViewController, frame: CGRect? = nil, okMsg: String = "Ok", confirmMsg: String = "Ok", cancelMsg: String = "Cancel", hasOkButton: Bool = false, isConfirm: Bool = false, rootControllerStartPoint: CGPoint? = nil, okAction: VoidFunction? = nil, onDismiss: VoidFunction? = nil) {
 //        let alert = create(title: title, message: message, okMsg: okMsg, onDismiss: onDismiss)
 //        controller.presentViewController(alert, animated: true, completion: nil)
 
         guard controller.view.viewWithTag(ViewTags.NotePopup) == nil else {QL2("Already showing popup, return"); return}
         
         let myAlert = NSBundle.loadView("MyAlert", owner: self) as! MyAlert
+
+        
         myAlert.translatesAutoresizingMaskIntoConstraints = true
         myAlert.frame = frame ?? controller.view.bounds
         controller.view.addSubview(myAlert)
         controller.view.bringSubviewToFront(myAlert)
         myAlert.tag = ViewTags.NotePopup
         
-        myAlert.text = message
+        myAlert.hasOkButton = hasOkButton // this only has an effect when isConfirm = false
+        myAlert.confirmText = confirmMsg
+        myAlert.cancelText = cancelMsg
         myAlert.buttonText = okMsg
+        myAlert.title = title
+        myAlert.text = message
+        myAlert.isConfirm = isConfirm
+
         myAlert.onDismiss = onDismiss
-        myAlert.dismissAnimation = .None
         myAlert.dismissWithSwipe = false
-        myAlert.hasOkButton = false
+
         
+        // "grow from point" animation
         if let point = rootControllerStartPoint {
+            
+            myAlert.dismissAnimation = .None
+            
             // close
             myAlert.onTapAnywhere = {
                 myAlert.animateScale(false, anchorPoint: point, parentView: controller.view, frame: frame) {
@@ -50,6 +62,15 @@ class AlertPopup: NSObject {
             
             // open
             myAlert.animateScale(true, anchorPoint: point, parentView: controller.view, frame: frame)
+            
+        } else { // normal alert animation
+            myAlert.dismissAnimation = .Fade
+            
+            if !isConfirm && !hasOkButton {
+                myAlert.onTapAnywhere = {
+                    myAlert.dismiss()
+                }
+            }
         }
     }
     

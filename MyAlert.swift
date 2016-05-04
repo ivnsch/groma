@@ -13,10 +13,12 @@ enum MyAlertDismissAnimation {
     case Fade, None
 }
 
-// Inspired by https://github.com/chrene/swipe-to-dismiss
+// TODO better structure, alert and confirm should be 2 different classes, which share part of the view and code. Frame/constraints calculations are also messy.
+// swipe to dismiss part inspired by https://github.com/chrene/swipe-to-dismiss
 class MyAlert: UIView, UIGestureRecognizerDelegate {
 
     @IBOutlet weak var container: UIView!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var background: UIView!
     
@@ -27,11 +29,28 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var okButton: UIButton!
     
+    
+    @IBOutlet weak var confirmButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
+    
+    
     var dismissWithSwipe = false
     var dismissAnimation: MyAlertDismissAnimation = .Fade
 
     var minWidth: CGFloat = 250
     var minHeight: CGFloat = 160
+
+    
+    var title: String? {
+        didSet {
+            if let titleLabel = titleLabel {
+                titleLabel.text = title
+                updateContainerSize()
+            } else {
+                QL3("Outlets not initialised, can't set text")
+            }
+        }
+    }
     
     var text: String = "" {
         didSet {
@@ -53,21 +72,52 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
             }
         }
     }
-    
+   
+    var onOk: VoidFunction?
     var onDismiss: VoidFunction?
     var onTapAnywhere: VoidFunction?
+    
+    var confirmText: String = "Confirm" {
+        didSet {
+            if let confirmButton = confirmButton {
+                confirmButton.setTitle(confirmText, forState: .Normal)
+            } else {
+                QL3("Outlets not initialised")
+            }
+        }
+    }
 
+    var cancelText: String = "Cancel" {
+        didSet {
+            if let cancelButton = cancelButton {
+                cancelButton.setTitle(cancelText, forState: .Normal)
+            } else {
+                QL3("Outlets not initialised")
+            }
+        }
+    }
+
+    var isConfirm: Bool = true {
+        didSet {
+            if let confirmButton = confirmButton {
+                confirmButton.hidden = !isConfirm
+                cancelButton.hidden = !isConfirm
+                okButton.hidden = isConfirm
+            } else {
+                QL3("Outlets not initialised")
+            }
+        }
+    }
+    
     var hasOkButton: Bool = true {
         didSet {
             if let okButton = okButton {
                 okButton.hidden = !hasOkButton
-                labelCenterConstraint.constant = hasOkButton ? -25 : 0
             } else {
                 QL3("No button")
             }
         }
     }
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -75,6 +125,19 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        okButton.setTitle(buttonText, forState: .Normal)
+        confirmButton.setTitle(confirmText, forState: .Normal)
+        cancelButton.setTitle(cancelText, forState: .Normal)
+        
+        animateFade(true)
+    }
+    
+    private func animateFade(opening: Bool) {
+        alpha = opening ? 0 : 1
+        UIView.animateWithDuration(0.3) {[weak self] in
+            self?.alpha = opening ? 1 : 0
+        }
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -120,20 +183,30 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
 
     private func updateContainerSize() {
         label.sizeToFit()
-        
-        let labelSize = label.bounds.size
-        
-        let padding: CGFloat = 20
-        let containerWidth: CGFloat = labelSize.width + padding * 2
-        let containerHeight: CGFloat = labelSize.height + padding * 2
-       
-        let paddingMaxSize: CGFloat = 30
-        
+
+        let paddingMaxSize: CGFloat = 40
+        let labelPadding: CGFloat = 20
         let maxWidth: CGFloat = frame.width - (paddingMaxSize * 2)
+        
+        print("alert frame: \(frame)")
+        
+//        let maxWidth: CGFloat = 200
         let maxHeight: CGFloat = frame.height - (paddingMaxSize * 2)
+        
+//        let labelSize = label.bounds.size
+        let labelSize = CGSizeMake(maxWidth - (labelPadding * 2), text.heightWithConstrainedWidth(maxWidth, font: label.font))
+        
+        let titleWithTopAndBottomSpaceHeight: CGFloat = title != nil ? 62 : 0
+        let bottomButtonsWithTopAndButtonSpaceHeight: CGFloat = 62
+        
+
+        let containerWidth: CGFloat = labelSize.width + (labelPadding * 2)
+        let containerHeight: CGFloat = (labelSize.height + (labelPadding * 2)) + titleWithTopAndBottomSpaceHeight + bottomButtonsWithTopAndButtonSpaceHeight
         
         widthConstraint.constant = min(max(minWidth, containerWidth), maxWidth)
         heightConstraint.constant = min(max(minHeight, containerHeight), maxHeight)
+        
+        labelCenterConstraint.constant = (title == nil && (hasOkButton || isConfirm)) ? -25 : 0
     }
     
     func dismiss() {
@@ -145,7 +218,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
         
         switch dismissAnimation {
         case .Fade:
-            UIView.animateWithDuration(0.3, animations: {[weak self] in
+            UIView.animateWithDuration(0.2, animations: {[weak self] in
                 self?.background.alpha = 0
                 }, completion: {finished in
                     dismiss()
@@ -208,6 +281,15 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
     }
     
     @IBAction func onOkTap() {
+        dismiss()
+    }
+    
+    @IBAction func onConfirmTap() {
+        onOk?()
+        dismiss()
+    }
+    
+    @IBAction func onCancelTap() {
         dismiss()
     }
 }
