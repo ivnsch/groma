@@ -111,6 +111,7 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
 //                QL2("updating price, items: \(itemsStr), total cart quantity: \(totalCartQuantity), done price: \(totalCartPrice)")
                 self.pricesView.cartQuantity = totalCartQuantity
                 self.pricesView.setDonePrice(totalCartPrice, animated: true)
+                self.stashView.updateOpenStateForQuantities(totalCartQuantity, stashQuantity: listItems.totalQuanityAndPrice(.Stash).quantity)
                 
                 self.todoListItemsEditBottomView?.setTotalPrice(listItems.totalPriceTodoAndCart)
             })
@@ -122,17 +123,16 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     
     func updateStashView() {
         if let list = currentList {
-            Providers.listItemsProvider.listItemCount(ListItemStatus.Stash, list: list, fetchMode: .MemOnly, successHandler {[weak self] count in
+            Providers.listItemsProvider.listItemCount(ListItemStatus.Stash, list: list, fetchMode: .MemOnly, successHandler {[weak self] count in guard let weakSelf = self else {return}
 //                    if count != self?.stashView.quantity { // don't animate if there's no change
-                    self?.stashView.quantity = count
-                    self?.pricesView.allowOpen = count > 0
+                    weakSelf.stashView.quantity = count
+                    weakSelf.pricesView.allowOpen = count > 0
                     if count == 0 {
-                        self?.pricesView.setOpen(false, animated: true)
+                        weakSelf.pricesView.setOpen(false, animated: true)
                     }
-                    self?.pricesView.stashQuantity = count
-//                        self?.stashView.setOpen(count > 0)
-                    
-//                    }
+                    weakSelf.pricesView.stashQuantity = count
+
+                    weakSelf.stashView.updateOpenStateForQuantities(weakSelf.pricesView.cartQuantity, stashQuantity: count)
             })
         }
     }

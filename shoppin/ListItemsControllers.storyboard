@@ -37,8 +37,8 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PcH-rK-LUL">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="eMF-ZE-4G9">
-                                        <rect key="frame" x="151" y="151" width="299" height="235"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="eMF-ZE-4G9">
+                                        <rect key="frame" x="181" y="166" width="240" height="206"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="BdM-XD-w7S"/>
@@ -51,8 +51,8 @@
                                             </mask>
                                         </variation>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPu-gm-3Bj">
-                                        <rect key="frame" x="222" y="398" width="156" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="There are no listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPu-gm-3Bj">
+                                        <rect key="frame" x="222" y="384" width="156" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -110,8 +110,8 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="blz-rx-aVz">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="QQF-1r-ms4">
-                                        <rect key="frame" x="151" y="131" width="299" height="235"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="QQF-1r-ms4">
+                                        <rect key="frame" x="181" y="146" width="240" height="206"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="aKL-Rf-ABt"/>
@@ -124,14 +124,14 @@
                                             </mask>
                                         </variation>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hAl-pb-QcH">
-                                        <rect key="frame" x="204" y="378" width="193" height="24"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="There are no listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hAl-pb-QcH">
+                                        <rect key="frame" x="204" y="364" width="193" height="24"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to start adding listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xde-nJ-NKG">
-                                        <rect key="frame" x="188" y="410" width="225" height="22"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tap to start adding listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xde-nJ-NKG">
+                                        <rect key="frame" x="188" y="396" width="225" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -269,8 +269,8 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="so5-bY-yhM">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="bes-vp-e1u">
-                                        <rect key="frame" x="151" y="151" width="299" height="235"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="bes-vp-e1u">
+                                        <rect key="frame" x="181" y="166" width="240" height="206"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="9iR-Gu-SA7"/>
@@ -283,14 +283,14 @@
                                             </mask>
                                         </variation>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There are no listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sxW-16-sQo">
-                                        <rect key="frame" x="222" y="398" width="156" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="There are no listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sxW-16-sQo">
+                                        <rect key="frame" x="222" y="384" width="156" height="21"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap to start adding listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fPp-Ci-147">
-                                        <rect key="frame" x="223" y="427" width="154" height="16"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tap to start adding listitems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fPp-Ci-147">
+                                        <rect key="frame" x="223" y="413" width="154" height="16"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -307,10 +307,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5T4-jf-M2R" customClass="StashView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="80" y="540" width="520" height="60"/>
+                                <rect key="frame" x="80" y="600" width="520" height="0.0"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0eD-HV-Myo">
-                                        <rect key="frame" x="460" y="0.0" width="60" height="60"/>
+                                        <rect key="frame" x="460" y="0.0" width="60" height="0.0"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="q4Q-KL-w5r"/>
                                         </constraints>
@@ -327,7 +327,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="520" id="0f8-8Q-Vt8"/>
                                     <constraint firstAttribute="trailing" secondItem="0eD-HV-Myo" secondAttribute="trailing" id="Hlf-fx-LlM"/>
-                                    <constraint firstAttribute="height" constant="60" id="OvZ-Vs-sjM"/>
+                                    <constraint firstAttribute="height" id="OvZ-Vs-sjM"/>
                                     <constraint firstItem="0eD-HV-Myo" firstAttribute="leading" secondItem="5T4-jf-M2R" secondAttribute="leading" id="Y3j-hu-rmH"/>
                                     <constraint firstItem="0eD-HV-Myo" firstAttribute="top" secondItem="5T4-jf-M2R" secondAttribute="top" id="hXi-E7-V0I"/>
                                     <constraint firstAttribute="bottom" secondItem="0eD-HV-Myo" secondAttribute="bottom" id="nfc-pA-CeF"/>
@@ -344,10 +344,10 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iVM-Kg-U2m" customClass="PricesView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="540" width="600" height="60"/>
+                                <rect key="frame" x="0.0" y="600" width="600" height="0.0"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mNO-iA-eWt" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="580" y="30" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="580" y="0.0" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -369,10 +369,10 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cart" translatesAutoresizingMaskIntoConstraints="NO" id="jvm-6H-Duz">
-                                        <rect key="frame" x="20" y="19" width="27" height="23"/>
+                                        <rect key="frame" x="20" y="-11" width="27" height="23"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E7V-vH-7DE" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="67" y="20" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="67" y="-10" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -383,7 +383,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fgk-0h-BDM" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="67" y="40" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="67" y="10" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -394,7 +394,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Om-sR-QxE">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="0.0"/>
                                         <connections>
                                             <action selector="onCartTap:" destination="QHZ-uV-ZSM" eventType="touchUpInside" id="95P-SU-3Lw"/>
                                         </connections>
@@ -404,7 +404,7 @@
                                 <constraints>
                                     <constraint firstItem="80h-ha-9Dw" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" id="7Ho-ih-Y8v"/>
                                     <constraint firstAttribute="trailing" secondItem="80h-ha-9Dw" secondAttribute="trailing" constant="20" id="EFj-TJ-Exd"/>
-                                    <constraint firstAttribute="height" constant="60" id="FDi-oR-jaL"/>
+                                    <constraint firstAttribute="height" id="FDi-oR-jaL"/>
                                     <constraint firstItem="jvm-6H-Duz" firstAttribute="leading" secondItem="iVM-Kg-U2m" secondAttribute="leading" constant="20" id="N2L-3E-box"/>
                                     <constraint firstItem="8Om-sR-QxE" firstAttribute="width" secondItem="iVM-Kg-U2m" secondAttribute="width" id="RXv-Ls-2G1"/>
                                     <constraint firstAttribute="bottom" secondItem="8Om-sR-QxE" secondAttribute="bottom" id="SXe-fT-Hgl"/>
@@ -700,7 +700,7 @@
     </scenes>
     <resources>
         <image name="cart" width="27" height="23"/>
-        <image name="empty_page" width="299" height="235"/>
+        <image name="empty_page" width="240" height="206"/>
         <image name="minus" width="9" height="3"/>
         <image name="plus" width="15" height="14"/>
         <image name="speechbubble" width="23" height="23"/>

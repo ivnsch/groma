@@ -14,10 +14,14 @@ class StashView: UIView {
     @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var heightConstraint: NSLayoutConstraint!
 
+    var originalHeight: CGFloat = 0
+
     @IBOutlet weak var button: UIButton!
     
     var bgColor: UIColor?
     
+    private var expanded: Bool = true // if vertically minimized or expanded (expanded is normal size)
+
     var quantity: Int = 0 {
         didSet {
 //            quantityLabel.text = String(quantity)
@@ -28,7 +32,10 @@ class StashView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
 //        backgroundColor = UIColor.clearColor()
-        heightConstraint.constant = DimensionsManager.listItemsPricesViewHeight
+        originalHeight = DimensionsManager.listItemsPricesViewHeight
+        clipsToBounds = true
+        
+        setExpandedVertical(false, animated: false)
     }
     
     // this is to draw arrow shape on the right side - for now disabled
@@ -49,5 +56,27 @@ class StashView: UIView {
     
     func setTextColor(color: UIColor) {
         quantityLabel.textColor = color
+    }
+    
+    // this is a hack to update the transform of the stash view together with the cart view because otherwise when we scale down the cart view, the stash view remains behind. TODO proper solution - we should put the cart and the stash view inside a new superview with controls this logic, such that we don't have to update them separately.
+    func updateOpenStateForQuantities(cartQuantity: Int, stashQuantity: Int) {
+        let expanded = cartQuantity > 0 || stashQuantity > 0
+        setExpandedVertical(expanded, animated: true)
+    }
+    
+    private func setExpandedVertical(expanded: Bool, animated: Bool) {
+        if expanded != self.expanded {
+            self.expanded = expanded
+            
+            if animated {
+                heightConstraint.constant = expanded ? originalHeight : 0
+                UIView.animateWithDuration(0.3) {[weak self] in
+                    self?.superview?.layoutIfNeeded()
+                }
+            } else {
+                heightConstraint.constant = expanded ? originalHeight : 0
+                superview?.layoutIfNeeded()
+            }
+        }
     }
 }

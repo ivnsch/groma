@@ -51,6 +51,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     var cartQuantity: Int = 0 {
         didSet {
             if let cartQuantityLabel = quantityLabel {
+                checkExpandedVertical()
                 cartQuantityLabel.text = "\(cartQuantity) items in your cart"
                 updateQuantityCenterConstraint()
             } else {
@@ -62,6 +63,7 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     var stashQuantity: Int = 0 {
         didSet {
             if let stashQuantityLabel = stashQuantityLabel {
+                checkExpandedVertical()
                 stashQuantityLabel.text = "\(stashQuantity) in the backstore"
                 updateQuantityCenterConstraint()
                 stashQuantityLabel.hidden = stashQuantity == 0
@@ -78,10 +80,13 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
 //        backgroundColor = UIColor.clearColor() // we add the background with layer (because of triangle shape)
-//        originalHeight = heightConstraint.constant
-        heightConstraint.constant = DimensionsManager.listItemsPricesViewHeight
+        originalHeight = DimensionsManager.listItemsPricesViewHeight
         originalPriceFont = totalPriceLabel.font
         originalCartImgLeftConstraint = cartImgLeftConstraint.constant
+
+        setExpandedVerticalSimple(false, animated: false)
+        
+        clipsToBounds = true
         
         cellUncoverer = CellUncoverer(parentView: self, button: button, leftLayoutConstraint: leftLayoutConstraint)
         cellUncoverer?.delegate = self
@@ -159,7 +164,30 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     private var widthConstant: CGFloat {
         return open ? openWidth : 0
     }
+
     
+    private func checkExpandedVertical() {
+        let expanded = cartQuantity > 0 || stashQuantity > 0
+        setExpandedVerticalSimple(expanded, animated: true)
+    }
+    
+    private func setExpandedVerticalSimple(expanded: Bool, animated: Bool) {
+        if expanded != self.expanded {
+            self.expanded = expanded
+
+            if animated {
+                heightConstraint.constant = expanded ? originalHeight : 0
+                UIView.animateWithDuration(0.3) {[weak self] in
+                    self?.superview?.layoutIfNeeded()
+                }
+            } else {
+                heightConstraint.constant = expanded ? originalHeight : 0
+                superview?.layoutIfNeeded()
+            }
+        }
+    }
+    
+    // TODO this is from old UI, remove
     func setExpandedVertical(expanded: Bool) {
         if expanded != self.expanded {
             self.expanded = expanded

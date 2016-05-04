@@ -599,7 +599,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 let noteButton = cell.noteButton
                 
                 let topOffset: CGFloat = 64
-                let frame = parentController.view.bounds.copy(y: topOffset, height: parentController.view.bounds.height - DimensionsManager.listItemsPricesViewHeight - topOffset)
+                let frame = parentController.view.bounds.copy(y: topOffset, height: parentController.view.bounds.height)
                 
                 let noteButtonPointParentController = parentController.view.convertPoint(CGPointMake(noteButton.center.x, noteButton.center.y), fromView: cell)
                 // adjust the anchor point also for topOffset
