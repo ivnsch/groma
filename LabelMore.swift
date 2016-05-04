@@ -13,6 +13,7 @@ import QorumLogs
     
     @IBInspectable var fontType: Int = -1
     
+    // TODO enum for fontTypes? with the same name as the numbers such that we can add later 21, 22 etc. if necessary. For storyboards this is not very useful but when we set the font programmatically at least
     static func mapToFontSize(fontType: Int) -> CGFloat? {
         switch (DimensionsManager.widthDimension, fontType) {
         case (.Small, 20): return 11
@@ -34,7 +35,7 @@ import QorumLogs
         case (.Large, 60): return 21
         
         default:
-            QL3("Didn't provide fontType: \(fontType)")
+            QL3("Not handled fontType: \(fontType)")
             return nil
         }
     }

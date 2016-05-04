@@ -94,8 +94,8 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if let textHeight = sectionModel.textHeight {
             return textHeight
         } else {
-            let textHeight = sectionModel.obj.text.heightWithConstrainedWidth(view.frame.size.width, font: Fonts.smallerLight)
-                + 16 + 30 // label top & bottom constrain to cell. 30 is a quick fix, for some reson the returned height is a bit short. TODO fix heightWithConstrainedWidth to return correct height
+            let textHeight = sectionModel.obj.text.heightWithConstrainedWidth(view.frame.size.width, font: Fonts.fontForSizeCategory(40))
+                + 16 + 50 // label top & bottom constrain to cell. 50 is a quick fix, for some reson the returned height is a bit short. TODO fix heightWithConstrainedWidth to return correct height
             sectionModel.textHeight = textHeight
             return textHeight
         }

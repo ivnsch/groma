@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 enum FontType {
     case Light, Regular, Bold
@@ -18,6 +19,18 @@ enum FontSize {
 
 class Fonts {
 
+    static func fontForSizeCategory(fontType: Int) -> UIFont {
+        if let fontSize = LabelMore.mapToFontSize(fontType) { // TODO move this out of LabelMore
+            return UIFont.systemFontOfSize(fontSize)
+        } else {
+            QL3("No fond size for size category: \(fontType)")
+            return UIFont.systemFontOfSize(15) // return something
+        }
+    }
+    
+    //////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////
+    // deprecated! from now on only size categories
     static let fontName: String = "HelveticaNeue"
     static let fontNameLight: String = "\(fontName)-Light"
     static let fontNameBold: String = "\(fontName)-Bold"
@@ -122,4 +135,6 @@ class Fonts {
         let size = fontSize(heightDimension, size: size)
         return UIFont(name: fontName(type), size: size) ?? UIFont.systemFontOfSize(size)
     }
+    //////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////
 }
