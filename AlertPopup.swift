@@ -47,6 +47,7 @@ class AlertPopup: NSObject {
         myAlert.onDismiss = onDismiss
         myAlert.dismissWithSwipe = false
 
+        myAlert.onOk = okAction
         
         // "grow from point" animation
         if let point = rootControllerStartPoint {
