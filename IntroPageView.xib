@@ -12,10 +12,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XNR-ne-y1N">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="550"/>
+                    <rect key="frame" x="40" y="0.0" width="520" height="550"/>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9gA-1a-5TJ" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="550" width="600" height="50"/>
+                    <rect key="frame" x="40" y="550" width="520" height="50"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="gzp-hG-vl1"/>
                     </constraints>
@@ -32,12 +32,64 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="9gA-1a-5TJ" secondAttribute="bottom" id="85R-Tc-y5G"/>
-                <constraint firstItem="XNR-ne-y1N" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="9e5-V5-E8e"/>
-                <constraint firstAttribute="trailing" secondItem="XNR-ne-y1N" secondAttribute="trailing" id="J9H-6A-iyb"/>
+                <constraint firstItem="XNR-ne-y1N" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="9e5-V5-E8e" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
+                            <real key="value" value="40"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
+                            <real key="value" value="50"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
+                            <real key="value" value="60"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </constraint>
+                <constraint firstAttribute="trailing" secondItem="XNR-ne-y1N" secondAttribute="trailing" constant="40" id="J9H-6A-iyb" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
+                            <real key="value" value="40"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
+                            <real key="value" value="50"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
+                            <real key="value" value="60"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </constraint>
                 <constraint firstItem="9gA-1a-5TJ" firstAttribute="top" secondItem="XNR-ne-y1N" secondAttribute="bottom" id="aEo-oQ-zCJ"/>
                 <constraint firstItem="XNR-ne-y1N" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="ju1-20-wJJ"/>
-                <constraint firstAttribute="trailing" secondItem="9gA-1a-5TJ" secondAttribute="trailing" id="m0e-gd-QRs"/>
-                <constraint firstItem="9gA-1a-5TJ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ufS-Ib-P8v"/>
+                <constraint firstAttribute="trailing" secondItem="9gA-1a-5TJ" secondAttribute="trailing" constant="40" id="m0e-gd-QRs" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
+                            <real key="value" value="40"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
+                            <real key="value" value="50"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
+                            <real key="value" value="60"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </constraint>
+                <constraint firstItem="9gA-1a-5TJ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="40" id="ufS-Ib-P8v" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
+                            <real key="value" value="40"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
+                            <real key="value" value="50"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
+                        <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
+                            <real key="value" value="60"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </constraint>
             </constraints>
             <connections>
                 <outlet property="imageView" destination="XNR-ne-y1N" id="B4l-wp-SoH"/>

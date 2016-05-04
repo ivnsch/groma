@@ -20,14 +20,11 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 //    @IBOutlet weak var loginButton: UIButton!
 //    @IBOutlet weak var registerButton: UIButton!
     
-    private let pageCount = 5 // later replace with array of images
-    
     private let pageModels: [(key: String, imageName: String)] = [
-        ("Manage shopping lists comfortably", "splash"),
-        ("Connect lists with inventories to keep track of your items", "splash"),
-        ("Share with other users in real time", "splash"),
-        ("Analyse your shopping behaviour and expenses", "splash"),
-        ("Browse your shopping history", "splash")
+        ("Manage shopping lists comfortably", "intro_lists"),
+        ("Connect lists with inventories to keep track of your items", "intro_inventory"),
+        ("Share with other users in real time", "intro_sharing"),
+        ("Analyse your shopping behaviour and expenses", "intro_stats")
     ]
     
     private var finishedSlider = false {
@@ -38,10 +35,10 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        pageControl.numberOfPages = pageCount
+        pageControl.numberOfPages = pageModels.count
         
-//        let initActions =  PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false
-        let initActions = true
+        let initActions =  PreferencesManager.loadPreference(PreferencesManagerKey.isFirstLaunch) ?? false
+//        let initActions = true
         
         QL1("Will init database: \(initActions)")
         
@@ -156,7 +153,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     // MARK: - SwipeViewDataSource
     
     func numberOfItemsInSwipeView(swipeView: SwipeView!) -> Int {
-        return pageCount
+        return pageModels.count
     }
     
     func swipeView(swipeView: SwipeView!, viewForItemAtIndex index: Int, reusingView view: UIView!) -> UIView! {
@@ -176,7 +173,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     func swipeViewCurrentItemIndexDidChange(swipeView: SwipeView!) {
         pageControl.currentPage = swipeView.currentItemIndex
-        if swipeView.currentItemIndex == pageCount - 1 {
+        if swipeView.currentItemIndex == pageModels.count - 1 {
             if !finishedSlider {
                 finishedSlider = true
             }

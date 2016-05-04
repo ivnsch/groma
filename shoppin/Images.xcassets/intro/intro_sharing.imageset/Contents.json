@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Manage Shopping Lists.png",
+      "filename" : "Share with others in real time.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Manage Shopping Lists@2x.png",
+      "filename" : "Share with others in real time@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Manage Shopping Lists@3x.png",
+      "filename" : "Share with others in real time@3x.png",
       "scale" : "3x"
     }
   ],

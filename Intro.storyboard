@@ -18,15 +18,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NJR-Pk-tTx" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="285" y="527" width="30" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <rect key="frame" x="283" y="527" width="35" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Skip">
                                     <color key="titleColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="fontType">
-                                        <integer key="value" value="40"/>
+                                        <integer key="value" value="50"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
@@ -34,12 +34,19 @@
                                 </connections>
                             </button>
                             <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="6ZS-ry-WaI" customClass="SwipeView">
-                                <rect key="frame" x="150" y="150" width="300" height="300"/>
+                                <rect key="frame" x="0.0" y="150" width="600" height="300"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="F9J-cf-zXF"/>
                                     <constraint firstAttribute="height" constant="300" id="LYA-2Y-b7H"/>
+                                    <constraint firstAttribute="height" constant="300" id="gWF-zF-RTt"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="F9J-cf-zXF"/>
+                                        <exclude reference="LYA-2Y-b7H"/>
+                                    </mask>
+                                </variation>
                                 <connections>
                                     <outlet property="dataSource" destination="k9Y-sO-uBl" id="2Sa-1E-BJa"/>
                                     <outlet property="delegate" destination="k9Y-sO-uBl" id="U2a-xG-2zJ"/>
@@ -54,6 +61,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="6ZS-ry-WaI" firstAttribute="centerX" secondItem="q6e-yE-ONc" secondAttribute="centerX" id="08e-Fr-iT8"/>
+                            <constraint firstAttribute="trailing" secondItem="6ZS-ry-WaI" secondAttribute="trailing" id="15Y-Bf-R9H"/>
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="10" id="2Je-Xu-p9d"/>
                             <constraint firstItem="6ZS-ry-WaI" firstAttribute="centerY" secondItem="q6e-yE-ONc" secondAttribute="centerY" id="3Tk-Zj-DvH" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
                                 <userDefinedRuntimeAttributes>
@@ -73,9 +81,44 @@
                                 </userDefinedRuntimeAttributes>
                             </constraint>
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="centerX" secondItem="q6e-yE-ONc" secondAttribute="centerX" id="7sM-E7-U7q"/>
-                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="30" id="dKg-jx-UjW" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target"/>
+                            <constraint firstItem="NJR-Pk-tTx" firstAttribute="top" secondItem="mkE-ao-QPc" secondAttribute="bottom" constant="30" id="dKg-jx-UjW" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vVerySmall">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
+                                        <real key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
+                                        <real key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
+                                        <real key="value" value="60"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </constraint>
                             <constraint firstAttribute="centerX" secondItem="NJR-Pk-tTx" secondAttribute="centerX" id="mK8-90-YtI"/>
+                            <constraint firstItem="6ZS-ry-WaI" firstAttribute="leading" secondItem="q6e-yE-ONc" secondAttribute="leading" id="xZ6-gy-O9O">
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="hSmall">
+                                        <real key="value" value="40"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="hMiddle">
+                                        <real key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="hLarge">
+                                        <real key="value" value="60"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </constraint>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="08e-Fr-iT8"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="05r-p6-eT1"/>
                     <connections>

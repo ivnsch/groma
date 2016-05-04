@@ -44,7 +44,7 @@ class DimensionsManager {
             switch screenSize.width {
             case let w where w >= 413: return .Large // iPhone 6+
             case let w where w >= 374: return .Middle // iPhone 6
-            default: return .Large // iPhone 4,5
+            default: return .Small // iPhone 4,5
             }
         }()
 //        QL2("Screen width: \(screenSize.width), widthDimension: \(dimension)")
