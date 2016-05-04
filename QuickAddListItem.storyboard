@@ -35,7 +35,7 @@
                                     <constraint firstAttribute="height" constant="35" id="7T7-qi-eka"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="fontType">
                                         <integer key="value" value="40"/>
@@ -44,6 +44,9 @@
                                         <integer key="value" value="30"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="delegate" destination="3Uk-Rq-zKd" id="Ak9-SG-P9a"/>
+                                </connections>
                             </textField>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mt4-1h-sRG">
                                 <rect key="frame" x="0.0" y="65" width="600" height="535"/>

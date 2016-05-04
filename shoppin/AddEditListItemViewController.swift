@@ -249,6 +249,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         return addButtonHelper
     }
     
+    func focusFirstTextField() {
+        brandInput.becomeFirstResponder()
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         addButtonHelper?.addObserver()
@@ -363,7 +367,6 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     func textFieldShouldReturn(sender: UITextField) -> Bool {
-        view.endEditing(true)
         if sender == noteInput {
             submit()
             sender.resignFirstResponder()

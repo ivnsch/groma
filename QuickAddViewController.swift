@@ -39,7 +39,7 @@ private enum AddProductOrGroupContent {
 }
 
 // The container for quick add, manages top bar buttons and a navigation controller for content (quick add list, add products, add groups)
-class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISearchBarDelegate, AddEditListItemViewControllerDelegate, QuickAddPageControllerDelegate {
+class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISearchBarDelegate, AddEditListItemViewControllerDelegate, QuickAddPageControllerDelegate, UITextFieldDelegate {
     
     var delegate: QuickAddDelegate?
     
@@ -167,6 +167,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     private func hideAddProductController() -> Bool {
         if navController?.viewControllers.last as? AddEditListItemViewController != nil {
             navController?.popViewControllerAnimated(false)
+            
+            // Change back from "Next" to default
+            searchBar.returnKeyType = .Default
+            // without this the key doesn't change immediately. According to some internet sites this can cause issues with autocorrection, but we don't need it
+            searchBar.resignFirstResponder()
+            searchBar.becomeFirstResponder()
+            
             delegate?.onQuickListOpen()
 //            sortByButton.selected = true
             return true
@@ -187,6 +194,13 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
                 controller.editingItem = weakSelf.editingItem
                 controller.modus = weakSelf.modus
             }
+            
+            // show "Next" in the keyboard
+            searchBar.returnKeyType = .Next
+            // without this the key doesn't change immediately. According to some internet sites this can cause issues with autocorrection, but we don't need it
+            searchBar.resignFirstResponder()
+            searchBar.becomeFirstResponder()
+            
             delegate?.onAddProductOpen()
             
             return true
@@ -303,4 +317,14 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
 //            handler(planItemMaybe)
 //        })
 //    }
+    
+    
+    func textFieldShouldReturn(sender: UITextField) -> Bool {
+        if sender == searchBar {
+            if let addEditListItemController = navController?.viewControllers.last as? AddEditListItemViewController {
+                addEditListItemController.focusFirstTextField()
+            }
+        }
+        return false
+    }
 }
