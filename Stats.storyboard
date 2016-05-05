@@ -8,10 +8,6 @@
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeue.ttc">
             <string>HelveticaNeue</string>
-            <string>HelveticaNeue</string>
-        </mutableArray>
-        <mutableArray key="HelveticaNeueLights.ttc">
-            <string>HelveticaNeue-Light</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -49,7 +45,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Percent" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2kV-4s-JdU" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Percent" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2kV-4s-JdU" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
                                                     <rect key="frame" x="302" y="13" width="53" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.61568627450980395" green="0.83921568627450982" blue="0.93725490196078431" alpha="1" colorSpace="calibratedRGB"/>
@@ -60,7 +56,7 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LH7-ME-daK" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LH7-ME-daK" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
                                                     <rect key="frame" x="242" y="13" width="35" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.59215686270000001" blue="0.85098039219999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -75,8 +71,9 @@
                                             <constraints>
                                                 <constraint firstItem="LH7-ME-daK" firstAttribute="baseline" secondItem="Td7-f1-22Z" secondAttribute="baseline" id="HcO-M5-Vbe"/>
                                                 <constraint firstItem="Td7-f1-22Z" firstAttribute="centerY" secondItem="P8H-kl-UdR" secondAttribute="centerY" id="L9m-Cp-GYD"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="LH7-ME-daK" secondAttribute="trailing" constant="98" id="LP1-fs-HMS"/>
                                                 <constraint firstItem="LH7-ME-daK" firstAttribute="centerY" secondItem="P8H-kl-UdR" secondAttribute="centerY" constant="-10" id="M61-vb-jT1"/>
-                                                <constraint firstItem="2kV-4s-JdU" firstAttribute="leading" secondItem="LH7-ME-daK" secondAttribute="trailing" constant="25" id="XNd-qt-HJx"/>
+                                                <constraint firstItem="2kV-4s-JdU" firstAttribute="leading" secondItem="LH7-ME-daK" secondAttribute="trailing" priority="999" constant="25" id="XNd-qt-HJx"/>
                                                 <constraint firstItem="Td7-f1-22Z" firstAttribute="leading" secondItem="P8H-kl-UdR" secondAttribute="leading" constant="20" id="aK5-PZ-rg5"/>
                                                 <constraint firstAttribute="trailing" secondItem="2kV-4s-JdU" secondAttribute="trailing" constant="20" id="cTJ-WS-qH6"/>
                                                 <constraint firstItem="2kV-4s-JdU" firstAttribute="centerY" secondItem="P8H-kl-UdR" secondAttribute="centerY" id="qwe-ap-ppi"/>
@@ -284,26 +281,37 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aLA-Dg-hNI">
                                 <rect key="frame" x="0.0" y="607" width="375" height="60"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total spent" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lFI-3p-fMv">
-                                        <rect key="frame" x="10" y="19" width="85" height="22"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total spent" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lFI-3p-fMv" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="19" width="274" height="22"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                <integer key="value" value="50"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GKo-7k-tDF">
-                                        <rect key="frame" x="354" y="19" width="11" height="21"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GKo-7k-tDF" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="344" y="19" width="11" height="22"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="fontType">
+                                                <integer key="value" value="50"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="0t8-hF-ean"/>
+                                    <constraint firstItem="GKo-7k-tDF" firstAttribute="leading" secondItem="lFI-3p-fMv" secondAttribute="trailing" constant="50" id="2YR-Cu-J5q"/>
                                     <constraint firstItem="GKo-7k-tDF" firstAttribute="baseline" secondItem="lFI-3p-fMv" secondAttribute="baseline" id="AE6-1l-YKw"/>
-                                    <constraint firstItem="lFI-3p-fMv" firstAttribute="leading" secondItem="aLA-Dg-hNI" secondAttribute="leading" constant="10" id="RQe-Ai-crr"/>
+                                    <constraint firstItem="lFI-3p-fMv" firstAttribute="leading" secondItem="aLA-Dg-hNI" secondAttribute="leading" constant="20" id="RQe-Ai-crr"/>
                                     <constraint firstItem="lFI-3p-fMv" firstAttribute="centerY" secondItem="aLA-Dg-hNI" secondAttribute="centerY" id="auz-Ot-T17"/>
-                                    <constraint firstAttribute="trailing" secondItem="GKo-7k-tDF" secondAttribute="trailing" constant="10" id="bYC-xw-dEA"/>
+                                    <constraint firstAttribute="trailing" secondItem="GKo-7k-tDF" secondAttribute="trailing" constant="20" id="bYC-xw-dEA"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -350,11 +358,12 @@
                         <outlet property="pieChartContainer" destination="cB3-Gm-4ee" id="SaE-CC-X97"/>
                         <outlet property="tableView" destination="fiZ-BY-4Y4" id="3dW-or-miY"/>
                         <outlet property="totalSpendLabel" destination="GKo-7k-tDF" id="l0f-n3-5uv"/>
+                        <outlet property="totalSpendViewHeightConstraint" destination="0t8-hF-ean" id="Wid-hU-pPS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kmf-Vk-Z3h" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="520" y="516"/>
+            <point key="canvasLocation" x="519.5" y="515.5"/>
         </scene>
     </scenes>
 </document>

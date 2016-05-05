@@ -146,6 +146,7 @@ class DimensionsManager {
         }
     }
 
+    // Note: used also for stats details - we now use this for all bottom info views to keep ui consistent
     static var listItemsPricesViewHeight: CGFloat {
         switch heightDimension {
         case .VerySmall: return 54

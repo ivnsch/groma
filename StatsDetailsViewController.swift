@@ -15,6 +15,7 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var totalSpendLabel: UILabel!
+    @IBOutlet weak var totalSpendViewHeightConstraint: NSLayoutConstraint!
     
     var onViewDidLoad: VoidFunction?
     
@@ -147,6 +148,9 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
 
         initPieChart()
         
+        totalSpendViewHeightConstraint.constant = DimensionsManager.listItemsPricesViewHeight
+        tableView.bottomInset = totalSpendViewHeightConstraint.constant + 10 // 10 just add some extra space
+
         onViewDidLoad?()
     }
     
