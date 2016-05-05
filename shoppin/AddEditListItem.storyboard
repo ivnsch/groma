@@ -14,7 +14,7 @@
                         <viewControllerLayoutGuide type="bottom" id="su6-gv-v31"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="If7-20-6Xv">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Price" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="NrU-fN-qdF" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
@@ -39,7 +39,7 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="List section" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="i1w-xi-aFz" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="25" y="66" width="480" height="40"/>
+                                <rect key="frame" x="25" y="66" width="255" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="jOx-1e-S6w"/>
                                 </constraints>
@@ -82,7 +82,7 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Brand (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="r5b-Sz-J4o" customClass="LineAutocompleteTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="25" y="26" width="550" height="40"/>
+                                <rect key="frame" x="25" y="26" width="325" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="bLM-k5-r0i"/>
                                 </constraints>
@@ -104,7 +104,7 @@
                                 </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add new item" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dwL-LH-4dI" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="253" y="8" width="94" height="18"/>
+                                <rect key="frame" x="141" y="8" width="94" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -115,7 +115,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Note (optional)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yfv-oA-AU6" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="25" y="146" width="561" height="40"/>
+                                <rect key="frame" x="25" y="146" width="336" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="ogx-ge-tLz"/>
                                 </constraints>
@@ -135,13 +135,13 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xjl-8k-ZTY">
-                                <rect key="frame" x="505" y="66" width="70" height="40"/>
+                                <rect key="frame" x="280" y="66" width="70" height="40"/>
                                 <connections>
                                     <action selector="onSectionColorButtonTap:" destination="CI5-0y-OAL" eventType="touchUpInside" id="Xu7-Uf-KfM"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Colour" placeholder="Colour" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="CcK-74-2fx" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="505" y="66" width="70" height="40"/>
+                                <rect key="frame" x="280" y="66" width="70" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="2T8-cF-A8U"/>
                                     <constraint firstAttribute="width" constant="70" id="MkS-fK-o65"/>
@@ -214,8 +214,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="600" height="600"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="addNewItemLabel" destination="dwL-LH-4dI" id="Wbj-R8-UgF"/>
                         <outlet property="brandInput" destination="r5b-Sz-J4o" id="Nwq-Vw-9MC"/>

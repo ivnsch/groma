@@ -19,11 +19,11 @@
                         <viewControllerLayoutGuide type="bottom" id="5Cc-Oq-zW1"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="bQi-hy-w8S">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="TsF-zg-FLy" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="20" y="120" width="560" height="40"/>
+                                <rect key="frame" x="20" y="120" width="335" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="A2r-64-xJw"/>
                                     <constraint firstAttribute="width" constant="568" id="Emc-bi-aYF"/>
@@ -48,7 +48,7 @@
                                 </connections>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Yt4-Ha-XoG" customClass="LineTextField" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="16" y="60" width="568" height="40"/>
+                                <rect key="frame" x="16" y="60" width="343" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="ZVq-6j-gZY"/>
                                 </constraints>
@@ -67,7 +67,7 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EgA-OH-X0u">
-                                <rect key="frame" x="207" y="190" width="186" height="50"/>
+                                <rect key="frame" x="95" y="190" width="186" height="50"/>
                                 <color key="backgroundColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="186" id="Hfc-AW-q9v"/>
@@ -88,7 +88,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t83-R4-Wil" customClass="FBSDKLoginButton">
-                                <rect key="frame" x="175" y="391" width="250" height="45"/>
+                                <rect key="frame" x="63" y="391" width="250" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="KpM-Mj-o2X"/>
                                     <constraint firstAttribute="width" constant="250" id="c1L-pE-YIb"/>
@@ -107,7 +107,7 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Crr-TG-4lg" customClass="GIDSignInButton">
-                                <rect key="frame" x="175" y="456" width="250" height="45"/>
+                                <rect key="frame" x="63" y="456" width="250" height="45"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="OFd-Vd-pYg"/>
@@ -115,13 +115,13 @@
                                 </constraints>
                             </view>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome back! Please log in again." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D7c-wL-aYY">
-                                <rect key="frame" x="20" y="60" width="560" height="18"/>
+                                <rect key="frame" x="20" y="60" width="335" height="18"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                                 <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IE2-Wn-ab8" customClass="EyeView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="540" y="125" width="40" height="30"/>
+                                <rect key="frame" x="315" y="125" width="40" height="30"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="40" id="ISs-cs-6Vk"/>
@@ -134,7 +134,7 @@
                                 </variation>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v0i-2j-jaS">
-                                <rect key="frame" x="272" y="330" width="57" height="30"/>
+                                <rect key="frame" x="159" y="330" width="57" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Register">
                                     <color key="titleColor" red="0.054901960780000002" green="0.58431372550000005" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -145,7 +145,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QVU-Pz-cxq" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="239" y="270" width="123" height="30"/>
+                                <rect key="frame" x="126" y="270" width="123" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Forgot password?">
                                     <color key="titleColor" red="0.49803921569999998" green="0.49803921569999998" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
@@ -160,7 +160,7 @@
                                 </connections>
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yQG-pO-NNA" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="248" y="330" width="104" height="30"/>
+                                <rect key="frame" x="136" y="330" width="104" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Use app offline">
                                     <color key="titleColor" red="0.054901960780000002" green="0.58431372550000005" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -175,7 +175,7 @@
                                 </connections>
                             </button>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You can log in again any time!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3G3-DS-C6O">
-                                <rect key="frame" x="211" y="362" width="178" height="16"/>
+                                <rect key="frame" x="99" y="362" width="178" height="16"/>
                                 <fontDescription key="fontDescription" type="system" weight="light" pointSize="13"/>
                                 <color key="textColor" red="0.49803921569999998" green="0.49803921569999998" blue="0.49803921569999998" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -217,6 +217,7 @@
                             </mask>
                         </variation>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="eyeView" destination="IE2-Wn-ab8" id="KJQ-2k-NF0"/>
                         <outlet property="fbButton" destination="t83-R4-Wil" id="0Ui-Vf-SgW"/>

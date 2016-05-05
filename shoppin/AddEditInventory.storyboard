@@ -14,11 +14,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Qpe-T7-N2v"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="h5W-ku-HnU">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Inventory name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="958-Da-VLu" customClass="TextFieldMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="25" y="28" width="550" height="30"/>
+                                <rect key="frame" x="25" y="28" width="325" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="94c-mD-itq"/>
                                 </constraints>
@@ -37,7 +37,7 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Auc-8i-PnM" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="274" y="72" width="53" height="30"/>
+                                <rect key="frame" x="161" y="72" width="53" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Colours">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -52,7 +52,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bg3-OT-zRt" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="457" y="72" width="113" height="30"/>
+                                <rect key="frame" x="232" y="72" width="113" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Add participants">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -85,8 +85,7 @@
                             </mask>
                         </variation>
                     </view>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="600" height="600"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="colorButton" destination="Auc-8i-PnM" id="APK-1U-A7x"/>
                         <outlet property="listNameInputField" destination="958-Da-VLu" id="HlN-kN-3kc"/>

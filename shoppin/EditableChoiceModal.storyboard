@@ -14,17 +14,17 @@
                         <viewControllerLayoutGuide type="bottom" id="YKf-iD-LRo"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="DMt-kt-wt7">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vvc-Md-QLz">
-                                <rect key="frame" x="0.0" y="80" width="600" height="460"/>
+                                <rect key="frame" x="0.0" y="80" width="375" height="527"/>
                                 <connections>
                                     <segue destination="YKF-0g-Y0v" kind="embed" identifier="tableViewControllerSegue" id="ABV-WG-hYH"/>
                                 </connections>
                             </containerView>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eaR-bs-9eK">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="54"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="54"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="54" id="5NJ-PD-dMB"/>
                                 </constraints>
@@ -39,7 +39,7 @@
                                 </items>
                             </navigationBar>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9nn-FH-wOX">
-                                <rect key="frame" x="554" y="555" width="30" height="30"/>
+                                <rect key="frame" x="554" y="622" width="30" height="30"/>
                                 <state key="normal" title="Add">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -48,7 +48,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter participant's e-mail address" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qB4-ae-t6z">
-                                <rect key="frame" x="15" y="555" width="525" height="30"/>
+                                <rect key="frame" x="15" y="622" width="525" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
@@ -77,6 +77,7 @@
                             </mask>
                         </variation>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="participantInputField" destination="qB4-ae-t6z" id="Pxo-pq-u7U"/>
                     </connections>
@@ -90,15 +91,15 @@
             <objects>
                 <tableViewController id="YKF-0g-Y0v" customClass="EditablePlainTableViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7ZB-Ju-pgO">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="460"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="reuseIdentifier" id="Fv8-R9-dLY">
-                                <rect key="frame" x="0.0" y="22" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="22" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Fv8-R9-dLY" id="boT-gw-AKA">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -108,6 +109,7 @@
                             <outlet property="delegate" destination="YKF-0g-Y0v" id="xZx-S7-ZI4"/>
                         </connections>
                     </tableView>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ADH-cT-zqC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

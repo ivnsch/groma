@@ -20,15 +20,15 @@
                         <viewControllerLayoutGuide type="bottom" id="xjX-b5-vAH"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="cbS-vQ-asw">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PW9-oj-ybu" customClass="FBSDKShareButton">
-                                <rect key="frame" x="285" y="161" width="30" height="30"/>
+                                <rect key="frame" x="173" y="161" width="30" height="30"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share Shoppin with your contacts!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nHw-Nj-W56">
-                                <rect key="frame" x="174" y="80" width="252" height="21"/>
+                                <rect key="frame" x="62" y="80" width="252" height="21"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -42,6 +42,7 @@
                             <constraint firstItem="nHw-Nj-W56" firstAttribute="top" secondItem="vUs-rI-CER" secondAttribute="bottom" constant="60" id="kvu-SR-f7J"/>
                         </constraints>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="facebookButton" destination="PW9-oj-ybu" id="kTG-Uh-dSC"/>
                     </connections>

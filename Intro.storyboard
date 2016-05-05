@@ -14,11 +14,11 @@
                         <viewControllerLayoutGuide type="bottom" id="OHf-Rk-Mbe"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="q6e-yE-ONc">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NJR-Pk-tTx" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="283" y="527" width="35" height="34"/>
+                                <rect key="frame" x="170" y="561" width="35" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Skip">
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -34,7 +34,7 @@
                                 </connections>
                             </button>
                             <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="6ZS-ry-WaI" customClass="SwipeView">
-                                <rect key="frame" x="0.0" y="150" width="600" height="300"/>
+                                <rect key="frame" x="0.0" y="184" width="375" height="300"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="F9J-cf-zXF"/>
@@ -53,7 +53,7 @@
                                 </connections>
                             </view>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="mkE-ao-QPc">
-                                <rect key="frame" x="281" y="460" width="39" height="37"/>
+                                <rect key="frame" x="168" y="494" width="39" height="37"/>
                                 <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="currentPageIndicatorTintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </pageControl>
@@ -121,6 +121,7 @@
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" id="05r-p6-eT1"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="pageControl" destination="mkE-ao-QPc" id="fb6-Vq-8Za"/>
                         <outlet property="skipButton" destination="NJR-Pk-tTx" id="vOf-eA-cbw"/>
@@ -136,6 +137,7 @@
             <objects>
                 <navigationController storyboardIdentifier="IntroNavController" automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="wfF-r6-NmF" sceneMemberID="viewController">
                     <toolbarItems/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="3EY-E8-OQx">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

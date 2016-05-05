@@ -14,11 +14,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Srj-eF-WJ5"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="nEu-cY-6d9">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="D1k-MQ-abI">
-                                <rect key="frame" x="20" y="118" width="560" height="100"/>
+                                <rect key="frame" x="20" y="118" width="335" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="fuI-fE-WX3"/>
                                     <constraint firstAttribute="height" constant="100" id="vfp-OL-S0s"/>
@@ -32,7 +32,7 @@
                                 </variation>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add a note" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3z2-aO-RRp" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="256" y="80" width="88" height="22"/>
+                                <rect key="frame" x="144" y="80" width="88" height="22"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -43,7 +43,7 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sZf-3j-0Yz" customClass="ButtonMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="285" y="234" width="30" height="30"/>
+                                <rect key="frame" x="173" y="234" width="30" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Ok"/>
                                 <connections>
@@ -62,6 +62,7 @@
                             <constraint firstAttribute="trailing" secondItem="D1k-MQ-abI" secondAttribute="trailing" constant="20" id="zKL-ZL-okK"/>
                         </constraints>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="textView" destination="D1k-MQ-abI" id="cy9-cq-P9h"/>
                     </connections>
