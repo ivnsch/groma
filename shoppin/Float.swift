@@ -19,7 +19,7 @@ extension Float {
     }()
     
     func toString(maxFractionDigits: Int) -> String {
-        Float.formatter.numberStyle = .DecimalStyle
+        Float.formatter.numberStyle = .NoStyle
         Float.formatter.maximumFractionDigits = maxFractionDigits
         Float.formatter.minimumFractionDigits = 0
         return Float.formatter.stringFromNumber(NSNumber(float: self))!
