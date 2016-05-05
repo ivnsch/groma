@@ -46,7 +46,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
         
         buyViewHeightConstraint.constant = DimensionsManager.listItemsPricesViewHeight
 
-        listItemsTableViewController.tableView.bottomInset = buyView.frame.height
+        listItemsTableViewController.tableView.bottomInset = buyView.frame.height + 10
 //            + Constants.tableViewAdditionalBottomInset
         
         expandCollapseButton.delegate = self
