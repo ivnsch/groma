@@ -45,7 +45,7 @@ import QorumLogs
         
         if let size = LabelMore.mapToFontSize(fontType) {
             
-            QL1("Init label with font size: \(size), text?: \(text). Dimension: \(DimensionsManager.widthDimension)")
+//            QL1("Init label with font size: \(size), text?: \(text). Dimension: \(DimensionsManager.widthDimension)")
             
             self.font = {
                 if font.isBold {
