@@ -30,6 +30,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     private var finishedSlider = false {
         didSet {
             skipButton.setTitle("Start", forState: .Normal)
+            skipButton.setTitleColor(UIColor(hexString: "222222"), forState: .Normal)
         }
     }
     
