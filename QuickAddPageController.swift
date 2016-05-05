@@ -27,6 +27,9 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     var itemTypeForFirstPage: QuickAddItemType = .Product // TODO improve this, no time now
     
     var list: List? // this is only used when quick add is used in list items, in order to use the section colors when available instead of category colors. TODO cleaner solution?
+
+    private var addProductController: QuickAddListItemViewController?
+    private var addGroupController: QuickAddListItemViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,7 +81,7 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
             currentSwipeController = productsController
             addChildViewController(productsController)
             
-            delegate?.onPageChanged(index, pageType: .Product)
+            addProductController = productsController
             
             return productsController.view
             
@@ -90,9 +93,9 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
             }
             currentSwipeController = productsController
             addChildViewController(productsController)
-            
-            delegate?.onPageChanged(index, pageType: .Group)
 
+            addGroupController = productsController
+            
             return productsController.view
         }
     }
@@ -117,7 +120,16 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     // MARK: - SwipeViewDelegate
     
     func swipeViewCurrentItemIndexDidChange(swipeView: SwipeView!) {
-        slidingTabsView.setSelected(swipeView.currentItemIndex)
+        let index = swipeView.currentItemIndex
+        slidingTabsView.setSelected(index)
+        
+        if index == 0 {
+            currentSwipeController = addProductController
+            delegate?.onPageChanged(index, pageType: .Product)
+        } else {
+            currentSwipeController = addGroupController
+            delegate?.onPageChanged(index, pageType: .Group)
+        }
     }
     
     func swipeViewItemSize(swipeView: SwipeView!) -> CGSize {
