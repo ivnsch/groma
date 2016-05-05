@@ -164,6 +164,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
             }()
             
             delay(itemsDelay) {[weak self] in
+                self?.plusButtonWidthConstraint.constant = constant
                 self?.minusButtonWidthConstraint.constant = constant
                 self?.minusTrailingConstraint.constant = minusConstant
                 UIView.animateWithDuration(0.2) {

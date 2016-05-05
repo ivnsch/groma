@@ -599,16 +599,10 @@
                                                     <rect key="frame" x="240" y="0.0" width="61" height="91"/>
                                                     <rect key="contentStretch" x="0.0" y="0.0" width="0.40000000000000002" height="1"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="25" id="P6i-N0-avq"/>
                                                         <constraint firstAttribute="width" constant="61" id="dKo-Iq-2Sh"/>
                                                     </constraints>
                                                     <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                     <state key="normal" image="speechbubble"/>
-                                                    <variation key="default">
-                                                        <mask key="constraints">
-                                                            <exclude reference="P6i-N0-avq"/>
-                                                        </mask>
-                                                    </variation>
                                                     <connections>
                                                         <action selector="onNoteTap:" destination="qDe-gS-G77" eventType="touchUpInside" id="ERg-HN-Obn"/>
                                                     </connections>
@@ -708,7 +702,7 @@
                                     <outlet property="nameLabel" destination="npq-ts-NkO" id="e3j-25-fIv"/>
                                     <outlet property="noteButton" destination="8LP-6w-Aa7" id="6Qg-cK-Ip5"/>
                                     <outlet property="plusButton" destination="OUR-OA-3PQ" id="q3F-Eq-HeY"/>
-                                    <outlet property="plusButtonWidthConstraint" destination="P6i-N0-avq" id="SMc-Do-QKH"/>
+                                    <outlet property="plusButtonWidthConstraint" destination="xtY-uN-SR5" id="uNA-IK-SN8"/>
                                     <outlet property="priceLabel" destination="PHE-mh-lAU" id="E2t-cv-Ag0"/>
                                     <outlet property="quantityLabel" destination="SqV-LQ-m9i" id="5No-Si-4uh"/>
                                     <outlet property="quantityLabelCenterVerticallyConstraint" destination="JJd-X6-AeU" id="uGM-Rt-Fmt"/>
