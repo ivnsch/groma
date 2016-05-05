@@ -149,19 +149,24 @@ class ListTopBarView: UIView {
         let circlePath = UIBezierPath(roundedRect: CGRectMake(x, y, circleDiam, circleDiam), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(cornerRadius, cornerRadius))
         circlePath.closePath()
         
+        let animationKey = "path"
+        
         CATransaction.begin()
-        let pathAnimation = CABasicAnimation(keyPath: "path")
+        let pathAnimation = CABasicAnimation(keyPath: animationKey)
         pathAnimation.duration = duration
         pathAnimation.fillMode = kCAFillModeForwards
         pathAnimation.removedOnCompletion = false
         pathAnimation.fromValue = expanding ? rectPath.CGPath : circlePath.CGPath
-        pathAnimation.toValue = expanding ?  circlePath.CGPath : rectPath.CGPath
+        pathAnimation.toValue = expanding ? circlePath.CGPath : rectPath.CGPath
         
-        // this causes some flickering (only on device) when expand=false, so for now using kCAFillModeForwards and removedOnCompletion=false instead
-//        CATransaction.setCompletionBlock {[weak self] in
-//            self?.bgColorLayer?.path = expanding ? circlePath.CGPath : rectPath.CGPath
-//        }
-        bgColorLayer?.addAnimation(pathAnimation, forKey: "path")
+        CATransaction.setCompletionBlock {[weak self] in
+            self?.bgColorLayer?.path = expanding ? circlePath.CGPath : rectPath.CGPath
+            self?.setNeedsDisplay()
+            // remove the animation manually, after it's completed, otherwise there's flickering (on expanding = false)
+            // removing the animation is important, otherwise we get sometimes random artifacts later which freeze the app.
+            self?.bgColorLayer?.removeAnimationForKey(animationKey)
+        }
+        bgColorLayer?.addAnimation(pathAnimation, forKey: animationKey)
         
         CATransaction.commit()
     }
