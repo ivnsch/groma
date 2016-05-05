@@ -144,7 +144,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RDW-hy-ch1" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="247" y="240" width="107" height="72"/>
+                                <rect key="frame" x="247" y="300" width="107" height="72"/>
                                 <string key="text" base64-UTF8="YES">
 SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
 </string>
@@ -157,19 +157,25 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Je8-L8-ALQ">
-                                <rect key="frame" x="250" y="160" width="100" height="60"/>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="about" translatesAutoresizingMaskIntoConstraints="NO" id="Je8-L8-ALQ">
+                                <rect key="frame" x="232" y="197" width="150" height="83"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="1XQ-vd-cWg"/>
                                     <constraint firstAttribute="height" constant="60" id="giO-xe-YTW"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="1XQ-vd-cWg"/>
+                                        <exclude reference="giO-xe-YTW"/>
+                                    </mask>
+                                </variation>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Je8-L8-ALQ" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" id="9Bt-VB-Yb3"/>
+                            <constraint firstItem="Je8-L8-ALQ" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" constant="7" id="9Bt-VB-Yb3"/>
                             <constraint firstItem="RDW-hy-ch1" firstAttribute="top" secondItem="Je8-L8-ALQ" secondAttribute="bottom" constant="20" id="EDP-Dp-6AD"/>
-                            <constraint firstItem="RDW-hy-ch1" firstAttribute="centerY" secondItem="nyx-EU-a0C" secondAttribute="centerY" id="TH0-iH-8ot"/>
+                            <constraint firstItem="RDW-hy-ch1" firstAttribute="centerY" secondItem="nyx-EU-a0C" secondAttribute="centerY" constant="60" id="TH0-iH-8ot"/>
                             <constraint firstItem="RDW-hy-ch1" firstAttribute="centerX" secondItem="nyx-EU-a0C" secondAttribute="centerX" id="UJp-Zc-5lt"/>
                         </constraints>
                     </view>
@@ -2043,6 +2049,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
         </scene>
     </scenes>
     <resources>
+        <image name="about" width="150" height="83"/>
         <image name="empty_page" width="240" height="206"/>
         <image name="group" width="29" height="25"/>
         <image name="group_selected" width="30" height="25"/>
