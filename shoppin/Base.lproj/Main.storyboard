@@ -577,7 +577,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="RHQ-AR-gZ5" firstAttribute="centerY" secondItem="Lld-xp-bAz" secondAttribute="centerY" id="SOa-GT-E1H"/>
-                                                <constraint firstItem="RHQ-AR-gZ5" firstAttribute="leading" secondItem="Lld-xp-bAz" secondAttribute="leading" constant="20" id="W0u-VU-yOS"/>
+                                                <constraint firstItem="RHQ-AR-gZ5" firstAttribute="leading" secondItem="Lld-xp-bAz" secondAttribute="leading" constant="20" id="W0u-VU-yOS" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                                 <constraint firstItem="RHQ-AR-gZ5" firstAttribute="centerY" secondItem="Lld-xp-bAz" secondAttribute="centerY" id="eLL-QP-htv"/>
                                             </constraints>
                                         </tableViewCellContentView>
