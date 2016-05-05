@@ -108,10 +108,10 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="blz-rx-aVz">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="543"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="QQF-1r-ms4">
-                                        <rect key="frame" x="68" y="179" width="240" height="206"/>
+                                        <rect key="frame" x="68" y="149" width="240" height="206"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="aKL-Rf-ABt"/>
@@ -125,7 +125,7 @@
                                         </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You cart is empty" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hAl-pb-QcH" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="117" y="405" width="141" height="22"/>
+                                        <rect key="frame" x="117" y="375" width="141" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.13333333333333333" green="0.13333333333333333" blue="0.13333333333333333" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -135,8 +135,8 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Move items from the todo list or add directly using the top menu!" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xde-nJ-NKG" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="40" y="435" width="295" height="36"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Move items from the todo list or add directly using the top menu!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xde-nJ-NKG" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
+                                        <rect key="frame" x="40" y="405" width="295" height="36"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -226,7 +226,7 @@
                             </view>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="LyR-1z-msh" firstAttribute="top" secondItem="blz-rx-aVz" secondAttribute="bottom" id="0ar-12-Vyc"/>
+                            <constraint firstItem="LyR-1z-msh" firstAttribute="top" secondItem="blz-rx-aVz" secondAttribute="bottom" constant="60" id="0ar-12-Vyc"/>
                             <constraint firstAttribute="trailing" secondItem="Xxj-JB-Bmd" secondAttribute="trailing" id="1hJ-0X-jxp"/>
                             <constraint firstItem="Xxj-JB-Bmd" firstAttribute="leading" secondItem="0tl-vv-fHn" secondAttribute="leading" id="4xL-Qc-HVv"/>
                             <constraint firstItem="blz-rx-aVz" firstAttribute="top" secondItem="Dhe-Wt-ZWJ" secondAttribute="bottom" id="6IN-qJ-cKC"/>
@@ -339,8 +339,8 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="cart" translatesAutoresizingMaskIntoConstraints="NO" id="jvm-6H-Duz">
-                                        <rect key="frame" x="20" y="-10" width="27" height="23"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cart" translatesAutoresizingMaskIntoConstraints="NO" id="jvm-6H-Duz">
+                                        <rect key="frame" x="20" y="-11" width="27" height="23"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E7V-vH-7DE" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
                                         <rect key="frame" x="67" y="-9" width="0.0" height="0.0"/>
@@ -411,10 +411,10 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="so5-bY-yhM">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="543"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="bes-vp-e1u">
-                                        <rect key="frame" x="68" y="199" width="240" height="206"/>
+                                        <rect key="frame" x="68" y="169" width="240" height="206"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="9iR-Gu-SA7"/>
@@ -428,7 +428,7 @@
                                         </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ops, there are no list items yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sxW-16-sQo" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="65" y="425" width="246" height="22"/>
+                                        <rect key="frame" x="65" y="395" width="246" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -439,7 +439,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Just add some, will ya?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fPp-Ci-147" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="109" y="455" width="158" height="18"/>
+                                        <rect key="frame" x="109" y="425" width="158" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -464,10 +464,12 @@
                         <constraints>
                             <constraint firstItem="CzC-OK-nPG" firstAttribute="top" secondItem="Ytc-Mq-xYS" secondAttribute="top" id="BIM-hI-uax"/>
                             <constraint firstItem="iVM-Kg-U2m" firstAttribute="width" secondItem="Ytc-Mq-xYS" secondAttribute="width" id="CQQ-wq-7AI"/>
+                            <constraint firstItem="iVM-Kg-U2m" firstAttribute="top" secondItem="so5-bY-yhM" secondAttribute="bottom" id="EZn-Vn-Bwd"/>
                             <constraint firstAttribute="trailing" secondItem="5T4-jf-M2R" secondAttribute="trailing" id="Gsx-FO-ul6"/>
                             <constraint firstItem="peQ-Fh-dVX" firstAttribute="top" secondItem="iVM-Kg-U2m" secondAttribute="bottom" priority="999" id="IrT-Je-DDy"/>
                             <constraint firstItem="peQ-Fh-dVX" firstAttribute="top" secondItem="5T4-jf-M2R" secondAttribute="bottom" priority="999" id="NDB-NB-vei"/>
                             <constraint firstItem="iVM-Kg-U2m" firstAttribute="leading" secondItem="Ytc-Mq-xYS" secondAttribute="leading" id="R3l-IW-TzB"/>
+                            <constraint firstItem="peQ-Fh-dVX" firstAttribute="top" secondItem="so5-bY-yhM" secondAttribute="bottom" constant="60" id="Rq2-Xv-qpT"/>
                             <constraint firstItem="so5-bY-yhM" firstAttribute="top" secondItem="CzC-OK-nPG" secondAttribute="bottom" priority="999" id="SJe-8i-7tB"/>
                             <constraint firstItem="CzC-OK-nPG" firstAttribute="leading" secondItem="Ytc-Mq-xYS" secondAttribute="leading" id="cRB-8R-1FH"/>
                             <constraint firstItem="so5-bY-yhM" firstAttribute="leading" secondItem="Ytc-Mq-xYS" secondAttribute="leading" id="cia-OM-TGe"/>
@@ -475,6 +477,12 @@
                             <constraint firstItem="peQ-Fh-dVX" firstAttribute="top" secondItem="so5-bY-yhM" secondAttribute="bottom" id="nuy-Gu-BZe"/>
                             <constraint firstAttribute="trailing" secondItem="so5-bY-yhM" secondAttribute="trailing" id="oSI-6A-S4k"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="EZn-Vn-Bwd"/>
+                                <exclude reference="nuy-Gu-BZe"/>
+                            </mask>
+                        </variation>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
@@ -556,7 +564,7 @@
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="npq-ts-NkO" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                                    <rect key="frame" x="29" y="25" width="181" height="22"/>
+                                                    <rect key="frame" x="29" y="25" width="222" height="22"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -567,7 +575,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SqV-LQ-m9i" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                                    <rect key="frame" x="260" y="34" width="49" height="24"/>
+                                                    <rect key="frame" x="301" y="34" width="49" height="24"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" red="0.17254901959999999" green="0.23921568630000001" blue="0.31372549020000001" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -578,9 +586,9 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OUR-OA-3PQ">
-                                                    <rect key="frame" x="219" y="0.0" width="41" height="91"/>
+                                                    <rect key="frame" x="301" y="0.0" width="0.0" height="91"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="41" id="xtY-uN-SR5"/>
+                                                        <constraint firstAttribute="width" id="xtY-uN-SR5"/>
                                                     </constraints>
                                                     <state key="normal" image="plus"/>
                                                     <connections>
@@ -588,7 +596,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" alpha="0.0" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8LP-6w-Aa7">
-                                                    <rect key="frame" x="199" y="0.0" width="61" height="91"/>
+                                                    <rect key="frame" x="240" y="0.0" width="61" height="91"/>
                                                     <rect key="contentStretch" x="0.0" y="0.0" width="0.40000000000000002" height="1"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="25" id="P6i-N0-avq"/>
@@ -606,7 +614,7 @@
                                                     </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="251" horizontalCompressionResistancePriority="249" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="9Rc-cx-ee2" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                                    <rect key="frame" x="29" y="47" width="181" height="18"/>
+                                                    <rect key="frame" x="29" y="47" width="222" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -617,7 +625,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PHE-mh-lAU" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                                    <rect key="frame" x="268" y="58" width="33" height="16"/>
+                                                    <rect key="frame" x="309" y="58" width="33" height="16"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -628,9 +636,9 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Pn-i3-NXi">
-                                                    <rect key="frame" x="309" y="0.0" width="41" height="91"/>
+                                                    <rect key="frame" x="350" y="0.0" width="0.0" height="91"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="41" id="9EV-Z6-ykG"/>
+                                                        <constraint firstAttribute="width" id="9EV-Z6-ykG"/>
                                                     </constraints>
                                                     <state key="normal" image="minus"/>
                                                     <connections>
@@ -644,7 +652,7 @@
                                                 <constraint firstItem="OUR-OA-3PQ" firstAttribute="top" secondItem="mEO-yB-hml" secondAttribute="top" id="4L6-Sy-CDL"/>
                                                 <constraint firstItem="PHE-mh-lAU" firstAttribute="top" secondItem="SqV-LQ-m9i" secondAttribute="bottom" id="7NN-oz-hwT"/>
                                                 <constraint firstItem="PHE-mh-lAU" firstAttribute="centerX" secondItem="SqV-LQ-m9i" secondAttribute="centerX" id="80d-5T-asF"/>
-                                                <constraint firstAttribute="trailing" secondItem="5Pn-i3-NXi" secondAttribute="trailing" constant="25" id="BQZ-CA-jxk"/>
+                                                <constraint firstAttribute="trailing" secondItem="5Pn-i3-NXi" secondAttribute="trailing" constant="25" id="BQZ-CA-jxk" customClass="LeftRightPaddingConstraint" customModule="shoppin" customModuleProvider="target"/>
                                                 <constraint firstItem="SqV-LQ-m9i" firstAttribute="leading" secondItem="8LP-6w-Aa7" secondAttribute="trailing" id="Bu8-oH-DHZ"/>
                                                 <constraint firstAttribute="bottom" secondItem="W7z-OP-2eO" secondAttribute="bottom" id="FR7-gt-I5f"/>
                                                 <constraint firstItem="W7z-OP-2eO" firstAttribute="leading" secondItem="mEO-yB-hml" secondAttribute="leading" id="Fqx-Wo-FuB"/>

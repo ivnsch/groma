@@ -158,7 +158,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
 
             let minusConstant: CGFloat = {
                 switch mode {
-                case .Note: return 30
+                case .Note: return DimensionsManager.leftRightPaddingConstraint
                 case .Increment: return 0
                 }
             }()
