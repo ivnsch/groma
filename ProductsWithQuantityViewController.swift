@@ -164,7 +164,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         //            //}
         //        }
         
-        cell.contentView.addBottomBorderWithColor(Theme.cellBottomBorderColor, width: 1)
+
         
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
@@ -177,6 +177,14 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         return true
+    }
+    
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
+        if editing {
+            return .Delete
+        } else {
+            return .None
+        }
     }
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
