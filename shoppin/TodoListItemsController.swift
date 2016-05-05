@@ -27,7 +27,8 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     }
     
     override var tableViewBottomInset: CGFloat {
-        return pricesView.frame.height
+//        return pricesView.frame.height // can be open or closed, for now just return fixed height of prices view - when it's closed we have a bigger inset
+        return DimensionsManager.listItemsPricesViewHeight
     }
     
     override var emptyView: UIView {
