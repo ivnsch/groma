@@ -67,8 +67,6 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
                 checkExpandedVertical()
                 updateQuantityCenterConstraint()
                 
-                superview?.bringSubviewToFront(self)
-                
             } else {
                 QL3("Setting quantities but labels not initialised yet")
             }
