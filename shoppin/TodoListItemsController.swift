@@ -53,6 +53,16 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
         }
     }
     
+    override func onExpand(expanding: Bool) {
+        super.onExpand(expanding)
+        
+        if !expanding {
+            pricesView.hidden = true
+            stashView.hidden = true
+            todoListItemsEditBottomView?.hidden = true
+        }
+    }
+    
     private func initBottomEditView() {
         let view = NSBundle.loadView("TodoListItemsEditBottomView", owner: self) as! TodoListItemsEditBottomView
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -108,10 +118,16 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
 //                let itemsStr = listItems.reduce("") {str, item in
 //                    str + item.quantityDebugDescription + ","
 //                }
-//                QL2("updating price, items: \(itemsStr), total cart quantity: \(totalCartQuantity), done price: \(totalCartPrice)")
-                self.pricesView.cartQuantity = totalCartQuantity
+
+                let stashQuantity = listItems.totalQuanityAndPrice(.Stash).quantity
+                
+                self.pricesView.quantities = (cart: totalCartQuantity, stash: stashQuantity)
+                
+//                QL2("updating price, items: \(itemsStr), total cart quantity: \(totalCartQuantity), done price: \(totalCartPrice), stash quantity: \(stashQuantity)")
+                
                 self.pricesView.setDonePrice(totalCartPrice, animated: true)
-                self.stashView.updateOpenStateForQuantities(totalCartQuantity, stashQuantity: listItems.totalQuanityAndPrice(.Stash).quantity)
+                self.stashView.updateOpenStateForQuantities(totalCartQuantity, stashQuantity: stashQuantity)
+                
                 
                 self.todoListItemsEditBottomView?.setTotalPrice(listItems.totalPriceTodoAndCart)
             })
@@ -130,9 +146,11 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
                     if count == 0 {
                         weakSelf.pricesView.setOpen(false, animated: true)
                     }
-                    weakSelf.pricesView.stashQuantity = count
+                    weakSelf.pricesView.quantities = (cart: weakSelf.pricesView.quantities.cart, stash: count)
 
-                    weakSelf.stashView.updateOpenStateForQuantities(weakSelf.pricesView.cartQuantity, stashQuantity: count)
+//                    QL2("Set stash quantity: \(count), cart quantity: \(weakSelf.pricesView.quantities.cart)")
+                
+                    weakSelf.stashView.updateOpenStateForQuantities(weakSelf.pricesView.quantities.cart, stashQuantity: count)
             })
         }
     }

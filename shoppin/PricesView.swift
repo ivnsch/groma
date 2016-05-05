@@ -48,24 +48,37 @@ class PricesView: UIView, UIGestureRecognizerDelegate, CellUncovererDelegate {
     @IBOutlet weak var leftLayoutConstraint: NSLayoutConstraint!
     private var cellUncoverer: CellUncoverer?
 
-    var cartQuantity: Int = 0 {
+    private var cartQuantity: Int = 0 {
         didSet {
             if let cartQuantityLabel = quantityLabel {
-                checkExpandedVertical()
                 cartQuantityLabel.text = "\(cartQuantity) items in your cart"
-                updateQuantityCenterConstraint()
             } else {
                 QL3("Setting cart quantity but label is not initialised yet")
             }
         }
     }
 
-    var stashQuantity: Int = 0 {
+    var quantities: (cart: Int, stash: Int) = (0, 0) {
+        didSet {
+            if let _ = quantityLabel {
+                cartQuantity = quantities.cart
+                stashQuantity = quantities.stash
+
+                checkExpandedVertical()
+                updateQuantityCenterConstraint()
+                
+                superview?.bringSubviewToFront(self)
+                
+            } else {
+                QL3("Setting quantities but labels not initialised yet")
+            }
+        }
+    }
+    
+    private var stashQuantity: Int = 0 {
         didSet {
             if let stashQuantityLabel = stashQuantityLabel {
-                checkExpandedVertical()
                 stashQuantityLabel.text = "\(stashQuantity) in the backstore"
-                updateQuantityCenterConstraint()
                 stashQuantityLabel.hidden = stashQuantity == 0
             } else {
                 QL3("Setting stash quantity but label is not initialised yet")
