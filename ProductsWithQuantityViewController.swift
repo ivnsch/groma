@@ -165,6 +165,8 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         //        }
         
 
+        // height now calculated yet so we pass the position of border
+        cell.addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
         
         cell.selectionStyle = UITableViewCellSelectionStyle.None
         
