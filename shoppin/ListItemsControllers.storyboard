@@ -278,10 +278,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5T4-jf-M2R" customClass="StashView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="-145" y="667" width="520" height="0.0"/>
+                                <rect key="frame" x="-145" y="666" width="520" height="1"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0eD-HV-Myo">
-                                        <rect key="frame" x="460" y="0.0" width="60" height="0.0"/>
+                                        <rect key="frame" x="460" y="0.0" width="60" height="1"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="q4Q-KL-w5r"/>
                                         </constraints>
@@ -298,7 +298,7 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="520" id="0f8-8Q-Vt8"/>
                                     <constraint firstAttribute="trailing" secondItem="0eD-HV-Myo" secondAttribute="trailing" id="Hlf-fx-LlM"/>
-                                    <constraint firstAttribute="height" id="OvZ-Vs-sjM"/>
+                                    <constraint firstAttribute="height" constant="1" id="OvZ-Vs-sjM"/>
                                     <constraint firstItem="0eD-HV-Myo" firstAttribute="leading" secondItem="5T4-jf-M2R" secondAttribute="leading" id="Y3j-hu-rmH"/>
                                     <constraint firstItem="0eD-HV-Myo" firstAttribute="top" secondItem="5T4-jf-M2R" secondAttribute="top" id="hXi-E7-V0I"/>
                                     <constraint firstAttribute="bottom" secondItem="0eD-HV-Myo" secondAttribute="bottom" id="nfc-pA-CeF"/>
@@ -315,10 +315,10 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iVM-Kg-U2m" customClass="PricesView" customModule="shoppin" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="667" width="375" height="0.0"/>
+                                <rect key="frame" x="0.0" y="666" width="375" height="1"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mNO-iA-eWt" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="355" y="0.0" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="355" y="1" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -329,7 +329,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="80h-ha-9Dw" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="344" y="-11" width="11" height="22"/>
+                                        <rect key="frame" x="344" y="-10" width="11" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.17254901960784313" green="0.23921568627450979" blue="0.31372549019607843" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -339,11 +339,11 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cart" translatesAutoresizingMaskIntoConstraints="NO" id="jvm-6H-Duz">
-                                        <rect key="frame" x="20" y="-11" width="27" height="23"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="cart" translatesAutoresizingMaskIntoConstraints="NO" id="jvm-6H-Duz">
+                                        <rect key="frame" x="20" y="-10" width="27" height="23"/>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E7V-vH-7DE" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="67" y="-10" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="67" y="-9" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -354,7 +354,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fgk-0h-BDM" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="67" y="10" width="0.0" height="0.0"/>
+                                        <rect key="frame" x="67" y="11" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -365,7 +365,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Om-sR-QxE">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="1"/>
                                         <connections>
                                             <action selector="onCartTap:" destination="QHZ-uV-ZSM" eventType="touchUpInside" id="95P-SU-3Lw"/>
                                         </connections>
@@ -375,7 +375,7 @@
                                 <constraints>
                                     <constraint firstItem="80h-ha-9Dw" firstAttribute="centerY" secondItem="iVM-Kg-U2m" secondAttribute="centerY" id="7Ho-ih-Y8v"/>
                                     <constraint firstAttribute="trailing" secondItem="80h-ha-9Dw" secondAttribute="trailing" constant="20" id="EFj-TJ-Exd"/>
-                                    <constraint firstAttribute="height" id="FDi-oR-jaL"/>
+                                    <constraint firstAttribute="height" constant="1" id="FDi-oR-jaL"/>
                                     <constraint firstItem="jvm-6H-Duz" firstAttribute="leading" secondItem="iVM-Kg-U2m" secondAttribute="leading" constant="20" id="N2L-3E-box"/>
                                     <constraint firstItem="8Om-sR-QxE" firstAttribute="width" secondItem="iVM-Kg-U2m" secondAttribute="width" id="RXv-Ls-2G1"/>
                                     <constraint firstAttribute="bottom" secondItem="8Om-sR-QxE" secondAttribute="bottom" id="SXe-fT-Hgl"/>
