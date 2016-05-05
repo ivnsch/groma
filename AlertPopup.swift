@@ -36,14 +36,16 @@ class AlertPopup: NSObject {
         controller.view.bringSubviewToFront(myAlert)
         myAlert.tag = ViewTags.NotePopup
         
-        myAlert.hasOkButton = hasOkButton // this only has an effect when isConfirm = false
         myAlert.confirmText = confirmMsg
         myAlert.cancelText = cancelMsg
         myAlert.buttonText = okMsg
+
+        myAlert.isConfirm = isConfirm
+        myAlert.hasOkButton = hasOkButton // this only has an effect when isConfirm = false, order also matters - has to be called after setting isConfirm and before setting title and text :)
+        
         myAlert.title = title
         myAlert.text = message
-        myAlert.isConfirm = isConfirm
-
+        
         myAlert.onDismiss = onDismiss
         myAlert.dismissWithSwipe = false
 
