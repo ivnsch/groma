@@ -65,7 +65,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
     
     private func initTopAddEditListControllerManager() -> ExpandableTopViewController<AddEditInventoryController> {
         let top = CGRectGetHeight(topBar.frame)
-        return ExpandableTopViewController(top: top, height: Constants.topAddContainerViewHeight, parentViewController: self, tableView: tableView) {[weak self] in
+        let expandableTopViewController: ExpandableTopViewController<AddEditInventoryController> = ExpandableTopViewController(top: top, height: Constants.topAddContainerViewHeight, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.addEditInventory()
             controller.delegate = self
             controller.currentListsCount = self?.models.count ?? {
@@ -75,6 +75,9 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
             controller.view.clipsToBounds = false
             return controller
         }
+        
+        expandableTopViewController.delegate = self
+        return expandableTopViewController
     }
     
     override func initModels() {
