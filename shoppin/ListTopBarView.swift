@@ -78,13 +78,9 @@ class ListTopBarView: UIView {
     
     private var titleLabelLeftConstraint: NSLayoutConstraint?
     private var titleLabelCentered = false
-    private let titleLabelLeftConstant: Float = 14
+    private let titleLabelLeftConstant: Float = Float(DimensionsManager.leftRightPaddingConstraint)
     
-    private let startTopConstant: Float = 27
-    private let topConstant: Float = 32
-    
-    private var titleLabelTopConstraint: NSLayoutConstraint?
-    
+    private var titleLabelCenterYContraint: NSLayoutConstraint?
     
     private var bgColorLayer: CAShapeLayer?
     
@@ -94,6 +90,11 @@ class ListTopBarView: UIView {
         }
     }
     
+    private var centerYInExpandedState: Float = 0
+    private var centerYOffsetInExpandedState: Float = 0 // offset of center of available height to center of total height, derived from centerYInExpandedState
+    
+    private var titleLabelFont = Fonts.fontForSizeCategory(50)
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         translatesAutoresizingMaskIntoConstraints = false
@@ -101,18 +102,31 @@ class ListTopBarView: UIView {
         backgroundColor = Theme.navigationBarBackgroundColor
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-
-        titleLabel.font = Fonts.regular
+        
+        let statusBarHeight: Float = 20
+        let totalHeight: Float = 64
+        let availableHeight: Float = totalHeight - statusBarHeight
+        centerYInExpandedState = statusBarHeight + (availableHeight / 2)
+        centerYOffsetInExpandedState = centerYInExpandedState - (totalHeight / 2)
+        
+        titleLabel.font = titleLabelFont
         addSubview(titleLabel)
         titleLabelLeftConstraint = titleLabel.alignLeft(self, constant: titleLabelLeftConstant)
 
-        // FIXME for some reason this makes the label move the y center during the animation - it should stay constant. alignTop (quickfix) stays constant
-//        titleLabel.centerYInParent()
-        titleLabelTopConstraint = titleLabel.alignTop(self, constant: startTopConstant)
-        
+        titleLabelCenterYContraint = titleLabel.centerYInParent()
         layoutIfNeeded()
         
         addTitleButton()
+        
+// to debug center y
+//        let centerYLine = UIView()
+//        centerYLine.translatesAutoresizingMaskIntoConstraints = false
+//        centerYLine.backgroundColor = UIColor.redColor()
+//        addSubview(centerYLine)
+//        centerYLine.fillSuperviewWidth()
+//        centerYLine.heightConstraint(1)
+//        centerYLine.centerYInParent(centerYOffsetInExpandedState)
+        
         
         let hairline = UIImageView()
         hairline.translatesAutoresizingMaskIntoConstraints = false
@@ -137,14 +151,14 @@ class ListTopBarView: UIView {
     
     func animateDot(expanding: Bool, duration: CFTimeInterval = 0.3) {
         
-        guard let titleTextSize = titleLabel.text?.size(Fonts.regular) else {return}
+        guard let titleTextSize = titleLabel.text?.size(titleLabelFont) else {return}
         
         let rectPath = UIBezierPath(roundedRect: CGRectInset(self.bounds, -10, -10), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(5, 5))
         
         let circleDiam: CGFloat = 12
         let cornerRadius = circleDiam / 2
         let x = frame.width / 2 + (titleTextSize.width / 2) + 8
-        let y = titleTopConstant(expanding) + (titleTextSize.height / 2) - (circleDiam / 2)
+        let y = CGFloat(centerYInExpandedState) - (circleDiam / 2)
         
         let circlePath = UIBezierPath(roundedRect: CGRectMake(x, y, circleDiam, circleDiam), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(cornerRadius, cornerRadius))
         circlePath.closePath()
@@ -171,10 +185,6 @@ class ListTopBarView: UIView {
         CATransaction.commit()
     }
     
-    private func titleTopConstant(expanded: Bool) -> CGFloat {
-        return expanded ? CGFloat(topConstant) : CGFloat(startTopConstant)
-    }
-    
     // parameter: center => center, !center => left
     // TODO rename maybe "setState(open)" or something, this is not only animating the label now but also the background and the height
     func positionTitleLabelLeft(center: Bool, animated: Bool, withDot: Bool, heightConstraint: NSLayoutConstraint? = nil) {
@@ -187,7 +197,8 @@ class ListTopBarView: UIView {
         }
         
         titleLabelLeftConstraint?.constant = center ? self.center.x - titleLabel.frame.width / 2 : CGFloat(titleLabelLeftConstant)
-        titleLabelTopConstraint?.constant = center ? CGFloat(topConstant) : CGFloat(startTopConstant)
+        titleLabelCenterYContraint?.constant = center ? 10 : 0
+        
         if animated {
             UIView.animateWithDuration(0.3, animations: {[weak self] in
                 self?.layoutIfNeeded()
@@ -234,15 +245,17 @@ class ListTopBarView: UIView {
                 let backLabel = UIButton()
                 backLabel.translatesAutoresizingMaskIntoConstraints = false
                 backLabel.setTitle(backButtonText ?? "", forState: .Normal)
-                backLabel.titleLabel?.font = Fonts.regularLight
+                backLabel.titleLabel?.font = Fonts.fontForSizeCategory(50)
                 backLabel.setTitleColor(fgColor, forState: .Normal)
                 addSubview(backLabel)
                 
                 let viewDictionary = ["back": button, "backLabel": backLabel]
                 
+                let topSpace = CGFloat(centerYInExpandedState) - (button.frame.height / 2)
+                
                 let hConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-(6)-[back]-(4)-[backLabel]", options: [], metrics: nil, views: viewDictionary)
-                let vImgConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(\(topConstant))-[back]", options: [], metrics: nil, views: viewDictionary)
-                let vLabelConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(\(topConstant))-[backLabel]", options: [], metrics: nil, views: viewDictionary)
+                let vImgConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(\(topSpace))-[back]", options: [], metrics: nil, views: viewDictionary)
+                let vLabelConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(\(topSpace))-[backLabel]", options: [], metrics: nil, views: viewDictionary)
                 
                 addConstraints(hConstraints)
                 addConstraints(vImgConstraints)
@@ -305,7 +318,7 @@ class ListTopBarView: UIView {
 //                QL1("model.buttonId: \(model.buttonId), tag: \(tapView.tag)")
                 tapView.addSubview(button)
 
-                button.alignTop(tapView, constant: topConstant)
+                button.centerYInParent(centerYOffsetInExpandedState)
                 button.centerXInParent()
 
                 modelsWithButtons.append((model: model, button: tapView, inner: button))

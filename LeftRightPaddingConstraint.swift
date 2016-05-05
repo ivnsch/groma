@@ -12,15 +12,6 @@ class LeftRightPaddingConstraint: NSLayoutConstraint {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-
-        let constant: CGFloat = {
-            switch DimensionsManager.widthDimension {
-            case .Small: return 20
-            case .Middle: return 25
-            case .Large: return 30
-            }
-        }()
-        
-        self.constant = constant
+        self.constant = DimensionsManager.leftRightPaddingConstraint
     }
 }

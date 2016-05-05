@@ -175,6 +175,14 @@ class DimensionsManager {
         }
     }
     
+    static var leftRightPaddingConstraint: CGFloat {
+        switch widthDimension {
+        case .Small: return 20
+        case .Middle: return 25
+        case .Large: return 30
+        }
+    }
+    
     // MARK: User details
     
     static var userDetailsLogoutButtonRadius: CGFloat {
