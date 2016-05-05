@@ -327,17 +327,9 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func onQuickListOpen() {
-        topBar.setBackVisible(false)
-        topBar.setLeftButtonModels([])
-        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))])
     }
     
     func onAddProductOpen() {
-        topBar.setBackVisible(false)
-        topBar.setLeftButtonModels([])
-        topBar.setRightButtonModels([
-            TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)))
-        ])
     }
     
     func onAddGroupOpen() {

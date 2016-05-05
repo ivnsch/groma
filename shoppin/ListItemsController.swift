@@ -596,15 +596,9 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     func onQuickListOpen() {
-        topBar.setBackVisible(false)
-        topBar.setLeftButtonModels([])
-        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
     }
     
     func onAddProductOpen() {
-        topBar.setBackVisible(false)
-        topBar.setLeftButtonModels([])
-        topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
     }
     
     func parentViewForAddButton() -> UIView {
