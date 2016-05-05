@@ -22,7 +22,7 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
     
     private var slices: [Slice] = [] {
         didSet {
-            pieChart?.selectedSliceOffsetRadius = slices.count <= 1 ? 0 : 10
+            pieChart?.selectedSliceOffsetRadius = slices.count <= 1 ? 0 : 3
         }
     }
     
