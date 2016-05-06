@@ -161,7 +161,8 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
         })
     }
     
-    override func setEmptyViewVisible(visible: Bool, animated: Bool) {
+    override func setEmptyUI(visible: Bool, animated: Bool) {
+        super.setEmptyUI(visible, animated: animated)
         let hidden = !visible
         if animated {
             emptyListView.setHiddenAnimated(hidden)

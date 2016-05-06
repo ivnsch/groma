@@ -153,7 +153,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     private func topBarOnCloseExpandable() {
-        topBar.setLeftButtonIds([.Edit])
+        setDefaultLeftButtons()
         topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
     }
     
@@ -235,7 +235,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             topQuickAddControllerManager?.expand(false)
             topQuickAddControllerManager?.controller?.onClose()
             
-            topBar.setLeftButtonIds([.Edit])
+            setDefaultLeftButtons()
             
             if rotateTopBarButton {
                 topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
@@ -261,8 +261,16 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func onCenterTitleAnimComplete(center: Bool) {
         if center {
-            topBar.setLeftButtonIds([.Edit])
+            setDefaultLeftButtons()
             topBar.setRightButtonIds([.ToggleOpen])
+        }
+    }
+    
+    func setDefaultLeftButtons() {
+        if productsWithQuantityController.models.isEmpty {
+            topBar.setLeftButtonIds([])
+        } else {
+            topBar.setLeftButtonIds([.Edit])
         }
     }
 
@@ -453,7 +461,13 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         return nil
     }
     
-
+    func onEmpty(empty: Bool) {
+        if empty {
+            topBar.setLeftButtonIds([])
+        } else {
+            topBar.setLeftButtonIds([.Edit])
+        }
+    }
     
     // MARK: - Websocket // TODO websocket group items?
     

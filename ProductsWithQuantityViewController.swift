@@ -17,6 +17,7 @@ protocol ProductsWithQuantityViewControllerDelegate {
     func onModelSelected(model: ProductWithQuantity, indexPath: NSIndexPath)
     func emptyViewData() -> (text: String, text2: String, imgName: String)
     func onEmptyViewTap()
+    func onEmpty(empty: Bool)
     func onTableViewScroll(scrollView: UIScrollView)
     
     func isPullToAddEnabled() -> Bool
@@ -220,7 +221,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             tableView.wrapUpdates {[weak self] in
                 self?.models.remove(item)
                 self?.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Top)
-                self?.updateEmptyView()
+                self?.updateEmptyUI()
             }
         }
         return itemMaybe
@@ -236,7 +237,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
                 if let indexPathToInsert = weakSelf.findIndexPathForNewItem(item)  { // note: before append
                     weakSelf.models.insert(item, atIndex: indexPathToInsert.row)
                     weakSelf.tableView.insertRowsAtIndexPaths([indexPathToInsert], withRowAnimation: .Top)
-                    weakSelf.updateEmptyView()
+                    weakSelf.updateEmptyUI()
                 } else {
                     QL4("No indexPathToInsert")
                 }
@@ -266,8 +267,9 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         delegate?.onTableViewScroll(scrollView)
     }
     
-    private func updateEmptyView() {
+    func updateEmptyUI() {
         emptyView.setHiddenAnimated(!models.isEmpty)
+        delegate?.onEmpty(models.isEmpty)
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -472,7 +474,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             self?.models.removeAtIndex(row)
             self?.tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: row, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Bottom)
         }
-        updateEmptyView()
+        updateEmptyUI()
     }
     
     
@@ -503,7 +505,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
                             weakSelf.models.appendAll(inventoryItems)
                             weakSelf.paginator.update(inventoryItems.count)
                             weakSelf.tableView.reloadData()
-                            weakSelf.updateEmptyView()
+                            weakSelf.updateEmptyUI()
                             setLoading(false)
                         }
                     }

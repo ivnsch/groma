@@ -150,7 +150,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     private func topBarOnCloseExpandable() {
-        topBar.setLeftButtonIds([.Edit])
+        setDefaultLeftButtons()
 //        topBar.setRightButtonModels([TopBarButtonModel(buttonId: .ToggleOpen, initTransform: CGAffineTransformMakeRotation(CGFloat(M_PI_4)), endTransform: CGAffineTransformIdentity)])
     }
     
@@ -266,8 +266,16 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func onCenterTitleAnimComplete(center: Bool) {
         if center {
-            topBar.setLeftButtonIds([.Edit])
+            setDefaultLeftButtons()
 //            topBar.setRightButtonIds([.ToggleOpen])
+        }
+    }
+    
+    func setDefaultLeftButtons() {
+        if productsWithQuantityController.models.isEmpty {
+            topBar.setLeftButtonIds([])
+        } else {
+            topBar.setLeftButtonIds([.Edit])
         }
     }
     
@@ -500,6 +508,14 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     func onPullToAdd() {
         toggleTopAddController(false)
+    }
+    
+    func onEmpty(empty: Bool) {
+        if empty {
+            topBar.setLeftButtonIds([])
+        } else {
+            topBar.setLeftButtonIds([.Edit])
+        }
     }
     
     // MARK: - Websocket

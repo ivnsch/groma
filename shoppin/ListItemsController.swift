@@ -145,7 +145,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         if !expanding {
             clearPossibleNotePopup()
             topQuickAddControllerManager?.controller?.removeFromParentViewControllerWithView()
-            setEmptyViewVisible(false, animated: false)
+            setEmptyUI(false, animated: false)
             clearPossibleUndo()
             topBar.setLeftButtonIds([])
             topBar.setRightButtonModels(rightButtonsClosing())
@@ -168,8 +168,12 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         }
     }
     
-    func setEmptyViewVisible(visible: Bool, animated: Bool) {
-        fatalError("override")
+    func setEmptyUI(empty: Bool, animated: Bool) {
+        if empty {
+            topBar.setLeftButtonIds([])
+        } else {
+            setDefaultLeftButtons()
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -219,7 +223,11 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     // buttons for left nav bar side in default state (e.g. not while the top controller is open)
     func setDefaultLeftButtons() {
-        topBar.setLeftButtonIds([.Edit])
+        if listItemsTableViewController.items.isEmpty {
+            topBar.setLeftButtonIds([])
+        } else {
+            topBar.setLeftButtonIds([.Edit])
+        }
     }
     
     func clearPossibleNotePopup() {
@@ -406,8 +414,11 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     func onTableViewChangedQuantifiables() {
         updateQuantifiables()
         
-        // update empty view
-        setEmptyViewVisible(listItemsTableViewController.items.isEmpty, animated: true)
+        updateEmptyUI()
+    }
+    
+    private func updateEmptyUI() {
+        setEmptyUI(listItemsTableViewController.items.isEmpty, animated: true)
     }
     
     func updateQuantifiables() {
