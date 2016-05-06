@@ -248,18 +248,15 @@ class ListTopBarView: UIView {
                 backLabel.titleLabel?.font = Fonts.fontForSizeCategory(50)
                 backLabel.setTitleColor(fgColor, forState: .Normal)
                 addSubview(backLabel)
-                
+
                 let viewDictionary = ["back": button, "backLabel": backLabel]
                 
-                let topSpace = CGFloat(centerYInExpandedState) - (button.frame.height / 2)
-                
                 let hConstraints = NSLayoutConstraint.constraintsWithVisualFormat("H:|-(6)-[back]-(4)-[backLabel]", options: [], metrics: nil, views: viewDictionary)
-                let vImgConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(\(topSpace))-[back]", options: [], metrics: nil, views: viewDictionary)
-                let vLabelConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|-(\(topSpace))-[backLabel]", options: [], metrics: nil, views: viewDictionary)
                 
+                button.centerYInParent(centerYOffsetInExpandedState)
+                backLabel.centerYInParent(centerYOffsetInExpandedState)
+
                 addConstraints(hConstraints)
-                addConstraints(vImgConstraints)
-                addConstraints(vLabelConstraints)
 
                 button.addTarget(self, action: "onBackTap:", forControlEvents: .TouchUpInside)
                 backLabel.addTarget(self, action: "onBackTap:", forControlEvents: .TouchUpInside)
