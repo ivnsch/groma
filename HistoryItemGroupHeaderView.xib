@@ -61,7 +61,7 @@
                             </userDefinedRuntimeAttributes>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" red="0.94117647059999998" green="0.94117647059999998" blue="0.94117647059999998" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.96078431369999995" green="0.96078431369999995" blue="0.96078431369999995" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="Rhx-FB-89p" firstAttribute="centerY" secondItem="Wc1-WB-Cx0" secondAttribute="centerY" constant="10" id="Bi9-YM-tro"/>
                         <constraint firstItem="1XK-Ns-czE" firstAttribute="leading" secondItem="Rhx-FB-89p" secondAttribute="trailing" constant="10" id="Cd3-oW-tIw"/>
@@ -102,6 +102,7 @@
                 <mask key="constraints">
                     <exclude reference="bdW-6u-DoU"/>
                     <exclude reference="jI8-b5-kk3"/>
+                    <exclude reference="5CR-SE-20g"/>
                 </mask>
             </variation>
             <connections>
