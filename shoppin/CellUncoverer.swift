@@ -37,8 +37,13 @@ class CellUncoverer: NSObject, UIGestureRecognizerDelegate {
         
         let panRecognizer = UIPanGestureRecognizer(target: self, action: "onPanCell:")
         panRecognizer.delegate = self
+        panRecognizer.cancelsTouchesInView = true
         self.button.addGestureRecognizer(panRecognizer)
         self.panRecognizer = panRecognizer
+    }
+    
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
     
     func onPanCell(recognizer: UIPanGestureRecognizer) {
