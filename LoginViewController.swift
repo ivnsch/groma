@@ -151,15 +151,15 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         } else {
             if let email = userNameField.text, password = passwordField.text {
                 let loginData = LoginData(email: email, password: password)
+
+                guard let rootController = UIApplication.sharedApplication().delegate?.window??.rootViewController else {
+                    QL4("No root view controller, can't show invitations popup")
+                    return
+                }
                 
                 self.progressVisible()
-                Providers.userProvider.login(loginData, controller: self, resultHandler(onSuccess: {[weak self] syncResult in guard let weakSelf = self else {return}
-                    
-                    if let controller = UIApplication.sharedApplication().delegate?.window??.rootViewController {
-                        InvitationsHandler.handleInvitations(syncResult.listInvites, inventoryInvitations: syncResult.inventoryInvites, controller: controller)
-                    } else {
-                        QL4("No root view controller, can't show invitations popup")
-                    }
+                
+                Providers.userProvider.login(loginData, controller: self, rootController.resultHandler(onSuccess: {[weak self] syncResult in guard let weakSelf = self else {return}
                     
                     weakSelf.onLoginSuccess()
                     
@@ -167,7 +167,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                         
                         switch result.status {
                         case .SyncFailed:
-                            self?.defaultErrorHandler()(providerResult: result) // show alert
+                            rootController.defaultErrorHandler()(providerResult: result) // show alert (on root view controller since in login success we switch controller)
                             self?.onLoginSuccess() // handle like success, this way user still can access settings like full download to try to solve sync problems.
                         case .IsNewDeviceLoginAndDeclinedOverwrite:
                             QL1("New device and declined overwrite") // if it's a new device login and user declined overwrite, nothing to do here, user stays in login form, provider logged user out.
