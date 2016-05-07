@@ -106,6 +106,10 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         
         eyeView.delegate = self
         
+        if let storedEmail = Providers.userProvider.mySharedUser?.email {
+            userNameField.text = storedEmail
+        }
+        
         onUIReady?()
     }
     
@@ -113,15 +117,6 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         view.endEditing(true)
     }
 
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // in will appear such that it works also when we are coming back from register controller
-        if let storedEmail = Providers.userProvider.mySharedUser?.email {
-            userNameField.text = storedEmail
-        }
-    }
-    
     private func initValidator() {
         let validator = Validator()
         validator.registerField(self.userNameField, rules: [EmailRule(message: "validation_email_format")])
@@ -140,6 +135,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     
     private func login() {
         
+        
         guard self.validator != nil else {return}
         
         if let errors = self.validator?.validate() {
@@ -150,14 +146,15 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
             
         } else {
             if let email = userNameField.text, password = passwordField.text {
-                let loginData = LoginData(email: email, password: password)
 
                 guard let rootController = UIApplication.sharedApplication().delegate?.window??.rootViewController else {
                     QL4("No root view controller, can't show invitations popup")
                     return
                 }
                 
-                self.progressVisible()
+                progressVisible()
+
+                let loginData = LoginData(email: email, password: password)
                 
                 Providers.userProvider.login(loginData, controller: self, rootController.resultHandler(onSuccess: {[weak self] syncResult in guard let weakSelf = self else {return}
                     
@@ -171,12 +168,14 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
                             self?.onLoginSuccess() // handle like success, this way user still can access settings like full download to try to solve sync problems.
                         case .IsNewDeviceLoginAndDeclinedOverwrite:
                             QL1("New device and declined overwrite") // if it's a new device login and user declined overwrite, nothing to do here, user stays in login form, provider logged user out.
+                        case .CancelledLoginWithDifferentAccount:
+                            QL1("New email and user cancelled clear local data popup") // nothing to do here, user stays in login form
                         default:
                             self?.defaultErrorHandler()(providerResult: result)
                             Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared
                         }
-                    }))
-                
+                    }
+                ))
             } else {
                 print("Error: validation was not implemented correctly")
             }
@@ -196,11 +195,25 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         self.navigationController?.pushViewController(registerController, animated: true)
     }
     
-    func onRegisterSuccess() {
+    // MARK: - RegisterDelegate
+    
+    func onRegisterSuccess(email: String) {
         self.mode = .AfterRegister
+        
+        // Set the email in the input field so user don't have to type it again after confirming.
+        // Note this is in memory only! If user leaves this screen and comes back this email is lost. The email in prefs is saved only after a successful login (this is a requirement for some checks to function correctly - don't change it!). If we see another email when we come back it should be an email of an account with which we previously logged in successfully.
+        userNameField.text = email
+        
         navigationController?.popViewControllerAnimated(true)
-        self.delegate?.onRegisterFromLoginSuccess() ?? QL3("No login delegate")
+        self.delegate?.onRegisterFromLoginSuccess()
     }
+    
+    func onSocialSignupInRegisterScreenSuccess() {
+        navigationController?.popViewControllerAnimated(true)
+        self.delegate?.onLoginSuccess()
+    }
+    
+    // MARK: -
     
     func textFieldShouldReturn(sender: UITextField) -> Bool {
         
@@ -233,7 +246,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     // MARK:
     
     func onLoginSuccess() {
-        delegate?.onLoginSuccess() ?? QL3("No login delegate")
+        delegate?.onLoginSuccess()
     }
     
     // TODO refactor, same code as in LoginController
@@ -291,7 +304,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         resultHandler(
             onSuccess: {[weak self] syncResult in
                 QL1("Login success")
-                self?.onRegisterSuccess() // TODO!!!! why on register success? this can also be login? now server sends us a flag login/registered maybe we can use this. Also we should probably refactor the login result handler with the credentials login. For example .IsNewDeviceLoginAndDeclinedOverwrite handling seems to be missing here.
+                self?.onLoginSuccess() // TODO!!!! we should probably refactor the login result handler with the credentials login? For example .IsNewDeviceLoginAndDeclinedOverwrite handling seems to be missing here.
                 self?.progressVisible(false)
                 
                 if let weakSelf = self {

@@ -27,7 +27,7 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     }
     
     func onLoginSuccess() {
-        self.onLoginOrRegisterSuccess()
+        showUserDetailsController()
     }
     
     func onRegisterFromLoginError() {
@@ -35,10 +35,6 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
     }
     
     func onRegisterFromLoginSuccess() {
-    }
-    
-    private func onLoginOrRegisterSuccess() {
-        self.showUserDetailsController()
     }
 
     // MARK: - UserDetailsViewControllerDelegate

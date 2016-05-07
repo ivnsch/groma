@@ -25,6 +25,10 @@ class UserProviderMock: UserProvider {
         return hasLoginToken
     }
     
+    func isDifferentUser(email: String) -> Bool {
+        return self.email.map{$0 != email} ?? false
+    }
+    
     func login(loginData: LoginData, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
         delay(requestDelay) {[weak self] in
             self?.isLoggedIn = true

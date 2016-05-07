@@ -21,7 +21,7 @@ class UserProviderImpl: UserProvider {
 
         self.remoteProvider.login(loginData) {[weak self] result in
             if result.success {
-                self?.handleLoginSuccess(controller, handler)
+                self?.handleLoginSuccess(loginData.email, controller: controller, handler)
             } else {
                 handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
             }
@@ -29,7 +29,7 @@ class UserProviderImpl: UserProvider {
     }
     
     func register(user: UserInput, _ handler: ProviderResult<Any> -> ()) {
-        self.remoteProvider.register(user) {result in
+        self.remoteProvider.register(user) {[weak self] result in
             if result.success {
                 PreferencesManager.savePreference(PreferencesManagerKey.registeredWithThisDevice, value: true)
             }
@@ -155,7 +155,44 @@ class UserProviderImpl: UserProvider {
         }
     }
     
-    private func handleLoginSuccess(controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
+    
+    // If we have login success with a different user than the one that is currently stored in the device, clear local db before doing sync. Otherwise we will upload the data from the old user to the account of the new one (which even if we wanted doesn't work because the uuids have to be unique).
+    private func wrapCheckDifferentUser(loggedInUserEmail: String, controller: UIViewController, handler: ProviderResult<Any> -> Void) {
+        
+        let loggingInWithADifferentUser = isDifferentUser(loggedInUserEmail)
+        
+        if loggingInWithADifferentUser ?? false {
+            
+            let previousEmail = Providers.userProvider.mySharedUser?.email ?? ""
+
+            QL2("Logging in with different user, new email: \(loggedInUserEmail), previous email: \(previousEmail)")
+            
+            ConfirmationPopup.show(title: "Warning", message: "You're logging in with a new account on this device. If you continue, all the not synced data on this device will be lost permanently. Do you want to continue?\nYour previous account id: \(previousEmail)", okTitle: "Yes", cancelTitle: "Cancel", controller: controller, onOk: {
+                
+                    Providers.globalProvider.clearAllData(false) {result in
+                        if !result.success {
+                            QL4("Error clearing data of different user: \(loggedInUserEmail), result: \(result)")
+                        }
+                        handler(result)
+                    }
+                
+                }, onCancel: {[weak self] in
+                    QL2("Different user and cancelled clear local data, logging out")
+                    self?.logout {logoutResult in
+                        if !logoutResult.success {
+                            QL4("Logout failed: \(logoutResult)")
+                        }
+                        handler(ProviderResult(status: .CancelledLoginWithDifferentAccount))
+                    }
+            })
+            
+        } else {
+            handler(ProviderResult(status: .Success))
+        }
+    }
+    
+    
+    private func handleLoginSuccess(userEmail: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
         
         // If a user logs in the first time on a device but account exists already, we don't want to do a full sync because this would upload all the prefilled products (which have different uuids) and user would end with a duplicate (name suffix (n)) for each product.
         // So we remember if the user registered using this device, if not it means they are loggin in with a new device. If the user logs in with a new device we only overwrite the local database, meaning we send a sync with no payload.
@@ -166,53 +203,88 @@ class UserProviderImpl: UserProvider {
         if !registeredWithThisDevice && !overwroteLocalDataAfterNewDeviceLogin {
             ConfirmationPopup.show(title: "New installation", message: "Your local data will be overwritten with the data stored in your account", okTitle: "Continue", cancelTitle: "Cancel", controller: controller, onOk: {[weak self] in
                 
-                self?.sync(isMatchSync: false, onlyOverwriteLocal: true, additionalActionsOnSyncSuccess: {
-                    PreferencesManager.savePreference(PreferencesManagerKey.registeredWithThisDevice, value: true)
-                }, handler: handler)
                 
-                }, onCancel: {[weak self] in
-                    // If user declines to overwrite local data we do nothing and log the user out.
-                    QL1("Declined overwrite sync, logging out")
-                    self?.logout {logoutResult in
-                        QL2("Declined overwrite sync, logged out. Logout result: \(logoutResult)")
-                        handler(ProviderResult(status: .IsNewDeviceLoginAndDeclinedOverwrite))
+                self?.wrapCheckDifferentUser(userEmail, controller: controller) {result in
+                    if result.success {
+                        self?.storeEmail(userEmail)
+                        
+                        self?.sync(isMatchSync: false, onlyOverwriteLocal: true, additionalActionsOnSyncSuccess: {
+                            PreferencesManager.savePreference(PreferencesManagerKey.registeredWithThisDevice, value: true)
+                            }, handler: handler)
+                    } else {
+                        handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
                     }
-                })
+                }
+                
+            }, onCancel: {[weak self] in
+                // If user declines to overwrite local data we do nothing and log the user out.
+                QL1("Declined overwrite sync, logging out")
+                self?.logout {logoutResult in
+                    if !logoutResult.success {
+                        QL4("Logout failed: \(logoutResult)")
+                    }
+                    handler(ProviderResult(status: .IsNewDeviceLoginAndDeclinedOverwrite))
+                }
+            })
             
         } else { // normal login/sync
-            sync(isMatchSync: false, onlyOverwriteLocal: false, handler: handler)
+            wrapCheckDifferentUser(userEmail, controller: controller) {[weak self] result in
+                if result.success {
+                    self?.storeEmail(userEmail)
+                    
+                    self?.sync(isMatchSync: false, onlyOverwriteLocal: false, handler: handler)
+                } else {
+                    handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
+                }
+            }
         }
+    }
+    
+    func isDifferentUser(email: String) -> Bool {
+        return mySharedUser.map{$0.email != email} ?? false
     }
     
     // MARK: - Social login
     
+    private func handleSocialSignUpResult(controller: UIViewController, result: RemoteResult<RemoteSocialLoginResult>, handler: ProviderResult<SyncResult> -> Void) {
+        if let authResult = result.successResult {
+            if authResult.isRegister {
+                // If register, send a normal sync. This is equivalent with a login with the credentials provider as the user is verified already and don't need to confirm. Except that here we know it's register, so we can just send a plain sync - without checks for possible accounts on other device.
+                // We of course also clear data from a possible previous user on this device first.
+                wrapCheckDifferentUser(authResult.email, controller: controller) {[weak self] result in
+                    if result.success {
+                        self?.storeEmail(authResult.email)
+                        self?.sync(isMatchSync: false, onlyOverwriteLocal: false, handler: handler)
+                    } else {
+                        handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
+                    }
+                }
+                
+            } else {
+                handleLoginSuccess(authResult.email, controller: controller, handler)
+            }
+        } else {
+            handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
+        }
+    }
+    
     // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore
     func authenticateWithFacebook(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
-        self.remoteProvider.authenticateWithFacebook(token) {[weak self] result in
-            if let authResult = result.successResult {
-                if authResult.isRegister {
-                    self?.sync(isMatchSync: false, onlyOverwriteLocal: false, handler: handler)
-                } else {
-                    self?.handleLoginSuccess(controller, handler)
-                }
-            } else {
-                handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
-            }
+        remoteProvider.authenticateWithFacebook(token) {[weak self] result in
+            self?.handleSocialSignUpResult(controller, result: result, handler: handler)
         }
     }
 
     // TODO!!!! don't use default error handler here, if no connection etc we have to show an alert not ignore
     func authenticateWithGoogle(token: String, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ()) {
-        self.remoteProvider.authenticateWithGoogle(token) {[weak self] result in
-            if let authResult = result.successResult {
-                if authResult.isRegister {
-                    self?.sync(isMatchSync: false, onlyOverwriteLocal: false, handler: handler)
-                } else {
-                    self?.handleLoginSuccess(controller, handler)
-                }
-            } else {
-                handler(ProviderResult(status: DefaultRemoteResultMapper.toProviderStatus(result.status)))
-            }
+        remoteProvider.authenticateWithGoogle(token) {[weak self] result in
+            self?.handleSocialSignUpResult(controller, result: result, handler: handler)
         }
+    }
+    
+    // store email in prefs so we can e.g. prefill login controller, which is opened after registration
+    // For now store it as simple preference, we need it to be added automatically to list shared users. This may change in the future
+    private func storeEmail(email: String) {
+        PreferencesManager.savePreference(PreferencesManagerKey.email, value: NSString(string: email))
     }
 }

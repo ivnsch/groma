@@ -56,7 +56,7 @@ class GlobalProviderImpl: GlobalProvider {
         }
     }
     
-    func clearAllData(handler: ProviderResult<Any> -> Void) {
+    func clearAllData(remote: Bool, handler: ProviderResult<Any> -> Void) {
         dbProvider.clearAllData {success in
             handler(ProviderResult(status: success ? .Success : .DatabaseUnknown))
             

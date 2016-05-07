@@ -4,11 +4,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <mutableArray key="HelveticaNeue.ttc">
-            <string>HelveticaNeue</string>
-        </mutableArray>
-    </customFonts>
     <scenes>
         <!--Delegate-->
         <scene sceneID="oOj-9D-kDN">
@@ -115,9 +110,9 @@
                                 </constraints>
                             </view>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome back! Please log in again." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D7c-wL-aYY">
-                                <rect key="frame" x="20" y="60" width="335" height="18"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
-                                <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="20" y="30" width="335" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IE2-Wn-ab8" customClass="EyeView" customModule="shoppin" customModuleProvider="target">
@@ -194,7 +189,7 @@
                             <constraint firstItem="D7c-wL-aYY" firstAttribute="leading" secondItem="bQi-hy-w8S" secondAttribute="leading" constant="20" id="NYK-Oa-BEo"/>
                             <constraint firstItem="IE2-Wn-ab8" firstAttribute="trailing" secondItem="TsF-zg-FLy" secondAttribute="trailing" id="UCi-Pg-vM6"/>
                             <constraint firstItem="Crr-TG-4lg" firstAttribute="top" secondItem="t83-R4-Wil" secondAttribute="bottom" constant="20" id="UbY-6B-uvg"/>
-                            <constraint firstItem="D7c-wL-aYY" firstAttribute="top" secondItem="Pdv-bE-LUR" secondAttribute="bottom" constant="40" id="WY8-qe-Y5s"/>
+                            <constraint firstItem="D7c-wL-aYY" firstAttribute="top" secondItem="Pdv-bE-LUR" secondAttribute="bottom" constant="10" id="WY8-qe-Y5s"/>
                             <constraint firstItem="IE2-Wn-ab8" firstAttribute="bottom" secondItem="TsF-zg-FLy" secondAttribute="bottom" constant="-5" id="aN0-ye-UEn"/>
                             <constraint firstItem="TsF-zg-FLy" firstAttribute="top" secondItem="Yt4-Ha-XoG" secondAttribute="bottom" constant="20" id="bbt-tb-zJh"/>
                             <constraint firstAttribute="trailing" secondItem="TsF-zg-FLy" secondAttribute="trailing" constant="20" id="bnR-83-IbH"/>

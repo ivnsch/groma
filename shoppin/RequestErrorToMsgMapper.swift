@@ -37,7 +37,9 @@ struct RequestErrorToMsgMapper {
             case .NoConnection: return "error_no_internet_connection"
             case .SyncFailed: return "sync_failed"
             
-            case .IsNewDeviceLoginAndDeclinedOverwrite: return "Error invalid" // this is a special status and is not mean to be shown to the client. Return some text anyway, if something goes wrong at least we know where the popup comes from.
+            // There statuses are internal and not meant to be shown to the client. We don't want to add yet another layer for this so we handle them like normal provider status. We provide not empty strings just in case they accidentally appear to the client, to know where they come from.
+            case .IsNewDeviceLoginAndDeclinedOverwrite: return "Error invalid"
+            case .CancelledLoginWithDifferentAccount: return "Cancelled"
         }
     }
 }

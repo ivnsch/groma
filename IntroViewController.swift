@@ -129,7 +129,13 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     
     // MARK: - RegisterDelegate
     
-    func onRegisterSuccess() {
+    func onRegisterSuccess(email: String) {
+        self.navigationController?.popViewControllerAnimated(true)
+        startLogin(.AfterRegister)
+    }
+    
+    func onSocialSignupInRegisterScreenSuccess() {
+        // TODO review this - not tested. For now no signup buttons in intro so we let it like this, maybe we want to reenable it later.
         self.navigationController?.popViewControllerAnimated(true)
         startLogin(.AfterRegister)
     }

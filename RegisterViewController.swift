@@ -13,7 +13,10 @@ import FBSDKLoginKit
 import QorumLogs
 
 protocol RegisterDelegate {
-    func onRegisterSuccess()
+    func onRegisterSuccess(email: String)
+    
+    // can be login or register
+    func onSocialSignupInRegisterScreenSuccess()
 }
 
 class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDelegate, FBSDKLoginButtonDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, EyeViewDelegate {
@@ -115,8 +118,8 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                     
                     self.progressVisible()
                     Providers.userProvider.register(user, successHandler{[weak self] in
-                        self?.onRegisterSuccess()
-                        })
+                        self?.delegate?.onRegisterSuccess(email)
+                    })
                     
                 } else {
                     QL4("Validation was not implemented correctly")
@@ -198,7 +201,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         resultHandler(
             onSuccess: {[weak self] syncResult in
                 QL1("Login success")
-                self?.onRegisterSuccess()
+                self?.delegate?.onSocialSignupInRegisterScreenSuccess()
                 self?.progressVisible(false)
                 
                 if let weakSelf = self {
@@ -212,10 +215,6 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
                     Providers.userProvider.logout(weakSelf.successHandler{}) // ensure everything cleared, buttons text resetted etc. Note this is also triggered by sync error (which is called directly after login)
                 }
             })(providerResult: providerResult)
-    }
-
-    private func onRegisterSuccess() {
-        self.delegate?.onRegisterSuccess() ?? print("Warn: no register delegate")
     }
     
     // MARK: - EyeViewDelegate

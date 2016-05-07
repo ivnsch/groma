@@ -33,6 +33,8 @@ protocol UserProvider {
     */
     var mySharedUser: SharedUser? {get}
 
+    func isDifferentUser(email: String) -> Bool
+    
     // TODO don't pass controller, no UIKit things in providers. Pass a block instead.
     func login(loginData: LoginData, controller: UIViewController, _ handler: ProviderResult<SyncResult> -> ())
     

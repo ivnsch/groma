@@ -20,7 +20,7 @@ class RemoteUserProvider {
         ]
         RemoteProvider.request(.POST, Urls.login, parameters) {[weak self] (result: RemoteResult<RemoteLoginResult>) in
             if let successResult = result.successResult {
-                self?.storeUserData(successResult.token, email: loginData.email)
+                self?.storeToken(successResult.token)
             } else {
                 if result.status != .InvalidCredentials {
                     QL4("No token. Result: \(result)")
@@ -36,7 +36,7 @@ class RemoteUserProvider {
         
         RemoteProvider.request(.POST, Urls.register, parameters) {[weak self] (result: RemoteResult<NoOpSerializable>) in
             if result.success {
-                self?.storeEmail(user.email) // store the email in prefs so we can e.g. prefill login controller, which is opened after registration
+
             } else {
                 QL4("Error registering. Result: \(result)")
             }
@@ -85,12 +85,6 @@ class RemoteUserProvider {
             handler(result)
         }
     }
-
-    
-    // For now store the user's email as simple preference, we need it to be added automatically to list shared users. This may change in the future
-    private func storeEmail(email: String) {
-        PreferencesManager.savePreference(PreferencesManagerKey.email, value: NSString(string: email))
-    }
     
     func logout(handler: RemoteResult<NoOpSerializable> -> ()) {
         // with JWT we just have to remove token from client no need to call the server TODO verify this
@@ -102,7 +96,7 @@ class RemoteUserProvider {
         let parameters = ["access_token": token]
         RemoteProvider.request(.POST, Urls.authFacebook, parameters) {[weak self] (result: RemoteResult<RemoteSocialLoginResult>) in
             if let successResult = result.successResult {
-                self?.storeUserData(successResult.token, email: successResult.email)
+                self?.storeToken(successResult.token)
             }
             handler(result)
         }
@@ -112,15 +106,14 @@ class RemoteUserProvider {
         let parameters = ["access_token": token]
         RemoteProvider.request(.POST, Urls.authGoogle, parameters) {[weak self] (result: RemoteResult<RemoteSocialLoginResult>) in
             if let successResult = result.successResult {
-                self?.storeUserData(successResult.token, email: successResult.email)
+                self?.storeToken(successResult.token)
             }
             handler(result)
         }
     }
     
-    private func storeUserData(token: String, email: String) {
+    private func storeToken(token: String) {
         AccessTokenHelper.storeToken(token)
-        storeEmail(email)
     }
     
     func toRequestParams(user: UserInput) -> [String: AnyObject] {
