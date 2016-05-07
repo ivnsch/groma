@@ -84,30 +84,21 @@
             <color key="backgroundColor" red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="dMD-fl-Aq7" secondAttribute="trailing" id="1ER-YK-p9d"/>
-                <constraint firstItem="p4e-cM-r2I" firstAttribute="top" secondItem="dMD-fl-Aq7" secondAttribute="bottom" id="5CR-SE-20g"/>
                 <constraint firstAttribute="trailing" secondItem="p4e-cM-r2I" secondAttribute="trailing" id="DeS-da-KR0"/>
                 <constraint firstAttribute="bottom" secondItem="Wc1-WB-Cx0" secondAttribute="bottom" id="IeR-ME-lPA"/>
                 <constraint firstItem="Wc1-WB-Cx0" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="Muj-sN-nVC"/>
                 <constraint firstItem="Wc1-WB-Cx0" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Qai-gf-GgJ"/>
                 <constraint firstItem="dMD-fl-Aq7" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="b8O-NM-Uiu"/>
-                <constraint firstAttribute="trailing" secondItem="Wc1-WB-Cx0" secondAttribute="trailing" id="bdW-6u-DoU"/>
                 <constraint firstItem="dMD-fl-Aq7" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="iZD-8x-G7m"/>
-                <constraint firstAttribute="trailing" secondItem="Wc1-WB-Cx0" secondAttribute="trailing" id="jI8-b5-kk3"/>
                 <constraint firstItem="p4e-cM-r2I" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="p0G-hd-GK0"/>
                 <constraint firstItem="Wc1-WB-Cx0" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="uPw-8V-jSY"/>
                 <constraint firstAttribute="bottom" secondItem="p4e-cM-r2I" secondAttribute="bottom" id="xd7-Zd-yIG"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="bdW-6u-DoU"/>
-                    <exclude reference="jI8-b5-kk3"/>
-                    <exclude reference="5CR-SE-20g"/>
-                </mask>
-            </variation>
             <connections>
                 <outlet property="contentView" destination="Wc1-WB-Cx0" id="kLZ-iD-tNf"/>
                 <outlet property="dateLabel" destination="x5x-Ld-BLT" id="edT-Vh-lcA"/>
+                <outlet property="dateLabelVCenterConstraint" destination="jaU-xP-E3N" id="UUm-G9-XgK"/>
                 <outlet property="deleteGroupButton" destination="dMD-fl-Aq7" id="q3G-v5-QYB"/>
                 <outlet property="leftLayoutConstraint" destination="uPw-8V-jSY" id="zpH-j0-RgE"/>
                 <outlet property="priceLabel" destination="1XK-Ns-czE" id="R2Y-Yy-yYJ"/>

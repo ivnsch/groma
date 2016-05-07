@@ -20,6 +20,8 @@ class HistoryItemGroupHeaderView: UIView, CellUncovererDelegate {
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var priceLabel: UILabel!
     
+    @IBOutlet weak var dateLabelVCenterConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var deleteGroupButton: UIButton!
     
     @IBOutlet weak var contentView: UIView!
@@ -43,6 +45,11 @@ class HistoryItemGroupHeaderView: UIView, CellUncovererDelegate {
     var userName: String {
         set {
             userNameLabel.text = newValue
+            if newValue.isEmpty {
+                dateLabelVCenterConstraint.constant = 0
+            } else {
+                dateLabelVCenterConstraint.constant = -10
+            }
         }
         get {
             return userNameLabel.text ?? ""

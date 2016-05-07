@@ -1635,7 +1635,7 @@ SXZhbiBTY2jDvHR6DUJpcmtlbnN0cmHDn2UgMTUREQ0xMDU1OSBCZXJsaW4R4oCoR2VybWFueQ
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="bqW-8q-Oq6" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
                                                     <rect key="frame" x="20" y="31" width="285" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" red="0.49019607840000001" green="0.5450980392" blue="0.54901960780000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" red="0.49019607843137253" green="0.54509803921568623" blue="0.5490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="fontType">
