@@ -228,6 +228,32 @@ class RealmProvider {
             return false
         }
     }
+
+    // WARN: passing nil as pred will remove ALL objects of objType
+    // additionalActions: optional actions to be executed after delete in the same transaction
+    // Returns count of removed items or nil if there was an error.
+    func removeReturnCount<T: Object>(pred: String?, handler: Int? -> Void, objType: T.Type, additionalActions: (Realm -> Void)? = nil) {
+        doInWriteTransaction({[weak self] realm in
+            return self?.removeReturnCountSync(realm, pred: pred, objType: objType, additionalActions: additionalActions)
+        }, finishHandler: {countMaybe in
+            handler(countMaybe)
+        })
+    }
+    
+    // Expects to be executed in a transaction
+    func removeReturnCountSync<T: Object>(realm: Realm, pred: String?, objType: T.Type, additionalActions: (Realm -> Void)? = nil) -> Int? {
+        var results: Results<T> = realm.objects(T)
+        if let pred = pred {
+            results = results.filter(pred)
+        }
+        
+        let count = results.count
+        
+        realm.delete(results)
+        additionalActions?(realm)
+        
+        return count
+    }
     
     func doInWriteTransaction<T>(f: Realm -> T?, finishHandler: T? -> Void) {
         

@@ -150,8 +150,11 @@ class DBListItem: DBSyncable, CustomDebugStringConvertible {
     }
     
     static func createFilter(list: List, product: Product) -> String {
-        let brand = product.brand ?? ""
-        return "\(createFilterList(list.uuid)) AND productOpt.name == '\(product.name)' AND productOpt.brand == '\(brand)'"
+        return createFilterUniqueInList(product.name, productBrand: product.brand, list: list)
+    }
+
+    static func createFilterUniqueInList(productName: String, productBrand: String, list: List) -> String {
+        return "\(createFilterList(list.uuid)) AND productOpt.productOpt.name == '\(productName)' AND productOpt.productOpt.brand == '\(productBrand)'"
     }
     
     static func createFilterWithProducts(productUuids: [String]) -> String {

@@ -526,11 +526,16 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     private func updateItem(updatingListItem: ListItem, listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
         if let currentList = self.currentList {
             
-            Providers.listItemsProvider.update(listItemInput, updatingListItem: updatingListItem, status: status, list: currentList, true, successHandler {[weak self] listItem in guard let weakSelf = self else {return}
-                weakSelf.listItemsTableViewController.updateListItem(listItem, status: weakSelf.status, notifyRemote: true)
-                //                    self?.updatePrices(.MemOnly)
-                weakSelf.onTableViewChangedQuantifiables()
-                handler?()
+            Providers.listItemsProvider.update(listItemInput, updatingListItem: updatingListItem, status: status, list: currentList, true, successHandler {[weak self] (listItem, replaced) in guard let weakSelf = self else {return}
+                if replaced { // if an item was replaced (means: a previous list item with same unique as the updated item already existed and was removed from the list) reload list items to get rid of it. The item can be in a different status though, in which case it's not necessary to reload the current list but for simplicity we always do it.
+                    weakSelf.updatePossibleList()
+                } else {
+                    weakSelf.listItemsTableViewController.updateListItem(listItem, status: weakSelf.status, notifyRemote: true)
+                    //                    self?.updatePrices(.MemOnly)
+                    weakSelf.onTableViewChangedQuantifiables()
+                    handler?()
+                }
+
             })
         } else {
             print("Error: Invalid state: trying to update list item without current list")

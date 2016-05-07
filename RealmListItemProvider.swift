@@ -16,61 +16,37 @@ enum QuickAddItemSortBy {
 
 class RealmListItemProvider: RealmProvider {
     
-    func saveListItem(listItem: ListItem, updateSuggestions: Bool = true, incrementQuantity: Bool, handler: ListItem -> ()) {
-        saveListItems([listItem], incrementQuantity: incrementQuantity) {listItemsMaybe in
-            if let listItems = listItemsMaybe {
-                if let listItem = listItems.first {
-                    handler(listItem)
-                } else {
-                    // FIXME for now not calling the handler if error happen, but to be correct the handler should get optional list item.
-                    print("Error: RealmListItemProvider: saveListItem: returned empty array after (maybe) saving: \(listItem)")
-                }
-            } else {
-                // FIXME for now not calling the handler if error happen, but to be correct the handler should get optional list item.
-                print("Error: RealmListItemProvider: saveListItem: returned nil array after (maybe) saving: \(listItem)")
-            }
-        }
-    }
-    
     /**
     Batch add/update of list items
     When used for add: incrementQuantity should be true, update: false. After clearing db (e.g. sync) also false (since there's nothing to increment)
     NOTE: Assumes all listItems belong to the same list (only the list of first list item is used for filtering)
     */
-    func saveListItems(listItems: [ListItem], incrementQuantity: Bool, updateSection: Bool = true, handler: [ListItem]? -> ()) {
+    func addOrIncrementListItems(listItems: [ListItem], updateSection: Bool = true, handler: [ListItem]? -> ()) {
         doInWriteTransaction({[weak self] realm in
-            self?.saveListItemsSync(realm, listItems: listItems, incrementQuantity: incrementQuantity, updateSection: updateSection)
+            self?.addOrIncrementListItemsSync(realm, listItems: listItems, updateSection: updateSection)
             }, finishHandler: {listItemsMaybe in
                 handler(listItemsMaybe)
         })
     }
     
-    func saveListItemsSync(realm: Realm, var listItems: [ListItem], incrementQuantity: Bool, updateSection: Bool = true) -> [ListItem] {
+    func addOrIncrementListItemsSync(realm: Realm, var listItems: [ListItem], updateSection: Bool = true) -> [ListItem] {
         
-        // if we want to increment if item with same product name exists
-        // Note that we always want this except when saveListItems is called after having cleared the database, e.g. (currently) on server sync, or when doing an update
-        if incrementQuantity {
-            // get all existing list items with product names using IN query
-            // Note we don't query brand here because we use the result just as a look up dictionary (by uuid) and name+brand query is a subset of name query, so all the products we need will be contained in this query.
-            let existingListItems = realm.objects(DBListItem).filter(DBListItem.createFilter(listItems))
-            
-            let uuidToDBListItemDict: [String: DBListItem] = existingListItems.toDictionary{
-                ($0.product.uuid, $0)
-            }
-            // merge list items with existing, in order to do update (increment quantity)
-            // this means: use uuid of existing item, increment quantity, and for the rest copy fields of new item
-            listItems = listItems.map {listItem in
-                if let existingDBListItem = uuidToDBListItemDict[listItem.product.uuid] {
-                    return listItem.increment(existingDBListItem.todoQuantity, doneQuantity: existingDBListItem.doneQuantity, stashQuantity: existingDBListItem.stashQuantity)
-                } else {
-                    return listItem
-                }
+        let existingListItems = realm.objects(DBListItem).filter(DBListItem.createFilter(listItems))
+        
+        let uuidToDBListItemDict: [String: DBListItem] = existingListItems.toDictionary{
+            ($0.product.uuid, $0)
+        }
+        // merge list items with existing, in order to do update (increment quantity)
+        // this means: use uuid of existing item, increment quantity, and for the rest copy fields of new item
+        listItems = listItems.map {listItem in
+            if let existingDBListItem = uuidToDBListItemDict[listItem.product.uuid] {
+                return listItem.increment(existingDBListItem.todoQuantity, doneQuantity: existingDBListItem.doneQuantity, stashQuantity: existingDBListItem.stashQuantity)
+            } else {
+                return listItem
             }
         }
         
         for listItem in listItems {
-            
-            // TODO possible to use batch save here?
             let dbListItem = ListItemMapper.dbWithListItem(listItem)
             realm.add(dbListItem, update: true)
         }
@@ -286,6 +262,26 @@ class RealmListItemProvider: RealmProvider {
         let mapper = {ListItemMapper.listItemWithDB($0)}
         self.loadFirst(mapper, filter: DBListItem.createFilter(uuid), handler: handler)
     }
+
+    func findListItemWithUnique(productName: String, productBrand: String, list: List, handler: ListItem? -> Void) {
+        let mapper = {ListItemMapper.listItemWithDB($0)}
+        self.loadFirst(mapper, filter: DBListItem.createFilterUniqueInList(productName, productBrand: productBrand, list: list), handler: handler)
+    }
+
+    // Handler returns true if it deleted something, false if there was nothing to delete or an error ocurred.
+    func deletePossibleListItemWithUnique(productName: String, productBrand: String, list: List, handler: Bool -> Void) {
+        removeReturnCount(DBListItem.createFilterUniqueInList(productName, productBrand: productBrand, list: list), handler: {removedCountMaybe in
+            if let removedCount = removedCountMaybe {
+                if removedCount > 0 {
+                    QL2("Found list item with same name+brand in list, deleted it. Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
+                }
+            } else {
+                QL4("Remove didn't succeed: Name: \(productName), brand: \(productBrand), list: {\(list.uuid), \(list.name)}")
+            }
+
+            handler(removedCountMaybe.map{$0 > 0} ?? false)
+        }, objType: DBListItem.self)
+    }
     
     // hm...
     func loadAllListItems(handler: [ListItem] -> ()) {
@@ -352,33 +348,6 @@ class RealmListItemProvider: RealmProvider {
 //        }
 //    }
     
-    // TODO remove this method? Or if it's still needed, pass only list items, all the dependencies are in list items already
-    // TODO do we really need ListItemsWithRelations here, maybe convenience holder made sense only for coredata?
-    func saveListItems(listItemsWithRelations: ListItemsWithRelations, handler: Bool -> ()) {
-        
-        //        let dbProducts = listItemsWithRelations.products.map{self.toDBProduct($0)}
-        //        let dbSections = listItemsWithRelations.sections.map{self.toDBSection($0)}
-        //        let dbLists = listItemsWithRelations.lists.map{self.toDBList($0)}
-        //
-        //        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-        //            let realm = Realm()
-        //            realm.write {
-        //
-        //                for dbProduct in dbProducts {
-        //                    realm.add(dbProduct)
-        //                }
-        //            }
-        //            dispatch_async(dispatch_get_main_queue(), {
-        //                handler(true)
-        //            })
-        //        })
-        
-        let dbListItems = listItemsWithRelations.listItems.map{ListItemMapper.dbWithListItem($0)}
-        self.saveObjs(dbListItems, update: true) {listItemsMaybe in
-            handler(true)
-        }
-    }
-    
     func updateListItems(listItems: [ListItem], handler: Bool -> Void) {
         doInWriteTransaction({[weak self] realm in
             return self?.updateListItemsSync(realm, listItems: listItems)
@@ -388,13 +357,12 @@ class RealmListItemProvider: RealmProvider {
     }
     
     func updateListItemsSync(realm: Realm, listItems: [ListItem]) -> Bool {
-        let updatedListItems = saveListItemsSync(realm, listItems: listItems, incrementQuantity: false, updateSection: false)
-        if listItems.count == updatedListItems.count {
-            return true
-        } else {
-            QL4("list items count != updated items count. list items: \(listItems), updated: \(updatedListItems)")
-            return false
+        for listItem in listItems {
+            let dbListItem = ListItemMapper.dbWithListItem(listItem)
+            realm.add(dbListItem, update: true)
         }
+
+        return true
     }
     
     func overwrite(listItems: [ListItem], listUuid: String, clearTombstones: Bool, handler: Bool -> ()) {

@@ -73,6 +73,20 @@ final class Product: Equatable, Identifiable, CustomDebugStringConvertible {
         )
     }
     
+    func update(product: Product) -> Product {
+        return update(product, category: product.category)
+    }
+    
+    // Updates self and its dependencies with product, the references to the dependencies (uuid) are not changed
+    func updateWithoutChangingReferences(product: Product) -> Product {
+        let updatedCategory = category.updateWithoutChangingReferences(product.category)
+        return update(product, category: updatedCategory)
+    }
+    
+    private func update(product: Product, category: ProductCategory) -> Product {
+        return copy(name: product.name, category: product.category, fav: product.fav, brand: product.brand, lastServerUpdate: product.lastServerUpdate, removed: product.removed)
+    }
+    
     func same(rhs: Product) -> Bool {
         return uuid == rhs.uuid
     }

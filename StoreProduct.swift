@@ -62,7 +62,7 @@ final class StoreProduct: Equatable, Identifiable, CustomDebugStringConvertible 
         return "{\(self.dynamicType) uuid: \(uuid), price: \(price), baseQuantity: \(baseQuantity), unit: \(unit), store: \(store), product: \(product), lastServerUpdate: \(lastServerUpdate)::\(lastServerUpdate?.millisToEpochDate()), removed: \(removed)}"
     }
     
-    func copy(uuid uuid: String? = nil, name: String? = nil, price: Float? = nil, category: ProductCategory? = nil, baseQuantity: Float? = nil, unit: StoreProductUnit? = nil, fav: Int? = nil, brand: String? = nil, store: String? = nil, product: Product? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> StoreProduct {
+    func copy(uuid uuid: String? = nil, price: Float? = nil, baseQuantity: Float? = nil, unit: StoreProductUnit? = nil, store: String? = nil, product: Product? = nil, lastServerUpdate: Int64? = nil, removed: Bool? = nil) -> StoreProduct {
         return StoreProduct(
             uuid: uuid ?? self.uuid,
             price: price ?? self.price,
@@ -75,6 +75,25 @@ final class StoreProduct: Equatable, Identifiable, CustomDebugStringConvertible 
         )
     }
     
+    // Overwrite all fields with fields of storeProduct, except uuid
+    func update(storeProduct: StoreProduct) -> StoreProduct {
+        return copy(storeProduct, product: storeProduct.product)
+    }
+    
+    // Updates self and its dependencies with storeProduct, the references to the dependencies (uuid) are not changed
+    func updateWithoutChangingReferences(storeProduct: StoreProduct) -> StoreProduct {
+        let updatedProduct = product.updateWithoutChangingReferences(storeProduct.product)
+        return update(storeProduct, product: updatedProduct)
+    }
+
+    private func update(storeProduct: StoreProduct, product: Product) -> StoreProduct {
+        return copy(price: storeProduct.price, baseQuantity: storeProduct.baseQuantity, unit: storeProduct.unit, store: storeProduct.store, product: product, lastServerUpdate: storeProduct.lastServerUpdate, removed: storeProduct.removed)
+    }
+    
+    private func copy(storeProduct: StoreProduct, product: Product) -> StoreProduct {
+        return copy(price: storeProduct.price, baseQuantity: storeProduct.baseQuantity, unit: storeProduct.unit, store: storeProduct.store, product: product, lastServerUpdate: storeProduct.lastServerUpdate, removed: storeProduct.removed)
+    }
+
     func same(rhs: StoreProduct) -> Bool {
         return uuid == rhs.uuid
     }

@@ -182,7 +182,7 @@ class ListItemProviderImpl: ListItemProvider {
         }
         
         // TODO review carefully what happens if adding fails after memory cache is updated
-        dbProvider.saveListItems(listItems, incrementQuantity: true) {[weak self] savedListItemsMaybe in // currently the item returned by server is identically to the one we sent, so we just save our local item
+        dbProvider.addOrIncrementListItems(listItems) {[weak self] savedListItemsMaybe in // currently the item returned by server is identically to the one we sent, so we just save our local item
             if let savedListItems = savedListItemsMaybe {
                 if !addedListItemsMaybe.isSet { // we assume the database result is always == mem result, so if returned from mem already no need to return from db
                     handler(ProviderResult(status: .Success, sucessResult: savedListItems))
@@ -272,37 +272,49 @@ class ListItemProviderImpl: ListItemProvider {
     // We load product and section from db identified by uniques and update and link to them, instead of updating directly the product and section of the item
     // The reason for this, is that if we udpate a part of the unique say the product's brand, we have to look if a product with the new unique exist and link to that one - otherwise we may end with 2 products (or sections) with the same semantic unique (but different uuids) and this is invalid, among others it causes an error in the server. 
     // NOTE: for now assumes that the store is not updated (the app doesn't allow to edit the store of a list item). This means that we don't look if a store product with the name-brand-store exists and link to that one if it does like we do with product or category. We just update the current store product. TODO review this
-    func update(listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, _ handler: ProviderResult<ListItem> -> Void) {
-        sectionAndProductForAddUpdate(listItemInput, list: list, possibleNewSectionOrder: nil) {[weak self] result in
-            if let (section, product) = result.sucessResult {
+    func update(listItemInput: ListItemInput, updatingListItem: ListItem, status: ListItemStatus, list: List, _ remote: Bool, _ handler: ProviderResult<(listItem: ListItem, replaced: Bool)> -> Void) {
+        
+        // Remove a possible already existing item with same unique (name+brand) in the same list.
+        DBProviders.listItemProvider.deletePossibleListItemWithUnique(listItemInput.name, productBrand: listItemInput.brand, list: list) {[weak self] foundAndDeletedListItem in
+        
+            self?.sectionAndProductForAddUpdate(listItemInput, list: list, possibleNewSectionOrder: nil) {[weak self] result in
                 
-                let storeProduct = StoreProduct(uuid: updatingListItem.product.uuid, price: listItemInput.price, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, store: updatingListItem.list.store ?? "", product: product) // possible store product update
-                
-                let listItem = ListItem(
-                    uuid: updatingListItem.uuid,
-                    product: storeProduct,
-                    section: section,
-                    list: list,
-                    note: listItemInput.note,
-                    statusOrder: ListItemStatusOrder(status: status, order: updatingListItem.order(status)),
-                    statusQuantity: ListItemStatusQuantity(status: status, quantity: listItemInput.quantity)
-                )
-                
-                self?.update([listItem], remote: remote) {result in
-                    if result.success {
-                        handler(ProviderResult(status: .Success, sucessResult: listItem))
-                    } else {
-                        QL4("Error updating list item: \(result)")
-                        handler(ProviderResult(status: result.status))
+                if let (section, product) = result.sucessResult {
+
+                    let storeProduct = StoreProduct(uuid: updatingListItem.product.uuid, price: listItemInput.price, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, store: updatingListItem.list.store ?? "", product: product) // possible store product update
+                    
+                    let listItem = ListItem(
+                        uuid: updatingListItem.uuid,
+                        product: storeProduct,
+                        section: section,
+                        list: list,
+                        note: listItemInput.note,
+                        statusOrder: ListItemStatusOrder(status: status, order: updatingListItem.order(status)),
+                        statusQuantity: ListItemStatusQuantity(status: status, quantity: listItemInput.quantity)
+                    )
+
+                    if foundAndDeletedListItem {
+                        // if deleted a list item, invalidate memory cache such that it's updated next request with correct items
+                        self?.invalidateMemCache()
                     }
+                    
+                    self?.update([listItem], remote: remote) {result in
+                        if result.success {
+                            handler(ProviderResult(status: .Success, sucessResult: (listItem: listItem, replaced: foundAndDeletedListItem)))
+                        } else {
+                            QL4("Error updating list item: \(result)")
+                            handler(ProviderResult(status: result.status))
+                        }
+                    }
+                } else {
+                    QL4("Error fetching section and/or product: \(result.status)")
+                    handler(ProviderResult(status: .DatabaseUnknown))
                 }
-            } else {
-                QL4("Error fetching section and/or product: \(result.status)")
-                handler(ProviderResult(status: .DatabaseUnknown))
             }
         }
     }
     
+    // Retrieves section and product identified by semantic unique, if they don't exist creates new ones
     private func sectionAndProductForAddUpdate(listItemInput: ListItemInput, list: List, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<(Section, Product)> -> Void) {
         Providers.sectionProvider.mergeOrCreateSection(listItemInput.section, sectionColor: listItemInput.sectionColor, status: .Todo, possibleNewOrder: possibleNewSectionOrder, list: list) {result in
             

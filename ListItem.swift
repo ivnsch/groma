@@ -302,9 +302,19 @@ final class ListItem: Equatable, Identifiable, CustomDebugStringConvertible {
     
     // Overwrite all fields with fields of listItem, except uuid
     func update(listItem: ListItem) -> ListItem {
+        return update(listItem, storeProduct: listItem.product)
+    }
+
+    // Updates self and its dependencies with listItem, the references to the dependencies (uuid) are not changed
+    func updateWithoutChangingReferences(listItem: ListItem) -> ListItem {
+        let updatedStoreProduct = product.updateWithoutChangingReferences(listItem.product)
+        return update(listItem, storeProduct: updatedStoreProduct)
+    }
+    
+    private func update(listItem: ListItem, storeProduct: StoreProduct) -> ListItem {
         return copy(
             uuid: uuid,
-            product: listItem.product,
+            product: storeProduct,
             section: listItem.section,
             list: listItem.list,
             note: listItem.note,
