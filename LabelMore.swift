@@ -11,7 +11,7 @@ import QorumLogs
 
 @IBDesignable class LabelMore: UILabel {
     
-    @IBInspectable var fontType: Int = -1
+    @IBInspectable var fontType: NSNumber = -1
     
     // TODO enum for fontTypes? with the same name as the numbers such that we can add later 21, 22 etc. if necessary. For storyboards this is not very useful but when we set the font programmatically at least
     static func mapToFontSize(fontType: Int) -> CGFloat? {
@@ -43,7 +43,7 @@ import QorumLogs
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        if let size = LabelMore.mapToFontSize(fontType) {
+        if let size = LabelMore.mapToFontSize(fontType.integerValue) {
             
 //            QL1("Init label with font size: \(size), text?: \(text). Dimension: \(DimensionsManager.widthDimension)")
             
