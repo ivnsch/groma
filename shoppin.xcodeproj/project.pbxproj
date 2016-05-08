@@ -173,6 +173,7 @@
 		EB3144461B643559005814F0 /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3144451B643559005814F0 /* UITextField.swift */; };
 		EB33D5551CDFA2000097AD58 /* MoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D5531CDFA2000097AD58 /* MoreCell.swift */; };
 		EB33D5561CDFA2000097AD58 /* CountryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D5541CDFA2000097AD58 /* CountryHelper.swift */; };
+		EB33D5581CDFAB640097AD58 /* LocalizedFloatRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D5571CDFAB640097AD58 /* LocalizedFloatRule.swift */; };
 		EB37AB981C9CA81F00FE9D7A /* OrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37AB971C9CA81F00FE9D7A /* OrderUpdate.swift */; };
 		EB37AB991C9CA81F00FE9D7A /* OrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37AB971C9CA81F00FE9D7A /* OrderUpdate.swift */; };
 		EB37AB9A1C9CA81F00FE9D7A /* OrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37AB971C9CA81F00FE9D7A /* OrderUpdate.swift */; };
@@ -1218,6 +1219,7 @@
 		EB3144451B643559005814F0 /* UITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		EB33D5531CDFA2000097AD58 /* MoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreCell.swift; sourceTree = "<group>"; };
 		EB33D5541CDFA2000097AD58 /* CountryHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryHelper.swift; sourceTree = "<group>"; };
+		EB33D5571CDFAB640097AD58 /* LocalizedFloatRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedFloatRule.swift; sourceTree = "<group>"; };
 		EB37AB971C9CA81F00FE9D7A /* OrderUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderUpdate.swift; sourceTree = "<group>"; };
 		EB37ABA11C9F249300FE9D7A /* LineTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineTextField.swift; sourceTree = "<group>"; };
 		EB37ABA51C9F2DA400FE9D7A /* LineAutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAutocompleteTextField.swift; sourceTree = "<group>"; };
@@ -2787,6 +2789,7 @@
 			isa = PBXGroup;
 			children = (
 				EBB5A0461B65395000FB9C58 /* ValidationAlert.swift */,
+				EB33D5571CDFAB640097AD58 /* LocalizedFloatRule.swift */,
 			);
 			name = validatorHelpers;
 			sourceTree = "<group>";
@@ -3762,6 +3765,7 @@
 				EBA18C201BF5638D009291F2 /* QuickAddListItemViewController.swift in Sources */,
 				EB1D696A1CABE71A004892A2 /* ListItemsController.swift in Sources */,
 				EB7E831E1B7B7069009DEEF4 /* HistoryProvider.swift in Sources */,
+				EB33D5581CDFAB640097AD58 /* LocalizedFloatRule.swift in Sources */,
 				EBD558CB1BF3C1090048F287 /* ScaleViewController.swift in Sources */,
 				EB0C1BA71B3DFD0800F24C85 /* NSLayoutConstraint.swift in Sources */,
 				EBF5D7D71B8FB01B00A235C5 /* Synced.swift in Sources */,
