@@ -8,14 +8,42 @@
 
 import UIKit
 
+enum MoreItemType {
+    case History, ManageProduct, User, Settings, Help, Share, Feedback, About
+}
+
+typealias MoreItem = (type: MoreItemType, text: String)
+
 class MoreViewController: UITableViewController {
    
     private var emailHelper: EmailHelper?
     
+    private var items: [MoreItem] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         styleBackButton()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        items = [
+            MoreItem(type: .History, text: "History"),
+            MoreItem(type: .ManageProduct, text: "Manage product"),
+            MoreItem(type: .Settings, text: "Settings"),
+            MoreItem(type: .Help, text: "Help"),
+            MoreItem(type: .Share, text: "Share"),
+            MoreItem(type: .Feedback, text: "Feedback"),
+            MoreItem(type: .About, text: "About")
+        ]
+        
+        if CountryHelper.isInServerSupportedCountry() {
+            items.insert((type: .User, text: "User"), atIndex: 2)
+        }
+        
+        tableView.reloadData()
     }
     
     private func styleBackButton() {
@@ -28,24 +56,44 @@ class MoreViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        switch indexPath.row  {
+        let item = items[indexPath.row]
+        
+        switch item.type {
             
-        case 1: // Manage product
+        case .History:
+            let controller = UIStoryboard.historyViewController()
+            navigationController?.pushViewController(controller, animated: true)
+            
+        case .ManageProduct:
             let controller = UIStoryboard.manageProductsViewController()
             navigationController?.pushViewController(controller, animated: true)
             
-        case 5: // Feedback
+        case .User:
+            let controller = UIStoryboard.userDetailsViewController()
+            navigationController?.pushViewController(controller, animated: true)
+
+        case .Settings:
+            let controller = UIStoryboard.settingsViewController()
+            navigationController?.pushViewController(controller, animated: true)
+            
+        case .Help:
+            let controller = UIStoryboard.helpViewController()
+            navigationController?.pushViewController(controller, animated: true)
+            
+        case .Feedback:
             emailHelper = EmailHelper(controller: self)
             emailHelper?.showEmail()
-  
-        case 6: // Share
+            
+        case .Share:
             share("Message message", sharingImage: nil, sharingURL: NSURL(string: "https://developers.facebook.com"))
             // Initially implemented this, which contains facebook sharing using its SDK. It seems with the default share we achieve the same functionality (Facebook seems to not allow to add title and description to links to the app store, which is what we want to link to, see https://developers.facebook.com/docs/sharing/ios - this would have been the only reason to use the SDK). Letting it commented just in case.
 //            let controller = UIStoryboard.shareAppViewController()
 //            navigationController?.setNavigationBarHidden(true, animated: false)
 //            navigationController?.pushViewController(controller, animated: true)
             
-        default: break
+        case .About:
+            let controller = UIStoryboard.aboutViewController()
+            navigationController?.pushViewController(controller, animated: true)
         }
     }
     
@@ -53,10 +101,14 @@ class MoreViewController: UITableViewController {
         return DimensionsManager.defaultCellHeight
     }
     
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return items.count
+    }
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = super.tableView(tableView, cellForRowAtIndexPath: indexPath)
-        // When returning cell height programatically, here it's still the height from the storyboard so we have to pass the offset for the line to eb draw at the bottom.
-        cell.contentView.addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
+        let cell = tableView.dequeueReusableCellWithIdentifier("moreCell", forIndexPath: indexPath) as! MoreCell
+        let item = items[indexPath.row]
+        cell.moreItem = item
         return cell
     }
     

@@ -171,6 +171,8 @@
 		EB2F5D791A557E2C00DBC4AF /* ListMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */; };
 		EB2F5D7F1A559C8800DBC4AF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2F5D7E1A559C8800DBC4AF /* Constants.swift */; };
 		EB3144461B643559005814F0 /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3144451B643559005814F0 /* UITextField.swift */; };
+		EB33D5551CDFA2000097AD58 /* MoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D5531CDFA2000097AD58 /* MoreCell.swift */; };
+		EB33D5561CDFA2000097AD58 /* CountryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D5541CDFA2000097AD58 /* CountryHelper.swift */; };
 		EB37AB981C9CA81F00FE9D7A /* OrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37AB971C9CA81F00FE9D7A /* OrderUpdate.swift */; };
 		EB37AB991C9CA81F00FE9D7A /* OrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37AB971C9CA81F00FE9D7A /* OrderUpdate.swift */; };
 		EB37AB9A1C9CA81F00FE9D7A /* OrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37AB971C9CA81F00FE9D7A /* OrderUpdate.swift */; };
@@ -1214,6 +1216,8 @@
 		EB2F5D781A557E2C00DBC4AF /* ListMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListMapper.swift; sourceTree = "<group>"; };
 		EB2F5D7E1A559C8800DBC4AF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		EB3144451B643559005814F0 /* UITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
+		EB33D5531CDFA2000097AD58 /* MoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreCell.swift; sourceTree = "<group>"; };
+		EB33D5541CDFA2000097AD58 /* CountryHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryHelper.swift; sourceTree = "<group>"; };
 		EB37AB971C9CA81F00FE9D7A /* OrderUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderUpdate.swift; sourceTree = "<group>"; };
 		EB37ABA11C9F249300FE9D7A /* LineTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineTextField.swift; sourceTree = "<group>"; };
 		EB37ABA51C9F2DA400FE9D7A /* LineAutocompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineAutocompleteTextField.swift; sourceTree = "<group>"; };
@@ -2878,6 +2882,8 @@
 		EBD827F81BE79A110072F9FA /* util */ = {
 			isa = PBXGroup;
 			children = (
+				EB33D5531CDFA2000097AD58 /* MoreCell.swift */,
+				EB33D5541CDFA2000097AD58 /* CountryHelper.swift */,
 				EBD827F91BE79A280072F9FA /* Fonts.swift */,
 				EB135B951BED5F130093DE70 /* ItemWithCellAttributes.swift */,
 				EBB526841BEFE6DD0002A286 /* SectionModel.swift */,
@@ -3713,6 +3719,7 @@
 				EB4FD4501AC6BE960000F952 /* Globals.swift in Sources */,
 				EB85F4671BD54FA800E19E9B /* QuickAddProduct.swift in Sources */,
 				EB4A38B41C8F8901000714F9 /* RemoteProductsWithDependencies.swift in Sources */,
+				EB33D5561CDFA2000097AD58 /* CountryHelper.swift in Sources */,
 				EB70C22F1B5021D50060E529 /* UserInput.swift in Sources */,
 				EBF87BC91C73A0360024E13C /* RemotePingResult.swift in Sources */,
 				EB76A7A41BEE8CD700486F30 /* AddEditPlanItemController.swift in Sources */,
@@ -4009,6 +4016,7 @@
 				EBC9D23C1BE41F440088E3CF /* StatsDetailsViewController.swift in Sources */,
 				EB20FBFE1A5972C70058103B /* InventoryItemsProviderImpl.swift in Sources */,
 				EBEA0CE41CA7F27700E68B81 /* RemoteListItemsReorderResult.swift in Sources */,
+				EB33D5551CDFA2000097AD58 /* MoreCell.swift in Sources */,
 				EBB5A04D1B6596D400FB9C58 /* ProviderFetchModus.swift in Sources */,
 				EB4D57B01B75093D00BC6171 /* RemoteListWithListItemsSyncResult.swift in Sources */,
 				EB7524551BF5830600A97A10 /* QuickAddGroupCell.swift in Sources */,

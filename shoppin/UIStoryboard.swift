@@ -235,4 +235,22 @@ extension UIStoryboard {
     class func ratingProvideFeedbackController() -> RatingProvideFeedbackController {
         return ratingPopupStoryboard().instantiateViewControllerWithIdentifier("RatingProvideFeedbackController") as! RatingProvideFeedbackController
     }
+    
+    // MARK: Help
+    // TODO now that we don't use the segues in the main storyboard for more items anymore we should put them in their own storyboards
+    class func helpViewController() -> HelpViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("HelpViewController") as! HelpViewController
+    }
+
+    // MARK: About
+    // TODO now that we don't use the segues in the main storyboard for more items anymore we should put them in their own storyboards
+    class func aboutViewController() -> UIViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("AboutViewController")
+    }
+    
+    // MARK: Settings
+    // TODO now that we don't use the segues in the main storyboard for more items anymore we should put them in their own storyboards
+    class func settingsViewController() -> SettingsViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("SettingsViewController") as! SettingsViewController
+    }
 }
