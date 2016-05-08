@@ -96,6 +96,10 @@ extension UIStoryboard {
     class func forgotPasswordViewController() -> ForgotPasswordViewController {
         return forgotPasswordStoryboard().instantiateViewControllerWithIdentifier("ForgotPasswordViewController") as! ForgotPasswordViewController
     }
+
+    class func userTabItemViewController() -> UserTabItemViewController {
+        return mainStoryboard().instantiateViewControllerWithIdentifier("UserTabItemViewController") as! UserTabItemViewController
+    }
     
     // MARK: - Modal
     class func choiceViewController() -> EditableChoiceModal {

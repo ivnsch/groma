@@ -20,7 +20,7 @@
         <!--User-->
         <scene sceneID="aV2-i4-Nfl">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="m4s-HA-kaT" customClass="UserTabItemViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="UserTabItemViewController" automaticallyAdjustsScrollViewInsets="NO" id="m4s-HA-kaT" customClass="UserTabItemViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8Xc-LO-HAF"/>
                         <viewControllerLayoutGuide type="bottom" id="alZ-ze-xB3"/>

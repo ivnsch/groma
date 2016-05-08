@@ -69,7 +69,7 @@ class MoreViewController: UITableViewController {
             navigationController?.pushViewController(controller, animated: true)
             
         case .User:
-            let controller = UIStoryboard.userDetailsViewController()
+            let controller = UIStoryboard.userTabItemViewController()
             navigationController?.pushViewController(controller, animated: true)
 
         case .Settings:
