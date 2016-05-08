@@ -245,6 +245,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
             topQuickAddControllerManager?.expand(true)
             topQuickAddControllerManager?.controller?.initContent(AddEditItem(item: productEditData))
             initNavBar([.Edit, .Save])
+            tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
         }
     }
     
