@@ -183,7 +183,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         }
     }
     
-    // MARK: - EditListViewController
+    // MARK: - AddEditListControllerDelegate
     //sub?
     func onListAdded(list: List) {
         tableView.wrapUpdates {[weak self] in
@@ -200,6 +200,7 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         models.update(ExpandableTableViewListModel(list: list))
         tableView.reloadData()
         topAddEditListControllerManager?.expand(false)
+        setTopBarState(.NormalFromExpanded)
     }
     
     // MARK: - ExpandableTopViewControllerDelegate

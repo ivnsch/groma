@@ -200,6 +200,7 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
         models.update(ExpandableTableViewInventoryModel(inventory: list))
         tableView.reloadData()
         topAddEditListControllerManager?.expand(false)
+        setTopBarState(.NormalFromExpanded)
     }
     
     // MARK: - Websocket

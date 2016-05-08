@@ -210,6 +210,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         models.update(ExpandableTableViewGroupModel(group: list))
         tableView.reloadData()
         topAddEditListControllerManager?.expand(false)
+        setTopBarState(.NormalFromExpanded)
     }
     
     // MARK: - ExpandableTopViewControllerDelegate
