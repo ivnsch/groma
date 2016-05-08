@@ -123,6 +123,8 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
         
+        listNameInputField.becomeFirstResponder()
+        
         if addButtonHelper == nil {
             addButtonHelper = initAddButtonHelper() // in view did load parentViewController is nil
         }
