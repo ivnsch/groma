@@ -144,7 +144,8 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         cell.brandLabel.text = model.product.brand
         
         cell.quantityLabel.text = String(model.quantity)
-        
+        cell.shownQuantity = model.quantity
+
         cell.model = model
         
         cell.row = indexPath.row

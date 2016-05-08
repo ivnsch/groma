@@ -35,7 +35,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     var delegate: ProductWithQuantityTableViewCellDelegate?
     var row: Int?
 
-    private var shownQuantity: Int = 0 {
+    var shownQuantity: Int = 0 {
         didSet {
             quantityLabel.text = String("\(shownQuantity)")
         }
