@@ -177,7 +177,7 @@ class StatsViewController: UIViewController
     }
     
     private func initThisMonthSpendingsLabels(monthYearAggregate: GroupMonthYearAggregate) {
-        if let lastMonthYearAggregate = monthYearAggregate.monthYearAggregates.first { // the spendings of this months (which is always the last in the returned aggregate)
+        if let lastMonthYearAggregate = monthYearAggregate.monthYearAggregates.last { // the spendings of this month (which is always the last in the returned aggregate)
             
             let today = NSDate()
             let dailyAvgSpendingsThisMonth = lastMonthYearAggregate.totalPrice / Float(today.dayMonthYear.day)
@@ -297,8 +297,8 @@ class StatsViewController: UIViewController
         let yModel = ChartAxisModel(axisValues: yValues, axisTitleLabel: ChartAxisLabel(text: "Spending", settings: labelSettings.defaultVertical()))
         let chartSettings = ChartSettings()
         chartSettings.top = 20
-        chartSettings.trailing = 20
-        chartSettings.leading = 10
+        chartSettings.trailing = 30
+        chartSettings.leading = 12
         chartSettings.labelsToAxisSpacingY = 0
         chartSettings.axisStrokeWidth = 0
         
