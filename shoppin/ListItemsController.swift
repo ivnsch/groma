@@ -523,7 +523,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     // Note: don't use this to reorder sections, this doesn't update section order
     // Note: concerning status - this only updates the current status related data (quantity, order). This means quantity and order of possible items in the other status is not affected
-    private func updateItem(updatingListItem: ListItem, listItemInput: ListItemInput, successHandler handler: VoidFunction? = nil) {
+    private func updateItem(updatingListItem: ListItem, listItemInput: ListItemInput) {
         if let currentList = self.currentList {
             
             Providers.listItemsProvider.update(listItemInput, updatingListItem: updatingListItem, status: status, list: currentList, true, successHandler {[weak self] (listItem, replaced) in guard let weakSelf = self else {return}
@@ -533,9 +533,8 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                     weakSelf.listItemsTableViewController.updateListItem(listItem, status: weakSelf.status, notifyRemote: true)
                     //                    self?.updatePrices(.MemOnly)
                     weakSelf.onTableViewChangedQuantifiables()
-                    handler?()
+                    weakSelf.setEditing(false, animated: true, tryCloseTopViewController: true)
                 }
-
             })
         } else {
             print("Error: Invalid state: trying to update list item without current list")
@@ -591,9 +590,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         func onEditListItem(input: ListItemInput, editingListItem: ListItem) {
             // set normal (.Note) mode in advance - with updateItem the table view calls reloadData, but the change to .Note mode happens after (in setEditing), which doesn't reload the table so the cells will appear without notes.
             listItemsTableViewController.cellMode = .Note
-            updateItem(editingListItem, listItemInput: input) {[weak self] in
-                self?.setEditing(false, animated: true, tryCloseTopViewController: true)
-            }
+            updateItem(editingListItem, listItemInput: input)
         }
         
         func onAddListItem(input: ListItemInput) {
