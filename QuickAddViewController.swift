@@ -272,6 +272,12 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     
     // MARK: - AddEditListItemViewControllerDelegate
     
+    func runAdditionalSubmitValidations() -> [UITextField: ValidationError]? {
+        return (ValidationRule(textField: searchBar, rules: [MinLengthRule(length: 1, message: "validation_item_name_not_empty")], errorLabel: nil).validateField().map{
+            [searchBar: $0]
+        })
+    }
+    
     func onValidationErrors(errors: [UITextField: ValidationError]) {
         // TODO validation errors in the add/edit popup. Or make that validation popup comes in front of add/edit popup, which is added to window (possible?)
         self.presentViewController(ValidationAlertCreator.create(errors), animated: true, completion: nil)

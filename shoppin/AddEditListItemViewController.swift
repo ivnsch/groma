@@ -12,6 +12,9 @@ import QorumLogs
 
 protocol AddEditListItemViewControllerDelegate {
     
+    // Returns nil if no errors, otherwise dictionary with errors. Important: Empty dictionary is invalid and the form will not be submitted!
+    func runAdditionalSubmitValidations() -> [UITextField: ValidationError]?
+    
     func onValidationErrors(errors: [UITextField: ValidationError])
     
     func onOkTap(price: Float, quantity: Int, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: StoreProductUnit, brand: String, editingItem: Any?)
@@ -325,10 +328,22 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     func submit() {
         guard validator != nil else {return}
         
-        if let errors = validator?.validate() {
-            for (field, _) in errors {
+        let formValidationErrors = validator?.validate()
+        let externalValidationsErrors = delegate?.runAdditionalSubmitValidations() // name (search bar)
+        
+        if formValidationErrors != nil || externalValidationsErrors != nil {
+           
+            var allValidationErrors = [UITextField: ValidationError]()
+            if let formValidationErrors = formValidationErrors {
+                allValidationErrors = formValidationErrors
+            }
+            if let externalValidationsErrors = externalValidationsErrors {
+                allValidationErrors = allValidationErrors + externalValidationsErrors
+            }
+
+            for (field, _) in allValidationErrors {
                 field.showValidationError()
-                delegate?.onValidationErrors(errors)
+                delegate?.onValidationErrors(allValidationErrors)
             }
             
         } else {
