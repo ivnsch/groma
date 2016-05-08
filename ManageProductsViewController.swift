@@ -147,9 +147,10 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     private func initTopQuickAddControllerManager() -> ExpandableTopViewController<QuickAddViewController> {
 //        let top: CGFloat = 55
         let top: CGFloat = 0
-        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddHeight, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
+        let manager: ExpandableTopViewController<QuickAddViewController> = ExpandableTopViewController(top: top, height: DimensionsManager.quickAddManageProductsHeight, animateTableViewInset: false, parentViewController: self, tableView: tableView) {[weak self] in
             let controller = UIStoryboard.quickAddViewController()
             controller.delegate = self
+            controller.modus = .Product
             return controller
         }
         manager.delegate = self

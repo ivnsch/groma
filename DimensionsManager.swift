@@ -80,6 +80,15 @@ class DimensionsManager {
         case .Large: return 310
         }
     }
+
+    static var quickAddManageProductsHeight: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 150
+        case .Small: return 150
+        case .Middle: return 180
+        case .Large: return 200
+        }
+    }
     
     static var quickAddSlidingTabsViewHeight: CGFloat {
         switch heightDimension {
