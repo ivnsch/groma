@@ -80,6 +80,10 @@ final class StoreProduct: Equatable, Identifiable, CustomDebugStringConvertible 
         return copy(storeProduct, product: storeProduct.product)
     }
     
+    func update(storeProductInput: StoreProductInput) -> StoreProduct {
+        return copy(price: storeProductInput.price, baseQuantity: storeProductInput.baseQuantity, unit: storeProductInput.unit)
+    }
+    
     // Updates self and its dependencies with storeProduct, the references to the dependencies (uuid) are not changed
     func updateWithoutChangingReferences(storeProduct: StoreProduct) -> StoreProduct {
         let updatedProduct = product.updateWithoutChangingReferences(storeProduct.product)

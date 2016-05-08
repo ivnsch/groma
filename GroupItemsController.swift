@@ -320,7 +320,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         
         func onAddItem(input: ListItemInput) {
             if let group = group {
-                let groupItemInput = GroupItemInput(name: input.name, quantity: input.quantity, price: input.price, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
+                let groupItemInput = GroupItemInput(name: input.name, quantity: input.quantity, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
                 Providers.listItemGroupsProvider.add(groupItemInput, group: group, remote: true, self.successHandler{[weak self] groupItem in
                     self?.onGroupItemAdded(true)
                 })

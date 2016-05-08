@@ -271,7 +271,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         }
         
         func onAddItem(input: ListItemInput) {
-            let product = ProductInput(name: input.name, price: input.price, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
+            let product = ProductInput(name: input.name, category: input.section, categoryColor: input.sectionColor, brand: input.brand)
             
             Providers.productProvider.countProducts(successHandler {[weak self] count in
                 if let weakSelf = self {

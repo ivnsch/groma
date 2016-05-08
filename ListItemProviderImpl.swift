@@ -154,7 +154,7 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     func add(groupItems: [GroupItem], status: ListItemStatus, list: List, _ handler: ProviderResult<[ListItem]> -> ()) {
-        let listItemPrototypes: [ListItemPrototype] = groupItems.map{ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name, targetSectionColor: $0.product.category.color)}
+        let listItemPrototypes: [ListItemPrototype] = groupItems.map{ListItemPrototype(product: $0.product, quantity: $0.quantity, targetSectionName: $0.product.category.name, targetSectionColor: $0.product.category.color, storeProductInput: nil)}
         self.add(listItemPrototypes, status: status, list: list, handler)
     }
     
@@ -260,7 +260,7 @@ class ListItemProviderImpl: ListItemProvider {
     func add(listItemInput: ListItemInput, status: ListItemStatus, list: List, order orderMaybe: Int? = nil, possibleNewSectionOrder: ListItemStatusOrder?, _ handler: ProviderResult<ListItem> -> Void) {
         sectionAndProductForAddUpdate(listItemInput, list: list, possibleNewSectionOrder: possibleNewSectionOrder) {[weak self] result in
             if let (section, product) = result.sucessResult {
-                self?.addListItem(product, status: status, section: section, quantity: listItemInput.quantity, list: list, note: listItemInput.note, order: orderMaybe, handler)
+                self?.addListItem(product, status: status, section: section, quantity: listItemInput.quantity, list: list, note: listItemInput.note, order: orderMaybe, storeProductInput: listItemInput.storeProductInput, handler)
             } else {
                 QL4("Error fetching section and/or product: \(result.status)")
                 handler(ProviderResult(status: .DatabaseUnknown))
@@ -281,7 +281,7 @@ class ListItemProviderImpl: ListItemProvider {
                 
                 if let (section, product) = result.sucessResult {
 
-                    let storeProduct = StoreProduct(uuid: updatingListItem.product.uuid, price: listItemInput.price, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, store: updatingListItem.list.store ?? "", product: product) // possible store product update
+                    let storeProduct = StoreProduct(uuid: updatingListItem.product.uuid, price: listItemInput.storeProductInput.price, baseQuantity: listItemInput.storeProductInput.baseQuantity, unit: listItemInput.storeProductInput.unit, store: updatingListItem.list.store ?? "", product: product) // possible store product update
                     
                     let listItem = ListItem(
                         uuid: updatingListItem.uuid,
@@ -322,7 +322,7 @@ class ListItemProviderImpl: ListItemProvider {
                 
                 // updateCategory: false: we don't touch product's category from list items - our inputs affect only the section. We use them though to create a category in the case a category with the section's name doesn't exists already. A product needs a category and it's logical to simply default this to the section if it doesn't exist, instead of making user enter a second input for the category. From user's perspective, most times category = section.
                 //Providers.productProvider.mergeOrCreateProduct(listItemInput.name, productPrice: listItemInput.price, category: listItemInput.section, categoryColor: listItemInput.sectionColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, store: listItemInput.store, updateCategory: false)
-                Providers.productProvider.mergeOrCreateProduct(listItemInput.name, category: listItemInput.section, categoryColor: listItemInput.sectionColor, baseQuantity: listItemInput.baseQuantity, unit: listItemInput.unit, brand: listItemInput.brand, updateCategory: false) {result in
+                Providers.productProvider.mergeOrCreateProduct(listItemInput.name, category: listItemInput.section, categoryColor: listItemInput.sectionColor, brand: listItemInput.brand, updateCategory: false) {result in
                     
                     if let product = result.sucessResult {
                         handler(ProviderResult(status: .Success, sucessResult: (section, product)))
@@ -341,8 +341,8 @@ class ListItemProviderImpl: ListItemProvider {
     
 
     // Adds list item with todo status
-    func addListItem(product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
-        let listItemPrototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionName, targetSectionColor: sectionColor)
+    func addListItem(product: Product, status: ListItemStatus, sectionName: String, sectionColor: UIColor, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, _ handler: ProviderResult<ListItem> -> Void) {
+        let listItemPrototype = ListItemPrototype(product: product, quantity: quantity, targetSectionName: sectionName, targetSectionColor: sectionColor, storeProductInput: storeProductInput)
         self.add(listItemPrototype, status: status, list: list, handler)
     }
     
@@ -392,15 +392,19 @@ class ListItemProviderImpl: ListItemProvider {
                     let existingStoreProducts = DBProviders.storeProductProvider.storeProductsSync(prototypes.map{$0.product}, store: list.store ?? "") ?? {
                         QL4("An error ocurred fetching store products, array is nil")
                         return [] // maybe we should exit from method here - for now only error log and return empty array
-                        }()
+                    }()
                     let existingStoreProductsDict = existingStoreProducts.toDictionary{($0.product.uuid, $0)}
                     return prototypes.map {prototype in
                         let storeProduct = existingStoreProductsDict[prototype.product.uuid] ?? {
                             let storeProduct = StoreProduct(uuid: NSUUID().UUIDString, price: 1, baseQuantity: 1, unit: StoreProductUnit.None, store: list.store ?? "", product: prototype.product)
                             QL1("Store product doesn't exist, created: \(storeProduct)")
                             return storeProduct
-                            }()
-                        return StoreListItemPrototype(product: storeProduct, quantity: prototype.quantity, targetSectionName: prototype.targetSectionName, targetSectionColor: prototype.targetSectionColor)
+                        }()
+                        
+                        // Set possible passed store product properties in the store product we will save. These are passed only when we create list items, using the form
+                        let updatedStoreProduct = prototype.storeProductInput.map{storeProduct.update($0)} ?? storeProduct
+                        
+                        return StoreListItemPrototype(product: updatedStoreProduct, quantity: prototype.quantity, targetSectionName: prototype.targetSectionName, targetSectionColor: prototype.targetSectionColor)
                     }
                 }()
                 
@@ -581,9 +585,9 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
 
-    func addListItem(product: Product, status: ListItemStatus, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, _ handler: ProviderResult<ListItem> -> Void) {
+    func addListItem(product: Product, status: ListItemStatus, section: Section, quantity: Int, list: List, note: String? = nil, order orderMaybe: Int? = nil, storeProductInput: StoreProductInput?, _ handler: ProviderResult<ListItem> -> Void) {
         // for now call the other func, which will fetch the section again... review if this is bad for performance otherwise let like this
-        addListItem(product, status: status, sectionName: section.name, sectionColor: section.color, quantity: quantity, list: list, note: note, order: orderMaybe, handler)
+        addListItem(product, status: status, sectionName: section.name, sectionColor: section.color, quantity: quantity, list: list, note: note, order: orderMaybe, storeProductInput: storeProductInput, handler)
     }
     
     // Common code for update single and batch list items switch status (in case of single listItems contains only 1 element)

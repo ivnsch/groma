@@ -187,7 +187,7 @@ class ProductProviderImpl: ProductProvider {
         }
     }
 
-    func mergeOrCreateProduct(productName: String, category: String, categoryColor: UIColor, baseQuantity: Float, unit: StoreProductUnit, brand: String, updateCategory: Bool, _ handler: ProviderResult<Product> -> Void) {
+    func mergeOrCreateProduct(productName: String, category: String, categoryColor: UIColor, brand: String, updateCategory: Bool, _ handler: ProviderResult<Product> -> Void) {
 
         // load product and update or create one
         // if we find a product with the name/brand we update it - this is for the case the user changes the price etc for an existing product while adding an item

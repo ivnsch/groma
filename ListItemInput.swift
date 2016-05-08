@@ -13,23 +13,19 @@ struct ListItemInput {
     
     let name: String
     let quantity: Int
-    let price: Float
     let section: String
     let sectionColor: UIColor
     let note: String?
-    let baseQuantity: Float
-    let unit: StoreProductUnit
     let brand: String
+    let storeProductInput: StoreProductInput
     
     init(name: String, quantity: Int, price: Float, section: String, sectionColor: UIColor, note: String?, baseQuantity: Float, unit: StoreProductUnit, brand: String) {
         self.name = name
         self.quantity = quantity
-        self.price = price
         self.section = section
         self.sectionColor = sectionColor
         self.note = note
-        self.baseQuantity = baseQuantity
-        self.unit = unit
         self.brand = brand
+        self.storeProductInput = StoreProductInput(price: price, baseQuantity: baseQuantity, unit: unit)
     }
 }
