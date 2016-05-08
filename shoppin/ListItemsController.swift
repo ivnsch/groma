@@ -44,8 +44,10 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             updatePossibleList()
         }
     }
-    var onViewWillAppear: VoidFunction?
     
+    // TODO rename these blocks, which are meant to be executed only once after loading accordingly e.g. onViewWillAppearOnce
+    var onViewWillAppear: VoidFunction?
+    var onViewDidAppear: VoidFunction?
     
     var status: ListItemStatus {
         fatalError("override")
@@ -191,6 +193,13 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         // TODO custom empty view, put this there
         let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyListViewTap:"))
         emptyView.addGestureRecognizer(tapRecognizer)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        onViewDidAppear?()
+        onViewDidAppear = nil
     }
     
     func onEmptyListViewTap(sender: UITapGestureRecognizer) {

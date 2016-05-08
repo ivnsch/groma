@@ -65,6 +65,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     private var titleLabel: UILabel?
     
     var onViewWillAppear: VoidFunction?
+    var onViewDidAppear: VoidFunction?
     
     private var productsWithQuantityController: ProductsWithQuantityViewController!
     
@@ -166,6 +167,11 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         onViewWillAppear = nil
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        onViewDidAppear?()
+        onViewDidAppear = nil
+    }
     
     private func toggleEditing() {
         if let productsWithQuantityController = productsWithQuantityController {

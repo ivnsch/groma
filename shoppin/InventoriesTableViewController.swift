@@ -150,6 +150,11 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
             listItemsController.setThemeColor(cell.backgroundColor!)
             listItemsController.onExpand(true)
         }
+        
+        listItemsController.onViewDidAppear = {
+            listItemsController.onExpand(true)
+        }
+        
         return listItemsController
     }
     

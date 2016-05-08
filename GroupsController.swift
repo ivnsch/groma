@@ -136,6 +136,10 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
             listItemsController.onExpand(true)
         }
         
+        listItemsController.onViewDidAppear = {
+            listItemsController.onExpand(true)
+        }
+        
         return listItemsController
     }
     

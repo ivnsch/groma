@@ -164,6 +164,9 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
             // Note: order of lines important here, list has to be set first for topbar dot to be positioned correctly right of the title
             listItemsController.currentList = (model as! ExpandableTableViewListModel).list
             listItemsController.setThemeColor(cell.backgroundColor!)
+        }
+        
+        listItemsController.onViewDidAppear = {
             listItemsController.onExpand(true)
         }
 

@@ -60,7 +60,8 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     private var titleLabel: UILabel?
 
     var onViewWillAppear: VoidFunction?
-    
+    var onViewDidAppear: VoidFunction?
+
     private var productsWithQuantityController: ProductsWithQuantityViewController!
 
     private var toggleButtonRotator: ToggleButtonRotator = ToggleButtonRotator()
@@ -161,6 +162,12 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         
         onViewWillAppear?()
         onViewWillAppear = nil
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        onViewDidAppear?()
+        onViewDidAppear = nil
     }
     
     private func toggleEditing() {

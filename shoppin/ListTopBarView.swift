@@ -165,24 +165,17 @@ class ListTopBarView: UIView {
         
         let animationKey = "path"
         
-        CATransaction.begin()
         let pathAnimation = CABasicAnimation(keyPath: animationKey)
         pathAnimation.duration = duration
-        pathAnimation.fillMode = kCAFillModeForwards
-        pathAnimation.removedOnCompletion = false
         pathAnimation.fromValue = expanding ? rectPath.CGPath : circlePath.CGPath
+
+        // Disable implicit animation
+        CATransaction.disableActions()
+        bgColorLayer?.path = expanding ? circlePath.CGPath : rectPath.CGPath
+        
         pathAnimation.toValue = expanding ? circlePath.CGPath : rectPath.CGPath
-        
-        CATransaction.setCompletionBlock {[weak self] in
-            self?.bgColorLayer?.path = expanding ? circlePath.CGPath : rectPath.CGPath
-            self?.setNeedsDisplay()
-            // remove the animation manually, after it's completed, otherwise there's flickering (on expanding = false)
-            // removing the animation is important, otherwise we get sometimes random artifacts later which freeze the app.
-            self?.bgColorLayer?.removeAnimationForKey(animationKey)
-        }
         bgColorLayer?.addAnimation(pathAnimation, forKey: animationKey)
-        
-        CATransaction.commit()
+
     }
     
     // parameter: center => center, !center => left
