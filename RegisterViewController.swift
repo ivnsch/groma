@@ -68,6 +68,11 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         view.addGestureRecognizer(recognizer)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        emailField.becomeFirstResponder()
+    }
+    
     func handleTap(recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }

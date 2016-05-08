@@ -106,11 +106,16 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         
         eyeView.delegate = self
         
+        onUIReady?()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         if let storedEmail = Providers.userProvider.mySharedUser?.email {
             userNameField.text = storedEmail
+            passwordField.becomeFirstResponder()
         }
-        
-        onUIReady?()
+        // If there's no email stored, user in most cases wants to register so we don't focus a text field
     }
     
     func handleTap(recognizer: UITapGestureRecognizer) {

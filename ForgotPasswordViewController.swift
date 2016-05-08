@@ -36,6 +36,11 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
         view.addGestureRecognizer(recognizer)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        emailField.becomeFirstResponder()
+    }
+    
     func handleTap(recognizer: UITapGestureRecognizer) {
         view.endEditing(true)
     }
