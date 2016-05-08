@@ -342,16 +342,19 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     private func updateProductUI(product: Product, indexPath: NSIndexPath) {
-        
-        for i in 0..<filteredProducts.count {
-            if filteredProducts[i].item.same(product) {
-                filteredProducts[i] = ItemWithCellAttributes(item: product, boldRange: product.name.range(searchText, caseInsensitive: true))
+
+        tableView.wrapUpdates {[weak self] in guard let weakSelf = self else {return}
+            for i in 0..<weakSelf.filteredProducts.count {
+                if weakSelf.filteredProducts[i].item.same(product) {
+                    let item = ItemWithCellAttributes(item: product, boldRange: product.name.range(weakSelf.searchText, caseInsensitive: true))
+                    weakSelf.filteredProducts[i] = item
+                    if let cell = weakSelf.tableView.cellForRowAtIndexPath(indexPath) as? ManageProductsCell {
+                        cell.product = item
+                    }
+                }
             }
         }
-        
-        onUpdatedProducts()
-        
-        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+
         topQuickAddControllerManager?.expand(false)
         topQuickAddControllerManager?.controller?.onClose()
         initNavBar([.Edit])
@@ -361,7 +364,6 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         let item = ItemWithCellAttributes(item: product, boldRange: product.name.range(searchText, caseInsensitive: true))
         filteredProducts.append(item)
         onUpdatedProducts()
-        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: filteredProducts.count - 1, inSection: 0), atScrollPosition: .Top, animated: true)
         setAddEditProductControllerOpen(false)
     }
 
