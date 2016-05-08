@@ -249,7 +249,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
                     ListItem(uuid: uuid, product: storeProduct1, section: section1, list: list1, todoQuantity: 5, todoOrder: 0)
                 ]
                 
-                DBProviders.listItemProvider.saveListItems(listItems, incrementQuantity: false) {saved in
+                DBProviders.listItemProvider.addOrIncrementListItems(listItems) {saved in
                     QL1("Done adding dummy data (mini)")
                 }
             }
