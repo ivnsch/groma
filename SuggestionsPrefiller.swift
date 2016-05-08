@@ -117,7 +117,7 @@ class SuggestionsPrefiller {
         let riceCat = DBProductCategory(uuid: uuid, name: tr("pr_rice", lang), bgColorHex: UIColor.flatWhiteColor().hexStr)
         let nutsCat = DBProductCategory(uuid: uuid, name: tr("pr_nuts", lang), bgColorHex: UIColor.flatBrownColorDark().hexStr)
         let oilCat = DBProductCategory(uuid: uuid, name: tr("pr_oil", lang), bgColorHex: UIColor.flatYellowColor().hexStr)
-        let clothesCat = DBProductCategory(uuid: uuid, name: tr("pr_oil", lang), bgColorHex: UIColor.flatBlueColorDark().hexStr)
+        let clothesCat = DBProductCategory(uuid: uuid, name: tr("pr_clothes", lang), bgColorHex: UIColor.flatBlueColorDark().hexStr)
         let cleaningCat = DBProductCategory(uuid: uuid, name: tr("pr_cleaning", lang), bgColorHex: UIColor.flatMagentaColor().hexStr)
         
         let milkCat = DBProductCategory(uuid: uuid, name: tr("pr_milk", lang), bgColorHex: UIColor.flatYellowColor().hexStr)
@@ -162,7 +162,6 @@ class SuggestionsPrefiller {
             DBProduct(uuid: uuid, name: tr("pr_grapefruits", lang), category: fruitsCat),
             DBProduct(uuid: uuid, name: tr("pr_mangos", lang), category: fruitsCat),
             DBProduct(uuid: uuid, name: tr("pr_limes", lang), category: fruitsCat),
-//            DBProduct(uuid: uuid, name: tr("pr_limes", lang), category: fruitsCat), // TODO!!!! handle possible unique conflicts (when we enable this, the sync with server will not work because repeated name+brand. So we have to 1. assign a new name in the server (append a number), 2. when user updates product e.g. via list or group items, it should be possible to make the item point to a different product instead of just updating the associated product like it's now. Probably we should always when the update changes a part of the unique (name or brand) fetch/create product instead of updating the existing one. Note that this means that updating the product data like category would update this fetched/new product. In case of list items we also have store products - here fetching product means fetching store product that links to product identified by this unique, if it doesn't exist look for a product identified by this unique, use it, if it doesn't exist create the product (etc).
             DBProduct(uuid: uuid, name: tr("pr_pomegranate", lang), category: fruitsCat),
             
             // frozen fruits
