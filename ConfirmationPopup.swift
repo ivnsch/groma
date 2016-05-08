@@ -22,10 +22,7 @@ class ConfirmationPopup {
     }
     
     static func show(title title: String? = nil, message: String, okTitle: String = "Ok", cancelTitle: String = "Cancel", controller: UIViewController, onOk: VoidFunction? = nil, onCancel: VoidFunction? = nil) {
-//        let alert = create(title: title, message: message, okTitle: okTitle, cancelTitle: cancelTitle, onOk: onOk, onCancel: onCancel)
-//        controller.presentViewController(alert, animated: true, completion: nil)
-        
-        AlertPopup.show(title: title, message: message, controller: controller, confirmMsg: okTitle, cancelMsg: cancelTitle, hasOkButton: false, isConfirm: true, okAction: onOk, onDismiss: nil)
-        
+        let alert = create(title: title, message: message, okTitle: okTitle, cancelTitle: cancelTitle, onOk: onOk, onCancel: onCancel)
+        controller.presentViewController(alert, animated: true, completion: nil)
     }
 }

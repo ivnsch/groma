@@ -605,7 +605,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
                 // adjust the anchor point also for topOffset
                 let buttonPointWithOffset = noteButtonPointParentController.copy(y: noteButtonPointParentController.y - topOffset)
                 
-                AlertPopup.show(message: note, controller: parentController, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
+                AlertPopup.showCustom(message: note, controller: parentController, frame: frame, rootControllerStartPoint: buttonPointWithOffset)
             } else {
                 QL3("No parent controller, can't show note popup")
             }
