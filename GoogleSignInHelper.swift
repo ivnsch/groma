@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 struct GoogleSignInHelper {
 
@@ -14,7 +15,10 @@ struct GoogleSignInHelper {
         // Google sign-in
         var configureError: NSError?
         GGLContext.sharedInstance().configureWithError(&configureError)
-        assert(configureError == nil, "Error configuring Google services: \(configureError)")
+        if let configureError = configureError {
+            QL4("Error configuring Google services: \(configureError)")
+        }
+        
         GIDSignIn.sharedInstance().delegate = delegate
         
         // So far research these are the current scopes https://developers.google.com/+/web/api/rest/oauth
