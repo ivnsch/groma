@@ -313,7 +313,7 @@ class RealmProductProvider: RealmProvider {
     func incrementFav(productUuid: String, _ handler: Bool -> Void) {
         doInWriteTransaction({realm in
             if let existingProduct = realm.objects(DBProduct).filter(DBProduct.createFilter(productUuid)).first {
-                existingProduct.fav++
+                existingProduct.fav += 1
                 realm.add(existingProduct, update: true)                
                 return true
             } else { // product not found

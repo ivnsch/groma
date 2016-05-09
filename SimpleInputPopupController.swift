@@ -36,7 +36,7 @@ class SimpleInputPopupController: UIViewController {
 
         self.overlay = overlay
         
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: "onTapBG:")
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(SimpleInputPopupController.onTapBG(_:)))
         overlay.addGestureRecognizer(tapRecognizer)
         
         onUIReady?()

@@ -91,16 +91,16 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         
         navigationController?.interactivePopGestureRecognizer?.delegate = self
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onListRemovedNotification:", name: Notification.ListRemoved.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onListRemovedNotification(_:)), name: Notification.ListRemoved.rawValue, object: nil)
         
         // websocket
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItems:", name: WSNotificationName.ListItems.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketListItem:", name: WSNotificationName.ListItem.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketSection:", name: WSNotificationName.Section.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onWebsocketListItems(_:)), name: WSNotificationName.ListItems.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onWebsocketListItem(_:)), name: WSNotificationName.ListItem.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onWebsocketSection(_:)), name: WSNotificationName.Section.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onWebsocketProduct(_:)), name: WSNotificationName.Product.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onWebsocketProductCategory(_:)), name: WSNotificationName.ProductCategory.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListItemsController.onWebsocketList(_:)), name: WSNotificationName.List.rawValue, object: nil)
     }
 
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -191,7 +191,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
 //        updatePrices(.First)
         
         // TODO custom empty view, put this there
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyListViewTap:"))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ListItemsController.onEmptyListViewTap(_:)))
         emptyView.addGestureRecognizer(tapRecognizer)
     }
     

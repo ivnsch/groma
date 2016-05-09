@@ -31,7 +31,7 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
         initValidator()
         prefill()
         
-        let recognizer = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(ForgotPasswordViewController.handleTap(_:)))
         recognizer.delegate = self
         view.addGestureRecognizer(recognizer)
     }

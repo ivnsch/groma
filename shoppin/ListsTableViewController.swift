@@ -52,10 +52,10 @@ class ListsTableViewController: ExpandableItemsTableViewController, AddEditListC
         setNavTitle("Lists")        
 
         topAddEditListControllerManager = initTopAddEditListControllerManager()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketLists:", name: WSNotificationName.Lists.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onListInvitationAccepted:", name: Notification.ListInvitationAccepted.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListsTableViewController.onWebsocketList(_:)), name: WSNotificationName.List.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListsTableViewController.onWebsocketLists(_:)), name: WSNotificationName.Lists.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListsTableViewController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ListsTableViewController.onListInvitationAccepted(_:)), name: Notification.ListInvitationAccepted.rawValue, object: nil)
         
         initGlobalTabBar() // since ListsTableViewController is the always the first controller (that shows a tabbar) init tabBar insets here. Tried to do this in AppDelegate with root controller it doesn't have tabBarController.
     }

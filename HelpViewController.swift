@@ -39,10 +39,10 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        searchBar.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        searchBar.addTarget(self, action: #selector(HelpViewController.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         searchBarHeightConstraint.constant = DimensionsManager.searchBarHeight
         
-        let recognizer = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
+        let recognizer = UITapGestureRecognizer(target: self, action:#selector(HelpViewController.handleTap(_:)))
         recognizer.delegate = self
         recognizer.cancelsTouchesInView = false
         view.addGestureRecognizer(recognizer)

@@ -161,7 +161,7 @@ class ListTopBarView: UIView {
         let y = CGFloat(centerYInExpandedState) - (circleDiam / 2)
         
         let circlePath = UIBezierPath(roundedRect: CGRectMake(x, y, circleDiam, circleDiam), byRoundingCorners: UIRectCorner.AllCorners, cornerRadii: CGSizeMake(cornerRadius, cornerRadius))
-        circlePath.closePath()
+//        circlePath.closePath()
         
         let animationKey = "path"
         
@@ -219,7 +219,7 @@ class ListTopBarView: UIView {
         addSubview(button)
         button.fillSuperviewHeight()
         button.fillSuperviewWidth(70, rightConstant: -70)
-        button.addTarget(self, action: "onTitleTap:", forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(ListTopBarView.onTitleTap(_:)), forControlEvents: .TouchUpInside)
     }
     
     /**
@@ -251,8 +251,8 @@ class ListTopBarView: UIView {
 
                 addConstraints(hConstraints)
 
-                button.addTarget(self, action: "onBackTap:", forControlEvents: .TouchUpInside)
-                backLabel.addTarget(self, action: "onBackTap:", forControlEvents: .TouchUpInside)
+                button.addTarget(self, action: #selector(ListTopBarView.onBackTap(_:)), forControlEvents: .TouchUpInside)
+                backLabel.addTarget(self, action: #selector(ListTopBarView.onBackTap(_:)), forControlEvents: .TouchUpInside)
             }
 
         } else {

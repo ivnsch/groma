@@ -68,7 +68,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
         view.backgroundColor = UIColor.blackColor()
         view.userInteractionEnabled = true
         view.alpha = 0
-        view.addTarget(self, action: "onOverlayTap:", forControlEvents: .TouchUpInside)
+        view.addTarget(self, action: #selector(ExpandableTopViewController.onOverlayTap(_:)), forControlEvents: .TouchUpInside)
         return view
     }
     

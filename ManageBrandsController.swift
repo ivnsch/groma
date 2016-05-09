@@ -90,10 +90,10 @@ class ManageBrandsController: UIViewController, UITableViewDataSource, UITableVi
         for action in actions {
             switch action {
             case .Save:
-                let button = UIBarButtonItem(image: UIImage(named: "tb_done")!, style: .Plain, target: self, action: "onSubmitTap:")
+                let button = UIBarButtonItem(image: UIImage(named: "tb_done")!, style: .Plain, target: self, action: #selector(ManageBrandsController.onSubmitTap(_:)))
                 buttons.append(button)
             case .Edit:
-                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .Plain, target: self, action: "onEditTap:")
+                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .Plain, target: self, action: #selector(ManageBrandsController.onEditTap(_:)))
                 buttons.append(button)
             default: break
             }

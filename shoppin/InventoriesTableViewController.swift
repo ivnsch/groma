@@ -49,10 +49,10 @@ class InventoriesTableViewController: ExpandableItemsTableViewController, AddEdi
 
         topAddEditListControllerManager = initTopAddEditListControllerManager()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsockeInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsockeInventories:", name: WSNotificationName.Inventories.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onInventoryInvitationAccepted:", name: Notification.InventoryInvitationAccepted.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InventoriesTableViewController.onWebsockeInventory(_:)), name: WSNotificationName.Inventory.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InventoriesTableViewController.onWebsockeInventories(_:)), name: WSNotificationName.Inventories.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InventoriesTableViewController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(InventoriesTableViewController.onInventoryInvitationAccepted(_:)), name: Notification.InventoryInvitationAccepted.rawValue, object: nil)
     }
     
     deinit {

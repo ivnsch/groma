@@ -96,7 +96,7 @@ class MemListItemProvider {
             var listItemOrder = 0
             for existingListItem in self.listItems![list.uuid]! {
                 if existingListItem.section.uuid == prototype.section.uuid && existingListItem.hasStatus(status) { // count list items in my section (e.g. "vegetables") and status (e.g. "todo") to determine my order
-                    listItemOrder++
+                    listItemOrder += 1
                 }
             }
             

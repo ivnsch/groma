@@ -35,7 +35,7 @@ class CellUncoverer: NSObject, UIGestureRecognizerDelegate {
         self.button = button
         self.leftLayoutConstraint = leftLayoutConstraint
         
-        let panRecognizer = UIPanGestureRecognizer(target: self, action: "onPanCell:")
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(CellUncoverer.onPanCell(_:)))
         panRecognizer.delegate = self
         panRecognizer.cancelsTouchesInView = true
         self.button.addGestureRecognizer(panRecognizer)

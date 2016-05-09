@@ -53,9 +53,9 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         setNavTitle("Groups")
         
         topAddEditListControllerManager = initTopAddEditListControllerManager()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketGroup:", name: WSNotificationName.Group.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketGroups:", name: WSNotificationName.Groups.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)    
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GroupsController.onWebsocketGroup(_:)), name: WSNotificationName.Group.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GroupsController.onWebsocketGroups(_:)), name: WSNotificationName.Groups.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GroupsController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)    
     }
     
     deinit {
@@ -177,10 +177,10 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         for action in actions {
             switch action {
             case .Add:
-                let button = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "onAddTap:")
+                let button = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(ExpandableItemsTableViewController.onAddTap(_:)))
                 buttons.append(button)
             case .Edit:
-                let button = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "onEditTap:")
+                let button = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(ExpandableItemsTableViewController.onEditTap(_:)))
                 self.editButton = button
                 buttons.append(button)
             default: break

@@ -32,7 +32,7 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
     init(view: UIView) {
         super.init()
         
-        panRecognizer = UIPanGestureRecognizer(target: self, action: "onPanCell:")
+        panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(SwipeToIncrementHelper.onPanCell(_:)))
         panRecognizer.delegate = self
         panRecognizer.cancelsTouchesInView = true
         view.addGestureRecognizer(self.panRecognizer)

@@ -51,7 +51,7 @@ class EyeView: UIView {
         addSubview(label)
         self.openLabel = label
         
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onTap:"))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(EyeView.onTap(_:)))
         addGestureRecognizer(tapRecognizer)
     }
     

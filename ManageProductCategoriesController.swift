@@ -62,8 +62,8 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         
         initNavBar([.Edit])
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ManageProductCategoriesController.onWebsocketProductCategory(_:)), name: WSNotificationName.ProductCategory.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ManageProductCategoriesController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
     }
     
     deinit {
@@ -93,10 +93,10 @@ class ManageProductCategoriesController: UIViewController, UITableViewDataSource
         for action in actions {
             switch action {
             case .Save:
-                let button = UIBarButtonItem(image: UIImage(named: "tb_done")!, style: .Plain, target: self, action: "onSubmitTap:")
+                let button = UIBarButtonItem(image: UIImage(named: "tb_done")!, style: .Plain, target: self, action: #selector(ManageProductCategoriesController.onSubmitTap(_:)))
                 buttons.append(button)
             case .Edit:
-                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .Plain, target: self, action: "onEditTap:")
+                let button = UIBarButtonItem(image: UIImage(named: "tb_edit")!, style: .Plain, target: self, action: #selector(ManageProductCategoriesController.onEditTap(_:)))
                 buttons.append(button)
             default: break
             }

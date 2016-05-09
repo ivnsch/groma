@@ -42,7 +42,7 @@ class NavigationTitleView: UIView {
         
         self.userInteractionEnabled = true
         
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: "onTap")
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(NavigationTitleView.onTap))
         self.addGestureRecognizer(tapRecognizer)
         
         self.textField.placeholder = "New list name"

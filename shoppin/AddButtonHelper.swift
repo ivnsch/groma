@@ -33,8 +33,8 @@ class AddButtonHelper: NSObject {
     }
     
     func addObserver() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillChangeFrame:", name: UIKeyboardWillChangeFrameNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(AddButtonHelper.keyboardWillChangeFrame(_:)), name: UIKeyboardWillChangeFrameNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(AddButtonHelper.keyboardWillDisappear(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
     
     func removeObserver() {

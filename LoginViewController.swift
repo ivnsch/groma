@@ -100,7 +100,7 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
 
         fbButton.readPermissions = ["public_profile"]
 
-        let recognizer = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
+        let recognizer = UITapGestureRecognizer(target: self, action:#selector(LoginViewController.handleTap(_:)))
         recognizer.delegate = self
         view.addGestureRecognizer(recognizer)
         

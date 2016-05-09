@@ -18,7 +18,7 @@ class AddItemButton: UIButton {
         backgroundColor = UIColor(hexString: "1FAC6A")
         setTitle("Submit", forState: UIControlState.Normal)
         
-        addTarget(self, action: "onTap:", forControlEvents: .TouchUpInside)
+        addTarget(self, action: #selector(AddItemButton.onTap(_:)), forControlEvents: .TouchUpInside)
     }
 
     required init?(coder aDecoder: NSCoder) {

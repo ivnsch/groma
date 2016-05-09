@@ -212,7 +212,7 @@ class FloatingViews: UIView {
             }
         }
 
-        button.addTarget(self, action: "onButtonTap:", forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(FloatingViews.onButtonTap(_:)), forControlEvents: .TouchUpInside)
         button.alpha = model.alpha
         button.transform = CGAffineTransformMakeRotation(model.rotation)
         button.enabled = model.enabled

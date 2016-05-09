@@ -148,7 +148,7 @@ class MyAlert: UIView, UIGestureRecognizerDelegate {
         super.init(coder: aDecoder)
         
         if dismissWithSwipe {
-            let panRecognizer = UIPanGestureRecognizer(target: self, action: "onPan:")
+            let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(MyAlert.onPan(_:)))
             panRecognizer.delegate = self
             panRecognizer.cancelsTouchesInView = false
             addGestureRecognizer(panRecognizer)

@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-class ExpandableTableViewModel: NSObject, Identifiable, CustomDebugStringConvertible {
+class ExpandableTableViewModel: NSObject, Identifiable {
 
     var name: String {
         fatalError("override")

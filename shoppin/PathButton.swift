@@ -60,7 +60,7 @@ class PathButton: UIButton {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onTapHandler:"))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(PathButton.onTapHandler(_:)))
         addGestureRecognizer(tapRecognizer)
     }
     

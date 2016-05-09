@@ -74,11 +74,11 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         if delegate?.isPullToAddEnabled() ?? false {
             let refreshControl = PullToAddHelper.createPullToAdd(self)
             tableViewController.refreshControl = refreshControl
-            refreshControl.addTarget(self, action: "onPullRefresh:", forControlEvents: .ValueChanged)
+            refreshControl.addTarget(self, action: #selector(ProductsWithQuantityViewController.onPullRefresh(_:)), forControlEvents: .ValueChanged)
         }
         
         // TODO custom empty view, put this there
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyInventoryViewTap:"))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ProductsWithQuantityViewController.onEmptyInventoryViewTap(_:)))
         emptyView.addGestureRecognizer(tapRecognizer)
         
         if let emptyViewData = delegate?.emptyViewData()  {

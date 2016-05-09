@@ -63,7 +63,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
         let attributedText = buttonTranslation.underlineBetweenFirstSeparators("%%")
         termsButton.setAttributedTitle(attributedText, forState: .Normal)
         
-        let recognizer = UITapGestureRecognizer(target: self, action:Selector("handleTap:"))
+        let recognizer = UITapGestureRecognizer(target: self, action:#selector(RegisterViewController.handleTap(_:)))
         recognizer.delegate = self
         view.addGestureRecognizer(recognizer)
     }

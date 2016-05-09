@@ -283,15 +283,11 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     private func initTextFieldPlaceholders() {
-        for (textField, placeholder) in [
-            (brandInput, "Brand"),
-            (sectionInput, "Section"),
-            (quantityInput, "Quantity"),
-            (priceInput, "Price"),
-            (noteInput, "Note")
-            ] {
-            textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
-        }
+        brandInput.attributedPlaceholder = NSAttributedString(string: "Brand", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+        sectionInput.attributedPlaceholder = NSAttributedString(string: "Section", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+        quantityInput.attributedPlaceholder = NSAttributedString(string: "Quantity", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+        priceInput.attributedPlaceholder = NSAttributedString(string: "Price", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
+        noteInput.attributedPlaceholder = NSAttributedString(string: "Note", attributes: [NSForegroundColorAttributeName: UIColor.grayColor()])
     }
     
     private func initAutocompletionTextFields() {

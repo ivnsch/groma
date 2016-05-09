@@ -146,7 +146,7 @@ struct OrderedDictionary<KeyType: Hashable, ValueType>: SequenceType {
 
     func generate() -> AnyGenerator<(KeyType, ValueType)> {
         var nextIndex = 0
-        return anyGenerator {
+        return AnyGenerator {
             if (nextIndex < 0) {
                 return nil
             }

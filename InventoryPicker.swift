@@ -48,7 +48,7 @@ class InventoryPicker: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
         
         super.init()
         
-        button.addTarget(self, action: "onButtonTap:", forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(InventoryPicker.onButtonTap(_:)), forControlEvents: .TouchUpInside)
     }
     
     func onButtonTap(sender: UIButton) {

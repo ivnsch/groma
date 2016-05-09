@@ -34,7 +34,7 @@ class RemoteUserProvider {
         
         let parameters = self.toRequestParams(user)
         
-        RemoteProvider.request(.POST, Urls.register, parameters) {[weak self] (result: RemoteResult<NoOpSerializable>) in
+        RemoteProvider.request(.POST, Urls.register, parameters) {(result: RemoteResult<NoOpSerializable>) in
             if result.success {
 
             } else {

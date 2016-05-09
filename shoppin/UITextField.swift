@@ -44,7 +44,7 @@ extension UITextField {
         }
         set {
             maxLengthDictionary[self] = newValue
-            addTarget(self, action: "checkMaxLength:", forControlEvents: UIControlEvents.EditingChanged)
+            addTarget(self, action: #selector(UITextField.checkMaxLength(_:)), forControlEvents: UIControlEvents.EditingChanged)
         }
     }
     

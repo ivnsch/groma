@@ -178,7 +178,6 @@
 		EB33D55B1CDFC2890097AD58 /* StoreProductInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D5591CDFC2890097AD58 /* StoreProductInput.swift */; };
 		EB33D55C1CDFC2890097AD58 /* StoreProductInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D5591CDFC2890097AD58 /* StoreProductInput.swift */; };
 		EB33D55E1CDFFC8D0097AD58 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D55D1CDFFC8D0097AD58 /* UIDevice.swift */; };
-		EB33D56D1CE010410097AD58 /* shoppinUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D56C1CE010410097AD58 /* shoppinUITests.swift */; };
 		EB33D5741CE0104C0097AD58 /* OpenAndCloseListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB33D5641CE00FAA0097AD58 /* OpenAndCloseListTest.swift */; };
 		EB37AB981C9CA81F00FE9D7A /* OrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37AB971C9CA81F00FE9D7A /* OrderUpdate.swift */; };
 		EB37AB991C9CA81F00FE9D7A /* OrderUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37AB971C9CA81F00FE9D7A /* OrderUpdate.swift */; };
@@ -1235,9 +1234,8 @@
 		EB33D5571CDFAB640097AD58 /* LocalizedFloatRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalizedFloatRule.swift; sourceTree = "<group>"; };
 		EB33D5591CDFC2890097AD58 /* StoreProductInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreProductInput.swift; sourceTree = "<group>"; };
 		EB33D55D1CDFFC8D0097AD58 /* UIDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
-		EB33D5641CE00FAA0097AD58 /* OpenAndCloseListTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenAndCloseListTest.swift; sourceTree = "<group>"; };
+		EB33D5641CE00FAA0097AD58 /* OpenAndCloseListTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OpenAndCloseListTest.swift; path = ../OpenAndCloseListTest.swift; sourceTree = "<group>"; };
 		EB33D56A1CE010400097AD58 /* shoppinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = shoppinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		EB33D56C1CE010410097AD58 /* shoppinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = shoppinUITests.swift; sourceTree = "<group>"; };
 		EB33D56E1CE010410097AD58 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB37AB971C9CA81F00FE9D7A /* OrderUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrderUpdate.swift; sourceTree = "<group>"; };
 		EB37ABA11C9F249300FE9D7A /* LineTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineTextField.swift; sourceTree = "<group>"; };
@@ -2134,18 +2132,10 @@
 			name = common;
 			sourceTree = "<group>";
 		};
-		EB33D5611CE00F420097AD58 /* uiTests */ = {
-			isa = PBXGroup;
-			children = (
-				EB33D5641CE00FAA0097AD58 /* OpenAndCloseListTest.swift */,
-			);
-			name = uiTests;
-			sourceTree = "<group>";
-		};
 		EB33D56B1CE010400097AD58 /* shoppinUITests */ = {
 			isa = PBXGroup;
 			children = (
-				EB33D56C1CE010410097AD58 /* shoppinUITests.swift */,
+				EB33D5641CE00FAA0097AD58 /* OpenAndCloseListTest.swift */,
 				EB33D56E1CE010410097AD58 /* Info.plist */,
 			);
 			path = shoppinUITests;
@@ -2336,7 +2326,6 @@
 				EB0A058B1BDFCD4100D1E29D /* more */,
 				EB22C7121C4B031E00285352 /* shareApp */,
 				EBB5266D1BEFD8820002A286 /* help */,
-				EB33D5611CE00F420097AD58 /* uiTests */,
 				EBF1628E1A3499620048E37C /* LaunchScreen-568h@2x.png */,
 				EB9207EA1C4C4FC200332332 /* Localizable.strings */,
 			);
@@ -4160,7 +4149,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB33D5741CE0104C0097AD58 /* OpenAndCloseListTest.swift in Sources */,
-				EB33D56D1CE010410097AD58 /* shoppinUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
     private let debugAddDummyData = false
     private let debugGeneratePrefillDatabases = false
-    private let debugForceShowIntro = false
+    private let debugForceShowIntro = true
     
     var window: UIWindow?
     
@@ -62,8 +62,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
 
         checkMigrateRealm()
         
-        Notification.subscribe(.LoginTokenExpired, selector: "onLoginTokenExpired:", observer: self)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketConnectionChange:", name: WSNotificationName.Connection.rawValue, object: nil)
+        Notification.subscribe(.LoginTokenExpired, selector: #selector(AppDelegate.onLoginTokenExpired(_:)), observer: self)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketConnectionChange(_:)), name: WSNotificationName.Connection.rawValue, object: nil)
 
         return initFb
     }
@@ -118,11 +118,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     private func initWebsocket() {
         WebsocketHelper.tryConnectWebsocket()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketReceptionNotification:", name: WSNotificationName.Reception.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProcessingError:", name: WSNotificationName.ProcessingError.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketList:", name: WSNotificationName.List.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketInventory:", name: WSNotificationName.Inventory.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketSharedSync:", name: WSNotificationName.SyncShared.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketReceptionNotification(_:)), name: WSNotificationName.Reception.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketProcessingError(_:)), name: WSNotificationName.ProcessingError.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketList(_:)), name: WSNotificationName.List.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketInventory(_:)), name: WSNotificationName.Inventory.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketSharedSync(_:)), name: WSNotificationName.SyncShared.rawValue, object: nil)
     }
     
     private func initHockey() {
@@ -310,7 +310,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
     // MARK: - Reachability
     
     private func initReachability() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"checkForReachability:", name: kReachabilityChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.checkForReachability(_:)), name: kReachabilityChangedNotification, object: nil)
         self.reachability = Reachability.reachabilityForInternetConnection()
         self.reachability.startNotifier()
     }
@@ -448,7 +448,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         if let info = note.userInfo as? Dictionary<String, String> {
             if let sender = info["sender"], category = info["category"], _ = info["verb"] {
                 
-                let categoryText = category.capitalizedString
+//                let categoryText = category.capitalizedString
                 let msg = "\(sender) updated."
                 
                 let notificationView = showBottomNotification(msg, textColor: UIColor.blackColor(), tag: ViewTags.WebsocketSenderNotification)

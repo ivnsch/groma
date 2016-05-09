@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-class DBListItem: DBSyncable, CustomDebugStringConvertible {
+class DBListItem: DBSyncable {
     
     dynamic var uuid: String = ""
     dynamic var sectionOpt: DBSection? = DBSection()

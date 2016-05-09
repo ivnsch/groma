@@ -89,7 +89,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
 
         initNavBar([.Edit])
         
-        searchBar.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        searchBar.addTarget(self, action: #selector(ManageProductsViewController.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
 
         loadPossibleNextPage()
         
@@ -97,14 +97,14 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
         
         layout()
 
-        let recognizer = UITapGestureRecognizer(target: self, action: Selector("handleTap:"))
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(ManageProductsViewController.handleTap(_:)))
         recognizer.delegate = self
         recognizer.cancelsTouchesInView = false
         view.addGestureRecognizer(recognizer)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProduct:", name: WSNotificationName.Product.rawValue, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onWebsocketProductCategory:", name: WSNotificationName.ProductCategory.rawValue, object: nil)        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "onIncomingGlobalSyncFinished:", name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ManageProductsViewController.onWebsocketProduct(_:)), name: WSNotificationName.Product.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ManageProductsViewController.onWebsocketProductCategory(_:)), name: WSNotificationName.ProductCategory.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ManageProductsViewController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)        
     }
     
     private func layout() {

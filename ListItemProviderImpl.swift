@@ -507,7 +507,7 @@ class ListItemProviderImpl: ListItemProvider {
                                     // Note that currently we are doing this iteration even if we just created the section, where order is always 0. Not a big issue in our case but can be optimised (TODO?)
                                     for existingListItem in existingListItems {
                                         if existingListItem.section.uuid == section.uuid && existingListItem.hasStatus(status) {
-                                            existingCountInSection++
+                                            existingCountInSection += 1
                                         }
                                     }
                                     sectionCountNewItemsDict[section.uuid] = existingCountInSection
@@ -611,7 +611,7 @@ class ListItemProviderImpl: ListItemProvider {
                         let listItemOrder: Int = listItemOrderInDstStatus ?? sectionCount
                         
                         listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: listItemOrder))
-                        dstSectionsDict[listItem.section.uuid]!++ // we are adding an item to section - increment count for possible next item
+                        dstSectionsDict[listItem.section.uuid]! += 1 // we are adding an item to section - increment count for possible next item
                         
                     } else { // item's section is not in target status - set order 0 (first item in section) and add section to the dictionary
                         listItem.updateOrderMutable(ListItemStatusOrder(status: status, order: 0))

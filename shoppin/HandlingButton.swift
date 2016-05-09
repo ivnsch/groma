@@ -23,7 +23,7 @@ class HandlingButton: UIButton {
     }
     
     private func sharedInit() {
-        addTarget(self, action: "onTap:", forControlEvents: .TouchUpInside)
+        addTarget(self, action: #selector(HandlingButton.onTap(_:)), forControlEvents: .TouchUpInside)
     }
 
     func onTap(sender: UIButton) {
