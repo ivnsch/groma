@@ -8,6 +8,7 @@
 
 import UIKit
 import MessageUI
+import QorumLogs
 
 protocol EmailHelperDelegate {
     func onEmailSent()
@@ -30,7 +31,28 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
             mail.mailComposeDelegate = self
             mail.setToRecipients([email])
             mail.setSubject("Feedback")
-            //                mail.setMessageBody("", isHTML: true)
+            
+            let device = UIDevice().type
+            
+            if device == .unrecognized {
+                QL4("No device name for: \(device)")
+            }
+            
+            let userStrMaybe = Providers.userProvider.mySharedUser.map{"User id: \($0.email)"}
+            
+            let strMaybe: String? = {
+                switch (userStrMaybe, device) {
+                case (nil, .unrecognized): return nil
+                case (nil, let deviceId): return "\n\nDevice: \(deviceId.rawValue)"
+                case (let userStr, .unrecognized): return "\n\n\(userStr!)"
+                case (let userStr, let deviceId): return "\n\n\(userStr!), device: \(deviceId.rawValue)"
+                }
+            }()
+            
+            if let str = strMaybe {
+                mail.setMessageBody(str, isHTML: false)
+            }
+
             controller.presentViewController(mail, animated: true, completion: nil)
         } else {
             AlertPopup.show(message: "Couldn't find an email account. If the problem persists, please send us an e-mail manually to the address: \(email)", controller: controller)
