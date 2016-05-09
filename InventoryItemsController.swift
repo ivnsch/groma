@@ -464,7 +464,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
             
         } else {
             if delta > 0 { // positive increment - show info
-                AlertPopup.show(title: "Info", message: "Incrementing inventory items does NOT affect history and stats.", controller: self, okMsg: "Got it!") {
+                AlertPopup.show(title: "Info", message: "Incrementing inventory items directly does NOT affect history and stats.\nOnly items that have been bought (using the cart) affect them.", controller: self, okMsg: "Got it!") {
                     PreferencesManager.savePreference(PreferencesManagerKey.showedIncrementInventoryItemHelp, value: true)
                     increment()
                 }
