@@ -931,6 +931,11 @@
 		EBDFE3C41AD11EA100E48F95 /* NSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C31AD11EA100E48F95 /* NSView.swift */; };
 		EBDFE3C61AD11F6700E48F95 /* NSLayoutConstraint.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */; };
 		EBE366371BCBC346009543AF /* BlurBubbleTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE366361BCBC346009543AF /* BlurBubbleTransition.swift */; };
+		EBE889211CE121090028B59F /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE889201CE121090028B59F /* AppInfo.swift */; };
+		EBE889231CE1228F0028B59F /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE889221CE1228F0028B59F /* Operators.swift */; };
+		EBE889241CE1228F0028B59F /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE889221CE1228F0028B59F /* Operators.swift */; };
+		EBE889251CE1228F0028B59F /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE889221CE1228F0028B59F /* Operators.swift */; };
+		EBE889261CE1228F0028B59F /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE889221CE1228F0028B59F /* Operators.swift */; };
 		EBEA0CC81CA5ABBE00E68B81 /* MyAutoCompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CC71CA5ABBE00E68B81 /* MyAutoCompleteTextField.swift */; };
 		EBEA0CCF1CA5B24C00E68B81 /* MyAutocompleteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEA0CCD1CA5B24C00E68B81 /* MyAutocompleteCell.swift */; };
 		EBEA0CD01CA5B24C00E68B81 /* MyAutocompleteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = EBEA0CCE1CA5B24C00E68B81 /* MyAutocompleteCell.xib */; };
@@ -1637,6 +1642,8 @@
 		EBDFE3C31AD11EA100E48F95 /* NSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSView.swift; sourceTree = "<group>"; };
 		EBDFE3C51AD11F6700E48F95 /* NSLayoutConstraint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraint.swift; sourceTree = "<group>"; };
 		EBE366361BCBC346009543AF /* BlurBubbleTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurBubbleTransition.swift; sourceTree = "<group>"; };
+		EBE889201CE121090028B59F /* AppInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInfo.swift; sourceTree = "<group>"; };
+		EBE889221CE1228F0028B59F /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		EBEA0CC71CA5ABBE00E68B81 /* MyAutoCompleteTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAutoCompleteTextField.swift; sourceTree = "<group>"; };
 		EBEA0CCD1CA5B24C00E68B81 /* MyAutocompleteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAutocompleteCell.swift; sourceTree = "<group>"; };
 		EBEA0CCE1CA5B24C00E68B81 /* MyAutocompleteCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MyAutocompleteCell.xib; sourceTree = "<group>"; };
@@ -2118,6 +2125,7 @@
 				EBB5A0441B65391200FB9C58 /* validatorHelpers */,
 				EB2F5D7E1A559C8800DBC4AF /* Constants.swift */,
 				EB4FD44F1AC6BE960000F952 /* Globals.swift */,
+				EBE889221CE1228F0028B59F /* Operators.swift */,
 				EB1D69601CAB0563004892A2 /* Notification.swift */,
 				EB4FD46B1AC73B590000F952 /* PreferencesManager.swift */,
 				EB89D33B1AD44BD400B6E0D0 /* Selectable.swift */,
@@ -2933,6 +2941,7 @@
 				EB37ABB61CA099BA00FE9D7A /* ToggleButtonRotator.swift */,
 				EBB8FC7A1CD3EBC2008FD084 /* WebsocketHelper.swift */,
 				EB33D55D1CDFFC8D0097AD58 /* UIDevice.swift */,
+				EBE889201CE121090028B59F /* AppInfo.swift */,
 			);
 			name = util;
 			sourceTree = "<group>";
@@ -3871,6 +3880,7 @@
 				EBED0CF91C8111A400A1EEC4 /* Array_GroupItem.swift in Sources */,
 				EBF163011A3DE6880048E37C /* ItemsListTableViewConstants.swift in Sources */,
 				EB1748C51C7E4C750067FD16 /* RemoteListNoUsers.swift in Sources */,
+				EBE889211CE121090028B59F /* AppInfo.swift in Sources */,
 				EB4147BC1BE0338800549CE4 /* ProductInput.swift in Sources */,
 				EBA701A41CC9443F007172CD /* RemoteListItemSwitchResult.swift in Sources */,
 				EB451C461B863516000DE208 /* MonthYear.swift in Sources */,
@@ -4013,6 +4023,7 @@
 				EBED0D121C824EC300A1EEC4 /* RatingProvideFeedbackController.swift in Sources */,
 				EB7233CF1C84B6CD002B9903 /* DBRemoveInventoryItem.swift in Sources */,
 				EB3C9E2A1BEA47FF00886197 /* Theme.swift in Sources */,
+				EBE889231CE1228F0028B59F /* Operators.swift in Sources */,
 				EBA9E6041C64AD7C00A85610 /* ProductWithQuantity.swift in Sources */,
 				EB33D55E1CDFFC8D0097AD58 /* UIDevice.swift in Sources */,
 				EB7233D71C84B6E3002B9903 /* DBRemoveHistoryItem.swift in Sources */,
@@ -4149,6 +4160,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB33D5741CE0104C0097AD58 /* OpenAndCloseListTest.swift in Sources */,
+				EBE889261CE1228F0028B59F /* Operators.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4451,6 +4463,7 @@
 				EB5529E51BC6F2A800EDCEAF /* PlanItemInput.swift in Sources */,
 				EBA7AC971BFE95AF00247A8C /* RemoteProductCategory.swift in Sources */,
 				EB40A48B1B553A19000E9CAD /* DBListItem.swift in Sources */,
+				EBE889241CE1228F0028B59F /* Operators.swift in Sources */,
 				EBA288D81BB9FCC3001A2B95 /* MemInventoryItemProvider.swift in Sources */,
 				EB4A38881C864D30000714F9 /* RemoteProductProvider.swift in Sources */,
 				EB55677E1A8658A600CD3EC6 /* ListItemProviderImpl.swift in Sources */,
@@ -4688,6 +4701,7 @@
 				EBF377801B342B4000EEB6DB /* Float.swift in Sources */,
 				EBBC22FF1BB4080E0002F6B1 /* Suggestion.swift in Sources */,
 				EBED0CFB1C8111A400A1EEC4 /* Array_GroupItem.swift in Sources */,
+				EBE889251CE1228F0028B59F /* Operators.swift in Sources */,
 				EBEE7E651C97595C00DBCB6A /* RealmGroupItemProvider.swift in Sources */,
 				EB70C21D1B4D2ECE0060E529 /* RemoteSharedUser.swift in Sources */,
 				EB5666D01C52BCA90074D2B3 /* LangManager.swift in Sources */,

@@ -18,8 +18,14 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
         } else {
             self.showLoginController()
         }
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UserTabItemViewController.onLogoutNotification(_:)), name: Notification.LogoutUI.rawValue, object: nil)
     }
-
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
     // MARK: - LoginDelegate
     
     func onLoginError() {
@@ -82,5 +88,13 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
                 controller.removeFromParentViewControllerWithView()
             }
         })
+    }
+    
+    // MARK: - Notification
+    
+    func onLogoutNotification(note: NSNotification) {
+        if !(childViewControllers.first is LoginViewController) {
+            showLoginController()
+        }
     }
 }

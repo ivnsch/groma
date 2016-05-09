@@ -40,6 +40,7 @@ struct RequestErrorToMsgMapper {
             // There statuses are internal and not meant to be shown to the client. We don't want to add yet another layer for this so we handle them like normal provider status. We provide not empty strings just in case they accidentally appear to the client, to know where they come from.
             case .IsNewDeviceLoginAndDeclinedOverwrite: return "Error invalid"
             case .CancelledLoginWithDifferentAccount: return "Cancelled"
+            case .MustUpdateApp: return "Invalid service. Please update the app to continue using your user account." // App delegate shows a different popup for this, see comment processing response in AlamofireHelper
         }
     }
 }

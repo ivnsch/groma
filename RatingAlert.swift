@@ -20,8 +20,6 @@ class RatingAlert: EmailHelperDelegate {
     var delegate: RatingAlertDelegate?
 
     private var controller: UIViewController?
-
-    private let appId = "Groma"
     
     func checkShow(parentController: UIViewController) {
         
@@ -67,7 +65,7 @@ class RatingAlert: EmailHelperDelegate {
         let alert = UIAlertController(title: "Rate Groma", message: "If you love Groma, please take a moment to rate it", preferredStyle: .Alert)
         
         alert.addAction(UIAlertAction(title: "Rate", style: .Default) {[weak self ]alertAction in guard let weakSelf = self else {return}
-            if let url = NSURL(string: "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=\(weakSelf.appId)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1)") {
+            if let url = NSURL(string: Constants.appStoreLink) {
                 
                 if UIApplication.sharedApplication().openURL(url) {
                     QL1("Rating dialog: opened app store")

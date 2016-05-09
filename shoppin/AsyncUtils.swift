@@ -11,8 +11,14 @@ import Foundation
 func background<T>(background: Void -> T, onFinish: T -> Void) {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
         let t: T = background()
-        dispatch_async(dispatch_get_main_queue(), {
+        mainQueue {
             onFinish(t)
-        })
+        }
+    })
+}
+
+func mainQueue(f: VoidFunction) {
+    dispatch_async(dispatch_get_main_queue(), {
+        f()
     })
 }

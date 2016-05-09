@@ -36,6 +36,8 @@ enum PreferencesManagerKey: String {
     case overwroteLocalDataAfterNewDeviceLogin = "overwroteLocalDataAfterNewDeviceLogin"
     
     case userDisabledWebsocket = "userDisabledWebsocket"
+    
+    case lastShouldUpdateAppDialogDate = "lastShouldUpdateAppDialogDate" // the last date where should update app dialog was shown
 }
 
 class PreferencesManager {

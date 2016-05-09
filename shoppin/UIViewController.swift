@@ -82,7 +82,7 @@ extension UIViewController {
                 onSuccess(successResult)
             } else {
                 QL4("Invalid state: handler expects result with payload, result is success but has no payload. Result: \(providerResult)")
-                showProviderErrorAlert(ProviderResult<Any>(status: ProviderStatusCode.Unknown))
+                handleResultHelper(.Unknown, error: nil, errorObj: nil)
             }
             
         } else {
@@ -129,13 +129,12 @@ extension UIViewController {
             let size = errorObj.map{$0}
             let sizeStr = size.map{"(\($0))"} ?? ""
             AlertPopup.show(title: title, message: "size_limit_exceeded \(sizeStr)", controller: self)
+        
+        case .MustUpdateApp:
+            QL1("Controller received: \(status), do nothing.") // popup in this case is shown by AppDelegate
             
         default: ProviderPopupManager.instance.showStatusPopup(status, controller: self)
         }
-    }
-    
-    private func showProviderErrorAlert<T>(providerResult: ProviderResult<T>) {
-        ProviderPopupManager.instance.showStatusPopup(providerResult.status, controller: self)
     }
     
     private func showRemoteValidationErrorAlert(status: ProviderStatusCode, error: RemoteInvalidParametersResult) {

@@ -28,6 +28,8 @@ enum ProviderStatusCode: Int {
     case SocialAlreadyExists = 107
     case NoConnection = 108 // Used when we detect in advance that there's no connectivity and don't proceed making the request. When this is not used, the execution of a request without a connection results in .ServerNotReachable
     case SyncFailed = 109 // Generic status code for a failed sync - for whatever reason - note this is client generated, the server status code that leads to this can be anything.
+    case MustUpdateApp = 111
+    
     
     // DB related
     case DatabaseUnknown = 1000
@@ -107,6 +109,7 @@ struct DefaultRemoteResultMapper {
         case .ClientParamsParsingError: return .Unknown
         case .NoConnection: return .NoConnection
         case .NotLoggedIn: return .NotAuthenticated // for provider layer it doesn't matter if not authenticated status was determined in client or server, so we map both to .NotAuthenticated
+        case .MustUpdateApp: return .MustUpdateApp
         }
     }
 }

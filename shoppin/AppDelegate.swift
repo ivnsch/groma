@@ -123,6 +123,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketList(_:)), name: WSNotificationName.List.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketInventory(_:)), name: WSNotificationName.Inventory.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onWebsocketSharedSync(_:)), name: WSNotificationName.SyncShared.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onShowShouldUpdateAppDialog(_:)), name: Notification.ShowShouldUpdateAppDialog.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AppDelegate.onShowMustUpdateAppDialog(_:)), name: Notification.ShowMustUpdateAppDialog.rawValue, object: nil)
     }
     
     private func initHockey() {
@@ -544,5 +546,80 @@ class AppDelegate: UIResponder, UIApplicationDelegate, RatingAlertDelegate {
             
         }
     }
-}
+    
+    func onShowShouldUpdateAppDialog(note: NSNotification) {
+        guard window?.rootViewController?.presentedViewController == nil else {QL3("Root controller already showing a popup, return"); return}
 
+        if let controller = window?.rootViewController {
+            
+            func appInstallDate() -> NSDate {
+                return PreferencesManager.loadPreference(PreferencesManagerKey.firstLaunchDate) ?? {
+                    QL4("Invalid state: There's no app first launch date stored.")
+                    return NSDate() // just to return something - note that with this we will never show the popup as the time offset will be ~0
+                }()
+            }
+            
+            // last time the we shown the dialog to the user, if it was never shown we return distant past such that it will be shown
+            let referenceDate = PreferencesManager.loadPreference(PreferencesManagerKey.lastShouldUpdateAppDialogDate).map {(date: NSDate) in
+                return date
+            } ?? NSDate.distantPast()
+            
+            let now = NSDate()
+
+            let showAfterDays = Constants.dayCountShouldUpdatAppDialog
+            let passedDays = referenceDate.daysUntil(now)
+            QL1("\(passedDays) days passed since last time we showed should update dialog. Showing if >= \(showAfterDays)")
+            if passedDays >= showAfterDays {
+                
+                // Save current date, to be used as reference date next time. Note that this doesn't have to be cleared - 
+                PreferencesManager.savePreference(PreferencesManagerKey.lastShouldUpdateAppDialogDate, value: now)
+                
+                ConfirmationPopup.show(title: "Update", message: "You haven't updated the app in a while.\nTo continue accessing your user account, it's recommended to update.\nThe server will stop supporting this version soon, and you will not be able to log in with it anymore.", okTitle: "Update", cancelTitle: "Not now", controller: controller, onOk: {
+                    
+                    if let url = NSURL(string: Constants.appStoreLink) {
+                        
+                        if UIApplication.sharedApplication().openURL(url) {
+                            QL1("Update dialog: opened app store")
+                            
+                        } else {
+                            QL1("Rating dialog: Couldn't open app store url")
+                            AlertPopup.show(message: "Couldn't open app store url.", controller: controller)
+                        }
+                    } else {
+                        QL4("Url is nil, can't go to app store")
+                    }
+                    
+                }, onCancel: nil)
+            }
+        }
+    }
+    
+    func onShowMustUpdateAppDialog(note: NSNotification) {
+        guard window?.rootViewController?.presentedViewController == nil else {QL3("Root controller already showing a popup, return"); return}
+        
+        if let controller = window?.rootViewController {
+            
+            Providers.userProvider.logout(controller.successHandler{
+                QL2("Logout success")
+                Notification.send(Notification.LogoutUI) // in case we are currently in user screens
+            })
+            
+            ConfirmationPopup.show(title: "Required update", message: "Please update the app in order to continue using your user account.", okTitle: "Update", cancelTitle: "Log out", controller: controller, onOk: {
+                
+                if let url = NSURL(string: Constants.appStoreLink) {
+                    
+                    if UIApplication.sharedApplication().openURL(url) {
+                        QL1("Update dialog: opened app store")
+                        
+                    } else {
+                        QL1("Rating dialog: Couldn't open app store url")
+                        AlertPopup.show(message: "Couldn't open app store url.", controller: controller)
+                    }
+                } else {
+                    QL4("Url is nil, can't go to app store")
+                }
+                
+                }, onCancel: nil)
+        }
+    }
+}

@@ -47,6 +47,8 @@ enum RemoteStatusCode: Int {
     case ClientParamsParsingError = 10008 // This should really not happen, but the serialization for some requests needs do catch so for overall consistency in catch we return this error
     case NoConnection = 10009 // Used when we detect in advance that there's no connectivity and don't proceed making the request. When this is not used, the execution of a request without a connection results in .ServerNotReachable
     case NotLoggedIn = 10010 // Returned when there's no login token stored. For caller normally same meaning as .NotAuthenticated - difference is that .NotAuthenticated is determined by the server
+    
+    case MustUpdateApp = 10011 // Must update app, service response except status and app version info was not processed.
 }
 
 extension RemoteStatusCode: CustomStringConvertible {
@@ -385,6 +387,40 @@ extension Alamofire.Request {
 
                         let statusInt = dataObj.valueForKeyPath("status") as! Int
                         if let status = RemoteStatusCode(rawValue: statusInt) {
+                            
+                            // App version check. Note that this doesn't affect processing the rest of the response, not even if the fields are missing. In the future we may prefer to trigger an .Unknown if the fields are missing and not continue processing response.
+                            if let minRequiredAppVersion = dataObj.valueForKeyPath("minr") as? Int, minAdvisedAppVersion = dataObj.valueForKeyPath("mina") as? Int {
+                                if let appVersion = AppInfo.CFBundleVersion {
+                                    QL1("Response app version, required: \(minRequiredAppVersion), min advised: \(minAdvisedAppVersion), app version: \(appVersion)")
+                                    
+                                    func isInvalidAppVersion() -> Bool {
+                                       return appVersion < minRequiredAppVersion
+                                    }
+
+                                    // App delegate shows version popups. The reason we don't do this with default controller error handling is mainly .ShowShouldUpdateAppDialog - here we want to process the response normally. The popup is only a reminder, not related with success/error. So we would have to implement centralized functionality to process additional status besides success/errors in order to show this popup.
+                                    // For .ShowMustUpdateAppDialog it's not really necessary to use the AppDelegate - this is practically an error and we could adjust the controller error handler to show the confirmation alert in this case, but we do it in AppDelegate just to be consistent with .ShowShouldUpdateAppDialog
+                                    mainQueue {
+                                        if isInvalidAppVersion() {
+                                            Notification.send(Notification.ShowMustUpdateAppDialog)
+                                        } else if appVersion < minAdvisedAppVersion {
+                                            Notification.send(Notification.ShowShouldUpdateAppDialog)
+                                        }
+                                    }
+                                    
+                                    // On invalid version, we return error status. The controller doesn't show error popup for this status (alrady handled by AppDelegate).
+                                    if isInvalidAppVersion() {
+                                        // Log out - in case user taps on "Update" but comes back
+                                        Providers.userProvider.removeLoginToken()
+                                        return Result.Success(RemoteResult<T>(status: .MustUpdateApp))
+                                    }
+                                    
+                                } else {
+                                    QL4("Can't check min version: App has no bundle version")
+                                }
+                            } else {
+                                QL4("Server didn't send app minr and/or mina app version, data: \(dataObj)")
+                            }
+
                             if status == .Success || status == .InvalidParameters || status == .SizeLimit {
                                 
                                 if status == .Success {
