@@ -43,32 +43,12 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
-            skipped = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EB1DDEBC1A3334EC00D778DE"
-               BuildableName = "shoppinTests.xctest"
-               BlueprintName = "shoppinTests"
-               ReferencedContainer = "container:shoppin.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EB75535C1B78C10400789A40"
-               BuildableName = "teests.xctest"
-               BlueprintName = "teests"
-               ReferencedContainer = "container:shoppin.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EB75536A1B78C22700789A40"
-               BuildableName = "shoppin_tests.xctest"
-               BlueprintName = "shoppin_tests"
+               BlueprintIdentifier = "EB33D5691CE010400097AD58"
+               BuildableName = "shoppinUITests.xctest"
+               BlueprintName = "shoppinUITests"
                ReferencedContainer = "container:shoppin.xcodeproj">
             </BuildableReference>
          </TestableReference>
