@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol OkNextButtonsViewDelegate {
+protocol OkNextButtonsViewDelegate: class {
     func onOkEditModusTap()
     func onOkAddModusTap()
     func onOkNextAddModusTap()
@@ -22,7 +22,7 @@ enum AddModus {
 
 class OkNextButtonsView: UIView {
 
-    var delegate: OkNextButtonsViewDelegate?
+    weak var delegate: OkNextButtonsViewDelegate?
     
     @IBOutlet weak var addModusView: UIView!
     @IBOutlet weak var editModusView: UIView!

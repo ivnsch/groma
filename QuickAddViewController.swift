@@ -11,7 +11,7 @@ import SwiftValidator
 import QorumLogs
 
 
-protocol QuickAddDelegate {
+protocol QuickAddDelegate: class {
     func onAddProduct(product: Product)
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?)
     func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) // editingItem == nil -> add
@@ -41,7 +41,7 @@ private enum AddProductOrGroupContent {
 // The container for quick add, manages top bar buttons and a navigation controller for content (quick add list, add products, add groups)
 class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISearchBarDelegate, AddEditListItemViewControllerDelegate, QuickAddPageControllerDelegate, UITextFieldDelegate {
     
-    var delegate: QuickAddDelegate?
+    weak var delegate: QuickAddDelegate?
     
     var itemType: QuickAddItemType = .Product // for now product/group mutually exclusive (no mixed tableview)
     
@@ -50,7 +50,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     @IBOutlet weak var searchBar: RoundTextField!
     @IBOutlet weak var searchBarHeightConstraint: NSLayoutConstraint!
     
-    private var navController: UINavigationController?
+    private weak var navController: UINavigationController?
     private var quickAddListItemViewController: QuickAddPageController? {
         return navController?.viewControllers.first as? QuickAddPageController
     }
@@ -75,8 +75,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     }
 
     deinit {
-        // TODO!!!! check memory, this is never being called though the controller should be allocated when closed. Also, on a short run with instruments noticed memory consumption keeps increasing when we do things in the app but never decreases.
-        print("Quick add deinit")
+        QL1("Deinit quick add")
     }
     
     var open: Bool = false
@@ -92,7 +91,7 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        searchBar.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        searchBar.addTarget(self, action: #selector(QuickAddViewController.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
 
         searchBarHeightConstraint.constant = DimensionsManager.searchBarHeight
     }
@@ -190,9 +189,9 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
             controller.delegate = self
             navController?.pushViewController(controller, animated: false)
 //            sortByButton.selected = false
-            controller.onViewDidLoad = {[weak self] in guard let weakSelf = self else {return}
-                controller.editingItem = weakSelf.editingItem
-                controller.modus = weakSelf.modus
+            controller.onViewDidLoad = {[weak self, weak controller] in guard let weakSelf = self else {return}
+                controller?.editingItem = weakSelf.editingItem
+                controller?.modus = weakSelf.modus
             }
             
             // show "Next" in the keyboard

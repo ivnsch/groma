@@ -10,7 +10,7 @@ import UIKit
 import QorumLogs
 
 
-protocol CartListItemsControllerDelegate {
+protocol CartListItemsControllerDelegate: class {
     func onCartSendItemsToStash(listItems: [ListItem])
 }
 
@@ -28,7 +28,7 @@ class CartListItemsController: ListItemsController, ExpandCollapseButtonDelegate
     
     @IBOutlet weak var expandCollapseButton: ExpandCollapseButton!
     
-    var delegate: CartListItemsControllerDelegate?
+    weak var delegate: CartListItemsControllerDelegate?
     
     override var status: ListItemStatus {
         return .Done

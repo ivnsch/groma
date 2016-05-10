@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol SimpleInputPopupControllerDelegate {
+protocol SimpleInputPopupControllerDelegate: class {
     func onSubmitInput(text: String)
     func onDismissSimpleInputPopupController(cancelled: Bool)
 }
@@ -18,7 +18,7 @@ class SimpleInputPopupController: UIViewController {
     @IBOutlet weak var textView: UITextView!
 //    @IBOutlet weak var bgView: UIView!
     
-    var delegate: SimpleInputPopupControllerDelegate?
+    weak var delegate: SimpleInputPopupControllerDelegate?
     
     var animatedBG = false
     

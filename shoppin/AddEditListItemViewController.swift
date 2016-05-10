@@ -10,7 +10,7 @@ import UIKit
 import SwiftValidator
 import QorumLogs
 
-protocol AddEditListItemViewControllerDelegate {
+protocol AddEditListItemViewControllerDelegate: class {
     
     // Returns nil if no errors, otherwise dictionary with errors. Important: Empty dictionary is invalid and the form will not be submitted!
     func runAdditionalSubmitValidations() -> [UITextField: ValidationError]?
@@ -148,10 +148,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     @IBOutlet weak var noteInput: LineTextField!
 
     
-    var delegate: AddEditListItemViewControllerDelegate?
+    weak var delegate: AddEditListItemViewControllerDelegate?
     
     private var showingColorPicker: FlatColorPickerController?
-    private var showingNoteInputPopup: SimpleInputPopupController?
+//    private var showingNoteInputPopup: SimpleInputPopupController?
 
     var editingItem: AddEditItem? {
         didSet {
@@ -571,6 +571,10 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
             })
         default: QL4("Not handled input")
         }
+    }
+    
+    deinit {
+        QL1("Deinit add edit listitem controller")
     }
     
 ///////////////////////////////////////////////////////////////////////////

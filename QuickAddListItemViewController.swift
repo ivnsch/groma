@@ -11,7 +11,7 @@ import QorumLogs
 
 // TODO rename this controller in only groups controller and remove the old groups controller. Also delegate methods not with "Add" but simply "Tap" - the implementation of this delegate decides what the tap means.
 
-protocol QuickAddListItemDelegate {
+protocol QuickAddListItemDelegate: class {
     func onAddProduct(product: Product)
     func onAddGroup(group: ListItemGroup)
     func onCloseQuickAddTap()
@@ -33,7 +33,7 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var emptyView: UIView!
     
-    var delegate: QuickAddListItemDelegate?
+    weak var delegate: QuickAddListItemDelegate?
     
     private var filteredQuickAddItems: [QuickAddItem] = [] {
         didSet {
@@ -335,5 +335,9 @@ class QuickAddListItemViewController: UIViewController, UICollectionViewDataSour
     
     @IBAction func onEmptyViewTap(sender: UIButton) {
         tabBarController?.selectedIndex = Constants.tabGroupsIndex
+    }
+    
+    deinit {
+        QL1("Deinit quick add item controller")
     }
 }

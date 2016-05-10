@@ -9,7 +9,7 @@
 import UIKit
 import ChameleonFramework
 
-protocol FlatColorPickerControllerDelegate {
+protocol FlatColorPickerControllerDelegate: class {
     func onColorPicked(color: UIColor)
     func onDismiss()
 }
@@ -44,7 +44,7 @@ class FlatColorPickerController: UIViewController, UICollectionViewDataSource, U
         UIColor.flatBlueColorDark()
     ]
     
-    var delegate: FlatColorPickerControllerDelegate?
+    weak var delegate: FlatColorPickerControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol HistoryItemGroupHeaderViewDelegate {
+protocol HistoryItemGroupHeaderViewDelegate: class {
     func onHeaderTap(header: HistoryItemGroupHeaderView, sectionIndex: Int, sectionModel: SectionModel<HistoryItemGroup>)
     func onDeleteGroupTap(sectionModel: SectionModel<HistoryItemGroup>, header: HistoryItemGroupHeaderView)
 }
@@ -31,7 +31,7 @@ class HistoryItemGroupHeaderView: UIView, CellUncovererDelegate {
     var sectionIndex: Int?
     var sectionModel: SectionModel<HistoryItemGroup>?
     
-    var delegate: HistoryItemGroupHeaderViewDelegate!
+    weak var delegate: HistoryItemGroupHeaderViewDelegate!
     
     var date: String {
         set {

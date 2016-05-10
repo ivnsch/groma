@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol ReorderSectionTableViewControllerDelegate {
+protocol ReorderSectionTableViewControllerDelegate: class {
     func onSectionsUpdated()
     func onSectionSelected(section: Section)
     func canRemoveSection(section: Section, can: Bool -> Void)
@@ -26,7 +26,7 @@ class ReorderSectionTableViewController: UIViewController, UITableViewDataSource
     
     var cellHeight: CGFloat = DimensionsManager.listItemsHeaderHeight
     
-    var delegate: ReorderSectionTableViewControllerDelegate?
+    weak var delegate: ReorderSectionTableViewControllerDelegate?
     
     var status: ListItemStatus?
     

@@ -33,7 +33,7 @@ class ExpandableTableViewModel: NSObject, Identifiable {
     }
 }
 
-protocol Foo { // TODO rename, put in other file
+protocol Foo: class { // TODO rename, put in other file
     func setExpanded(expanded: Bool)
 }
 
@@ -46,10 +46,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
     
     @IBOutlet weak var topBar: ListTopBarView!
 //    @IBOutlet weak var topBarConstraint: NSLayoutConstraint!
-    
-    private var titleLabel: UILabel?
-    
-    private weak var editButton: UIBarButtonItem!
     
     @IBOutlet weak var emptyView: UIView!
 
@@ -97,7 +93,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
 
         let refreshControl = PullToAddHelper.createPullToAdd(self)
         tableViewController.refreshControl = refreshControl
-        refreshControl.addTarget(self, action: "onPullRefresh:", forControlEvents: .ValueChanged)
+        refreshControl.addTarget(self, action: #selector(ExpandableItemsTableViewController.onPullRefresh(_:)), forControlEvents: .ValueChanged)
         
         originalNavBarFrame = topBar.frame
         
@@ -105,7 +101,7 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         
         initTopBar()
         
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: Selector("onEmptyViewTap:"))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(ExpandableItemsTableViewController.onEmptyViewTap(_:)))
         emptyView.addGestureRecognizer(tapRecognizer)
     }
 
@@ -142,7 +138,6 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         label.font = Fonts.regular
         label.textColor = UIColor.whiteColor()
         topBar.addSubview(label)
-        titleLabel = label
     }
     
     

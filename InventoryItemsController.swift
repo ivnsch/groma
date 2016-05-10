@@ -55,9 +55,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         }
     }
     
-    var expandDelegate: Foo?
-    
-    private var titleLabel: UILabel?
+    weak var expandDelegate: Foo?
 
     var onViewWillAppear: VoidFunction?
     var onViewDidAppear: VoidFunction?
@@ -88,6 +86,7 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     }
     
     deinit {
+        QL1("Deinit inventory items")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
@@ -117,7 +116,6 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
         label.font = Fonts.regular
         label.textColor = UIColor.whiteColor()
         topBar.addSubview(label)
-        titleLabel = label
     }
     
     private func initTopQuickAddControllerManager(tableView: UITableView) -> ExpandableTopViewController<QuickAddViewController> {

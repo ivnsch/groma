@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 class HelpItemSectionModel: SectionModel<HelpItem> {
     var boldRange: NSRange?
@@ -145,5 +146,9 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
             }
         }
+    }
+    
+    deinit {
+        QL1("Deinit help controller")
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsViewControllerDelegate {
 
@@ -20,10 +21,6 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
         }
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(UserTabItemViewController.onLogoutNotification(_:)), name: Notification.LogoutUI.rawValue, object: nil)
-    }
-    
-    deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     // MARK: - LoginDelegate
@@ -96,5 +93,10 @@ class UserTabItemViewController: UIViewController, LoginDelegate, UserDetailsVie
         if !(childViewControllers.first is LoginViewController) {
             showLoginController()
         }
+    }
+    
+    deinit {
+        QL1("Deinit user tab controller")
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 }

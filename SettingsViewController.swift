@@ -246,4 +246,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             break
         }
     }
+    
+    deinit {
+        QL1("Deinit settings controller")
+    }
 }

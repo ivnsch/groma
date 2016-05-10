@@ -12,7 +12,7 @@ enum ListItemsViewSectionStyle {
     case Normal, Gray
 }
 
-protocol ItemActionsDelegate {
+protocol ItemActionsDelegate: class {
     func startItemSwipe(tableViewListItem: TableViewListItem)
     func endItemSwipe(tableViewListItem: TableViewListItem)
     func undoSwipe(tableViewListItem: TableViewListItem)
@@ -42,7 +42,7 @@ class ListItemsViewSection: NSObject, ListItemsSectionHeaderViewDelegate, ListIt
     
     var style: ListItemsTableViewControllerStyle = .Normal
 
-    var delegate: ItemActionsDelegate!
+    weak var delegate: ItemActionsDelegate?
     
     private let headerFont = Fonts.regular
 

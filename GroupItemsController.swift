@@ -60,14 +60,12 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         }
     }
     
-    var expandDelegate: Foo?
-    
-    private var titleLabel: UILabel?
+    weak var expandDelegate: Foo?
     
     var onViewWillAppear: VoidFunction?
     var onViewDidAppear: VoidFunction?
     
-    private var productsWithQuantityController: ProductsWithQuantityViewController!
+    private weak var productsWithQuantityController: ProductsWithQuantityViewController!
     
     private var updatingGroupItem: GroupItem?
     
@@ -92,6 +90,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     deinit {
+        QL1("Deinit group items controller")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
@@ -122,7 +121,6 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         label.font = Fonts.regular
         label.textColor = UIColor.whiteColor()
         topBar.addSubview(label)
-        titleLabel = label
     }
     
     private func initTopQuickAddControllerManager(tableView: UITableView) -> ExpandableTopViewController<QuickAddViewController> {

@@ -112,6 +112,7 @@ class ManageProductsViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     deinit {
+        QL1("Deinit manage products controller")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     

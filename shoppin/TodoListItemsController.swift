@@ -20,7 +20,7 @@ class TodoListItemsController: ListItemsController, CartListItemsControllerDeleg
     @IBOutlet weak var emptyListViewLabel1: UILabel!
     @IBOutlet weak var emptyListViewLabel2: UILabel!
     
-    private var todoListItemsEditBottomView: TodoListItemsEditBottomView?
+    private weak var todoListItemsEditBottomView: TodoListItemsEditBottomView?
     
     override var status: ListItemStatus {
         return .Todo

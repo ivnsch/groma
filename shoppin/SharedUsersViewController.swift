@@ -9,7 +9,7 @@
 import UIKit
 import SwiftValidator
 
-protocol SharedUsersViewControllerDelegate {
+protocol SharedUsersViewControllerDelegate: class {
     // Note: this is only a table view update, no providers
     func onSharedUsersUpdated(users: [SharedUser])
 }
@@ -21,7 +21,7 @@ class SharedUsersViewController: UIViewController {
     
     private var userInputsValidator: Validator?
 
-    var delegate: SharedUsersViewControllerDelegate?
+    weak var delegate: SharedUsersViewControllerDelegate?
 
     var sharedUsers: [SharedUser] = [] {
         didSet {

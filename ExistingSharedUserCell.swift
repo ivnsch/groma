@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol ExistingSharedUserCellDelegate {
+protocol ExistingSharedUserCellDelegate: class {
     func onDeleteSharedUser(sharedUser: SharedUser, cell: ExistingSharedUserCell)
     func onPullSharedUser(sharedUser: SharedUser, cell: ExistingSharedUserCell)
 }
@@ -18,7 +18,7 @@ class ExistingSharedUserCell: UITableViewCell {
 
     @IBOutlet weak var emailLabel: UILabel!
     
-    var delegate: ExistingSharedUserCellDelegate?
+    weak var delegate: ExistingSharedUserCellDelegate?
     
     var sharedUser: SharedUser? {
         didSet {

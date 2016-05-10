@@ -9,7 +9,7 @@
 import UIKit
 import MessageUI
 
-protocol RatingProvideFeedbackControllerDelegate {
+protocol RatingProvideFeedbackControllerDelegate: class {
     func onEmailSent()
 }
 
@@ -17,7 +17,7 @@ class RatingProvideFeedbackController: UIViewController, EmailHelperDelegate {
 
     private var emailHelper: EmailHelper?
     
-    var delegate: RatingProvideFeedbackControllerDelegate?
+    weak var delegate: RatingProvideFeedbackControllerDelegate?
     
     @IBAction func onProvideFeedbackTap(sender: UIButton) {
         PreferencesManager.savePreference(PreferencesManagerKey.lastAppRatingDialogDate, value: NSDate())

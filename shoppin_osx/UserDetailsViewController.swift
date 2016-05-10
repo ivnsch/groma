@@ -8,7 +8,7 @@
 
 import Cocoa
 
-protocol UserDetailsViewControllerDelegate {
+protocol UserDetailsViewControllerDelegate: class {
     func onLogoutSuccess()
     func onLogoutError()
     func onRemoveAccount()
@@ -19,7 +19,7 @@ class UserDetailsViewController: NSViewController {
     
     let userProvider = ProviderFactory().userProvider
     
-    var delegate: UserDetailsViewControllerDelegate?
+    weak var delegate: UserDetailsViewControllerDelegate?
     
     @IBAction func onLogoutTap(sender: NSButton) {
         

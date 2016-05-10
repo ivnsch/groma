@@ -8,7 +8,7 @@
 
 import Cocoa
 
-protocol ListCellDelegate {
+protocol ListCellDelegate: class {
     func removeListTapped(cell: ListCell)
 }
 
@@ -24,7 +24,7 @@ class ListCell: NSTableCellView {
     
     @IBOutlet weak var nameLabel: NSTextField!
     
-    var delegate: ListCellDelegate?
+    weak var delegate: ListCellDelegate?
 
     private func fill(list: List) {
         self.nameLabel.stringValue = list.name

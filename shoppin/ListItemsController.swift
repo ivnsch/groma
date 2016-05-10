@@ -20,24 +20,13 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     private let defaultSectionIdentifier = "default" // dummy section for items where user didn't specify a section TODO repeated with tableview controller
     
-    // TODO put next vars in a struct
-    //    private var updatingListItem: ListItem?
-    private var updatingSelectedCell: UITableViewCell?
     
-    var listItemsTableViewController: ListItemsTableViewController!
-    
-    private var currentTopController: UIViewController?
-    
-//    @IBOutlet weak var listNameView: UILabel!
+    weak var listItemsTableViewController: ListItemsTableViewController!
     
     @IBOutlet weak var topBar: ListTopBarView!
     @IBOutlet weak var topBarHeightConstraint: NSLayoutConstraint!
     
-    private let transition = BlurBubbleTransition()
-    
-    var titleLabel: UILabel?
-    
-    var expandDelegate: Foo?
+    weak var expandDelegate: Foo?
     
     var currentList: List? {
         didSet {
@@ -108,6 +97,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     }
     
     deinit {
+        QL1("Deinit list items controller")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
@@ -140,7 +130,6 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
         label.font = Fonts.regular
         label.textColor = UIColor.whiteColor()
         topBar.addSubview(label)
-        titleLabel = label
     }
     
     func onExpand(expanding: Bool) {
@@ -380,8 +369,6 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) {
         if self.editing { // open quick add in edit mode
-            updatingSelectedCell = listItemsTableViewController.tableView.cellForRowAtIndexPath(indexPath)
-            
             topQuickAddControllerManager?.expand(true)
             topBar.setRightButtonModels(rightButtonsOpeningQuickAdd())
             
@@ -713,7 +700,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     // MARK: - Reorder sections
     
-    private var sectionsTableViewController: ReorderSectionTableViewController?
+    private weak var sectionsTableViewController: ReorderSectionTableViewController?
     private var lockToggleSectionsTableView: Bool = false // prevent condition in which user presses toggle too quickly many times and sectionsTableViewController doesn't go away
     
     // Toggles between expanded and collapsed section mode. For this a second tableview with only sections is added or removed from foreground. Animates floating button.

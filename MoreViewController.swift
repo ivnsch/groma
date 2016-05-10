@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 enum MoreItemType {
     case History, ManageProduct, User, Settings, Help, Share, Feedback, About
@@ -133,5 +134,9 @@ class MoreViewController: UITableViewController {
             self?.view.defaultProgressVisible(false)
             self?.presentViewController(controller, animated: true, completion: nil)
         }
+    }
+    
+    deinit {
+        QL1("Deinit more controller")
     }
 }

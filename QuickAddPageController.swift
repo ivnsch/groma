@@ -10,7 +10,7 @@ import UIKit
 import QorumLogs
 import SwipeView
 
-protocol QuickAddPageControllerDelegate {
+protocol QuickAddPageControllerDelegate: class {
 //    func onPagerScroll(xOffset: CGFloat)
     func onPageChanged(newIndex: Int, pageType: QuickAddItemType)
 }
@@ -21,8 +21,8 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     @IBOutlet weak var slidingTabsView: SlidingTabsView!
     @IBOutlet weak var swipeView: SwipeView!
     
-    var delegate: QuickAddPageControllerDelegate?
-    var quickAddListItemDelegate: QuickAddListItemDelegate?
+    weak var delegate: QuickAddPageControllerDelegate?
+    weak var quickAddListItemDelegate: QuickAddListItemDelegate?
     
     var itemTypeForFirstPage: QuickAddItemType = .Product // TODO improve this, no time now
     
@@ -150,5 +150,9 @@ class QuickAddPageController: UIViewController, SwipeViewDataSource, SwipeViewDe
     
     func onPagerScroll(xOffset: CGFloat) {
         slidingTabsView.moveLine(xOffset)
+    }
+    
+    deinit {
+        QL1("Deinit quick add page controller")
     }
 }

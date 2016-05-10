@@ -12,7 +12,7 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import QorumLogs
 
-protocol LoginDelegate {
+protocol LoginDelegate: class {
     func onLoginSuccess()
     
     // LoginDelegate has register link, so the register event is forwarded to the container
@@ -20,7 +20,7 @@ protocol LoginDelegate {
 }
 
 // Things that make sense only for the re-login modal
-protocol ExpiredLoginDelegate {
+protocol ExpiredLoginDelegate: class {
     func onUseAppOfflineTap()
 }
 
@@ -44,8 +44,8 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     @IBOutlet weak var useAppOfflineButton: UIButton!
     @IBOutlet weak var useAppOfflineLabel: UILabel!
     
-    var delegate: LoginDelegate?
-    var expiredLoginDelegate: ExpiredLoginDelegate?
+    weak var delegate: LoginDelegate?
+    weak var expiredLoginDelegate: ExpiredLoginDelegate?
     
     private var validator: Validator?
 
@@ -329,5 +329,9 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     
     func onEyeChange(open: Bool) {
         passwordField.secureTextEntry = open
+    }
+    
+    deinit {
+        QL1("Deinit login controller")
     }
 }

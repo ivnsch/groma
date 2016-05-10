@@ -9,7 +9,7 @@
 import UIKit
 import SwiftValidator
 
-protocol EditBrandControllerDelegate {
+protocol EditBrandControllerDelegate: class {
     func onBrandUpdated(brand: AddEditBrandControllerEditingData)
 }
 
@@ -27,7 +27,7 @@ class EditBrandController: UIViewController {
         }
     }
     
-    var delegate: EditBrandControllerDelegate?
+    weak var delegate: EditBrandControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()

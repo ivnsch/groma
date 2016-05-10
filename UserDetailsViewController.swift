@@ -11,14 +11,14 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import QorumLogs
 
-protocol UserDetailsViewControllerDelegate {
+protocol UserDetailsViewControllerDelegate: class {
     func onLogoutSuccess()
     func onLogoutError() // TODO do we really need to notify the delegate about error?
 }
 
 class UserDetailsViewController: UIViewController {
 
-    var delegate: UserDetailsViewControllerDelegate?
+    weak var delegate: UserDetailsViewControllerDelegate?
 
     @IBOutlet weak var userIdLabel: UILabel!
     @IBOutlet weak var logoutButton: UIButton!

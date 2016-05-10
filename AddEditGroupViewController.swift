@@ -12,7 +12,7 @@ import ChameleonFramework
 import QorumLogs
 
 //change
-protocol AddEditGroupControllerDelegate {
+protocol AddEditGroupControllerDelegate: class {
     func onGroupAdded(inventory: ListItemGroup)
     func onGroupUpdated(inventory: ListItemGroup)
 }
@@ -27,7 +27,7 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
     
     private var listInputsValidator: Validator?
     
-    var delegate: AddEditGroupControllerDelegate?
+    weak var delegate: AddEditGroupControllerDelegate?
     
     var open: Bool = false
     
@@ -261,5 +261,9 @@ class AddEditGroupViewController: UIViewController, FlatColorPickerControllerDel
                 }
             )
         }
+    }
+    
+    deinit {
+        QL1("Deinit add edit groups controller")
     }
 }

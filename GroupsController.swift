@@ -59,6 +59,7 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
     }
     
     deinit {
+        QL1("Deinit groups controller")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
@@ -129,18 +130,25 @@ class GroupsController: ExpandableItemsTableViewController, AddEditGroupControll
         listItemsController.expandDelegate = self
         listItemsController.view.clipsToBounds = true
         
-        listItemsController.onViewWillAppear = { // FIXME crash here once when tapped on "edit"
+        listItemsController.onViewWillAppear = {[weak listItemsController, weak cell] in guard let weakCell = cell else {return} // FIXME crash here once when tapped on "edit"
             // Note: order of lines important here, group has to be set first for topbar dot to be positioned correctly right of the title
-            listItemsController.group = (model as! ExpandableTableViewGroupModel).group //change
-            listItemsController.setThemeColor(cell.backgroundColor!)
-            listItemsController.onExpand(true)
+            listItemsController?.group = (model as! ExpandableTableViewGroupModel).group //change
+            listItemsController?.setThemeColor(weakCell.backgroundColor!)
+            listItemsController?.onExpand(true)
         }
         
-        listItemsController.onViewDidAppear = {
-            listItemsController.onExpand(true)
+        listItemsController.onViewDidAppear = {[weak listItemsController] in
+            listItemsController?.onExpand(true)
         }
         
         return listItemsController
+    }
+    
+    override func animationsComplete(wasExpanding: Bool, frontView: UIView) {
+        super.animationsComplete(wasExpanding, frontView: frontView)
+        if !wasExpanding {
+            removeChildViewControllers()
+        }
     }
     
     override func onAddTap(rotateTopBarButton: Bool = true) {

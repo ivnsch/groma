@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol ProductWithQuantityTableViewCellDelegate {
+protocol ProductWithQuantityTableViewCellDelegate: class {
     func onIncrementItemTap(cell: ProductWithQuantityTableViewCell)
     func onDecrementItemTap(cell: ProductWithQuantityTableViewCell)
     func onPanQuantityUpdate(cell: ProductWithQuantityTableViewCell, newQuantity: Int)
@@ -32,7 +32,7 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     
     var model: ProductWithQuantity?
     
-    var delegate: ProductWithQuantityTableViewCellDelegate?
+    weak var delegate: ProductWithQuantityTableViewCellDelegate?
     var row: Int?
 
     var shownQuantity: Int = 0 {

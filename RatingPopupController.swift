@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol RatingPopupControllerDelegate {
+protocol RatingPopupControllerDelegate: class {
     func dismiss()
 }
 
@@ -17,7 +17,7 @@ class RatingPopupController: UIViewController, RatingProvideFeedbackControllerDe
     
     private let appId = "Groma"
     
-    var delegate: RatingPopupControllerDelegate?
+    weak var delegate: RatingPopupControllerDelegate?
 
     @IBAction func onGoodTap(sender: UIButton) {
         if let url = NSURL(string : "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=\(appId)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1)") {

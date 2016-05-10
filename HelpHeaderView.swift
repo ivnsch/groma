@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol HelpHeaderViewDelegate {
+protocol HelpHeaderViewDelegate: class {
     func onHeaderTap(header: HelpHeaderView, sectionIndex: Int, sectionModel: HelpItemSectionModel)
 }
 
@@ -18,7 +18,7 @@ class HelpHeaderView: UIView {
     
     var sectionIndex: Int?
 
-    var delegate: HelpHeaderViewDelegate!
+    weak var delegate: HelpHeaderViewDelegate!
 
     var sectionModel: HelpItemSectionModel? {
         didSet {

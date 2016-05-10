@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol ExpandCollapseButtonDelegate {
+protocol ExpandCollapseButtonDelegate: class {
     func onExpandButton(expanded: Bool)
 }
 
 class ExpandCollapseButton: PathButton {
 
-    var delegate: ExpandCollapseButtonDelegate?
+    weak var delegate: ExpandCollapseButtonDelegate?
     
     var expanded: Bool {
         set {

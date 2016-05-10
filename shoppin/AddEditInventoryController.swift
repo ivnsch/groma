@@ -12,7 +12,7 @@ import ChameleonFramework
 import QorumLogs
 
 //change
-protocol AddEditInventoryControllerDelegate {
+protocol AddEditInventoryControllerDelegate: class {
     func onInventoryAdded(inventory: Inventory)
     func onInventoryUpdated(inventory: Inventory)
 }
@@ -26,7 +26,7 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
     
     private var listInputsValidator: Validator?
     
-    var delegate: AddEditInventoryControllerDelegate?
+    weak var delegate: AddEditInventoryControllerDelegate?
     
     var open: Bool = false
     
@@ -359,6 +359,10 @@ class AddEditInventoryController: UIViewController, FlatColorPickerControllerDel
         } else { // adding inventory - there can't be invited users yet
             handler([])
         }
+    }
+    
+    deinit {
+        QL1("Deinit add edit inventory controller")
     }
 }
 

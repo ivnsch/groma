@@ -8,8 +8,9 @@
 
 import UIKit
 import SwiftValidator
+import QorumLogs
 
-protocol ForgotPasswordDelegate {
+protocol ForgotPasswordDelegate: class {
     func onForgotPasswordSuccess()
 }
 
@@ -19,7 +20,7 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
     
     private var validator: Validator?
 
-    var delegate: ForgotPasswordDelegate?
+    weak var delegate: ForgotPasswordDelegate?
     
     var email: String?
     
@@ -93,5 +94,9 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate, UIGes
                 print("Error: validation was not implemented correctly")
             }
         }
+    }
+    
+    deinit {
+        QL1("Deinit forgot password controller")
     }
 }

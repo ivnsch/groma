@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol TodoListItemsEditBottomViewDelegate {
+protocol TodoListItemsEditBottomViewDelegate: class {
     func onExpandSections(expand: Bool)
 }
 
@@ -24,7 +24,7 @@ class TodoListItemsEditBottomView: UIView, ExpandCollapseButtonDelegate {
     
     @IBOutlet weak var pricesRightConstraint: NSLayoutConstraint!
 
-    var delegate: TodoListItemsEditBottomViewDelegate?
+    weak var delegate: TodoListItemsEditBottomViewDelegate?
     
     func setTotalPrice(totalPrice: Float) {
         if let totalPriceLabel = totalPriceLabel {

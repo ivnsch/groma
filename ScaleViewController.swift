@@ -23,7 +23,7 @@ struct ProductScaleData {
     }
 }
 
-protocol ScaleViewControllerDelegate {
+protocol ScaleViewControllerDelegate: class {
     func onScaleViewControllerValidationErrors(errors: [UITextField: ValidationError])
     func onScaleViewControllerSubmit(inputs: ProductScaleData)
     func onDismissScaleViewController(cancelled: Bool)    
@@ -53,7 +53,7 @@ class ScaleViewController: UIViewController, UIPickerViewDataSource, UIPickerVie
         (.Kilogram, "Kilogram")
     ]
     
-    var delegate: ScaleViewControllerDelegate?
+    weak var delegate: ScaleViewControllerDelegate?
     
     private var validator: Validator?
 

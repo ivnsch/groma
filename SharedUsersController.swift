@@ -10,7 +10,7 @@ import UIKit
 import SwiftValidator
 import QorumLogs
 
-protocol SharedUsersControllerDelegate {
+protocol SharedUsersControllerDelegate: class {
     func onPull(user: SharedUser)
     func onUsersUpdated(existingUsers: [SharedUser], invitedUsers: [SharedUser])
     func invitedUsers(handler: [SharedUser] -> Void)
@@ -38,7 +38,7 @@ class SharedUsersController: UIViewController, UITableViewDataSource, UITableVie
         return userModels.map{$0.user}
     }
     
-    var delegate: SharedUsersControllerDelegate?
+    weak var delegate: SharedUsersControllerDelegate?
     
     private var userModels: [UserCellModel] = [] {
         didSet {

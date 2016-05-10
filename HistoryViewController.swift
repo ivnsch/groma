@@ -10,8 +10,6 @@ import UIKit
 import QorumLogs
 
 class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, HistoryItemGroupHeaderViewDelegate {
-
-    private let historyProvider = ProviderFactory().historyProvider
     
     private let paginator = Paginator(pageSize: 20)
     private var loadingPage: Bool = false
@@ -62,6 +60,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     deinit {
+        QL1("Deinit history controller")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
@@ -161,7 +160,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                     if (!weakSelf.loadingPage) {
                         setLoading(true)
                         
-                        weakSelf.historyProvider.historyItemsGroups(weakSelf.paginator.currentPage, inventory: inventory, weakSelf.successHandler{historyItems in
+                        Providers.historyProvider.historyItemsGroups(weakSelf.paginator.currentPage, inventory: inventory, weakSelf.successHandler{historyItems in
                             for historyItem in historyItems {
                                 weakSelf.sectionModels.append(SectionModel(obj: historyItem))
                             }
@@ -196,7 +195,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             func delete() {
                 let historyItem = sectionModels[indexPath.section].obj.historyItems[indexPath.row]
-                historyProvider.removeHistoryItem(historyItem, successHandler({[weak self] result in
+                Providers.historyProvider.removeHistoryItem(historyItem, successHandler({[weak self] result in
                     self?.removeHistoryItemUI(indexPath)
                 }))
             }

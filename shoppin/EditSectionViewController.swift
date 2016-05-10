@@ -10,7 +10,7 @@ import UIKit
 import SwiftValidator
 import QorumLogs
 
-protocol EditSectionViewControllerDelegate {
+protocol EditSectionViewControllerDelegate: class {
     func onSectionUpdated(section: Section)
 }
 
@@ -40,7 +40,7 @@ class EditSectionViewController: UIViewController, FlatColorPickerControllerDele
     
     private var addButtonHelper: AddButtonHelper?
     
-    var delegate: EditSectionViewControllerDelegate?
+    weak var delegate: EditSectionViewControllerDelegate?
     
     init() {
         super.init(nibName: "EditSectionViewController", bundle: nil)

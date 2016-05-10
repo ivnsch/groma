@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol EyeViewDelegate {
+protocol EyeViewDelegate: class {
     func onEyeChange(open: Bool)
 }
 
@@ -18,7 +18,9 @@ class EyeView: UIView {
     private var openLabel: UILabel?
 
     private let dotDiameter: CGFloat = 10
-
+    
+    weak var delegate: EyeViewDelegate?
+    
     private var open: Bool = true {
         didSet {
             openLabel?.hidden = !open
@@ -59,6 +61,4 @@ class EyeView: UIView {
         open = !open
         delegate?.onEyeChange(open)
     }
-    
-    var delegate: EyeViewDelegate?
 }

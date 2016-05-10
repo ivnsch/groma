@@ -9,7 +9,7 @@
 import UIKit
 
 
-protocol PlanTableViewCellDelegate {
+protocol PlanTableViewCellDelegate: class {
     func onPlusTap(planItem: PlanItem, cell: PlanTableViewCell, row: Int)
     func onMinusTap(planItem: PlanItem, cell: PlanTableViewCell, row: Int)
 }
@@ -20,7 +20,7 @@ class PlanTableViewCell: UITableViewCell {
     @IBOutlet weak var quantityLabel: UILabel!
     @IBOutlet weak var quantityLeftLabel: UILabel!
     
-    var delegate: PlanTableViewCellDelegate?
+    weak var delegate: PlanTableViewCellDelegate?
     var row: Int?
     
     var planItem: PlanItem? {

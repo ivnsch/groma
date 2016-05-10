@@ -72,7 +72,7 @@ class FloatingViewModel {
 }
 
 
-protocol BottonPanelViewDelegate {
+protocol BottonPanelViewDelegate: class {
     func onSubmitAction(action: FLoatingButtonAction)
 }
 
@@ -131,7 +131,7 @@ class FloatingViews: UIView {
 //    }
     
     
-    var delegate: BottonPanelViewDelegate?
+    weak var delegate: BottonPanelViewDelegate?
     
     func setActions(actions: [FLoatingButtonAction]) {
         let attributedActions = actions.map{FLoatingButtonAttributedAction(action: $0)}

@@ -9,7 +9,7 @@
 //import UIKit
 //import SwiftValidator
 //
-//protocol AddEditPlanItemContentViewDelegate {
+//protocol AddEditPlanItemContentViewDelegate: class {
 //    func onValidationErrors(errors: [UITextField: ValidationError])
 //
 //    func onPlanItemAdded(planItem: PlanItem)
@@ -30,7 +30,7 @@
 //
 //    private var validator: Validator?
 //    
-//    var delegate: AddEditPlanItemContentViewDelegate?
+//    weak var delegate: AddEditPlanItemContentViewDelegate?
 //    
 //    var inventories: [Inventory] = []
 //    

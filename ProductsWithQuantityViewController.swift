@@ -10,7 +10,7 @@ import UIKit
 import CMPopTipView
 import QorumLogs
 
-protocol ProductsWithQuantityViewControllerDelegate {
+protocol ProductsWithQuantityViewControllerDelegate: class {
     func loadModels(page: NSRange, sortBy: InventorySortBy, onSuccess: [ProductWithQuantity] -> Void)
     func remove(model: ProductWithQuantity, onSuccess: VoidFunction, onError: ProviderResult<Any> -> Void)
     func increment(model: ProductWithQuantity, delta: Int, onSuccess: Int -> Void)
@@ -28,19 +28,17 @@ protocol ProductsWithQuantityViewControllerDelegate {
 /// Generic controller for sorted products with a quantity, which can be incremented and decremented
 class ProductsWithQuantityViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, ProductWithQuantityTableViewCellDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
 
-    private var tableViewController: UITableViewController! // initially there was only a tableview but pull to refresh control seems to work better with table view controller
+    private weak var tableViewController: UITableViewController! // initially there was only a tableview but pull to refresh control seems to work better with table view controller
     
     var tableView: UITableView {
         return tableViewController.tableView
     }
     
     private(set) var models: [ProductWithQuantity] = []
-    
-    @IBOutlet var tableViewFooter: LoadingFooter!
 
     var sortBy: InventorySortBy? = .Count
     @IBOutlet weak var sortByButton: UIButton!
-    private var sortByPopup: CMPopTipView?
+//    private var sortByPopup: CMPopTipView?
     private let sortByOptions: [(value: InventorySortBy, key: String)] = [
         (.Count, "Count"), (.Alphabetic, "Alphabetic")
     ]
@@ -50,7 +48,7 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     @IBOutlet weak var emptyViewLabel1: UILabel!
     @IBOutlet weak var emptyViewLabel2: UILabel!
     
-    var delegate: ProductsWithQuantityViewControllerDelegate?
+    weak var delegate: ProductsWithQuantityViewControllerDelegate?
     
     var onViewWillAppear: VoidFunction? // to be able to ensure sortBy is not set before UI is ready
 
@@ -98,7 +96,6 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             tableViewController = segue.destinationViewController as! UITableViewController
             tableViewController.tableView.dataSource = self
             tableViewController.tableView.delegate = self
-            tableViewFooter = tableViewController.view.viewWithTag(ViewTags.TableViewFooter) as! LoadingFooter
         }
     }
     
@@ -483,7 +480,8 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         
         func setLoading(loading: Bool) {
             self.loadingPage = loading
-            self.tableViewFooter.hidden = !loading
+            let tableViewFooter = tableViewController.view.viewWithTag(ViewTags.TableViewFooter) as? LoadingFooter
+            tableViewFooter?.hidden = !loading
         }
         
         if let sortBy = sortBy {
@@ -544,12 +542,12 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     }
     
     @IBAction func onSortByTap(sender: UIButton) {
-        if let popup = self.sortByPopup {
-            popup.dismissAnimated(true)
-        } else {
+//        if let popup = self.sortByPopup {
+//            popup.dismissAnimated(true)
+//        } else {
             let popup = MyTipPopup(customView: createPicker())
             popup.presentPointingAtView(sortByButton, inView: view, animated: true)
-        }
+//        }
     }
     
     private func createPicker() -> UIPickerView {

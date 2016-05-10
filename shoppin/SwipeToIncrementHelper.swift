@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol SwipeToIncrementHelperDelegate {
+protocol SwipeToIncrementHelperDelegate: class {
     func currentQuantity() -> Int
     func onQuantityUpdated(quantity: Int)
     func onFinishSwipe()
@@ -25,7 +25,7 @@ class SwipeToIncrementHelper: NSObject, UIGestureRecognizerDelegate {
     
     private var initQuantitySlider: Int = 0 // capture quantity when we start sliding
     
-    var delegate: SwipeToIncrementHelperDelegate?
+    weak var delegate: SwipeToIncrementHelperDelegate?
     
     var enabled: Bool = true
     

@@ -8,7 +8,7 @@
 
 import UIKit
 
-@objc protocol ExpandableTopViewControllerDelegate {
+@objc protocol ExpandableTopViewControllerDelegate: class {
     func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView)
     func onExpandableClose()
 }
@@ -31,7 +31,7 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
 
     private var blocked = false
     
-    var delegate: ExpandableTopViewControllerDelegate?
+    weak var delegate: ExpandableTopViewControllerDelegate?
     
     init(top: CGFloat, height: CGFloat, animateTableViewInset: Bool = true, openInset: CGFloat = 0, closeInset: CGFloat = 0, parentViewController: UIViewController, tableView: UITableView, controllerBuilder: Void -> T) {
         self.top = top
@@ -139,6 +139,8 @@ class ExpandableTopViewController<T: UIViewController>: NSObject {
                     if !expanded {
                         self?.controller?.removeFromParentViewControllerWithView()
                         self?.overlay?.removeFromSuperview()
+                        self?.controller = nil
+                        self?.overlay = nil
                     }
                     
                     self?.expanded = expanded

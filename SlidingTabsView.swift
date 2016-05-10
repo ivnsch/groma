@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol SlidingTabsViewDelegate {
+protocol SlidingTabsViewDelegate: class {
     func onSlidingViewButtonTap(index: Int, button: UIButton)
 }
 
@@ -27,7 +27,7 @@ class SlidingTabsView: UIView {
     
     private var line: UIView?
     
-    var delegate: SlidingTabsViewDelegate?
+    weak var delegate: SlidingTabsViewDelegate?
     
     var buttons: [UIButton] = []
     

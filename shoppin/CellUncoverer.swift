@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CellUncovererDelegate {
+protocol CellUncovererDelegate: class {
     func onOpen(open: Bool)
 }
 
@@ -26,7 +26,7 @@ class CellUncoverer: NSObject, UIGestureRecognizerDelegate {
     
     var stashViewWidth: CGFloat = 60
     
-    var delegate: CellUncovererDelegate?
+    weak var delegate: CellUncovererDelegate?
     
     init(parentView: UIView, button: UIView, leftLayoutConstraint: NSLayoutConstraint) {
         super.init()

@@ -9,7 +9,7 @@
 import UIKit
 import SwiftValidator
 
-protocol EditProductCategoryControllerDelegate {
+protocol EditProductCategoryControllerDelegate: class {
     func onCategoryUpdated(brand: AddEditCategoryControllerEditingData)
 }
 
@@ -31,7 +31,7 @@ class EditProductCategoryController: UIViewController, FlatColorPickerController
         }
     }
     
-    var delegate: EditProductCategoryControllerDelegate?
+    weak var delegate: EditProductCategoryControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()

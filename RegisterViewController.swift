@@ -12,7 +12,7 @@ import FBSDKCoreKit
 import FBSDKLoginKit
 import QorumLogs
 
-protocol RegisterDelegate {
+protocol RegisterDelegate: class {
     func onRegisterSuccess(email: String)
     
     // can be login or register
@@ -32,9 +32,7 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
 
     @IBOutlet weak var eyeView: EyeView!
     
-    let userProvider = ProviderFactory().userProvider
-    
-    var delegate: RegisterDelegate?
+    weak var delegate: RegisterDelegate?
 
     private var validator: Validator?
 
@@ -226,5 +224,9 @@ class RegisterViewController: UIViewController, GIDSignInUIDelegate, GIDSignInDe
     
     func onEyeChange(open: Bool) {
         passwordField.secureTextEntry = open
+    }
+    
+    deinit {
+        QL1("Deinit register controller")
     }
 }

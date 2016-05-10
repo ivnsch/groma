@@ -10,7 +10,7 @@ import UIKit
 import MessageUI
 import QorumLogs
 
-protocol EmailHelperDelegate {
+protocol EmailHelperDelegate: class {
     func onEmailSent()
 }
 
@@ -18,7 +18,7 @@ class EmailHelper: NSObject, MFMailComposeViewControllerDelegate {
     
     private let controller: UIViewController
     
-    var delegate: EmailHelperDelegate?
+    weak var delegate: EmailHelperDelegate?
     
     init(controller: UIViewController) {
         self.controller = controller

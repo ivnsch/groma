@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol OkCancelButtonsViewDelegate {
+protocol OkCancelButtonsViewDelegate: class {
     func onOkTap()
     func onCancelTap()
 }
@@ -18,7 +18,7 @@ class OkCancelButtonsView: UIView {
     @IBOutlet weak var okButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
 
-    var delegate: OkCancelButtonsViewDelegate?
+    weak var delegate: OkCancelButtonsViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -22,8 +22,6 @@ private enum StatsPresentation {
 class StatsViewController: UIViewController
 //, UIPickerViewDataSource, UIPickerViewDelegate
 {
-
-    private let statsProvider = ProviderFactory().statsProvider
     
     private typealias TimePeriodWithText = (timePeriod: TimePeriod, text: String)
     
@@ -83,6 +81,7 @@ class StatsViewController: UIViewController
     }
     
     deinit {
+        QL1("Deinit stats controller")
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 

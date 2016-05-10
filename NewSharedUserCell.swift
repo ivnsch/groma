@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol NewSharedUserCellDelegate {
+protocol NewSharedUserCellDelegate: class {
     func onAddSharedUser(sharedUser: SharedUser, cell: NewSharedUserCell)
 }
 
@@ -17,7 +17,7 @@ class NewSharedUserCell: UITableViewCell {
 
     @IBOutlet weak var emailLabel: UILabel!
 
-    var delegate: NewSharedUserCellDelegate?
+    weak var delegate: NewSharedUserCellDelegate?
     
     var sharedUser: SharedUser? {
         didSet {

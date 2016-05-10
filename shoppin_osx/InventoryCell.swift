@@ -8,7 +8,7 @@
 
 import Cocoa
 
-protocol InventoryCellDelegate {
+protocol InventoryCellDelegate: class {
     func removeInventoryTapped(cell: InventoryCell)
 }
 
@@ -24,7 +24,7 @@ class InventoryCell: NSTableCellView {
     
     @IBOutlet weak var nameLabel: NSTextField!
     
-    var delegate: InventoryCellDelegate?
+    weak var delegate: InventoryCellDelegate?
     
     private func fill(inventory: Inventory) {
         self.nameLabel.stringValue = inventory.name

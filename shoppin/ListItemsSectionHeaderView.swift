@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol ListItemsSectionHeaderViewDelegate {
+protocol ListItemsSectionHeaderViewDelegate: class {
     func onHeaderTap(header: ListItemsSectionHeaderView)
 }
 
@@ -24,7 +24,7 @@ class ListItemsSectionHeaderView: UIView {
         }
     }
     
-    var delegate: ListItemsSectionHeaderViewDelegate!
+    weak var delegate: ListItemsSectionHeaderViewDelegate!
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         delegate?.onHeaderTap(self)

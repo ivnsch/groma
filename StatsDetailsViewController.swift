@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, XYPieChartDataSource, XYPieChartDelegate {
 
@@ -152,6 +153,10 @@ class StatsDetailsViewController: UIViewController, UITableViewDataSource, UITab
         tableView.bottomInset = totalSpendViewHeightConstraint.constant + 10 // 10 just add some extra space
 
         onViewDidLoad?()
+    }
+    
+    deinit {
+        QL1("Deinit stats details controller")
     }
     
     private func initPieChart() {

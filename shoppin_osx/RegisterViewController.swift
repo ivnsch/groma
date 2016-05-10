@@ -8,7 +8,7 @@
 
 import Cocoa
 
-protocol RegisterDelegate {
+protocol RegisterDelegate: class {
     func onRegisterSuccess()
 }
 
@@ -19,7 +19,7 @@ class RegisterViewController: NSViewController {
     @IBOutlet weak var firstNameInputField: NSTextField!
     @IBOutlet weak var lastNameInputField: NSTextField!
     
-    var delegate: RegisterDelegate?
+    weak var delegate: RegisterDelegate?
     
     let userProvider = ProviderFactory().userProvider
     

@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol SharedUserCellDelegate {
+protocol SharedUserCellDelegate: class {
     func onPullProductsTap(user: SharedUser, cell: ListSharedUserCell)
 }
 
@@ -28,7 +28,7 @@ class ListSharedUserCell: UITableViewCell {
     
     @IBOutlet weak var pullProductsButton: UIButton!
     
-    var delegate: SharedUserCellDelegate?
+    weak var delegate: SharedUserCellDelegate?
     
     var cellModel: SharedUserCellModel? {
         didSet {

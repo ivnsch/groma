@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol ListTopBarViewDelegate {
+protocol ListTopBarViewDelegate: class {
     func onTopBarButtonTap(buttonId: ListTopBarViewButtonId)
     func onTopBarTitleTap()
     func onTopBarBackButtonTap()
@@ -61,7 +61,7 @@ class ListTopBarView: UIView {
         }
     }
     
-    var delegate: ListTopBarViewDelegate?
+    weak var delegate: ListTopBarViewDelegate?
     
     var fgColor: UIColor = UIColor.blackColor() {
         didSet {

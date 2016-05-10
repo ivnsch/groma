@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol ListItemsTableViewDelegate {
+protocol ListItemsTableViewDelegate: class {
     func onListItemClear(tableViewListItem: TableViewListItem, notifyRemote: Bool, onFinish: VoidFunction) // submit item marked as undo
     func onListItemSelected(tableViewListItem: TableViewListItem, indexPath: NSIndexPath) // mark as undo
     func onListItemReset(tableViewListItem: TableViewListItem) // revert undo
@@ -19,7 +19,7 @@ protocol ListItemsTableViewDelegate {
     func onPullToAdd()
 }
 
-protocol ListItemsEditTableViewDelegate {
+protocol ListItemsEditTableViewDelegate: class {
     func onListItemsOrderChangedSection(tableViewListItems: [TableViewListItem])
     func onListItemDeleted(tableViewListItem: TableViewListItem)
 }
@@ -35,9 +35,9 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     private var lastContentOffset: CGFloat = 0
     
-    var scrollViewDelegate: UIScrollViewDelegate?
-    var listItemsTableViewDelegate: ListItemsTableViewDelegate?
-    var listItemsEditTableViewDelegate: ListItemsEditTableViewDelegate?
+    weak var scrollViewDelegate: UIScrollViewDelegate?
+    weak var listItemsTableViewDelegate: ListItemsTableViewDelegate?
+    weak var listItemsEditTableViewDelegate: ListItemsEditTableViewDelegate?
 
     private(set) var sections: [Section] = [] // quick access. Sorting not necessarily same as in tableViewSections
     private(set) var items: [ListItem] = [] // quick access. Sorting not necessarily same as in tableViewSections

@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol SwitchSettingCellDelegate {
+protocol SwitchSettingCellDelegate: class {
     func onSwitch(setting: SwitchSetting, on: Bool)
 }
 
@@ -18,7 +18,7 @@ class SwitchSettingCell: UITableViewCell {
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var switch_: UISwitch!
     
-    var delegate: SwitchSettingCellDelegate?
+    weak var delegate: SwitchSettingCellDelegate?
     
     var setting: SwitchSetting? {
         didSet {

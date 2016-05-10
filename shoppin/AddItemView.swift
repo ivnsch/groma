@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol AddItemViewDelegate {
+protocol AddItemViewDelegate: class {
     func onAddTap()
 }
 
 @IBDesignable class AddItemView: UIVisualEffectView {
     
-    var delegate: AddItemViewDelegate!
+    weak var delegate: AddItemViewDelegate!
     var bottomConstraint: NSLayoutConstraint?
 
     @IBOutlet weak var addButton: UIButton!

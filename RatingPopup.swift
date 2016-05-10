@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol RatingPopupDelegate {
+protocol RatingPopupDelegate: class {
     func onDismissRatingPopup()
 }
 
@@ -20,7 +20,7 @@ class RatingPopup: RatingPopupControllerDelegate {
     
     private var controller: UIViewController?
     
-    var delegate: RatingPopupDelegate?
+    weak var delegate: RatingPopupDelegate?
     
     func checkShow(parentController: UIViewController) {
         

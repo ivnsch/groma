@@ -190,4 +190,9 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     func swipeViewItemSize(swipeView: SwipeView!) -> CGSize {
         return swipeView.frame.size
     }
+    
+    
+    deinit {
+        QL1("Deinit intro controller")
+    }
 }

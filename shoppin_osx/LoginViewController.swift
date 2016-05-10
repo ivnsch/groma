@@ -9,7 +9,7 @@
 import Cocoa
 import Accounts
 
-protocol LoginDelegate {
+protocol LoginDelegate: class {
     func onLoginSuccess()
     
     // LoginDelegate has register link, so the register event is forwarded to the container
@@ -21,7 +21,7 @@ class LoginViewController: NSViewController, RegisterDelegate, PhFacebookDelegat
     @IBOutlet weak var emailInputField: NSTextField!
     @IBOutlet weak var passwordInputField: NSTextField!
 
-    var delegate: LoginDelegate?
+    weak var delegate: LoginDelegate?
     
     private let userProvider = ProviderFactory().userProvider
 

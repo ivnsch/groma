@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol RatingAlertDelegate {
+protocol RatingAlertDelegate: class {
     func onDismissRatingAlert()
 }
 
@@ -17,7 +17,7 @@ class RatingAlert: EmailHelperDelegate {
 
     private let showLaterDays = 7
     
-    var delegate: RatingAlertDelegate?
+    weak var delegate: RatingAlertDelegate?
 
     private var controller: UIViewController?
     

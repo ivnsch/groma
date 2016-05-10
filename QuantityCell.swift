@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol QuantityCellDelegate {
+protocol QuantityCellDelegate: class {
     func onPlusTap(cell: QuantityCell, indexPath: NSIndexPath)
     func onMinusTap(cell: QuantityCell, indexPath: NSIndexPath)
 }
@@ -20,7 +20,7 @@ class QuantityCell: UITableViewCell {
     
     var indexPath: NSIndexPath?
     
-    var delegate: QuantityCellDelegate?
+    weak var delegate: QuantityCellDelegate?
     
     var name: String? {
         set {

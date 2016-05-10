@@ -9,7 +9,7 @@
 
 import UIKit
 
-protocol ExpandCellAnimatorDelegate {
+protocol ExpandCellAnimatorDelegate: class {
     func animationsForCellAnimator(isExpanding: Bool, frontView: UIView)
     func animationsComplete(wasExpanding: Bool, frontView: UIView)
     func prepareAnimations(willExpand: Bool, frontView: UIView)
@@ -25,7 +25,7 @@ class ExpandCellAnimator {
     var toView: UIView = UIView()
     var inView: UIView = UIView()
     
-    var delegate: ExpandCellAnimatorDelegate?
+    weak var delegate: ExpandCellAnimatorDelegate?
     
     func animateTransition(isExpand: Bool, topOffsetY: CGFloat, expandedViewFrame: CGRect? = nil) {
         

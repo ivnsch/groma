@@ -9,7 +9,7 @@
 import UIKit
 import QorumLogs
 
-protocol ListItemCellDelegate {
+protocol ListItemCellDelegate: class {
     func onItemSwiped(listItem: TableViewListItem)
     func onStartItemSwipe(listItem: TableViewListItem)
     func onButtonTwoTap(listItem: TableViewListItem)
@@ -44,7 +44,7 @@ class ListItemCell: SwipeableCell, SwipeToIncrementHelperDelegate {
     
     @IBOutlet weak var minusTrailingConstraint: NSLayoutConstraint!
     
-    private var delegate: ListItemCellDelegate?
+    private weak var delegate: ListItemCellDelegate?
     
     private var swipeToIncrementHelper: SwipeToIncrementHelper?
     

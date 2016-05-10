@@ -12,7 +12,7 @@ import ChameleonFramework
 import CMPopTipView
 import QorumLogs
 
-protocol AddEditListControllerDelegate {
+protocol AddEditListControllerDelegate: class {
     func onListAdded(list: List)
     func onListUpdated(list: List)
 }
@@ -67,7 +67,7 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
     
     private var invitedUsers: [SharedUser] = []
 
-    var delegate: AddEditListControllerDelegate?
+    weak var delegate: AddEditListControllerDelegate?
     
     var open: Bool = false
     
@@ -469,5 +469,9 @@ class AddEditListController: UIViewController, FlatColorPickerControllerDelegate
         } else { // adding a list - there can't be invited users yet
             handler([])
         }
+    }
+    
+    deinit {
+        QL1("Deinit add edit list controller")
     }
 }
