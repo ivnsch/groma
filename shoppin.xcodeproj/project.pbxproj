@@ -190,6 +190,7 @@
 		EB37ABBB1CA2021C00FE9D7A /* RoundTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB37ABBA1CA2021C00FE9D7A /* RoundTextField.swift */; };
 		EB3C9E2A1BEA47FF00886197 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3C9E291BEA47FF00886197 /* Theme.swift */; };
 		EB3E92EF1CD9347F0048DA0D /* EyeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3E92EE1CD9347E0048DA0D /* EyeView.swift */; };
+		EB3E92F11CDA3A620048DA0D /* LangHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3E92F01CDA3A610048DA0D /* LangHelper.swift */; };
 		EB3E92F41CDA72A90048DA0D /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3E92F31CDA72A90048DA0D /* UIFont.swift */; };
 		EB40A4691B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
 		EB40A46A1B5506FB000E9CAD /* DBSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB40A4681B5506FB000E9CAD /* DBSection.swift */; };
@@ -1251,6 +1252,7 @@
 		EB37ABBA1CA2021C00FE9D7A /* RoundTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundTextField.swift; sourceTree = "<group>"; };
 		EB3C9E291BEA47FF00886197 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		EB3E92EE1CD9347E0048DA0D /* EyeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EyeView.swift; sourceTree = "<group>"; };
+		EB3E92F01CDA3A610048DA0D /* LangHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LangHelper.swift; sourceTree = "<group>"; };
 		EB3E92F31CDA72A90048DA0D /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFont.swift; sourceTree = "<group>"; };
 		EB40A4681B5506FB000E9CAD /* DBSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBSection.swift; sourceTree = "<group>"; };
 		EB40A46D1B550804000E9CAD /* RealmProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmProvider.swift; sourceTree = "<group>"; };
@@ -2938,6 +2940,7 @@
 				EB80CE481C3DEB8A001DF159 /* InventoryPicker.swift */,
 				EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */,
 				EBED0D131C824FE200A1EEC4 /* EmailHelper.swift */,
+				EB3E92F01CDA3A610048DA0D /* LangHelper.swift */,
 				EB37ABB61CA099BA00FE9D7A /* ToggleButtonRotator.swift */,
 				EBB8FC7A1CD3EBC2008FD084 /* WebsocketHelper.swift */,
 				EB33D55D1CDFFC8D0097AD58 /* UIDevice.swift */,
@@ -3819,6 +3822,7 @@
 				EBF608B51C0F5D0E00EDB33E /* RemotePlanItemsProvider.swift in Sources */,
 				EB40A4721B5508B6000E9CAD /* DBResult.swift in Sources */,
 				EBB526891BF016910002A286 /* ButtonMore.swift in Sources */,
+				EB3E92F11CDA3A620048DA0D /* LangHelper.swift in Sources */,
 				EB40A47E1B5512D6000E9CAD /* DBSharedUser.swift in Sources */,
 				EBB9A7321B5EB0FC00E5487D /* DBInventory.swift in Sources */,
 				EB9208301C4EE9AF00332332 /* BrandProvider.swift in Sources */,
