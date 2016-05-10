@@ -12,7 +12,7 @@ import FBSDKLoginKit
 import QorumLogs
 
 enum SettingId {
-    case ClearHistory, OverwriteData, RemoveAccount, EnableRealTime, AddDummyHistoryItems
+    case ClearHistory, OverwriteData, RemoveAccount, EnableRealTime, AddDummyHistoryItems, ClearAllData
 }
 
 class Setting {
@@ -49,6 +49,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private let removeAccountSetting = SimpleSetting(id: .RemoveAccount, label: "Remove account")
     // developer
     private let addDummyHistoryItemsSetting = SimpleSetting(id: .AddDummyHistoryItems, label: "Add dummy history items")
+    private let clearAllDataSetting = SimpleSetting(id: .ClearAllData, label: "Clear all data")
     
     private var settings: [Setting] = []
     
@@ -73,12 +74,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 realTimeConnectionSetting,
                 overwriteDataSetting,
                 removeAccountSetting,
-                addDummyHistoryItemsSetting
+                addDummyHistoryItemsSetting,
+                clearAllDataSetting
             ]
         } else {
             settings = [
                 clearHistorySetting,
-                addDummyHistoryItemsSetting
+                addDummyHistoryItemsSetting,
+                clearAllDataSetting
             ]
         }
         
@@ -176,13 +179,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         })
     }
     
-    // TODO remove? there's no server service for this yet + this is mostly the same as either reinstalling app or deleting account
-    //    @IBAction func onClearAllDataTap(sender: UIButton) {
-    //        Providers.globalProvider.clearAllData(successHandler{
-    //            AlertPopup.show(message: "The data was cleared", controller: self)
-    //        })
-    //    }
-    
+    private func clearAllData() {
+        Providers.globalProvider.clearAllData(false, handler: successHandler{
+            AlertPopup.show(message: "The data was cleared", controller: self)
+        })
+    }
     
     // MARK: - UITableView
 
@@ -204,6 +205,8 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             removeAccount()
         case .AddDummyHistoryItems:
             addDummyHistoryItems()
+        case .ClearAllData:
+            clearAllData()
         }
     }
     

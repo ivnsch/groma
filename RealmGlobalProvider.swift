@@ -177,6 +177,12 @@ class RealmGlobalProvider: RealmProvider {
         }
     }
     
+    func clearAllDataSync() {
+        doInWriteTransactionSync() {[weak self] realm in
+            self?.clearAllDataSync(realm)
+        }
+    }
+    
     private func clearAllDataSync(realm: Realm) {
         realm.delete(realm.objects(DBGroupItem))
         realm.delete(realm.objects(DBListItem))
