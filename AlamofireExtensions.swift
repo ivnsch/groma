@@ -18,7 +18,7 @@ import QorumLogs
 // Note that this doesn't contain any success HTTP status codes as this is currently not necessary, either it's an error, or if not, we have a JSON object where we can query the JSON status flag which is sent in all JSON responses. Improvement: TODO: use HTTP status codes instead of JSON flag wherever possible - e.g. use 204 to indicate a success response with no content. So we don't have to parse the JSON. Currently this is being sent using JSON status flag "NotFound" (which represents -maybe unexpectedly- empty result, no 404).
 enum RemoteStatusCode: Int {
     
-    // JSON FLAG
+    // JSON Flag
     case Success = 1
     case InvalidParameters = 2
 
@@ -27,6 +27,7 @@ enum RemoteStatusCode: Int {
     case InvalidCredentials = 6
     case SizeLimit = 7
     case RegisteredWithOtherProvider = 8
+    case Blacklisted = 10
     case Unknown = 100 // Note that, like above cases this also is sent as status by the server - don't change raw value
  
     // HTTP
@@ -421,7 +422,7 @@ extension Alamofire.Request {
                                 QL4("Server didn't send app minr and/or mina app version, data: \(dataObj)")
                             }
 
-                            if status == .Success || status == .InvalidParameters || status == .SizeLimit {
+                            if status == .Success || status == .InvalidParameters || status == .SizeLimit || status == .Blacklisted {
                                 
                                 if status == .Success {
                                     if let data: AnyObject = dataObj.valueForKeyPath("data") {
@@ -469,6 +470,14 @@ extension Alamofire.Request {
                                         logRequesstError("SizeLimit: unexpected format in invalid parameters response")
                                         return Result.Success(RemoteResult<T>(status: .ParsingError))
                                     }
+                                    
+                                } else if status == .Blacklisted {
+                                    logRequesstWarning("Blacklisted user")
+                                    Providers.userProvider.removeLoginToken()
+                                    mainQueue {
+                                        Notification.send(Notification.LogoutUI)
+                                    }
+                                    return Result.Success(RemoteResult<T>(status: status))
                                     
                                 } else {
                                     logRequesstError("Forgot to handle a status in nested if: \(status)")
