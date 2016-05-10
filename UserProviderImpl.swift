@@ -225,6 +225,15 @@ class UserProviderImpl: UserProvider {
                     }
                     handler(ProviderResult(status: .IsNewDeviceLoginAndDeclinedOverwrite))
                 }
+                
+            }, onCannotPresent: {[weak self] in // this can happen if we are showing another popup already on same controller - an example in this case is when we show the optional app update dialog, which also uses root controller. It's always presented before of this, so when we are here, it will not show anything. For now we do the same as if user cancelled - log out, this isn't perfect but is the only meaningful thing we can do here. Note it is important to return something! Otherwise we get e.g. not dismissed progress indicator. This situation (with the update dialog, the only where it has happened so far) can happen but is rare, it means that: 1. User has an outdated installation on a device, 2. User opened an account with other device, 3. User logs in with the outdated device - here we get 'new device' and 'should update app' popup at the same time. At least for this case logging out is ok, user just has to login again after cancelling the update (if they update the app everything is gone anyway) and then the new installation popup appears.
+                QL3("Couldn't present confirm new device popup, logging out")
+                self?.logout {logoutResult in
+                    if !logoutResult.success {
+                        QL4("Logout failed: \(logoutResult)")
+                    }
+                    handler(ProviderResult(status: .IsNewDeviceLoginAndDeclinedOverwrite))
+                }
             })
             
         } else { // normal login/sync

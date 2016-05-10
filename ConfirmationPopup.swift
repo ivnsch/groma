@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import QorumLogs
 
 class ConfirmationPopup {
     
@@ -21,8 +22,14 @@ class ConfirmationPopup {
         return alert
     }
     
-    static func show(title title: String? = nil, message: String, okTitle: String = "Ok", cancelTitle: String = "Cancel", controller: UIViewController, onOk: VoidFunction? = nil, onCancel: VoidFunction? = nil) {
+    static func show(title title: String? = nil, message: String, okTitle: String = "Ok", cancelTitle: String = "Cancel", controller: UIViewController, onOk: VoidFunction? = nil, onCancel: VoidFunction? = nil, onCannotPresent: VoidFunction? = nil) {
         let alert = create(title: title, message: message, okTitle: okTitle, cancelTitle: cancelTitle, onOk: onOk, onCancel: onCancel)
-        controller.presentViewController(alert, animated: true, completion: nil)
+        
+        if controller.presentedViewController == nil {
+            controller.presentViewController(alert, animated: true, completion: nil)
+        } else {
+            QL3("Already showing a confirmation popup: \(controller.presentedViewController), skipping new one: title: \(title), message: \(message)")
+            onCannotPresent?()
+        }
     }
 }
