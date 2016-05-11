@@ -574,6 +574,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
     }
     
     deinit {
+        // TODO!!! why is this deinit never called?
         QL1("Deinit add edit listitem controller")
     }
     
