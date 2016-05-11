@@ -37,6 +37,7 @@ class ExpandableItemsTableViewCell: UITableViewCell {
                 if let subtitle = model.subtitle {
                     subtitleLabel?.text = subtitle
                     subtitleLabel?.textColor = contrastingTextColor
+                    subtitleLabel?.hidden = false
                     nameVerticalCenterConstraint?.constant = -10
                 } else {
                     subtitleLabel?.hidden = true
