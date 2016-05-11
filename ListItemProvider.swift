@@ -64,8 +64,9 @@ protocol ListItemProvider {
     ** Note ** word SWITCH: done expected to be != all listItem.done. This operation is meant to be used to append the items at the end of the section corresponding to new "done" state
     so we must not use it against the same tableview/state where we already are, because the items will update "order" field incorrectly by basically being appended after themselves.
     TODO cleaner implementation, maybe split in smaller methods. The method should not lead to inconsistent result when used in wrong context (see explanation above)
+    param: orderInDstStatus: To override default dst order with a manual order. This is used for undo cell, where we want to the item to be inserted back at the original position.
     */
-    func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<ListItem> -> Void)
+    func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, orderInDstStatus: Int?, remote: Bool, _ handler: ProviderResult<ListItem> -> Void)
     
     func switchAllToStatus(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<[ListItem]> -> Void)
     

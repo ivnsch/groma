@@ -591,7 +591,8 @@ class ListItemProviderImpl: ListItemProvider {
     }
     
     // Common code for update single and batch list items switch status (in case of single listItems contains only 1 element)
-    private func switchStatusInsertInDst(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: (switchedItems: [ListItem], storedItems: [ListItem])? -> Void) {
+    // param: orderInDstStatus: To override default dst order with a manual order. This is used for undo cell, where we want to the item to be inserted back at the original position.
+    private func switchStatusInsertInDst(listItems: [ListItem], list: List, status1: ListItemStatus, status: ListItemStatus, orderInDstStatus: Int? = nil, remote: Bool, _ handler: (switchedItems: [ListItem], storedItems: [ListItem])? -> Void) {
         
         self.listItems(list, sortOrderByStatus: status, fetchMode: .MemOnly) {result in // TODO review .First suitable here
             
@@ -602,7 +603,7 @@ class ListItemProviderImpl: ListItemProvider {
                 var dstSectionsDict = storedListItems.sectionCountDict(status)
                 for listItem in listItems {
                     
-                    let listItemOrderInDstStatus: Int? = listItem.hasStatus(status) ? listItem.order(status) : nil // catch this before switching quantity
+                    let listItemOrderInDstStatus: Int? = orderInDstStatus ?? (listItem.hasStatus(status) ? listItem.order(status) : nil) // catch this before switching quantity
                     
                     listItem.switchStatusQuantityMutable(status1, targetStatus: status)
                     if let sectionCount = dstSectionsDict[listItem.section.uuid] { // TODO rename this sounds like count of sections but it's count of list item in sections
@@ -645,11 +646,12 @@ class ListItemProviderImpl: ListItemProvider {
         }
     }
     
-    func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, remote: Bool, _ handler: ProviderResult<ListItem> -> Void) {
+    // param: orderInDstStatus: To override default dst order with a manual order. This is used for undo cell, where we want to the item to be inserted back at the original position.    
+    func switchStatus(listItem: ListItem, list: List, status1: ListItemStatus, status: ListItemStatus, orderInDstStatus: Int? = nil, remote: Bool, _ handler: ProviderResult<ListItem> -> Void) {
         
 //        QL2("Switching status from \(listItem.product.product.name) from status \(status1) to \(status)")
         
-        switchStatusInsertInDst([listItem], list: list, status1: status1, status: status, remote: remote) {switchResult in
+        switchStatusInsertInDst([listItem], list: list, status1: status1, status: status, orderInDstStatus: orderInDstStatus, remote: remote) {switchResult in
             
             if let (switchedItems, storedListItems) = switchResult { // here switchedItems is a 1 element array, containing the switched listItem
                 

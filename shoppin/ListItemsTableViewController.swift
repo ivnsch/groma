@@ -46,7 +46,7 @@ class ListItemsTableViewController: UITableViewController, ItemActionsDelegate {
     
     var status: ListItemStatus = .Todo
     
-    private var swipedTableViewListItem: TableViewListItem? // Item marked for "undo". Item is not submitted until undo state is cleared
+    private var swipedTableViewListItem: TableViewListItem? // Item marked for "undo".
     
     func touchEnabled(enabled:Bool) {
         self.tableView.userInteractionEnabled = enabled

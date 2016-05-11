@@ -388,7 +388,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
                 }()
                 
                 // NOTE: For the provider the whole state is updated here - including possible section removal (if the current undo list item is the last one in the section) and the order field update of possible following sections. This means that the contents of the table view may be in a slightly inconsistent state with the data in the provider during the time cell is in undo (for the table view the section is still there, for the provider it's not). This is fine as the undo state is just a UI thing (local) and it should be cleared as soon as we try to start a new action (add, edit, delete, reorder etc) or go to the cart/stash.
-                Providers.listItemsProvider.switchStatus(tableViewListItem.listItem, list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, remote: true, weakSelf.successHandler {switchedListItem in
+                Providers.listItemsProvider.switchStatus(tableViewListItem.listItem, list: tableViewListItem.listItem.list, status1: weakSelf.status, status: targetStatus, orderInDstStatus: nil, remote: true, weakSelf.successHandler {switchedListItem in
                         weakSelf.onTableViewChangedQuantifiables()
                 })
             })
@@ -440,7 +440,7 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
             onTableViewChangedQuantifiables()
         }
         
-        Providers.listItemsProvider.switchStatus(listItem, list: listItem.list, status1: srcStatus, status: status, remote: true, successHandler{switchedListItem in
+        Providers.listItemsProvider.switchStatus(listItem, list: listItem.list, status1: srcStatus, status: status, orderInDstStatus: listItem.order(status), remote: true, successHandler{switchedListItem in
             QL1("Undo successful")
             updateUI()
         })
