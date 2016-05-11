@@ -49,7 +49,9 @@ class OpenAndCloseListTest: XCTestCase {
         let tabBarsQuery = app.tabBars
         tabBarsQuery.childrenMatchingType(.Button).elementBoundByIndex(2).tap()
         
-        let query: XCUIElementQuery = app.otherElements.containingType(.NavigationBar, identifier:"UITabBar").childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other)
+        
+        let element2 = app.otherElements.containingType(.NavigationBar, identifier:"UITabBar").childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element.childrenMatchingType(.Other).element
+        let query: XCUIElementQuery = element2.childrenMatchingType(.Other)
         
         let element = query.elementBoundByIndex(1)
         element.childrenMatchingType(.Button).elementBoundByIndex(4).tap()
@@ -63,39 +65,41 @@ class OpenAndCloseListTest: XCTestCase {
         
         tabBarsQuery.childrenMatchingType(.Button).elementBoundByIndex(0).tap()
         
-        element.childrenMatchingType(.Button).elementBoundByIndex(4).tap()
+
+        let button = element.childrenMatchingType(.Button).elementBoundByIndex(4)
+        element.tap()
+        button.tap()
         aKey.tap()
         app.textFields["List name"]
         submitButton.tap()
         element.childrenMatchingType(.Button).elementBoundByIndex(8).tap()
-        
-        let app2 = app
-        app2.keys["B"].tap()
+        app.keys["B"].tap()
         app.textFields["List name"]
-        submitButton.tap()
+        
+        let submitButton2 = element2.childrenMatchingType(.Button).matchingIdentifier("Submit").elementBoundByIndex(0)
+        submitButton2.tap()
         element.childrenMatchingType(.Button).elementBoundByIndex(12).tap()
-        app2.keys["C"].tap()
+        app.keys["C"].tap()
         app.textFields["List name"]
-        submitButton.tap()
+        submitButton2.tap()
         element.childrenMatchingType(.Button).elementBoundByIndex(16).tap()
-        app2.keys["D"].tap()
+        app.keys["D"].tap()
         app.textFields["List name"]
-        submitButton.tap()
+        submitButton2.tap()
         element.childrenMatchingType(.Button).elementBoundByIndex(20).tap()
-        app2.keys["E"].tap()
+        app.keys["E"].tap()
         app.textFields["List name"]
-        submitButton.tap()
+        submitButton2.tap()
         element.childrenMatchingType(.Button).elementBoundByIndex(24).tap()
-        app2.keys["F"].tap()
+        app.keys["F"].tap()
         app.textFields["List name"]
-        submitButton.tap()
+        submitButton2.tap()
         element.childrenMatchingType(.Button).elementBoundByIndex(28).tap()
-        app2.keys["G"].tap()
+        app.keys["G"].tap()
         app.textFields["List name"]
-        submitButton.tap()
+        submitButton2.tap()
         
-        
-        for _ in 0..<1000 {
+        for _ in 0..<100 {
             let tablesQuery = app.tables
             tablesQuery.staticTexts["A"].tap()
             
