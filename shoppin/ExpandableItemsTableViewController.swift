@@ -151,6 +151,11 @@ class ExpandableItemsTableViewController: UIViewController, UITableViewDataSourc
         initModels()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        toggleButtonRotator.reset(tableView, topBar: topBar)
+    }
+    
     func initModels() {
         fatalError("override")
     }

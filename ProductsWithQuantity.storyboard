@@ -14,7 +14,7 @@
         <!--Products With Quantity View Controller-->
         <scene sceneID="cuL-Ap-8F3">
             <objects>
-                <viewController storyboardIdentifier="ProductsWithQuantityViewController" id="qbS-9X-m18" customClass="ProductsWithQuantityViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ProductsWithQuantityViewController" automaticallyAdjustsScrollViewInsets="NO" id="qbS-9X-m18" customClass="ProductsWithQuantityViewController" customModule="shoppin" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TE0-fj-rkH"/>
                         <viewControllerLayoutGuide type="bottom" id="ZHM-HP-sIF"/>
@@ -157,7 +157,7 @@
         <!--Table View Controller-->
         <scene sceneID="M3a-kq-Xhc">
             <objects>
-                <tableViewController id="xcz-g7-ytM" sceneMemberID="viewController">
+                <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="xcz-g7-ytM" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="76" sectionHeaderHeight="28" sectionFooterHeight="28" id="oRr-Y8-szf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="607"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

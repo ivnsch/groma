@@ -186,7 +186,9 @@ class ListItemsController: UIViewController, UITextFieldDelegate, UIScrollViewDe
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
+     
+        toggleButtonRotator.reset(listItemsTableViewController.tableView, topBar: topBar)
+
         onViewDidAppear?()
         onViewDidAppear = nil
     }

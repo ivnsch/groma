@@ -164,6 +164,9 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        toggleButtonRotator.reset(productsWithQuantityController.tableView, topBar: topBar)
+
         onViewDidAppear?()
         onViewDidAppear = nil
     }

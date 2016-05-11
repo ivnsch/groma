@@ -167,6 +167,9 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        toggleButtonRotator.reset(productsWithQuantityController.tableView, topBar: topBar)
+
         onViewDidAppear?()
         onViewDidAppear = nil
     }
