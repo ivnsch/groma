@@ -295,6 +295,9 @@ class RemoteListItemProvider {
             "inventory": inventoryDict
         ]
         
+        if let store = list.store {
+            dict["store"] = store
+        }
         if let lastServerUpdate = list.lastServerUpdate {
             dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         }
@@ -422,7 +425,10 @@ class RemoteListItemProvider {
             "order": list.order,
             "color": list.bgColor.hexStr
         ]
-        
+
+        if let store = list.store {
+            dict["store"] = store
+        }
         if let lastServerUpdate = list.lastServerUpdate {
             dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
         }
