@@ -56,6 +56,10 @@ class DBGroupItem: DBSyncable {
         return "productOpt.uuid = '\(productUuid)'"
     }
     
+    static func createFilter(product: Product, group: ListItemGroup) -> String {
+        return createFilterGroupAndProductName(group.uuid, productName: product.name, productBrand: product.brand)
+    }
+
     static func createFilterGroupAndProductName(groupUuid: String, productName: String, productBrand: String) -> String {
         return "\(createFilterGroup(groupUuid)) AND productOpt.name = '\(productName)' AND productOpt.brand = '\(productBrand)'"
     }

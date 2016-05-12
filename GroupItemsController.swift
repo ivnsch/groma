@@ -83,6 +83,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
         topBar.delegate = self
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GroupItemsController.onWebsocketGroupItem(_:)), name: WSNotificationName.GroupItem.rawValue, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GroupItemsController.onWebsocketGroupItems(_:)), name: WSNotificationName.GroupItems.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GroupItemsController.onWebsocketProduct(_:)), name: WSNotificationName.Product.rawValue, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GroupItemsController.onWebsocketProductCategory(_:)), name: WSNotificationName.ProductCategory.rawValue, object: nil)        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GroupItemsController.onIncomingGlobalSyncFinished(_:)), name: WSNotificationName.IncomingGlobalSyncFinished.rawValue, object: nil)
@@ -296,9 +297,12 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func onAddGroup(group: ListItemGroup, onFinish: VoidFunction?) {
-        Providers.listItemGroupsProvider.addGroupItems(group, remote: true, successHandler{[weak self] groupItems in
-            self?.productsWithQuantityController?.addOrIncrementUI(groupItems.map{ProductWithQuantityGroup(groupItem: $0)})
-        })
+        if let currentGroup = self.group {
+            Providers.listItemGroupsProvider.addGroupItems(group, targetGroup: currentGroup, remote: true, successHandler{[weak self] groupItemsWithDelta in
+                let groupItems = groupItemsWithDelta.map{$0.groupItem}
+                self?.addOrUpdateUI(groupItems)
+            })
+        }
     }
     
     func onAddProduct(product: Product) {
@@ -307,9 +311,15 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
             let groupItem = GroupItem(uuid: NSUUID().UUIDString, quantity: 1, product: product, group: group)
             
             Providers.listItemGroupsProvider.add(groupItem, remote: true, successHandler{[weak self] result in
-                self?.productsWithQuantityController?.addOrIncrementUI(ProductWithQuantityGroup(groupItem: groupItem))
+                self?.productsWithQuantityController?.addOrUpdateUI(ProductWithQuantityGroup(groupItem: groupItem), scrollToCell: true)
             })
         }
+    }
+    
+    private func addOrUpdateUI(items: [GroupItem]) {
+        productsWithQuantityController?.addOrUpdateUI(items.map{
+            return ProductWithQuantityGroup(groupItem: $0)
+        })
     }
     
     func onSubmitAddEditItem(input: ListItemInput, editingItem: Any?) {
@@ -543,6 +553,25 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
                 }
             } else {
                 QL4("Mo value")
+            }
+        } else {
+            QL4("No userInfo")
+        }
+    }
+    
+    
+    func onWebsocketGroupItems(note: NSNotification) {
+        if let info = note.userInfo as? Dictionary<String, WSNotification<[GroupItem]>> {
+            if let notification = info[WSNotificationValue] {
+                switch notification.verb {
+                case WSNotificationVerb.Add:
+                    let groupItems = notification.obj
+                    addOrUpdateUI(groupItems)
+                    
+                default: QL4("Not handled: \(notification.verb)")
+                }
+            } else {
+                QL4("N value")
             }
         } else {
             QL4("No userInfo")

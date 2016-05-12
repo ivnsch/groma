@@ -44,7 +44,10 @@ protocol ListItemGroupProvider {
 
     func add(items: [GroupItem], group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 
-    func addGroupItems(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<[GroupItem]> -> ())
+    // For websocket - simply upserts the inventory item, does not any checks or re-referencing of dependencies.
+    func addOrUpdateLocal(groupItems: [GroupItem], _ handler: ProviderResult<Any> -> Void)
+    
+    func addGroupItems(srcGroup: ListItemGroup, targetGroup: ListItemGroup, remote: Bool, _ handler: ProviderResult<[(groupItem: GroupItem, delta: Int)]> -> Void)
 
     func add(itemInput: GroupItemInput, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<GroupItem> -> Void)
 

@@ -21,6 +21,52 @@ class RealmGroupItemProvider: RealmProvider {
         addOrUpdate(groupItem, dirty: dirty, handler: handler)
     }
     
+    ///////////////////////////////////////////////////////////////
+    // New - add/increment using only product + quantity, like in inventory, no fake/input group items
+    
+    func addOrIncrement(group: ListItemGroup, productsWithQuantities: [(product: Product, quantity: Int)], dirty: Bool, _ handler: [(groupItem: GroupItem, delta: Int)]? -> Void) {
+        doInWriteTransaction({[weak self] realm in guard let weakSelf = self else {return nil}
+            
+            var addedOrIncrementedItems: [(groupItem: GroupItem, delta: Int)] = []
+            for productsWithQuantity in productsWithQuantities {
+                let groupItem = weakSelf.addOrIncrementGroupItem(realm, group: group, product: productsWithQuantity.product, quantity: productsWithQuantity.quantity, dirty: dirty)
+                addedOrIncrementedItems.append(groupItem)
+            }
+            return addedOrIncrementedItems
+            
+            }, finishHandler: {(addedOrIncrementedItems: [(groupItem: GroupItem, delta: Int)]?) in
+                handler(addedOrIncrementedItems)
+        })
+    }
+    
+    private func addOrIncrementGroupItem(realm: Realm, group: ListItemGroup, product: Product, quantity: Int, dirty: Bool) -> (groupItem: GroupItem, delta: Int) {
+        
+        // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
+        let mapper: DBGroupItem -> GroupItem = {GroupItemMapper.groupItemWith($0)}
+        let existingGroupItems: [GroupItem] = loadSync(realm, mapper: mapper, filter: DBGroupItem.createFilter(product, group: group))
+        
+        let addedOrIncrementedGroupItem: GroupItem = {
+            if let existingGroupItem = existingGroupItems.first {
+                let existingQuantity = existingGroupItem.quantity
+                
+                return existingGroupItem.copy(quantity: quantity + existingQuantity)
+                
+            } else { // if item doesn't exist there's nothing to increment
+                return GroupItem(uuid: NSUUID().UUIDString, quantity: quantity, product: product, group: group)
+            }
+        }()
+    
+        // save
+        let dbGroupItem = GroupItemMapper.dbWith(addedOrIncrementedGroupItem, dirty: dirty)
+        realm.add(dbGroupItem, update: true)
+        
+        return (groupItem: addedOrIncrementedGroupItem, delta: quantity)
+    }
+    
+    ///////////////////////////////////////////////////////////////
+    
+    
+    // param groupItems: Important: There are the input group items - not the target group items! This is when we add a group to a group - the input group items belong to the group that we are adding. This is equivalent to adding prototypes, products or group items to list/inventory.
     func addOrIncrement(groupItems: [GroupItem], dirty: Bool, handler: Bool -> Void) {
         
         func addOrIncrement(groupItems: [GroupItem]) -> Bool {
@@ -121,6 +167,11 @@ class RealmGroupItemProvider: RealmProvider {
     func addOrUpdate(groupItem: GroupItem, dirty: Bool, handler: Bool -> Void) {
         let dbObj = GroupItemMapper.dbWith(groupItem, dirty: dirty)
         saveObj(dbObj, update: true, handler: handler)
+    }
+    
+    func addOrUpdate(groupItems: [GroupItem], update: Bool =  true, dirty: Bool, handler: Bool -> Void) {
+        let dbObjs = groupItems.map{GroupItemMapper.dbWith($0, dirty: dirty)}
+        self.saveObjs(dbObjs, update: update, handler: handler)
     }
     
     func remove(groupItem: GroupItem, markForSync: Bool, handler: Bool -> Void) {

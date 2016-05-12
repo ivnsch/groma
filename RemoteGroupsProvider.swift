@@ -69,8 +69,12 @@ class RemoteGroupsProvider: RemoteProvider {
     }
     
     func addGroupItem(groupItem: GroupItem, handler: RemoteResult<RemoteGroupItemsWithDependencies> -> ()) {
-        let params = toRequestParams(groupItem)
-        RemoteProvider.authenticatedRequest(.POST, Urls.groupItem, params) {result in
+        addGroupItems([groupItem], handler: handler)
+    }
+
+    func addGroupItems(groupItems: [GroupItem], handler: RemoteResult<RemoteGroupItemsWithDependencies> -> ()) {
+        let params = groupItems.map{toRequestParams($0)}
+        RemoteProvider.authenticatedRequest(.POST, Urls.groupItems, params) {result in
             handler(result)
         }
     }

@@ -20,6 +20,7 @@ enum WSNotificationName: String {
     case Group = "WSGroup"
     case Groups = "WSGroups"
     case GroupItem = "WSGroupItem"
+    case GroupItems = "WSGroupItems"
     case Section = "WSSection"
     case Inventory = "WSInventory"
     case Inventories = "WSInventories"
@@ -63,6 +64,7 @@ enum WSNotificationCategory: String {
     case Category = "category"
     case Group = "group"
     case GroupItem = "groupItem"
+    case GroupItems = "groupItems"
     case List = "list"
     case ListItem = "listItem"
     case Section = "section"
@@ -109,6 +111,8 @@ struct MyWebsocketDispatcher {
                 processGroup(verb, topic, sender, data)
             case .GroupItem:
                 processGroupItem(verb, topic, sender, data)
+            case .GroupItems:
+                processGroupItems(verb, topic, sender, data)
             case .List:
                 processList(verb, topic, sender, data)
             case .ListItem:
@@ -417,6 +421,27 @@ struct MyWebsocketDispatcher {
                 }
             } else {
                 MyWebsocketDispatcher.reportWebsocketParsingError("Delete Group item, data: \(data)")
+            }
+            
+        default: QL4("Not handled verb: \(verb)")
+        }
+    }
+    
+    private static func processGroupItems(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
+        switch verb {
+        case WSNotificationVerb.Add:
+            if let remoteGroupItems = RemoteGroupItemsWithDependencies(representation: data) {
+                let groupItems = GroupItemMapper.groupItemsWithRemote(remoteGroupItems).groupItems
+                Providers.listItemGroupsProvider.addOrUpdateLocal(groupItems) {result in
+                    if result.success {
+                        postNotification(.GroupItems, verb, sender, groupItems)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Add group items, \(groupItems)", result: result)
+                    }
+                }
+            
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Add group items, data: \(data)")
             }
             
         default: QL4("Not handled verb: \(verb)")

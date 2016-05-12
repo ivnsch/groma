@@ -77,20 +77,21 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
     
-    func addGroupItems(group: ListItemGroup, remote: Bool, _ handler: ProviderResult<[GroupItem]> -> ()) {
-        groupItems(group, sortBy: .Alphabetic) {[weak self] result in
+    func addGroupItems(srcGroup: ListItemGroup, targetGroup: ListItemGroup, remote: Bool, _ handler: ProviderResult<[(groupItem: GroupItem, delta: Int)]> -> Void) {
+        groupItems(srcGroup, sortBy: .Alphabetic) {[weak self] result in
             if let groupItems = result.sucessResult {
-                self?.add(groupItems, group: group, remote: remote) {result in
+                let productsWithQuantities: [(product: Product, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
+                self?.add(targetGroup, productsWithQuantities: productsWithQuantities, remote: remote) {result in
                     // return fetched group items to the caller
-                    if result.success {
+                    if let groupItems = result.sucessResult {
                         handler(ProviderResult(status: .Success, sucessResult: groupItems))
                     } else {
-                        print("Error: ListItemGroupProviderImpl.addGroupItems: Couldn't save group items for group: \(group)")
+                        print("Error: ListItemGroupProviderImpl.addGroupItems: Couldn't save group items for group: \(targetGroup)")
                         handler(ProviderResult(status: result.status))
                     }
                 }
             } else {
-                print("Error: ListItemGroupProviderImpl.addGroupItems: Can't get group items for group: \(group)")
+                print("Error: ListItemGroupProviderImpl.addGroupItems: Can't get group items for group: \(srcGroup)")
                 handler(ProviderResult(status: .DatabaseUnknown))
             }
         }
@@ -218,22 +219,56 @@ class ListItemGroupProviderImpl: ListItemGroupProvider {
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////
+    // new - decouple input from actual source by passing only product+quantity. TODO make other methods where this is usable also use it
+    
+    func add(group: ListItemGroup, productsWithQuantities: [(product: Product, quantity: Int)], remote: Bool, _ handler: ProviderResult<[(groupItem: GroupItem, delta: Int)]> -> Void) {
+        DBProviders.groupItemProvider.addOrIncrement(group, productsWithQuantities: productsWithQuantities, dirty: remote) {[weak self] addedOrIncrementedGroupItemsMaybe in
+            if let addedOrIncrementedGroupItems = addedOrIncrementedGroupItemsMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: addedOrIncrementedGroupItems))
+                
+                let groupItems = addedOrIncrementedGroupItems.map{$0.groupItem}
+                
+                if remote {
+                    self?.remoteGroupsProvider.addGroupItems(groupItems) {remoteResult in
+                        if let remoteInventoryItems = remoteResult.successResult {
+                            DBProviders.groupItemProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        }
+                    }
+                }
+                
+            } else {
+                QL4("Unknown error adding to group in local db, group: \(group), productsWithQuantities: \(productsWithQuantities)")
+                handler(ProviderResult(status: .Unknown))
+            }
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////////
+    
+    func addOrUpdateLocal(groupItems: [GroupItem], _ handler: ProviderResult<Any> -> Void) {
+        DBProviders.groupItemProvider.addOrUpdate(groupItems, update: true, dirty: false) {updated in
+            handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
+        }
+    }
+    
     func add(items: [GroupItem], group: ListItemGroup, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
-        DBProviders.groupItemProvider.addOrIncrement(items, dirty: remote) {saved in
+        DBProviders.groupItemProvider.addOrIncrement(items, dirty: remote) {[weak self] saved in
             if saved {
                 handler(ProviderResult(status: .Success))
                 
                 if saved {
-                    // TODO!!
-//                    self?.remoteGroupsProvider.addGroupItem(item, group: group) {remoteResult in
-//                        if !remoteResult.success {
-//                            print("Error: adding group item in remote: \(item), result: \(remoteResult)")
-//                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
-//                        }
-//                    }
+                    self?.remoteGroupsProvider.addGroupItems(items) {remoteResult in
+                        if !remoteResult.success {
+                            QL4("Error adding group items in remote: \(items), result: \(remoteResult)")
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+                        }
+                    }
                 }
-                
             } else {
+                QL4("Error saving items to local db: \(items)")
                 handler(ProviderResult(status: .DatabaseSavingError))
             }
         }

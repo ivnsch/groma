@@ -253,14 +253,21 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 }
             }
             
-            let alreadyShowedPopup: Bool = PreferencesManager.loadPreference(PreferencesManagerKey.showedAddDirectlyToInventoryHelp) ?? false
-            if alreadyShowedPopup {
+            checkShowAddToInventoryExplanationPopup {
                 open()
-            } else {
-                AlertPopup.show(title: "Info", message: "Inventory items added here will be added to your history and stats, like when tapping 'buy' in the cart.", controller: self, okMsg: "Got it!") {
-                    PreferencesManager.savePreference(PreferencesManagerKey.showedAddDirectlyToInventoryHelp, value: true)
-                    open()
-                }
+            }
+        }
+    }
+    
+    private func checkShowAddToInventoryExplanationPopup(onContinue: VoidFunction) {
+        
+        let alreadyShowedPopup: Bool = PreferencesManager.loadPreference(PreferencesManagerKey.showedAddDirectlyToInventoryHelp) ?? false
+        if alreadyShowedPopup {
+            onContinue()
+        } else {
+            AlertPopup.show(title: "Info", message: "Adding or incrementing items here in the inventory does *not* affect history and stats.\nIf you want the items to appear in history and stats, use 'buy' in the cart. The cart can be found in shopping lists.", controller: self, okMsg: "Got it!") {
+                PreferencesManager.savePreference(PreferencesManagerKey.showedAddDirectlyToInventoryHelp, value: true)
+                onContinue()
             }
         }
     }
@@ -458,20 +465,13 @@ class InventoryItemsController: UIViewController, ProductsWithQuantityViewContro
                 onSuccess(updatedQuantity)
             }))
         }
-        
-        let alreadyShowedPopup: Bool = PreferencesManager.loadPreference(PreferencesManagerKey.showedIncrementInventoryItemHelp) ?? false
-        if alreadyShowedPopup {
-            increment()
-            
-        } else {
-            if delta > 0 { // positive increment - show info
-                AlertPopup.show(title: "Info", message: "Incrementing inventory items directly does NOT affect history and stats.\nOnly items that have been bought (using the cart) affect them.", controller: self, okMsg: "Got it!") {
-                    PreferencesManager.savePreference(PreferencesManagerKey.showedIncrementInventoryItemHelp, value: true)
-                    increment()
-                }
-            } else {
+
+        if delta > 0 { // positive increment - show info
+            checkShowAddToInventoryExplanationPopup {
                 increment()
             }
+        } else {
+            increment()
         }
     }
     
