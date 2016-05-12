@@ -255,7 +255,7 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
         }
     }
     
-    // NOTE: this is not used anymore because we disabled quick add in inventory items, if we enable it again it needs to be modified, update now has to load first possible existent product by unique like in group item/list item update.
+    // TODO!!!!update now has to load first possible existent product by unique like in group item/list item update. -- explanation: because on update we can change the unique, e.g. different name+brand for product and in this case we don't want to update the underlaying product but change the item's reference to a possible already existing product with this new unique, or create a new one.
     func updateInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> Void) {
         memProvider.updateInventoryItem(item)
         
@@ -287,6 +287,15 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
                     }
                 }
             }
+        }
+    }
+    
+    func addOrUpdateLocal(inventoryItems: [InventoryItem], _ handler: ProviderResult<Any> -> Void) {
+        DBProviders.inventoryItemProvider.saveInventoryItems(inventoryItems, update: true, dirty: false) {[weak self] updated in
+            if !updated {
+                self?.memProvider.invalidate()
+            }
+            handler(ProviderResult(status: updated ? .Success : .DatabaseUnknown))
         }
     }
     
@@ -334,5 +343,91 @@ class InventoryItemsProviderImpl: InventoryItemsProvider {
 
     func invalidateMemCache() {
         memProvider.invalidate()
+    }
+    
+    // MARK: - Direct (no history)
+    
+    func addToInventory(inventory: Inventory, product: Product, quantity: Int, remote: Bool, _ handler: ProviderResult<(inventoryItem: InventoryItem, delta: Int)> -> Void) {
+        addToInventory(inventory, productsWithQuantities: [(product: product, quantity: quantity)], remote: remote) {result in
+            if let addedOrIncrementedInventoryItem = result.sucessResult?.first {
+                handler(ProviderResult(status: .Success, sucessResult: addedOrIncrementedInventoryItem))
+            } else {
+                handler(ProviderResult(status: result.status, sucessResult: nil, error: result.error, errorObj: result.errorObj))
+            }
+        }
+    }
+    
+    private func addToInventory(inventory: Inventory, productsWithQuantities: [(product: Product, quantity: Int)], remote: Bool, _ handler: ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]> -> Void) {
+        DBProviders.inventoryItemProvider.addToInventory(inventory, productsWithQuantities: productsWithQuantities, dirty: remote) {[weak self] addedOrIncrementedInventoryItemsMaybe in
+            if let addedOrIncrementedInventoryItems = addedOrIncrementedInventoryItemsMaybe {
+                handler(ProviderResult(status: .Success, sucessResult: addedOrIncrementedInventoryItems))
+                
+                if remote {
+                    self?.remoteInventoryItemsProvider.addToInventory(addedOrIncrementedInventoryItems) {remoteResult in
+                        if let remoteInventoryItems = remoteResult.successResult {
+                            DBProviders.inventoryItemProvider.updateLastSyncTimeStamp(remoteInventoryItems) {success in
+                            }
+                        } else {
+                            DefaultRemoteErrorHandler.handle(remoteResult, handler: {(result: ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]>) in
+                                QL4("Error addToInventory: \(remoteResult.status)")
+                                // if there's a not connection related server error, invalidate cache
+                                self?.memProvider.invalidate()
+                                handler(result)
+                            })
+                        }
+                    }
+                }
+                
+            } else {
+                QL4("Unknown error adding to inventory in local db, inventory: \(inventory), productsWithQuantities: \(productsWithQuantities)")
+                handler(ProviderResult(status: .Unknown))
+
+//                DefaultRemoteErrorHandler.handle(remoteResult, handler: handler)
+            }
+        }
+    }
+
+    
+    func addToInventory(inventory: Inventory, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]> -> Void) {
+        Providers.listItemGroupsProvider.groupItems(group, sortBy: .Alphabetic) {[weak self] result in
+            if let groupItems = result.sucessResult {
+                let productsWithQuantities: [(product: Product, quantity: Int)] = groupItems.map{($0.product, $0.quantity)}
+                self?.addToInventory(inventory, productsWithQuantities: productsWithQuantities, remote: remote, handler)
+            } else {
+                QL4("Couldn't get items for group: \(group)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
+    }
+    
+    // Add inventory item input
+    func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, remote: Bool, _ handler: ProviderResult<(inventoryItem: InventoryItem, delta: Int)> -> Void) {
+        
+        func onHasProduct(product: Product) {
+            addToInventory(inventory, product: product, quantity: 1, remote: remote, handler)
+        }
+        
+        Providers.productProvider.product(itemInput.productPrototype.name, brand: itemInput.productPrototype.brand) {productResult in
+            // TODO consistent handling everywhere of optional results - return always either .Success & Option(None) or .NotFound & non-optional.
+            if productResult.success || productResult.status == .NotFound {
+                if let product = productResult.sucessResult {
+                    onHasProduct(product)
+                } else {
+                    Providers.productCategoryProvider.categoryWithName(itemInput.productPrototype.category) {result in
+                        if let category = result.sucessResult {
+                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.productPrototype.name, category: category, brand: itemInput.productPrototype.brand)
+                            onHasProduct(product)
+                        } else {
+                            let category = ProductCategory(uuid: NSUUID().UUIDString, name: itemInput.productPrototype.category, color: itemInput.productPrototype.categoryColor)
+                            let product = Product(uuid: NSUUID().UUIDString, name: itemInput.productPrototype.name, category: category, brand: itemInput.productPrototype.brand)
+                            onHasProduct(product)
+                        }
+                    }
+                }
+            } else {
+                QL4("Error fetching product, result: \(productResult)")
+                handler(ProviderResult(status: .DatabaseUnknown))
+            }
+        }
     }
 }

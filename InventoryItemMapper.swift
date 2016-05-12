@@ -48,47 +48,70 @@ class InventoryItemMapper {
         db.dirty = false
         return db
     }
+
+    
+    private class func toInventoryDict(remoteInventories: [RemoteInventoryWithDependencies]) -> ([String: Inventory], [Inventory]) {
+        var dict: [String: Inventory] = [:]
+        var arr: [Inventory] = []
+        for remoteInventory in remoteInventories {
+            let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
+            dict[remoteInventory.inventory.uuid] = inventory
+            arr.append(inventory)
+            
+        }
+        return (dict, arr)
+    }
+    
+    private class func toProductCategoryDict(remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
+        var dict: [String: ProductCategory] = [:]
+        var arr: [ProductCategory] = []
+        for remoteProductCategory in remoteProductsCategories {
+            let category = ProductCategoryMapper.categoryWithRemote(remoteProductCategory)
+            dict[remoteProductCategory.uuid] = category
+            arr.append(category)
+            
+        }
+        return (dict, arr)
+    }
+    
+    private class func toProductDict(remoteProducts: [RemoteProduct], categories: [String: ProductCategory]) -> ([String: Product], [Product]) {
+        var dict: [String: Product] = [:]
+        var arr: [Product] = []
+        for remoteProduct in remoteProducts {
+            if let category = categories[remoteProduct.categoryUuid] {
+                let product = ProductMapper.productWithRemote(remoteProduct, category: category)
+                dict[remoteProduct.uuid] = product
+                arr.append(product)
+            } else {
+                QL4("Error: Got product with category uuid: \(remoteProduct.categoryUuid) which is not in the category dict: \(categories)")
+            }
+        }
+        return (dict, arr)
+    }
+    
+    class func itemsWithRemote(remoteItems: RemoteInventoryItemsWithDependencies) -> [InventoryItem] {
+        
+        let (productsCategoriesDict, _) = toProductCategoryDict(remoteItems.productsCategories) // TODO review if productsCategories array is necessary if not remove
+        let (productsDict, _) = toProductDict(remoteItems.products, categories: productsCategoriesDict)
+        let (inventoriesDict, _) = toInventoryDict(remoteItems.inventories)
+        
+        let remoteListItemsArr = remoteItems.inventoryItems
+        
+        let inventoryItems = remoteListItemsArr.map {remoteInventoryItem in
+            InventoryItem(
+                uuid: remoteInventoryItem.uuid,
+                quantity: remoteInventoryItem.quantity,
+                quantityDelta: 0,
+                product: productsDict[remoteInventoryItem.productUuid]!,
+                inventory: inventoriesDict[remoteInventoryItem.inventoryUuid]!,
+                lastServerUpdate: remoteInventoryItem.lastUpdate
+            )
+        }
+        
+        return inventoryItems
+    }
     
     class func itemsWithRemote(remoteItems: RemoteInventoryItemsWithHistoryAndDependencies) -> (inventoryItems: [InventoryItem], historyItems: [HistoryItem]) {
-        
-        func toInventoryDict(remoteInventories: [RemoteInventoryWithDependencies]) -> ([String: Inventory], [Inventory]) {
-            var dict: [String: Inventory] = [:]
-            var arr: [Inventory] = []
-            for remoteInventory in remoteInventories {
-                let inventory = InventoryMapper.inventoryWithRemote(remoteInventory)
-                dict[remoteInventory.inventory.uuid] = inventory
-                arr.append(inventory)
-                
-            }
-            return (dict, arr)
-        }
-        
-        func toProductCategoryDict(remoteProductsCategories: [RemoteProductCategory]) -> ([String: ProductCategory], [ProductCategory]) {
-            var dict: [String: ProductCategory] = [:]
-            var arr: [ProductCategory] = []
-            for remoteProductCategory in remoteProductsCategories {
-                let category = ProductCategoryMapper.categoryWithRemote(remoteProductCategory)
-                dict[remoteProductCategory.uuid] = category
-                arr.append(category)
-                
-            }
-            return (dict, arr)
-        }
-        
-        func toProductDict(remoteProducts: [RemoteProduct], categories: [String: ProductCategory]) -> ([String: Product], [Product]) {
-            var dict: [String: Product] = [:]
-            var arr: [Product] = []
-            for remoteProduct in remoteProducts {
-                if let category = categories[remoteProduct.categoryUuid] {
-                    let product = ProductMapper.productWithRemote(remoteProduct, category: category)
-                    dict[remoteProduct.uuid] = product
-                    arr.append(product)
-                } else {
-                    QL4("Error: Got product with category uuid: \(remoteProduct.categoryUuid) which is not in the category dict: \(categories)")
-                }
-            }
-            return (dict, arr)
-        }
         
         func toUserDict(remoteUsers: [RemoteSharedUser]) -> ([String: SharedUser], [SharedUser]) {
             var dict: [String: SharedUser] = [:]

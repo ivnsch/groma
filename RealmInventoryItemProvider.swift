@@ -240,6 +240,32 @@ class RealmInventoryItemProvider: RealmProvider {
         })
     }
     
+    // MARK: - Direct (no history)
+    
+    // Add product
+    func addToInventory(inventory: Inventory, product: Product, quantity: Int, dirty: Bool, _ handler: (inventoryItem: InventoryItem, delta: Int)? -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            return self?.addOrIncrementInventoryItem(realm, inventory: inventory, product: product, quantity: quantity, dirty: dirty)
+        }, finishHandler: {(inventoryItemWithDeltaMaybe: (inventoryItem: InventoryItem, delta: Int)?) in
+            handler(inventoryItemWithDeltaMaybe)
+        })
+    }
+
+    func addToInventory(inventory: Inventory, productsWithQuantities: [(product: Product, quantity: Int)], dirty: Bool, _ handler: [(inventoryItem: InventoryItem, delta: Int)]? -> Void) {
+        doInWriteTransaction({[weak self] realm in guard let weakSelf = self else {return nil}
+            
+            var addedOrIncrementedInventoryItems: [(inventoryItem: InventoryItem, delta: Int)] = []
+            for productsWithQuantity in productsWithQuantities {
+                let inventoryItem = weakSelf.addOrIncrementInventoryItem(realm, inventory: inventory, product: productsWithQuantity.product, quantity: productsWithQuantity.quantity, dirty: dirty)
+                addedOrIncrementedInventoryItems.append(inventoryItem)
+            }
+            return addedOrIncrementedInventoryItems
+            
+            }, finishHandler: {(addedOrIncrementedInventoryItems: [(inventoryItem: InventoryItem, delta: Int)]?) in
+                handler(addedOrIncrementedInventoryItems)
+        })
+    }  
+    
     // MARK: - Sync
 
     private func addSync(realm: Realm, items: [ProductWithQuantityInput], inventory: Inventory, dirty: Bool) -> [(inventoryItem: InventoryItem, historyItem: HistoryItem)] {
@@ -252,36 +278,42 @@ class RealmInventoryItemProvider: RealmProvider {
         
         for item in items {
             
+            let addedOrIncrementedInventoryItem = addOrIncrementInventoryItem(realm, inventory: inventory, product: item.product.product, quantity: item.quantity, dirty: dirty)
+
+            let historyItem = HistoryItem(uuid: NSUUID().UUIDString, inventory: inventory, product: item.product.product, addedDate: addedDate, quantity: item.quantity, user: sharedUser, paidPrice: item.product.price)
+            let dbHistoryItem = HistoryItemMapper.dbWithHistoryItem(historyItem, dirty: dirty)
+            realm.add(dbHistoryItem, update: true)
+            
+            adddedOrUpdatedItems.append((inventoryItem: addedOrIncrementedInventoryItem.inventoryItem, historyItem: historyItem))
+        }
+        
+        return adddedOrUpdatedItems
+    }
+    
+    private func addOrIncrementInventoryItem(realm: Realm, inventory: Inventory, product: Product, quantity: Int, dirty: Bool) -> (inventoryItem: InventoryItem, delta: Int) {
+        
             // increment if already exists (currently there doesn't seem to be any functionality to do this using Realm so we do it manually)
             let mapper: DBInventoryItem -> InventoryItem = {InventoryItemMapper.inventoryItemWithDB($0)}
             let existingInventoryItems: [InventoryItem] = loadSync(realm, mapper: mapper, filter:
-                DBInventoryItem.createFilter(item.product.product, inventory))
+                DBInventoryItem.createFilter(product, inventory))
             
             let addedOrIncrementedInventoryItem: InventoryItem = {
                 if let existingInventoryItem = existingInventoryItems.first {
                     let existingQuantity = existingInventoryItem.quantity
                     let existingQuantityDelta = existingInventoryItem.quantityDelta
-
-                    return existingInventoryItem.copy(quantity: item.quantity + existingQuantity, quantityDelta: item.quantity + existingQuantityDelta)
+                    
+                    return existingInventoryItem.copy(quantity: quantity + existingQuantity, quantityDelta: quantity + existingQuantityDelta)
                     
                 } else { // if item doesn't exist there's nothing to increment
-                    return InventoryItem(uuid: NSUUID().UUIDString, quantity: item.quantity, quantityDelta: item.quantity, product: item.product.product, inventory: inventory)
+                    return InventoryItem(uuid: NSUUID().UUIDString, quantity: quantity, quantityDelta: quantity, product: product, inventory: inventory)
                 }
             }()
             
             // save
             let dbInventoryItem = InventoryItemMapper.dbWithInventoryItem(addedOrIncrementedInventoryItem, dirty: dirty)
-            
-            let historyItem = HistoryItem(uuid: NSUUID().UUIDString, inventory: inventory, product: item.product.product, addedDate: addedDate, quantity: item.quantity, user: sharedUser, paidPrice: item.product.price)
-            
-            let dbHistoryItem = HistoryItemMapper.dbWithHistoryItem(historyItem, dirty: dirty)
             realm.add(dbInventoryItem, update: true)
-            realm.add(dbHistoryItem, update: true)
-            
-            adddedOrUpdatedItems.append((inventoryItem: addedOrIncrementedInventoryItem, historyItem: historyItem))
-        }
         
-        return adddedOrUpdatedItems
+        return (inventoryItem: addedOrIncrementedInventoryItem, delta: quantity)
     }
     
     func clearInventoryItemTombstone(uuid: String, handler: Bool -> Void) {
@@ -333,6 +365,27 @@ class RealmInventoryItemProvider: RealmProvider {
             }
             for historyItem in items.historyItems {
                 realm.create(DBHistoryItem.self, value: historyItem.timestampUpdateDict, update: true)
+            }
+            // TODO shared users? - probably not as we can't edit shared users so there's nothing to sync
+            return true
+            }, finishHandler: {success in
+                handler(success ?? false)
+        })
+    }
+    
+    func updateLastSyncTimeStamp(items: RemoteInventoryItemsWithDependencies, handler: Bool -> Void) {
+        doInWriteTransaction({[weak self] realm in
+            for listItem in items.inventoryItems {
+                self?.updateInventoryItemLastUpdate(realm, updateDict: listItem.timestampUpdateDict)
+            }
+            for product in items.products {
+                realm.create(DBProduct.self, value: product.timestampUpdateDict, update: true)
+            }
+            for productCategory in items.productsCategories {
+                realm.create(DBProductCategory.self, value: productCategory.timestampUpdateDict, update: true)
+            }
+            for inventory in items.inventories {
+                DBProviders.inventoryProvider.updateLastSyncTimeStampSync(realm, inventory: inventory.inventory)
             }
             // TODO shared users? - probably not as we can't edit shared users so there's nothing to sync
             return true

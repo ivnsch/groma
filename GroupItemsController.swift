@@ -303,6 +303,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func onAddProduct(product: Product) {
         if let group = group {
+            // TODO don't create group item here we don't know if it exists in the group already, if it does the new uuid is not used. Use a prototype class like in list items.
             let groupItem = GroupItem(uuid: NSUUID().UUIDString, quantity: 1, product: product, group: group)
             
             Providers.listItemGroupsProvider.add(groupItem, remote: true, successHandler{[weak self] result in
@@ -383,7 +384,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     }
     
     func appendItemUI(item: GroupItem) {
-        productsWithQuantityController.appendItemUI(ProductWithQuantityGroup(groupItem: item))
+        productsWithQuantityController.appendItemUI(ProductWithQuantityGroup(groupItem: item), scrollToCell: false)
     }
     
     func updateItemUI(item: GroupItem) -> Bool {

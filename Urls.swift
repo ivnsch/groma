@@ -74,7 +74,9 @@ struct Urls {
     static let inventoryInvitation = host + "inventory/invitation"
     static let pullInventoryProducts = host + "pullInvProducts"
     static let inventoryInvitedUsers = host + "inventory/invs"
-
+    // Inventory item without history
+    static let inventoryItemsNoHistory = host + "inventoryItems/nh"
+    
     // History
     static let historyItems = host + "historyItems"
     static let historyItemsSync = host + "historyItems/sync"

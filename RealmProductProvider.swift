@@ -24,14 +24,12 @@ struct ProductUnique {
 
 struct ProductPrototype {
     let name: String
-    let price: Float
     let category: String
     let categoryColor: UIColor
     let brand: String
     
-    init(name: String, price: Float, category: String, categoryColor: UIColor, brand: String) {
+    init(name: String, category: String, categoryColor: UIColor, brand: String) {
         self.name = name
-        self.price = price
         self.category = category
         self.categoryColor = categoryColor
         self.brand = brand

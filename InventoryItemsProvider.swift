@@ -28,6 +28,9 @@ protocol InventoryItemsProvider {
     
     func updateInventoryItem(item: InventoryItem, remote: Bool, _ handler: ProviderResult<Any> -> Void)
 
+    // For websocket - simply upserts the inventory item, does not any checks or re-referencing of dependencies.
+    func addOrUpdateLocal(inventoryItems: [InventoryItem], _ handler: ProviderResult<Any> -> Void)
+    
     func incrementInventoryItem(item: InventoryItem, delta: Int, remote: Bool, _ handler: ProviderResult<Int> -> Void)
     
     func incrementInventoryItem(item: ItemIncrement, remote: Bool, _ handler: ProviderResult<InventoryItem> -> ())
@@ -37,4 +40,15 @@ protocol InventoryItemsProvider {
     func removeInventoryItem(uuid: String, inventoryUuid: String, remote: Bool, _ handler: ProviderResult<Any> -> ())
     
     func invalidateMemCache()
+    
+    // MARK: - Direct (no history)
+    
+    // Add product
+    func addToInventory(inventory: Inventory, product: Product, quantity: Int, remote: Bool, _ handler: ProviderResult<(inventoryItem: InventoryItem, delta: Int)> -> Void)
+    
+    // Add group
+    func addToInventory(inventory: Inventory, group: ListItemGroup, remote: Bool, _ handler: ProviderResult<[(inventoryItem: InventoryItem, delta: Int)]> -> Void)
+    
+    // Add inventory item input
+    func addToInventory(inventory: Inventory, itemInput: InventoryItemInput, remote: Bool, _ handler: ProviderResult<(inventoryItem: InventoryItem, delta: Int)> -> Void)
 }

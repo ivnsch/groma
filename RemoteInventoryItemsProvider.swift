@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import QorumLogs
 
 class RemoteInventoryItemsProvider: Any {
     
@@ -25,6 +26,32 @@ class RemoteInventoryItemsProvider: Any {
             }
         } else {
             print("Warn: RemoteInventoryItemsProvider.addToInventory: called without items. Remote service was not called.")
+        }
+    }
+
+    // Adds inventoryItems to remote, IMPORTANT: All items are assumed to have the same inventory TODO maybe implement server service such that we don't have to put inventory uuid in url, and just use the inventory for each inventory item for the insert
+    func addToInventory(inventoryItemsWithDelta: [(inventoryItem: InventoryItem, delta: Int)], handler: RemoteResult<RemoteInventoryItemsWithDependencies> -> ()) {
+        
+        func toParams(inventoryItemWithDelta: (inventoryItem: InventoryItem, delta: Int)) -> [String: AnyObject] {
+            let productDict = RemoteListItemProvider().toRequestParams(inventoryItemWithDelta.inventoryItem.product)
+            let inventoryDict = RemoteInventoryProvider().toRequestParams(inventoryItemWithDelta.inventoryItem.inventory)
+            
+            var dict: [String: AnyObject] = [
+                "uuid": inventoryItemWithDelta.inventoryItem.uuid,
+                "quantity": inventoryItemWithDelta.delta, // in this service the server does an "insert or increment" and interprets quantity as delta
+                "inventory": inventoryDict,
+                "product": productDict
+            ]
+            
+            if let lastServerUpdate = inventoryItemWithDelta.inventoryItem.lastServerUpdate {
+                dict["lastUpdate"] = NSNumber(longLong: Int64(lastServerUpdate))
+            }
+            return dict
+        }
+
+        let parameters = inventoryItemsWithDelta.map{toParams($0)}
+        RemoteProvider.authenticatedRequest(.POST, Urls.inventoryItemsNoHistory, parameters) {result in
+            handler(result)
         }
     }
     
@@ -82,14 +109,14 @@ class RemoteInventoryItemsProvider: Any {
     }
     
     
-    private func toRequestParams(inventoryItem: InventoryItem) -> [String: AnyObject] {
+    private func toRequestParams(inventoryItem: InventoryItem, quantityOverwrite: Int? = nil) -> [String: AnyObject] {
         
         let productDict = RemoteListItemProvider().toRequestParams(inventoryItem.product)
         let inventoryDict = RemoteInventoryProvider().toRequestParams(inventoryItem.inventory)
         
         var dict: [String: AnyObject] = [
             "uuid": inventoryItem.uuid,
-            "quantity": inventoryItem.quantityDelta,
+            "quantity": inventoryItem.quantity,
             "inventory": inventoryDict,
             "product": productDict
         ]

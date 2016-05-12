@@ -777,23 +777,6 @@ struct MyWebsocketDispatcher {
     private static func processInventoryItem(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
             
-            // Now we have buyCart and there's no other way (for now) to add items to the inventory so this is not necessary. This was also never tested. Letting it here anyway just in case, if we re-allow adding items to inventory directly, maybe it helps as a start.
-//        case WSNotificationVerb.Add:
-//            if let inventoryItemsWithHistoryAndDependencies = RemoteInventoryItemsWithHistoryAndDependencies(representation: data) {
-//                let (inventoryItems, historyItems) = InventoryItemMapper.itemsWithRemote(inventoryItemsWithHistoryAndDependencies)
-//                Providers.inventoryItemsProvider.addToInventoryLocal(inventoryItems, historyItems: historyItems, dirty: false) {result in
-//                    if result.success {
-//                        postNotification(.InventoryItem, verb, sender, inventoryItems)
-//                        postNotification(.HistoryItem, verb, sender, historyItems)
-//                    } else {
-//                        MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory/history item \(inventoryItemsWithHistoryAndDependencies)", result: result)
-//                    }
-//                }
-//                
-//            } else {
-//                MyWebsocketDispatcher.reportWebsocketParsingError("Add inventory/history item, data: \(data)")
-//            }
-            
         case WSNotificationVerb.Update:
             if let remoteInventoryItem = RemoteInventoryItemWithProduct(representation: data) {
                 let inventory = InventoryMapper.inventoryWithRemote(remoteInventoryItem.inventory, users: [])
@@ -841,19 +824,23 @@ struct MyWebsocketDispatcher {
         }
     }
     
-    // TODO!!!! this seems to be used for move cart->history, it accepts a sequence!
     private static func processInventoryItems(verb: WSNotificationVerb, _ topic: String, _ sender: String, _ data: AnyObject) {
         switch verb {
+        // Add directly to inventory (product, group or new item)
         case WSNotificationVerb.Add:
-            QL4("TODO processInventoryItems")
-//            let incr = WSInventoryParser.parseInventoryItemIncrement(data)
-//            Providers.inventoryItemsProvider.incrementInventoryItem(incr, remote: false) {result in
-//                if result.success {
-//                    postNotification(.Inventory, verb, incr)
-//                } else {
-//                    MyWebsocketDispatcher.reportWebsocketStoringError("Add (increment) \(incr)", result: result)
-//                }
-//            }
+            if let inventoryItemsWithDependencies = RemoteInventoryItemsWithDependencies(representation: data) {
+                let inventoryItems = InventoryItemMapper.itemsWithRemote(inventoryItemsWithDependencies)
+                Providers.inventoryItemsProvider.addOrUpdateLocal(inventoryItems) {result in
+                    if result.success {
+                        postNotification(.InventoryItems, verb, sender, inventoryItems)
+                    } else {
+                        MyWebsocketDispatcher.reportWebsocketStoringError("Add inventory items \(inventoryItemsWithDependencies)", result: result)
+                    }
+                }
+                
+            } else {
+                MyWebsocketDispatcher.reportWebsocketParsingError("Add inventory items, data: \(data)")
+            }
             
         default: QL4("Not handled verb: \(verb)")
         }

@@ -30,7 +30,40 @@ class ProductWithQuantityTableViewCell: UITableViewCell, SwipeToIncrementHelperD
     private var isAnimatingProgress: Bool = false
     private var animationCancelled: Bool = false
     
-    var model: ProductWithQuantity?
+    var model: ProductWithQuantity? {
+        didSet {
+            guard let model = model else {QL3("Model is nil"); return}
+            
+            nameLabel.text = NSLocalizedString(model.product.name, comment: "")
+            
+            centerVerticallyNameLabelConstraint.constant = model.product.brand.isEmpty ? 0 : 10
+            brandLabel.text = model.product.brand
+            
+            quantityLabel.text = String(model.quantity)
+            shownQuantity = model.quantity
+            
+            categoryColorView.backgroundColor = model.product.category.color
+            
+            cancelDeleteProgress() // some recycled cells were showing red bar on top
+            
+            // this was initially a local function but it seems we have to use a closure, see http://stackoverflow.com/a/26237753/930450
+            // TODO change quantity / edit inventory items
+            //        let incrementItem = {(quantity: Int) -> () in
+            //            //let newQuantity = inventoryItem.quantity + quantity
+            //            //if (newQuantity >= 0) {
+            //                inventoryItem.quantityDelta += quantity
+            //                self.inventoryItemsProvider.updateInventoryItem(inventoryItem)
+            //                cell.quantityLabel.text = String(inventoryItem.quantity)
+            //            //}
+            //        }
+            
+            
+            // height now calculated yet so we pass the position of border
+            addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
+            
+            selectionStyle = UITableViewCellSelectionStyle.None
+        }
+    }
     
     weak var delegate: ProductWithQuantityTableViewCellDelegate?
     var row: Int?

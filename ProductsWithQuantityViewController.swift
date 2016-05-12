@@ -135,39 +135,9 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         
         let model = self.models[indexPath.row]
         
-        cell.nameLabel.text = NSLocalizedString(model.product.name, comment: "")
-        
-        cell.centerVerticallyNameLabelConstraint.constant = model.product.brand.isEmpty ? 0 : 10
-        cell.brandLabel.text = model.product.brand
-        
-        cell.quantityLabel.text = String(model.quantity)
-        cell.shownQuantity = model.quantity
-
         cell.model = model
-        
         cell.row = indexPath.row
         cell.delegate = self
-        
-        cell.categoryColorView.backgroundColor = model.product.category.color
-
-        cell.cancelDeleteProgress() // some recycled cells were showing red bar on top
-        
-        // this was initially a local function but it seems we have to use a closure, see http://stackoverflow.com/a/26237753/930450
-        // TODO change quantity / edit inventory items
-        //        let incrementItem = {(quantity: Int) -> () in
-        //            //let newQuantity = inventoryItem.quantity + quantity
-        //            //if (newQuantity >= 0) {
-        //                inventoryItem.quantityDelta += quantity
-        //                self.inventoryItemsProvider.updateInventoryItem(inventoryItem)
-        //                cell.quantityLabel.text = String(inventoryItem.quantity)
-        //            //}
-        //        }
-        
-
-        // height now calculated yet so we pass the position of border
-        cell.addBorderWithYOffset(Theme.cellBottomBorderColor, width: 1, offset: DimensionsManager.defaultCellHeight)
-        
-        cell.selectionStyle = UITableViewCellSelectionStyle.None
         
         return cell
     }
@@ -225,20 +195,30 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
         return itemMaybe
     }
 
-    func appendItemUI(item: ProductWithQuantity) {
+    func appendItemUI(item: ProductWithQuantity, scrollToCell: Bool) {
         
         // Warning (depending where this is used): this adds the inventory item at the end of the current page - this may look a bit buggy and if user scrolls down the item may be "repeated", but for now don't have a better solution,
         // the alternative which is loading all the pages until we are in the page where the position of the item is correct (according to current sorting criteria) is inefficient as well as difficult to implement
         // a compromise is to choose a big enough page size where most users will have smaller inventories, so this can't happen
+        
+        var insertedIndexPath: NSIndexPath?
         tableView.wrapUpdates {[weak self] in
             if let weakSelf = self {
                 if let indexPathToInsert = weakSelf.findIndexPathForNewItem(item)  { // note: before append
                     weakSelf.models.insert(item, atIndex: indexPathToInsert.row)
                     weakSelf.tableView.insertRowsAtIndexPaths([indexPathToInsert], withRowAnimation: .Top)
                     weakSelf.updateEmptyUI()
+                    
+                    insertedIndexPath = indexPathToInsert
                 } else {
                     QL4("No indexPathToInsert")
                 }
+            }
+        }
+        
+        if scrollToCell {
+            if let insertedIndexPath = insertedIndexPath {
+                tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: insertedIndexPath.row, inSection: 0), atScrollPosition: .Top, animated: true)
             }
         }
     }
@@ -415,6 +395,28 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             addOrIncrementUI(inventoryItem)
         }
     }
+
+    func addOrUpdateUI(inventoryItems: [ProductWithQuantity]) {
+        for inventoryItem in inventoryItems {
+            addOrUpdateUI(inventoryItem, scrollToCell: false)
+        }
+    }
+
+    private func tryUpdateItem(inventoryItem: ProductWithQuantity, scrollToCell: Bool) -> Bool {
+        if let (index, _, cellMaybe) = inventoryItemTableViewData(inventoryItem) {
+            models[index] = inventoryItem
+            if let cell = cellMaybe {
+                cell.model = inventoryItem
+                cell.setNeedsLayout()
+            }
+            if scrollToCell {
+                tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0), atScrollPosition: .Top, animated: true)
+            }
+            return true
+        } else {
+            return false
+        }
+    }
     
     private func tryIncrementItem(inventoryItem: ProductWithQuantity) -> Bool {
         if let (index, item, cellMaybe) = inventoryItemTableViewData(inventoryItem) {
@@ -425,10 +427,16 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
             return false
         }
     }
+
+    func addOrUpdateUI(item: ProductWithQuantity, scrollToCell: Bool) {
+        if !tryUpdateItem(item, scrollToCell: scrollToCell) {
+            appendItemUI(item, scrollToCell: scrollToCell)
+        }
+    }
     
     func addOrIncrementUI(item: ProductWithQuantity) {
         if !tryIncrementItem(item) {
-            appendItemUI(item)
+            appendItemUI(item, scrollToCell: false)
         }
     }
     

@@ -595,6 +595,7 @@
 		EB80CE551C44AFFE001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; };
 		EB80CE561C44B000001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; };
 		EB80CE571C44B000001DF159 /* NSMutableAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */; };
+		EB8226D71CE44EF3008A0A6E /* RemoteInventoryItemsWithDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB8226D61CE44EF2008A0A6E /* RemoteInventoryItemsWithDependencies.swift */; };
 		EB85CEDD1C91E423008E3BA0 /* ProductWithQuantityInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85CEDC1C91E423008E3BA0 /* ProductWithQuantityInput.swift */; };
 		EB85CEDE1C91E423008E3BA0 /* ProductWithQuantityInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85CEDC1C91E423008E3BA0 /* ProductWithQuantityInput.swift */; };
 		EB85CEDF1C91E423008E3BA0 /* ProductWithQuantityInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB85CEDC1C91E423008E3BA0 /* ProductWithQuantityInput.swift */; };
@@ -1427,6 +1428,7 @@
 		EB80CE4C1C3F5F10001DF159 /* InventoryAuthChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryAuthChecker.swift; sourceTree = "<group>"; };
 		EB80CE521C449E1D001DF159 /* TermsAndConditionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsController.swift; sourceTree = "<group>"; };
 		EB80CE541C44AFFE001DF159 /* NSMutableAttributedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSMutableAttributedString.swift; sourceTree = "<group>"; };
+		EB8226D61CE44EF2008A0A6E /* RemoteInventoryItemsWithDependencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteInventoryItemsWithDependencies.swift; sourceTree = "<group>"; };
 		EB85CEDC1C91E423008E3BA0 /* ProductWithQuantityInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductWithQuantityInput.swift; sourceTree = "<group>"; };
 		EB85F4521BD5393800E19E9B /* QuickAddListItem.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = QuickAddListItem.storyboard; sourceTree = "<group>"; };
 		EB85F4621BD54E8D00E19E9B /* QuickAddItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickAddItem.swift; sourceTree = "<group>"; };
@@ -2467,6 +2469,7 @@
 				EB7858741B7F6F69008AAD12 /* RemoteHistoryItems.swift */,
 				EB4A38B31C8F8901000714F9 /* RemoteProductsWithDependencies.swift */,
 				EBA701AB1CCA8EBF007172CD /* RemoteBuyCartResult.swift */,
+				EB8226D61CE44EF2008A0A6E /* RemoteInventoryItemsWithDependencies.swift */,
 			);
 			name = aggr;
 			sourceTree = "<group>";
@@ -3775,6 +3778,7 @@
 				EBAB0BB81CB3CFB2001B8B01 /* RemoteSwitchListItemResult.swift in Sources */,
 				EB2F5D5C1A5058E900DBC4AF /* TableViewListItem.swift in Sources */,
 				EB8EDE1A1C9B1A78003B566F /* RemoteSectionWithDependencies.swift in Sources */,
+				EB8226D71CE44EF3008A0A6E /* RemoteInventoryItemsWithDependencies.swift in Sources */,
 				EB9208341C4EEA2400332332 /* BrandProviderImpl.swift in Sources */,
 				EB6E3D131C56D0ED00D65DD5 /* PathButton.swift in Sources */,
 				EB40A4861B55159D000E9CAD /* DBList.swift in Sources */,
@@ -5127,6 +5131,7 @@
 				EB33D5731CE010420097AD58 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EB9F6CFB1A8610550038355B /* Build configuration list for PBXNativeTarget "shoppin_osx" */ = {
 			isa = XCConfigurationList;
