@@ -159,4 +159,24 @@ extension String {
 //        }
 //        return startsWith
 //    }
+    
+    func capitalizeFirst() -> String {
+        if characters.count > 0 {
+            var copy = self
+            copy.replaceRange(self.startIndex...self.startIndex, with: String(self[self.startIndex]).capitalizedString)
+            return copy
+        } else {
+            return self
+        }
+    }
+    
+    func uncapitalizeFirst() -> String {
+        if characters.count > 0 {
+            var copy = self
+            copy.replaceRange(self.startIndex...self.startIndex, with: String(self[self.startIndex]).lowercaseString)
+            return copy
+        } else {
+            return self
+        }
+    }
 }
