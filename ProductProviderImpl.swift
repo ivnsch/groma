@@ -203,7 +203,8 @@ class ProductProviderImpl: ProductProvider {
                 Providers.productCategoryProvider.categoryWithName(category) {result in
                     
                     func onHasCategory(category: ProductCategory) {
-                        let newProduct = Product(uuid: NSUUID().UUIDString, name: productName, category: category, brand: brand)
+                        // fav: 1 If we create a product we are "using" it so we start with fav: 1. This way, for example, when user creates new products in the quick add, these products will show in the quick add list above of prefilled products that have never been used.
+                        let newProduct = Product(uuid: NSUUID().UUIDString, name: productName, category: category, fav: 1, brand: brand)
                         handler(ProviderResult(status: .Success, sucessResult: newProduct))
                     }
                     
