@@ -75,7 +75,12 @@
 - (void)reloadData; //it will ask DataSource for data again
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath withAutoCompleteString:(NSString *)string;
-    
+
+// Change by ivan - expose this such that we can set the layer's path correctly. We use a custom path in order to round only the bottom corners.
+- (CGRect)autoCompleteTableViewFrameForTextField:(MLPAutoCompleteTextField *)textField
+                                 forNumberOfRows:(NSInteger)numberOfRows;
+// Change by ivan - expose to be able to remove the bottom view (rounded corners)
+- (void)closeAutoCompleteTableView;
 @end
 
 

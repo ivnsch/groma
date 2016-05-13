@@ -16,6 +16,9 @@ protocol MyAutoCompleteTextFieldDelegate {
 class MyAutoCompleteTextField: MLPAutoCompleteTextField {
 
     var myDelegate: MyAutoCompleteTextFieldDelegate?
+
+    private var borderLayer: CALayer?
+    private var v: UIView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -53,5 +56,66 @@ class MyAutoCompleteTextField: MLPAutoCompleteTextField {
         } else {
             QL3("Cell is has not expected type: \(cell)")
         }
+    }
+    
+    override func autoCompleteTermsDidSort(completions: [AnyObject]!) {
+        super.autoCompleteTermsDidSort(completions)
+        
+        self.v?.removeFromSuperview()
+        if !completions.isEmpty {
+            let v = UIView(frame: autoCompleteTableView.bounds.copy(autoCompleteTableView.frame.origin.x, y: autoCompleteTableView.frame.maxY - 2, height: 10))
+            v.backgroundColor = UIColor.whiteColor()
+
+            
+            let width: CGFloat = v.bounds.width
+            let height: CGFloat = v.bounds.height
+            let radius: CGFloat = 9
+            let maskPath = CGPathCreateMutable()
+            
+            CGPathMoveToPoint (maskPath, nil, width, 0)
+            CGPathAddLineToPoint (maskPath, nil, width, height - radius)
+            CGPathAddArcToPoint (maskPath, nil, width, height, width - radius, height, radius)
+            CGPathAddLineToPoint (maskPath, nil, radius, height)
+            CGPathAddArcToPoint (maskPath, nil, 0, height, 0, height - radius, radius)
+            CGPathAddLineToPoint (maskPath, nil, 0, 0)
+            
+            CGPathCloseSubpath (maskPath)
+            
+            let maskLayer = CAShapeLayer()
+            maskLayer.frame = v.bounds
+            maskLayer.path  = maskPath
+            v.layer.mask = maskLayer
+            
+            
+            let borderPath = CGPathCreateMutable()
+            CGPathMoveToPoint (borderPath, nil, width, 0)
+            CGPathAddLineToPoint (borderPath, nil, width, height - radius)
+            CGPathAddArcToPoint (borderPath, nil, width, height, width - radius, height, radius)
+            CGPathAddLineToPoint (borderPath, nil, radius, height)
+            CGPathAddArcToPoint (borderPath, nil, 0, height, 0, height - radius, radius)
+            CGPathAddLineToPoint (borderPath, nil, 0, 0)
+//            CGPathCloseSubpath (borderPath)
+            
+            self.borderLayer?.removeFromSuperlayer()
+    
+            let borderLayer = CAShapeLayer()
+            borderLayer.frame = v.bounds
+            borderLayer.path  = borderPath
+            borderLayer.lineWidth   = 1
+            borderLayer.strokeColor = UIColor.grayColor().CGColor
+            borderLayer.fillColor   = UIColor.clearColor().CGColor
+            v.layer.addSublayer(borderLayer)
+            self.borderLayer = borderLayer
+
+            superview?.addSubview(v)
+            superview?.bringSubviewToFront(v)
+            
+            self.v = v
+        }
+    }
+    
+    override func closeAutoCompleteTableView() {
+        super.closeAutoCompleteTableView()
+        v?.removeFromSuperview()
     }
 }
