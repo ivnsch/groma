@@ -187,6 +187,17 @@ class QuickAddViewController: UIViewController, QuickAddListItemDelegate, UISear
         if navController?.viewControllers.last as? AddEditListItemViewController == nil { // don't show if already showing
             let controller = UIStoryboard.addEditListItemViewController()
             controller.delegate = self
+            
+            // Something clips the section autocompletion list - after some tests with a dummy view it seems to be the navigation controller - QuickAddViewController does not clip, neither AddEditListItemViewController (for the test added it directly as top menu instead of QuickAddViewController). See also http://stackoverflow.com/questions/18735154/uinavigationcontroller-clips-subviews Couldn't fix (TODO) so for now reducing the number of rows in autocompletion.
+            view.clipsToBounds = false
+            navController?.view.clipsToBounds = false
+//            navController?.view.layer.masksToBounds = false
+//            if let vcs = navController?.viewControllers {
+//                for vc in vcs {
+//                    vc.view.clipsToBounds = false
+//                }
+//            }
+            
             navController?.pushViewController(controller, animated: false)
 //            sortByButton.selected = false
             controller.onViewDidLoad = {[weak self, weak controller] in guard let weakSelf = self else {return}

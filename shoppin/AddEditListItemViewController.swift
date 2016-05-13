@@ -234,7 +234,7 @@ class AddEditListItemViewController: UIViewController, UITextFieldDelegate, MLPA
         
         initValidator()
         
-        view.clipsToBounds = true
+        view.clipsToBounds = false
         
         initStaticLabels()
 
