@@ -61,57 +61,65 @@ extension UIViewController {
         return self.resultHandler(onSuccess: onSuccess, onError: nil)
     }
     
-    func resultHandler(onSuccess onSuccess: () -> (), onError: ((ProviderResult<Any>) -> ())? = nil)(providerResult: ProviderResult<Any>) {
-        if providerResult.success {
-            onSuccess()
-            
-        } else {
-            if let onError = onError {
-                onError(providerResult)
+    func resultHandler(onSuccess onSuccess: VoidFunction, onError: ((ProviderResult<Any>) -> Void)? = nil) -> (providerResult: ProviderResult<Any>) -> Void {
+        return {[weak self] providerResult in
+            if providerResult.success {
+                onSuccess()
+                
             } else {
-                self.defaultErrorHandler()(providerResult: providerResult)
+                if let onError = onError {
+                    onError(providerResult)
+                } else {
+                    self?.defaultErrorHandler()(providerResult: providerResult)
+                }
             }
+            self?.progressVisible(false)
         }
-        self.progressVisible(false)
     }
     
     // Result handler for result with payload
-    func resultHandler<T>(onSuccess onSuccess: (T) -> Void, onError: ((ProviderResult<T>) -> Void)? = nil)(providerResult: ProviderResult<T>) {
-        if providerResult.success {
-            if let successResult = providerResult.sucessResult {
-                onSuccess(successResult)
+    func resultHandler<T>(onSuccess onSuccess: (T) -> Void, onError: ((ProviderResult<T>) -> Void)? = nil) -> (providerResult: ProviderResult<T>) -> Void {
+        return {[weak self] providerResult in
+            if providerResult.success {
+                if let successResult = providerResult.sucessResult {
+                    onSuccess(successResult)
+                } else {
+                    QL4("Invalid state: handler expects result with payload, result is success but has no payload. Result: \(providerResult)")
+                    self?.handleResultHelper(.Unknown, error: nil, errorObj: nil)
+                }
+                
             } else {
-                QL4("Invalid state: handler expects result with payload, result is success but has no payload. Result: \(providerResult)")
-                handleResultHelper(.Unknown, error: nil, errorObj: nil)
+                if let onError = onError {
+                    onError(providerResult)
+                } else {
+                    self?.defaultErrorHandler()(providerResult: providerResult)
+                }
             }
             
-        } else {
-            if let onError = onError {
-                onError(providerResult)
-            } else {
-                self.defaultErrorHandler()(providerResult: providerResult)
-            }
+            self?.progressVisible(false)
         }
-        
-        progressVisible(false)
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // TODO how do we unify these functions? we don't need the to know possible payload's type here, so Any would be ok but it doesn't compile for resultHandler<T>
     
-    func defaultErrorHandler(ignore: [ProviderStatusCode] = [])(providerResult: ProviderResult<Any>) {
-        if !ignore.contains(providerResult.status) {
-            handleResultHelper(providerResult.status, error: providerResult.error, errorObj: providerResult.errorObj)
-            progressVisible(false)
+    func defaultErrorHandler(ignore: [ProviderStatusCode] = []) -> (providerResult: ProviderResult<Any>) -> Void {
+        return {[weak self] providerResult in
+            if !ignore.contains(providerResult.status) {
+                self?.handleResultHelper(providerResult.status, error: providerResult.error, errorObj: providerResult.errorObj)
+                self?.progressVisible(false)
+            }
         }
     }
 
-    func defaultErrorHandler<T>(ignore: [ProviderStatusCode] = [])(providerResult: ProviderResult<T>) {
-        if !ignore.contains(providerResult.status) {
-            handleResultHelper(providerResult.status, error: providerResult.error, errorObj: providerResult.errorObj)
-            progressVisible(false)
-        } else {
-            QL1("Ignoring status code: \(providerResult.status), result: \(providerResult)")
+    func defaultErrorHandler<T>(ignore: [ProviderStatusCode] = []) -> (providerResult: ProviderResult<T>) -> Void {
+        return {[weak self] providerResult in
+            if !ignore.contains(providerResult.status) {
+                self?.handleResultHelper(providerResult.status, error: providerResult.error, errorObj: providerResult.errorObj)
+                self?.progressVisible(false)
+            } else {
+                QL1("Ignoring status code: \(providerResult.status), result: \(providerResult)")
+            }
         }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
