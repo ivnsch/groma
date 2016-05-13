@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeue.ttc">
@@ -32,8 +33,8 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PcH-rK-LUL">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="eMF-ZE-4G9">
-                                        <rect key="frame" x="68" y="199" width="240" height="206"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="eMF-ZE-4G9">
+                                        <rect key="frame" x="75" y="199" width="226" height="206"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="BdM-XD-w7S"/>
@@ -60,6 +61,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="eMF-ZE-4G9" firstAttribute="width" secondItem="PcH-rK-LUL" secondAttribute="width" multiplier="0.6" constant="1" id="MEw-tl-vPL"/>
                                     <constraint firstItem="dPu-gm-3Bj" firstAttribute="top" secondItem="eMF-ZE-4G9" secondAttribute="bottom" constant="20" id="Yme-Wv-8jh"/>
                                     <constraint firstItem="eMF-ZE-4G9" firstAttribute="centerY" secondItem="PcH-rK-LUL" secondAttribute="centerY" id="k1C-Jy-bGV"/>
                                     <constraint firstItem="dPu-gm-3Bj" firstAttribute="centerX" secondItem="PcH-rK-LUL" secondAttribute="centerX" id="nGd-PG-1PH"/>
@@ -110,8 +112,8 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="blz-rx-aVz">
                                 <rect key="frame" x="0.0" y="64" width="375" height="543"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="QQF-1r-ms4">
-                                        <rect key="frame" x="68" y="149" width="240" height="206"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="QQF-1r-ms4">
+                                        <rect key="frame" x="75" y="149" width="225" height="206"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="aKL-Rf-ABt"/>
@@ -152,6 +154,7 @@
                                     <constraint firstItem="hAl-pb-QcH" firstAttribute="centerX" secondItem="blz-rx-aVz" secondAttribute="centerX" id="Ovg-7x-shh"/>
                                     <constraint firstItem="Xde-nJ-NKG" firstAttribute="centerX" secondItem="blz-rx-aVz" secondAttribute="centerX" id="Q2C-2s-Vrg"/>
                                     <constraint firstItem="Xde-nJ-NKG" firstAttribute="top" secondItem="hAl-pb-QcH" secondAttribute="bottom" constant="8" id="T3j-xI-qyM"/>
+                                    <constraint firstItem="QQF-1r-ms4" firstAttribute="width" secondItem="blz-rx-aVz" secondAttribute="width" multiplier="0.6" id="ado-Zr-PIx"/>
                                     <constraint firstItem="QQF-1r-ms4" firstAttribute="centerY" secondItem="blz-rx-aVz" secondAttribute="centerY" constant="-20" id="dxK-dc-Kc9">
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="horizontal" value="NO"/>
@@ -413,8 +416,8 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="so5-bY-yhM">
                                 <rect key="frame" x="0.0" y="64" width="375" height="543"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="bes-vp-e1u">
-                                        <rect key="frame" x="68" y="169" width="240" height="206"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="bes-vp-e1u">
+                                        <rect key="frame" x="75" y="169" width="225" height="206"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="9iR-Gu-SA7"/>
@@ -428,7 +431,7 @@
                                         </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ops, there are no list items yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sxW-16-sQo" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="65" y="395" width="246" height="22"/>
+                                        <rect key="frame" x="65" y="226" width="246" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -439,7 +442,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Just add some, will ya?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fPp-Ci-147" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="109" y="425" width="158" height="18"/>
+                                        <rect key="frame" x="109" y="256" width="158" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -454,7 +457,8 @@
                                 <constraints>
                                     <constraint firstItem="fPp-Ci-147" firstAttribute="centerX" secondItem="so5-bY-yhM" secondAttribute="centerX" id="4Vf-Te-7ZZ"/>
                                     <constraint firstItem="bes-vp-e1u" firstAttribute="centerX" secondItem="so5-bY-yhM" secondAttribute="centerX" id="8Vl-sw-Gdt"/>
-                                    <constraint firstItem="sxW-16-sQo" firstAttribute="top" secondItem="bes-vp-e1u" secondAttribute="bottom" constant="20" id="YFI-vZ-mRG"/>
+                                    <constraint firstItem="bes-vp-e1u" firstAttribute="width" secondItem="so5-bY-yhM" secondAttribute="width" multiplier="0.6" id="CF4-Ap-WGa"/>
+                                    <constraint firstItem="sxW-16-sQo" firstAttribute="top" secondItem="bes-vp-e1u" secondAttribute="bottom" multiplier="0.6" constant="1" id="YFI-vZ-mRG"/>
                                     <constraint firstItem="sxW-16-sQo" firstAttribute="centerX" secondItem="so5-bY-yhM" secondAttribute="centerX" id="Zub-z6-dKm"/>
                                     <constraint firstItem="fPp-Ci-147" firstAttribute="top" secondItem="sxW-16-sQo" secondAttribute="bottom" constant="8" id="cHA-XD-wmq"/>
                                     <constraint firstItem="bes-vp-e1u" firstAttribute="centerY" secondItem="so5-bY-yhM" secondAttribute="centerY" id="fz8-uy-Val"/>

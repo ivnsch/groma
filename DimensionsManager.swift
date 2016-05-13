@@ -193,8 +193,13 @@ class DimensionsManager {
         }
     }
     
+    static var topMenuBarHeight: CGFloat {
+        return 40
+    }
+    
     // MARK: User details
     
+    // Rename - default button radius?
     static var userDetailsLogoutButtonRadius: CGFloat {
         switch heightDimension {
         case .VerySmall: return 18
@@ -204,4 +209,23 @@ class DimensionsManager {
         }
     }
     
+    // MARK: Login
+    
+    static var topConstraintFirstInputWhenClose: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 50
+        case .Small: return 60
+        case .Middle: return 60
+        case .Large: return 60
+        }
+    }
+    
+    static var topConstraintFirstInputWhenOpen: CGFloat {
+        switch heightDimension {
+        case .VerySmall: return 60
+        case .Small: return 60
+        case .Middle: return 60
+        case .Large: return 60
+        }
+    }
 }

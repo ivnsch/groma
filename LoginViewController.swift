@@ -33,12 +33,16 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     @IBOutlet weak var userNameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
+    @IBOutlet weak var loginButton: UIButton!
+    
     @IBOutlet weak var fbButton: FBSDKLoginButton!
 
     @IBOutlet weak var registerButton: UIButton!
     
     @IBOutlet weak var eyeView: EyeView!
  
+    @IBOutlet weak var firstFieldTopConstraint: NSLayoutConstraint!
+    
     // expired views
     @IBOutlet weak var pleaseLoginAgainLabel: UILabel!
     @IBOutlet weak var useAppOfflineButton: UIButton!
@@ -48,13 +52,14 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
     weak var expiredLoginDelegate: ExpiredLoginDelegate?
     
     private var validator: Validator?
-
+    
     var mode: LoginControllerMode = .Normal {
         didSet {
             if registerButton != nil {
                 
                 let isNormal = mode == .Normal
                 pleaseLoginAgainLabel.hidden = isNormal
+                firstFieldTopConstraint.constant = isNormal ? DimensionsManager.topConstraintFirstInputWhenOpen : DimensionsManager.topConstraintFirstInputWhenClose
                 
                 // on expired mode show below "use app offline" instead of register - there's no sense of registering here because the token just expired + we want to make clear to the users they can close the modal and continue using the app offline.
                 let isExpired = mode == .Expired
@@ -106,7 +111,13 @@ class LoginViewController: UIViewController, RegisterDelegate, ForgotPasswordDel
         
         eyeView.delegate = self
         
+        staticLayout()
+        
         onUIReady?()
+    }
+    
+    private func staticLayout() {
+        loginButton.layer.cornerRadius = DimensionsManager.userDetailsLogoutButtonRadius
     }
     
     override func viewWillAppear(animated: Bool) {

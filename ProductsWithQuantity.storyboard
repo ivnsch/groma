@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="HelveticaNeueLights.ttc">
@@ -29,7 +30,7 @@
                                     <segue destination="xcz-g7-ytM" kind="embed" identifier="embedTableViewController" id="yB9-oD-KJv"/>
                                 </connections>
                             </containerView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IB8-aT-NV9">
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IB8-aT-NV9">
                                 <rect key="frame" x="0.0" y="20" width="375" height="40"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort by:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nBh-aZ-qb2">
@@ -58,29 +59,22 @@
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="3we-TH-Eq8"/>
                                     <constraint firstItem="GzU-ob-qc5" firstAttribute="centerY" secondItem="IB8-aT-NV9" secondAttribute="centerY" id="4U3-jg-U3E"/>
                                     <constraint firstItem="nBh-aZ-qb2" firstAttribute="centerY" secondItem="IB8-aT-NV9" secondAttribute="centerY" id="7KP-kA-YAD"/>
                                     <constraint firstAttribute="trailing" secondItem="GzU-ob-qc5" secondAttribute="trailing" constant="14" id="9hb-bD-C8W"/>
                                     <constraint firstItem="GzU-ob-qc5" firstAttribute="baseline" secondItem="nBh-aZ-qb2" secondAttribute="baseline" id="Fkw-vC-UbW"/>
                                     <constraint firstAttribute="trailing" secondItem="iMY-Wf-Xm3" secondAttribute="trailing" id="G6F-jN-vH8"/>
                                     <constraint firstItem="iMY-Wf-Xm3" firstAttribute="leading" secondItem="IB8-aT-NV9" secondAttribute="leading" id="JOV-3t-ued"/>
-                                    <constraint firstItem="nBh-aZ-qb2" firstAttribute="leading" secondItem="iMY-Wf-Xm3" secondAttribute="trailing" id="OeY-wu-uwh"/>
                                     <constraint firstAttribute="height" constant="40" id="Yuo-cI-lzF"/>
                                     <constraint firstItem="GzU-ob-qc5" firstAttribute="leading" secondItem="nBh-aZ-qb2" secondAttribute="trailing" constant="16" id="aES-k6-zQO"/>
                                     <constraint firstAttribute="bottom" secondItem="iMY-Wf-Xm3" secondAttribute="bottom" id="mZ8-dQ-9pp"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="OeY-wu-uwh"/>
-                                    </mask>
-                                </variation>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kZw-vd-0Tu">
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="xlU-gu-Hqm">
-                                        <rect key="frame" x="68" y="157" width="240" height="206"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_page" translatesAutoresizingMaskIntoConstraints="NO" id="xlU-gu-Hqm">
+                                        <rect key="frame" x="75" y="157" width="226" height="206"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="Z2W-jV-7aE"/>
                                             <constraint firstAttribute="width" constant="60" id="vhO-8t-1qo"/>
@@ -121,6 +115,7 @@
                                     <constraint firstItem="xlU-gu-Hqm" firstAttribute="centerX" secondItem="kZw-vd-0Tu" secondAttribute="centerX" id="MxQ-Hl-619"/>
                                     <constraint firstItem="LUt-lH-RYz" firstAttribute="centerX" secondItem="kZw-vd-0Tu" secondAttribute="centerX" id="QpZ-FC-wjc"/>
                                     <constraint firstItem="LUt-lH-RYz" firstAttribute="top" secondItem="2dJ-JG-9o5" secondAttribute="bottom" constant="8" id="RHY-nt-KhF"/>
+                                    <constraint firstItem="xlU-gu-Hqm" firstAttribute="width" secondItem="kZw-vd-0Tu" secondAttribute="width" multiplier="0.6" constant="1" id="WMF-8j-xGx"/>
                                     <constraint firstItem="2dJ-JG-9o5" firstAttribute="top" secondItem="xlU-gu-Hqm" secondAttribute="bottom" constant="20" id="dIN-7H-2Zf"/>
                                     <constraint firstItem="xlU-gu-Hqm" firstAttribute="centerY" secondItem="kZw-vd-0Tu" secondAttribute="centerY" constant="-64" id="tD2-gy-hoK"/>
                                 </constraints>
@@ -148,6 +143,7 @@
                         <outlet property="emptyViewLabel1" destination="2dJ-JG-9o5" id="MQT-g8-W1Z"/>
                         <outlet property="emptyViewLabel2" destination="LUt-lH-RYz" id="lpR-zB-DUa"/>
                         <outlet property="sortByButton" destination="GzU-ob-qc5" id="Hjk-iF-krq"/>
+                        <outlet property="topMenusHeightConstraint" destination="Yuo-cI-lzF" id="hso-uy-UX6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U0Q-FT-Ycv" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -48,6 +48,8 @@ class ProductsWithQuantityViewController: UIViewController, UITableViewDataSourc
     @IBOutlet weak var emptyViewLabel1: UILabel!
     @IBOutlet weak var emptyViewLabel2: UILabel!
     
+    @IBOutlet weak var topMenusHeightConstraint: NSLayoutConstraint!
+    
     weak var delegate: ProductsWithQuantityViewControllerDelegate?
     
     var onViewWillAppear: VoidFunction? // to be able to ensure sortBy is not set before UI is ready

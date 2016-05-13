@@ -286,6 +286,7 @@ class GroupItemsController: UIViewController, ProductsWithQuantityViewController
     
     func animationsForExpand(controller: UIViewController, expand: Bool, view: UIView) {
         topControlTopConstraint.constant = view.frame.height
+        productsWithQuantityController?.topMenusHeightConstraint.constant = expand ? 0 : DimensionsManager.topMenuBarHeight
         self.view.layoutIfNeeded()
     }
     

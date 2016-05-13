@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1713" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="wfF-r6-NmF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="wfF-r6-NmF">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
         <!--Data Source-->
@@ -21,7 +21,7 @@
                                 <rect key="frame" x="170" y="561" width="35" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Skip">
-                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" red="0.67450980392156867" green="0.67450980392156867" blue="0.67450980392156867" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -37,16 +37,8 @@
                                 <rect key="frame" x="0.0" y="184" width="375" height="300"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="F9J-cf-zXF"/>
-                                    <constraint firstAttribute="height" constant="300" id="LYA-2Y-b7H"/>
                                     <constraint firstAttribute="height" constant="300" id="gWF-zF-RTt"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="F9J-cf-zXF"/>
-                                        <exclude reference="LYA-2Y-b7H"/>
-                                    </mask>
-                                </variation>
                                 <connections>
                                     <outlet property="dataSource" destination="k9Y-sO-uBl" id="2Sa-1E-BJa"/>
                                     <outlet property="delegate" destination="k9Y-sO-uBl" id="U2a-xG-2zJ"/>
@@ -60,7 +52,6 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="6ZS-ry-WaI" firstAttribute="centerX" secondItem="q6e-yE-ONc" secondAttribute="centerX" id="08e-Fr-iT8"/>
                             <constraint firstAttribute="trailing" secondItem="6ZS-ry-WaI" secondAttribute="trailing" id="15Y-Bf-R9H"/>
                             <constraint firstItem="mkE-ao-QPc" firstAttribute="top" secondItem="6ZS-ry-WaI" secondAttribute="bottom" constant="10" id="2Je-Xu-p9d"/>
                             <constraint firstItem="6ZS-ry-WaI" firstAttribute="centerY" secondItem="q6e-yE-ONc" secondAttribute="centerY" id="3Tk-Zj-DvH" customClass="MultiLayoutConstraint" customModule="shoppin" customModuleProvider="target">
@@ -88,13 +79,13 @@
                                         <real key="value" value="5"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vSmall">
-                                        <real key="value" value="30"/>
+                                        <integer key="value" value="20"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vMiddle">
-                                        <real key="value" value="40"/>
+                                        <integer key="value" value="30"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="number" keyPath="vLarge">
-                                        <real key="value" value="60"/>
+                                        <integer key="value" value="50"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </constraint>
@@ -114,11 +105,6 @@
                                 </userDefinedRuntimeAttributes>
                             </constraint>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="08e-Fr-iT8"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="05r-p6-eT1"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
@@ -126,6 +112,7 @@
                         <outlet property="pageControl" destination="mkE-ao-QPc" id="fb6-Vq-8Za"/>
                         <outlet property="skipButton" destination="NJR-Pk-tTx" id="vOf-eA-cbw"/>
                         <outlet property="swipeView" destination="6ZS-ry-WaI" id="TgR-a1-308"/>
+                        <outlet property="verticalCenterSlideConstraint" destination="3Tk-Zj-DvH" id="rMo-yr-l31"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sav-df-KtR" userLabel="First Responder" sceneMemberID="firstResponder"/>

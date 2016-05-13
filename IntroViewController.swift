@@ -20,6 +20,8 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
 //    @IBOutlet weak var loginButton: UIButton!
 //    @IBOutlet weak var registerButton: UIButton!
     
+    @IBOutlet weak var verticalCenterSlideConstraint: NSLayoutConstraint!
+    
     private let pageModels: [(key: String, imageName: String)] = [
         ("Manage shopping lists comfortably", "intro_lists"),
         ("Connect lists with inventories to keep track of your items", "intro_inventory"),
@@ -30,7 +32,7 @@ class IntroViewController: UIViewController, RegisterDelegate, LoginDelegate, Sw
     private var finishedSlider = false {
         didSet {
             skipButton.setTitle("Start", forState: .Normal)
-            skipButton.setTitleColor(UIColor(hexString: "222222"), forState: .Normal)
+            skipButton.setTitleColor(Theme.black, forState: .Normal)
         }
     }
     
