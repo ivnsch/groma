@@ -13,13 +13,11 @@ private var maxLengthDictionary = [UITextField: Int]()
 extension UITextField {
 
     func showValidationError() {
-        self.layer.borderColor = UIColor.redColor().CGColor
-        self.layer.borderWidth = 1.0
+        // override
     }
     
     func clearValidationError() {
-        self.layer.borderColor = UIColor.clearColor().CGColor
-        self.layer.borderWidth = 0.0
+        // override
     }
     
     func clear() {
