@@ -431,7 +431,7 @@
                                         </variation>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ops, there are no list items yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sxW-16-sQo" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="65" y="226" width="246" height="22"/>
+                                        <rect key="frame" x="65" y="376" width="246" height="22"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <color key="textColor" red="0.1333333333" green="0.1333333333" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -442,7 +442,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Just add some, will ya?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fPp-Ci-147" customClass="LabelMore" customModule="shoppin" customModuleProvider="target">
-                                        <rect key="frame" x="109" y="256" width="158" height="18"/>
+                                        <rect key="frame" x="109" y="406" width="158" height="18"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="0.1529411765" green="0.67843137249999996" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -458,7 +458,7 @@
                                     <constraint firstItem="fPp-Ci-147" firstAttribute="centerX" secondItem="so5-bY-yhM" secondAttribute="centerX" id="4Vf-Te-7ZZ"/>
                                     <constraint firstItem="bes-vp-e1u" firstAttribute="centerX" secondItem="so5-bY-yhM" secondAttribute="centerX" id="8Vl-sw-Gdt"/>
                                     <constraint firstItem="bes-vp-e1u" firstAttribute="width" secondItem="so5-bY-yhM" secondAttribute="width" multiplier="0.6" id="CF4-Ap-WGa"/>
-                                    <constraint firstItem="sxW-16-sQo" firstAttribute="top" secondItem="bes-vp-e1u" secondAttribute="bottom" multiplier="0.6" constant="1" id="YFI-vZ-mRG"/>
+                                    <constraint firstItem="sxW-16-sQo" firstAttribute="top" secondItem="bes-vp-e1u" secondAttribute="bottom" constant="1" id="YFI-vZ-mRG"/>
                                     <constraint firstItem="sxW-16-sQo" firstAttribute="centerX" secondItem="so5-bY-yhM" secondAttribute="centerX" id="Zub-z6-dKm"/>
                                     <constraint firstItem="fPp-Ci-147" firstAttribute="top" secondItem="sxW-16-sQo" secondAttribute="bottom" constant="8" id="cHA-XD-wmq"/>
                                     <constraint firstItem="bes-vp-e1u" firstAttribute="centerY" secondItem="so5-bY-yhM" secondAttribute="centerY" id="fz8-uy-Val"/>
